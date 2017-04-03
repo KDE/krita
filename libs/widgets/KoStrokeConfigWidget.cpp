@@ -86,7 +86,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     QGridLayout *mainLayout = new QGridLayout();
     mainLayout->setMargin(2);
 
-     // The cap group
+    // The cap group
     capGroup = new QButtonGroup(this);
     capGroup->setExclusive(true);
 
@@ -143,8 +143,8 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     miterLimit = new KisDoubleParseUnitSpinBox(this);
     miterLimit->setMinMaxStep(0.0, 1000.0, 0.5);
     miterLimit->setDecimals(2);
-    miterLimit->setUnit(KoUnit(KoUnit::Point));
     miterLimit->setToolTip(i18n("Miter limit"));
+    miterLimit->setUnitChangeFromOutsideBehavior(false);
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -162,7 +162,8 @@ class Q_DECL_HIDDEN KoStrokeConfigWidget::Private
 public:
     Private()
         : canvas(0),
-        active(true)
+          active(true),
+          allowLocalUnitManagement(true)
     {
     }
 
@@ -180,6 +181,7 @@ public:
     KoCanvasBase *canvas;
 
     bool active;
+    bool allowLocalUnitManagement;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -224,7 +226,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->lineWidth = new KisDoubleParseUnitSpinBox(this);
     d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
     d->lineWidth->setDecimals(2);
-    d->lineWidth->setUnit(KoUnit(KoUnit::Point));
+    d->lineWidth->setUnitChangeFromOutsideBehavior(false);
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
     secondLineLayout->addWidget(d->lineWidth);
 
@@ -377,6 +379,10 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
+    if (!d->allowLocalUnitManagement) {
+        return; //the unit management is completly transfered to the unitManagers.
+    }
+
     blockChildSignals(true);
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
@@ -421,6 +427,19 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
 void KoStrokeConfigWidget::setActive(bool active)
 {
     d->active = active;
+}
+
+void KoStrokeConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerLineWidth,
+                                           KisSpinBoxUnitManager *managerMitterLimit)
+{
+    blockChildSignals(true);
+
+    d->allowLocalUnitManagement = false;
+
+    d->lineWidth->setUnitManager(managerLineWidth);
+    d->capNJoinMenu->miterLimit->setUnitManager(managerMitterLimit);
+
+    blockChildSignals(false);
 }
 
 //------------------------
@@ -511,7 +530,7 @@ void KoStrokeConfigWidget::selectionChanged()
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
             updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),
-                                             pathShape->marker(KoMarkerData::MarkerEnd));
+                           pathShape->marker(KoMarkerData::MarkerEnd));
         }
         else {
             updateControls(shape->stroke(), 0 ,0);

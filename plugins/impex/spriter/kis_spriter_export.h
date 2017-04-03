@@ -109,7 +109,7 @@ class KisSpriterExport : public KisImportExportFilter
 public:
     KisSpriterExport(QObject *parent, const QVariantList &);
     virtual ~KisSpriterExport();
-public:
+    virtual bool supportsIO() const { return false; }
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
     void initializeCapabilities();
 private:

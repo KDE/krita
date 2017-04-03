@@ -40,7 +40,7 @@ yum -y install epel-release
 # we need to be up to date in order to install the xcb-keysyms dependency
 yum -y update
 # base dependencies and Qt5.
-yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake3 glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel mesa-libGLU-devel libxcb libxcb-devel xcb-util xcb-util-devel glibc-devel xkeyboard-config
+yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake3 glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel libxcb libxcb-devel xcb-util xcb-util-devel
 
 
 # Newer compiler than what comes with CentOS 6
@@ -58,7 +58,6 @@ fi
 
 cd /AppImageKit/
 git_pull_rebase_helper
-git checkout stable/v1.0
 ./build.sh
 cd /
 
@@ -105,19 +104,19 @@ cmake3 /krita/3rdparty \
     -DEXTERNALS_DOWNLOAD_DIR=/d
     
 cmake3 --build . --config RelWithDebInfo --target ext_qt
-cmake3 --build . --config RelWithDebInfo --target ext_boost
-cmake3 --build . --config RelWithDebInfo --target ext_eigen3
-cmake3 --build . --config RelWithDebInfo --target ext_exiv2
-cmake3 --build . --config RelWithDebInfo --target ext_fftw3
-cmake3 --build . --config RelWithDebInfo --target ext_lcms2
-cmake3 --build . --config RelWithDebInfo --target ext_ocio
-cmake3 --build . --config RelWithDebInfo --target ext_openexr
-cmake3 --build . --config RelWithDebInfo --target ext_vc
+#cmake3 --build . --config RelWithDebInfo --target ext_boost
+#cmake3 --build . --config RelWithDebInfo --target ext_eigen3
+#cmake3 --build . --config RelWithDebInfo --target ext_exiv2
+#cmake3 --build . --config RelWithDebInfo --target ext_fftw3
+#cmake3 --build . --config RelWithDebInfo --target ext_lcms2
+#cmake3 --build . --config RelWithDebInfo --target ext_ocio
+#cmake3 --build . --config RelWithDebInfo --target ext_openexr
+#cmake3 --build . --config RelWithDebInfo --target ext_vc
 #cmake3 --build . --config RelWithDebInfo --target ext_png
-cmake3 --build . --config RelWithDebInfo --target ext_tiff
-cmake3 --build . --config RelWithDebInfo --target ext_jpeg
-cmake3 --build . --config RelWithDebInfo --target ext_libraw
-cmake3 --build . --config RelWithDebInfo --target ext_kcrash
-cmake3 --build . --config RelWithDebInfo --target ext_poppler
-cmake3 --build . --config RelWithDebInfo --target ext_gsl
+#cmake3 --build . --config RelWithDebInfo --target ext_tiff
+#cmake3 --build . --config RelWithDebInfo --target ext_jpeg
+#cmake3 --build . --config RelWithDebInfo --target ext_libraw
+#cmake3 --build . --config RelWithDebInfo --target ext_kcrash
+#cmake3 --build . --config RelWithDebInfo --target ext_poppler
+#cmake3 --build . --config RelWithDebInfo --target ext_gsl
 

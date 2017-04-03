@@ -127,6 +127,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
 
             prop->setRange(0.01, 10);
             prop->setSingleStep(0.01);
+            prop->setExponentRatio(3.0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {

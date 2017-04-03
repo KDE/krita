@@ -21,6 +21,8 @@
 #include "RectangleShape.h"
 #include "RectangleShapeConfigCommand.h"
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 RectangleShapeConfigWidget::RectangleShapeConfigWidget()
 {
     widget.setupUi(this);

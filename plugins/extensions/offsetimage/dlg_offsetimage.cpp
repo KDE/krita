@@ -21,9 +21,11 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize imageSize)
-        :   KoDialog(parent),
-            m_offsetSize(imageSize)
+    :   KoDialog(parent),
+      m_offsetSize(imageSize)
 {
     setCaption("BUG: No sane caption is set");
     setButtons(Ok | Cancel);
@@ -40,10 +42,38 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
+    _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
+    _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
+
+    _widthUnitManager->setApparentUnitFromSymbol("px");
+    _heightUnitManager->setApparentUnitFromSymbol("px");
+
+    m_page->offsetXdoubleSpinBox->setUnitManager(_widthUnitManager);
+    m_page->offsetYdoubleSpinBox->setUnitManager(_heightUnitManager);
+    m_page->offsetXdoubleSpinBox->setDecimals(2);
+    m_page->offsetYdoubleSpinBox->setDecimals(2);
+    m_page->offsetXdoubleSpinBox->setDisplayUnit(false);
+    m_page->offsetYdoubleSpinBox->setDisplayUnit(false);
+
+    m_page->offsetXdoubleSpinBox->setReturnUnit("px");
+    m_page->offsetYdoubleSpinBox->setReturnUnit("px");
+
+    m_page->unitXComboBox->setModel(_widthUnitManager);
+    m_page->unitYComboBox->setModel(_heightUnitManager);
+
+    const int pixelUnitIndex = _widthUnitManager->getsUnitSymbolList().indexOf("px"); //TODO: have a better way to identify units.
+    m_page->unitXComboBox->setCurrentIndex(pixelUnitIndex);
+    m_page->unitYComboBox->setCurrentIndex(pixelUnitIndex);
+
     connect(this, SIGNAL(okClicked()),this, SLOT(okClicked()));
     connect(m_page->middleOffsetBtn, SIGNAL(clicked()), this, SLOT(slotMiddleOffset()));
-    connect(m_page->offsetXspinBox, SIGNAL(valueChanged(int)), this, SLOT(slotOffsetXChanged(int)));
-    connect(m_page->offsetYspinBox, SIGNAL(valueChanged(int)), this, SLOT(slotOffsetYChanged(int)));
+    connect(m_page->offsetXdoubleSpinBox, SIGNAL(valueChangedPt(double)), this, SLOT(slotOffsetXChanged(double)));
+    connect(m_page->offsetYdoubleSpinBox, SIGNAL(valueChangedPt(double)), this, SLOT(slotOffsetYChanged(double)));
+
+    connect(m_page->unitXComboBox, SIGNAL(currentIndexChanged(int)), _widthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_page->unitYComboBox, SIGNAL(currentIndexChanged(int)), _heightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(_widthUnitManager, SIGNAL(unitChanged(int)), m_page->unitXComboBox, SLOT(setCurrentIndex(int)));
+    connect(_heightUnitManager, SIGNAL(unitChanged(int)), m_page->unitYComboBox, SLOT(setCurrentIndex(int)));
 
     slotMiddleOffset();
 }
@@ -53,12 +83,12 @@ DlgOffsetImage::~DlgOffsetImage()
     delete m_page;
 }
 
-void DlgOffsetImage::slotOffsetXChanged(int newOffsetX)
+void DlgOffsetImage::slotOffsetXChanged(double newOffsetX)
 {
     m_offsetX = newOffsetX;
 }
 
-void DlgOffsetImage::slotOffsetYChanged(int newOffsetY)
+void DlgOffsetImage::slotOffsetYChanged(double newOffsetY)
 {
     m_offsetY = newOffsetY;
 }
@@ -67,8 +97,8 @@ void DlgOffsetImage::slotMiddleOffset()
 {
     int offsetX = m_offsetSize.width() / 2;
     int offsetY = m_offsetSize.height() / 2;
-    m_page->offsetXspinBox->setValue(offsetX);
-    m_page->offsetYspinBox->setValue(offsetY);
+    m_page->offsetXdoubleSpinBox->changeValue(offsetX);
+    m_page->offsetYdoubleSpinBox->changeValue(offsetY);
 }
 
 void DlgOffsetImage::okClicked()

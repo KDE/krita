@@ -255,6 +255,8 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualRectangleSelectorShape.cpp
     widgets/KisVisualTriangleSelectorShape.cpp
 
+    utils/kis_document_aware_spin_box_unit_manager.cpp
+
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

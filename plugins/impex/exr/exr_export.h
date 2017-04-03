@@ -48,6 +48,7 @@ class EXRExport : public KisImportExportFilter
 public:
     EXRExport(QObject *parent, const QVariantList &);
     virtual ~EXRExport();
+    virtual bool supportsIO() const { return false; }
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
     KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;

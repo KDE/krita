@@ -752,6 +752,9 @@ void KisAdvancedColorSpaceSelector::setCurrentProfile(const QString& name)
 
 void KisAdvancedColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
 {
+    if (!colorSpace) {
+        return;
+    }
     setCurrentColorModel(colorSpace->colorModelId());
     setCurrentColorDepth(colorSpace->colorDepthId());
     setCurrentProfile(colorSpace->profile()->name());

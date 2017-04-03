@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>366</width>
+    <width>374</width>
     <height>201</height>
    </rect>
   </property>
@@ -55,18 +55,15 @@
       <item row="0" column="1">
        <widget class="QLabel" name="lblNewWidth">
         <property name="text">
-         <string>W&amp;idth:</string>
+         <string>Width:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy">
-         <cstring>newWidth</cstring>
-        </property>
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="KisDoubleParseSpinBox" name="newWidthDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="newWidthDouble">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -88,7 +85,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="KisDoubleParseSpinBox" name="newHeightDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="newHeightDouble">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -106,32 +103,6 @@
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="KisIntParseSpinBox" name="newHeight">
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="KisIntParseSpinBox" name="newWidth">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
         </property>
        </widget>
       </item>
@@ -151,13 +122,10 @@
       <item row="1" column="1">
        <widget class="QLabel" name="lblNewHeight">
         <property name="text">
-         <string>&amp;Height:</string>
+         <string>Height:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>newHeight</cstring>
         </property>
        </widget>
       </item>
@@ -213,32 +181,25 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCmbIDList</class>
-   <extends></extends>
-   <header>widgets/kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <class>KisDoubleParseUnitSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
+   <class>KisCmbIDList</class>
+   <extends></extends>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>newWidth</tabstop>
   <tabstop>newWidthDouble</tabstop>
   <tabstop>newWidthUnit</tabstop>
-  <tabstop>newHeight</tabstop>
   <tabstop>newHeightDouble</tabstop>
   <tabstop>newHeightUnit</tabstop>
   <tabstop>filterCmb</tabstop>

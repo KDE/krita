@@ -86,7 +86,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     //set the proofing space
     m_proofingConfig = m_image->proofingConfiguration();
-    m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel, m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile));
+    m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel, m_proofingConfig->proofingDepth, m_proofingConfig->proofingProfile));
 
     m_page->cmbIntent->setCurrentIndex((int)m_proofingConfig->intent);
 

@@ -6,7 +6,7 @@ include(KritaAddBrokenUnitTest)
 macro_add_unittest_definitions()
 
 ecm_add_tests(
-    TestKrita.cpp
+    #TestKrita.cpp
     TestChannel.cpp
     TestDocument.cpp
     TestNode.cpp

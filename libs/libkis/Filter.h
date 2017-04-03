@@ -42,7 +42,7 @@ class KRITALIBKIS_EXPORT Filter : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Filter)
-    
+
 public:
     /**
      * @brief Filter: create an empty filter object. Until a name is set, the filter cannot
@@ -50,7 +50,7 @@ public:
      */
     explicit Filter();
     virtual ~Filter();
-    
+
     bool operator==(const Filter &other) const;
     bool operator!=(const Filter &other) const;
 
@@ -88,6 +88,16 @@ public Q_SLOTS:
      * does not have an editable paint device.
      */
     bool apply(Node *node, int x, int y, int w, int h);
+
+    /**
+     * @brief startFilter starts the given filter on the given node.
+     *
+     * @param node the node to apply the filter to
+     * @params x, y, w, h: describe the rectangle the filter should be apply.
+     * This is always in image pixel coordinates and not relative to the x, y
+     * of the node.
+     */
+    bool startFilter(Node *node, int x, int y, int w, int h);
 
 private:
     struct Private;

@@ -17,5 +17,6 @@ public Q_SLOTS:
     InfoObject * configuration() const;
     void setConfiguration(InfoObject*  value);
     void apply(Node *node, int x, int y, int w, int h);
+    bool startFilter(Node *node, int x, int y, int w, int h);
 private:
 };

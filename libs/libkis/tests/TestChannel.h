@@ -25,9 +25,10 @@ class TestChannel : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void testChannel();
-    void cleanupTestCase();
+    void testPixelDataU8();
+    void testPixelDataU16();
+    void testPixelDataF16();
+    void testPixelDataF32();
 };
 
 #endif

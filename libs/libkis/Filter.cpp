@@ -17,13 +17,25 @@
  */
 #include "Filter.h"
 
+#include <KoCanvasResourceManager.h>
+
+#include <kis_canvas_resource_provider.h>
 #include <kis_filter.h>
 #include <kis_filter.h>
 #include <kis_properties_configuration.h>
 #include <kis_filter_configuration.h>
+#include <kis_filter_manager.h>
 #include <kis_filter_registry.h>
-#include <InfoObject.h>
-#include <Node.h>
+#include <KisPart.h>
+#include <KisView.h>
+
+#include <strokes/kis_filter_stroke_strategy.h>
+#include <krita_utils.h>
+
+#include "Krita.h"
+#include "Document.h"
+#include "InfoObject.h"
+#include "Node.h"
 
 struct Filter::Private {
     Private() {}
@@ -92,6 +104,63 @@ bool Filter::apply(Node *node, int x, int y, int w, int h)
     QRect applyRect = QRect(x, y, w, h);
     KisFilterConfigurationSP config = static_cast<KisFilterConfiguration*>(d->configuration->configuration().data());
     filter->process(dev, applyRect, config);
+    return true;
+}
+
+bool Filter::startFilter(Node *node, int x, int y, int w, int h)
+{
+    if (node->locked()) return false;
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(d->name);
+    if (!filter) return false;
+
+    KisImageWSP image = node->image();
+    if (!image) return false;
+
+    KisFilterConfigurationSP filterConfig = static_cast<KisFilterConfiguration*>(d->configuration->configuration().data());
+
+    image->waitForDone();
+    QRect initialApplyRect = QRect(x, y, w, h);
+
+    QRect applyRect = initialApplyRect;
+
+    KisPaintDeviceSP paintDevice = node->paintDevice();
+    if (paintDevice && filter->needsTransparentPixels(filterConfig.data(), paintDevice->colorSpace())) {
+        applyRect |= image->bounds();
+    }
+
+    KisResourcesSnapshotSP resources = new KisResourcesSnapshot(image, node->node());
+
+    Document *document = Krita::instance()->activeDocument();
+    if (document && KisPart::instance()->viewCount(document->document()) > 0) {
+        Q_FOREACH (QPointer<KisView> view, KisPart::instance()->views()) {
+            if (view && view->document() == document->document()) {
+                resources = new KisResourcesSnapshot(image, node->node(), view->resourceProvider()->resourceManager());
+                break;
+            }
+        }
+    }
+    delete document;
+
+    KisStrokeId currentStrokeId = image->startStroke(new KisFilterStrokeStrategy(filter,
+                                                                                 KisFilterConfigurationSP(filterConfig),
+                                                                                 resources));
+
+    QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);
+    processRect &= image->bounds();
+
+    if (filter->supportsThreading()) {
+        QSize size = KritaUtils::optimalPatchSize();
+        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
+        Q_FOREACH (const QRect &rc, rects) {
+            image->addJob(currentStrokeId, new KisFilterStrokeStrategy::Data(rc, true));
+        }
+    } else {
+        image->addJob(currentStrokeId, new KisFilterStrokeStrategy::Data(processRect, false));
+    }
+
+    image->endStroke(currentStrokeId);
+
     return true;
 }
 

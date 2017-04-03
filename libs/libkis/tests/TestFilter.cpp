@@ -39,7 +39,7 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
-void TestFilter::testFilter()
+void TestFilter::testApply()
 {
     KisDocument *kisdoc = KisPart::instance()->createDocument();
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
@@ -59,6 +59,35 @@ void TestFilter::testFilter()
     f.apply(&node, 0, 0, 100, 100);
     d.unlock();
     d.refreshProjection();
+
+    for (int i = 0; i < 100 ; i++) {
+        for (int j = 0; j < 100 ; j++) {
+            QColor pixel;
+            layer->paintDevice()->pixel(i, j, &pixel);
+            QVERIFY(pixel == QColor(Qt::white));
+        }
+    }
+
+}
+
+void TestFilter::testStartFilter()
+{
+    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    KisFillPainter gc(layer->paintDevice());
+    gc.fillRect(0, 0, 100, 100, KoColor(Qt::black, layer->colorSpace()));
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+    Document d(kisdoc);
+    Node node(image, layer);
+
+    Filter f;
+    f.setName("invert");
+    QVERIFY(f.configuration());
+
+    f.startFilter(&node, 0, 0, 100, 100);
+    image->waitForDone();
 
     for (int i = 0; i < 100 ; i++) {
         for (int j = 0; j < 100 ; j++) {

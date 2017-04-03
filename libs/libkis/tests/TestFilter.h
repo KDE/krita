@@ -25,7 +25,8 @@ class TestFilter : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testFilter();
+    void testApply();
+    void testStartFilter();
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,41 +16,41 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_CACHE_POPULATOR_H
-#define KIS_ANIMATION_CACHE_POPULATOR_H
+#ifndef KISANIMATIONCACHEREGENERATOR_H
+#define KISANIMATIONCACHEREGENERATOR_H
 
 #include <QObject>
+#include <QScopedPointer>
+#include "kritaui_export.h"
 #include "kis_types.h"
 
-class KisPart;
-
-class KisAnimationCachePopulator : public QObject
+class KRITAUI_EXPORT KisAnimationCacheRegenerator : public QObject
 {
     Q_OBJECT
-
 public:
-    KisAnimationCachePopulator(KisPart *part);
-    ~KisAnimationCachePopulator();
-
-    /**
-     * Request generation of given frame. The request will
-     * be ignored if the populator is already requesting a frame.
-     * @return true if generation reqeusted, false if busy
-     */
-    bool regenerate(KisAnimationFrameCacheSP cache, int frame);
+    explicit KisAnimationCacheRegenerator(QObject *parent = 0);
+    ~KisAnimationCacheRegenerator();
 
 public Q_SLOTS:
-    void slotRequestRegeneration();
+    void startFrameRegeneration(int frame, KisAnimationFrameCacheSP cache);
+    void cancelCurrentFrameRegeneration();
+
+Q_SIGNALS:
+    void sigFrameCancelled();
+    void sigFrameFinished();
+
+    void sigInternalStartFrameConversion();
 
 private Q_SLOTS:
-    void slotTimer();
+    void slotFrameRegenerationCancelled();
+    void slotFrameRegenerationFinished(int frame);
+    void slotFrameStartConversion();
+    void slotFrameConverted();
 
-    void slotRegeneratorFrameCancelled();
-    void slotRegeneratorFrameReady();
 
 private:
     struct Private;
-    QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif
+#endif // KISANIMATIONCACHEREGENERATOR_H

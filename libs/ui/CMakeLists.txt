@@ -385,6 +385,7 @@ endif()
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
         kis_animation_cache_populator.cpp
+        KisAnimationCacheRegenerator.cpp
         canvas/kis_animation_player.cpp
         kis_animation_exporter.cpp
         kis_animation_importer.cpp

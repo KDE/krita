@@ -953,7 +953,7 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
-                                           i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
+                                           i18n("An autosaved file exists for this document.\nDo you want to open the autosaved file instead?"),
                                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
             switch (res) {
             case QMessageBox::Yes :

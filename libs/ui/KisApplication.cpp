@@ -141,7 +141,6 @@ public:
 };
 
 
-
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
@@ -210,7 +209,7 @@ BOOL isWow64()
 }
 #endif
 
-void initializeGlobals(const KisApplicationArguments &args)
+void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 {
     int dpiX = args.dpiX();
     int dpiY = args.dpiY();
@@ -219,7 +218,7 @@ void initializeGlobals(const KisApplicationArguments &args)
     }
 }
 
-void addResourceTypes()
+void KisApplication::addResourceTypes()
 {
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
@@ -245,6 +244,7 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
+    KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");

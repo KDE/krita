@@ -35,9 +35,14 @@
 class KisToolInvocationAction::Private
 {
 public:
-    Private() : active(false) { }
+    Private()
+        : active(false),
+          lineToolActivated(false)
+    {
+    }
 
     bool active;
+    bool lineToolActivated;
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
@@ -67,6 +72,7 @@ void KisToolInvocationAction::activate(int shortcut)
 
     if (shortcut == LineToolShortcut) {
         KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolLine");
+        d->lineToolActivated = true;
     }
 
     inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
@@ -79,8 +85,9 @@ void KisToolInvocationAction::deactivate(int shortcut)
 
     inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
 
-    if (shortcut == LineToolShortcut) {
-            KoToolManager::instance()->switchBackRequested();
+    if (shortcut == LineToolShortcut && d->lineToolActivated) {
+        d->lineToolActivated = false;
+        KoToolManager::instance()->switchBackRequested();
     }
 }
 

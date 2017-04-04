@@ -24,6 +24,8 @@
 #include <QMutex>
 #include <QtConcurrent>
 
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "KisPart.h"
 #include "KisDocument.h"
 #include "kis_image.h"
@@ -64,6 +66,7 @@ struct KisAnimationCachePopulator::Private
     QFutureWatcher<void> infoConversionWatcher;
 
     KisAnimationCacheRegenerator regenerator;
+    bool calculateAnimationCacheInBackground = true;
 
 
 
@@ -265,6 +268,9 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
 
     connect(&m_d->regenerator, SIGNAL(sigFrameCancelled()), SLOT(slotRegeneratorFrameCancelled()));
     connect(&m_d->regenerator, SIGNAL(sigFrameFinished()), SLOT(slotRegeneratorFrameReady()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 }
 
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
@@ -282,6 +288,9 @@ void KisAnimationCachePopulator::slotTimer()
 
 void KisAnimationCachePopulator::slotRequestRegeneration()
 {
+    // skip if the user forbade background regeneration
+    if (!m_d->calculateAnimationCacheInBackground) return;
+
     m_d->enterState(Private::WaitingForIdle);
 }
 
@@ -294,4 +303,10 @@ void KisAnimationCachePopulator::slotRegeneratorFrameCancelled()
 void KisAnimationCachePopulator::slotRegeneratorFrameReady()
 {
     m_d->enterState(Private::BetweenFrames);
+}
+
+void KisAnimationCachePopulator::slotConfigChanged()
+{
+    KisConfig cfg;
+    m_d->calculateAnimationCacheInBackground = cfg.calculateAnimationCacheInBackground();
 }

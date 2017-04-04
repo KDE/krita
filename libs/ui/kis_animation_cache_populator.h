@@ -48,6 +48,8 @@ private Q_SLOTS:
     void slotRegeneratorFrameCancelled();
     void slotRegeneratorFrameReady();
 
+    void slotConfigChanged();
+
 private:
     struct Private;
     QScopedPointer<Private> m_d;

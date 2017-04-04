@@ -1791,6 +1791,16 @@ void KisConfig::setBrushHudSetting(const QString &value) const
     m_cfg.writeEntry("brushHudSettings", value);
 }
 
+bool KisConfig::calculateAnimationCacheInBackground(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("calculateAnimationCacheInBackground", true);
+}
+
+void KisConfig::setCalculateAnimationCacheInBackground(bool value)
+{
+    m_cfg.writeEntry("calculateAnimationCacheInBackground", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

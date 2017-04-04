@@ -513,11 +513,7 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         m_d->maskManager.createSelectionMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFileLayer") {
         m_d->layerManager.addFileLayer(activeNode);
-    } else if (nodeType == "KisInpaintMask") {
-        m_d->maskManager.createInpaintMask(activeNode, copyFrom, false);
-        //m_d->maskManager.createEffectsMask( activeNode );
     }
-
 }
 
 void KisNodeManager::createFromVisible()

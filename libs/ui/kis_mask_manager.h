@@ -91,7 +91,6 @@ private:
     void createEffectsMask(KisNodeSP activeNode);
     void createTransformMask(KisNodeSP activeNode);
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
-    void createInpaintMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 
     KisViewManager * m_view;
     QPointer<KisView>m_imageView;

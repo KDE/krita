@@ -98,8 +98,8 @@ bool KisToolSmartPatch::canCreateInpaintMask() const
 
 QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
 {
-    int accuracy = 0;
-    int patchRadius = 2;
+    int accuracy = 50; //default accuracy - middle value
+    int patchRadius = 4; //default radius, which works well for most cases tested
 
     if( !m_d.isNull() && m_d->optionsWidget ){
         accuracy = m_d->optionsWidget->getAccuracy();
@@ -169,6 +169,7 @@ void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
     KisToolFreehand::continuePrimaryAction(event);
 }
 
+#include "kis_paint_layer.h"
 
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
@@ -183,7 +184,9 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 
     //User drew a mask on the temporary inpaint mask layer. Get this mask to pass to the inpaint algorithm
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
+
+    m_d->maskDev->makeCloneFrom(m_d->mask->paintDevice(), m_d->mask->paintDevice()->extent());
+
     //Once we get the mask we delete the temporary layer
     deleteInpaintMask();
 
@@ -193,6 +196,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
+
     //actual inpaint operation
     QRect changedRect = inpaintImage( m_d->maskDev, m_d->imageDev );
     currentNode()->setDirty( changedRect );
@@ -202,9 +206,6 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     canvas()->shapeController()->resourceManager()->undoStack()->endMacro();
 
     QApplication::restoreOverrideCursor();
-
-//    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
-//    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
 
     canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
 }

@@ -32,6 +32,8 @@
 #include <iostream>
 
 #include "kis_paint_device.h"
+#include "kis_painter.h"
+#include "kis_selection.h"
 
 #include "kis_debug.h"
 #include "kis_paint_device_debug_utils.h"
@@ -46,14 +48,6 @@
 #include "KoMixColorsOp.h"
 #include "KoColorModelStandardIds.h"
 #include "KoColorSpaceRegistry.h"
-
-//#include <KisPart.h>
-//#include <kis_group_layer.h>
-
-//#include <brushengine/kis_paint_information.h>
-//#include <kis_canvas_resource_provider.h>
-//#include <brushengine/kis_paintop_preset.h>
-//#include <brushengine/kis_paintop_settings.h>
 
 
 const int MAX_DIST = 65535;
@@ -166,7 +160,7 @@ public:
                                  KoColorSpaceRegistry::instance()->colorSpace("RGBA", "U8", "");
         KisPaintDeviceSP dbout = new KisPaintDevice(cs);
         saveToDevice(dbout, imSize);
-        KIS_DUMP_DEVICE_2(dbout, imSize, fnamePrefix, "/home/eugening/Projects/img");
+        KIS_DUMP_DEVICE_2(dbout, imSize, fnamePrefix, "./");
     }
 };
 
@@ -961,12 +955,13 @@ QRect getMaskBoundingBox(  KisPaintDeviceSP maskDev )
     return maskRect;
 }
 
+
 QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
 {
     QRect maskRect = getMaskBoundingBox( maskDev );
     QRect imageRect = imageDev->exactBounds();
 
-    float scale = 1 + (accuracy / 25); //basically higher accuracy means we include more surrouding area around the patch. Minimum 2x padding.
+    float scale = 1 + (accuracy / 25); //higher accuracy means we include more surrouding area around the patch. Minimum 2x padding.
     int dx = maskRect.width()*scale;
     int dy = maskRect.height()*scale;
     maskRect.adjust(-dx, -dy, dx, dy);
@@ -977,14 +972,11 @@ QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchR
     tempImageDev->makeCloneFrom( imageDev, maskRect );
     tempMaskDev->makeCloneFrom( maskDev, maskRect );
 
-    //    KIS_DUMP_DEVICE_2(tempImageDev, tempImageDev->extent(), "tempImageDev", "/home/eugening/Projects/Out");
-    //    KIS_DUMP_DEVICE_2(tempMaskDev, tempMaskDev->extent(), "tempMaskDev", "/home/eugening/Projects/Out");
     if( !maskRect.isEmpty() ){
         Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
         MaskedImageSP output = inpaint.patch();
         output->toPaintDevice( imageDev, maskRect );
     }
-    //    KIS_DUMP_DEVICE_2(imageDev, imageDev->extent(), "patched", "/home/eugening/Projects/Out");
 
     return maskRect;
 }

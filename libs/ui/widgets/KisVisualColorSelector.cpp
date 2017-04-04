@@ -328,7 +328,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(block2);
     }
 
-    Q_ASSERT(m_d->widgetlist.size() == 2);
+    //Q_ASSERT(m_d->widgetlist.size() == 2);
     this->setLayout(layout);
 }
 

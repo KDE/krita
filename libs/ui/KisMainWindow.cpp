@@ -109,7 +109,6 @@
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
 #include "KisDocument.h"
@@ -294,6 +293,8 @@ KisMainWindow::KisMainWindow()
 
     actionCollection()->addAssociatedWidget(this);
 
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
+
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
@@ -351,11 +352,6 @@ KisMainWindow::KisMainWindow()
 
     setAutoSaveSettings("krita", false);
 
-    KoPluginLoader::instance()->load("Krita/ViewPlugin",
-                                     "Type == 'Service' and ([X-Krita-Version] == 28)",
-                                     KoPluginLoader::PluginsConfig(),
-                                     viewManager(),
-                                     false);
 
     subWindowActivated();
     updateWindowMenu();
@@ -2009,7 +2005,9 @@ void KisMainWindow::updateWindowMenu()
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = doc->url().toDisplayString();
-            if (title.isEmpty()) title = doc->image()->objectName();
+            if (title.isEmpty() && doc->image()) {
+                title = doc->image()->objectName();
+            }
             QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));

@@ -874,7 +874,9 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile)
     m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
-    return m_d->rootLayer->accept(visitor);
+    bool retval = m_d->rootLayer->accept(visitor);
+    m_d->signalRouter.emitNotification(ProfileChangedSignal);
+    return retval;
 
 }
 

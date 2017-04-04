@@ -45,7 +45,7 @@ namespace KisCommandUtils
     }
 
     SkipFirstRedoWrapper::SkipFirstRedoWrapper(KUndo2Command *child, KUndo2Command *parent)
-        : KUndo2Command(child->text(), parent), m_firstRedo(true), m_child(child) {}
+        : KUndo2Command(child ? child->text() : kundo2_noi18n("<bug: unnamed command>"), parent), m_firstRedo(true), m_child(child) {}
 
     void SkipFirstRedoWrapper::redo()
     {

@@ -77,7 +77,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
 
     options.alpha = configuration->getBool("alpha", true);
     options.interlace = configuration->getBool("interlaced", false);
-    options.compression = configuration->getInt("compression", 0);
+    options.compression = configuration->getInt("compression", 3);
     options.tryToSaveAsIndexed = configuration->getBool("indexed", false);
     options.transparencyFillColor = configuration->getColor("transparencyFillColor").toQColor();
     options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
@@ -116,7 +116,7 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("alpha", true);
     cfg->setProperty("indexed", false);
-    cfg->setProperty("compression", 9);
+    cfg->setProperty("compression", 3);
     cfg->setProperty("interlaced", false);
     cfg->setProperty("transparencyFillcolor", QString("255,255,255"));
     cfg->setProperty("saveSRGBProfile", false);
@@ -169,7 +169,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
         tryToSaveAsIndexed->setVisible(false);
     }
     interlacing->setChecked(cfg->getBool("interlaced", false));
-    compressionLevel->setValue(cfg->getInt("compression", 9));
+    compressionLevel->setValue(cfg->getInt("compression", 3));
     compressionLevel->setRange(1, 9 , 0);
 
     alpha->setEnabled(isThereAlpha);

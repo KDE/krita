@@ -106,6 +106,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KoResourceItemView(this);
+    d->view->setObjectName("ResourceItemview");
     d->view->setModel(d->model);
     d->view->setItemDelegate(new KoResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);

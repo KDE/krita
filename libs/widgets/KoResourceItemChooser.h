@@ -76,7 +76,7 @@ public:
     void setCurrentResource(KoResource *resource);
 
     /**
-     * Sets the sected resource, does nothing if there is no valid item
+     * Sets the selected resource, does nothing if there is no valid item
      * @param row row of the item
      * @param column column of the item
      */

@@ -186,23 +186,4 @@ private:
 };
 
 
-class KoAlphaColorSpaceFactory : public KoSimpleColorSpaceFactory
-{
-
-public:
-    KoAlphaColorSpaceFactory()
-            : KoSimpleColorSpaceFactory("ALPHA",
-                                        i18n("Alpha mask"),
-                                        false,
-                                        AlphaColorModelID,
-                                        Integer8BitsColorDepthID,
-                                        8) {
-    }
-
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
-        return new KoAlphaColorSpace();
-    }
-
-};
-
 #endif // KO_COLORSPACE_ALPHA_H_

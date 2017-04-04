@@ -131,6 +131,7 @@ set(kritaui_LIB_SRCS
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
+    kis_script_manager.cpp
     kis_resource_server_provider.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
@@ -253,6 +254,8 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualEllipticalSelectorShape.cpp
     widgets/KisVisualRectangleSelectorShape.cpp
     widgets/KisVisualTriangleSelectorShape.cpp
+
+    utils/kis_document_aware_spin_box_unit_manager.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp

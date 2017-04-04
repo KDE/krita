@@ -26,8 +26,6 @@
 
 #include "LcmsColorSpace.h"
 
-#include <QDebug>
-
 // -- KoLcmsColorConversionTransformation --
 
 class KoLcmsColorConversionTransformation : public KoColorConversionTransformation
@@ -187,7 +185,7 @@ IccColorSpaceEngine::~IccColorSpaceEngine()
     delete d;
 }
 
-void IccColorSpaceEngine::addProfile(const QString &filename)
+bool IccColorSpaceEngine::addProfile(const QString &filename)
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
 
@@ -205,12 +203,12 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     }
 
     if (profile->valid()) {
-        qDebug() << "Valid profile : " << profile->fileName() << profile->name();
         registry->addProfile(profile);
-    } else {
-        qDebug() << "Invalid profile : " << profile->fileName() << profile->name();
-        delete profile;
+        return true;
     }
+
+    delete profile;
+    return false;
 
 }
 

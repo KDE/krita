@@ -48,7 +48,7 @@ private:
 };
 
 typedef KisDelegatedTool<KisTool, __KisToolSelectPathLocalTool,
-                         DeselectShapesActivationPolicy> DelegatedSelectPathTool;
+DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 
 struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     KisDelegatedSelectPathWrapper(KoCanvasBase *canvas,

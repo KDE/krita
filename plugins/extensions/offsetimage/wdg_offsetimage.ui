@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>203</width>
+    <width>214</width>
     <height>157</height>
    </rect>
   </property>
@@ -21,7 +21,7 @@
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <layout class="QHBoxLayout" name="offsetRowX" stretch="0,1">
+       <layout class="QHBoxLayout" name="offsetRowX" stretch="0,0,0">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -45,19 +45,22 @@
          </widget>
         </item>
         <item>
-         <widget class="KisIntParseSpinBox" name="offsetXspinBox">
-          <property name="suffix">
-           <string> px</string>
-          </property>
-          <property name="maximum">
-           <number>999999999</number>
+         <widget class="KisDoubleParseUnitSpinBox" name="offsetXdoubleSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="unitXComboBox"/>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="offsetRowY" stretch="0,1">
+       <layout class="QHBoxLayout" name="offsetRowY" stretch="0,0,0">
         <item>
          <widget class="QLabel" name="yLabel">
           <property name="text">
@@ -69,14 +72,17 @@
          </widget>
         </item>
         <item>
-         <widget class="KisIntParseSpinBox" name="offsetYspinBox">
-          <property name="suffix">
-           <string> px</string>
-          </property>
-          <property name="maximum">
-           <number>999999999</number>
+         <widget class="KisDoubleParseUnitSpinBox" name="offsetYdoubleSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="unitYComboBox"/>
         </item>
        </layout>
       </item>
@@ -116,9 +122,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <class>KisDoubleParseUnitSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

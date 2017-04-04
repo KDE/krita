@@ -26,6 +26,8 @@
 
 #include "ui_wdg_layersize.h"
 
+class KisDocumentAwareSpinBoxUnitManager;
+
 class WdgLayerSize : public QWidget, public Ui::WdgLayerSize
 {
     Q_OBJECT
@@ -55,12 +57,8 @@ public:
     KisFilterStrategy *filterType();
 
 private Q_SLOTS:
-    void slotWidthChanged(int w);
-    void slotHeightChanged(int h);
     void slotWidthChanged(double w);
     void slotHeightChanged(double h);
-    void slotWidthUnitChanged(int index);
-    void slotHeightUnitChanged(int index);
     void slotAspectChanged(bool keep);
 
 private:
@@ -73,6 +71,9 @@ private:
     int m_width, m_height;
     const double m_resolution;
     bool m_keepAspect;
+
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
 };
 
 #endif // DLG_IMAGESIZE

@@ -394,7 +394,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,
                                                                                       proofingConfig->proofingDepth,
                                                                                       proofingConfig->proofingProfile);
-    m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
+    if (proofingSpace) {
+        m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
+    }
 
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
@@ -489,7 +491,9 @@ void ColorSettingsTab::setDefault()
     KisImageConfig cfgImage;
     KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration();
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
-    m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
+    if (proofingSpace) {
+        m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
+    }
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
     m_page->sldAdaptationState->setValue(0);

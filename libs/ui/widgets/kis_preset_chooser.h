@@ -54,7 +54,7 @@ public:
     void showButtons(bool show);
 
     void setCurrentResource(KoResource *resource);
-    KoResource* currentResource();
+    KoResource* currentResource() const;
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
     KoResourceItemChooser *itemChooser();

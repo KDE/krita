@@ -45,6 +45,8 @@
 #include <QList>
 #include <QTransform>
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     : QWidget(parent)
     , m_tool(tool)

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=scripter
+X-Python-2-Compatible=false
+Name=Scripter
+Comment=Plugin to execute ad-hoc Python code

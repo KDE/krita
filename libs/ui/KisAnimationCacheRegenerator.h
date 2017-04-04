@@ -24,12 +24,22 @@
 #include "kritaui_export.h"
 #include "kis_types.h"
 
+class KisTimeRange;
+
+
 class KRITAUI_EXPORT KisAnimationCacheRegenerator : public QObject
 {
     Q_OBJECT
 public:
     explicit KisAnimationCacheRegenerator(QObject *parent = 0);
     ~KisAnimationCacheRegenerator();
+
+    static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache,
+                                   const KisTimeRange &playbackRange,
+                                   const KisTimeRange &skipRange);
+    static int calcNumberOfDirtyFrame(KisAnimationFrameCacheSP cache,
+                                      const KisTimeRange &playbackRange);
+
 
 public Q_SLOTS:
     void startFrameRegeneration(int frame, KisAnimationFrameCacheSP cache);

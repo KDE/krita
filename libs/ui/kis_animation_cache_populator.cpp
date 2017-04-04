@@ -178,27 +178,10 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
 
-        if (!animation->hasAnimation()) return false;
+        const int frame = KisAnimationCacheRegenerator::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
-        if (currentRange.isValid()) {
-            Q_ASSERT(!currentRange.isInfinite());
-
-            // TODO: optimize check for fully-cached case
-
-            for (int frame = currentRange.start(); frame <= currentRange.end(); frame++) {
-                if (skipRange.contains(frame)) {
-                    if (skipRange.isInfinite()) {
-                        break;
-                    } else {
-                        frame = skipRange.end();
-                        continue;
-                    }
-                }
-
-                if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
-                    return regenerate(cache, frame);
-                }
-            }
+        if (frame >= 0) {
+            return regenerate(cache, frame);
         }
 
         return false;

@@ -398,6 +398,7 @@ endif()
         kis_animation_frame_cache.cpp
         kis_animation_cache_populator.cpp
         KisAnimationCacheRegenerator.cpp
+        dialogs/KisAnimationCacheUpdateProgressDialog.cpp
         canvas/kis_animation_player.cpp
         kis_animation_exporter.cpp
         kis_animation_importer.cpp

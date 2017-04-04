@@ -28,6 +28,7 @@
 #include "kis_animation_frame_cache.h"
 #include "kis_update_info.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_time_range.h"
 
 
 struct Q_DECL_HIDDEN KisAnimationCacheRegenerator::Private
@@ -57,6 +58,75 @@ KisAnimationCacheRegenerator::KisAnimationCacheRegenerator(QObject *parent)
 
 KisAnimationCacheRegenerator::~KisAnimationCacheRegenerator()
 {
+}
+
+int KisAnimationCacheRegenerator::calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange, const KisTimeRange &skipRange)
+{
+    int result = -1;
+
+    KisImageSP image = cache->image();
+    if (!image) return result;
+
+    KisImageAnimationInterface *animation = image->animationInterface();
+    if (!animation->hasAnimation()) return result;
+
+    if (playbackRange.isValid()) {
+        KIS_ASSERT_RECOVER_RETURN_VALUE(!playbackRange.isInfinite(), result);
+
+        // TODO: optimize check for fully-cached case
+        for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
+            if (skipRange.contains(frame)) {
+                if (skipRange.isInfinite()) {
+                    break;
+                } else {
+                    frame = skipRange.end();
+                    continue;
+                }
+            }
+
+            if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
+                result = frame;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+int KisAnimationCacheRegenerator::calcNumberOfDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange)
+{
+    int result = 0;
+
+    KisImageSP image = cache->image();
+    if (!image) return result;
+
+    KisImageAnimationInterface *animation = image->animationInterface();
+    if (!animation->hasAnimation()) return result;
+
+    if (playbackRange.isValid()) {
+        KIS_ASSERT_RECOVER_RETURN_VALUE(!playbackRange.isInfinite(), result);
+
+        // TODO: optimize check for fully-cached case
+        for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
+            KisTimeRange stillFrameRange = KisTimeRange::infinite(0);
+            KisTimeRange::calculateTimeRangeRecursive(image->root(), frame, stillFrameRange, true);
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(stillFrameRange.isValid(), 0);
+
+            if (cache->frameStatus(stillFrameRange.start()) == KisAnimationFrameCache::Uncached) {
+                result++;
+            }
+
+            if (stillFrameRange.isInfinite()) {
+                break;
+            } else {
+                frame = stillFrameRange.end();
+            }
+        }
+    }
+
+    return result;
 }
 
 void KisAnimationCacheRegenerator::startFrameRegeneration(int frame, KisAnimationFrameCacheSP cache)

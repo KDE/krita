@@ -976,23 +976,23 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
-    QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
-    KisImageSP dst = new KisImage(d->createUndoStore(),
+    KisImageSP dst = new KisImage(doc->createUndoStore(),
                                   bounds.width(),
                                   bounds.height(),
                                   device->compositionSourceColorSpace(),
                                   defaultName);
     dst->setResolution(xRes, yRes);
-    d->setCurrentImage(dst);
+    doc->setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", opacity);
     paintLayer->paintDevice()->makeCloneFrom(device, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
     dst->initialRefreshGraph();
 
-    d->setOutputMimeType(mimefilter.toLatin1());
-    d->exportDocument(url);
+    doc->setOutputMimeType(mimefilter.toLatin1());
+    doc->exportDocument(url);
 }
 
 void KisNodeManager::saveNodeAsImage()

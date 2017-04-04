@@ -27,7 +27,7 @@ class IccColorSpaceEngine : public KoColorSpaceEngine
 public:
     IccColorSpaceEngine();
     virtual ~IccColorSpaceEngine();
-    void addProfile(const QString &filename);
+    bool addProfile(const QString &filename);
     void removeProfile(const QString &filename);
     virtual KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
             const KoColorSpace *dstColorSpace,

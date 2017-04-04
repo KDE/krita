@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOALPHACOLORSPACE_H
-#define KOALPHACOLORSPACE_H
+#ifndef KOF16ALPHACOLORSPACE_H
+#define KOF16ALPHACOLORSPACE_H
 
 #include <QColor>
 
@@ -30,7 +30,8 @@
 #include "KoColorModelStandardIds.h"
 #include "KoSimpleColorSpaceFactory.h"
 
-typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
+#include <half.h>
+typedef KoColorSpaceTrait<half, 1, 0> AlphaF16Traits;
 
 class QBitArray;
 
@@ -38,23 +39,23 @@ class QBitArray;
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class KRITAPIGMENT_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits>
+class KRITAPIGMENT_EXPORT KoAlphaF16ColorSpace : public KoColorSpaceAbstract<AlphaF16Traits>
 {
 
 public:
 
-    KoAlphaColorSpace();
+    KoAlphaF16ColorSpace();
 
-    virtual ~KoAlphaColorSpace();
+    virtual ~KoAlphaF16ColorSpace();
 
-    static QString colorSpaceId() { return "ALPHA"; }
+    static QString colorSpaceId() { return "ALPHAF16"; }
 
     virtual KoID colorModelId() const {
         return AlphaColorModelID;
     }
 
     virtual KoID colorDepthId() const {
-        return Integer8BitsColorDepthID;
+        return Float16BitsColorDepthID;
     }
 
     virtual KoColorSpace* clone() const;
@@ -110,6 +111,7 @@ public:
             lab += 4;
         }
     }
+
     virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         const quint16* lab = reinterpret_cast<const quint16*>(src);
         while (nPixels--) {
@@ -127,6 +129,7 @@ public:
             rgb += 4;
         }
     }
+
     virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         const quint16* rgb = reinterpret_cast<const quint16*>(src);
         while (nPixels--) {
@@ -135,6 +138,7 @@ public:
             rgb += 4;
         }
     }
+
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const {
         Q_UNUSED(transferValues);
         warnPigment << i18n("Undefined operation in the alpha color space");
@@ -185,5 +189,4 @@ private:
     QList<KoCompositeOp*> m_compositeOps;
 };
 
-
-#endif // KO_COLORSPACE_ALPHA_H_
+#endif

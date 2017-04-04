@@ -25,6 +25,8 @@
 #include "KoColorConversionTransformationFactory.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
+#include <KoColorModelStandardIds.h>
+
 class KoSimpleColorSpaceFactory : public KoColorSpaceFactory
 {
 
@@ -35,13 +37,29 @@ public:
                               bool userVisible,
                               const KoID& colorModelId,
                               const KoID& colorDepthId,
-                              int referenceDepth)
-            : m_id(id)
-            , m_name(name)
-            , m_userVisible(userVisible)
-            , m_colorModelId(colorModelId)
-            , m_colorDepthId(colorDepthId)
-            , m_referenceDepth(referenceDepth) {
+                              int referenceDepth = -1)
+        : m_id(id)
+        , m_name(name)
+        , m_userVisible(userVisible)
+        , m_colorModelId(colorModelId)
+        , m_colorDepthId(colorDepthId)
+        , m_referenceDepth(referenceDepth)
+    {
+        if (colorDepthId == Integer8BitsColorDepthID) {
+            m_referenceDepth = 1 * 8;
+        }
+        else if (colorDepthId == Integer16BitsColorDepthID) {
+            m_referenceDepth = 2 * 8;
+        }
+        if (colorDepthId == Float16BitsColorDepthID) {
+            m_referenceDepth = 2 * 8;
+        }
+        if (colorDepthId == Float32BitsColorDepthID) {
+            m_referenceDepth = 4 * 8;
+        }
+        if (colorDepthId == Float64BitsColorDepthID) {
+            m_referenceDepth = 8 * 8;
+        }
     }
 
 

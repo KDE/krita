@@ -75,8 +75,7 @@ public:
                                         i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
                                         true,
                                         LABAColorModelID,
-                                        Integer16BitsColorDepthID,
-                                        16) {
+                                        Integer16BitsColorDepthID) {
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {

@@ -36,7 +36,15 @@
 #include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
 
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#include "colorspaces/KoAlphaF16ColorSpace.h"
+#endif
+
 #include "colorspaces/KoAlphaColorSpace.h"
+#include "colorspaces/KoAlphaU16ColorSpace.h"
+#include "colorspaces/KoAlphaF32ColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
 #include "colorspaces/KoRgbU8ColorSpace.h"
@@ -49,15 +57,19 @@ Q_GLOBAL_STATIC(KoColorSpaceRegistry, s_instance)
 struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
     QList<KoColorSpaceFactory *> localFactories;
-    QHash<QString, KoColorProfile * > profileMap;
+    QHash<QString, KoColorProfile *> profileMap;
     QHash<QString, QString> profileAlias;
-    QHash<QString, const KoColorSpace * > csMap;
+    QHash<QString, const KoColorSpace *> csMap;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
-    KoColorSpaceFactory* alphaCSF;
     const KoColorSpace *rgbU8sRGB;
     const KoColorSpace *lab16sLAB;
     const KoColorSpace *alphaCs;
+    const KoColorSpace *alphaU16Cs;
+#ifdef HAVE_OPENEXR
+    const KoColorSpace *alphaF16Cs;
+#endif
+    const KoColorSpace *alphaF32Cs;
     QReadWriteLock registrylock;
 };
 
@@ -75,6 +87,11 @@ void KoColorSpaceRegistry::init()
     d->rgbU8sRGB = 0;
     d->lab16sLAB = 0;
     d->alphaCs = 0;
+    d->alphaU16Cs = 0;
+#ifdef HAVE_OPENEXR
+    d->alphaF16Cs = 0;
+#endif
+    d->alphaF32Cs = 0;
 
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
@@ -93,6 +110,16 @@ void KoColorSpaceRegistry::init()
 
     d->alphaCs = new KoAlphaColorSpace();
     d->alphaCs->d->deletability = OwnedByRegistryRegistryDeletes;
+
+    d->alphaU16Cs = new KoAlphaU16ColorSpace();
+    d->alphaU16Cs->d->deletability = OwnedByRegistryRegistryDeletes;
+
+    d->alphaF16Cs = new KoAlphaF16ColorSpace();
+    d->alphaF16Cs->d->deletability = OwnedByRegistryRegistryDeletes;
+
+    d->alphaF32Cs = new KoAlphaF32ColorSpace();
+    d->alphaF32Cs->d->deletability = OwnedByRegistryRegistryDeletes;
+
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
@@ -139,8 +166,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 
 //    // Delete the colorspace factories
 //    qDeleteAll(d->localFactories);
-
-//    delete d->alphaCSF;
 
     delete d;
 }
@@ -458,6 +483,36 @@ const KoColorSpace * KoColorSpaceRegistry::alpha8()
     Q_ASSERT(d->alphaCs);
     return d->alphaCs;
 }
+
+const KoColorSpace * KoColorSpaceRegistry::alpha16()
+{
+    if (!d->alphaU16Cs) {
+        d->alphaU16Cs = colorSpace(KoAlphaU16ColorSpace::colorSpaceId());
+    }
+    Q_ASSERT(d->alphaU16Cs);
+    return d->alphaU16Cs;
+}
+
+#ifdef HAVE_OPENEXR
+const KoColorSpace * KoColorSpaceRegistry::alpha16f()
+{
+    if (!d->alphaF16Cs) {
+        d->alphaF16Cs = colorSpace(KoAlphaF16ColorSpace::colorSpaceId());
+    }
+    Q_ASSERT(d->alphaF16Cs);
+    return d->alphaF16Cs;
+}
+#endif
+
+const KoColorSpace * KoColorSpaceRegistry::alpha32f()
+{
+    if (!d->alphaF32Cs) {
+        d->alphaF32Cs = colorSpace(KoAlphaF32ColorSpace::colorSpaceId());
+    }
+    Q_ASSERT(d->alphaF32Cs);
+    return d->alphaF32Cs;
+}
+
 
 const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {

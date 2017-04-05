@@ -25,6 +25,7 @@
 #include "KarbonSimplifyPath.h"
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
+#include <KoXmlNS.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
@@ -474,7 +475,7 @@ bool KarbonCalligraphicShape::saveSvg(SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(this, context);
     QDomDocument doc= QDomDocument();
     QDomElement baseNode = doc.createElement("krita:calligraphic-stroke-data");
-    baseNode.setAttribute("xmlns", "http://krita.org/kritasvg");
+    baseNode.setAttribute("xmlns", KoXmlNS::krita);
     Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
         QDomElement infoElt = doc.createElement("point");
         p->paintInfo()->toXML(doc, infoElt);

@@ -381,6 +381,7 @@ KoFormatChangeInformation *KoChangeTracker::formatChangeInformation(int formatCh
 
 void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
 {
+#ifndef KOXML_USE_QDOM
     if (element.namespaceURI() == KoXmlNS::text) {
         KoXmlElement tag;
         forEachElement(tag, element) {
@@ -452,6 +453,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
            }
         }
     }
+#endif
 }
 
 int KoChangeTracker::getLoadedChangeId(const QString &odfId) const
@@ -530,7 +532,7 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor 
         for (int i = cursor.anchor();i <= cursor.position(); i++) {
             if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
                 editCursor.setPosition(i+1);
-	    }
+        }
         }
     }
 

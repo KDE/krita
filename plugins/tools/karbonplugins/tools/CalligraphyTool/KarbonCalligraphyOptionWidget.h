@@ -22,12 +22,15 @@
 
 #include <QWidget>
 #include <QMap>
+#include <kis_properties_configuration.h>
 
 class KComboBox;
 class QCheckBox;
 class QSpinBox;
 class QDoubleSpinBox;
 class QToolButton;
+class KarbonCalligraphyToolOptions;
+class KisCurveOptionWidget;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -45,31 +48,28 @@ Q_SIGNALS:
     // all the following signals emit user friendly values, not the internal
     // values which are instead computed directly by KarbonCalligraphyTool
     void usePathChanged(bool);
-    void usePressureChanged(bool);
-    void useAngleChanged(bool);
-    void widthChanged(double);
-    void thinningChanged(double);
-    void angleChanged(int);
-    void fixationChanged(double);
-    void capsChanged(double);
+    void useAssistantChanged(bool);
+    void useNoAdjustChanged(bool);
+    void settingsChanged(KisPropertiesConfigurationSP settings);
     void massChanged(double);
     void dragChanged(double);
+    void smoothTimeChanged(double);
+    void smoothDistanceChanged(double);
 
 public Q_SLOTS:
     // needed for the shortcuts
-    void increaseWidth();
-    void decreaseWidth();
-    void increaseAngle();
-    void decreaseAngle();
+    //void increaseWidth();
+    //void decreaseWidth();
+    //void increaseAngle();
+    //void decreaseAngle();
 
 private Q_SLOTS:
     void loadProfile(const QString &name);
-    void toggleUseAngle(bool checked);
+    //void toggleUseAngle(bool checked);
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
-
-    void setUsePathEnabled(bool enabled);
+    void generateSettings();
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
@@ -78,15 +78,11 @@ private:
         QString name;
         int index; // index in the config file
         bool usePath;
-        bool usePressure;
-        bool useAngle;
-        qreal width;
-        qreal thinning;
-        int angle;
-        qreal fixation;
+        bool useAssistants;
         qreal caps;
-        qreal mass;
-        qreal drag;
+        qreal timeInterval;
+        qreal distanceInterval;
+        KisPropertiesConfigurationSP curveConfig;
     };
 
     // convenience functions:
@@ -121,20 +117,10 @@ private:
     typedef QMap<QString, Profile *> ProfileMap;
     ProfileMap m_profiles;
 
-    KComboBox *m_comboBox;
-    QCheckBox *m_usePath;
-    QCheckBox *m_usePressure;
-    QCheckBox *m_useAngle;
-    QDoubleSpinBox  *m_widthBox;
-    QDoubleSpinBox  *m_thinningBox;
-    QSpinBox        *m_angleBox;
-    QDoubleSpinBox  *m_capsBox;
-    QDoubleSpinBox  *m_fixationBox;
-    QDoubleSpinBox  *m_massBox;
-    QDoubleSpinBox  *m_dragBox;
-
-    QToolButton *m_saveButton;
-    QToolButton *m_removeButton;
+    KarbonCalligraphyToolOptions *m_options;
+    KisCurveOptionWidget *m_sizeOption;
+    KisCurveOptionWidget *m_rotationOption;
+    KisCurveOptionWidget *m_ratioOption;
 
     // when true updateCurrentProfile() doesn't do anything
     bool m_changingProfile;

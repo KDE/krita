@@ -34,12 +34,20 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QLabel>
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QToolButton>
+#include <QTabWidget>
+
+#include <kis_popup_button.h>
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
-
+#include "ui_karboncalligraphytooloptions.h"
+#include "kis_slider_spin_box.h"
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
+#include <kis_pressure_ratio_option.h>
+#include <kis_curve_option_widget.h>
 /*
 Profiles are saved in karboncalligraphyrc
 
@@ -59,102 +67,51 @@ TODO: add a reset defaults option?
 // name of the configuration file
 const QString RCFILENAME = "karboncalligraphyrc";
 
+class KarbonCalligraphyToolOptions: public QWidget, public Ui::WdgCalligraphyToolOptions
+{
+public:
+    KarbonCalligraphyToolOptions(QWidget *parent = 0)
+        : QWidget(parent) {
+        setupUi(this);
+    }
+};
+
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     : m_changingProfile(false)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    m_options = new KarbonCalligraphyToolOptions();
+    m_options->setupUi(this);
 
-    m_comboBox = new KComboBox(this);
-    layout->addWidget(m_comboBox, 0, 0);
+    m_options->sldDistanceInterval->setPrefix(i18n("Distance: "));
+    //the distance is in SCREEN coordinates!
+    m_options->sldDistanceInterval->setSuffix(i18n("px"));
+    m_options->sldDistanceInterval->setRange(1, 1000, 2);
+    m_options->sldDistanceInterval->setSingleStep(1);
 
-    m_saveButton = new QToolButton(this);
-    m_saveButton->setToolTip(i18n("Save profile as..."));
-    m_saveButton->setIcon(koIcon("document-save-as"));
-    layout->addWidget(m_saveButton, 0, 1);
+    m_options->sldTimeInterval->setPrefix(i18n("Time: "));
+    m_options->sldTimeInterval->setSuffix(i18n("ms"));
+    m_options->sldTimeInterval->setRange(1, 1000, 2);
+    m_options->sldTimeInterval->setSingleStep(1);
 
-    m_removeButton = new QToolButton(this);
-    m_removeButton->setToolTip(i18n("Remove profile"));
-    m_removeButton->setIcon(koIcon("list-remove"));
-    layout->addWidget(m_removeButton, 0, 2);
+    m_options->sldCaps->setPrefix(i18n("Caps: "));
+    m_options->sldCaps->setRange(0.0, 2.0, 2);
+    m_options->sldCaps->setSingleStep(0.03);
 
-    QGridLayout *detailsLayout = new QGridLayout();
-    detailsLayout->setContentsMargins(0, 0, 0, 0);
-    detailsLayout->setVerticalSpacing(0);
+    m_sizeOption = new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%"));
+    m_rotationOption = new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°"));
+    //m_ratioOption = new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%"));
+    m_rotationOption->setChecked(true);
+    m_sizeOption->setChecked(true);
 
-    m_usePath = new QCheckBox(i18n("&Follow selected path"), this);
-    detailsLayout->addWidget(m_usePath, 0, 0, 1, 4);
+    m_options->bnSize->setIcon(kisIcon("brush_size"));
+    m_options->bnSize->setPopupWidget(m_sizeOption->configurationPage());
 
-    m_usePressure = new QCheckBox(i18n("Use tablet &pressure"), this);
-    detailsLayout->addWidget(m_usePressure, 1, 0, 1, 4);
+    m_options->bnRotation->setIcon(kisIcon("brush_rotation"));
+    m_options->bnRotation->setPopupWidget(m_rotationOption->configurationPage());
 
-    QLabel *widthLabel = new QLabel(i18n("Width:"), this);
-    widthLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_widthBox = new KisDoubleParseSpinBox(this);
-    m_widthBox->setRange(0.0, 999.0);
-    widthLabel->setBuddy(m_widthBox);
-    detailsLayout->addWidget(widthLabel, 2, 2);
-    detailsLayout->addWidget(m_widthBox, 2, 3);
-
-    QLabel *thinningLabel = new QLabel(i18n("Thinning:"), this);
-    thinningLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_thinningBox = new KisDoubleParseSpinBox(this);
-    m_thinningBox->setRange(-1.0, 1.0);
-    m_thinningBox->setSingleStep(0.1);
-    thinningLabel->setBuddy(m_thinningBox);
-    detailsLayout->addWidget(thinningLabel, 2, 0);
-    detailsLayout->addWidget(m_thinningBox, 2, 1);
-
-    m_useAngle = new QCheckBox(i18n("Use tablet &angle"), this);
-    detailsLayout->addWidget(m_useAngle, 3, 0, 1, 4);
-
-    QLabel *angleLabel = new QLabel(i18n("Angle:"), this);
-    angleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_angleBox = new KisIntParseSpinBox(this);
-    m_angleBox->setRange(0, 179);
-    m_angleBox->setWrapping(true);
-    angleLabel->setBuddy(m_angleBox);
-    detailsLayout->addWidget(angleLabel, 4, 0);
-    detailsLayout->addWidget(m_angleBox, 4, 1);
-
-    QLabel *fixationLabel = new QLabel(i18n("Fixation:"), this);
-    fixationLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_fixationBox = new KisDoubleParseSpinBox(this);
-    m_fixationBox->setRange(0.0, 1.0);
-    m_fixationBox->setSingleStep(0.1);
-    fixationLabel->setBuddy(m_fixationBox);
-    detailsLayout->addWidget(fixationLabel, 5, 0);
-    detailsLayout->addWidget(m_fixationBox, 5, 1);
-
-    QLabel *capsLabel = new QLabel(i18n("Caps:"), this);
-    capsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_capsBox = new KisDoubleParseSpinBox(this);
-    m_capsBox->setRange(0.0, 2.0);
-    m_capsBox->setSingleStep(0.03);
-    capsLabel->setBuddy(m_capsBox);
-    detailsLayout->addWidget(capsLabel, 5, 2);
-    detailsLayout->addWidget(m_capsBox, 5, 3);
-
-    QLabel *massLabel = new QLabel(i18n("Mass:"), this);
-    massLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_massBox = new KisDoubleParseSpinBox(this);
-    m_massBox->setRange(0.0, 20.0);
-    m_massBox->setDecimals(1);
-    massLabel->setBuddy(m_massBox);
-    detailsLayout->addWidget(massLabel, 6, 0);
-    detailsLayout->addWidget(m_massBox, 6, 1);
-
-    QLabel *dragLabel = new QLabel(i18n("Drag:"), this);
-    dragLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_dragBox = new KisDoubleParseSpinBox(this);
-    m_dragBox->setRange(0.0, 1.0);
-    m_dragBox->setSingleStep(0.1);
-    dragLabel->setBuddy(m_dragBox);
-    detailsLayout->addWidget(dragLabel, 6, 2);
-    detailsLayout->addWidget(m_dragBox, 6, 3);
-
-    layout->addLayout(detailsLayout, 1, 0, 1, 3);
-    layout->setRowStretch(2, 1);
+    m_options->bnRatio->hide();
+    //m_options->bnRatio->setIcon(kisIcon("brush_ratio"));
+    //m_options->bnRatio->setPopupWidget(m_ratioOption->configurationPage());
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing
@@ -168,16 +125,12 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 
 void KarbonCalligraphyOptionWidget::emitAll()
 {
-    emit usePathChanged(m_usePath->isChecked());
-    emit usePressureChanged(m_usePressure->isChecked());
-    emit useAngleChanged(m_useAngle->isChecked());
-    emit widthChanged(m_widthBox->value());
-    emit thinningChanged(m_thinningBox->value());
-    emit angleChanged(m_angleBox->value());
-    emit fixationChanged(m_fixationBox->value());
-    emit capsChanged(m_capsBox->value());
-    emit massChanged(m_massBox->value());
-    emit dragChanged(m_dragBox->value());
+    emit usePathChanged(m_options->rdAdjustPath->isChecked());
+    emit useAssistantChanged(m_options->rdAdjustAssistant->isChecked());
+    emit useNoAdjustChanged(m_options->rdNoAdjust->isChecked());
+    emit generateSettings();
+    emit smoothTimeChanged(m_options->sldTimeInterval->value());
+    emit smoothDistanceChanged(m_options->sldDistanceInterval->value());
 }
 
 void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
@@ -252,32 +205,16 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
 
 void KarbonCalligraphyOptionWidget::removeProfile()
 {
-    removeProfile(m_comboBox->currentText());
+    removeProfile(m_options->cmbProfiles->currentText());
 }
 
-void KarbonCalligraphyOptionWidget::toggleUseAngle(bool checked)
+void KarbonCalligraphyOptionWidget::generateSettings()
 {
-    m_angleBox->setEnabled(! checked);
-}
-
-void KarbonCalligraphyOptionWidget::increaseWidth()
-{
-    m_widthBox->setValue(m_widthBox->value() + 1);
-}
-
-void KarbonCalligraphyOptionWidget::decreaseWidth()
-{
-    m_widthBox->setValue(m_widthBox->value() - 1);
-}
-
-void KarbonCalligraphyOptionWidget::increaseAngle()
-{
-    m_angleBox->setValue((m_angleBox->value() + 3) % 180);
-}
-
-void KarbonCalligraphyOptionWidget::decreaseAngle()
-{
-    m_angleBox->setValue((m_angleBox->value() - 3) % 180);
+    KisPropertiesConfigurationSP settings = new KisPropertiesConfiguration();
+    settings->setProperty("capSize", m_options->sldCaps->value());
+    m_sizeOption->writeOptionSetting(settings);
+    m_rotationOption->writeOptionSetting(settings);
+    emit settingsChanged(settings);
 }
 
 /******************************************************************************
@@ -286,76 +223,49 @@ void KarbonCalligraphyOptionWidget::decreaseAngle()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+    connect(m_options->cmbProfiles, SIGNAL(currentIndexChanged(QString)),
             SLOT(loadProfile(QString)));
 
     // propagate changes
-    connect(m_usePath, SIGNAL(toggled(bool)),
+    connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),
             SIGNAL(usePathChanged(bool)));
+    connect(m_options->rdAdjustAssistant, SIGNAL(toggled(bool)),
+            SIGNAL(useAssistantChanged(bool)));
+    connect(m_options->rdNoAdjust, SIGNAL(toggled(bool)),
+            SIGNAL(useNoAdjustChanged(bool)));
 
-    connect(m_usePressure, SIGNAL(toggled(bool)),
-            SIGNAL(usePressureChanged(bool)));
+    connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
+            SLOT(generateSettings()));
 
-    connect(m_useAngle, SIGNAL(toggled(bool)),
-            SIGNAL(useAngleChanged(bool)));
+    connect(m_options->sldTimeInterval, SIGNAL(valueChanged(double)),
+            SIGNAL(smoothTimeChanged(double)));
+    connect(m_options->sldDistanceInterval, SIGNAL(valueChanged(double)),
+            SIGNAL(smoothDistanceChanged(double)));
 
-    connect(m_widthBox, SIGNAL(valueChanged(double)),
-            SIGNAL(widthChanged(double)));
-
-    connect(m_thinningBox, SIGNAL(valueChanged(double)),
-            SIGNAL(thinningChanged(double)));
-
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SIGNAL(angleChanged(int)));
-
-    connect(m_fixationBox, SIGNAL(valueChanged(double)),
-            SIGNAL(fixationChanged(double)));
-
-    connect(m_capsBox, SIGNAL(valueChanged(double)),
-            SIGNAL(capsChanged(double)));
-
-    connect(m_massBox, SIGNAL(valueChanged(double)),
-            SIGNAL(massChanged(double)));
-
-    connect(m_dragBox, SIGNAL(valueChanged(double)),
-            SIGNAL(dragChanged(double)));
+    connect(m_sizeOption, SIGNAL(sigSettingChanged()), SLOT(generateSettings()));
+    connect(m_rotationOption, SIGNAL(sigSettingChanged()), SLOT(generateSettings()));
 
     // update profile
-    connect(m_usePath, SIGNAL(toggled(bool)),
+    connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),
             SLOT(updateCurrentProfile()));
-
-    connect(m_usePressure, SIGNAL(toggled(bool)),
+    connect(m_options->rdAdjustAssistant, SIGNAL(toggled(bool)),
             SLOT(updateCurrentProfile()));
-
-    connect(m_useAngle, SIGNAL(toggled(bool)),
+    connect(m_options->rdNoAdjust, SIGNAL(toggled(bool)),
             SLOT(updateCurrentProfile()));
-
-    connect(m_widthBox, SIGNAL(valueChanged(double)),
+    connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
-
-    connect(m_thinningBox, SIGNAL(valueChanged(double)),
+    connect(m_options->sldTimeInterval, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
-
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
+    connect(m_options->sldDistanceInterval, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
+    connect(m_sizeOption, SIGNAL(sigSettingChanged()), SLOT(updateCurrentProfile()));
+    connect(m_rotationOption, SIGNAL(sigSettingChanged()), SLOT(updateCurrentProfile()));
 
-    connect(m_fixationBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_capsBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_massBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_dragBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()));
-    connect(m_removeButton, SIGNAL(clicked()), SLOT(removeProfile()));
+    connect(m_options->bnSaveProfile, SIGNAL(clicked()), SLOT(saveProfileAs()));
+    connect(m_options->bnRemoveProfile, SIGNAL(clicked()), SLOT(removeProfile()));
 
     // visualization
-    connect(m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
+    //connect(m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
@@ -371,30 +281,73 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     KConfigGroup profile0(&config, "Profile0");
     profile0.writeEntry("name", i18n("Mouse"));
     profile0.writeEntry("usePath", false);
-    profile0.writeEntry("usePressure", false);
-    profile0.writeEntry("useAngle", false);
-    profile0.writeEntry("width", 30.0);
-    profile0.writeEntry("thinning", 0.2);
-    profile0.writeEntry("angle", 30);
-    profile0.writeEntry("fixation", 1.0);
+    profile0.writeEntry("useAssistants", false);
     profile0.writeEntry("caps", 0.0);
-    profile0.writeEntry("mass", 3.0);
-    profile0.writeEntry("drag", 0.7);
+    profile0.writeEntry("timeInterval", 0);
+    profile0.writeEntry("distanceInterval", 0);
+    QString curveConfigMouse("<!DOCTYPE params>\n<params>\n<param type='bool' "
+                                       " name='PressureRotation'>true</param>\n <param type='bool' name='PressureSize'>"
+                                       "true</param>\n <param type='string' name='RotationSensor'><![CDATA[<!DOCTYPE params>"
+                                       "\n<params fanCornersEnabled='0' lockedAngleMode='0' angleOffset='90' "
+                                       " id='drawingangle' fanCornersStep='30'/>\n]]></param>\n"
+                                       "<param type='bool' name='RotationUseCurve'>false</param>\n"
+                                       "<param type='bool' name='RotationUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='RotationValue'>1</param>\n"
+                                       "<param type='string' name='SizeSensor'>"
+                                       "<![CDATA[<!DOCTYPE params>\n<params id='pressure'>\n"
+                                       "<curve>0,0;1,1;</curve>\n</params>\n]]></param>"
+                                       "<param type='bool' name='SizeUseCurve'>false</param>\n"
+                                       "<param type='bool' name='SizeUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='SizeValue'>1</param>\n</params>");
+    profile0.writeEntry("curveConfig", curveConfigMouse);
 
     KConfigGroup profile1(&config, "Profile1");
-    profile1.writeEntry("name", i18n("Graphics Pen"));
-    profile1.writeEntry("width", 50.0);
+    profile1.writeEntry("name", i18n("Brush"));
     profile1.writeEntry("usePath", false);
-    profile1.writeEntry("usePressure", false);
-    profile1.writeEntry("useAngle", false);
-    profile1.writeEntry("thinning", 0.2);
-    profile1.writeEntry("angle", 30);
-    profile1.writeEntry("fixation", 1.0);
+    profile1.writeEntry("useAssistants", false);
     profile1.writeEntry("caps", 0.0);
-    profile1.writeEntry("mass", 1.0);
-    profile1.writeEntry("drag", 0.9);
+    profile1.writeEntry("timeInterval", 50);
+    profile1.writeEntry("distanceInterval", 15);
+    QString curveConfigBrush("<!DOCTYPE params>\n<params>\n<param type='bool' "
+                                       " name='PressureRotation'>true</param>\n <param type='bool' name='PressureSize'>"
+                                       "true</param>\n <param type='string' name='RotationSensor'><![CDATA[<!DOCTYPE params>"
+                                       "\n<params fanCornersEnabled='0' lockedAngleMode='0' angleOffset='90' "
+                                       " id='drawingangle' fanCornersStep='30'/>\n]]></param>\n"
+                                       "<param type='bool' name='RotationUseCurve'>true</param>\n"
+                                       "<param type='bool' name='RotationUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='RotationValue'>1</param>\n"
+                                       "<param type='string' name='SizeSensor'>"
+                                       "<![CDATA[<!DOCTYPE params>\n<params id='pressure'>\n"
+                                       "<curve>0,0;0.375,0.25;0.625,0.75;1,1;</curve>\n</params>\n]]></param>"
+                                       "<param type='bool' name='SizeUseCurve'>true</param>\n"
+                                       "<param type='bool' name='SizeUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='SizeValue'>1</param>\n</params>");
+    profile1.writeEntry("curveConfig", curveConfigBrush);
 
-    generalGroup.writeEntry("profile", i18n("Mouse"));
+    KConfigGroup profile2(&config, "Profile2");
+    profile2.writeEntry("name", i18n("GPen"));
+    profile2.writeEntry("usePath", false);
+    profile2.writeEntry("useAssistants", false);
+    profile2.writeEntry("caps", 0.0);
+    profile2.writeEntry("timeInterval", 50);
+    profile2.writeEntry("distanceInterval", 15);
+    QString curveConfigGpen("<!DOCTYPE params>\n<params>\n<param type='bool' "
+                                      " name='PressureRotation'>true</param>\n <param type='bool' name='PressureSize'>"
+                                      "true</param>\n <param type='string' name='RotationSensor'><![CDATA[<!DOCTYPE params>"
+                                      "\n<params fanCornersEnabled='0' lockedAngleMode='0' angleOffset='90' "
+                                      " id='drawingangle' fanCornersStep='30'/>\n]]></param>\n"
+                                      "<param type='bool' name='RotationUseCurve'>true</param>\n"
+                                      "<param type='bool' name='RotationUseSameCurve'>true</param>\n"
+                                      "<param type='double' name='RotationValue'>1</param>\n"
+                                      "<param type='string' name='SizeSensor'>"
+                                      "<![CDATA[<!DOCTYPE params>\n<params id='pressure'>\n"
+                                      "<curve>0,0;0.625,0.375;1,1;</curve>\n</params>\n]]></param>"
+                                      "<param type='bool' name='SizeUseCurve'>true</param>\n"
+                                      "<param type='bool' name='SizeUseSameCurve'>true</param>\n"
+                                      "<param type='double' name='SizeValue'>1</param>\n</params>");
+    profile2.writeEntry("curveConfig", curveConfigGpen);
+
+    generalGroup.writeEntry("profile", i18n("Brush"));
     generalGroup.writeEntry("defaultProfilesAdded", true);
 
     config.sync();
@@ -415,17 +368,14 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
 
         Profile *profile = new Profile;
         profile->index = i;
-        profile->name =         profileGroup.readEntry("name", QString());
-        profile->usePath =      profileGroup.readEntry("usePath", false);
-        profile->usePressure =  profileGroup.readEntry("usePressure", false);
-        profile->useAngle =     profileGroup.readEntry("useAngle", false);
-        profile->width =        profileGroup.readEntry("width", 30.0);
-        profile->thinning =     profileGroup.readEntry("thinning", 0.2);
-        profile->angle =        profileGroup.readEntry("angle", 30);
-        profile->fixation =     profileGroup.readEntry("fixation", 0.0);
-        profile->caps =         profileGroup.readEntry("caps", 0.0);
-        profile->mass =         profileGroup.readEntry("mass", 3.0);
-        profile->drag =         profileGroup.readEntry("drag", 0.7);
+        profile->name =             profileGroup.readEntry("name", QString());
+        profile->usePath =          profileGroup.readEntry("usePath", false);
+        profile->useAssistants =          profileGroup.readEntry("useAssistants", false);
+        profile->caps =             profileGroup.readEntry("caps", 0.0);
+        profile->timeInterval =     profileGroup.readEntry("timeInterval", 0.0);
+        profile->distanceInterval = profileGroup.readEntry("distanceInterval", 0.0);
+        profile->curveConfig = new KisPropertiesConfiguration();
+        profile->curveConfig->fromXML(profileGroup.readEntry("curveConfig", QString()));
 
         m_profiles.insert(profile->name, profile);
         ++i;
@@ -435,7 +385,7 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
     ProfileMap::const_iterator it = m_profiles.constBegin();
     ProfileMap::const_iterator lastIt = m_profiles.constEnd();
     for (; it != lastIt; ++it) {
-        m_comboBox->addItem(it.key());
+        m_options->cmbProfiles->addItem(it.key());
     }
     m_changingProfile = false;
 
@@ -454,21 +404,21 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
         return;
     }
 
-    m_comboBox->setCurrentIndex(index);
+    m_options->cmbProfiles->setCurrentIndex(index);
 
     Profile *profile = m_profiles[currentProfile];
 
     m_changingProfile = true;
-    m_usePath->setChecked(profile->usePath);
-    m_usePressure->setChecked(profile->usePressure);
-    m_useAngle->setChecked(profile->useAngle);
-    m_widthBox->setValue(profile->width);
-    m_thinningBox->setValue(profile->thinning);
-    m_angleBox->setValue(profile->angle);
-    m_fixationBox->setValue(profile->fixation);
-    m_capsBox->setValue(profile->caps);
-    m_massBox->setValue(profile->mass);
-    m_dragBox->setValue(profile->drag);
+    m_options->rdAdjustPath->setChecked(profile->usePath);
+    m_options->rdAdjustAssistant->setChecked(profile->useAssistants);
+    if (profile->useAssistants == false && profile->usePath==false) {
+        m_options->rdNoAdjust->setChecked(true);
+    }
+    m_options->sldCaps->setValue(profile->caps);
+    m_options->sldTimeInterval->setValue(profile->timeInterval);
+    m_options->sldDistanceInterval->setValue(profile->distanceInterval);
+    m_sizeOption->readOptionSetting(profile->curveConfig);
+    m_rotationOption->readOptionSetting(profile->curveConfig);
     m_changingProfile = false;
 }
 
@@ -476,16 +426,14 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 {
     Profile *profile = new Profile;
     profile->name = name;
-    profile->usePath = m_usePath->isChecked();
-    profile->usePressure = m_usePressure->isChecked();
-    profile->useAngle = m_useAngle->isChecked();
-    profile->width = m_widthBox->value();
-    profile->thinning = m_thinningBox->value();
-    profile->angle = m_angleBox->value();
-    profile->fixation = m_fixationBox->value();
-    profile->caps = m_capsBox->value();
-    profile->mass = m_massBox->value();
-    profile->drag = m_dragBox->value();
+    profile->usePath = m_options->rdAdjustPath->isChecked();
+    profile->caps = m_options->sldCaps->value();
+    profile->useAssistants = m_options->rdAdjustAssistant->isChecked();
+    profile->timeInterval = m_options->sldTimeInterval->value();
+    profile->distanceInterval = m_options->sldDistanceInterval->value();
+    profile->curveConfig = new KisPropertiesConfiguration();
+    m_sizeOption->writeOptionSetting(profile->curveConfig);
+    m_rotationOption->writeOptionSetting(profile->curveConfig);
 
     if (m_profiles.contains(name)) {
         // there is already a profile with the same name, overwrite
@@ -497,15 +445,15 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
         m_profiles.insert(name, profile);
         // add the profile to the combobox
         QString dbg;
-        for (int i = 0; i < m_comboBox->count(); ++i) {
-            dbg += m_comboBox->itemText(i) + ' ';
+        for (int i = 0; i < m_options->cmbProfiles->count(); ++i) {
+            dbg += m_options->cmbProfiles->itemText(i) + ' ';
         }
         int pos = profilePosition(name);
         m_changingProfile = true;
-        m_comboBox->insertItem(pos, name);
+        m_options->cmbProfiles->insertItem(pos, name);
         m_changingProfile = false;
-        for (int i = 0; i < m_comboBox->count(); ++i) {
-            dbg += m_comboBox->itemText(i) + ' ';
+        for (int i = 0; i < m_options->cmbProfiles->count(); ++i) {
+            dbg += m_options->cmbProfiles->itemText(i) + ' ';
         }
     }
 
@@ -515,22 +463,18 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 
     profileGroup.writeEntry("name", name);
     profileGroup.writeEntry("usePath", profile->usePath);
-    profileGroup.writeEntry("usePressure", profile->usePressure);
-    profileGroup.writeEntry("useAngle", profile->useAngle);
-    profileGroup.writeEntry("width", profile->width);
-    profileGroup.writeEntry("thinning", profile->thinning);
-    profileGroup.writeEntry("angle", profile->angle);
-    profileGroup.writeEntry("fixation", profile->fixation);
+    profileGroup.writeEntry("useAssistants", profile->useAssistants);
     profileGroup.writeEntry("caps", profile->caps);
-    profileGroup.writeEntry("mass", profile->mass);
-    profileGroup.writeEntry("drag", profile->drag);
+    profileGroup.writeEntry("timeInterval", profile->timeInterval);
+    profileGroup.writeEntry("distanceInterval", profile->distanceInterval);
+    profileGroup.writeEntry("curveConfig", profile->curveConfig->toXML());
 
     KConfigGroup generalGroup(&config, "General");
     generalGroup.writeEntry("profile", name);
 
     config.sync();
 
-    m_comboBox->setCurrentIndex(profilePosition(name));
+    m_options->cmbProfiles->setCurrentIndex(profilePosition(name));
 }
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
@@ -550,7 +494,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     // and from profiles
     m_profiles.remove(name);
 
-    m_comboBox->removeItem(index);
+    m_options->cmbProfiles->removeItem(index);
 
     // now in the config file there is value ProfileN missing,
     // where N = configIndex, so put the last one there
@@ -578,17 +522,12 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     config.deleteGroup(lastGroup);
 
     KConfigGroup profileGroup(&config, deletedGroup);
-    profileGroup.writeEntry("name", profile->name);
+    profileGroup.writeEntry("name", name);
     profileGroup.writeEntry("usePath", profile->usePath);
-    profileGroup.writeEntry("usePressure", profile->usePressure);
-    profileGroup.writeEntry("useAngle", profile->useAngle);
-    profileGroup.writeEntry("width", profile->width);
-    profileGroup.writeEntry("thinning", profile->thinning);
-    profileGroup.writeEntry("angle", profile->angle);
-    profileGroup.writeEntry("fixation", profile->fixation);
+    profileGroup.writeEntry("useAssistants", profile->useAssistants);
     profileGroup.writeEntry("caps", profile->caps);
-    profileGroup.writeEntry("mass", profile->mass);
-    profileGroup.writeEntry("drag", profile->drag);
+    profileGroup.writeEntry("timeInterval", profile->timeInterval);
+    profileGroup.writeEntry("distanceInterval", profile->distanceInterval);
     config.sync();
 
     profile->index = deletedIndex;
@@ -606,9 +545,4 @@ int KarbonCalligraphyOptionWidget::profilePosition(const QString &profileName)
         ++res;
     }
     return -1;
-}
-
-void KarbonCalligraphyOptionWidget::setUsePathEnabled(bool enabled)
-{
-    m_usePath->setEnabled(enabled);
 }

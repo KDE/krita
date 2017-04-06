@@ -42,6 +42,7 @@
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
+#include <KoXmlReader.h>
 #include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
@@ -159,7 +160,7 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return 0;
 
     const KoXmlElement &e = m_context.definition(id);
-    if (e.childNodesCount() == 0) {
+    if (KoXml::childNodesCount(e) == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
         if (m_context.hasDefinition(mhref))
@@ -1292,7 +1293,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         shapes += parseContainer(b);
         m_context.popGraphicsContext();
     } else if (b.tagName() == "defs") {
-        if (b.childNodesCount() > 0) {
+        if (KoXml::childNodesCount(b) > 0) {
             /**
              * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
              *          any role in shapes outline calculation. But setVisible(false) shapes do!

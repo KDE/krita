@@ -1,3 +1,6 @@
+include_directories(libpaintop)
+
+add_subdirectory( libpaintop )
 add_subdirectory( version )
 add_subdirectory( global )
 add_subdirectory( koplugin )

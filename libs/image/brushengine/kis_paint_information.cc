@@ -72,6 +72,8 @@ struct KisPaintInformation::Private {
     }
 
     void copy(const Private &rhs) {
+        KIS_ASSERT(!rhs.currentDistanceInfo);
+
         pos = rhs.pos;
         pressure = rhs.pressure;
         xTilt = rhs.xTilt;
@@ -130,9 +132,18 @@ DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *di
 }
 
 KisPaintInformation::DistanceInformationRegistrar::
+DistanceInformationRegistrar(KisPaintInformation::DistanceInformationRegistrar &&rhs)
+    : p(rhs.p)
+{
+    rhs.p = 0;
+}
+
+KisPaintInformation::DistanceInformationRegistrar::
 ~DistanceInformationRegistrar()
 {
-    p->d->unregisterDistanceInfo();
+    if (p) {
+        p->d->unregisterDistanceInfo();
+    }
 }
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos,

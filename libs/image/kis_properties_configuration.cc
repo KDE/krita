@@ -88,9 +88,15 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
                     if(type == "bytearray")
                     {
                         d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
-                    }
-                    else
+                    } else if (type == "bool") {
+                        d->properties[name] = QVariant(value).toBool();
+                    }  else if (type == "int") {
+                        d->properties[name] = QVariant(value.toInt());
+                    } else if (type == "double") {
+                        d->properties[name] = QVariant(value.toDouble());
+                    } else {
                         d->properties[name] = value;
+                    }
                 }
                 else
                     d->properties[e.attribute("name")] = QVariant(e.text());
@@ -129,6 +135,15 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         } else if(v.type() == QVariant::ByteArray ) {
             text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitrary Data
             type = "bytearray";
+        } else if (v.type() == QVariant::Bool) {
+            text = doc.createTextNode(v.toString());
+            type = "bool";
+        }  else if (v.type() == QVariant::Int) {
+            text = doc.createTextNode(v.toString());
+            type = "int";
+        } else if (v.type() == QVariant::Double) {
+            text = doc.createTextNode(v.toString());
+            type = "double";
         } else {
             text = doc.createTextNode(v.toString());
             type = "internal";

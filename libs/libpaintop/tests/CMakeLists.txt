@@ -2,6 +2,7 @@
 include_directories( ${CMAKE_SOURCE_DIR}/..    ${CMAKE_SOURCE_DIR}/sdk/tests )
 
 include(KritaAddBrokenUnitTest)
+include(ECMAddTests)
 
 ecm_add_test(kis_sensors_test.cpp
     TEST_NAME krita-paintop-SensorsTest

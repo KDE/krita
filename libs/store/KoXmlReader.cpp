@@ -71,12 +71,12 @@
 
 #include <QTextCodec>
 #include <QTextDecoder>
+#include <QXmlStreamReader>
 
 #ifndef KOXML_USE_QDOM
 
 #include <QtXml>
 #include <QDomDocument>
-#include <QXmlStreamReader>
 #include <QXmlStreamEntityResolver>
 
 #include <QBuffer>
@@ -815,7 +815,7 @@ private:
     QString textData;
     // reference counting
     unsigned long refCount;
-    friend class KoXmlElement;
+    friend #include <KoXmlReaderForward.h>
 };
 
 KoXmlNodeData KoXmlNodeData::null;
@@ -2253,7 +2253,7 @@ KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
                                 const QString& localName, KoXmlNamedItemType type)
 {
 #ifdef KOXML_USE_QDOM
-Q_ASSERT(false);
+    Q_UNUSED(type)
     return namedItemNS(node, nsURI, localName);
 #else
     return node.namedItemNS(nsURI, localName, type).toElement();
@@ -2314,7 +2314,7 @@ void KoXml::asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node)
 {
     Q_ASSERT(!node.isDocument());
 #ifdef KOXML_USE_QDOM
-    ownerDoc.appendChild(ownerDoc.importNode(node));
+    ownerDoc.appendChild(ownerDoc.importNode(node, true));
 #else
     node.asQDomNode(ownerDoc);
 #endif
@@ -2340,12 +2340,10 @@ QDomDocument KoXml::asQDomDocument(const KoXmlDocument& document)
 #endif
 }
 
-bool KoXml::setDocument(KoXmlDocument& doc, QIODevice* device,
-                        bool namespaceProcessing, QString* errorMsg, int* errorLine,
-                        int* errorColumn)
+bool KoXml::setDocument(KoXmlDocument& doc, QIODevice *device,
+                        bool namespaceProcessing,
+                        QString *errorMsg, int *errorLine, int *errorColumn)
 {
-    QXmlStreamReader reader(device);
-    reader.setNamespaceProcessing(namespaceProcessing);
-    bool result = doc.setContent(&reader, errorMsg, errorLine, errorColumn);
+    bool result = doc.setContent(device, namespaceProcessing, errorMsg, errorLine, errorColumn);
     return result;
 }

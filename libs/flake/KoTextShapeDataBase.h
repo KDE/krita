@@ -25,7 +25,7 @@
 #include "KoShapeUserData.h"
 
 class KoTextShapeDataBasePrivate;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoGenStyle;

@@ -82,9 +82,13 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     sensors/SensorFadeConfiguration.ui
 
 )
+include_Directories(SYSTEM
+    ${EIGEN3_INCLUDE_DIR}
+)
 
 add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
 generate_export_header(kritalibpaintop BASE_NAME kritapaintop EXPORT_MACRO_NAME PAINTOP_EXPORT)
+
 
 target_link_libraries(kritalibpaintop kritaui kritalibbrush kritawidgetutils)
 target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES kritaui kritalibbrush)

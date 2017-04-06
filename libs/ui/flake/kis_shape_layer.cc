@@ -408,15 +408,13 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
 
 QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, QSizeF *fragmentSize)
 {
-    QXmlStreamReader reader(device);
-    reader.setNamespaceProcessing(false);
 
     QString errorMsg;
     int errorLine = 0;
     int errorColumn;
 
     KoXmlDocument doc;
-    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    bool ok = doc.setContent(device, false, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

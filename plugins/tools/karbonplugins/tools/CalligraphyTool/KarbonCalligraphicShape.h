@@ -21,41 +21,41 @@
 #define KARBONCALLIGRAPHICSHAPE_H
 
 #include <KoParameterShape.h>
+#include <kis_paint_information.h>
+#include <kis_properties_configuration.h>
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
+#include <SvgShape.h>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
 
 class KarbonCalligraphicPoint
 {
 public:
-    KarbonCalligraphicPoint(const QPointF &point, qreal angle, qreal width)
-        : m_point(point), m_angle(angle), m_width(width) {}
+    KarbonCalligraphicPoint(KisPaintInformation &paintInfo)
+        : m_paintInfo(paintInfo) {}
 
     QPointF point() const
     {
-        return m_point;
+        return m_paintInfo.pos();
     }
-    qreal angle() const
+    KisPaintInformation* paintInfo()
     {
-        return m_angle;
+        return &m_paintInfo;
     }
-    qreal width() const
+
+    void setPaintInfo(const KisPaintInformation &paintInfo)
     {
-        return m_width;
+        m_paintInfo = paintInfo;
     }
 
     void setPoint(const QPointF &point)
     {
-        m_point = point;
-    }
-    void setAngle(qreal angle)
-    {
-        m_angle = angle;
+        m_paintInfo.setPos(point);
     }
 
 private:
-    QPointF m_point; // in shape coordinates
-    qreal m_angle;
-    qreal m_width;
+    KisPaintInformation m_paintInfo;
 };
 
 /*class KarbonCalligraphicShape::Point
@@ -83,16 +83,33 @@ private:
 //        7--6--5--4   <- pointCount() / 2
 // start  |        |   end    ==> (direction of the stroke)
 //        0--1--2--3
-class KarbonCalligraphicShape : public KoParameterShape
+class KarbonCalligraphicShape : public KoParameterShape, public SvgShape
 {
 public:
-    explicit KarbonCalligraphicShape(qreal caps = 0.0);
+    explicit KarbonCalligraphicShape(KisPropertiesConfigurationSP settings);
     ~KarbonCalligraphicShape();
+
+    /**
+     * @brief configuration holds the interpretation of the paintinfo,
+     * this is similar to a vector version of a paintop.
+     * @return the configuration that is currently held by the object.
+     */
+    KisPropertiesConfigurationSP configuration() const;
+
+    /**
+     * @brief setConfiguration
+     * Set the configuration of the paintinfo interpretation(the paintop, basically)
+     * This will update the full stroke.
+     * @param setting
+     */
+    void setConfiguration(KisPropertiesConfigurationSP setting);
 
     KoShape* cloneShape() const override;
 
-    void appendPoint(const QPointF &p1, qreal angle, qreal width);
-    void appendPointToPath(const KarbonCalligraphicPoint &p);
+    void appendPoint(KisPaintInformation &paintInfo);
+    void appendPointToPath(int index);
+
+    KarbonCalligraphicPoint* lastPoint();
 
     // returns the bounding rect of whan needs to be repainted
     // after new points are added
@@ -109,6 +126,9 @@ public:
 
     // reimplemented
     virtual QString pathShapeId() const;
+
+    bool saveSvg(SvgSavingContext &context);
+    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
 protected:
     // reimplemented
@@ -141,10 +161,22 @@ private:
     //
     void addCap(int index1, int index2, int pointIndex, bool inverted = false);
 
+    /**
+     * @brief calculateWidth calculate the current width.
+     * @param p the point for which you wish to calculate the width.
+     * @return the width as modulated by the paintinfo.
+     */
+    qreal calculateWidth(KisPaintInformation *p);
+    qreal calculateAngle(KisPaintInformation *p);
+
     // the actual data then determines it's shape (guide path + data for points)
+    KisDistanceInformation *m_strokeDistance;
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
-    qreal m_caps;
+    KisPropertiesConfigurationSP m_strokeConfig;
+    QPointF m_lastOffset;
+    KisPressureSizeOption     m_sizeOption;
+    KisPressureRotationOption m_rotationOption;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

@@ -5,6 +5,9 @@
         <file>dark_addblankframe.svg</file>
         <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
+        <file>dark_brush_size.svg</file>
+        <file>dark_brush_rotation.svg</file>
+        <file>dark_brush_ratio.svg</file>
         <file>dark_deletekeyframe.svg</file>
         <file>dark_docker_lock_a.svg</file>
         <file>dark_docker_lock_b.svg</file>
@@ -31,6 +34,9 @@
         <file>light_addblankframe.svg</file>
         <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
+        <file>light_brush_size.svg</file>
+        <file>light_brush_rotation.svg</file>
+        <file>light_brush_ratio.svg</file>
         <file>light_deletekeyframe.svg</file>
         <file>light_docker_lock_a.svg</file>
         <file>light_docker_lock_b.svg</file>

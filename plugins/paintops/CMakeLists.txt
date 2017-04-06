@@ -1,6 +1,4 @@
-include_directories(libpaintop)
 
-add_subdirectory( libpaintop )
 add_subdirectory( defaultpresets )
 add_subdirectory( defaultpaintops )
 add_subdirectory( hairy )

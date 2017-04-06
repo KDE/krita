@@ -103,8 +103,9 @@ public:
 class KisApplication::ResetStarting
 {
 public:
-    ResetStarting(KisSplashScreen *splash = 0)
+    ResetStarting(KisSplashScreen *splash, int fileCount)
         : m_splash(splash)
+        , m_fileCount(fileCount)
     {
     }
 
@@ -113,8 +114,7 @@ public:
 
             KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
-
-            if (hideSplash) {
+            if (m_fileCount > 0 || hideSplash) {
                 m_splash->hide();
             }
             else {
@@ -136,6 +136,7 @@ public:
     }
 
     QPointer<KisSplashScreen> m_splash;
+    int m_fileCount;
 };
 
 
@@ -389,7 +390,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
 
-    ResetStarting resetStarting(d->splashScreen); // remove the splash when done
+
+    ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
@@ -427,7 +429,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
-
         // Loop through arguments
         short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {

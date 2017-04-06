@@ -50,8 +50,11 @@ public:
 
     KoColor col;
     QPoint mPos;
-
+#ifndef Q_OS_OSX
     QPointer<KisDlgInternalColorSelector> dialogPtr;
+#else
+    QPointer<QColorDialog> dialogPtr;
+#endif
 
     void initStyleOption(QStyleOptionButton *opt) const;
 };
@@ -306,9 +309,17 @@ void KisColorButton::mouseMoveEvent(QMouseEvent *e)
 
 void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 {
+#ifndef Q_OS_OSX
     KisDlgInternalColorSelector *dialog = dialogPtr.data();
+#else
+    QColorDialog *dialog = dialogPtr.data();
+#endif
     if (dialog) {
+#ifndef Q_OS_OSX
         dialog->setPreviousColor(q->color());
+#else
+        dialog->setCurrentColor(q->color().toQColor());
+#endif
         dialog->show();
         dialog->raise();
         dialog->activateWindow();
@@ -316,27 +327,43 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
     }
 
     KisDlgInternalColorSelector::Config cfg;
-
+#ifndef Q_OS_OSX
     dialog = new KisDlgInternalColorSelector(q,
                                           q->color(),
                                           cfg,
                                           i18n("Choose a color"));
-    //dialog->setOption(QColorDialog::ShowAlphaChannel, m_alphaChannel);
+#else
+    dialog = new QColorDialog(q);
+    dialog->setOption(QColorDialog::ShowAlphaChannel, m_alphaChannel);
+#endif
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     connect(dialog, SIGNAL(accepted()), q, SLOT(_k_colorChosen()));
     dialogPtr = dialog;
-    dialog->setPreviousColor(q->color());
+#ifndef Q_OS_OSX
+        dialog->setPreviousColor(q->color());
+#else
+        dialog->setCurrentColor(q->color().toQColor());
+#endif
     dialog->show();
 }
 
 void KisColorButton::KisColorButtonPrivate::_k_colorChosen()
 {
+#ifndef Q_OS_OSX
     KisDlgInternalColorSelector *dialog = dialogPtr.data();
+#else
+    QColorDialog *dialog = dialogPtr.data();
+#endif
     if (!dialog) {
         return;
     }
-
+#ifndef Q_OS_OSX
     q->setColor(dialog->getCurrentColor());
+#else
+    KoColor c;
+    c.fromQColor(dialog->currentColor());
+    q->setColor(c);
+#endif
 }
 
 #include "moc_kis_color_button.cpp"

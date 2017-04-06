@@ -32,9 +32,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
                Make sure mingw's bin folder is in your path. It might be a good
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.
-               
-               Copy the ming32-make.exe to make.exe in the same location. This is needed because some dependencies only know about make.exe.
-               
+
 4. On Windows, you will also need Python 3.6: https://www.python.org. Make sure to have python.exe in your path. This version of python will be used for two things: to configure Qt and to build the python scripting module. Make sure the version you download is exactly python-3.6.1. Make sure Python is in your path.
 
 == Setup your environment ==

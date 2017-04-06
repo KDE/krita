@@ -36,8 +36,8 @@ public:
     KisToolSmartPatchOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
     ~KisToolSmartPatchOptionsWidget();
 
-    int getPatchRadius( void );
-    int getAccuracy( void );
+    int getPatchRadius(void);
+    int getAccuracy(void);
 
 private:
     struct Private;

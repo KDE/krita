@@ -33,7 +33,7 @@ K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritatoolsmartpatch.json", regi
 
 
 ToolSmartPatch::ToolSmartPatch(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KisToolSmartPatchFactory());
 }

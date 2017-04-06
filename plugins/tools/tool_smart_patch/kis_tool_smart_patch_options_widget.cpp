@@ -28,18 +28,19 @@
 #include "kis_canvas_resource_provider.h"
 
 
-struct KisToolSmartPatchOptionsWidget::Private
-{
+struct KisToolSmartPatchOptionsWidget::Private {
     Private()
     {
     }
 
     Ui_KisToolSmartPatchOptionsWidget *ui;
 
-    int getPatchRadius(void){
+    int getPatchRadius(void)
+    {
         return ui->patchRadius->value();
     }
-    int getAccuracy(void){
+    int getAccuracy(void)
+    {
         return ui->accuracySlider->value();
     }
 };
@@ -57,12 +58,13 @@ KisToolSmartPatchOptionsWidget::~KisToolSmartPatchOptionsWidget()
 {
 }
 
-int KisToolSmartPatchOptionsWidget::getPatchRadius(){
+int KisToolSmartPatchOptionsWidget::getPatchRadius()
+{
     return m_d->getPatchRadius();
 }
 
-int KisToolSmartPatchOptionsWidget::getAccuracy(){
+int KisToolSmartPatchOptionsWidget::getAccuracy()
+{
     return m_d->getAccuracy();
 }
-
 

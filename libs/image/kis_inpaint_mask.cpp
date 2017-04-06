@@ -32,12 +32,12 @@
 #include "KoColorSpaceRegistry.h"
 
 KisInpaintMask::KisInpaintMask()
-        : KisTransparencyMask()
+    : KisTransparencyMask()
 {
 }
 
 KisInpaintMask::KisInpaintMask(const KisInpaintMask& rhs)
-        : KisTransparencyMask(rhs)
+    : KisTransparencyMask(rhs)
 {
 }
 
@@ -46,9 +46,9 @@ KisInpaintMask::~KisInpaintMask()
 }
 
 QRect KisInpaintMask::decorateRect(KisPaintDeviceSP &src,
-                                        KisPaintDeviceSP &dst,
-                                        const QRect & rc,
-                                        PositionToFilthy maskPos) const
+                                   KisPaintDeviceSP &dst,
+                                   const QRect & rc,
+                                   PositionToFilthy maskPos) const
 {
     Q_UNUSED(maskPos);
     KIS_ASSERT(dst != src);
@@ -60,6 +60,5 @@ QRect KisInpaintMask::decorateRect(KisPaintDeviceSP &src,
 
     return rc;
 }
-
 
 

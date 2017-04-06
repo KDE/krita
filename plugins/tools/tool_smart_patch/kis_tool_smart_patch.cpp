@@ -48,8 +48,7 @@
 
 QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
 
-struct KisToolSmartPatch::Private
-{
+struct KisToolSmartPatch::Private {
     KisMaskSP mask = nullptr;
     KisNodeSP maskNode = nullptr;
     KisNodeSP paintNode = nullptr;
@@ -102,11 +101,11 @@ QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP
     int accuracy = 50; //default accuracy - middle value
     int patchRadius = 4; //default radius, which works well for most cases tested
 
-    if( !m_d.isNull() && m_d->optionsWidget ){
+    if (!m_d.isNull() && m_d->optionsWidget) {
         accuracy = m_d->optionsWidget->getAccuracy();
         patchRadius = m_d->optionsWidget->getPatchRadius();
     }
-    return patchImage( imageDev, maskDev, patchRadius, accuracy );
+    return patchImage(imageDev, maskDev, patchRadius, accuracy);
 }
 
 void KisToolSmartPatch::activatePrimaryAction()
@@ -119,21 +118,21 @@ void KisToolSmartPatch::deactivatePrimaryAction()
     KisToolFreehand::deactivatePrimaryAction();
 }
 
-void KisToolSmartPatch::createInpaintMask( void )
+void KisToolSmartPatch::createInpaintMask(void)
 {
     m_d->mask = new KisInpaintMask();
 
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(m_d->paintNode.data());
     m_d->mask->initSelection(parentLayer);
-    image()->addNode( m_d->mask, m_d->paintNode );
+    image()->addNode(m_d->mask, m_d->paintNode);
 }
 
-void KisToolSmartPatch::deleteInpaintMask( void )
+void KisToolSmartPatch::deleteInpaintMask(void)
 {
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
-    if( ! m_d->paintNode.isNull() )
-        viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
+    if (! m_d->paintNode.isNull())
+        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->paintNode);
 
     image()->removeNode(m_d->mask);
     m_d->mask = nullptr;
@@ -147,7 +146,7 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
     KisViewManager* viewManager = kiscanvas->viewManager();
 
     //we can only apply inpaint operation to paint layer
-    if ( !m_d->paintNode.isNull() && m_d->paintNode->inherits("KisPaintLayer") ){
+    if (!m_d->paintNode.isNull() && m_d->paintNode->inherits("KisPaintLayer")) {
 
 
         if (!m_d->mask.isNull()) {
@@ -168,9 +167,9 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
         KisToolFreehand::beginPrimaryAction(event);
     } else {
         viewManager->
-                showFloatingMessage(
-                    i18n("Select paint layer to use this tool"),
-                    QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+        showFloatingMessage(
+            i18n("Select paint layer to use this tool"),
+            QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
     }
 }
 
@@ -183,10 +182,10 @@ void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
-    if( mode() != KisTool::PAINT_MODE )
+    if (mode() != KisTool::PAINT_MODE)
         return;
 
-    if( m_d->mask.isNull() )
+    if (m_d->mask.isNull())
         return;
 
     KisToolFreehand::endPrimaryAction(event);
@@ -198,7 +197,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     //User drew a mask on the temporary inpaint mask layer. Get this mask to pass to the inpaint algorithm
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
-    if( !m_d->mask.isNull() ){
+    if (!m_d->mask.isNull()) {
         m_d->maskDev->makeCloneFrom(m_d->mask->paintDevice(), m_d->mask->paintDevice()->extent());
 
         //Once we get the mask we delete the temporary layer
@@ -212,8 +211,8 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         //actual inpaint operation
-        QRect changedRect = inpaintImage( m_d->maskDev, m_d->imageDev );
-        currentNode()->setDirty( changedRect );
+        QRect changedRect = inpaintImage(m_d->maskDev, m_d->imageDev);
+        currentNode()->setDirty(changedRect);
         inpaintTransaction.commit(image()->undoAdapter());
 
         //Matching endmacro for inpaint operation
@@ -234,5 +233,4 @@ QWidget * KisToolSmartPatch::createOptionWidget()
 
     return m_d->optionsWidget;
 }
-
 

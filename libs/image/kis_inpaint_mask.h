@@ -37,7 +37,8 @@ public:
     KisInpaintMask(const KisInpaintMask& rhs);
     virtual ~KisInpaintMask();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisInpaintMask(*this));
     }
 

@@ -62,7 +62,7 @@ Q_SIGNALS:
 
 private:
     bool canCreateInpaintMask() const;
-    QRect inpaintImage( KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev );
+    QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
 
 private:
     struct Private;
@@ -78,7 +78,8 @@ class KisToolSmartPatchFactory : public KoToolFactoryBase
 
 public:
     KisToolSmartPatchFactory()
-            : KoToolFactoryBase("KritaShape/KisToolSmartPatch") {
+        : KoToolFactoryBase("KritaShape/KisToolSmartPatch")
+    {
 
         setToolTip(i18n("Smart Patch Tool"));
 
@@ -91,7 +92,8 @@ public:
 
     virtual ~KisToolSmartPatchFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas)
+    {
         return new KisToolSmartPatch(canvas);
     }
 

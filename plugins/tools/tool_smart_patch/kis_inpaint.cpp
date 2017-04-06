@@ -145,7 +145,7 @@ public:
         return m_pixelSize;
     }
 
-    void saveToDevice(KisPaintDeviceSP outDev, QRect rect )
+    void saveToDevice(KisPaintDeviceSP outDev, QRect rect)
     {
 
         Q_ASSERT(outDev->colorSpace()->pixelSize() == (quint32) m_pixelSize);
@@ -240,7 +240,9 @@ private:
 
         //hard threshold for the initial mask
         //may be optional. needs testing
-        std::for_each(maskData.data(), maskData.data() + maskData.num_bytes(), [](quint8& v){ v = (v<MASK_CLEAR)? MASK_SET : MASK_CLEAR;});
+        std::for_each(maskData.data(), maskData.data() + maskData.num_bytes(), [](quint8 & v) {
+            v = (v < MASK_CLEAR) ? MASK_SET : MASK_CLEAR;
+        });
     }
 
     MaskedImage() {}
@@ -254,8 +256,8 @@ public:
 
     void DebugDump(const QString& name)
     {
-        imageData.DebugDump(name+"_img");
-        maskData.DebugDump(name+"_mask");
+        imageData.DebugDump(name + "_img");
+        maskData.DebugDump(name + "_mask");
     }
 
     void clearMask(void)
@@ -306,7 +308,7 @@ public:
 
         for (int i = 0; i < imageData.num_elements(); ++i) {
             quint8* maskPix = maskData.data() + i * maskData.pixel_size();
-            if (*maskPix == MASK_SET ) {
+            if (*maskPix == MASK_SET) {
                 for (int k = 0; k < imageData.pixel_size(); k++)
                     *(imageData.data() + i * imageData.pixel_size() + k) = 0;
             } else {
@@ -945,12 +947,12 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
     }
 }
 
-QRect getMaskBoundingBox(  KisPaintDeviceSP maskDev )
+QRect getMaskBoundingBox(KisPaintDeviceSP maskDev)
 {
     KoColor defaultMaskPixel = maskDev->defaultPixel();
-    maskDev->setDefaultPixel( KoColor(Qt::white, maskDev->colorSpace()));
+    maskDev->setDefaultPixel(KoColor(Qt::white, maskDev->colorSpace()));
     QRect maskRect = maskDev->nonDefaultPixelArea();
-    maskDev->setDefaultPixel( defaultMaskPixel );
+    maskDev->setDefaultPixel(defaultMaskPixel);
 
     return maskRect;
 }
@@ -958,27 +960,26 @@ QRect getMaskBoundingBox(  KisPaintDeviceSP maskDev )
 
 QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
 {
-    QRect maskRect = getMaskBoundingBox( maskDev );
+    QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
 
     float scale = 1 + (accuracy / 25); //higher accuracy means we include more surrouding area around the patch. Minimum 2x padding.
-    int dx = maskRect.width()*scale;
-    int dy = maskRect.height()*scale;
+    int dx = maskRect.width() * scale;
+    int dy = maskRect.height() * scale;
     maskRect.adjust(-dx, -dy, dx, dy);
     maskRect = maskRect.intersected(imageRect);
 
-    KisPaintDeviceSP tempImageDev = new KisPaintDevice( imageDev->colorSpace() );
-    KisPaintDeviceSP tempMaskDev = new KisPaintDevice( maskDev->colorSpace() );
-    tempImageDev->makeCloneFrom( imageDev, maskRect );
-    tempMaskDev->makeCloneFrom( maskDev, maskRect );
+    KisPaintDeviceSP tempImageDev = new KisPaintDevice(imageDev->colorSpace());
+    KisPaintDeviceSP tempMaskDev = new KisPaintDevice(maskDev->colorSpace());
+    tempImageDev->makeCloneFrom(imageDev, maskRect);
+    tempMaskDev->makeCloneFrom(maskDev, maskRect);
 
-    if( !maskRect.isEmpty() ){
+    if (!maskRect.isEmpty()) {
         Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
         MaskedImageSP output = inpaint.patch();
-        output->toPaintDevice( imageDev, maskRect );
+        output->toPaintDevice(imageDev, maskRect);
     }
 
     return maskRect;
 }
-
 

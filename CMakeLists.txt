@@ -179,6 +179,15 @@ add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken te
 
 include(MacroJPEG)
 
+###########################################################
+## Look for Python3. It is also searched by KF5,         ##
+## so we should request the correct  version in advance  ##
+###########################################################
+
+find_package(PythonInterp 3.0)
+find_package(PythonLibrary 3.0)
+
+
  ########################
 #########################
 ## Look for KDE and Qt ##

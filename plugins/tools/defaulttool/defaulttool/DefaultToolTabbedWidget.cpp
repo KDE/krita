@@ -25,6 +25,8 @@
 #include "KoFillConfigWidget.h"
 #include <KoInteractionTool.h>
 
+#include <kis_document_aware_spin_box_unit_manager.h>
+
 
 DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidget *parent)
     : KoTitledTabWidget(parent)
@@ -37,6 +39,13 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 
     m_strokeWidget = new KoStrokeConfigWidget(tool->canvas(), this);
     m_strokeWidget->setWindowTitle(i18n("Stroke"));
+
+    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(m_strokeWidget);
+    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(m_strokeWidget);
+    managerLineWidth->setApparentUnitFromSymbol("px");
+    managerMitterLimit->setApparentUnitFromSymbol("px"); //set unit to px by default
+    m_strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
+
     addTab(m_strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
 
     m_fillWidget = new KoFillConfigWidget(tool->canvas(), KoFlake::Fill, this);

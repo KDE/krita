@@ -169,6 +169,7 @@ public:
     Private()
         : canvas(0),
         active(true),
+        allowLocalUnitManagement(true),
         fillConfigWidget(0),
         noSelectionTrackingMode(false)
     {
@@ -188,6 +189,7 @@ public:
     KoCanvasBase *canvas;
 
     bool active;
+    bool allowLocalUnitManagement;
 
     KoFillConfigWidget *fillConfigWidget;
     bool noSelectionTrackingMode;
@@ -428,6 +430,10 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeShape)
 {
+    if (!d->allowLocalUnitManagement) {
+        return; //the unit management is completly transfered to the unitManagers.
+    }
+
     blockChildSignals(true);
 
     /**
@@ -447,6 +453,16 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeSh
     d->lineWidth->setLineStep(1.0);
     d->capNJoinMenu->miterLimit->setLineStep(1.0);
 
+    blockChildSignals(false);
+}
+
+void KoStrokeConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerLineWidth,
+                                           KisSpinBoxUnitManager *managerMitterLimit)
+{
+    blockChildSignals(true);
+    d->allowLocalUnitManagement = false;
+    d->lineWidth->setUnitManager(managerLineWidth);
+    d->capNJoinMenu->miterLimit->setUnitManager(managerMitterLimit);
     blockChildSignals(false);
 }
 

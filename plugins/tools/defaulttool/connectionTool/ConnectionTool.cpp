@@ -837,14 +837,14 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
         }
     }
 
-//    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(canvas(), 0);
-//    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
-//    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
-//    managerLineWidth->setApparentUnitFromSymbol("px");
-//    managerMitterLimit->setApparentUnitFromSymbol("px");
-//    strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
-//    strokeWidget->setWindowTitle(i18n("Line"));
-//    list.append(strokeWidget);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(canvas(), 0);
+    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    managerLineWidth->setApparentUnitFromSymbol("px");
+    managerMitterLimit->setApparentUnitFromSymbol("px");
+    strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    list.append(strokeWidget);
 
     ConnectionPointWidget *connectPoint = new ConnectionPointWidget(this);
     connectPoint->setWindowTitle(i18n("Connection Point"));

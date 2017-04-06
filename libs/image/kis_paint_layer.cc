@@ -181,11 +181,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     }
 }
 
-void KisPaintLayer::setDirty(const QRect & rect)
-{
-    KisLayer::setDirty(rect);
-}
-
 QIcon KisPaintLayer::icon() const
 {
     return KisIconUtils::loadIcon("paintLayer");

@@ -1513,19 +1513,20 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
 {
     if (rect.isEmpty()) return;
 
-    KisNodeGraphListener::requestProjectionUpdate(node, rect);
     m_d->scheduler.updateProjection(node, rect, cropRect);
 }
 
-void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
+void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache)
 {
     if (m_d->projectionUpdatesFilter
-        && m_d->projectionUpdatesFilter->filter(this, node, rect)) {
+        && m_d->projectionUpdatesFilter->filter(this, node, rect, resetAnimationCache)) {
 
         return;
     }
 
-    m_d->animationInterface->notifyNodeChanged(node, rect, false);
+    if (resetAnimationCache) {
+        m_d->animationInterface->notifyNodeChanged(node, rect, false);
+    }
 
     /**
      * Here we use 'permitted' instead of 'active' intentively,
@@ -1543,6 +1544,8 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
     } else {
         requestProjectionUpdateImpl(node, rect, bounds());
     }
+
+    KisNodeGraphListener::requestProjectionUpdate(node, rect, resetAnimationCache);
 }
 
 void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)

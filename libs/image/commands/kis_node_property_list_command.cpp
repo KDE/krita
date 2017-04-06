@@ -24,7 +24,7 @@
 #include "kis_paint_layer.h"
 #include "commands/kis_node_property_list_command.h"
 #include "kis_undo_adapter.h"
-
+#include "kis_layer_properties_icons.h"
 
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList)
@@ -50,6 +50,30 @@ void KisNodePropertyListCommand::undo()
     m_node->setSectionModelProperties(m_oldPropertyList);
     doUpdate(m_newPropertyList, m_oldPropertyList);
 }
+
+bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
+                           const KisBaseNode::PropertyList &newPropertyList)
+{
+    if (oldPropertyList.size() != newPropertyList.size()) return false;
+
+    bool oldOnionSkinsValue = false;
+    bool newOnionSkinsValue = false;
+
+    Q_FOREACH (const KisBaseNode::Property &prop, oldPropertyList) {
+        if (prop.id == KisLayerPropertiesIcons::onionSkins.id()) {
+            oldOnionSkinsValue = prop.state.toBool();
+        }
+    }
+
+    Q_FOREACH (const KisBaseNode::Property &prop, newPropertyList) {
+        if (prop.id == KisLayerPropertiesIcons::onionSkins.id()) {
+            newOnionSkinsValue = prop.state.toBool();
+        }
+    }
+
+    return oldOnionSkinsValue != newOnionSkinsValue;
+}
+
 
 void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
                                           const KisBaseNode::PropertyList &newPropertyList)
@@ -81,6 +105,8 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
         if (image) {
             image->refreshGraphAsync(layer);
         }
+    } else if (checkOnionSkinChanged(oldPropertyList, newPropertyList)) {
+        m_node->setDirtyDontResetAnimationCache();
     } else {
         m_node->setDirty(); // TODO check if visibility was changed or not
     }

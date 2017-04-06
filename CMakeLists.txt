@@ -87,12 +87,12 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 # Define the generic version of the Krita libraries here
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
-# (2.x) so we're starting with 15 in 3.x series.
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 3)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 15")
+# (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 4)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 16")
 else()
-    # let's make sure we won't forget to update the "15"
-    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
+    # let's make sure we won't forget to update the "16"
+    message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
 endif()
 set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")

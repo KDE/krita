@@ -246,7 +246,7 @@ private:
     void updateSelectionPath();
     void updateApplyResetAvailability();
 
-    void forceRepaintShapeLayers(KisNodeSP root);
+    void forceRepaintDelayedLayers(KisNodeSP root);
 
 private:
     ToolTransformArgs m_currentArgs;

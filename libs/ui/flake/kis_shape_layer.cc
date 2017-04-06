@@ -376,7 +376,7 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
     KisExternalLayer::setVisible(visible, isLoading);
 }
 
-void KisShapeLayer::forceRepaint()
+void KisShapeLayer::forceUpdateTimedNode()
 {
     m_d->canvas->forceRepaint();
 }

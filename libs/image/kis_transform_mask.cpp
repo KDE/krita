@@ -106,6 +106,7 @@ KisTransformMask::KisTransformMask()
             new KisDumbTransformMaskParams()));
 
     connect(this, SIGNAL(initiateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(start()));
+    connect(this, SIGNAL(forceTerminateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(stop()));
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
 
     KisImageConfig cfg;
@@ -143,7 +144,7 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
     m_d->params = params;
     m_d->reloadParameters();
 
-    m_d->updateSignalCompressor.stop();
+    emit forceTerminateDelayedStaticUpdate();
 }
 
 KisTransformMaskParamsInterfaceSP KisTransformMask::transformParams() const
@@ -422,6 +423,16 @@ void KisTransformMask::setY(qint32 y)
     m_d->params->translate(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
     KisEffectMask::setY(y);
+}
+
+void KisTransformMask::forceUpdateTimedNode()
+{
+    if (m_d->updateSignalCompressor.isActive()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->staticCacheValid);
+
+        emit forceTerminateDelayedStaticUpdate();
+        slotDelayedStaticUpdate();
+    }
 }
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)

@@ -42,6 +42,7 @@
 #include "kis_resources_snapshot.h"
 #include "kis_layer.h"
 #include "kis_transaction.h"
+#include "kis_paint_layer.h"
 
 #include "kis_inpaint_mask.h"
 
@@ -93,7 +94,7 @@ void KisToolSmartPatch::resetCursorStyle()
 bool KisToolSmartPatch::canCreateInpaintMask() const
 {
     KisNodeSP node = currentNode();
-    return node && node->inherits("KisLayer");
+    return node && node->inherits("KisPaintLayer");
 }
 
 QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
@@ -141,39 +142,51 @@ void KisToolSmartPatch::deleteInpaintMask( void )
 void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
     m_d->paintNode = currentNode();
-    if (m_d->paintNode.isNull())
-        return;
+
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
 
-    if (!m_d->mask.isNull()) {
-        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
-    } else {
+    //we can only apply inpaint operation to paint layer
+    if ( !m_d->paintNode.isNull() && m_d->paintNode->inherits("KisPaintLayer") ){
 
-        createInpaintMask();
-        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
 
-        //Collapse freehand drawing of the mask followed by inpaint operation into a single undo node
-        canvas()->shapeController()->resourceManager()->undoStack()->beginMacro(kundo2_i18n("Smart Patch"));
+        if (!m_d->mask.isNull()) {
+            viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
+        } else {
 
+            createInpaintMask();
+            viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
+
+            //Collapse freehand drawing of the mask followed by inpaint operation into a single undo node
+            canvas()->shapeController()->resourceManager()->undoStack()->beginMacro(kundo2_i18n("Smart Patch"));
+
+
+            //User will be drawing on an alpha mask. Show color matching inpaint mask color.
+            m_d->currentFgColor = canvas()->resourceManager()->foregroundColor();
+            canvas()->resourceManager()->setForegroundColor(KoColor(Qt::magenta, image()->colorSpace()));
+        }
         KisToolFreehand::beginPrimaryAction(event);
-
-        //User will be drawing on an alpha mask. Show color matching inpaint mask color.
-        m_d->currentFgColor = canvas()->resourceManager()->foregroundColor();
-        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::magenta, image()->colorSpace()));
+    } else {
+        viewManager->
+                showFloatingMessage(
+                    i18n("Select paint layer to use this tool"),
+                    QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
     }
 }
 
 void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
 {
-    KisToolFreehand::continuePrimaryAction(event);
+    if (!m_d->mask.isNull())
+        KisToolFreehand::continuePrimaryAction(event);
 }
 
-#include "kis_paint_layer.h"
 
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
     if( mode() != KisTool::PAINT_MODE )
+        return;
+
+    if( m_d->mask.isNull() )
         return;
 
     KisToolFreehand::endPrimaryAction(event);
@@ -185,29 +198,31 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     //User drew a mask on the temporary inpaint mask layer. Get this mask to pass to the inpaint algorithm
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
-    m_d->maskDev->makeCloneFrom(m_d->mask->paintDevice(), m_d->mask->paintDevice()->extent());
+    if( !m_d->mask.isNull() ){
+        m_d->maskDev->makeCloneFrom(m_d->mask->paintDevice(), m_d->mask->paintDevice()->extent());
 
-    //Once we get the mask we delete the temporary layer
-    deleteInpaintMask();
+        //Once we get the mask we delete the temporary layer
+        deleteInpaintMask();
 
-    image()->waitForDone();
-    m_d->imageDev = currentNode()->paintDevice();
+        image()->waitForDone();
+        m_d->imageDev = currentNode()->paintDevice();
 
-    KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
+        KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-    //actual inpaint operation
-    QRect changedRect = inpaintImage( m_d->maskDev, m_d->imageDev );
-    currentNode()->setDirty( changedRect );
-    inpaintTransaction.commit(image()->undoAdapter());
+        //actual inpaint operation
+        QRect changedRect = inpaintImage( m_d->maskDev, m_d->imageDev );
+        currentNode()->setDirty( changedRect );
+        inpaintTransaction.commit(image()->undoAdapter());
 
-    //Matching endmacro for inpaint operation
-    canvas()->shapeController()->resourceManager()->undoStack()->endMacro();
+        //Matching endmacro for inpaint operation
+        canvas()->shapeController()->resourceManager()->undoStack()->endMacro();
 
-    QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
 
-    canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
+        canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
+    }
 }
 
 QWidget * KisToolSmartPatch::createOptionWidget()

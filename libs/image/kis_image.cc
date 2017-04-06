@@ -755,7 +755,11 @@ void KisImage::rotateImage(double radians)
 
 void KisImage::rotateNode(KisNodeSP node, double radians)
 {
-    rotateImpl(kundo2_i18n("Rotate Layer"), node, false, radians);
+    if (node->inherits("KisMask")) {
+        rotateImpl(kundo2_i18n("Rotate Mask"), node, false, radians);
+    } else {
+        rotateImpl(kundo2_i18n("Rotate Layer"), node, false, radians);
+    }
 }
 
 void KisImage::shearImpl(const KUndo2MagicString &actionName,
@@ -822,8 +826,13 @@ void KisImage::shearNode(KisNodeSP node, double angleX, double angleY)
 {
     QPointF shearOrigin = QRectF(bounds()).center();
 
-    shearImpl(kundo2_i18n("Shear layer"), node, false,
-              angleX, angleY, shearOrigin);
+    if (node->inherits("KisMask")) {
+        shearImpl(kundo2_i18n("Shear Mask"), node, false,
+                  angleX, angleY, shearOrigin);
+    } else {
+        shearImpl(kundo2_i18n("Shear Layer"), node, false,
+                  angleX, angleY, shearOrigin);
+    }
 }
 
 void KisImage::shear(double angleX, double angleY)
@@ -865,7 +874,9 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile)
     m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
-    return m_d->rootLayer->accept(visitor);
+    bool retval = m_d->rootLayer->accept(visitor);
+    m_d->signalRouter.emitNotification(ProfileChangedSignal);
+    return retval;
 
 }
 

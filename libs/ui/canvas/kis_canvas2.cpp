@@ -782,14 +782,6 @@ void KisCanvas2::notifyLevelOfDetailChange()
     image->setDesiredLevelOfDetail(lod);
 }
 
-void KisCanvas2::preScale()
-{
-    if (!m_d->currentCanvasIsOpenGL) {
-        Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->preScale();
-    }
-}
-
 const KoColorProfile *  KisCanvas2::monitorProfile()
 {
     return m_d->displayColorConverter.monitorProfile();

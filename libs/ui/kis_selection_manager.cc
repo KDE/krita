@@ -161,7 +161,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_invert = actionManager->createAction("invert");
     m_invert->setOperationID("invertselection");
 
-    actionManager->registerOperation(new KisInvertSelectionOperaton);
+    actionManager->registerOperation(new KisInvertSelectionOperation);
 
     m_copyToNewLayer = actionManager->createAction("copy_selection_to_new_layer");
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));

@@ -54,6 +54,7 @@ public Q_SLOTS:
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
+    qreal rotation() const;
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
     void slotToggleLevelOfDetailMode(bool value);

@@ -31,6 +31,9 @@
 
 #include <kis_filter_strategy.h>
 
+#include "kis_double_parse_unit_spin_box.h"
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
 static const QString pixelsInchStr(i18n("Pixels/Inch"));
@@ -59,48 +62,53 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->layout()->setMargin(0);
     m_page->setObjectName("image_size");
 
-    m_page->pixelWidth->setValue(width);
-    m_page->pixelWidth->setFocus();
-    m_page->pixelHeight->setValue(height);
+    _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
+    _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
 
-    m_page->pixelWidthDouble->setVisible(false);
-    m_page->pixelHeightDouble->setVisible(false);
+    //configure the unit to image length, default unit is pixel and printing units are forbiden.
+    _widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
+    _heightUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
+
+    m_page->pixelWidthDouble->setUnitManager(_widthUnitManager);
+    m_page->pixelHeightDouble->setUnitManager(_heightUnitManager);
+
+    m_page->pixelWidthDouble->changeValue(width);
+    m_page->pixelHeightDouble->changeValue(height);
+    m_page->pixelWidthDouble->setDecimals(2);
+    m_page->pixelHeightDouble->setDecimals(2);
+    m_page->pixelWidthDouble->setDisplayUnit(false);
+    m_page->pixelHeightDouble->setDisplayUnit(false);
+
+    m_page->pixelWidthUnit->setModel(_widthUnitManager);
+    m_page->pixelHeightUnit->setModel(_widthUnitManager);
+    m_page->pixelWidthUnit->setCurrentText("px");
+    m_page->pixelHeightUnit->setCurrentText("px");
 
     m_page->pixelFilterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formatedDescriptions());
     m_page->pixelFilterCmb->setCurrent("Bicubic");
 
-    m_page->pixelWidthUnit->addItem(pixelStr);
-    m_page->pixelWidthUnit->addItem(percentStr);
-    m_page->pixelWidthUnit->setCurrentIndex(0);
+    _printWidthUnitManager = new KisSpinBoxUnitManager(this);
+    _printHeightUnitManager = new KisSpinBoxUnitManager(this);
 
-    m_page->pixelHeightUnit->addItem(pixelStr);
-    m_page->pixelHeightUnit->addItem(percentStr);
-    m_page->pixelHeightUnit->setCurrentIndex(0);
+    m_page->printWidth->setUnitManager(_printWidthUnitManager);
+    m_page->printHeight->setUnitManager(_printHeightUnitManager);
+    m_page->printWidth->setDecimals(2);
+    m_page->printHeight->setDecimals(2);
+    m_page->printWidth->setDisplayUnit(false);
+    m_page->printHeight->setDisplayUnit(false);
+    m_page->printResolution->setDecimals(2);
+    m_page->printResolution->setAlignment(Qt::AlignRight);
 
-    m_page->printWidthUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
-    m_page->printWidthUnit->addItem(percentStr);
-    m_page->printHeightUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
-    m_page->printHeightUnit->addItem(percentStr);
+    m_page->printWidthUnit->setModel(_printWidthUnitManager);
+    m_page->printHeightUnit->setModel(_printHeightUnitManager);
 
+    m_page->printWidth->changeValue(m_printWidth);
+    m_page->printHeight->changeValue(m_printHeight);
+
+    //TODO: create a resolution dimension in the unit manager.
     m_page->printResolutionUnit->addItem(pixelsInchStr);
     m_page->printResolutionUnit->addItem(pixelsCentimeterStr);
-
-    // pick selected print units from user locale
-    if (QLocale().measurementSystem() == QLocale::MetricSystem) {
-        const int unitIndex = KoUnit(KoUnit::Centimeter).indexInListForUi(KoUnit::HidePixel);
-        m_page->printWidthUnit->setCurrentIndex(unitIndex);
-        m_page->printHeightUnit->setCurrentIndex(unitIndex);
-        m_page->printResolutionUnit->setCurrentIndex(0); // Pixels/Centimeter
-    } else { // Imperial
-        const int unitIndex = KoUnit(KoUnit::Inch).indexInListForUi(KoUnit::HidePixel);
-        m_page->printWidthUnit->setCurrentIndex(unitIndex);
-        m_page->printHeightUnit->setCurrentIndex(unitIndex);
-        m_page->printResolutionUnit->setCurrentIndex(1); // Pixels/Inch
-    }
-    updatePrintWidthUIValue(m_printWidth);
-    updatePrintHeightUIValue(m_printHeight);
-    updatePrintResolutionUIValue(m_resolution);
 
     m_page->pixelAspectRatioBtn->setKeepAspectRatio(true);
     m_page->printAspectRatioBtn->setKeepAspectRatio(true);
@@ -115,9 +123,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     labelsGroup->addWidget(m_page->lblResolution);
 
     KisSizeGroup *spinboxesGroup = new KisSizeGroup(this);
-    spinboxesGroup->addWidget(m_page->pixelWidth);
     spinboxesGroup->addWidget(m_page->pixelWidthDouble);
-    spinboxesGroup->addWidget(m_page->pixelHeight);
     spinboxesGroup->addWidget(m_page->pixelHeightDouble);
     spinboxesGroup->addWidget(m_page->printWidth);
     spinboxesGroup->addWidget(m_page->printHeight);
@@ -135,21 +141,36 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     connect(m_page->printAspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
     connect(m_page->constrainProportionsCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
 
-    connect(m_page->pixelWidth, SIGNAL(valueChanged(int)), this, SLOT(slotPixelWidthChanged(int)));
-    connect(m_page->pixelHeight, SIGNAL(valueChanged(int)), this, SLOT(slotPixelHeightChanged(int)));
-    connect(m_page->pixelWidthDouble, SIGNAL(valueChanged(double)), this, SLOT(slotPixelWidthChanged(double)));
-    connect(m_page->pixelHeightDouble, SIGNAL(valueChanged(double)), this, SLOT(slotPixelHeightChanged(double)));
-    connect(m_page->pixelWidthUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPixelWidthUnitChanged()));
-    connect(m_page->pixelHeightUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPixelHeightUnitChanged()));
+    connect(m_page->pixelWidthDouble, SIGNAL(valueChangedPt(double)), this, SLOT(slotPixelWidthChanged(double)));
+    connect(m_page->pixelHeightDouble, SIGNAL(valueChangedPt(double)), this, SLOT(slotPixelHeightChanged(double)));
+    connect(m_page->pixelWidthUnit, SIGNAL(currentIndexChanged(int)), _widthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_page->pixelHeightUnit, SIGNAL(currentIndexChanged(int)), _heightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(_widthUnitManager, SIGNAL(unitChanged(int)), m_page->pixelWidthUnit, SLOT(setCurrentIndex(int)));
+    connect(_heightUnitManager, SIGNAL(unitChanged(int)), m_page->pixelHeightUnit, SLOT(setCurrentIndex(int)));
 
-    connect(m_page->printWidth, SIGNAL(valueChanged(double)), this, SLOT(slotPrintWidthChanged(double)));
-    connect(m_page->printHeight, SIGNAL(valueChanged(double)), this, SLOT(slotPrintHeightChanged(double)));
-    connect(m_page->printWidthUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPrintWidthUnitChanged()));
-    connect(m_page->printHeightUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPrintHeightUnitChanged()));
+    connect(m_page->printWidth, SIGNAL(valueChangedPt(double)), this, SLOT(slotPrintWidthChanged(double)));
+    connect(m_page->printHeight, SIGNAL(valueChangedPt(double)), this, SLOT(slotPrintHeightChanged(double)));
+    connect(m_page->printWidthUnit, SIGNAL(currentIndexChanged(int)), _printWidthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_page->printHeightUnit, SIGNAL(currentIndexChanged(int)), _printHeightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(_printWidthUnitManager, SIGNAL(unitChanged(int)), m_page->printWidthUnit, SLOT(setCurrentIndex(int)));
+    connect(_printHeightUnitManager, SIGNAL(unitChanged(int)), m_page->printHeightUnit, SLOT(setCurrentIndex(int)));
 
     connect(m_page->printResolution, SIGNAL(valueChanged(double)), this, SLOT(slotPrintResolutionChanged(double)));
     connect(m_page->printResolution, SIGNAL(editingFinished()), this, SLOT(slotPrintResolutionEditFinished()));
     connect(m_page->printResolutionUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPrintResolutionUnitChanged()));
+
+    // pick selected print units from user locale (after slots connection, so the spinbox will be updated too).
+    if (QLocale().measurementSystem() == QLocale::MetricSystem) {
+        m_page->printWidthUnit->setCurrentText("cm");
+        m_page->printHeightUnit->setCurrentText("cm");
+        m_page->printResolutionUnit->setCurrentIndex(0); // Pixels/Centimeter
+        slotPrintResolutionUnitChanged(); //ensure the resolution is updated, even if the index didn't changed.
+    } else { // Imperial
+        m_page->printWidthUnit->setCurrentText("in");
+        m_page->printHeightUnit->setCurrentText("in");
+        m_page->printResolutionUnit->setCurrentIndex(1); // Pixels/Inch
+        slotPrintResolutionUnitChanged(); //ensure the resolution is updated, even if the index didn't changed.
+    }
 
     setMainWidget(m_page);
 }
@@ -183,23 +204,9 @@ KisFilterStrategy *DlgImageSize::filterType()
 
 // SLOTS
 
-void DlgImageSize::slotPixelWidthChanged(int w)
-{
-    slotPixelWidthChanged((double) w);
-}
-
-void DlgImageSize::slotPixelHeightChanged(int h)
-{
-    slotPixelHeightChanged((double) h);
-}
-
 void DlgImageSize::slotPixelWidthChanged(double w)
 {
-    if (m_page->pixelWidthUnit->currentText() == percentStr) {
-        m_width = qRound((w * m_originalWidth) / 100.0);
-    } else {
-        m_width = w;
-    }
+    m_width = w;
 
     m_printWidth = m_width / m_resolution;
     updatePrintWidthUIValue(m_printWidth);
@@ -215,11 +222,7 @@ void DlgImageSize::slotPixelWidthChanged(double w)
 
 void DlgImageSize::slotPixelHeightChanged(double h)
 {
-    if (m_page->pixelHeightUnit->currentText() == percentStr) {
-        m_height = qRound((h * m_originalHeight) / 100.0);
-    } else {
-        m_height = h;
-    }
+    m_height = h;
 
     m_printHeight = m_height / m_resolution;
     updatePrintHeightUIValue(m_printHeight);
@@ -233,31 +236,9 @@ void DlgImageSize::slotPixelHeightChanged(double h)
     }
 }
 
-void DlgImageSize::slotPixelWidthUnitChanged()
-{
-    updatePixelWidthUIValue(m_width);
-
-    m_page->pixelWidth->setVisible(m_page->pixelWidthUnit->currentText() == pixelStr);
-    m_page->pixelWidthDouble->setVisible(m_page->pixelWidthUnit->currentText() == percentStr);
-}
-
-void DlgImageSize::slotPixelHeightUnitChanged()
-{
-    updatePixelHeightUIValue(m_height);
-
-    m_page->pixelHeight->setVisible(m_page->pixelHeightUnit->currentText() == pixelStr);
-    m_page->pixelHeightDouble->setVisible(m_page->pixelHeightUnit->currentText() == percentStr);
-}
-
 void DlgImageSize::slotPrintWidthChanged(double w)
 {
-    if (m_page->printWidthUnit->currentText() == percentStr) {
-        const double originalWidthPoint = m_originalWidth / m_originalResolution;
-        m_printWidth = (w * originalWidthPoint) / 100.0;
-    } else {
-        KoUnit selectedUnit = KoUnit::fromListForUi(m_page->printWidthUnit->currentIndex(), KoUnit::HidePixel);
-        m_printWidth = selectedUnit.fromUserValue(w);
-    }
+    m_printWidth = w;
 
     if (m_keepAspect) {
         m_printHeight = m_printWidth / m_aspectRatio;
@@ -288,13 +269,7 @@ void DlgImageSize::slotPrintWidthChanged(double w)
 
 void DlgImageSize::slotPrintHeightChanged(double h)
 {
-    if (m_page->printHeightUnit->currentText() == percentStr) {
-        const double originalHeightPoint = m_originalHeight / m_originalResolution;
-        m_printHeight = (h * originalHeightPoint) / 100.0;
-    } else {
-        KoUnit selectedUnit = KoUnit::fromListForUi(m_page->printHeightUnit->currentIndex(), KoUnit::HidePixel);
-        m_printHeight = selectedUnit.fromUserValue(h);
-    }
+    m_printHeight = h;
 
     if (m_keepAspect) {
         m_printWidth = m_printHeight * m_aspectRatio;
@@ -321,16 +296,6 @@ void DlgImageSize::slotPrintHeightChanged(double h)
             updatePixelWidthUIValue(m_width);
         }
     }
-}
-
-void DlgImageSize::slotPrintWidthUnitChanged()
-{
-    updatePrintWidthUIValue(m_printWidth);
-}
-
-void DlgImageSize::slotPrintHeightUnitChanged()
-{
-    updatePrintHeightUIValue(m_printHeight);
 }
 
 void DlgImageSize::slotAspectChanged(bool keep)
@@ -413,65 +378,29 @@ void DlgImageSize::slotPrintResolutionUnitChanged()
 
 void DlgImageSize::updatePixelWidthUIValue(double value)
 {
-    if (m_page->pixelWidthUnit->currentText() == percentStr) {
-        m_page->pixelWidthDouble->blockSignals(true);
-        m_page->pixelWidthDouble->setValue((value * 100.0) / m_originalWidth);
-        m_page->pixelWidthDouble->blockSignals(false);
-    } else {
-        m_page->pixelWidth->blockSignals(true);
-        m_page->pixelWidth->setValue(value);
-        m_page->pixelWidth->blockSignals(false);
-    }
+    m_page->pixelWidthDouble->blockSignals(true);
+    m_page->pixelWidthDouble->changeValue(value);
+    m_page->pixelWidthDouble->blockSignals(false);
 }
 
 void DlgImageSize::updatePixelHeightUIValue(double value)
 {
-    if (m_page->pixelHeightUnit->currentText() == percentStr) {
-        m_page->pixelHeightDouble->blockSignals(true);
-        m_page->pixelHeightDouble->setValue((value * 100.0) / m_originalHeight);
-        m_page->pixelHeightDouble->blockSignals(false);
-    } else {
-        m_page->pixelHeight->blockSignals(true);
-        m_page->pixelHeight->setValue(value);
-        m_page->pixelHeight->blockSignals(false);
-    }
+    m_page->pixelHeightDouble->blockSignals(true);
+    m_page->pixelHeightDouble->changeValue(value);
+    m_page->pixelHeightDouble->blockSignals(false);
 }
 
 void DlgImageSize::updatePrintWidthUIValue(double value)
 {
-    double uiValue = 0.0;
-    if (m_page->printWidthUnit->currentText() == percentStr) {
-        // We need to compute percent in point unit because:
-        // - originalWith is a value expressed in px (original resolution)
-        // - value is expressed in point unit (current resolution)
-        // - the percentage value should be based on the original print size
-        const double originalWidthPoint = m_originalWidth / m_originalResolution;
-        uiValue = (value * 100.0) / originalWidthPoint;
-    } else {
-        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->printWidthUnit->currentIndex());
-        uiValue = selectedUnit.toUserValue(value);
-    }
     m_page->printWidth->blockSignals(true);
-    m_page->printWidth->setValue(uiValue);
+    m_page->printWidth->changeValue(value);
     m_page->printWidth->blockSignals(false);
 }
 
 void DlgImageSize::updatePrintHeightUIValue(double value)
 {
-    double uiValue = 0.0;
-    if (m_page->printHeightUnit->currentText() == percentStr) {
-        // We need to compute percent in point unit because:
-        // - originalHeight is a value expressed in px (original resolution)
-        // - value is expressed in point unit (current resolution)
-        // - the percentage value should be based on the original print size
-        const double originalHeightPoint = m_originalHeight / m_originalResolution;
-        uiValue = (value * 100.0) / originalHeightPoint;
-    } else {
-        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->printHeightUnit->currentIndex());
-        uiValue = selectedUnit.toUserValue(value);
-    }
     m_page->printHeight->blockSignals(true);
-    m_page->printHeight->setValue(uiValue);
+    m_page->printHeight->changeValue(value);
     m_page->printHeight->blockSignals(false);
 }
 

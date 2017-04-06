@@ -75,24 +75,6 @@ bool KoDocumentInfo::load(const KoXmlDocument &doc)
     return true;
 }
 
-bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
-{
-    m_authorInfo.clear();
-
-    KoXmlNode t = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
-    KoXmlNode office = KoXml::namedItemNS(t, KoXmlNS::office, "meta");
-
-    if (office.isNull())
-        return false;
-
-    if (!loadOasisAboutInfo(office))
-        return false;
-
-    if (!loadOasisAuthorInfo(office))
-        return false;
-
-    return true;
-}
 
 QDomDocument KoDocumentInfo::save(QDomDocument &doc)
 {
@@ -111,32 +93,6 @@ QDomDocument KoDocumentInfo::save(QDomDocument &doc)
         return QDomDocument();
 
     return doc;
-}
-
-bool KoDocumentInfo::saveOasis(KoStore *store)
-{
-    updateParametersAndBumpNumCycles();
-
-    KoStoreDevice dev(store);
-    KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
-                             "office:document-meta");
-    xmlWriter->startElement("office:meta");
-
-    xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("Calligra/%1")
-                           .arg(KritaVersionWrapper::versionString()));
-    xmlWriter->endElement();
-
-    if (!saveOasisAboutInfo(*xmlWriter))
-        return false;
-    if (!saveOasisAuthorInfo(*xmlWriter))
-        return false;
-
-    xmlWriter->endElement();
-    xmlWriter->endElement(); // root element
-    xmlWriter->endDocument();
-    delete xmlWriter;
-    return true;
 }
 
 void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)

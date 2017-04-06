@@ -49,6 +49,19 @@ void KisToolPencil::mousePressEvent(KoPointerEvent *event)
     DelegatedPencilTool::mousePressEvent(event);
 }
 
+QList<QPointer<QWidget> > KisToolPencil::createOptionWidgets()
+{
+    QList<QPointer<QWidget> > widgetsList =
+            DelegatedPencilTool::createOptionWidgets();
+
+    QList<QPointer<QWidget> > filteredWidgets;
+    Q_FOREACH (QWidget* widget, widgetsList) {
+        if (widget->objectName() != "Stroke widget") {
+            filteredWidgets.push_back(widget);
+        }
+    }
+    return filteredWidgets;
+}
 
 __KisToolPencilLocalTool::__KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool)
     : KoPencilTool(canvas), m_parentTool(parentTool) {}

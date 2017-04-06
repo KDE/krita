@@ -63,8 +63,7 @@ public:
                                         i18n("RGB (16-bit integer/channel, unmanaged)"),
                                         true,
                                         RGBAColorModelID,
-                                        Integer16BitsColorDepthID,
-                                        16) {
+                                        Integer16BitsColorDepthID) {
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {

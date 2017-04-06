@@ -24,6 +24,8 @@
 #include "kis_double_parse_spin_box.h"
 #include "kritawidgets_export.h"
 
+class KisSpinBoxUnitManager;
+
 /*!
  * \brief The KisDoubleParseUnitSpinBox class is an evolution of the \see KoUnitDoubleSpinBox, but inherit from \see KisDoubleParseSpinBox to be able to parse math expressions.
  *
@@ -36,18 +38,33 @@ class KRITAWIDGETS_EXPORT  KisDoubleParseUnitSpinBox : public KisDoubleParseSpin
 
 public:
     KisDoubleParseUnitSpinBox(QWidget* parent = 0);
-    ~KisDoubleParseUnitSpinBox();
+    virtual ~KisDoubleParseUnitSpinBox();
+
+    void setUnitManager(KisSpinBoxUnitManager* unitManager);
 
     /**
-     * Set the new value in points which will then be converted to the current unit for display
+     * Set the new value in points (or other reference unit) which will then be converted to the current unit for display
      * @param newValue the new value
      * @see value()
      */
     virtual void changeValue( double newValue );
+
     /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
     virtual void setUnit(const KoUnit &unit);
+    virtual void setUnit(const QString & symbol);
+    /*!
+     * \brief setReturnUnit set a unit, such that the spinbox now return values in this unit instead of the reference unit for the current dimension.
+     * \param symbol the symbol of the new unit.
+     */
+    void setReturnUnit(const QString & symbol);
+
+    /**
+     * @brief setDimensionType set the dimension (for example length or angle) of the units the spinbox manage
+     * @param dim the dimension id. (if not an id in KisSpinBoxUnitManager::UnitDimension, then the function does nothing).
+     */
+    virtual void setDimensionType(int dim);
 
     /// @return the current value, converted in points
     double value( ) const;
@@ -76,6 +93,10 @@ public:
      * @return the resulting string
      */
     virtual QString textFromValue( double value ) const;
+
+    //! \brief get the text in the spinbox without prefix or suffix, and remove unit symbol if present.
+    virtual QString veryCleanText() const;
+
     /**
      * Transfrom a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
@@ -83,8 +104,13 @@ public:
      */
     virtual double valueFromText( const QString& str ) const;
 
+    void setUnitChangeFromOutsideBehavior(bool toggle); //if set to false, setting the unit using KoUnit won't have any effect.
+
+    //! \brief display the unit symbol in the spinbox or not. For example if the unit is displayed in a combobox connected to the unit manager.
+    void setDisplayUnit(bool toggle);
+
 Q_SIGNALS:
-    /// emitted like valueChanged in the parent, but this one emits the point value
+    /// emitted like valueChanged in the parent, but this one emits the point value, or converted to another reference unit.
     void valueChangedPt( qreal );
 
 
@@ -92,9 +118,20 @@ private:
     class Private;
     Private * const d;
 
+    QString detectUnit();
+    QString makeTextClean(QString const& txt) const;
+
+    //thoses functions are usefull to sync the spinbox with it's unitmanager.
+    //! \brief change the unit, reset the spin box everytime. From the outside it's alway set unit that should be called.
+    void internalUnitChange(QString const& symbol);
+    void prepareUnitChange();
+
 private Q_SLOTS:
     // exists to do emits for valueChangedPt
     void privateValueChanged();
+    void detectUnitChanges();
+    void disconnectExternalUnitManager();
+
 };
 
 #endif // KIS_DOUBLEPARSEUNITSPINBOX_H

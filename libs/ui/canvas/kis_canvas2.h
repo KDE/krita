@@ -92,7 +92,7 @@ public: // KoCanvasBase implementation
 
     bool snapToGrid() const;
 
-    // XXX: Why?
+    // This method only exists to support flake-related operations
     void addCommand(KUndo2Command *command);
 
     virtual QPoint documentOrigin() const;
@@ -115,7 +115,7 @@ public: // KoCanvasBase implementation
     /**
      * Return the shape manager associated with this canvas
      */
-    KoShapeManager * globalShapeManager() const;
+    KoShapeManager *globalShapeManager() const;
 
     void updateCanvas(const QRectF& rc);
 
@@ -133,12 +133,6 @@ public: // KoCanvasBase implementation
     virtual KoToolProxy* toolProxy() const;
 
     const KoColorProfile* monitorProfile();
-
-    /**
-     * Prescale the canvas represention of the image (if necessary, it
-     * is for QPainter, not for OpenGL).
-     */
-    void preScale();
 
     // FIXME:
     // Temporary! Either get the current layer and image from the
@@ -172,23 +166,27 @@ public: // KisCanvas2 methods
 
     KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+
     /**
      * @brief setProofingOptions
      * set the options for softproofing, without affecting the proofing options as stored inside the image.
      */
     void setProofingOptions(bool softProof, bool gamutCheck);
     KisProofingConfigurationSP proofingConfiguration() const;
+
     /**
      * @brief setProofingConfigUpdated This function is to set whether the proofing config is updated,
      * this is needed for determining whether or not to generate a new proofing transform.
      * @param updated whether it's updated. Just set it to false in normal usage.
      */
     void setProofingConfigUpdated(bool updated);
+
     /**
      * @brief proofingConfigUpdated ask the canvas whether or not it updated the proofing config.
      * @return whether or not the proofing config is updated, if so, a new proofing transform needs to be made
      * in KisOpenGL canvas.
-     */bool proofingConfigUpdated();
+     */
+    bool proofingConfigUpdated();
 
     void setCursor(const QCursor &cursor);
     KisAnimationFrameCacheSP frameCache() const;

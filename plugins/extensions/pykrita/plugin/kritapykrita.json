@@ -1,0 +1,9 @@
+{
+    "Id": "Python Plugin Manager",
+    "Type": "Service",
+    "X-KDE-Library": "kritapykrita",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

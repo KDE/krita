@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=highpass
+X-Python-2-Compatible=false
+Name=Highpass Filter
+Comment=Highpass Filter, based on http://registry.gimp.org/node/7385

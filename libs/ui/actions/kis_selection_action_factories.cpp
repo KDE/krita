@@ -306,7 +306,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         if (willCut) {
             KUndo2Command *command = 0;
 
-            if (willCut && node->hasEditablePaintDevice()) {
+            if (node->hasEditablePaintDevice()) {
                 struct ClearSelection : public KisTransactionBasedCommand {
                     ClearSelection(KisNodeSP node, KisSelectionSP sel)
                         : m_node(node), m_sel(sel) {}
@@ -406,7 +406,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     win->addViewAndNotifyLoadingCompleted(doc);
 }
 
-void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
+void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
     runFilter(filter, view, config);

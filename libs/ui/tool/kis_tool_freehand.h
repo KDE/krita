@@ -19,6 +19,8 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
+#include <Eigen/Core>
+
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_distance_information.h>

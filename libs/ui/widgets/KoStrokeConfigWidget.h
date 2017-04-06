@@ -43,6 +43,7 @@ class KoMarker;
 class KoCanvasBase;
 class KoShapeStroke;
 
+class KisSpinBoxUnitManager;
 
 /// A widget for configuring the stroke of a shape
 class KRITAUI_EXPORT KoStrokeConfigWidget : public QWidget
@@ -75,13 +76,14 @@ public:
     void setActive(bool active);
 
     void updateStyleControlsAvailability(bool enabled);
-
-    void updateMarkers(const QList<KoMarker*> &markers);
+    void setUnitManagers(KisSpinBoxUnitManager* managerLineWidth, KisSpinBoxUnitManager* managerMitterLimit);
 
     void activate();
     void deactivate();
 
 private Q_SLOTS:
+
+    void updateMarkers(const QList<KoMarker*> &markers);
 
     void canvasResourceChanged(int key, const QVariant &value);
 

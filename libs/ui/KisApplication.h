@@ -95,6 +95,11 @@ public:
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
 
+    void addResourceTypes();
+    void loadResources();
+    void loadPlugins();
+    void initializeGlobals(const KisApplicationArguments &args);
+
 public Q_SLOTS:
 
     void remoteArguments(QByteArray message, QObject*socket);
@@ -105,8 +110,6 @@ private:
     void checkAutosaveFiles();
     bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *m_mainWindow);
     void clearConfig();
-    void loadResources();
-    void loadPlugins();
 
 private:
     KisApplicationPrivate * const d;

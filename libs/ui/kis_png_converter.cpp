@@ -1263,7 +1263,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
         delete [] palette;
     }
-    iodevice->close();
     return KisImageBuilder_RESULT_OK;
 }
 

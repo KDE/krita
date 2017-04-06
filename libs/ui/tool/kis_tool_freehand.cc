@@ -29,6 +29,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+#include <Eigen/Core>
+
 #include <kis_icon.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>

@@ -47,8 +47,8 @@ private:
 };
 
 typedef KisDelegatedTool<KisToolShape,
-                         __KisToolPencilLocalTool,
-                         DeselectShapesActivationPolicy> DelegatedPencilTool;
+__KisToolPencilLocalTool,
+DeselectShapesActivationPolicy> DelegatedPencilTool;
 
 class KisToolPencil : public DelegatedPencilTool
 {
@@ -57,6 +57,8 @@ class KisToolPencil : public DelegatedPencilTool
 public:
     KisToolPencil(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
+
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
@@ -73,7 +75,7 @@ class KisToolPencilFactory : public KoToolFactoryBase
 
 public:
     KisToolPencilFactory()
-            : KoToolFactoryBase("KisToolPencil") {
+        : KoToolFactoryBase("KisToolPencil") {
         setToolTip(i18n("Freehand Path Tool"));
         setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

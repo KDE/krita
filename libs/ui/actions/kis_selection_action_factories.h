@@ -94,8 +94,8 @@ struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFact
     void run(KisViewManager *view);
 };
 
-struct KisInvertSelectionOperaton : public KisFilterSelectionOperation {
-    KisInvertSelectionOperaton() : KisFilterSelectionOperation("invertselection") {}
+struct KisInvertSelectionOperation : public KisFilterSelectionOperation {
+    KisInvertSelectionOperation() : KisFilterSelectionOperation("invertselection") {}
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
 };
 

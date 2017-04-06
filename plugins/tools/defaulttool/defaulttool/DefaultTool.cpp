@@ -55,6 +55,8 @@
 #include "kis_action_registry.h"
 #include <KoInteractionStrategyFactory.h>
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 #include <KoIcon.h>
 
 #include <QPointer>
@@ -1105,6 +1107,13 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 
     m_tabbedOptionWidget = new DefaultToolTabbedWidget(this);
 
+    // TODO: fix units in tabbed widget
+    // KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    // KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    // managerLineWidth->setApparentUnitFromSymbol("px");
+    // managerMitterLimit->setApparentUnitFromSymbol("px"); //set unit to px by default
+    // strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
+    
     if (isActivated()) {
         m_tabbedOptionWidget->activate();
     }

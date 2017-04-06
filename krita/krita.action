@@ -2666,7 +2666,7 @@
       <whatsThis></whatsThis>
       <toolTip>Rotate Layer</toolTip>
       <iconText>Rotate Layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2678,7 +2678,7 @@
       <whatsThis></whatsThis>
       <toolTip>Rotate Layer 90° to the Right</toolTip>
       <iconText>Rotate Layer 90° to the Right</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2690,7 +2690,7 @@
       <whatsThis></whatsThis>
       <toolTip>Rotate Layer 90° to the Left</toolTip>
       <iconText>Rotate Layer 90° to the Left</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2702,7 +2702,7 @@
       <whatsThis></whatsThis>
       <toolTip>Rotate Layer 180°</toolTip>
       <iconText>Rotate Layer 180°</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2726,7 +2726,7 @@
       <whatsThis></whatsThis>
       <toolTip>Shear Layer</toolTip>
       <iconText>Shear Layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>

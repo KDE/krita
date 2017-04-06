@@ -17,10 +17,9 @@
  */
 
 /**
-  \mainpage Krita Image manipulation and paint application
+  \mainpage Krita Painting application
 
-  Krita is an advanced and modular paint and image manipulation
-  application.
+  Krita is an advanced and modular painting application.
 
   Krita is built around two core libraries: pigment and kritaimage.
 
@@ -39,11 +38,12 @@
 
 <ul>
   <li> filters
+  <li> generators
   <li> tools
-  <li> paintops
+  <li> brush engines
   <li> colorspaces
-  <li> file filters
-  <li> view plugins
+  <li> import/export filters
+  <li> view plugins: plugins that extend krita with dockers, dialogs etcetera
 </ul>
 
  */

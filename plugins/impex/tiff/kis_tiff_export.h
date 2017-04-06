@@ -31,7 +31,7 @@ class KisTIFFExport : public KisImportExportFilter
 public:
     KisTIFFExport(QObject *parent, const QVariantList &);
     virtual ~KisTIFFExport();
-public:
+    virtual bool supportsIO() const { return false; }
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
     KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;

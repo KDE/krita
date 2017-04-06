@@ -123,22 +123,12 @@ public:
     bool haveShapesSelected();
     bool haveShapesInClipboard();
 
-    /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
+    /// Checks if the current selection is editable and has some pixels selected in the pixel selection
     bool havePixelSelectionWithPixels();
-
-    // the following functions are needed for the siox tool
-    // they might be also useful on its own
-    void erode();
-    void dilate();
-
-    void paint(QPainter& gc, const KoViewConverter &converter);
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
     void updateStatusBar();
-
-    void copyFromDevice(KisPaintDeviceSP device);
-    void applySelectionFilter(KisSelectionFilter *filter);
 
     KisViewManager * m_view;
     KisDocument * m_doc;

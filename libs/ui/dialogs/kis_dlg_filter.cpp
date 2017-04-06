@@ -109,6 +109,7 @@ void KisDlgFilter::setFilter(KisFilterSP f)
     setDialogTitle(f);
     d->uiFilterDialog.filterSelection->setFilter(f);
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
+    d->currentFilter = f;
     updatePreview();
 }
 
@@ -183,6 +184,7 @@ void KisDlgFilter::createMask()
 
     KisLayer *layer = dynamic_cast<KisLayer*>(d->node.data());
     KisFilterMaskSP mask = new KisFilterMask();
+    mask->setName(d->currentFilter->name());
     mask->initSelection(d->view->selection(), layer);
     mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
 

@@ -28,7 +28,9 @@
 
 #include <algorithm>
 
+#include <cmath>
 #include <Python.h>
+
 
 #include <QLibrary>
 #include <QString>

@@ -1,563 +1,719 @@
-0x4e84
-A. Agarossi
-acrazymind
-Adam Druzd
-Admiral Potato
-Adroneus
-ajmendoza
-aka
-akimine
-Al Steffen
+3DEsprit
+Aan
+Aatu Mikkonen
+Abhay Menon
+Adam Earle
+Adam Mizerski
+adekto
+Adrian LAN SUN LUK
+Adrian "Skie" Hernik
+AGee
+Aina Reich
+Akerraren Adarrak
+Aki
+Alaguillaume
 Alan Pike
-Albert Giró
-Alejandro Alonso Fernández
-Alessandro Castellani
-Alex Alexzander
-Alex Gleason
-Alexander Bender
-Alexander Frolov
-Alexander-Lars Dallmann
+Albert Perrien II
+Alecaddd
+Aleks Creative
+Alessandro Bono
+Alessandro Norfo
+Alexander A. (cicyractu)
+Alexander Birke
+Alexander "Keota" Clowes
+Alexander Otto
 Alexandra Mould
-alexis
-Algot
-AltaryBeastiful
-Amelia Hamrick
-Amit Dutta
-AmokRyan
-Andreas Hiller
-Andreas Pagsberg
+Alex Gleason
+Alex Gustafson
+Alex Haskell
+Alexis Andersson
+Algot Runeman
+Alicia Rangel Avila
+Alvaro Fernando Celis
+Amanda Marie Hampe
+Amigo
+A. Monti
+Amy Musa
+anatolnsk
+Anders I. Gjermo
+Anders Kirchenbauer
+Andrea Agoston
+Andrea Gastaldello
+Andreas Mattijat
 Andreas Rieger
-Andrej Kwadrin
-Andrew Buttery
-Andrew Frey
+Andres Ruiz
+Andreus
+Andrew Ford
 Andrew Helm
 Andrew Morgan
-Andy hartshorn
-Andy Kaczmarczyk
-aneumann
-Aneurin Price
-Ania Celarek
-Anne Stenbye
-Antonio Larrosa
-Antony T Curtis
-Anu Swipe
-Aramande
-Argusdusty
-ariayko
-Ariel Rosenfeld
+Andy Palatka
+Ange
+Angel Rua
+Ankit Sinha
+Anne Derenne
+anoptic
+Ant
+Antan Karmola
+Antharias
+Antonio Gulino
+Antonio Mendoza
+Anton Krivdin
+Apothem
+Append Media, LLC
+Ariochlee
+Arjan Schuurman
 Arne Brix
-Artifex-Astra
-Asbjørn Ole Karstensen
-Aurailious
+Arne Hormann
+Arn Sweatman
+Arron Washington
+Arthur Juchereau
+Arthur Shagall
+Arturo J. Pérez
+Asa2
+Asher Glick
+Asko L.
+Aster Blair
+Atlanta, GA, USA
+Atrian \\lunitaire
+Audrey Walsh
+Aura Qualic
 Aurélien Da Campo
-Avi
-awfulTHEduck
-Aysberg
-B.DUMAS
-B+P-Snegge
-Bahamuttone
-Banajune
-Barry Carter
+Aurélien Pavel
+Axel Philipsenburg
+Azaelys
+Baconhawk
+Bakawaki
 Bartek Moniewski
-Belgian Blender User Group
+beholder0x100
+Ben Bickle
+Beni
+beniwtv
+Benjamin Nelan
+Benjamin Thery
 Ben Lawn
-BenBen
-Bernhard Friedreich
+Ben Lousley
+Benny
+Ben Reeves
+Bernd Grobauer
+bgr
 Biliogadafr
+Bill Tavis
 Bill Travis
-Bla6
+BiSeol
+Bjørnar Frøyse
+Björn K.
+BlackScorp
 Blake Phoenix
-Boyd Stephen Smith Jr.
-Bozeman-ite
-Brendan G.
-Brendan Hsiao
-C9Ping
-CaitlynB
-Camille Bissuel (aka nylnook)
-Can Ax
-Capt Brime
-Carlos Mazon
-CarlozZ
-Caryl F
+Bleeptrack
+bloodywing
+Bob WRENN
+Boneloaf
+B+P-Snegge
+Brad Cage
+Braddock
+Brandon Ayers
+Branko Lampi
+BrashMonkey
+Brendan Azama
+Brendan G
+Brosina
+Broudenoi G.
+Bruno D.
+BunnyApocalypse
+C
+Cally Lim
+CaptainCaffeine
+Carles Figuerola
+Carl Hughes
+Catalina-Andreea Oprea
+@CattyFae
+Caujka
 ceceppa
-Cedric Sieg
-Chris Offner
-Chrispynutt
-Christer Landstedt
-Christian Müller
-Christian Platzer
+Cedric3d
+Cedric Dumont
+Célian Veyssière
+Cellihelli
+CepO
+Chaddaï
+Charles "Meerkat" Cooper
+Charlie T
+Chef J
+Cheng-Chia Tseng
+Chippyri
+Christiaan Moleman
+Christian Lange
 Christian Vitroler
-Christopher Sweets
-Cimeryd
-Claire P
-Claudia Caro Valadez
-Clayton Fasenmyer
-ClockworkWolf
+Christopher Sidebottom
+Christophe S
+Christoph Grüninger
+Clockwork
+cnikiel
 codl
-Collignon David
-Conicer
-Contoli Hervé
+coeseta
+Conrad/Saria
 Contret
-cosarara
-Costo
-Courtland Jones
-cybernard
+Corey L
+Corey Ryan Hanson
+Coronicus Mitchell
+Craig Maloney
+credits nick
+Crista Alejandre
+CubicRain
+cycl0ne
+D3spairity
+Dan Arrabal
+Dan Bjorge
 Daniel Andersen
-Daniel Cohen
-Daniel Dean
-Daniel50 
-Danni
+Daniel Beck
+Daniel Díaz Casanueva
+Daniel Hofmann
+Daniel Kvarfordt
+Daniel "Livix" Dean
+Darin Miller
 Darkflame
-darkinmyeyes
-David Gianforte
+darutse
+das_j
+dave5
+Dave Dodson
+Dave "Jellybit" Freeman
+David
+David F. Sandberg
+David Gayerie
+David J Sequero
 David Kerdudo
-David Polston
-David Revoy
+David Kuhta
+David Mortensen
+davidr
 David Seward
-Davidr
-DC Turner
+David Torcivia
 Dea Felicia Regine Nørregård
-decultured
-Deltabeard
-Demonio Pájaro
-Denaro
-Denver Gingerich
-Dezponia
-diacritica
-Dirk Tol
+Denis Domrachev
+Denis Gualtieri
+Dezponia Veil
+Dhruv Govil
+differentsmoke
+Dimitar Pouchnikov
+Dimitri Z
+Dinesh Kumar
+Dmitrii Minaev
 Dmitri Sotnikov
-Dototot
-Douglas Hammond
-Drew CR
-drozdal
-DyngJohan
-Ed Grether
-Edhrin
-Eduard Lohmann
-EduMerch
+Doc Whitaker
+Dominikus Reiter
+Dou
+dritter
+Duy Vo Van
+ecloud
+Edgar Simo-Serra
+Edoli
 Eiken
 Ejnaren
-elhombretecla
-Emil Maselli
-EmileIsMine
-Emmanuel Florac
-Emmanuel Klein
-Eo Fenstalker
+Eli
+elimik
+Eli Spizzichino
+Englert Guillaume
+Eric Fish
+Érico Vieira Porto
 Eric "Rexodus" Lee
-Eric Hansen
-Erwin B.
-Esteban Manchado Velázquez
-Fang
-fdoggrady
+Erik Widqvist
+Erkki Ruohtula
+Erwhann-Rouge
+Erwin
+Esteban Bondy
+Ethan Darling
+Evelyn Radcliffe
+Even K Johansen
+Farfarer
+fbessou
+Fede Ramirez
 Federico Fieni
+Felix Felicis Potter
+Felix Otoo
 Ferenc Kurucz
-Fernando Hoyos
-feufochmar
-ffd114
-fire_lizard
-Flaim Manuel
-Fnappy
+Feufochmar
+Filou
+Fire Lizard
+FloKe
+flord
 Foli Ayivoh
-Francesca Poppi
-Francesco Bona
+fractalfiend
+Francesca "JK" Poppi
 Francis Godawski
-Franco Giachetti
 François Téchené
+Frank Bremer
 FrankyFunky
+fratti
+Frédéric Bertolus
+Frederik Gladhorn
 Frémo
-Furor
-gabsd84
-Gamamoto
-Gary Kacmarcik
-Gavin S
+FrenchyParagon
+Gabriel Diosan
+Gabriel Montagné Láscaris-Comneno
+Gabriel Morell-Pacheco
+Gabriel Scherer
+Gal Buki
+Gary Noden
 Gazelle
-Geert J. Janssens
-Gerben Venekamp
-Gerhard "Angelic_Mew" Booysen
-Giovanni Bianco
-Gizmo
-gottesman007
-GQBUM
+gdquest
+GeekyMonkey
+Genester
+Georg Piorczynski
+gerbilfat
+gfcwfzkm
+gf.nekro
+Giacomo Magisano
+Gibbon
+Gil
+Gizmo Beardon
+Gog0
+GreenImp
+Greg Freeman
 Grigory Petrov
-Grozmo
-GuruBuszu
+Guillaume Sancey
 guruguru
-Gustaf Lindstedt
-Hadrien Brissaud
-hamnstar
-Hana Dusíková
-Hanny Pooh
-HASEGAWA Manabu
-HDWT
-Headtoon
-Hector Dubon
+HappyEnte
+Harald Schott
+Harrison Lumia
+Haydn Stevens
 Heini Gurke
 Henry Stahle
-herrkjeldsen
+HeroStudio
+Herrkjeldsen
+Hidetaka Nakazawa
 higekzk
-Hitoshi Okabe
-Ian F (Cyquine)
-Ian Magee
+High Iron Studios
+Honzito
+Hoofed
+H Petrus
+HwangTW
+HyDrone
+Ian George Bull Young
+Ichigo Mayo
 Ieniki Coon
-Igor Kozyrin
-Ike Ah-Loe
-Iker AM
+Ifynth
+IkerAM
 ikkiz
+Ilja Lauber
 Ilya Portnov
-Inês Almeida
-Infocentral
+ilyas
+Ingjald
+Inkbug
+iRowebot
 Irvin Dos Reis
-J Ryan Buller
-J. 'Koopacloud' A.
-JadeGFX
-Jaime Herazo
-Jakob Riepler
-James "Moody" Orwin
-James Gockel
+Jaco Vermeulen
+Jamaica Sobrenilla
 James Marsters
-James Orr
-James Sheppard
-James Thompson
 James Valleroy
-Jan Včelák
-Janez Rupar
-Jarkko Pöyry
-Jarno Lehto
+Jamie Macdougall
+Jamie Slowgrove
+Jan
+Jasem Mutlaq
+Jason Hall
+Jasper Boot
+Jaylooker
 Jay Shartzer
-JBrosi
-jenissimo
-Jens Reuterberg
-Jens Wilmer
-Jesse D Cutts
-Jim Salter
-Jiray
-JM
-jmscharff2
-Jo-Herman "Huyderman" Haugholt
-John the Treeman
-John Urquhart 'Sympodius' Ferguson
-John-Gabriel Davila
-Jonas Gehrunger
-Jonas Scott Di Hu
-Jonathan Dunlap @jadbox
-Jonathan Greig ( http://embroidermodder.org )
+Jayson Vantuyl
+Jean-francois Suret
+Jean V
+Jehoshua-Hannael Santos
+Jerome van den Heuvel
+Jérôme W
+JiggyART
+Jochen Hoff
+johan jaccob
+Johannes Meng
+John Bintz
+John Forsyth
+John-Soda
+John Urquhart Ferguson
+Jonatan Bijl
+Jonatan R
+Jonathan Oh
 Jonathan Ringstad
-Jonno
-JonR79
 Jörg Tremmel
-Josema Castillo
 Josep Febrer Salord
-Josh Hanson
-Joshua McGrew
-Joshua Sherfield
+Joseph Young
+Joshua Neal Boren
 Joss Smith
-Jotaele
-Juan V. Camuñas
+J Taylor
+Juha Koppström
+Julia Knoblauch
 Julien Duroure
-Julien Fernando Joaquin
-kabic
+junglegrown
+JY Liang
 kaesve
-Kaiko
+KAHR-Alpha
+KaiTen
+kaiyote
 Kaj Syrjänen
-kallecarl
 Karith Densmore
+Karl
+Karl-Andreas Luik
 Karl Ove Hufthammer
-Karol Górzyński
-Kathy Reid
-Kelytha
-Kemie G.
-Kevin Hu
-Kimberley Belle
-Kimberley Belle
-Kjartan Tysdal
-kmeaw
-Kokabel
-Konstantin A. Kitmanov
+Karoljartur
+kednar
+Keith Sear
+Kendrick Hernandez
+Ketzal
+Kevin Minehart
+kevin ridgway
+Kevin Shih
+Kevin Whitaker
+Khalil El-Harake
+Khartuin
+Ki Gniark
+Kita SDS
+Klesus
+Knap
 Kresimir Kis
 Krešimir Pernek
-Kristian Rydberg
-Kseniya Kuzyaeva
-Kunda
-Kver
+Kristina Buble
+Lachlan Easton
+Landry Dubus
 Lapineige
-Larry Battle
+La Plume
+Lars C Wallin
 Lars Pontoppidan
-Lary
-Laurence Gonsalves
 Laurent Espitallier
+Lavaheart
+L. Brühwasser
+LcLk
+l-d-j
+Lee Shirley
+leinir
 Leonhard Landrock
 level1imp
+liam easton
+Lili Lith
+Lilly
+LimitlessLions
+Lindenk
+Linus Chan
 Lisandro "NoidEXE" Lorea
-littleredshark
+Lise-Lotte Pesonen
+little jo
+Liudmila Zaytseva
 Livio Fania
-LostMahPants
-Lou O'Block
-Lucas Falcao
-Luciano Montanaro
+Lluc Romani
+Lockdonnen
+Long Vu - Shuttle099
+Luca Weiss (z3ntu)
+Luigi
 Lukáš "denzil" Frolka
-Lukas Dachtler
-Lunarex
-MadJo
-manmi
-Manu Järvinen
-Marc-Eric Boisvert
+Lxtof
+m3talsmith
+Magnus Wild
+Manuel Frei
+M.A. Nyst
+Marc Albrecht
 Marco Caminada
-María Cruz
-Mark Atwood
+Mario Fux
+Mariusz Janicki
+Mark Connors
 Mark Fitch
-Mark Fraser
-Mark Titchener
 Markus Saers
-Martin "matohan" Hanschild
+Mark Wielaard
+Mark Zuccarell II
 Martin Trokenheim
-Mary S
-Matias Mannerkoski
-Matjaž
-matray
-Matt Tyler
+Marty Kulma
+Marzee
+Matias Kangasjärvelä
+Matjaž Lamut
 Matteo 'Peach' Pescarin
-Mavwarf
-M̕͠ȩ̛̀͢c̕͏̶͠h̨́a̵̵͟͞X̶̧̨̢͢L͟͠
+Matthew Rever
+Matthieu Chevillot
+Matthieu Harel
+Matt Johnston
+Mauro Breda
+Maxime Cornet
+Max Polun
+mayenok
+mcoudert
 Melania Fois
 Melody Haren Anderson
-meneer
-Merciana
-Mica S.
-Micha Cassola
+Merioch
+Metalorion
+Meukah
+Mica
 Michael Freundorfer
-Michael Hoffer
-Michael New
+Michael Hoffer (miho)
 Michael Thaler
 Michael Watzko
-Michel Vilain
 Michelle Anne Roxas
-Michio Kawasaki
-mifth
+Michel Vilain
+Miguel Fontoura
+Mike Crist
 Mike Kasprzak
-Min
-Minioma81671
-Miquel
-Mirjan Bouma
-Miso Hongri
-Mk2
-mrefish
-Mu57Di3
-Muegge
+mikelima
+Miralys
+mlchen
+Moose
+mrpraline
+Mr Tee
+M.Stein
+muegge
 Mufeed Al-Hashim
-N. Greene
+N07070
+Nadesj
 nakajimakotaro
 Nataly Novak
-Nathan Salapat
-Nawaf A Alanzi
-Nelyubov Egor
+NathanS21
+Nathan Tarrant
+nduhil
+Negrobrooding
 Neotheta
-netAction
 Nicholas George
-nicoguaro
-Nicola Gibi Papale
-Nicolas Duhil
-Nigel Maher
+Nicole K
+Niels Erik Østergård
+Nige H.
+Nightfire92
 Nikolai Schlegel
-Nils acrimont
-Noemi Sanchez del Rio
-Nyian Sii
+Nikolai Vincent Vaags
+Nils Trost
+Nischo
+Nival
+Nosorożec Kaszle
+NuclearPeon
+Nuezalcuadrado
+nylnook
 Nymunariya
-OctoD
+OddArtMan
+Odd Pierrot
 Odysseus
-Oleg Kuznetsov
-Oleg Shchelykalnov
-Olivier "oenvoyage" Amrein
-Oubliette
-OursGeek
-Oxben
-Pablo
-Pablo Mendoza Arrambidez
-Paintdelux
-palme
-Panos Zarkadas
-Pao
-Patrick Duchemin
-Patrick Poniewas
+Ofx360
+Oliver Horn
+oliviadb
+Olivier Amrein
+Olivier COSQUER
+OmaeTido
+Oneiric Worlds
+Ørjan Sollie
+Owen McClung
+Ozkrita
+Panga
+Pascal Schmid
+Patrick Hickey
+Patrick Nafarrete
+Patrick Völcker
 Patrick Wspanialy
-Patrik Nilsson
-Pekka
+Paul Desiles
+Paul Hartsuyker
+Paul von Drayventhal
+Paul Ward
+Paul Wortmann
+Pavel Grochal
+Pedro R
 Pekka Heikkinen
-Pete Smith
-Peter Scamman
+Per Kofod Hansen
+Pete
+Peter Bursch
+Peter de Jong
+Peter Liang
 Peter Schulman
-Peter Simonsson
 Petr Viktorin
-Petr Zalyautdinov
-Petroff
-Pevzi
-phil_frontal
-Phillip Kramer
+Phaine of Catz
+pharion3d
+phenoch
+Philip Cohn-Cort
+Philip Larsson
+Pierre Vuillemin
+Pilaf
+Pinco Pallo
+Piquillos
+Pirminus
+Pixel_Freak
 Pixoloco
 Przemek Jeske
-pttrsmrt
-Punkbit
-QatariGameDev
-qkiel
+Psilo
+QuantumPriest
+Quek05
 Quentin Geluyckens
-R Phillips
-r_roeser
-Raghukamath
-RagtagMatt
+Quentin Pointillart
+Quollism
+raghukamath
+Ragtag Matt
+Rainer Lutz
+Rajasekaran Senthil Kumaran
 Ramon Buldó
-Ranger Harke
-Rastaban26
-Rattlehead
+Ramuda-2
+random_dave
+Raphael Lobosco
+raspbeguy
+Rath, the great and wise
+Ravneson
+Rayek
+Raymond Dahlberg
 Ray Vargas
-Raymond Jansen van Vuuren
 Redj
-Reto Haeberli
-Rezza
-Richter Huang
-ridlimod
-Rienzi Gokea
-RinKaenbyou
+RedSparrow
+Regen
+renaud garcia
+René David
+Renha
+reyawn
+Richard Jarvis
+Ridli
+riking
+Rin Dash
+Rita Geraghty
+Rittinger Peter
+rob
 Robert Adam II
-Robert Becher
-Robert Ives
-Robert Kist
-Robin Lefever
-Robson dos Santos França
-robumanx
-Rodolf "Lib" Grosjean
+Robert Artero
+Robert Lefrandt
+Rob Fairbairn
+Robin Penea
+Robotichead
+Roderick Gladwish
+Rodrigo D.
+Rodrigo Severo
 Rohit Nirmal
-Roland Kerr
+Romain Brouté
 Roman Burdun
+Roman Nazarenko
+romio82
 Ronan Zeegers
+Ronnie Ashlock
 Rose
-RRWhitey
-RTLund
 Ruakuu
-Ryangatts
-Rylander Animation
-S J Bennett
-Sacha WAKED
-Sage Ross
-SageofSpice
-Sam Tuke
-sam@cmpct 
-Sami Kyöstilä
-Samuel Stoney
-Sarah Laufer
-Shawn Rutledge
-Scott Petrovic
+Ryan Baird Thompson
+Rylander animation
+Ryszard Goń
+Sage of Spice
+Sam Mehoke
+Samuel Wilton
+Samuinou
+Santiago J TurplePurtle
+Sarah Laghribi
+Sascha Glasmachers
 Scott Wilson
-Scotty
+Sean Givan
+Sean Mountcastle
+Sean Tilley
+Sebastian Gift
 sebastian_k
-Serge Zaigraeff
+Sebastian Lange
+Seb Maynard
 Sergey Shpikin
-Sessjion
-Setthawut
-sfepa
-Shen-po
-Shreepad
-Simply-Wrong
-Siva Katir
+Serge Zaigraeff
+Sergio De Amores
+Séverin Lemaignan
+SharpStrukture
+Shigeya Murai
+Shinigami
+Shining Arrow
+Silvan Jegen
+Simon, Eliza, and Bryer McDougall
+Simon Hischier
+Sinan H
 Sketch Stick
 Skevos Mavros
-Skyler Koch
-Slackermedia.info
 śledź
-Smiley Tom
-Sofus Rose
-Solar Panel
-Solène Waked
-Some Weird Cat
+Slug45
+Sofus
+Sorae
 Soren Lane
-soriac
-SoulOfUndead
-Spazturtle
+Soriac
+sparker
 Spencer Brown
-Spoodie
-Srdan Dukic
-SREENIVAS ALAPATI
-ST88
-Standtall007
+Spuggiehawk
+Stan Halstead
+Star Weaver
 Stefan [steveway] Murawski
-Stefano Ciarrocchi Doc3D
-Stelard Actek
-Stephan Theelke
 Stephane Hentschel
+Stephen Croft
 Stephen Egts
 Steve
-STrRedWolf
-Stuart Attenborrow
-Studio Regen
+Steven Ruppert
+Steven Schoorens
+Steve Sharman
+Stoo
+Stramaz
+Strassi
+Stuckfly
+sudomabider
 Sune
-SUTO Masanori
-Sverrir H. Steindórsson
-svgeesus
-Sythgara
-Szilárd Bálint
-T-REX
+Svenne Krap
+Sylvain Boussiron
+Szijj Marietta
 TaleOfACat
-TanK
+Tamir Bahar
+teazombie
 Techbot
-Tepee (alias Tristan Paulais)
+Ted
+Tekuzo
+Terry Hancock
+TerusTheBird
 TesX
-The Brightman
-The Cursed Red Baron
+TheDigitalEchoes
 TheFaico
-thinkinmonkey
-Thomas Beck (plasmasolutions)
-Thomas Chapman
-Thubakabra
+Thierry Fabre
+Thomas Lynge
 Tibo
-Tinderbox Entertainment
-Tobias Horvath
-Tomas Kuchta
+Tidaluxys
+Timberline Hackerspace
+Tim Burbank
+Tim Carr
+TimefireVR
+Tim Quax
+TN1505
+TNT
+Tobias Biehl
+Tobias Jaeger
+Tormod Landet
+Tory Republic
+Tracy Buckner
 Trent Reed
-tribouil
-Trip Volpe
+Trev
+Tricia Cunningham
+Twosky2000
 Tyson Tan
 uaun
-ubaka
 Udan
 Umberto Uderzo
-Vaidelot
-Vel Applebee
-veritanuda
-Victor V. Terber
-Victor Wåhlström
-viknet
+Uta
+Valdi Seppsij
+ValerieVK
+vamp1r0
+Victor Frausto
+Víctor Manuel Gómez
+Ville Saario
+Vince(nt)
 Vinicius Braga
 Virgilio Vasconcelos
-Voidswimmer
-vpodzime
-Walli
-Walter Johan
-Watson "Starrodkirby86" Tungjunyatham
-Watson Huang
-WeezAir
+Vitaly “_Vi” Shukela
+Vojtěch Trefný
+Wadada Sellassie
 Wei-Ching Shyu
-Will Binns-Smith
-Will Thorup
+wieherbuh
+Wiglot
+Wiiilmaa
+Wilhelmine
+WillBellJr
+Willem Sonke
+Willernest
 William Bettridge-Radford
+William Binns-Smith
+William Edwards
 William Shakour
-Wolfram Schwenzer
-Wyatt Lee Chastain
-Wybren van Keulen
-X-Raym
-xinux
-Yalyn Vinkindo
-Yevgeniy Pinskiy
-Yiynova Europe BV
-Yousamah Philips
-Yui
-z-uo
-Zack
+Will Olis
+Will Thorup
+Wilson E. Alvarez
+Wim Tousseyn
+WingPing Tam
+Xavier Guillot
+XDjackieXD
+Yabo "Yalyn" Vinkindo
+yamarten
+Yaniel
+Yann
+YGA-KSD
+Yousuf Philips
+Yury V. Zaytsev
+z6sic6z
 Zafio
 Zalibart
-zerngjia
-Zher Huei Lee
-Zneb
-Zolotoy_Poloz
-Zorael
-Zorayda
-Zorgy
-夢前きのこ
-and 47 anonymous backers
+zezba9000
+zorgy
+z-uo
+Елена
+and 81 anonymous backers

@@ -168,7 +168,7 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
     } else {
         viewManager->
         showFloatingMessage(
-            i18n("Select paint layer to use this tool"),
+            i18n("Select a paint layer to use this tool"),
             QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
     }
 }
@@ -200,7 +200,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     if (!m_d->mask.isNull()) {
         m_d->maskDev->makeCloneFrom(m_d->mask->paintDevice(), m_d->mask->paintDevice()->extent());
 
-        //Once we get the mask we delete the temporary layer
+        //Once we get the mask we delete the temporary layer on which user painted it
         deleteInpaintMask();
 
         image()->waitForDone();
@@ -210,7 +210,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        //actual inpaint operation
+        //actual inpaint operation. filling in areas masked by user
         QRect changedRect = inpaintImage(m_d->maskDev, m_d->imageDev);
         currentNode()->setDirty(changedRect);
         inpaintTransaction.commit(image()->undoAdapter());

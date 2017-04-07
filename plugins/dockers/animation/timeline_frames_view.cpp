@@ -123,6 +123,7 @@ struct TimelineFramesView::Private
 
     KisCustomModifiersCatcher *modifiersCatcher;
     QPoint lastPressedPosition;
+    Qt::KeyboardModifiers lastPressedModifier;
     KisSignalCompressor selectionChangedCompressor;
 
     QStyleOptionViewItem viewOptionsV4() const;
@@ -733,6 +734,20 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
             }
         }
     } else {
+
+        /**
+         * Workaround for Qt5's bug: if we start a dragging action right during
+         * Shift-selection, Qt will get crazy. We cannot workaround it easily,
+         * because we would need to fork mouseMoveEvent() for that (where the
+         * decision about drag state is done). So we just abort dragging in that
+         * case.
+         *
+         * BUG:373067
+         */
+        if (m_d->lastPressedModifier & Qt::ShiftModifier) {
+            return;
+        }
+
         /**
          * Workaround for Qt5's bugs:
          *
@@ -917,6 +932,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 
         m_d->lastPressedPosition =
             QPoint(horizontalOffset(), verticalOffset()) + event->pos();
+        m_d->lastPressedModifier = event->modifiers();
 
         QAbstractItemView::mousePressEvent(event);
     }

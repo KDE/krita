@@ -64,10 +64,12 @@ bool compareShapePropertiesEqual(const QList<KoShape*> shapes, const Policy &pol
             policy.getProperty(shapes.first());
 
     Q_FOREACH (KoShape *shape, shapes) {
+        typename Policy::PointerType otherBg = policy.getProperty(shape);
+
         if (
             !(
-                (!bg && !policy.getProperty(shape)) ||
-                (bg && policy.compareTo(bg, policy.getProperty(shape)))
+                (!bg && !otherBg) ||
+                (bg && otherBg && policy.compareTo(bg, otherBg))
                 )) {
 
             return false;

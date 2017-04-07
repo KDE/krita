@@ -39,7 +39,8 @@ public:
         ToImagePPI
     };
 
-    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
+    KisFileLayer(KisImageWSP image, const QString &name, quint8 opacity);
+    KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
     ~KisFileLayer();
     KisFileLayer(const KisFileLayer& rhs);
 

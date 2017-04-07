@@ -583,10 +583,17 @@ void KisNode::setDirty(const QRegion &region)
     setDirty(region.rects());
 }
 
+void KisNode::setDirtyDontResetAnimationCache()
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestProjectionUpdate(this, extent(), false);
+    }
+}
+
 void KisNode::setDirty(const QRect & rect)
 {
     if(m_d->graphListener) {
-        m_d->graphListener->requestProjectionUpdate(this, rect);
+        m_d->graphListener->requestProjectionUpdate(this, rect, true);
     }
 }
 

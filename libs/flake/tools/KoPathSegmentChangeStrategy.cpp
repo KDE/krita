@@ -128,7 +128,7 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     m_ctrlPoint2Move += move2;
 
     // save last mouse position
-    m_lastPosition = mouseLocation;
+    m_lastPosition = snappedPosition;
 }
 
 void KoPathSegmentChangeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

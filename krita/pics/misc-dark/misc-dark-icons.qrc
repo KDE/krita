@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
         <file>dark_draw-eraser.svg</file>
+        <file>dark_geometry.svg</file>
         <file alias="dark_object-align-horizontal-center-calligra.svg">dark_ox16-action-object-align-horizontal-center-calligra.svg</file>
         <file alias="dark_object-align-horizontal-left-calligra.svg">dark_ox16-action-object-align-horizontal-left-calligra.svg</file>
         <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-right-calligra.svg</file>
@@ -14,6 +15,14 @@
         <file alias="dark_object-order-raise-calligra.svg">dark_ox16-action-object-order-raise-calligra.svg</file>
         <file alias="dark_object-group-calligra.svg">dark_ox16-action-object-group-calligra.svg</file>
         <file alias="dark_object-ungroup-calligra.svg">dark_ox16-action-object-ungroup-calligra.svg</file>
+        <file>dark_distribute-horizontal-center.svg</file>
+        <file>dark_distribute-horizontal-left.svg</file>
+        <file>dark_distribute-horizontal-right.svg</file>
+        <file>dark_distribute-horizontal.svg</file>
+        <file>dark_distribute-vertical-bottom.svg</file>
+        <file>dark_distribute-vertical-center.svg</file>
+        <file>dark_distribute-vertical-top.svg</file>
+        <file>dark_distribute-vertical.svg</file>
         <file>dark_paintop_settings_01.svg</file>
         <file>dark_paintop_settings_02.svg</file>
         <file>dark_pivot-point.svg</file>
@@ -28,5 +37,19 @@
         <file>dark_onionOff.svg</file>
         <file>dark_onionOn.svg</file>
         <file>dark_onion_skin_options.svg</file>
+        <file>dark_onion_skin_options.svg</file>
+        <file>dark_path-break-point.svg</file>
+        <file>dark_path-break-segment.svg</file>
+        <file>dark_pathpoint-corner.svg</file>
+        <file>dark_pathpoint-curve.svg</file>
+        <file>dark_pathpoint-insert.svg</file>
+        <file>dark_pathpoint-join.svg</file>
+        <file>dark_pathpoint-line.svg</file>
+        <file>dark_pathpoint-merge.svg</file>
+        <file>dark_pathpoint-remove.svg</file>
+        <file>dark_pathpoint-smooth.svg</file>
+        <file>dark_pathpoint-symmetric.svg</file>
+        <file>dark_pathsegment-curve.svg</file>
+        <file>dark_pathsegment-line.svg</file>
     </qresource>
 </RCC>

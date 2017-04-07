@@ -39,6 +39,7 @@ class KoShapeBasedDocumentBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
+class KoSelectedShapesProxy;
 
 class QWidget;
 class QCursor;
@@ -110,10 +111,22 @@ public:
     virtual void addCommand(KUndo2Command *command) = 0;
 
     /**
-     * return the current shapeManager
+     * Return the current shapeManager. WARNING: the shape manager can switch
+     * in time, e.g. when a layer is changed. Please don't keep any persistent
+     * connections to it. Instead please use selectedShapesProxy(),
+     * which is guaranteed to be the same throughout the life of the canvas.
+     *
      * @return the current shapeManager
      */
     virtual KoShapeManager *shapeManager() const = 0;
+
+    /**
+     * @brief selectedShapesProxy() is a special interface for keeping a persistent connections
+     * to selectionChanged() and selectionContentChanged() signals. While shapeManager() can change
+     * throughout the life time of the cavas, selectedShapesProxy() is guaranteed to stay the same.
+     * @return persistent KoSelectedShapesProxy object
+     */
+    virtual KoSelectedShapesProxy *selectedShapesProxy() const = 0;
 
     /**
      * Tell the canvas to repaint the specified rectangle. The coordinates

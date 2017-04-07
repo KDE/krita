@@ -19,6 +19,7 @@
 #ifndef KIS_SHAPE_SELECTION_CANVAS_H
 #define KIS_SHAPE_SELECTION_CANVAS_H
 
+#include <QScopedPointer>
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
@@ -44,7 +45,8 @@ public:
     void gridSize(QPointF *offset, QSizeF *spacing) const;
     bool snapToGrid() const;
     void addCommand(KUndo2Command *command);
-    KoShapeManager *shapeManager() const;
+    KoShapeManager *shapeManager() const override;
+    KoSelectedShapesProxy *selectedShapesProxy() const override;
     void updateCanvas(const QRectF& rc);
     KoToolProxy * toolProxy() const;
     KoViewConverter *viewConverter() const;
@@ -54,7 +56,8 @@ public:
     virtual void updateInputMethodInfo() {}
     virtual void setCursor(const QCursor &) {}
 private:
-    KoShapeManager * m_shapeManager;
+    QScopedPointer<KoShapeManager> m_shapeManager;
+    QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
 };
 
 #endif

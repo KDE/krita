@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=assignprofiledialog
+X-Python-2-Compatible=false
+Name=Assign Profile to Image
+Name[ca]=Assigna un perfil a una imatge
+Name[nl]=Profiel aan afbeelding toekennen
+Name[pt]=Atribuir um Perfil à Imagem
+Name[sv]=Tilldela profil till bild
+Name[uk]=Призначити профіль до зображення
+Name[x-test]=xxAssign Profile to Imagexx
+Comment=Assign a profile to an image without converting it.
+Comment[ca]=Assigna un perfil a una imatge sense convertir-la.
+Comment[nl]=Een profiel aan een afbeelding toekennen zonder het te converteren.
+Comment[pt]=Atribui um perfil à imagem sem a converter.
+Comment[sv]=Tilldela en profil till en bild utan att konvertera den.
+Comment[uk]=Призначити профіль до зображення без його перетворення.
+Comment[x-test]=xxAssign a profile to an image without converting it.xx

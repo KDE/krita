@@ -20,13 +20,18 @@
 #include "RectangleShapeConfigWidget.h"
 #include "RectangleShape.h"
 #include "RectangleShapeConfigCommand.h"
+#include "kis_signals_blocker.h"
+#include "kis_assert.h"
+
+#include "kis_document_aware_spin_box_unit_manager.h"
 
 RectangleShapeConfigWidget::RectangleShapeConfigWidget()
+    : m_rectangle(0)
 {
     widget.setupUi(this);
 
-    connect(widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.cornerRadiusX, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(propertyChanged()));
+    connect(widget.cornerRadiusY, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(propertyChanged()));
 }
 
 void RectangleShapeConfigWidget::setUnit(const KoUnit &unit)
@@ -37,23 +42,28 @@ void RectangleShapeConfigWidget::setUnit(const KoUnit &unit)
 
 void RectangleShapeConfigWidget::open(KoShape *shape)
 {
-    m_rectangle = dynamic_cast<RectangleShape *>(shape);
-    if (!m_rectangle) {
-        return;
+    if (m_rectangle) {
+        m_rectangle->removeShapeChangeListener(this);
     }
 
-    widget.cornerRadiusX->blockSignals(true);
-    widget.cornerRadiusY->blockSignals(true);
+    m_rectangle = dynamic_cast<RectangleShape *>(shape);
+    if (!m_rectangle) return;
 
-    QSizeF size = m_rectangle->size();
+    loadPropertiesFromShape(m_rectangle);
+
+    m_rectangle->addShapeChangeListener(this);
+}
+
+void RectangleShapeConfigWidget::loadPropertiesFromShape(RectangleShape *shape)
+{
+    KisSignalsBlocker b(widget.cornerRadiusX, widget.cornerRadiusY);
+
+    QSizeF size = shape->size();
 
     widget.cornerRadiusX->setMaximum(0.5 * size.width());
-    widget.cornerRadiusX->changeValue(0.01 * m_rectangle->cornerRadiusX() * 0.5 * size.width());
+    widget.cornerRadiusX->changeValue(0.01 * shape->cornerRadiusX() * 0.5 * size.width());
     widget.cornerRadiusY->setMaximum(0.5 * size.height());
-    widget.cornerRadiusY->changeValue(0.01 * m_rectangle->cornerRadiusY() * 0.5 * size.height());
-
-    widget.cornerRadiusX->blockSignals(false);
-    widget.cornerRadiusY->blockSignals(false);
+    widget.cornerRadiusY->changeValue(0.01 * shape->cornerRadiusY() * 0.5 * size.height());
 }
 
 void RectangleShapeConfigWidget::save()
@@ -79,4 +89,13 @@ KUndo2Command *RectangleShapeConfigWidget::createCommand()
     qreal cornerRadiusY = 100.0 * widget.cornerRadiusY->value() / (0.5 * size.height());
 
     return new RectangleShapeConfigCommand(m_rectangle, cornerRadiusX, cornerRadiusY);
+}
+
+void RectangleShapeConfigWidget::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_rectangle && shape == m_rectangle);
+
+    if (type == KoShape::ParameterChanged) {
+        loadPropertiesFromShape(m_rectangle);
+    }
 }

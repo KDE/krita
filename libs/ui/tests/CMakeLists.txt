@@ -19,6 +19,8 @@ ecm_add_tests(
     kis_stabilized_events_sampler_test.cpp
     kis_derived_resources_test.cpp
     kis_brush_hud_properties_config_test.cpp
+    kis_shape_commands_test.cpp
+    kis_stop_gradient_editor_test.cpp
     NAME_PREFIX "krita-ui-"
     LINK_LIBRARIES kritaui Qt5::Test
 )

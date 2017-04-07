@@ -78,12 +78,6 @@ protected Q_SLOTS:
          */
     void loadCollection();
 
-    /// Called when an error occurred while loading a collection
-    void onLoadingFailed(const QString &reason);
-
-    /// Called when loading of a collection is finished
-    void onLoadingFinished();
-
     /// Called when the close collection button is clicked
     void removeCurrentCollection();
 

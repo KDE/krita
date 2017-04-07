@@ -24,6 +24,9 @@
 
 #include <klocalizedstring.h>
 
+#include "kis_command_ids.h"
+
+
 class Q_DECL_HIDDEN KoShapeBackgroundCommand::Private
 {
 public:
@@ -109,6 +112,25 @@ void KoShapeBackgroundCommand::undo()
         shape->update();
         ++brushIt;
     }
+}
+
+int KoShapeBackgroundCommand::id() const
+{
+    return KisCommandUtils::ChangeShapeBackgroundId;
+}
+
+bool KoShapeBackgroundCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoShapeBackgroundCommand *other = dynamic_cast<const KoShapeBackgroundCommand*>(command);
+
+    if (!other ||
+        other->d->shapes != d->shapes) {
+
+        return false;
+    }
+
+    d->newFills= other->d->newFills;
+    return true;
 }
 
 KoShapeBackgroundCommand::~KoShapeBackgroundCommand()

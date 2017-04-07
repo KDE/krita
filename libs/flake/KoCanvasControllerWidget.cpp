@@ -484,6 +484,13 @@ void KoCanvasControllerWidget::setVastScrolling(qreal factor)
     d->vastScrollingFactor = factor;
 }
 
+QPointF KoCanvasControllerWidget::currentCursorPosition() const
+{
+    QWidget *canvasWidget = d->canvas->canvasWidget();
+    const KoViewConverter *converter = d->canvas->viewConverter();
+    return converter->viewToDocument(canvasWidget->mapFromGlobal(QCursor::pos()) + d->canvas->canvasController()->documentOffset() - canvasWidget->pos());
+}
+
 void KoCanvasControllerWidget::pan(const QPoint &distance)
 {
     QPoint sourcePoint = scrollBarValue();
@@ -529,11 +536,6 @@ void KoCanvasControllerWidget::dragMoveEvent(QDragMoveEvent *event)
 void KoCanvasControllerWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
     d->viewportWidget->handleDragLeaveEvent(event);
-}
-
-void KoCanvasControllerWidget::keyPressEvent(QKeyEvent *event)
-{
-    KoToolManager::instance()->priv()->switchToolByShortcut(event);
 }
 
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)

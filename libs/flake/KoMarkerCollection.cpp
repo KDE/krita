@@ -21,15 +21,22 @@
 
 #include <QFile>
 
+#include <klocalizedstring.h>
 #include "KoMarker.h"
-#include "KoMarkerSharedLoadingData.h"
 #include <KoXmlReader.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfReadStore.h>
-#include <QStandardPaths>
 #include <FlakeDebug.h>
+#include <KoResourcePaths.h>
+#include <SvgParser.h>
+#include <QFileInfo>
+#include <KoDocumentResourceManager.h>
+#include <QXmlStreamReader>
+
+#include "kis_debug.h"
+
+// WARNING: there is a bug in GCC! It doesn't warn that we are
+//          deleting an uninitialized type here!
+#include <KoShape.h>
+
 
 class Q_DECL_HIDDEN KoMarkerCollection::Private
 {
@@ -56,66 +63,58 @@ KoMarkerCollection::~KoMarkerCollection()
     delete d;
 }
 
-bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
+void KoMarkerCollection::loadMarkersFromFile(const QString &svgFile)
 {
-    debugFlake;
-    QHash<QString, KoMarker*> lookupTable;
+    QFile file(svgFile);
+    if (!file.exists()) return;
 
-    const QHash<QString, KoXmlElement*> markers = context.odfLoadingContext().stylesReader().drawStyles("marker");
-    loadOdfMarkers(markers, context, lookupTable);
+    if (!file.open(QIODevice::ReadOnly)) return;
 
-    KoMarkerSharedLoadingData * sharedMarkerData = new KoMarkerSharedLoadingData(lookupTable);
-    context.addSharedData(MARKER_SHARED_LOADING_ID, sharedMarkerData);
+    QXmlStreamReader reader(&file);
+    reader.setNamespaceProcessing(false);
 
-    return true;
+    QString errorMsg;
+    int errorLine = 0;
+    int errorColumn;
+
+    KoXmlDocument doc;
+    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    if (!ok) {
+        errKrita << "Parsing error in " << svgFile << "! Aborting!" << endl
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg << endl;
+        errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+                         , errorLine , errorColumn , errorMsg);
+        return;
+    }
+
+    KoDocumentResourceManager manager;
+    SvgParser parser(&manager);
+    parser.setResolution(QRectF(0,0,100,100), 72); // initialize with default values
+    parser.setXmlBaseDir(QFileInfo(svgFile).absolutePath());
+
+    parser.setFileFetcher(
+        [](const QString &fileName) {
+            QFile file(fileName);
+            if (!file.exists()) return QByteArray();
+
+            file.open(QIODevice::ReadOnly);
+            return file.readAll();
+        });
+
+    QSizeF fragmentSize;
+    QList<KoShape*> shapes = parser.parseSvg(doc.documentElement(), &fragmentSize);
+    qDeleteAll(shapes);
+
+    Q_FOREACH (const QExplicitlySharedDataPointer<KoMarker> &marker, parser.knownMarkers()) {
+        addMarker(marker.data());
+    }
 }
 
 void KoMarkerCollection::loadDefaultMarkers()
 {
-    // use the same mechanism for loading the markers that are available
-    // per default as when loading the normal markers.
-    KoOdfStylesReader markerReader;
-    KoOdfLoadingContext odfContext(markerReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
-    KoXmlDocument doc;
-    QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "styles/markers.xml");
-
-    if (!filePath.isEmpty()) {
-        QFile file(filePath);
-        QString errorMessage;
-        if (KoOdfReadStore::loadAndParse(&file, doc, errorMessage, filePath)) {
-            markerReader.createStyleMap(doc, true);
-
-            QHash<QString, KoMarker*> lookupTable;
-            const QHash<QString, KoXmlElement*> defaultMarkers = markerReader.drawStyles("marker");
-            loadOdfMarkers(defaultMarkers, shapeContext, lookupTable);
-        }
-        else {
-            warnFlake << "reading of" << filePath << "failed:" << errorMessage;
-        }
-    }
-    else {
-        debugFlake << "markers.xml not found";
-    }
-}
-
-void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement*> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker*> &lookupTable)
-{
-    QHash<QString, KoXmlElement*>::const_iterator it(markers.constBegin());
-    for (; it != markers.constEnd(); ++it) {
-        KoMarker *marker = new KoMarker();
-        if (marker->loadOdf(*(it.value()), context)) {
-            KoMarker *m = addMarker(marker);
-            lookupTable.insert(it.key(), m);
-            debugFlake << "loaded marker" << it.key() << marker << m;
-            if (m != marker) {
-                delete marker;
-            }
-        }
-        else {
-            delete marker;
-        }
-    }
+    QString filePath = KoResourcePaths::findResource("data", "styles/markers.svg");
+    loadMarkersFromFile(filePath);
 }
 
 QList<KoMarker*> KoMarkerCollection::markers() const

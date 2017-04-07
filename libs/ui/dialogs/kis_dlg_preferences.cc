@@ -140,6 +140,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
+    m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
@@ -178,6 +179,7 @@ void GeneralTab::setDefault()
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
+    m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground(true));
 
 }
 
@@ -251,6 +253,11 @@ bool GeneralTab::switchSelectionCtrlAlt()
 bool GeneralTab::convertToImageColorspaceOnImport()
 {
     return m_chkConvertOnImport->isChecked();
+}
+
+bool GeneralTab::calculateAnimationCacheInBackground()
+{
+    return m_chkCacheAnimatioInBackground->isChecked();
 }
 
 
@@ -1015,6 +1022,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
+        cfg.setCalculateAnimationCacheInBackground(dialog->m_general->calculateAnimationCacheInBackground());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
         group.writeEntry("DontUseNativeFileDialog", !dialog->m_general->m_chkNativeFileDialog->isChecked());

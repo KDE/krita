@@ -123,6 +123,7 @@
 #include "kis_zoom_manager.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_script_manager.h"
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
@@ -184,6 +185,7 @@ public:
         , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
+        , scriptManager(_q)
         , actionAuthor(0)
     {
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
@@ -240,6 +242,7 @@ public:
     KisInputManager inputManager;
 
     KisSignalAutoConnectionsStore viewConnections;
+    KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
 
     QByteArray canvasState;
@@ -695,6 +698,7 @@ void KisViewManager::setupManagers()
 
     d->mirrorManager.setup(actionCollection());
 
+    d->scriptManager.setup(actionCollection(), actionManager());
 }
 
 void KisViewManager::updateGUI()
@@ -739,6 +743,11 @@ KisDocument *KisViewManager::document() const
         return d->currentImageView->document();
     }
     return 0;
+}
+
+KisScriptManager *KisViewManager::scriptManager() const
+{
+  return &d->scriptManager;
 }
 
 int KisViewManager::viewCount() const

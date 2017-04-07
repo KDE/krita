@@ -95,7 +95,7 @@ public:
 
 protected:
     /// constructor
-    KoTosContainer(KoTosContainerPrivate &);
+    KoTosContainer(KoTosContainerPrivate *);
 
     //reimplemented
     void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -125,7 +125,7 @@ protected:
 
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
-private:
+protected:
     Q_DECLARE_PRIVATE(KoTosContainer)
 };
 

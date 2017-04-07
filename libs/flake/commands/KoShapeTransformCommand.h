@@ -50,6 +50,9 @@ public:
     /// revert the actions done in redo
     void undo();
 
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
+
 private:
     class Private;
     Private * const d;

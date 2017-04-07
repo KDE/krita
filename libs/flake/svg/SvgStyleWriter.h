@@ -36,6 +36,7 @@
 class SvgSavingContext;
 class KoShape;
 class KoPatternBackground;
+class KoVectorPatternBackground;
 class QTransform;
 class QGradient;
 
@@ -55,12 +56,17 @@ protected:
     static void saveSvgEffects(KoShape *shape, SvgSavingContext &context);
     /// Saves clipping of specified shape
     static void saveSvgClipping(KoShape *shape, SvgSavingContext &context);
+    /// Saves masking of specified shape
+    static void saveSvgMasking(KoShape *shape, SvgSavingContext &context);
+    /// Saves markers of the path shape if present
+    static void saveSvgMarkers(KoShape *shape, SvgSavingContext &context);
     /// Saves gradient color stops
     static void saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
     /// Saves gradient
     static QString saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
     /// Saves pattern
     static QString saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
+    static QString saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
 };
 
 #endif // SVGSTYLEWRITER_H

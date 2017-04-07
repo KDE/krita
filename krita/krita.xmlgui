@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="103"
+version="110"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -49,6 +49,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="copy_sharp"/>
       <Action name="copy_merged"/>
       <Action name="edit_paste"/>
+      <Action name="paste_at"/>
       <Action name="paste_new"/>
       <Action name="clear"/>
       <Action name="fill_selection_foreground_color"/>
@@ -297,6 +298,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     </Menu>
     <Menu name="tools">
       <text>&amp;Tools</text>
+      <Action name="scripts"/>
       <Menu name="Recording">
         <text>Recording</text>
         <Action name="Recording_Start_Recording_Macro"/>

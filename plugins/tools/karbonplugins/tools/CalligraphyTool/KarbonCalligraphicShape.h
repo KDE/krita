@@ -89,6 +89,8 @@ public:
     explicit KarbonCalligraphicShape(qreal caps = 0.0);
     ~KarbonCalligraphicShape();
 
+    KoShape* cloneShape() const override;
+
     void appendPoint(const QPointF &p1, qreal angle, qreal width);
     void appendPointToPath(const KarbonCalligraphicPoint &p);
 
@@ -118,6 +120,8 @@ protected:
     void updatePath(const QSizeF &size);
 
 private:
+    KarbonCalligraphicShape(const KarbonCalligraphicShape &rhs);
+
     // auxiliary function that actually insererts the points
     // without doing any additional checks
     // the points should be given in canvas coordinates

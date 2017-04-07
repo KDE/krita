@@ -88,7 +88,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
             path->lineTo(resolutionMatrix.map(points[i]));
         path->normalize();
 
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         path->setStroke(border);
 
         addShape(path);

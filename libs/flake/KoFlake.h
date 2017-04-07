@@ -24,14 +24,38 @@
 #include "kritaflake_export.h"
 
 class QGradient;
+class QRectF;
 class QPointF;
 class QSizeF;
+
+class KoShape;
+class QTransform;
+
+#include <Qt>
 
 /**
  * Flake reference
  */
 namespace KoFlake
 {
+    enum FillVariant {
+        Fill,
+        StrokeFill
+    };
+
+    enum FillType {
+        None,
+        Solid,
+        Gradient,
+        Pattern
+    };
+
+    enum MarkerPosition {
+        StartMarker,
+        MidMarker,
+        EndMarker
+    };
+
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {
         FullSelection,      ///< Create a list of all user-shapes in the selection. This excludes KoShapeGroup grouping objects that may be selected.
@@ -62,15 +86,6 @@ namespace KoFlake
         ShapeOnTop  ///< return the shape highest z-ordering, regardless of selection.
     };
 
-    /// position. See KoShape::absolutePosition()
-    enum Position {
-        TopLeftCorner, ///< the top left corner
-        TopRightCorner, ///< the top right corner
-        BottomLeftCorner, ///< the bottom left corner
-        BottomRightCorner, ///< the bottom right corner
-        CenteredPosition ///< the centred corner
-    };
-
     /**
      * Used to see which style type is active
      */
@@ -79,8 +94,30 @@ namespace KoFlake
         Foreground  ///< the foreground / stroke style is active
     };
 
+    enum AnchorPosition {
+        TopLeft,
+        Top,
+        TopRight,
+        Left,
+        Center,
+        Right,
+        BottomLeft,
+        Bottom,
+        BottomRight,
+        NoAnchor,
+        NumAnchorPositions
+    };
+
+    KRITAFLAKE_EXPORT QPointF anchorToPoint(AnchorPosition anchor, const QRectF rect, bool *valid = 0);
+
+    enum CanvasResource {
+        HotPosition = 1410100299
+    };
+
     /// clones the given gradient
     KRITAFLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
+
+    KRITAFLAKE_EXPORT QGradient *mergeGradient(const QGradient *coordsSource, const QGradient *fillSource);
 
     /**
      * Convert absolute to relative position
@@ -101,6 +138,13 @@ namespace KoFlake
      * @return absolute position
      */
     KRITAFLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
+
+    KRITAFLAKE_EXPORT Qt::Orientation significantScaleOrientation(qreal scaleX, qreal scaleY);
+
+    KRITAFLAKE_EXPORT void resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                                       const QPointF &absoluteStillPoint,
+                                       bool useGlobalMode,
+                                       bool usePostScaling, const QTransform &postScalingCoveringTransform);
 }
 
 #endif

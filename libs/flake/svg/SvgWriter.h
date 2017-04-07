@@ -60,7 +60,11 @@ public:
     /// Writes svg to the specified file
     bool save(const QString &filename, bool writeInlineImages);
 
+    bool saveDetached(QIODevice &outputDevice);
+
 private:
+    void saveShapes(const QList<KoShape*> shapes, SvgSavingContext &savingContext);
+
     void saveLayer(KoShapeLayer *layer, SvgSavingContext &context);
     void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
     void saveShape(KoShape *shape, SvgSavingContext &context);

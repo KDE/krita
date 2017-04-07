@@ -31,6 +31,7 @@
 #include <QJsonObject>
 #include <QTextBrowser>
 #include <QCheckBox>
+#include <QSaveFile>
 #include <QGroupBox>
 
 #include <klocalizedstring.h>
@@ -400,19 +401,24 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     }
 
     QFile io(location);
+    QSaveFile out(location);
 
     if (direction == Import) {
         if (!io.exists()) {
             return KisImportExportFilter::FileNotFound;
         }
 
-        if (!io.open(QFile::ReadOnly)) {
+        if (!io.open(QFile::ReadOnly) ) {
             return KisImportExportFilter::FileNotFound;
         }
     }
     else if (direction == Export) {
-        if (!io.open(QFile::WriteOnly)) {
-            return KisImportExportFilter::CreationError;
+        if (filter->supportsIO()) {
+            out.setDirectWriteFallback(true);
+            if (!out.open(QFile::WriteOnly)) {
+                out.cancelWriting();
+                return KisImportExportFilter::CreationError;
+            }
         }
     }
     else {
@@ -423,8 +429,20 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         QApplication::setOverrideCursor(Qt::WaitCursor);
     }
 
-    KisImportExportFilter::ConversionStatus status = filter->convert(m_document, &io, exportConfiguration);
-    io.close();
+    KisImportExportFilter::ConversionStatus status;
+    if (direction == Import || !filter->supportsIO()) {
+         status = filter->convert(m_document, &io, exportConfiguration);
+         if (io.isOpen()) io.close();
+    }
+    else {
+        status = filter->convert(m_document, &out, exportConfiguration);
+        if (status != KisImportExportFilter::OK) {
+            out.cancelWriting();
+        }
+        else {
+            out.commit();
+        }
+    }
 
     if (exportConfiguration) {
         KisConfig().setExportConfiguration(typeName, exportConfiguration);
@@ -434,13 +452,17 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         QString l = location + ".kra";
         QByteArray ba = m_document->nativeFormatMimeType();
         KisImportExportFilter *filter = filterForMimeType(QString::fromLatin1(ba), Export);
-        QFile f(l);
+        QSaveFile f(l);
         f.open(QIODevice::WriteOnly);
         if (filter) {
             filter->setFilename(l);
-            filter->convert(m_document, &f);
+            if (filter->convert(m_document, &f) == KisImportExportFilter::OK) {
+                f.commit();
+            }
+            else {
+                f.cancelWriting();
+            }
         }
-        f.close();
         delete filter;
 
     }

@@ -24,6 +24,7 @@
 
 #include "ui_wdg_offsetimage.h"
 
+class KisDocumentAwareSpinBoxUnitManager;
 
 class WdgOffsetImage : public QWidget, public Ui::WdgOffsetImage
 {
@@ -50,8 +51,8 @@ public:
 
 private Q_SLOTS:
     void okClicked();
-    void slotOffsetXChanged(int);
-    void slotOffsetYChanged(int);
+    void slotOffsetXChanged(double);
+    void slotOffsetYChanged(double);
     void slotMiddleOffset();
 
 private:
@@ -60,6 +61,9 @@ private:
     int m_offsetY;
     bool m_lock;
     QSize m_offsetSize;
+
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
 
 };
 

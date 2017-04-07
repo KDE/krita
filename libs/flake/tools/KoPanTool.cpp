@@ -31,10 +31,12 @@
 #include <QScrollBar>
 #include <FlakeDebug.h>
 
+#include "kis_assert.h"
+
+
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
         : KoToolBase(canvas),
-        m_controller(0),
-        m_temporary(false)
+        m_controller(0)
 {
 }
 
@@ -68,8 +70,6 @@ void KoPanTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     event->accept();
     useCursor(QCursor(Qt::OpenHandCursor));
-    if (m_temporary)
-        emit done();
 }
 
 void KoPanTool::keyPressEvent(QKeyEvent *event)
@@ -98,18 +98,10 @@ void KoPanTool::keyPressEvent(QKeyEvent *event)
 
 void KoPanTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
 {
-    if (m_controller == 0) {
-        emit done();
-        return;
-    }
-    m_temporary = toolActivation == TemporaryActivation;
-    useCursor(QCursor(Qt::OpenHandCursor));
-}
+    Q_UNUSED(toolActivation);
+    KIS_ASSERT_RECOVER_NOOP(m_controller);
 
-void KoPanTool::customMoveEvent(KoPointerEvent * event)
-{
-    m_controller->pan(QPoint(-event->x(), -event->y()));
-    event->accept();
+    useCursor(QCursor(Qt::OpenHandCursor));
 }
 
 QPointF KoPanTool::documentToViewport(const QPointF &p)

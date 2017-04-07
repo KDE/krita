@@ -4,15 +4,16 @@ set ( defaulttools_SRCS
     Plugin.cpp
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp
-    defaulttool/DefaultToolWidget.cpp
-    defaulttool/DefaultToolArrangeWidget.cpp
-    defaulttool/DefaultToolTransformWidget.cpp
+    defaulttool/DefaultToolTabbedWidget.cpp
+    defaulttool/DefaultToolGeometryWidget.cpp
     defaulttool/ShapeMoveStrategy.cpp
     defaulttool/ShapeResizeStrategy.cpp
     defaulttool/ShapeRotateStrategy.cpp
     defaulttool/ShapeShearStrategy.cpp
+    defaulttool/ShapeGradientEditStrategy.cpp
     defaulttool/SelectionDecorator.cpp
-    defaulttool/SelectionTransformCommand.cpp
+
+    defaulttool/KoShapeGradientHandles.cpp
 
     connectionTool/ConnectionTool.cpp
     connectionTool/ConnectionToolFactory.cpp
@@ -24,9 +25,7 @@ set ( defaulttools_SRCS
 )
 
 ki18n_wrap_ui(defaulttools_SRCS
-    defaulttool/DefaultToolWidget.ui
-    defaulttool/DefaultToolArrangeWidget.ui
-    defaulttool/DefaultToolTransformWidget.ui
+    defaulttool/DefaultToolGeometryWidget.ui
     connectionTool/ConnectionPointWidget.ui
 )
 

@@ -43,6 +43,7 @@
 #include <QTabWidget>
 
 #include <WidgetsDebug.h>
+#include <kis_debug.h>
 
 class Q_DECL_HIDDEN KoToolDocker::Private
 {
@@ -114,7 +115,7 @@ public:
                 housekeeperLayout->setVerticalSpacing(0);
                 Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
                     if (widget.isNull() || widget->objectName().isEmpty()) {
-                        continue; // skip this docker in release build when assert don't crash
+                        KIS_SAFE_ASSERT_RECOVER(!(widget->objectName().isEmpty())) { continue; }
                     }
                     if (!widget->windowTitle().isEmpty()) {
                         housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);
@@ -137,8 +138,7 @@ public:
                 int specialCount = 0;
                 Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
                     if (widget.isNull() || widget->objectName().isEmpty()) {
-                        Q_ASSERT(!(widget->objectName().isEmpty()));
-                        continue; // skip this docker in release build when assert don't crash
+                        KIS_SAFE_ASSERT_RECOVER(!(widget->objectName().isEmpty())) { continue; }
                     }
                     if (!widget->windowTitle().isEmpty()) {
                         housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 0);

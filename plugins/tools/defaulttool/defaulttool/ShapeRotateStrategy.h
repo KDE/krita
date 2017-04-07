@@ -53,14 +53,12 @@ public:
         Q_UNUSED(modifiers);
     }
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent(KoPointerEvent *event);
 
 private:
     void rotateBy(qreal angle);
-    QRectF m_initialBoundingRect;
+
     QPointF m_start;
     QTransform m_rotationMatrix;
-    QTransform m_initialSelectionMatrix;
     QList<QTransform> m_oldTransforms;
     QPointF m_rotationCenter;
     QList<KoShape *> m_selectedShapes;

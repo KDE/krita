@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=highpass
+X-Python-2-Compatible=false
+Name=Highpass Filter
+Name[ca]=Filtre passa-alt
+Name[nl]=Hoogdoorlaatfilter
+Name[pt]=Filtro Passa-Alto
+Name[sv]=Högpassfilter
+Name[uk]=Високочастотний фільтр
+Name[x-test]=xxHighpass Filterxx
+Comment=Highpass Filter, based on http://registry.gimp.org/node/7385
+Comment[ca]=Filtre passa-alt, basat en el http://registry.gimp.org/node/7385
+Comment[nl]=Hoogdoorlaatfilter, gebaseerd op http://registry.gimp.org/node/7385
+Comment[pt]=Filtro passa-alto, baseado em http://registry.gimp.org/node/7385
+Comment[sv]=Högpassfilter, baserat på http://registry.gimp.org/node/7385
+Comment[uk]=Високочастотний фільтр, засновано на on http://registry.gimp.org/node/7385
+Comment[x-test]=xxHighpass Filter, based on http://registry.gimp.org/node/7385xx

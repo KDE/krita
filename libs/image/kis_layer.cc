@@ -816,17 +816,19 @@ QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
 
     KisPaintDeviceSP originalDevice = original();
     if (originalDevice) {
-        KisPaintDeviceSP targetDevice = new KisPaintDevice(colorSpace());
         KisRasterKeyframeChannel *channel = originalDevice->keyframeChannel();
-        KisKeyframeSP keyframe = channel->activeKeyframeAt(time);
-        channel->fetchFrame(keyframe, targetDevice);
-        return targetDevice->createThumbnail(w, h, 1,
-                                             KoColorConversionTransformation::internalRenderingIntent(),
-                                             KoColorConversionTransformation::internalConversionFlags());
+
+        if (channel) {
+            KisPaintDeviceSP targetDevice = new KisPaintDevice(colorSpace());
+            KisKeyframeSP keyframe = channel->activeKeyframeAt(time);
+            channel->fetchFrame(keyframe, targetDevice);
+            return targetDevice->createThumbnail(w, h, 1,
+                                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                                 KoColorConversionTransformation::internalConversionFlags());
+        }
     }
-    else {
-        return QImage();
-    }
+
+    return createThumbnail(w, h);
 }
 
 qint32 KisLayer::x() const

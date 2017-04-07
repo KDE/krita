@@ -65,6 +65,12 @@ KoOdfGradientBackground::~KoOdfGradientBackground()
 
 }
 
+bool KoOdfGradientBackground::compareTo(const KoShapeBackground *other) const
+{
+    Q_UNUSED(other);
+    return false;
+}
+
 
 bool KoOdfGradientBackground::loadOdf(const KoXmlElement& e)
 {

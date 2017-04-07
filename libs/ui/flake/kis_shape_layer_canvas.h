@@ -58,7 +58,8 @@ public:
     void gridSize(QPointF *offset, QSizeF *spacing) const;
     bool snapToGrid() const;
     void addCommand(KUndo2Command *command);
-    KoShapeManager *shapeManager() const;
+    KoShapeManager *shapeManager() const override;
+    KoSelectedShapesProxy *selectedShapesProxy() const override;
     void updateCanvas(const QRectF& rc);
     KoToolProxy * toolProxy() const;
     KoViewConverter* viewConverter() const;
@@ -68,6 +69,8 @@ public:
     virtual void updateInputMethodInfo() {}
     virtual void setCursor(const QCursor &) {}
 
+    void forceRepaint();
+
 private Q_SLOTS:
     void repaint();
 Q_SIGNALS:
@@ -76,7 +79,8 @@ private:
 
     bool m_isDestroying;
     QScopedPointer<KisImageViewConverter> m_viewConverter;
-    KoShapeManager * m_shapeManager;
+    QScopedPointer<KoShapeManager> m_shapeManager;
+    QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 

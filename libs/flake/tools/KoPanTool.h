@@ -55,8 +55,6 @@ public:
     /// reimplemented from superclass
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented method
-    virtual void customMoveEvent(KoPointerEvent *event);
-    /// reimplemented method
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
 
@@ -69,7 +67,6 @@ private:
     QPointF documentToViewport(const QPointF &p);
     KoCanvasController *m_controller;
     QPointF m_lastPosition;
-    bool m_temporary;
     Q_DECLARE_PRIVATE(KoToolBase)
 };
 

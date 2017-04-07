@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
         <file>light_draw-eraser.svg</file>
+        <file>light_geometry.svg</file>
         <file alias="light_object-align-horizontal-center-calligra.svg">light_ox16-action-object-align-horizontal-center-calligra.svg</file>
         <file alias="light_object-align-horizontal-left-calligra.svg">light_ox16-action-object-align-horizontal-left-calligra.svg</file>
         <file alias="light_object-align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-right-calligra.svg</file>
@@ -14,6 +15,14 @@
         <file alias="light_object-order-raise-calligra.svg">light_ox16-action-object-order-raise-calligra.svg</file>
         <file alias="light_object-group-calligra.svg">light_ox16-action-object-group-calligra.svg</file>
         <file alias="light_object-ungroup-calligra.svg">light_ox16-action-object-ungroup-calligra.svg</file>
+        <file>light_distribute-horizontal-center.svg</file>
+        <file>light_distribute-horizontal-left.svg</file>
+        <file>light_distribute-horizontal-right.svg</file>
+        <file>light_distribute-horizontal.svg</file>
+        <file>light_distribute-vertical-bottom.svg</file>
+        <file>light_distribute-vertical-center.svg</file>
+        <file>light_distribute-vertical-top.svg</file>
+        <file>light_distribute-vertical.svg</file>
         <file>light_paintop_settings_01.svg</file>
         <file>light_paintop_settings_02.svg</file>
         <file>light_pivot-point.svg</file>        
@@ -28,5 +37,18 @@
         <file>light_onionOff.svg</file>
         <file>light_onionOn.svg</file>
         <file>light_onion_skin_options.svg</file>
+        <file>light_path-break-point.svg</file>
+        <file>light_path-break-segment.svg</file>
+        <file>light_pathpoint-corner.svg</file>
+        <file>light_pathpoint-curve.svg</file>
+        <file>light_pathpoint-insert.svg</file>
+        <file>light_pathpoint-join.svg</file>
+        <file>light_pathpoint-line.svg</file>
+        <file>light_pathpoint-merge.svg</file>
+        <file>light_pathpoint-remove.svg</file>
+        <file>light_pathpoint-smooth.svg</file>
+        <file>light_pathpoint-symmetric.svg</file>
+        <file>light_pathsegment-curve.svg</file>
+        <file>light_pathsegment-line.svg</file>
     </qresource>
 </RCC>

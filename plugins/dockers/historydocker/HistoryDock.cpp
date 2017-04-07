@@ -38,13 +38,14 @@ HistoryDock::HistoryDock()
     QVBoxLayout *vl = new QVBoxLayout(page);
     m_undoView = new KisUndoView(this);
     vl->addWidget(m_undoView);
-    QHBoxLayout *hl = new QHBoxLayout(page);
+    QHBoxLayout *hl = new QHBoxLayout();
     hl->addSpacerItem(new QSpacerItem(10, 1,  QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_bnConfigure = new QToolButton(page);
     m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure"));
     connect(m_bnConfigure, SIGNAL(clicked(bool)), SLOT(configure()));
     hl->addWidget(m_bnConfigure);
     vl->addItem(hl);
+    vl->addLayout(hl);
 
     setWidget(page);
     setWindowTitle(i18n("Undo History"));

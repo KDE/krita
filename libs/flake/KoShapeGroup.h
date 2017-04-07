@@ -52,18 +52,25 @@ public:
     KoShapeGroup();
     /// destructor
     virtual ~KoShapeGroup();
+
+    KoShape* cloneShape() const override;
+
     /// This implementation is empty since a group is itself not visible.
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// always returns false since the group itself can't be selected or hit
     virtual bool hitTest(const QPointF &position) const;
-    /// a group in flake doesn't have a size, this function just returns QSizeF(0,0)
-    virtual QSizeF size() const;
+    QSizeF size() const override;
+    void setSize(const QSizeF &size) override;
+    QRectF outlineRect() const override;
     /// a group's boundingRect
-    virtual QRectF boundingRect() const;
+    QRectF boundingRect() const override;
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+private:
+    friend class ShapeGroupContainerModel;
 
     /**
      * @brief Invalidate the size cache of the group
@@ -73,6 +80,9 @@ public:
      * to be invalidated.
      */
     void invalidateSizeCache();
+
+private:
+    KoShapeGroup(const KoShapeGroup &rhs);
 
 private:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);

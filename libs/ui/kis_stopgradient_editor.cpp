@@ -27,50 +27,103 @@
 
 #include "kis_debug.h"
 
-#include "widgets/kis_gradient_slider_widget.h"
 #include <kis_icon_utils.h>
 
 /****************************** KisStopGradientEditor ******************************/
 
-KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption)
-    : QWidget(parent), m_gradient(gradient)
+KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
+    : QWidget(parent),
+      m_gradient(0)
 {
-    setObjectName(name);
     setupUi(this);
-    setWindowTitle(caption);
-    
+
     connect(gradientSlider, SIGNAL(sigSelectedStop(int)), this, SLOT(stopChanged(int)));
-    gradientSlider->setGradientResource(m_gradient);
-
-    nameedit->setText(gradient->name());
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(nameChanged()));
-
     connect(colorButton, SIGNAL(changed(const KoColor&)), SLOT(colorChanged(const KoColor&)));
-    
+
+    opacitySlider->setPrefix(i18n("Opacity: "));
     opacitySlider->setRange(0.0, 1.0, 2);
     connect(opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(opacityChanged(qreal)));
-    
+
+
     buttonReverse->setIcon(KisIconUtils::loadIcon("mirrorAxis-HorizontalMove"));
     KisIconUtils::updateIcon(buttonReverse);
-    connect(buttonReverse, SIGNAL(pressed()), this, SLOT(reverse()));
-    
-    stopChanged(gradientSlider->selectedStop());
+    connect(buttonReverse, SIGNAL(pressed()), SLOT(reverse()));
+
+    buttonReverseSecond->setIcon(KisIconUtils::loadIcon("mirrorAxis-HorizontalMove"));
+    KisIconUtils::updateIcon(buttonReverseSecond);
+    connect(buttonReverseSecond, SIGNAL(clicked()), SLOT(reverse()));
+
+    setCompactMode(false);
+
+    setGradient(0);
+    stopChanged(-1);
 }
 
-void KisStopGradientEditor::activate()
+KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption)
+    : KisStopGradientEditor(parent)
 {
-    paramChanged();
+    setObjectName(name);
+    setWindowTitle(caption);
+
+    setGradient(gradient);
+}
+
+void KisStopGradientEditor::setCompactMode(bool value)
+{
+    lblName->setVisible(!value);
+    buttonReverse->setVisible(!value);
+    nameedit->setVisible(!value);
+
+    buttonReverseSecond->setVisible(value);
+}
+
+void KisStopGradientEditor::setGradient(KoStopGradient *gradient)
+{
+    m_gradient = gradient;
+    setEnabled(m_gradient);
+
+    if (m_gradient) {
+        gradientSlider->setGradientResource(m_gradient);
+        nameedit->setText(gradient->name());
+        stopChanged(gradientSlider->selectedStop());
+    }
+
+    emit sigGradientChanged();
+}
+
+void KisStopGradientEditor::notifyGlobalColorChanged(const KoColor &color)
+{
+    if (colorButton->isEnabled() &&
+        color != colorButton->color()) {
+
+        colorButton->setColor(color);
+    }
+}
+
+boost::optional<KoColor> KisStopGradientEditor::currentActiveStopColor() const
+{
+    if (!colorButton->isEnabled()) return boost::none;
+    return colorButton->color();
 }
 
 void KisStopGradientEditor::stopChanged(int stop)
 {
-    KoColor color = m_gradient->stops()[stop].second;
-    opacitySlider->setValue(color.opacityF());
+    const bool hasStopSelected = stop >= 0;
+
+    opacitySlider->setEnabled(hasStopSelected);
+    colorButton->setEnabled(hasStopSelected);
+    stopLabel->setEnabled(hasStopSelected);
+
+    if (hasStopSelected) {
+        KoColor color = m_gradient->stops()[stop].second;
+        opacitySlider->setValue(color.opacityF());
    
-    color.setOpacity(1.0);
-    colorButton->setColor(color);
-    
-    paramChanged();
+        color.setOpacity(1.0);
+        colorButton->setColor(color);
+    }
+
+    emit sigGradientChanged();
 }
 
 void KisStopGradientEditor::colorChanged(const KoColor& color)
@@ -87,8 +140,9 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     stops.insert(currentStop, KoGradientStop(t, c));
     
     m_gradient->setStops(stops);
+    gradientSlider->update();
 
-    paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisStopGradientEditor::opacityChanged(qreal value)
@@ -105,32 +159,29 @@ void KisStopGradientEditor::opacityChanged(qreal value)
     stops.insert(currentStop, KoGradientStop(t, c));
     
     m_gradient->setStops(stops);
+    gradientSlider->update();
 
-    paramChanged();
+    emit sigGradientChanged();
 }
 
 
 void KisStopGradientEditor::nameChanged()
 {
      m_gradient->setName(nameedit->text());
-}
 
-void KisStopGradientEditor::paramChanged()
-{
-    m_gradient->updatePreview();
-    gradientSlider->update();     
+     emit sigGradientChanged();
 }
 
 void KisStopGradientEditor::reverse()
 {
     QList<KoGradientStop> stops = m_gradient->stops();
     QList<KoGradientStop> reversedStops;
-    for(const KoGradientStop& stop : stops)
-    {
+    for(const KoGradientStop& stop : stops) {
         reversedStops.push_front(KoGradientStop(1 - stop.first, stop.second));
     }
     m_gradient->setStops(reversedStops);
-    gradientSlider->setSeletectStop(stops.size()-1 -gradientSlider->selectedStop());
-    paramChanged();
+    gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
+
+    emit sigGradientChanged();
 }
 

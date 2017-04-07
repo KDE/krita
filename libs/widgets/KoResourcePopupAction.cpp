@@ -45,10 +45,11 @@
 class KoResourcePopupAction::Private
 {
 public:
-    QMenu *menu {0};
-    KoResourceItemView *resourceList {0};
+    QMenu *menu = 0;
+    KoResourceModel *model = 0;
+    KoResourceItemView *resourceList = 0;
     QSharedPointer<KoShapeBackground> background;
-    KoImageCollection *imageCollection {0};
+    KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
 };
 
@@ -63,7 +64,9 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     QWidgetAction *wdgAction = new QWidgetAction(this);
 
     d->resourceList = new KoResourceItemView(widget);
-    d->resourceList->setModel(new KoResourceModel(resourceAdapter, widget));
+
+    d->model = new KoResourceModel(resourceAdapter, widget);
+    d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KoResourceItemDelegate(widget));
     KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(d->resourceList->model());
     if (resourceModel) {
@@ -71,21 +74,11 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     }
 
     KoResource *resource = 0;
-    if (resourceAdapter->resources().count() > 0) {
-        resource = resourceAdapter->resources().at(0);
-    }
-
-    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
-    KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
-    if (gradient) {
-        QGradient *qg = gradient->toQGradient();
-        qg->setCoordinateMode(QGradient::ObjectBoundingMode);
-        d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
-    }
-    else if (pattern) {
-        d->imageCollection = new KoImageCollection();
-        d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(d->imageCollection));
-        static_cast<KoPatternBackground*>(d->background.data())->setPattern(pattern->pattern());
+    QList<KoResource*> resources = resourceAdapter->resources();
+    if (resources.count() > 0) {
+        resource = resources.at(0);
+        d->resourceList->setCurrentIndex(d->model->indexFromResource(resource));
+        indexChanged(d->resourceList->currentIndex());
     }
 
     QHBoxLayout *layout = new QHBoxLayout(widget);
@@ -132,6 +125,22 @@ void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackgroun
     updateIcon();
 }
 
+void KoResourcePopupAction::setCurrentResource(KoResource *resource)
+{
+    QModelIndex index = d->model->indexFromResource(resource);
+    if (index.isValid()) {
+        d->resourceList->setCurrentIndex(index);
+        indexChanged(index);
+    }
+}
+
+KoResource* KoResourcePopupAction::currentResource() const
+{
+    QModelIndex index = d->resourceList->currentIndex();
+    if (!index.isValid()) return 0;
+
+    return static_cast<KoResource*>(index.internalPointer());
+}
 
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 {

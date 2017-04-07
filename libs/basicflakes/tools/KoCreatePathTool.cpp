@@ -22,16 +22,18 @@
 #include "KoCreatePathTool.h"
 #include "KoCreatePathTool_p.h"
 
+#include <KoUnit.h>
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
 #include "KoSelection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
-#include "KoStrokeConfigWidget.h"
 #include "KoCanvasBase.h"
 #include "kis_int_parse_spin_box.h"
 #include <KoColor.h>
+#include "kis_canvas_resource_provider.h"
+#include <KisHandlePainterHelper.h>
 
 #include <klocalizedstring.h>
 
@@ -57,62 +59,39 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
     if (pathStarted()) {
 
-        KoShapeStroke *stroke(createStroke());
-
-        if (stroke) {
-            d->shape->setStroke(stroke);
-        }
-
         painter.save();
         paintPath(*(d->shape), painter, converter);
         painter.restore();
 
-        painter.save();
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, d->shape, converter, d->handleRadius);
 
-        painter.setTransform(d->shape->absoluteTransformation(&converter) * painter.transform());
+        const bool firstPointActive = d->firstPoint == d->activePoint;
 
-        KoShape::applyConversion(painter, converter);
-
-        QPen pen(QBrush(Qt::blue), 1);
-        pen.setCosmetic(true);
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
-
-        const bool firstPoint = (d->firstPoint == d->activePoint);
-
-        if (d->pointIsDragged || firstPoint) {
+        if (d->pointIsDragged || firstPointActive) {
             const bool onlyPaintActivePoints = false;
             KoPathPoint::PointTypes paintFlags = KoPathPoint::ControlPoint2;
 
             if (d->activePoint->activeControlPoint1()) {
                 paintFlags |= KoPathPoint::ControlPoint1;
             }
-            d->activePoint->paint(painter, d->handleRadius, paintFlags, onlyPaintActivePoints);
+
+            helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+            d->activePoint->paint(helper, paintFlags, onlyPaintActivePoints);
         }
 
-
-        // check if we have to color the first point
-        if (d->mouseOverFirstPoint) {
-            painter.setBrush(Qt::red);
-        } else {
-            painter.setBrush(Qt::white);
+        if (!firstPointActive) {
+            helper.setHandleStyle(d->mouseOverFirstPoint ?
+                                      KisHandleStyle::highlightedPrimaryHandles() :
+                                      KisHandleStyle::primarySelection());
+            d->firstPoint->paint(helper, KoPathPoint::Node);
         }
-
-        d->firstPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
-
-        painter.restore();
     }
 
     if (d->hoveredPoint) {
-        painter.save();
-        painter.setTransform(d->hoveredPoint->parent()->absoluteTransformation(&converter), true);
-        KoShape::applyConversion(painter, converter);
-        QPen pen(QBrush(Qt::blue), 1);
-        pen.setCosmetic(true);
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
-        d->hoveredPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
-        painter.restore();
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+        d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
 
     painter.save();
@@ -199,7 +178,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape = pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoShapeStroke *stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
+        KoShapeStrokeSP stroke(new KoShapeStroke());
+        const qreal size = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+
+        stroke->setLineWidth(canvas()->unit().fromUserValue(size));
         stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
         pathShape->setStroke(stroke);
@@ -218,7 +200,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         canvas()->updateCanvas(handlePaintRect(point));
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
 
-        canvas()->snapGuide()->setEditedShape(pathShape);
+        canvas()->snapGuide()->setAdditionalEditedShape(pathShape);
 
         d->angleSnapStrategy = new AngleSnapStrategy(d->angleSnappingDelta, d->angleSnapStatus);
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);
@@ -407,8 +389,10 @@ void KoCreatePathTool::removeLastPoint()
     }
 }
 
-void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoCreatePathTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     Q_D(KoCreatePathTool);
     useCursor(Qt::ArrowCursor);
 
@@ -423,6 +407,7 @@ void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
 void KoCreatePathTool::deactivate()
 {
     cancelPath();
+    KoToolBase::deactivate();
 }
 
 void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
@@ -451,7 +436,6 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     d->existingStartPoint.validate(canvas());
     d->existingEndPoint.validate(canvas());
 
-    pathShape->setStroke(createStroke());
     if (d->connectPaths(pathShape, d->existingStartPoint, d->existingEndPoint)) {
         if (d->existingStartPoint.isValid()) {
             startShape = d->existingStartPoint.path;
@@ -506,27 +490,10 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
-    d->strokeWidget = new KoStrokeConfigWidget(0);
-    d->strokeWidget->setWindowTitle(i18n("Line"));
-    d->strokeWidget->setCanvas(canvas());
-    d->strokeWidget->setActive(false);
-    list.append(d->strokeWidget);
-
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
 
     return list;
-}
-
-KoShapeStroke *KoCreatePathTool::createStroke()
-{
-    Q_D(KoCreatePathTool);
-
-    KoShapeStroke *stroke = 0;
-    if (d->strokeWidget) {
-        stroke = d->strokeWidget->createShapeStroke();
-    }
-    return stroke;
 }
 
 //have to include this because of Q_PRIVATE_SLOT

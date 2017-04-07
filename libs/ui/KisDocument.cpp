@@ -1,4 +1,4 @@
-/* This file is part of the Krita project
+﻿/* This file is part of the Krita project
  *
  * Copyright (C) 2014 Boudewijn Rempt <boud@kogmbh.com>
  *
@@ -605,6 +605,7 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     //qDebug() << "save" << d->m_file << d->m_url << url() << localFilePath();
 
     d->m_saveOk = false;
+
     if (d->m_file.isEmpty()) { // document was created empty
         d->m_file = d->m_url.toLocalFile();
     }
@@ -644,117 +645,73 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
-
-    // The output format is set by KisMainWindow, and by openFile
-    QByteArray outputMimeType = d->outputMimeType;
-
-    if (outputMimeType.isEmpty()) {
-        outputMimeType = d->outputMimeType = nativeFormatMimeType();
-    }
-
-    //qDebug() << "saveFile. Is Autosaving?" << isAutosaving() << "url" << filePath << d->outputMimeType;
-
-
-    if (d->backupFile) {
-        Q_ASSERT(url().isLocalFile());
-        KBackup::backupFile(url().toLocalFile());
-    }
-
-    qApp->processEvents();
-
     bool ret = false;
-    bool suppressErrorDialog = false;
+    bool suppressErrorDialog = fileBatchMode();
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
-    setFileProgressUpdater(i18n("Saving Document"));
+    //qDebug() << "saveFile" << localFilePath() << QFileInfo(localFilePath()).exists() << !QFileInfo(localFilePath()).isWritable();
 
-    QFileInfo fi(filePath);
-    QString tempororaryFileName;
-    {
-        QTemporaryFile tf(QDir::tempPath() + "/XXXXXX" + fi.baseName() + "." + fi.completeSuffix());
-        tf.open();
-        tempororaryFileName = tf.fileName();
+    if (QFileInfo(localFilePath()).exists() && !QFileInfo(localFilePath()).isWritable()) {
+        setErrorMessage(i18n("%1 cannot be written to. Please save under a different name.", localFilePath()));
     }
-    Q_ASSERT(!tempororaryFileName.isEmpty());
+    else {
 
-    //qDebug() << "saving to tempory file" << tempororaryFileName;
-    status = d->importExportManager->exportDocument(tempororaryFileName, filePath, outputMimeType, !d->isExporting , exportConfiguration);
+        // The output format is set by KisMainWindow, and by openFile
+        QByteArray outputMimeType = d->outputMimeType;
 
-    ret = (status == KisImportExportFilter::OK);
-    suppressErrorDialog = (isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
-    //qDebug() << "Export status was" << status;
-
-    if (ret) {
-
-        //qDebug() << "copying temporary file" << tempororaryFileName << "to" << filePath;
-
-        if (!d->isAutosaving && !d->suppressProgress) {
-            QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-            updater->setProgress(0);
-            d->undoStack->setClean();
-            updater->setProgress(100);
-        } else {
-            d->undoStack->setClean();
+        if (outputMimeType.isEmpty()) {
+            outputMimeType = d->outputMimeType = nativeFormatMimeType();
         }
 
-        QFile tempFile(tempororaryFileName);
-        QString s = filePath;
-        QFile dstFile(s);
-        while (QFileInfo(s).exists()) {
-            s.append("_");
+        //qDebug() << "saveFile. Is Autosaving?" << isAutosaving() << "url" << filePath << d->outputMimeType;
+
+
+        if (d->backupFile) {
+            Q_ASSERT(url().isLocalFile());
+            KBackup::backupFile(url().toLocalFile());
         }
-        bool r;
-        if (s != filePath) {
-            r = dstFile.rename(s);
-            if (!r) {
-               setErrorMessage(i18n("Could not rename original file to %1: %2", dstFile.fileName(), dstFile. errorString()));
-                ret = false;
+
+        qApp->processEvents();
+
+        setFileProgressUpdater(i18n("Saving Document"));
+
+        //qDebug() << "saving to tempory file" << tempororaryFileName;
+        status = d->importExportManager->exportDocument(localFilePath(), filePath, outputMimeType, !d->isExporting , exportConfiguration);
+
+        ret = (status == KisImportExportFilter::OK);
+        suppressErrorDialog = (fileBatchMode() || isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
+        //qDebug() << "Export status was" << status;
+
+        if (ret) {
+
+            if (!d->isAutosaving && !d->suppressProgress) {
+                QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+                updater->setProgress(0);
+                d->undoStack->setClean();
+                updater->setProgress(100);
+            } else {
+                d->undoStack->setClean();
             }
-         }
 
-        if (tempFile.exists()) {
-            r = tempFile.copy(filePath);
-            if (!r) {
-                setErrorMessage(i18n("Copying the temporary file failed: %1 to %2: %3", tempFile.fileName(), dstFile.fileName(), tempFile.errorString()));
-                ret = false;
+            if (errorMessage().isEmpty()) {
+                if (!isAutosaving()) {
+                    removeAutoSaveFiles();
+                }
             }
             else {
-                r = tempFile.remove();
-                if (!r) {
-                    setErrorMessage(i18n("Could not remove temporary file %1: %2", tempFile.fileName(), tempFile.errorString()));
-                    ret = false;
-                }
-                else if (s != filePath) {
-                    r = dstFile.remove();
-                    if (!r) {
-                        setErrorMessage(i18n("Could not remove saved original file: %1", dstFile.errorString()));
-                        ret = false;
-                    }
-                }
+                ret = false;
+                qWarning() << "Error while saving:" << errorMessage();
             }
-        }
-        else {
-            setErrorMessage(i18n("The temporary file %1 is gone before we could copy it!", tempFile.fileName()));
-            ret = false;
-        }
-
-        if (errorMessage().isEmpty()) {
+            // Restart the autosave timer
+            // (we don't want to autosave again 2 seconds after a real save)
             if (!isAutosaving()) {
-                removeAutoSaveFiles();
+                setAutoSaveDelay(d->autoSaveDelay);
             }
-        }
-        else {
-            ret = false;
-            qWarning() << "Error while saving:" << errorMessage();
-        }
-        // Restart the autosave timer
-        // (we don't want to autosave again 2 seconds after a real save)
-        if (!isAutosaving()) {
-            setAutoSaveDelay(d->autoSaveDelay);
-        }
 
-        d->mimeType = outputMimeType;
+            d->mimeType = outputMimeType;
+        }
     }
+
     if (!ret) {
         if (!suppressErrorDialog) {
 
@@ -996,7 +953,7 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
-                                           i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
+                                           i18n("An autosaved file exists for this document.\nDo you want to open the autosaved file instead?"),
                                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
             switch (res) {
             case QMessageBox::Yes :
@@ -1647,17 +1604,20 @@ void KisDocument::setFileProgressUpdater(const QString &text)
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
         d->progressUpdater->start(100, text);
         d->importExportManager->setProgresUpdater(d->progressUpdater);
-
-        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-        connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        if (KisPart::instance()->currentMainwindow()) {
+            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        }
     }
 }
 
 void KisDocument::clearFileProgressUpdater()
 {
     if (!d->suppressProgress && d->progressUpdater) {
-        disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
-        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        if (KisPart::instance()->currentMainwindow()) {
+            disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        }
         delete d->progressUpdater;
         d->importExportManager->setProgresUpdater(0);
         d->progressUpdater = 0;

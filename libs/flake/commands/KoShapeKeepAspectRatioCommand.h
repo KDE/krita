@@ -20,6 +20,7 @@
 #ifndef KOSHAPEKEEPASPECTRATIOCOMMAND_H
 #define KOSHAPEKEEPASPECTRATIOCOMMAND_H
 
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 #include <QList>
 
@@ -28,7 +29,7 @@ class KoShape;
 /**
  * Command that changes the keepAspectRatio property of KoShape
  */
-class KoShapeKeepAspectRatioCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeKeepAspectRatioCommand : public KUndo2Command
 {
 public:
     /**

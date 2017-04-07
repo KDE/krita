@@ -49,6 +49,7 @@
 #include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "commands/kis_node_property_list_command.h"
+#include <KisDelayedUpdateNodeInterface.h>
 
 
 namespace KisLayerUtils {
@@ -238,6 +239,26 @@ namespace KisLayerUtils {
                 }
             }
         }
+    private:
+        MergeDownInfoBaseSP m_info;
+    };
+
+    struct RefreshDelayedUpdateLayers : public KUndo2Command {
+        RefreshDelayedUpdateLayers(MergeDownInfoBaseSP info) : m_info(info) {}
+
+        void redo() override {
+            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+                recursiveApplyNodes(node,
+                    [] (KisNodeSP node) {
+                        KisDelayedUpdateNodeInterface *delayedUpdate =
+                            dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
+                        if (delayedUpdate) {
+                            delayedUpdate->forceUpdateTimedNode();
+                        }
+                    });
+            }
+        }
+
     private:
         MergeDownInfoBaseSP m_info;
     };
@@ -778,12 +799,14 @@ namespace KisLayerUtils {
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
                     applicator.applyCommand(new RefreshHiddenAreas(info));
+                    applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
                 }
             } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));
+                applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                 applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
             }
 
@@ -1074,12 +1097,14 @@ namespace KisLayerUtils {
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
                     applicator.applyCommand(new RefreshHiddenAreas(info));
+                    applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
                 }
             } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));
+                applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                 applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
             }
 

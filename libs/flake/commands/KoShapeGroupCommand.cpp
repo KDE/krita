@@ -40,18 +40,20 @@ KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container
     return new KoShapeGroupCommand(container, orderedShapes, parent);
 }
 
-KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip, const QList<bool> &it)
+KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip, const QList<bool> &it, bool _shouldNormalize)
     : shapes(s),
     clipped(clip),
     inheritTransform(it),
+    shouldNormalize(_shouldNormalize),
     container(c)
+
 {
 }
 
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform))
+    d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform, true))
 {
     Q_ASSERT(d->clipped.count() == d->shapes.count());
     Q_ASSERT(d->inheritTransform.count() == d->shapes.count());
@@ -60,11 +62,23 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QLis
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes))
+    d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), true))
 {
     for (int i = 0; i < shapes.count(); ++i) {
         d->clipped.append(false);
         d->inheritTransform.append(false);
+    }
+    d->init(this);
+}
+
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
+                                         bool clipped, bool inheritTransform, bool shouldNormalize, KUndo2Command *parent)
+    : KUndo2Command(parent),
+      d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), shouldNormalize))
+{
+    for (int i = 0; i < shapes.count(); ++i) {
+        d->clipped.append(clipped);
+        d->inheritTransform.append(inheritTransform);
     }
     d->init(this);
 }
@@ -100,10 +114,10 @@ void KoShapeGroupCommand::redo()
 {
     KUndo2Command::redo();
 
-    if (dynamic_cast<KoShapeGroup*>(d->container)) {
+    if (d->shouldNormalize &&  dynamic_cast<KoShapeGroup*>(d->container)) {
         QRectF bound = d->containerBoundingRect();
-        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeftCorner);
-        d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
+        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeft);
+        d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeft);
         d->container->setSize(bound.size());
 
         if (d->container->shapeCount() > 0) {
@@ -175,8 +189,8 @@ void KoShapeGroupCommand::undo()
         shape->setZIndex(d->oldZIndex[i]);
     }
 
-    if (dynamic_cast<KoShapeGroup*>(d->container)) {
-        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeftCorner);
+    if (d->shouldNormalize && dynamic_cast<KoShapeGroup*>(d->container)) {
+        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeft);
         if (d->container->shapeCount() > 0) {
             bool boundingRectInitialized = false;
             QRectF bound;
@@ -193,7 +207,7 @@ void KoShapeGroupCommand::undo()
             Q_FOREACH (KoShape * child, d->container->shapes())
                 child->setAbsolutePosition(child->absolutePosition() + positionOffset);
 
-            d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
+            d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeft);
             d->container->setSize(bound.size());
         }
     }
@@ -201,20 +215,14 @@ void KoShapeGroupCommand::undo()
 
 QRectF KoShapeGroupCommandPrivate::containerBoundingRect()
 {
-    bool boundingRectInitialized = true;
     QRectF bound;
-    if (container->shapeCount() > 0)
-        bound = container->boundingRect();
-    else
-        boundingRectInitialized = false;
+    if (container->shapeCount() > 0) {
+        bound = container->absoluteTransformation(0).mapRect(container->outlineRect());
+    }
 
     Q_FOREACH (KoShape *shape, shapes) {
-        if (boundingRectInitialized)
-            bound = bound.united(shape->boundingRect());
-        else {
-            bound = shape->boundingRect();
-            boundingRectInitialized = true;
-        }
+        bound |= shape->absoluteTransformation(0).mapRect(shape->outlineRect());
     }
+
     return bound;
 }

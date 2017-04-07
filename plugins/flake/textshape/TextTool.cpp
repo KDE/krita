@@ -50,6 +50,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoPointerEvent.h>
 #include <KoColor.h>
 #include <KoColorBackground.h>
@@ -185,24 +186,24 @@ TextTool::TextTool(KoCanvasBase *canvas)
         }
     }
 
+    m_contextMenu.reset(new QMenu());
+
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
-    QList<QAction *> list;
-    list.append(this->action("format_font"));
+    m_contextMenu->addAction(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
             QAction *a = new QAction(factory->title(), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
-            list.append(a);
+            m_contextMenu->addAction(a);
             addAction(QString("apply_%1").arg(factory->id()), a);
         }
     }
-    setPopupActionList(list);
 
-    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
@@ -867,7 +868,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
     updateSelectedShape(event->point, shiftPressed);
 
-    KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
         selection->deselectAll();
         selection->select(m_textShape);
@@ -1135,13 +1136,6 @@ void TextTool::cut()
         m_textEditor.data()->deleteChar(false, topCmd);
         m_textEditor.data()->endEditBlock();
     }
-}
-
-QStringList TextTool::supportedPasteMimeTypes() const
-{
-    QStringList list;
-    list << "text/plain" << "text/html" << "application/vnd.oasis.opendocument.text";
-    return list;
 }
 
 void TextTool::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
@@ -1971,6 +1965,11 @@ void TextTool::updateActions()
     emit blockFormatChanged(bf);
 }
 
+QMenu *TextTool::popupActionsMenu()
+{
+    return m_contextMenu.data();
+}
+
 void TextTool::updateStyleManager()
 {
     if (!m_textShapeData) {
@@ -1983,9 +1982,10 @@ void TextTool::updateStyleManager()
     m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
 }
 
-void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KoToolBase::activate(activation, shapes);
+
     m_caretTimer.start();
     m_caretTimerState = true;
     foreach (KoShape *shape, shapes) {
@@ -2047,6 +2047,8 @@ void TextTool::deactivate()
         m_specialCharacterDocker->setEnabled(false);
         m_specialCharacterDocker->setVisible(false);
     }
+
+    KoToolBase::deactivate();
 }
 
 void TextTool::repaintDecorations()
@@ -2781,7 +2783,7 @@ void TextTool::shapeAddedToCanvas()
 {
     qDebug();
     if (m_textShape) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
+        KoSelection *selection = canvas()->selectedShapesProxy()->selection();
         KoShape *shape = selection->firstSelectedShape();
         if (shape != m_textShape && canvas()->shapeManager()->shapes().contains(m_textShape)) {
             // this situation applies when someone, not us, changed the selection by selecting another

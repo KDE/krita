@@ -58,6 +58,10 @@ public:
         return 0;
     }
 
+    virtual bool supportsPerspectiveTransform() const {
+        return false;
+    }
+
 };
 
 #endif // KIS_EXTERNAL_IFACE_LAYER_IFACE_

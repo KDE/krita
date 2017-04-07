@@ -114,12 +114,12 @@ public:
     /**
      * @return the KisMainWindow in which this view is currently.
      */
-    KisMainWindow * mainWindow() const;
+    KisMainWindow *mainWindow() const;
 
     /**
      * @return the statusbar of the KisMainWindow in which this view is currently.
      */
-    QStatusBar * statusBar() const;
+    QStatusBar *statusBar() const;
 
     /**
      * This adds a widget to the statusbar for this view.

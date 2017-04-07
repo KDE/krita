@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=scripter
+X-Python-2-Compatible=false
+Name=Scripter
+Name[ca]=Scripter
+Name[nl]=Scriptschrijver
+Name[pt]=Programador
+Name[sv]=Skriptgenerator
+Name[uk]=Скриптер
+Name[x-test]=xxScripterxx
+Comment=Plugin to execute ad-hoc Python code
+Comment[ca]=Connector per executar codi Python ad-hoc
+Comment[nl]=Plug-in om ad-hoc Python code uit te voeren
+Comment[pt]='Plugin' para executar código em Python arbitrário
+Comment[sv]=Insticksprogram för att köra godtycklig Python-kod
+Comment[uk]=Додаток для виконання апріорного коду Python
+Comment[x-test]=xxPlugin to execute ad-hoc Python codexx

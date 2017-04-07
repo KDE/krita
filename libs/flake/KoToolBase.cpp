@@ -114,8 +114,24 @@ void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController
     }
 }
 
+
+bool KoToolBase::isActivated() const
+{
+    Q_D(const KoToolBase);
+    return d->isActivated;
+}
+
+
+void KoToolBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+{
+    Q_D(KoToolBase);
+    d->isActivated = true;
+}
+
 void KoToolBase::deactivate()
 {
+    Q_D(KoToolBase);
+    d->isActivated = false;
 }
 
 void KoToolBase::canvasResourceChanged(int key, const QVariant & res)
@@ -165,6 +181,10 @@ void KoToolBase::touchEvent(QTouchEvent *event)
     event->ignore();
 }
 
+void KoToolBase::explicitUserStrokeEndRequest()
+{
+}
+
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);
@@ -188,21 +208,6 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
         keyPressEvent(&ke);
     }
     event->accept();
-}
-
-void KoToolBase::customPressEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
-void KoToolBase::customReleaseEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
-void KoToolBase::customMoveEvent(KoPointerEvent * event)
-{
-    event->ignore();
 }
 
 bool KoToolBase::wantsTouch() const
@@ -292,16 +297,9 @@ void KoToolBase::cut()
     deleteSelection();
 }
 
-QList<QAction*> KoToolBase::popupActionList() const
+QMenu *KoToolBase::popupActionsMenu()
 {
-    Q_D(const KoToolBase);
-    return d->popupActionList;
-}
-
-void KoToolBase::setPopupActionList(const QList<QAction*> &list)
-{
-    Q_D(KoToolBase);
-    d->popupActionList = list;
+    return 0;
 }
 
 KoCanvasBase * KoToolBase::canvas() const
@@ -363,11 +361,6 @@ void KoToolBase::setTextMode(bool value)
     d->isInTextMode=value;
 }
 
-QStringList KoToolBase::supportedPasteMimeTypes() const
-{
-    return QStringList();
-}
-
 bool KoToolBase::paste()
 {
     return false;
@@ -413,6 +406,22 @@ bool KoToolBase::isInTextMode() const
 {
     Q_D(const KoToolBase);
     return d->isInTextMode;
+}
+
+void KoToolBase::requestUndoDuringStroke()
+{
+    /**
+     * Default implementation just cancells the stroke
+     */
+    requestStrokeCancellation();
+}
+
+void KoToolBase::requestStrokeCancellation()
+{
+}
+
+void KoToolBase::requestStrokeEnd()
+{
 }
 
 bool KoToolBase::maskSyntheticEvents() const

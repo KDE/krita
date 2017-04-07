@@ -99,18 +99,18 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     }
 
     qreal newBottom = rootArea->top() + newSize.height();
-    KoFlake::Position sizeAnchor = KoFlake::TopLeftCorner;
+    KoFlake::AnchorPosition sizeAnchor = KoFlake::TopLeft;
 
     if (m_textShapeData->verticalAlignment() & Qt::AlignBottom) {
         if (true /*FIXME test no page based shapes interfering*/) {
             rootArea->setVerticalAlignOffset(newBottom - rootArea->bottom());
-            sizeAnchor = KoFlake::BottomLeftCorner;
+            sizeAnchor = KoFlake::BottomLeft;
         }
     }
     if (m_textShapeData->verticalAlignment() & Qt::AlignVCenter) {
         if (true /*FIXME test no page based shapes interfering*/) {
             rootArea->setVerticalAlignOffset((newBottom - rootArea->bottom()) / 2);
-            sizeAnchor = KoFlake::CenteredPosition;
+            sizeAnchor = KoFlake::Center;
         }
     }
     newSize += QSizeF(m_textShapeData->leftPadding() + m_textShapeData->rightPadding(),
@@ -126,9 +126,9 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
             m_fixAutogrow = false;
             QSizeF tmpSize = m_textShape->size();
             tmpSize.setWidth(newSize.width());
-            QPointF centerpos = rootArea->associatedShape()->absolutePosition(KoFlake::CenteredPosition);
+            QPointF centerpos = rootArea->associatedShape()->absolutePosition(KoFlake::Center);
             m_textShape->setSize(tmpSize);
-            m_textShape->setAbsolutePosition(centerpos, KoFlake::CenteredPosition);
+            m_textShape->setAbsolutePosition(centerpos, KoFlake::Center);
             centerpos = rootArea->associatedShape()->absolutePosition(sizeAnchor);
             m_textShape->setSize(newSize);
             m_textShape->setAbsolutePosition(centerpos, sizeAnchor);

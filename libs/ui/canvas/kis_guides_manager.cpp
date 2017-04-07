@@ -39,6 +39,7 @@
 #include "kis_snap_config.h"
 #include "kis_coordinates_converter.h"
 #include  "kis_canvas2.h"
+#include "kis_signal_compressor.h"
 
 struct KisGuidesManager::Private
 {
@@ -48,7 +49,9 @@ struct KisGuidesManager::Private
           invalidGuide(Qt::Horizontal, -1),
           currentGuide(invalidGuide),
           cursorSwitched(false),
-          dragStartGuidePos(0) {}
+          dragStartGuidePos(0),
+          updateDocumentCompressor(40, KisSignalCompressor::FIRST_ACTIVE),
+          shouldSetModified(false) {}
 
     KisGuidesManager *q;
 
@@ -92,12 +95,16 @@ struct KisGuidesManager::Private
     qreal dragStartGuidePos;
 
     KisSignalAutoConnectionsStore viewConnections;
+
+    KisSignalCompressor updateDocumentCompressor;
+    bool shouldSetModified;
 };
 
 KisGuidesManager::KisGuidesManager(QObject *parent)
     : QObject(parent),
       m_d(new Private(this))
 {
+    connect(&m_d->updateDocumentCompressor, SIGNAL(timeout()), SLOT(slotUploadConfigToDocument()));
 }
 
 KisGuidesManager::~KisGuidesManager()
@@ -116,6 +123,27 @@ void KisGuidesManager::slotDocumentRequestedConfig(const KisGuidesConfig &config
     setGuidesConfigImpl(config, false);
 }
 
+void KisGuidesManager::slotUploadConfigToDocument()
+{
+    const KisGuidesConfig &value = m_d->guidesConfig;
+
+    KisDocument *doc = m_d->view ? m_d->view->document() : 0;
+    if (doc) {
+        KisSignalsBlocker b(doc);
+
+        if (m_d->shouldSetModified) {
+            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
+            doc->addCommand(cmd);
+        } else {
+            doc->setGuidesConfig(value);
+        }
+
+        value.saveStaticData();
+    }
+
+    m_d->shouldSetModified = false;
+}
+
 void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified)
 {
     m_d->guidesConfig = value;
@@ -125,19 +153,8 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
         m_d->decoration->setGuidesConfig(value);
     }
 
-    KisDocument *doc = m_d->view ? m_d->view->document() : 0;
-    if (doc) {
-        KisSignalsBlocker b(doc);
-
-        if (emitModified) {
-            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
-            doc->addCommand(cmd);
-        } else {
-            doc->setGuidesConfig(value);
-        }
-
-        value.saveStaticData();
-    }
+    m_d->shouldSetModified |= emitModified;
+    m_d->updateDocumentCompressor.start();
 
     const bool shouldFilterEvent =
         value.showGuides() && !value.lockGuides() && value.hasGuides();
@@ -299,6 +316,11 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         KoSnapGuide *snapGuide = m_d->view->canvasBase()->snapGuide();
         snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, 0);
         snapGuide->enableSnapStrategy(KoSnapGuide::GuideLineSnapping, false);
+
+        if (m_d->updateDocumentCompressor.isActive()) {
+            m_d->updateDocumentCompressor.stop();
+            slotUploadConfigToDocument();
+        }
 
         m_d->decoration = 0;
         m_d->viewConnections.clear();

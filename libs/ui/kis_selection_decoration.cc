@@ -35,7 +35,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
-#include "krita_utils.h"
+#include "kis_painting_tweaks.h"
 #include "KisView.h"
 
 static const unsigned int ANT_LENGTH = 4;
@@ -48,8 +48,8 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
       m_offset(0),
       m_mode(Ants)
 {
-    KritaUtils::initAntsPen(&m_antsPen, &m_outlinePen,
-                            ANT_LENGTH, ANT_SPACE);
+    KisPaintingTweaks::initAntsPen(&m_antsPen, &m_outlinePen,
+                                   ANT_LENGTH, ANT_SPACE);
 
     m_antsTimer = new QTimer(this);
     m_antsTimer->setInterval(150);

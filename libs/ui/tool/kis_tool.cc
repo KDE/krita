@@ -116,10 +116,9 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(toolActivation);
-    Q_UNUSED(shapes);
+    KoToolBase::activate(activation, shapes);
 
     resetCursorStyle();
 
@@ -153,9 +152,7 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
+
 
     d->m_isActive = true;
     emit isActiveChanged();
@@ -165,9 +162,6 @@ void KisTool::deactivate()
 {
     bool result = true;
 
-    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
-    result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
-    result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
 
@@ -178,22 +172,8 @@ void KisTool::deactivate()
 
     d->m_isActive = false;
     emit isActiveChanged();
-}
 
-void KisTool::requestUndoDuringStroke()
-{
-    /**
-     * Default implementation just cancells the stroke
-     */
-    requestStrokeCancellation();
-}
-
-void KisTool::requestStrokeCancellation()
-{
-}
-
-void KisTool::requestStrokeEnd()
-{
+    KoToolBase::deactivate();
 }
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
@@ -445,6 +425,11 @@ void KisTool::setMode(ToolMode mode) {
 
 KisTool::ToolMode KisTool::mode() const {
     return d->m_mode;
+}
+
+void KisTool::setCursor(const QCursor &cursor)
+{
+    d->cursor = cursor;
 }
 
 KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {

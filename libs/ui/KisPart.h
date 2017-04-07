@@ -35,6 +35,7 @@
 namespace KIO {
 }
 
+class KisAction;
 class KisDocument;
 class KisView;
 class KisDocument;
@@ -134,6 +135,17 @@ public:
     KisMainWindow *currentMainwindow() const;
 
     /**
+     * Add a given action to the list of dynamically defined actions. On creating
+     * a mainwindow, all these actions will be added to the script manager.
+     */
+    void addScriptAction(KisAction *);
+
+    /**
+     * Load actions for currently active main window into KisActionRegistry.
+     */
+    void loadActions();
+
+    /**
      * @return the application-wide KisIdleWatcher.
      */
     KisIdleWatcher *idleWatcher() const;
@@ -175,21 +187,26 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * emitted when a new document is opened.
+     * emitted when a new document is opened. (for the idle watcher)
      */
     void documentOpened(const QString &ref);
 
     /**
-     * emitted when an old document is closed.
+     * emitted when an old document is closed. (for the idle watcher)
      */
     void documentClosed(const QString &ref);
 
+    // These signals are for libkis or sketch
     void sigViewAdded(KisView *view);
     void sigViewRemoved(KisView *view);
+    void sigDocumentAdded(KisDocument *document);
+    void sigDocumentSaved(const QString &url);
+    void sigDocumentRemoved(const QString &filename);
+    void sigWindowAdded(KisMainWindow *window);
 
 public:
 
-    static KisInputManager *currentInputManager();
+    KisInputManager *currentInputManager();
 
     //------------------ View management ------------------
 
@@ -225,6 +242,11 @@ public:
      * @return number of views this document is displayed in
      */
     int viewCount(KisDocument *doc) const;
+
+
+private Q_SLOTS:
+
+    void slotDocumentSaved();
 
 private:
 

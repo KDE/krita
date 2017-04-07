@@ -89,18 +89,13 @@ struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFa
     void run(KisViewManager *view);
 };
 
-struct KRITAUI_EXPORT KisPasteActionFactory : public KisNoParameterActionFactory {
-    KisPasteActionFactory() : KisNoParameterActionFactory("paste-ui-action") {}
-    void run(KisViewManager *view);
-};
-
 struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {
     KisPasteNewActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
     void run(KisViewManager *view);
 };
 
-struct KisInvertSelectionOperaton : public KisFilterSelectionOperation {
-    KisInvertSelectionOperaton() : KisFilterSelectionOperation("invertselection") {}
+struct KisInvertSelectionOperation : public KisFilterSelectionOperation {
+    KisInvertSelectionOperation() : KisFilterSelectionOperation("invertselection") {}
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
 };
 

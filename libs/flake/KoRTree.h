@@ -31,6 +31,7 @@
 #include <QVarLengthArray>
 
 #include <QDebug>
+#include "kis_assert.h"
 
 // #define CALLIGRA_RTREE_DEBUG
 #ifdef CALLIGRA_RTREE_DEBUG
@@ -75,6 +76,12 @@ public:
     virtual void insert(const QRectF& bb, const T& data);
 
     /**
+     * @brief Show if a shape is a part of the tree
+     * @param data
+     */
+    bool contains(const T &data);
+
+    /**
      * @brief Remove a data item from the tree
      *
      * This removed a data item from the tree. If necessary the tree will
@@ -103,6 +110,16 @@ public:
      * @return objects which contain the point
      */
     QList<T> contains(const QPointF &point) const;
+
+    /**
+     * @brief Find all data item which contain the point
+     * The items are sorted by insertion time in ascending order.
+     *
+     * @param point which should be contained in the objects
+     *
+     * @return objects which contain the point
+     */
+    QList<T> contained(const QRectF &point) const;
 
     /**
      * @brief Find all data rectangles
@@ -162,6 +179,7 @@ protected:
 
         virtual void intersects(const QRectF& rect, QMap<int, T> & result) const = 0;
         virtual void contains(const QPointF & point, QMap<int, T> & result) const = 0;
+        virtual void contained(const QRectF & point, QMap<int, T> & result) const = 0;
 
         virtual void keys(QList<QRectF> & result) const = 0;
         virtual void values(QMap<int, T> & result) const = 0;
@@ -252,6 +270,7 @@ class NonLeafNode : virtual public Node
 
         virtual void intersects(const QRectF& rect, QMap<int, T> & result) const;
         virtual void contains(const QPointF & point, QMap<int, T> & result) const;
+        virtual void contained(const QRectF & point, QMap<int, T> & result) const;
 
         virtual void keys(QList<QRectF> & result) const;
         virtual void values(QMap<int, T> & result) const;
@@ -286,6 +305,7 @@ class LeafNode : virtual public Node
 
         virtual void intersects(const QRectF& rect, QMap<int, T> & result) const;
         virtual void contains(const QPointF & point, QMap<int, T> & result) const;
+        virtual void contained(const QRectF & point, QMap<int, T> & result) const;
 
         virtual void keys(QList<QRectF> & result) const;
         virtual void values(QMap<int, T> & result) const;
@@ -351,6 +371,9 @@ KoRTree<T>::~KoRTree()
 template <typename T>
 void KoRTree<T>::insert(const QRectF& bb, const T& data)
 {
+    // check if the shape is not already registered
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_leafMap[data]);
+
     insertHelper(bb, data, LeafNode::dataIdCounter++);
 }
 
@@ -419,16 +442,31 @@ void KoRTree<T>::insert(Node * node)
 }
 
 template <typename T>
+bool KoRTree<T>::contains(const T &data)
+{
+    return m_leafMap[data];
+}
+
+
+template <typename T>
 void KoRTree<T>::remove(const T&data)
 {
     //qDebug() << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
-    if (leaf == 0) {
-        qWarning() << "KoRTree<T>::remove( const T&data) data not found";
-        return;
-    }
+
+    // Trying to remove unexistent leaf. Most probably, this leaf hasn't been added
+    // to the shape manager correctly
+    KIS_SAFE_ASSERT_RECOVER_RETURN(leaf);
+
     m_leafMap.remove(data);
     leaf->remove(data);
+
+    /**
+     * WARNING: after calling condenseTree() the temporary enters an inconsistent state!
+     *          m_leafMap still points to the nodes now stored in 'reinsert' list, although
+     *          they are not a part of the hierarchy. This state does not cause any use
+     *          visible changes, but should be considered while implementing sanity checks.
+     */
 
     QVector<Node *> reinsert;
     condenseTree(leaf, reinsert);
@@ -469,6 +507,15 @@ QList<T> KoRTree<T>::contains(const QPointF &point) const
     m_root->contains(point, found);
     return found.values();
 }
+
+template <typename T>
+QList<T> KoRTree<T>::contained(const QRectF& rect) const
+{
+    QMap<int, T> found;
+    m_root->contained(rect, found);
+    return found.values();
+}
+
 
 template <typename T>
 QList<QRectF> KoRTree<T>::keys() const
@@ -686,6 +733,14 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
             //qDebug() << "  remove node";
             parent->remove(node->place());
             reinsert.push_back(node);
+
+            /**
+             * WARNING: here we leave the tree in an inconsistent state! 'reinsert'
+             *          nodes may still be kept in m_leafMap structure, but we will
+             *          *not* remove them for the efficiency reasons. They are guarenteed
+             *          to be readded in remove().
+             */
+
         } else {
             //qDebug() << "  update BB parent is root" << parent->isRoot();
             parent->setChildBoundingBox(node->place(), node->boundingBox());
@@ -871,6 +926,16 @@ void KoRTree<T>::NonLeafNode::contains(const QPointF & point, QMap<int, T> & res
 }
 
 template <typename T>
+void KoRTree<T>::NonLeafNode::contained(const QRectF& rect, QMap<int, T> & result) const
+{
+    for (int i = 0; i < this->m_counter; ++i) {
+        if (this->m_childBoundingBox[i].intersects(rect)) {
+            m_childs[i]->contained(rect, result);
+        }
+    }
+}
+
+template <typename T>
 void KoRTree<T>::NonLeafNode::keys(QList<QRectF> & result) const
 {
     for (int i = 0; i < this->m_counter; ++i) {
@@ -1035,6 +1100,16 @@ void KoRTree<T>::LeafNode::contains(const QPointF & point, QMap<int, T> & result
 {
     for (int i = 0; i < this->m_counter; ++i) {
         if (this->m_childBoundingBox[i].contains(point)) {
+            result.insert(m_dataIds[i], m_data[i]);
+        }
+    }
+}
+
+template <typename T>
+void KoRTree<T>::LeafNode::contained(const QRectF& rect, QMap<int, T> & result) const
+{
+    for (int i = 0; i < this->m_counter; ++i) {
+        if (rect.contains(this->m_childBoundingBox[i])) {
             result.insert(m_dataIds[i], m_data[i]);
         }
     }

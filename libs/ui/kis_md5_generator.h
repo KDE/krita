@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 #include <resources/KoMD5Generator.h>
-
-class KisMD5Generator : public KoMD5Generator
+#include "kritaui_export.h"
+class KRITAUI_EXPORT KisMD5Generator : public KoMD5Generator
 {
 public:
     KisMD5Generator();

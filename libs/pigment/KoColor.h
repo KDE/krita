@@ -24,6 +24,7 @@
 #include <QMetaType>
 #include "kritapigment_export.h"
 #include "KoColorConversionTransformation.h"
+#include <boost/operators.hpp>
 
 
 class QDomDocument;
@@ -36,7 +37,7 @@ class KoColorSpace;
  * A KoColor describes a color in a certain colorspace. The color is stored in a buffer
  * that can be manipulated by the function of the color space.
  */
-class KRITAPIGMENT_EXPORT KoColor
+class KRITAPIGMENT_EXPORT KoColor : public boost::equality_comparable<KoColor>
 {
 
 public:

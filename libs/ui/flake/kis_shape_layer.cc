@@ -38,25 +38,21 @@
 #include <kis_debug.h>
 
 #include <kis_icon.h>
-#include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
-#include <KoDataCenterBase.h>
 #include <KisDocument.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoGenStyles.h>
-#include <KoImageCollection.h>
 #include <KoUnit.h>
 #include <KoOdf.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfWriteStore.h>
+#include <KoOdfLoadingContext.h>
 #include <KoPageLayout.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
@@ -72,7 +68,6 @@
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
 
-
 #include <kis_types.h>
 #include <kis_image.h>
 #include "kis_default_bounds.h"
@@ -84,9 +79,6 @@
 #include "kis_processing_visitor.h"
 #include "kis_effect_mask.h"
 
-#include "kis_shape_layer_paste.h"
-
-
 #include <SimpleShapeContainerModel.h>
 class ShapeLayerContainerModel : public SimpleShapeContainerModel
 {
@@ -97,12 +89,20 @@ public:
 
     void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
-        q->shapeManager()->addShape(child);
     }
 
     void remove(KoShape *child) override {
-        q->shapeManager()->remove(child);
         SimpleShapeContainerModel::remove(child);
+    }
+
+    void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree) override {
+        q->shapeManager()->addShape(shape);
+        SimpleShapeContainerModel::shapeHasBeenAddedToHierarchy(shape, addedToSubtree);
+    }
+
+    void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree) override {
+        q->shapeManager()->remove(shape);
+        SimpleShapeContainerModel::shapeToBeRemovedFromHierarchy(shape, removedFromSubtree);
     }
 
 private:
@@ -154,17 +154,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
 
     initShapeLayer(controller);
 
-    KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
-    KoDrag drag;
-    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    QMimeData* mimeData = drag.mimeData();
-
-    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-    KisShapeLayerShapePaste paste(this, m_d->controller);
-    bool success = paste.paste(KoOdf::Text, mimeData);
-    Q_ASSERT(success);
-    Q_UNUSED(success); // for release build
+    Q_FOREACH (KoShape *shape, _rhs.shapes()) {
+        addShape(shape->cloneShape());
+    }
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
@@ -178,33 +170,13 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     initShapeLayer(_rhs.m_d->controller);
 
     // copy in _rhs's shapes
-    {
-        KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
-        KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-        QMimeData* mimeData = drag.mimeData();
-
-        Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-        KisShapeLayerShapePaste paste(this, m_d->controller);
-        bool success = paste.paste(KoOdf::Text, mimeData);
-        Q_ASSERT(success);
-        Q_UNUSED(success); // for release build
+    Q_FOREACH (KoShape *shape, _rhs.shapes()) {
+        addShape(shape->cloneShape());
     }
 
     // copy in _addShapes's shapes
-    {
-        KoShapeOdfSaveHelper saveHelper(_addShapes.shapes());
-        KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-        QMimeData* mimeData = drag.mimeData();
-
-        Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-        KisShapeLayerShapePaste paste(this, m_d->controller);
-        bool success = paste.paste(KoOdf::Text, mimeData);
-        Q_ASSERT(success);
-        Q_UNUSED(success); // for release build
+    Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
+        addShape(shape->cloneShape());
     }
 }
 
@@ -241,8 +213,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 
     m_d->canvas->shapeManager()->selection()->disconnect(this);
 
-    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
-    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+    connect(m_d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+    connect(m_d->canvas->selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
@@ -328,25 +300,49 @@ void KisShapeLayer::setY(qint32 y)
     // Save new value to satisfy LSP
     m_d->y = y;
 }
+namespace {
+void filterTransformableShapes(QList<KoShape*> &shapes)
+{
+    auto it = shapes.begin();
+    while (it != shapes.end()) {
+        if (shapes.size() == 1) break;
+
+        if ((*it)->inheritsTransformFromAny(shapes)) {
+            it = shapes.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+}
+
+QList<KoShape *> KisShapeLayer::shapesToBeTransformed()
+{
+    QList<KoShape*> shapes = shapeManager()->shapes();
+
+    // We expect that **all** the shapes inherit the transform from its parent
+
+    // SANITY_CHECK: we expect all the shapes inside the
+    //               shape layer to inherit transform!
+    Q_FOREACH (KoShape *shape, shapes) {
+        if (shape->parent()) {
+            KIS_SAFE_ASSERT_RECOVER(shape->parent()->inheritsTransform(shape)) {
+                break;
+            }
+        }
+    }
+
+    shapes << this;
+    filterTransformableShapes(shapes);
+    return shapes;
+}
 
 void KisShapeLayer::slotMoveShapes(const QPointF &diff)
 {
-    QList<QPointF> prevPos;
-    QList<QPointF> newPos;
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return;
 
-    QList<KoShape*> shapes;
-    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
-        if (!dynamic_cast<KoShapeGroup*>(shape)) {
-            shapes.append(shape);
-        }
-    }
-    Q_FOREACH (KoShape* shape, shapes) {
-        QPointF pos = shape->position();
-        prevPos << pos;
-        newPos << pos + diff;
-    }
-
-    KoShapeMoveCommand cmd(shapes, prevPos, newPos);
+    KoShapeMoveCommand cmd(shapes, diff);
     cmd.redo();
 }
 
@@ -380,98 +376,89 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
     KisExternalLayer::setVisible(visible, isLoading);
 }
 
-bool KisShapeLayer::saveLayer(KoStore * store) const
+void KisShapeLayer::forceUpdateTimedNode()
 {
+    m_d->canvas->forceRepaint();
+}
 
-    KoOdfWriteStore odfStore(store);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
+#include "SvgWriter.h"
+#include "SvgParser.h"
+#include <QXmlStreamReader>
 
-    if (!store->open("content.xml"))
+bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
+{
+    if (!store->open("content.svg")) {
         return false;
+    }
 
     KoStoreDevice storeDev(store);
-    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
+    storeDev.open(QIODevice::WriteOnly);
 
-    // for office:master-styles
-//    QTemporaryFile masterStyles;
-//    masterStyles.open();
-//    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    KoPageLayout page;
-    page.format = KoPageFormat::defaultFormat();
-    QRectF rc = boundingRect();
-    page.width = rc.width();
-    page.height = rc.height();
-    if (page.width > page.height) {
-        page.orientation = KoPageFormat::Landscape;
-    } else {
-        page.orientation = KoPageFormat::Portrait;
-    }
+    SvgWriter writer(shapes, sizeInPt);
+    writer.save(storeDev);
 
-    KoGenStyles mainStyles;
-    KoGenStyle pageLayout = page.saveOdf();
-    QString layoutName = mainStyles.insert(pageLayout, "PL");
-    KoGenStyle masterPage(KoGenStyle::MasterPageStyle);
-    masterPage.addAttribute("style:page-layout-name", layoutName);
-    mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
-
-    QTemporaryFile contentTmpFile;
-    contentTmpFile.open();
-    KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
-
-    contentTmpWriter.startElement("office:body");
-    contentTmpWriter.startElement("office:drawing");
-
-    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
-
-    shapeContext.xmlWriter().startElement("draw:page");
-    shapeContext.xmlWriter().addAttribute("draw:name", "");
-
-    KoElementReference elementRef("page", 1);
-    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
-
-    shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
-
-    saveOdf(shapeContext);
-
-    shapeContext.xmlWriter().endElement(); // draw:page
-
-    contentTmpWriter.endElement(); // office:drawing
-    contentTmpWriter.endElement(); // office:body
-
-    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, docWriter);
-
-    // And now we can copy over the contents from the tempfile to the real one
-    contentTmpFile.seek(0);
-    docWriter->addCompleteElement(&contentTmpFile);
-
-    docWriter->endElement(); // Root element
-    docWriter->endDocument();
-    delete docWriter;
-
-    if (!store->close())
-        return false;
-
-    embeddedSaver.saveEmbeddedDocuments(documentContext);
-
-    manifestWriter->addManifestEntry("content.xml", "text/xml");
-
-    if (! mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
+    if (!store->close()) {
         return false;
     }
 
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+    return true;
+}
 
-    if (! shapeContext.saveDataCenter(documentContext.odfStore.store(),
-                                      documentContext.odfStore.manifestWriter()))
-        return false;
+QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, QSizeF *fragmentSize)
+{
+    QXmlStreamReader reader(device);
+    reader.setNamespaceProcessing(false);
 
-    // Write out manifest file
-    if (!odfStore.closeManifestWriter()) {
-        dbgImage << "closing manifestWriter failed";
-        return false;
+    QString errorMsg;
+    int errorLine = 0;
+    int errorColumn;
+
+    KoXmlDocument doc;
+    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    if (!ok) {
+        errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg << endl;
+        errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+                         , errorLine , errorColumn , errorMsg);
+    }
+
+    SvgParser parser(resourceManager);
+    parser.setXmlBaseDir(baseXmlDir);
+    parser.setResolution(rectInPixels /* px */, resolutionPPI /* ppi */);
+    return parser.parseSvg(doc.documentElement(), fragmentSize);
+}
+
+
+bool KisShapeLayer::saveLayer(KoStore * store) const
+{
+    // FIXME: we handle xRes() only!
+
+    const QSizeF sizeInPx = image()->bounds().size();
+    const QSizeF sizeInPt(sizeInPx.width() / image()->xRes(), sizeInPx.height() / image()->yRes());
+
+    return saveShapesToStore(store, this->shapes(), sizeInPt);
+}
+
+bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
+{
+    QSizeF fragmentSize; // unused!
+    KisImageSP image = this->image();
+
+    // FIXME: we handle xRes() only!
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyCompare(image->xRes(), image->yRes()));
+    const qreal resolutionPPI = 72.0 * image->xRes();
+
+    QList<KoShape*> shapes =
+        createShapesFromSvg(device, baseXmlDir,
+                            image->bounds(), resolutionPPI,
+                            m_d->controller->resourceManager(),
+                            &fragmentSize);
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        addShape(shape);
     }
 
     return true;
@@ -479,6 +466,22 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
 
 bool KisShapeLayer::loadLayer(KoStore* store)
 {
+    if (!store) {
+        warnKrita << i18n("No store backend");
+        return false;
+    }
+
+    if (store->open("content.svg")) {
+        KoStoreDevice storeDev(store);
+        storeDev.open(QIODevice::ReadOnly);
+
+        loadSvg(&storeDev, "");
+
+        store->close();
+
+        return true;
+    }
+
     KoOdfReadStore odfStore(store);
     QString errorMessage;
 
@@ -569,7 +572,8 @@ void KisShapeLayer::resetCache()
     }
 }
 
-KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
+KUndo2Command* KisShapeLayer::crop(const QRect & rect)
+{
     QPoint oldPos(x(), y());
     QPoint newPos = oldPos - rect.topLeft();
 
@@ -577,8 +581,8 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
 }
 
 KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
-    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    if(shapes.isEmpty()) return 0;
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return 0;
 
     KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
     QTransform realTransform = converter->documentToView() *
@@ -590,19 +594,13 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<KoShapeShadow*> newShadows;
     const qreal transformBaseScale = KoUnit::approxTransformScale(transform);
 
-
-    // this code won't work if there are shapes, that inherit the transformation from the parent container.
-    // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
     Q_FOREACH (const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        if (dynamic_cast<const KoShapeGroup*>(shape)) {
-            newTransformations.append(oldTransform);
-        } else {
-            QTransform globalTransform = shape->absoluteTransformation(0);
-            QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
-            newTransformations.append(localTransform*oldTransform);
-        }
+
+        QTransform globalTransform = shape->absoluteTransformation(0);
+        QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
+        newTransformations.append(localTransform * oldTransform);
 
         KoShapeShadow *shadow = 0;
 

@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include <kritaimage_export.h>
-#include "kis_undo_store.h"
+#include <kis_undo_store.h>
 
 
 class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject

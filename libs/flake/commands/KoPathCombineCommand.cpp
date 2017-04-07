@@ -23,24 +23,32 @@
 #include "KoShapeContainer.h"
 #include "KoPathShape.h"
 #include <klocalizedstring.h>
+#include "kis_assert.h"
+#include <KoPathPointData.h>
+
+#include <QHash>
 
 class Q_DECL_HIDDEN KoPathCombineCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c, const QList<KoPathShape*> &p)
         : controller(c), paths(p)
-        , combinedPath(0), combinedPathParent(0)
+        , combinedPath(0)
+        , combinedPathParent(0)
         , isCombined(false)
     {
-        foreach (KoPathShape * path, paths)
+        foreach (KoPathShape * path, paths) {
             oldParents.append(path->parent());
+        }
     }
     ~Private() {
         if (isCombined && controller) {
-            Q_FOREACH (KoPathShape* path, paths)
+            Q_FOREACH (KoPathShape* path, paths) {
                 delete path;
-        } else
+            }
+        } else {
             delete combinedPath;
+        }
     }
 
     KoShapeBasedDocumentBase *controller;
@@ -48,24 +56,31 @@ public:
     QList<KoShapeContainer*> oldParents;
     KoPathShape *combinedPath;
     KoShapeContainer *combinedPathParent;
+
+    QHash<KoPathShape*, int> shapeStartSegmentIndex;
+
     bool isCombined;
 };
 
 KoPathCombineCommand::KoPathCombineCommand(KoShapeBasedDocumentBase *controller,
         const QList<KoPathShape*> &paths, KUndo2Command *parent)
-: KUndo2Command(parent)
-, d(new Private(controller, paths))
+    : KUndo2Command(kundo2_i18n("Combine paths"), parent)
+    , d(new Private(controller, paths))
 {
-    setText(kundo2_i18n("Combine paths"));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!paths.isEmpty());
 
-    d->combinedPath = new KoPathShape();
-    d->combinedPath->setStroke(d->paths.first()->stroke());
-    d->combinedPath->setShapeId(d->paths.first()->shapeId());
-    // combine the paths
     Q_FOREACH (KoPathShape* path, d->paths) {
-        d->combinedPath->combine(path);
-        if (! d->combinedPathParent && path->parent())
+        if (!d->combinedPath) {
+            KoPathShape *clone = dynamic_cast<KoPathShape*>(path->cloneShape());
+            KIS_ASSERT_RECOVER_BREAK(clone);
+
+            d->combinedPath = clone;
             d->combinedPathParent = path->parent();
+            d->shapeStartSegmentIndex[path] = 0;
+        } else {
+            const int startSegmentIndex = d->combinedPath->combine(path);
+            d->shapeStartSegmentIndex[path] = startSegmentIndex;
+        }
     }
 }
 
@@ -77,23 +92,16 @@ KoPathCombineCommand::~KoPathCombineCommand()
 void KoPathCombineCommand::redo()
 {
     KUndo2Command::redo();
-
-    if (! d->paths.size())
-        return;
+    if (d->paths.isEmpty()) return;
 
     d->isCombined = true;
 
     if (d->controller) {
-        QList<KoShapeContainer*>::iterator parentIt = d->oldParents.begin();
         Q_FOREACH (KoPathShape* p, d->paths) {
             d->controller->removeShape(p);
-            if (*parentIt)
-                (*parentIt)->removeShape(p);
-            ++parentIt;
-
+            p->setParent(0);
         }
-        if (d->combinedPathParent)
-            d->combinedPathParent->addShape(d->combinedPath);
+        d->combinedPath->setParent(d->combinedPathParent);
         d->controller->addShape(d->combinedPath);
     }
 }
@@ -107,15 +115,30 @@ void KoPathCombineCommand::undo()
 
     if (d->controller) {
         d->controller->removeShape(d->combinedPath);
-        if (d->combinedPath->parent())
-            d->combinedPath->parent()->removeShape(d->combinedPath);
-        QList<KoShapeContainer*>::iterator parentIt = d->oldParents.begin();
+        d->combinedPath->setParent(0);
+
+        auto parentIt = d->oldParents.begin();
         Q_FOREACH (KoPathShape* p, d->paths) {
-            d->controller->addShape(p);
             p->setParent(*parentIt);
+            d->controller->addShape(p);
             ++parentIt;
         }
     }
     KUndo2Command::undo();
+}
+
+KoPathShape *KoPathCombineCommand::combinedPath() const
+{
+    return d->combinedPath;
+}
+
+KoPathPointData KoPathCombineCommand::originalToCombined(KoPathPointData pd) const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->shapeStartSegmentIndex.contains(pd.pathShape), pd);
+
+    const int segmentOffet = d->shapeStartSegmentIndex[pd.pathShape];
+
+    KoPathPointIndex newIndex(segmentOffet + pd.pointIndex.first, pd.pointIndex.second);
+    return KoPathPointData(d->combinedPath, newIndex);
 }
 

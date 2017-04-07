@@ -122,5 +122,79 @@
       <isCheckable>false</isCheckable>
       <text>Align Bottom</text>
     </Action>
+
+    <Action name="object_distribute_horizontal_left">
+      <text>Distribute Left</text>
+      <toolTip>Distribute left edges equidistantly</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-horizontal-left</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="object_distribute_horizontal_center">
+      <text>Distribute Centers Horizontally</text>
+      <toolTip>Distribute centers equidistantly horizontally</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-horizontal-center</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="object_distribute_horizontal_right">
+      <text>Distribute Right</text>
+      <toolTip>Distribute right edges equidistantly</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-horizontal-right</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="object_distribute_horizontal_gaps">
+      <text>Distribute Horizontal Gap</text>
+      <toolTip>Make horizontal gaps between objects equal</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-horizontal</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_distribute_vertical_top">
+      <text>Distribute Top</text>
+      <toolTip>Distribute top edges equidistantly</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-vertical-top</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="object_distribute_vertical_center">
+      <text>Distribute Centers Vertically</text>
+      <toolTip>Distribute centers equidistantly vertically</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-vertical-center</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="object_distribute_vertical_bottom">
+      <text>Distribute Bottom</text>
+      <toolTip>Distribute bottom edges equidistantly</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-vertical-bottom</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="object_distribute_vertical_gaps">
+      <text>Distribute Vertical Gap</text>
+      <toolTip>Make vertical gaps between objects equal</toolTip>
+      <shortcut></shortcut>
+      <icon>distribute-vertical</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
   </Actions>
 </ActionCollection>

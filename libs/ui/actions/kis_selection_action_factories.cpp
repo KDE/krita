@@ -30,13 +30,8 @@
 #include <KoShapeController.h>
 #include <KoShapeRegistry.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoOdfPaste.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoDrag.h>
-#include <KoShapeOdfSaveHelper.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
@@ -65,7 +60,6 @@
 #include "KisPart.h"
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
-#include "kis_import_catcher.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -312,7 +306,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         if (willCut) {
             KUndo2Command *command = 0;
 
-            if (willCut && node->hasEditablePaintDevice()) {
+            if (node->hasEditablePaintDevice()) {
                 struct ClearSelection : public KisTransactionBasedCommand {
                     ClearSelection(KisNodeSP node, KisSelectionSP sel)
                         : m_node(node), m_sel(sel) {}
@@ -381,29 +375,6 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisPasteActionFactory::run(KisViewManager *view)
-{
-    KisImageWSP image = view->image();
-    if (!image) return;
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
-
-    if (clip) {
-        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-        KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
-        KisNodeSP aboveNode = view->activeLayer();
-        KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
-
-        KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
-        KisProcessingApplicator *ap = beginAction(view, cmd->text());
-        ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-        endAction(ap, KisOperationConfiguration(id()).toXML());
-    } else {
-        // XXX: "Add saving of XML data for Paste of shapes"
-        view->canvasBase()->toolProxy()->paste();
-    }
-}
-
 void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 {
     Q_UNUSED(viewManager);
@@ -435,7 +406,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     win->addViewAndNotifyLoadingCompleted(doc);
 }
 
-void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
+void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
     runFilter(filter, view, config);
@@ -473,52 +444,17 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-
-class KisShapeSelectionPaste : public KoOdfPaste
-{
-public:
-    KisShapeSelectionPaste(KisViewManager* view) : m_view(view)
-    {
-    }
-
-    ~KisShapeSelectionPaste() override {
-    }
-
-    bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) override {
-        KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, m_view->canvasBase()->shapeController()->resourceManager());
-        KoXmlElement child;
-
-        QList<KoShape*> shapes;
-        forEachElement(child, body) {
-            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
-            if (shape) {
-                shapes.append(shape);
-            }
-        }
-        if (!shapes.isEmpty()) {
-            KisSelectionToolHelper helper(m_view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));
-            helper.addSelectionShapes(shapes);
-        }
-        return true;
-    }
-private:
-    KisViewManager* m_view;
-};
-
 void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
-    QList<KoShape*> shapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
+    const QList<KoShape*> originalShapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
 
-    KoShapeOdfSaveHelper saveHelper(shapes);
-    KoDrag drag;
-    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    QMimeData* mimeData = drag.mimeData();
+    QList<KoShape*> clonedShapes;
+    Q_FOREACH (KoShape *shape, originalShapes) {
+        clonedShapes << shape->cloneShape();
+    }
 
-    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-    KisShapeSelectionPaste paste(view);
-    paste.paste(KoOdf::Text, mimeData);
+    KisSelectionToolHelper helper(view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));
+    helper.addSelectionShapes(clonedShapes);
 }
 
 void KisSelectionToShapeActionFactory::run(KisViewManager *view)
@@ -535,7 +471,7 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     shape->setShapeId(KoPathShapeId);
 
     KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-    KoShapeStroke* border = new KoShapeStroke(1.0, fgColor.toQColor());
+    KoShapeStrokeSP border(new KoShapeStroke(1.0, fgColor.toQColor()));
     shape->setStroke(border);
 
     view->document()->shapeController()->addShape(shape);
@@ -594,7 +530,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(outline));
         shape->setShapeId(KoPathShapeId);
 
-        KoShapeStroke* border = new KoShapeStroke(size, color);
+        KoShapeStrokeSP border(new KoShapeStroke(size, color));
         shape->setStroke(border);
 
         view->document()->shapeController()->addShape(shape);

@@ -48,16 +48,15 @@ public:
     ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked);
     virtual ~ShapeMoveStrategy() {}
 
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KUndo2Command *createCommand();
-    void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent(KoPointerEvent *event);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) override;
 private:
-    void moveSelection();
+    void moveSelection(const QPointF &diff);
     QList<QPointF> m_previousPositions;
     QList<QPointF> m_newPositions;
-    QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
+    QPointF m_start, m_finalMove, m_initialOffset;
     QList<KoShape *> m_selectedShapes;
     QPointer<KoCanvasBase> m_canvas;
 };

@@ -66,7 +66,7 @@ public:
 
 void KisNodeDelegate::slotOnCloseEditor()
 {
-    KisPart::currentInputManager()->slotFocusOnEnter(true);
+    KisPart::instance()->currentInputManager()->slotFocusOnEnter(true);
 }
 
 KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
@@ -733,7 +733,7 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
 
 QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
-    KisPart::currentInputManager()->slotFocusOnEnter(false);
+    KisPart::instance()->currentInputManager()->slotFocusOnEnter(false);
     d->edit = new QLineEdit(parent);
     d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
     return d->edit;

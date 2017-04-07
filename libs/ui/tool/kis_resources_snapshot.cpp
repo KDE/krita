@@ -133,6 +133,39 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->presetAllowsLod = resourceManager->resource(KisCanvasResourceProvider::PresetAllowsLod).toBool();
 }
 
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds)
+    : m_d(new Private())
+{
+    m_d->image = image;
+    if (!bounds) {
+        bounds = new KisDefaultBounds(m_d->image);
+    }
+    m_d->bounds = bounds;
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+    QPointF relativeAxesCenter(0.5, 0.5);
+    if (m_d->image) {
+        relativeAxesCenter = m_d->image->mirrorAxesCenter();
+    }
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->opacity = OPACITY_OPAQUE_U8;
+
+    setCurrentNode(currentNode);
+
+    /**
+     * Fill and Stroke styles are not a part of the resource manager
+     * so the tools should set them manually
+     * TODO: port stroke and fill styles to be a part
+     *       of the resource manager
+     */
+    m_d->strokeStyle = KisPainter::StrokeStyleBrush;
+    m_d->fillStyle = KisPainter::FillStyleNone;
+}
+
+
 KisResourcesSnapshot::~KisResourcesSnapshot()
 {
     delete m_d;

@@ -19,6 +19,7 @@
 
 #include "SpiralShape.h"
 
+#include <KoParameterShape_p.h>
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
@@ -26,6 +27,8 @@
 #include <KoXmlNS.h>
 
 #include <math.h>
+#include "kis_assert.h"
+
 
 SpiralShape::SpiralShape()
     : m_fade(.9)
@@ -40,8 +43,30 @@ SpiralShape::SpiralShape()
     createPath(QSizeF(m_radii.x(), m_radii.y()));
 }
 
+SpiralShape::SpiralShape(const SpiralShape &rhs)
+    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+      m_fade(rhs.m_fade),
+      m_kindAngle(rhs.m_kindAngle),
+      m_center(rhs.m_center),
+      m_radii(rhs.m_radii),
+      m_type(rhs.m_type),
+      m_clockwise(rhs.m_clockwise)
+
+{
+    Q_FOREACH(KoPathPoint *point, rhs.m_points) {
+        KIS_ASSERT_RECOVER(point) { continue; }
+        m_points << new KoPathPoint(*point, this);
+    }
+}
+
+
 SpiralShape::~SpiralShape()
 {
+}
+
+KoShape *SpiralShape::cloneShape() const
+{
+    return new SpiralShape(*this);
 }
 
 void SpiralShape::saveOdf(KoShapeSavingContext &context) const
@@ -163,14 +188,14 @@ void SpiralShape::updatePath(const QSizeF &size)
         --cp;
     }
 
-    m_subpaths[0]->clear();
+    d->m_subpaths[0]->clear();
     for (int i = 0; i <= cp; ++i) {
         if (i < cp || (m_type == Line && m_startAngle != m_endAngle)) {
             m_points[i]->unsetProperty(KoPathPoint::CloseSubpath);
         } else {
             m_points[i]->setProperty(KoPathPoint::CloseSubpath);
         }
-        m_subpaths[0]->push_back(m_points[i]);
+        d->m_subpaths[0]->push_back(m_points[i]);
     }
 
 #endif
@@ -178,6 +203,8 @@ void SpiralShape::updatePath(const QSizeF &size)
 
 void SpiralShape::createPath(const QSizeF &size)
 {
+    Q_D(KoParameterShape);
+
     Q_UNUSED(size);
     clear();
     QPointF center = QPointF(m_radii.x() / 2.0, m_radii.y() / 2.0);
@@ -215,7 +242,7 @@ void SpiralShape::createPath(const QSizeF &size)
         r *= m_fade;
     }
     //m_handles[1] = QPointF(center.x(), (m_clockwise ? -1.0 : 1.0) * m_radius + center.y());
-    m_points = *m_subpaths[0];
+    m_points = *d->subpaths[0];
 }
 
 void SpiralShape::updateKindHandle()

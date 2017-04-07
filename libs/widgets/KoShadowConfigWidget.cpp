@@ -29,7 +29,7 @@
 #include <KoSelection.h>
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
-#include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 
 #include <klocalizedstring.h>
 
@@ -158,8 +158,8 @@ void KoShadowConfigWidget::visibilityChanged()
 void KoShadowConfigWidget::applyChanges()
 {
     if (d->canvas) {
-        KoSelection *selection = d->canvas->shapeManager()->selection();
-        KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+        KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
+        KoShape * shape = selection->firstSelectedShape();
         if (! shape) {
             return;
         }
@@ -169,7 +169,7 @@ void KoShadowConfigWidget::applyChanges()
         newShadow->setColor(shadowColor());
         newShadow->setOffset(shadowOffset());
         newShadow->setBlur(shadowBlur());
-        d->canvas->addCommand(new KoShapeShadowCommand(selection->selectedShapes(KoFlake::TopLevelSelection), newShadow));
+        d->canvas->addCommand(new KoShapeShadowCommand(selection->selectedShapes(), newShadow));
     }
 }
 
@@ -179,8 +179,8 @@ void KoShadowConfigWidget::selectionChanged()
         return;
     }
 
-    KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+    KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
+    KoShape * shape = selection->firstSelectedShape();
 
     setEnabled(shape != 0);
 
@@ -204,13 +204,23 @@ void KoShadowConfigWidget::selectionChanged()
 void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(selectionChanged()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(selectionChanged()));
 
     setUnit(canvas->unit());
 
     connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
              this, SLOT( resourceChanged( int, const QVariant& ) ) );
+}
+
+void KoShadowConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager *managerOffset)
+{
+    d->widget.shadowOffset->blockSignals(true);
+    d->widget.shadowBlur->blockSignals(true);
+    d->widget.shadowOffset->setUnitManager(managerOffset);
+    d->widget.shadowBlur->setUnitManager(managerBlur);
+    d->widget.shadowOffset->blockSignals(false);
+    d->widget.shadowBlur->blockSignals(false);
 }
 
 void KoShadowConfigWidget::setUnit(const KoUnit &unit)

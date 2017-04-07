@@ -25,6 +25,7 @@
 #include <kis_types.h>
 #include <kis_external_layer_iface.h>
 #include <kritaui_export.h>
+#include <KisDelayedUpdateNodeInterface.h>
 
 class QRect;
 class QIcon;
@@ -34,6 +35,7 @@ class KoShapeManager;
 class KoStore;
 class KoViewConverter;
 class KoShapeBasedDocumentBase;
+class KoDocumentResourceManager;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -47,7 +49,7 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 
    XXX: what about removing shapes?
 */
-class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer
+class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer, public KisDelayedUpdateNodeInterface
 {
     Q_OBJECT
 
@@ -104,6 +106,17 @@ public:
 
     KoShapeManager *shapeManager() const;
 
+    static bool saveShapesToStore(KoStore *store, QList<KoShape*> shapes, const QSizeF &sizeInPt);
+
+    static QList<KoShape *> createShapesFromSvg(QIODevice *device,
+                                                const QString &baseXmlDir,
+                                                const QRectF &rectInPixels,
+                                                qreal resolutionPPI,
+                                                KoDocumentResourceManager *resourceManager,
+                                                QSizeF *fragmentSize);
+
+
+
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store);
 
@@ -113,8 +126,23 @@ public:
     bool visible(bool recursive = false) const override;
     void setVisible(bool visible, bool isLoading = false) override;
 
+    /**
+     * Forces a repaint of a shape layer without waiting for an event loop
+     * calling a delayed timer update. If you want to see the result of the shape
+     * layer right here and right now, you should do:
+     *
+     * shapeLayer->setDirty();
+     * shapeLayer->image()->waitForDone();
+     * shapeLayer->forceUpdateTimedNode();
+     * shapeLayer->image()->waitForDone();
+     *
+     */
+    void forceUpdateTimedNode() override;
+
 protected:
     using KoShape::isVisible;
+
+    bool loadSvg(QIODevice *device, const QString &baseXmlDir);
 
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
@@ -141,6 +169,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
+
+private:
+    QList<KoShape*> shapesToBeTransformed();
 
 private:
     struct Private;

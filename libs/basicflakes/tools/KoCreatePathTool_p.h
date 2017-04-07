@@ -190,8 +190,8 @@ public:
           listeningToModifiers(false),
           angleSnapStrategy(0),
           angleSnappingDelta(15),
-          angleSnapStatus(false),
-          strokeWidget(0) {
+          angleSnapStatus(false)
+    {
     }
 
     KoPathShape *shape;
@@ -209,7 +209,6 @@ public:
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;
-    KoStrokeConfigWidget *strokeWidget;
 
     void repaintActivePoint() const {
         const bool isFirstPoint = (activePoint == firstPoint);

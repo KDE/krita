@@ -29,6 +29,7 @@
 #include <QPointer>
 
 class KoSelection;
+class KoCanvasResourceManager;
 
 /**
  * The SelectionDecorator is used to paint extra user-interface items on top of a selection.
@@ -42,7 +43,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
+    SelectionDecorator(KoCanvasResourceManager *resourceManager);
     ~SelectionDecorator() {}
 
     /**
@@ -64,19 +65,28 @@ public:
      */
     void setHandleRadius(int radius);
 
-    /// Sets the hot position to highlight
-    static void setHotPosition(KoFlake::Position hotPosition);
+    /**
+     * Set true if you want to render gradient handles on the canvas.
+     * Default value: false
+     */
+    void setShowFillGradientHandles(bool value);
 
-    /// Returns the hot position
-    static KoFlake::Position hotPosition();
+    /**
+     * Set true if you want to render gradient handles on the canvas.
+     * Default value: false
+     */
+    void setShowStrokeFillGradientHandles(bool value);
 
 private:
-    bool m_rotationHandles, m_shearHandles;
-    KoFlake::SelectionHandle m_arrows;
-    static KoFlake::Position m_hotPosition;
-    QPointer<KoSelection> m_selection;
+    void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
+
+private:
+    KoFlake::AnchorPosition m_hotPosition;
+    KoSelection *m_selection;
     int m_handleRadius;
     int m_lineWidth;
+    bool m_showFillGradientHandles;
+    bool m_showStrokeFillGradientHandles;
 };
 
 #endif

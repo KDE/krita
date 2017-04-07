@@ -48,7 +48,7 @@ public:
     ~KoPathToolSelection();
 
     /// @brief Draw the selected points
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius);
 
     /**
     * @brief Add a point to the selection

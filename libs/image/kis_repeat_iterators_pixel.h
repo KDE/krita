@@ -44,7 +44,7 @@ public:
     /**
      * @param rc indicates the rectangle that truly contains data
      */
-    inline KisRepeatLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, const QRect& _rc);
+    inline KisRepeatLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener);
     virtual inline ~KisRepeatLineIteratorPixelBase();
 public:
     inline qint32 x() const {
@@ -63,6 +63,7 @@ private:
     qint32 m_offsetX, m_offsetY;
     QRect m_dataRect;
     T* m_iterator;
+    KisIteratorCompleteListener *m_completeListener;
 };
 
 /**
@@ -76,7 +77,7 @@ public:
     /**
      * @param rc indicates the rectangle that trully contains data
      */
-    inline KisRepeatHLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 w, qint32 offsetx, qint32 offsety, const QRect& _rc);
+    inline KisRepeatHLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 w, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener);
     virtual inline ~KisRepeatHLineIteratorPixelBase();
     inline bool nextPixel();
     /**
@@ -102,7 +103,7 @@ public:
     /**
      * @param rc indicates the rectangle that trully contains data
      */
-    inline KisRepeatVLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc);
+    inline KisRepeatVLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener);
     virtual inline ~KisRepeatVLineIteratorPixelBase();
     inline KisRepeatVLineIteratorPixelBase<T> & operator ++();
     inline bool nextPixel();
@@ -123,12 +124,13 @@ private:
 //---------------- KisRepeatLineIteratorPixelBase -----------------//
 
 template<class T>
-KisRepeatLineIteratorPixelBase<T>::KisRepeatLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, const QRect& _rc) :
+KisRepeatLineIteratorPixelBase<T>::KisRepeatLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener) :
     m_dm(dm),
     m_realX(x), m_realY(y),
     m_offsetX(offsetx), m_offsetY(offsety),
     m_dataRect(_rc),
-    m_iterator(0)
+    m_iterator(0),
+    m_completeListener(completeListener)
 {
 }
 
@@ -141,8 +143,8 @@ KisRepeatLineIteratorPixelBase<T>::~KisRepeatLineIteratorPixelBase()
 //---------------- KisRepeatHLineIteratorPixelBase ----------------//
 
 template<class T>
-KisRepeatHLineIteratorPixelBase<T>::KisRepeatHLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 w, qint32 offsetx, qint32 offsety, const QRect& _rc)
-    : KisRepeatLineIteratorPixelBase<T>(dm, x, y, offsetx, offsety , _rc),
+KisRepeatHLineIteratorPixelBase<T>::KisRepeatHLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 w, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener)
+    : KisRepeatLineIteratorPixelBase<T>(dm, x, y, offsetx, offsety , _rc, completeListener),
       m_startX(x), m_startIteratorX(x),
       m_width(w)
 {
@@ -196,15 +198,15 @@ void KisRepeatHLineIteratorPixelBase<T>::createIterator()
     }
 
     int width = this->m_dataRect.x() + this->m_dataRect.width() - this->m_startIteratorX;
-    this->m_iterator = new T(this->m_dm, this->m_startIteratorX, startY, width, this->m_offsetX, this->m_offsetY, false);
+    this->m_iterator = new T(this->m_dm, this->m_startIteratorX, startY, width, this->m_offsetX, this->m_offsetY, false, this->m_completeListener);
     this->m_realX = this->m_startX;
 }
 
 //---------------- KisRepeatVLineIteratorPixelBase ----------------//
 
 template<class T>
-KisRepeatVLineIteratorPixelBase<T>::KisRepeatVLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc)
-    : KisRepeatLineIteratorPixelBase<T>(dm, x, y, offsetx, offsety , _rc),
+KisRepeatVLineIteratorPixelBase<T>::KisRepeatVLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener)
+    : KisRepeatLineIteratorPixelBase<T>(dm, x, y, offsetx, offsety , _rc, completeListener),
       m_startY(y), m_startIteratorY(y),
       m_height(h)
 {
@@ -258,7 +260,7 @@ void KisRepeatVLineIteratorPixelBase<T>::createIterator()
     }
 
     int height = this->m_dataRect.y() + this->m_dataRect.height() - this->m_startIteratorY;
-    this->m_iterator = new T(this->m_dm, startX, this->m_startIteratorY, height, this->m_offsetX, this->m_offsetY, false);
+    this->m_iterator = new T(this->m_dm, startX, this->m_startIteratorY, height, this->m_offsetX, this->m_offsetY, false, this->m_completeListener);
     this->m_realY = this->m_startY;
 }
 

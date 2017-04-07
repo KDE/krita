@@ -45,6 +45,8 @@ public:
     EllipseShape();
     virtual ~EllipseShape();
 
+    KoShape* cloneShape() const override;
+
     void setSize(const QSizeF &newSize);
     virtual QPointF normalize();
 
@@ -99,6 +101,8 @@ private:
 
     void updateKindHandle();
     void updateAngleHandles();
+
+    EllipseShape(const EllipseShape &rhs);
 
     // start angle in degree
     qreal m_startAngle;

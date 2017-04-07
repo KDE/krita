@@ -122,6 +122,15 @@ void KisCanvasController::activate()
     KoCanvasControllerWidget::activate();
 }
 
+QPointF KisCanvasController::currentCursorPosition() const
+{
+    KoCanvasBase *canvas = m_d->view->canvasBase();
+    QWidget *canvasWidget = canvas->canvasWidget();
+    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(QCursor::pos());
+
+    return m_d->coordinatesConverter->widgetToDocument(cursorPosWidget);
+}
+
 void KisCanvasController::keyPressEvent(QKeyEvent *event)
 {
     /**
@@ -212,6 +221,11 @@ void KisCanvasController::rotateCanvasRight15()
 void KisCanvasController::rotateCanvasLeft15()
 {
     rotateCanvas(-15.0);
+}
+
+qreal KisCanvasController::rotation() const
+{
+    return m_d->coordinatesConverter->rotationAngle();
 }
 
 void KisCanvasController::resetCanvasRotation()

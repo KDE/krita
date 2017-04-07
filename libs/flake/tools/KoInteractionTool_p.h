@@ -23,6 +23,7 @@
 
 #include "KoToolBase_p.h"
 #include "KoInteractionStrategy.h"
+#include "KoInteractionStrategyFactory.h"
 
 class KoInteractionToolPrivate : public KoToolBasePrivate
 {
@@ -39,6 +40,7 @@ public:
 
     QPointF lastPoint;
     KoInteractionStrategy *currentStrategy;
+    QList<QSharedPointer<KoInteractionStrategyFactory>> interactionFactories;
 };
 
 #endif

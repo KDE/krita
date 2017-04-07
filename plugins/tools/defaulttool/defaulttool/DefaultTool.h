@@ -30,9 +30,11 @@
 #include <QPolygonF>
 #include <QTime>
 
+class QSignalMapper;
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
 class KoSelection;
+class DefaultToolTabbedWidget;
 
 /**
  * The default tool (associated with the arrow icon) implements the default
@@ -74,9 +76,9 @@ public:
     ///reimplemented
     virtual bool paste();
     ///reimplemented
-    virtual QStringList supportedPasteMimeTypes() const;
-    ///reimplemented
     virtual KoToolSelection *selection();
+
+    QMenu* popupActionsMenu() override;
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
@@ -89,15 +91,12 @@ public:
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
 private Q_SLOTS:
-    void selectionAlignHorizontalLeft();
-    void selectionAlignHorizontalCenter();
-    void selectionAlignHorizontalRight();
-    void selectionAlignVerticalTop();
-    void selectionAlignVerticalCenter();
-    void selectionAlignVerticalBottom();
+    void selectionAlign(int _align);
+    void selectionDistribute(int _distribute);
 
     void selectionBringToFront();
     void selectionSendToBack();
@@ -107,33 +106,39 @@ private Q_SLOTS:
     void selectionGroup();
     void selectionUngroup();
 
+    void slotActivateEditFillGradient(bool value);
+    void slotActivateEditStrokeGradient(bool value);
+
     /// Update actions on selection change
     void updateActions();
 
 public: // Events
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
 
-    virtual void customMoveEvent(KoPointerEvent *event);
-
+    void explicitUserStrokeEndRequest() override;
 protected:
     QList<QPointer<QWidget> > createOptionWidgets();
 
-    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
+
+private:
+    class MoveGradientHandleInteractionFactory;
 
 private:
     void setupActions();
-    void recalcSelectionBox();
+    void recalcSelectionBox(KoSelection *selection);
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
     qreal rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation);
 
-    void selectionAlign(KoShapeAlignCommand::Align align);
+    void addMappedAction(QSignalMapper *mapper, const QString &actionId, int type);
+
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
     bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
 
@@ -145,20 +150,12 @@ private:
 
     void canvasResourceChanged(int key, const QVariant &res);
 
-    /// Returns list of editable shapes from the given list of shapes
-    QList<KoShape *> filterEditableShapes(const QList<KoShape *> &shapes);
-
-    /// Returns the number of editable shapes from the given list of shapes
-    uint editableShapesCount(const QList<KoShape *> &shapes);
-
     KoFlake::SelectionHandle m_lastHandle;
-    KoFlake::Position m_hotPosition;
+    KoFlake::AnchorPosition m_hotPosition;
     bool m_mouseWasInsideHandles;
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
-    KoShapeMoveCommand *m_moveCommand;
-    QTime m_lastUsedMoveCommand;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];
@@ -168,6 +165,9 @@ private:
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
     KoInteractionStrategy *m_customEventStrategy;
+    QScopedPointer<QMenu> m_contextMenu;
+
+    DefaultToolTabbedWidget *m_tabbedOptionWidget;
 };
 
 #endif

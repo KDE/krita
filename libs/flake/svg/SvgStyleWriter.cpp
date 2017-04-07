@@ -44,8 +44,11 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoVectorPatternBackground.h>
 #include <KoShapeStroke.h>
 #include <KoClipPath.h>
+#include <KoClipMask.h>
+#include <KoMarker.h>
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
@@ -53,6 +56,11 @@
 #include <QLinearGradient>
 #include <QRadialGradient>
 #include <KisMimeDatabase.h>
+#include "kis_dom_utils.h"
+#include "kis_algebra_2d.h"
+#include <SvgWriter.h>
+#include <KoFlakeCoordinateSystem.h>
+
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -60,6 +68,8 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgStroke(shape, context);
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
+    saveSvgMasking(shape, context);
+    saveSvgMarkers(shape, context);
     if (! shape->isVisible())
         context.shapeWriter().addAttribute("display", "none");
     if (shape->transparency() > 0.0)
@@ -89,6 +99,11 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
         const QString patternId = saveSvgPattern(pbg, shape, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
+    QSharedPointer<KoVectorPatternBackground>  vpbg = qSharedPointerDynamicCast<KoVectorPatternBackground>(shape->background());
+    if (vpbg) {
+        const QString patternId = saveSvgVectorPattern(vpbg, shape, context);
+        context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
+    }
 
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path && shape->background()) {
@@ -100,53 +115,54 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(shape->stroke());
-    if (! line)
+    const QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+
+    if (! lineBorder)
         return;
 
     QString strokeStr("none");
-    if (line->lineBrush().gradient()) {
-        QString gradientId = saveSvgGradient(line->lineBrush().gradient(), line->lineBrush().transform(), context);
+    if (lineBorder->lineBrush().gradient()) {
+        QString gradientId = saveSvgGradient(lineBorder->lineBrush().gradient(), lineBorder->lineBrush().transform(), context);
         strokeStr = "url(#" + gradientId + ")";
     } else {
-        strokeStr = line->color().name();
+        strokeStr = lineBorder->color().name();
     }
     if (!strokeStr.isEmpty())
         context.shapeWriter().addAttribute("stroke", strokeStr);
 
-    if (line->color().alphaF() < 1.0)
-        context.shapeWriter().addAttribute("stroke-opacity", line->color().alphaF());
-    context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(line->lineWidth()));
+    if (lineBorder->color().alphaF() < 1.0)
+        context.shapeWriter().addAttribute("stroke-opacity", lineBorder->color().alphaF());
+    context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(lineBorder->lineWidth()));
 
-    if (line->capStyle() == Qt::FlatCap)
+    if (lineBorder->capStyle() == Qt::FlatCap)
         context.shapeWriter().addAttribute("stroke-linecap", "butt");
-    else if (line->capStyle() == Qt::RoundCap)
+    else if (lineBorder->capStyle() == Qt::RoundCap)
         context.shapeWriter().addAttribute("stroke-linecap", "round");
-    else if (line->capStyle() == Qt::SquareCap)
+    else if (lineBorder->capStyle() == Qt::SquareCap)
         context.shapeWriter().addAttribute("stroke-linecap", "square");
 
-    if (line->joinStyle() == Qt::MiterJoin) {
+    if (lineBorder->joinStyle() == Qt::MiterJoin) {
         context.shapeWriter().addAttribute("stroke-linejoin", "miter");
-        context.shapeWriter().addAttribute("stroke-miterlimit", line->miterLimit());
-    } else if (line->joinStyle() == Qt::RoundJoin)
+        context.shapeWriter().addAttribute("stroke-miterlimit", lineBorder->miterLimit());
+    } else if (lineBorder->joinStyle() == Qt::RoundJoin)
         context.shapeWriter().addAttribute("stroke-linejoin", "round");
-    else if (line->joinStyle() == Qt::BevelJoin)
+    else if (lineBorder->joinStyle() == Qt::BevelJoin)
         context.shapeWriter().addAttribute("stroke-linejoin", "bevel");
 
     // dash
-    if (line->lineStyle() > Qt::SolidLine) {
-        qreal dashFactor = line->lineWidth();
+    if (lineBorder->lineStyle() > Qt::SolidLine) {
+        qreal dashFactor = lineBorder->lineWidth();
 
-        if (line->dashOffset() != 0)
-            context.shapeWriter().addAttribute("stroke-dashoffset", dashFactor * line->dashOffset());
+        if (lineBorder->dashOffset() != 0)
+            context.shapeWriter().addAttribute("stroke-dashoffset", dashFactor * lineBorder->dashOffset());
 
         QString dashStr;
-        const QVector<qreal> dashes = line->lineDashes();
+        const QVector<qreal> dashes = lineBorder->lineDashes();
         int dashCount = dashes.size();
         for (int i = 0; i < dashCount; ++i) {
             if (i > 0)
                 dashStr += ",";
-            dashStr += QString("%1").arg(dashes[i] * dashFactor);
+            dashStr += QString("%1").arg(KisDomUtils::toString(dashes[i] * dashFactor));
         }
         context.shapeWriter().addAttribute("stroke-dasharray", dashStr);
     }
@@ -169,34 +185,132 @@ void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
     context.shapeWriter().addAttribute("filter", "url(#" + uid + ")");
 }
 
+void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
+{
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    {
+        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
+        shapesWriter.saveDetached(buffer);
+    }
+    buffer.close();
+    outWriter.addCompleteElement(&buffer);
+}
+
+
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {
     KoClipPath *clipPath = shape->clipPath();
     if (!clipPath)
         return;
 
-    const QSizeF shapeSize = shape->outlineRect().size();
-    KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->pathForSize(shapeSize));
-    if (!path)
-        return;
-
-    path->close();
-
     const QString uid = context.createUID("clippath");
 
     context.styleWriter().startElement("clipPath");
     context.styleWriter().addAttribute("id", uid);
-    context.styleWriter().addAttribute("clipPathUnits", "userSpaceOnUse");
+    context.styleWriter().addAttribute("clipPathUnits", KoFlake::coordinateToString(clipPath->coordinates()));
 
-    context.styleWriter().startElement("path");
-    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(0)*context.userSpaceTransform()));
-    context.styleWriter().endElement(); // path
+    embedShapes(clipPath->clipShapes(), context.styleWriter());
 
     context.styleWriter().endElement(); // clipPath
 
     context.shapeWriter().addAttribute("clip-path", "url(#" + uid + ")");
     if (clipPath->clipRule() != Qt::WindingFill)
         context.shapeWriter().addAttribute("clip-rule", "evenodd");
+}
+
+void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
+{
+    KoClipMask*clipMask = shape->clipMask();
+    if (!clipMask)
+        return;
+
+    const QString uid = context.createUID("clipmask");
+
+    context.styleWriter().startElement("mask");
+    context.styleWriter().addAttribute("id", uid);
+    context.styleWriter().addAttribute("maskUnits", KoFlake::coordinateToString(clipMask->coordinates()));
+    context.styleWriter().addAttribute("maskContentUnits", KoFlake::coordinateToString(clipMask->contentCoordinates()));
+
+    const QRectF rect = clipMask->maskRect();
+
+    // think funny duplication? please note the 'pt' suffix! :)
+    if (clipMask->coordinates() == KoFlake::ObjectBoundingBox) {
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
+    } else {
+        context.styleWriter().addAttributePt("x", rect.x());
+        context.styleWriter().addAttributePt("y", rect.y());
+        context.styleWriter().addAttributePt("width", rect.width());
+        context.styleWriter().addAttributePt("height", rect.height());
+    }
+
+    embedShapes(clipMask->shapes(), context.styleWriter());
+
+    context.styleWriter().endElement(); // clipMask
+
+    context.shapeWriter().addAttribute("mask", "url(#" + uid + ")");
+}
+
+namespace {
+void writeMarkerStyle(KoXmlWriter &styleWriter, const KoMarker *marker, const QString &assignedId) {
+
+    styleWriter.startElement("marker");
+    styleWriter.addAttribute("id", assignedId);
+    styleWriter.addAttribute("markerUnits", KoMarker::coordinateSystemToString(marker->coordinateSystem()));
+
+    const QPointF refPoint = marker->referencePoint();
+    styleWriter.addAttribute("refX", refPoint.x());
+    styleWriter.addAttribute("refY", refPoint.y());
+
+    const QSizeF refSize = marker->referenceSize();
+    styleWriter.addAttribute("markerWidth", refSize.width());
+    styleWriter.addAttribute("markerHeight", refSize.height());
+
+
+    if (marker->hasAutoOtientation()) {
+        styleWriter.addAttribute("orient", "auto");
+    } else {
+        // no suffix means 'degrees'
+        styleWriter.addAttribute("orient", kisRadiansToDegrees(marker->explicitOrientation()));
+    }
+
+    embedShapes(marker->shapes(), styleWriter);
+
+    styleWriter.endElement(); // marker
+}
+
+void tryEmbedMarker(const KoPathShape *pathShape,
+                    const QString &markerTag,
+                    KoFlake::MarkerPosition markerPosition,
+                    SvgSavingContext &context)
+{
+    KoMarker *marker = pathShape->marker(markerPosition);
+
+    if (marker) {
+        const QString uid = context.createUID("lineMarker");
+        writeMarkerStyle(context.styleWriter(), marker, uid);
+        context.shapeWriter().addAttribute(markerTag.toLatin1().data(), "url(#" + uid + ")");
+    }
+}
+
+}
+
+void SvgStyleWriter::saveSvgMarkers(KoShape *shape, SvgSavingContext &context)
+{
+    KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+    if (!pathShape || !pathShape->hasMarkers()) return;
+
+
+    tryEmbedMarker(pathShape, "marker-start", KoFlake::StartMarker, context);
+    tryEmbedMarker(pathShape, "marker-mid", KoFlake::MidMarker, context);
+    tryEmbedMarker(pathShape, "marker-end", KoFlake::EndMarker, context);
+
+    if (pathShape->autoFillMarkers()) {
+        context.shapeWriter().addAttribute("krita:marker-fill-method", "auto");
+    }
 }
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
@@ -208,6 +322,16 @@ void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavi
         context.styleWriter().addAttribute("stop-opacity", stop.second.alphaF());
         context.styleWriter().endElement();
     }
+}
+
+inline QString convertGradientMode(QGradient::CoordinateMode mode) {
+    KIS_ASSERT_RECOVER_NOOP(mode != QGradient::StretchToDeviceMode);
+
+    return
+        mode == QGradient::ObjectBoundingMode ?
+        "objectBoundingBox" :
+        "userSpaceOnUse";
+
 }
 
 QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context)
@@ -230,7 +354,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
-        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("x1", g->start().x());
         context.styleWriter().addAttribute("y1", g->start().y());
         context.styleWriter().addAttribute("x2", g->finalStop().x());
@@ -244,7 +368,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
-        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("cx", g->center().x());
         context.styleWriter().addAttribute("cy", g->center().y());
         context.styleWriter().addAttribute("fx", g->focalPoint().x());
@@ -343,14 +467,14 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
         context.styleWriter().addAttribute("patternUnits", "userSpaceOnUse");
     }
 
-    context.styleWriter().addAttribute("viewBox", QString("0 0 %1 %2").arg(imageSize.width()).arg(imageSize.height()));
+    context.styleWriter().addAttribute("viewBox", QString("0 0 %1 %2").arg(KisDomUtils::toString(imageSize.width())).arg(KisDomUtils::toString(imageSize.height())));
     //*m_defs << " patternContentUnits=\"userSpaceOnUse\"";
 
     context.styleWriter().startElement("image");
     context.styleWriter().addAttribute("x", "0");
     context.styleWriter().addAttribute("y", "0");
-    context.styleWriter().addAttribute("width", QString("%1px").arg(imageSize.width()));
-    context.styleWriter().addAttribute("height", QString("%1px").arg(imageSize.height()));
+    context.styleWriter().addAttribute("width", QString("%1px").arg(KisDomUtils::toString(imageSize.width())));
+    context.styleWriter().addAttribute("height", QString("%1px").arg(KisDomUtils::toString(imageSize.height())));
 
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -361,6 +485,61 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     }
 
     context.styleWriter().endElement(); // image
+    context.styleWriter().endElement(); // pattern
+
+    return uid;
+}
+
+QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *parentShape, SvgSavingContext &context)
+{
+    const QString uid = context.createUID("pattern");
+
+    context.styleWriter().startElement("pattern");
+    context.styleWriter().addAttribute("id", uid);
+
+    context.styleWriter().addAttribute("patternUnits", KoFlake::coordinateToString(pattern->referenceCoordinates()));
+    context.styleWriter().addAttribute("patternContentUnits", KoFlake::coordinateToString(pattern->contentCoordinates()));
+
+    const QRectF rect = pattern->referenceRect();
+
+    if (pattern->referenceCoordinates() == KoFlake::ObjectBoundingBox) {
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
+    } else {
+        context.styleWriter().addAttributePt("x", rect.x());
+        context.styleWriter().addAttributePt("y", rect.y());
+        context.styleWriter().addAttributePt("width", rect.width());
+        context.styleWriter().addAttributePt("height", rect.height());
+    }
+
+    context.styleWriter().addAttribute("patternTransform", SvgUtil::transformToString(pattern->patternTransform()));
+
+    if (pattern->contentCoordinates() == KoFlake::ObjectBoundingBox) {
+        // TODO: move this normalization into the KoVectorPatternBackground itself
+
+        QList<KoShape*> shapes = pattern->shapes();
+        QList<KoShape*> clonedShapes;
+
+        const QRectF dstShapeBoundingRect = parentShape->outlineRect();
+        const QTransform relativeToShape = KisAlgebra2D::mapToRect(dstShapeBoundingRect);
+        const QTransform shapeToRelative = relativeToShape.inverted();
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            KoShape *clone = shape->cloneShape();
+            clone->applyAbsoluteTransformation(shapeToRelative);
+            clonedShapes.append(clone);
+        }
+
+        embedShapes(clonedShapes, context.styleWriter());
+        qDeleteAll(clonedShapes);
+
+    } else {
+        QList<KoShape*> shapes = pattern->shapes();
+        embedShapes(shapes, context.styleWriter());
+    }
+
     context.styleWriter().endElement(); // pattern
 
     return uid;

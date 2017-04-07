@@ -27,6 +27,8 @@
 
 #include "ui_wdg_canvassize.h"
 
+class KisDocumentAwareSpinBoxUnitManager;
+
 class WdgCanvasSize : public QWidget, public Ui::WdgCanvasSize
 {
     Q_OBJECT
@@ -59,30 +61,16 @@ private Q_SLOTS:
     void slotAspectChanged(bool keep);
     void slotAnchorButtonClicked(int id);
 
-    void slotWidthChanged(int v);
-    void slotHeightChanged(int v);
     void slotWidthChanged(double v);
     void slotHeightChanged(double v);
 
-    void slotWidthUnitChanged(int index);
-    void slotHeightUnitChanged(int index);
-
-    void slotXOffsetChanged(int v);
-    void slotYOffsetChanged(int v);
     void slotXOffsetChanged(double v);
     void slotYOffsetChanged(double v);
-
-    void slotXOffsetUnitChanged(int index);
-    void slotYOffsetUnitChanged(int index);
 
     void slotCanvasPreviewXOffsetChanged(int v);
     void slotCanvasPreviewYOffsetChanged(int v);
 
 private:
-    void updateWidthUIValue(double value);
-    void updateHeightUIValue(double value);
-    void updateXOffsetUIValue(double value);
-    void updateYOffsetUIValue(double value);
 
     void loadAnchorIcons();
     void updateAnchorIcons(int id);
@@ -100,6 +88,12 @@ private:
     WdgCanvasSize * m_page;
     QIcon m_anchorIcons[9];
     QButtonGroup *m_group;
+
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+
+    KisDocumentAwareSpinBoxUnitManager* _xOffsetUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _yOffsetUnitManager;
 };
 
 

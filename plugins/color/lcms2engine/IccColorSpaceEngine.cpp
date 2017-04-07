@@ -26,8 +26,6 @@
 
 #include "LcmsColorSpace.h"
 
-#include <QDebug>
-
 // -- KoLcmsColorConversionTransformation --
 
 class KoLcmsColorConversionTransformation : public KoColorConversionTransformation
@@ -187,7 +185,7 @@ IccColorSpaceEngine::~IccColorSpaceEngine()
     delete d;
 }
 
-void IccColorSpaceEngine::addProfile(const QString &filename)
+const KoColorProfile* IccColorSpaceEngine::addProfile(const QString &filename)
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
 
@@ -205,13 +203,34 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     }
 
     if (profile->valid()) {
-        qDebug() << "Valid profile : " << profile->fileName() << profile->name();
+        dbgPigment << "Valid profile : " << profile->fileName() << profile->name();
         registry->addProfile(profile);
     } else {
-        qDebug() << "Invalid profile : " << profile->fileName() << profile->name();
+        dbgPigment << "Invalid profile : " << profile->fileName() << profile->name();
         delete profile;
+        profile = 0;
     }
 
+    return profile;
+}
+
+const KoColorProfile* IccColorSpaceEngine::addProfile(const QByteArray &data)
+{
+    KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
+
+    KoColorProfile *profile = new IccColorProfile(data);
+    Q_CHECK_PTR(profile);
+
+    if (profile->valid()) {
+        dbgPigment << "Valid profile : " << profile->fileName() << profile->name();
+        registry->addProfile(profile);
+    } else {
+        dbgPigment << "Invalid profile : " << profile->fileName() << profile->name();
+        delete profile;
+        profile = 0;
+    }
+
+    return profile;
 }
 
 void IccColorSpaceEngine::removeProfile(const QString &filename)

@@ -144,6 +144,12 @@ KoPatternBackground::~KoPatternBackground()
 {
 }
 
+bool KoPatternBackground::compareTo(const KoShapeBackground *other) const
+{
+    Q_UNUSED(other);
+    return false;
+}
+
 void KoPatternBackground::setTransform(const QTransform &matrix)
 {
     Q_D(KoPatternBackground);

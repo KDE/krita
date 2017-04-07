@@ -388,18 +388,6 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="paste_at">
-      <icon></icon>
-      <text>Paste at cursor</text>
-      <whatsThis></whatsThis>
-      <toolTip>Paste at cursor</toolTip>
-      <iconText>Paste at cursor</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="invert">
       <icon></icon>
       <text>&amp;Invert Selection</text>

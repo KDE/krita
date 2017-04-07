@@ -68,7 +68,6 @@ public:
     enum CanvasResource {
         ForegroundColor,    ///< The active forground color selected for this canvas.
         BackgroundColor,    ///< The active background color selected for this canvas.
-        ActiveStroke,       ///< The active stroke selected for this canvas
         PageSize,           ///< The size of the (current) page in postscript points.
         Unit,               ///< The unit of this canvas
         CurrentPage,        ///< The current page number
@@ -165,12 +164,6 @@ public:
      * Return the backgroundColor
      */
     KoColor backgroundColor() const;
-
-    /// Sets the stroke resource
-    void setActiveStroke(const KoShapeStroke &stroke);
-
-    /// Returns the stroke resource
-    KoShapeStroke activeStroke() const;
 
     /**
      * Return the resource determined by param key as a boolean.

@@ -92,13 +92,13 @@ public:
     void addProfile(KoColorProfile* profile);
     void addProfile(const KoColorProfile* profile); // TODO why ?
     void removeProfile(KoColorProfile* profile);
-    
+
     /**
      * Create an alias to a profile with a different name. Then @ref profileByName
      * will return the profile @p to when passed @p name as a parameter.
      */
     void addProfileAlias(const QString& name, const QString& to);
-    
+
     /**
      * @return the profile alias, or name if not aliased
      */
@@ -107,7 +107,7 @@ public:
     /**
      * create a profile of the specified type.
      */
-    const KoColorProfile* createColorProfile(const QString & colorModelId, const QString & colorDepthId, const QByteArray& rawData);
+    const KoColorProfile *createColorProfile(const QString & colorModelId, const QString & colorDepthId, const QByteArray& rawData);
 
     /**
      * Return a profile by its given name, or 0 if none registered.
@@ -116,7 +116,17 @@ public:
      * @see addProfile()
      * @see KoColorProfile::productName()
      */
-    const KoColorProfile *  profileByName(const QString & name) const ;
+    const KoColorProfile * profileByName(const QString & name) const ;
+
+
+    /**
+     * Returns a profile by its unique id stored/calculated in the header.
+     * The first call to this function might take long, because the map is
+     * created on the first use only (atm used by SVG only)
+     * @param id unique ProfileID of the profile (MD5 sum of its header)
+     * @return the profile or 0 if not found
+     */
+    const KoColorProfile *profileByUniqueId(const QByteArray &id) const;
 
     /**
      * Return the list of profiles for the argument colorspacefactory.
@@ -226,9 +236,15 @@ public:
     KoID colorSpaceColorDepthId(const QString & _colorSpaceId) const;
 
     /**
-     * Convenience method to get the often used alpha colorspace
+     * Convenience methods to get the often used alpha colorspaces
      */
-    const KoColorSpace * alpha8();
+    const KoColorSpace *alpha8();
+    const KoColorSpace *alpha16();
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+    const KoColorSpace *alpha16f();
+#endif
+    const KoColorSpace *alpha32f();
 
     /**
      * Convenience method to get an RGBA 8bit colorspace. If a profile is not specified,

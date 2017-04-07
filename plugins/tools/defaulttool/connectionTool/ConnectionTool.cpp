@@ -51,6 +51,9 @@
 #include <KoConnectionShapeConfigWidget.h>
 #include <KoPathConnectionPointStrategy.h>
 #include <KoStrokeConfigWidget.h>
+#include <KisHandlePainterHelper.h>
+
+#include "kis_document_aware_spin_box_unit_manager.h"
 
 #include <KoIcon.h>
 #include "kis_action_registry.h"
@@ -202,7 +205,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
                 if (shape == findNonConnectionShapeAtPosition(transform.map(cp.value().position))) {
                     handleRect.moveCenter(transform.map(cp.value().position));
                     painter.setBrush(cp.key() == m_activeHandle && shape == m_currentShape ?
-                                     Qt::red : Qt::white);
+                                         Qt::red : Qt::white);
                     painter.drawRect(handleRect);
                 }
             }
@@ -217,12 +220,9 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             int radius = handleRadius() + 1;
             int handleCount = connectionShape->handleCount();
             for (int i = 0; i < handleCount; ++i) {
-                painter.save();
-                painter.setPen(Qt::blue);
-                painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
-                painter.setTransform(connectionShape->absoluteTransformation(&converter) * painter.transform());
-                connectionShape->paintHandle(painter, converter, i, radius);
-                painter.restore();
+                KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, connectionShape, converter, radius);
+                helper.setHandleStyle(i == m_activeHandle ? KisHandleStyle::highlightedPrimaryHandles() : KisHandleStyle::primarySelection());
+                connectionShape->paintHandle(helper, i);
             }
         }
     }
@@ -240,7 +240,7 @@ void ConnectionTool::repaintDecorations()
         if (!m_resetPaint && m_currentShape->isVisible(true) && !connectionShape) {
             // only paint connection points of textShapes not inside a tos container and other shapes
             if (!(m_currentShape->shapeId() == TextShape_SHAPEID &&
-                    dynamic_cast<KoTosContainer *>(m_currentShape->parent()))) {
+                  dynamic_cast<KoTosContainer *>(m_currentShape->parent()))) {
                 KoConnectionPoints connectionPoints = m_currentShape->connectionPoints();
                 KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
                 KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
@@ -510,8 +510,10 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ConnectionTool::activate(ToolActivation, const QSet<KoShape *> &)
+void ConnectionTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = canvas()->snapGuide()->enabledSnapStrategies();
     canvas()->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBoxSnapping);
@@ -531,6 +533,7 @@ void ConnectionTool::deactivate()
     // restore previously set snap strategies
     canvas()->snapGuide()->enableSnapStrategies(m_oldSnapStrategies);
     canvas()->snapGuide()->reset();
+    KoToolBase::deactivate();
 }
 
 qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2) const
@@ -833,9 +836,14 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
             list.append(cw);
         }
     }
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(canvas(), 0);
+    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    managerLineWidth->setApparentUnitFromSymbol("px");
+    managerMitterLimit->setApparentUnitFromSymbol("px");
+    strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
     strokeWidget->setWindowTitle(i18n("Line"));
-    strokeWidget->setCanvas(canvas());
     list.append(strokeWidget);
 
     ConnectionPointWidget *connectPoint = new ConnectionPointWidget(this);

@@ -48,6 +48,9 @@
 #include "KisViewManager.h"
 #include "kis_icon_utils.h"
 
+#include "KisPart.h"
+#include "dialogs/KisAnimationCacheUpdateProgressDialog.h"
+
 
 using namespace boost::accumulators;
 typedef accumulator_set<qreal, stats<tag::rolling_mean> > FpsAccumulator;
@@ -326,6 +329,15 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
 
 void KisAnimationPlayer::play()
 {
+    {
+        const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+        const KisTimeRange &range = animation->playbackRange();
+        if (!range.isValid()) return;
+
+        KisAnimationCacheUpdateProgressDialog dlg(200, KisPart::instance()->currentMainwindow());
+        dlg.regenerateRange(m_d->canvas->frameCache(), range, m_d->canvas->viewManager());
+    }
+
     m_d->playing = true;
 
     slotUpdatePlaybackTimer();

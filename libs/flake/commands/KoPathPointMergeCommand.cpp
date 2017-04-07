@@ -24,6 +24,8 @@
 #include "KoPathShape.h"
 #include <klocalizedstring.h>
 #include <QPointF>
+#include "kis_assert.h"
+
 
 class Q_DECL_HIDDEN KoPathPointMergeCommand::Private
 {
@@ -34,6 +36,7 @@ public:
     , startPoint(pointData2.pointIndex)
     , splitIndex(KoPathPointIndex(-1, -1))
     , removedPoint(0)
+    , mergedPointIndex(-1, -1)
     , reverse(ReverseNone)
     {
     }
@@ -89,6 +92,7 @@ public:
     QPointF oldControlPoint2;
 
     KoPathPoint * removedPoint;
+    KoPathPointIndex mergedPointIndex;
 
     enum Reverse {
         ReverseNone = 0,
@@ -107,14 +111,19 @@ public:
 KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent)
     : KUndo2Command(parent), d(new Private(pointData1, pointData2))
 {
-    Q_ASSERT(pointData1.pathShape == pointData2.pathShape);
-    Q_ASSERT(d->pathShape);
-    Q_ASSERT(!d->pathShape->isClosedSubpath(d->endPoint.first));
-    Q_ASSERT(d->endPoint.second == 0 ||
+    KIS_ASSERT(pointData1.pathShape == pointData2.pathShape);
+    KIS_ASSERT(d->pathShape);
+
+    KIS_ASSERT(!d->pathShape->isClosedSubpath(d->endPoint.first));
+    KIS_ASSERT(!d->pathShape->isClosedSubpath(d->startPoint.first));
+
+    KIS_ASSERT(d->endPoint.second == 0 ||
              d->endPoint.second == d->pathShape->subpathPointCount(d->endPoint.first) - 1);
-    Q_ASSERT(!d->pathShape->isClosedSubpath(d->startPoint.first));
-    Q_ASSERT(d->startPoint.second == 0 ||
+
+    KIS_ASSERT(d->startPoint.second == 0 ||
              d->startPoint.second == d->pathShape->subpathPointCount(d->startPoint.first) - 1);
+
+    KIS_ASSERT(d->startPoint != d->endPoint);
 
     // if we have two different subpaths we might need to reverse them
     if (d->endPoint.first != d->startPoint.first) {
@@ -178,6 +187,9 @@ void KoPathPointMergeCommand::redo()
         // set new startpoint of subpath to close the subpath
         KoPathPointIndex newStartIndex(d->startPoint.first,0);
         d->pathShape->pointByIndex(newStartIndex)->setProperty(KoPathPoint::CloseSubpath);
+
+        d->mergedPointIndex = d->pathShape->pathPointIndex(endPoint);
+
     } else {
         // first revert subpaths if needed
         if (d->reverse & Private::ReverseFirst) {
@@ -193,6 +205,8 @@ void KoPathPointMergeCommand::redo()
         d->pathShape->join(d->endPoint.first);
         // change the first point of the points to merge
         d->removedPoint = d->mergePoints(endPoint, startPoint);
+
+        d->mergedPointIndex = d->pathShape->pathPointIndex(endPoint);
     }
 
     d->pathShape->normalize();
@@ -239,4 +253,10 @@ void KoPathPointMergeCommand::undo()
 
     // reset the removed point
     d->removedPoint = 0;
+    d->mergedPointIndex = KoPathPointIndex(-1,-1);
+}
+
+KoPathPointData KoPathPointMergeCommand::mergedPointData() const
+{
+    return KoPathPointData(d->pathShape, d->mergedPointIndex);
 }

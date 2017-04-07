@@ -86,9 +86,6 @@ public:
      */
     void registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas);
 
-    void switchToolByShortcut(QKeyEvent *event);
-
-
     KoToolManager *q;
 
     QList<ToolHelper*> tools; // list of all available tools via their factories.

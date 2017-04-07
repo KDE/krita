@@ -41,6 +41,8 @@ private Q_SLOTS:
     void testMoveDownOverlapping();
     void testSendToBackChildren();
     void testNoCommand();
+    void testMergeInShape();
+    void testMergeInShapeDistant();
 };
 
 #endif // TESTSHAPEREORDERCOMMAND_H

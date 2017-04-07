@@ -26,7 +26,6 @@
 #include <resources/KoResource.h>
 #include <kritapigment_export.h>
 
-
 typedef QPair<qreal, KoColor> KoGradientStop;
 
 /**
@@ -53,7 +52,7 @@ public:
     void colorAt(KoColor&, qreal t) const;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(QGradient * gradient);
+    static KoStopGradient * fromQGradient(const QGradient * gradient);
 
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);

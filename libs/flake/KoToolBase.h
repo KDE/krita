@@ -50,6 +50,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QMenu;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -189,6 +190,13 @@ public:
     virtual void touchEvent(QTouchEvent *event);
 
     /**
+     * @brief explicitUserStrokeEndRequest is called by the input manager
+     *        when the user presses Enter key or any equivalent. This callback
+     *        comes before requestStrokeEnd(), which comes from a different source.
+     */
+    virtual void explicitUserStrokeEndRequest();
+
+    /**
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
      * text and reconversions.
@@ -207,29 +215,6 @@ public:
      * @param event the input method event.
      */
     virtual void inputMethodEvent(QInputMethodEvent *event);
-
-    /**
-     * Called when (one of) a custom device buttons is pressed.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this custom device press
-     */
-    virtual void customPressEvent(KoPointerEvent *event);
-
-    /**
-     * Called when (one of) a custom device buttons is released.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this custom device release
-     */
-    virtual void customReleaseEvent(KoPointerEvent *event);
-
-    /**
-     * Called when a custom device moved over the canvas.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this custom device move
-     */
-    virtual void customMoveEvent(KoPointerEvent *event);
-
-
 
     /**
      * @return true if synthetic mouse events on the canvas should be eaten.
@@ -302,16 +287,9 @@ public:
      * Paste the clipboard selection.
      * A tool typically has one or more shapes selected and pasting should do something meaningful
      * for this specific shape and tool combination.  Inserting text in a text tool, for example.
-     * If you reimplement this function make sure to also reimplement supportedPasteMimeTypes().
      * @return will return true if pasting succeeded. False if nothing happened.
      */
     virtual bool paste();
-
-    /**
-     * Returns the mimetypes that this tool's paste() function can handle
-     * @return QStringList containing the mimetypes that's supported by paste()
-     */
-    virtual QStringList supportedPasteMimeTypes() const;
 
     /**
      * Handle the dragMoveEvent
@@ -339,9 +317,10 @@ public:
     virtual void dropEvent(QDropEvent *event, const QPointF &point);
 
     /**
-     * @return A list of actions to be used for a popup.
+     * @return a menu with context-aware actions for the currect selection. If
+     *         the returned value is null, no context menu is shown.
      */
-    QList<QAction*> popupActionList() const;
+    virtual QMenu* popupActionsMenu();
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
@@ -352,6 +331,31 @@ public:
       *   any kind of textual input and all single key shortcuts should be eaten.
       */
     bool isInTextMode() const;
+
+    /**
+     * Called when the user requested undo while the stroke is
+     * active. If you tool supports undo of the part of its actions,
+     * override this method and do the needed work there.
+     *
+     * NOTE: Default implementation forwards this request to
+     *       requestStrokeCancellation() method, so that the stroke
+     *       would be cancelled.
+     */
+    virtual void requestUndoDuringStroke();
+
+    /**
+     * Called when the user requested the cancellation of the current
+     * stroke. If you tool supports cancelling, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeCancellation();
+
+    /**
+     * Called when the image decided that the stroke should better be
+     * ended. If you tool supports long strokes, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeEnd();
 
 public Q_SLOTS:
 
@@ -375,7 +379,7 @@ public Q_SLOTS:
      *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
     /**
      * This method is called whenever this tool is no longer the
@@ -476,13 +480,6 @@ protected:
      */
     void addAction(const QString &name, QAction *action);
 
-    /**
-     * Set the list of actions to be used as popup menu.
-     * @param list the list of actions.
-     * @see popupActionList
-     */
-    void setPopupActionList(const QList<QAction*> &list);
-
     /// Convenience function to get the current handle radius
     uint handleRadius() const;
 
@@ -519,6 +516,11 @@ protected:
      * Allows subclasses to specify whether synthetic mouse events should be accepted.
      */
     void setMaskSyntheticEvents(bool value);
+
+    /**
+     * Returns true if activate() has been called (more times than deactivate :) )
+     */
+    bool isActivated() const;
 
 protected:
     KoToolBase(KoToolBasePrivate &dd);

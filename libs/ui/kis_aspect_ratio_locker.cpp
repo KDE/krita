@@ -29,6 +29,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 #include "kis_double_parse_spin_box.h"
+#include "kis_double_parse_unit_spin_box.h"
 
 
 struct SliderWrapper
@@ -153,6 +154,7 @@ template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisSliderSpi
 template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleSliderSpinBox *spinOne, KisDoubleSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
 template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisIntParseSpinBox *spinOne, KisIntParseSpinBox *spinTwo, KoAspectButton *aspectButton);
 template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseSpinBox *spinOne, KisDoubleParseSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseUnitSpinBox *spinOne, KisDoubleParseUnitSpinBox *spinTwo, KoAspectButton *aspectButton);
 
 void KisAspectRatioLocker::slotSpinOneChanged()
 {
@@ -197,4 +199,10 @@ void KisAspectRatioLocker::slotAspectButtonChanged()
 void KisAspectRatioLocker::setBlockUpdateSignalOnDrag(bool value)
 {
     m_d->blockUpdatesOnDrag = value;
+}
+
+void KisAspectRatioLocker::updateAspect()
+{
+    KisSignalsBlocker b(this);
+    slotAspectButtonChanged();
 }

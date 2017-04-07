@@ -31,6 +31,7 @@
 #include "KoShapeManager.h"
 #include "KoToolProxy.h"
 #include "KoSelection.h"
+#include "KoSelectedShapesProxy.h"
 
 class Q_DECL_HIDDEN KoCanvasBase::Private
 {
@@ -94,6 +95,7 @@ void KoCanvasBase::disconnectCanvasObserver(QObject *object)
     if (resourceManager()) resourceManager()->disconnect(object);
     if (shapeManager()) shapeManager()->disconnect(object);
     if (toolProxy()) toolProxy()->disconnect(object);
+    if (selectedShapesProxy()) selectedShapesProxy()->disconnect(object);
 }
 
 

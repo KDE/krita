@@ -26,7 +26,11 @@
 
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
         const QList<KoShape*> &topLevelShapes, KUndo2Command *parent)
-    : KoShapeGroupCommand(*(new KoShapeGroupCommandPrivate(container, shapes)), parent)
+    : KoShapeGroupCommand(*(new KoShapeGroupCommandPrivate(container,
+                                                           shapes,
+                                                           QList<bool>(),
+                                                           QList<bool>(),
+                                                           false)), parent)
 {
     QList<KoShape*> orderdShapes(shapes);
     qSort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
@@ -49,10 +53,11 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
         d->oldParents.append(d->container->parent());
         d->oldClipped.append(d->container->isClipped(shape));
         d->oldInheritTransform.append(shape->parent() && shape->parent()->inheritsTransform(shape));
-        d->inheritTransform.append(false);
+        d->inheritTransform.append(d->container->inheritsTransform(shape));
         // TODO this might also need to change the children of the parent but that is very problematic if the parent is 0
         d->oldZIndex.append(zIndex++);
     }
+    d->shouldNormalize = false;
 
     setText(kundo2_i18n("Ungroup shapes"));
 }

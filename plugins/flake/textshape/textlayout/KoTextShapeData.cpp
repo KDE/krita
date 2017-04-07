@@ -58,57 +58,66 @@ class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {
 public:
     KoTextShapeDataPrivate()
-            : ownsDocument(true)
-            , topPadding(0)
+            : topPadding(0)
             , leftPadding(0)
             , rightPadding(0)
             , bottomPadding(0)
             , direction(KoText::AutoDirection)
-            , textpage(0)
             , rootArea(0)
-            , paragraphStyle(0)
+    {
+    }
+
+    KoTextShapeDataPrivate(const KoTextShapeDataPrivate &rhs)
+        : KoTextShapeDataBasePrivate(rhs),
+          topPadding(rhs.topPadding),
+          leftPadding(rhs.leftPadding),
+          rightPadding(rhs.rightPadding),
+          bottomPadding(rhs.bottomPadding),
+          direction(rhs.direction),
+          rootArea(rhs.rootArea), // WARNING: root area becomes shared via raw pointer!
+          paragraphStyle(rhs.paragraphStyle->clone())
     {
     }
 
     ~KoTextShapeDataPrivate() override
     {
-        if (ownsDocument) {
-            delete document;
-        }
-        delete textpage;
-        delete paragraphStyle;
     }
 
-    bool ownsDocument;
     qreal topPadding;
     qreal leftPadding;
     qreal rightPadding;
     qreal bottomPadding;
     KoText::Direction direction;
-    KoTextPage *textpage;
     KoTextLayoutRootArea *rootArea;
-    KoParagraphStyle *paragraphStyle; // the paragraph style of the shape (part of the graphic style)
+    QScopedPointer<KoParagraphStyle> paragraphStyle; // the paragraph style of the shape (part of the graphic style)
 };
 
 
 KoTextShapeData::KoTextShapeData()
-    : KoTextShapeDataBase(*(new KoTextShapeDataPrivate()))
+    : KoTextShapeDataBase(new KoTextShapeDataPrivate())
 {
-    setDocument(new QTextDocument, true);
+    setDocument(new QTextDocument);
+}
+
+KoTextShapeData::KoTextShapeData(KoTextShapeDataPrivate *dd)
+    : KoTextShapeDataBase(dd)
+{
 }
 
 KoTextShapeData::~KoTextShapeData()
 {
 }
 
-void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership)
+KoShapeUserData *KoTextShapeData::clone() const
+{
+    Q_D(const KoTextShapeData);
+    return new KoTextShapeData(new KoTextShapeDataPrivate(*d));
+}
+
+void KoTextShapeData::setDocument(QTextDocument *document)
 {
     Q_D(KoTextShapeData);
     Q_ASSERT(document);
-    if (d->ownsDocument && document != d->document) {
-        delete d->document;
-    }
-    d->ownsDocument = transferOwnership;
 
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
@@ -132,12 +141,13 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     // to 0. Otherwise crashes may occur when inserting textshape in words (or resetting document)
     d->rootArea = 0;
 
-    if (d->document == document)
-        return;
-    d->document = document;
+    if (d->document.data() != document) {
+        d->document.reset(document);
 
-    if (kodoc.textEditor() == 0)
-        kodoc.setTextEditor(new KoTextEditor(d->document));
+        if (kodoc.textEditor() == 0) {
+            kodoc.setTextEditor(new KoTextEditor(d->document.data()));
+        }
+    }
 }
 
 qreal KoTextShapeData::documentOffset() const
@@ -272,7 +282,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *
 {
     Q_D(const KoTextShapeData);
 
-    KoTextWriter::saveOdf(context, rdfData, d->document, from, to);
+    KoTextWriter::saveOdf(context, rdfData, d->document.data(), from, to);
 }
 
 void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -360,7 +370,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
         cursor.setCharFormat(cformat);
         cursor.setBlockCharFormat(cformat);
 
-        d->paragraphStyle = new KoParagraphStyle(format, cformat);
+        d->paragraphStyle.reset(new KoParagraphStyle(format, cformat));
         qDeleteAll(paragraphStyles);
         delete defaultStyle;
     }

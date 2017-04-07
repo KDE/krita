@@ -50,8 +50,10 @@ class KoShapeLoadingContext;
 class EnhancedPathShape : public KoParameterShape
 {
 public:
-    explicit EnhancedPathShape(const QRect &viewBox);
+    EnhancedPathShape(const QRect &viewBox);
     virtual ~EnhancedPathShape();
+
+    KoShape* cloneShape() const override;
 
     /**
      * Evaluates the given reference to a identifier, modifier or formula.
@@ -133,6 +135,8 @@ protected:
     virtual void updatePath(const QSizeF &size);
 
 private:
+    EnhancedPathShape(const EnhancedPathShape &rhs);
+
     void evaluateHandles();
     void reset();
 

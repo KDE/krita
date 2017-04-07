@@ -23,7 +23,9 @@
 
 #include "kritaflake_export.h"
 
-#include "KoMarkerData.h"
+#include <QScopedPointer>
+
+#include "KoFlake.h"
 #include <kundo2command.h>
 #include <QList>
 
@@ -41,19 +43,19 @@ public:
      * @param position the position - start or end - of the marker on the shape
      * @param parent the parent command used for macro commands
      */
-    KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);
+    KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoFlake::MarkerPosition position, KUndo2Command *parent = 0);
 
-    virtual ~KoPathShapeMarkerCommand();
-    /// redo the command
-    void redo();
-    /// revert the actions done in redo
-    void undo();
+    ~KoPathShapeMarkerCommand();
+
+    void redo() override;
+    void undo() override;
+
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
 
 private:
-    QList<KoPathShape*> m_shapes;  ///< the shapes to set marker for
-    QList<KoMarker*> m_oldMarkers; ///< the old markers, one for each shape
-    KoMarker* m_marker; ///< the new marker to set
-    KoMarkerData::MarkerPosition m_position;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // KoPathShapeMarkerCommand_H

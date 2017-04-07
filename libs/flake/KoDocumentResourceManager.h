@@ -73,8 +73,6 @@ enum DocumentResource {
     UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
     ImageCollection,        ///< The KoImageCollection for the document
     OdfDocument,            ///< The document this canvas shows (KoDocumentBase)
-    PasteOffset,            ///< Application wide paste offset
-    PasteAtCursor,          ///< Application wide paste at cursor setting
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
     MarkerCollection,       ///< The collection holding all markers
@@ -221,20 +219,6 @@ enum DocumentResource {
     void setGrabSensitivity(int grabSensitivity);
     /// Returns the actual grab sensitivity
     int grabSensitivity() const;
-
-    /**
-     * Offset used for pasting shapes to a document.
-     */
-    void setPasteOffset(qreal pasteOffset);
-    /// Returns the current paste offset
-    qreal pasteOffset() const;
-
-    /**
-     * Enables/disables pasting shape at cursor position
-     */
-    void enablePasteAtCursor(bool enable);
-    /// Returns current state of paste at cursor setting
-    bool pasteAtCursor() const;
 
     KUndo2Stack *undoStack() const;
     void setUndoStack(KUndo2Stack *undoStack);

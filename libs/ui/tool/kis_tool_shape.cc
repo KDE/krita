@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QGridLayout>
 
+#include <KoUnit.h>
 #include <KoShape.h>
 #include <KoGradientBackground.h>
 #include <KoCanvasBase.h>
@@ -125,6 +126,14 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
     }
 }
 
+qreal KisToolShape::currentStrokeWidth() const
+{
+    const qreal sizeInPx =
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+
+    return canvas()->unit().fromUserValue(sizeInPx);
+}
+
 void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisToolPaint::setupPaintAction(action);
@@ -184,7 +193,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     KisPaintOpPresetSP preset = currentPaintOpPreset();
 
     // Compute the outline
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());

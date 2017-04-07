@@ -69,6 +69,8 @@
 #include "KisImportExportManager.h"
 #include "KisDocument.h"
 #include "KoToolManager.h"
+#include "KisViewManager.h"
+#include "kis_script_manager.h"
 #include "KisOpenPane.h"
 
 #include "kis_color_manager.h"
@@ -99,13 +101,14 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
+    QList<KisAction*> scriptActions;
 
     KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    void loadActions();
 };
+
 
 KisPart* KisPart::instance()
 {
@@ -157,7 +160,9 @@ void KisPart::updateIdleWatcherConnections()
     QVector<KisImageSP> images;
 
     Q_FOREACH (QPointer<KisDocument> document, documents()) {
-        images << document->image();
+        if (document->image()) {
+            images << document->image();
+        }
     }
 
     d->idleWatcher.setTrackedImages(images);
@@ -170,6 +175,8 @@ void KisPart::addDocument(KisDocument *document)
     if (!d->documents.contains(document)) {
         d->documents.append(document);
         emit documentOpened('/'+objectName());
+        emit sigDocumentAdded(document);
+        connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
     }
 }
 
@@ -194,16 +201,19 @@ void KisPart::removeDocument(KisDocument *document)
 {
     d->documents.removeAll(document);
     emit documentClosed('/'+objectName());
+    emit sigDocumentRemoved(document->url().toLocalFile());
     document->deleteLater();
 }
 
 KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
-
+    Q_FOREACH(QAction *action, d->scriptActions) {
+        mw->viewManager()->scriptManager()->addAction(action);
+    }
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
-
+    emit sigWindowAdded(mw);
     return mw;
 }
 
@@ -305,6 +315,11 @@ int KisPart::viewCount(KisDocument *doc) const
     }
 }
 
+void KisPart::slotDocumentSaved()
+{
+    KisDocument *doc = qobject_cast<KisDocument*>(sender());
+    emit sigDocumentSaved(doc->url().toLocalFile());
+}
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
 {
@@ -339,6 +354,11 @@ KisMainWindow *KisPart::currentMainwindow() const
     }
     return mainWindow;
 
+}
+
+void KisPart::addScriptAction(KisAction *action)
+{
+    d->scriptActions << action;
 }
 
 KisIdleWatcher* KisPart::idleWatcher() const
@@ -476,6 +496,8 @@ void KisPart::startCustomDocument(KisDocument* doc)
 
 KisInputManager* KisPart::currentInputManager()
 {
-    return instance()->currentMainwindow()->viewManager()->inputManager();
+    KisMainWindow *mw = currentMainwindow();
+    KisViewManager *manager = mw ? mw->viewManager() : 0;
+    return manager ? manager->inputManager() : 0;
 }
 

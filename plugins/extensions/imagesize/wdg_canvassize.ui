@@ -23,16 +23,6 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="2">
-       <widget class="KisIntParseSpinBox" name="newWidth">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QLabel" name="lblNewHeight">
         <property name="text">
@@ -49,16 +39,6 @@
       <item row="0" column="4" rowspan="2">
        <widget class="KoAspectButton" name="aspectRatioBtn" native="true"/>
       </item>
-      <item row="1" column="2">
-       <widget class="KisIntParseSpinBox" name="newHeight">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QLabel" name="lblNewWidth">
         <property name="text">
@@ -70,7 +50,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="KisDoubleParseSpinBox" name="newWidthDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="newWidthDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -86,7 +66,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="KisDoubleParseSpinBox" name="newHeightDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="newHeightDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -204,17 +184,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="KisIntParseSpinBox" name="xOffset">
-        <property name="minimum">
-         <number>-100000</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="KisDoubleParseSpinBox" name="xOffsetDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="xOffsetDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -266,17 +236,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="KisIntParseSpinBox" name="yOffset">
-        <property name="minimum">
-         <number>-100000</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="KisDoubleParseSpinBox" name="yOffsetDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="yOffsetDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -653,28 +613,19 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
+   <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>newWidth</tabstop>
   <tabstop>newWidthDouble</tabstop>
   <tabstop>widthUnit</tabstop>
-  <tabstop>newHeight</tabstop>
   <tabstop>newHeightDouble</tabstop>
   <tabstop>heightUnit</tabstop>
   <tabstop>constrainProportionsCkb</tabstop>
-  <tabstop>xOffset</tabstop>
   <tabstop>xOffsetDouble</tabstop>
   <tabstop>xOffUnit</tabstop>
-  <tabstop>yOffset</tabstop>
   <tabstop>yOffsetDouble</tabstop>
   <tabstop>yOffUnit</tabstop>
   <tabstop>topLeft</tabstop>

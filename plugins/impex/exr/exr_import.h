@@ -30,7 +30,7 @@ class exrImport : public KisImportExportFilter
 public:
     exrImport(QObject *parent, const QVariantList &);
     virtual ~exrImport();
-public:
+    virtual bool supportsIO() const { return false; }
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
 };
 

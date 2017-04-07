@@ -60,6 +60,11 @@ void KoZoomStrategy::cancelInteraction()
     d->tool->canvas()->updateCanvas(d->selectedRect().toRect().normalized());
 }
 
+KoShapeRubberSelectStrategy::SelectionMode KoZoomStrategy::currentMode() const
+{
+    return CoveringSelection;
+}
+
 void KoZoomStrategy::forceZoomOut()
 {
     m_forceZoomOut = true;

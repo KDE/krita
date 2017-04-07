@@ -24,6 +24,8 @@
 #include <QMutex>
 #include <QtConcurrent>
 
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "KisPart.h"
 #include "KisDocument.h"
 #include "kis_image.h"
@@ -37,6 +39,8 @@
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_keyframe_channel.h"
+
+#include "KisAnimationCacheRegenerator.h"
 
 
 struct KisAnimationCachePopulator::Private
@@ -52,7 +56,6 @@ struct KisAnimationCachePopulator::Private
     int idleCounter;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
-    static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
 
     int requestedFrame;
@@ -62,18 +65,18 @@ struct KisAnimationCachePopulator::Private
 
     QFutureWatcher<void> infoConversionWatcher;
 
+    KisAnimationCacheRegenerator regenerator;
+    bool calculateAnimationCacheInBackground = true;
+
 
 
     enum State {
         NotWaitingForAnything,
         WaitingForIdle,
         WaitingForFrame,
-        WaitingForConvertedFrame,
         BetweenFrames
     };
     State state;
-
-    QMutex mutex;
 
     Private(KisAnimationCachePopulator *_q, KisPart *_part)
         : q(_q),
@@ -83,43 +86,6 @@ struct KisAnimationCachePopulator::Private
           state(WaitingForIdle)
     {
         timer.setSingleShot(true);
-        connect(&infoConversionWatcher, SIGNAL(finished()), q, SLOT(slotInfoConverted()));
-    }
-
-    static void processFrameInfo(KisOpenGLUpdateInfoSP info) {
-        if (info->needsConversion()) {
-            info->convertColorSpace();
-        }
-    }
-
-    void frameReceived(int frame)
-    {
-        if (frame != requestedFrame) return;
-
-        imageRequestConnections.clear();
-        requestInfo = requestCache->fetchFrameData(frame);
-
-        /**
-         * This method is called from the context of the image worker
-         * threads, so we cannot modify timers here. Therefore the
-         * timers reset and the conversion request will be issued in
-         * the main GUI thread.
-         */
-        emit q->sigPrivateStartWaitingForConvertedFrame();
-    }
-
-    void infoConverted() {
-        KIS_ASSERT_RECOVER(requestInfo && requestCache) {
-            enterState(WaitingForIdle);
-            return;
-        }
-
-        requestCache->addConvertedFrameData(requestInfo, requestedFrame);
-
-        requestedFrame = 0;
-        requestCache = 0;
-        requestInfo = 0;
-        enterState(BetweenFrames);
     }
 
     void timerTimeout() {
@@ -129,12 +95,7 @@ struct KisAnimationCachePopulator::Private
             generateIfIdle();
             break;
         case WaitingForFrame:
-            // Request timed out :(
-            imageRequestConnections.clear();
-            enterState(WaitingForIdle);
-            break;
-        case WaitingForConvertedFrame:
-            KIS_ASSERT_RECOVER_NOOP(0 && "WaitingForConvertedFrame cannot have a timeout. Just skip this message and report a bug");
+            KIS_ASSERT_RECOVER_NOOP(0 && "WaitingForFrame cannot have a timeout. Just skip this message and report a bug");
             break;
         case NotWaitingForAnything:
             KIS_ASSERT_RECOVER_NOOP(0 && "NotWaitingForAnything cannot have a timeout. Just skip this message and report a bug");
@@ -220,27 +181,10 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
 
-        if (!animation->hasAnimation()) return false;
+        const int frame = KisAnimationCacheRegenerator::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
-        if (currentRange.isValid()) {
-            Q_ASSERT(!currentRange.isInfinite());
-
-            // TODO: optimize check for fully-cached case
-
-            for (int frame = currentRange.start(); frame <= currentRange.end(); frame++) {
-                if (skipRange.contains(frame)) {
-                    if (skipRange.isInfinite()) {
-                        break;
-                    } else {
-                        frame = skipRange.end();
-                        continue;
-                    }
-                }
-
-                if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
-                    return regenerate(cache, frame);
-                }
-            }
+        if (frame >= 0) {
+            return regenerate(cache, frame);
         }
 
         return false;
@@ -248,28 +192,10 @@ struct KisAnimationCachePopulator::Private
 
     bool regenerate(KisAnimationFrameCacheSP cache, int frame)
     {
-        if (state == WaitingForFrame || state == WaitingForConvertedFrame) {
+        if (state == WaitingForFrame) {
             // Already busy, deny request
             return false;
         }
-
-        KIS_ASSERT_RECOVER_NOOP(QThread::currentThread() == q->thread());
-
-        KisImageSP image = cache->image();
-
-        requestCache = cache;
-        requestedFrame = frame;
-
-        imageRequestConnections.clear();
-        imageRequestConnections.addConnection(
-            image->animationInterface(), SIGNAL(sigFrameReady(int)),
-            q, SLOT(slotFrameReady(int)),
-            Qt::DirectConnection);
-
-        imageRequestConnections.addConnection(
-            image->animationInterface(), SIGNAL(sigFrameCancelled()),
-            q, SLOT(slotFrameCancelled()),
-            Qt::AutoConnection);
 
         /**
          * We should enter the state before the frame is
@@ -277,7 +203,8 @@ struct KisAnimationCachePopulator::Private
          * enter it.
          */
         enterState(WaitingForFrame);
-        image->animationInterface()->requestFrameRegeneration(frame, image->bounds());
+
+        regenerator.startFrameRegeneration(frame, cache);
 
         return true;
     }
@@ -294,9 +221,6 @@ struct KisAnimationCachePopulator::Private
             break;
         case NotWaitingForAnything:
             str = "NotWaitingForAnything";
-            break;
-        case WaitingForConvertedFrame:
-            str = "WaitingForConvertedFrame";
             break;
         case BetweenFrames:
             str = "BetweenFrames";
@@ -316,10 +240,10 @@ struct KisAnimationCachePopulator::Private
             timerTimeout = IDLE_CHECK_INTERVAL;
             break;
         case WaitingForFrame:
-            timerTimeout = WAITING_FOR_FRAME_TIMEOUT;
+            // the timeout is handled by the regenerator now
+            timerTimeout = -1;
             break;
         case NotWaitingForAnything:
-        case WaitingForConvertedFrame:
             // frame conversion cannot be cancelled,
             // so there is no timeout
             timerTimeout = -1;
@@ -341,7 +265,12 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
     : m_d(new Private(this, part))
 {
     connect(&m_d->timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
-    connect(this, SIGNAL(sigPrivateStartWaitingForConvertedFrame()), SLOT(slotPrivateStartWaitingForConvertedFrame()));
+
+    connect(&m_d->regenerator, SIGNAL(sigFrameCancelled()), SLOT(slotRegeneratorFrameCancelled()));
+    connect(&m_d->regenerator, SIGNAL(sigFrameFinished()), SLOT(slotRegeneratorFrameReady()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 }
 
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
@@ -352,50 +281,32 @@ bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int 
     return m_d->regenerate(cache, frame);
 }
 
-void KisAnimationCachePopulator::slotStart()
-{
-    m_d->timer.start();
-}
-
 void KisAnimationCachePopulator::slotTimer()
 {
     m_d->timerTimeout();
 }
 
-void KisAnimationCachePopulator::slotFrameReady(int frame)
-{
-    m_d->frameReceived(frame);
-}
-
-void KisAnimationCachePopulator::slotFrameCancelled()
-{
-    KIS_ASSERT_RECOVER_RETURN(m_d->state == Private::WaitingForFrame);
-
-    m_d->timer.stop();
-    m_d->imageRequestConnections.clear();
-    m_d->enterState(Private::NotWaitingForAnything);
-}
-
-void KisAnimationCachePopulator::slotInfoConverted()
-{
-    m_d->infoConverted();
-}
-
 void KisAnimationCachePopulator::slotRequestRegeneration()
 {
+    // skip if the user forbade background regeneration
+    if (!m_d->calculateAnimationCacheInBackground) return;
+
     m_d->enterState(Private::WaitingForIdle);
 }
 
-void KisAnimationCachePopulator::slotPrivateStartWaitingForConvertedFrame()
+void KisAnimationCachePopulator::slotRegeneratorFrameCancelled()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->requestInfo);
+    KIS_ASSERT_RECOVER_RETURN(m_d->state == Private::WaitingForFrame);
+    m_d->enterState(Private::NotWaitingForAnything);
+}
 
-    m_d->enterState(Private::WaitingForConvertedFrame);
+void KisAnimationCachePopulator::slotRegeneratorFrameReady()
+{
+    m_d->enterState(Private::BetweenFrames);
+}
 
-    QFuture<void> requestFuture =
-        QtConcurrent::run(
-            std::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
-                        m_d->requestInfo));
-
-    m_d->infoConversionWatcher.setFuture(requestFuture);
+void KisAnimationCachePopulator::slotConfigChanged()
+{
+    KisConfig cfg;
+    m_d->calculateAnimationCacheInBackground = cfg.calculateAnimationCacheInBackground();
 }

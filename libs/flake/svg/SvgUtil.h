@@ -26,19 +26,17 @@
 class QString;
 class SvgGraphicsContext;
 class QTransform;
+class KoXmlElement;
 
 class KRITAFLAKE_EXPORT SvgUtil
 {
 public:
-    /**
-     * Converts given value from userspace units to points.
-     */
-    static double fromUserSpace(double value);
 
-    /**
-     * Converts given value from points to userspace units.
-     */
+    // remove later! pixels *are* user coordinates
+    static double fromUserSpace(double value);
     static double toUserSpace(double value);
+
+    static double ptToPx(SvgGraphicsContext *gc, double value);
 
     /// Converts given point from points to userspace units.
     static QPointF toUserSpace(const QPointF &point);
@@ -83,18 +81,14 @@ public:
      */
     static QSizeF userSpaceToObject(const QSizeF &size, const QRectF &objectBound);
 
-    /**
-     * Parses transform attribute value into a matrix.
-     * @param transform the transform attribute value
-     * @return the resulting transformation matrix
-     */
-    static QTransform parseTransform(const QString &transform);
-
     /// Converts specified transformation to a string
     static QString transformToString(const QTransform &transform);
 
     /// Parses a viewbox attribute into an rectangle
-    static QRectF parseViewBox(QString viewbox);
+    static bool parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
+
+    struct PreserveAspectRatioParser;
+    static void parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewRect, QTransform *_viewTransform);
 
     /// Parses a length attribute
     static qreal parseUnit(SvgGraphicsContext *gc, const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
@@ -108,8 +102,40 @@ public:
     /// parses a length attribute in xy-direction
     static qreal parseUnitXY(SvgGraphicsContext *gc, const QString &unit);
 
+    /// parses angle, result in *radians*!
+    static qreal parseUnitAngular(SvgGraphicsContext *gc, const QString &unit);
+
     /// parses the number into parameter number
     static const char * parseNumber(const char *ptr, qreal &number);
+
+    static qreal parseNumber(const QString &string);
+
+    static QString mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element);
+
+    struct PreserveAspectRatioParser
+    {
+        PreserveAspectRatioParser(const QString &str);
+
+        enum Alignment {
+            Min,
+            Middle,
+            Max
+        };
+
+        bool defer = false;
+        Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio;
+        Alignment xAlignment = Min;
+        Alignment yAlignment = Min;
+
+        QPointF rectAnchorPoint(const QRectF &rc) const;
+
+        QString toString() const;
+
+    private:
+        Alignment alignmentFromString(const QString &str) const;
+        QString alignmentToString(Alignment alignment) const;
+        static qreal alignedValue(qreal min, qreal max, Alignment alignment);
+    };
 };
 
 #endif // SVGUTIL_H

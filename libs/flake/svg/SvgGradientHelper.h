@@ -21,35 +21,27 @@
 #ifndef SVGGRADIENTHELPER_H
 #define SVGGRADIENTHELPER_H
 
+#include <KoFlakeCoordinateSystem.h>
 #include <QTransform>
-
-class QGradient;
+#include <QGradient>
 
 class SvgGradientHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
-
     SvgGradientHelper();
     ~SvgGradientHelper();
     /// Copy constructor
     SvgGradientHelper(const SvgGradientHelper &other);
 
     /// Sets the gradient units type
-    void setGradientUnits(Units units);
+    void setGradientUnits(KoFlake::CoordinateSystem units);
     /// Returns gradient units type
-    Units gradientUnits() const;
+    KoFlake::CoordinateSystem gradientUnits() const;
 
     /// Sets the gradient
     void setGradient(QGradient * g);
     /// Retrurns the gradient
-    QGradient * gradient();
-
-    /// Copies the given gradient
-    void copyGradient(QGradient * g);
-
-    /// Returns fill adjusted to the given bounding box
-    QBrush adjustedFill(const QRectF &bound);
+    QGradient * gradient() const;
 
     /// Returns the gradient transformation
     QTransform transform() const;
@@ -62,16 +54,17 @@ public:
     QGradient * adjustedGradient(const QRectF &bound) const;
 
     /// Converts a gradient from LogicalMode to ObjectBoundingMode 
-    static QGradient *convertGradient(const QGradient * originalGradient, const QSizeF &size);
+    static QGradient *convertGradient(const QGradient * originalGradient, const QTransform &userToRelativeTransform, const QRectF &size);
+
+    QGradient::Spread spreadMode() const;
+    void setSpreadMode(const QGradient::Spread &spreadMode);
 
 private:
 
-    /// Duplicates the given gradient and applies the given transformation
-    static QGradient *duplicateGradient(const QGradient * g, const QTransform &transform);
-
     QGradient * m_gradient;
-    Units m_gradientUnits;
+    KoFlake::CoordinateSystem m_gradientUnits;
     QTransform m_gradientTransform;
+    QGradient::Spread m_spreadMode;
 };
 
 #endif // SVGGRADIENTHELPER_H

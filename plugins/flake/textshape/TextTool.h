@@ -63,6 +63,7 @@ class KUndo2Command;
 
 class QDrag;
 class QMimeData;
+class QMenu;
 
 class MockCanvas;
 class TextToolSelection;
@@ -99,7 +100,7 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
@@ -117,8 +118,6 @@ public:
     virtual void cut();
     /// reimplemented from superclass
     virtual bool paste();
-    /// reimplemented from superclass
-    virtual QStringList supportedPasteMimeTypes() const;
     /// reimplemented from superclass
     virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
     /// reimplemented from superclass
@@ -324,6 +323,8 @@ private Q_SLOTS:
 
     void updateActions();
 
+    QMenu* popupActionsMenu();
+
 private:
     void repaintCaret();
     void repaintSelection();
@@ -420,6 +421,8 @@ private:
     bool m_clickWithinSelection;
     QDrag *m_drag;
     QAbstractTextDocumentLayout::Selection m_preDragSelection;
+
+    QScopedPointer<QMenu> m_contextMenu;
 };
 
 #endif

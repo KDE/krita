@@ -27,6 +27,7 @@
 
 #include <QList>
 
+class QRectF;
 class KoShape;
 class KoShapeBasedDocumentBasePrivate;
 class KoDocumentResourceManager;
@@ -49,7 +50,15 @@ public:
      * if the shape is one that should be currently shown on screen.
      * @param shape the new shape
      */
-    virtual void addShape(KoShape *shape) = 0;
+    void addShape(KoShape *shape);
+
+    /**
+     * Add shapes to the shape controller, allowing it to be seen and saved.
+     * The controller should add the shape to the ShapeManager instance(s) manually
+     * if the shape is one that should be currently shown on screen.
+     * @param shape the new shape
+     */
+    virtual void addShapes(const QList<KoShape*> shapes) = 0;
 
     /**
      * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
@@ -77,6 +86,22 @@ public:
      * collection and others.
      */
     virtual KoDocumentResourceManager *resourceManager() const;
+
+    /**
+     * The size of the document measured in rasterized pixels. This information is needed for loading
+     * SVG documents that use 'px' as the default unit.
+     */
+    virtual QRectF documentRectInPixels() const = 0;
+
+    /**
+     * The size of the document measured in 'pt'
+     */
+    QRectF documentRect() const;
+
+    /**
+     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     */
+    virtual qreal pixelsPerInch() const = 0;
 
 private:
     KoShapeBasedDocumentBasePrivate * const d;

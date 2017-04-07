@@ -718,10 +718,15 @@ bool KisView::queryClose()
                 return false;
             break;
         }
-        case QMessageBox::No :
+        case QMessageBox::No : {
+            KisImageSP image = document()->image();
+            image->requestStrokeCancellation();
+            viewManager()->blockUntillOperationsFinishedForced(image);
+
             document()->removeAutoSaveFiles();
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
+        }
         default : // case QMessageBox::Cancel :
             return false;
         }
@@ -787,6 +792,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
 void KisView::setCurrentNode(KisNodeSP node)
 {
     d->currentNode = node;
+    d->canvas.slotTrySwitchShapeManager();
 }
 
 KisNodeSP KisView::currentNode() const

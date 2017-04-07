@@ -21,7 +21,6 @@
 
 #include "ShapeShearStrategy.h"
 #include "SelectionDecorator.h"
-#include "SelectionTransformCommand.h"
 
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
@@ -43,16 +42,10 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
     , m_start(clicked)
 {
     KoSelection *sel = tool->canvas()->shapeManager()->selection();
-    QList<KoShape *> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
-    Q_FOREACH (KoShape *shape, selectedShapes) {
-        if (!shape->isEditable()) {
-            continue;
-        }
-        m_selectedShapes << shape;
+    m_selectedShapes = sel->selectedEditableShapes();
+    Q_FOREACH (KoShape *shape, m_selectedShapes) {
         m_oldTransforms << shape->transformation();
     }
-
-    m_initialSelectionMatrix = sel->transformation();
 
     // Eventhoug we aren't currently activated by the corner handles we might as well code like it
     switch (direction) {
@@ -89,31 +82,30 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
     }
 
+    m_solidPoint = sel->absoluteTransformation(0).map(sel->outlineRect().topLeft() + m_solidPoint);
+
     QPointF edge;
     qreal angle = 0.0;
     if (m_top) {
-        edge = sel->absolutePosition(KoFlake::BottomLeftCorner) - sel->absolutePosition(KoFlake::BottomRightCorner);
+        edge = sel->absolutePosition(KoFlake::BottomLeft) - sel->absolutePosition(KoFlake::BottomRight);
         angle = 180.0;
     } else if (m_bottom) {
-        edge = sel->absolutePosition(KoFlake::TopRightCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
+        edge = sel->absolutePosition(KoFlake::TopRight) - sel->absolutePosition(KoFlake::TopLeft);
         angle = 0.0;
     } else if (m_left) {
-        edge = sel->absolutePosition(KoFlake::BottomLeftCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
+        edge = sel->absolutePosition(KoFlake::BottomLeft) - sel->absolutePosition(KoFlake::TopLeft);
         angle = 90.0;
     } else if (m_right) {
-        edge = sel->absolutePosition(KoFlake::TopRightCorner) - sel->absolutePosition(KoFlake::BottomRightCorner);
+        edge = sel->absolutePosition(KoFlake::TopRight) - sel->absolutePosition(KoFlake::BottomRight);
         angle = 270.0;
     }
     qreal currentAngle = atan2(edge.y(), edge.x()) / M_PI * 180;
     m_initialSelectionAngle = currentAngle - angle;
 
-    qDebug() << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y();
-    m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(0).map(m_solidPoint);
-
     // use crossproduct of top edge and left edge of selection bounding rect
     // to determine if the selection is mirrored
-    QPointF top = sel->absolutePosition(KoFlake::TopRightCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
-    QPointF left = sel->absolutePosition(KoFlake::BottomLeftCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
+    QPointF top = sel->absolutePosition(KoFlake::TopRight) - sel->absolutePosition(KoFlake::TopLeft);
+    QPointF left = sel->absolutePosition(KoFlake::BottomLeft) - sel->absolutePosition(KoFlake::TopLeft);
     m_isMirrored = (top.x() * left.y() - top.y() * left.x()) < 0.0;
 }
 
@@ -158,16 +150,13 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
         shape->applyAbsoluteTransformation(applyMatrix);
         shape->update();
     }
-    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation(applyMatrix);
     m_shearMatrix = matrix;
 }
 
 void ShapeShearStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator(KoFlake::NoHandle, true, false);
-    decorator.setSelection(tool()->canvas()->shapeManager()->selection());
-    decorator.setHandleRadius(handleRadius());
-    decorator.paint(painter, converter);
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 KUndo2Command *ShapeShearStrategy::createCommand()
@@ -178,7 +167,5 @@ KUndo2Command *ShapeShearStrategy::createCommand()
     }
     KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_selectedShapes, m_oldTransforms, newTransforms);
     cmd->setText(kundo2_i18n("Shear"));
-    KoSelection *sel = tool()->canvas()->shapeManager()->selection();
-    new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;
 }

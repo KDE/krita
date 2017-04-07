@@ -27,19 +27,24 @@
 #include <QMap>
 #include <QSizeF>
 #include <QRectF>
+#include <QSharedPointer>
+#include <QExplicitlySharedDataPointer>
 
 #include "kritaflake_export.h"
 #include "SvgGradientHelper.h"
-#include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
 #include "SvgStyleParser.h"
+#include "KoClipMask.h"
 
 
 class KoShape;
 class KoShapeGroup;
 class KoDocumentResourceManager;
+class KoVectorPatternBackground;
+class KoMarker;
+class KoPathShape;
 
 
 class KRITAFLAKE_EXPORT SvgParser
@@ -54,25 +59,35 @@ public:
     /// Sets the initial xml base directory (the directory form where the file is read)
     void setXmlBaseDir(const QString &baseDir);
 
+    void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
+
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 
+    typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
+    void setFileFetcher(FileFetcherFunc func);
+
+    QList<QExplicitlySharedDataPointer<KoMarker>> knownMarkers() const;
+
 protected:
 
+    /// Parses a group-like element element, saving all its topmost properties
+    KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement());
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const KoXmlElement &);
+    QList<KoShape*> parseSingleElement(const KoXmlElement &b);
     /// Parses a use element, returning a list of child shapes
-    QList<KoShape*> parseUse(const KoXmlElement &);
-    /// Parses definitions for later use
-    void parseDefs(const KoXmlElement &);
+    KoShape* parseUse(const KoXmlElement &);
     /// Parses a gradient element
-    bool parseGradient(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+    SvgGradientHelper *parseGradient(const KoXmlElement &);
     /// Parses a pattern element
-    void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
+    QSharedPointer<KoVectorPatternBackground> parsePattern(const KoXmlElement &e, const KoShape *__shape);
     /// Parses a filter element
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a clip path element
-    bool parseClipPath(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+    bool parseClipPath(const KoXmlElement &);
+    bool parseClipMask(const KoXmlElement &e);
+    bool parseMarker(const KoXmlElement &e);
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
     /// parses a length attribute in x-direction
@@ -81,19 +96,23 @@ protected:
     qreal parseUnitY(const QString &unit);
     /// parses a length attribute in xy-direction
     qreal parseUnitXY(const QString &unit);
+    /// parses a angular attribute values, result in radians
+    qreal parseAngular(const QString &unit);
+
+    KoShape *createObjectDirect(const KoXmlElement &b);
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create path object from the given xml element
     KoShape * createPath(const KoXmlElement &);
     /// find gradient with given id in gradient map
-    SvgGradientHelper* findGradient(const QString &id, const QString &href = QString());
+    SvgGradientHelper* findGradient(const QString &id);
     /// find pattern with given id in pattern map
-    SvgPatternHelper* findPattern(const QString &id);
+    QSharedPointer<KoVectorPatternBackground> findPattern(const QString &id, const KoShape *shape);
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
     /// find clip path with given id in clip path map
-    SvgClipPathHelper* findClipPath(const QString &id, const QString &href = QString());
+    SvgClipPathHelper* findClipPath(const QString &id);
 
     /// Adds list of shapes to the given group shape
     void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
@@ -106,11 +125,14 @@ protected:
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
 
-    /// Applies styles to the given shape
-    void applyStyle(KoShape *, const KoXmlElement &);
+    void uploadStyleToContext(const KoXmlElement &e);
+    void applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
 
     /// Applies styles to the given shape
-    void applyStyle(KoShape *, const SvgStyles &);
+    void applyStyle(KoShape *, const KoXmlElement &, const QPointF &shapeToOriginalUserCoordinates);
+
+    /// Applies styles to the given shape
+    void applyStyle(KoShape *, const SvgStyles &, const QPointF &shapeToOriginalUserCoordinates);
 
     /// Applies the current fill style to the object
     void applyFillStyle(KoShape * shape);
@@ -122,18 +144,25 @@ protected:
     void applyFilter(KoShape * shape);
 
     /// Applies the current clip path to the object
-    void applyClipping(KoShape *shape);
+    void applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
+    void applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
+    void applyMarkers(KoPathShape *shape);
 
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
+
+    /// Applies viewBox transformation to the current graphical context
+    /// NOTE: after applying the function currectBoundingBox can become null!
+    void applyViewBoxTransform(const KoXmlElement &element);
 
 private:
     QSizeF m_documentSize;
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
-    QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
+    QMap<QString, QSharedPointer<KoClipMask>> m_clipMasks;
+    QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;

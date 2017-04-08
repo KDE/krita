@@ -592,7 +592,7 @@ public:
         initialize();
     }
 
-    //multi-pass NN-field minimization (see "PatchMatch" - page 4)
+    //multi-pass NN-field minimization (see "PatchMatch" paper referenced above - page 4)
     void minimize(int pass)
     {
         int min_x = 0;
@@ -795,7 +795,7 @@ MaskedImageSP Inpaint::patch()
             nnf_TargetToSource = new_nnf_rev;
         }
 
-        //Build an upscaled target by EM-like algorithm (see "PatchMatch" - page 6)
+        //Build an upscaled target by EM-like algorithm (see "PatchMatch" paper referenced above - page 6)
         target = NearestNeighborField::ExpectationMaximization(nnf_TargetToSource, level, radius, pyramid);
         //target->DebugDump( "target" );
     }

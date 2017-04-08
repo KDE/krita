@@ -231,13 +231,6 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     }
 }
 
-void KisMaskManager::createEffectsMask(KisNodeSP activeNode)
-{
-    KisFilterMaskSP mask = new KisFilterMask();
-    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Effect Mask"), "KisEffectMask", i18n("Inpaint Mask"), false, false);
-    mask->setImage(m_view->image());
-}
-
 
 void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {

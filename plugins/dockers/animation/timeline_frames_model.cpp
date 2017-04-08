@@ -217,7 +217,12 @@ void TimelineFramesModel::setNodeManipulationInterface(NodeManipulationInterface
 
 KisNodeSP TimelineFramesModel::nodeAt(QModelIndex index) const
 {
-    return m_d->converter->dummyFromRow(index.row())->node();
+    /**
+     * The dummy might not exist because the user could (quickly) change
+     * active layer and the list of the nodes in m_d->converter will change.
+     */
+    KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
+    return dummy ? dummy->node() : 0;
 }
 
 QList<KisKeyframeChannel *> TimelineFramesModel::channelsAt(QModelIndex index) const

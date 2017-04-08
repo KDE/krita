@@ -38,6 +38,8 @@
 #include "kis_cached_gradient_shape_strategy.h"
 #include "krita_utils.h"
 #include "kis_gradient_cache_strategy.h"
+#include <iostream>
+#include <KoColorProfile.h>
 
 class CachedGradient : public KoAbstractGradient
 {
@@ -50,13 +52,14 @@ public:
         m_max = steps - 1;
         m_colorSpace = cs;
 
-        if( KisGradientCacheStategy::minColorDepth(cs) == 1) {
-            m_cacheStategy.reset(new NotBit8GradientCacheStategy(gradient, steps, cs));
-
-        } else {
+        if (KisGradientCacheStategy::minColorDepth(cs) == 1 ) {
+            if (m_colorSpace->name() == "RGB/Alpha (8-bit integer/channel)") {
+                m_cacheStategy.reset(new Bit8RGBGradientCacheStategy(gradient, steps, cs));
+            } else {
+                m_cacheStategy.reset(new Bit8GradientCacheStategy(gradient, steps, cs));}
+            } else {
              m_cacheStategy.reset(new NotBit8GradientCacheStategy(gradient, steps, cs));
-        }
-
+      }
     }
 
     ~CachedGradient() override {}

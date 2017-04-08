@@ -17,45 +17,80 @@
  */
 #ifndef KIS_GRADINT_CACHE_STRATEGY_H
 #define KIS_GRADINT_CACHE_STRATEGY_H
-#include <QtGlobal>
-#include <KoColorSpace.h>
-#include <KoChannelInfo.h>
-#include <KoAbstractGradient.h>
-#include <KoColor.h>
-#include <QSharedPointer>
 #include "boost/random.hpp"
+#include <KoAbstractGradient.h>
+#include <KoChannelInfo.h>
+#include <KoColor.h>
+#include <KoColorSpace.h>
+#include <QSharedPointer>
+#include <QtGlobal>
 
-
-class KisGradientCacheStategy
-{
-public: 
-    KisGradientCacheStategy(qint32 steps, const KoColorSpace *colorSpace);
+class KisGradientCacheStategy {
+public:
+    KisGradientCacheStategy(qint32 steps, const KoColorSpace* colorSpace);
     virtual ~KisGradientCacheStategy();
-    virtual const quint8 *cachedAt(qreal t) = 0;
-    static qint32 minColorDepth(const KoColorSpace *colorSpace);
+    virtual const quint8* cachedAt(qreal t) = 0;
+    static qint32 minColorDepth(const KoColorSpace* colorSpace);
 
 protected:
     /// gets step of change t at position 0 <= t <= 1
-    double stepAt(qreal t) const;
+    virtual double stepAt(qreal t) const = 0;
 
 protected:
-    const KoColorSpace *m_colorSpace;
+    const KoColorSpace* m_colorSpace;
     qint32 m_max;
     KoColor m_black;
-    QVector<qreal> m_step;
+    boost::mt11213b m_gen;
 };
 
-class Bit8GradientCacheStategy : public KisGradientCacheStategy
-{
+class Bit8Stategy {
+public:
+    Bit8Stategy(qreal m_max);
+    struct offset {
+        offset() {}
+        offset(qreal currentOffset, qreal colorOffset)
+            : m_currentOffset(currentOffset)
+            , m_mainOffset(colorOffset)
+        {
+        }
+        qreal m_currentOffset;
+        qreal m_mainOffset;
+    };
+
+protected:
+    /// gets a differ from the original color 0 <= t <= 1
+    double offsetAt(qreal t) const;
+    /// gets step of change t at position 0 <= t <= 1
+    virtual double stepAt(qreal t) const = 0;
+    QVector<offset> m_step;
+
 private:
-    struct nearColors{
-        nearColors(){}
-        nearColors(QColor color, const KoColorSpace *m_colorSpace);
+    qreal m_max2;
+};
+
+class Bit8GradientCacheStategy : public KisGradientCacheStategy, public Bit8Stategy {
+public:
+    Bit8GradientCacheStategy(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* colorSpace);
+    const quint8* cachedAt(qreal t) override;
+
+protected:
+    QVector<KoColor> m_colors;
+    double stepAt(qreal t) const override;
+
+private:
+    boost::random::uniform_01<> m_distribution;
+};
+
+class Bit8RGBGradientCacheStategy : public Bit8GradientCacheStategy {
+private:
+    struct nearColors {
+        nearColors() {}
+        nearColors(QColor color, const KoColorSpace* m_colorSpace);
         QSharedPointer<KoColor> m_colors[7];
         QColor getColor(QSharedPointer<KoColor> color);
     };
 
-    struct colorComponents{
+    struct colorComponents {
         colorComponents(QColor& color);
         int m_red;
         int m_green;
@@ -71,25 +106,31 @@ private:
     };
 
 public:
-    Bit8GradientCacheStategy(const KoAbstractGradient *gradient, qint32 steps, const KoColorSpace *colorSpace);
-    const quint8 *cachedAt(qreal t) override;
+    Bit8RGBGradientCacheStategy(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* colorSpace);
+    const quint8* cachedAt(qreal t) override;
+
+protected:
+    double stepAt(qreal t) const override;
 
 private:
     QMap<qreal, nearColors> m_nearColors;
-    boost::mt11213b  m_gen;
     boost::random::uniform_smallint<> m_distribution;
+    boost::random::uniform_01<> m_distribution2;
+
 };
 
-class NotBit8GradientCacheStategy : public KisGradientCacheStategy
-{
+class NotBit8GradientCacheStategy : public KisGradientCacheStategy {
 public:
-    NotBit8GradientCacheStategy(const KoAbstractGradient *gradient, qint32 steps, const KoColorSpace *colorSpace);
-    const quint8 *cachedAt(qreal t) override;
+    NotBit8GradientCacheStategy(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* colorSpace);
+    const quint8* cachedAt(qreal t) override;
+
+protected:
+    double stepAt(qreal t) const override;
+    QVector<qreal> m_step;
 
 private:
     QVector<KoColor> m_colors;
-    boost::mt11213b  m_gen;
-    boost::random::uniform_smallint<> m_distribution;
-
+    boost::random::uniform_01<> m_distribution;
 };
+
 #endif //KIS_GRADIENT_CACHE_STRATEGY_H

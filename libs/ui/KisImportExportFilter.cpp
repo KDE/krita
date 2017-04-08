@@ -43,7 +43,7 @@ public:
     QMap<QString, KisExportCheckBase*> capabilities;
 
     Private()
-        : updater(0)
+        : updater(0), mime("")
         , batchmode(false)
     {}
 

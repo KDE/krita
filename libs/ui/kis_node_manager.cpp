@@ -514,7 +514,6 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
     } else if (nodeType == "KisFileLayer") {
         m_d->layerManager.addFileLayer(activeNode);
     }
-
 }
 
 void KisNodeManager::createFromVisible()

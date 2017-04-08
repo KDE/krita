@@ -30,6 +30,8 @@
 #include <boost/multi_array.hpp>
 #include <random>
 #include <iostream>
+#include <functional>
+
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -48,13 +50,16 @@
 #include "KoMixColorsOp.h"
 #include "KoColorModelStandardIds.h"
 #include "KoColorSpaceRegistry.h"
-
+#include "KoColorSpaceTraits.h"
 
 const int MAX_DIST = 65535;
 const quint8 MASK_SET = 0;
 const quint8 MASK_CLEAR = 255;
 
 void patchImage(KisPaintDeviceSP, KisPaintDeviceSP, int radius);
+
+class MaskedImage; //forward decl for the forward decl below
+template <typename T> float distance_impl(const MaskedImage& my, int x, int y, const MaskedImage& other, int xo, int yo);
 
 
 class ImageView
@@ -203,9 +208,13 @@ public:
 
 };
 
+
+
 class MaskedImage : public KisShared
 {
 private:
+
+    template <typename T> friend float distance_impl(const MaskedImage& my, int x, int y, const MaskedImage& other, int xo, int yo);
 
     QRect imageSize;
     int nChannels;
@@ -248,6 +257,7 @@ private:
     MaskedImage() {}
 
 public:
+    std::function< float(const MaskedImage&, int, int, const MaskedImage& , int , int ) > distance;
 
     void toPaintDevice(KisPaintDeviceSP imageDev, QRect rect)
     {
@@ -270,6 +280,25 @@ public:
         cacheImageSize(_imageDev);
         cacheImage(_imageDev);
         cacheMask(_maskDev);
+
+        //distance function is the only that needs to know the type
+        //For performance reasons we can't use functions provided by color space
+        KoID colorDepthId =  _imageDev->colorSpace()->colorDepthId();
+
+        //Use RGB traits to assign actual pixel data types.
+        distance = &distance_impl<KoRgbU8Traits::channels_type>;
+
+        if( colorDepthId == Integer16BitsColorDepthID )
+            distance = &distance_impl<KoRgbU16Traits::channels_type>;
+
+        if( colorDepthId == Float16BitsColorDepthID )
+            distance = &distance_impl<KoRgbF16Traits::channels_type>;
+
+        if( colorDepthId == Float32BitsColorDepthID )
+            distance = &distance_impl<KoRgbF32Traits::channels_type>;
+
+        if( colorDepthId == Float64BitsColorDepthID )
+            distance = &distance_impl<KoRgbF64Traits::channels_type>;
     }
 
     MaskedImage(KisPaintDeviceSP _imageDev, KisPaintDeviceSP _maskDev)
@@ -316,9 +345,6 @@ public:
             }
         }
         imageSize = QRect(0, 0, newW, newH);
-//        int nmasked = countMasked();
-//        printf("Masked: %d size: %dx%d\n", nmasked, newW, newH);
-//        maskData.DebugDump("maskData");
     }
 
     void upscale(int newW, int newH)
@@ -369,6 +395,7 @@ public:
         clone->imageData = this->imageData;
         clone->cs = this->cs;
         clone->csMask = this->csMask;
+        clone->distance = this->distance;
         return clone;
     }
 
@@ -459,23 +486,26 @@ public:
     {
         return cs->channelCount();
     }
-
-    float distance(int x, int y, const MaskedImage& other, int xo, int yo)
-    {
-        float dsq = 0;
-        quint32 nchannels = channelCount();
-        quint8* v1 = imageData(x, y);
-        quint8* v2 = other.imageData(xo, yo);
-
-        for (quint32 chan = 0; chan < nchannels; chan++) {
-            //It's very important not to lose precision in the next line
-            //TODO: This code only works for 8bpp data. Refactor to make it universal.
-            float v = (float)(*((quint8*)v1 + chan)) - (float)(*((quint8*)v2 + chan));
-            dsq += v * v;
-        }
-        return dsq;
-    }
 };
+
+
+//Generic version of the distance function. produces distance between colors in the range [0, MAX_DIST]. This
+//is a fast distance computation. More accurate, but very slow implementation is to use color space operations.
+template <typename T> float distance_impl(const MaskedImage& my, int x, int y, const MaskedImage& other, int xo, int yo)
+{
+    float dsq = 0;
+    quint32 nchannels = my.channelCount();
+    quint8* v1 = my.imageData(x, y);
+    quint8* v2 = other.imageData(xo, yo);
+
+    for (quint32 chan = 0; chan < nchannels; chan++) {
+        //It's very important not to lose precision in the next line
+        float v = ((float)(*((T*)v1 + chan)) - (float)(*((T*)v2 + chan)));
+        dsq += v * v;
+    }
+    return dsq / ( (float)KoColorSpaceMathsTraits<T>::unitValue * (float)KoColorSpaceMathsTraits<T>::unitValue / MAX_DIST );
+}
+
 
 typedef KisSharedPtr<MaskedImage> MaskedImageSP;
 
@@ -712,8 +742,7 @@ public:
                 }
 
                 //SSD distance between pixels
-                float ssd = input->distance(xks, yks, *output, xkt, ykt);
-                //long ssd = input->distance(xks, yks, *input, xkt, ykt);
+                float ssd = input->distance(*input, xks, yks, *output, xkt, ykt);
                 distance += ssd;
 
             }

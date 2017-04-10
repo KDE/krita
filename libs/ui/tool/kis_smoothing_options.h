@@ -19,13 +19,15 @@
 #define KIS_SMOOTHING_OPTIONS_H
 
 #include <qglobal.h>
+#include <QObject>
 #include <QSharedPointer>
+#include <QScopedPointer>
 #include <kritaui_export.h>
 
 
-
-class KRITAUI_EXPORT KisSmoothingOptions
+class KRITAUI_EXPORT KisSmoothingOptions : public QObject
 {
+    Q_OBJECT
 public:
     enum SmoothingType {
         NO_SMOOTHING = 0,
@@ -37,6 +39,7 @@ public:
 public:
 
     KisSmoothingOptions(bool useSavedSmoothing = true);
+    ~KisSmoothingOptions();
 
     SmoothingType smoothingType() const;
     void setSmoothingType(SmoothingType value);
@@ -65,16 +68,12 @@ public:
     void setStabilizeSensors(bool value);
     bool stabilizeSensors() const;
 
+private Q_SLOTS:
+    void slotWriteConfig();
+
 private:
-    SmoothingType m_smoothingType;
-    qreal m_smoothnessDistance;
-    qreal m_tailAggressiveness;
-    bool m_smoothPressure;
-    bool m_useScalableDistance;
-    qreal m_delayDistance;
-    bool m_useDelayDistance;
-    bool m_finishStabilizedCurve;
-    bool m_stabilizeSensors;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 typedef QSharedPointer<KisSmoothingOptions> KisSmoothingOptionsSP;

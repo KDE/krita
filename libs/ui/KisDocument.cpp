@@ -634,6 +634,28 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     return false;
 }
 
+QByteArray KisDocument::serializeToNativeByteArray()
+{
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+
+    QScopedPointer<KisImportExportFilter> filter(KisImportExportManager::filterForMimeType(nativeFormatMimeType(), KisImportExportManager::Export));
+    filter->setBatchMode(true);
+    filter->setMimeType(nativeFormatMimeType());
+
+    if (!prepareLocksForSaving()) {
+        return byteArray;
+    }
+
+    if (filter->convert(this, &buffer) != KisImportExportFilter::OK) {
+        qWarning() << "serializeToByteArray():: Could not export to our native format";
+    }
+
+    unlockAfterSaving();
+
+    return byteArray;
+}
+
 bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!prepareLocksForSaving()) {

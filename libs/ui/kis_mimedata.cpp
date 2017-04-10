@@ -108,19 +108,8 @@ KisDocument *createDocument(QList<KisNodeSP> nodes)
 
 QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
 {
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-
-    KisDocument *doc = createDocument(nodes);
-    KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(doc->nativeFormatMimeType(), KisImportExportManager::Export);
-    filter->setBatchMode(true);
-    filter->setMimeType(doc->nativeFormatMimeType());
-    if (filter->convert(doc, &buffer) != KisImportExportFilter::OK) {
-        qWarning() << "serializeToByteArray():: Could not export to our native format";
-    }
-    delete filter;
-    delete doc;
-    return byteArray;
+    QScopedPointer<KisDocument> doc(createDocument(nodes));
+    return doc->serializeToNativeByteArray();
 }
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const

@@ -107,17 +107,8 @@ KisDocument *createDocument(QList<KisNodeSP> nodes)
 
 QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
 {
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-
-    KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
-    Q_ASSERT(!store->bad());
-    
-    KisDocument *doc = createDocument(nodes);
-    doc->saveNativeFormatCalligraDirect(store);
-    delete doc;
-
-    return byteArray;
+    QScopedPointer<KisDocument> doc(createDocument(nodes));
+    return doc->serializeToNativeByteArray();
 }
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const

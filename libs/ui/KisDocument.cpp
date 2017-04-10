@@ -1042,7 +1042,35 @@ bool KisDocument::saveNativeFormat(const QString & file)
         result = saveNativeFormatCalligraImpl(store);
     }
 
+    delete store;
     return result;
+}
+
+QByteArray KisDocument::serializeToNativeByteArray()
+{
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+
+    QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Write, nativeFormatMimeType(), KoStore::Auto));
+    if (store->bad()) {
+        return byteArray;
+    }
+
+    Private::SafeSavingLocker locker(d);
+    if (!locker.successfullyLocked()) {
+        return byteArray;
+    }
+
+    Private::SavingImageSetter savingImageSetter(d, d->image);
+
+    KisAsyncActionFeedback f(i18n("Exporting document..."), 0);
+    bool result = f.runAction(std::bind(&KisDocument::saveNativeFormatCalligraImpl, this, store.data()));
+
+    if (!result) {
+        byteArray.clear();
+    }
+
+    return byteArray;
 }
 
 bool KisDocument::saveNativeFormatCalligraDirect(KoStore *store)
@@ -1066,12 +1094,10 @@ bool KisDocument::saveNativeFormatCalligraImpl(KoStore *store)
         KoStoreDevice dev(store);
         if (!saveToStream(&dev) || !store->close()) {
             dbgUI << "saveToStream failed";
-            delete store;
             return false;
         }
     } else {
         d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("maindoc.xml"));
-        delete store;
         return false;
     }
     if (store->open("documentinfo.xml")) {
@@ -1094,16 +1120,13 @@ bool KisDocument::saveNativeFormatCalligraImpl(KoStore *store)
     }
 
     if (!completeSaving(store)) {
-        delete store;
         return false;
     }
     dbgUI << "Saving done of url:" << url().url();
     if (!store->finalize()) {
-        delete store;
         return false;
     }
-    // Success
-    delete store;
+
     return true;
 }
 

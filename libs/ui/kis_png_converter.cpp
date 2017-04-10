@@ -927,7 +927,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (options.forceSRGB) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
-        device->convertTo(cs);
+        KUndo2Command *cmd = device->convertTo(cs);
+        delete cmd;
     }
 
     // Initialize structures

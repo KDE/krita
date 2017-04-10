@@ -538,21 +538,21 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     qDebug() << "sRGB" << sRGBIntent;
 #endif
 
-bool fromBlender = false;
+    bool fromBlender = false;
 
-png_text* text_ptr;
+    png_text* text_ptr;
     int num_comments;
-png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
+    png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
 
-        for (int i = 0; i < num_comments; i++) {
-            QString key = QString(text_ptr[i].key).toLower();
-            if (key == "file") {
-                QString relatedFile = text_ptr[i].text;
-                if (relatedFile.contains(".blend", Qt::CaseInsensitive)){
-                    fromBlender=true;
-                }
+    for (int i = 0; i < num_comments; i++) {
+        QString key = QString(text_ptr[i].key).toLower();
+        if (key == "file") {
+            QString relatedFile = text_ptr[i].text;
+            if (relatedFile.contains(".blend", Qt::CaseInsensitive)){
+                fromBlender=true;
             }
         }
+    }
 
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
@@ -634,7 +634,7 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
         transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
-    // Creating the KisImageWSP
+    // Creating the KisImageSP
     if (m_image == 0) {
         m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         Q_CHECK_PTR(m_image);

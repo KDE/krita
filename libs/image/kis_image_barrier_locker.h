@@ -50,6 +50,12 @@ struct PointerPolicyAllowNull
     }
 };
 
+/**
+ * A simple class that implements std::lock_guard concept for locking KisImage.
+ * It barrier-locks the image during construction and unlocks it on destruction.
+ *
+ * \p PointerPolicy defines how the image pointer is handled
+ */
 
 template <class PointerPolicy>
 class KisImageBarrierLockerImpl {
@@ -71,9 +77,13 @@ private:
     ImagePointer m_image;
 };
 
+// Lock guard for the image passed as KisImageSP pointer. Pointer cannot be null.
 typedef KisImageBarrierLockerImpl<PointerPolicyAlwaysPresent<KisImageSP>> KisImageBarrierLocker;
+
+// Lock guard for the image passed as a raw KisImage* pointer. Pointer cannot be null.
 typedef KisImageBarrierLockerImpl<PointerPolicyAlwaysPresent<KisImage*>> KisImageBarrierLockerRaw;
 
+// Lock guard for the image passed as KisImageSP pointer that *can* be null.
 typedef KisImageBarrierLockerImpl<PointerPolicyAllowNull<KisImageSP>> KisImageBarrierLockerAllowNull;
 
 #endif /* __KIS_IMAGE_BARRIER_LOCKER_H */

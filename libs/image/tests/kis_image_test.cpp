@@ -667,7 +667,8 @@ void KisImageTest::testMergeDownDestinationInheritsAlpha()
 
         KisLayerSP newLayer = mergeHelper(p, p.layer2);
 
-        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        // WARN: this check is suspicious!
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_proj_merged_layer2_over_layer5_IA"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer2_layerproj"));
 
         QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);

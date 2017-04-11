@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisMimeData : public QMimeData
 {
     Q_OBJECT
 public:
-    KisMimeData(QList<KisNodeSP> nodes, bool forceCopy = false);
+    KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCopy = false);
 
     /// return the node set on this mimedata object -- for internal use
     QList<KisNodeSP> nodes() const;
@@ -84,13 +84,13 @@ private:
      * that is can be fetched without serialization
      */
     static KisNodeList tryLoadInternalNodes(const QMimeData *data,
-                                                 KisImageWSP image,
+                                                 KisImageSP image,
                                                  KisShapeController *shapeController,
                                                  bool /* IN-OUT */ &copyNode);
 
 public:
-    static QMimeData* mimeForLayers(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy = false);
-    static QMimeData* mimeForLayersDeepCopy(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy);
+    static QMimeData* mimeForLayers(const KisNodeList &nodes, KisImageSP image, bool forceCopy = false);
+    static QMimeData* mimeForLayersDeepCopy(const KisNodeList &nodes, KisImageSP image, bool forceCopy);
     static bool insertMimeLayers(const QMimeData *data,
                                  KisImageSP image,
                                  KisShapeController *shapeController,
@@ -112,7 +112,7 @@ private:
 
     QList<KisNodeSP> m_nodes;
     bool m_forceCopy;
-    KisNodeGraphListener *m_initialListener;
+    KisImageSP m_image;
 };
 
 #endif // KIS_MIMEDATA_H

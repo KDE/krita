@@ -27,6 +27,7 @@
 
 class QRect;
 class QMimeData;
+class KisBlockUntilOperationsFinishedMediator;
 
 enum enumPasteBehaviour {
     PASTE_ASSUME_WEB,
@@ -69,7 +70,7 @@ public:
 
     QSize clipSize() const;
 
-    void setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy = false);
+    void setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy = false);
     bool hasLayers() const;
     const QMimeData* layersMimeData() const;
 

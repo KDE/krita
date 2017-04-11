@@ -1138,10 +1138,9 @@ void KisNodeManager::slotSplitAlphaSaveMerged()
 void KisNodeManager::cutLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisNodeSP root = m_d->view->image()->root();
     if (nodes.isEmpty()) return;
 
-    KisClipboard::instance()->setLayers(nodes, root, false);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), false);
 
     KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
     KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
@@ -1151,9 +1150,7 @@ void KisNodeManager::cutLayersToClipboard()
 void KisNodeManager::copyLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisNodeSP root = m_d->view->image()->root();
-
-    KisClipboard::instance()->setLayers(nodes, root, true);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), true);
 }
 
 void KisNodeManager::pasteLayersFromClipboard()

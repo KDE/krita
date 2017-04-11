@@ -34,7 +34,7 @@
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
 #include "KisImportExportManager.h"
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLockerWithFeedback.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -65,7 +65,7 @@ void KisMimeData::deepCopyNodes()
     KisNodeList newNodes;
 
     {
-        KisImageBarrierLockerAllowNull locker(m_image);
+        KisImageBarrierLockerWithFeedbackAllowNull locker(m_image);
         Q_FOREACH (KisNodeSP node, m_nodes) {
             newNodes << node->clone();
         }
@@ -104,7 +104,7 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
 
     {
-        KisImageBarrierLockerAllowNull locker(srcImage);
+        KisImageBarrierLockerWithFeedbackAllowNull locker(srcImage);
         Q_FOREACH (KisNodeSP node, nodes) {
             image->addNode(node->clone());
         }
@@ -247,7 +247,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
     }
 
     if (!nodes.isEmpty() && (forceCopy || copyNode || sourceImage != image)) {
-        KisImageBarrierLockerAllowNull locker(sourceImage);
+        KisImageBarrierLockerWithFeedbackAllowNull locker(sourceImage);
 
         QList<KisNodeSP> clones;
         Q_FOREACH (KisNodeSP node, nodes) {

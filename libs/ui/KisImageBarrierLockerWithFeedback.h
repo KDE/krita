@@ -26,6 +26,11 @@ namespace KisImageBarrierLockerWithFeedbackImplPrivate {
 void blockWithFeedback(KisImageSP image);
 }
 
+/**
+ * The wrapper around KisImageBarrierLocker or KisImageBarrierLockerAllowNull
+ * that adds GUI feedback with a progress bar when the locking is going to be
+ * long enough.
+ */
 template<class InternalLocker>
 class KisImageBarrierLockerWithFeedbackImpl
 {
@@ -42,7 +47,16 @@ private:
     QScopedPointer<InternalLocker> m_locker;
 };
 
+/**
+ * @brief KisImageBarrierLockerWithFeedback is a simple KisImageBarrierLocker with a
+ * progress dialog feedback shown before locking.
+ */
 typedef KisImageBarrierLockerWithFeedbackImpl<KisImageBarrierLocker> KisImageBarrierLockerWithFeedback;
+
+/**
+ * @brief KisImageBarrierLockerWithFeedback is a simple KisImageBarrierLockerAllowEmpty with a
+ * progress dialog feedback shown before locking.
+ */
 typedef KisImageBarrierLockerWithFeedbackImpl<KisImageBarrierLockerAllowNull> KisImageBarrierLockerWithFeedbackAllowNull;
 
 

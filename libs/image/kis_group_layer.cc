@@ -157,7 +157,9 @@ KisLayerSP KisGroupLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
             image()->addNode(cloned, merged);
         }
 
-        image()->refreshGraphAsync(merged);
+        if (!merged->passThroughMode()) {
+            image()->refreshGraphAsync(merged);
+        }
 
         return merged;
     } else

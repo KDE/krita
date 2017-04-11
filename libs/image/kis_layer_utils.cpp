@@ -197,6 +197,40 @@ namespace KisLayerUtils {
         MergeDownInfoBaseSP m_info;
     };
 
+    struct DisablePassThroughForHeadsOnly : public KisCommandUtils::AggregateCommand {
+        DisablePassThroughForHeadsOnly(MergeDownInfoBaseSP info, bool skipIfDstIsGroup = false)
+            : m_info(info),
+              m_skipIfDstIsGroup(skipIfDstIsGroup)
+        {
+        }
+
+        void populateChildCommands() override {
+            if (m_skipIfDstIsGroup &&
+                m_info->dstLayer() &&
+                m_info->dstLayer()->inherits("KisGroupLayer")) {
+
+                return;
+            }
+
+
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::passThrough, false).toBool()) {
+
+                    KisBaseNode::PropertyList props = node->sectionModelProperties();
+                    KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                             KisLayerPropertiesIcons::passThrough,
+                                                             false);
+
+                    addCommand(new KisNodePropertyListCommand(node, props));
+                }
+            }
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+        bool m_skipIfDstIsGroup;
+    };
+
     struct RefreshHiddenAreas : public KUndo2Command {
         RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_info(info) {}
 
@@ -773,6 +807,11 @@ namespace KisLayerUtils {
             applicator.applyCommand(new FillSelectionMasks(info));
             applicator.applyCommand(new CreateMergedLayer(info), KisStrokeJobData::BARRIER);
 
+            // in two-layer mode we disable pass trhough only when the destination layer
+            // is not a group layer
+            applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true));
+            applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
+
             if (info->frames.size() > 0) {
                 foreach (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
@@ -1059,6 +1098,7 @@ namespace KisLayerUtils {
             // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
             applicator.applyCommand(new DisableOnionSkins(info));
+            applicator.applyCommand(new DisablePassThroughForHeadsOnly(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));

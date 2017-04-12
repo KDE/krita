@@ -440,6 +440,7 @@ public:
     }
 
     class SafeSavingLocker;
+    class SavingImageSetter;
 };
 
 class KisDocument::Private::SafeSavingLocker {
@@ -493,6 +494,15 @@ public:
         }
     }
 
+    void doEmergencyLock() {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(!m_locked);
+
+        if (d->savingLock.try_lock()) {
+            d->image->lock();
+            m_locked = true;
+        }
+    }
+
     bool successfullyLocked() const {
         return m_locked;
     }
@@ -502,6 +512,22 @@ private:
     bool m_locked;
 
     KisImageBarrierLockAdapter m_imageLock;
+};
+
+class KisDocument::Private::SavingImageSetter {
+public:
+    SavingImageSetter(KisDocument::Private *_d, KisImageSP image)
+        : d(_d)
+    {
+        d->savingImage = image;
+    }
+
+    ~SavingImageSetter() {
+        d->savingImage.clear();
+    }
+
+private:
+    KisDocument::Private *d;
 };
 
 
@@ -702,11 +728,24 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
         if (!isNativeFormat(outputMimeType)) {
 
-            if (!prepareLocksForSaving()) {
-                return false;
+            {
+                Private::SafeSavingLocker locker(d);
+
+                if (!locker.successfullyLocked()) {
+                    d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
+                    locker.doEmergencyLock();
+                }
+
+                if (!locker.successfullyLocked()) {
+                    d->lastErrorMessage = i18n("Could not lock the image for saving.");
+                    return false;
+                }
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(d->image->locked());
+                Private::SavingImageSetter savingImageSetter(d, d->image);
+
+                status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
             }
-            status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
-            unlockAfterSaving();
 
             ret = status == KisImportExportFilter::OK;
             suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph || d->importExportManager->getBatchMode());
@@ -942,58 +981,25 @@ bool KisDocument::isModified() const
     return d->modified;
 }
 
-bool KisDocument::prepareLocksForSaving()
-{
-    KisImageSP copiedImage;
-    // XXX: Restore this when
-    // a) cloning works correctly and
-    // b) doesn't take ages because it needs to refresh its entire graph and finally,
-    // c) we do use the saving image to save in the background.
-    {
-        Private::SafeSavingLocker locker(d);
-        if (locker.successfullyLocked()) {
-            copiedImage = d->image; //->clone(true);
-        } else if (!isAutosaving()) {
-            // even though it is a recovery operation, we should ensure we do not enter saving twice!
-            std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
-
-            if (l.owns_lock()) {
-                d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
-                d->image->lock();
-                copiedImage = d->image; //->clone(true);
-                //copiedImage->initialRefreshGraph();
-                d->image->unlock();
-            }
-        }
-    }
-
-    bool result = false;
-
-    // ensure we do not enter saving twice
-    if (copiedImage && d->savingMutex.tryLock()) {
-        d->savingImage = copiedImage;
-        result = true;
-    } else {
-        qWarning() << "Could not lock the document for saving!";
-        d->lastErrorMessage = i18n("Could not lock the image for saving.");
-    }
-
-    return result;
-}
-
-void KisDocument::unlockAfterSaving()
-{
-    d->savingImage = 0;
-    d->savingMutex.unlock();
-}
-
 bool KisDocument::saveNativeFormat(const QString & file)
 {
-    if (!prepareLocksForSaving()) {
+    d->lastErrorMessage.clear();
+
+    Private::SafeSavingLocker locker(d);
+
+    if (!locker.successfullyLocked()) {
+        d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
+        locker.doEmergencyLock();
+    }
+
+    if (!locker.successfullyLocked()) {
+        d->lastErrorMessage = i18n("Could not lock the image for saving.");
         return false;
     }
 
-    d->lastErrorMessage.clear();
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->image->locked());
+    Private::SavingImageSetter savingImageSetter(d, d->image);
+
     //dbgUI <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Auto;
@@ -1007,10 +1013,8 @@ bool KisDocument::saveNativeFormat(const QString & file)
         if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             bool success = saveToStream(&f);
             f.close();
-            unlockAfterSaving();
             return success;
         } else {
-            unlockAfterSaving();
             return false;
         }
     }
@@ -1025,7 +1029,6 @@ bool KisDocument::saveNativeFormat(const QString & file)
     }
     if (store->bad()) {
         d->lastErrorMessage = i18n("Could not create the file for saving");   // more details needed?
-        unlockAfterSaving();
         delete store;
         return false;
     }
@@ -1038,7 +1041,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
     } else {
         result = saveNativeFormatCalligraImpl(store);
     }
-    unlockAfterSaving();
+
     return result;
 }
 

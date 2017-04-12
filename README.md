@@ -18,6 +18,10 @@ If you're building on Windows or OSX you'll need to build some third-party depen
 
 If you're building on Linux, please follow David Revoy's Cat Guide: http://www.davidrevoy.com/article193/guide-building-krita-on-linux-for-cats
 
+Other developer guides, notes and wiki:
+
+https://community.kde.org/Krita
+
 ### Bugs and Wishes
 
 https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1315444&product=krita&query_format=advanced

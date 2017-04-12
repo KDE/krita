@@ -272,16 +272,20 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     }
 
-    KisPreExportChecker checker;
+    QStringList warnings;
+    QStringList errors;
+
     if (direction == Export) {
+        KisPreExportChecker checker;
         checker.check(m_document->image(), filter->exportChecks());
+
+        warnings = checker.warnings();
+        errors = checker.errors();
     }
 
     KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
     bool alsoAsKra = false;
 
-    QStringList warnings = checker.warnings();
-    QStringList errors = checker.errors();
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.
     if (!m_document->assistants().isEmpty() && typeName != m_document->nativeFormatMimeType()) {
@@ -319,7 +323,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         QWidget *page = new QWidget(&dlg);
         QVBoxLayout *layout = new QVBoxLayout(page);
 
-        if (!checker.warnings().isEmpty()) {
+        if (!warnings.isEmpty()) {
 
             if (showWarnings) {
 
@@ -372,12 +376,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
 
         QCheckBox *chkAlsoAsKra = 0;
-        if (showWarnings) {
-            if (!checker.warnings().isEmpty()) {
-                chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
-                chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
-                layout->addWidget(chkAlsoAsKra);
-            }
+        if (showWarnings && !warnings.isEmpty()) {
+            chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
+            chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
+            layout->addWidget(chkAlsoAsKra);
         }
 
         dlg.setMainWidget(page);

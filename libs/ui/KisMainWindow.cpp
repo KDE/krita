@@ -886,8 +886,19 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     KisDelayedSaveDialog dlg(document->image(), KisDelayedSaveDialog::SaveDialog, 0, this);
     dlg.blockIfImageIsBusy();
 
-    if (dlg.result() != QDialog::Accepted) {
+    if (dlg.result() == KisDelayedSaveDialog::Rejected) {
         return false;
+    } else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
+        QMessageBox::critical(0,
+                              i18nc("@title:window", "Krita"),
+                              i18n("You are saving a file while the image is "
+                                   "still rendering. The saved file may be "
+                                   "incomplete or corrupted.\n\n"
+                                   "Please select a location where the original "
+                                   "file will not be overridden!"));
+
+
+        saveas = true;
     }
 
     bool reset_url;

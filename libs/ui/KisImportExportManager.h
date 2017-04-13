@@ -129,6 +129,9 @@ private:
 
     KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 
+    KisImportExportFilter::ConversionStatus doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter);
+    KisImportExportFilter::ConversionStatus doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
+
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);
     KisImportExportManager &operator=(const KisImportExportManager& rhs);

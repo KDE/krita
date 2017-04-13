@@ -402,71 +402,43 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     }
 
-    QFile io(location);
-    QSaveFile out(location);
-
-    if (direction == Import) {
-        if (!io.exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-        if (!io.open(QFile::ReadOnly) ) {
-            return KisImportExportFilter::FileNotFound;
-        }
-    }
-    else if (direction == Export) {
-        if (filter->supportsIO()) {
-            out.setDirectWriteFallback(true);
-            if (!out.open(QFile::WriteOnly)) {
-                out.cancelWriting();
-                return KisImportExportFilter::CreationError;
-            }
-        }
-    }
-    else {
-        return KisImportExportFilter::BadConversionGraph;
-    }
+    KIS_ASSERT_RECOVER_RETURN_VALUE(
+                direction == Import || direction == Export,
+                KisImportExportFilter::BadConversionGraph);
 
     if (!batchMode()) {
         QApplication::setOverrideCursor(Qt::WaitCursor);
     }
 
-    KisImportExportFilter::ConversionStatus status;
-    if (direction == Import || !filter->supportsIO()) {
-         status = filter->convert(m_document, &io, exportConfiguration);
-         if (io.isOpen()) io.close();
-    }
-    else {
-        status = filter->convert(m_document, &out, exportConfiguration);
-        if (status != KisImportExportFilter::OK) {
-            out.cancelWriting();
-        }
-        else {
-            out.commit();
+    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+    if (direction == Import) {
+        status = doImport(location, filter);
+    } else /* if (direction == Export) */ {
+        status = doExport(location, filter, exportConfiguration);
+
+        if (alsoAsKra && status == KisImportExportFilter::OK) {
+            QString kraLocation = location + ".kra";
+            QByteArray mime = m_document->nativeFormatMimeType();
+            QSharedPointer<KisImportExportFilter> filter(
+                filterForMimeType(QString::fromLatin1(mime), Export));
+
+            KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
+
+            if (filter) {
+                filter->setFilename(kraLocation);
+
+                KisPropertiesConfigurationSP kraExportConfiguration =
+                    filter->lastSavedConfiguration(mime, mime);
+
+                status = doExport(kraLocation, filter, kraExportConfiguration);
+            } else {
+                status = KisImportExportFilter::FilterCreationError;
+            }
         }
     }
 
     if (exportConfiguration) {
         KisConfig().setExportConfiguration(typeName, exportConfiguration);
-    }
-
-    if (alsoAsKra) {
-        QString l = location + ".kra";
-        QByteArray ba = m_document->nativeFormatMimeType();
-        KisImportExportFilter *filter = filterForMimeType(QString::fromLatin1(ba), Export);
-        QSaveFile f(l);
-        f.open(QIODevice::WriteOnly);
-        if (filter) {
-            filter->setFilename(l);
-            if (filter->convert(m_document, &f) == KisImportExportFilter::OK) {
-                f.commit();
-            }
-            else {
-                f.cancelWriting();
-            }
-        }
-        delete filter;
-
     }
 
     if (!batchMode()) {
@@ -477,5 +449,47 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
 }
 
+KisImportExportFilter::ConversionStatus KisImportExportManager::doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter)
+{
+    QFile file(location);
+    if (!file.exists()) {
+        return KisImportExportFilter::FileNotFound;
+    }
+
+    if (filter->supportsIO() && !file.open(QFile::ReadOnly)) {
+        return KisImportExportFilter::FileNotFound;
+    }
+
+    KisImportExportFilter::ConversionStatus status =
+        filter->convert(m_document, &file, KisPropertiesConfigurationSP());
+
+    if (file.isOpen()) {
+        file.close();
+    }
+
+    return status;
+}
+
+KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
+{
+    QSaveFile file(location);
+    file.setDirectWriteFallback(true);
+
+    if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
+        file.cancelWriting();
+        return KisImportExportFilter::CreationError;
+    }
+
+    KisImportExportFilter::ConversionStatus status =
+        filter->convert(m_document, &file, exportConfiguration);
+
+    if (status != KisImportExportFilter::OK) {
+        file.cancelWriting();
+    } else {
+        file.commit();
+    }
+
+    return status;
+}
 
 #include <KisMimeDatabase.h>

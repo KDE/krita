@@ -54,6 +54,7 @@
 #include "KisDocument.h"
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include "kis_painter.h"
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
 #include "kis_popup_button.h"
@@ -251,17 +252,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         if (exportConfiguration) {
             // Fill with some meta information about the image
             KisImageWSP image = m_document->image();
-            KisPaintDeviceSP pd = image->projection();
-
-            bool isThereAlpha = false;
-            KisSequentialConstIterator it(pd, image->bounds());
-            const KoColorSpace* cs = pd->colorSpace();
-            do {
-                if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
-                    isThereAlpha = true;
-                    break;
-                }
-            } while (it.nextPixel());
+            KisPaintDeviceSP dev = image->projection();
+            const KoColorSpace* cs = dev->colorSpace();
+            const bool isThereAlpha =
+                KisPainter::checkDeviceHasTransparency(image->projection());
 
             exportConfiguration->setProperty("ImageContainsTransparency", isThereAlpha);
             exportConfiguration->setProperty("ColorModelID", cs->colorModelId().id());

@@ -217,6 +217,9 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
+    // export configuration is supported for export only
+    KIS_SAFE_ASSERT_RECOVER_NOOP(direction == Export || !bool(exportConfiguration));
+
 
     QString typeName = mimeType;
     if (typeName.isEmpty()) {
@@ -257,11 +260,14 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             const bool isThereAlpha =
                 KisPainter::checkDeviceHasTransparency(image->projection());
 
-            exportConfiguration->setProperty("ImageContainsTransparency", isThereAlpha);
-            exportConfiguration->setProperty("ColorModelID", cs->colorModelId().id());
-            exportConfiguration->setProperty("ColorDepthID", cs->colorDepthId().id());
-            bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
-            exportConfiguration->setProperty("sRGB", sRGB);
+            exportConfiguration->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, isThereAlpha);
+            exportConfiguration->setProperty(KisImportExportFilter::ColorModelIDTag, cs->colorModelId().id());
+            exportConfiguration->setProperty(KisImportExportFilter::ColorDepthIDTag, cs->colorDepthId().id());
+
+            const bool sRGB =
+                    (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
+                     !cs->profile()->name().contains(QLatin1String("g10")));
+            exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
         }
 
     }

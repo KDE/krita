@@ -152,11 +152,16 @@ void KisPNGExport::initializeCapabilities()
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
-    bool isThereAlpha = cfg->getBool("isThereAlpha");
+    // the export manager should have prepared some info for us!
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::ImageContainsTransparencyTag));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::ColorModelIDTag));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::sRGBTag));
+
+    const bool isThereAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag);
 
     alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
 
-    if (cfg->getString("ColorModelID") == RGBAColorModelID.id()) {
+    if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == RGBAColorModelID.id()) {
         tryToSaveAsIndexed->setVisible(true);
         if (alpha->isChecked()) {
             tryToSaveAsIndexed->setChecked(false);
@@ -177,7 +182,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
-    bool sRGB = cfg->getBool("sRGB", false);
+    const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
     chkSRGB->setEnabled(sRGB);
     chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));

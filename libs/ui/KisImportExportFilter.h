@@ -64,7 +64,11 @@ class KisConfigWidget;
 class KRITAUI_EXPORT KisImportExportFilter : public QObject
 {
     Q_OBJECT
-
+public:
+    static const QString ImageContainsTransparencyTag;
+    static const QString ColorModelIDTag;
+    static const QString ColorDepthIDTag;
+    static const QString sRGBTag;
 public:
     /**
      * This enum is used to signal the return state of your filter.

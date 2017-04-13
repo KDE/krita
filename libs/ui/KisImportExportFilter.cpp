@@ -31,6 +31,11 @@ Boston, MA 02110-1301, USA.
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
 
+const QString KisImportExportFilter::ImageContainsTransparencyTag = "ImageContainsTransparency";
+const QString KisImportExportFilter::ColorModelIDTag = "ColorModelID";
+const QString KisImportExportFilter::ColorDepthIDTag = "ColorDepthID";
+const QString KisImportExportFilter::sRGBTag = "sRGB";
+
 class Q_DECL_HIDDEN KisImportExportFilter::Private
 {
 public:

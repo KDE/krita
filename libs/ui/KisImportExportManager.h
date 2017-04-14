@@ -129,6 +129,10 @@ private:
 
     KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 
+
+    void fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration);
+    bool askUserAboutExportConfiguration(QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, const QByteArray &from, const QByteArray &to, bool batchMode, const bool showWarnings, bool *alsoAsKra);
+
     KisImportExportFilter::ConversionStatus doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter);
     KisImportExportFilter::ConversionStatus doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
 

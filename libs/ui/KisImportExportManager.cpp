@@ -289,10 +289,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         } else {
             status = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
-    }
 
-    if (exportConfiguration) {
-        KisConfig().setExportConfiguration(typeName, exportConfiguration);
+        if (exportConfiguration) {
+            KisConfig().setExportConfiguration(typeName, exportConfiguration);
+        }
     }
 
     return status;
@@ -446,7 +446,7 @@ KisImportExportManager::askUserAboutExportConfiguration(
         }
 
         if (wdg) {
-            exportConfiguration = wdg->configuration();
+            *exportConfiguration = *wdg->configuration();
         }
     }
 

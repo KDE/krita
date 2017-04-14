@@ -35,9 +35,7 @@ public:
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
 
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from, const QByteArray& to) const;
-    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
-
 };
 
 #endif

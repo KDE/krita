@@ -153,14 +153,6 @@ KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArra
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
-{
-    QString filterConfig = KisConfig().exportConfiguration(to);
-    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    cfg->fromXML(filterConfig, false);
-    return cfg;
-}
-
 KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisTIFFOptionsWidget(parent);

@@ -125,14 +125,6 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisPNGExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
-{
-    QString filterConfig = KisConfig().exportConfiguration("PNG");
-    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    cfg->fromXML(filterConfig, false);
-    return cfg;
-}
-
 KisConfigWidget *KisPNGExport::createConfigurationWidget(QWidget *parent, const QByteArray &, const QByteArray &) const
 {
     return new KisWdgOptionsPNG(parent);

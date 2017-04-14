@@ -59,6 +59,7 @@
 #include "kis_grid_config.h"
 #include "kis_popup_button.h"
 #include <kis_iterator_ng.h>
+#include "kis_async_action_feedback.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -259,11 +260,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
     if (direction == Import) {
         if (!batchMode()) {
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-        }
-        status = doImport(location, filter);
-        if (!batchMode()) {
-            QApplication::restoreOverrideCursor();
+            KisAsyncActionFeedback f(i18n("Opening document..."), 0);
+            status = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
+        } else {
+            status = doImport(location, filter);
         }
     } else /* if (direction == Export) */ {
         if (!exportConfiguration) {
@@ -284,33 +284,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         }
 
         if (!batchMode()) {
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-        }
-
-        status = doExport(location, filter, exportConfiguration);
-
-        if (alsoAsKra && status == KisImportExportFilter::OK) {
-            QString kraLocation = location + ".kra";
-            QByteArray mime = m_document->nativeFormatMimeType();
-            QSharedPointer<KisImportExportFilter> filter(
-                filterForMimeType(QString::fromLatin1(mime), Export));
-
-            KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
-
-            if (filter) {
-                filter->setFilename(kraLocation);
-
-                KisPropertiesConfigurationSP kraExportConfiguration =
-                    filter->lastSavedConfiguration(mime, mime);
-
-                status = doExport(kraLocation, filter, kraExportConfiguration);
-            } else {
-                status = KisImportExportFilter::FilterCreationError;
-            }
-        }
-
-        if (!batchMode()) {
-            QApplication::restoreOverrideCursor();
+            KisAsyncActionFeedback f(i18n("Saving document..."), 0);
+            status = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+        } else {
+            status = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
     }
 
@@ -497,7 +474,35 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doImport(const Q
     return status;
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
+{
+    KisImportExportFilter::ConversionStatus status =
+        doExportImpl(location, filter, exportConfiguration);
+
+    if (alsoAsKra && status == KisImportExportFilter::OK) {
+        QString kraLocation = location + ".kra";
+        QByteArray mime = m_document->nativeFormatMimeType();
+        QSharedPointer<KisImportExportFilter> filter(
+            filterForMimeType(QString::fromLatin1(mime), Export));
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
+
+        if (filter) {
+            filter->setFilename(kraLocation);
+
+            KisPropertiesConfigurationSP kraExportConfiguration =
+                filter->lastSavedConfiguration(mime, mime);
+
+            status = doExportImpl(kraLocation, filter, kraExportConfiguration);
+        } else {
+            status = KisImportExportFilter::FilterCreationError;
+        }
+    }
+
+    return status;
+}
+
+KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
 {
     QSaveFile file(location);
     file.setDirectWriteFallback(true);

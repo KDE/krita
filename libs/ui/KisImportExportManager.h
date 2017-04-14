@@ -134,7 +134,9 @@ private:
     bool askUserAboutExportConfiguration(QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, const QByteArray &from, const QByteArray &to, bool batchMode, const bool showWarnings, bool *alsoAsKra);
 
     KisImportExportFilter::ConversionStatus doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter);
-    KisImportExportFilter::ConversionStatus doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
+
+    KisImportExportFilter::ConversionStatus doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra);
+    KisImportExportFilter::ConversionStatus doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);

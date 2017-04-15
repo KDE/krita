@@ -1040,7 +1040,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                 //
                 document->setOutputMimeType(outputFormat);
                 if (!d->isExporting) {  // Save As
-                    ret = document->saveAs(newURL);
+                    ret = document->saveAs(newURL, true);
 
                     if (ret) {
                         dbgUI << "Successful Save As!";
@@ -1075,7 +1075,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
         // be sure document has the correct outputMimeType!
         if (d->isExporting || document->isModified()) {
-            ret = document->save();
+            ret = document->save(true, 0);
         }
 
         if (!ret) {

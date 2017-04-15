@@ -113,6 +113,7 @@
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include <mutex>
+#include "kis_config_notifier.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -182,7 +183,8 @@ class UndoStack : public KUndo2Stack
 {
 public:
     UndoStack(KisDocument *doc)
-        : m_doc(doc)
+        : KUndo2Stack(doc),
+          m_doc(doc)
     {
     }
 
@@ -245,31 +247,17 @@ private:
 class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
-    Private() :
-        docInfo(0),
-        progressUpdater(0),
-        progressProxy(0),
-        importExportManager(0),
-        isImporting(false),
-        isExporting(false),
-        password(QString()),
-        modifiedAfterAutosave(false),
-        isAutosaving(false),
-        backupFile(true),
-        doNotSaveExtDoc(false),
-        undoStack(0),
-        m_saveOk(false),
-        m_waitForSave(false),
-        m_duringSaveAs(false),
+    Private(KisDocument *q) :
+        docInfo(new KoDocumentInfo(q)), // deleted by QObject
+        importExportManager(new KisImportExportManager(q)), // deleted manually
+        undoStack(new UndoStack(q)), // deleted by QObject
         m_bAutoDetectedMime(false),
         modified(false),
         readwrite(true),
-        disregardAutosaveFailure(false),
-        nserver(0),
-        macroNestDepth(0),
+        firstMod(QDateTime::currentDateTime()),
+        lastMod(firstMod),
+        nserver(new KisNameServer(1)),
         imageIdleWatcher(2000 /*ms*/),
-        suppressProgress(false),
-        fileProgressProxy(0),
         savingLock(&savingMutex)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
@@ -279,73 +267,84 @@ public:
         }
     }
 
+    Private(const Private &rhs, KisDocument *q) :
+        docInfo(new KoDocumentInfo(*rhs.docInfo, q)),
+        unit(rhs.unit),
+        importExportManager(new KisImportExportManager(q)),
+        mimeType(rhs.mimeType),
+        outputMimeType(rhs.outputMimeType),
+        undoStack(new UndoStack(q)),
+        guidesConfig(rhs.guidesConfig),
+        m_bAutoDetectedMime(rhs.m_bAutoDetectedMime),
+        m_url(rhs.m_url),
+        m_file(rhs.m_file),
+        modified(rhs.modified),
+        readwrite(rhs.readwrite),
+        firstMod(rhs.firstMod),
+        lastMod(rhs.lastMod),
+        nserver(new KisNameServer(*rhs.nserver)),
+        preActivatedNode(rhs.preActivatedNode),
+        imageIdleWatcher(2000 /*ms*/),
+        assistants(rhs.assistants), // WARNING: assistants should not store pointers to the document!
+        gridConfig(rhs.gridConfig),
+        savingLock(&savingMutex)
+    {
+    }
+
     ~Private() {
         // Don't delete m_d->shapeController because it's in a QObject hierarchy.
         delete nserver;
     }
 
-    KoDocumentInfo *docInfo;
+    KoDocumentInfo *docInfo = 0;
 
-    KoProgressUpdater *progressUpdater;
-    KoProgressProxy *progressProxy;
+    KoProgressUpdater *progressUpdater = 0;
+    KoProgressProxy *progressProxy = 0;
 
     KoUnit unit;
 
-    KisImportExportManager *importExportManager; // The filter-manager to use when loading/saving [for the options]
+    KisImportExportManager *importExportManager = 0; // The filter-manager to use when loading/saving [for the options]
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
 
-    bool isImporting;
-    bool isExporting; // File --> Import/Export vs File --> Open/Save
-    QString password; // The password used to encrypt an encrypted document
-
     QTimer autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     QString lastWarningMessage;
-    int autoSaveDelay {300}; // in seconds, 0 to disable.
-    bool modifiedAfterAutosave;
-    bool isAutosaving;
-    bool backupFile;
-    bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
+    int autoSaveDelay = 300; // in seconds, 0 to disable.
+    bool modifiedAfterAutosave = false;
+    bool isAutosaving = false;
+    bool disregardAutosaveFailure = false;
 
-    KUndo2Stack *undoStack;
+    KUndo2Stack *undoStack = 0;
 
     KisGuidesConfig guidesConfig;
 
-    QUrl m_originalURL; // for saveAs
-    QString m_originalFilePath; // for saveAs
-    bool m_saveOk;
-    bool m_waitForSave;
-    bool m_duringSaveAs;
-    bool m_bAutoDetectedMime; // whether the mimetype in the arguments was detected by the part itself
+    bool m_bAutoDetectedMime = false; // whether the mimetype in the arguments was detected by the part itself
     QUrl m_url; // local url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
-    QEventLoop m_eventLoop;
+
     QMutex savingMutex;
 
-    bool modified;
-    bool readwrite;
+    bool modified = false;
+    bool readwrite = false;
 
     QDateTime firstMod;
     QDateTime lastMod;
 
-    bool disregardAutosaveFailure;
-
     KisNameServer *nserver;
-    qint32 macroNestDepth;
 
     KisImageSP image;
     KisImageSP savingImage;
 
     KisNodeSP preActivatedNode;
-    KisShapeController* shapeController;
-    KoShapeController* koShapeController;
+    KisShapeController* shapeController = 0;
+    KoShapeController* koShapeController = 0;
     KisIdleWatcher imageIdleWatcher;
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
-    bool suppressProgress;
-    KoProgressProxy* fileProgressProxy;
+    bool suppressProgress = false;
+    KoProgressProxy* fileProgressProxy = 0;
 
     QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
@@ -433,37 +432,39 @@ private:
 };
 
 KisDocument::KisDocument()
-    : d(new Private())
+    : d(new Private(this))
 {
-    d->undoStack = new UndoStack(this);
-    d->undoStack->setParent(this);
-
-    d->importExportManager = new KisImportExportManager(this);
-    d->importExportManager->setProgresUpdater(d->progressUpdater);
-
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-    KisConfig cfg;
-    setAutoSaveDelay(cfg.autoSaveInterval());
-
     setObjectName(newObjectName());
-
-    d->docInfo = new KoDocumentInfo(this);
-
-    d->firstMod = QDateTime::currentDateTime();
-    d->lastMod = QDateTime::currentDateTime();
-
 
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    d->nserver = new KisNameServer(1);
+    d->shapeController = new KisShapeController(this, d->nserver),
+    d->koShapeController = new KoShapeController(0, d->shapeController),
 
-    d->shapeController = new KisShapeController(this, d->nserver);
-    d->koShapeController = new KoShapeController(0, d->shapeController);
+    slotConfigChanged();
+}
 
-    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
+KisDocument::KisDocument(const KisDocument &rhs)
+    : QObject(),
+      d(new Private(*rhs.d, this))
+{
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
-    setBackupFile(KisConfig().backupFile());
+    connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    setObjectName(rhs.objectName());
+
+    d->shapeController = new KisShapeController(this, d->nserver),
+    d->koShapeController = new KoShapeController(0, d->shapeController),
+
+    slotConfigChanged();
+
+    // clone the image with keeping the GUIDs of the layers intact
+    // NOTE: we expect the image to be locked!
+    setCurrentImage(rhs.image()->clone(true));
 }
 
 KisDocument::~KisDocument()
@@ -530,8 +531,6 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
     //qDebug() << "exportDocument" << _url.toDisplayString() << "is autosaving" << d->isAutosaving;
     bool ret;
 
-    d->isExporting = true;
-
     //
     // Preserve a lot of state here because we need to restore it in order to
     // be able to fake a File --> Export.  Can't do this in saveFile() because,
@@ -548,7 +547,7 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
     bool wasModified = isModified();
 
     // save...
-    ret = saveAs(_url, exportConfiguration);
+    ret = saveAs(_url, true, exportConfiguration);
 
     //
     // This is sooooo hacky :(
@@ -569,42 +568,36 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
         setModified(wasModified);
    }
 
-    d->isExporting = false;
-
     return ret;
 }
 
-bool KisDocument::saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::saveAs(const QUrl &url, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     //qDebug() << "saveAs" << url;
     if (!url.isValid() || !url.isLocalFile()) {
         errKrita << "saveAs: Malformed URL " << url.url() << endl;
         return false;
     }
-    d->m_duringSaveAs = true;
-    d->m_originalURL = d->m_url;
-    d->m_originalFilePath = d->m_file;
+
+    QUrl originalURL = d->m_url;
+    QString originalFilePath = d->m_file;
+
     d->m_url = url; // Store where to upload in saveToURL
     d->m_file = d->m_url.toLocalFile();
 
-    bool result = save(exportConfiguration); // Save local file and upload local file
+    bool result = save(showWarnings, exportConfiguration); // Save local file and upload local file
 
     if (!result) {
-        d->m_url = d->m_originalURL;
-        d->m_file = d->m_originalFilePath;
-        d->m_duringSaveAs = false;
-        d->m_originalURL = QUrl();
-        d->m_originalFilePath.clear();
+        d->m_url = originalURL;
+        d->m_file = originalFilePath;
     }
 
     return result;
 }
 
-bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     //qDebug() << "save" << d->m_file << d->m_url << url() << localFilePath();
-
-    d->m_saveOk = false;
 
     if (d->m_file.isEmpty()) { // document was created empty
         d->m_file = d->m_url.toLocalFile();
@@ -615,17 +608,13 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     setFileProgressProxy();
     setUrl(url());
 
-    bool ok = saveFile(localFilePath(), exportConfiguration);
+    bool ok = saveFile(localFilePath(), showWarnings, exportConfiguration);
 
     clearFileProgressProxy();
 
     if (ok) {
         setModified( false );
         emit completed();
-        d->m_saveOk = true;
-        d->m_duringSaveAs = false;
-        d->m_originalURL = QUrl();
-        d->m_originalFilePath.clear();
         return true; // Nothing to do
     }
     else {
@@ -656,7 +645,7 @@ QByteArray KisDocument::serializeToNativeByteArray()
     return byteArray;
 }
 
-bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::saveFile(const QString &filePath, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!prepareLocksForSaving()) {
         return false;
@@ -687,8 +676,9 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
 
         //qDebug() << "saveFile. Is Autosaving?" << isAutosaving() << "url" << filePath << d->outputMimeType;
 
+        KisConfig cfg;
 
-        if (d->backupFile) {
+        if (cfg.backupFile()) {
             Q_ASSERT(url().isLocalFile());
             KBackup::backupFile(url().toLocalFile());
         }
@@ -698,7 +688,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
         setFileProgressUpdater(i18n("Saving Document"));
 
         //qDebug() << "saving to tempory file" << tempororaryFileName;
-        status = d->importExportManager->exportDocument(localFilePath(), filePath, outputMimeType, !d->isExporting , exportConfiguration);
+        status = d->importExportManager->exportDocument(localFilePath(), filePath, outputMimeType, showWarnings , exportConfiguration);
 
         ret = (status == KisImportExportFilter::OK);
         suppressErrorDialog = (fileBatchMode() || isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -801,16 +791,6 @@ bool KisDocument::fileBatchMode() const
 void KisDocument::setFileBatchMode(const bool batchMode)
 {
     d->importExportManager->setBatchMode(batchMode);
-}
-
-bool KisDocument::isImporting() const
-{
-    return d->isImporting;
-}
-
-bool KisDocument::isExporting() const
-{
-    return d->isExporting;
 }
 
 void KisDocument::slotAutoSave()
@@ -930,7 +910,6 @@ bool KisDocument::importDocument(const QUrl &_url)
     bool ret;
 
     dbgUI << "url=" << _url.url();
-    d->isImporting = true;
 
     // open...
     ret = openUrl(_url);
@@ -942,8 +921,6 @@ bool KisDocument::importDocument(const QUrl &_url)
         resetURL();
         setTitleModified();
     }
-
-    d->isImporting = false;
 
     return ret;
 }
@@ -1315,11 +1292,6 @@ void KisDocument::removeAutoSaveFiles()
     }
 }
 
-void KisDocument::setBackupFile(bool saveBackup)
-{
-    d->backupFile = saveBackup;
-}
-
 KoUnit KisDocument::unit() const
 {
     return d->unit;
@@ -1363,6 +1335,13 @@ void KisDocument::slotUndoStackIndexChanged(int idx)
 {
     // even if the document was already modified, call setModified to re-start autosave timer
     setModified(idx != d->undoStack->cleanIndex());
+}
+
+void KisDocument::slotConfigChanged()
+{
+    KisConfig cfg;
+    d->undoStack->setUndoLimit(cfg.undoStackLimit());
+    setAutoSaveDelay(cfg.autoSaveInterval());
 }
 
 void KisDocument::clearUndoHistory()

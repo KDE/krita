@@ -58,6 +58,17 @@ KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
                  .toString(Qt::ISODate));
 }
 
+KoDocumentInfo::KoDocumentInfo(const KoDocumentInfo &rhs, QObject *parent)
+    : QObject(parent),
+      m_aboutTags(rhs.m_aboutTags),
+      m_authorTags(rhs.m_authorTags),
+      m_authorInfo(m_authorInfo),
+      m_authorInfoOverride(m_authorInfoOverride),
+      m_aboutInfo(m_aboutInfo),
+      m_generator(m_generator)
+{
+}
+
 KoDocumentInfo::~KoDocumentInfo()
 {
 }

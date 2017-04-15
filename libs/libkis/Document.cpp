@@ -406,13 +406,13 @@ void Document::resizeImage(int w, int h)
 bool Document::save()
 {
     if (!d->document) return false;
-    return d->document->save();
+    return d->document->save(true, 0);
 }
 
 bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
-    return d->document->saveAs(QUrl::fromLocalFile(filename));
+    return d->document->saveAs(QUrl::fromLocalFile(filename), true);
 }
 
 Node* Document::createNode(const QString &name, const QString &nodeType)

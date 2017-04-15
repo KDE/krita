@@ -80,6 +80,15 @@ protected:
 
     explicit KisDocument();
 
+    /**
+     * @brief KisDocument makes a deep copy of the document \p rhs.
+     *        The caller *must* ensure that the image is properly
+     *        locked and is in consistent state before asking for
+     *        cloning.
+     * @param rhs the source document to copy from
+     */
+    explicit KisDocument(const KisDocument &rhs);
+
 public:
 
     enum OpenUrlFlags {
@@ -126,10 +135,6 @@ public:
      * KisDocument (URL, modified flag etc.). Call this instead of
      * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
      * File --> Export feature.
-     *
-     * @note This will call KisDocument::saveAs(). To differentiate this
-     *       from an ordinary Save operation (in any reimplementation of
-     *       saveFile()) call isExporting().
      */
     bool exportDocument(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration = 0);
 
@@ -299,12 +304,6 @@ public:
      * Performs a cleanup of unneeded backup files
      */
     void removeAutoSaveFiles();
-
-    /**
-     * @brief setBackupFile enable/disable saving a backup of the file on saving
-     * @param saveBackup if true, Krita will save a backup of the file
-     */
-    void setBackupFile(bool saveBackup);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
@@ -477,27 +476,11 @@ private:
      *  Applies a filter if necessary, and calls exportDocument in any case
      *  You should not have to reimplement, except for very special cases.
      */
-    bool saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool saveFile(const QString &filePath, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 
     /** @internal */
     void setModified();
-
-    /**
-     *  Returns whether or not the current openUrl() or openFile() call is
-     *  actually an import operation (like File --> Import).
-     *  This is for informational purposes only.
-     */
-    bool isImporting() const;
-
-    /**
-     *  Returns whether or not the current saveFile() call is actually an export
-     *  operation (like File --> Export).
-     *  If this function returns true during saveFile() and you are changing
-     *  some sort of state, you _must_ restore it before the end of saveFile();
-     *  otherwise, File --> Export will not work properly.
-     */
-    bool isExporting() const;
 
 public:
 
@@ -517,7 +500,7 @@ public:
 
     bool closeUrl(bool promptToSave = true);
 
-    bool saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfigration = 0);
+    bool saveAs(const QUrl &url, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
 
     /**
      * Create a new image that has this document as a parent and
@@ -591,7 +574,7 @@ public:
     QList<KisPaintingAssistantSP> assistants() const;
     void setAssistants(const QList<KisPaintingAssistantSP> value);
 
-    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 
 Q_SIGNALS:
 
@@ -606,6 +589,8 @@ private Q_SLOTS:
 
     /// Called by the undo stack when undo or redo is called
     void slotUndoStackIndexChanged(int idx);
+
+    void slotConfigChanged();
 
 
 private:

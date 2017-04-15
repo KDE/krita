@@ -1045,17 +1045,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
-
-        KisPart *part = KisPart::instance();
-        if (part) {
-            Q_FOREACH (QPointer<KisDocument> doc, part->documents()) {
-                if (doc) {
-                    doc->setAutoSaveDelay(dialog->m_general->autoSaveInterval());
-                    doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-                    doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
-                }
-            }
-        }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());
 

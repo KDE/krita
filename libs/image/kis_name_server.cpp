@@ -23,6 +23,11 @@ KisNameServer::KisNameServer(qint32 seed)
     m_generator = seed;
 }
 
+KisNameServer::KisNameServer(const KisNameServer &rhs)
+    : m_generator(rhs.m_generator)
+{
+}
+
 KisNameServer::~KisNameServer()
 {
 }

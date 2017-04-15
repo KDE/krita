@@ -475,9 +475,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
                 else if (m_mainWindow) {
-                    KisDocument *doc = KisPart::instance()->createDocument();
-                    doc->setFileBatchMode(m_batchRun);
-                    if (m_mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
+                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                    if (m_mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
                         if (print) {
                             m_mainWindow->slotFilePrint();
                             nPrinted++;
@@ -586,9 +585,8 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
                 createNewDocFromTemplate(filename, mw);
             }
             else if (QFile(filename).exists()) {
-                KisDocument *doc = KisPart::instance()->createDocument();
-                doc->setFileBatchMode(m_batchRun);
-                mw->openDocumentInternal(QUrl::fromLocalFile(filename), doc);
+                KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                mw->openDocument(QUrl::fromLocalFile(filename), flags);
             }
         }
     }
@@ -598,9 +596,8 @@ void KisApplication::fileOpenRequested(const QString &url)
 {
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
-        KisDocument *doc = KisPart::instance()->createDocument();
-        doc->setFileBatchMode(m_batchRun);
-        mainWindow->openDocumentInternal(QUrl::fromLocalFile(url), doc);
+        KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+        mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
     }
 }
 
@@ -653,9 +650,8 @@ void KisApplication::checkAutosaveFiles()
             }
             if (m_mainWindow) {
                 Q_FOREACH (const QUrl &url, autosaveUrls) {
-                    KisDocument *doc = KisPart::instance()->createDocument();
-                    doc->setFileBatchMode(m_batchRun);
-                    m_mainWindow->openDocumentInternal(url, doc);
+                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                    m_mainWindow->openDocument(url, flags);
                 }
             }
         }
@@ -703,11 +699,8 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QUrl templateURL;
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
 
-        KisDocument *doc = KisPart::instance()->createDocument();
-        doc->setFileBatchMode(m_batchRun);
-        if (mainWindow->openDocumentInternal(templateURL, doc)) {
-            doc->resetURL();
-            doc->setTitleModified();
+        KisMainWindow::OpenFlags batchFlags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+        if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {
             dbgUI << "Template loaded...";
             return true;
         }

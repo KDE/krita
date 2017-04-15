@@ -593,7 +593,7 @@ void KisView::dropEvent(QDropEvent *event)
                         else {
                             Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
                             if (mainWindow()) {
-                                mainWindow()->openDocument(url);
+                                mainWindow()->openDocument(url, KisMainWindow::None);
                             }
                         }
                     }
@@ -714,7 +714,7 @@ bool KisView::queryClose()
         switch (res) {
         case QMessageBox::Yes : {
             bool isNative = (document()->outputMimeType() == document()->nativeFormatMimeType());
-            if (!viewManager()->mainWindow()->saveDocument(document(), !isNative))
+            if (!viewManager()->mainWindow()->saveDocument(document(), !isNative, false))
                 return false;
             break;
         }

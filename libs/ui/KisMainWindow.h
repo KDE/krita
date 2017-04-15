@@ -61,6 +61,14 @@ class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSuperv
     Q_OBJECT
 
 public:
+    enum OpenFlag {
+        None,
+        Import,
+        BatchMode
+    };
+    Q_DECLARE_FLAGS(OpenFlags, OpenFlag)
+
+public:
 
     /**
      *  Constructor.
@@ -113,7 +121,7 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const QUrl &url);
+    bool openDocument(const QUrl &url, OpenFlags flags);
 
     void setReadWrite(bool readwrite);
 
@@ -140,7 +148,7 @@ public:
 
     void addViewAndNotifyLoadingCompleted(KisDocument *document);
 
-    QStringList showOpenFileDialog();
+    QStringList showOpenFileDialog(bool isImporting);
 
     /**
      * Shows if the main window is saving anything right now. If the
@@ -196,7 +204,7 @@ public Q_SLOTS:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new mainwindow will be opened for showing the opened file.
      */
-    void slotFileOpen();
+    void slotFileOpen(bool isImporting = false);
 
     /**
      *  Slot for opening a file among the recently opened files.
@@ -231,7 +239,7 @@ public Q_SLOTS:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(KisDocument *document, bool saveas = false);
+    bool saveDocument(KisDocument *document, bool saveas, bool isExporting);
 
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
@@ -401,7 +409,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const QUrl &url, KisDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
 
     /**
      * Reloads the recent documents list.
@@ -455,5 +463,7 @@ private:
     bool m_dieOnError;
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)
 
 #endif

@@ -33,6 +33,8 @@
 #include <QCheckBox>
 #include <QSaveFile>
 #include <QGroupBox>
+#include <QFuture>
+#include <QtConcurrent>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
@@ -72,6 +74,42 @@ public:
     QPointer<KoProgressUpdater> progressUpdater {0};
 };
 
+struct KisImportExportManager::ConversionResult {
+    ConversionResult()
+    {
+    }
+
+    ConversionResult(const QFuture<KisImportExportFilter::ConversionStatus> &futureStatus)
+        : m_isAsync(true),
+          m_futureStatus(futureStatus)
+    {
+    }
+
+    ConversionResult(KisImportExportFilter::ConversionStatus status)
+        : m_isAsync(false),
+          m_status(status)
+    {
+    }
+
+    bool isAsync() const {
+        return m_isAsync;
+    }
+
+    QFuture<KisImportExportFilter::ConversionStatus> futureStatus() const {
+        return m_futureStatus;
+    }
+
+    KisImportExportFilter::ConversionStatus status() const {
+        return m_status;
+    }
+
+private:
+    bool m_isAsync = false;
+    QFuture<KisImportExportFilter::ConversionStatus> m_futureStatus;
+    KisImportExportFilter::ConversionStatus m_status = KisImportExportFilter::UsageError;
+};
+
+
 KisImportExportManager::KisImportExportManager(KisDocument* document)
     : m_document(document)
     , d(new Private)
@@ -85,12 +123,26 @@ KisImportExportManager::~KisImportExportManager()
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::importDocument(const QString& location, const QString& mimeType)
 {
-    return convert(Import, location, location, mimeType, false, 0);
+    ConversionResult result = convert(Import, location, location, mimeType, false, 0, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), KisImportExportFilter::UsageError);
+
+    return result.status();
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, const QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
-    return convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration);
+    ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), KisImportExportFilter::UsageError);
+
+    return result.status();
+}
+
+QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+{
+    ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(result.isAsync(), QFuture<KisImportExportFilter::ConversionStatus>());
+
+    return result.futureStatus();
 }
 
 // The static method to figure out to which parts of the
@@ -216,7 +268,7 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
     return dialog.filename();
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAsync)
 {
     // export configuration is supported for export only
     KIS_SAFE_ASSERT_RECOVER_NOOP(direction == Export || !bool(exportConfiguration));
@@ -257,13 +309,16 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
 
 
-    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+    ConversionResult result = KisImportExportFilter::OK;
     if (direction == Import) {
+        // async importing is not yet supported!
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
+
         if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Opening document..."), 0);
-            status = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
+            result = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
         } else {
-            status = doImport(location, filter);
+            result = doImport(location, filter);
         }
     } else /* if (direction == Export) */ {
         if (!exportConfiguration) {
@@ -283,11 +338,13 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             return KisImportExportFilter::UserCancelled;
         }
 
-        if (!batchMode()) {
+        if (isAsync) {
+            result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+        } else if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Saving document..."), 0);
-            status = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+            result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
         } else {
-            status = doExport(location, filter, exportConfiguration, alsoAsKra);
+            result = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
 
         if (exportConfiguration) {
@@ -295,7 +352,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         }
     }
 
-    return status;
+    return result;
 }
 
 void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration)

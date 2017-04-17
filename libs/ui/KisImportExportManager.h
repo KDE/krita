@@ -32,6 +32,9 @@
 class KisDocument;
 class KoProgressUpdater;
 
+template <class T>
+class QFuture;
+
 /**
  *  @brief The class managing all the filters.
  *
@@ -83,7 +86,9 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString &location, const QString& realLocation, QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
+    KisImportExportFilter::ConversionStatus exportDocument(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
+
+    QFuture<KisImportExportFilter::ConversionStatus> exportDocumentAsyc(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     ///@name Static API
     //@{
@@ -127,7 +132,8 @@ private Q_SLOTS:
 
 private:
 
-    KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
+    struct ConversionResult;
+    ConversionResult convert(Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAsync);
 
 
     void fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration);

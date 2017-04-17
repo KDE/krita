@@ -62,9 +62,10 @@ class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSuperv
 
 public:
     enum OpenFlag {
-        None,
-        Import,
-        BatchMode
+        None = 0,
+        Import = 0x1,
+        BatchMode = 0x2,
+        RecoveryFile = 0x4
     };
     Q_DECLARE_FLAGS(OpenFlags, OpenFlag)
 

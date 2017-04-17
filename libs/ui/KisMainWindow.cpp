@@ -771,7 +771,15 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-    bool openRet = !(flags & Import) ? newdoc->openUrl(url) : newdoc->importDocument(url);
+
+    KisDocument::OpenFlags openFlags = KisDocument::None;
+    if (flags & RecoveryFile) {
+        openFlags |= KisDocument::RecoveryFile;
+    }
+
+    bool openRet = !(flags & Import) ? newdoc->openUrl(url, openFlags) : newdoc->importDocument(url);
+
+
     if (!openRet) {
         delete newdoc;
         return false;
@@ -895,6 +903,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                                    "file will not be overridden!"));
 
 
+        saveas = true;
+    }
+
+    if (document->isRecovered()) {
         saveas = true;
     }
 
@@ -1090,6 +1102,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         }
     }
 
+    if (ret && !isExporting) {
+        document->setRecovered(false);
+    }
 
     if (!ret && reset_url)
         document->resetURL(); //clean the suggested filename as the save dialog was rejected

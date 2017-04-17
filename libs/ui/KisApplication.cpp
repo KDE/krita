@@ -619,39 +619,39 @@ void KisApplication::checkAutosaveFiles()
 #endif
 
     // all autosave files for our application
-    m_autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+    QStringList autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
     // Allow the user to make their selection
-    if (m_autosaveFiles.size() > 0) {
+    if (autosaveFiles.size() > 0) {
         if (d->splashScreen) {
             // hide the splashscreen to see the dialog
             d->splashScreen->hide();
         }
-        m_autosaveDialog = new KisAutoSaveRecoveryDialog(m_autosaveFiles, activeWindow());
+        m_autosaveDialog = new KisAutoSaveRecoveryDialog(autosaveFiles, activeWindow());
         QDialog::DialogCode result = (QDialog::DialogCode) m_autosaveDialog->exec();
 
         if (result == QDialog::Accepted) {
             QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
-            Q_FOREACH (const QString &autosaveFile, m_autosaveFiles) {
+            Q_FOREACH (const QString &autosaveFile, autosaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
-            m_autosaveFiles = filesToRecover;
+            autosaveFiles = filesToRecover;
         } else {
-            m_autosaveFiles.clear();
+            autosaveFiles.clear();
         }
 
-        if (m_autosaveFiles.size() > 0) {
+        if (autosaveFiles.size() > 0) {
             QList<QUrl> autosaveUrls;
-            Q_FOREACH (const QString &autoSaveFile, m_autosaveFiles) {
+            Q_FOREACH (const QString &autoSaveFile, autosaveFiles) {
                 const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
                 autosaveUrls << url;
             }
             if (m_mainWindow) {
                 Q_FOREACH (const QUrl &url, autosaveUrls) {
                     KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    m_mainWindow->openDocument(url, flags);
+                    m_mainWindow->openDocument(url, flags | KisMainWindow::RecoveryFile);
                 }
             }
         }

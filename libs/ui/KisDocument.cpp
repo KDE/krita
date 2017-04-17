@@ -72,6 +72,8 @@
 #include <QtGlobal>
 #include <QTimer>
 #include <QWidget>
+#include <QFuture>
+#include <QFutureWatcher>
 
 // Krita Image
 #include <kis_config.h>
@@ -351,6 +353,11 @@ public:
 
     StdLockableWrapper<QMutex> savingLock;
 
+    QScopedPointer<KisDocument> backgroundSaveDocument;
+    QFuture<KisImportExportFilter::ConversionStatus> childSavingFuture;
+
+    bool isRecovered = false;
+
     void setImageAndInitIdleWatcher(KisImageSP _image) {
         image = _image;
 
@@ -365,6 +372,7 @@ public:
     }
 
     class SafeSavingLocker;
+    class StrippedSafeSavingLocker;
 };
 
 class KisDocument::Private::SafeSavingLocker {
@@ -428,6 +436,53 @@ private:
     KisDocument *m_document;
     bool m_locked;
 
+    KisImageBarrierLockAdapter m_imageLock;
+};
+
+class KisDocument::Private::StrippedSafeSavingLocker {
+public:
+    StrippedSafeSavingLocker(QMutex *savingMutex, KisImageSP image)
+        : m_locked(false)
+        , m_image(image)
+        , m_savingLock(savingMutex)
+        , m_imageLock(image, true)
+
+    {
+        /**
+         * Initial try to lock both objects. Locking the image guards
+         * us from any image composition threads running in the
+         * background, while savingMutex guards us from entering the
+         * saving code twice by autosave and main threads.
+         *
+         * Since we are trying to lock multiple objects, so we should
+         * do it in a safe manner.
+         */
+        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+
+        if (!m_locked) {
+            m_image->requestStrokeEnd();
+            QApplication::processEvents();
+
+            // one more try...
+            m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+        }
+    }
+
+    ~StrippedSafeSavingLocker() {
+         if (m_locked) {
+             m_imageLock.unlock();
+             m_savingLock.unlock();
+         }
+     }
+
+    bool successfullyLocked() const {
+        return m_locked;
+    }
+
+private:
+    bool m_locked;
+    KisImageSP m_image;
+    StdLockableWrapper<QMutex> m_savingLock;
     KisImageBarrierLockAdapter m_imageLock;
 };
 
@@ -795,33 +850,102 @@ void KisDocument::setFileBatchMode(const bool batchMode)
 
 void KisDocument::slotAutoSave()
 {
-    //qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "url" << url() << localFilePath();
+    if (!d->modified || !d->modifiedAfterAutosave) return;
 
-    if (!d->isAutosaving && d->modified && d->modifiedAfterAutosave) {
+    QScopedPointer<KisDocument> clonedDocument;
 
-        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-        emit statusBarMessage(i18n("Autosaving..."));
-        d->isAutosaving = true;
-        QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
-
-        QByteArray mimetype = d->outputMimeType;
-        d->outputMimeType = nativeFormatMimeType();
-        bool ret = exportDocument(QUrl::fromLocalFile(autoSaveFileName));
-        d->outputMimeType = mimetype;
-
-        if (ret) {
-            d->modifiedAfterAutosave = false;
-            d->autoSaveTimer.stop(); // until the next change
+    {
+        Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+        if (!locker.successfullyLocked()) {
+            const int emergencyAutoSaveInterval = 10; // sec
+            setAutoSaveDelay(emergencyAutoSaveInterval);
+            return;
         }
-        d->isAutosaving = false;
-
-        emit clearStatusBarMessage();
-        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-
-        if (!ret && !d->disregardAutosaveFailure) {
-            emit statusBarMessage(i18n("Error during autosave! Partition full?"));
-        }
+        clonedDocument.reset(new KisDocument(*this));
     }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(clonedDocument);
+
+    // we block saving until the current saving is finished!
+    if (!d->savingMutex.tryLock()) return;
+
+    KIS_ASSERT_RECOVER_RETURN(!d->backgroundSaveDocument);
+    d->backgroundSaveDocument.reset(clonedDocument.take());
+
+    emit statusBarMessage(i18n("Autosaving..."));
+    connect(d->backgroundSaveDocument.data(), SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus)), SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus)));
+
+    const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
+    bool started =
+        d->backgroundSaveDocument->startExportInBackground(QUrl::fromLocalFile(autoSaveFileName),
+                                                           nativeFormatMimeType());
+
+    if (!started) {
+        const int emergencyAutoSaveInterval = 10; // sec
+        setAutoSaveDelay(emergencyAutoSaveInterval);
+    }
+}
+
+void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status)
+{
+    KIS_SAFE_ASSERT_RECOVER(!d->savingMutex.tryLock()) {
+        d->savingMutex.unlock();
+        return;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->backgroundSaveDocument);
+    d->backgroundSaveDocument.take()->deleteLater();
+    d->savingMutex.unlock();
+
+    if (status != KisImportExportFilter::OK) {
+        const int emergencyAutoSaveInterval = 10; // sec
+        setAutoSaveDelay(emergencyAutoSaveInterval);
+        emit statusBarMessage(i18n("Error during autosave! Partition full?"));
+    } else {
+        d->modifiedAfterAutosave = false;
+        KisConfig cfg;
+        d->autoSaveDelay = cfg.autoSaveInterval();
+        d->autoSaveTimer.stop(); // until the next change
+        emit clearStatusBarMessage();
+    }
+}
+
+bool KisDocument::startExportInBackground(const QUrl &url,
+                                          const QByteArray &mimeType)
+{
+    const QString filePath = url.toLocalFile();
+
+    d->savingImage = d->image;
+    d->childSavingFuture =
+        d->importExportManager->exportDocumentAsyc(filePath,
+                                                   filePath,
+                                                   mimeType,
+                                                   false, 0);
+
+    if (d->childSavingFuture.isCanceled()) return false;
+
+    typedef QFutureWatcher<KisImportExportFilter::ConversionStatus> StatusWatcher;
+    StatusWatcher *watcher = new StatusWatcher();
+    watcher->setFuture(d->childSavingFuture);
+
+    connect(watcher, SIGNAL(finished()), SLOT(finishExportInBackground()));
+    connect(watcher, SIGNAL(finished()), watcher, SLOT(deleteLater()));
+
+    return true;
+}
+
+void KisDocument::finishExportInBackground()
+{
+    KIS_SAFE_ASSERT_RECOVER(d->childSavingFuture.isFinished()) {
+        emit sigBackgroundSavingFinished(KisImportExportFilter::InternalError);
+        return;
+    }
+
+    KisImportExportFilter::ConversionStatus status =
+        d->childSavingFuture.result();
+
+    d->savingImage.clear();
+    d->childSavingFuture = QFuture<KisImportExportFilter::ConversionStatus>();
+    emit sigBackgroundSavingFinished(status);
 }
 
 void KisDocument::setReadWrite(bool readwrite)
@@ -926,7 +1050,7 @@ bool KisDocument::importDocument(const QUrl &_url)
 }
 
 
-bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
+bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
 {
     if (!_url.isLocalFile()) {
         return false;
@@ -970,13 +1094,13 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 
     bool ret = openUrlInternal(url);
 
-    if (autosaveOpened) {
-        resetURL(); // Force save to act like 'Save As'
+    if (autosaveOpened || flags & RecoveryFile) {
         setReadWrite(true); // enable save button
         setModified(true);
+        setRecovered(true);
     }
     else {
-        if( !(flags & OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES) ) {
+        if (!(flags & DontAddToRecent)) {
             KisPart::instance()->addRecentURLToAllMainWindows(_url);
         }
 
@@ -985,7 +1109,10 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
             QFileInfo fi(url.toLocalFile());
             setReadWrite(fi.isWritable());
         }
+
+        setRecovered(false);
     }
+
     return ret;
 }
 
@@ -1174,6 +1301,16 @@ void KisDocument::setModified(bool mod)
     // This influences the title
     setTitleModified();
     emit modified(mod);
+}
+
+void KisDocument::setRecovered(bool value)
+{
+    d->isRecovered = value;
+}
+
+bool KisDocument::isRecovered() const
+{
+    return d->isRecovered;
 }
 
 void KisDocument::updateEditingTime(bool forceStoreElapsed)

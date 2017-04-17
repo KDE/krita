@@ -85,7 +85,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
     KisRasterKeyframeChannel *contentChannel = 0;
 
     Q_FOREACH(QString file, files) {
-        bool successfullyLoaded = importDoc->openUrl(QUrl::fromLocalFile(file), KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+        bool successfullyLoaded = importDoc->openUrl(QUrl::fromLocalFile(file), KisDocument::DontAddToRecent);
         if (!successfullyLoaded) {
             status = KisImportExportFilter::InternalError;
             break;

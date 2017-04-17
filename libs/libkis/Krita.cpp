@@ -297,7 +297,7 @@ Document* Krita::openDocument(const QString &filename)
 {
     KisDocument *document = KisPart::instance()->createDocument();
     KisPart::instance()->addDocument(document);
-    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
     return new Document(document);
 }
 

@@ -441,7 +441,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
         filename.append(layer->last);
 
         result = importDoc->openUrl(QUrl::fromLocalFile(filename),
-                                    KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+                                    KisDocument::DontAddToRecent);
         if (result)
             layer->channel->importFrame(layer->frame, importDoc->image()->projection(), 0);
 

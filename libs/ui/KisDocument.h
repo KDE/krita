@@ -31,6 +31,7 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <KisImportExportFilter.h>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
@@ -90,11 +91,12 @@ protected:
     explicit KisDocument(const KisDocument &rhs);
 
 public:
-
-    enum OpenUrlFlags {
-        OPEN_URL_FLAG_NONE                       = 1 << 0,
-        OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES = 1 << 1,
+    enum OpenFlag {
+        None = 0,
+        DontAddToRecent = 0x1,
+        RecoveryFile = 0x2
     };
+    Q_DECLARE_FLAGS(OpenFlags, OpenFlag)
 
     /**
      *  Destructor.
@@ -116,7 +118,7 @@ public:
      * @param flags Control specific behavior
      * @return success status
      */
-    bool openUrl(const QUrl &url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
+    bool openUrl(const QUrl &url, OpenFlags flags = None);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -359,6 +361,9 @@ public:
      */
     void setModified(bool _mod);
 
+    void setRecovered(bool value);
+    bool isRecovered() const;
+
     void updateEditingTime(bool forceStoreElapsed);
 
     /**
@@ -446,10 +451,18 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
+    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status);
+
+private Q_SLOTS:
+    void finishExportInBackground();
+    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status);
 private:
 
     friend class KisPart;
     friend class SafeSavingLocker;
+
+    bool startExportInBackground(const QUrl &url,
+                                 const QByteArray &mimeType);
 
     /**
      * Generate a name for the document.
@@ -607,6 +620,7 @@ private:
     Private *const d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisDocument::OpenFlags)
 Q_DECLARE_METATYPE(KisDocument*)
 
 #endif

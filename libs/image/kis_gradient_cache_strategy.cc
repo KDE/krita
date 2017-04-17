@@ -55,10 +55,10 @@ Bit8GradientCacheStategy::Bit8GradientCacheStategy(const KoAbstractGradient* gra
         m_colors << tmpColor;
         if (nextColor == tmpColor) {
             count++;
-            struct offset m_offset(count / lastcount, lastcount /  m_max / 2);
+            struct offset m_offset(count / lastcount, lastcount / m_max / 2);
             m_step.push_back(m_offset);
         } else {
-            struct offset m_offset(count / lastcount, lastcount /  m_max / 2);
+            struct offset m_offset(count / lastcount, lastcount / m_max / 2);
             m_step.push_back(m_offset);
 
             lastcount = count;
@@ -85,7 +85,7 @@ const quint8* Bit8GradientCacheStategy::cachedAt(qreal t)
         if (offset < 0.5) {
             t += stepAt(t);
         } else {
-            t -= stepAt(t) ;
+            t -= stepAt(t);
         }
     }
 
@@ -139,7 +139,6 @@ Bit8RGBGradientCacheStategy::colorComponents::colorComponents(QColor& color)
         m_alpha = 255;
         m_alphaMinus = 255;
     }
-
 }
 
 double Bit8RGBGradientCacheStategy::stepAt(qreal t) const
@@ -301,5 +300,36 @@ double NotBit8GradientCacheStategy::stepAt(qreal t) const
         return m_step[tInt];
     } else {
         return 0;
+    }
+}
+
+NotDitherGradientCacheStategy::NotDitherGradientCacheStategy(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* colorSpace)
+    : KisGradientCacheStategy(steps, colorSpace)
+
+{
+    m_subject = gradient;
+    m_max = steps - 1;
+    m_black = KoColor(m_colorSpace);
+
+    KoColor tmpColor(m_colorSpace);
+    for (qint32 i = 0; i < steps; i++) {
+        m_subject->colorAt(tmpColor, qreal(i) / m_max);
+        m_colors << tmpColor;
+    }
+}
+
+double NotDitherGradientCacheStategy::stepAt(qreal t) const
+{
+    return 0;
+}
+
+const quint8 *NotDitherGradientCacheStategy::cachedAt(qreal t)
+{
+    qint32 tInt = t * m_max + 0.5;
+    if (m_colors.size() > tInt) {
+        return m_colors[tInt].data();
+    }
+    else {
+        return m_black.data();
     }
 }

@@ -43,6 +43,20 @@ protected:
     boost::mt11213b m_gen;
 };
 
+class NotDitherGradientCacheStategy : public KisGradientCacheStategy {
+public:
+    NotDitherGradientCacheStategy(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* colorSpace);
+    const quint8 *cachedAt(qreal t)  override;
+
+
+protected:
+    double stepAt(qreal t) const override;
+
+private:
+    const KoAbstractGradient* m_subject;
+    QVector<KoColor> m_colors;
+};
+
 class Bit8Stategy {
 public:
     Bit8Stategy(qreal m_max);
@@ -116,7 +130,6 @@ private:
     QMap<qreal, nearColors> m_nearColors;
     boost::random::uniform_smallint<> m_distribution;
     boost::random::uniform_01<> m_distribution2;
-
 };
 
 class NotBit8GradientCacheStategy : public KisGradientCacheStategy {

@@ -67,6 +67,7 @@ public Q_SLOTS:
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
+    void slotSetDither(bool);
     void slotSetAntiAliasThreshold(qreal);
 
 protected Q_SLOTS:
@@ -92,11 +93,13 @@ private:
     KisGradientPainter::enumGradientRepeat m_repeat;
 
     bool m_reverse;
+    bool m_dither;
     double m_antiAliasThreshold;
 
     QLabel *m_lbShape;
     QLabel *m_lbRepeat;
     QCheckBox *m_ckReverse;
+    QCheckBox *m_ckDither;
     KComboBox *m_cmbShape;
     KComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;

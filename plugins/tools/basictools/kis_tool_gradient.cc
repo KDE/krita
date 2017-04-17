@@ -69,6 +69,7 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_endPos = QPointF(0, 0);
 
     m_reverse = false;
+    m_dither = false;
     m_shape = KisGradientPainter::GradientShapeLinear;
     m_repeat = KisGradientPainter::GradientRepeatNone;
     m_antiAliasThreshold = 0.2;
@@ -180,7 +181,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         painter.setProgress(updater->startSubtask());
 
         painter.setGradientShape(m_shape);
-        painter.paintGradient(m_startPos, m_endPos, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());
+        painter.paintGradient(m_startPos, m_endPos, m_repeat, m_antiAliasThreshold, m_reverse, m_dither, 0, 0, image->width(), image->height());
         painter.endTransaction(undoAdapter);
         undoAdapter->endMacro();
 
@@ -264,6 +265,11 @@ QWidget* KisToolGradient::createOptionWidget()
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
     addOptionWidgetOption(m_ckReverse);
 
+    m_ckDither= new QCheckBox(i18nc("the gradient will be drawn with the color order reversed", "Dithering"), widget);
+    m_ckReverse->setObjectName("dither_check");
+    connect(m_ckDither, SIGNAL(toggled(bool)), this, SLOT(slotSetDither(bool)));
+    addOptionWidgetOption(m_ckDither);
+
 
     widget->setFixedHeight(widget->sizeHint().height());
 
@@ -293,6 +299,11 @@ void KisToolGradient::slotSetReverse(bool state)
 {
     m_reverse = state;
     m_configGroup.writeEntry("reverse", state);
+}
+
+void KisToolGradient::slotSetDither(bool)
+{
+
 }
 
 void KisToolGradient::slotSetAntiAliasThreshold(qreal value)

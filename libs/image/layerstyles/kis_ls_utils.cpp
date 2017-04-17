@@ -531,6 +531,7 @@ namespace KisLsUtils
             gc.paintGradient(gradStart, gradEnd,
                              repeat, 0.0,
                              config->reverse(),
+                             config->dither(),
                              applyRect);
         }
     }

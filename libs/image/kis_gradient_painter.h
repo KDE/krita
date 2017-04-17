@@ -70,6 +70,7 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
+                       bool ditherGradient,
                        qint32 startx,
                        qint32 starty,
                        qint32 width,
@@ -81,6 +82,7 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
+                       bool ditherGradient,
                        const QRect &applyRect);
 
 private:

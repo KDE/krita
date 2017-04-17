@@ -896,6 +896,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         : m_scale(100),
           m_alignWithLayer(true),
           m_reverse(false),
+          m_dither(false),
           m_style(psd_gradient_style_linear),
           m_gradientXOffset(0),
           m_gradientYOffset(0),
@@ -923,6 +924,10 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
 
     bool reverse() const {
         return m_reverse;
+    }
+
+    bool dither() const {
+        return m_dither;
     }
 
     psd_gradient_style style() const {
@@ -964,6 +969,10 @@ public:
         m_reverse = value;
     }
 
+    void setDither(bool value) {
+        m_dither = value;
+    }
+
     void setStyle(psd_gradient_style value) {
         m_style = value;
     }
@@ -1003,6 +1012,7 @@ private:
 
     // Gradient
     bool m_reverse;
+    bool m_dither;
     psd_gradient_style m_style;
     int m_gradientXOffset; // 0..100%
     int m_gradientYOffset; // 0..100%
@@ -1044,6 +1054,7 @@ struct psd_layer_effects_gradient_overlay : public psd_layer_effects_overlay_bas
         setFillType(psd_fill_gradient);
         setAngle(90);
         setReverse(false);
+        setDither(false),
         setScale(100);
         setAlignWithLayer(true);
         setStyle(psd_gradient_style_linear);
@@ -1107,6 +1118,7 @@ struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base
 
         setAngle(90);
         setReverse(false);
+        setDither(false);
         setScale(100);
         setAlignWithLayer(true);
         setStyle(psd_gradient_style_linear);

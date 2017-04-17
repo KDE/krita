@@ -45,27 +45,32 @@ class CachedGradient : public KoAbstractGradient
 {
 
 public:
-    explicit CachedGradient(const KoAbstractGradient *gradient, qint32 steps, const KoColorSpace *cs)
+    explicit CachedGradient(const KoAbstractGradient *gradient, qint32 steps, const KoColorSpace *cs, bool ditherGradient)
         : KoAbstractGradient(gradient->filename())
     {
         m_subject = gradient;
         m_max = steps - 1;
         m_colorSpace = cs;
+        m_dither = ditherGradient;
 
-        if (KisGradientCacheStategy::minColorDepth(cs) == 1 ) {
-            if (m_colorSpace->name() == "RGB/Alpha (8-bit integer/channel)") {
-                m_cacheStategy.reset(new Bit8RGBGradientCacheStategy(gradient, steps, cs));
-            } else {
-                m_cacheStategy.reset(new Bit8GradientCacheStategy(gradient, steps, cs));}
-            } else {
-             m_cacheStategy.reset(new NotBit8GradientCacheStategy(gradient, steps, cs));
-      }
+        if(m_dither) {
+            if (KisGradientCacheStategy::minColorDepth(cs) == 1 ) {
+                if (m_colorSpace->name() == "RGB/Alpha (8-bit integer/channel)") {
+                    m_cacheStategy.reset(new Bit8RGBGradientCacheStategy(gradient, steps, cs));
+                } else {
+                    m_cacheStategy.reset(new Bit8GradientCacheStategy(gradient, steps, cs));}
+                } else {
+                 m_cacheStategy.reset(new NotBit8GradientCacheStategy(gradient, steps, cs));
+          }
+       } else {
+           m_cacheStategy.reset(new NotDitherGradientCacheStategy(gradient, steps, cs));
+        }
     }
 
     ~CachedGradient() override {}
 
     KoAbstractGradient* clone() const override {
-        return new CachedGradient(m_subject, m_max + 1, m_colorSpace);
+        return new CachedGradient(m_subject, m_max + 1, m_colorSpace, m_dither);
     }
 
     /**
@@ -94,6 +99,7 @@ private:
     const KoColorSpace *m_colorSpace;
     qint32 m_max;
     QScopedPointer<KisGradientCacheStategy> m_cacheStategy;
+    bool m_dither;
 };
 
 namespace
@@ -599,6 +605,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        enumGradientRepeat repeat,
                                        double antiAliasThreshold,
                                        bool reverseGradient,
+                                       bool ditherGradient,
                                        qint32 startx,
                                        qint32 starty,
                                        qint32 width,
@@ -609,6 +616,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                          repeat,
                          antiAliasThreshold,
                          reverseGradient,
+                         ditherGradient,
                          QRect(startx, starty, width, height));
 }
 
@@ -617,6 +625,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        enumGradientRepeat repeat,
                                        double antiAliasThreshold,
                                        bool reverseGradient,
+                                       bool ditherGradient,
                                        const QRect &applyRect)
 {
     Q_UNUSED(antiAliasThreshold);
@@ -701,13 +710,12 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     const KoColorSpace * colorSpace = dev->colorSpace();
     const qint32 pixelSize = colorSpace->pixelSize();
-    boost::mt11213b  gen(138);
 
     Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
         QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
 
-        CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+        CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace, ditherGradient);
 
         KisSequentialIterator it(dev, processRect);
         const int rightCol = processRect.right();

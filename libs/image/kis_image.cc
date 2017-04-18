@@ -1598,6 +1598,10 @@ bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 
 void KisImage::setWrapAroundModePermitted(bool value)
 {
+    if (m_d->wrapAroundModePermitted != value) {
+        requestStrokeEnd();
+    }
+
     m_d->wrapAroundModePermitted = value;
 
     if (m_d->wrapAroundModePermitted &&

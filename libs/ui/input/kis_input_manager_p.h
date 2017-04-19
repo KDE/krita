@@ -144,4 +144,6 @@ public:
     EventEater eventEater;
 
     bool containsPointer = true;
+
+    int accumulatedScrollDelta = 0;
 };

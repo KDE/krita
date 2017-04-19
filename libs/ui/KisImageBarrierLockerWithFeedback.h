@@ -21,9 +21,10 @@
 
 #include "kis_types.h"
 #include "kis_image_barrier_locker.h"
+#include "kritaui_export.h"
 
 namespace KisImageBarrierLockerWithFeedbackImplPrivate {
-void blockWithFeedback(KisImageSP image);
+void KRITAUI_EXPORT blockWithFeedback(KisImageSP image);
 }
 
 /**

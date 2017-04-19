@@ -25,7 +25,7 @@
 
 namespace KisAnimationUtils
 {
-    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channel, int time, bool copy);
+    void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channel, int time, bool copy);
 
     struct FrameItem {
         FrameItem() : time(-1) {}
@@ -38,16 +38,21 @@ namespace KisAnimationUtils
 
     typedef QVector<FrameItem> FrameItemList;
 
-    bool removeKeyframes(KisImageSP image, const FrameItemList &frames);
-    bool removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time);
+    void removeKeyframes(KisImageSP image, const FrameItemList &frames);
+    void removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time);
 
     void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset);
-    bool moveKeyframes(KisImageSP image,
+
+    KUndo2Command* createMoveKeyframesCommand(const FrameItemList &srcFrames,
+                                              const FrameItemList &dstFrames,
+                                              bool copy, KUndo2Command *parentCommand = 0);
+
+    void moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
                        const FrameItemList &dstFrames,
-                       bool copy = false,
-                       KUndo2Command *parentCommand = 0);
-    bool moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime);
+                       bool copy = false);
+
+    void moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime);
 
     bool supportsContentFrames(KisNodeSP node);
 

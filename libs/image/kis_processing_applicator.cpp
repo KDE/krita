@@ -321,3 +321,13 @@ void KisProcessingApplicator::cancel()
 {
     m_image->cancelStroke(m_strokeId);
 }
+
+void KisProcessingApplicator::runSingleCommandStroke(KisImageSP image, KUndo2Command *cmd, KisStrokeJobData::Sequentiality sequentiality, KisStrokeJobData::Exclusivity exclusivity)
+{
+    KisProcessingApplicator applicator(image, 0,
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       cmd->text());
+    applicator.applyCommand(cmd, sequentiality, exclusivity);
+    applicator.end();
+}

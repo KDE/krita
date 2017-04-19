@@ -168,7 +168,8 @@ struct TimelineFramesModel::Private
         KisNodeSP node = dummy->node();
         if (!KisAnimationUtils::supportsContentFrames(node)) return false;
 
-        return KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
+        KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
+        return true;
     }
 
     bool addNewLayer(int row) {
@@ -675,24 +676,14 @@ bool TimelineFramesModel::createFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
 
-    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
-    if (result) {
-        emit dataChanged(dstIndex, dstIndex);
-    }
-
-    return result;
+    return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
 }
 
 bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
 
-    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
-    if (result) {
-        emit dataChanged(dstIndex, dstIndex);
-    }
-
-    return result;
+    return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
 }
 
 QString TimelineFramesModel::audioChannelFileName() const

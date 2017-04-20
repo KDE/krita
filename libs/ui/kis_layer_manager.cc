@@ -614,6 +614,21 @@ bool tryMergeSelectionMasks(KisNodeSP currentNode, KisImageSP image)
     return result;
 }
 
+bool tryFlattenGroupLayer(KisNodeSP currentNode, KisImageSP image)
+{
+    bool result = false;
+
+    if (currentNode->inherits("KisGroupLayer")) {
+        KisGroupLayer *layer = qobject_cast<KisGroupLayer*>(currentNode.data());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(layer, false);
+
+        image->flattenLayer(layer);
+        result = true;
+    }
+
+    return result;
+}
+
 void KisLayerManager::mergeLayer()
 {
     KisImageSP image = m_view->image();
@@ -628,7 +643,11 @@ void KisLayerManager::mergeLayer()
     if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
 
-    } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
+    } else if (tryMergeSelectionMasks(m_view->activeNode(), image)) {
+        // already done!
+    } else if (tryFlattenGroupLayer(m_view->activeNode(), image)) {
+        // already done!
+    } else {
 
         if (!layer->prevSibling()) return;
         KisLayer *prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());

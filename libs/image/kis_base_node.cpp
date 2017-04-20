@@ -32,7 +32,6 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
 {
     QString compositeOp;
     KoProperties properties;
-    bool systemLocked;
     KisBaseNode::Property hack_visible; //HACK
     QUuid id;
     bool collapsed;
@@ -52,7 +51,6 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
 
     Private(const Private &rhs)
         : compositeOp(rhs.compositeOp),
-          systemLocked(false),
           id(QUuid::createUuid()),
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
@@ -84,7 +82,6 @@ KisBaseNode::KisBaseNode()
     setCollapsed(false);
     setSupportsLodMoves(true);
 
-    setSystemLocked(false);
     m_d->compositeOp = COMPOSITE_OVER;
 
     setUuid(QUuid::createUuid());
@@ -260,28 +257,14 @@ void KisBaseNode::setUserLocked(bool locked)
     baseNodeChangedCallback();
 }
 
-bool KisBaseNode::systemLocked() const
-{
-    return m_d->systemLocked;
-}
-
-void KisBaseNode::setSystemLocked(bool locked, bool update)
-{
-    m_d->systemLocked = locked;
-    if (update) {
-        emit systemLockingChanged(locked);
-        baseNodeChangedCallback();
-    }
-}
-
 bool KisBaseNode::isEditable(bool checkVisibility) const
 {
     bool editable = true;
     if (checkVisibility) {
-        editable = (visible(false) && !userLocked() && !systemLocked());
+        editable = (visible(false) && !userLocked());
     }
     else {
-        editable = (!userLocked() && !systemLocked());
+        editable = (!userLocked());
     }
 
     if (editable) {

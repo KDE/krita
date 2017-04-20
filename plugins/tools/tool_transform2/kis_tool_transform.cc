@@ -64,7 +64,6 @@
 #include <kis_pixel_selection.h>
 #include <kis_shape_selection.h>
 #include <kis_selection_manager.h>
-#include <kis_system_locker.h>
 #include <krita_utils.h>
 #include <kis_resources_snapshot.h>
 

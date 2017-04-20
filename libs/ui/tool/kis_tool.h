@@ -299,9 +299,6 @@ protected:
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
     void paintToolOutline(QPainter * painter, const QPainterPath &path);
 
-    /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
-    void setCurrentNodeLocked(bool locked);
-
     /// Checks checks if the current node is editable
     bool nodeEditable();
 
@@ -310,6 +307,9 @@ protected:
 
     /// Override the cursor appropriately if current node is not editable
     bool overrideCursorIfNotEditable();
+
+    bool blockUntillOperationsFinished();
+    void blockUntillOperationsFinishedForced();
 
 protected:
     enum ToolMode {

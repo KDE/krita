@@ -44,7 +44,6 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include "kis_figure_painting_tool_helper.h"
-#include <kis_system_locker.h>
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
 
@@ -177,7 +176,7 @@ void KisToolShape::addShape(KoShape* shape)
 void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)
 {
     KisNodeSP node = currentNode();
-    if (!node || node->systemLocked()) {
+    if (!node || !blockUntillOperationsFinished()) {
         return;
     }
     // Get painting options
@@ -228,8 +227,6 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     image->actionRecorder()->addAction(bezierCurvePaintAction);
 
     if (node->hasEditablePaintDevice()) {
-        KisSystemLocker locker(node);
-
         KisFigurePaintingToolHelper helper(name,
                                            image,
                                            node,

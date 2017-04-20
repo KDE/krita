@@ -166,8 +166,6 @@ void KisToolFreehand::deactivate()
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
-    setCurrentNodeLocked(true);
-
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
                         currentNode(),
@@ -188,7 +186,6 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
 void KisToolFreehand::endStroke()
 {
     m_helper->endPaint();
-    setCurrentNodeLocked(false);
 }
 
 bool KisToolFreehand::primaryActionSupportsHiResEvents() const

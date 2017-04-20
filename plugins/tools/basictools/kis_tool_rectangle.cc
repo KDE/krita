@@ -30,7 +30,6 @@
 #include "KoCanvasBase.h"
 #include "kis_shape_tool_helper.h"
 #include "kis_figure_painting_tool_helper.h"
-#include "kis_system_locker.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_shape_paint_action.h>
@@ -60,7 +59,7 @@ void KisToolRectangle::resetCursorStyle()
 
 void KisToolRectangle::finishRect(const QRectF &rect)
 {
-    if (rect.isNull())
+    if (rect.isNull() || !blockUntillOperationsFinished())
         return;
 
     if (image()) {
@@ -70,7 +69,6 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Rectangle"),
                                            image(),
                                            currentNode(),

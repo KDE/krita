@@ -30,7 +30,6 @@
 #include <kis_shape_tool_helper.h>
 #include "kis_figure_painting_tool_helper.h"
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_system_locker.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_shape_paint_action.h>
@@ -57,7 +56,7 @@ void KisToolEllipse::resetCursorStyle()
 
 void KisToolEllipse::finishRect(const QRectF& rect)
 {
-    if (rect.isEmpty())
+    if (rect.isEmpty() || !blockUntillOperationsFinished())
         return;
 
     if (image()) {
@@ -67,7 +66,6 @@ void KisToolEllipse::finishRect(const QRectF& rect)
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Ellipse"),
                                            image(),
                                            currentNode(),

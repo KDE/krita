@@ -35,6 +35,6 @@ void blockWithFeedback(KisImageSP image)
     if (!window) return;
 
     KisViewManager *viewManager = window->viewManager();
-    viewManager->blockUntillOperationsFinishedForced(image);
+    viewManager->blockUntilOperationsFinishedForced(image);
 }
 }

@@ -476,15 +476,16 @@ void KisNodeManager::slotTryFinishIsolatedMode()
 
 void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
 {
+    if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) {
+        return;
+    }
+
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) {
         activeNode = m_d->view->image()->root();
     }
 
     KIS_ASSERT_RECOVER_RETURN(activeNode);
-    if (activeNode->systemLocked()) {
-        return;
-    }
 
     // XXX: make factories for this kind of stuff,
     //      with a registry

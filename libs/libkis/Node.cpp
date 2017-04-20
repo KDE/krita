@@ -270,7 +270,7 @@ void Node::setInheritAlpha(bool value)
 bool Node::locked() const
 {
     if (!d->node) return false;
-    return d->node->userLocked() || d->node->systemLocked();
+    return d->node->userLocked();
 }
 
 void Node::setLocked(bool value)

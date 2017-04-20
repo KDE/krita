@@ -53,7 +53,6 @@ KisNodeShape::KisNodeShape(KisNodeSP node)
 
     connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
     connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
-    connect(node, SIGNAL(systemLockingChanged(bool)), SLOT(editabilityChanged()));
     editabilityChanged();  // Correctly set the lock at loading
 }
 

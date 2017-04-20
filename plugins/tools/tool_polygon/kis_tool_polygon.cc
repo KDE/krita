@@ -35,7 +35,6 @@
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
-#include <kis_system_locker.h>
 
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
@@ -57,6 +56,8 @@ void KisToolPolygon::resetCursorStyle()
 
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
+    if (!blockUntilOperationsFinished()) return;
+
     if (image()) {
         KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
         setupPaintAction(&linePaintAction);
@@ -65,7 +66,6 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polygon"),
                                            image(),
                                            currentNode(),

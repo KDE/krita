@@ -260,28 +260,14 @@ void KisBaseNode::setUserLocked(bool locked)
     baseNodeChangedCallback();
 }
 
-bool KisBaseNode::systemLocked() const
-{
-    return m_d->systemLocked;
-}
-
-void KisBaseNode::setSystemLocked(bool locked, bool update)
-{
-    m_d->systemLocked = locked;
-    if (update) {
-        emit systemLockingChanged(locked);
-        baseNodeChangedCallback();
-    }
-}
-
 bool KisBaseNode::isEditable(bool checkVisibility) const
 {
     bool editable = true;
     if (checkVisibility) {
-        editable = (visible(false) && !userLocked() && !systemLocked());
+        editable = (visible(false) && !userLocked());
     }
     else {
-        editable = (!userLocked() && !systemLocked());
+        editable = (!userLocked());
     }
 
     if (editable) {

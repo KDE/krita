@@ -141,7 +141,7 @@ public:
         , recorder(_q)
         , signalRouter(_q)
         , animationInterface(_animationInterface)
-        , scheduler(_q)
+        , scheduler(_q, _q)
         , axesCenter(QPointF(0.5, 0.5))
     {
         {
@@ -245,6 +245,9 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
                                   colorSpace, undoStore,
                                   new KisImageAnimationInterface(this)))
 {
+    // make sure KisImage belongs to the GUI thread
+    moveToThread(qApp->thread());
+
     setObjectName(name);
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 }
@@ -277,6 +280,9 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
                               undoStore ? undoStore : new KisDumbUndoStore(),
                               new KisImageAnimationInterface(*rhs.animationInterface(), this)))
 {
+    // make sure KisImage belongs to the GUI thread
+    moveToThread(qApp->thread());
+
     setObjectName(rhs.objectName());
 
     m_d->xres = rhs.m_d->xres;

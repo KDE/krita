@@ -19,8 +19,9 @@
 #include "kis_undo_adapter.h"
 
 
-KisUndoAdapter::KisUndoAdapter(KisUndoStore *undoStore)
-    : m_undoStore(undoStore)
+KisUndoAdapter::KisUndoAdapter(KisUndoStore *undoStore, QObject *parent)
+    : QObject(parent),
+      m_undoStore(undoStore)
 {
 }
 

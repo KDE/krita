@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject, public KisStrokesFa
     Q_OBJECT
 
 public:
-    KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener);
+    KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener, QObject *parent = 0);
     virtual ~KisUpdateScheduler();
 
     /**

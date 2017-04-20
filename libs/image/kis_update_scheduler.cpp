@@ -48,6 +48,7 @@
 struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     Private(KisUpdateScheduler *_q, KisProjectionUpdateListener *p)
         : q(_q)
+        , updaterContext(KisUpdaterContext::useIdealThreadCountTag, q)
         , projectionUpdateListener(p)
     {}
 
@@ -66,8 +67,9 @@ struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     KisLazyWaitCondition updatesFinishedCondition;
 };
 
-KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
-    : m_d(new Private(this, projectionUpdateListener))
+KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener, QObject *parent)
+    : QObject(parent),
+      m_d(new Private(this, projectionUpdateListener))
 {
     updateSettings();
     connectSignals();
@@ -101,7 +103,7 @@ void KisUpdateScheduler::setProgressProxy(KoProgressProxy *progressProxy)
 {
     delete m_d->progressUpdater;
     m_d->progressUpdater = progressProxy ?
-        new KisQueuesProgressUpdater(progressProxy) : 0;
+        new KisQueuesProgressUpdater(progressProxy, this) : 0;
 }
 
 void KisUpdateScheduler::progressUpdate()

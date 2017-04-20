@@ -1691,7 +1691,6 @@ void KisDocument::setCurrentImage(KisImageSP image)
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
     d->image->initialRefreshGraph();
-    setAutoSaveDelay(KisConfig().autoSaveInterval());
 }
 
 void KisDocument::setImageModified()

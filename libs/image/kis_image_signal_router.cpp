@@ -35,7 +35,8 @@ static ImageSignalsStaticRegistrar __registrar;
 
 
 KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
-    : m_image(image)
+    : QObject(image.data()),
+      m_image(image)
 {
     connect(this, SIGNAL(sigNotification(KisImageSignalType)),
             SLOT(slotNotification(KisImageSignalType)));

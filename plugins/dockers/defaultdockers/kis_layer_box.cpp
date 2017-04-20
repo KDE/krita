@@ -602,12 +602,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     }
 }
 
-void KisLayerBox::slotMergeLayer()
-{
-    if (!m_canvas) return;
-    m_nodeManager->mergeLayer();
-}
-
 void KisLayerBox::slotMinimalView()
 {
     m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::MinimalMode);

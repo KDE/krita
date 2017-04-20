@@ -882,11 +882,6 @@ void KisNodeManager::switchToPreviouslyActiveNode()
     }
 }
 
-void KisNodeManager::mergeLayer()
-{
-    m_d->layerManager.mergeLayer();
-}
-
 void KisNodeManager::rotate(double radians)
 {
     if(!m_d->view->image()) return;

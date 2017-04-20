@@ -196,9 +196,6 @@ public Q_SLOTS:
 
     void saveNodeAsImage();
 
-    // merges the active layer with the layer below it.
-    void mergeLayer();
-
     void slotSplitAlphaIntoMask();
     void slotSplitAlphaWrite();
     void slotSplitAlphaSaveMerged();

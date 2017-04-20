@@ -192,20 +192,16 @@ void KisLayerManager::setup(KisActionManager* actionManager)
 
 void KisLayerManager::updateGUI()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
+    KisLayerSP layer = activeLayer();
 
-    KisLayerSP layer;
-    qint32 nlayers = 0;
+    const bool isGroupLayer = layer && layer->inherits("KisGroupLayer");
 
-    if (image) {
-        layer = activeLayer();
-        nlayers = image->nlayers();
-    }
-
-    // XXX these should be named layer instead of image
-    m_imageFlatten->setEnabled(nlayers > 1);
-    m_imageMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
-    m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
+    m_imageMergeLayer->setText(
+        isGroupLayer ?
+            i18nc("@action:inmenu", "Merge Group") :
+            i18nc("@action:inmenu", "Merge with Layer Below"));
+    m_flattenLayer->setVisible(!isGroupLayer);
 
     if (m_view->statusBar())
         m_view->statusBar()->setProfile(image);

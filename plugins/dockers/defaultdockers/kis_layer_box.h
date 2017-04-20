@@ -103,7 +103,6 @@ private Q_SLOTS:
     void slotLowerClicked();
     void slotPropertiesClicked();
 
-    void slotMergeLayer();
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);

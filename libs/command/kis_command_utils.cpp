@@ -139,7 +139,7 @@ namespace KisCommandUtils
 
     void SkipFirstRedoBase::setSkipOneRedo(bool value)
     {
-        m_firstRedo = true;
+        m_firstRedo = value;
     }
 
     FlipFlopCommand::FlipFlopCommand(bool finalize, KUndo2Command *parent)

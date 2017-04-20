@@ -657,7 +657,7 @@ void KisLayerManager::flattenLayer()
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
 
-    image->flattenLayer(layer);
+    convertNodeToPaintLayer(layer);
     m_view->updateGUI();
 }
 

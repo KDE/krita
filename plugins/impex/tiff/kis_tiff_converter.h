@@ -32,15 +32,18 @@
 class KisDocument;
 
 struct KisTIFFOptions {
-    quint16 compressionType;
-    quint16 predictor;
-    bool alpha;
-    bool flatten;
-    quint16 jpegQuality;
-    quint16 deflateCompress;
-    quint16 faxMode;
-    quint16 pixarLogCompress;
-    bool saveProfile;
+    quint16 compressionType = 0;
+    quint16 predictor = 1;
+    bool alpha = true;
+    bool flatten = true;
+    quint16 jpegQuality = 80;
+    quint16 deflateCompress = 6;
+    quint16 faxMode = 1;
+    quint16 pixarLogCompress = 6;
+    bool saveProfile = true;
+
+    KisPropertiesConfigurationSP toProperties() const;
+    void fromProperties(KisPropertiesConfigurationSP cfg);
 };
 
 class KisTIFFConverter : public QObject

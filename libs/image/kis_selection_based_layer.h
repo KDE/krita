@@ -85,7 +85,6 @@ public:
      * as our extent() function doesn't fit for this
      */
     void setDirty() override;
-    void setDirty(const QRect & rect) override;
 
 public:
 

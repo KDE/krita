@@ -265,6 +265,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     // TODO: Handle touch events correctly.
     bool retval = false;
 
+    if (event->type() != QEvent::Wheel) {
+        d->accumulatedScrollDelta = 0;
+    }
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
@@ -343,6 +347,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::Wheel: {
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        d->accumulatedScrollDelta += wheelEvent->delta();
         KisSingleActionShortcut::WheelAction action;
 
         /**
@@ -356,7 +361,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
 
-        if(wheelEvent->orientation() == Qt::Horizontal) {
+        if (wheelEvent->orientation() == Qt::Horizontal) {
             if(wheelEvent->delta() < 0) {
                 action = KisSingleActionShortcut::WheelRight;
             }
@@ -373,9 +378,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             }
         }
 
-        //Make sure the input actions know we are active.
-        KisAbstractInputAction::setInputManager(this);
-        retval = d->matcher.wheelEvent(action, wheelEvent);
+        if (qAbs(d->accumulatedScrollDelta) >= QWheelEvent::DefaultDeltasPerStep) {
+            //Make sure the input actions know we are active.
+            KisAbstractInputAction::setInputManager(this);
+            retval = d->matcher.wheelEvent(action, wheelEvent);
+            d->accumulatedScrollDelta = 0;
+        }
+        else {
+            retval = true;
+        }
         break;
     }
     case QEvent::Enter:

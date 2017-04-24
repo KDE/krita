@@ -774,7 +774,7 @@ bool KisViewManager::blockUntilOperationsFinished(KisImageSP image)
     return d->blockUntilOperationsFinishedImpl(image, false);
 }
 
-void KisViewManager::blockUntillOperationsFinishedForced(KisImageSP image)
+void KisViewManager::blockUntilOperationsFinishedForced(KisImageSP image)
 {
     d->blockUntilOperationsFinishedImpl(image, true);
 }

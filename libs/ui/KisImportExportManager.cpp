@@ -54,10 +54,12 @@
 #include "KisDocument.h"
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include "kis_painter.h"
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
 #include "kis_popup_button.h"
 #include <kis_iterator_ng.h>
+#include "kis_async_action_feedback.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -138,8 +140,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
 {
     int weight = -1;
     KisImportExportFilter *filter = 0;
-    KoJsonTrader trader;
-    QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+    QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
@@ -217,6 +218,9 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
+    // export configuration is supported for export only
+    KIS_SAFE_ASSERT_RECOVER_NOOP(direction == Export || !bool(exportConfiguration));
+
 
     QString typeName = mimeType;
     if (typeName.isEmpty()) {
@@ -240,64 +244,117 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     QByteArray from, to;
     if (direction == Export) {
         from = m_document->nativeFormatMimeType();
-        to = mimeType.toLatin1();
+        to = typeName.toLatin1();
     }
     else {
-        from = mimeType.toLatin1();
+        from = typeName.toLatin1();
         to = m_document->nativeFormatMimeType();
     }
 
-    if (!exportConfiguration) {
-        exportConfiguration = filter->lastSavedConfiguration(from, to);
-        if (exportConfiguration) {
-            // Fill with some meta information about the image
-            KisImageWSP image = m_document->image();
-            KisPaintDeviceSP pd = image->projection();
+    KIS_ASSERT_RECOVER_RETURN_VALUE(
+                direction == Import || direction == Export,
+                KisImportExportFilter::BadConversionGraph);
 
-            bool isThereAlpha = false;
-            KisSequentialConstIterator it(pd, image->bounds());
-            const KoColorSpace* cs = pd->colorSpace();
-            do {
-                if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
-                    isThereAlpha = true;
-                    break;
-                }
-            } while (it.nextPixel());
 
-            exportConfiguration->setProperty("ImageContainsTransparency", isThereAlpha);
-            exportConfiguration->setProperty("ColorModelID", cs->colorModelId().id());
-            exportConfiguration->setProperty("ColorDepthID", cs->colorDepthId().id());
-            bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
-            exportConfiguration->setProperty("sRGB", sRGB);
+
+    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+    if (direction == Import) {
+        if (!batchMode()) {
+            KisAsyncActionFeedback f(i18n("Opening document..."), 0);
+            status = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
+        } else {
+            status = doImport(location, filter);
+        }
+    } else /* if (direction == Export) */ {
+        if (!exportConfiguration) {
+            exportConfiguration = filter->lastSavedConfiguration(from, to);
         }
 
+        if (exportConfiguration) {
+            fillStaticExportConfigurationProperties(exportConfiguration);
+        }
+
+        bool alsoAsKra = false;
+        if (!askUserAboutExportConfiguration(filter, exportConfiguration,
+                                             from, to,
+                                             batchMode(), showWarnings,
+                                             &alsoAsKra)) {
+
+            return KisImportExportFilter::UserCancelled;
+        }
+
+        if (!batchMode()) {
+            KisAsyncActionFeedback f(i18n("Saving document..."), 0);
+            status = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+        } else {
+            status = doExport(location, filter, exportConfiguration, alsoAsKra);
+        }
+
+        if (exportConfiguration) {
+            KisConfig().setExportConfiguration(typeName, exportConfiguration);
+        }
     }
 
-    KisPreExportChecker checker;
-    if (direction == Export) {
+    return status;
+}
+
+void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration)
+{
+    // Fill with some meta information about the image
+    KisImageSP image = m_document->image();
+    KisPaintDeviceSP dev = image->projection();
+    const KoColorSpace* cs = dev->colorSpace();
+    const bool isThereAlpha =
+        KisPainter::checkDeviceHasTransparency(image->projection());
+
+    exportConfiguration->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, isThereAlpha);
+    exportConfiguration->setProperty(KisImportExportFilter::ColorModelIDTag, cs->colorModelId().id());
+    exportConfiguration->setProperty(KisImportExportFilter::ColorDepthIDTag, cs->colorDepthId().id());
+
+    const bool sRGB =
+            (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
+             !cs->profile()->name().contains(QLatin1String("g10")));
+    exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
+}
+
+bool
+KisImportExportManager::askUserAboutExportConfiguration(
+        QSharedPointer<KisImportExportFilter> filter,
+        KisPropertiesConfigurationSP exportConfiguration,
+        const QByteArray &from,
+        const QByteArray &to,
+        const bool batchMode, const bool showWarnings,
+        bool *alsoAsKra)
+{
+    const QString mimeUserDescription = KisMimeDatabase::descriptionForMimeType(to);
+
+    QStringList warnings;
+    QStringList errors;
+
+    {
+        KisPreExportChecker checker;
         checker.check(m_document->image(), filter->exportChecks());
+
+        warnings = checker.warnings();
+        errors = checker.errors();
     }
 
     KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
-    bool alsoAsKra = false;
-
-    QStringList warnings = checker.warnings();
-    QStringList errors = checker.errors();
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.
-    if (!m_document->assistants().isEmpty() && typeName != m_document->nativeFormatMimeType()) {
+    if (!m_document->assistants().isEmpty() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>assistants</b>. The assistants will not be saved."));
     }
-    if (m_document->guidesConfig().hasGuides() && typeName != m_document->nativeFormatMimeType()) {
+    if (m_document->guidesConfig().hasGuides() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>guides</b>. The guides will not be saved."));
     }
-    if (!m_document->gridConfig().isDefault() && typeName != m_document->nativeFormatMimeType()) {
+    if (!m_document->gridConfig().isDefault() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains a <b>custom grid configuration</b>. The configuration will not be saved."));
     }
 
-    if (!batchMode() && !errors.isEmpty()) {
+    if (!batchMode && !errors.isEmpty()) {
         QString error =  "<html><body><p><b>"
-                + i18n("Error: cannot save this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
+                + i18n("Error: cannot save this image as a %1.", mimeUserDescription)
                 + "</b> Reasons:</p>"
                 + "<p/><ul>";
         Q_FOREACH(const QString &w, errors) {
@@ -307,60 +364,55 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         error += "</ul>";
 
         QMessageBox::critical(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita: Export Error"), error);
-        return KisImportExportFilter::UserCancelled;
+        return false;
     }
 
-    if (!batchMode() && (wdg || !warnings.isEmpty())) {
+    if (!batchMode && (wdg || !warnings.isEmpty())) {
 
         KoDialog dlg;
 
         dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
-        dlg.setWindowTitle(KisMimeDatabase::descriptionForMimeType(mimeType));
+        dlg.setWindowTitle(mimeUserDescription);
 
         QWidget *page = new QWidget(&dlg);
         QVBoxLayout *layout = new QVBoxLayout(page);
 
-        if (!checker.warnings().isEmpty()) {
+        if (showWarnings && !warnings.isEmpty()) {
+            QHBoxLayout *hLayout = new QHBoxLayout();
 
-            if (showWarnings) {
+            QLabel *labelWarning = new QLabel();
+            labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
+            hLayout->addWidget(labelWarning);
 
-                QHBoxLayout *hLayout = new QHBoxLayout();
+            KisPopupButton *bn = new KisPopupButton(0);
 
-                QLabel *labelWarning = new QLabel();
-                labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
-                hLayout->addWidget(labelWarning);
+            bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as %1 will lose information from your image.    ", mimeUserDescription));
 
-                KisPopupButton *bn = new KisPopupButton(0);
+            hLayout->addWidget(bn);
 
-                bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as %1 will lose information from your image.    ", KisMimeDatabase::descriptionForMimeType(mimeType)));
+            layout->addLayout(hLayout);
 
+            QTextBrowser *browser = new QTextBrowser();
+            browser->setMinimumWidth(bn->width());
+            bn->setPopupWidget(browser);
 
-                hLayout->addWidget(bn);
+            QString warning = "<html><body><p><b>"
+                    + i18n("You will lose information when saving this image as a %1.", mimeUserDescription);
 
-                layout->addLayout(hLayout);
-
-                QTextBrowser *browser = new QTextBrowser();
-                browser->setMinimumWidth(bn->width());
-                bn->setPopupWidget(browser);
-
-                QString warning = "<html><body><p><b>"
-                        + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName));
-
-                if (warnings.size() == 1) {
-                    warning += "</b> Reason:</p>";
-                }
-                else {
-                    warning += "</b> Reasons:</p>";
-                }
-                warning += "<p/><ul>";
-
-                Q_FOREACH(const QString &w, warnings) {
-                    warning += "\n<li>" + w + "</li>";
-                }
-
-                warning += "</ul>";
-                browser->setHtml(warning);
+            if (warnings.size() == 1) {
+                warning += "</b> Reason:</p>";
             }
+            else {
+                warning += "</b> Reasons:</p>";
+            }
+            warning += "<p/><ul>";
+
+            Q_FOREACH(const QString &w, warnings) {
+                warning += "\n<li>" + w + "</li>";
+            }
+
+            warning += "</ul>";
+            browser->setHtml(warning);
         }
 
         if (wdg) {
@@ -371,14 +423,11 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             layout->addWidget(box);
         }
 
-
         QCheckBox *chkAlsoAsKra = 0;
-        if (showWarnings) {
-            if (!checker.warnings().isEmpty()) {
-                chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
-                chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
-                layout->addWidget(chkAlsoAsKra);
-            }
+        if (showWarnings && !warnings.isEmpty()) {
+            chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
+            chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
+            layout->addWidget(chkAlsoAsKra);
         }
 
         dlg.setMainWidget(page);
@@ -386,95 +435,93 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
         if (showWarnings || wdg) {
             if (!dlg.exec()) {
-                return KisImportExportFilter::UserCancelled;
+                return false;
             }
         }
 
+        *alsoAsKra = false;
         if (chkAlsoAsKra) {
             KisConfig().writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
-            alsoAsKra = chkAlsoAsKra->isChecked();
+            *alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
         if (wdg) {
-            exportConfiguration = wdg->configuration();
-        }
-
-    }
-
-    QFile io(location);
-    QSaveFile out(location);
-
-    if (direction == Import) {
-        if (!io.exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-        if (!io.open(QFile::ReadOnly) ) {
-            return KisImportExportFilter::FileNotFound;
-        }
-    }
-    else if (direction == Export) {
-        if (filter->supportsIO()) {
-            out.setDirectWriteFallback(true);
-            if (!out.open(QFile::WriteOnly)) {
-                out.cancelWriting();
-                return KisImportExportFilter::CreationError;
-            }
-        }
-    }
-    else {
-        return KisImportExportFilter::BadConversionGraph;
-    }
-
-    if (!batchMode()) {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-    }
-
-    KisImportExportFilter::ConversionStatus status;
-    if (direction == Import || !filter->supportsIO()) {
-         status = filter->convert(m_document, &io, exportConfiguration);
-         if (io.isOpen()) io.close();
-    }
-    else {
-        status = filter->convert(m_document, &out, exportConfiguration);
-        if (status != KisImportExportFilter::OK) {
-            out.cancelWriting();
-        }
-        else {
-            out.commit();
+            *exportConfiguration = *wdg->configuration();
         }
     }
 
-    if (exportConfiguration) {
-        KisConfig().setExportConfiguration(typeName, exportConfiguration);
+    return true;
+}
+
+KisImportExportFilter::ConversionStatus KisImportExportManager::doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter)
+{
+    QFile file(location);
+    if (!file.exists()) {
+        return KisImportExportFilter::FileNotFound;
     }
 
-    if (alsoAsKra) {
-        QString l = location + ".kra";
-        QByteArray ba = m_document->nativeFormatMimeType();
-        KisImportExportFilter *filter = filterForMimeType(QString::fromLatin1(ba), Export);
-        QSaveFile f(l);
-        f.open(QIODevice::WriteOnly);
-        if (filter) {
-            filter->setFilename(l);
-            if (filter->convert(m_document, &f) == KisImportExportFilter::OK) {
-                f.commit();
-            }
-            else {
-                f.cancelWriting();
-            }
-        }
-        delete filter;
-
+    if (filter->supportsIO() && !file.open(QFile::ReadOnly)) {
+        return KisImportExportFilter::FileNotFound;
     }
 
-    if (!batchMode()) {
-        QApplication::restoreOverrideCursor();
+    KisImportExportFilter::ConversionStatus status =
+        filter->convert(m_document, &file, KisPropertiesConfigurationSP());
+
+    if (file.isOpen()) {
+        file.close();
     }
 
     return status;
-
 }
 
+KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
+{
+    KisImportExportFilter::ConversionStatus status =
+        doExportImpl(location, filter, exportConfiguration);
+
+    if (alsoAsKra && status == KisImportExportFilter::OK) {
+        QString kraLocation = location + ".kra";
+        QByteArray mime = m_document->nativeFormatMimeType();
+        QSharedPointer<KisImportExportFilter> filter(
+            filterForMimeType(QString::fromLatin1(mime), Export));
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
+
+        if (filter) {
+            filter->setFilename(kraLocation);
+
+            KisPropertiesConfigurationSP kraExportConfiguration =
+                filter->lastSavedConfiguration(mime, mime);
+
+            status = doExportImpl(kraLocation, filter, kraExportConfiguration);
+        } else {
+            status = KisImportExportFilter::FilterCreationError;
+        }
+    }
+
+    return status;
+}
+
+KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
+{
+    QSaveFile file(location);
+    file.setDirectWriteFallback(true);
+
+    if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
+        file.cancelWriting();
+        return KisImportExportFilter::CreationError;
+    }
+
+    KisImportExportFilter::ConversionStatus status =
+        filter->convert(m_document, &file, exportConfiguration);
+
+    if (status != KisImportExportFilter::OK) {
+        file.cancelWriting();
+    } else {
+        file.commit();
+    }
+
+    return status;
+}
 
 #include <KisMimeDatabase.h>

@@ -59,8 +59,8 @@ public:
     {
     }
 
-    void requestProjectionUpdate(KisNode *node, const QRect& rect) override {
-        KisNodeGraphListener::requestProjectionUpdate(node, rect);
+    void requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache) override {
+        KisNodeGraphListener::requestProjectionUpdate(node, rect, resetAnimationCache);
 
         QMutexLocker locker(&m_lock);
         m_scratchPad->imageUpdated(rect);

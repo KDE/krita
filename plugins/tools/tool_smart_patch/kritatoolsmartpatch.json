@@ -1,0 +1,9 @@
+{
+    "Id": "Inpaint Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoolsmartpatch",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

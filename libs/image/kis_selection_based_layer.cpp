@@ -257,11 +257,6 @@ void KisSelectionBasedLayer::setY(qint32 y)
     }
 }
 
-void KisSelectionBasedLayer::setDirty(const QRect & rect)
-{
-    KisLayer::setDirty(rect);
-}
-
 KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::Content.id()) {

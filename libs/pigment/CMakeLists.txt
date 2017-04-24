@@ -69,7 +69,6 @@ set(kritapigment_SRCS
     KoUniqueNumberForIdServer.cpp
     colorspaces/KoAlphaColorSpace.cpp
     colorspaces/KoAlphaU16ColorSpace.cpp
-    colorspaces/KoAlphaF16ColorSpace.cpp
     colorspaces/KoAlphaF32ColorSpace.cpp
     colorspaces/KoLabColorSpace.cpp
     colorspaces/KoRgbU16ColorSpace.cpp

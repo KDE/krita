@@ -83,9 +83,6 @@ public:
 
     bool needProjection() const override;
 
-    using KisLayer::setDirty;
-    void setDirty(const QRect & rect) override;
-
     QIcon icon() const override;
     void setImage(KisImageWSP image) override;
 

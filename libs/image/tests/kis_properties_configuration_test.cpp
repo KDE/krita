@@ -103,8 +103,22 @@ void KisPropertiesConfigurationTest::testCopy()
     QVERIFY(config.getDouble("v3", 0.0) == v3);
     QVERIFY(config.getBool("v4", !v4) == v4);
     QVERIFY(config.getCubicCurve("v5") == v5);
-    QVERIFY(config.hasProperty("v6") == false);
+    QVERIFY(config.hasProperty("v6") == true); // copying works!
 
+    p1->setProperty("testBool1", true);
+    p1->setProperty("testBool2", false);
+
+    QString string = p1->toXML();
+
+    KisPropertiesConfiguration p2;
+    p2.fromXML(string);
+    QVERIFY(p2.getInt("v1", 0) == v1);
+    QVERIFY(p2.getString("v2", QString()) == v2);
+    QVERIFY(p2.getDouble("v3", 0.0) == v3);
+    QVERIFY(p2.getBool("v4", !v4) == v4);
+    QVERIFY(p2.hasProperty("v6") == false); // round-tripping -- no
+    QCOMPARE(p2.getBool("testBool1", false), true);
+    QCOMPARE(p2.getBool("testBool2", true), false);
 }
 
 QTEST_MAIN(KisPropertiesConfigurationTest)

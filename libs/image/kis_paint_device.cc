@@ -808,6 +808,8 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
 
     const QRect rect = srcData->dataManager()->extent();
     dstData->dataManager()->bitBltRough(srcData->dataManager(), rect);
+    dstData->setX(srcData->x());
+    dstData->setY(srcData->y());
 }
 
 void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)

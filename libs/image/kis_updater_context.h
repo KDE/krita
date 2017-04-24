@@ -36,9 +36,11 @@ class KisStrokeJob;
 class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
 {
     Q_OBJECT
+public:
+    static const int useIdealThreadCountTag;
 
 public:
-    KisUpdaterContext(qint32 threadCount = -1);
+    KisUpdaterContext(qint32 threadCount = useIdealThreadCountTag, QObject *parent = 0);
     virtual ~KisUpdaterContext();
 
 

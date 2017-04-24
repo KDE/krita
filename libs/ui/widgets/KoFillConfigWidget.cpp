@@ -728,7 +728,7 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
         break;
     case KoFlake::Solid: {
         QColor color = wrapper.color();
-        if (d->group->checkedId() == KoFillConfigWidget::Solid || color.alpha() > 0) {
+        if (color.alpha() > 0) {
             newActiveButton = KoFillConfigWidget::Solid;
             d->colorAction->setCurrentColor(wrapper.color());
         }

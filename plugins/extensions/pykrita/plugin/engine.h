@@ -23,13 +23,14 @@
 #ifndef __PYKRITA_ENGINE_H__
 # define  __PYKRITA_ENGINE_H__
 
-# include <Python.h>
+#include <cmath>
+#include <Python.h>
 
-# include "version_checker.h"
+#include "version_checker.h"
 
-# include <QAbstractItemModel>
-# include <QList>
-# include <QStringList>
+#include <QAbstractItemModel>
+#include <QList>
+#include <QStringList>
 
 namespace PyKrita
 {

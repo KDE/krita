@@ -25,8 +25,10 @@
 
 struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
 {
-    Private()
-        : queueSizeMetric(0)
+    Private(KisQueuesProgressUpdater *q)
+        : timer(q)
+        , startDelayTimer(q)
+        , queueSizeMetric(0)
         , initialQueueSizeMetric(0)
         , progressProxy(0)
         , tickingRequested(false)
@@ -50,8 +52,9 @@ struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
 };
 
 
-KisQueuesProgressUpdater::KisQueuesProgressUpdater(KoProgressProxy *progressProxy)
-    : m_d(new Private)
+KisQueuesProgressUpdater::KisQueuesProgressUpdater(KoProgressProxy *progressProxy, QObject *parent)
+    : QObject(parent),
+      m_d(new Private(this))
 {
     m_d->progressProxy = progressProxy;
 

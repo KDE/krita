@@ -95,7 +95,7 @@ public:
     /**
      * Inform the model that a node has been changed (setDirty)
      */
-    virtual void requestProjectionUpdate(KisNode * node, const QRect& rect);
+    virtual void requestProjectionUpdate(KisNode * node, const QRect& rect, bool resetAnimationCache);
 
     virtual void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 

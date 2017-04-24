@@ -29,6 +29,7 @@
 #include "config.h"
 #include "utilities.h"
 
+#include <cmath>
 #include <Python.h>
 
 #include <QSettings>

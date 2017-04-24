@@ -121,14 +121,6 @@ KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArr
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisVideoExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
-{
-    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration("FFMPEG_CONFIG");
-    cfg->fromXML(filterConfig, false);
-    return cfg;
-}
-
 KisConfigWidget *KisVideoExport::createConfigurationWidget(QWidget *parent, const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);

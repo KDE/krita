@@ -667,7 +667,8 @@ void KisImageTest::testMergeDownDestinationInheritsAlpha()
 
         KisLayerSP newLayer = mergeHelper(p, p.layer2);
 
-        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        // WARN: this check is suspicious!
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_proj_merged_layer2_over_layer5_IA"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer2_layerproj"));
 
         QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
@@ -1011,5 +1012,148 @@ void KisImageTest::testFlattenImage()
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
     }
 }
+
+struct FlattenPassThroughTestImage
+{
+    FlattenPassThroughTestImage()
+        : refRect(0,0,512,512)
+        , p(refRect)
+    {
+
+        image = p.image;
+        undoStore = p.undoStore;
+
+        group1 = new KisGroupLayer(p.image, "group1", OPACITY_OPAQUE_U8);
+        layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
+        layer3 = new KisPaintLayer(p.image, "paint3", OPACITY_OPAQUE_U8);
+
+        group4 = new KisGroupLayer(p.image, "group4", OPACITY_OPAQUE_U8);
+        layer5 = new KisPaintLayer(p.image, "paint5", OPACITY_OPAQUE_U8);
+        layer6 = new KisPaintLayer(p.image, "paint6", OPACITY_OPAQUE_U8);
+
+        QRect rect2(100, 100, 100, 100);
+        QRect rect3(150, 150, 100, 100);
+
+        QRect rect5(200, 200, 100, 100);
+        QRect rect6(250, 250, 100, 100);
+
+        group1->setPassThroughMode(true);
+        layer2->paintDevice()->fill(rect2, KoColor(Qt::red, p.image->colorSpace()));
+        layer3->paintDevice()->fill(rect3, KoColor(Qt::green, p.image->colorSpace()));
+
+        group4->setPassThroughMode(true);
+        layer5->paintDevice()->fill(rect5, KoColor(Qt::blue, p.image->colorSpace()));
+        layer6->paintDevice()->fill(rect6, KoColor(Qt::yellow, p.image->colorSpace()));
+
+
+        p.image->addNode(group1);
+        p.image->addNode(layer2, group1);
+        p.image->addNode(layer3, group1);
+
+        p.image->addNode(group4);
+        p.image->addNode(layer5, group4);
+        p.image->addNode(layer6, group4);
+
+        p.image->initialRefreshGraph();
+
+        TestUtil::ExternalImageChecker chk("passthrough", "imagetest");
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    QRect refRect;
+    TestUtil::MaskParent p;
+
+    KisImageSP image;
+    KisSurrogateUndoStore *undoStore;
+
+    KisGroupLayerSP group1;
+    KisPaintLayerSP layer2;
+    KisPaintLayerSP layer3;
+
+    KisGroupLayerSP group4;
+    KisPaintLayerSP layer5;
+    KisPaintLayerSP layer6;
+};
+
+void KisImageTest::testFlattenPassThroughLayer()
+{
+    FlattenPassThroughTestImage p;
+
+    TestUtil::ExternalImageChecker chk("passthrough", "imagetest");
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.group1->passThroughMode(), true);
+
+        KisLayerSP newLayer = flattenLayerHelper(p, p.group1);
+
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_group1_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QVERIFY(newLayer->inherits("KisPaintLayer"));
+    }
+}
+
+void KisImageTest::testMergeTwoPassThroughLayers()
+{
+    FlattenPassThroughTestImage p;
+
+    TestUtil::ExternalImageChecker chk("passthrough", "imagetest");
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.group1->passThroughMode(), true);
+
+        KisLayerSP newLayer = mergeHelper(p, p.group4);
+
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QVERIFY(newLayer->inherits("KisGroupLayer"));
+    }
+}
+
+void KisImageTest::testMergePaintOverPassThroughLayer()
+{
+    FlattenPassThroughTestImage p;
+
+    TestUtil::ExternalImageChecker chk("passthrough", "imagetest");
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.group1->passThroughMode(), true);
+
+        KisLayerSP newLayer = flattenLayerHelper(p, p.group4);
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(newLayer->inherits("KisPaintLayer"));
+
+        newLayer = mergeHelper(p, newLayer);
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(newLayer->inherits("KisPaintLayer"));
+    }
+}
+
+void KisImageTest::testMergePassThroughOverPaintLayer()
+{
+    FlattenPassThroughTestImage p;
+
+    TestUtil::ExternalImageChecker chk("passthrough", "imagetest");
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.group1->passThroughMode(), true);
+
+        KisLayerSP newLayer = flattenLayerHelper(p, p.group1);
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(newLayer->inherits("KisPaintLayer"));
+
+        newLayer = mergeHelper(p, p.group4);
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(newLayer->inherits("KisPaintLayer"));
+    }
+}
+
+
 
 QTEST_MAIN(KisImageTest)

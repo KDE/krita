@@ -32,6 +32,12 @@ class KisDelayedSaveDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum ResultType {
+        Rejected = QDialog::Rejected,
+        Accepted = QDialog::Accepted,
+        Ignored = 2
+    };
+
     enum Type {
         SaveDialog,
         GeneralDialog,
@@ -47,6 +53,7 @@ public:
 private Q_SLOTS:
     void slotTimerTimeout();
     void slotCancelRequested();
+    void slotIgnoreRequested();
 
 private:
     Ui::KisDelayedSaveDialog *ui;

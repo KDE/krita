@@ -64,7 +64,6 @@
 #include <kis_pixel_selection.h>
 #include <kis_shape_selection.h>
 #include <kis_selection_manager.h>
-#include <kis_system_locker.h>
 #include <krita_utils.h>
 #include <kis_resources_snapshot.h>
 
@@ -83,7 +82,7 @@
 #include "kis_transform_mask_adapter.h"
 
 #include "kis_layer_utils.h"
-#include "kis_shape_layer.h"
+#include <KisDelayedUpdateNodeInterface.h>
 
 #include "strokes/transform_stroke_strategy.h"
 
@@ -691,7 +690,7 @@ bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, T
 
         // FIXME: can we make it async?
         image()->waitForDone();
-        forceRepaintShapeLayers(oldRootNode);
+        forceRepaintDelayedLayers(oldRootNode);
 
         result = true;
     }
@@ -868,6 +867,12 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
+    /**
+     * We must ensure that the currently selected subtree
+     * has finished all its updates.
+     */
+    forceRepaintDelayedLayers(currentNode);
+
     ToolTransformArgs fetchedArgs;
     bool fetchedFromCommand = false;
 
@@ -1008,10 +1013,11 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
     QList<KisNodeSP> result;
 
     auto fetchFunc =
-        [&result, mode] (KisNodeSP node) {
+        [&result, mode, root] (KisNodeSP node) {
             if (node->isEditable() &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
-                !node->inherits("KisFileLayer")) {
+                !node->inherits("KisFileLayer") &&
+                (!node->inherits("KisTransformMask") || node == root)) {
 
                 result << node;
             }
@@ -1162,7 +1168,7 @@ void KisToolTransform::slotResetTransform()
 
             cancelStroke();
             image()->waitForDone();
-            forceRepaintShapeLayers(root);
+            forceRepaintDelayedLayers(root);
             startStroke(savedMode, true);
 
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
@@ -1183,27 +1189,25 @@ void KisToolTransform::slotRestartTransform()
     ToolTransformArgs savedArgs(m_currentArgs);
     cancelStroke();
     image()->waitForDone();
-    forceRepaintShapeLayers(root);
+    forceRepaintDelayedLayers(root);
     startStroke(savedArgs.mode(), true);
 }
 
-void KisToolTransform::forceRepaintShapeLayers(KisNodeSP root)
+void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(root);
 
-    auto forceUpdateFunction =
+    KisLayerUtils::recursiveApplyNodes(root,
         [] (KisNodeSP node) {
-            KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
-            if (shapeLayer) {
-                shapeLayer->forceRepaint();
-            }
-        };
+            KisDelayedUpdateNodeInterface *delayedUpdate =
+                dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
 
-    if (m_workRecursively) {
-        KisLayerUtils::recursiveApplyNodes(root, forceUpdateFunction);
-    } else {
-        forceUpdateFunction(root);
-    }
+            if (delayedUpdate) {
+                delayedUpdate->forceUpdateTimedNode();
+            }
+        });
+
+    image()->waitForDone();
 }
 
 

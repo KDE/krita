@@ -131,6 +131,13 @@ public:
     virtual void setDirty(const QRegion &region);
 
     /**
+     * @brief setDirtyDontResetAnimationCache does almost the same thing as usual
+     * setDirty() call, but doesn't reset the animation cache (since onlion skins are
+     * not used when rendering animation.
+     */
+    void setDirtyDontResetAnimationCache();
+
+    /**
      * Informs that the frames in the given range are no longer valid
      * and need to be recached.
      * @param range frames to invalidate

@@ -22,12 +22,13 @@
 
 #include "kis_types.h"
 #include "kis_effect_mask.h"
+#include "KisDelayedUpdateNodeInterface.h"
 
 /**
    Transform a layer according to a matrix transform
 */
 
-class KRITAIMAGE_EXPORT KisTransformMask : public KisEffectMask
+class KRITAIMAGE_EXPORT KisTransformMask : public KisEffectMask, public KisDelayedUpdateNodeInterface
 {
     Q_OBJECT
 
@@ -73,6 +74,8 @@ public:
     void setX(qint32 x);
     void setY(qint32 y);
 
+    void forceUpdateTimedNode() override;
+
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
@@ -81,6 +84,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void initiateDelayedStaticUpdate() const;
+    void forceTerminateDelayedStaticUpdate() const;
 
 private:
     struct Private;

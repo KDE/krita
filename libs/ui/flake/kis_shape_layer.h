@@ -25,6 +25,7 @@
 #include <kis_types.h>
 #include <kis_external_layer_iface.h>
 #include <kritaui_export.h>
+#include <KisDelayedUpdateNodeInterface.h>
 
 class QRect;
 class QIcon;
@@ -48,7 +49,7 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 
    XXX: what about removing shapes?
 */
-class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer
+class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer, public KisDelayedUpdateNodeInterface
 {
     Q_OBJECT
 
@@ -132,10 +133,11 @@ public:
      *
      * shapeLayer->setDirty();
      * shapeLayer->image()->waitForDone();
-     * shapeLayer->forceRepaint();
+     * shapeLayer->forceUpdateTimedNode();
+     * shapeLayer->image()->waitForDone();
      *
      */
-    void forceRepaint();
+    void forceUpdateTimedNode() override;
 
 protected:
     using KoShape::isVisible;

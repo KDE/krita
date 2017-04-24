@@ -2,6 +2,9 @@ import pykrita
 import os
 import sys
 
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+
 from .api import *
 from .decorators import *
 from .dockwidgetfactory import *

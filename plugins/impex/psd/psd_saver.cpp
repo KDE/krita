@@ -28,6 +28,7 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
+#include "kis_painter.h"
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -100,39 +101,14 @@ KisImageSP PSDSaver::image()
     return m_image;
 }
 
-#include "kis_sequential_iterator.h"
-
-
-bool checkIfHasTransparency(KisPaintDeviceSP dev)
-{
-    const QRect deviceBounds = dev->exactBounds();
-    const QRect imageBounds = dev->defaultBounds()->bounds();
-
-    if (deviceBounds.isEmpty() ||
-        (deviceBounds & imageBounds) != imageBounds) {
-
-        return true;
-    }
-
-    const KoColorSpace *cs = dev->colorSpace();
-    KisSequentialConstIterator it(dev, deviceBounds);
-
-    do {
-        if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
-            return true;
-        }
-    } while(it.nextPixel());
-
-    return false;
-}
-
 KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
 {
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
 
     const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
-        checkIfHasTransparency(m_image->rootLayer()->firstChild()->projection());
+        KisPainter::checkDeviceHasTransparency(
+                m_image->rootLayer()->firstChild()->projection());
 
     // HEADER
     PSDHeader header;

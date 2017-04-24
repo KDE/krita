@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SYSTEM_LOCKER_H_
-#define _KIS_SYSTEM_LOCKER_H_
+#ifndef KISDELAYEDUPDATENODEINTERFACE_H
+#define KISDELAYEDUPDATENODEINTERFACE_H
+
+#include "kritaimage_export.h"
 
 
 /**
- * This class will lock a \ref KisBaseNode upon construction, and unlock it
- * at destruction. Use it before processing a node.
+ * @brief The KisDelayedUpdateNodeInterface class is an interface for
+ * nodes that dealy their real updates with KisSignalCompressor. Some
+ * operations need explicit regeneration before they can proceed.
  */
-class KisSystemLocker
+class KRITAIMAGE_EXPORT KisDelayedUpdateNodeInterface
 {
 public:
-    inline KisSystemLocker(KisBaseNodeSP _node) : m_node(_node) {
-        Q_ASSERT(!_node->systemLocked());
-        m_node->setSystemLocked(true);
-    }
-    inline ~KisSystemLocker() {
-        m_node->setSystemLocked(false);
-    }
-private:
-    KisBaseNodeSP m_node;
+    virtual ~KisDelayedUpdateNodeInterface();
 
+    /**
+     * @brief forceUpdateTimedNode forrces the node to regenerate its project. The update might
+     * be asynchronous, so you chould call image->waitForDone() after that.
+     */
+    virtual void forceUpdateTimedNode() = 0;
 };
 
-
-#endif
+#endif // KISDELAYEDUPDATENODEINTERFACE_H

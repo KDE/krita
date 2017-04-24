@@ -53,8 +53,8 @@
 #include "KoColorSpaceTraits.h"
 
 const int MAX_DIST = 65535;
-const quint8 MASK_SET = 0;
-const quint8 MASK_CLEAR = 255;
+const quint8 MASK_SET = 255;
+const quint8 MASK_CLEAR = 0;
 
 void patchImage(KisPaintDeviceSP, KisPaintDeviceSP, int radius);
 
@@ -250,7 +250,7 @@ private:
         //hard threshold for the initial mask
         //may be optional. needs testing
         std::for_each(maskData.data(), maskData.data() + maskData.num_bytes(), [](quint8 & v) {
-            v = (v < MASK_CLEAR) ? MASK_SET : MASK_CLEAR;
+            v = (v > MASK_CLEAR) ? MASK_SET : MASK_CLEAR;
         });
     }
 
@@ -402,14 +402,14 @@ public:
     int countMasked(void)
     {
         int count = std::count_if(maskData.data(), maskData.data() + maskData.num_elements(), [](quint8 v) {
-            return v < MASK_CLEAR;
+            return v > MASK_CLEAR;
         });
         return count;
     }
 
     inline bool isMasked(int x, int y)
     {
-        return (*maskData(x, y) < MASK_CLEAR);
+        return (*maskData(x, y) > MASK_CLEAR);
     }
 
     //returns true if the patch contains a masked pixel

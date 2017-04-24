@@ -20,6 +20,8 @@
 #define KIS_TOOL_SMART_PATCH_H_
 
 #include <QScopedPointer>
+#include <QPainterPath>
+
 #include "kis_tool_paint.h"
 
 #include "KoToolFactoryBase.h"
@@ -56,11 +58,6 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter);
 
-protected:
-    QPainterPath brushOutline();
-    QPainterPath getOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
-    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
-
 protected Q_SLOTS:
     void resetCursorStyle();
 
@@ -71,15 +68,15 @@ public Q_SLOTS:
 Q_SIGNALS:
 
 private:
-    bool canCreateInpaintMask() const;
     QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
+    QPainterPath getBrushOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
+    QPainterPath brushOutline();
+    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
-    void createInpaintMask();
-    void deleteInpaintMask();
     void addMaskPath(KoPointerEvent *event);
 };
 

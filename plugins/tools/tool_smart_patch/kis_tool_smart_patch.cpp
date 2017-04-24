@@ -36,7 +36,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoShapeController.h"
 #include "KoDocumentResourceManager.h"
-#include "kis_node_manager.h"
+//#include "kis_node_manager.h"
 #include "kis_cursor.h"
 
 #include "kis_tool_smart_patch_options_widget.h"
@@ -49,14 +49,9 @@
 #include "kis_paint_information.h"
 #include "kis_distance_information.h"
 
-#include "kis_inpaint_mask.h"
-
 QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
 
 struct KisToolSmartPatch::Private {
-    KisMaskSP mask = nullptr;
-    KisNodeSP maskNode = nullptr;
-    KisNodeSP paintNode = nullptr;
     KisPaintDeviceSP imageDev = nullptr;
     KisPaintDeviceSP maskDev = nullptr;
     KisPainter maskDevPainter;
@@ -105,13 +100,6 @@ void KisToolSmartPatch::resetCursorStyle()
     KisToolPaint::resetCursorStyle();
 }
 
-
-bool KisToolSmartPatch::canCreateInpaintMask() const
-{
-    KisNodeSP node = currentNode();
-    return node && node->inherits("KisPaintLayer");
-}
-
 QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
 {
     int accuracy = 50; //default accuracy - middle value
@@ -136,26 +124,6 @@ void KisToolSmartPatch::deactivatePrimaryAction()
     KisToolPaint::deactivatePrimaryAction();
 }
 
-void KisToolSmartPatch::createInpaintMask(void)
-{
-    m_d->mask = new KisInpaintMask();
-
-    KisLayerSP parentLayer = qobject_cast<KisLayer*>(m_d->paintNode.data());
-    m_d->mask->initSelection(parentLayer);
-    image()->addNode(m_d->mask, m_d->paintNode);
-}
-
-void KisToolSmartPatch::deleteInpaintMask(void)
-{
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager* viewManager = kiscanvas->viewManager();
-    if (! m_d->paintNode.isNull())
-        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->paintNode);
-
-    image()->removeNode(m_d->mask);
-    m_d->mask = nullptr;
-}
-
 void KisToolSmartPatch::addMaskPath( KoPointerEvent *event )
 {
     QPointF imagePos = currentImage()->documentToPixel(event->point);
@@ -167,41 +135,20 @@ void KisToolSmartPatch::addMaskPath( KoPointerEvent *event )
 
 void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
+    //we can only apply inpaint operation to paint layer
+    if ( currentNode().isNull() || !currentNode()->inherits("KisPaintLayer")) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        kiscanvas->viewManager()->
+                showFloatingMessage(
+                    i18n("Select a paint layer to use this tool"),
+                    QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+        event->ignore();
+        return;
+    }
+
     addMaskPath(event);
     setMode(KisTool::PAINT_MODE);
     KisToolPaint::beginPrimaryAction(event);
-
-//    m_d->paintNode = currentNode();
-
-//    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-//    KisViewManager* viewManager = kiscanvas->viewManager();
-
-//    //we can only apply inpaint operation to paint layer
-//    if (!m_d->paintNode.isNull() && m_d->paintNode->inherits("KisPaintLayer")) {
-
-
-//        if (!m_d->mask.isNull()) {
-//            viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
-//        } else {
-
-//            createInpaintMask();
-//            viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
-
-//            //Collapse freehand drawing of the mask followed by inpaint operation into a single undo node
-//            canvas()->shapeController()->resourceManager()->undoStack()->beginMacro(kundo2_i18n("Smart Patch"));
-
-
-//            //User will be drawing on an alpha mask. Show color matching inpaint mask color.
-//            m_d->currentFgColor = canvas()->resourceManager()->foregroundColor();
-//            canvas()->resourceManager()->setForegroundColor(KoColor(Qt::magenta, image()->colorSpace()));
-//        }
-//        KisToolPaint::beginPrimaryAction(event);
-//    } else {
-//        viewManager->
-//        showFloatingMessage(
-//            i18n("Select a paint layer to use this tool"),
-//            QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
-//    }
 }
 
 
@@ -219,6 +166,18 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     addMaskPath(event);
     KisToolPaint::endPrimaryAction(event);
     setMode(KisTool::HOVER_MODE);
+
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+
+    m_d->imageDev = currentNode()->paintDevice();
+
+    //KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->exactBounds(), "maskDev", "/home/eugening/Projects/Mask");
+    //actual inpaint operation. filling in areas masked by user
+    QRect changedRect = inpaintImage( KisPainter::convertToAlphaAsAlpha(m_d->maskDev), m_d->imageDev);
+
+    QApplication::restoreOverrideCursor();
+    m_d->maskDev->clear();
+    currentNode()->setDirty(changedRect);
 
 //    if (m_d->mask.isNull())
 //        return;
@@ -267,7 +226,7 @@ QPainterPath KisToolSmartPatch::brushOutline( void )
     return outline;
 }
 
-QPainterPath KisToolSmartPatch::getOutlinePath(const QPointF &documentPos,
+QPainterPath KisToolSmartPatch::getBrushOutlinePath(const QPointF &documentPos,
                                           const KoPointerEvent *event)
 {
     Q_UNUSED(event);
@@ -283,7 +242,7 @@ void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, con
     if( !event )
         return;
 
-    m_d->brushOutline = getOutlinePath(outlineDocPoint, event);
+    m_d->brushOutline = getBrushOutlinePath(outlineDocPoint, event);
 
     QRectF outlinePixelRect = m_d->brushOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
@@ -314,6 +273,7 @@ void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, con
 
 void KisToolSmartPatch::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
 
     painter.save();
     painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);

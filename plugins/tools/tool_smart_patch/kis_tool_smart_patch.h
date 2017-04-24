@@ -20,7 +20,7 @@
 #define KIS_TOOL_SMART_PATCH_H_
 
 #include <QScopedPointer>
-#include "kis_tool_freehand.h"
+#include "kis_tool_paint.h"
 
 #include "KoToolFactoryBase.h"
 
@@ -34,8 +34,11 @@
 
 class KActionCollection;
 class KoCanvasBase;
+class KisPaintInformation;
+class KisSpacingInfomation;
 
-class KisToolSmartPatch : public KisToolFreehand
+
+class KisToolSmartPatch : public KisToolPaint
 {
     Q_OBJECT
 public:
@@ -50,6 +53,13 @@ public:
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
+
+    void paint(QPainter &painter, const KoViewConverter &converter);
+
+protected:
+    QPainterPath brushOutline();
+    QPainterPath getOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
+    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
 protected Q_SLOTS:
     void resetCursorStyle();
@@ -70,6 +80,7 @@ private:
 
     void createInpaintMask();
     void deleteInpaintMask();
+    void addMaskPath(KoPointerEvent *event);
 };
 
 

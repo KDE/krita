@@ -27,6 +27,9 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 #include <KoCmykColorSpaceTraits.h>
+#include <colorspaces/KoAlphaColorSpace.h>
+#include <colorspaces/KoAlphaU16ColorSpace.h>
+#include <colorspaces/KoAlphaF32ColorSpace.h>
 
 #include <QtEndian>
 
@@ -48,6 +51,22 @@ namespace PsdPixelUtils {
 template <class Traits>
 typename Traits::channels_type convertByteOrder(typename Traits::channels_type value);
 // default implementation is undefined for every color space should be added manually
+
+template <>
+inline quint8 convertByteOrder<AlphaU8Traits>(quint8 value) {
+    return value;
+}
+
+template <>
+inline quint16 convertByteOrder<AlphaU16Traits>(quint16 value) {
+    return qFromBigEndian((quint16)value);
+}
+
+template <>
+inline float convertByteOrder<AlphaF32Traits>(float value) {
+    return qFromBigEndian((quint32)value);
+}
+
 
 template <>
 inline quint8 convertByteOrder<KoGrayU8Traits>(quint8 value) {
@@ -107,6 +126,31 @@ inline quint16 convertByteOrder<KoLabU16Traits>(quint16 value) {
 template <>
 inline float convertByteOrder<KoLabF32Traits>(float value) {
     return qFromBigEndian((quint32)value);
+}
+
+template <class Traits>
+void readAlphaMaskPixel(const QMap<quint16, QByteArray> &channelBytes,
+                        int col, quint8 *dstPtr);
+
+template <>
+void readAlphaMaskPixel<AlphaU8Traits>(const QMap<quint16, QByteArray> &channelBytes,
+                                       int col, quint8 *dstPtr)
+{
+    *dstPtr = reinterpret_cast<const quint8*>(channelBytes.first().constData())[col];
+}
+
+template <>
+void readAlphaMaskPixel<AlphaU16Traits>(const QMap<quint16, QByteArray> &channelBytes,
+                                       int col, quint8 *dstPtr)
+{
+    *dstPtr = reinterpret_cast<const quint16*>(channelBytes.first().constData())[col] >> 8;
+}
+
+template <>
+void readAlphaMaskPixel<AlphaF32Traits>(const QMap<quint16, QByteArray> &channelBytes,
+                                        int col, quint8 *dstPtr)
+{
+    *dstPtr = reinterpret_cast<const float*>(channelBytes.first().constData())[col] * 255;
 }
 
 template <class Traits>
@@ -259,6 +303,19 @@ void readLabPixelCommon(int channelSize,
     }
 }
 
+void readAlphaMaskPixelCommon(int channelSize,
+                                const QMap<quint16, QByteArray> &channelBytes,
+                                int col, quint8 *dstPtr)
+{
+    if (channelSize == 1) {
+        readAlphaMaskPixel<AlphaU8Traits>(channelBytes, col, dstPtr);
+    } else if (channelSize == 2) {
+        readAlphaMaskPixel<AlphaU16Traits>(channelBytes, col, dstPtr);
+    } else if (channelSize == 4) {
+        readAlphaMaskPixel<AlphaF32Traits>(channelBytes, col, dstPtr);
+    }
+}
+
 /**********************************************************************/
 /* Two functions copied from the abandoned PSDParse library (GPL)     */
 /* See: http://www.telegraphics.com.au/svn/psdparse/trunk/psd_zip.c   */
@@ -353,7 +410,7 @@ psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len,
 /**********************************************************************/
 
 QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo*> channelInfoRecords,
-                                            int row, int width, int channelSize)
+                                            int row, int width, int channelSize, bool processMasks)
 {
     const int uncompressedLength = width * channelSize;
 
@@ -361,7 +418,7 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo*
 
     Q_FOREACH (ChannelInfo *channelInfo, channelInfoRecords) {
         // user supplied masks are ignored here
-        if (channelInfo->channelId < -1) continue;
+        if (!processMasks && channelInfo->channelId < -1) continue;
 
         io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
 
@@ -393,7 +450,8 @@ void readCommon(KisPaintDeviceSP dev,
                 const QRect &layerRect,
                 QVector<ChannelInfo*> infoRecords,
                 int channelSize,
-                PixelFunc pixelFunc)
+                PixelFunc pixelFunc,
+                bool processMasks)
 {
     KisOffsetKeeper keeper(io);
 
@@ -450,7 +508,8 @@ void readCommon(KisPaintDeviceSP dev,
             QMap<quint16, QByteArray> channelBytes;
 
             channelBytes = fetchChannelsBytes(io, infoRecords,
-                                              i, layerRect.width(), channelSize);
+                                              i, layerRect.width(),
+                                              channelSize, processMasks);
 
             for (qint64 col = 0; col < layerRect.width(); col++){
                 pixelFunc(channelSize, channelBytes, col, it->rawData());
@@ -470,16 +529,16 @@ void readChannels(QIODevice *io,
 {
     switch (colorMode) {
     case Grayscale:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readGrayPixelCommon);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readGrayPixelCommon, false);
         break;
     case RGB:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readRgbPixelCommon);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readRgbPixelCommon, false);
         break;
     case CMYK:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readCmykPixelCommon);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readCmykPixelCommon, false);
         break;
     case Lab:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readLabPixelCommon);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readLabPixelCommon, false);
         break;
     case Bitmap:
     case Indexed:
@@ -490,6 +549,16 @@ void readChannels(QIODevice *io,
         QString error = QString("Unsupported color mode: %1").arg(colorMode);
         throw KisAslReaderUtils::ASLParseException(error);
     }
+}
+
+void readAlphaMaskChannels(QIODevice *io,
+                           KisPaintDeviceSP device,
+                           int channelSize,
+                           const QRect &layerRect,
+                           QVector<ChannelInfo*> infoRecords)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(infoRecords.size() == 1);
+    readCommon(device, io, layerRect, infoRecords, channelSize, &readAlphaMaskPixelCommon, true);
 }
 
 void writeChannelDataRLE(QIODevice *io, const quint8 *plane, const int channelSize, const QRect &rc, const qint64 sizeFieldOffset, const qint64 rleBlockOffset, const bool writeCompressionType)

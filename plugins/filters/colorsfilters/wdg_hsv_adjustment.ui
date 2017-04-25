@@ -106,6 +106,9 @@
    </item>
    <item row="4" column="2">
     <widget class="KisIntParseSpinBox" name="saturationSpinBox">
+     <property name="minimum">
+      <number>-100</number>
+     </property>
      <property name="maximum">
       <number>100</number>
      </property>
@@ -124,13 +127,13 @@
    <item row="4" column="1">
     <widget class="QSlider" name="saturationSlider">
      <property name="minimum">
-      <number>0</number>
+      <number>-100</number>
      </property>
      <property name="maximum">
       <number>100</number>
      </property>
      <property name="value">
-      <number>50</number>
+      <number>0</number>
      </property>
      <property name="tracking">
       <bool>true</bool>

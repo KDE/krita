@@ -56,8 +56,6 @@ const int MAX_DIST = 65535;
 const quint8 MASK_SET = 255;
 const quint8 MASK_CLEAR = 0;
 
-void patchImage(KisPaintDeviceSP, KisPaintDeviceSP, int radius);
-
 class MaskedImage; //forward decl for the forward decl below
 template <typename T> float distance_impl(const MaskedImage& my, int x, int y, const MaskedImage& other, int xo, int yo);
 
@@ -152,7 +150,6 @@ public:
 
     void saveToDevice(KisPaintDeviceSP outDev, QRect rect)
     {
-
         Q_ASSERT(outDev->colorSpace()->pixelSize() == (quint32) m_pixelSize);
         outDev->writeBytes(m_data, rect);
     }
@@ -987,7 +984,8 @@ QRect getMaskBoundingBox(KisPaintDeviceSP maskDev)
 }
 
 
-QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
+QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy,
+                 KisPaintDeviceSP originalImageDev, KisPaintDeviceSP patchedImageDev)
 {
     QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
@@ -1000,13 +998,17 @@ QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchR
 
     KisPaintDeviceSP tempImageDev = new KisPaintDevice(imageDev->colorSpace());
     KisPaintDeviceSP tempMaskDev = new KisPaintDevice(maskDev->colorSpace());
-    tempImageDev->makeCloneFrom(imageDev, maskRect);
+
+    tempImageDev->makeCloneFrom(imageDev, maskRect); //needed for fast redo operation
+    originalImageDev->makeCloneFrom(imageDev, maskRect); //needed for undo operation
+
     tempMaskDev->makeCloneFrom(maskDev, maskRect);
 
     if (!maskRect.isEmpty()) {
         Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
         MaskedImageSP output = inpaint.patch();
-        output->toPaintDevice(imageDev, maskRect);
+
+        output->toPaintDevice(patchedImageDev, maskRect);
     }
 
     return maskRect;

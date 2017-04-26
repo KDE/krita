@@ -31,6 +31,8 @@
 #include "kis_painter.h"
 
 #include "kundo2magicstring.h"
+#include "kis_processing_applicator.h"
+#include "kis_datamanager.h"
 
 #include "KoProperties.h"
 #include "KoColorSpaceRegistry.h"
@@ -49,7 +51,35 @@
 #include "kis_paint_information.h"
 #include "kis_distance_information.h"
 
-QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
+QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy,
+                 KisPaintDeviceSP originalImageDev, KisPaintDeviceSP patchedImageDev);
+
+class KisToolSmartPatch::InpaintCommand : public KUndo2Command {
+public:
+    InpaintCommand( KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev, int accuracy, int patchRadius ) :
+        m_maskDev(maskDev), m_imageDev(imageDev), m_patchedImageDev(nullptr), m_accuracy(accuracy), m_patchRadius(patchRadius) {}
+
+    void redo() override {
+        if( m_patchedImageDev.isNull() ){
+            m_originalImageDev = new KisPaintDevice(m_imageDev->colorSpace());
+            m_patchedImageDev  = new KisPaintDevice(m_imageDev->colorSpace());
+            m_modifiedRect = patchImage(m_imageDev, m_maskDev, m_patchRadius, m_accuracy, m_originalImageDev, m_patchedImageDev);
+        }
+        m_imageDev->dataManager()->bitBlt( m_patchedImageDev->dataManager(), m_modifiedRect);
+    }
+
+    void undo() override {
+        Q_ASSERT(!m_originalImageDev.isNull());
+        m_imageDev->dataManager()->bitBlt( m_originalImageDev->dataManager(), m_modifiedRect);
+    }
+
+private:
+    KisPaintDeviceSP m_maskDev, m_imageDev;
+    KisPaintDeviceSP m_originalImageDev;
+    KisPaintDeviceSP m_patchedImageDev;
+    QRect m_modifiedRect;
+    int m_accuracy, m_patchRadius;
+};
 
 struct KisToolSmartPatch::Private {
     KisPaintDeviceSP imageDev = nullptr;
@@ -100,17 +130,17 @@ void KisToolSmartPatch::resetCursorStyle()
     KisToolPaint::resetCursorStyle();
 }
 
-QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
-{
-    int accuracy = 50; //default accuracy - middle value
-    int patchRadius = 4; //default radius, which works well for most cases tested
+//QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
+//{
+//    int accuracy = 50; //default accuracy - middle value
+//    int patchRadius = 4; //default radius, which works well for most cases tested
 
-    if (!m_d.isNull() && m_d->optionsWidget) {
-        accuracy = m_d->optionsWidget->getAccuracy();
-        patchRadius = m_d->optionsWidget->getPatchRadius();
-    }
-    return patchImage(imageDev, maskDev, patchRadius, accuracy);
-}
+//    if (!m_d.isNull() && m_d->optionsWidget) {
+//        accuracy = m_d->optionsWidget->getAccuracy();
+//        patchRadius = m_d->optionsWidget->getPatchRadius();
+//    }
+//    return patchImage(imageDev, maskDev, patchRadius, accuracy);
+//}
 
 void KisToolSmartPatch::activatePrimaryAction()
 {
@@ -151,14 +181,13 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
     KisToolPaint::beginPrimaryAction(event);
 }
 
-
-
 void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     addMaskPath(event);
     KisToolPaint::continuePrimaryAction(event);
 }
+
 
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
@@ -172,50 +201,27 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     m_d->imageDev = currentNode()->paintDevice();
 
     //KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->exactBounds(), "maskDev", "/home/eugening/Projects/Mask");
+
+    int accuracy = 50; //default accuracy - middle value
+    int patchRadius = 4; //default radius, which works well for most cases tested
+
+    if (!m_d.isNull() && m_d->optionsWidget) {
+        accuracy = m_d->optionsWidget->getAccuracy();
+        patchRadius = m_d->optionsWidget->getPatchRadius();
+    }
+
+    KisProcessingApplicator applicator( image(), currentNode(), KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal,
+                                        kundo2_i18n("Smart Patch"));
+
     //actual inpaint operation. filling in areas masked by user
-    QRect changedRect = inpaintImage( KisPainter::convertToAlphaAsAlpha(m_d->maskDev), m_d->imageDev);
+    applicator.applyCommand( new InpaintCommand( KisPainter::convertToAlphaAsAlpha(m_d->maskDev), m_d->imageDev, accuracy, patchRadius ),
+                             KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
+
+    applicator.end();
+    image()->waitForDone();
 
     QApplication::restoreOverrideCursor();
     m_d->maskDev->clear();
-    currentNode()->setDirty(changedRect);
-
-//    if (m_d->mask.isNull())
-//        return;
-
-//    KisToolPaint::endPrimaryAction(event);
-
-//    //Next line is important. We need to wait for the paint operation to finish otherwise
-//    //mask will be incomplete.
-//    image()->waitForDone();
-
-//    //User drew a mask on the temporary inpaint mask layer. Get this mask to pass to the inpaint algorithm
-//    m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-
-//    if (!m_d->mask.isNull()) {
-//        m_d->maskDev->makeCloneFrom(m_d->mask->paintDevice(), m_d->mask->paintDevice()->extent());
-
-//        //Once we get the mask we delete the temporary layer on which user painted it
-//        deleteInpaintMask();
-
-//        image()->waitForDone();
-//        m_d->imageDev = currentNode()->paintDevice();
-
-//        KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
-
-//        QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-//        //actual inpaint operation. filling in areas masked by user
-//        QRect changedRect = inpaintImage(m_d->maskDev, m_d->imageDev);
-//        currentNode()->setDirty(changedRect);
-//        inpaintTransaction.commit(image()->undoAdapter());
-
-//        //Matching endmacro for inpaint operation
-//        canvas()->shapeController()->resourceManager()->undoStack()->endMacro();
-
-//        QApplication::restoreOverrideCursor();
-
-//        canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
-//    }
 }
 
 QPainterPath KisToolSmartPatch::brushOutline( void )

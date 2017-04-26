@@ -68,13 +68,14 @@ public Q_SLOTS:
 Q_SIGNALS:
 
 private:
-    QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
+    //QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
     QPainterPath getBrushOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
     QPainterPath brushOutline();
     void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
 private:
     struct Private;
+    class InpaintCommand;
     const QScopedPointer<Private> m_d;
 
     void addMaskPath(KoPointerEvent *event);

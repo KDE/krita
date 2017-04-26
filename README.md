@@ -33,3 +33,7 @@ irc.freenode.net, #krita
 ### Project Website
 
   http://www.krita.org
+
+### License
+
+Krita as a whole is licensed under the GNU Public License, Version 3. Individual files may have a different, but compatible license.

@@ -61,6 +61,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
+    connect(m_curveOptionWidget->CurveResetButton, SIGNAL(clicked(bool)), this, SLOT(resetCurve()));
 
     m_curveOptionWidget->label_ymin->setText(minLabel);
     m_curveOptionWidget->label_ymax->setText(maxLabel);
@@ -172,6 +173,11 @@ void KisCurveOptionWidget::updateValues()
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
     disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emitSettingChanged();
+}
+
+void KisCurveOptionWidget::resetCurve()
+{
+    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve());
 }
 
 void KisCurveOptionWidget::disableWidgets(bool disable)

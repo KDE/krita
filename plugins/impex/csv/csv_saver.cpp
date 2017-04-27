@@ -338,7 +338,8 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     } while((retval == KisImageBuilder_RESULT_OK) && (step < 8));
 
     qDeleteAll(layers);
-    io->close();
+
+    // io->close();  it seems this is not required anymore
 
     if (!m_batchMode) {
         disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
@@ -387,6 +388,9 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 {
     //render to the temp layer
     KisImageSP image = exportDoc->savingImage();
+
+    if (!image) image= exportDoc->image();
+
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
     if (!keyframe.isNull()) {

@@ -38,6 +38,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <asl/kis_offset_keeper.h>
 #include <asl/kis_asl_writer_utils.h>
@@ -542,6 +543,9 @@ void PSDLayerRecord::write(QIODevice* io,
                 KisAslWriterUtils::writeRect(m_onlyTransparencyMaskRect, io);
 
                 {
+                    // NOTE: in PSD the default color of the mask is stored in 1 byte value!
+                    //       Even when the mask is actually 16/32 bit! I have no idea how it is
+                    //       actually treated in this case.
                     KIS_ASSERT_RECOVER_NOOP(m_onlyTransparencyMask->paintDevice()->pixelSize() == 1);
                     const quint8 defaultPixel = *m_onlyTransparencyMask->paintDevice()->defaultPixel().data();
                     SAFE_WRITE_EX(io, defaultPixel);
@@ -589,16 +593,29 @@ void PSDLayerRecord::write(QIODevice* io,
     }
 }
 
+KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
+{
+    KisPaintDeviceSP result = dev;
+
+    if (m_header.channelDepth == 16) {
+        result = new KisPaintDevice(*dev);
+        result->convertTo(KoColorSpaceRegistry::instance()->alpha16());
+    } else if (m_header.channelDepth == 32) {
+        result = new KisPaintDevice(*dev);
+        result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
+    }
+    return result;
+}
+
 void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
 {
     if (m_onlyTransparencyMask) {
-        KisPaintDeviceSP device = m_onlyTransparencyMask->paintDevice();
-        KIS_ASSERT_RECOVER_NOOP(device->pixelSize() == 1);
+        KisPaintDeviceSP device = convertMaskDeviceIfNeeded(m_onlyTransparencyMask->paintDevice());
 
-        QByteArray buffer(m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
+        QByteArray buffer(device->pixelSize() * m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
         device->readBytes((quint8*)buffer.data(), m_onlyTransparencyMaskRect);
 
-        PsdPixelUtils::writeChannelDataRLE(io, (quint8*)buffer.data(), 1, m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset, -1, true);
+        PsdPixelUtils::writeChannelDataRLE(io, (quint8*)buffer.data(), device->pixelSize(), m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset, -1, true);
     }
 }
 

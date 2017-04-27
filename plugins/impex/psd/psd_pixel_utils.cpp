@@ -28,8 +28,6 @@
 #include <KoColorSpaceTraits.h>
 #include <KoCmykColorSpaceTraits.h>
 #include <colorspaces/KoAlphaColorSpace.h>
-#include <colorspaces/KoAlphaU16ColorSpace.h>
-#include <colorspaces/KoAlphaF32ColorSpace.h>
 
 #include <QtEndian>
 

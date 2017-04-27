@@ -85,7 +85,7 @@ class  KRITAUI_EXPORT KisTool
     Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
 
 public:
-    enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02 };
+    enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02, FLAG_USES_CUSTOM_SIZE=0x04 };
 
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisTool();

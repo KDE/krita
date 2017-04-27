@@ -29,6 +29,7 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_painter.h"
+#include "kis_paintop_preset.h"
 
 #include "kundo2magicstring.h"
 #include "kis_processing_applicator.h"
@@ -248,6 +249,7 @@ void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, con
     if( !event )
         return;
 
+    m_d->brushRadius = currentPaintOpPreset()->settings()->paintOpSize();
     m_d->brushOutline = getBrushOutlinePath(outlineDocPoint, event);
 
     QRectF outlinePixelRect = m_d->brushOutline.boundingRect();

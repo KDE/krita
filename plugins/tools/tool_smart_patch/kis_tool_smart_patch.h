@@ -47,31 +47,30 @@ public:
     KisToolSmartPatch(KoCanvasBase * canvas);
     virtual ~KisToolSmartPatch();
 
-    QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
-    void activatePrimaryAction();
-    void deactivatePrimaryAction();
+    void activatePrimaryAction() override;
+    void deactivatePrimaryAction() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    int flags() const override { return KisTool::FLAG_USES_CUSTOM_SIZE; }
 
 protected Q_SLOTS:
     void resetCursorStyle();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
-
-Q_SIGNALS:
 
 private:
     //QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
     QPainterPath getBrushOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
     QPainterPath brushOutline();
-    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
+    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event) override;
 
 private:
     struct Private;

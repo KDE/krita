@@ -599,10 +599,10 @@ KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
 
     if (m_header.channelDepth == 16) {
         result = new KisPaintDevice(*dev);
-        result->convertTo(KoColorSpaceRegistry::instance()->alpha16());
+        delete result->convertTo(KoColorSpaceRegistry::instance()->alpha16());
     } else if (m_header.channelDepth == 32) {
         result = new KisPaintDevice(*dev);
-        result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
+        delete result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
     }
     return result;
 }

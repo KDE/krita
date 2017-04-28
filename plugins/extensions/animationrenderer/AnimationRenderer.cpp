@@ -100,12 +100,20 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(extension);
 
         KisAnimationExportSaver exporter(doc, baseFileName, sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame"), sequenceConfig->getInt("sequence_start"));
-        bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration());
-        Q_ASSERT(success);
-        QString savedFilesMask = exporter.savedFilesMask();
+        KisImportExportFilter::ConversionStatus status =
+            exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration());
+
+        if (status != KisImportExportFilter::OK) {
+            const QString msg = KisImportExportFilter::conversionStatusString(status);
+            // TODO: change the message after the string freeze lifted up!
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("Could not render animation:\n%1", msg));
+        }
 
         KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
-        if (videoConfig) {
+        if (status == KisImportExportFilter::OK && videoConfig) {
+            QString savedFilesMask = exporter.savedFilesMask();
+
             kisConfig.setExportConfiguration("ANIMATION_RENDERER", *videoConfig.data());
 
             KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();

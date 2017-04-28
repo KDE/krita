@@ -241,6 +241,16 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         resultFile = framesDir.absolutePath() + "/" + filename;
     }
     const QFileInfo info(resultFile);
+
+    {
+        // ensure the output directory exists!
+        QDir dir(info.absolutePath());
+        if (!dir.exists()) {
+            dir.mkpath(info.absolutePath());
+        }
+        KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+    }
+
     const QString suffix = info.suffix().toLower();
 
     const QString palettePath = framesDir.filePath("palette.png");

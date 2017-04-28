@@ -251,6 +251,11 @@ auto maxDimension(Size size) -> decltype(size.width()) {
     return qMax(size.width(), size.height());
 }
 
+template <class Size>
+auto minDimension(Size size) -> decltype(size.width()) {
+    return qMin(size.width(), size.height());
+}
+
 QPainterPath KRITAGLOBAL_EXPORT smallArrow();
 
 /**

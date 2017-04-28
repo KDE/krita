@@ -167,7 +167,7 @@ void KisToolSmartPatch::addMaskPath( KoPointerEvent *event )
 void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
     //we can only apply inpaint operation to paint layer
-    if ( currentNode().isNull() || !currentNode()->inherits("KisPaintLayer")) {
+    if ( currentNode().isNull() || !currentNode()->inherits("KisPaintLayer") || nodePaintAbility()!=NodePaintAbility::PAINT ) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         kiscanvas->viewManager()->
                 showFloatingMessage(
@@ -246,11 +246,12 @@ QPainterPath KisToolSmartPatch::getBrushOutlinePath(const QPointF &documentPos,
 
 void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
-    if( !event )
-        return;
+    static QPointF lastDocPoint = QPointF(0,0);
+    if( event )
+        lastDocPoint=outlineDocPoint;
 
     m_d->brushRadius = currentPaintOpPreset()->settings()->paintOpSize();
-    m_d->brushOutline = getBrushOutlinePath(outlineDocPoint, event);
+    m_d->brushOutline = getBrushOutlinePath(lastDocPoint, event);
 
     QRectF outlinePixelRect = m_d->brushOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);

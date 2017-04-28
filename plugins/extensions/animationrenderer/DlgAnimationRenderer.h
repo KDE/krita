@@ -84,6 +84,10 @@ protected Q_SLOTS:
     void slotButtonClicked(int button);
 
 private:
+    QString fetchRenderingDirectory() const;
+    QString fetchRenderingFileName() const;
+
+private:
 
     static QString findFFMpeg();
 

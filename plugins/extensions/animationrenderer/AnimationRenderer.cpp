@@ -102,10 +102,14 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(extension);
 
         KisAnimationExportSaver exporter(doc, baseFileName, sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame"), sequenceConfig->getInt("sequence_start"));
-        bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration()) == KisImportExportFilter::OK;
+        KisImportExportFilter::ConversionStatus status =
+            exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration());
 
-        // the folder could have been read-only or something else could happen
-        if (success) {
+        if (status != KisImportExportFilter::OK) {
+            const QString msg = KisImportExportFilter::conversionStatusString(status);
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("Could not export animation frames:\n%1", msg));
+        } else  {
             QString savedFilesMask = exporter.savedFilesMask();
 
             KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
@@ -118,9 +122,25 @@ void AnimaterionRenderer::slotRenderAnimation()
                     encoderConfig->setProperty("savedFilesMask", savedFilesMask);
                 }
 
+                const QDir framesDir(sequenceConfig->getString("directory"));
+                const QString fileName = videoConfig->getString("filename");
+                QString resultFile = QFileInfo(fileName).isAbsolute() ? fileName :
+                    framesDir.absoluteFilePath(fileName);
+
+                {
+                    const QFileInfo info(resultFile);
+                    QDir dir(info.absolutePath());
+
+                    if (!dir.exists()) {
+                        dir.mkpath(info.absolutePath());
+                    }
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+                }
+
                 QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
                 encoder->setMimeType(mimetype.toLatin1());
-                QFile fi(videoConfig->getString("filename"));
+                QFile fi(resultFile);
+
                 KisImportExportFilter::ConversionStatus res;
                 if (!fi.open(QIODevice::WriteOnly)) {
                     qWarning() << "Could not open" << fi.fileName() << "for writing!";

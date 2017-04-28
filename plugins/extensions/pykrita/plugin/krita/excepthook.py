@@ -63,7 +63,7 @@ class ExceptHookDialog(QDialog):
         self.ui.exceptionLabel.setText(msg)
         html = cgitb.text((exc_type, exc_obj, exc_tb))
         self.ui.tracebackBrowser.setText(html)
-        self.resize(self.sizeHint())
+        self.resize(650, 350) # give enough space to see the backtrace better
 
     @pyqtSlot()
     def on_closeButton_clicked(self):

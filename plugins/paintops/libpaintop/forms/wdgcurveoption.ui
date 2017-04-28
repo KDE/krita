@@ -77,24 +77,8 @@
    </item>
    <item row="2" column="1">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
+     <item row="0" column="1">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="0">
-        <widget class="KisCurveWidget" name="curveWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>1</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>230</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
@@ -137,6 +121,22 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="KisCurveWidget" name="curveWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>230</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item row="1" column="1">
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -191,9 +191,16 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="CurveResetButton">
+         <property name="text">
+          <string>Reset</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
-     <item row="0" column="1">
+     <item row="0" column="3">
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -206,7 +213,7 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="0">
+     <item row="1" column="1">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

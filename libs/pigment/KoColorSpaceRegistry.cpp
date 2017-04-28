@@ -116,10 +116,10 @@ void KoColorSpaceRegistry::init()
 
     d->alphaU16Cs = new KoAlphaU16ColorSpace();
     d->alphaU16Cs->d->deletability = OwnedByRegistryRegistryDeletes;
-
+#ifdef HAVE_OPENEXR
     d->alphaF16Cs = new KoAlphaF16ColorSpace();
     d->alphaF16Cs->d->deletability = OwnedByRegistryRegistryDeletes;
-
+#endif
     d->alphaF32Cs = new KoAlphaF32ColorSpace();
     d->alphaF32Cs->d->deletability = OwnedByRegistryRegistryDeletes;
 

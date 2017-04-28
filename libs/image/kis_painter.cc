@@ -310,6 +310,29 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     return dst;
 }
 
+bool KisPainter::checkDeviceHasTransparency(KisPaintDeviceSP dev)
+{
+    const QRect deviceBounds = dev->exactBounds();
+    const QRect imageBounds = dev->defaultBounds()->bounds();
+
+    if (deviceBounds.isEmpty() ||
+        (deviceBounds & imageBounds) != imageBounds) {
+
+        return true;
+    }
+
+    const KoColorSpace *cs = dev->colorSpace();
+    KisSequentialConstIterator it(dev, deviceBounds);
+
+    do {
+        if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
+            return true;
+        }
+    } while(it.nextPixel());
+
+    return false;
+}
+
 void KisPainter::begin(KisPaintDeviceSP device)
 {
     begin(device, d->selection);

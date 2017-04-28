@@ -30,7 +30,7 @@ class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
     Q_OBJECT
 
 public:
-    KisUndoAdapter(KisUndoStore *undoStore);
+    KisUndoAdapter(KisUndoStore *undoStore, QObject *parent = 0);
     virtual ~KisUndoAdapter();
 
 public:

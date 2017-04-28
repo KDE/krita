@@ -287,10 +287,10 @@ public:
 
         if( colorDepthId == Integer16BitsColorDepthID )
             distance = &distance_impl<KoRgbU16Traits::channels_type>;
-
+#ifdef HAVE_OPENEXR
         if( colorDepthId == Float16BitsColorDepthID )
             distance = &distance_impl<KoRgbF16Traits::channels_type>;
-
+#endif
         if( colorDepthId == Float32BitsColorDepthID )
             distance = &distance_impl<KoRgbF32Traits::channels_type>;
 

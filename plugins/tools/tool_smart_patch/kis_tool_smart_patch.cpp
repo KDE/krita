@@ -22,35 +22,24 @@
 #include "QPainterPath"
 
 #include <klocalizedstring.h>
-#include <KoCanvasBase.h>
 #include <KoColor.h>
 #include <KisViewManager.h>
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
-#include "kis_config.h"
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
 
 #include "kundo2magicstring.h"
+#include "kundo2stack.h"
 #include "kis_processing_applicator.h"
 #include "kis_datamanager.h"
 
-#include "KoProperties.h"
 #include "KoColorSpaceRegistry.h"
-#include "KoShapeController.h"
-#include "KoDocumentResourceManager.h"
-//#include "kis_node_manager.h"
-#include "kis_cursor.h"
 
 #include "kis_tool_smart_patch_options_widget.h"
 #include "libs/image/kis_paint_device_debug_utils.h"
 
-#include "kis_resources_snapshot.h"
-#include "kis_layer.h"
-#include "kis_transaction.h"
 #include "kis_paint_layer.h"
-#include "kis_paint_information.h"
-#include "kis_distance_information.h"
 
 QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy,
                  KisPaintDeviceSP originalImageDev, KisPaintDeviceSP patchedImageDev);
@@ -86,11 +75,8 @@ struct KisToolSmartPatch::Private {
     KisPaintDeviceSP imageDev = nullptr;
     KisPaintDeviceSP maskDev = nullptr;
     KisPainter maskDevPainter;
-    KisResourcesSnapshotSP resources = nullptr;
-    KoColor currentFgColor;
-    float brushRadius = 22.;
+    float brushRadius = 50.; //initial default. actually read from ui.
     KisToolSmartPatchOptionsWidget *optionsWidget = nullptr;
-    QRectF brushRect;
     QRectF oldOutlineRect;
     QPainterPath brushOutline;
 };
@@ -130,18 +116,6 @@ void KisToolSmartPatch::resetCursorStyle()
 {
     KisToolPaint::resetCursorStyle();
 }
-
-//QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
-//{
-//    int accuracy = 50; //default accuracy - middle value
-//    int patchRadius = 4; //default radius, which works well for most cases tested
-
-//    if (!m_d.isNull() && m_d->optionsWidget) {
-//        accuracy = m_d->optionsWidget->getAccuracy();
-//        patchRadius = m_d->optionsWidget->getPatchRadius();
-//    }
-//    return patchImage(imageDev, maskDev, patchRadius, accuracy);
-//}
 
 void KisToolSmartPatch::activatePrimaryAction()
 {
@@ -200,8 +174,6 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
     m_d->imageDev = currentNode()->paintDevice();
-
-    //KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->exactBounds(), "maskDev", "/home/eugening/Projects/Mask");
 
     int accuracy = 50; //default accuracy - middle value
     int patchRadius = 4; //default radius, which works well for most cases tested

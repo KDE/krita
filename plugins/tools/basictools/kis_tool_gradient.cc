@@ -48,7 +48,6 @@
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_paint_layer.h>
-#include <kis_system_locker.h>
 
 #include <canvas/kis_canvas2.h>
 #include <KisViewManager.h>
@@ -146,14 +145,12 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
-    if (!currentNode() || currentNode()->systemLocked())
+    if (!currentNode() || !blockUntilOperationsFinished())
         return;
 
     if (m_startPos == m_endPos) {
         return;
     }
-
-    KisSystemLocker locker(currentNode());
 
     KisPaintDeviceSP device;
     KisImageSP image = this->image();

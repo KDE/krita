@@ -52,9 +52,14 @@ public:
     virtual ~KisPropertiesConfiguration();
 
     /**
-     * Deep copy the properties  configFile
+     * Deep copy the properties \p rhs
      */
     KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs);
+
+    /**
+     * Deep copy the properties \p rhs
+     */
+    KisPropertiesConfiguration& operator=(const KisPropertiesConfiguration& rhs);
 
 public:
 

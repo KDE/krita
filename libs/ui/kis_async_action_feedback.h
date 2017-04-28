@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SYSTEM_LOCKER_H_
-#define _KIS_SYSTEM_LOCKER_H_
+#ifndef __KIS_ASYNC_ACTION_FEEDBACK_H
+#define __KIS_ASYNC_ACTION_FEEDBACK_H
 
+#include <QScopedPointer>
+#include <functional>
+#include "KisImportExportFilter.h"
 
-/**
- * This class will lock a \ref KisBaseNode upon construction, and unlock it
- * at destruction. Use it before processing a node.
- */
-class KisSystemLocker
+class QWidget;
+
+class KisAsyncActionFeedback
 {
 public:
-    inline KisSystemLocker(KisBaseNodeSP _node) : m_node(_node) {
-        Q_ASSERT(!_node->systemLocked());
-        m_node->setSystemLocked(true);
-    }
-    inline ~KisSystemLocker() {
-        m_node->setSystemLocked(false);
-    }
-private:
-    KisBaseNodeSP m_node;
+    KisAsyncActionFeedback(const QString &message, QWidget *parent);
+    ~KisAsyncActionFeedback();
 
+    KisImportExportFilter::ConversionStatus runAction(std::function<KisImportExportFilter::ConversionStatus()> func);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-
-#endif
+#endif /* __KIS_ASYNC_ACTION_FEEDBACK_H */

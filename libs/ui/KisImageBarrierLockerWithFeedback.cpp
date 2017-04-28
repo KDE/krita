@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_undo_adapter.h"
+#include "KisImageBarrierLockerWithFeedback.h"
 
+#include <KisPart.h>
+#include <KisViewManager.h>
+#include <KisMainWindow.h>
 
-KisUndoAdapter::KisUndoAdapter(KisUndoStore *undoStore, QObject *parent)
-    : QObject(parent),
-      m_undoStore(undoStore)
+#include "kis_image.h"
+
+namespace KisImageBarrierLockerWithFeedbackImplPrivate {
+void blockWithFeedback(KisImageSP image)
 {
+    if (!image) return;
+
+    // TODO1: find the window corrsponding to the awaited image!
+    // TODO2: move blocking code from KisViewManager here
+    KisMainWindow *window = KisPart::instance()->currentMainwindow();
+    if (!window) return;
+
+    KisViewManager *viewManager = window->viewManager();
+    viewManager->blockUntilOperationsFinishedForced(image);
 }
-
-KisUndoAdapter::~KisUndoAdapter()
-{
 }
-
-void KisUndoAdapter::emitSelectionChanged()
-{
-    emit selectionChanged();
-}
-
-
-

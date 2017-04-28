@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,39 +15,36 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef _KIS_INPAINT_MASK_
+#define _KIS_INPAINT_MASK_
 
-#ifndef __KIS_QUEUES_PROGRESS_UPDATER_H
-#define __KIS_QUEUES_PROGRESS_UPDATER_H
+#include "kis_types.h"
+#include "kis_transparency_mask.h"
 
-#include <QObject>
-#include "kritaimage_export.h"
+class QRect;
 
-class KoProgressProxy;
-
-
-class KRITAIMAGE_EXPORT KisQueuesProgressUpdater : public QObject
+/**
+ *  A inpaint mask is a single channel mask that works with inpaint operation to denote area affected by inpaint operation.
+ *
+ */
+class KRITAIMAGE_EXPORT KisInpaintMask : public KisTransparencyMask
 {
     Q_OBJECT
 
 public:
-    KisQueuesProgressUpdater(KoProgressProxy *progressProxy, QObject *parent = 0);
-    ~KisQueuesProgressUpdater();
 
-    void updateProgress(int queueSizeMetric, const QString &jobName);
-    void hide();
+    KisInpaintMask();
+    KisInpaintMask(const KisInpaintMask& rhs);
+    virtual ~KisInpaintMask();
 
-private Q_SLOTS:
-    void startTicking();
-    void stopTicking();
-    void timerTicked();
+    KisNodeSP clone() const
+    {
+        return KisNodeSP(new KisInpaintMask(*this));
+    }
 
-Q_SIGNALS:
-    void sigStartTicking();
-    void sigStopTicking();
-
-private:
-    struct Private;
-    Private * const m_d;
+    QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
+                       const QRect & rc,
+                       PositionToFilthy maskPos) const;
 };
 
-#endif /* __KIS_QUEUES_PROGRESS_UPDATER_H */
+#endif //_KIS_INPAINT_MASK_

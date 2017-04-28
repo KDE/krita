@@ -535,9 +535,9 @@ void KisTool::deleteSelection()
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager* viewManager = kiscanvas->viewManager();
-    viewManager->blockUntilOperationsFinished(image());
+    if (!blockUntilOperationsFinished()) {
+        return;
+    }
 
     if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
@@ -595,6 +595,20 @@ bool KisTool::overrideCursorIfNotEditable()
     return false;
 }
 
+bool KisTool::blockUntilOperationsFinished()
+{
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    return viewManager->blockUntilOperationsFinished(image());
+}
+
+void KisTool::blockUntilOperationsFinishedForced()
+{
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    viewManager->blockUntilOperationsFinishedForced(image());
+}
+
 bool KisTool::isActive() const
 {
     return d->m_isActive;
@@ -623,14 +637,6 @@ void KisTool::slotResetFgBg()
     // see a comment in slotToggleFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
     resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
-}
-
-
-void KisTool::setCurrentNodeLocked(bool locked)
-{
-    if (currentNode()) {
-        currentNode()->setSystemLocked(locked, false);
-    }
 }
 
 bool KisTool::nodeEditable()

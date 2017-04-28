@@ -122,10 +122,9 @@ void AnimaterionRenderer::slotRenderAnimation()
                     encoderConfig->setProperty("savedFilesMask", savedFilesMask);
                 }
 
-                const QDir framesDir(sequenceConfig->getString("directory"));
                 const QString fileName = videoConfig->getString("filename");
-                QString resultFile = QFileInfo(fileName).isAbsolute() ? fileName :
-                    framesDir.absoluteFilePath(fileName);
+                QString resultFile = fileName;
+                KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute())
 
                 {
                     const QFileInfo info(resultFile);

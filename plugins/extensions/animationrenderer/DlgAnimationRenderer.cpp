@@ -201,10 +201,25 @@ QString DlgAnimationRenderer::fetchRenderingDirectory() const
 QString DlgAnimationRenderer::fetchRenderingFileName() const
 {
     QString filename = m_page->videoFilename->fileName();
+
     if (QFileInfo(filename).completeSuffix().isEmpty()) {
         QString mimetype = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
         filename += "." + KisMimeDatabase::suffixesForMimeType(mimetype).first();
     }
+
+    if (QFileInfo(filename).isRelative()) {
+        QDir baseDir(m_page->dirRequester->fileName());
+
+        if (m_page->shouldExportOnlyVideo->isChecked()) {
+            QString documentDir = QFileInfo(m_doc->url().toLocalFile()).absolutePath();
+            if (!documentDir.isEmpty()) {
+                baseDir = documentDir;
+            }
+        }
+
+        filename = baseDir.absoluteFilePath(filename);
+    }
+
     return filename;
 }
 

@@ -23,15 +23,21 @@
 #include "KoColorConversionTransformation.h"
 #include "KoColorConversionTransformationFactory.h"
 
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+
 /**
  * Create converter from the alpha color space to any color space
  * This class is for use by the KoColorConversionSystemn, no reason
  * to use it directly.
  */
-class KoColorConversionFromAlphaTransformationFactory : public KoColorConversionTransformationFactory
+template<typename alpha_channel_type>
+class KoColorConversionFromAlphaTransformationFactoryImpl : public KoColorConversionTransformationFactory
 {
 public:
-    KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName);
+    KoColorConversionFromAlphaTransformationFactoryImpl(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName);
     virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
@@ -40,15 +46,23 @@ public:
     virtual bool conserveDynamicRange() const;
 };
 
+typedef KoColorConversionFromAlphaTransformationFactoryImpl<quint8> KoColorConversionFromAlphaTransformationFactory;
+typedef KoColorConversionFromAlphaTransformationFactoryImpl<quint16> KoColorConversionFromAlphaU16TransformationFactory;
+#ifdef HAVE_OPENEXR
+typedef KoColorConversionFromAlphaTransformationFactoryImpl<half> KoColorConversionFromAlphaF16TransformationFactory;
+#endif
+typedef KoColorConversionFromAlphaTransformationFactoryImpl<float> KoColorConversionFromAlphaF32TransformationFactory;
+
 /**
  * Create converter to the alpha color space to any color space
  * This class is for use by the KoColorConversionSystemn, no reason
  * to use it directly.
  */
-class KoColorConversionToAlphaTransformationFactory : public KoColorConversionTransformationFactory
+template <typename alpha_channel_type>
+class KoColorConversionToAlphaTransformationFactoryImpl : public KoColorConversionTransformationFactory
 {
 public:
-    KoColorConversionToAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _srcProfileName);
+    KoColorConversionToAlphaTransformationFactoryImpl(const QString& _dstModelId, const QString& _dstDepthId, const QString& _srcProfileName);
     virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
@@ -56,5 +70,12 @@ public:
     virtual bool conserveColorInformation() const;
     virtual bool conserveDynamicRange() const;
 };
+
+typedef KoColorConversionToAlphaTransformationFactoryImpl<quint8> KoColorConversionToAlphaTransformationFactory;
+typedef KoColorConversionToAlphaTransformationFactoryImpl<quint16> KoColorConversionToAlphaU16TransformationFactory;
+#ifdef HAVE_OPENEXR
+typedef KoColorConversionToAlphaTransformationFactoryImpl<half> KoColorConversionToAlphaF16TransformationFactory;
+#endif
+typedef KoColorConversionToAlphaTransformationFactoryImpl<float> KoColorConversionToAlphaF32TransformationFactory;
 
 #endif

@@ -99,6 +99,12 @@ public:
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
 
     /**
+     * @return the cost of the usage of the colorspace in the conversion graph. The higher the cost,
+     * the less probably the color space will be chosen for the conversion.
+     */
+    virtual int crossingCost() const = 0;
+
+    /**
      * Returns the default icc profile for use with this colorspace. This may be ""
      *
      * @return the default icc profile name

@@ -259,12 +259,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
     if (direction == Import) {
-        if (!batchMode()) {
-            KisAsyncActionFeedback f(i18n("Opening document..."), 0);
-            status = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
-        } else {
             status = doImport(location, filter);
-        }
     } else /* if (direction == Export) */ {
         if (!exportConfiguration) {
             exportConfiguration = filter->lastSavedConfiguration(from, to);

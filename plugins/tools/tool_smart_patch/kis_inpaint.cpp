@@ -1005,7 +1005,8 @@ QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev
     tempMaskDev->makeCloneFrom(maskDev, maskRect);
 
     if (!maskRect.isEmpty()) {
-        Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
+        //Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
+        Inpaint inpaint(imageDev, maskDev, patchRadius);
         MaskedImageSP output = inpaint.patch();
 
         output->toPaintDevice(patchedImageDev, maskRect);

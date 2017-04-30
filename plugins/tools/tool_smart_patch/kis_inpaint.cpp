@@ -223,26 +223,20 @@ private:
     ImageData imageData;
 
 
-    void cacheImageSize(KisPaintDeviceSP imageDev)
+    void cacheImage(KisPaintDeviceSP imageDev, QRect rect)
     {
-        imageSize = imageDev->exactBounds();
-    }
-
-    void cacheImage(KisPaintDeviceSP imageDev)
-    {
-        Q_ASSERT(!imageSize.isEmpty() && imageSize.isValid());
         cs = imageDev->colorSpace();
         nChannels = cs->channelCount();
-        imageData.Init(imageDev, imageSize);
+        imageData.Init(imageDev, rect);
+        imageSize = rect;
     }
 
 
-    void cacheMask(KisPaintDeviceSP maskDev)
+    void cacheMask(KisPaintDeviceSP maskDev, QRect rect)
     {
-        Q_ASSERT(!imageSize.isEmpty() && imageSize.isValid());
         Q_ASSERT(maskDev->colorSpace()->pixelSize() == 1);
         csMask = maskDev->colorSpace();
-        maskData.Init(maskDev, imageSize);
+        maskData.Init(maskDev, rect);
 
         //hard threshold for the initial mask
         //may be optional. needs testing
@@ -272,11 +266,10 @@ public:
         std::fill(maskData.data(), maskData.data() + maskData.num_bytes(), MASK_CLEAR);
     }
 
-    void initialize(KisPaintDeviceSP _imageDev, KisPaintDeviceSP _maskDev)
+    void initialize(KisPaintDeviceSP _imageDev, KisPaintDeviceSP _maskDev, QRect _maskRect)
     {
-        cacheImageSize(_imageDev);
-        cacheImage(_imageDev);
-        cacheMask(_maskDev);
+        cacheImage(_imageDev, _maskRect);
+        cacheMask(_maskDev, _maskRect);
 
         //distance function is the only that needs to know the type
         //For performance reasons we can't use functions provided by color space
@@ -298,10 +291,9 @@ public:
             distance = &distance_impl<KoRgbF64Traits::channels_type>;
     }
 
-    MaskedImage(KisPaintDeviceSP _imageDev, KisPaintDeviceSP _maskDev)
+    MaskedImage(KisPaintDeviceSP _imageDev, KisPaintDeviceSP _maskDev, QRect _maskRect)
     {
-        initialize(_imageDev, _maskDev);
-//        DebugDump("Initialize");
+        initialize(_imageDev, _maskDev, _maskRect);
     }
 
     void downsample2x(void)
@@ -768,9 +760,9 @@ private:
 
 
 public:
-    Inpaint(KisPaintDeviceSP dev, KisPaintDeviceSP devMask, int _radius)
+    Inpaint(KisPaintDeviceSP dev, KisPaintDeviceSP devMask, int _radius, QRect maskRect)
     {
-        initial = new MaskedImage(dev, devMask);
+        initial = new MaskedImage(dev, devMask, maskRect);
         radius = _radius;
         devCache = dev;
     }
@@ -984,8 +976,7 @@ QRect getMaskBoundingBox(KisPaintDeviceSP maskDev)
 }
 
 
-QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy,
-                 KisPaintDeviceSP originalImageDev, KisPaintDeviceSP patchedImageDev)
+QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
 {
     QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
@@ -996,20 +987,10 @@ QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev
     maskRect.adjust(-dx, -dy, dx, dy);
     maskRect = maskRect.intersected(imageRect);
 
-    KisPaintDeviceSP tempImageDev = new KisPaintDevice(imageDev->colorSpace());
-    KisPaintDeviceSP tempMaskDev = new KisPaintDevice(maskDev->colorSpace());
-
-    tempImageDev->makeCloneFrom(imageDev, maskRect); //needed for fast redo operation
-    originalImageDev->makeCloneFrom(imageDev, maskRect); //needed for undo operation
-
-    tempMaskDev->makeCloneFrom(maskDev, maskRect);
-
     if (!maskRect.isEmpty()) {
-        //Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
-        Inpaint inpaint(imageDev, maskDev, patchRadius);
+        Inpaint inpaint(imageDev, maskDev, patchRadius, maskRect);
         MaskedImageSP output = inpaint.patch();
-
-        output->toPaintDevice(patchedImageDev, maskRect);
+        output->toPaintDevice(imageDev, maskRect);
     }
 
     return maskRect;

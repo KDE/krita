@@ -31,6 +31,9 @@
 
 #include "kundo2magicstring.h"
 #include "kundo2stack.h"
+#include "kis_transaction_based_command.h"
+#include "kis_transaction.h"
+
 #include "kis_processing_applicator.h"
 #include "kis_datamanager.h"
 
@@ -41,38 +44,25 @@
 
 #include "kis_paint_layer.h"
 
-QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy,
-                 KisPaintDeviceSP originalImageDev, KisPaintDeviceSP patchedImageDev);
+QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
 
-class KisToolSmartPatch::InpaintCommand : public KUndo2Command {
+class KisToolSmartPatch::InpaintCommand : public KisTransactionBasedCommand {
 public:
     InpaintCommand( KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev, int accuracy, int patchRadius ) :
-        m_maskDev(maskDev), m_imageDev(imageDev), m_patchedImageDev(nullptr), m_accuracy(accuracy), m_patchRadius(patchRadius) {}
+        m_maskDev(maskDev), m_imageDev(imageDev), m_accuracy(accuracy), m_patchRadius(patchRadius) {}
 
-    void redo() override {
-        if( m_patchedImageDev.isNull() ){
-            m_originalImageDev = new KisPaintDevice(m_imageDev->colorSpace());
-            m_patchedImageDev  = new KisPaintDevice(m_imageDev->colorSpace());
-            m_modifiedRect = patchImage(m_imageDev, m_maskDev, m_patchRadius, m_accuracy, m_originalImageDev, m_patchedImageDev);
-        }
-        m_imageDev->dataManager()->bitBlt( m_patchedImageDev->dataManager(), m_modifiedRect);
-    }
-
-    void undo() override {
-        Q_ASSERT(!m_originalImageDev.isNull());
-        m_imageDev->dataManager()->bitBlt( m_originalImageDev->dataManager(), m_modifiedRect);
+    KUndo2Command* paint() override {
+        KisTransaction transaction(m_imageDev);
+        patchImage(m_imageDev, m_maskDev, m_patchRadius, m_accuracy);
+        return transaction.endAndTake();
     }
 
 private:
     KisPaintDeviceSP m_maskDev, m_imageDev;
-    KisPaintDeviceSP m_originalImageDev;
-    KisPaintDeviceSP m_patchedImageDev;
-    QRect m_modifiedRect;
     int m_accuracy, m_patchRadius;
 };
 
 struct KisToolSmartPatch::Private {
-    KisPaintDeviceSP imageDev = nullptr;
     KisPaintDeviceSP maskDev = nullptr;
     KisPainter maskDevPainter;
     float brushRadius = 50.; //initial default. actually read from ui.
@@ -173,12 +163,10 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-    m_d->imageDev = currentNode()->paintDevice();
-
     int accuracy = 50; //default accuracy - middle value
     int patchRadius = 4; //default radius, which works well for most cases tested
 
-    if (!m_d.isNull() && m_d->optionsWidget) {
+    if (m_d->optionsWidget) {
         accuracy = m_d->optionsWidget->getAccuracy();
         patchRadius = m_d->optionsWidget->getPatchRadius();
     }
@@ -187,7 +175,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
                                         kundo2_i18n("Smart Patch"));
 
     //actual inpaint operation. filling in areas masked by user
-    applicator.applyCommand( new InpaintCommand( KisPainter::convertToAlphaAsAlpha(m_d->maskDev), m_d->imageDev, accuracy, patchRadius ),
+    applicator.applyCommand( new InpaintCommand( KisPainter::convertToAlphaAsAlpha(m_d->maskDev), currentNode()->paintDevice(), accuracy, patchRadius ),
                              KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 
     applicator.end();

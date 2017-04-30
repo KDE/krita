@@ -244,7 +244,6 @@ set(kritaimage_LIB_SRCS
    kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
    kis_transparency_mask.cc
-   kis_inpaint_mask.cpp
    kis_undo_adapter.cpp
    kis_macro_based_undo_store.cpp
    kis_surrogate_undo_adapter.cpp

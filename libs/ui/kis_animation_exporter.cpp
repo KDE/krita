@@ -226,6 +226,7 @@ void KisAnimationExporter::frameReadyToSave()
         m_d->currentFrame = time + 1;
         m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
     } else {
+        m_d->status = result;
         emit sigFinished();
     }
 }
@@ -302,9 +303,15 @@ KisAnimationExportSaver::~KisAnimationExportSaver()
 
 KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation(KisPropertiesConfigurationSP cfg)
 {
-    QFileInfo info(savedFilesMask());
+    QFileInfo info(savedFilesMaskWildcard());
 
     QDir dir(info.absolutePath());
+
+    if (!dir.exists()) {
+        dir.mkpath(info.absolutePath());
+    }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+
     QStringList filesList = dir.entryList({ info.fileName() });
 
     if (!filesList.isEmpty()) {
@@ -366,7 +373,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);
     if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration)) {
-        status = KisImportExportFilter::InternalError;
+        status = KisImportExportFilter::CreationError;
     }
 
     return status;
@@ -375,4 +382,9 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 QString KisAnimationExportSaver::savedFilesMask() const
 {
     return m_d->filenamePrefix + "%04d" + m_d->filenameSuffix;
+}
+
+QString KisAnimationExportSaver::savedFilesMaskWildcard() const
+{
+    return m_d->filenamePrefix + "????" + m_d->filenameSuffix;
 }

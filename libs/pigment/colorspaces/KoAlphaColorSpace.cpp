@@ -36,289 +36,85 @@
 #include "KoCompositeOpAlphaDarken.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
-namespace
-{
-
-class CompositeClear : public KoCompositeOp
-{
-
-public:
-
-    CompositeClear(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), KoCompositeOp::categoryMix()) {
-    }
-
-public:
-
-    using KoCompositeOp::composite;
-
-    void composite(quint8 *dst,
-                   qint32 dststride,
-                   const quint8 *src,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 opacity,
-                   const QBitArray & channelFlags) const override {
-        Q_UNUSED(src);
-        Q_UNUSED(srcstride);
-        Q_UNUSED(opacity);
-        Q_UNUSED(channelFlags);
-
-        quint8 *d;
-        qint32 linesize;
-
-        if (rows <= 0 || cols <= 0)
-            return;
-
-        if (maskRowStart == 0) {
-
-            linesize = sizeof(quint8) * cols;
-            d = dst;
-            while (rows-- > 0) {
-
-                memset(d, OPACITY_TRANSPARENT_U8, linesize);
-                d += dststride;
-            }
-        } else {
-            while (rows-- > 0) {
-
-                const quint8 *mask = maskRowStart;
-
-                d = dst;
-
-                for (qint32 i = cols; i > 0; --i, ++d) {
-                    // If the mask tells us to completely not
-                    // blend this pixel, continue.
-                    if (mask != 0) {
-                        if (mask[0] == OPACITY_TRANSPARENT_U8) {
-                            ++mask;
-                            continue;
-                        }
-                        ++mask;
-                    }
-                    // linesize is uninitialized here, so it just crashes
-                    //memset(d, OPACITY_TRANSPARENT, linesize);
-                }
-                dst += dststride;
-                src += srcstride;
-                maskRowStart += maskstride;
-            }
-        }
-
-    }
-
-};
-
-class CompositeSubtract : public KoCompositeOp
-{
-
-public:
-
-    CompositeSubtract(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic()) {
-    }
-
-public:
-
-    using KoCompositeOp::composite;
-
-    void composite(quint8 *dst,
-                   qint32 dststride,
-                   const quint8 *src,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 opacity,
-                   const QBitArray & channelFlags) const override {
-
-        Q_UNUSED(opacity);
-        Q_UNUSED(channelFlags);
-
-
-        quint8 *d;
-        const quint8 *s;
-        qint32 i;
-
-        if (rows <= 0 || cols <= 0)
-            return;
-
-        while (rows-- > 0) {
-            const quint8 *mask = maskRowStart;
-            d = dst;
-            s = src;
-
-            for (i = cols; i > 0; --i, ++d, ++s) {
-
-                // If the mask tells us to completely not
-                // blend this pixel, continue.
-                if (mask != 0) {
-                    if (mask[0] == OPACITY_TRANSPARENT_U8) {
-                        ++mask;
-                        continue;
-                    }
-                    ++mask;
-                }
-
-                if (d[0] <= s[0]) {
-                    d[0] = OPACITY_TRANSPARENT_U8;
-                } else {
-                    d[0] -= s[0];
-                }
-            }
-
-            dst += dststride;
-            src += srcstride;
-
-            if (maskRowStart) {
-                maskRowStart += maskstride;
-            }
-        }
-    }
-};
-
-
-
-
-class CompositeMultiply : public KoCompositeOp
-{
-
-public:
-
-    CompositeMultiply(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_MULT, i18n("Multiply"), KoCompositeOp::categoryArithmetic()) {
-    }
-
-public:
-
-    using KoCompositeOp::composite;
-
-    void composite(quint8 *dst,
-                   qint32 dststride,
-                   const quint8 *src,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 opacity,
-                   const QBitArray & channelFlags) const override {
-
-        Q_UNUSED(opacity);
-        Q_UNUSED(channelFlags);
-
-
-        quint8 *destination;
-        const quint8 *source;
-        qint32 i;
-
-        if (rows <= 0 || cols <= 0)
-            return;
-
-        while (rows-- > 0) {
-            const quint8 *mask = maskRowStart;
-            destination = dst;
-            source = src;
-
-            for (i = cols; i > 0; --i, ++destination, ++source) {
-
-                // If the mask tells us to completely not
-                // blend this pixel, continue.
-                if (mask != 0) {
-                    if (mask[0] == OPACITY_TRANSPARENT_U8) {
-                        ++mask;
-                        continue;
-                    }
-                    ++mask;
-                }
-
-                // here comes the math
-                destination[0] = KoColorSpaceMaths<quint8>::multiply(destination[0], source[0]);
-
-            }
-
-            dst += dststride;
-            src += srcstride;
-
-            if (maskRowStart) {
-                maskRowStart += maskstride;
-            }
-        }
-    }
-};
-
+namespace {
+template <typename channel_type> KoChannelInfo::enumChannelValueType channelInfoIdFromChannelType();
+template <> inline KoChannelInfo::enumChannelValueType channelInfoIdFromChannelType<quint8>() { return KoChannelInfo::UINT8; }
+template <> inline KoChannelInfo::enumChannelValueType channelInfoIdFromChannelType<quint16>() { return KoChannelInfo::UINT16; }
+#ifdef HAVE_OPENEXR
+template <> inline KoChannelInfo::enumChannelValueType channelInfoIdFromChannelType<half>() { return KoChannelInfo::FLOAT16; }
+#endif
+template <> inline KoChannelInfo::enumChannelValueType channelInfoIdFromChannelType<float>() { return KoChannelInfo::FLOAT32; }
 }
 
 
-
-KoAlphaColorSpace::KoAlphaColorSpace() :
-        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"))
+template <class _CSTrait>
+KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
+    : KoColorSpaceAbstract<_CSTrait>(alphaIdFromChannelType<channels_type>().id(),
+                                     alphaIdFromChannelType<channels_type>().name())
 {
-    addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    this->addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, channelInfoIdFromChannelType<channels_type>()));
 
-    m_compositeOps << new KoCompositeOpOver<AlphaU8Traits>(this)
-            << new CompositeClear(this)
-            << new KoCompositeOpErase<AlphaU8Traits>(this)
-            << new KoCompositeOpCopy2<AlphaU8Traits>(this)
-            << new CompositeSubtract(this)
-            << new CompositeMultiply(this)
-            << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
+    m_compositeOps << new KoCompositeOpOver<_CSTrait>(this)
+                   << new KoCompositeOpErase<_CSTrait>(this)
+                   << new KoCompositeOpCopy2<_CSTrait>(this)
+                   << new KoCompositeOpAlphaDarken<_CSTrait>(this);
 
     Q_FOREACH (KoCompositeOp *op, m_compositeOps) {
-        addCompositeOp(op);
+        this->addCompositeOp(op);
     }
     m_profile = new KoDummyColorProfile;
 }
 
-KoAlphaColorSpace::~KoAlphaColorSpace()
+template <class _CSTrait>
+KoAlphaColorSpaceImpl<_CSTrait>::~KoAlphaColorSpaceImpl()
 {
     qDeleteAll(m_compositeOps);
     delete m_profile;
     m_profile = 0;
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
-    dst[0] = c.alpha();
+    _CSTrait::nativeArray(dst)[0] = _MathsFromU8::scaleToA(c.alpha());
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
 {
-    c->setRgba(qRgba(255, 255, 255, src[0]));
+    c->setRgba(qRgba(255, 255, 255, _MathsToU8::scaleToA(_CSTrait::nativeArray(src)[0])));
 }
 
-quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) const
+template <class _CSTrait>
+quint8 KoAlphaColorSpaceImpl<_CSTrait>::difference(const quint8 *src1, const quint8 *src2) const
 {
-    // Arithmetic operands smaller than int are converted to int automatically
-    return qAbs(src2[0] - src1[0]);
+    return qAbs(_MathsToU8::scaleToA(_CSTrait::nativeArray(src2)[0] - _CSTrait::nativeArray(src1)[0]));
 }
 
-quint8 KoAlphaColorSpace::differenceA(const quint8 *src1, const quint8 *src2) const
+template <class _CSTrait>
+quint8 KoAlphaColorSpaceImpl<_CSTrait>::differenceA(const quint8 *src1, const quint8 *src2) const
 {
     return difference(src1, src2);
 }
 
-QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
+template <class _CSTrait>
+QString KoAlphaColorSpaceImpl<_CSTrait>::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < channelCount());
-    quint32 channelPosition = channels()[channelIndex]->pos();
-
-    return QString().setNum(pixel[channelPosition]);
+    Q_ASSERT(channelIndex < this->channelCount());
+    const quint32 channelPosition = this->channels()[channelIndex]->pos();
+    return QString().setNum(_CSTrait::nativeArray(pixel)[channelPosition]);
 }
 
-QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
+template <class _CSTrait>
+QString KoAlphaColorSpaceImpl<_CSTrait>::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < channelCount());
-    quint32 channelPosition = channels()[channelIndex]->pos();
-
-    return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
+    Q_ASSERT(channelIndex < this->channelCount());
+    const quint32 channelPosition = this->channels()[channelIndex]->pos();
+    return QString().setNum(KoColorSpaceMaths<channels_type, float>::scaleToA(_CSTrait::nativeArray(pixel)[channelPosition]));
 }
 
-void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::convolveColors(quint8** colors, qreal * kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const
 {
     qreal totalAlpha = 0;
 
@@ -326,22 +122,25 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
         qreal weight = *kernelValues;
 
         if (weight != 0) {
-            totalAlpha += (*colors)[0] * weight;
+            totalAlpha += _CSTrait::nativeArray(*colors)[0] * weight;
         }
         ++colors;
         ++kernelValues;
     }
 
-    if (channelFlags.isEmpty() || channelFlags.testBit(0))
-        dst[0] = CLAMP((totalAlpha / factor) + offset, 0, SCHAR_MAX);
+    if (channelFlags.isEmpty() || channelFlags.testBit(0)) {
+        _CSTrait::nativeArray(dst)[0] = _Maths::clamp((totalAlpha / factor) + offset);
+    }
 }
 
-
-QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
+template <class _CSTrait>
+QImage KoAlphaColorSpaceImpl<_CSTrait>::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                           const KoColorProfile *  /*dstProfile*/,
                                           KoColorConversionTransformation::Intent /*renderingIntent*/,
                                           KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
 {
+    const channels_type *srcPtr = _CSTrait::nativeArray(data);
+
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
     for (int i = 0; i < 256; ++i) table.append(qRgb(i, i, i));
@@ -349,20 +148,98 @@ QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint
 
     quint8* data_img;
     for (int i = 0; i < height; ++i) {
-        data_img=img.scanLine(i);
-        for (int j = 0; j < width; ++j)
-            data_img[j]=*(data++);
+        data_img = img.scanLine(i);
+
+        for (int j = 0; j < width; ++j) {
+            data_img[j] = _MathsToU8::scaleToA(*(srcPtr++));
+        }
     }
 
     return img;
 }
 
-KoColorSpace* KoAlphaColorSpace::clone() const
-{
-    return new KoAlphaColorSpace();
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::toLabA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
+    quint16* lab = reinterpret_cast<quint16*>(dst);
+    while (nPixels--) {
+        lab[3] = _CSTrait::nativeArray(src)[0];
+        src++;
+        lab += 4;
+    }
 }
 
-bool KoAlphaColorSpace::preferCompositionInSourceColorSpace() const
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::fromLabA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
+    const quint16* lab = reinterpret_cast<const quint16*>(src);
+    while (nPixels--) {
+        _CSTrait::nativeArray(dst)[0] = lab[3];
+        dst++;
+        lab += 4;
+    }
+}
+
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::toRgbA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
+    quint16* rgb = reinterpret_cast<quint16*>(dst);
+    while (nPixels--) {
+        rgb[3] = _CSTrait::nativeArray(src)[0];
+        src++;
+        rgb += 4;
+    }
+}
+
+template <class _CSTrait>
+void KoAlphaColorSpaceImpl<_CSTrait>::fromRgbA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
+    const quint16* rgb = reinterpret_cast<const quint16*>(src);
+    while (nPixels--) {
+        _CSTrait::nativeArray(dst)[0] = rgb[3];
+        dst++;
+        rgb += 4;
+    }
+}
+
+template <class _CSTrait>
+KoColorSpace* KoAlphaColorSpaceImpl<_CSTrait>::clone() const
+{
+    return new KoAlphaColorSpaceImpl<_CSTrait>();
+}
+
+template <class _CSTrait>
+bool KoAlphaColorSpaceImpl<_CSTrait>::preferCompositionInSourceColorSpace() const
 {
     return true;
 }
+
+template class KoAlphaColorSpaceImpl<AlphaU8Traits>;
+template class KoAlphaColorSpaceImpl<AlphaU16Traits>;
+#ifdef HAVE_OPENEXR
+template class KoAlphaColorSpaceImpl<AlphaF16Traits>;
+#endif
+template class KoAlphaColorSpaceImpl<AlphaF32Traits>;
+
+/*********************************************************************************************/
+/*              KoAlphaColorSpaceFactoryImpl                                                  */
+/*********************************************************************************************/
+
+#include <KoColorConversionAlphaTransformation.h>
+
+template <class _CSTrait>
+QList<KoColorConversionTransformationFactory *> KoAlphaColorSpaceFactoryImpl<_CSTrait>::colorConversionLinks() const
+{
+    QList<KoColorConversionTransformationFactory*> factories;
+
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");
+
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "Lab identity built-in");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "Lab identity built-in");
+
+    return factories;
+}
+
+template class KoAlphaColorSpaceFactoryImpl<AlphaU8Traits>;
+template class KoAlphaColorSpaceFactoryImpl<AlphaU16Traits>;
+#ifdef HAVE_OPENEXR
+template class KoAlphaColorSpaceFactoryImpl<AlphaF16Traits>;
+#endif
+template class KoAlphaColorSpaceFactoryImpl<AlphaF32Traits>;

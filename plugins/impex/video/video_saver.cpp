@@ -227,6 +227,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("first_frame"));
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("last_frame"));
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("include_audio"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("directory"));
 
     const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
     const bool includeAudio = configuration->getBool("include_audio", true);

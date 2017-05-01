@@ -89,7 +89,16 @@ public:
 
     KisImportExportFilter::ConversionStatus exportAnimation(KisPropertiesConfigurationSP cfg = 0);
 
+    /**
+     * A standard exported files mask for ffmpeg
+     */
     QString savedFilesMask() const;
+
+    /**
+     * Wildcards are not supported ffmpeg on Windows, so they are used for QDir
+     * only.
+     */
+    QString savedFilesMaskWildcard() const;
 
 private:
     KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration = 0);

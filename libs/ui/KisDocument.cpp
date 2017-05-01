@@ -687,6 +687,12 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
     return ret;
 }
 
+bool KisDocument::isInSaving() const
+{
+    std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
+    return !l.owns_lock();
+}
+
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
     // Unset the error message

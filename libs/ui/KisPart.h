@@ -167,8 +167,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void viewDestroyed();
-
     void updateIdleWatcherConnections();
 
     void updateShortcuts();

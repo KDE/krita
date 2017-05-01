@@ -246,8 +246,6 @@ void KisPart::addView(KisView *view)
         d->views.append(view);
     }
 
-    connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-
     emit sigViewAdded(view);
 }
 
@@ -261,9 +259,7 @@ void KisPart::removeView(KisView *view)
      *             document *before* the saving is completed, a crash
      *             will happen.
      */
-    if (view->mainWindow()->hackIsSaving()) {
-        return;
-    }
+    KIS_ASSERT_RECOVER_RETURN(!view->mainWindow()->hackIsSaving());
 
     emit sigViewRemoved(view);
 
@@ -437,14 +433,6 @@ void KisPart::openTemplate(const QUrl &url)
     }
 
     qApp->restoreOverrideCursor();
-}
-
-void KisPart::viewDestroyed()
-{
-    KisView *view = qobject_cast<KisView*>(sender());
-    if (view) {
-        removeView(view);
-    }
 }
 
 void KisPart::addRecentURLToAllMainWindows(QUrl url)

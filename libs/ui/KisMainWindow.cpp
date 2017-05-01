@@ -1191,13 +1191,6 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         if (d->noCleanup)
             return;
 
-        Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
-            KisView *view = dynamic_cast<KisView*>(subwin);
-            if (view) {
-                KisPart::instance()->removeView(view);
-            }
-        }
-
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             Q_FOREACH (QDockWidget* dockWidget, d->dockWidgetsMap)
                 dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));

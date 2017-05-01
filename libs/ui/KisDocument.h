@@ -549,6 +549,13 @@ public:
      */
     QByteArray serializeToNativeByteArray();
 
+
+    /**
+     * @brief isInSaving shown if the document has any (background) saving process or not
+     * @return true if there is some saving in action
+     */
+    bool isInSaving() const;
+
 public Q_SLOTS:
 
     /**

@@ -656,6 +656,12 @@ QByteArray KisDocument::serializeToNativeByteArray()
     return byteArray;
 }
 
+bool KisDocument::isInSaving() const
+{
+    std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
+    return !l.owns_lock();
+}
+
 bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!prepareLocksForSaving()) {

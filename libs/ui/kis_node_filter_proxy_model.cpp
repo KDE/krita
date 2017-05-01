@@ -29,13 +29,17 @@
 
 struct KisNodeFilterProxyModel::Private
 {
-    Private() : nodeModel(0), activeNodeCompressor(1000, KisSignalCompressor::FIRST_INACTIVE) {}
+    Private()
+        : nodeModel(0),
+          activeNodeCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
+    {}
 
     KisNodeModel *nodeModel;
     KisNodeSP pendingActiveNode;
     KisNodeSP activeNode;
     QSet<int> acceptedLabels;
     KisSignalCompressor activeNodeCompressor;
+    bool isUpdatingFilter = false;
 
     bool checkIndexAllowedRecursively(QModelIndex srcIndex);
 };
@@ -55,6 +59,15 @@ void KisNodeFilterProxyModel::setNodeModel(KisNodeModel *model)
 {
     m_d->nodeModel = model;
     setSourceModel(model);
+}
+
+bool KisNodeFilterProxyModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (m_d->isUpdatingFilter && role == KisNodeModel::ActiveRole) {
+        return false;
+    }
+
+    return QSortFilterProxyModel::setData(index, value, role);
 }
 
 bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex srcIndex)
@@ -116,6 +129,7 @@ void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
 
 void KisNodeFilterProxyModel::setActiveNode(KisNodeSP node)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
     m_d->pendingActiveNode = node;
 
     if (node && indexFromNode(node).isValid()) {
@@ -128,7 +142,18 @@ void KisNodeFilterProxyModel::setActiveNode(KisNodeSP node)
 void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()
 {
     m_d->activeNode = m_d->pendingActiveNode;
+
+    /**
+     * During the filter update the model might emit "current changed" signals,
+     * which (in their turn) will issue setData(..., KisNodeModel::ActiveRole)
+     * call, leading to a double recursion. Which, obviously, crashes Krita.
+     *
+     * Right now, just blocking the KisNodeModel::ActiveRole call is the
+     * most obvious solution for the problem.
+     */
+    m_d->isUpdatingFilter = true;
     invalidateFilter();
+    m_d->isUpdatingFilter = false;
 }
 
 void KisNodeFilterProxyModel::unsetDummiesFacade()

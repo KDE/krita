@@ -7,10 +7,10 @@ set (TextNGShape_SRCS
     TextNGShapeFactory.cpp
     TextNGTool.cpp
     TextNGToolFactory.cpp
-    ChangeTextNGDataCommand.cpp
+    ChangeTextDataCommand.cpp
 )
 
-ki18n_wrap_ui(TextNGShape_SRCS wdgTextNGtexteditor.ui)
+ki18n_wrap_ui(TextNGShape_SRCS wdgtextngtexteditory.ui)
 
 add_library(krita_shape_TextNG MODULE ${TextNGShape_SRCS})
 

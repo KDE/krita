@@ -122,6 +122,15 @@ void KisCanvasController::activate()
     KoCanvasControllerWidget::activate();
 }
 
+QPointF KisCanvasController::currentCursorPosition() const
+{
+    KoCanvasBase *canvas = m_d->view->canvasBase();
+    QWidget *canvasWidget = canvas->canvasWidget();
+    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(QCursor::pos());
+
+    return m_d->coordinatesConverter->widgetToDocument(cursorPosWidget);
+}
+
 void KisCanvasController::keyPressEvent(QKeyEvent *event)
 {
     /**

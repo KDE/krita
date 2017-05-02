@@ -20,6 +20,7 @@
 #ifndef SVGLOADINGCONTEXT_H
 #define SVGLOADINGCONTEXT_H
 
+#include <functional>
 #include <QStringList>
 #include <KoXmlReader.h>
 #include "kritaflake_export.h"
@@ -55,6 +56,8 @@ public:
     /// Constructs an absolute file path from the given href and current xml base directory
     QString absoluteFilePath(const QString &href);
 
+    QString relativeFilePath(const QString &href);
+
     /// Returns the next z-index
     int nextZIndex();
 
@@ -80,10 +83,20 @@ public:
     void addStyleSheet(const KoXmlElement &styleSheet);
 
     /// Returns list of css styles matching to the specified element
-    QStringList matchingStyles(const KoXmlElement &element) const;
+    QStringList matchingCssStyles(const KoXmlElement &element) const;
 
     /// Returns a style parser to parse styles
     SvgStyleParser &styleParser();
+
+    /// parses 'color-profile' tag and saves it in the context
+    void parseProfile(const KoXmlElement &element);
+
+    bool isRootContext() const;
+
+    typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
+    void setFileFetcher(FileFetcherFunc func);
+
+    QByteArray fetchExternalFile(const QString &url);
 
 private:
     class Private;

@@ -73,7 +73,7 @@ void KisShapeSelectionModel::add(KoShape *child)
     if (m_shapeMap.contains(child))
         return;
 
-    child->setStroke(0);
+    child->setStroke(KoShapeStrokeModelSP());
     child->setBackground( QSharedPointer<KoShapeBackground>(0));
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);
@@ -165,6 +165,8 @@ void KisShapeSelectionModel::containerChanged(KoShapeContainer *, KoShape::Chang
 void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType type)
 {
     if (!m_shapeSelection) return;
+
+    // TODO: check if still needed
     if (type == KoShape::ParentChanged) return;
 
     QRectF changedRect = m_shapeMap[child];

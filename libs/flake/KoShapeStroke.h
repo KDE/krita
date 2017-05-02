@@ -24,6 +24,7 @@
 #ifndef KOSHAPESTROKE_H
 #define KOSHAPESTROKE_H
 
+#include "KoFlakeTypes.h"
 #include "KoShapeStrokeModel.h"
 
 #include "kritaflake_export.h"
@@ -101,9 +102,13 @@ public:
     // pure virtuals from KoShapeStrokeModel implemented here.
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
     virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const;
+    virtual qreal strokeMaxMarkersInset(const KoShape *shape) const;
     virtual bool hasTransparency() const;
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color);
+
+    virtual bool compareFillTo(const KoShapeStrokeModel *other);
+    virtual bool compareStyleTo(const KoShapeStrokeModel *other);
+    virtual bool isVisible() const;
 
 private:
     class Private;

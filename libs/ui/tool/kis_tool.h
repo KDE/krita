@@ -204,7 +204,7 @@ public:
     bool isActive() const;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
     // Implement this slot in case there are any widgets or properties which need
@@ -299,9 +299,6 @@ protected:
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
     void paintToolOutline(QPainter * painter, const QPainterPath &path);
 
-    /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
-    void setCurrentNodeLocked(bool locked);
-
     /// Checks checks if the current node is editable
     bool nodeEditable();
 
@@ -310,6 +307,9 @@ protected:
 
     /// Override the cursor appropriately if current node is not editable
     bool overrideCursorIfNotEditable();
+
+    bool blockUntilOperationsFinished();
+    void blockUntilOperationsFinishedForced();
 
 protected:
     enum ToolMode {
@@ -324,37 +324,13 @@ protected:
 
     virtual void setMode(ToolMode mode);
     virtual ToolMode mode() const;
+    void setCursor(const QCursor &cursor);
 
 protected Q_SLOTS:
     /**
      * Called whenever the configuration settings change.
      */
     virtual void resetCursorStyle();
-
-    /**
-     * Called when the user requested undo while the stroke is
-     * active. If you tool supports undo of the part of its actions,
-     * override this method and do the needed work there.
-     *
-     * NOTE: Default implementation forwards this request to
-     *       requestStrokeCancellation() method, so that the stroke
-     *       would be cancelled.
-     */
-    virtual void requestUndoDuringStroke();
-
-    /**
-     * Called when the user requested the cancellation of the current
-     * stroke. If you tool supports cancelling, override this method
-     * and do the needed work there
-     */
-    virtual void requestStrokeCancellation();
-
-    /**
-     * Called when the image decided that the stroke should better be
-     * ended. If you tool supports long strokes, override this method
-     * and do the needed work there
-     */
-    virtual void requestStrokeEnd();
 
 private Q_SLOTS:
     void slotToggleFgBg();

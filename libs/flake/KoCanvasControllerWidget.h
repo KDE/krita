@@ -139,6 +139,8 @@ public:
 
     virtual void setVastScrolling(qreal factor);
 
+    QPointF currentCursorPosition() const override;
+
     /**
      * \internal
      */
@@ -170,8 +172,6 @@ protected:
     virtual void dragLeaveEvent(QDragLeaveEvent *event);
     /// reimplemented from QWidget
     virtual void wheelEvent(QWheelEvent *event);
-    /// reimplemented from QWidget
-    virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from QWidget
     virtual bool focusNextPrevChild(bool next);
 

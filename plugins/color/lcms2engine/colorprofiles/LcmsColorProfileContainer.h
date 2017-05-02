@@ -103,6 +103,7 @@ public:
     virtual void DelinearizeFloatValueFast(QVector <double> & Value) const;
     virtual QString name() const;
     virtual QString info() const;
+    virtual QByteArray getProfileUniqueId() const;
 
 protected:
     LcmsColorProfileContainer();

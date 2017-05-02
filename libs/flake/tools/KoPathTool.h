@@ -26,6 +26,7 @@
 #include "KoPathShape.h"
 #include "KoToolBase.h"
 #include "KoPathToolSelection.h"
+#include "kis_signal_auto_connection.h"
 #include <QList>
 #include <QCursor>
 
@@ -34,8 +35,11 @@ class KoCanvasBase;
 class KoInteractionStrategy;
 class KoPathToolHandle;
 class KoParameterShape;
+class KUndo2Command;
 
 class QAction;
+class QMenu;
+
 
 /// The tool for editing a KoPathShape or a KoParameterShape.
 /// See KoCreatePathTool for code handling the initial path creation.
@@ -46,44 +50,35 @@ public:
     explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
 
-    /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-
-    /// reimplemented
-    virtual void repaintDecorations();
-
-    /// reimplemented
-    virtual void mousePressEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void keyPressEvent(QKeyEvent *event);
-    /// reimplemented
-    virtual void keyReleaseEvent(QKeyEvent *event);
-    /// reimplemented
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    /// reimplemented
-    virtual void deactivate();
-
-    /// reimplemented
-    virtual void deleteSelection();
-
-    /// reimplemented
-    virtual KoToolSelection* selection();
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void repaintDecorations() override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
+    void deleteSelection() override;
+    KoToolSelection* selection() override;
+    void requestUndoDuringStroke();
+    void requestStrokeCancellation() override;
+    void requestStrokeEnd() override;
+    void explicitUserStrokeEndRequest() override;
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
+
+    QMenu* popupActionsMenu() override;
 
 public Q_SLOTS:
     void documentResourceChanged(int key, const QVariant & res);
 
 Q_SIGNALS:
     void typeChanged(int types);
-    void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
+    void singleShapeChanged(KoPathShape* path);
+
 protected:
     /// reimplemented
     virtual QList<QPointer<QWidget> >  createOptionWidgets();
@@ -109,14 +104,20 @@ private Q_SLOTS:
     void updateActions();
     void pointToLine();
     void pointToCurve();
-    void activate();
+    void slotSelectionChanged();
+
+private:
+    void clearActivePointSelectionReferences();
+    void initializeWithShapes(const QList<KoShape*> shapes);
+    KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
+    void repaintSegment(PathSegment *pathSegment);
+    void mergePointsImpl(bool doJoin);
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection
     QCursor m_selectCursor;
 
 private:
-
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
@@ -145,6 +146,9 @@ private:
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
+    bool m_activatedTemporarily;
+    QScopedPointer<QMenu> m_contextMenu;
+    KisSignalAutoConnectionsStore m_canvasConnections;
 
     Q_DECLARE_PRIVATE(KoToolBase)
 };

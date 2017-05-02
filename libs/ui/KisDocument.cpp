@@ -634,6 +634,34 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     return false;
 }
 
+QByteArray KisDocument::serializeToNativeByteArray()
+{
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+
+    QScopedPointer<KisImportExportFilter> filter(KisImportExportManager::filterForMimeType(nativeFormatMimeType(), KisImportExportManager::Export));
+    filter->setBatchMode(true);
+    filter->setMimeType(nativeFormatMimeType());
+
+    if (!prepareLocksForSaving()) {
+        return byteArray;
+    }
+
+    if (filter->convert(this, &buffer) != KisImportExportFilter::OK) {
+        qWarning() << "serializeToByteArray():: Could not export to our native format";
+    }
+
+    unlockAfterSaving();
+
+    return byteArray;
+}
+
+bool KisDocument::isInSaving() const
+{
+    std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
+    return !l.owns_lock();
+}
+
 bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!prepareLocksForSaving()) {
@@ -1669,7 +1697,6 @@ void KisDocument::setCurrentImage(KisImageSP image)
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
     d->image->initialRefreshGraph();
-    setAutoSaveDelay(KisConfig().autoSaveInterval());
 }
 
 void KisDocument::setImageModified()

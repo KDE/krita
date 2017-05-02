@@ -36,6 +36,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
 #include <KoShapeBackground.h>
@@ -131,8 +132,7 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     m_anchorGroup->addAction(anchorEnd);
     connect(m_anchorGroup, SIGNAL(triggered(QAction*)), this, SLOT(anchorChanged(QAction*)));
 
-    KoShapeManager *manager = canvas->shapeManager();
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
 
     addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
     addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
@@ -246,7 +246,7 @@ void ArtisticTextTool::mousePressEvent(KoPointerEvent *event)
         m_currentStrategy = new MoveStartOffsetStrategy(this, m_currentShape);
     }
     if (m_hoverText) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
+        KoSelection *selection = canvas()->selectedShapesProxy()->selection();
         if (m_hoverText != m_currentShape) {
             // if we hit another text shape, select that shape
             selection->deselectAll();
@@ -491,9 +491,10 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void ArtisticTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KoToolBase::activate(activation, shapes);
+
     foreach (KoShape *shape, shapes) {
         ArtisticTextShape *text = dynamic_cast<ArtisticTextShape *>(shape);
         if (text) {
@@ -514,8 +515,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     emit statusTextChanged(i18n("Press return to finish editing."));
     repaintDecorations();
 
-    KoShapeManager *manager = canvas()->shapeManager();
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    connect(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 void ArtisticTextTool::blinkCursor()
@@ -534,8 +534,9 @@ void ArtisticTextTool::deactivate()
     m_hoverPath = 0;
     m_hoverText = 0;
 
-    KoShapeManager *manager = canvas()->shapeManager();
-    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    disconnect(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
+    KoToolBase::deactivate();
 }
 
 void ArtisticTextTool::updateActions()
@@ -624,7 +625,7 @@ QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
     connect(configWidget, SIGNAL(fontFamilyChanged(QFont)), this, SLOT(setFontFamiliy(QFont)));
     connect(configWidget, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
+    connect(canvas()->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
     widgets.append(configWidget);
 
@@ -633,7 +634,7 @@ QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
     pathWidget->setWindowTitle(i18n("Text On Path"));
     connect(pathWidget, SIGNAL(offsetChanged(int)), this, SLOT(setStartOffset(int)));
     connect(this, SIGNAL(shapeSelected()), pathWidget, SLOT(updateWidget()));
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
+    connect(canvas()->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
             pathWidget, SLOT(updateWidget()));
     widgets.append(pathWidget);
 
@@ -785,7 +786,7 @@ void ArtisticTextTool::textChanged()
 
 void ArtisticTextTool::shapeSelectionChanged()
 {
-    KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (selection->isSelected(m_currentShape)) {
         return;
     }

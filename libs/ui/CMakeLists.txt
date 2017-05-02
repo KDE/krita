@@ -43,6 +43,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_guides_config.cpp
     canvas/kis_snap_config.cpp
     canvas/kis_snap_line_strategy.cpp
+    canvas/KisSnapPointStrategy.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -105,6 +106,7 @@ set(kritaui_LIB_SRCS
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_histogram_view.cc
+    KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc
@@ -133,6 +135,7 @@ set(kritaui_LIB_SRCS
     kis_preference_set_registry.cpp
     kis_script_manager.cpp
     kis_resource_server_provider.cpp
+    KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
     kis_statusbar.cc
@@ -254,6 +257,9 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualEllipticalSelectorShape.cpp
     widgets/KisVisualRectangleSelectorShape.cpp
     widgets/KisVisualTriangleSelectorShape.cpp
+    widgets/KoStrokeConfigWidget.cpp
+    widgets/KoFillConfigWidget.cpp
+    widgets/KoShapeFillWrapper.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -283,6 +289,7 @@ set(kritaui_LIB_SRCS
     operations/kis_operation_ui_widget.cpp
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
+    actions/KisPasteActionFactory.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
@@ -323,6 +330,7 @@ set(kritaui_LIB_SRCS
     KisImportExportFilter.cpp
     KisFilterEntry.cpp
     KisImportExportManager.cpp
+    kis_async_action_feedback.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
     KisPart.cpp
@@ -382,6 +390,8 @@ endif()
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
         kis_animation_cache_populator.cpp
+        KisAnimationCacheRegenerator.cpp
+        dialogs/KisAnimationCacheUpdateProgressDialog.cpp
         canvas/kis_animation_player.cpp
         kis_animation_exporter.cpp
         kis_animation_importer.cpp
@@ -408,6 +418,7 @@ endif()
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
+    widgets/KoFillConfigWidget.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui

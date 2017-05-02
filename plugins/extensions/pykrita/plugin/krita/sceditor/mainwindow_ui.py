@@ -86,7 +86,7 @@ class Ui_ScriptEditor(object):
         self.actionClear.setText(_translate("ScriptEditor", "Clear"))
         self.actionClear.setToolTip(_translate("ScriptEditor", "Clear The Console"))
         self.actionSave_As.setText(_translate("ScriptEditor", "Save &As"))
-        self.actionSave_As.setToolTip(_translate("ScriptEditor", "Save the  script"))
+        self.actionSave_As.setToolTip(_translate("ScriptEditor", "Save the script"))
         self.actionSave_As.setShortcut(_translate("ScriptEditor", "Ctrl+A"))
         self.actionOpen.setText(_translate("ScriptEditor", "&Open"))
         self.actionOpen.setToolTip(_translate("ScriptEditor", "Open a script"))

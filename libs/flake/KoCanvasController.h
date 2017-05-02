@@ -299,6 +299,12 @@ public:
 
     QPoint documentOffset() const;
 
+    /**
+     * @return the current position of the cursor fetched from QCursor::pos() and
+     *         converted into document coordinates
+     */
+    virtual QPointF currentCursorPosition() const = 0;
+
 protected:
     void setDocumentSize(const QSize &sz);
     QSize documentSize() const;
@@ -465,6 +471,7 @@ public:
     virtual void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) {}
     virtual void setZoomWithWheel(bool /*zoom*/) {}
     virtual void setVastScrolling(qreal /*factor*/) {}
+    QPointF currentCursorPosition() const override { return QPointF(); }
 
 };
 

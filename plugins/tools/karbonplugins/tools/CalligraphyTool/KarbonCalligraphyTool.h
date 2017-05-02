@@ -42,7 +42,7 @@ public:
 
     QList<QPointer<QWidget> > createOptionWidgets();
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 Q_SIGNALS:

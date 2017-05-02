@@ -38,7 +38,7 @@ public:
     KoSnapProxy(KoSnapGuide *snapGuide);
 
     /// returns list of points in given rectangle in document coordinates
-    QList<QPointF> pointsInRect(const QRectF &rect);
+    QList<QPointF> pointsInRect(const QRectF &rect, bool omitEditedShape);
 
     /// returns list of shape in given rectangle in document coordinates
     QList<KoShape*> shapesInRect(const QRectF &rect, bool omitEditedShape = false);
@@ -47,7 +47,7 @@ public:
     QList<QPointF> pointsFromShape(KoShape *shape);
 
     /// returns list of points in given rectangle in document coordinates
-    QList<KoPathSegment> segmentsInRect(const QRectF &rect);
+    QList<KoPathSegment> segmentsInRect(const QRectF &rect, bool omitEditedShape);
 
     /// returns list of all shapes
     QList<KoShape*> shapes(bool omitEditedShape = false);

@@ -109,7 +109,7 @@
     <string>Save &amp;As</string>
    </property>
    <property name="toolTip">
-    <string>Save the  script</string>
+    <string>Save the script</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>

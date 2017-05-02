@@ -103,8 +103,7 @@ void KoParameterToPathCommandPrivate::copyPath(KoPathShape *destination, KoPathS
         KoSubpath * subpath = new KoSubpath;
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
             KoPathPoint * p = source->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
-            KoPathPoint * c = new KoPathPoint(*p);
-            c->setParent(destination);
+            KoPathPoint * c = new KoPathPoint(*p, destination);
             subpath->append(c);
         }
         destination->addSubpath(subpath, subpathIndex);

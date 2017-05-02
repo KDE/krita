@@ -68,6 +68,8 @@ public:
     inline bool operator!=(const KoImageData &other) const { return !operator==(other); }
     bool operator==(const KoImageData &other) const;
 
+    KoShapeUserData* clone() const override;
+
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
 
     /**

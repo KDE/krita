@@ -25,6 +25,7 @@
 #include <FlakeDebug.h>
 #include <QPainter>
 #include <QPointF>
+#include <KisHandlePainterHelper.h>
 
 #include <math.h>
 
@@ -51,13 +52,19 @@ public:
 KoPathPoint::KoPathPoint(const KoPathPoint &pathPoint)
         : d(new Private())
 {
-    d->shape = pathPoint.d->shape;
+    d->shape = 0;
     d->point = pathPoint.d->point;
     d->controlPoint1 = pathPoint.d->controlPoint1;
     d->controlPoint2 = pathPoint.d->controlPoint2;
     d->properties = pathPoint.d->properties;
     d->activeControlPoint1 = pathPoint.d->activeControlPoint1;
     d->activeControlPoint2 = pathPoint.d->activeControlPoint2;
+}
+
+KoPathPoint::KoPathPoint(const KoPathPoint &pathPoint, KoPathShape *newParent)
+    : KoPathPoint(pathPoint)
+{
+    d->shape = newParent;
 }
 
 KoPathPoint::KoPathPoint()
@@ -255,49 +262,40 @@ void KoPathPoint::map(const QTransform &matrix)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::paint(QPainter &painter, int handleRadius, PointTypes types, bool active)
+void KoPathPoint::paint(KisHandlePainterHelper &handlesHelper, PointTypes types, bool active)
 {
-    QRectF handle(-handleRadius, -handleRadius, 2*handleRadius, 2*handleRadius);
-
     bool drawControlPoint1 = types & ControlPoint1 && (!active || activeControlPoint1());
     bool drawControlPoint2 = types & ControlPoint2 && (!active || activeControlPoint2());
 
     // draw lines at the bottom
-    if (drawControlPoint2)
-        painter.drawLine(point(), controlPoint2());
+    if (drawControlPoint2) {
+        handlesHelper.drawConnectionLine(point(), controlPoint2());
+    }
 
-    if (drawControlPoint1)
-        painter.drawLine(point(), controlPoint1());
-
-
-    QTransform worldMatrix = painter.worldTransform();
-
-    painter.setWorldTransform(QTransform());
+    if (drawControlPoint1) {
+        handlesHelper.drawConnectionLine(point(), controlPoint1());
+    }
 
     // the point is lowest
     if (types & Node) {
-        if (properties() & IsSmooth)
-            painter.drawRect(handle.translated(worldMatrix.map(point())));
-        else if (properties() & IsSymmetric) {
-            QTransform matrix;
-            matrix.rotate(45.0);
-            QPolygonF poly(handle);
-            poly = matrix.map(poly);
-            poly.translate(worldMatrix.map(point()));
-            painter.drawPolygon(poly);
-        } else
-            painter.drawEllipse(handle.translated(worldMatrix.map(point())));
+        if (properties() & IsSmooth) {
+            handlesHelper.drawHandleRect(point());
+        } else if (properties() & IsSymmetric) {
+            handlesHelper.drawGradientHandle(point());
+        } else {
+            handlesHelper.drawHandleCircle(point());
+        }
     }
 
     // then comes control point 2
-    if (drawControlPoint2)
-        painter.drawEllipse(handle.translated(worldMatrix.map(controlPoint2())));
+    if (drawControlPoint2) {
+        handlesHelper.drawHandleSmallCircle(controlPoint2());
+    }
 
     // then comes control point 1
-    if (drawControlPoint1)
-        painter.drawEllipse(handle.translated(worldMatrix.map(controlPoint1())));
-
-    painter.setWorldTransform(worldMatrix);
+    if (drawControlPoint1) {
+        handlesHelper.drawHandleSmallCircle(controlPoint1());
+    }
 }
 
 void KoPathPoint::setParent(KoPathShape* parent)

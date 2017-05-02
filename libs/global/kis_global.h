@@ -112,7 +112,7 @@ inline qreal normalizeAngle(qreal a) {
         a = 2 * M_PI + fmod(a, 2 * M_PI);
     }
 
-    return a > 2 * M_PI ? fmod(a, 2 * M_PI) : a;
+    return a >= 2 * M_PI ? fmod(a, 2 * M_PI) : a;
 }
 
 // converts \p a to [0, 360.0) range
@@ -121,7 +121,7 @@ inline qreal normalizeAngleDegrees(qreal a) {
         a = 360.0 + fmod(a, 360.0);
     }
 
-    return a > 360.0 ? fmod(a, 360.0) : a;
+    return a >= 360.0 ? fmod(a, 360.0) : a;
 }
 
 inline qreal shortestAngularDistance(qreal a, qreal b) {
@@ -139,6 +139,11 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
     qreal d2 = shortestAngularDistance(b2, direction);
 
     return d1 < d2 ? b1 : b2;
+}
+
+inline qreal bisectorAngle(qreal a, qreal b) {
+    const qreal diff = shortestAngularDistance(a, b);
+    return incrementInDirection(a, 0.5 * diff, b);
 }
 
 template<typename PointType>
@@ -235,62 +240,7 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
     return rc;
 }
 
-#include <QSharedPointer>
-
-template <class T>
-inline QSharedPointer<T> toQShared(T* ptr) {
-    return QSharedPointer<T>(ptr);
-}
-
-template <class A, template <class C> class List>
-List<QSharedPointer<A>> listToQShared(const List<A*> list) {
-    List<QSharedPointer<A>> newList;
-    Q_FOREACH(A* value, list) {
-        newList.append(toQShared(value));
-    }
-    return newList;
-}
-
-
-/**
- * Convert a list of strong pointers into a list of weak pointers
- */
-template <template <class> class Container, class T>
-Container<QWeakPointer<T>> listStrongToWeak(const Container<QSharedPointer<T>> &containter)
-{
-    Container<QWeakPointer<T> > result;
-    Q_FOREACH (QSharedPointer<T> v, containter) {
-        result << v;
-    }
-    return result;
-}
-
-/**
- * Convert a list of weak pointers into a list of strong pointers
- *
- * WARNING: By default, uses "all or nothing" rule. If at least one of
- *          the weak pointers is invalid, returns an *empty* list!
- *          Even though some other pointer can still be converted
- *          correctly.
- */
-template <template <class> class Container, class T>
-    Container<QSharedPointer<T> > listWeakToStrong(const Container<QWeakPointer<T>> &containter,
-                                                   bool allOrNothing = true)
-{
-    Container<QSharedPointer<T> > result;
-    Q_FOREACH (QWeakPointer<T> v, containter) {
-        QSharedPointer<T> strong(v);
-        if (!strong && allOrNothing) {
-            result.clear();
-            return result;
-        }
-
-        if (strong) {
-            result << strong;
-        }
-    }
-    return result;
-}
+#include "kis_pointer_utils.h"
 
 /**
  * A special wrapper object that converts Qt-style mutexes and locks

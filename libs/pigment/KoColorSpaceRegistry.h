@@ -118,6 +118,16 @@ public:
      */
     const KoColorProfile * profileByName(const QString & name) const ;
 
+
+    /**
+     * Returns a profile by its unique id stored/calculated in the header.
+     * The first call to this function might take long, because the map is
+     * created on the first use only (atm used by SVG only)
+     * @param id unique ProfileID of the profile (MD5 sum of its header)
+     * @return the profile or 0 if not found
+     */
+    const KoColorProfile *profileByUniqueId(const QByteArray &id) const;
+
     /**
      * Return the list of profiles for the argument colorspacefactory.
      * Profiles will not work with any color space, you can query which profiles

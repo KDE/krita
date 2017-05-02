@@ -20,6 +20,7 @@
 #ifndef MOCKSHAPES_H
 #define MOCKSHAPES_H
 
+#include <KoSelectedShapesProxySimple.h>
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
 #include <KoShapeBasedDocumentBase.h>
@@ -78,12 +79,58 @@ class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 
 class KoToolProxy;
 
+class KRITAFLAKE_EXPORT MockShapeController : public KoShapeBasedDocumentBase
+{
+public:
+    void addShapes(const QList<KoShape*> shapes) {
+        Q_FOREACH (KoShape *shape, shapes) {
+            m_shapes.insert(shape);
+            if (m_shapeManager) {
+                m_shapeManager->addShape(shape);
+            }
+        }
+    }
+    void removeShape(KoShape* shape) {
+        m_shapes.remove(shape);
+        if (m_shapeManager) {
+            m_shapeManager->remove(shape);
+        }
+    }
+    bool contains(KoShape* shape) {
+        return m_shapes.contains(shape);
+    }
+
+    void setShapeManager(KoShapeManager *shapeManager) {
+        m_shapeManager = shapeManager;
+    }
+
+    QRectF documentRectInPixels() const {
+        return QRectF(0,0,100,100);
+    }
+
+    qreal pixelsPerInch() const {
+        return 72.0;
+    }
+
+private:
+    QSet<KoShape * > m_shapes;
+    KoShapeManager *m_shapeManager = 0;
+};
+
 class KRITAFLAKE_EXPORT MockCanvas : public KoCanvasBase
 {
     Q_OBJECT
 public:
     MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)) {}
+            : KoCanvasBase(aKoShapeBasedDocumentBase),
+              m_shapeManager(new KoShapeManager(this)),
+              m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
+    {
+        if (MockShapeController *controller = dynamic_cast<MockShapeController*>(aKoShapeBasedDocumentBase)) {
+            controller->setShapeManager(m_shapeManager.data());
+        }
+    }
+
     ~MockCanvas() {}
     void setHorz(qreal pHorz){
         m_horz = pHorz;
@@ -102,7 +149,10 @@ public:
     }
     void addCommand(KUndo2Command*) { }
     KoShapeManager *shapeManager() const  {
-        return m_shapeManager;
+        return m_shapeManager.data();
+    }
+    KoSelectedShapesProxy *selectedShapesProxy() const {
+        return m_selectedShapesProxy.data();
     }
     void updateCanvas(const QRectF&)  {}
     KoToolProxy * toolProxy() const {
@@ -123,28 +173,13 @@ public:
     void updateInputMethodInfo() {}
     void setCursor(const QCursor &) {}
     private:
-        KoShapeManager *m_shapeManager;
+        QScopedPointer<KoShapeManager> m_shapeManager;
+        QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
         qreal m_horz;
         qreal m_vert;
 };
 
-class KRITAFLAKE_EXPORT MockShapeController : public KoShapeBasedDocumentBase
-{
-public:
-    void addShape(KoShape* shape) {
-        m_shapes.insert(shape);
-    }
-    void removeShape(KoShape* shape) {
-        m_shapes.remove(shape);
-    }
-    bool contains(KoShape* shape) {
-        return m_shapes.contains(shape);
-    }
-private:
-    QSet<KoShape * > m_shapes;
-};
-
-class MockContainerModel : public KoShapeContainerModel
+class KRITAFLAKE_EXPORT MockContainerModel : public KoShapeContainerModel
 {
 public:
     MockContainerModel() {

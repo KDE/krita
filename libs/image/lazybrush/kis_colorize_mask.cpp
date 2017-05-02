@@ -51,7 +51,7 @@ using namespace KisLazyFillTools;
 
 struct KisColorizeMask::Private
 {
-    Private()
+    Private(KisColorizeMask *q)
         : coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
@@ -60,11 +60,11 @@ struct KisColorizeMask::Private
           showColoring(true),
           needsUpdate(true),
           originalSequenceNumber(-1),
-          updateCompressor(1, KisSignalCompressor::POSTPONE)
+          updateCompressor(1, KisSignalCompressor::POSTPONE, q)
     {
     }
 
-    Private(const Private &rhs)
+    Private(const Private &rhs, KisColorizeMask *q)
         : coloringProjection(new KisPaintDevice(*rhs.coloringProjection)),
           fakePaintDevice(new KisPaintDevice(*rhs.fakePaintDevice)),
           filteredSource(new KisPaintDevice(*rhs.filteredSource)),
@@ -73,7 +73,7 @@ struct KisColorizeMask::Private
           showColoring(rhs.showColoring),
           needsUpdate(false),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::POSTPONE),
+          updateCompressor(1000, KisSignalCompressor::POSTPONE, q),
           offset(rhs.offset)
     {
         Q_FOREACH (const KeyStroke &stroke, rhs.keyStrokes) {
@@ -104,7 +104,7 @@ struct KisColorizeMask::Private
 };
 
 KisColorizeMask::KisColorizeMask()
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
@@ -119,7 +119,7 @@ KisColorizeMask::~KisColorizeMask()
 
 KisColorizeMask::KisColorizeMask(const KisColorizeMask& rhs)
     : KisEffectMask(rhs),
-      m_d(new Private(*rhs.m_d))
+      m_d(new Private(*rhs.m_d, this))
 {
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),

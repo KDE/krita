@@ -26,7 +26,7 @@
 #include "kis_coordinates_converter.h"
 #include "tool_transform_args.h"
 #include "transform_transaction_properties.h"
-#include "krita_utils.h"
+#include "kis_painting_tweaks.h"
 #include "kis_cursor.h"
 #include "kis_transform_utils.h"
 #include "kis_algebra_2d.h"
@@ -209,7 +209,7 @@ void KisWarpTransformStrategy::drawConnectionLines(QPainter &gc,
     QPen antsPen;
     QPen outlinePen;
 
-    KritaUtils::initAntsPen(&antsPen, &outlinePen);
+    KisPaintingTweaks::initAntsPen(&antsPen, &outlinePen);
 
     const int numPoints = origPoints.size();
 
@@ -534,9 +534,10 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
 {
     QTransform scaleTransform = KisTransformUtils::imageToFlakeTransform(converter);
 
-    QTransform resultTransform = q->thumbToImageTransform() * scaleTransform;
-    qreal scale = KisTransformUtils::scaleFromAffineMatrix(resultTransform);
-    bool useFlakeOptimization = scale < 1.0;
+    QTransform resultThumbTransform = q->thumbToImageTransform() * scaleTransform;
+    qreal scale = KisTransformUtils::scaleFromAffineMatrix(resultThumbTransform);
+    bool useFlakeOptimization = scale < 1.0 &&
+        !KisTransformUtils::thumbnailTooSmall(resultThumbTransform, q->originalImage().rect());
 
     QVector<QPointF> thumbOrigPoints(currentArgs.numPoints());
     QVector<QPointF> thumbTransfPoints(currentArgs.numPoints());
@@ -552,11 +553,11 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
         QPointF origTLInFlake = imageToThumb(transaction.originalTopLeft(), useFlakeOptimization);
 
         if (useFlakeOptimization) {
-            transformedImage = q->originalImage().transformed(q->thumbToImageTransform() * scaleTransform);
+            transformedImage = q->originalImage().transformed(resultThumbTransform);
             paintingTransform = QTransform();
         } else {
             transformedImage = q->originalImage();
-            paintingTransform = q->thumbToImageTransform() * scaleTransform;
+            paintingTransform = resultThumbTransform;
 
         }
 
@@ -569,7 +570,7 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
     } else {
         transformedImage = q->originalImage();
         paintingOffset = imageToThumb(transaction.originalTopLeft(), false);
-        paintingTransform = q->thumbToImageTransform() * scaleTransform;
+        paintingTransform = resultThumbTransform;
     }
 
     handlesTransform = scaleTransform;

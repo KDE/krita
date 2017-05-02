@@ -34,6 +34,7 @@ public:
 
 public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
+    void initializeImage(KisImageSP image);
 
     void forwardHoverEvent(QEvent *event);
 

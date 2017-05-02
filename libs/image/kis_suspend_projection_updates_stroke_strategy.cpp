@@ -38,24 +38,28 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
     class SuspendLod0Updates : public KisProjectionUpdatesFilter
     {
 
-        typedef QHash<KisNodeSP, QVector<QRect> > RectsHash;
-    public:
         struct Request {
-            Request() {}
-            Request(KisNodeSP _node, QRect _rect) : node(_node), rect(_rect) {}
-            KisNodeSP node;
+            Request() : resetAnimationCache(false) {}
+            Request(const QRect &_rect, bool _resetAnimationCache)
+                : rect(_rect), resetAnimationCache(_resetAnimationCache)
+            {
+            }
+
             QRect rect;
+            bool resetAnimationCache;
         };
+
+        typedef QHash<KisNodeSP, QVector<Request> > RectsHash;
     public:
         SuspendLod0Updates()
         {
         }
 
-        bool filter(KisImage *image, KisNode *node, const QRect &rect) override {
+        bool filter(KisImage *image, KisNode *node, const QRect &rect,  bool resetAnimationCache) override {
             if (image->currentLevelOfDetail() > 0) return false;
 
             QMutexLocker l(&m_mutex);
-            m_requestsHash[KisNodeSP(node)].append(rect);
+            m_requestsHash[KisNodeSP(node)].append(Request(rect, resetAnimationCache));
             return true;
         }
 
@@ -84,21 +88,18 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
             for (; it != end; ++it) {
                 KisNodeSP node = it.key();
-                const QVector<QRect> &rects = it.value();
-
-                QVector<QRect>::const_iterator it = rects.constBegin();
-                QVector<QRect>::const_iterator end = rects.constEnd();
 
                 QRegion region;
 
-                for (; it != end; ++it) {
-                    region += alignRect(*it, step);
+                bool resetAnimationCache = false;
+                Q_FOREACH (const Request &req, it.value()) {
+                    region += alignRect(req.rect, step);
+                    resetAnimationCache |= req.resetAnimationCache;
                 }
 
                 Q_FOREACH (const QRect &rc, region.rects()) {
                     // FIXME: constness: port rPU to SP
-                    listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), rc);
-
+                    listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), rc, resetAnimationCache);
                 }
             }
         }

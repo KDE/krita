@@ -47,6 +47,8 @@ public:
     /// Destroys the background
     virtual ~KoGradientBackground();
 
+    bool compareTo(const KoShapeBackground *other) const override;
+
     /// Sets the transform matrix
     void setTransform(const QTransform &matrix);
 

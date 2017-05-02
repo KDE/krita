@@ -29,7 +29,6 @@
 #include <QTransform>
 
 #include "KoTosContainer.h"
-#include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -37,6 +36,7 @@ class KoPathSegment;
 class KoPathPoint;
 class KoPathShapePrivate;
 class KoMarker;
+class KisHandlePainterHelper;
 
 typedef QPair<int, int> KoPathPointIndex;
 
@@ -85,15 +85,20 @@ public:
      */
     virtual ~KoPathShape();
 
+    KoShape *cloneShape() const;
+
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
-    virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
+    virtual void paintPoints(KisHandlePainterHelper &handlesHelper);
+
     /// reimplemented
-    virtual QPainterPath outline() const;
+    QRectF outlineRect() const override;
     /// reimplemented
-    virtual QRectF boundingRect() const;
+    QPainterPath outline() const override;
     /// reimplemented
-    virtual QSizeF size() const;
+    QRectF boundingRect() const override;
+    /// reimplemented
+    QSizeF size() const override;
 
     QPainterPath pathStroke(const QPen &pen) const;
     /**
@@ -409,9 +414,9 @@ public:
     /**
      * @brief Combines two path shapes by appending the data of the specified path.
      * @param path the path to combine with
-     * @return true if combining was successful, else false
+     * @return index of the first segment inserted or -1 on failure
      */
-    bool combine(KoPathShape *path);
+    int combine(KoPathShape *path);
 
     /**
      * @brief Creates separate path shapes, one for each existing subpath.
@@ -450,20 +455,22 @@ public:
     /// Returns the viewbox from the given xml element.
     static QRect loadOdfViewbox(const KoXmlElement &element);
 
-    /// Marker setter
-    void setMarker(const KoMarkerData &markerData);
+    void setMarker(KoMarker *marker, KoFlake::MarkerPosition pos);
+    KoMarker* marker(KoFlake::MarkerPosition pos) const;
+    bool hasMarkers() const;
 
-    /// Marker setter
-    void setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position);
+    bool autoFillMarkers() const;
+    void setAutoFillMarkers(bool value);
 
-    /// returns the list of all the markers of the path
-    KoMarker *marker(KoMarkerData::MarkerPosition position) const;
-
-    KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
+private:
+    /// constructor: to be used in cloneShape(), not in descendants!
+    /// \internal
+    KoPathShape(const KoPathShape &rhs);
 
 protected:
-    /// constructor \internal
-    KoPathShape(KoPathShapePrivate &);
+    /// constructor:to be used in descendant shapes
+    /// \internal
+    KoPathShape(KoPathShapePrivate *);
 
     /// reimplemented
     virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
@@ -493,8 +500,6 @@ protected:
      * very small size of 0.000001 pixels
      */
     QTransform resizeMatrix( const QSizeF &newSize ) const;
-
-    KoSubpathList m_subpaths;
 
 private:
     Q_DECLARE_PRIVATE(KoPathShape)

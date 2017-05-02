@@ -40,6 +40,7 @@ public:
         void connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *spinTwo, KoAspectButton *aspectButton);
 
     void setBlockUpdateSignalOnDrag(bool block);
+    void updateAspect();
 
 private Q_SLOTS:
     void slotSpinOneChanged();

@@ -320,6 +320,13 @@ void KisShortcutMatcher::reinitialize()
     }
 }
 
+void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
+{
+    if (m_d->runningShortcut) {
+        forceEndRunningShortcut(localPos);
+    }
+}
+
 void KisShortcutMatcher::reset()
 {
     m_d->keys.clear();
@@ -484,6 +491,23 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
     return !m_d->runningShortcut;
 }
 
+void KisShortcutMatcher::forceEndRunningShortcut(const QPointF &localPos)
+{
+    Q_ASSERT(m_d->runningShortcut);
+    Q_ASSERT(!m_d->readyShortcut);
+
+    if (m_d->runningShortcut->action()) {
+        DEBUG_ACTION("Forced ending running shortcut at event");
+        KisAbstractInputAction* action = m_d->runningShortcut->action();
+        int shortcutIndex = m_d->runningShortcut->shortcutIndex();
+
+        QMouseEvent event = m_d->runningShortcut->fakeEndEvent(localPos);
+
+        action->end(&event);
+        action->deactivate(shortcutIndex);
+    }
+    m_d->runningShortcut = 0;
+}
 
 bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
 {

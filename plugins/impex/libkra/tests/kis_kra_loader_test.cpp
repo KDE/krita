@@ -46,7 +46,7 @@ void KisKraLoaderTest::initTestCase()
 
 void KisKraLoaderTest::testLoading()
 {
-    KisDocument *doc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     KisImageSP image = doc->image();
     image->lock();
@@ -66,8 +66,6 @@ void KisKraLoaderTest::testLoading()
     QCOMPARE(node->name(), QString("Group 1"));
     QVERIFY(node->inherits("KisGroupLayer"));
     QCOMPARE((int) node->childCount(), 2);
-
-    delete doc;
 }
 
 void testObligeSingleChildImpl(bool transpDefaultPixel)
@@ -79,8 +77,10 @@ void testObligeSingleChildImpl(bool transpDefaultPixel)
 
     QString fileName = TestUtil::fetchDataFileLazy(id);
 
-    KisDocument *doc = KisPart::instance()->createDocument();
-    doc->loadNativeFormat(fileName);
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    const bool result = doc->loadNativeFormat(fileName);
+    QVERIFY(result);
+
     KisImageSP image = doc->image();
 
     QVERIFY(image);
@@ -98,8 +98,6 @@ void testObligeSingleChildImpl(bool transpDefaultPixel)
     } else {
         QVERIFY(root->original() != child->projection());
     }
-
-    delete doc;
 }
 
 void KisKraLoaderTest::testObligeSingleChild()
@@ -114,7 +112,7 @@ void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
 
 void KisKraLoaderTest::testLoadAnimated()
 {
-    KisDocument *doc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test_animation.kra");
     KisImageSP image = doc->image();
 
@@ -126,11 +124,13 @@ void KisKraLoaderTest::testLoadAnimated()
 
     KisPaintLayerSP layer1 = qobject_cast<KisPaintLayer*>(node1.data());
     KisPaintLayerSP layer2 = qobject_cast<KisPaintLayer*>(node2.data());
-    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
-    KisKeyframeChannel *channel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
+    QVERIFY(layer1->isAnimated());
+    QVERIFY(!layer2->isAnimated());
+
+    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QVERIFY(channel1);
     QCOMPARE(channel1->keyframeCount(), 3);
-    QCOMPARE(channel2->keyframeCount(), 1);
 
     QCOMPARE(image->animationInterface()->framerate(), 17);
     QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeRange::fromTime(15, 45));

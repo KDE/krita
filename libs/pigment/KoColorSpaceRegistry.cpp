@@ -36,15 +36,7 @@
 #include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
 
-#include <KoConfig.h>
-#ifdef HAVE_OPENEXR
-#include <half.h>
-#include "colorspaces/KoAlphaF16ColorSpace.h"
-#endif
-
 #include "colorspaces/KoAlphaColorSpace.h"
-#include "colorspaces/KoAlphaU16ColorSpace.h"
-#include "colorspaces/KoAlphaF32ColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
 #include "colorspaces/KoRgbU8ColorSpace.h"
@@ -57,7 +49,8 @@ Q_GLOBAL_STATIC(KoColorSpaceRegistry, s_instance)
 struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
     QList<KoColorSpaceFactory *> localFactories;
-    QHash<QString, KoColorProfile *> profileMap;
+    QHash<QString, KoColorProfile * > profileMap;
+    QHash<QByteArray, KoColorProfile * > profileUniqueIdMap;
     QHash<QString, QString> profileAlias;
     QHash<QString, const KoColorSpace *> csMap;
     KoColorConversionSystem *colorConversionSystem;
@@ -71,6 +64,8 @@ struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
 #endif
     const KoColorSpace *alphaF32Cs;
     QReadWriteLock registrylock;
+
+    void populateUniqueIdMap();
 };
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
@@ -101,25 +96,20 @@ void KoColorSpaceRegistry::init()
     addProfile(new KoDummyColorProfile);
 
     // Create the built-in colorspaces
-    d->localFactories << new KoLabColorSpaceFactory()
+    d->localFactories
+            << new KoAlphaColorSpaceFactory()
+            << new KoAlphaU16ColorSpaceFactory()
+           #ifdef HAVE_OPENEXR
+            << new KoAlphaF16ColorSpaceFactory()
+           #endif
+            << new KoAlphaF32ColorSpaceFactory()
+            << new KoLabColorSpaceFactory()
             << new KoRgbU8ColorSpaceFactory()
             << new KoRgbU16ColorSpaceFactory();
+
     Q_FOREACH (KoColorSpaceFactory *factory, d->localFactories) {
         add(factory);
     }
-
-    d->alphaCs = new KoAlphaColorSpace();
-    d->alphaCs->d->deletability = OwnedByRegistryRegistryDeletes;
-
-    d->alphaU16Cs = new KoAlphaU16ColorSpace();
-    d->alphaU16Cs->d->deletability = OwnedByRegistryRegistryDeletes;
-
-    d->alphaF16Cs = new KoAlphaF16ColorSpace();
-    d->alphaF16Cs->d->deletability = OwnedByRegistryRegistryDeletes;
-
-    d->alphaF32Cs = new KoAlphaF32ColorSpace();
-    d->alphaF32Cs->d->deletability = OwnedByRegistryRegistryDeletes;
-
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
@@ -217,6 +207,38 @@ const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & _nam
     return d->profileMap.value( profileAlias(_name), 0);
 }
 
+void KoColorSpaceRegistry::Private::populateUniqueIdMap()
+{
+    QWriteLocker l(&registrylock);
+    profileUniqueIdMap.clear();
+
+    for (auto it = profileMap.constBegin();
+         it != profileMap.constEnd();
+         ++it) {
+
+        KoColorProfile *profile = it.value();
+        QByteArray id = profile->uniqueId();
+
+        if (!id.isEmpty()) {
+            profileUniqueIdMap.insert(id, profile);
+        }
+    }
+}
+
+const KoColorProfile *  KoColorSpaceRegistry::profileByUniqueId(const QByteArray &id) const
+{
+    {
+        QReadLocker l(&d->registrylock);
+        if (d->profileUniqueIdMap.isEmpty()) {
+            l.unlock();
+            d->populateUniqueIdMap();
+            l.relock();
+        }
+        return d->profileUniqueIdMap.value(id, 0);
+    }
+}
+
+
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id) const
 {
     return profilesFor(d->colorSpaceFactoryRegistry.value(id));
@@ -278,6 +300,9 @@ void KoColorSpaceRegistry::addProfileToMap(KoColorProfile *p)
     Q_ASSERT(p);
     if (p->valid()) {
         d->profileMap[p->name()] = p;
+        if (!d->profileUniqueIdMap.isEmpty()) {
+            d->profileUniqueIdMap.insert(p->uniqueId(), p);
+        }
     }
 }
 
@@ -285,7 +310,7 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
     Q_ASSERT(p);
     if (p->valid()) {
-        d->profileMap[p->name()] = p;
+        addProfileToMap(p);
         d->colorConversionSystem->insertColorProfile(p);
     }
 }
@@ -298,6 +323,9 @@ void KoColorSpaceRegistry::addProfile(const KoColorProfile* profile)
 void KoColorSpaceRegistry::removeProfile(KoColorProfile* profile)
 {
     d->profileMap.remove(profile->name());
+    if (!d->profileUniqueIdMap.isEmpty()) {
+        d->profileUniqueIdMap.remove(profile->uniqueId());
+    }
 }
 
 const KoColorSpace* KoColorSpaceRegistry::getCachedColorSpace(const QString & csID, const QString & profileName) const

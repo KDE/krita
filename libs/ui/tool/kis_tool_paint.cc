@@ -604,7 +604,7 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
-    if (!node || node->systemLocked()) {
+    if (!node) {
         return NONE;
     }
     if (node->inherits("KisShapeLayer")) {
@@ -736,20 +736,30 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         colorPreviewDocUpdateRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
     }
 
-    if (!m_oldColorPreviewUpdateRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldColorPreviewUpdateRect);
-    }
+    // DIRTY HACK ALERT: we should fetch the assistant's dirty rect when requesting
+    //                   the update, instead of just dumbly update the entire canvas!
 
-    if (!m_oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldOutlineRect);
-    }
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
+    if (decoration && decoration->visible()) {
+        kiscanvas->updateCanvas();
+    } else {
+        // TODO: only this branch should be present!
+        if (!m_oldColorPreviewUpdateRect.isEmpty()) {
+            canvas()->updateCanvas(m_oldColorPreviewUpdateRect);
+        }
 
-    if (!outlineDocRect.isEmpty()) {
-        canvas()->updateCanvas(outlineDocRect);
-    }
+        if (!m_oldOutlineRect.isEmpty()) {
+            canvas()->updateCanvas(m_oldOutlineRect);
+        }
 
-    if (!colorPreviewDocUpdateRect.isEmpty()) {
-        canvas()->updateCanvas(colorPreviewDocUpdateRect);
+        if (!outlineDocRect.isEmpty()) {
+            canvas()->updateCanvas(outlineDocRect);
+        }
+
+        if (!colorPreviewDocUpdateRect.isEmpty()) {
+            canvas()->updateCanvas(colorPreviewDocUpdateRect);
+        }
     }
 
     m_oldOutlineRect = outlineDocRect;

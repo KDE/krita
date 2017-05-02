@@ -142,7 +142,7 @@ void TestShapeContainer::testScaling()
 
     QList<QPointF> oldPositions;
     for(int i=0; i< transformShapes.size(); i++) {
-        oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
+        oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeft));
     }
 
     KoShapeTransformCommand* transformCommand;
@@ -150,7 +150,7 @@ void TestShapeContainer::testScaling()
     transformCommand->redo();
 
     for(int i=0; i< transformShapes.size(); i++) {
-        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i)*0.5);
+        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeft), oldPositions.at(i)*0.5);
     }
 
     transformShapes.takeLast();
@@ -158,7 +158,7 @@ void TestShapeContainer::testScaling()
     ungroupCmd->redo();
 
     for(int i=0; i< transformShapes.size(); i++) {
-        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i)*0.5);
+        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeft), oldPositions.at(i)*0.5);
     }
 }
 
@@ -182,7 +182,7 @@ void TestShapeContainer::testScaling2()
     groupCommand->redo();
 
     KoSelection* selection = new KoSelection();
-    selection->select(shape1, true);
+    selection->select(shape1);
 
     QList<KoShape*> transformShapes;
     transformShapes.append(selection->selectedShapes());
@@ -200,19 +200,19 @@ void TestShapeContainer::testScaling2()
 
     QList<QPointF> oldPositions;
     for(int i=0; i< transformShapes.size(); i++) {
-        oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
+        oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeft));
     }
 
     KoShapeTransformCommand* transformCommand;
     transformCommand = new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations);
     transformCommand->redo();
 
-    QRectF r1(shape1->absolutePosition(KoFlake::TopLeftCorner), shape1->absolutePosition(KoFlake::BottomRightCorner));
-    QRectF r2(shape2->absolutePosition(KoFlake::TopLeftCorner), shape2->absolutePosition(KoFlake::BottomRightCorner));
+    QRectF r1(shape1->absolutePosition(KoFlake::TopLeft), shape1->absolutePosition(KoFlake::BottomRight));
+    QRectF r2(shape2->absolutePosition(KoFlake::TopLeft), shape2->absolutePosition(KoFlake::BottomRight));
     QSizeF shapeSize=r1.united(r2).size();
 
     selection = new KoSelection();
-    selection->select(shape1, true);
+    selection->select(shape1);
     QSizeF selecSize = selection->size();
 
     bool works=false;

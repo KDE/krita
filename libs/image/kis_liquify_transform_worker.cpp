@@ -446,7 +446,7 @@ QRect KisLiquifyTransformWorker::approxChangeRect(const QRect &rc)
         samplePoints << m_d->transformedPoints[i].toPoint();
     }
 
-    QRect resultRect = KritaUtils::approximateRectFromPoints(samplePoints);
+    QRect resultRect = KisAlgebra2D::approximateRectFromPoints(samplePoints);
     return KisAlgebra2D::blowRect(resultRect | rc, margin);
 }
 

@@ -69,6 +69,8 @@ protected:
     virtual KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();
 
+    qreal currentStrokeWidth() const;
+
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     void addShape(KoShape* shape);

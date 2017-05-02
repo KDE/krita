@@ -36,6 +36,8 @@
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
 #include <QPainter>
+#include <KisHandlePainterHelper.h>
+
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
         : m_tool(tool)
@@ -58,19 +60,18 @@ PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint
 {
 }
 
-void PointHandle::paint(QPainter &painter, const KoViewConverter &converter)
+void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
-    painter.save();
-    painter.setTransform(m_activePoint->parent()->absoluteTransformation(&converter) * painter.transform());
-    KoShape::applyConversion(painter, converter);
-
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
     KoPathPoint::PointType type = KoPathPoint::Node;
-    if (selection && selection->contains(m_activePoint))
+    if (selection && selection->contains(m_activePoint)) {
         type = KoPathPoint::All;
-    m_activePoint->paint(painter, handleRadius(), type);
-    painter.restore();
+    }
+
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_activePoint->parent(), converter, handleRadius);
+    helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+    m_activePoint->paint(helper, type);
 }
 
 void PointHandle::repaint() const
@@ -88,11 +89,11 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
 {
     if ((event->button() & Qt::LeftButton) == 0)
         return 0;
-    if ((event->modifiers() & Qt::ShiftModifier) == 0) { // no shift pressed.
+    if ((event->modifiers() & Qt::ControlModifier) == 0) { // no shift pressed.
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
         // control select adds/removes points to/from the selection
-        if (event->modifiers() & Qt::ControlModifier) {
+        if (event->modifiers() & Qt::ShiftModifier) {
             if (selection->contains(m_activePoint)) {
                 selection->remove(m_activePoint);
             } else {
@@ -152,6 +153,16 @@ KoPathPoint::PointType PointHandle::activePointType() const
     return m_activePointType;
 }
 
+void PointHandle::trySelectHandle()
+{
+    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+
+    if (!selection->contains(m_activePoint) && m_activePointType == KoPathPoint::Node) {
+        selection->clear();
+        selection->add(m_activePoint, false);
+    }
+}
+
 ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId)
         : KoPathToolHandle(tool)
         , m_parameterShape(parameterShape)
@@ -159,13 +170,11 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 {
 }
 
-void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter)
+void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
-    painter.save();
-    painter.setTransform(m_parameterShape->absoluteTransformation(&converter) * painter.transform());
-
-    m_parameterShape->paintHandle(painter, converter, m_handleId, handleRadius());
-    painter.restore();
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_parameterShape, converter, handleRadius);
+    helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+    m_parameterShape->paintHandle(helper, m_handleId);
 }
 
 void ParameterHandle::repaint() const

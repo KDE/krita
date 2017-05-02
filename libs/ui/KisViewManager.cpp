@@ -732,11 +732,6 @@ KisGuidesManager * KisViewManager::guidesManager() const
     return &d->guidesManager;
 }
 
-KisPaintingAssistantsManager* KisViewManager::paintingAssistantsManager() const
-{
-    return &d->paintingAssistantsManager;
-}
-
 KisDocument *KisViewManager::document() const
 {
     if (d->currentImageView && d->currentImageView->document()) {
@@ -774,7 +769,7 @@ bool KisViewManager::blockUntilOperationsFinished(KisImageSP image)
     return d->blockUntilOperationsFinishedImpl(image, false);
 }
 
-void KisViewManager::blockUntillOperationsFinishedForced(KisImageSP image)
+void KisViewManager::blockUntilOperationsFinishedForced(KisImageSP image)
 {
     d->blockUntilOperationsFinishedImpl(image, true);
 }

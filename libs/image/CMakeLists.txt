@@ -124,6 +124,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_multiway_cut.cpp
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
+   KisDelayedUpdateNodeInterface.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -189,16 +190,12 @@ set(kritaimage_LIB_SRCS
    kis_regenerate_frame_stroke_strategy.cpp
    kis_switch_time_stroke_strategy.cpp
    kis_crop_saved_extra_data.cpp
-   kis_signal_compressor.cpp
-   kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp
-   kis_acyclic_signal_connector.cpp
    kis_timed_signal_threshold.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
-   kis_command_utils.cpp
    kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
@@ -246,10 +243,8 @@ set(kritaimage_LIB_SRCS
    kis_cage_transform_worker.cpp
    kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
-   kis_algebra_2d.cpp
    kis_transparency_mask.cc
-   kis_undo_store.cpp
-   kis_undo_stores.cpp
+   kis_inpaint_mask.cpp
    kis_undo_adapter.cpp
    kis_macro_based_undo_store.cpp
    kis_surrogate_undo_adapter.cpp
@@ -340,7 +335,7 @@ target_link_libraries(kritaimage
         kritawidgets 
         kritaglobal kritapsd 
         kritaodf kritapigment 
-        kritaundo2 
+        kritacommand
         kritawidgetutils 
         Qt5::Concurrent
 )

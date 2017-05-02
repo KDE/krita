@@ -21,19 +21,20 @@
 #ifndef KOPARAMETERSHAPE_P_H
 #define KOPARAMETERSHAPE_P_H
 
+#include "kritaflake_export.h"
+#include <KoParameterShape.h>
 #include "KoPathShape_p.h"
 
 #include <QList>
 #include <QPointF>
 
-class KoParameterShapePrivate : public KoPathShapePrivate
+class KoParameterShape;
+
+class KRITAFLAKE_EXPORT KoParameterShapePrivate : public KoPathShapePrivate
 {
 public:
-    explicit KoParameterShapePrivate(KoParameterShape *shape)
-        : KoPathShapePrivate(shape),
-        parametric(true)
-    {
-    }
+    explicit KoParameterShapePrivate(KoParameterShape *shape);
+    explicit KoParameterShapePrivate(const KoParameterShapePrivate &rhs, KoParameterShape *q);
 
     bool parametric;
 

@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -28,9 +27,31 @@
 #include "KoColorSpaceTraits.h"
 
 #include "KoColorModelStandardIds.h"
+#include "KoColorModelStandardIdsUtils.h"
 #include "KoSimpleColorSpaceFactory.h"
 
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+
+
+template <typename _T, typename _Tdst>
+class KoColorSpaceMaths;
+
 typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
+typedef KoColorSpaceTrait<quint16, 1, 0> AlphaU16Traits;
+typedef KoColorSpaceTrait<float, 1, 0> AlphaF32Traits;
+
+template <typename channel_type> KoID alphaIdFromChannelType();
+template <> inline KoID alphaIdFromChannelType<quint8>() { return KoID("ALPHA", i18n("Alpha (8-bit integer)")); }
+template <> inline KoID alphaIdFromChannelType<quint16>() { return KoID("ALPHAU16", i18n("Alpha (16-bit integer)")); }
+template <> inline KoID alphaIdFromChannelType<float>() { return KoID("ALPHAF32", i18n("Alpha (32-bit floating point)")); }
+
+#ifdef HAVE_OPENEXR
+typedef KoColorSpaceTrait<half, 1, 0> AlphaF16Traits;
+template <> inline KoID alphaIdFromChannelType<half>() { return KoID("ALPHAF16", i18n("Alpha (16-bit floating point)")); }
+#endif
 
 class QBitArray;
 
@@ -38,23 +59,31 @@ class QBitArray;
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class KRITAPIGMENT_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits>
+template <class _CSTrait>
+class KRITAPIGMENT_EXPORT KoAlphaColorSpaceImpl : public KoColorSpaceAbstract<_CSTrait>
 {
+    typedef typename _CSTrait::channels_type channels_type;
+    typedef KoColorSpaceMaths<channels_type> _Maths;
+    typedef KoColorSpaceMaths<channels_type, quint8> _MathsToU8;
+    typedef KoColorSpaceMaths<quint8, channels_type> _MathsFromU8;
+
 
 public:
 
-    KoAlphaColorSpace();
+    KoAlphaColorSpaceImpl();
 
-    virtual ~KoAlphaColorSpace();
+    virtual ~KoAlphaColorSpaceImpl();
 
-    static QString colorSpaceId() { return "ALPHA"; }
+    static QString colorSpaceId() {
+        return alphaIdFromChannelType<channels_type>().id();
+    }
 
     virtual KoID colorModelId() const {
         return AlphaColorModelID;
     }
 
     virtual KoID colorDepthId() const {
-        return Integer8BitsColorDepthID;
+        return colorDepthIdForChannelType<channels_type>();
     }
 
     virtual KoColorSpace* clone() const;
@@ -102,39 +131,12 @@ public:
                                    KoColorConversionTransformation::Intent renderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
-        quint16* lab = reinterpret_cast<quint16*>(dst);
-        while (nPixels--) {
-            lab[3] = src[0];
-            src++;
-            lab += 4;
-        }
-    }
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
-        const quint16* lab = reinterpret_cast<const quint16*>(src);
-        while (nPixels--) {
-            dst[0] = lab[3];
-            dst++;
-            lab += 4;
-        }
-    }
+    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
 
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
-        quint16* rgb = reinterpret_cast<quint16*>(dst);
-        while (nPixels--) {
-            rgb[3] = src[0];
-            src++;
-            rgb += 4;
-        }
-    }
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
-        const quint16* rgb = reinterpret_cast<const quint16*>(src);
-        while (nPixels--) {
-            dst[0] = rgb[3];
-            dst++;
-            rgb += 4;
-        }
-    }
+    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const {
         Q_UNUSED(transferValues);
         warnPigment << i18n("Undefined operation in the alpha color space");
@@ -145,31 +147,39 @@ public:
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
+
     virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
+
     virtual void invertColor(quint8*, qint32) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual void colorFromXML(quint8* , const QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual void toHSY(const QVector<double> &, qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual QVector <double> fromHSY(qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         QVector <double> channelValues (1);
         channelValues.fill(0.0);
         return channelValues;
     }
+
     virtual void toYUV(const QVector<double> &, qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual QVector <double> fromYUV(qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         QVector <double> channelValues (1);
@@ -185,5 +195,49 @@ private:
     QList<KoCompositeOp*> m_compositeOps;
 };
 
+typedef KoAlphaColorSpaceImpl<AlphaU8Traits> KoAlphaColorSpace;
+typedef KoAlphaColorSpaceImpl<AlphaU16Traits> KoAlphaU16ColorSpace;
+#ifdef HAVE_OPENEXR
+typedef KoAlphaColorSpaceImpl<AlphaF16Traits> KoAlphaF16ColorSpace;
+#endif
+typedef KoAlphaColorSpaceImpl<AlphaF32Traits> KoAlphaF32ColorSpace;
 
-#endif // KO_COLORSPACE_ALPHA_H_
+template <class _CSTrait>
+class KoAlphaColorSpaceFactoryImpl : public KoSimpleColorSpaceFactory
+{
+    typedef typename _CSTrait::channels_type channels_type;
+
+public:
+    KoAlphaColorSpaceFactoryImpl()
+            : KoSimpleColorSpaceFactory(alphaIdFromChannelType<channels_type>().id(),
+                                        alphaIdFromChannelType<channels_type>().name(),
+                                        true,
+                                        AlphaColorModelID,
+                                        colorDepthIdForChannelType<channels_type>(),
+                                        qMin(16, int(sizeof(channels_type) * 8)), // DIRTY HACK ALERT: see a comment below!
+                                        100000)
+    {
+        /**
+         * Note about a hack with reference bit depth: right now all the color
+         * conversions to/from Alpha colorspace are done via LabAU16 16-bit color space,
+         * therefore, the conversions are lossy! Better conversions are yet to be implemented,
+         * but for now we just define this color space as having 16-bit reference depth
+         * (the problem arises with AlphaF32 only of course, which is hardly used anywhere).
+         */
+    }
+
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
+        return new KoAlphaColorSpaceImpl<_CSTrait>();
+    }
+
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+};
+
+typedef KoAlphaColorSpaceFactoryImpl<AlphaU8Traits> KoAlphaColorSpaceFactory;
+typedef KoAlphaColorSpaceFactoryImpl<AlphaU16Traits> KoAlphaU16ColorSpaceFactory;
+#ifdef HAVE_OPENEXR
+typedef KoAlphaColorSpaceFactoryImpl<AlphaF16Traits> KoAlphaF16ColorSpaceFactory;
+#endif
+typedef KoAlphaColorSpaceFactoryImpl<AlphaF32Traits> KoAlphaF32ColorSpaceFactory;
+
+#endif

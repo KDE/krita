@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QGridLayout>
 
+#include <KoUnit.h>
 #include <KoShape.h>
 #include <KoGradientBackground.h>
 #include <KoCanvasBase.h>
@@ -44,7 +45,6 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include "kis_figure_painting_tool_helper.h"
-#include <kis_system_locker.h>
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
 
@@ -125,6 +125,14 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
     }
 }
 
+qreal KisToolShape::currentStrokeWidth() const
+{
+    const qreal sizeInPx =
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+
+    return canvas()->unit().fromUserValue(sizeInPx);
+}
+
 void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisToolPaint::setupPaintAction(action);
@@ -177,14 +185,14 @@ void KisToolShape::addShape(KoShape* shape)
 void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)
 {
     KisNodeSP node = currentNode();
-    if (!node || node->systemLocked()) {
+    if (!node || !blockUntilOperationsFinished()) {
         return;
     }
     // Get painting options
     KisPaintOpPresetSP preset = currentPaintOpPreset();
 
     // Compute the outline
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
@@ -228,8 +236,6 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     image->actionRecorder()->addAction(bezierCurvePaintAction);
 
     if (node->hasEditablePaintDevice()) {
-        KisSystemLocker locker(node);
-
         KisFigurePaintingToolHelper helper(name,
                                            image,
                                            node,

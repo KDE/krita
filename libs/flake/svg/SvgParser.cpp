@@ -30,6 +30,8 @@
 #include <FlakeDebug.h>
 
 #include <QColor>
+#include <QPainter>
+#include <QDir>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -49,15 +51,22 @@
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectLoadingContext.h"
 #include <KoClipPath.h>
+#include <KoClipMask.h>
 #include <KoXmlNS.h>
 
 #include "SvgUtil.h"
 #include "SvgShape.h"
 #include "SvgGraphicContext.h"
-#include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
+#include "parsers/SvgTransformParser.h"
+#include "kis_pointer_utils.h"
+#include <KoVectorPatternBackground.h>
+#include <KoMarker.h>
+
+#include "kis_debug.h"
+#include "kis_global.h"
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
@@ -73,6 +82,27 @@ SvgParser::~SvgParser()
 void SvgParser::setXmlBaseDir(const QString &baseDir)
 {
     m_context.setInitialXmlBaseDir(baseDir);
+
+    setFileFetcher(
+        [this](const QString &name) {
+            const QString fileName = m_context.xmlBaseDir() + QDir::separator() + name;
+            QFile file(fileName);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(file.exists(), QByteArray());
+            file.open(QIODevice::ReadOnly);
+            return file.readAll();
+        });
+}
+
+void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
+{
+    KIS_ASSERT(!m_context.currentGC());
+    m_context.pushGraphicsContext();
+    m_context.currentGC()->pixelsPerInch = pixelsPerInch;
+
+    const qreal scale = 72.0 / pixelsPerInch;
+    const QTransform t = QTransform::fromScale(scale, scale);
+    m_context.currentGC()->currentBoundingBox = boundsInPixels;
+    m_context.currentGC()->matrix = t;
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -83,77 +113,39 @@ QList<KoShape*> SvgParser::shapes() const
 // Helper functions
 // ---------------------------------------------------------------------------------------
 
-SvgGradientHelper* SvgParser::findGradient(const QString &id, const QString &href)
+SvgGradientHelper* SvgParser::findGradient(const QString &id)
 {
+    SvgGradientHelper *result = 0;
+
     // check if gradient was already parsed, and return it
-    if (m_gradients.contains(id))
-        return &m_gradients[ id ];
+    if (m_gradients.contains(id)) {
+        result = &m_gradients[ id ];
+    }
 
     // check if gradient was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    const KoXmlElement &e = m_context.definition(id);
-    if (!e.tagName().contains("Gradient"))
-        return 0;
-
-    if (e.childNodesCount() == 0) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-
-        if (m_context.hasDefinition(mhref))
-            return findGradient(mhref, id);
-        else
-            return 0;
-    } else {
-        // ok parse gradient now
-        if (! parseGradient(m_context.definition(id), m_context.definition(href)))
-            return 0;
+    if (!result && m_context.hasDefinition(id)) {
+        const KoXmlElement &e = m_context.definition(id);
+        if (e.tagName().contains("Gradient")) {
+            result = parseGradient(m_context.definition(id));
+        }
     }
 
-    // return successfully parsed gradient or 0
-    QString n;
-    if (href.isEmpty())
-        n = id;
-    else
-        n = href;
-
-    if (m_gradients.contains(n))
-        return &m_gradients[ n ];
-    else
-        return 0;
+    return result;
 }
 
-SvgPatternHelper* SvgParser::findPattern(const QString &id)
+QSharedPointer<KoVectorPatternBackground> SvgParser::findPattern(const QString &id, const KoShape *shape)
 {
-    // check if pattern was already parsed, and return it
-    if (m_patterns.contains(id))
-        return &m_patterns[ id ];
+    QSharedPointer<KoVectorPatternBackground> result;
 
-    // check if pattern was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    SvgPatternHelper pattern;
-
-    const KoXmlElement &e = m_context.definition(id);
-    if (e.tagName() != "pattern")
-        return 0;
-
-    // are we referencing another pattern ?
-    if (e.hasAttribute("xlink:href")) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-        SvgPatternHelper *refPattern = findPattern(mhref);
-        // inherit attributes of referenced pattern
-        if (refPattern)
-            pattern = *refPattern;
+    // check if gradient was stored for later parsing
+    if (m_context.hasDefinition(id)) {
+        const KoXmlElement &e = m_context.definition(id);
+        if (e.tagName() == "pattern") {
+            result = parsePattern(m_context.definition(id), shape);
+        }
     }
 
-    // ok parse pattern now
-    parsePattern(pattern, m_context.definition(id));
-    // add to parsed pattern list
-    m_patterns.insert(id, pattern);
-
-    return &m_patterns[ id ];
+    return result;
 }
 
 SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
@@ -193,36 +185,9 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return 0;
 }
 
-SvgClipPathHelper* SvgParser::findClipPath(const QString &id, const QString &href)
+SvgClipPathHelper* SvgParser::findClipPath(const QString &id)
 {
-    // check if clip path was already parsed, and return it
-    if (m_clipPaths.contains(id))
-        return &m_clipPaths[ id ];
-
-    // check if clip path was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    const KoXmlElement &e = m_context.definition(id);
-    if (e.childNodesCount() == 0) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-
-        if (m_context.hasDefinition(mhref))
-            return findClipPath(mhref, id);
-        else
-            return 0;
-    } else {
-        // ok clip path filter now
-        if (! parseClipPath(m_context.definition(id), m_context.definition(href)))
-            return 0;
-    }
-
-    // return successfully parsed clip path or 0
-    const QString n = href.isEmpty() ? id : href;
-    if (m_clipPaths.contains(n))
-        return &m_clipPaths[ n ];
-    else
-        return 0;
+    return m_clipPaths.contains(id) ? &m_clipPaths[id] : 0;
 }
 
 // Parsing functions
@@ -248,7 +213,13 @@ qreal SvgParser::parseUnitXY(const QString &unit)
     return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
 }
 
-bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referencedBy)
+qreal SvgParser::parseAngular(const QString &unit)
+{
+    return SvgUtil::parseUnitAngular(m_context.currentGC(), unit);
+}
+
+
+SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
 {
     // IMPROVEMENTS:
     // - Store the parsed colorstops in some sort of a cache so they don't need to be parsed again.
@@ -257,168 +228,265 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     // - Gradients with one color stop have a solid color.
 
     SvgGraphicsContext *gc = m_context.currentGC();
-    if (!gc)
-        return false;
+    if (!gc) return 0;
 
-    SvgGradientHelper gradhelper;
+    SvgGradientHelper gradHelper;
+
+    QString gradientId = e.attribute("id");
+    if (gradientId.isEmpty()) return 0;
+
+    // check if we have this gradient already parsed
+    // copy existing gradient if it exists
+    if (m_gradients.contains(gradientId)) {
+        return &m_gradients[gradientId];
+    }
 
     if (e.hasAttribute("xlink:href")) {
+        // strip the '#' symbol
         QString href = e.attribute("xlink:href").mid(1);
-        if (! href.isEmpty()) {
+
+        if (!href.isEmpty()) {
             // copy the referenced gradient if found
             SvgGradientHelper *pGrad = findGradient(href);
-            if (pGrad)
-                gradhelper = *pGrad;
-        } else {
-            //gc->fillType = SvgGraphicsContext::None; // <--- TODO Fill OR Stroke are none
-            return false;
+            if (pGrad) {
+                gradHelper = *pGrad;
+            }
         }
     }
 
-    // Use the gradient that is referencing, or if there isn't one, the original gradient.
-    KoXmlElement b;
-    if (!referencedBy.isNull())
-        b = referencedBy;
-    else
-        b = e;
+    const QGradientStops defaultStops = gradHelper.gradient()->stops();
 
-    QString gradientId = b.attribute("id");
-
-    if (! gradientId.isEmpty()) {
-        // check if we have this gradient already parsed
-        // copy existing gradient if it exists
-        if (m_gradients.find(gradientId) != m_gradients.end())
-            gradhelper.copyGradient(m_gradients[ gradientId ].gradient());
+    if (e.attribute("gradientUnits") == "userSpaceOnUse") {
+        gradHelper.setGradientUnits(KoFlake::UserSpaceOnUse);
     }
 
-    if (b.attribute("gradientUnits") == "userSpaceOnUse")
-        gradhelper.setGradientUnits(SvgGradientHelper::UserSpaceOnUse);
+    m_context.pushGraphicsContext(e);
+    uploadStyleToContext(e);
 
-    // parse color prop
-    QColor c = gc->currentColor;
-
-    if (!b.attribute("color").isEmpty()) {
-        m_context.styleParser().parseColor(c, b.attribute("color"));
-    } else {
-        // try style attr
-        QString style = b.attribute("style").simplified();
-        QStringList substyles = style.split(';', QString::SkipEmptyParts);
-        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-            QStringList substyle = it->split(':');
-            QString command = substyle[0].trimmed();
-            QString params  = substyle[1].trimmed();
-            if (command == "color")
-                m_context.styleParser().parseColor(c, params);
-        }
-    }
-    gc->currentColor = c;
-
-    if (b.tagName() == "linearGradient") {
+    if (e.tagName() == "linearGradient") {
         QLinearGradient *g = new QLinearGradient();
-        if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        if (gradHelper.gradientUnits() == KoFlake::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setStart(QPointF(SvgUtil::fromPercentage(b.attribute("x1", "0%")),
-                                SvgUtil::fromPercentage(b.attribute("y1", "0%"))));
-            g->setFinalStop(QPointF(SvgUtil::fromPercentage(b.attribute("x2", "100%")),
-                                    SvgUtil::fromPercentage(b.attribute("y2", "0%"))));
+            g->setStart(QPointF(SvgUtil::fromPercentage(e.attribute("x1", "0%")),
+                                SvgUtil::fromPercentage(e.attribute("y1", "0%"))));
+            g->setFinalStop(QPointF(SvgUtil::fromPercentage(e.attribute("x2", "100%")),
+                                    SvgUtil::fromPercentage(e.attribute("y2", "0%"))));
         } else {
-            g->setStart(QPointF(SvgUtil::fromUserSpace(b.attribute("x1").toDouble()),
-                                SvgUtil::fromUserSpace(b.attribute("y1").toDouble())));
-            g->setFinalStop(QPointF(SvgUtil::fromUserSpace(b.attribute("x2").toDouble()),
-                                    SvgUtil::fromUserSpace(b.attribute("y2").toDouble())));
+            g->setStart(QPointF(parseUnitX(e.attribute("x1")),
+                                parseUnitY(e.attribute("y1"))));
+            g->setFinalStop(QPointF(parseUnitX(e.attribute("x2")),
+                                    parseUnitY(e.attribute("y2"))));
         }
-        // preserve color stops
-        if (gradhelper.gradient())
-            g->setStops(gradhelper.gradient()->stops());
-        gradhelper.setGradient(g);
-    } else if (b.tagName() == "radialGradient") {
+        gradHelper.setGradient(g);
+
+    } else if (e.tagName() == "radialGradient") {
         QRadialGradient *g = new QRadialGradient();
-        if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        if (gradHelper.gradientUnits() == KoFlake::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setCenter(QPointF(SvgUtil::fromPercentage(b.attribute("cx", "50%")),
-                                 SvgUtil::fromPercentage(b.attribute("cy", "50%"))));
-            g->setRadius(SvgUtil::fromPercentage(b.attribute("r", "50%")));
-            g->setFocalPoint(QPointF(SvgUtil::fromPercentage(b.attribute("fx", "50%")),
-                                     SvgUtil::fromPercentage(b.attribute("fy", "50%"))));
+            g->setCenter(QPointF(SvgUtil::fromPercentage(e.attribute("cx", "50%")),
+                                 SvgUtil::fromPercentage(e.attribute("cy", "50%"))));
+            g->setRadius(SvgUtil::fromPercentage(e.attribute("r", "50%")));
+            g->setFocalPoint(QPointF(SvgUtil::fromPercentage(e.attribute("fx", "50%")),
+                                     SvgUtil::fromPercentage(e.attribute("fy", "50%"))));
         } else {
-            g->setCenter(QPointF(SvgUtil::fromUserSpace(b.attribute("cx").toDouble()),
-                                 SvgUtil::fromUserSpace(b.attribute("cy").toDouble())));
-            g->setFocalPoint(QPointF(SvgUtil::fromUserSpace(b.attribute("fx").toDouble()),
-                                     SvgUtil::fromUserSpace(b.attribute("fy").toDouble())));
-            g->setRadius(SvgUtil::fromUserSpace(b.attribute("r").toDouble()));
+            g->setCenter(QPointF(parseUnitX(e.attribute("cx")),
+                                 parseUnitY(e.attribute("cy"))));
+            g->setFocalPoint(QPointF(parseUnitX(e.attribute("fx")),
+                                     parseUnitY(e.attribute("fy"))));
+            g->setRadius(parseUnitXY(e.attribute("r")));
         }
-        // preserve color stops
-        if (gradhelper.gradient())
-            g->setStops(gradhelper.gradient()->stops());
-        gradhelper.setGradient(g);
+        gradHelper.setGradient(g);
     } else {
-        return false;
+        qDebug() << "WARNING: Failed to parse gradient with tag" << e.tagName();
     }
 
     // handle spread method
-    QString spreadMethod = b.attribute("spreadMethod");
-    if (!spreadMethod.isEmpty()) {
-        if (spreadMethod == "reflect")
-            gradhelper.gradient()->setSpread(QGradient::ReflectSpread);
-        else if (spreadMethod == "repeat")
-            gradhelper.gradient()->setSpread(QGradient::RepeatSpread);
-        else
-            gradhelper.gradient()->setSpread(QGradient::PadSpread);
-    } else
-        gradhelper.gradient()->setSpread(QGradient::PadSpread);
+    QGradient::Spread spreadMethod = QGradient::PadSpread;
+    QString spreadMethodStr = e.attribute("spreadMethod");
+    if (!spreadMethodStr.isEmpty()) {
+        if (spreadMethodStr == "reflect") {
+            spreadMethod = QGradient::ReflectSpread;
+        } else if (spreadMethodStr == "repeat") {
+            spreadMethod = QGradient::RepeatSpread;
+        }
+    }
 
-    // Parse the color stops. The referencing gradient does not have colorstops,
-    // so use the stops from the gradient it references to (e in this case and not b)
-    m_context.styleParser().parseColorStops(gradhelper.gradient(), e);
-    gradhelper.setTransform(SvgUtil::parseTransform(b.attribute("gradientTransform")));
-    m_gradients.insert(gradientId, gradhelper);
+    gradHelper.setSpreadMode(spreadMethod);
 
-    return true;
+    // Parse the color stops.
+    m_context.styleParser().parseColorStops(gradHelper.gradient(), e, gc, defaultStops);
+
+    if (e.hasAttribute("gradientTransform")) {
+        SvgTransformParser p(e.attribute("gradientTransform"));
+        if (p.isValid()) {
+            gradHelper.setTransform(p.transform());
+        }
+    }
+
+    m_context.popGraphicsContext();
+
+    m_gradients.insert(gradientId, gradHelper);
+
+    return &m_gradients[gradientId];
 }
 
-void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
+inline QPointF bakeShapeOffset(const QTransform &patternTransform, const QPointF &shapeOffset)
 {
-    if (e.attribute("patternUnits") == "userSpaceOnUse") {
-        pattern.setPatternUnits(SvgPatternHelper::UserSpaceOnUse);
-    }
-    if (e.attribute("patternContentUnits") == "objectBoundingBox") {
-        pattern.setPatternContentUnits(SvgPatternHelper::ObjectBoundingBox);
-    }
-    const QString viewBox = e.attribute("viewBox");
-    if (!viewBox.isEmpty()) {
-        pattern.setPatternContentViewbox(SvgUtil::parseViewBox(viewBox));
-    }
-    const QString transform = e.attribute("patternTransform");
-    if (!transform.isEmpty()) {
-        pattern.setTransform(SvgUtil::parseTransform(transform));
+    QTransform result =
+            patternTransform *
+            QTransform::fromTranslate(-shapeOffset.x(), -shapeOffset.y()) *
+            patternTransform.inverted();
+    KIS_ASSERT_RECOVER_NOOP(result.type() <= QTransform::TxTranslate);
+
+    return QPointF(result.dx(), result.dy());
+}
+
+QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlElement &e, const KoShape *shape)
+{
+    /**
+     * Unlike the gradient parsing function, this method is called every time we
+     * *reference* the pattern, not when we define it. Therefore we can already
+     * use the coordinate system of the destination.
+     */
+
+    QSharedPointer<KoVectorPatternBackground> pattHelper;
+
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc) return pattHelper;
+
+    const QString patternId = e.attribute("id");
+    if (patternId.isEmpty()) return pattHelper;
+
+    pattHelper = toQShared(new KoVectorPatternBackground);
+
+    if (e.hasAttribute("xlink:href")) {
+        // strip the '#' symbol
+        QString href = e.attribute("xlink:href").mid(1);
+
+        if (!href.isEmpty() &&href != patternId) {
+            // copy the referenced pattern if found
+            QSharedPointer<KoVectorPatternBackground> pPatt = findPattern(href, shape);
+            if (pPatt) {
+                pattHelper = pPatt;
+            }
+        }
     }
 
-    const QString x = e.attribute("x");
-    const QString y = e.attribute("y");
-    const QString w = e.attribute("width");
-    const QString h = e.attribute("height");
-    // parse tile reference rectangle
-    if (pattern.patternUnits() == SvgPatternHelper::UserSpaceOnUse) {
-        if (!x.isEmpty() && !y.isEmpty()) {
-            pattern.setPosition(QPointF(parseUnitX(x), parseUnitY(y)));
+    pattHelper->setReferenceCoordinates(
+                KoFlake::coordinatesFromString(e.attribute("patternUnits"),
+                                               pattHelper->referenceCoordinates()));
+
+    pattHelper->setContentCoordinates(
+                KoFlake::coordinatesFromString(e.attribute("patternContentUnits"),
+                                               pattHelper->contentCoordinates()));
+
+    if (e.hasAttribute("patternTransform")) {
+        SvgTransformParser p(e.attribute("patternTransform"));
+        if (p.isValid()) {
+            pattHelper->setPatternTransform(p.transform());
         }
-        if (!w.isEmpty() && !h.isEmpty()) {
-            pattern.setSize(QSizeF(parseUnitX(w), parseUnitY(h)));
-        }
+    }
+
+    if (pattHelper->referenceCoordinates() == KoFlake::ObjectBoundingBox) {
+        QRectF referenceRect(
+            SvgUtil::fromPercentage(e.attribute("x", "0%")),
+            SvgUtil::fromPercentage(e.attribute("y", "0%")),
+            SvgUtil::fromPercentage(e.attribute("width", "0%")), // 0% is according to SVG 1.1, don't ask me why!
+            SvgUtil::fromPercentage(e.attribute("height", "0%"))); // 0% is according to SVG 1.1, don't ask me why!
+
+        pattHelper->setReferenceRect(referenceRect);
     } else {
-        // x, y, width, height are in percentages of the object referencing the pattern
-        // so we just parse the percentages
-        if (!x.isEmpty() && !y.isEmpty()) {
-            pattern.setPosition(QPointF(SvgUtil::fromPercentage(x), SvgUtil::fromPercentage(y)));
-        }
-        if (!w.isEmpty() && !h.isEmpty()) {
-            pattern.setSize(QSizeF(SvgUtil::fromPercentage(w), SvgUtil::fromPercentage(h)));
+        QRectF referenceRect(
+            parseUnitX(e.attribute("x", "0")),
+            parseUnitY(e.attribute("y", "0")),
+            parseUnitX(e.attribute("width", "0")), // 0 is according to SVG 1.1, don't ask me why!
+            parseUnitY(e.attribute("height", "0"))); // 0 is according to SVG 1.1, don't ask me why!
+
+        pattHelper->setReferenceRect(referenceRect);
+    }
+
+    /**
+     * In Krita shapes X,Y coordinates are baked into the the shape global transform, but
+     * the pattern should be painted in "user" coordinates. Therefore, we should handle
+     * this offfset separately.
+     *
+     * TODO: Please also not that this offset is different from extraShapeOffset(),
+     * because A.inverted() * B != A * B.inverted(). I'm not sure which variant is
+     * correct (DK)
+     */
+
+   const QTransform dstShapeTransform = shape->absoluteTransformation(0);
+   const QTransform shapeOffsetTransform = dstShapeTransform * gc->matrix.inverted();
+   KIS_SAFE_ASSERT_RECOVER_NOOP(shapeOffsetTransform.type() <= QTransform::TxTranslate);
+   const QPointF extraShapeOffset(shapeOffsetTransform.dx(), shapeOffsetTransform.dy());
+
+   m_context.pushGraphicsContext(e);
+   gc = m_context.currentGC();
+   gc->workaroundClearInheritedFillProperties(); // HACK!
+
+   // start building shape tree from scratch
+   gc->matrix = QTransform();
+
+   const QRectF boundingRect = shape->outline().boundingRect()/*.translated(extraShapeOffset)*/;
+   const QTransform relativeToShape(boundingRect.width(), 0, 0, boundingRect.height(),
+                                    boundingRect.x(), boundingRect.y());
+
+
+
+   // WARNING1: OBB and ViewBox transformations are *baked* into the pattern shapes!
+   //          although we expect the pattern be reusable, but it is not so!
+   // WARNING2: the pattern shapes are stored in *User* coordinate system, although
+   //           the "official" content system might be either OBB or User. It means that
+   //           this baked transform should be stripped before writing the shapes back
+   //           into SVG
+   if (e.hasAttribute("viewBox")) {
+        gc->currentBoundingBox =
+            pattHelper->referenceCoordinates() == KoFlake::ObjectBoundingBox ?
+            relativeToShape.mapRect(pattHelper->referenceRect()) :
+            pattHelper->referenceRect();
+
+        applyViewBoxTransform(e);
+        pattHelper->setContentCoordinates(pattHelper->referenceCoordinates());
+
+    } else if (pattHelper->contentCoordinates() == KoFlake::ObjectBoundingBox) {
+        gc->matrix = relativeToShape * gc->matrix;
+    }
+
+    // We do *not* apply patternTransform here! Here we only bake the untransformed
+    // version of the shape. The transformed one will be done in the very end while rendering.
+
+    QList<KoShape*> patternShapes = parseContainer(e);
+
+    if (pattHelper->contentCoordinates() == KoFlake::UserSpaceOnUse) {
+        // In Krita we normalize the shapes, bake this transform into the pattern shapes
+
+        const QPointF offset = bakeShapeOffset(pattHelper->patternTransform(), extraShapeOffset);
+
+        Q_FOREACH (KoShape *shape, patternShapes) {
+            shape->applyAbsoluteTransformation(QTransform::fromTranslate(offset.x(), offset.y()));
         }
     }
 
-    if (e.hasChildNodes()) {
-        pattern.setContent(e);
+    if (pattHelper->referenceCoordinates() == KoFlake::UserSpaceOnUse) {
+        // In Krita we normalize the shapes, bake this transform into reference rect
+        // NOTE: this is possible *only* when pattern transform is not perspective
+        //       (which is always true for SVG)
+
+        const QPointF offset = bakeShapeOffset(pattHelper->patternTransform(), extraShapeOffset);
+
+        QRectF ref = pattHelper->referenceRect();
+        ref.translate(offset);
+        pattHelper->setReferenceRect(ref);
     }
+
+    m_context.popGraphicsContext();
+    gc = m_context.currentGC();
+
+    if (!patternShapes.isEmpty()) {
+        pattHelper->setShapes(patternShapes);
+    }
+
+    return pattHelper;
 }
 
 bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &referencedBy)
@@ -446,12 +514,12 @@ bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &reference
     }
 
     if (b.attribute("filterUnits") == "userSpaceOnUse")
-        filter.setFilterUnits(SvgFilterHelper::UserSpaceOnUse);
+        filter.setFilterUnits(KoFlake::UserSpaceOnUse);
     if (b.attribute("primitiveUnits") == "objectBoundingBox")
-        filter.setPrimitiveUnits(SvgFilterHelper::ObjectBoundingBox);
+        filter.setPrimitiveUnits(KoFlake::ObjectBoundingBox);
 
     // parse filter region rectangle
-    if (filter.filterUnits() == SvgFilterHelper::UserSpaceOnUse) {
+    if (filter.filterUnits() == KoFlake::UserSpaceOnUse) {
         filter.setPosition(QPointF(parseUnitX(b.attribute("x")),
                                    parseUnitY(b.attribute("y"))));
         filter.setSize(QSizeF(parseUnitX(b.attribute("width")),
@@ -470,45 +538,168 @@ bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &reference
     return true;
 }
 
-bool SvgParser::parseClipPath(const KoXmlElement &e, const KoXmlElement &referencedBy)
+bool SvgParser::parseMarker(const KoXmlElement &e)
 {
-    SvgClipPathHelper clipPath;
+    const QString id = e.attribute("id");
+    if (id.isEmpty()) return false;
 
-    // Use the filter that is referencing, or if there isn't one, the original filter
-    KoXmlElement b;
-    if (!referencedBy.isNull())
-        b = referencedBy;
-    else
-        b = e;
+    QScopedPointer<KoMarker> marker(new KoMarker());
+    marker->setCoordinateSystem(
+        KoMarker::coordinateSystemFromString(e.attribute("markerUnits", "strokeWidth")));
 
-    // check if we are referencing another clip path
-    if (e.hasAttribute("xlink:href")) {
-        QString href = e.attribute("xlink:href").mid(1);
-        if (! href.isEmpty()) {
-            // copy the referenced clip path if found
-            SvgClipPathHelper *refClipPath = findClipPath(href);
-            if (refClipPath)
-                clipPath = *refClipPath;
-        }
+    marker->setReferencePoint(QPointF(parseUnitX(e.attribute("refX")),
+                                      parseUnitY(e.attribute("refY"))));
+
+    marker->setReferenceSize(QSizeF(parseUnitX(e.attribute("markerWidth", "3")),
+                                     parseUnitY(e.attribute("markerHeight", "3"))));
+
+    const QString orientation = e.attribute("orient", "0");
+
+    if (orientation == "auto") {
+        marker->setAutoOrientation(true);
     } else {
-        clipPath.setContent(b);
+        marker->setExplicitOrientation(parseAngular(orientation));
     }
 
-    if (b.attribute("clipPathUnits") == "objectBoundingBox")
-        clipPath.setClipPathUnits(SvgClipPathHelper::ObjectBoundingBox);
+    // ensure that the clip path is loaded in local coordinates system
+    m_context.pushGraphicsContext(e, false);
+    m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->currentBoundingBox = QRectF(QPointF(0, 0), marker->referenceSize());
 
+    KoShape *markerShape = parseGroup(e);
 
-    m_clipPaths.insert(b.attribute("id"), clipPath);
+    m_context.popGraphicsContext();
+
+    if (!markerShape) return false;
+
+    marker->setShapes({markerShape});
+
+    m_markers.insert(id, QExplicitlySharedDataPointer<KoMarker>(marker.take()));
 
     return true;
 }
 
-void SvgParser::applyStyle(KoShape *obj, const KoXmlElement &e)
+bool SvgParser::parseClipPath(const KoXmlElement &e)
 {
-    applyStyle(obj, m_context.styleParser().collectStyles(e));
+    SvgClipPathHelper clipPath;
+
+    const QString id = e.attribute("id");
+    if (id.isEmpty()) return false;
+
+    clipPath.setClipPathUnits(
+                KoFlake::coordinatesFromString(e.attribute("clipPathUnits"), KoFlake::UserSpaceOnUse));
+
+    // ensure that the clip path is loaded in local coordinates system
+    m_context.pushGraphicsContext(e);
+    m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->workaroundClearInheritedFillProperties(); // HACK!
+
+    KoShape *clipShape = parseGroup(e);
+
+    m_context.popGraphicsContext();
+
+    if (!clipShape) return false;
+
+    clipPath.setShapes({clipShape});
+    m_clipPaths.insert(id, clipPath);
+
+    return true;
 }
 
-void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles)
+bool SvgParser::parseClipMask(const KoXmlElement &e)
+{
+    QSharedPointer<KoClipMask> clipMask(new KoClipMask);
+
+    const QString id = e.attribute("id");
+    if (id.isEmpty()) return false;
+
+    clipMask->setCoordinates(KoFlake::coordinatesFromString(e.attribute("maskUnits"), KoFlake::ObjectBoundingBox));
+    clipMask->setContentCoordinates(KoFlake::coordinatesFromString(e.attribute("maskContentUnits"), KoFlake::UserSpaceOnUse));
+
+    QRectF maskRect;
+
+    if (clipMask->coordinates() == KoFlake::ObjectBoundingBox) {
+        maskRect.setRect(
+            SvgUtil::fromPercentage(e.attribute("x", "-10%")),
+            SvgUtil::fromPercentage(e.attribute("y", "-10%")),
+            SvgUtil::fromPercentage(e.attribute("width", "120%")),
+            SvgUtil::fromPercentage(e.attribute("height", "120%")));
+    } else {
+        maskRect.setRect(
+            parseUnitX(e.attribute("x", "-10%")), // yes, percents are insane in this case,
+            parseUnitY(e.attribute("y", "-10%")), // but this is what SVG 1.1 tells us...
+            parseUnitX(e.attribute("width", "120%")),
+            parseUnitY(e.attribute("height", "120%")));
+    }
+
+    clipMask->setMaskRect(maskRect);
+
+
+    // ensure that the clip mask is loaded in local coordinates system
+    m_context.pushGraphicsContext(e);
+    m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->workaroundClearInheritedFillProperties(); // HACK!
+
+    KoShape *clipShape = parseGroup(e);
+
+    m_context.popGraphicsContext();
+
+    if (!clipShape) return false;
+    clipMask->setShapes({clipShape});
+
+    m_clipMasks.insert(id, clipMask);
+    return true;
+}
+
+void SvgParser::uploadStyleToContext(const KoXmlElement &e)
+{
+    SvgStyles styles = m_context.styleParser().collectStyles(e);
+    m_context.styleParser().parseFont(styles);
+    m_context.styleParser().parseStyle(styles);
+}
+
+void SvgParser::applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
+{
+    if (!shape) return;
+
+    SvgGraphicsContext *gc = m_context.currentGC();
+    KIS_ASSERT(gc);
+
+    if (!dynamic_cast<KoShapeGroup*>(shape)) {
+        applyFillStyle(shape);
+        applyStrokeStyle(shape);
+    }
+
+    if (KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape)) {
+        applyMarkers(pathShape);
+    }
+
+    applyFilter(shape);
+    applyClipping(shape, shapeToOriginalUserCoordinates);
+    applyMaskClipping(shape, shapeToOriginalUserCoordinates);
+
+    if (!gc->display || !gc->visible) {
+        /**
+         * WARNING: here is a small inconsistency with the standard:
+         *          in the standard, 'display' is not inherited, but in
+         *          flake it is!
+         *
+         * NOTE: though the standard says: "A value of 'display:none' indicates
+         *       that the given element and ***its children*** shall not be
+         *       rendered directly". Therefore, using setVisible(false) is fully
+         *       legitimate here (DK 29.11.16).
+         */
+        shape->setVisible(false);
+    }
+    shape->setTransparency(1.0 - gc->opacity);
+}
+
+void SvgParser::applyStyle(KoShape *obj, const KoXmlElement &e, const QPointF &shapeToOriginalUserCoordinates)
+{
+    applyStyle(obj, m_context.styleParser().collectStyles(e), shapeToOriginalUserCoordinates);
+}
+
+void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
@@ -523,12 +714,68 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles)
         applyFillStyle(obj);
         applyStrokeStyle(obj);
     }
-    applyFilter(obj);
-    applyClipping(obj);
 
-    if (! gc->display)
+    if (KoPathShape *pathShape = dynamic_cast<KoPathShape*>(obj)) {
+        applyMarkers(pathShape);
+    }
+
+    applyFilter(obj);
+    applyClipping(obj, shapeToOriginalUserCoordinates);
+    applyMaskClipping(obj, shapeToOriginalUserCoordinates);
+
+    if (!gc->display || !gc->visible) {
         obj->setVisible(false);
+    }
     obj->setTransparency(1.0 - gc->opacity);
+}
+
+QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
+                                   const KoShape *shape,
+                                   const SvgGraphicsContext *gc,
+                                   QTransform *transform)
+{
+    QGradient *resultGradient = 0;
+    KIS_ASSERT(transform);
+
+    if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
+        resultGradient = KoFlake::cloneGradient(gradient->gradient());
+        *transform = gradient->transform();
+    } else {
+        if (gradient->gradient()->type() == QGradient::LinearGradient) {
+            /**
+             * Create a converted gradient that looks the same, but linked to the
+             * bounding rect of the shape, so it would be transformed with the shape
+             */
+
+            const QRectF boundingRect = shape->outline().boundingRect();
+            const QTransform relativeToShape(boundingRect.width(), 0, 0, boundingRect.height(),
+                                             boundingRect.x(), boundingRect.y());
+
+            const QTransform relativeToUser =
+                    relativeToShape * shape->transformation() * gc->matrix.inverted();
+
+            const QTransform userToRelative = relativeToUser.inverted();
+
+            const QLinearGradient *o = static_cast<const QLinearGradient*>(gradient->gradient());
+            QLinearGradient *g = new QLinearGradient();
+            g->setStart(userToRelative.map(o->start()));
+            g->setFinalStop(userToRelative.map(o->finalStop()));
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
+            g->setStops(o->stops());
+            g->setSpread(o->spread());
+
+            resultGradient = g;
+            *transform = relativeToUser * gradient->transform() * userToRelative;
+
+        } else if (gradient->gradient()->type() == QGradient::RadialGradient) {
+            // For radial and conical gradients such conversion is not possible
+
+            resultGradient = KoFlake::cloneGradient(gradient->gradient());
+            *transform = gradient->transform() * gc->matrix * shape->transformation().inverted();
+        }
+    }
+
+    return resultGradient;
 }
 
 void SvgParser::applyFillStyle(KoShape *shape)
@@ -545,91 +792,20 @@ void SvgParser::applyFillStyle(KoShape *shape)
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
-            // great, we have a gradient fill
-            QSharedPointer<KoGradientBackground> bg;
-            if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(*gradient->gradient()));
-                bg->setTransform(gradient->transform());
-            } else {
-                QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
-                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(convertedGradient));
-                QTransform invShapematrix = shape->transformation().inverted();
-                bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
+            QTransform transform;
+            QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
+            if (result) {
+                QSharedPointer<KoGradientBackground> bg;
+                bg = toQShared(new KoGradientBackground(result));
+                bg->setTransform(transform);
+                shape->setBackground(bg);
             }
-            shape->setBackground(bg);
         } else {
-            // try to find referenced pattern
-            SvgPatternHelper *pattern = findPattern(gc->fillId);
-            KoImageCollection *imageCollection = m_documentResourceManager->imageCollection();
-            if (pattern && imageCollection) {
-                // great we have a pattern fill
-                QRectF objectBound = QRectF(QPoint(), shape->size());
-                QRectF currentBoundbox = gc->currentBoundbox;
+            QSharedPointer<KoVectorPatternBackground> pattern =
+                findPattern(gc->fillId, shape);
 
-                // properties from the object are not inherited
-                // so we are creating a new context without copying
-                SvgGraphicsContext *gc = m_context.pushGraphicsContext(pattern->content(), false);
-
-                // the pattern establishes a new coordinate system with its
-                // origin at the patterns x and y attributes
-                gc->matrix = QTransform();
-                // object bounding box units are relative to the object the pattern is applied
-                if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                    gc->currentBoundbox = objectBound;
-                    gc->forcePercentage = true;
-                } else {
-                    // inherit the current bounding box
-                    gc->currentBoundbox = currentBoundbox;
-                }
-
-                applyStyle(0, pattern->content());
-
-                // parse the pattern content elements
-                QList<KoShape*> patternContent = parseContainer(pattern->content());
-
-                // generate the pattern image from the shapes and the object bounding rect
-                QImage image = pattern->generateImage(objectBound, patternContent);
-
-                m_context.popGraphicsContext();
-
-                // delete the shapes created from the pattern content
-                qDeleteAll(patternContent);
-
-                if (!image.isNull()) {
-                    QSharedPointer<KoPatternBackground> bg(new KoPatternBackground(imageCollection));
-                    bg->setPattern(image);
-
-                    QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
-                    QSizeF tileSize = pattern->size(objectBound);
-
-                    bg->setPatternDisplaySize(tileSize);
-                    if (pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                        if (tileSize == objectBound.size())
-                            bg->setRepeat(KoPatternBackground::Stretched);
-                    }
-
-                    // calculate pattern reference point offset in percent of tileSize
-                    // and relative to the topleft corner of the shape
-                    qreal fx = refPoint.x() / tileSize.width();
-                    qreal fy = refPoint.y() / tileSize.height();
-                    if (fx < 0.0)
-                        fx = std::floor(fx);
-                    else if (fx > 1.0)
-                        fx = std::ceil(fx);
-                    else
-                        fx = 0.0;
-                    if (fy < 0.0)
-                        fy = std::floor(fy);
-                    else if (fx > 1.0)
-                        fy = std::ceil(fy);
-                    else
-                        fy = 0.0;
-                    qreal offsetX = 100.0 * (refPoint.x() - fx * tileSize.width()) / tileSize.width();
-                    qreal offsetY = 100.0 * (refPoint.y() - fy * tileSize.height()) / tileSize.height();
-                    bg->setReferencePointOffset(QPointF(offsetX, offsetY));
-
-                    shape->setBackground(bg);
-                }
+            if (pattern) {
+                shape->setBackground(pattern);
             } else {
                 // no referenced fill found, use fallback color
                 shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));
@@ -642,6 +818,27 @@ void SvgParser::applyFillStyle(KoShape *shape)
         path->setFillRule(gc->fillRule);
 }
 
+void applyDashes(const KoShapeStrokeSP srcStroke, KoShapeStrokeSP dstStroke)
+{
+    const double lineWidth = srcStroke->lineWidth();
+    QVector<qreal> dashes = srcStroke->lineDashes();
+
+    // apply line width to dashes and dash offset
+    if (dashes.count() && lineWidth > 0.0) {
+        const double dashOffset = srcStroke->dashOffset();
+        QVector<qreal> dashes = srcStroke->lineDashes();
+
+        for (int i = 0; i < dashes.count(); ++i) {
+            dashes[i] /= lineWidth;
+        }
+
+        dstStroke->setLineStyle(Qt::CustomDashLine, dashes);
+        dstStroke->setDashOffset(dashOffset / lineWidth);
+    } else {
+        dstStroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
+    }
+}
+
 void SvgParser::applyStrokeStyle(KoShape *shape)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -649,48 +846,31 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
         return;
 
     if (gc->strokeType == SvgGraphicsContext::None) {
-        shape->setStroke(0);
+        shape->setStroke(KoShapeStrokeModelSP());
     } else if (gc->strokeType == SvgGraphicsContext::Solid) {
-        double lineWidth = gc->stroke.lineWidth();
-        QVector<qreal> dashes = gc->stroke.lineDashes();
-
-        KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-
-        // apply line width to dashes and dash offset
-        if (dashes.count() && lineWidth > 0.0) {
-            QVector<qreal> dashes = stroke->lineDashes();
-            for (int i = 0; i < dashes.count(); ++i)
-                dashes[i] /= lineWidth;
-            double dashOffset = stroke->dashOffset();
-            stroke->setLineStyle(Qt::CustomDashLine, dashes);
-            stroke->setDashOffset(dashOffset / lineWidth);
-        } else {
-            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
-        }
+        KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
+        applyDashes(gc->stroke, stroke);
         shape->setStroke(stroke);
     } else if (gc->strokeType == SvgGraphicsContext::Complex) {
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->strokeId);
         if (gradient) {
-            // great, we have a gradient stroke
-            QBrush brush;
-            if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                brush = *gradient->gradient();
-                brush.setTransform(gradient->transform());
-            } else {
-                QGradient *convertedGradient(SvgGradientHelper::convertGradient(gradient->gradient(), shape->size()));
-                brush = *convertedGradient;
-                delete convertedGradient;
-                brush.setTransform(gradient->transform() * gc->matrix * shape->transformation().inverted());
+            QTransform transform;
+            QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
+            if (result) {
+                QBrush brush = *result;
+                delete result;
+                brush.setTransform(transform);
+
+                KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
+                stroke->setLineBrush(brush);
+                applyDashes(gc->stroke, stroke);
+                shape->setStroke(stroke);
             }
-            KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-            stroke->setLineBrush(brush);
-            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
-            shape->setStroke(stroke);
         } else {
             // no referenced stroke found, use fallback color
-            KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
+            KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
+            applyDashes(gc->stroke, stroke);
             shape->setStroke(stroke);
         }
     }
@@ -727,8 +907,8 @@ void SvgParser::applyFilter(KoShape *shape)
     KoFilterEffectLoadingContext context(m_context.xmlBaseDir());
     context.setShapeBoundingBox(bound);
     // enable units conversion
-    context.enableFilterUnitsConversion(filter->filterUnits() == SvgFilterHelper::UserSpaceOnUse);
-    context.enableFilterPrimitiveUnitsConversion(filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse);
+    context.enableFilterUnitsConversion(filter->filterUnits() == KoFlake::UserSpaceOnUse);
+    context.enableFilterPrimitiveUnitsConversion(filter->primitiveUnits() == KoFlake::UserSpaceOnUse);
 
     KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
 
@@ -761,7 +941,7 @@ void SvgParser::applyFilter(KoShape *shape)
 
         QRectF subRegion;
         // parse subregion
-        if (filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse) {
+        if (filter->primitiveUnits() == KoFlake::UserSpaceOnUse) {
             const QString xa = primitive.attribute("x");
             const QString ya = primitive.attribute("y");
             const QString wa = primitive.attribute("width");
@@ -824,7 +1004,28 @@ void SvgParser::applyFilter(KoShape *shape)
     }
 }
 
-void SvgParser::applyClipping(KoShape *shape)
+void SvgParser::applyMarkers(KoPathShape *shape)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc)
+        return;
+
+    if (!gc->markerStartId.isEmpty() && m_markers.contains(gc->markerStartId)) {
+        shape->setMarker(m_markers[gc->markerStartId].data(), KoFlake::StartMarker);
+    }
+
+    if (!gc->markerMidId.isEmpty() && m_markers.contains(gc->markerMidId)) {
+        shape->setMarker(m_markers[gc->markerMidId].data(), KoFlake::MidMarker);
+    }
+
+    if (!gc->markerEndId.isEmpty() && m_markers.contains(gc->markerEndId)) {
+        shape->setMarker(m_markers[gc->markerEndId].data(), KoFlake::EndMarker);
+    }
+
+    shape->setAutoFillMarkers(gc->autoFillMarkers);
+}
+
+void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
@@ -834,193 +1035,205 @@ void SvgParser::applyClipping(KoShape *shape)
         return;
 
     SvgClipPathHelper *clipPath = findClipPath(gc->clipPathId);
-    if (! clipPath)
+    if (!clipPath || clipPath->isEmpty())
         return;
 
-    debugFlake << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
-
-    const bool boundingBoxUnits = clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox;
-    debugFlake << "using" << (boundingBoxUnits ? "boundingBoxUnits" : "userSpaceOnUse");
-
-    QTransform shapeMatrix = shape->absoluteTransformation(0);
-    // TODO:
-    // clip path element can have a clip-path property
-    // -> clip-path = intersection of children with referenced clip-path
-    // any of its children can have a clip-path property
-    // -> child element is clipped and the ORed with other children
-    m_context.pushGraphicsContext();
-
-    if (boundingBoxUnits) {
-        SvgGraphicsContext *gc = m_context.currentGC();
-        gc->matrix.reset();
-        gc->viewboxTransform.reset();
-        gc->currentBoundbox = shape->boundingRect();
-        gc->forcePercentage = true;
-    }
-
-    QList<KoShape*> clipShapes = parseContainer(clipPath->content());
-    QList<KoPathShape*> pathShapes;
-    while (!clipShapes.isEmpty()) {
-        KoShape *clipShape = clipShapes.first();
-        clipShapes.removeFirst();
-        // remove clip shape from list of all parsed shapes
-        m_shapes.removeOne(clipShape);
-        // check if we have a path shape
-        KoPathShape *path = dynamic_cast<KoPathShape*>(clipShape);
-        if (!path) {
-            // if shape is a group, ungroup and add children to lits of clip shapes
-            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(clipShape);
-            if (group) {
-                QList<KoShape*> groupedShapes = group->shapes();
-                KoShapeUngroupCommand cmd(group, groupedShapes);
-                cmd.redo();
-                clipShapes.append(groupedShapes);
-            } else {
-                // shape is not a group shape, use its outline as clip path
-                QPainterPath outline = clipShape->absoluteTransformation(0).map(clipShape->outline());
-                path = KoPathShape::createShapeFromPainterPath(outline);
-            }
-            delete clipShape;
-        }
-        if (path) {
-            debugFlake << "using shape" << path->name() << "as clip path";
-            pathShapes.append(path);
-            if (boundingBoxUnits)
-                path->applyAbsoluteTransformation(shapeMatrix);
-        }
-    }
-
-    m_context.popGraphicsContext();
-
-    if (pathShapes.count()) {
-        QTransform transformToShape;
-        if (!boundingBoxUnits)
-            transformToShape = shape->absoluteTransformation(0).inverted();
-        KoClipData *clipData = new KoClipData(pathShapes);
-        KoClipPath *clipPath = new KoClipPath(shape, clipData);
-        clipPath->setClipRule(gc->clipRule);
-        shape->setClipPath(clipPath);
-    }
-}
-
-QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
-{
     QList<KoShape*> shapes;
 
-    QString id = e.attribute("xlink:href");
-    //
-    if (!id.isEmpty()) {
-        SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
+    Q_FOREACH (KoShape *item, clipPath->shapes()) {
+        KoShape *clonedShape = item->cloneShape();
+        KIS_ASSERT_RECOVER(clonedShape) { continue; }
 
-        // TODO: use width and height attributes too
-        gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
-
-        QString key = id.mid(1);
-
-        if (m_context.hasDefinition(key)) {
-            const KoXmlElement &a = m_context.definition(key);
-            SvgStyles styles = m_context.styleParser().mergeStyles(e, a);
-            if (a.tagName() == "g" || a.tagName() == "a" || a.tagName() == "symbol") {
-                m_context.pushGraphicsContext(a);
-
-                KoShapeGroup *group = new KoShapeGroup();
-                group->setZIndex(m_context.nextZIndex());
-
-                applyStyle(0, styles);
-                m_context.styleParser().parseFont(styles);
-
-                QList<KoShape*> childShapes = parseContainer(a);
-
-                // handle id
-                applyId(a.attribute("id"), group);
-
-                addToGroup(childShapes, group);
-                applyStyle(group, styles);   // apply style to group after size is set
-
-                shapes.append(group);
-
-                m_context.popGraphicsContext();
-            } else {
-                // Create the object with the merged styles.
-                // The object inherits all style attributes from the use tag, but keeps it's own attributes.
-                // So, not just use the style attributes of the use tag, but merge them first.
-                KoShape *shape = createObject(a, styles);
-                if (shape)
-                    shapes.append(shape);
-            }
-        } else {
-            // TODO: any named object can be referenced too
-        }
-        m_context.popGraphicsContext();
+        shapes.append(clonedShape);
     }
 
-    return shapes;
+    if (!shapeToOriginalUserCoordinates.isNull()) {
+        const QTransform t =
+            QTransform::fromTranslate(shapeToOriginalUserCoordinates.x(),
+                                      shapeToOriginalUserCoordinates.y());
+
+        Q_FOREACH(KoShape *s, shapes) {
+            s->applyAbsoluteTransformation(t);
+        }
+    }
+
+    KoClipPath *clipPathObject = new KoClipPath(shapes,
+                                                clipPath->clipPathUnits() == KoFlake::ObjectBoundingBox ?
+                                                KoFlake::ObjectBoundingBox : KoFlake::UserSpaceOnUse);
+    shape->setClipPath(clipPathObject);
+}
+
+void SvgParser::applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc)
+        return;
+
+    if (gc->clipMaskId.isEmpty())
+        return;
+
+
+    QSharedPointer<KoClipMask> originalClipMask = m_clipMasks.value(gc->clipMaskId);
+    if (!originalClipMask || originalClipMask->isEmpty()) return;
+
+    KoClipMask *clipMask = originalClipMask->clone();
+
+    clipMask->setExtraShapeOffset(shapeToOriginalUserCoordinates);
+
+    shape->setClipMask(clipMask);
+}
+
+KoShape* SvgParser::parseUse(const KoXmlElement &e)
+{
+    KoShape *result = 0;
+
+    QString id = e.attribute("xlink:href");
+    if (!id.isEmpty()) {
+
+        QString key = id.mid(1);
+        if (m_context.hasDefinition(key)) {
+
+            SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
+
+            // TODO: parse 'width' and 'hight' as well
+            gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
+
+            const KoXmlElement &referencedElement = m_context.definition(key);
+            result = parseGroup(e, referencedElement);
+
+            m_context.popGraphicsContext();
+        }
+    }
+
+    return result;
 }
 
 void SvgParser::addToGroup(QList<KoShape*> shapes, KoShapeGroup *group)
 {
     m_shapes += shapes;
 
-    if (! group)
+    if (!group || shapes.isEmpty())
         return;
 
-    KoShapeGroupCommand cmd(group, shapes);
+    // not clipped, but inherit transform
+    KoShapeGroupCommand cmd(group, shapes, false, true, false);
     cmd.redo();
 }
 
 QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 {
     // check if we are the root svg element
-    const bool isRootSvg = !m_context.currentGC();
+    const bool isRootSvg = m_context.isRootContext();
 
-    SvgGraphicsContext *gc = m_context.pushGraphicsContext();
+    // parse 'transform' field if preset
+    SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
 
-    applyStyle(0, e);
-
-    QRectF viewBox;
-
-    const QString viewBoxStr = e.attribute("viewBox");
-    if (!viewBoxStr.isEmpty()) {
-        viewBox = SvgUtil::parseViewBox(viewBoxStr);
-    }
+    applyStyle(0, e, QPointF());
 
     const QString w = e.attribute("width");
     const QString h = e.attribute("height");
-    const qreal width = w.isEmpty() ? 550.0 : parseUnit(w, true, false, viewBox);
-    const qreal height = h.isEmpty() ? 841.0 : parseUnit(h, false, true, viewBox);
+    const qreal width = w.isEmpty() ? 666.0 : parseUnitX(w);
+    const qreal height = h.isEmpty() ? 555.0 : parseUnitY(h);
 
     QSizeF svgFragmentSize(QSizeF(width, height));
 
-    if (fragmentSize)
+    if (fragmentSize) {
         *fragmentSize = svgFragmentSize;
+    }
 
-    gc->currentBoundbox = QRectF(QPointF(0, 0), svgFragmentSize);
+    gc->currentBoundingBox = QRectF(QPointF(0, 0), svgFragmentSize);
 
-    if (! isRootSvg) {
-        QTransform move;
+    if (!isRootSvg) {
         // x and y attribute has no meaning for outermost svg elements
         const qreal x = parseUnit(e.attribute("x", "0"));
         const qreal y = parseUnit(e.attribute("y", "0"));
-        move.translate(x, y);
+
+        QTransform move = QTransform::fromTranslate(x, y);
         gc->matrix = move * gc->matrix;
-        gc->viewboxTransform = move *gc->viewboxTransform;
     }
 
-    if (!viewBoxStr.isEmpty()) {
-        QTransform viewTransform;
-        viewTransform.translate(viewBox.x(), viewBox.y());
-        viewTransform.scale(width / viewBox.width() , height / viewBox.height());
-        gc->matrix = viewTransform * gc->matrix;
-        gc->viewboxTransform = viewTransform *gc->viewboxTransform;
-        gc->currentBoundbox.setWidth(gc->currentBoundbox.width() * (viewBox.width() / width));
-        gc->currentBoundbox.setHeight(gc->currentBoundbox.height() * (viewBox.height() / height));
-    }
+    applyViewBoxTransform(e);
 
-    QList<KoShape*> shapes = parseContainer(e);
+    QList<KoShape*> shapes;
+
+    // SVG 1.1: skip the rendering of the element if it has null viewBox
+    if (gc->currentBoundingBox.isValid()) {
+        shapes = parseContainer(e);
+    }
 
     m_context.popGraphicsContext();
 
     return shapes;
+}
+
+void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+
+    QRectF viewRect = gc->currentBoundingBox;
+    QTransform viewTransform;
+
+    if (SvgUtil::parseViewBox(gc, element, gc->currentBoundingBox,
+                              &viewRect, &viewTransform)) {
+
+        gc->matrix = viewTransform * gc->matrix;
+        gc->currentBoundingBox = viewRect;
+    }
+}
+
+QList<QExplicitlySharedDataPointer<KoMarker> > SvgParser::knownMarkers() const
+{
+    return m_markers.values();
+}
+
+void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
+{
+    m_context.setFileFetcher(func);
+}
+
+inline QPointF extraShapeOffset(const KoShape *shape, const QTransform coordinateSystemOnLoading)
+{
+    const QTransform shapeToOriginalUserCoordinates =
+        shape->absoluteTransformation(0).inverted() *
+        coordinateSystemOnLoading;
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(shapeToOriginalUserCoordinates.type() <= QTransform::TxTranslate);
+    return QPointF(shapeToOriginalUserCoordinates.dx(), shapeToOriginalUserCoordinates.dy());
+}
+
+KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overrideChildrenFrom)
+{
+    m_context.pushGraphicsContext(b);
+
+    KoShapeGroup *group = new KoShapeGroup();
+    group->setZIndex(m_context.nextZIndex());
+
+    // groups should also have their own coordinate system!
+    group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+    const QPointF extraOffset = extraShapeOffset(group, m_context.currentGC()->matrix);
+
+    uploadStyleToContext(b);
+
+    QList<KoShape*> childShapes;
+
+    if (!overrideChildrenFrom.isNull()) {
+        // we upload styles from both: <use> and <defs>
+        uploadStyleToContext(overrideChildrenFrom);
+        childShapes = parseSingleElement(overrideChildrenFrom);
+    } else {
+        childShapes = parseContainer(b);
+    }
+
+    // handle id
+    applyId(b.attribute("id"), group);
+
+    addToGroup(childShapes, group);
+
+    applyCurrentStyle(group, extraOffset); // apply style to this group after size is set
+
+    m_context.popGraphicsContext();
+
+    return group;
 }
 
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
@@ -1051,103 +1264,81 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             }
         }
 
-        if (b.tagName() == "svg") {
-            shapes += parseSvg(b);
-        } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
-            // treat svg link <a> as group so we don't miss its child elements
-            m_context.pushGraphicsContext(b);
-
-            KoShapeGroup *group = new KoShapeGroup();
-            group->setZIndex(m_context.nextZIndex());
-
-            SvgStyles styles = m_context.styleParser().collectStyles(b);
-            m_context.styleParser().parseFont(styles);
-            applyStyle(0, styles);   // parse style for inheritance
-
-            QList<KoShape*> childShapes = parseContainer(b);
-
-            // handle id
-            applyId(b.attribute("id"), group);
-
-            addToGroup(childShapes, group);
-
-            const QString viewBoxStr = b.attribute("viewBox");
-            if (!viewBoxStr.isEmpty()) {
-                QRectF viewBox = SvgUtil::parseViewBox(viewBoxStr);
-                QTransform viewTransform;
-                viewTransform.translate(viewBox.x(), viewBox.y());
-                viewTransform.scale(group->size().width() / viewBox.width() , group->size().height() / viewBox.height());
-                group->applyAbsoluteTransformation(viewTransform);
-            }
-            applyStyle(group, styles);   // apply style to this group after size is set
-
-            shapes.append(group);
-
-            m_context.popGraphicsContext();
-        } else if (b.tagName() == "switch") {
-            m_context.pushGraphicsContext(b);
-            shapes += parseContainer(b);
-            m_context.popGraphicsContext();
-        } else if (b.tagName() == "defs") {
-            parseDefs(b);
-        } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
-            parseGradient(b);
-        } else if (b.tagName() == "pattern") {
-            m_context.addDefinition(b);
-        } else if (b.tagName() == "filter") {
-            parseFilter(b);
-        } else if (b.tagName() == "clipPath") {
-            parseClipPath(b);
-        } else if (b.tagName() == "style") {
-            m_context.addStyleSheet(b);
-        } else if (b.tagName() == "rect" ||
-                   b.tagName() == "ellipse" ||
-                   b.tagName() == "circle" ||
-                   b.tagName() == "line" ||
-                   b.tagName() == "polyline" ||
-                   b.tagName() == "polygon" ||
-                   b.tagName() == "path" ||
-                   b.tagName() == "image" ||
-                   b.tagName() == "text") {
-            KoShape *shape = createObject(b);
-            if (shape)
-                shapes.append(shape);
-        } else if (b.tagName() == "use") {
-            shapes += parseUse(b);
-        } else {
-            // this is an unknown element, so try to load it anyway
-            // there might be a shape that handles that element
-            KoShape *shape = createObject(b);
-            if (shape) {
-                shapes.append(shape);
-            } else {
-                continue;
-            }
-        }
+        QList<KoShape*> currentShapes = parseSingleElement(b);
+        shapes.append(currentShapes);
 
         // if we are parsing a switch, stop after the first supported element
-        if (isSwitch)
+        if (isSwitch && !currentShapes.isEmpty())
             break;
     }
 
     return shapes;
 }
 
-void SvgParser::parseDefs(const KoXmlElement &e)
+QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
 {
-    for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement b = n.toElement();
-        if (b.isNull())
-            continue;
+    QList<KoShape*> shapes;
 
-        if (b.tagName() == "style") {
-            m_context.addStyleSheet(b);
-        } else if (b.tagName() == "defs") {
-            parseDefs(b);
-        } else {
-            m_context.addDefinition(b);
+    // save definition for later instantiation with 'use'
+    m_context.addDefinition(b);
+
+    if (b.tagName() == "svg") {
+        shapes += parseSvg(b);
+    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
+        // treat svg link <a> as group so we don't miss its child elements
+        shapes += parseGroup(b);
+    } else if (b.tagName() == "switch") {
+        m_context.pushGraphicsContext(b);
+        shapes += parseContainer(b);
+        m_context.popGraphicsContext();
+    } else if (b.tagName() == "defs") {
+        if (b.childNodesCount() > 0) {
+            /**
+             * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
+             *          any role in shapes outline calculation. But setVisible(false) shapes do!
+             *          Should be fixed in the future!
+             */
+            KoShape *defsShape = parseGroup(b);
+            defsShape->setVisible(false);
+        }
+    } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
+    } else if (b.tagName() == "pattern") {
+    } else if (b.tagName() == "filter") {
+        parseFilter(b);
+    } else if (b.tagName() == "clipPath") {
+        parseClipPath(b);
+    } else if (b.tagName() == "mask") {
+        parseClipMask(b);
+    } else if (b.tagName() == "marker") {
+        parseMarker(b);
+    } else if (b.tagName() == "style") {
+        m_context.addStyleSheet(b);
+    } else if (b.tagName() == "rect" ||
+               b.tagName() == "ellipse" ||
+               b.tagName() == "circle" ||
+               b.tagName() == "line" ||
+               b.tagName() == "polyline" ||
+               b.tagName() == "polygon" ||
+               b.tagName() == "path" ||
+               b.tagName() == "image" ||
+               b.tagName() == "text") {
+        KoShape *shape = createObjectDirect(b);
+        if (shape)
+            shapes.append(shape);
+    } else if (b.tagName() == "use") {
+        shapes += parseUse(b);
+    } else if (b.tagName() == "color-profile") {
+        m_context.parseProfile(b);
+    } else {
+        // this is an unknown element, so try to load it anyway
+        // there might be a shape that handles that element
+        KoShape *shape = createObject(b);
+        if (shape) {
+            shapes.append(shape);
         }
     }
+
+    return shapes;
 }
 
 // Creating functions
@@ -1224,6 +1415,28 @@ KoShape * SvgParser::createPath(const KoXmlElement &element)
     return obj;
 }
 
+KoShape * SvgParser::createObjectDirect(const KoXmlElement &b)
+{
+    m_context.pushGraphicsContext(b);
+    uploadStyleToContext(b);
+
+    KoShape *obj = createShapeFromElement(b, m_context);
+    if (obj) {
+        obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        const QPointF extraOffset = extraShapeOffset(obj, m_context.currentGC()->matrix);
+
+        applyCurrentStyle(obj, extraOffset);
+
+        // handle id
+        applyId(b.attribute("id"), obj);
+        obj->setZIndex(m_context.nextZIndex());
+    }
+
+    m_context.popGraphicsContext();
+
+    return obj;
+}
+
 KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
 {
     m_context.pushGraphicsContext(b);
@@ -1231,10 +1444,11 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     KoShape *obj = createShapeFromElement(b, m_context);
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        const QPointF extraOffset = extraShapeOffset(obj, m_context.currentGC()->matrix);
 
         SvgStyles objStyle = style.isEmpty() ? m_context.styleParser().collectStyles(b) : style;
         m_context.styleParser().parseFont(objStyle);
-        applyStyle(obj, objStyle);
+        applyStyle(obj, objStyle, extraOffset);
 
         // handle id
         applyId(b.attribute("id"), obj);
@@ -1250,7 +1464,10 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
 {
     KoShape *object = 0;
 
-    QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::svg, element.tagName());
+
+    const QString tagName = SvgUtil::mapExtendedShapeTag(element.tagName(), element);
+    QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::svg, tagName);
+
     foreach (KoShapeFactoryBase *f, factories) {
         KoShape *shape = f->createDefaultShape(m_documentResourceManager);
         if (!shape)
@@ -1266,9 +1483,8 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
         shape->setTransformation(QTransform());
 
         // reset border
-        KoShapeStrokeModel *oldStroke = shape->stroke();
-        shape->setStroke(0);
-        delete oldStroke;
+        KoShapeStrokeModelSP oldStroke = shape->stroke();
+        shape->setStroke(KoShapeStrokeModelSP());
 
         // reset fill
         shape->setBackground(QSharedPointer<KoShapeBackground>(0));
@@ -1309,9 +1525,8 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     shape->setTransformation(QTransform());
 
     // reset border
-    KoShapeStrokeModel *oldStroke = shape->stroke();
-    shape->setStroke(0);
-    delete oldStroke;
+    KoShapeStrokeModelSP oldStroke = shape->stroke();
+    shape->setStroke(KoShapeStrokeModelSP());
 
     // reset fill
     shape->setBackground(QSharedPointer<KoShapeBackground>(0));

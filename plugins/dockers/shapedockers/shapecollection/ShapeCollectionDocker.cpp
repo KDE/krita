@@ -20,8 +20,6 @@
 #include "ShapeCollectionDocker.h"
 
 #include "CollectionItemModel.h"
-#include "OdfCollectionLoader.h"
-#include "CollectionShapeFactory.h"
 
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
@@ -471,61 +469,8 @@ void ShapeCollectionDocker::loadCollection()
     CollectionItemModel *model = new CollectionItemModel(this);
     addCollection(path, action->iconText(), model);
     action->setEnabled(false);
-
-    if (type == "odg-collection") {
-        OdfCollectionLoader *loader = new OdfCollectionLoader(path, this);
-        connect(loader, SIGNAL(loadingFailed(QString)),
-                this, SLOT(onLoadingFailed(QString)));
-        connect(loader, SIGNAL(loadingFinished()),
-                this, SLOT(onLoadingFinished()));
-
-        loader->load();
-    }
 }
 
-void ShapeCollectionDocker::onLoadingFailed(const QString &reason)
-{
-    OdfCollectionLoader *loader = qobject_cast<OdfCollectionLoader *>(sender());
-
-    if (loader) {
-        removeCollection(loader->collectionPath());
-        QList<KoShape *> shapeList = loader->shapeList();
-        qDeleteAll(shapeList);
-        loader->deleteLater();
-    }
-
-    KMessageBox::error(this, reason, i18n("Collection Error"));
-}
-
-void ShapeCollectionDocker::onLoadingFinished()
-{
-    OdfCollectionLoader *loader = qobject_cast<OdfCollectionLoader *>(sender());
-
-    if (!loader) {
-        qWarning() << "Not called by a OdfCollectionLoader!";
-        return;
-    }
-
-    QList<KoCollectionItem> templateList;
-    QList<KoShape *> shapeList = loader->shapeList();
-
-    Q_FOREACH (KoShape *shape, shapeList) {
-        KoCollectionItem temp;
-        temp.id = loader->collectionPath() + shape->name();
-        temp.toolTip = shape->name();
-        temp.icon = generateShapeIcon(shape);
-        templateList.append(temp);
-        CollectionShapeFactory *factory =
-            new CollectionShapeFactory(loader->collectionPath() + shape->name(), shape);
-        KoShapeRegistry::instance()->add(loader->collectionPath() + shape->name(), factory);
-    }
-
-    CollectionItemModel *model = m_modelMap[loader->collectionPath()];
-    model->setShapeTemplateList(templateList);
-
-    loader->deleteLater();
-    //TODO m_collectionsCombo->setCurrentIndex(m_collectionsCombo->findData(loader->collectionPath()));
-}
 
 QIcon ShapeCollectionDocker::generateShapeIcon(KoShape *shape)
 {

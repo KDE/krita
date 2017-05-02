@@ -25,6 +25,7 @@
 #include "kritaflake_export.h"
 
 class KoParameterShapePrivate;
+class KisHandlePainterHelper;
 
 /**
  * KoParameterShape is the base class for all parametric shapes
@@ -83,7 +84,7 @@ public:
      * @param converter the view converter for applying the actual zoom
      * @param handleRadius the radius of the handles used for painting
      */
-    void paintHandles(QPainter &painter, const KoViewConverter &converter, int handleRadius);
+    void paintHandles(KisHandlePainterHelper &handlesHelper);
 
     /**
      * @brief Paint the given handles
@@ -93,7 +94,7 @@ public:
      * @param handleId of the handle which should be repainted
      * @param handleRadius the radius of the handle used for painting
      */
-    void paintHandle(QPainter &painter, const KoViewConverter &converter, int handleId, int handleRadius);
+    void paintHandle(KisHandlePainterHelper &handlesHelper, int handleId);
 
     /// reimplemented from KoShape
     virtual void setSize(const QSizeF &size);
@@ -137,7 +138,7 @@ protected:
     void setHandles(const QList<QPointF> &handles);
 
     /// constructor
-    KoParameterShape(KoParameterShapePrivate &);
+    KoParameterShape(KoParameterShapePrivate *);
 
     /**
      * @brief Updates the internal state of a KoParameterShape.
@@ -157,7 +158,7 @@ protected:
      */
     virtual void updatePath(const QSizeF &size) = 0;
 
-private:
+protected:
     Q_DECLARE_PRIVATE(KoParameterShape)
 };
 

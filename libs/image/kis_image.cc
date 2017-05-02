@@ -141,7 +141,7 @@ public:
         , recorder(_q)
         , signalRouter(_q)
         , animationInterface(_animationInterface)
-        , scheduler(_q)
+        , scheduler(_q, _q)
         , axesCenter(QPointF(0.5, 0.5))
     {
         {
@@ -245,6 +245,9 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
                                   colorSpace, undoStore,
                                   new KisImageAnimationInterface(this)))
 {
+    // make sure KisImage belongs to the GUI thread
+    moveToThread(qApp->thread());
+
     setObjectName(name);
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 }
@@ -277,6 +280,9 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
                               undoStore ? undoStore : new KisDumbUndoStore(),
                               new KisImageAnimationInterface(*rhs.animationInterface(), this)))
 {
+    // make sure KisImage belongs to the GUI thread
+    moveToThread(qApp->thread());
+
     setObjectName(rhs.objectName());
 
     m_d->xres = rhs.m_d->xres;
@@ -1513,19 +1519,20 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
 {
     if (rect.isEmpty()) return;
 
-    KisNodeGraphListener::requestProjectionUpdate(node, rect);
     m_d->scheduler.updateProjection(node, rect, cropRect);
 }
 
-void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
+void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache)
 {
     if (m_d->projectionUpdatesFilter
-        && m_d->projectionUpdatesFilter->filter(this, node, rect)) {
+        && m_d->projectionUpdatesFilter->filter(this, node, rect, resetAnimationCache)) {
 
         return;
     }
 
-    m_d->animationInterface->notifyNodeChanged(node, rect, false);
+    if (resetAnimationCache) {
+        m_d->animationInterface->notifyNodeChanged(node, rect, false);
+    }
 
     /**
      * Here we use 'permitted' instead of 'active' intentively,
@@ -1543,6 +1550,8 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
     } else {
         requestProjectionUpdateImpl(node, rect, bounds());
     }
+
+    KisNodeGraphListener::requestProjectionUpdate(node, rect, resetAnimationCache);
 }
 
 void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
@@ -1595,6 +1604,10 @@ bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 
 void KisImage::setWrapAroundModePermitted(bool value)
 {
+    if (m_d->wrapAroundModePermitted != value) {
+        requestStrokeEnd();
+    }
+
     m_d->wrapAroundModePermitted = value;
 
     if (m_d->wrapAroundModePermitted &&

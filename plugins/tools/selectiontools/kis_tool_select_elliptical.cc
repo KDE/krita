@@ -33,7 +33,6 @@
 #include "kis_shape_tool_helper.h"
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
-#include "kis_system_locker.h"
 
 
 __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *canvas)

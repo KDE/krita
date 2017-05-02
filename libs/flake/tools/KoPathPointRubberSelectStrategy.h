@@ -33,7 +33,9 @@ class KoPathPointRubberSelectStrategy : public KoShapeRubberSelectStrategy
 public:
     KoPathPointRubberSelectStrategy(KoPathTool *tool, const QPointF &clicked);
     virtual ~KoPathPointRubberSelectStrategy() {}
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+
+    void handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 private:
     /// pointer to the path tool

@@ -20,6 +20,7 @@
 
 #include "StarShape.h"
 
+#include <KoParameterShape_p.h>
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -45,9 +46,28 @@ StarShape::StarShape()
     updatePath(QSize(100, 100));
 }
 
+StarShape::StarShape(const StarShape &rhs)
+    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+      m_cornerCount(rhs.m_cornerCount),
+      m_radius(rhs.m_radius),
+      m_angles(rhs.m_angles),
+      m_zoomX(rhs.m_zoomX),
+      m_zoomY(rhs.m_zoomY),
+      m_roundness(rhs.m_roundness),
+      m_center(rhs.m_center),
+      m_convex(rhs.m_convex)
+{
+}
+
 StarShape::~StarShape()
 {
 }
+
+KoShape *StarShape::cloneShape() const
+{
+    return new StarShape(*this);
+}
+
 
 void StarShape::setCornerCount(uint cornerCount)
 {
@@ -168,12 +188,14 @@ void StarShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyboar
 
 void StarShape::updatePath(const QSizeF &size)
 {
+    Q_D(KoParameterShape);
+
     Q_UNUSED(size);
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
     createPoints(m_convex ? m_cornerCount : 2 * m_cornerCount);
 
-    KoSubpath &points = *m_subpaths[0];
+    KoSubpath &points = *d->subpaths[0];
 
     uint index = 0;
     for (uint i = 0; i < 2 * m_cornerCount; ++i) {
@@ -220,19 +242,21 @@ void StarShape::updatePath(const QSizeF &size)
 
 void StarShape::createPoints(int requiredPointCount)
 {
-    if (m_subpaths.count() != 1) {
+    Q_D(KoParameterShape);
+
+    if (d->subpaths.count() != 1) {
         clear();
-        m_subpaths.append(new KoSubpath());
+        d->subpaths.append(new KoSubpath());
     }
-    int currentPointCount = m_subpaths[0]->count();
+    int currentPointCount = d->subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete m_subpaths[0]->front();
-            m_subpaths[0]->pop_front();
+            delete d->subpaths[0]->front();
+            d->subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 }
@@ -251,7 +275,9 @@ void StarShape::setSize(const QSizeF &newSize)
 
 QPointF StarShape::computeCenter() const
 {
-    KoSubpath &points = *m_subpaths[0];
+    Q_D(const KoParameterShape);
+
+    KoSubpath &points = *d->subpaths[0];
 
     QPointF center(0, 0);
     for (uint i = 0; i < m_cornerCount; ++i) {

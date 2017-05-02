@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "shapeproperties/ShapePropertiesDockerFactory.h"
 #include "shapecollection/ShapeCollectionDocker.h"
 
 #include <KoDockRegistry.h>
@@ -30,7 +29,6 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     Q_UNUSED(parent);
-    KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
     KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
 }
 

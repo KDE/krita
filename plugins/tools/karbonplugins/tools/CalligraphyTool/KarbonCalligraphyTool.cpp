@@ -28,13 +28,13 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoSelection.h>
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
-#include <KoFillConfigWidget.h>
 #include <KoViewConverter.h>
 
 #include <QAction>
@@ -58,7 +58,7 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     , m_speed(0, 0)
     , m_lastShape(0)
 {
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
 
     updateSelectedPath();
 }
@@ -344,8 +344,10 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
     return angle;
 }
 
-void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape *> &)
+void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     useCursor(Qt::CrossCursor);
     m_lastShape = 0;
 }
@@ -357,6 +359,8 @@ void KarbonCalligraphyTool::deactivate()
         selection->deselectAll();
         selection->select(m_lastShape);
     }
+
+    KoToolBase::deactivate();
 }
 
 QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
@@ -364,10 +368,9 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     // if the widget don't exists yet create it
     QList<QPointer<QWidget> > widgets;
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
-    fillWidget->setWindowTitle(i18n("Fill"));
-    fillWidget->setCanvas(canvas());
-    widgets.append(fillWidget);
+    //KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    //fillWidget->setWindowTitle(i18n("Fill"));
+    //widgets.append(fillWidget);
 
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),

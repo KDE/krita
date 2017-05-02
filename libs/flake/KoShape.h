@@ -24,6 +24,7 @@
 #define KOSHAPE_H
 
 #include "KoFlake.h"
+#include "KoFlakeTypes.h"
 #include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
@@ -52,11 +53,13 @@ class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
+class KoClipMask;
 class KoShapePaintingContext;
 class KoShapeAnchor;
 class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
+class KisHandlePainterHelper;
 
 
 /**
@@ -113,6 +116,7 @@ public:
         ShearChanged,   ///< used after a shear()
         SizeChanged,    ///< used after a setSize()
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
+        KeepAspectRatioChange, ///< used after setKeepAspectRatio()
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
@@ -125,7 +129,8 @@ public:
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
         ConnectionPointChanged, ///< a connection point has changed
-        ClipPathChanged ///< the shapes clip path has changed
+        ClipPathChanged, ///< the shapes clip path has changed
+        TransparencyChanged ///< the shapetransparency value has changed
     };
 
     /// The behavior text should do when intersecting this shape.
@@ -163,6 +168,12 @@ public:
      * @brief Destructor
      */
     virtual ~KoShape();
+
+    /**
+     * @brief creates a deep copy of thie shape or shapes subtree
+     * @return a cloned shape
+     */
+    virtual KoShape* cloneShape() const;
 
     /**
      * @brief Paint the shape
@@ -319,6 +330,26 @@ public:
      * @return the bounding box of the shape
      */
     virtual QRectF boundingRect() const;
+
+    /**
+     * Get the united bounding box of a group of shapes. This is a utility
+     * function used in many places in Krita.
+     */
+    static QRectF boundingRect(const QList<KoShape*> &shapes);
+
+    /**
+     * @return the bounding rect of the outline of the shape measured
+     *         in absolute coordinate system. Please note that in contrast to
+     *         boundingRect() this rect doesn't include the stroke and other
+     *         insets.
+     */
+    QRectF absoluteOutlineRect(KoViewConverter *converter = 0) const;
+
+    /**
+     * Same as a member function, but applies to a list of shapes and returns a
+     * united rect.
+     */
+    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes, KoViewConverter *converter = 0);
 
     /**
      * @brief Add a connector point to the shape
@@ -651,6 +682,15 @@ public:
      */
     void setParent(KoShapeContainer *parent);
 
+
+    /**
+     * @brief inheritsTransformFromAny checks if the shape inherits transformation from
+     *        any of the shapes listed in \p ancestorsInQuestion. The inheritance is checked
+     *        in recursive way.
+     * @return true if there is a (transitive) transformation-wise parent found in \p ancestorsInQuestion
+     */
+    bool inheritsTransformFromAny(const QList<KoShape*> ancestorsInQuestion) const;
+
     /**
      * Request a repaint to be queued.
      * The repaint will be of the entire Shape, including its selection handles should this
@@ -731,13 +771,13 @@ public:
      * Returns the currently set stroke, or 0 if there is no stroke.
      * @return the currently set stroke, or 0 if there is no stroke.
      */
-    KoShapeStrokeModel *stroke() const;
+    KoShapeStrokeModelSP stroke() const;
 
     /**
      * Set a new stroke, removing the old one.
      * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    void setStroke(KoShapeStrokeModel *stroke);
+    void setStroke(KoShapeStrokeModelSP stroke);
 
     /**
      * Return the insets of the stroke.
@@ -763,6 +803,12 @@ public:
     /// Returns the currently set clip path or 0 if there is no clip path set
     KoClipPath * clipPath() const;
 
+    /// Sets a new clip mask, removing the old one. The mask is owned by the shape.
+    void setClipMask(KoClipMask *clipMask);
+
+    /// Returns the currently set clip mask or 0 if there is no clip mask set
+    KoClipMask* clipMask() const;
+
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
      * keep the width/hight ratio intact so as not to distort shapes that rely on that
@@ -785,7 +831,7 @@ public:
      * @param anchor The place on the (unaltered) shape that you want the position of.
      * @return the point that is the absolute, centered position of this shape.
      */
-    QPointF absolutePosition(KoFlake::Position anchor = KoFlake::CenteredPosition) const;
+    QPointF absolutePosition(KoFlake::AnchorPosition anchor = KoFlake::Center) const;
 
     /**
      * Move this shape to an absolute position where the end location will be the same
@@ -801,7 +847,7 @@ public:
      * @param newPosition the new absolute center of the shape.
      * @param anchor The place on the (unaltered) shape that you set the position of.
      */
-    void setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
+    void setAbsolutePosition(const QPointF &newPosition, KoFlake::AnchorPosition anchor = KoFlake::Center);
 
     /**
      * Set a data object on the shape to be used by an application.
@@ -814,19 +860,6 @@ public:
      * Return the current userData.
      */
     KoShapeUserData *userData() const;
-
-    /**
-     * Set a data object on the shape to be used by an application.
-     * This is specifically useful when an application wants to have data that is per shape
-     * and should be deleted when the shape is destructed.
-     * @param applicationData the new application data, or 0 to delete the current one.
-     */
-    void setApplicationData(KoShapeApplicationData *applicationData);
-
-    /**
-     * Return the current applicationData.
-     */
-    KoShapeApplicationData *applicationData() const;
 
     /**
      * Return the Id of this shape, identifying the type of shape by the id of the factory.
@@ -899,6 +932,13 @@ public:
      * @param converter the converter for the current views zoom.
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
+
+    /**
+     * A convenience method that creates a handles helper with applying transformations at
+     * the same time. Please note that you shouldn't save/restore additionally. All the work
+     * on restoring original painter's transformations is done by the helper.
+     */
+    static KisHandlePainterHelper createHandlePainterHelper(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
 
     /**
      * @brief Transforms point from shape coordinates to document coordinates
@@ -1090,9 +1130,31 @@ public:
      */
     KoShapePrivate *priv();
 
+public:
+
+    struct ShapeChangeListener {
+        virtual ~ShapeChangeListener();
+        virtual void notifyShapeChanged(ChangeType type, KoShape *shape) = 0;
+
+    private:
+        friend class KoShape;
+        friend class KoShapePrivate;
+        void registerShape(KoShape *shape);
+        void unregisterShape(KoShape *shape);
+        void notifyShapeChangedImpl(ChangeType type, KoShape *shape);
+
+        QList<KoShape*> m_registeredShapes;
+    };
+
+    void addShapeChangeListener(ShapeChangeListener *listener);
+    void removeShapeChangeListener(ShapeChangeListener *listener);
+
+public:
+    static QList<KoShape*> linearizeSubtree(const QList<KoShape*> &shapes);
+
 protected:
     /// constructor
-    KoShape(KoShapePrivate &);
+    KoShape(KoShapePrivate *);
 
     /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
@@ -1155,7 +1217,7 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeStrokeModelSP loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the fill style
     QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;

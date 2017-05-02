@@ -1,15 +1,17 @@
 #ifndef KOTOSCONTAINER_P_H
 #define KOTOSCONTAINER_P_H
 
+#include "kritaflake_export.h"
 #include "KoShapeContainer_p.h"
 
 #include "KoTosContainer.h"
 
-class KoTosContainerPrivate : public KoShapeContainerPrivate
+class KRITAFLAKE_EXPORT KoTosContainerPrivate : public KoShapeContainerPrivate
 {
 public:
 
     explicit KoTosContainerPrivate(KoShapeContainer *q);
+    explicit KoTosContainerPrivate(const KoTosContainerPrivate &rhs, KoShapeContainer *q);
 
     virtual ~KoTosContainerPrivate();
 

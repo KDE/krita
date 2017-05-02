@@ -22,6 +22,7 @@
 #include "KoParameterHandleMoveCommand.h"
 #include "KoParameterShape.h"
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
 
 KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, KUndo2Command *parent)
         : KUndo2Command(parent)
@@ -54,5 +55,27 @@ void KoParameterHandleMoveCommand::undo()
     m_shape->update();
     m_shape->moveHandle(m_handleId, m_startPoint);
     m_shape->update();
+}
+
+int KoParameterHandleMoveCommand::id() const
+{
+    return KisCommandUtils::ChangeShapeParameterId;
+}
+
+bool KoParameterHandleMoveCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoParameterHandleMoveCommand *other = dynamic_cast<const KoParameterHandleMoveCommand*>(command);
+
+    if (!other ||
+        other->m_shape != m_shape ||
+        other->m_handleId != m_handleId ||
+        other->m_keyModifiers != m_keyModifiers) {
+
+        return false;
+    }
+
+    m_endPoint = other->m_endPoint;
+
+    return true;
 }
 

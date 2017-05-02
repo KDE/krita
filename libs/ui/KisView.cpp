@@ -695,6 +695,13 @@ bool KisView::queryClose()
     if (!document())
         return true;
 
+    if (document()->isInSaving()) {
+        viewManager()->showFloatingMessage(
+            i18n("Cannot close the document while saving is in progress"),
+            KisIconUtils::loadIcon("object-locked"), 1500 /* ms */);
+        return false;
+    }
+
     if (document()->isModified()) {
         QString name;
         if (document()->documentInfo()) {
@@ -718,10 +725,15 @@ bool KisView::queryClose()
                 return false;
             break;
         }
-        case QMessageBox::No :
+        case QMessageBox::No : {
+            KisImageSP image = document()->image();
+            image->requestStrokeCancellation();
+            viewManager()->blockUntilOperationsFinishedForced(image);
+
             document()->removeAutoSaveFiles();
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
+        }
         default : // case QMessageBox::Cancel :
             return false;
         }
@@ -787,6 +799,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
 void KisView::setCurrentNode(KisNodeSP node)
 {
     d->currentNode = node;
+    d->canvas.slotTrySwitchShapeManager();
 }
 
 KisNodeSP KisView::currentNode() const

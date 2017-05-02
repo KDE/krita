@@ -262,6 +262,15 @@ void IccColorProfile::delinearizeFloatValueFast(QVector<qreal> &Value) const
         d->shared->lcmsProfile->DelinearizeFloatValueFast(Value);
 }
 
+QByteArray IccColorProfile::uniqueId() const
+{
+    QByteArray dummy;
+    if (d->shared->lcmsProfile) {
+        dummy = d->shared->lcmsProfile->getProfileUniqueId();
+    }
+    return dummy;
+}
+
 bool IccColorProfile::load()
 {
     QFile file(fileName());

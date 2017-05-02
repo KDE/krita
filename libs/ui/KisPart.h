@@ -179,8 +179,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void viewDestroyed();
-
     void updateIdleWatcherConnections();
 
     void updateShortcuts();
@@ -206,7 +204,7 @@ Q_SIGNALS:
 
 public:
 
-    static KisInputManager *currentInputManager();
+    KisInputManager *currentInputManager();
 
     //------------------ View management ------------------
 

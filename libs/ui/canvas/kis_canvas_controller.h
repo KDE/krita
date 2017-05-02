@@ -42,6 +42,8 @@ public:
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
     virtual void activate();
 
+    QPointF currentCursorPosition() const override;
+
 public:
     using KoCanvasController::documentSize;
     bool wrapAroundMode() const;

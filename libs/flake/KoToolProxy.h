@@ -44,6 +44,7 @@ class QDropEvent;
 class QTouchEvent;
 class QPainter;
 class QPointF;
+class QMenu;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -110,13 +111,16 @@ public:
     void wheelEvent(KoPointerEvent *event);
 
     /// Forwarded to the current KoToolBase
+    void explicitUserStrokeEndRequest();
+
+    /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// Forwarded to the current KoToolBase
     void inputMethodEvent(QInputMethodEvent *event);
 
     /// Forwarded to the current KoToolBase
-    QList<QAction*> popupActionList() const;
+    QMenu* popupActionsMenu();
 
     /// Forwarded to the current KoToolBase
     void deleteSelection();
@@ -144,9 +148,6 @@ public:
     bool paste();
 
     /// Forwarded to the current KoToolBase
-    QStringList supportedPasteMimeTypes() const;
-
-    /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
 
     /// Forwarded to the current KoToolBase
@@ -160,6 +161,16 @@ public:
 
     /// \internal
     KoToolProxyPrivate *priv();
+
+protected Q_SLOTS:
+    /// Forwarded to the current KoToolBase
+    void requestUndoDuringStroke();
+
+    /// Forwarded to the current KoToolBase
+    void requestStrokeCancellation();
+
+    /// Forwarded to the current KoToolBase
+    void requestStrokeEnd();
 
 Q_SIGNALS:
     /**

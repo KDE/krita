@@ -57,9 +57,13 @@ public:
 
     virtual ~KoShapeTransparencyCommand();
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
+
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
+
 private:
     class Private;
     Private * const d;

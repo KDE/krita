@@ -42,6 +42,7 @@
 #include <kis_debug.h>
 #include <kis_annotation.h>
 #include <kis_node.h>
+#include <kis_image.h>
 
 // local
 #include "kis_config.h"
@@ -407,12 +408,12 @@ QSize KisClipboard::clipSize() const
     return QSize();
 }
 
-void KisClipboard::setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy)
+void KisClipboard::setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy)
 {
     /**
      * See a comment in KisMimeData::deepCopyNodes()
      */
-    QMimeData *data = KisMimeData::mimeForLayersDeepCopy(nodes, imageRoot, forceCopy);
+    QMimeData *data = KisMimeData::mimeForLayersDeepCopy(nodes, image, forceCopy);
     if (!data) return;
 
     QClipboard *cb = QApplication::clipboard();

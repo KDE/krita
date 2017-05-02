@@ -145,7 +145,7 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
 
     QRectF rect(-maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance);
     rect.moveCenter(mousePosition);
-    QList<QPointF> points = proxy->pointsInRect(rect);
+    QList<QPointF> points = proxy->pointsInRect(rect, false);
     QPointF snappedPoint = mousePosition;
 
     foreach (const QPointF &point, points) {
@@ -387,7 +387,7 @@ bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *p
     rect.moveCenter(mousePosition);
     QPointF snappedPoint = mousePosition;
 
-    QList<KoPathSegment> segments = proxy->segmentsInRect(rect);
+    QList<KoPathSegment> segments = proxy->segmentsInRect(rect, false);
     int segmentCount = segments.count();
     for (int i = 0; i < segmentCount; ++i) {
         const KoPathSegment &s1 = segments[i];
@@ -510,12 +510,12 @@ bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *pr
     rect.moveCenter(mousePosition);
     QPointF snappedPoint = mousePosition;
 
-    KoFlake::Position pointId[5] = {
-        KoFlake::TopLeftCorner,
-        KoFlake::TopRightCorner,
-        KoFlake::BottomRightCorner,
-        KoFlake::BottomLeftCorner,
-        KoFlake::CenteredPosition
+    KoFlake::AnchorPosition pointId[5] = {
+        KoFlake::TopLeft,
+        KoFlake::TopRight,
+        KoFlake::BottomRight,
+        KoFlake::BottomLeft,
+        KoFlake::Center
     };
 
     QList<KoShape*> shapes = proxy->shapesInRect(rect, true);

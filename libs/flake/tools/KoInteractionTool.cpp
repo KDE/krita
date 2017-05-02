@@ -23,7 +23,10 @@
 #include "KoToolBase_p.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
-#include "KoPanTool.h"
+
+#include "kis_global.h"
+#include "kis_assert.h"
+
 
 KoInteractionTool::KoInteractionTool(KoCanvasBase *canvas)
     : KoToolBase(*(new KoInteractionToolPrivate(this, canvas)))
@@ -37,8 +40,15 @@ KoInteractionTool::~KoInteractionTool()
 void KoInteractionTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoInteractionTool);
-    if (d->currentStrategy)
+
+    if (d->currentStrategy) {
         d->currentStrategy->paint(painter, converter);
+    } else {
+        Q_FOREACH (KoInteractionStrategyFactorySP factory, d->interactionFactories) {
+            // skip the rest of rendering if the factory asks for it
+            if (factory->paintOnHover(painter, converter)) break;
+        }
+    }
 }
 
 void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
@@ -48,7 +58,7 @@ void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
         cancelCurrentStrategy();
         return;
     }
-    d->currentStrategy = createStrategy(event);
+    d->currentStrategy = createStrategyBase(event);
     if (d->currentStrategy == 0)
         event->ignore();
 }
@@ -57,10 +67,17 @@ void KoInteractionTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_D(KoInteractionTool);
     d->lastPoint = event->point;
+
     if (d->currentStrategy)
         d->currentStrategy->handleMouseMove(d->lastPoint, event->modifiers());
-    else
+    else {
+        Q_FOREACH (KoInteractionStrategyFactorySP factory, d->interactionFactories) {
+            // skip the rest of rendering if the factory asks for it
+            if (factory->hoverEvent(event)) return;
+        }
+
         event->ignore();
+    }
 }
 
 void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -94,10 +111,13 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 {
     Q_D(KoInteractionTool);
-    if (d->currentStrategy == 0) { // catch all cases where no current strategy is needed
-        if (event->key() == Qt::Key_Space)
-            emit activateTemporary(KoPanTool_ID);
-    } else if (event->key() == Qt::Key_Escape) {
+
+    if (!d->currentStrategy) {
+        KoToolBase::keyReleaseEvent(event);
+        return;
+    }
+
+    if (event->key() == Qt::Key_Escape) {
         cancelCurrentStrategy();
         event->accept();
     } else if (event->key() == Qt::Key_Control ||
@@ -121,6 +141,75 @@ void KoInteractionTool::cancelCurrentStrategy()
         delete d->currentStrategy;
         d->currentStrategy = 0;
     }
+}
+
+KoInteractionStrategy *KoInteractionTool::createStrategyBase(KoPointerEvent *event)
+{
+    Q_D(KoInteractionTool);
+
+    Q_FOREACH (KoInteractionStrategyFactorySP factory, d->interactionFactories) {
+        KoInteractionStrategy *strategy = factory->createStrategy(event);
+        if (strategy) {
+            return strategy;
+        }
+    }
+
+    return createStrategy(event);
+}
+
+void KoInteractionTool::addInteractionFactory(KoInteractionStrategyFactory *factory)
+{
+    Q_D(KoInteractionTool);
+
+    Q_FOREACH (auto f, d->interactionFactories) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(f->id() != factory->id());
+    }
+
+    d->interactionFactories.append(toQShared(factory));
+    qSort(d->interactionFactories.begin(),
+          d->interactionFactories.end(),
+          KoInteractionStrategyFactory::compareLess);
+}
+
+void KoInteractionTool::removeInteractionFactory(const QString &id)
+{
+    Q_D(KoInteractionTool);
+    QList<KoInteractionStrategyFactorySP>::iterator it =
+            d->interactionFactories.begin();
+
+    while (it != d->interactionFactories.end()) {
+        if ((*it)->id() == id) {
+            it = d->interactionFactories.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+bool KoInteractionTool::hasInteractioFactory(const QString &id)
+{
+    Q_D(KoInteractionTool);
+
+    Q_FOREACH (auto f, d->interactionFactories) {
+        if (f->id() == id) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KoInteractionTool::tryUseCustomCursor()
+{
+    Q_D(KoInteractionTool);
+
+    Q_FOREACH (auto f, d->interactionFactories) {
+        if (f->tryUseCustomCursor()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 KoInteractionTool::KoInteractionTool(KoInteractionToolPrivate &dd)

@@ -34,7 +34,6 @@ class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
 class KoPointerEvent;
-class KoShapeManagerPaintingStrategy;
 class KoShapePaintingContext;
 
 
@@ -100,25 +99,12 @@ public Q_SLOTS:
      */
     void addShape(KoShape *shape, KoShapeManager::Repaint repaint = PaintShapeOnAdd);
 
-    /**
-     * Add an additional shape to the manager.
-     *
-     * For additional shapes only updates are handled
-     */
-    void addAdditional(KoShape *shape);
 
     /**
      * Remove a KoShape from this manager
      * @param shape the shape to remove
      */
     void remove(KoShape *shape);
-
-    /**
-     * Remove an additional shape
-     *
-     * For additional shapes only updates are handled
-     */
-    void removeAdditional(KoShape *shape);
 
 public:
     /// return the selection shapes for this shapeManager
@@ -147,7 +133,7 @@ public:
      * @param rect the rectangle in the document coordinate system.
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    QList<KoShape *> shapesAt(const QRectF &rect, bool omitHiddenShapes = true);
+    QList<KoShape *> shapesAt(const QRectF &rect, bool omitHiddenShapes = true, bool containedMode = false);
 
     /**
      * Request a repaint to be queued.
@@ -173,30 +159,39 @@ public:
     void notifyShapeChanged(KoShape *shape);
 
     /**
-     * Switch to editing the shape that is at the position of the event.
-     * This method will check select a shape at the event position and switch to the default tool
-     * for that shape, or switch to the default tool if there is no shape at the position.
-     * @param event the event that holds the point where to look for a shape.
-     */
-    void suggestChangeTool(KoPointerEvent *event);
-
-    /**
      * Paint a shape
      *
      * @param shape the shape to paint
      * @param painter the painter to paint to.
      * @param converter to convert between document and view coordinates.
      */
-    void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    static void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     /**
-     * Set the strategy of the KoShapeManager
-     *
-     * This can be used to change the behaviour of the painting of the shapes.
-     * @param strategy the new strategy. The ownership of the argument \p
-     *    strategy will be taken by the shape manager.
+     * @brief renderSingleShape renders a shape on \p painter. This method includes all the
+     * needed steps for painting a single shape: setting transformations, clipping and masking.
      */
-    void setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy);
+    static void renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+
+    /**
+     * A special interface for KoShape to use during shape destruction. Don't use this
+     * interface directly unless you are KoShape.
+     */
+    struct ShapeInterface {
+        ShapeInterface(KoShapeManager *_q);
+
+        /**
+         * Called by a shape when it is destructed. Please note that you cannot access
+         * any shape's method type or information during this call because the shape might be
+         * semi-destroyed.
+         */
+        void notifyShapeDestructed(KoShape *shape);
+
+    protected:
+        KoShapeManager *q;
+    };
+
+    ShapeInterface* shapeInterface();
 
 Q_SIGNALS:
     /// emitted when the selection is changed
@@ -205,14 +200,10 @@ Q_SIGNALS:
     void selectionContentChanged();
     /// emitted when any object changed (moved/rotated etc)
     void contentChanged();
-    /// emitted when a shape is removed.
-    void shapeRemoved(KoShape *);
     /// emitted when any shape changed.
     void shapeChanged(KoShape *);
 
 private:
-
-    friend class KoShapeManagerPaintingStrategy;
     KoCanvasBase *canvas();
 
 

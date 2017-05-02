@@ -68,6 +68,7 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
     assistants.append(assistant);
 
     view()->document()->setAssistants(assistants);
+    setVisible(!assistants.isEmpty());
     emit assistantChanged();
 }
 
@@ -78,6 +79,7 @@ void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistantSP ass
 
     if (assistants.removeAll(assistant)) {
         view()->document()->setAssistants(assistants);
+        setVisible(!assistants.isEmpty());
         emit assistantChanged();
     }
 }
@@ -87,6 +89,7 @@ void KisPaintingAssistantsDecoration::removeAll()
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
     assistants.clear();
     view()->document()->setAssistants(assistants);
+    setVisible(!assistants.isEmpty());
 
     emit assistantChanged();
 }

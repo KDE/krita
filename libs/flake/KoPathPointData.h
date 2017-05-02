@@ -22,11 +22,12 @@
 #define KOPATHPOINTDATA_H
 
 #include "KoPathShape.h"
+#include <boost/operators.hpp>
 
 /**
  * @brief Describe a KoPathPoint by a KoPathShape and its indices
  */
-class KoPathPointData
+class KoPathPointData  : public boost::equality_comparable<KoPathPointData>
 {
 public:
     /// contructor

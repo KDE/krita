@@ -48,7 +48,7 @@ class KoSelectionPrivate;
  * A selection, however, should not be selectable. We need to think
  * a little about the interaction here.
  */
-class KRITAFLAKE_EXPORT KoSelection : public QObject, public KoShape
+class KRITAFLAKE_EXPORT KoSelection : public QObject, public KoShape, public KoShape::ShapeChangeListener
 {
     Q_OBJECT
 
@@ -57,7 +57,11 @@ public:
     KoSelection();
     virtual ~KoSelection();
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void setSize(const QSizeF &size) override;
+    QSizeF size() const override;
+    QRectF outlineRect() const override;
+    QRectF boundingRect() const override;
 
     /**
      * Adds a shape to the selection.
@@ -73,7 +77,7 @@ public:
      * @param shape the shape to add to the selection
      * @param recursive enables recursively selecting shapes of parent groups
      */
-    void select(KoShape *shape, bool recursive = true);
+    void select(KoShape *shape);
 
     /**
      * Removes a selected shape.
@@ -89,7 +93,7 @@ public:
      * @param shape the shape to remove from the selection
      * @param recursive enables recursively deselecting shapes of parent groups
      */
-    void deselect(KoShape *shape, bool recursive = true);
+    void deselect(KoShape *shape);
 
     /// clear the selections list
     void deselectAll();
@@ -100,14 +104,26 @@ public:
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a container shape if the container-parent is itself also in the set.
      */
-    const QList<KoShape*> selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    const QList<KoShape*> selectedShapes() const;
+
+    /**
+     * Same as selectedShapes() but only for editable shapes. Used by
+     * the algorithms that modify the image
+     */
+    const QList<KoShape*> selectedEditableShapes() const;
+
+    /**
+     * Same as selectedEditableShapes() but also includes shapes delegates.
+     * Used for
+     */
+    const QList<KoShape*> selectedEditableShapesAndDelegates() const;
 
     /**
      * Return the first selected shape, or 0 if there is nothing selected.
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a grouped shape if the group-parent is itself also in the set.
      */
-    KoShape *firstSelectedShape(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    KoShape *firstSelectedShape() const;
 
     /// return true if the shape is selected
     bool isSelected(const KoShape *shape) const;
@@ -116,8 +132,6 @@ public:
     int count() const;
 
     virtual bool hitTest(const QPointF &position) const;
-
-    virtual QRectF boundingRect() const;
 
     /**
      * Sets the currently active layer.
@@ -132,8 +146,7 @@ public:
      */
     KoShapeLayer *activeLayer() const;
 
-    /// Updates the size and position of the selection
-    void updateSizeAndPosition();
+    void notifyShapeChanged(ChangeType type, KoShape *shape);
 
 Q_SIGNALS:
     /// emitted when the selection is changed
@@ -146,7 +159,6 @@ private:
     virtual void saveOdf(KoShapeSavingContext &) const;
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);
 
-    Q_PRIVATE_SLOT(d_func(), void selectionChangedEvent())
     Q_DECLARE_PRIVATE_D(KoShape::d_ptr, KoSelection)
 };
 

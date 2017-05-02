@@ -14,6 +14,21 @@
    <string>Ellipse Shape</string>
   </property>
   <layout class="QGridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>3</number>
+   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -73,7 +88,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>6</height>
       </size>
      </property>
     </spacer>

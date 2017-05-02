@@ -63,6 +63,20 @@ public:
     static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
             MoveShapeType move, KUndo2Command *parent = 0);
 
+    /**
+     * @brief mergeInShape adjust zIndex of all the \p shapes and \p newShape to
+     *        avoid collisions between \p shapes and \p newShape.
+     *
+     *        Note1: \p newShape may or may not be contained in \p shapes, there
+     *               is no difference.
+     *        Note2: the collisions inside \p shapes are ignored. They are just
+     *               adjusted to avoid collisions with \p newShape only
+     * @param parent the parent command for grouping purposes.
+     * @return command for reording the shapes or 0 if no reordering happend
+     */
+    static KoShapeReorderCommand *mergeInShape(QList<KoShape*> shapes, KoShape *newShape,
+                                               KUndo2Command *parent = 0);
+
     /// redo the command
     void redo();
     /// revert the actions done in redo

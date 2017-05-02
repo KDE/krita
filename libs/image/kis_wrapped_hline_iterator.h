@@ -45,13 +45,15 @@ public:
     inline IteratorTypeSP createIterator(KisDataManager *dataManager,
                                          const QRect &rc,
                                          qint32 offsetX, qint32 offsetY,
-                                         bool writable) {
+                                         bool writable,
+                                         KisIteratorCompleteListener *listener) {
 
         return new KisHLineIterator2(dataManager,
                                      rc.x(), rc.y(),
                                      rc.width(),
                                      offsetX, offsetY,
-                                     writable);
+                                     writable,
+                                     listener);
     }
 
     inline void completeInitialization(QVector<IteratorTypeSP> *iterators,

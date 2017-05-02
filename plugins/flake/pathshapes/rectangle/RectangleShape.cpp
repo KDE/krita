@@ -21,6 +21,7 @@
 
 #include "RectangleShape.h"
 
+#include <KoParameterShape_p.h>
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
@@ -44,8 +45,20 @@ RectangleShape::RectangleShape()
     updatePath(size);
 }
 
+RectangleShape::RectangleShape(const RectangleShape &rhs)
+    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+      m_cornerRadiusX(rhs.m_cornerRadiusX),
+      m_cornerRadiusY(rhs.m_cornerRadiusY)
+{
+}
+
 RectangleShape::~RectangleShape()
 {
+}
+
+KoShape *RectangleShape::cloneShape() const
+{
+    return new RectangleShape(*this);
 }
 
 bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -146,6 +159,8 @@ void RectangleShape::updateHandles()
 
 void RectangleShape::updatePath(const QSizeF &size)
 {
+    Q_D(KoParameterShape);
+
     qreal rx = 0;
     qreal ry = 0;
     if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
@@ -168,7 +183,7 @@ void RectangleShape::updatePath(const QSizeF &size)
 
     createPoints(requiredCurvePointCount);
 
-    KoSubpath &points = *m_subpaths[0];
+    KoSubpath &points = *d->subpaths[0];
 
     int cp = 0;
 
@@ -255,19 +270,21 @@ void RectangleShape::updatePath(const QSizeF &size)
 
 void RectangleShape::createPoints(int requiredPointCount)
 {
-    if (m_subpaths.count() != 1) {
+    Q_D(KoParameterShape);
+
+    if (d->subpaths.count() != 1) {
         clear();
-        m_subpaths.append(new KoSubpath());
+        d->subpaths.append(new KoSubpath());
     }
-    int currentPointCount = m_subpaths[0]->count();
+    int currentPointCount = d->subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete m_subpaths[0]->front();
-            m_subpaths[0]->pop_front();
+            delete d->subpaths[0]->front();
+            d->subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 }

@@ -54,6 +54,8 @@ public:
     KoConnectionShape();
     virtual ~KoConnectionShape();
 
+    KoShape* cloneShape() const override;
+
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
@@ -124,6 +126,9 @@ public:
     void updateConnections();
 
 protected:
+    KoConnectionShape(const KoConnectionShape &rhs);
+
+
     /// reimplemented
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 

@@ -33,6 +33,9 @@
 #include <SvgUtil.h>
 #include <SvgStyleWriter.h>
 
+#include <KoParameterShape_p.h>
+#include "kis_global.h"
+
 #include <math.h>
 
 EllipseShape::EllipseShape()
@@ -52,8 +55,24 @@ EllipseShape::EllipseShape()
     updatePath(size);
 }
 
+EllipseShape::EllipseShape(const EllipseShape &rhs)
+    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+      m_startAngle(rhs.m_startAngle),
+      m_endAngle(rhs.m_endAngle),
+      m_kindAngle(rhs.m_kindAngle),
+      m_center(rhs.m_center),
+      m_radii(rhs.m_radii),
+      m_type(rhs.m_type)
+{
+}
+
 EllipseShape::~EllipseShape()
 {
+}
+
+KoShape *EllipseShape::cloneShape() const
+{
+    return new EllipseShape(*this);
 }
 
 void EllipseShape::saveOdf(KoShapeSavingContext &context) const
@@ -180,8 +199,9 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
         diff.setY(diff.y() * m_radii.x() / m_radii.y());
         angle = atan(diff.y() / diff.x());
         if (angle < 0) {
-            angle = M_PI + angle;
+            angle += M_PI;
         }
+
         if (diff.y() < 0) {
             angle += M_PI;
         }
@@ -191,15 +211,13 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
     switch (handleId) {
     case 0:
         p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
-        m_startAngle = angle * 180.0 / M_PI;
+        m_startAngle = kisRadiansToDegrees(angle);
         handles[handleId] = p;
-        updateKindHandle();
         break;
     case 1:
         p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
-        m_endAngle = angle * 180.0 / M_PI;
+        m_endAngle = kisRadiansToDegrees(angle);
         handles[handleId] = p;
-        updateKindHandle();
         break;
     case 2: {
         QList<QPointF> kindHandlePositions;
@@ -222,29 +240,38 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
     break;
     }
     setHandles(handles);
+
+    if (handleId != 2) {
+        updateKindHandle();
+    }
 }
 
 void EllipseShape::updatePath(const QSizeF &size)
 {
+    Q_D(KoParameterShape);
+
     Q_UNUSED(size);
     QPointF startpoint(handles()[0]);
 
     QPointF curvePoints[12];
+    const qreal distance = sweepAngle();
 
-    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, sweepAngle(), startpoint, curvePoints);
+    const bool sameAngles = distance > 359.9;
+    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, distance, startpoint, curvePoints);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(pointCnt);
 
     int curvePointCount = 1 + pointCnt / 3;
     int requiredPointCount = curvePointCount;
     if (m_type == Pie) {
         requiredPointCount++;
-    } else if (m_type == Arc && m_startAngle == m_endAngle) {
+    } else if (m_type == Arc && sameAngles) {
         curvePointCount--;
         requiredPointCount--;
     }
 
     createPoints(requiredPointCount);
 
-    KoSubpath &points = *m_subpaths[0];
+    KoSubpath &points = *d->subpaths[0];
 
     int curveIndex = 0;
     points[0]->setPoint(startpoint);
@@ -261,7 +288,7 @@ void EllipseShape::updatePath(const QSizeF &size)
         points[requiredPointCount - 1]->setPoint(m_center);
         points[requiredPointCount - 1]->removeControlPoint1();
         points[requiredPointCount - 1]->removeControlPoint2();
-    } else if (m_type == Arc && m_startAngle == m_endAngle) {
+    } else if (m_type == Arc && sameAngles) {
         points[curvePointCount - 1]->setControlPoint2(curvePoints[curveIndex]);
         points[0]->setControlPoint1(curvePoints[++curveIndex]);
     }
@@ -270,13 +297,13 @@ void EllipseShape::updatePath(const QSizeF &size)
         points[i]->unsetProperty(KoPathPoint::StopSubpath);
         points[i]->unsetProperty(KoPathPoint::CloseSubpath);
     }
-    m_subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
-    if (m_type == Arc && m_startAngle != m_endAngle) {
-        m_subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
-        m_subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
+    d->subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
+    if (m_type == Arc && !sameAngles) {
+        d->subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
     } else {
-        m_subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
-        m_subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
 
     normalize();
@@ -284,29 +311,34 @@ void EllipseShape::updatePath(const QSizeF &size)
 
 void EllipseShape::createPoints(int requiredPointCount)
 {
-    if (m_subpaths.count() != 1) {
+    Q_D(KoParameterShape);
+
+    if (d->subpaths.count() != 1) {
         clear();
-        m_subpaths.append(new KoSubpath());
+        d->subpaths.append(new KoSubpath());
     }
-    int currentPointCount = m_subpaths[0]->count();
+    int currentPointCount = d->subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete m_subpaths[0]->front();
-            m_subpaths[0]->pop_front();
+            delete d->subpaths[0]->front();
+            d->subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 }
 
 void EllipseShape::updateKindHandle()
 {
-    m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
+    qreal angle = 0.5 * (m_startAngle + m_endAngle);
     if (m_startAngle > m_endAngle) {
-        m_kindAngle += M_PI;
+        angle += 180.0;
     }
+
+    m_kindAngle = normalizeAngle(kisDegreesToRadians(angle));
+
     QList<QPointF> handles = this->handles();
     switch (m_type) {
     case Arc:
@@ -324,8 +356,8 @@ void EllipseShape::updateKindHandle()
 
 void EllipseShape::updateAngleHandles()
 {
-    qreal startRadian = m_startAngle * M_PI / 180.0;
-    qreal endRadian = m_endAngle * M_PI / 180.0;
+    qreal startRadian = kisDegreesToRadians(normalizeAngleDegrees(m_startAngle));
+    qreal endRadian = kisDegreesToRadians(normalizeAngleDegrees(m_endAngle));
     QList<QPointF> handles = this->handles();
     handles[0] = m_center + QPointF(cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
     handles[1] = m_center + QPointF(cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
@@ -334,15 +366,20 @@ void EllipseShape::updateAngleHandles()
 
 qreal EllipseShape::sweepAngle() const
 {
-    qreal sAngle =  m_endAngle - m_startAngle;
-    // treat also as full circle
-    if (sAngle == 0 || sAngle == -360) {
-        sAngle = 360;
+    const qreal a1 = normalizeAngle(kisDegreesToRadians(m_startAngle));
+    const qreal a2 = normalizeAngle(kisDegreesToRadians(m_endAngle));
+
+    qreal sAngle = a2 - a1;
+
+    if (a1 > a2) {
+        sAngle = 2 * M_PI + sAngle;
     }
-    if (m_startAngle > m_endAngle) {
-        sAngle = 360 - m_startAngle + m_endAngle;
+
+    if (qAbs(a1 - a2) < 0.05 / M_PI) {
+        sAngle = 2 * M_PI;
     }
-    return sAngle;
+
+    return kisRadiansToDegrees(sAngle);
 }
 
 void EllipseShape::setType(EllipseType type)
@@ -410,8 +447,37 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 
         context.shapeWriter().endElement();
     } else {
-        // the svg writer takes care of saving this shape as a path shape
-        return false;
+        context.shapeWriter().startElement("path");
+        context.shapeWriter().addAttribute("id", context.getID(this));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+        context.shapeWriter().addAttribute("sodipodi:type", "arc");
+
+        context.shapeWriter().addAttributePt("sodipodi:rx", m_radii.x());
+        context.shapeWriter().addAttributePt("sodipodi:ry", m_radii.y());
+
+        context.shapeWriter().addAttributePt("sodipodi:cx", m_center.x());
+        context.shapeWriter().addAttributePt("sodipodi:cy", m_center.y());
+
+        context.shapeWriter().addAttribute("sodipodi:start", 2 * M_PI - kisDegreesToRadians(endAngle()));
+        context.shapeWriter().addAttribute("sodipodi:end", 2 * M_PI - kisDegreesToRadians(startAngle()));
+
+        switch (type()) {
+        case Pie:
+            // noop
+            break;
+        case Chord:
+            context.shapeWriter().addAttribute("sodipodi:arc-type", "chord");
+        case Arc:
+            context.shapeWriter().addAttribute("sodipodi:open", "true");
+            break;
+        }
+
+        context.shapeWriter().addAttribute("d", this->toString(context.userSpaceTransform()));
+
+        SvgStyleWriter::saveSvgStyle(this, context);
+
+        context.shapeWriter().endElement();
     }
 
     return true;
@@ -420,21 +486,60 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
     qreal rx = 0, ry = 0;
+    qreal cx = 0;
+    qreal cy = 0;
+    qreal start = 0;
+    qreal end = 0;
+    EllipseType type = Arc;
+
+    const QString extendedNamespace =
+            element.attribute("sodipodi:type") == "arc" ? "sodipodi" :
+            element.attribute("krita:type") == "arc" ? "krita" : "";
+
     if (element.tagName() == "ellipse") {
         rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx"));
         ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry"));
+        cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
+        cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
     } else if (element.tagName() == "circle") {
         rx = ry = SvgUtil::parseUnitXY(context.currentGC(), element.attribute("r"));
+        cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
+        cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
+
+    } else if (element.tagName() == "path" && !extendedNamespace.isEmpty()) {
+        rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute(extendedNamespace + ":rx"));
+        ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute(extendedNamespace + ":ry"));
+        cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute(extendedNamespace + ":cx", "0"));
+        cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute(extendedNamespace + ":cy", "0"));
+        start = 2 * M_PI - SvgUtil::parseNumber(element.attribute(extendedNamespace + ":end"));
+        end = 2 * M_PI - SvgUtil::parseNumber(element.attribute(extendedNamespace + ":start"));
+
+        const QString kritaArcType =
+            element.attribute("sodipodi:arc-type", element.attribute("krita:arcType"));
+
+        if (kritaArcType.isEmpty()) {
+            if (element.attribute("sodipodi:open", "false") == "false") {
+                type = Pie;
+            }
+        } else if (kritaArcType == "pie") {
+            type = Pie;
+        } else if (kritaArcType == "chord") {
+            type = Chord;
+        }
     } else {
         return false;
     }
 
-    const qreal cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
-    const qreal cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
     setSize(QSizeF(2 * rx, 2 * ry));
     setPosition(QPointF(cx - rx, cy - ry));
     if (rx == 0.0 || ry == 0.0) {
         setVisible(false);
+    }
+
+    if (start != 0 || start != end) {
+        setStartAngle(kisRadiansToDegrees(start));
+        setEndAngle(kisRadiansToDegrees(end));
+        setType(type);
     }
 
     return true;

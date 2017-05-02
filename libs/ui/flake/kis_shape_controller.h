@@ -73,8 +73,11 @@ Q_SIGNALS:
     void currentLayerChanged(const KoShapeLayer*);
 
 public:
-    void addShape(KoShape* shape);
-    void removeShape(KoShape* shape);
+    void addShapes(const QList<KoShape*> shapes) override;
+    void removeShape(KoShape* shape) override;
+
+    QRectF documentRectInPixels() const override;
+    qreal pixelsPerInch() const override;
 
 private:
     struct Private;

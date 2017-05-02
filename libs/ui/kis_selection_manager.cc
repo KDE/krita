@@ -41,10 +41,12 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoShapeStroke.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
+#include <KoSvgPaste.h>
 #include <kis_icon.h>
 
 #include "kis_adjustment_layer.h"
@@ -84,6 +86,7 @@
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 #include "actions/kis_selection_action_factories.h"
+#include "actions/KisPasteActionFactory.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
@@ -231,9 +234,7 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
 
     m_imageView = imageView;
     if (m_imageView) {
-        KoSelection * selection = m_imageView->canvasBase()->globalShapeManager()->selection();
-        Q_ASSERT(selection);
-        connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+        connect(m_imageView->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
         KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection").data());
         if (!decoration) {
@@ -268,33 +269,16 @@ bool KisSelectionManager::havePixelsInClipboard()
 
 bool KisSelectionManager::haveShapesSelected()
 {
-    if (m_view
-            && m_view->canvasBase()
-            && m_view->canvasBase()->shapeManager()
-            && m_view->canvasBase()->shapeManager()->selection()
-            && m_view->canvasBase()->shapeManager()->selection()->count()) {
-        return m_view->canvasBase()->shapeManager()->selection()->count() > 0;
+    if (m_view && m_view->canvasBase()) {
+        return m_view->canvasBase()->selectedShapesProxy()->selection()->count() > 0;
     }
     return false;
 }
 
 bool KisSelectionManager::haveShapesInClipboard()
 {
-    KisShapeLayer *shapeLayer =
-        dynamic_cast<KisShapeLayer*>(m_view->activeLayer().data());
-
-    if (shapeLayer) {
-        const QMimeData* data = QApplication::clipboard()->mimeData();
-        if (data) {
-            QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
-            Q_FOREACH (const QString & mimeType, mimeTypes) {
-                if (data->hasFormat(mimeType)) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
+    KoSvgPaste paste;
+    return paste.hasShapes();
 }
 
 bool KisSelectionManager::havePixelSelectionWithPixels()
@@ -388,12 +372,13 @@ void KisSelectionManager::copyMerged()
 void KisSelectionManager::paste()
 {
     KisPasteActionFactory factory;
-    factory.run(m_view);
+    factory.run(false, m_view);
 }
 
 void KisSelectionManager::pasteAt()
 {
-    //XXX
+    KisPasteActionFactory factory;
+    factory.run(true, m_view);
 }
 
 void KisSelectionManager::pasteNew()
@@ -522,13 +507,13 @@ void KisSelectionManager::shapeSelectionChanged()
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
-    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
+    KoShapeStrokeSP border(new KoShapeStroke(0, Qt::lightGray));
     Q_FOREACH (KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
                 shape->setStroke(border);
             else
-                shape->setStroke(0);
+                shape->setStroke(KoShapeStrokeSP());
         }
     }
     m_view->updateGUI();

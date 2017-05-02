@@ -33,6 +33,7 @@
 
 #include <KoUnit.h>
 #include <KoShapeManager.h>
+#include <KisSelectedShapesProxy.h>
 #include <KoColorProfile.h>
 #include <KoCanvasControllerWidget.h>
 #include <KisDocument.h>
@@ -45,6 +46,7 @@
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
 #include "kis_image_barrier_locker.h"
+#include "kis_undo_adapter.h"
 #include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
@@ -96,6 +98,7 @@ public:
         : coordinatesConverter(coordConverter)
         , view(view)
         , shapeManager(parent)
+        , selectedShapesProxy(&shapeManager)
         , toolProxy(parent)
         , displayColorConverter(resourceManager, view)
     {
@@ -105,6 +108,7 @@ public:
     QPointer<KisView>view;
     KisAbstractCanvasWidget *canvasWidget = 0;
     KoShapeManager shapeManager;
+    KisSelectedShapesProxy selectedShapesProxy;
     bool currentCanvasIsOpenGL;
     int openGLFilterMode;
     KisToolProxy toolProxy;
@@ -128,11 +132,39 @@ public:
     KisAnimationFrameCacheSP frameCache;
     bool lodAllowedInCanvas;
     bool bootstrapLodBlocked;
+    QPointer<KoShapeManager> currentlyActiveShapeManager;
 
     bool effectiveLodAllowedInCanvas() {
         return lodAllowedInCanvas && !bootstrapLodBlocked;
     }
 };
+
+namespace {
+KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
+{
+    KoShapeManager *shapeManager = 0;
+
+    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+
+    if (layer) {
+        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer);
+        if (shapeLayer) {
+            shapeManager = shapeLayer->shapeManager();
+
+        } else {
+            KisSelectionSP selection = layer->selection();
+            if (selection && selection->hasShapeSelection()) {
+                KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                KIS_ASSERT_RECOVER_RETURN_VALUE(shapeSelection, 0);
+
+                shapeManager = shapeSelection->shapeManager();
+            }
+        }
+    }
+
+    return shapeManager;
+}
+}
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc, resourceManager)
@@ -148,8 +180,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     m_d->updateSignalCompressor.setDelay(10);
     m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
-
-
 }
 
 void KisCanvas2::setup()
@@ -291,7 +321,7 @@ void KisCanvas2::channelSelectionChanged()
     KisImageSP image = this->image();
     m_d->channelFlags = image->rootLayer()->channelFlags();
 
-    m_d->view->viewManager()->blockUntillOperationsFinishedForced(image);
+    m_d->view->viewManager()->blockUntilOperationsFinishedForced(image);
 
     image->barrierLock();
     m_d->canvasWidget->channelSelectionChanged(m_d->channelFlags);
@@ -307,28 +337,23 @@ void KisCanvas2::addCommand(KUndo2Command *command)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    if (!viewManager()) return globalShapeManager();
-    if (!viewManager()->nodeManager()) return globalShapeManager();
+    KisNodeSP node = m_d->view->currentNode();
+    KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
 
-    KisLayerSP activeLayer = viewManager()->nodeManager()->activeLayer();
-    if (activeLayer && activeLayer->isEditable()) {
-        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
-        if (shapeLayer) {
-            return shapeLayer->shapeManager();
-        }
-        KisSelectionSP selection = activeLayer->selection();
-        if (selection && !selection.isNull()) {
-            if (selection->hasShapeSelection()) {
-                KoShapeManager* m = dynamic_cast<KisShapeSelection*>(selection->shapeSelection())->shapeManager();
-                return m;
-            }
-
-        }
+    // sanity check for consistency of the local shape manager
+    KIS_SAFE_ASSERT_RECOVER (localShapeManager == m_d->currentlyActiveShapeManager) {
+        localShapeManager = globalShapeManager();
     }
-    return globalShapeManager();
+
+    return localShapeManager ? localShapeManager : globalShapeManager();
 }
 
-KoShapeManager * KisCanvas2::globalShapeManager() const
+KoSelectedShapesProxy* KisCanvas2::selectedShapesProxy() const
+{
+    return &m_d->selectedShapesProxy;
+}
+
+KoShapeManager* KisCanvas2::globalShapeManager() const
 {
     return &m_d->shapeManager;
 }
@@ -455,15 +480,17 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
 void KisCanvas2::initializeImage()
 {
-    KisImageWSP image = m_d->view->image();
+    KisImageSP image = m_d->view->image();
 
     m_d->coordinatesConverter->setImage(image);
+    m_d->toolProxy.initializeImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
+    connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
 
     connectCurrentCanvas();
 }
@@ -526,7 +553,7 @@ void KisCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter
     m_d->displayColorConverter.setDisplayFilter(displayFilter);
     KisImageSP image = this->image();
 
-    m_d->view->viewManager()->blockUntillOperationsFinishedForced(image);
+    m_d->view->viewManager()->blockUntilOperationsFinishedForced(image);
 
     image->barrierLock();
     m_d->canvasWidget->setDisplayFilter(displayFilter);
@@ -723,6 +750,21 @@ void KisCanvas2::notifyZoomChanged()
 
     notifyLevelOfDetailChange();
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
+}
+
+void KisCanvas2::slotTrySwitchShapeManager()
+{
+    QPointer<KoShapeManager> oldManager = m_d->currentlyActiveShapeManager;
+
+    KisNodeSP node = m_d->view->currentNode();
+
+    QPointer<KoShapeManager> newManager;
+    newManager = fetchShapeManagerFromNode(node);
+
+    if (newManager != oldManager) {
+        m_d->currentlyActiveShapeManager = newManager;
+        m_d->selectedShapesProxy.setShapeManager(newManager);
+    }
 }
 
 void KisCanvas2::notifyLevelOfDetailChange()

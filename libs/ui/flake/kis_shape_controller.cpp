@@ -55,6 +55,7 @@
 #include <KoDataCenterBase.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
+#include "KoSelectedShapesProxy.h"
 
 
 struct KisShapeController::Private
@@ -142,44 +143,57 @@ static inline bool belongsToShapeSelection(KoShape* shape) {
     return dynamic_cast<KisShapeSelectionMarker*>(shape->userData());
 }
 
-void KisShapeController::addShape(KoShape* shape)
+void KisShapeController::addShapes(const QList<KoShape*> shapes)
 {
-    if (!image()) return;
-
-    /**
-     * Krita layers have their own creation path.
-     * It goes through slotNodeAdded()
-     */
-    Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
-             shape->shapeId() != KIS_SHAPE_LAYER_ID);
-
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!shapes.isEmpty());
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
-    Q_ASSERT(canvas);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
 
-    if (belongsToShapeSelection(shape)) {
+    const KoShape *baseShapeParent = shapes.first()->parent();
+    const bool baseBelongsToSelection = belongsToShapeSelection(shapes.first());
+    bool allSameParent = true;
+    bool allSameBelongsToShapeSelection = true;
+    bool hasNullParent = false;
 
-        KisSelectionSP selection = canvas->viewManager()->selection();
-        if (selection) {
-            if (!selection->shapeSelection()) {
-                selection->setShapeSelection(new KisShapeSelection(image(), selection));
+    Q_FOREACH (KoShape *shape, shapes) {
+        hasNullParent |= !shape->parent();
+        allSameParent &= shape->parent() == baseShapeParent;
+        allSameBelongsToShapeSelection &= belongsToShapeSelection(shape) == baseBelongsToSelection;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!baseBelongsToSelection || allSameBelongsToShapeSelection);
+
+    if (!allSameParent || hasNullParent) {
+        if (baseBelongsToSelection && allSameBelongsToShapeSelection) {
+            KisSelectionSP selection = canvas->viewManager()->selection();
+            if (selection) {
+                if (!selection->shapeSelection()) {
+                    selection->setShapeSelection(new KisShapeSelection(image(), selection));
+                }
+                KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+
+                Q_FOREACH(KoShape *shape, shapes) {
+                    shapeSelection->addShape(shape);
+                }
             }
-            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-            shapeSelection->addShape(shape);
+        } else {
+            KisShapeLayer *shapeLayer =
+                dynamic_cast<KisShapeLayer*>(
+                    canvas->selectedShapesProxy()->selection()->activeLayer());
+
+            if (!shapeLayer) {
+                shapeLayer = new KisShapeLayer(this, image(),
+                                               i18n("Vector Layer %1", m_d->nameServer->number()),
+                                               OPACITY_OPAQUE_U8);
+
+                image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
+            }
+
+            Q_FOREACH(KoShape *shape, shapes) {
+                shapeLayer->addShape(shape);
+            }
         }
-
-    } else {
-        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
-
-        if (!shapeLayer) {
-            shapeLayer = new KisShapeLayer(this, image(),
-                                           i18n("Vector Layer %1", m_d->nameServer->number()),
-                                           OPACITY_OPAQUE_U8);
-
-            image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
-        }
-
-        shapeLayer->addShape(shape);
     }
 
     m_d->doc->setModified(true);
@@ -196,6 +210,16 @@ void KisShapeController::removeShape(KoShape* shape)
 
     shape->setParent(0);
     m_d->doc->setModified(true);
+}
+
+QRectF KisShapeController::documentRectInPixels() const
+{
+    return m_d->doc->image()->bounds();
+}
+
+qreal KisShapeController::pixelsPerInch() const
+{
+    return m_d->doc->image()->xRes() * 72.0;
 }
 
 void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)

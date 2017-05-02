@@ -388,18 +388,6 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="paste_at">
-      <icon></icon>
-      <text>Paste at cursor</text>
-      <whatsThis></whatsThis>
-      <toolTip>Paste at cursor</toolTip>
-      <iconText>Paste at cursor</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="invert">
       <icon></icon>
       <text>&amp;Invert Selection</text>
@@ -1528,6 +1516,16 @@
       <whatsThis></whatsThis>
       <toolTip>Path editing</toolTip>
       <iconText>Path editing</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="ZoomTool">
+      <icon></icon>
+      <text>Zoom Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Zoom Tool</toolTip>
+      <iconText>Zoom Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

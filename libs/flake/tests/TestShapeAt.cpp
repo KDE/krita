@@ -113,7 +113,7 @@ void TestShapeAt::testShadow()
     shape.setSize(bbox.size());
     QCOMPARE(shape.boundingRect(), bbox);
 
-    KoShapeStroke *stroke = new KoShapeStroke();
+    KoShapeStrokeSP stroke(new KoShapeStroke());
     stroke->setLineWidth(20); // which means the shape grows 10 in all directions.
     shape.setStroke(stroke);
     KoInsets strokeInsets;

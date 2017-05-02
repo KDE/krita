@@ -152,4 +152,39 @@ void KisAlgebra2DTest::testWeirdIntersections()
     //QCOMPARE(points[0], QPointF(15, 10));
 }
 
+void KisAlgebra2DTest::testMatrixDecomposition1()
+{
+    QTransform Sh;
+    Sh.shear(0.2, 0);
+    QTransform R;
+    R.rotate(30);
+    const QTransform t0 =
+        QTransform::fromScale(0.5, -0.6) *
+        R * Sh *
+        QTransform::fromTranslate(100, 200);
+
+    KisAlgebra2D::DecomposedMatix matrix(t0);
+
+    QCOMPARE(matrix.isValid(), true);
+    QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
+}
+
+void KisAlgebra2DTest::testMatrixDecomposition2()
+{
+    QPolygonF poly;
+    poly << QPointF(-0.3,-0.3);
+    poly << QPointF(1,0);
+    poly << QPointF(0.8,0.8);
+    poly << QPointF(0,1);
+
+    QTransform t0;
+    bool valid = QTransform::squareToQuad(poly, t0);
+    QVERIFY(valid);
+
+    KisAlgebra2D::DecomposedMatix matrix(t0);
+
+    QCOMPARE(matrix.isValid(), true);
+    QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
+}
+
 QTEST_MAIN(KisAlgebra2DTest)

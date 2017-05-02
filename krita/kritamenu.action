@@ -368,6 +368,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="paste_at">
+      <icon></icon>
+      <text>Paste at Cursor</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste at cursor</toolTip>
+      <iconText>Paste at cursor</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Alt+V</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="paste_new">
       <icon></icon>
       <text>Paste into &amp;New Image</text>

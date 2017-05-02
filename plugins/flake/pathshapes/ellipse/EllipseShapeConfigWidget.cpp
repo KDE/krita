@@ -20,8 +20,11 @@
 #include "EllipseShapeConfigWidget.h"
 #include "EllipseShapeConfigCommand.h"
 #include <klocalizedstring.h>
+#include <kis_signals_blocker.h>
+#include "kis_assert.h"
 
 EllipseShapeConfigWidget::EllipseShapeConfigWidget()
+    : m_ellipse(0)
 {
     widget.setupUi(this);
 
@@ -37,30 +40,34 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
     widget.endAngle->setMaximum(360.0);
 
     connect(widget.ellipseType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.startAngle, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.endAngle, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.startAngle, SIGNAL(valueChanged(double)), this, SIGNAL(propertyChanged()));
+    connect(widget.endAngle, SIGNAL(valueChanged(double)), this, SIGNAL(propertyChanged()));
     connect(widget.closeEllipse, SIGNAL(clicked(bool)), this, SLOT(closeEllipse()));
 }
 
 void EllipseShapeConfigWidget::open(KoShape *shape)
 {
-    m_ellipse = dynamic_cast<EllipseShape *>(shape);
-    if (!m_ellipse) {
-        return;
+    if (m_ellipse) {
+        m_ellipse->removeShapeChangeListener(this);
     }
 
-    widget.ellipseType->blockSignals(true);
-    widget.startAngle->blockSignals(true);
-    widget.endAngle->blockSignals(true);
+    m_ellipse = dynamic_cast<EllipseShape *>(shape);
+    if (!m_ellipse) return;
 
-    widget.ellipseType->setCurrentIndex(m_ellipse->type());
-    widget.startAngle->setValue(m_ellipse->startAngle());
-    widget.endAngle->setValue(m_ellipse->endAngle());
+    loadPropertiesFromShape(m_ellipse);
 
-    widget.ellipseType->blockSignals(false);
-    widget.startAngle->blockSignals(false);
-    widget.endAngle->blockSignals(false);
+    m_ellipse->addShapeChangeListener(this);
 }
+
+void EllipseShapeConfigWidget::loadPropertiesFromShape(EllipseShape *shape)
+{
+    KisSignalsBlocker b(widget.ellipseType, widget.startAngle, widget.endAngle);
+
+    widget.ellipseType->setCurrentIndex(shape->type());
+    widget.startAngle->setValue(shape->startAngle());
+    widget.endAngle->setValue(shape->endAngle());
+}
+
 
 void EllipseShapeConfigWidget::save()
 {
@@ -80,6 +87,15 @@ KUndo2Command *EllipseShapeConfigWidget::createCommand()
     } else {
         EllipseShape::EllipseType type = static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex());
         return new EllipseShapeConfigCommand(m_ellipse, type, widget.startAngle->value(), widget.endAngle->value());
+    }
+}
+
+void EllipseShapeConfigWidget::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_ellipse && shape == m_ellipse);
+
+    if (type == KoShape::ParameterChanged) {
+        open(m_ellipse);
     }
 }
 

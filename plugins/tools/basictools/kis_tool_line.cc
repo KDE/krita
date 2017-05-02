@@ -59,7 +59,7 @@ const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
-    : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
+    : KisToolShape(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
       m_showGuideline(true),
       m_strokeIsRunning(false),
       m_infoBuilder(new KisConverterPaintingInformationBuilder(getCoordinatesConverter(canvas))),
@@ -290,7 +290,7 @@ void KisToolLine::endStroke()
         path->lineTo(resolutionMatrix.map(m_endPoint));
         path->normalize();
 
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         path->setStroke(border);
 
         KUndo2Command * cmd = canvas()->shapeController()->addShape(path);

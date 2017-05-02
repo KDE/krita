@@ -133,7 +133,7 @@ public:
 
 protected:
     /// constructor
-    KoTextShapeDataBase(KoTextShapeDataBasePrivate &);
+    KoTextShapeDataBase(KoTextShapeDataBasePrivate *);
 
     KoTextShapeDataBasePrivate *d_ptr;
 

@@ -21,9 +21,11 @@
 #define KOCLIPPATH_H
 
 #include "kritaflake_export.h"
+
+#include <QScopedPointer>
 #include <QList>
-#include <QSharedData>
 #include <qnamespace.h>
+#include <KoFlakeCoordinateSystem.h>
 
 class KoShape;
 class KoPathShape;
@@ -33,42 +35,23 @@ class QTransform;
 class QPainterPath;
 class QSizeF;
 
-/// Shared clip path data
-class KRITAFLAKE_EXPORT KoClipData : public QSharedData
-{
-public:
-    /// Creates clip path data from a single path shape, takes ownership of the path shape
-    explicit KoClipData(KoPathShape *clipPathShape);
-
-    /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
-    explicit KoClipData(const QList<KoPathShape*> &clipPathShapes);
-
-    /// Destroys the clip path data
-    ~KoClipData();
-
-    /// Returns the clip path shapes
-    QList<KoPathShape*> clipPathShapes() const;
-
-    /// Gives up ownership of clip path shapes
-    void removeClipShapesOwnership();
-
-private:
-    class Private;
-    Private * const d;
-};
-
 /// Clip path used to clip shapes
 class KRITAFLAKE_EXPORT KoClipPath
 {
 public:
+
     /**
      * Create a new shape clipping using the given clip data
-     * @param clippedShape the shape to clip
-     * @param clipData shared clipping data containing the clip paths
+     * @param clipShapes define the clipping shapes, owned by KoClipPath!
+     * @param coordinates shows if ObjectBoundingBox or UserSpaceOnUse coordinate
+     *                    system is used.
      */
-    KoClipPath(KoShape *clippedShape, KoClipData *clipData);
-
+    KoClipPath(QList<KoShape*> clipShapes, KoFlake::CoordinateSystem coordinates);
     ~KoClipPath();
+
+    KoClipPath *clone() const;
+
+    KoFlake::CoordinateSystem coordinates() const;
 
     /// Sets the clip rule to be used for the clip path
     void setClipRule(Qt::FillRule clipRule);
@@ -85,6 +68,8 @@ public:
     /// Returns the clip path shapes
     QList<KoPathShape*> clipPathShapes() const;
 
+    QList<KoShape*> clipShapes() const;
+
     /**
      * Returns the transformation from the clip data path shapes to the
      * current document coordinates of the specified clipped shape.
@@ -98,8 +83,11 @@ public:
     static void applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter);
 
 private:
+    KoClipPath(const KoClipPath &rhs);
+
+private:
     class Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif // KOCLIPPATH_H

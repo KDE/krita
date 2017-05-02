@@ -3,6 +3,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include(ECMAddTests)
 include(KritaAddBrokenUnitTest)
 
+
 macro_add_unittest_definitions()
 
 ecm_add_tests(
@@ -57,3 +58,37 @@ krita_add_broken_unit_test(TestSegmentTypeCommand.cpp
 krita_add_broken_unit_test(TestPointMergeCommand.cpp
     TEST_NAME libs-kritaflake-TestPointMergeCommand
     LINK_LIBRARIES kritaflake Qt5::Test)
+
+ecm_add_test(
+    TestKoDrag.cpp
+    TEST_NAME libs-kritaflake-TestKoDrag
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+
+ecm_add_test(
+    TestKoMarkerCollection.cpp
+    TEST_NAME libs-kritaflake-TestKoMarkerCollection
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+
+ecm_add_test(
+    TestSvgParser.cpp
+    TEST_NAME libs-kritaflake-TestSvgParser
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+
+ecm_add_test(
+    TestSvgParser.cpp
+    TEST_NAME libs-kritaflake-TestSvgParserCloned
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+set_property(TARGET libs-kritaflake-TestSvgParserCloned
+             PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
+
+ecm_add_test(
+    TestSvgParser.cpp
+    TEST_NAME libs-kritaflake-TestSvgParserRoundTrip
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+set_property(TARGET libs-kritaflake-TestSvgParserRoundTrip
+             PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)

@@ -46,6 +46,8 @@ public:
     /// destructor
     virtual ~KoShapeContainerModel();
 
+    void deleteOwnedShapes();
+
     /**
      * Add a shape to this models store.
      * @param shape the shape to be managed in the container.
@@ -168,6 +170,12 @@ public:
      * @param type this enum shows which change the shape has had.
      */
     virtual void childChanged(KoShape *shape, KoShape::ChangeType type);
+
+    virtual void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree);
+    virtual void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree);
+
+protected:
+    KoShapeContainerModel(const KoShapeContainerModel &rhs);
 };
 
 #endif

@@ -374,6 +374,20 @@ public:
      */
     KisImportExportManager *importExportManager() const;
 
+    /**
+     * @brief serializeToNativeByteArray daves the document into a .kra file wtitten
+     * to a memory-based byte-array
+     * @return a byte array containing the .kra file
+     */
+    QByteArray serializeToNativeByteArray();
+
+
+    /**
+     * @brief isInSaving shown if the document has any (background) saving process or not
+     * @return true if there is some saving in action
+     */
+    bool isInSaving() const;
+
 public Q_SLOTS:
 
     /**

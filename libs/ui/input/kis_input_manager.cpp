@@ -82,6 +82,8 @@ KisInputManager::KisInputManager(QObject *parent)
 {
     d->setupActions();
 
+    connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)),
+            SLOT(slotAboutToChangeTool()));
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
@@ -263,6 +265,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     // TODO: Handle touch events correctly.
     bool retval = false;
 
+    if (event->type() != QEvent::Wheel) {
+        d->accumulatedScrollDelta = 0;
+    }
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
@@ -341,6 +347,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::Wheel: {
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        d->accumulatedScrollDelta += wheelEvent->delta();
         KisSingleActionShortcut::WheelAction action;
 
         /**
@@ -354,7 +361,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
 
-        if(wheelEvent->orientation() == Qt::Horizontal) {
+        if (wheelEvent->orientation() == Qt::Horizontal) {
             if(wheelEvent->delta() < 0) {
                 action = KisSingleActionShortcut::WheelRight;
             }
@@ -371,9 +378,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             }
         }
 
-        //Make sure the input actions know we are active.
-        KisAbstractInputAction::setInputManager(this);
-        retval = d->matcher.wheelEvent(action, wheelEvent);
+        if (qAbs(d->accumulatedScrollDelta) >= QWheelEvent::DefaultDeltasPerStep) {
+            //Make sure the input actions know we are active.
+            KisAbstractInputAction::setInputManager(this);
+            retval = d->matcher.wheelEvent(action, wheelEvent);
+            d->accumulatedScrollDelta = 0;
+        }
+        else {
+            retval = true;
+        }
         break;
     }
     case QEvent::Enter:
@@ -419,6 +432,18 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         stop_ignore_cursor_events();
         break;
+
+    case QEvent::FocusOut: {
+        d->debugEvent<QEvent, false>(event);
+        KisAbstractInputAction::setInputManager(this);
+
+        QPointF currentLocalPos =
+            canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+
+        d->matcher.lostFocusEvent(currentLocalPos);
+
+        break;
+    }
     case QEvent::TabletRelease: {
 #ifdef Q_OS_OSX
         stop_ignore_cursor_events();
@@ -552,6 +577,14 @@ KisToolProxy* KisInputManager::toolProxy() const
 QTouchEvent *KisInputManager::lastTouchEvent() const
 {
     return d->lastTouchEvent;
+}
+
+void KisInputManager::slotAboutToChangeTool()
+{
+    QPointF currentLocalPos =
+        canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+
+    d->matcher.lostFocusEvent(currentLocalPos);
 }
 
 void KisInputManager::slotToolChanged()

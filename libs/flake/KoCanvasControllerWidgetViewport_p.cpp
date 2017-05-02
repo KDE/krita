@@ -42,7 +42,6 @@
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
 #include "KoShapeLayer.h"
-#include "KoShapePaste.h"
 #include "KoShapePaintingContext.h"
 #include "KoToolProxy.h"
 #include "KoCanvasControllerWidget.h"
@@ -97,19 +96,22 @@ void Viewport::setDrawShadow(bool drawShadow)
     m_drawShadow = drawShadow;
 }
 
-
 void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 {
     // if not a canvas set then ignore this, makes it possible to assume
     // we have a canvas in all the support methods.
-    if (!(m_parent->canvas() && m_parent->canvas()->canvasWidget()))
+    if (!(m_parent->canvas() && m_parent->canvas()->canvasWidget())) {
+        event->ignore();
         return;
+    }
 
     // only allow dropping when active layer is editable
     KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
     KoShapeLayer *activeLayer = selection->activeLayer();
-    if (activeLayer && (!activeLayer->isEditable() || activeLayer->isGeometryProtected()))
+    if (activeLayer && (!activeLayer->isEditable() || activeLayer->isGeometryProtected())) {
+        event->ignore();
         return;
+    }
 
     const QMimeData *data = event->mimeData();
     if (data->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
@@ -161,19 +163,6 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
 
         m_parent->canvas()->shapeManager()->addShape(m_draggedShape);
-    }
-    else if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
-        KoShapeManager *sm = m_parent->canvas()->shapeManager();
-        KoShapePaste paste(m_parent->canvas(), sm->selection()->activeLayer());
-        if (paste.paste(KoOdf::Text, data)) {
-            QList<KoShape *> shapes = paste.pastedShapes();
-            if (shapes.count() == 1) {
-                m_draggedShape = shapes.first();
-                m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
-                event->setDropAction(Qt::CopyAction);
-            }
-            event->accept();
-        }
     } else {
         event->ignore();
     }

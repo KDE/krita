@@ -31,6 +31,8 @@ if(LIBRAW_FOUND)
     add_subdirectory(raw)
 endif()
 
+add_subdirectory(svg)
+
 add_subdirectory(bmp)
 add_subdirectory(ora)
 add_subdirectory(ppm)

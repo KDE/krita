@@ -96,13 +96,14 @@ public:
                 }
                 delete dialog;
             }
-
-            // set the active layer as parent if there is not yet a parent.
-            if (!shape->parent()) {
-                shape->setParent(canvas->shapeManager()->selection()->activeLayer());
-            }
         }
-        return new KoShapeCreateCommand(shapeBasedDocument, shape, parent);
+
+        return addShapesDirect({shape}, parent);
+    }
+
+    KUndo2Command* addShapesDirect(const QList<KoShape*> shapes, KUndo2Command *parent)
+    {
+        return new KoShapeCreateCommand(shapeBasedDocument, shapes, parent);
     }
 
     void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
@@ -149,7 +150,12 @@ KUndo2Command* KoShapeController::addShape(KoShape *shape, KUndo2Command *parent
 
 KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *parent)
 {
-    return d->addShape(shape, false, parent);
+    return d->addShapesDirect({shape}, parent);
+}
+
+KUndo2Command *KoShapeController::addShapesDirect(const QList<KoShape *> shapes, KUndo2Command *parent)
+{
+    return d->addShapesDirect(shapes, parent);
 }
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
@@ -176,6 +182,21 @@ KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KU
 void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument)
 {
     d->shapeBasedDocument = shapeBasedDocument;
+}
+
+QRectF KoShapeController::documentRectInPixels() const
+{
+    return d->shapeBasedDocument ? d->shapeBasedDocument->documentRectInPixels() : QRectF(0,0,1920,1080);
+}
+
+qreal KoShapeController::pixelsPerInch() const
+{
+    return d->shapeBasedDocument ? d->shapeBasedDocument->pixelsPerInch() : 72.0;
+}
+
+QRectF KoShapeController::documentRect() const
+{
+    return d->shapeBasedDocument ? d->shapeBasedDocument->documentRect() : documentRectInPixels();
 }
 
 KoDocumentResourceManager *KoShapeController::resourceManager() const

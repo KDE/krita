@@ -23,17 +23,18 @@
 #include <QPainter>
 
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxySimple.h>
 #include <KoUnit.h>
 
 KisShapeSelectionCanvas::KisShapeSelectionCanvas()
         : KoCanvasBase(0)
         , m_shapeManager(new KoShapeManager(this))
+        , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
 {
 }
 
 KisShapeSelectionCanvas::~KisShapeSelectionCanvas()
 {
-    delete m_shapeManager;
 }
 
 void KisShapeSelectionCanvas::gridSize(QPointF *offset, QSizeF *spacing) const
@@ -56,7 +57,12 @@ void KisShapeSelectionCanvas::addCommand(KUndo2Command *)
 
 KoShapeManager *KisShapeSelectionCanvas::shapeManager() const
 {
-    return m_shapeManager;
+    return m_shapeManager.data();
+}
+
+KoSelectedShapesProxy *KisShapeSelectionCanvas::selectedShapesProxy() const
+{
+    return m_selectedShapesProxy.data();
 }
 
 void KisShapeSelectionCanvas::updateCanvas(const QRectF& rc)

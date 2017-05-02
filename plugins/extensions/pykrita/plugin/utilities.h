@@ -25,8 +25,9 @@
 #ifndef __PYKRITA_UTILITIES_H__
 # define  __PYKRITA_UTILITIES_H__
 
-# include <Python.h>
-# include <QString>
+#include <cmath>
+#include <Python.h>
+#include <QString>
 
 class KConfigBase;
 

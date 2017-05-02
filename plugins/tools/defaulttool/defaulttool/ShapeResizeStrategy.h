@@ -23,12 +23,14 @@
 #include <KoInteractionStrategy.h>
 #include <KoFlake.h>
 
+#include <QScopedPointer>
 #include <QPointF>
 #include <QList>
 #include <QTransform>
 
 class KoToolBase;
 class KoShape;
+class KoShapeResizeCommand;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -42,28 +44,26 @@ public:
      * Constructor
      */
     ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
-    virtual ~ShapeResizeStrategy() {}
+    ~ShapeResizeStrategy();
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     KUndo2Command *createCommand();
     void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent(KoPointerEvent *event);
 private:
-    void resizeBy(const QPointF &center, qreal zoomX, qreal zoomY);
+    void resizeBy(const QPointF &stillPoint, qreal zoomX, qreal zoomY);
 
     QPointF m_start;
-    QList<QPointF> m_startPositions;
-    QList<QSizeF> m_startSizes;
-    bool m_top, m_left, m_bottom, m_right;
-    QTransform m_unwindMatrix, m_windMatrix;
-    QSizeF m_initialSize;
-    QPointF m_initialPosition;
-    QTransform m_scaleMatrix;
-    QList<QTransform> m_oldTransforms;
-    QList<QTransform> m_transformations;
-    QPointF m_lastScale;
     QList<KoShape *> m_selectedShapes;
+
+    QTransform m_postScalingCoveringTransform;
+    QSizeF m_initialSelectionSize;
+    QTransform m_unwindMatrix;
+    bool m_top, m_left, m_bottom, m_right;
+
+    QPointF m_globalStillPoint;
+    QPointF m_globalCenterPoint;
+    QScopedPointer<KoShapeResizeCommand> m_executedCommand;
 };
 
 #endif

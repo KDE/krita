@@ -27,3 +27,9 @@ KoShapeUserData::KoShapeUserData(QObject *parent)
 KoShapeUserData::~KoShapeUserData()
 {
 }
+
+KoShapeUserData::KoShapeUserData(const KoShapeUserData &rhs)
+    : QObject()
+{
+    Q_UNUSED(rhs);
+}

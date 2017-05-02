@@ -26,6 +26,7 @@
 #include "kritaflake_export.h"
 
 class KoInteractionStrategy;
+class KoInteractionStrategyFactory;
 class KoInteractionToolPrivate;
 
 #define KoInteractionTool_ID "InteractionTool"
@@ -86,7 +87,14 @@ protected:
      * Reimplement this factory method to create your strategy to be used for mouse interaction.
      * @returns a new strategy, or 0 when there is nothing to do.
      */
+    KoInteractionStrategy *createStrategyBase(KoPointerEvent *event);
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event) = 0;
+
+    void addInteractionFactory(KoInteractionStrategyFactory *factory);
+    void removeInteractionFactory(const QString &id);
+    bool hasInteractioFactory(const QString &id);
+
+    bool tryUseCustomCursor();
 
 private:
     KoInteractionTool(const KoInteractionTool&);

@@ -29,23 +29,21 @@ set(kritaflake_SRCS
     KoPathPoint.cpp
     KoPathSegment.cpp
     KoSelection.cpp
+    KoSelectedShapesProxy.cpp
+    KoSelectedShapesProxySimple.cpp
     KoShape.cpp
     KoShapeAnchor.cpp
     KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
-    KoShapeContainerDefaultModel.cpp
     KoShapeGroup.cpp
-    KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePaintingContext.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
-    KoMarkerData.cpp
     KoMarker.cpp
     KoMarkerCollection.cpp
-    KoMarkerSharedLoadingData.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
     KoCanvasControllerWidget.cpp
@@ -79,11 +77,12 @@ set(kritaflake_SRCS
     KoOdfGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
+    KoVectorPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
+    KoSvgPaste.cpp
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
-    KoShapePaste.cpp
     KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp
@@ -115,6 +114,8 @@ set(kritaflake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipPath.cpp
+    KoClipMask.cpp
+    KoClipMaskPainter.cpp
     KoCurveFit.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
@@ -124,6 +125,7 @@ set(kritaflake_SRCS
     commands/KoShapeDistributeCommand.cpp
     commands/KoShapeLockCommand.cpp
     commands/KoShapeMoveCommand.cpp
+    commands/KoShapeResizeCommand.cpp
     commands/KoShapeShearCommand.cpp
     commands/KoShapeSizeCommand.cpp
     commands/KoShapeStrokeCommand.cpp
@@ -157,6 +159,8 @@ set(kritaflake_SRCS
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
     commands/KoShapeConnectionChangeCommand.cpp
+    commands/KoMultiPathPointMergeCommand.cpp
+    commands/KoMultiPathPointJoinCommand.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -176,6 +180,7 @@ set(kritaflake_SRCS
     tools/KoPanToolFactory.cpp
     tools/KoInteractionTool.cpp
     tools/KoInteractionStrategy.cpp
+    tools/KoInteractionStrategyFactory.cpp
     tools/KoCreateShapesTool.cpp
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
@@ -190,12 +195,12 @@ set(kritaflake_SRCS
     svg/SvgParser.cpp
     svg/SvgStyleParser.cpp
     svg/SvgGradientHelper.cpp
-    svg/SvgPatternHelper.cpp
     svg/SvgFilterHelper.cpp
     svg/SvgCssHelper.cpp
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
+    svg/parsers/SvgTransformParser.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp
@@ -217,7 +222,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/svg>
 )
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons Qt5::Svg)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritacommand KF5::WidgetsAddons Qt5::Svg)
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

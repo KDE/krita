@@ -476,15 +476,16 @@ void KisNodeManager::slotTryFinishIsolatedMode()
 
 void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
 {
+    if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) {
+        return;
+    }
+
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) {
         activeNode = m_d->view->image()->root();
     }
 
     KIS_ASSERT_RECOVER_RETURN(activeNode);
-    if (activeNode->systemLocked()) {
-        return;
-    }
 
     // XXX: make factories for this kind of stuff,
     //      with a registry
@@ -514,7 +515,6 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
     } else if (nodeType == "KisFileLayer") {
         m_d->layerManager.addFileLayer(activeNode);
     }
-
 }
 
 void KisNodeManager::createFromVisible()
@@ -883,11 +883,6 @@ void KisNodeManager::switchToPreviouslyActiveNode()
     }
 }
 
-void KisNodeManager::mergeLayer()
-{
-    m_d->layerManager.mergeLayer();
-}
-
 void KisNodeManager::rotate(double radians)
 {
     if(!m_d->view->image()) return;
@@ -1139,10 +1134,9 @@ void KisNodeManager::slotSplitAlphaSaveMerged()
 void KisNodeManager::cutLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisNodeSP root = m_d->view->image()->root();
     if (nodes.isEmpty()) return;
 
-    KisClipboard::instance()->setLayers(nodes, root, false);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), false);
 
     KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
     KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
@@ -1152,9 +1146,7 @@ void KisNodeManager::cutLayersToClipboard()
 void KisNodeManager::copyLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisNodeSP root = m_d->view->image()->root();
-
-    KisClipboard::instance()->setLayers(nodes, root, true);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), true);
 }
 
 void KisNodeManager::pasteLayersFromClipboard()

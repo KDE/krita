@@ -26,6 +26,10 @@
 #include "kis_keyframe_channel.h"
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_post_execution_undo_adapter.h"
+#include "kis_animation_utils.h"
+#include "kis_processing_applicator.h"
+#include "kis_command_utils.h"
+#include "KisImageBarrierLockerWithFeedback.h"
 
 struct KisAnimationCurve::Private
 {
@@ -273,30 +277,66 @@ void KisAnimationCurvesModel::endCommand()
     m_d->undoCommand = 0;
 }
 
+
 bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int timeOffset, qreal valueOffset)
 {
-    KUndo2Command *command = new KUndo2Command(
-        kundo2_i18np("Adjust Keyframe",
-                     "Adjust %1 Keyframes",
-                     indexes.size()));
+    QScopedPointer<KUndo2Command> command(
+        new KUndo2Command(
+            kundo2_i18np("Adjust Keyframe",
+                         "Adjust %1 Keyframes",
+                         indexes.size())));
 
-    if (timeOffset != 0) {
-        bool ok = offsetFrames(indexes, QPoint(timeOffset, 0), false, command);
-        if (!ok) return false;
+    {
+        KisImageBarrierLockerWithFeedback locker(image());
+
+        if (timeOffset != 0) {
+            bool ok = createOffsetFramesCommand(indexes, QPoint(timeOffset, 0), false, command.data());
+            if (!ok) return false;
+        }
+
+
+        using KisAnimationUtils::FrameItem;
+        using KisAnimationUtils::FrameItemList;
+        FrameItemList frameItems;
+
+        Q_FOREACH(QModelIndex index, indexes) {
+            KisScalarKeyframeChannel *channel = m_d->getCurveAt(index)->channel();
+            KIS_ASSERT_RECOVER_RETURN_VALUE(channel, false);
+
+            frameItems << FrameItem(channel->node(),
+                                    channel->id(),
+                                    index.column() + timeOffset);
+        };
+
+        new KisCommandUtils::LambdaCommand(
+            command.data(),
+            [frameItems, valueOffset] () -> KUndo2Command* {
+
+                QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+
+                bool result = false;
+
+                Q_FOREACH (const FrameItem &item, frameItems) {
+                    const int time = item.time;
+                    KisNodeSP node = item.node;
+
+                    KisKeyframeChannel *channel = node->getKeyframeChannel(item.channel);
+
+                    if (!channel) continue;
+
+                    KisKeyframeSP keyframe = channel->keyframeAt(time);
+                    if (!keyframe) continue;
+
+                    const qreal currentValue = channel->scalarValue(keyframe);
+                    channel->setScalarValue(keyframe, currentValue + valueOffset, cmd.data());
+                    result = true;
+                }
+
+                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : 0;
+        });
     }
 
-    Q_FOREACH(QModelIndex oldIndex, indexes) {
-        KisScalarKeyframeChannel *channel = m_d->getCurveAt(oldIndex)->channel();
-        KIS_ASSERT_RECOVER_RETURN_VALUE(channel, false);
-
-        KisKeyframeSP keyframe = channel->keyframeAt(oldIndex.column() + timeOffset);
-        KIS_ASSERT_RECOVER_RETURN_VALUE(!keyframe.isNull(), false);
-
-        qreal currentValue = channel->scalarValue(keyframe);
-        channel->setScalarValue(keyframe, currentValue + valueOffset, command);
-    };
-
-    image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+    KisProcessingApplicator::runSingleCommandStroke(image(), command.take(), KisStrokeJobData::BARRIER);
 
     return true;
 }

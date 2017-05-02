@@ -166,11 +166,11 @@ void KisDoubleParseSpinBox::setValue(double value)
         return;
     }
 
+    QDoubleSpinBox::setValue(value);
+
     if (!hasFocus()) {
         clearError();
     }
-
-    QDoubleSpinBox::setValue(value);
 }
 
 void KisDoubleParseSpinBox::setErrorStyle()

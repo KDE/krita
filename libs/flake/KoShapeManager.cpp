@@ -32,7 +32,6 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
-#include "KoShapeManagerPaintingStrategy.h"
 #include "KoShapeShadow.h"
 #include "KoShapeLayer.h"
 #include "KoFilterEffect.h"
@@ -41,8 +40,10 @@
 #include "KoShapeBackground.h"
 #include <KoRTree.h>
 #include "KoClipPath.h"
+#include "KoClipMaskPainter.h"
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
+#include "KisQPainterStateSaver.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -50,6 +51,10 @@
 
 #include "kis_painting_tweaks.h"
 
+bool KoShapeManager::Private::shapeUsedInRenderingTree(KoShape *shape)
+{
+    return !dynamic_cast<KoShapeGroup*>(shape) && !dynamic_cast<KoShapeLayer*>(shape);
+}
 
 void KoShapeManager::Private::updateTree()
 {
@@ -65,21 +70,22 @@ void KoShapeManager::Private::updateTree()
     }
 
     foreach (KoShape *shape, aggregate4update) {
+        if (!shapeUsedInRenderingTree(shape)) continue;
+
         tree.remove(shape);
         QRectF br(shape->boundingRect());
-        strategy->adapt(shape, br);
         tree.insert(br, shape);
     }
 
     // do it again to see which shapes we intersect with _after_ moving.
-    foreach (KoShape *shape, aggregate4update)
+    foreach (KoShape *shape, aggregate4update) {
         detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
+    }
     aggregate4update.clear();
     shapeIndexesBeforeUpdate.clear();
 
     detector.fireSignals();
     if (selectionModified) {
-        selection->updateSizeAndPosition();
         emit q->selectionContentChanged();
     }
     if (anyModified) {
@@ -100,7 +106,7 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
             paintGroup(childGroup, painter, converter, paintContext);
         } else {
             painter.save();
-            strategy->paint(child, painter, converter, paintContext);
+            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
             painter.restore();
         }
     }
@@ -132,7 +138,6 @@ KoShapeManager::~KoShapeManager()
     delete d;
 }
 
-
 void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
     //clear selection
@@ -143,6 +148,7 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
     d->aggregate4update.clear();
     d->tree.clear();
     d->shapes.clear();
+
     Q_FOREACH (KoShape *shape, shapes) {
         addShape(shape, repaint);
     }
@@ -154,10 +160,12 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
         return;
     shape->priv()->addShapeManager(this);
     d->shapes.append(shape);
-    if (! dynamic_cast<KoShapeGroup*>(shape) && ! dynamic_cast<KoShapeLayer*>(shape)) {
+
+    if (d->shapeUsedInRenderingTree(shape)) {
         QRectF br(shape->boundingRect());
         d->tree.insert(br, shape);
     }
+
     if (repaint == PaintShapeOnAdd) {
         shape->update();
     }
@@ -176,17 +184,6 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
     detector.fireSignals();
 }
 
-void KoShapeManager::addAdditional(KoShape *shape)
-{
-    if (shape) {
-        if (d->additionalShapes.contains(shape)) {
-            return;
-        }
-        shape->priv()->addShapeManager(this);
-        d->additionalShapes.append(shape);
-    }
-}
-
 void KoShapeManager::remove(KoShape *shape)
 {
     Private::DetectCollision detector;
@@ -197,7 +194,10 @@ void KoShapeManager::remove(KoShape *shape)
     shape->priv()->removeShapeManager(this);
     d->selection->deselect(shape);
     d->aggregate4update.remove(shape);
-    d->tree.remove(shape);
+
+    if (d->shapeUsedInRenderingTree(shape)) {
+        d->tree.remove(shape);
+    }
     d->shapes.removeAll(shape);
 
     // remove the children of a KoShapeContainer
@@ -207,19 +207,33 @@ void KoShapeManager::remove(KoShape *shape)
             remove(containerShape);
         }
     }
-
-    // This signal is used in the annotation shape.
-    // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
-    shapeRemoved(shape);
 }
 
-void KoShapeManager::removeAdditional(KoShape *shape)
+KoShapeManager::ShapeInterface::ShapeInterface(KoShapeManager *_q)
+    : q(_q)
 {
-    if (shape) {
-        shape->priv()->removeShapeManager(this);
-        d->additionalShapes.removeAll(shape);
-    }
 }
+
+void KoShapeManager::ShapeInterface::notifyShapeDestructed(KoShape *shape)
+{
+    q->d->selection->deselect(shape);
+    q->d->aggregate4update.remove(shape);
+
+    // we cannot access RTTI of the semi-destructed shape, so just
+    // unlink it lazily
+    if (q->d->tree.contains(shape)) {
+        q->d->tree.remove(shape);
+    }
+
+    q->d->shapes.removeAll(shape);
+}
+
+
+KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
+{
+    return &d->shapeInterface;
+}
+
 
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
@@ -264,20 +278,10 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
+    KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+
     foreach (KoShape *shape, sortedShapes) {
-        if (shape->parent() != 0 && shape->parent()->isClipped(shape))
-            continue;
-
-        painter.save();
-
-        // apply shape clipping
-        KoClipPath::applyClipping(shape, painter, converter);
-
-        // let the painting strategy paint the shape
-        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
-        d->strategy->paint(shape, painter, converter, paintContext);
-
-        painter.restore();
+        renderSingleShape(shape, painter, converter, paintContext);
     }
 
 #ifdef CALLIGRA_RTREE_DEBUG
@@ -297,6 +301,20 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     }
 }
 
+void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+{
+    KisQPainterStateSaver saver(&painter);
+
+    // apply shape clipping
+    KoClipPath::applyClipping(shape, painter, converter);
+
+    // apply transformation
+    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
+
+    // paint the shape
+    paintShape(shape, painter, converter, paintContext);
+}
+
 void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     qreal transparency = shape->transparency(true);
@@ -310,15 +328,33 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.restore();
     }
     if (!shape->filterEffectStack() || shape->filterEffectStack()->isEmpty()) {
-        painter.save();
-        shape->paint(painter, converter, paintContext);
-        painter.restore();
-        if (shape->stroke()) {
-            painter.save();
-            shape->stroke()->paint(shape, painter, converter);
-            painter.restore();
+
+        QScopedPointer<KoClipMaskPainter> clipMaskPainter;
+        QPainter *shapePainter = &painter;
+
+        KoClipMask *clipMask = shape->clipMask();
+        if (clipMask) {
+            clipMaskPainter.reset(new KoClipMaskPainter(&painter, shape->boundingRect()));
+            shapePainter = clipMaskPainter->shapePainter();
         }
+
+        shapePainter->save();
+        shape->paint(*shapePainter, converter, paintContext);
+        shapePainter->restore();
+        if (shape->stroke()) {
+            shapePainter->save();
+            shape->stroke()->paint(shape, *shapePainter, converter);
+            shapePainter->restore();
+        }
+
+        if (clipMask) {
+            shape->clipMask()->drawMask(clipMaskPainter->maskPainter(), shape);
+            clipMaskPainter->renderOnGlobalPainter();
+        }
+
     } else {
+        // TODO: clipping mask is not implemented for this case!
+
         // There are filter effects, then we need to prerender the shape on an image, to filter it
         QRectF shapeBound(QPointF(), shape->size());
         // First step, compute the rectangle used for the image
@@ -350,7 +386,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 // the childrens matrix contains the groups matrix as well
                 // so we have to compensate for that before painting the children
                 imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
-                d->paintGroup(group, imagePainter, converter, paintContext);
+                Private::paintGroup(group, imagePainter, converter, paintContext);
             } else {
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
@@ -479,25 +515,36 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
     return 0; // missed everything
 }
 
-QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes)
+QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes, bool containedMode)
 { 
     d->updateTree();
-    QList<KoShape*> intersectedShapes(d->tree.intersects(rect));
-    
-    for (int count = intersectedShapes.count() - 1; count >= 0; count--) {
+    QList<KoShape*> shapes(containedMode ? d->tree.contained(rect) : d->tree.intersects(rect));
+
+    for (int count = shapes.count() - 1; count >= 0; count--) {
      
-        KoShape *shape = intersectedShapes.at(count);
+        KoShape *shape = shapes.at(count);
        
-        if (omitHiddenShapes && ! shape->isVisible(true)) {
-            intersectedShapes.removeAt(count);
+        if (omitHiddenShapes && !shape->isVisible(true)) {
+            shapes.removeAt(count);
         } else {
             const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());
-            if (! outline.intersects(rect) && ! outline.contains(rect)) { 
-                intersectedShapes.removeAt(count);
+
+            if (!containedMode && !outline.intersects(rect) && !outline.contains(rect)) {
+                shapes.removeAt(count);
+
+            } else if (containedMode) {
+
+                QPainterPath containingPath;
+                containingPath.addRect(rect);
+
+                if (!containingPath.contains(outline)) {
+                    shapes.removeAt(count);
+                }
             }
         }
     }
-    return intersectedShapes;
+
+    return shapes;
 }
 
 void KoShapeManager::update(QRectF &rect, const KoShape *shape, bool selectionHandles)
@@ -549,40 +596,6 @@ QList<KoShape*> KoShapeManager::topLevelShapes() const
 KoSelection *KoShapeManager::selection() const
 {
     return d->selection;
-}
-
-void KoShapeManager::suggestChangeTool(KoPointerEvent *event)
-{
-    QList<KoShape*> shapes;
-
-    KoShape *clicked = shapeAt(event->point);
-    if (clicked) {
-        if (! selection()->isSelected(clicked)) {
-            selection()->deselectAll();
-            selection()->select(clicked);
-        }
-        shapes.append(clicked);
-    }
-
-    QList<KoShape*> shapes2;
-    foreach (KoShape *shape, shapes) {
-        QSet<KoShape*> delegates = shape->toolDelegates();
-        if (delegates.isEmpty()) {
-            shapes2.append(shape);
-        } else {
-            foreach (KoShape *delegatedShape, delegates) {
-                shapes2.append(delegatedShape);
-            }
-        }
-    }
-    KoToolManager::instance()->switchToolRequested(
-        KoToolManager::instance()->preferredToolForSelection(shapes2));
-}
-
-void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy)
-{
-    delete d->strategy;
-    d->strategy = strategy;
 }
 
 KoCanvasBase *KoShapeManager::canvas()

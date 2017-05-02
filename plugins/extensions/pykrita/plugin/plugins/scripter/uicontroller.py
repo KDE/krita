@@ -1,6 +1,7 @@
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
-                             QLabel, QVBoxLayout, QMessageBox)
+                             QLabel, QVBoxLayout, QMessageBox,
+                             QSplitter)
 from PyQt5.QtCore import Qt, QObject
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
@@ -27,6 +28,8 @@ class UIController(object):
         self.editor = pythoneditor.CodeEditor(scripter)
         self.tabWidget = QTabWidget()
         self.statusBar = QLabel('untitled')
+        self.splitter = QSplitter()
+        self.splitter.setOrientation(Qt.Vertical)
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
 
         self.scripter = scripter
@@ -39,8 +42,9 @@ class UIController(object):
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
         vbox.addWidget(self.actionToolbar)
-        vbox.addWidget(self.editor)
-        vbox.addWidget(self.tabWidget)
+        self.splitter.addWidget(self.editor)
+        self.splitter.addWidget(self.tabWidget)
+        vbox.addWidget(self.splitter)
         vbox.addWidget(self.statusBar)
 
         self.mainWidget.resize(400, 500)

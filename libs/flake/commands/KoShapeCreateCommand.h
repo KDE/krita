@@ -38,6 +38,16 @@ public:
      */
     KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape,
                          KUndo2Command *parent = 0);
+
+   /**
+    * Command used on creation of new shapes
+    * @param controller the controller used to add/remove the shape from
+    * @param shapes the shapes that have just been created.
+    * @param parent the parent command used for macro commands
+    */
+    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> shape,
+                         KUndo2Command *parent = 0);
+
     virtual ~KoShapeCreateCommand();
     /// redo the command
     void redo();

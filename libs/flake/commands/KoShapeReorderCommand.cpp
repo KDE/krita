@@ -179,3 +179,42 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
     Q_ASSERT(changedShapes.count() == newIndexes.count());
     return changedShapes.isEmpty() ? 0: new KoShapeReorderCommand(changedShapes, newIndexes, parent);
 }
+
+KoShapeReorderCommand *KoShapeReorderCommand::mergeInShape(QList<KoShape *> shapes, KoShape *newShape, KUndo2Command *parent)
+{
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+    QList<KoShape*> reindexedShapes;
+    QList<int> reindexedIndexes;
+
+    const int originalShapeZIndex = newShape->zIndex();
+    int newShapeZIndex = originalShapeZIndex;
+    int lastOccupiedShapeZIndex = originalShapeZIndex + 1;
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        if (shape == newShape) continue;
+
+        const int zIndex = shape->zIndex();
+
+        if (newShapeZIndex == originalShapeZIndex) {
+            if (zIndex == originalShapeZIndex) {
+                newShapeZIndex = originalShapeZIndex + 1;
+                lastOccupiedShapeZIndex = newShapeZIndex;
+
+                reindexedShapes << newShape;
+                reindexedIndexes << newShapeZIndex;
+            }
+        } else {
+            if (newShapeZIndex != originalShapeZIndex &&
+                zIndex >= newShapeZIndex &&
+                zIndex <= lastOccupiedShapeZIndex) {
+
+                lastOccupiedShapeZIndex = zIndex + 1;
+                reindexedShapes << shape;
+                reindexedIndexes << lastOccupiedShapeZIndex;
+            }
+        }
+    }
+
+    return !reindexedShapes.isEmpty() ? new KoShapeReorderCommand(reindexedShapes, reindexedIndexes, parent) : 0;
+}

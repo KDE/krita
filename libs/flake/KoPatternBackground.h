@@ -61,6 +61,8 @@ public:
 
     virtual ~KoPatternBackground();
 
+    bool compareTo(const KoShapeBackground *other) const override;
+
     /// Sets the transform matrix
     void setTransform(const QTransform &matrix);
 

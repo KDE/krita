@@ -23,6 +23,8 @@
 #include <KoColorConversionTransformationAbstractFactory.h>
 #include <KoGenericRegistry.h>
 
+class KoColorProfile;
+
 /**
  * A KoColorSpaceEngine is a class use to create color conversion
  * transformation between color spaces, for which all profiles can
@@ -43,7 +45,8 @@ public:
     virtual ~KoColorSpaceEngine();
     const QString& id() const;
     const QString& name() const;
-    virtual bool addProfile(const QString &filename) = 0;
+    virtual const KoColorProfile* addProfile(const QString &filename) = 0;
+    virtual const KoColorProfile* addProfile(const QByteArray &data) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 
 private:

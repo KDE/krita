@@ -271,24 +271,25 @@ void KisLiquifyTransformStrategy::Private::recalculateTransformations()
 
     QTransform scaleTransform = KisTransformUtils::imageToFlakeTransform(converter);
 
-    QTransform resultTransform = q->thumbToImageTransform() * scaleTransform;
-    qreal scale = KisTransformUtils::scaleFromAffineMatrix(resultTransform);
-    bool useFlakeOptimization = scale < 1.0;
+    QTransform resultThumbTransform = q->thumbToImageTransform() * scaleTransform;
+    qreal scale = KisTransformUtils::scaleFromAffineMatrix(resultThumbTransform);
+    bool useFlakeOptimization = scale < 1.0 &&
+        !KisTransformUtils::thumbnailTooSmall(resultThumbTransform, q->originalImage().rect());
 
     paintingOffset = transaction.originalTopLeft();
     if (!q->originalImage().isNull()) {
         if (useFlakeOptimization) {
-            transformedImage = q->originalImage().transformed(q->thumbToImageTransform() * scaleTransform);
+            transformedImage = q->originalImage().transformed(resultThumbTransform);
             paintingTransform = QTransform();
         } else {
             transformedImage = q->originalImage();
-            paintingTransform = q->thumbToImageTransform() * scaleTransform;
+            paintingTransform = resultThumbTransform;
         }
 
         QTransform imageToRealThumbTransform =
             useFlakeOptimization ?
             scaleTransform :
-            QTransform();
+            q->thumbToImageTransform().inverted();
 
         QPointF origTLInFlake =
             imageToRealThumbTransform.map(transaction.originalTopLeft());
@@ -301,7 +302,7 @@ void KisLiquifyTransformStrategy::Private::recalculateTransformations()
     } else {
         transformedImage = q->originalImage();
         paintingOffset = imageToThumb(transaction.originalTopLeft(), false);
-        paintingTransform = q->thumbToImageTransform() * scaleTransform;
+        paintingTransform = resultThumbTransform;
     }
 
     handlesTransform = scaleTransform;

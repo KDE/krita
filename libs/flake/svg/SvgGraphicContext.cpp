@@ -20,13 +20,18 @@
 
 #include "SvgGraphicContext.h"
 
+#include "kis_pointer_utils.h"
+
+
 SvgGraphicsContext::SvgGraphicsContext()
 {
     strokeType = None;
-    stroke.setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
-    stroke.setLineWidth(1.0);
-    stroke.setCapStyle(Qt::FlatCap);
-    stroke.setJoinStyle(Qt::MiterJoin);
+
+    stroke = toQShared(new KoShapeStroke());
+    stroke->setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
+    stroke->setLineWidth(1.0);
+    stroke->setCapStyle(Qt::FlatCap);
+    stroke->setJoinStyle(Qt::MiterJoin);
 
     fillType = Solid;
     fillRule = Qt::WindingFill;
@@ -38,10 +43,42 @@ SvgGraphicsContext::SvgGraphicsContext()
     forcePercentage = false;
 
     display = true;
+    visible = true;
 
     clipRule = Qt::WindingFill;
     preserveWhitespace = false;
 
     letterSpacing = 0.0;
     wordSpacing = 0.0;
+    pixelsPerInch = 72.0;
+
+    autoFillMarkers = false;
+}
+
+void SvgGraphicsContext::workaroundClearInheritedFillProperties()
+{
+    /**
+     * HACK ALERT: according to SVG patterns, clip paths and clip masks
+     *             must not inherit any properties from the referencing element.
+     *             We still don't support it, therefore we reset only fill/stroke
+     *             properties to avoid cyclic fill inheritance, which may cause
+     *             infinite recursion.
+     */
+
+
+    strokeType = None;
+
+    stroke = toQShared(new KoShapeStroke());
+    stroke->setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
+    stroke->setLineWidth(1.0);
+    stroke->setCapStyle(Qt::FlatCap);
+    stroke->setJoinStyle(Qt::MiterJoin);
+
+    fillType = Solid;
+    fillRule = Qt::WindingFill;
+    fillColor = QColor(Qt::black);   // default is black fill as per svg spec
+
+    opacity = 1.0;
+
+    currentColor = Qt::black;
 }

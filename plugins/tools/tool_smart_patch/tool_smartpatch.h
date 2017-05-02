@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SYSTEM_LOCKER_H_
-#define _KIS_SYSTEM_LOCKER_H_
+#ifndef TOOL_SMARTPATCH_H_
+#define TOOL_SMARTPATCH_H_
 
+#include <QObject>
+#include <QVariant>
 
-/**
- * This class will lock a \ref KisBaseNode upon construction, and unlock it
- * at destruction. Use it before processing a node.
- */
-class KisSystemLocker
+class ToolSmartPatch : public QObject
 {
+    Q_OBJECT
 public:
-    inline KisSystemLocker(KisBaseNodeSP _node) : m_node(_node) {
-        Q_ASSERT(!_node->systemLocked());
-        m_node->setSystemLocked(true);
-    }
-    inline ~KisSystemLocker() {
-        m_node->setSystemLocked(false);
-    }
-private:
-    KisBaseNodeSP m_node;
+    ToolSmartPatch(QObject *parent, const QVariantList &);
+    virtual ~ToolSmartPatch();
 
 };
 
-
-#endif
+#endif // TOOL_SMARTPATCH_H_

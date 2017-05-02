@@ -33,17 +33,6 @@
 
 KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
 {
-    // Create the Alpha 8bit
-    d->alphaNode = new Node;
-    d->alphaNode->modelId = AlphaColorModelID.id();
-    d->alphaNode->depthId = Integer8BitsColorDepthID.id();
-    d->alphaNode->crossingCost = 1000000;
-    d->alphaNode->isInitialized = true;
-    d->alphaNode->isGray = true; // <- FIXME: it's a little bit hacky as alpha doesn't really have color information
-    d->graph.insert(NodeKey(d->alphaNode->modelId, d->alphaNode->depthId, "default"), d->alphaNode);
-
-    Vertex* v = createVertex(d->alphaNode, d->alphaNode);
-    v->setFactoryFromSrc(new KoCopyColorConversionTransformationFactory(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "default"));
 }
 
 KoColorConversionSystem::~KoColorConversionSystem()
@@ -187,12 +176,6 @@ KoColorConversionSystem::Node* KoColorConversionSystem::createNode(const QString
     n->depthId = _depthId;
     n->profileName = _profileName;
     d->graph.insert(NodeKey(_modelId, _depthId, _profileName), n);
-    Q_ASSERT(vertexBetween(d->alphaNode, n) == 0); // The two color spaces should not be connected yet
-    Vertex* vFromAlpha = createVertex(d->alphaNode, n);
-    vFromAlpha->setFactoryFromSrc(new KoColorConversionFromAlphaTransformationFactory(_modelId, _depthId, _profileName));
-    Q_ASSERT(vertexBetween(n, d->alphaNode) == 0); // The two color spaces should not be connected yet
-    Vertex* vToAlpha = createVertex(n, d->alphaNode);
-    vToAlpha->setFactoryFromDst(new KoColorConversionToAlphaTransformationFactory(_modelId, _depthId, _profileName));
     return n;
 }
 

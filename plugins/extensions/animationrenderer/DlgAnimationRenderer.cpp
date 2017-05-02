@@ -183,12 +183,52 @@ DlgAnimationRenderer::~DlgAnimationRenderer()
 
 }
 
+QString DlgAnimationRenderer::fetchRenderingDirectory() const
+{
+    QString result = m_page->dirRequester->fileName();
+
+    if (m_page->shouldExportOnlyVideo->isChecked()) {
+        const QFileInfo info(fetchRenderingFileName());
+
+        if (info.isAbsolute()) {
+            result = info.absolutePath();
+        }
+    }
+
+    return result;
+}
+
+QString DlgAnimationRenderer::fetchRenderingFileName() const
+{
+    QString filename = m_page->videoFilename->fileName();
+
+    if (QFileInfo(filename).completeSuffix().isEmpty()) {
+        QString mimetype = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
+        filename += "." + KisMimeDatabase::suffixesForMimeType(mimetype).first();
+    }
+
+    if (QFileInfo(filename).isRelative()) {
+        QDir baseDir(m_page->dirRequester->fileName());
+
+        if (m_page->shouldExportOnlyVideo->isChecked()) {
+            QString documentDir = QFileInfo(m_doc->url().toLocalFile()).absolutePath();
+            if (!documentDir.isEmpty()) {
+                baseDir = documentDir;
+            }
+        }
+
+        filename = baseDir.absoluteFilePath(filename);
+    }
+
+    return filename;
+}
+
 KisPropertiesConfigurationSP DlgAnimationRenderer::getSequenceConfiguration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("basename", m_page->txtBasename->text());
     cfg->setProperty("last_document_path", m_doc->localFilePath());
-    cfg->setProperty("directory", m_page->dirRequester->fileName());
+    cfg->setProperty("directory", fetchRenderingDirectory());
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
@@ -224,7 +264,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getFrameExportConfiguration()
     if (m_frameExportConfigWidget) {
         KisPropertiesConfigurationSP cfg = m_frameExportConfigWidget->configuration();
         cfg->setProperty("basename", m_page->txtBasename->text());
-        cfg->setProperty("directory", m_page->dirRequester->fileName());
+        cfg->setProperty("directory", fetchRenderingDirectory());
         cfg->setProperty("first_frame", m_page->intStart->value());
         cfg->setProperty("last_frame", m_page->intEnd->value());
         cfg->setProperty("sequence_start", m_page->sequenceStart->value());
@@ -243,12 +283,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
     }
 
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    QString filename = m_page->videoFilename->fileName();
-    if (QFileInfo(filename).completeSuffix().isEmpty()) {
-        QString mimetype = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
-        filename += "." + KisMimeDatabase::suffixesForMimeType(mimetype).first();
-    }
-    cfg->setProperty("filename", filename);
+    cfg->setProperty("filename", fetchRenderingFileName());
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
@@ -277,7 +312,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
         cfg = m_encoderConfigWidget->configuration();
     }
     cfg->setProperty("mimetype", m_page->cmbRenderType->currentData().toString());
-    cfg->setProperty("directory", m_page->dirRequester->fileName());
+    cfg->setProperty("directory", fetchRenderingDirectory());
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
@@ -472,7 +507,7 @@ void DlgAnimationRenderer::slotExportTypeChanged()
     }
 
     // if only exporting video
-    if (m_page->shouldExportOnlyVideo) {
+    if (m_page->shouldExportOnlyVideo->isChecked()) {
         m_page->cmbMimetype->setEnabled(false); // allow to change image format
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->videoOptionsGroup->setVisible(false); //shrinks the horizontal space temporarily to help resize() work

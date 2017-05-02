@@ -1520,6 +1520,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="ZoomTool">
+      <icon></icon>
+      <text>Zoom Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Zoom Tool</toolTip>
+      <iconText>Zoom Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="KisToolPolyline">
       <icon></icon>
       <text>Polyline Tool</text>

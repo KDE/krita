@@ -59,7 +59,7 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
-    if (m_colorSet) {
+    if (m_colorSet && m_displayRenderer) {
         quint32 i = (quint32)(index.row()*columnCount()+index.column());
         if (i < m_colorSet->nColors()) {
             switch (role) {

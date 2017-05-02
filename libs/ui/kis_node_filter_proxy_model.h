@@ -38,6 +38,8 @@ public:
 
     void setNodeModel(KisNodeModel *model);
 
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
+
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
     void setAcceptedLabels(const QList<int> &value);
 

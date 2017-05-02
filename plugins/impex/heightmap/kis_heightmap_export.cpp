@@ -60,14 +60,6 @@ KisPropertiesConfigurationSP KisHeightMapExport::defaultConfiguration(const QByt
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisHeightMapExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
-{
-    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration("HeightMap");
-    cfg->fromXML(filterConfig, false);
-    return cfg;
-}
-
 KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsHeightmap(parent);

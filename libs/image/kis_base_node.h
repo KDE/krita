@@ -373,25 +373,6 @@ public:
     void setUserLocked(bool l);
 
     /**
-     * Return the locked status of this node. System Locked nodes indicates
-     * that an algorithm is processing them and that an other
-     * algorithm need to wait before accessing it.
-     */
-    bool systemLocked() const;
-
-    /**
-     * Set the locked status of this node. System Locked nodes indicates
-     * that an algorithm is processing them and that an other
-     * algorithm need to wait before accessing it.
-     *
-     * A KisNode will update the layer model when the lock is released.
-     *
-     * @param l lock state
-     * @param update set false if the tools shouldn't be locked
-     */
-    virtual void setSystemLocked(bool l, bool update = true);
-
-    /**
      * @return true if the node can be edited:
      *
      * if checkVisibility is true, then the node is only editable if it is visible and not locked.
@@ -566,10 +547,6 @@ Q_SIGNALS:
      * This signal is emitted when the node is locked or unlocked with \ref setUserLocked.
      */
     void userLockingChanged(bool);
-    /**
-     * This signal is emitted when the node is locked or unlocked with \ref setSystemLocked.
-     */
-    void systemLockingChanged(bool);
 
     void keyframeChannelAdded(KisKeyframeChannel *channel);
 

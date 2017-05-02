@@ -106,6 +106,7 @@ set(kritaui_LIB_SRCS
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_histogram_view.cc
+    KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc
@@ -329,6 +330,7 @@ set(kritaui_LIB_SRCS
     KisImportExportFilter.cpp
     KisFilterEntry.cpp
     KisImportExportManager.cpp
+    kis_async_action_feedback.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
     KisPart.cpp

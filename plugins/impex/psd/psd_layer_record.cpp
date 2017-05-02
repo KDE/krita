@@ -38,6 +38,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <asl/kis_offset_keeper.h>
 #include <asl/kis_asl_writer_utils.h>
@@ -542,6 +543,9 @@ void PSDLayerRecord::write(QIODevice* io,
                 KisAslWriterUtils::writeRect(m_onlyTransparencyMaskRect, io);
 
                 {
+                    // NOTE: in PSD the default color of the mask is stored in 1 byte value!
+                    //       Even when the mask is actually 16/32 bit! I have no idea how it is
+                    //       actually treated in this case.
                     KIS_ASSERT_RECOVER_NOOP(m_onlyTransparencyMask->paintDevice()->pixelSize() == 1);
                     const quint8 defaultPixel = *m_onlyTransparencyMask->paintDevice()->defaultPixel().data();
                     SAFE_WRITE_EX(io, defaultPixel);
@@ -589,16 +593,29 @@ void PSDLayerRecord::write(QIODevice* io,
     }
 }
 
+KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
+{
+    KisPaintDeviceSP result = dev;
+
+    if (m_header.channelDepth == 16) {
+        result = new KisPaintDevice(*dev);
+        delete result->convertTo(KoColorSpaceRegistry::instance()->alpha16());
+    } else if (m_header.channelDepth == 32) {
+        result = new KisPaintDevice(*dev);
+        delete result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
+    }
+    return result;
+}
+
 void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
 {
     if (m_onlyTransparencyMask) {
-        KisPaintDeviceSP device = m_onlyTransparencyMask->paintDevice();
-        KIS_ASSERT_RECOVER_NOOP(device->pixelSize() == 1);
+        KisPaintDeviceSP device = convertMaskDeviceIfNeeded(m_onlyTransparencyMask->paintDevice());
 
-        QByteArray buffer(m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
+        QByteArray buffer(device->pixelSize() * m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
         device->readBytes((quint8*)buffer.data(), m_onlyTransparencyMaskRect);
 
-        PsdPixelUtils::writeChannelDataRLE(io, (quint8*)buffer.data(), 1, m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset, -1, true);
+        PsdPixelUtils::writeChannelDataRLE(io, (quint8*)buffer.data(), device->pixelSize(), m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset, -1, true);
     }
 }
 
@@ -698,8 +715,6 @@ QRect PSDLayerRecord::channelRect(ChannelInfo *channel) const
 
 bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channelInfo)
 {
-    KisOffsetKeeper keeper(io);
-
     KIS_ASSERT_RECOVER(channelInfo->channelId < -1) { return false; }
 
     dbgFile << "Going to read" << channelIdToChannelType(channelInfo->channelId, m_header.colormode) << "mask";
@@ -715,45 +730,13 @@ bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *
 
     dev->setDefaultPixel(KoColor(&layerMask.defaultColor, dev->colorSpace()));
 
-    int uncompressedLength = maskRect.width();
+    const int pixelSize =
+        m_header.channelDepth == 16 ? 2 :
+        m_header.channelDepth == 32 ? 4 : 1;
 
-    if (channelInfo->compressionType == Compression::ZIP ||
-            channelInfo->compressionType == Compression::ZIPWithPrediction) {
-
-        error = "Unsupported Compression mode: zip";
-        return false;
-    }
-
-    KisHLineIteratorSP it = dev->createHLineIteratorNG(maskRect.left(), maskRect.top(), maskRect.width());
-    for (int row = maskRect.top(); row <= maskRect.bottom(); row++)
-    {
-        QByteArray channelBytes;
-
-        io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
-
-        if (channelInfo->compressionType == Compression::Uncompressed) {
-            channelBytes = io->read(uncompressedLength);
-            channelInfo->channelOffset += uncompressedLength;
-        } else if (channelInfo->compressionType == Compression::RLE) {
-            int rleLength = channelInfo->rleRowLengths[row - maskRect.top()];
-            QByteArray compressedBytes = io->read(rleLength);
-            channelBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
-            channelInfo->channelOffset += rleLength;
-        } else {
-            error = "Unsupported Compression mode: " + QString::number(channelInfo->compressionType);
-            return false;
-        }
-
-        for (int col = 0; col < maskRect.width(); col++){
-            *it->rawData() = channelBytes[col];
-            it->nextPixel();
-        }
-
-        it->nextRow();
-    }
-
-    // the position of the io device will be restored by
-    // KisOffsetKeeper automagically
+    QVector<ChannelInfo*> infoRecords;
+    infoRecords << channelInfo;
+    PsdPixelUtils::readAlphaMaskChannels(io, dev, pixelSize, maskRect, infoRecords);
 
     return true;
 }

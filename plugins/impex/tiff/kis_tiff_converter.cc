@@ -165,6 +165,63 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
 }
 }
 
+KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
+{
+    QHash<int, int> compToIndex;
+    compToIndex[COMPRESSION_NONE] = 0;
+    compToIndex[COMPRESSION_JPEG] = 1;
+    compToIndex[COMPRESSION_DEFLATE] = 2;
+    compToIndex[COMPRESSION_LZW] = 3;
+    compToIndex[COMPRESSION_JP2000] = 4;
+    compToIndex[COMPRESSION_CCITTRLE] = 5;
+    compToIndex[COMPRESSION_CCITTFAX3] = 6;
+    compToIndex[COMPRESSION_CCITTFAX4] = 7;
+    compToIndex[COMPRESSION_PIXARLOG] = 8;
+
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+
+    cfg->setProperty("compressiontype", compToIndex.value(compressionType, 0));
+    cfg->setProperty("predictor", predictor - 1);
+    cfg->setProperty("alpha", alpha);
+    cfg->setProperty("flatten", flatten);
+    cfg->setProperty("quality", jpegQuality);
+    cfg->setProperty("deflate", deflateCompress);
+    cfg->setProperty("faxmode", faxMode - 1);
+    cfg->setProperty("pixarlog", pixarLogCompress);
+    cfg->setProperty("saveProfile", saveProfile);
+
+    return cfg;
+}
+
+void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
+{
+    QHash<int, int> indexToComp;
+    indexToComp[0] = COMPRESSION_NONE;
+    indexToComp[1] = COMPRESSION_JPEG;
+    indexToComp[2] = COMPRESSION_DEFLATE;
+    indexToComp[3] = COMPRESSION_LZW;
+    indexToComp[4] = COMPRESSION_JP2000;
+    indexToComp[5] = COMPRESSION_CCITTRLE;
+    indexToComp[6] = COMPRESSION_CCITTFAX3;
+    indexToComp[7] = COMPRESSION_CCITTFAX4;
+    indexToComp[8] = COMPRESSION_PIXARLOG;
+
+    compressionType =
+        indexToComp.value(
+            cfg->getInt("compressiontype", 0),
+            COMPRESSION_NONE);
+
+    predictor = cfg->getInt("predictor", 0) + 1;
+    alpha = cfg->getBool("alpha", true);
+    flatten = cfg->getBool("flatten", true);
+    jpegQuality = cfg->getInt("quality", 80);
+    deflateCompress = cfg->getInt("deflate", 6);
+    faxMode = cfg->getInt("faxmode", 0) + 1;
+    pixarLogCompress = cfg->getInt("pixarlog", 6);
+    saveProfile = cfg->getBool("saveProfile", true);
+}
+
+
 KisTIFFConverter::KisTIFFConverter(KisDocument *doc)
 {
     m_doc = doc;
@@ -684,4 +741,3 @@ void KisTIFFConverter::cancel()
 {
     m_stop = true;
 }
-

@@ -29,9 +29,6 @@ class KisCurveOption;
 
 #include <kis_dynamic_sensor.h>
 
-/**
- * XXX; Add a reset button!
- */
 class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
@@ -58,6 +55,7 @@ private Q_SLOTS:
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);
     void updateValues();
+    void resetCurve();
     void updateLabelsOfCurrentSensor();
     void disableWidgets(bool disable);
 

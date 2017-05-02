@@ -54,6 +54,15 @@ KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfig
 {
 }
 
+KisPropertiesConfiguration &KisPropertiesConfiguration::operator=(const KisPropertiesConfiguration &rhs)
+{
+    if (&rhs != this) {
+        *d = *rhs.d;
+    }
+
+    return *this;
+}
+
 bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
 {
     if (clear) {

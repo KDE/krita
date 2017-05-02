@@ -37,27 +37,27 @@ public:
                               bool userVisible,
                               const KoID& colorModelId,
                               const KoID& colorDepthId,
-                              int referenceDepth = -1)
+                              int referenceDepth = -1,
+                              int crossingCost = 1)
         : m_id(id)
         , m_name(name)
         , m_userVisible(userVisible)
         , m_colorModelId(colorModelId)
         , m_colorDepthId(colorDepthId)
         , m_referenceDepth(referenceDepth)
+        , m_crossingCost(crossingCost)
     {
-        if (colorDepthId == Integer8BitsColorDepthID) {
+        if (m_referenceDepth >= 0) {
+            // noop, already initialized!
+        } else if (colorDepthId == Integer8BitsColorDepthID) {
             m_referenceDepth = 1 * 8;
-        }
-        else if (colorDepthId == Integer16BitsColorDepthID) {
+        } else if (colorDepthId == Integer16BitsColorDepthID) {
             m_referenceDepth = 2 * 8;
-        }
-        if (colorDepthId == Float16BitsColorDepthID) {
+        } else if (colorDepthId == Float16BitsColorDepthID) {
             m_referenceDepth = 2 * 8;
-        }
-        if (colorDepthId == Float32BitsColorDepthID) {
+        } else if (colorDepthId == Float32BitsColorDepthID) {
             m_referenceDepth = 4 * 8;
-        }
-        if (colorDepthId == Float64BitsColorDepthID) {
+        } else if (colorDepthId == Float64BitsColorDepthID) {
             m_referenceDepth = 8 * 8;
         }
     }
@@ -99,6 +99,9 @@ public:
         return m_referenceDepth;
     }
 
+    virtual int crossingCost() const override {
+        return m_crossingCost;
+    }
 
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const {
         return QList<KoColorConversionTransformationFactory*>();
@@ -119,6 +122,7 @@ private:
     KoID    m_colorModelId;
     KoID    m_colorDepthId;
     int     m_referenceDepth;
+    int m_crossingCost;
 
 };
 

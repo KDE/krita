@@ -30,6 +30,12 @@ Boston, MA 02110-1301, USA.
 #include <KisExportCheckRegistry.h>
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
+#include "kis_config.h"
+
+const QString KisImportExportFilter::ImageContainsTransparencyTag = "ImageContainsTransparency";
+const QString KisImportExportFilter::ColorModelIDTag = "ColorModelID";
+const QString KisImportExportFilter::ColorDepthIDTag = "ColorDepthID";
+const QString KisImportExportFilter::sRGBTag = "sRGB";
 
 class Q_DECL_HIDDEN KisImportExportFilter::Private
 {
@@ -43,7 +49,7 @@ public:
     QMap<QString, KisExportCheckBase*> capabilities;
 
     Private()
-        : updater(0)
+        : updater(0), mime("")
         , batchmode(false)
     {}
 
@@ -179,7 +185,12 @@ KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const Q
 
 KisPropertiesConfigurationSP KisImportExportFilter::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    return defaultConfiguration(from, to);
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    const QString filterConfig = KisConfig().exportConfiguration(to);
+    if (!filterConfig.isEmpty()) {
+        cfg->fromXML(filterConfig, false);
+    }
+    return cfg;
 }
 
 KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, const QByteArray &from, const QByteArray &to) const

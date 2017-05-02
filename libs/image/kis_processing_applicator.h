@@ -78,6 +78,19 @@ public:
     void end();
     void cancel();
 
+    /**
+     * @brief runSingleCommandStroke creates a stroke and runs \p cmd in it.
+     *        The text() field fo \p cmd is used as a title of the stroke.
+     * @param image the image to run the stroke on
+     * @param cmd the command to be executed
+     * @param sequentiality sequentiality property of the command being executed (see strokes documentation)
+     * @param exclusivity sequentiality property of the command being executed (see strokes documentation)
+     */
+    static void runSingleCommandStroke(KisImageSP image,
+                                       KUndo2Command *cmd,
+                                       KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
+                                       KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
+
 private:
     void visitRecursively(KisNodeSP node,
                           KisProcessingVisitorSP visitor,

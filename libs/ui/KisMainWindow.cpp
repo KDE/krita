@@ -881,8 +881,19 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     KisDelayedSaveDialog dlg(document->image(), KisDelayedSaveDialog::SaveDialog, 0, this);
     dlg.blockIfImageIsBusy();
 
-    if (dlg.result() != QDialog::Accepted) {
+    if (dlg.result() == KisDelayedSaveDialog::Rejected) {
         return false;
+    } else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
+        QMessageBox::critical(0,
+                              i18nc("@title:window", "Krita"),
+                              i18n("You are saving a file while the image is "
+                                   "still rendering. The saved file may be "
+                                   "incomplete or corrupted.\n\n"
+                                   "Please select a location where the original "
+                                   "file will not be overridden!"));
+
+
+        saveas = true;
     }
 
     bool reset_url;
@@ -1133,13 +1144,6 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
         if (d->noCleanup)
             return;
-
-        Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
-            KisView *view = dynamic_cast<KisView*>(subwin);
-            if (view) {
-                KisPart::instance()->removeView(view);
-            }
-        }
 
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             Q_FOREACH (QDockWidget* dockWidget, d->dockWidgetsMap)

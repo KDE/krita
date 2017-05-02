@@ -41,6 +41,10 @@ public:
 private Q_SLOTS:
     void testConnections();
     void testGoodConnections();
+    void testAlphaConversions();
+    void testAlphaU16Conversions();
+    void benchmarkAlphaToRgbConversion();
+    void benchmarkRgbToAlphaConversion();
 private:
     QList< ModelDepthProfile > listModels;
 };

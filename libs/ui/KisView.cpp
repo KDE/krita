@@ -695,6 +695,13 @@ bool KisView::queryClose()
     if (!document())
         return true;
 
+    if (document()->isInSaving()) {
+        viewManager()->showFloatingMessage(
+            i18n("Cannot close the document while saving is in progress"),
+            KisIconUtils::loadIcon("object-locked"), 1500 /* ms */);
+        return false;
+    }
+
     if (document()->isModified()) {
         QString name;
         if (document()->documentInfo()) {
@@ -721,7 +728,7 @@ bool KisView::queryClose()
         case QMessageBox::No : {
             KisImageSP image = document()->image();
             image->requestStrokeCancellation();
-            viewManager()->blockUntillOperationsFinishedForced(image);
+            viewManager()->blockUntilOperationsFinishedForced(image);
 
             document()->removeAutoSaveFiles();
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.

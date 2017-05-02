@@ -53,7 +53,8 @@ struct KoColorConversionSystem::Node {
             colorSpaceFactory = _colorSpaceFactory;
             referenceDepth = _colorSpaceFactory->referenceDepth();
             isGray = (_colorSpaceFactory->colorModelId() == GrayAColorModelID
-                      || _colorSpaceFactory->colorModelId() == GrayColorModelID);
+                      || _colorSpaceFactory->colorModelId() == GrayColorModelID
+                      || _colorSpaceFactory->colorModelId() == AlphaColorModelID);
         }
     }
 
@@ -239,6 +240,24 @@ struct KoColorConversionSystem::Path {
 };
 Q_DECLARE_TYPEINFO(KoColorConversionSystem::Path, Q_MOVABLE_TYPE);
 
+
+inline QDebug operator<<(QDebug dbg, const KoColorConversionSystem::Path &path)
+{
+    bool havePrintedFirst = false;
+
+    Q_FOREACH (const KoColorConversionSystem::Vertex *v, path.vertexes) {
+        if (!havePrintedFirst) {
+            dbg.nospace() << v->srcNode->id();
+            havePrintedFirst = true;
+        }
+
+        dbg.nospace() << "->" << v->dstNode->id();
+    }
+
+    return dbg.space();
+}
+
+
 typedef QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path > Node2PathHash;
 
 
@@ -251,7 +270,6 @@ struct Q_DECL_HIDDEN KoColorConversionSystem::Private {
 
     QHash<NodeKey, Node*> graph;
     QList<Vertex*> vertexes;
-    Node* alphaNode;
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \

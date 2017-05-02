@@ -477,6 +477,10 @@ public:
         return false;
     }
 
+    virtual int crossingCost() const override {
+        return 1;
+    }
+
     virtual QList<KoColorConversionTransformationFactory *> colorConversionLinks() const;
     virtual KoColorProfile *createColorProfile(const QByteArray &rawData) const;
 };

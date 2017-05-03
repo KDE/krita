@@ -62,9 +62,13 @@ QMic::QMic(QObject *parent, const QVariantList &)
     preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
     m_qmicAction = createAction("QMic");
+    m_qmicAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+
     connect(m_qmicAction ,  SIGNAL(triggered()), this, SLOT(slotQMic()));
 
     m_againAction = createAction("QMicAgain");
+    m_againAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_againAction->setEnabled(false);
     connect(m_againAction,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
 }
 

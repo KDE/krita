@@ -967,11 +967,7 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
 
 QRect getMaskBoundingBox(KisPaintDeviceSP maskDev)
 {
-    KoColor defaultMaskPixel = maskDev->defaultPixel();
-    maskDev->setDefaultPixel(KoColor(Qt::white, maskDev->colorSpace()));
     QRect maskRect = maskDev->nonDefaultPixelArea();
-    maskDev->setDefaultPixel(defaultMaskPixel);
-
     return maskRect;
 }
 

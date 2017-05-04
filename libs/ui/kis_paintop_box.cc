@@ -1097,6 +1097,13 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
             setWidgetState(DISABLE_PRESETS | DISABLE_SIZE | DISABLE_FLOW);
             m_presetsEnabled = false;
         }
+
+        if (flags & KisTool::FLAG_USES_CUSTOM_SIZE) {
+            setWidgetState(ENABLE_SIZE | ENABLE_FLOW);
+        } else {
+            setWidgetState(DISABLE_SIZE | DISABLE_FLOW);
+        }
+
     } else setWidgetState(DISABLE_ALL);
 }
 

@@ -695,6 +695,13 @@ bool KisView::queryClose()
     if (!document())
         return true;
 
+    if (document()->isInSaving()) {
+        viewManager()->showFloatingMessage(
+            i18n("Cannot close the document while saving is in progress"),
+            KisIconUtils::loadIcon("object-locked"), 1500 /* ms */);
+        return false;
+    }
+
     if (document()->isModified()) {
         QString name;
         if (document()->documentInfo()) {

@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef VECTOR_TOOL_FACTORY
-#define VECTOR_TOOL_FACTORY
+#ifndef TEXTNG_TOOL_FACTORY
+#define TEXTNG_TOOL_FACTORY
 
 #include <KoToolFactoryBase.h>
 

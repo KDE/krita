@@ -35,12 +35,12 @@
 #include <klocalizedstring.h>
 
 TextNGShapeFactory::TextNGShapeFactory()
-    : KoShapeFactoryBase(TextNGShape_SHAPEID, i18n("TextNG image"))
+    : KoShapeFactoryBase(TextNGShape_SHAPEID, i18n("Text"))
 {
-    setToolTip(i18n("A shape that shows a textng image (EMF/WMF/SVM)"));
-    setIconName(koIconNameCStrNeededWithSubs("a generic textng image icon", "x-shape-textngimage", "application-x-wmf"));
-    setXmlElementNames(KoXmlNS::draw, QStringList("image"));
+    setToolTip(i18n("A shape that shows a text"));
+    setIconName(koIconNameCStr("x-shape-text"));
     setLoadingPriority(5);
+    setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }
 
 KoShape *TextNGShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const

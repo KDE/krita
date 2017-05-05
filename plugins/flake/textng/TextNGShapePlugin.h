@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef VECTORSHAPE_PLUGIN_H
-#define VECTORSHAPE_PLUGIN_H
+#ifndef TEXTNGSHAPE_PLUGIN_H
+#define TEXTNGSHAPE_PLUGIN_H
 
 // Qt
 #include <QObject>

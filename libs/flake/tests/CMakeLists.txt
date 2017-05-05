@@ -92,3 +92,9 @@ ecm_add_test(
 )
 set_property(TARGET libs-kritaflake-TestSvgParserRoundTrip
              PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
+
+ecm_add_test(
+    TestSvgText.cpp
+    TEST_NAME libs-kritaflake-TestSvgText
+    LINK_LIBRARIES kritaflake Qt5::Test
+)

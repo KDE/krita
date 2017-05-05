@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CHANGEVECTORDATACOMMAND_H
-#define CHANGEVECTORDATACOMMAND_H
+#ifndef CHANGETEXTNGDATACOMMAND_H
+#define CHANGETEXTNGDATACOMMAND_H
 
 #include <kundo2command.h>
 #include <QByteArray>
@@ -41,4 +41,4 @@ private:
     TextNGShape *m_shape;
 };
 
-#endif /* CHANGEVECTORDATACOMMAND_H */
+#endif /* CHANGETEXTNGDATACOMMAND_H */

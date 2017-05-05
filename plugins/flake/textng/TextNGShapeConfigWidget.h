@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef VECTORSHAPECONFIGWIDGET_H
-#define VECTORSHAPECONFIGWIDGET_H
+#ifndef TEXTNGSHAPECONFIGWIDGET_H
+#define TEXTNGSHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
 #include <QWidget>
@@ -50,4 +50,4 @@ private:
     TextNGShape *m_shape;
 };
 
-#endif //VECTORSHAPECONFIGWIDGET_H
+#endif //TEXTNGSHAPECONFIGWIDGET_H

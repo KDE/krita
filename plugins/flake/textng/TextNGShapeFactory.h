@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef VECTORSHAPE_FACTORY_H
-#define VECTORSHAPE_FACTORY_H
+#ifndef TEXTNGSHAPE_FACTORY_H
+#define TEXTNGSHAPE_FACTORY_H
 
 // Calligra
 #include <KoShapeFactoryBase.h>

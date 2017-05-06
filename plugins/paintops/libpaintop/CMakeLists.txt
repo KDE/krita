@@ -53,6 +53,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_texture_option.cpp
     kis_pressure_texture_strength_option.cpp
     kis_embedded_pattern_manager.cpp
+    kis_timed_spacing_selection_widget.cpp
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_drawing_angle.cpp
     sensors/kis_dynamic_sensor_distance.cc
@@ -77,6 +78,7 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgpredefinedbrushchooser.ui
     forms/wdgCompositeOpOption.ui
     forms/wdgflowopacityoption.ui
+    forms/wdgtimedspacing.ui
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
     sensors/SensorFadeConfiguration.ui

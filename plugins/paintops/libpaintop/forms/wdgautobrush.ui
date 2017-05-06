@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>429</width>
-    <height>279</height>
+    <height>296</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -146,7 +146,7 @@
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
      <item row="0" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRadius" >
+      <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
        <property name="minimumSize">
         <size>
          <width>200</width>
@@ -186,7 +186,7 @@
       </widget>
      </item>
      <item row="1" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRatio" />
+      <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>
      </item>
      <item row="2" column="0" colspan="3">
       <widget class="QStackedWidget" name="stackedWidget">
@@ -203,7 +203,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="PageFade">
         <layout class="QGridLayout" name="gridLayout_5">
@@ -241,10 +241,10 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputHFade" />
+               <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
               </item>
               <item row="0" column="2" rowspan="2">
-               <widget class="KoAspectButton" name="aspectButton" />
+               <widget class="KoAspectButton" name="aspectButton" native="true"/>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="lblVerticalFade">
@@ -257,7 +257,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputVFade" />
+               <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
               </item>
              </layout>
             </item>
@@ -291,7 +291,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="KisCurveWidget" name="softnessCurve" >
+          <widget class="KisCurveWidget" name="softnessCurve" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -350,8 +350,8 @@
       </widget>
      </item>
      <item row="3" column="1" colspan="2">
-      <widget class="KisSliderSpinBox" name="inputAngle" >
-        <property name="minimumSize">
+      <widget class="KisSliderSpinBox" name="inputAngle" native="true">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
@@ -360,13 +360,13 @@
       </widget>
      </item>
      <item row="4" column="1" colspan="2">
-      <widget class="KisSliderSpinBox" name="inputSpikes" />
+      <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
      </item>
      <item row="6" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="density" />
+      <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
      </item>
      <item row="5" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRandomness" />
+      <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="lblDensity">
@@ -378,9 +378,6 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1" colspan="2">
-      <widget class="KisSpacingSelectionWidget" name="spacingWidget" />
-     </item>
      <item row="7" column="0">
       <widget class="QLabel" name="lblSpacing">
        <property name="text">
@@ -391,6 +388,22 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="lblTimedSpacing">
+       <property name="text">
+        <string>Timed Spacing:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="2">
+      <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
+     </item>
+     <item row="8" column="1" colspan="2">
+      <widget class="KisTimedSpacingSelectionWidget" name="timedSpacingWidget" native="true"/>
+     </item>
     </layout>
    </item>
   </layout>
@@ -400,6 +413,12 @@
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSpacingSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>kis_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -421,9 +440,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisSpacingSelectionWidget</class>
+   <class>KisTimedSpacingSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>kis_spacing_selection_widget.h</header>
+   <header>kis_timed_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -138,34 +138,10 @@
        <property name="verticalSpacing">
         <number>10</number>
        </property>
-       <item row="1" column="0">
-        <widget class="QLabel" name="brushRotationLabel">
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="useColorAsMaskCheckbox">
          <property name="text">
-          <string>Rotation:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="brushSpacingLabel">
-         <property name="text">
-          <string>Spacing:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="brushSizeLabel">
-         <property name="text">
-          <string>Size:</string>
+          <string>Use Color as Mask</string>
          </property>
         </widget>
        </item>
@@ -179,6 +155,20 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="resetBrushButton">
+         <property name="text">
+          <string>Reset Predefined Tip</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="brushSizeLabel">
+         <property name="text">
+          <string>Size:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="KisDoubleSliderSpinBox" name="brushSizeSpinBox" native="true">
          <property name="sizePolicy">
@@ -189,19 +179,39 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="useColorAsMaskCheckbox">
+       <item row="2" column="0">
+        <widget class="QLabel" name="brushSpacingLabel">
          <property name="text">
-          <string>Use Color as Mask</string>
+          <string>Spacing:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="resetBrushButton">
+       <item row="1" column="0">
+        <widget class="QLabel" name="brushRotationLabel">
          <property name="text">
-          <string>Reset Predefined Tip</string>
+          <string>Rotation:</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="timedSpacingLabel">
+         <property name="text">
+          <string>Timed Spacing:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="KisTimedSpacingSelectionWidget" name="timedSpacingSelectionWidget" native="true"/>
        </item>
       </layout>
      </item>
@@ -224,15 +234,21 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisSpacingSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>kis_spacing_selection_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisSpacingSelectionWidget</class>
+   <class>KisTimedSpacingSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>kis_spacing_selection_widget.h</header>
+   <header>kis_timed_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

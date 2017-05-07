@@ -104,18 +104,30 @@ public:
     virtual QString indirectPaintingCompositeOp() const;
 
     /**
-     * Whether this paintop wants to deposit paint even when not moving, i.e. the
-     * tool needs to activate its timer.
+     * Whether this paintop wants to deposit paint even when not moving, i.e. the tool needs to
+     * activate its timer. If this is true, painting updates need to be generated at regular
+     * intervals even in the absence of input device events, e.g. when the cursor is not moving.
      */
     virtual bool isAirbrushing() const {
         return false;
     }
 
     /**
-    * If this paintop deposit the paint even when not moving, the tool needs to know the rate of it in miliseconds
-    */
-    virtual int rate() const {
-        return 100;
+     * Indicates whether this paintop controls the rate of its airbrushing (e.g. using timed
+     * spacing), meaning the tool itself does not need to precisely manage the timing. This value
+     * should be ignored if isAirbrushing() is false.
+     */
+    virtual bool isAirbrushRateControlled() const {
+        return false;
+    }
+
+    /**
+     * Indicates the minimum time interval that might be needed between airbrush dabs, in
+     * milliseconds. A lower value means painting updates need to happen more frequently. This value
+     * should be ignored if isAirbrushing() is false.
+     */
+    virtual qreal airbrushInterval() const {
+        return 100.0;
     }
 
     /**

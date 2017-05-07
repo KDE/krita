@@ -66,7 +66,8 @@ public:
                    KisStrokesFacade *strokesFacade,
                    KisNodeSP overrideNode = 0,
                    KisDefaultBoundsBaseSP bounds = 0);
-    void paint(KoPointerEvent *event);
+    void paintEvent(KoPointerEvent *event);
+    void paint(const KisPaintInformation &info);
     void endPaint();
 
     const KisPaintOp* currentPaintOp() const;
@@ -137,6 +138,7 @@ private:
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
+    int computeAirbrushTimerInterval() const;
 
 private Q_SLOTS:
 

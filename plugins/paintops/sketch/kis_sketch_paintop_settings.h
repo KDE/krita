@@ -37,8 +37,6 @@ public:
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
 };
 
 typedef KisSharedPtr<KisSketchPaintOpSettings> KisSketchPaintOpSettingsSP;

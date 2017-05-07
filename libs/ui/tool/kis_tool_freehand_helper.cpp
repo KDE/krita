@@ -44,6 +44,10 @@
 
 //#define DEBUG_BEZIER_CURVES
 
+// Factor by which to scale the airbrush timer's interval if we want it to be faster than the actual
+// airbrushing rate.
+const qreal FAST_AIRBRUSH_TIMER_FACTOR = 0.7;
+
 struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
@@ -69,6 +73,9 @@ struct KisToolFreehandHelper::Private
 
     KisSmoothingOptionsSP smoothingOptions;
 
+    // Timer used to generate paint updates periodically even without input events. This is only
+    // used for paintops that depend on timely updates even when the cursor is not moving, e.g. for
+    // airbrushing effects.
     QTimer airbrushingTimer;
 
     QList<KisPaintInformation> history;
@@ -276,7 +283,7 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
     m_d->distanceHistory.clear();
 
     if(m_d->resources->needsAirbrushing()) {
-        m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
+        m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
         m_d->airbrushingTimer.start();
     }
 
@@ -385,7 +392,7 @@ qreal KisToolFreehandHelper::Private::effectiveSmoothnessDistance() const
     return effectiveSmoothnessDistance;
 }
 
-void KisToolFreehandHelper::paint(KoPointerEvent *event)
+void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
 {
     KisPaintInformation info =
             m_d->infoBuilder->continueStroke(event,
@@ -395,6 +402,11 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 
     KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
 
+    paint(info);
+}
+
+void KisToolFreehandHelper::paint(const KisPaintInformation &info)
+{
     /**
      * Smooth the coordinates out using the history and the
      * distance. This is a heavily modified version of an algo used in
@@ -773,8 +785,41 @@ void KisToolFreehandHelper::finishStroke()
 void KisToolFreehandHelper::doAirbrushing()
 {
     if(!m_d->painterInfos.isEmpty()) {
-        paintAt(m_d->previousPaintInformation);
+        // Add a new painting update at a point identical to the previous one, except for the time
+        // and speed information.
+        const KisPaintInformation &prevPaint = m_d->previousPaintInformation;
+        KisPaintInformation nextPaint(prevPaint.pos(),
+                                      prevPaint.pressure(),
+                                      prevPaint.xTilt(),
+                                      prevPaint.yTilt(),
+                                      prevPaint.rotation(),
+                                      prevPaint.tangentialPressure(),
+                                      prevPaint.perspective(),
+                                      elapsedStrokeTime(),
+                                      0.0);
+        // If the paintop can control the airbrush timing itself, treat the new point as a direct
+        // continuation of the stroke. Otherwise, try to force a dab to be painted immediately.
+        if (m_d->resources->isAirbrushRateControlled()) {
+            paint(nextPaint);
+        }
+        else {
+            paintAt(nextPaint);
+        }
     }
+}
+
+int KisToolFreehandHelper::computeAirbrushTimerInterval() const
+{
+    // If the paintop is controlling the airbrush timing, we might be able to get better
+    // responsiveness by setting the tool's airbrush timer to update faster than the desired rate.
+    // If the paintop is not controlling the timing, the tool needs to make its updates happen as
+    // close as possible to the desired rate.
+    qreal realInterval = m_d->resources->airbrushingInterval();
+    if (m_d->resources->isAirbrushRateControlled()) {
+        realInterval *= FAST_AIRBRUSH_TIMER_FACTOR;
+    }
+
+    return qMax(1, qFloor(realInterval));
 }
 
 void KisToolFreehandHelper::paintAt(int painterInfoId,

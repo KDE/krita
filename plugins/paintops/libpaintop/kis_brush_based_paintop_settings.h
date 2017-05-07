@@ -40,7 +40,10 @@ public:
     virtual bool isAirbrushing() const;
 
     ///Reimplemented
-    virtual int rate() const;
+    virtual bool isAirbrushRateControlled() const;
+
+    ///Reimplemented
+    virtual qreal airbrushInterval() const;
 
     using KisPaintOpSettings::brushOutline;
     virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);

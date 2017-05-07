@@ -126,6 +126,9 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
+    connect(timedSpacingSelectionWidget, SIGNAL(sigTimedSpacingChanged()),
+            SLOT(slotTimedSpacingChanged());
+
 
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
 
@@ -240,6 +243,18 @@ void KisPredefinedBrushChooser::slotSpacingChanged()
     }
 }
 
+void KisPredefinedBrushChooser::slotTimedSpacingChanged()
+{
+    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    if (brush) {
+        brush->setTimedSpacing(timedSpacingSelectionWidget->isTimedSpacingEnabled(),
+                               timedSpacingSelectionWidget->rate());
+        slotActivatedBrush(brush);
+
+        emit sigBrushChanged();
+    }
+}
+
 void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
     KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_itemChooser->currentResource());
@@ -317,6 +332,9 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
         brushSpacingSelectionWidget->setSpacing(brush->autoSpacingActive(),
                                 brush->autoSpacingActive() ?
                                 brush->autoSpacingCoeff() : brush->spacing());
+
+        timedSpacingSelectionWidget->setTimedSpacing(brush->timedSpacingEnabled(),
+                                                     brush->timedSpacingRate());
 
         brushRotationSpinBox->setValue(brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(brush->width() * brush->scale());

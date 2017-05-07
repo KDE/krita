@@ -23,6 +23,8 @@
 
 #include "kis_brush.h"
 
+#include <limits>
+
 #include <QDomElement>
 #include <QFile>
 #include <QPoint>
@@ -108,6 +110,8 @@ struct KisBrush::Private {
         , brushType(INVALID)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
+        , timedSpacingEnabled(false)
+        , timedSpacingDelay(100.0)
     {}
 
     ~Private() {
@@ -131,6 +135,9 @@ struct KisBrush::Private {
 
     bool autoSpacingActive;
     qreal autoSpacingCoeff;
+
+    bool timedSpacingEnabled;
+    qreal timedSpacingDelay;
 };
 
 KisBrush::KisBrush()
@@ -336,6 +343,8 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
+    e.setAttribute("useTimedSpacing", QString::number(timedSpacingEnabled()));
+    e.setAttribute("timedSpacingRate", QString::number(timedSpacingRate()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
 }
@@ -424,6 +433,25 @@ bool KisBrush::autoSpacingActive() const
 qreal KisBrush::autoSpacingCoeff() const
 {
     return d->autoSpacingCoeff;
+}
+
+void KisBrush::setTimedSpacing(bool enabled, qreal rate) {
+    d->timedSpacingEnabled = enabled;
+    // Since the time delay is likely to be accessed more often than the rate, we store the delay
+    // instead of storing the rate directly. If rate is zero, the delay will be infinity.
+    d->timedSpacingDelay = 1000.0 / rate;
+}
+
+bool KisBrush::timedSpacingEnabled() const {
+    return d->timedSpacingEnabled;
+}
+
+qreal KisBrush::timedSpacingRate() const {
+    return 1000.0 / timedSpacingDelay();
+}
+
+qreal KisBrush::timedSpacingDelay() const {
+    return timedSpacingEnabled() ? d->timedSpacingDelay : std::numeric_limits<qreal>::infinity();
 }
 
 void KisBrush::notifyStrokeStarted()

@@ -58,6 +58,8 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
+
+    connect(timedSpacingWidget, SIGNAL(sigTimedSpacingChanged()), SLOT(slotTimedSpacingChanged()));
 }
 
 KisClipboardBrushWidget::~KisClipboardBrushWidget()
@@ -77,6 +79,8 @@ void KisClipboardBrushWidget::slotCreateBrush()
 
             m_brush->setSpacing(spacingWidget->spacing());
             m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
+            m_brush->setTimedSpacing(timedSpacingWidget->isTimedSpacingEnabled(),
+                                     timedSpacingWidget->rate());
             m_brush->setFilename(TEMPORARY_CLIPBOARD_BRUSH_FILENAME);
             m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
             m_brush->setValid(true);
@@ -100,6 +104,14 @@ void KisClipboardBrushWidget::slotSpacingChanged()
     if (m_brush) {
         m_brush->setSpacing(spacingWidget->spacing());
         m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
+    }
+}
+
+void KisClipboardBrushWidget::slotTimedSpacingChanged()
+{
+    if (m_brush) {
+        m_brush->setTimedSpacing(timedSpacingWidget->isTimedSpacingEnabled(),
+                                 timedSpacingWidget->rate());
     }
 }
 

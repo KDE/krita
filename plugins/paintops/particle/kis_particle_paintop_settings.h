@@ -33,7 +33,7 @@ public:
 
     bool paintIncremental();
     bool isAirbrushing() const;
-    int rate() const;
+    qreal airbrushInterval() const;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 

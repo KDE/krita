@@ -62,7 +62,7 @@ bool KisDynaPaintOpSettings::isAirbrushing() const
     return getBool(AIRBRUSH_ENABLED);
 }
 
-int KisDynaPaintOpSettings::rate() const
+qreal KisDynaPaintOpSettings::airbrushInterval() const
 {
     return getInt(AIRBRUSH_RATE);
 }

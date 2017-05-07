@@ -71,7 +71,7 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     }
 }
 
-int KisDeformPaintOpSettings::rate() const
+qreal KisDeformPaintOpSettings::airbrushInterval() const
 {
     if (hasProperty(AIRBRUSH_RATE)) {
         return getInt(AIRBRUSH_RATE);

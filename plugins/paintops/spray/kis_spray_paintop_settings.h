@@ -45,7 +45,7 @@ public:
 
     bool paintIncremental() override;
     bool isAirbrushing() const override;
-    int rate() const override;
+    qreal airbrushInterval() const override;
 
 protected:
 

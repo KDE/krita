@@ -47,7 +47,7 @@ bool KisParticlePaintOpSettings::isAirbrushing() const
     return getBool(AIRBRUSH_ENABLED);
 }
 
-int KisParticlePaintOpSettings::rate() const
+qreal KisParticlePaintOpSettings::airbrushInterval() const
 {
     return getInt(AIRBRUSH_RATE);
 }

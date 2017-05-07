@@ -37,7 +37,7 @@ bool KisChalkPaintOpSettings::isAirbrushing() const
     return getBool(AIRBRUSH_ENABLED);
 }
 
-int KisChalkPaintOpSettings::rate() const
+qreal KisChalkPaintOpSettings::airbrushInterval() const
 {
     return getInt(AIRBRUSH_RATE);
 }

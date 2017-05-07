@@ -36,9 +36,9 @@ public:
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
+    bool paintIncremental() override;
+    bool isAirbrushing() const override;
+    qreal airbrushInterval() const override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 

@@ -64,13 +64,12 @@ void paintLine(PaintOp &op,
                qreal fanCornersStep)
 {
     QPointF end = pi2.pos();
+    qreal endTime = pi2.currentTime();
 
     KisPaintInformation pi = pi1;
-    QPointF pt = pi1.pos();
     qreal t = 0.0;
 
-    while ((t = currentDistance->getNextPointPosition(pt, end)) >= 0.0) {
-        pt = pt + t * (end - pt);
+    while ((t = currentDistance->getNextPointPosition(pi.pos(), end, pi.currentTime(), endTime)) >= 0.0) {
         pi = KisPaintInformation::mix(pt, t, pi, pi2);
 
         if (fanCornersEnabled &&
@@ -160,6 +159,8 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal spacingVal,
                                        bool autoSpacingActive,
                                        qreal autoSpacingCoeff,
+                                       bool timedSpacingEnabled,
+                                       qreal timedSpacingInterval,
                                        qreal lodScale)
 {
     QPointF spacing;
@@ -186,7 +187,11 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
 
     spacing *= extraScale;
 
-    return KisSpacingInformation(spacing, rotation, axesFlipped);
+    if (timedSpacingEnabled) {
+        return KisSpacingInformation(spacing, rotation, axesFlipped, timedSpacingInterval);
+    } else {
+        return KisSpacingInformation(spacing, rotation, axesFlipped);
+    }
 }
 
 }

@@ -137,6 +137,8 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
                                           m_markerOption.spacing,
                                           m_markerOption.use_auto_spacing,
                                           m_markerOption.auto_spacing_coeff,
+                                          false,
+                                          0.0,
                                           lodScale);
 
     if (m_firstRun) {

@@ -20,6 +20,8 @@
 #ifndef _KIS_DISTANCE_INFORMATION_H_
 #define _KIS_DISTANCE_INFORMATION_H_
 
+#include <limits>
+
 #include <QPointF>
 #include <QVector2D>
 #include "kritaimage_export.h"
@@ -35,6 +37,8 @@ class KisSpacingInformation {
 public:
     explicit KisSpacingInformation()
         : m_spacing(0.0, 0.0)
+        , m_timedSpacingEnabled(false)
+        , m_timedSpacingInterval(0.0)
         , m_rotation(0.0)
         , m_coordinateSystemFlipped(false)
     {
@@ -42,6 +46,8 @@ public:
 
     explicit KisSpacingInformation(qreal isotropicSpacing)
         : m_spacing(isotropicSpacing, isotropicSpacing)
+        , m_timedSpacingEnabled(false)
+        , m_timedSpacingInterval(0.0)
         , m_rotation(0.0)
         , m_coordinateSystemFlipped(false)
     {
@@ -49,6 +55,30 @@ public:
 
     explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation, bool coordinateSystemFlipped)
         : m_spacing(anisotropicSpacing)
+        , m_timedSpacingEnabled(false)
+        , m_timedSpacingInterval(0.0)
+        , m_rotation(rotation)
+        , m_coordinateSystemFlipped(coordinateSystemFlipped)
+    {
+    }
+
+    explicit KisSpacingInformation(qreal isotropicSpacing,
+                                   qreal timedSpacingInterval)
+        : m_spacing(isotropicSpacing, isotropicSpacing)
+        , m_timedSpacingEnabled(true)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(0.0)
+        , m_coordinateSystemFlipped(false)
+    {
+    }
+
+    explicit KisSpacingInformation(const QPointF &anisotropicSpacing,
+                                   qreal rotation,
+                                   bool coordinateSystemFlipped,
+                                   qreal timedSpacingInterval)
+        : m_spacing(anisotropicSpacing)
+        , m_timedSpacingEnabled(true)
+        , m_timedSpacingInterval(timedSpacingInterval)
         , m_rotation(rotation)
         , m_coordinateSystemFlipped(coordinateSystemFlipped)
     {
@@ -56,6 +86,23 @@ public:
 
     inline QPointF spacing() const {
         return m_spacing;
+    }
+
+    /**
+     * @return True if and only if timed spacing is enabled.
+     */
+    inline bool isTimedSpacingEnabled() const {
+        return m_timedSpacingEnabled;
+    }
+
+    /**
+     * @return The desired maximum amount of time between dabs, in milliseconds. Returns infinity if
+     * timed spacing is disabled.
+     */
+    inline qreal timedSpacingInterval() const {
+        return isTimedSpacingEnabled() ?
+                    m_timedSpacingInterval :
+                    std::numeric_limits<qreal>::infinity();
     }
 
     inline bool isIsotropic() const {
@@ -76,6 +123,10 @@ public:
 
 private:
     QPointF m_spacing;
+    bool m_timedSpacingEnabled;
+    // Desired time between dabs, in milliseconds. This should be ignored if m_timedSpacingEnabled
+    // is false.
+    qreal m_timedSpacingInterval;
     qreal m_rotation;
     bool m_coordinateSystemFlipped;
 };
@@ -107,7 +158,9 @@ public:
                             const KisSpacingInformation &spacing);
 
     qreal getNextPointPosition(const QPointF &start,
-                               const QPointF &end);
+                               const QPointF &end,
+                               qreal startTime,
+                               qreal endTime);
 
     /**
      * \return true if at least one dab has been painted with this
@@ -128,6 +181,9 @@ private:
                                         const QPointF &end);
     qreal getNextPointPositionAnisotropic(const QPointF &start,
                                           const QPointF &end);
+    qreal getNextPointPositionTimed(qreal startTime,
+                                    qreal endTime);
+    void resetAccumulators();
 private:
     struct Private;
     Private * const m_d;

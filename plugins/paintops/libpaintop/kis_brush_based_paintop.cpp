@@ -157,6 +157,8 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qre
                                              m_brush->spacing(),
                                              m_brush->autoSpacingActive(),
                                              m_brush->autoSpacingCoeff(),
+                                             m_brush->timedSpacingEnabled(),
+                                             m_brush->timedSpacingDelay(),
                                              KisLodTransform::lodToScale(painter()->device()));
 }
 

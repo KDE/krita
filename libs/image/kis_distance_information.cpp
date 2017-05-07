@@ -33,9 +33,12 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
         lastPaintInfoValid(false),
         lockedDrawingAngle(0.0),
         hasLockedDrawingAngle(false),
-        totalDistance(0.0) {}
+        totalDistance(0.0),
+        accumDistance(),
+        accumTime(0.0) {}
 
-    QPointF distance;
+    QPointF accumDistance;
+    qreal accumTime;
     KisSpacingInformation spacing;
     QPointF lastPosition;
     qreal lastTime;
@@ -159,17 +162,32 @@ void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
 }
 
 qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
-                                                   const QPointF &end)
+                                                   const QPointF &end,
+                                                   qreal startTime,
+                                                   qreal endTime)
 {
-    return m_d->spacing.isIsotropic() ?
+    // Compute interpolation factor based on distance.
+    qreal spaceFactor = m_d->spacing.isIsotropic() ?
         getNextPointPositionIsotropic(start, end) :
         getNextPointPositionAnisotropic(start, end);
+
+    // Compute interpolation factor based on time.
+    qreal timeFactor = getNextPointPositionTemporal(startTime, endTime);
+
+    // Return the distance-based or time-based factor, whichever is smallest.
+    if (spaceFactor < 0.0) {
+        return timeFactor;
+    } else if (timeFactor < 0.0) {
+        return spaceFactor;
+    } else {
+        return qMin(spaceFactor, timeFactor);
+    }
 }
 
 qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start,
                                                             const QPointF &end)
 {
-    qreal distance = m_d->distance.x();
+    qreal distance = m_d->accumDistance.x();
     qreal spacing = qMax(qreal(0.5), m_d->spacing.spacing().x());
 
     if (start == end) {
@@ -183,10 +201,10 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
 
     if (nextPointDistance <= dragVecLength) {
         t = nextPointDistance / dragVecLength;
-        m_d->distance = QPointF();
+        resetAccumulators();
     } else {
         t = -1;
-        m_d->distance.rx() += dragVecLength;
+        m_d->accumDistance.rx() += dragVecLength;
     }
 
     return t;
@@ -202,8 +220,8 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
     qreal a_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.spacing().x());
     qreal b_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.spacing().y());
 
-    qreal x = m_d->distance.x();
-    qreal y = m_d->distance.y();
+    qreal x = m_d->accumDistance.x();
+    qreal y = m_d->accumDistance.y();
 
     static const qreal eps = 2e-3; // < 0.2 deg
 
@@ -238,15 +256,41 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
 
         if (k >= 0.0 && k <= 1.0) {
             t = k;
-            m_d->distance = QPointF();
+            resetAccumulators();
         } else {
-            m_d->distance += KisAlgebra2D::abs(diff);
+            m_d->accumDistance += KisAlgebra2D::abs(diff);
         }
     } else {
         warnKrita << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";
     }
 
     return t;
+}
+
+qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
+                                                        qreal endTime)
+{
+    // If start time is not before end time, or if timed spacing is disabled, do not interpolate.
+    if (!(startTime < endTime) || !m_d->spacing.isTimedSpacingEnabled()) {
+        return -1.0;
+    }
+
+    qreal newAccumTime = m_d->accumTime + endTime - startTime;
+
+    if (newAccumTime >= m_d->spacing.timedSpacingInterval()) {
+        resetAccumulators();
+        return m_d->spacing.timedSpacingInterval() / newAccumTime;
+    }
+    else {
+        m_d->accumTime = newAccumTime;
+        return -1.0;
+    }
+}
+
+void KisDistanceInformation::resetAccumulators()
+{
+    m_d->accumDistance = QPointF();
+    m_d->accumTime = 0.0;
 }
 
 bool KisDistanceInformation::hasLockedDrawingAngle() const

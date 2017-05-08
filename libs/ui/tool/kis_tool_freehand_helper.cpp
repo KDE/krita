@@ -784,27 +784,25 @@ void KisToolFreehandHelper::finishStroke()
 
 void KisToolFreehandHelper::doAirbrushing()
 {
-    if(!m_d->painterInfos.isEmpty()) {
-        // Add a new painting update at a point identical to the previous one, except for the time
-        // and speed information.
-        const KisPaintInformation &prevPaint = m_d->previousPaintInformation;
-        KisPaintInformation nextPaint(prevPaint.pos(),
-                                      prevPaint.pressure(),
-                                      prevPaint.xTilt(),
-                                      prevPaint.yTilt(),
-                                      prevPaint.rotation(),
-                                      prevPaint.tangentialPressure(),
-                                      prevPaint.perspective(),
-                                      elapsedStrokeTime(),
-                                      0.0);
-        // If the paintop can control the airbrush timing itself, treat the new point as a direct
-        // continuation of the stroke. Otherwise, try to force a dab to be painted immediately.
-        if (m_d->resources->isAirbrushRateControlled()) {
-            paint(nextPaint);
-        }
-        else {
-            paintAt(nextPaint);
-        }
+    // Add a new painting update at a point identical to the previous one, except for the time and
+    // speed information.
+    const KisPaintInformation &prevPaint = m_d->previousPaintInformation;
+    KisPaintInformation nextPaint(prevPaint.pos(),
+                                  prevPaint.pressure(),
+                                  prevPaint.xTilt(),
+                                  prevPaint.yTilt(),
+                                  prevPaint.rotation(),
+                                  prevPaint.tangentialPressure(),
+                                  prevPaint.perspective(),
+                                  elapsedStrokeTime(),
+                                  0.0);
+    // If the paintop can control the airbrush timing itself, treat the new point as a direct
+    // continuation of the stroke. Otherwise, try to force a dab to be painted immediately.
+    if (m_d->resources->isAirbrushRateControlled() && m_d->hasPaintAtLeastOnce) {
+        paint(nextPaint);
+    }
+    else {
+        paintAt(nextPaint);
     }
 }
 

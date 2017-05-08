@@ -32,7 +32,7 @@ class KritaRandomPickFilter : public QObject
     Q_OBJECT
 public:
     KritaRandomPickFilter(QObject *parent, const QVariantList &);
-    virtual ~KritaRandomPickFilter();
+    ~KritaRandomPickFilter() override;
 };
 
 class KisFilterRandomPick : public KisFilter
@@ -44,16 +44,16 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
     static inline KoID id() {
         return KoID("randompick", i18n("Random Pick"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
-    virtual QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod = 0) const;
+    QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod = 0) const override;
 };
 
 #endif

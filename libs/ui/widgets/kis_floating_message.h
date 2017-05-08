@@ -66,7 +66,7 @@ public:
 
 protected:
 
-    void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 
 public Q_SLOTS:
     void showMessage();

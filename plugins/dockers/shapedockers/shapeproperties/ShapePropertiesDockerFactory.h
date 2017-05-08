@@ -29,9 +29,9 @@ class ShapePropertiesDockerFactory : public KoDockFactoryBase
 public:
     ShapePropertiesDockerFactory();
 
-    virtual QString id() const;
-    virtual QDockWidget *createDockWidget();
-    virtual DockPosition defaultDockPosition() const;
+    QString id() const override;
+    QDockWidget *createDockWidget() override;
+    DockPosition defaultDockPosition() const override;
 
 };
 

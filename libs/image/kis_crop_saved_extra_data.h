@@ -38,7 +38,7 @@ public:
 public:
 
     KisCropSavedExtraData(Type type, QRect cropRect, KisNodeSP cropNode = 0);
-    ~KisCropSavedExtraData();
+    ~KisCropSavedExtraData() override;
 
     inline Type type() const {
         return m_type;

@@ -34,10 +34,10 @@ public:
 
 
     KisChangeFrameAction();
-    ~KisChangeFrameAction();
+    ~KisChangeFrameAction() override;
 
-    void begin(int shortcut, QEvent *event);
-    bool isAvailable() const;
+    void begin(int shortcut, QEvent *event) override;
+    bool isAvailable() const override;
 
 private:
     struct Private;

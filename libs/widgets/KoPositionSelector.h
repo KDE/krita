@@ -32,7 +32,7 @@ class KRITAWIDGETS_EXPORT KoPositionSelector : public QWidget
     Q_OBJECT
 public:
     explicit KoPositionSelector(QWidget *parent);
-    ~KoPositionSelector();
+    ~KoPositionSelector() override;
 
     KoFlake::Position position() const;
     void setPosition(KoFlake::Position position);
@@ -42,7 +42,7 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual void paintEvent (QPaintEvent *event);
+    void paintEvent (QPaintEvent *event) override;
 
 private Q_SLOTS:
     void positionChanged(int position);

@@ -54,7 +54,7 @@ class KRITAUI_EXPORT KisActionManager : public QObject
     Q_OBJECT
 public:
     KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection);
-    virtual ~KisActionManager();
+    ~KisActionManager() override;
 
     void setView(QPointer<KisView> imageView);
 

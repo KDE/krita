@@ -42,14 +42,14 @@ public:
 
 public:
     explicit VideoExportOptionsDialog(QWidget *parent = 0);
-    ~VideoExportOptionsDialog();
+    ~VideoExportOptionsDialog() override;
 
     void setCodec(CodecIndex index);
 
     QStringList customUserOptions() const;
 
-    void setConfiguration(const KisPropertiesConfigurationSP  config);
-    KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP  config) override;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private Q_SLOTS:
     void slotCustomLineToggled(bool value);

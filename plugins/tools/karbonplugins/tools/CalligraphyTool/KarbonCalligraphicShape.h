@@ -87,7 +87,7 @@ class KarbonCalligraphicShape : public KoParameterShape
 {
 public:
     explicit KarbonCalligraphicShape(qreal caps = 0.0);
-    ~KarbonCalligraphicShape();
+    ~KarbonCalligraphicShape() override;
 
     void appendPoint(const QPointF &p1, qreal angle, qreal width);
     void appendPointToPath(const KarbonCalligraphicPoint &p);
@@ -96,26 +96,26 @@ public:
     // after new points are added
     const QRectF lastPieceBoundingRect();
 
-    void setSize(const QSizeF &newSize);
+    void setSize(const QSizeF &newSize) override;
     //virtual QPointF normalize();
 
-    QPointF normalize();
+    QPointF normalize() override;
 
     void simplifyPath();
 
     void simplifyGuidePath();
 
     // reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
 protected:
     // reimplemented
     void moveHandleAction(int handleId,
                           const QPointF &point,
-                          Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+                          Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
 
     // reimplemented
-    void updatePath(const QSizeF &size);
+    void updatePath(const QSizeF &size) override;
 
 private:
     // auxiliary function that actually insererts the points

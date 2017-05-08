@@ -262,7 +262,7 @@ class KisDlgLayerStyle : public KoDialog
     Q_OBJECT
 public:
     explicit KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent = 0);
-    ~KisDlgLayerStyle();
+    ~KisDlgLayerStyle() override;
 
     KisPSDLayerStyleSP style() const;
 

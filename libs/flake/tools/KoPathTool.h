@@ -44,49 +44,49 @@ class KRITAFLAKE_EXPORT KoPathTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KoPathTool(KoCanvasBase *canvas);
-    ~KoPathTool();
+    ~KoPathTool() override;
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     /// reimplemented
-    virtual void repaintDecorations();
+    void repaintDecorations() override;
 
     /// reimplemented
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented
-    virtual void keyReleaseEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event) override;
     /// reimplemented
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// reimplemented
-    virtual void deactivate();
+    void deactivate() override;
 
     /// reimplemented
-    virtual void deleteSelection();
+    void deleteSelection() override;
 
     /// reimplemented
-    virtual KoToolSelection* selection();
+    KoToolSelection* selection() override;
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
 public Q_SLOTS:
-    void documentResourceChanged(int key, const QVariant & res);
+    void documentResourceChanged(int key, const QVariant & res) override;
 
 Q_SIGNALS:
     void typeChanged(int types);
     void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
 protected:
     /// reimplemented
-    virtual QList<QPointer<QWidget> >  createOptionWidgets();
+    QList<QPointer<QWidget> >  createOptionWidgets() override;
 
 private:
     struct PathSegment;

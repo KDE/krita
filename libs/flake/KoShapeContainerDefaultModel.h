@@ -32,30 +32,30 @@ class KRITAFLAKE_EXPORT KoShapeContainerDefaultModel : public KoShapeContainerMo
 {
 public:
     KoShapeContainerDefaultModel();
-    virtual ~KoShapeContainerDefaultModel();
+    ~KoShapeContainerDefaultModel() override;
 
-    virtual void add(KoShape *shape);
+    void add(KoShape *shape) override;
 
-    virtual void proposeMove(KoShape *shape, QPointF &move);
+    void proposeMove(KoShape *shape, QPointF &move) override;
 
-    virtual void setClipped(const KoShape *shape, bool clipping);
+    void setClipped(const KoShape *shape, bool clipping) override;
 
-    virtual bool isClipped(const KoShape *shape) const;
+    bool isClipped(const KoShape *shape) const override;
 
-    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
+    void setInheritsTransform(const KoShape *shape, bool inherit) override;
 
-    virtual bool inheritsTransform(const KoShape *shape) const;
+    bool inheritsTransform(const KoShape *shape) const override;
 
-    virtual void remove(KoShape *shape);
+    void remove(KoShape *shape) override;
 
-    virtual int count() const;
+    int count() const override;
 
-    virtual QList<KoShape*> shapes() const;
+    QList<KoShape*> shapes() const override;
 
-    virtual bool isChildLocked(const KoShape *child) const;
+    bool isChildLocked(const KoShape *child) const override;
 
     /// empty implementation.
-    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
 
 private:
     class Private;

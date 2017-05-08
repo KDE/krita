@@ -28,10 +28,10 @@ class SmallColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     SmallColorSelectorDock();
-    QString observerName() { return "SmallColorSelectorDock"; }
+    QString observerName() override { return "SmallColorSelectorDock"; }
     /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override { m_canvas = 0; setEnabled(false); }
 public Q_SLOTS:
     void colorChangedProxy(const QColor&);
     void canvasResourceChanged(int, const QVariant&);

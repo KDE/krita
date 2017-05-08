@@ -27,9 +27,9 @@ class KRITAUI_EXPORT OraLoadContext : public KisOpenRasterLoadContext
 {
 public:
     OraLoadContext(KoStore* _store);
-    virtual ~OraLoadContext();
-    virtual KisImageWSP loadDeviceData(const QString & fileName);
-    virtual QDomDocument loadStack();
+    ~OraLoadContext() override;
+    KisImageWSP loadDeviceData(const QString & fileName) override;
+    QDomDocument loadStack() override;
 
 
 private:

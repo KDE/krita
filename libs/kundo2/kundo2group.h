@@ -60,7 +60,7 @@ class KRITAUNDO2_EXPORT KUndo2Group : public QObject
 
 public:
     explicit KUndo2Group(QObject *parent = 0);
-    ~KUndo2Group();
+    ~KUndo2Group() override;
 
     void addStack(KUndo2QStack *stack);
     void removeStack(KUndo2QStack *stack);

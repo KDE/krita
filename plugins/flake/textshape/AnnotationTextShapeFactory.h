@@ -28,11 +28,11 @@ class AnnotationTextShapeFactory : public KoShapeFactoryBase
 {
 public:
     AnnotationTextShapeFactory();
-    ~AnnotationTextShapeFactory() {}
+    ~AnnotationTextShapeFactory() override {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const;
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const override;
+    KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 
 };
 

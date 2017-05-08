@@ -30,12 +30,12 @@ class KisWdgGaussianBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgGaussianBlur(QWidget * parent);
-    virtual ~KisWdgGaussianBlur();
+    ~KisWdgGaussianBlur() override;
     inline const Ui_WdgGaussianBlur* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private Q_SLOTS:
     void horizontalRadiusChanged(qreal);

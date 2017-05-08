@@ -35,7 +35,7 @@ class PSDLoader : public QObject {
 public:
 
     PSDLoader(KisDocument *doc);
-    virtual ~PSDLoader();
+    ~PSDLoader() override;
 
     KisImageBuilder_Result buildImage(const QString &filename);
 

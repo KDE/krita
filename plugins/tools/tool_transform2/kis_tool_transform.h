@@ -125,32 +125,32 @@ public:
     Q_ENUMS(WarpType)
 
     KisToolTransform(KoCanvasBase * canvas);
-    virtual ~KisToolTransform();
+    ~KisToolTransform() override;
 
-    virtual QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void touchEvent(QTouchEvent *event);
+    void mousePressEvent(KoPointerEvent *e) override;
+    void mouseMoveEvent(KoPointerEvent *e) override;
+    void mouseReleaseEvent(KoPointerEvent *e) override;
+    void touchEvent(QTouchEvent *event) override;
 
     void beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
 
-    void activatePrimaryAction();
-    void deactivatePrimaryAction();
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void activatePrimaryAction() override;
+    void deactivatePrimaryAction() override;
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    void activateAlternateAction(AlternateAction action);
-    void deactivateAlternateAction(AlternateAction action);
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void activateAlternateAction(AlternateAction action) override;
+    void deactivateAlternateAction(AlternateAction action) override;
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
-    void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
     TransformToolMode transformMode() const;
 
@@ -171,11 +171,11 @@ public:
     double warpFlexibility() const;
     int warpPointDensity() const;
 
-    bool wantsTouch() const { return true; }
+    bool wantsTouch() const override { return true; }
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
 
@@ -199,7 +199,7 @@ public Q_SLOTS:
     void setWarpPointDensity(int density);
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 Q_SIGNALS:
     void transformModeChanged();
@@ -207,9 +207,9 @@ Q_SIGNALS:
     void warpTransformChanged();
 
 public Q_SLOTS:
-    void requestUndoDuringStroke();
-    void requestStrokeEnd();
-    void requestStrokeCancellation();
+    void requestUndoDuringStroke() override;
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
     void canvasUpdateRequested();
     void cursorOutlineUpdateRequested(const QPointF &imagePos);
 
@@ -321,9 +321,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolTransformFactory() {}
+    ~KisToolTransformFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolTransform(canvas);
     }
 

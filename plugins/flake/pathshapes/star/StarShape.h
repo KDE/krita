@@ -35,7 +35,7 @@ class StarShape : public KoParameterShape
 {
 public:
     StarShape();
-    ~StarShape();
+    ~StarShape() override;
 
     /**
      * Sets the number of corners.
@@ -107,17 +107,17 @@ public:
     QPointF starCenter() const;
 
     /// reimplemented
-    virtual void setSize(const QSizeF &newSize);
+    void setSize(const QSizeF &newSize) override;
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
 protected:
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    void updatePath(const QSizeF &size);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
+    void updatePath(const QSizeF &size) override;
     /// recreates the path points when the corner count or convexity changes
     void createPoints(int requiredPointCount);
 

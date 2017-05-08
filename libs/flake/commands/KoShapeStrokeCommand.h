@@ -59,11 +59,11 @@ public:
      */
     KoShapeStrokeCommand(KoShape* shape, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
 
-    virtual ~KoShapeStrokeCommand();
+    ~KoShapeStrokeCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

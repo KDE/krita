@@ -82,7 +82,7 @@ public:
 
     explicit KoTextEditor(QTextDocument *document);
 
-    virtual ~KoTextEditor();
+    ~KoTextEditor() override;
 
     /**
      * Retrieves the texteditor for the document of the first text shape in the current

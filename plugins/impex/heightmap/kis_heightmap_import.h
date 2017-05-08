@@ -30,9 +30,9 @@ class KisHeightMapImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisHeightMapImport(QObject *parent, const QVariantList &);
-    virtual ~KisHeightMapImport();
+    ~KisHeightMapImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

@@ -40,7 +40,7 @@ public:
 
     DlgHistogram(QWidget * parent = 0,
                  const char* name = 0);
-    ~DlgHistogram();
+    ~DlgHistogram() override;
 
     void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 

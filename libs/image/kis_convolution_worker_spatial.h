@@ -39,7 +39,7 @@ public:
     {
     }
 
-    ~KisConvolutionWorkerSpatial() {
+    ~KisConvolutionWorkerSpatial() override {
     }
 
     inline void loadPixelToCache(qreal **cache, const quint8 *data, int index) {
@@ -58,7 +58,7 @@ public:
 
     }
 
-    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect) {
+    void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect) override {
         // store some kernel characteristics
         m_kw = kernel->width();
         m_kh = kernel->height();

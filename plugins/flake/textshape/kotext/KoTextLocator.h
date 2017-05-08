@@ -35,17 +35,17 @@ class KRITATEXT_EXPORT KoTextLocator : public KoInlineObject
 public:
     /// constructor
     KoTextLocator();
-    virtual ~KoTextLocator();
+    ~KoTextLocator() override;
 
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
+    void updatePosition(const QTextDocument *document,
+                                int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented from super
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object,
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented from super
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
 
     /// returns the text of the paragraph that is the first chapter before the index.
     QString chapter() const;
@@ -61,8 +61,8 @@ public:
     /// Remove a reference from the listeners.
     void removeListener(KoTextReference *reference);
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) override;
 
 private:
     class Private;

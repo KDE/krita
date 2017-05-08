@@ -33,14 +33,14 @@ class ShapePropertiesDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     explicit ShapePropertiesDocker(QWidget *parent = 0);
-    ~ShapePropertiesDocker();
-    QString observerName()
+    ~ShapePropertiesDocker() override;
+    QString observerName() override
     {
         return "ShapePropertiesDocker";
     }
     /// reimplemented
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private Q_SLOTS:
     void selectionChanged();

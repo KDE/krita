@@ -299,7 +299,7 @@ class KRITAUI_EXPORT MultinodePropertyConnectorInterface : public QObject
 {
     Q_OBJECT
 public:
-    virtual ~MultinodePropertyConnectorInterface();
+    ~MultinodePropertyConnectorInterface() override;
 
     /**
      * Public interface
@@ -338,13 +338,13 @@ class KRITAUI_EXPORT MultinodePropertyBaseConnector : public MultinodePropertyCo
 public:
     MultinodePropertyBaseConnector(KisMultinodePropertyInterface *parent);
 
-    void connectIgnoreCheckBox(QCheckBox *ignoreBox);
-    void notifyIgnoreChanged();
+    void connectIgnoreCheckBox(QCheckBox *ignoreBox) override;
+    void notifyIgnoreChanged() override;
 
-    void connectAutoEnableWidget(QWidget *widget);
+    void connectAutoEnableWidget(QWidget *widget) override;
 
 protected:
-    void slotIgnoreCheckBoxChanged(int state);
+    void slotIgnoreCheckBoxChanged(int state) override;
 
 private:
     QPointer<QCheckBox> m_ignoreBox;
@@ -365,7 +365,7 @@ public:
     {
     }
 
-    void connectIgnoreCheckBox(QCheckBox *ignoreBox) {
+    void connectIgnoreCheckBox(QCheckBox *ignoreBox) override {
         m_ignoreBox = ignoreBox;
 
         if ((!m_parent->isIgnored() && !m_parent->savedValuesDiffer())
@@ -378,11 +378,11 @@ public:
         connect(m_ignoreBox, SIGNAL(stateChanged(int)), SLOT(slotIgnoreCheckBoxChanged(int)));
     }
 
-    void notifyIgnoreChanged() {
+    void notifyIgnoreChanged() override {
         // noop
     }
 
-    void notifyValueChanged() {
+    void notifyValueChanged() override {
         if (m_ignoreBox) {
             Qt::CheckState newState =
                 m_parent->isIgnored() ? Qt::PartiallyChecked :
@@ -396,7 +396,7 @@ public:
         MultinodePropertyConnectorInterface::notifyValueChanged();
     }
 protected:
-    void slotIgnoreCheckBoxChanged(int state) {
+    void slotIgnoreCheckBoxChanged(int state) override {
         if (state == Qt::PartiallyChecked) {
             m_parent->setIgnored(true);
         } else {
@@ -433,7 +433,7 @@ public:
     {
     }
 
-    void undo() {
+    void undo() override {
         int index = 0;
         Q_FOREACH (KisNodeSP node, m_nodes) {
             m_propAdapter.setPropForNode(node, m_oldValues[index], -1);
@@ -441,7 +441,7 @@ public:
         }
     }
 
-    void redo() {
+    void redo() override {
         int index = 0;
         Q_FOREACH (KisNodeSP node, m_nodes) {
             m_propAdapter.setPropForNode(node, m_newValue, index);
@@ -522,9 +522,9 @@ public:
 
         m_currentValue = defaultValue();
     }
-    ~KisMultinodeProperty() {}
+    ~KisMultinodeProperty() override {}
 
-    void rereadCurrentValue() {
+    void rereadCurrentValue() override {
         if (m_isIgnored) return;
 
         ValueType lastValue = m_propAdapter.propForNode(m_nodes.first());
@@ -563,7 +563,7 @@ public:
         return m_currentValue;
     }
 
-    void setIgnored(bool value) {
+    void setIgnored(bool value) override {
         if (value == m_isIgnored) return;
 
         m_isIgnored = value;
@@ -586,11 +586,11 @@ public:
         m_connector->notifyIgnoreChanged();
     }
 
-    bool isIgnored() const {
+    bool isIgnored() const override {
         return m_isIgnored;
     }
 
-    KUndo2Command* createPostExecutionUndoCommand() {
+    KUndo2Command* createPostExecutionUndoCommand() override {
         KIS_ASSERT_RECOVER(!m_isIgnored) { return new KUndo2Command(); }
 
         return new MultinodePropertyUndoCommand<PropertyAdapter>(m_propAdapter, m_nodes,
@@ -598,15 +598,15 @@ public:
     }
 
     // TODO: disconnect methods...
-    void connectIgnoreCheckBox(QCheckBox *ignoreBox) {
+    void connectIgnoreCheckBox(QCheckBox *ignoreBox) override {
         m_connector->connectIgnoreCheckBox(ignoreBox);
     }
 
-    void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection) {
+    void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection) override {
         m_connector->connectValueChangedSignal(receiver, method, type);
     }
 
-    void connectAutoEnableWidget(QWidget *widget) {
+    void connectAutoEnableWidget(QWidget *widget) override {
         m_connector->connectAutoEnableWidget(widget);
     }
 
@@ -614,11 +614,11 @@ public:
      * Interface for the connector
      */
 
-    bool savedValuesDiffer() const {
+    bool savedValuesDiffer() const override {
         return m_savedValuesDiffer;
     }
 
-    bool haveTheOnlyNode() const {
+    bool haveTheOnlyNode() const override {
         return m_nodes.size() == 1;
     }
 

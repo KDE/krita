@@ -30,14 +30,14 @@ class ChannelModel : public QAbstractTableModel
     Q_OBJECT
 public:
     ChannelModel(QObject* parent = 0);
-    virtual ~ChannelModel();
+    ~ChannelModel() override;
 
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-    Qt::ItemFlags flags(const QModelIndex& index) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
     void unsetCanvas( void );
 
     //set maximum size of the thumbnail image. This should be set based on screen resolution, etc.

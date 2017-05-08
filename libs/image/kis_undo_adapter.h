@@ -31,7 +31,7 @@ class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
 
 public:
     KisUndoAdapter(KisUndoStore *undoStore);
-    virtual ~KisUndoAdapter();
+    ~KisUndoAdapter() override;
 
 public:
     void emitSelectionChanged();

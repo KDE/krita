@@ -34,8 +34,8 @@ public:
      */
     KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 
     typedef KisBaseNode::PropertyList PropertyList;

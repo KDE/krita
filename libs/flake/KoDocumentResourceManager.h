@@ -98,7 +98,7 @@ enum DocumentResource {
      * @param parent the parent QObject, used for memory management.
      */
     explicit KoDocumentResourceManager(QObject *parent = 0);
-    ~KoDocumentResourceManager();
+    ~KoDocumentResourceManager() override;
 
     /**
      * Set a resource of any type.

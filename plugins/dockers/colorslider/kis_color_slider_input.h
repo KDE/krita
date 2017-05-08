@@ -60,7 +60,7 @@ public:
     
     KisDisplayColorConverter* converter() const;
 protected:
-    virtual QWidget* createInput();
+    QWidget* createInput() override;
     KisCanvas2* m_canvas;
 public Q_SLOTS:
     void setValue(double);

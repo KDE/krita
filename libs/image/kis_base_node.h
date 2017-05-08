@@ -131,7 +131,7 @@ public:
     /**
      * Delete this node
      */
-    virtual ~KisBaseNode();
+    ~KisBaseNode() override;
 
 
     /**

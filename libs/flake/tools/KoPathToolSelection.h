@@ -45,7 +45,7 @@ class KRITAFLAKE_EXPORT KoPathToolSelection : public KoToolSelection
 public:
     explicit KoPathToolSelection(KoPathTool *tool);
 
-    ~KoPathToolSelection();
+    ~KoPathToolSelection() override;
 
     /// @brief Draw the selected points
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -143,7 +143,7 @@ public:
     void update();
 
     /// reimplemented from KoToolSelection
-    virtual bool hasSelection();
+    bool hasSelection() override;
 
 Q_SIGNALS:
     void selectionChanged();

@@ -44,11 +44,11 @@ public:
      */
     KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
                        KUndo2Command *parent = 0);
-    ~KoShapeMoveCommand();
+    ~KoShapeMoveCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
     /// update newPositions list with new postions.
     void setNewPositions(QList<QPointF> newPositions);

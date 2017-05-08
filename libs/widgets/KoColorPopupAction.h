@@ -47,7 +47,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KoColorPopupAction();
+    ~KoColorPopupAction() override;
 
 public Q_SLOTS:
     /// Sets a new color to be displayed

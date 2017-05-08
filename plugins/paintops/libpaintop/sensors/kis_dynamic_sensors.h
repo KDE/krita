@@ -28,9 +28,9 @@ class KisDynamicSensorSpeed : public KisDynamicSensor
 {
 public:
     KisDynamicSensorSpeed();
-    virtual ~KisDynamicSensorSpeed() { }
-    virtual qreal value(const KisPaintInformation& info);
-    void reset() {
+    ~KisDynamicSensorSpeed() override { }
+    qreal value(const KisPaintInformation& info) override;
+    void reset() override {
         m_speed = -1.0;
     }
 private:
@@ -41,8 +41,8 @@ class KisDynamicSensorRotation : public KisDynamicSensor
 {
 public:
     KisDynamicSensorRotation();
-    virtual ~KisDynamicSensorRotation() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorRotation() override { }
+    qreal value(const KisPaintInformation& info) override {
         return info.rotation() / 360.0;
     }
 };
@@ -51,8 +51,8 @@ class KisDynamicSensorPressure : public KisDynamicSensor
 {
 public:
     KisDynamicSensorPressure();
-    virtual ~KisDynamicSensorPressure() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorPressure() override { }
+    qreal value(const KisPaintInformation& info) override {
         return info.pressure();
     }
 };
@@ -61,8 +61,8 @@ class KisDynamicSensorPressureIn : public KisDynamicSensor
 {
 public:
     KisDynamicSensorPressureIn();
-    virtual ~KisDynamicSensorPressureIn() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorPressureIn() override { }
+    qreal value(const KisPaintInformation& info) override {
         if(!info.isHoveringMode()) {
             if(info.pressure() > lastPressure) {
                 lastPressure = info.pressure();
@@ -81,8 +81,8 @@ class KisDynamicSensorXTilt : public KisDynamicSensor
 {
 public:
     KisDynamicSensorXTilt();
-    virtual ~KisDynamicSensorXTilt() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorXTilt() override { }
+    qreal value(const KisPaintInformation& info) override {
         return 1.0 - fabs(info.xTilt()) / 60.0;
     }
 };
@@ -91,8 +91,8 @@ class KisDynamicSensorYTilt : public KisDynamicSensor
 {
 public:
     KisDynamicSensorYTilt();
-    virtual ~KisDynamicSensorYTilt() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorYTilt() override { }
+    qreal value(const KisPaintInformation& info) override {
         return 1.0 - fabs(info.yTilt()) / 60.0;
     }
 };
@@ -101,8 +101,8 @@ class KisDynamicSensorTiltDirection : public KisDynamicSensor
 {
 public:
     KisDynamicSensorTiltDirection();
-    virtual ~KisDynamicSensorTiltDirection() {}
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorTiltDirection() override {}
+    qreal value(const KisPaintInformation& info) override {
         return KisPaintInformation::tiltDirection(info, true);
     }
 };
@@ -111,8 +111,8 @@ class KisDynamicSensorTiltElevation : public KisDynamicSensor
 {
 public:
     KisDynamicSensorTiltElevation();
-    virtual ~KisDynamicSensorTiltElevation() {}
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorTiltElevation() override {}
+    qreal value(const KisPaintInformation& info) override {
         return KisPaintInformation::tiltElevation(info, 60.0, 60.0, true);
     }
 };
@@ -121,8 +121,8 @@ class KisDynamicSensorPerspective : public KisDynamicSensor
 {
 public:
     KisDynamicSensorPerspective();
-    virtual ~KisDynamicSensorPerspective() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorPerspective() override { }
+    qreal value(const KisPaintInformation& info) override {
         return info.perspective();
     }
 };
@@ -131,8 +131,8 @@ class KisDynamicSensorTangentialPressure : public KisDynamicSensor
 {
 public:
     KisDynamicSensorTangentialPressure();
-    virtual ~KisDynamicSensorTangentialPressure() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    ~KisDynamicSensorTangentialPressure() override { }
+    qreal value(const KisPaintInformation& info) override {
         return info.tangentialPressure();
     }
 };

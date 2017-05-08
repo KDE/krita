@@ -39,12 +39,12 @@ public:
      * @param parent the parent command
      */
     KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, KUndo2Command* parent = 0);
-    ~KoShapeKeepAspectRatioCommand();
+    ~KoShapeKeepAspectRatioCommand() override;
 
     /// Execute the command
-    virtual void redo();
+    void redo() override;
     /// Unexecute the command
-    virtual void undo();
+    void undo() override;
 
 private:
     QList<KoShape*> m_shapes;

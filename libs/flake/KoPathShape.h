@@ -83,17 +83,17 @@ public:
     /**
      * @brief
      */
-    virtual ~KoPathShape();
+    ~KoPathShape() override;
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
     /// reimplemented
-    virtual QPainterPath outline() const;
+    QPainterPath outline() const override;
     /// reimplemented
-    virtual QRectF boundingRect() const;
+    QRectF boundingRect() const override;
     /// reimplemented
-    virtual QSizeF size() const;
+    QSizeF size() const override;
 
     QPainterPath pathStroke(const QPen &pen) const;
     /**
@@ -107,14 +107,14 @@ public:
      *
      * @see resizeMatrix()
      */
-    virtual void setSize(const QSizeF &size);
+    void setSize(const QSizeF &size) override;
     /// reimplemented
-    virtual bool hitTest(const QPointF &position) const;
+    bool hitTest(const QPointF &position) const override;
 
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     // basically the same as loadOdf but adapted to the contour cases
     // tag needs to be either contour-polygon or contour-path from another shape
@@ -466,9 +466,9 @@ protected:
     KoPathShape(KoPathShapePrivate &);
 
     /// reimplemented
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
     /// reimplemented
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * @brief Add an arc.

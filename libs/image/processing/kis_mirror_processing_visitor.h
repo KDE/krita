@@ -30,10 +30,10 @@ public:
     KisMirrorProcessingVisitor(const QRect &bounds, Qt::Orientation orientation);
 
 private:
-    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
+    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) override;
 
-    void visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter);
+    void visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter) override;
 
 private:
     void transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);

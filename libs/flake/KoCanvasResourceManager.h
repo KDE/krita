@@ -101,7 +101,7 @@ public:
      * @param parent the parent QObject, used for memory management.
      */
     explicit KoCanvasResourceManager(QObject *parent = 0);
-    virtual ~KoCanvasResourceManager();
+    ~KoCanvasResourceManager() override;
 
 public Q_SLOTS:
     /**

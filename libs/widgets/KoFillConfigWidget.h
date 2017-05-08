@@ -42,7 +42,7 @@ class KRITAWIDGETS_EXPORT KoFillConfigWidget : public QWidget
     };
 public:
     explicit KoFillConfigWidget(QWidget *parent);
-    ~KoFillConfigWidget();
+    ~KoFillConfigWidget() override;
 
     void setCanvas(KoCanvasBase *canvas);
 

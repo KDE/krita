@@ -32,7 +32,7 @@ class QMLConverter : public QObject
     Q_OBJECT
 public:
     QMLConverter();
-    virtual ~QMLConverter();
+    ~QMLConverter() override;
 public:
     KisImageBuilder_Result buildFile(const QString &filename, KisImageSP image);
 

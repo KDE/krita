@@ -48,7 +48,7 @@ public:
     enum anchor { NORTH_WEST = 0, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE};
 
     DlgCanvasSize(QWidget * parent, int width, int height, double resolution);
-    ~DlgCanvasSize();
+    ~DlgCanvasSize() override;
 
     qint32 width();
     qint32 height();

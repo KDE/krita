@@ -51,16 +51,16 @@ public:
 
     KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter);
 
-    virtual ~KisOpenGLCanvas2();
+    ~KisOpenGLCanvas2() override;
 
 public: // QOpenGLWidget
 
-    void resizeGL(int width, int height);
-    void initializeGL();
-    void paintGL();
+    void resizeGL(int width, int height) override;
+    void initializeGL() override;
+    void paintGL() override;
 
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
+    void inputMethodEvent(QInputMethodEvent *event) override;
 
 public:
     void renderCanvasGL();
@@ -71,19 +71,19 @@ public:
 
 public: // Implement kis_abstract_canvas_widget interface
     void initializeShaders();
-    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
-    void setWrapAroundViewingMode(bool value);
-    void channelSelectionChanged(const QBitArray &channelFlags);
-    void setDisplayProfile(KisDisplayColorConverter *colorConverter);
-    void finishResizingImage(qint32 w, qint32 h);
-    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags);
-    QRect updateCanvasProjection(KisUpdateInfoSP info);
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
+    void setWrapAroundViewingMode(bool value) override;
+    void channelSelectionChanged(const QBitArray &channelFlags) override;
+    void setDisplayProfile(KisDisplayColorConverter *colorConverter) override;
+    void finishResizingImage(qint32 w, qint32 h) override;
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
+    QRect updateCanvasProjection(KisUpdateInfoSP info) override;
 
-    QWidget *widget() {
+    QWidget *widget() override {
         return this;
     }
 
-    bool isBusy() const;
+    bool isBusy() const override;
 
     void setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing);
 
@@ -93,7 +93,7 @@ private Q_SLOTS:
     void slotConfigChanged();
 
 protected: // KisCanvasWidgetBase
-    virtual bool callFocusNextPrevChild(bool next);
+    bool callFocusNextPrevChild(bool next) override;
 
 private:
     void reportFailedShaderCompilation(const QString &context);

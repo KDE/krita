@@ -59,7 +59,7 @@ public:
     /// Constructs a new pattern background utilizing the given image collection
     explicit KoPatternBackground(KoImageCollection *collection);
 
-    virtual ~KoPatternBackground();
+    ~KoPatternBackground() override;
 
     /// Sets the transform matrix
     void setTransform(const QTransform &matrix);
@@ -110,11 +110,11 @@ public:
     QSizeF patternOriginalSize() const;
 
     /// reimplemented from KoShapeBackground
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
     /// reimplemented from KoShapeBackground
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
+    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     /// reimplemented from KoShapeBackground
-    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize);
+    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
 
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);

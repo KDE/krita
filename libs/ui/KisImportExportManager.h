@@ -78,7 +78,7 @@ public:
      */
     explicit KisImportExportManager(const QString& location);
 
-    virtual ~KisImportExportManager();
+    ~KisImportExportManager() override;
 
     /**
      * Imports the specified document and returns the resultant filename

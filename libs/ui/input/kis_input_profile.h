@@ -42,7 +42,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KisInputProfile();
+    ~KisInputProfile() override;
 
     /**
      * \return The name of the profile.

@@ -137,17 +137,17 @@ public:
         : m_min(0), m_max(0), m_value(0)
     {}
 
-    int maximum() const {
+    int maximum() const override {
         return m_max;
     }
-    void setValue(int value) {
+    void setValue(int value) override {
         m_value = value;
     }
-    void setRange(int min, int max) {
+    void setRange(int min, int max) override {
         m_min = min;
         m_max = max;
     }
-    void setFormat(const QString &format) {
+    void setFormat(const QString &format) override {
         m_format = format;
     }
 
@@ -485,7 +485,7 @@ class TestNode : public DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestNode(*this);
     }
 };
@@ -494,32 +494,32 @@ class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode(KisNode *parent, int index) {
+    void aboutToAddANode(KisNode *parent, int index) override {
         KisNodeGraphListener::aboutToAddANode(parent, index);
         beforeInsertRow = true;
     }
 
-    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+    void nodeHasBeenAdded(KisNode *parent, int index) override {
         KisNodeGraphListener::nodeHasBeenAdded(parent, index);
         afterInsertRow = true;
     }
 
-    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+    void aboutToRemoveANode(KisNode *parent, int index) override {
         KisNodeGraphListener::aboutToRemoveANode(parent, index);
         beforeRemoveRow  = true;
     }
 
-    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+    void nodeHasBeenRemoved(KisNode *parent, int index) override {
         KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
 
-    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+    void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) override {
         KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
         beforeMove = true;
     }
 
-    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+    void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) override {
         KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
         afterMove = true;
     }

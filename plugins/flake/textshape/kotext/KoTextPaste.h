@@ -46,11 +46,11 @@ public:
      * @param rdfModel the rdfModel we'll insert the tuples into
      */
     KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel, KoCanvasBase *canvas, KUndo2Command *cmd);
-    virtual ~KoTextPaste();
+    ~KoTextPaste() override;
 
 protected:
     /// reimplemented
-    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore);
+    bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override;
 
     class Private;
     Private * const d;

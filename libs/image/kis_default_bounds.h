@@ -34,13 +34,13 @@ class KRITAIMAGE_EXPORT KisDefaultBounds :  public KisDefaultBoundsBase
 {
 public:
     KisDefaultBounds(KisImageWSP image = 0);
-    virtual ~KisDefaultBounds();
+    ~KisDefaultBounds() override;
 
-    QRect bounds() const;
-    bool wrapAroundMode() const;
-    int currentLevelOfDetail() const;
-    int currentTime() const;
-    bool externalFrameActive() const;
+    QRect bounds() const override;
+    bool wrapAroundMode() const override;
+    int currentLevelOfDetail() const override;
+    int currentTime() const override;
+    bool externalFrameActive() const override;
 
 protected:
     friend class KisPaintDeviceTest;
@@ -57,9 +57,9 @@ class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
 {
 public:
     KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice = 0, KisImageWSP image = 0);
-    ~KisSelectionDefaultBounds();
+    ~KisSelectionDefaultBounds() override;
 
-    QRect bounds() const;
+    QRect bounds() const override;
 
 private:
     Q_DISABLE_COPY(KisSelectionDefaultBounds)
@@ -72,8 +72,8 @@ class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds
 {
 public:
     KisSelectionEmptyBounds(KisImageWSP image);
-    virtual ~KisSelectionEmptyBounds();
-    QRect bounds() const;
+    ~KisSelectionEmptyBounds() override;
+    QRect bounds() const override;
 };
 
 #endif // KIS_DEFAULT_BOUNDS_H

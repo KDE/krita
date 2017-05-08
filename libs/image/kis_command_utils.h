@@ -40,8 +40,8 @@ namespace KisCommandUtils
         AggregateCommand(const KUndo2MagicString &text,
                          KUndo2Command *parent = 0);
 
-        void redo();
-        void undo();
+        void redo() override;
+        void undo() override;
 
     protected:
         virtual void populateChildCommands() = 0;
@@ -78,8 +78,8 @@ namespace KisCommandUtils
     struct KRITAIMAGE_EXPORT SkipFirstRedoWrapper : public KUndo2Command {
 
         SkipFirstRedoWrapper(KUndo2Command *child = 0, KUndo2Command *parent = 0);
-        void redo();
-        void undo();
+        void redo() override;
+        void undo() override;
 
     private:
         bool m_firstRedo;
@@ -89,8 +89,8 @@ namespace KisCommandUtils
     struct KRITAIMAGE_EXPORT FlipFlopCommand : public KUndo2Command {
         FlipFlopCommand(bool finalize, KUndo2Command *parent = 0);
 
-        void redo();
-        void undo();
+        void redo() override;
+        void undo() override;
 
     protected:
         virtual void init();
@@ -105,12 +105,12 @@ namespace KisCommandUtils
 
     struct KRITAIMAGE_EXPORT CompositeCommand : public KUndo2Command {
         CompositeCommand(KUndo2Command *parent = 0);
-        ~CompositeCommand();
+        ~CompositeCommand() override;
 
         void addCommand(KUndo2Command *cmd);
 
-        void redo();
-        void undo();
+        void redo() override;
+        void undo() override;
 
     private:
         QVector<KUndo2Command*> m_commands;

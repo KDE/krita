@@ -47,7 +47,7 @@ class KRITAWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoStrokeConfigWidget(QWidget *parent);
-    ~KoStrokeConfigWidget();
+    ~KoStrokeConfigWidget() override;
 
     // Getters
     Qt::PenStyle lineStyle() const;

@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject, public KisStrokesFa
 
 public:
     KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener);
-    virtual ~KisUpdateScheduler();
+    ~KisUpdateScheduler() override;
 
     /**
      * Sets the proxy that is going to be notified about the progress
@@ -136,10 +136,10 @@ public:
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
-    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisStrokeId id, KisStrokeJobData *data);
-    void endStroke(KisStrokeId id);
-    bool cancelStroke(KisStrokeId id);
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy) override;
+    void addJob(KisStrokeId id, KisStrokeJobData *data) override;
+    void endStroke(KisStrokeId id) override;
+    bool cancelStroke(KisStrokeId id) override;
 
     /**
      * Sets the desired level of detail on which the strokes should

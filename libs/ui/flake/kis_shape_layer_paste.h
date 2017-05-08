@@ -34,10 +34,10 @@ public:
             , m_controller(_controller) {
     }
 
-    virtual ~KisShapeLayerShapePaste() {
+    ~KisShapeLayerShapePaste() override {
     }
 
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
+    bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) override {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, m_controller ? m_controller->resourceManager() : 0);
         KoXmlElement child;

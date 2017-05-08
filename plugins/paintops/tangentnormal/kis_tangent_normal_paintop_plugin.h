@@ -27,7 +27,7 @@ class TangentNormalPaintOpPlugin: public QObject
     Q_OBJECT
 public:
     TangentNormalPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~TangentNormalPaintOpPlugin();
+    ~TangentNormalPaintOpPlugin() override;
 };
 
 

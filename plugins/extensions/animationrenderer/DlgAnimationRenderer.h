@@ -51,7 +51,7 @@ class DlgAnimationRenderer: public KoDialog
 public:
 
     DlgAnimationRenderer(KisDocument *doc, QWidget *parent = 0);
-    ~DlgAnimationRenderer();
+    ~DlgAnimationRenderer() override;
 
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
     void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg);
@@ -78,7 +78,7 @@ private Q_SLOTS:
 
 protected Q_SLOTS:
 
-    void slotButtonClicked(int button);
+    void slotButtonClicked(int button) override;
 
 private:
 

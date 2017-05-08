@@ -83,10 +83,10 @@ public:
 
 public: // KoProgressProxy implementation
 
-    int maximum() const;
-    void setValue( int value );
-    void setRange( int minimum, int maximum );
-    void setFormat( const QString & format );
+    int maximum() const override;
+    void setValue( int value ) override;
+    void setRange( int minimum, int maximum ) override;
+    void setFormat( const QString & format ) override;
 
 Q_SIGNALS:
 

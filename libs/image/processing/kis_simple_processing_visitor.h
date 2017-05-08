@@ -25,20 +25,20 @@
 class KRITAIMAGE_EXPORT KisSimpleProcessingVisitor : public KisProcessingVisitor
 {
 public:
-    ~KisSimpleProcessingVisitor();
+    ~KisSimpleProcessingVisitor() override;
 
-    void visit(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisNode *node, KisUndoAdapter *undoAdapter) override;
+    void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) override;
+    void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter) override;
+    void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) override;
+    void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) override;
+    void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) override;
 
 protected:
     virtual void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) = 0;

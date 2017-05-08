@@ -29,7 +29,7 @@ class ShearImage : public KisViewPlugin
     Q_OBJECT
 public:
     ShearImage(QObject *parent, const QVariantList &);
-    virtual ~ShearImage();
+    ~ShearImage() override;
 
 private Q_SLOTS:
 

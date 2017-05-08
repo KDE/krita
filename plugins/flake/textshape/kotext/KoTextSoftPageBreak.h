@@ -35,20 +35,20 @@ class KRITATEXT_EXPORT KoTextSoftPageBreak : public KoInlineObject
     Q_OBJECT
 public:
     KoTextSoftPageBreak();
-    virtual ~KoTextSoftPageBreak();
+    ~KoTextSoftPageBreak() override;
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    virtual void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) override;
 
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
+    void updatePosition(const QTextDocument *document,
+                                int posInDocument, const QTextCharFormat &format) override;
 
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object,
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
 };
 
 #endif /* KOTEXTSOFTPAGEBREAK_H */

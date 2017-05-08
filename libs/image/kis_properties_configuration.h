@@ -49,7 +49,7 @@ public:
      * Create a new properties  config.
      */
     KisPropertiesConfiguration();
-    virtual ~KisPropertiesConfiguration();
+    ~KisPropertiesConfiguration() override;
 
     /**
      * Deep copy the properties  configFile
@@ -66,7 +66,7 @@ public:
      * @param clear if true, the properties map will be emptied.
      * @return true is the xml document could be parsed
      */
-    virtual bool fromXML(const QString& xml, bool clear = true);
+    bool fromXML(const QString& xml, bool clear = true) override;
 
     /**
      * Fill the properties  configuration object from the XML encoded representation in s.
@@ -74,19 +74,19 @@ public:
      *
      * Note: the existing properties will not be cleared
      */
-    virtual void fromXML(const QDomElement&);
+    void fromXML(const QDomElement&) override;
 
     /**
      * Create a serialized version of this properties  config
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
-    virtual void toXML(QDomDocument&, QDomElement&) const;
+    void toXML(QDomDocument&, QDomElement&) const override;
 
     /**
      * Create a serialized version of this properties  config
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
-    virtual QString toXML() const;
+    QString toXML() const override;
 
     /**
      * @return true if the map contains a property with the specified name
@@ -153,9 +153,9 @@ class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializab
 {
 public:
     KisPropertiesConfigurationFactory();
-    virtual ~KisPropertiesConfigurationFactory();
-    virtual KisSerializableConfigurationSP createDefault();
-    virtual KisSerializableConfigurationSP create(const QDomElement& e);
+    ~KisPropertiesConfigurationFactory() override;
+    KisSerializableConfigurationSP createDefault() override;
+    KisSerializableConfigurationSP create(const QDomElement& e) override;
 private:
     struct Private;
     Private* const d;

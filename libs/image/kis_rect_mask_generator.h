@@ -35,14 +35,14 @@ public:
 
     KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     KisRectangleMaskGenerator(const KisRectangleMaskGenerator &rhs);
-    virtual ~KisRectangleMaskGenerator();
+    ~KisRectangleMaskGenerator() override;
 
-    KisMaskGenerator* clone() const;
+    KisMaskGenerator* clone() const override;
 
-    virtual bool shouldSupersample() const;
-    virtual quint8 valueAt(qreal x, qreal y) const;
-    void setScale(qreal scaleX, qreal scaleY);
-    void setSoftness(qreal softness);
+    bool shouldSupersample() const override;
+    quint8 valueAt(qreal x, qreal y) const override;
+    void setScale(qreal scaleX, qreal scaleY) override;
+    void setSoftness(qreal softness) override;
 
 private:
     struct Private;

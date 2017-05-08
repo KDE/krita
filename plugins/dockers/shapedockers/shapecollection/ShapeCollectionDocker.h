@@ -32,9 +32,9 @@ class ShapeCollectionDockerFactory : public KoDockFactoryBase
 public:
     ShapeCollectionDockerFactory();
 
-    virtual QString id() const;
-    virtual QDockWidget *createDockWidget();
-    DockPosition defaultDockPosition() const
+    QString id() const override;
+    QDockWidget *createDockWidget() override;
+    DockPosition defaultDockPosition() const override
     {
         return DockRight;
     }
@@ -58,8 +58,8 @@ public:
     explicit ShapeCollectionDocker(QWidget *parent = 0);
 
     /// reimplemented
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 protected Q_SLOTS:
     /**

@@ -31,14 +31,14 @@ class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, p
     Q_OBJECT
 public:
     CompositionDockerDock();
-    ~CompositionDockerDock();
-    QString observerName() { return "CompositionDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    ~CompositionDockerDock() override;
+    QString observerName() override { return "CompositionDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
     
     void updateModel();
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
     
 private Q_SLOTS:
     void activated (const QModelIndex& index);

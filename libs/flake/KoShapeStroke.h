@@ -56,7 +56,7 @@ public:
      * @param color the color we draw the outline in.
      */
     explicit KoShapeStroke(qreal lineWidth, const QColor &color = Qt::black);
-    virtual ~KoShapeStroke();
+    ~KoShapeStroke() override;
 
     /// Assignment operator
     KoShapeStroke& operator = (const KoShapeStroke &rhs);
@@ -99,11 +99,11 @@ public:
     QBrush lineBrush() const;
 
     // pure virtuals from KoShapeStrokeModel implemented here.
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-    virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const;
-    virtual bool hasTransparency() const;
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color);
+    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
+    void strokeInsets(const KoShape *shape, KoInsets &insets) const override;
+    bool hasTransparency() const override;
+    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) override;
+    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color) override;
 
 private:
     class Private;

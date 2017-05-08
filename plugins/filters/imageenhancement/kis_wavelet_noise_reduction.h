@@ -34,7 +34,7 @@ class KisWaveletNoiseReduction : public KisFilter
 public:
     KisWaveletNoiseReduction();
 
-    ~KisWaveletNoiseReduction();
+    ~KisWaveletNoiseReduction() override;
 
 public:
 
@@ -42,15 +42,15 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+                     ) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
     static inline KoID id() {
         return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer"));
     }
 
 private:
-    virtual KisFilterConfigurationSP  factoryConfiguration() const;
+    KisFilterConfigurationSP  factoryConfiguration() const override;
 
 };
 

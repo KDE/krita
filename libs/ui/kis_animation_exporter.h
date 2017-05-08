@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
 public:
 
     KisAnimationExporterUI(QWidget *parent);
-    virtual ~KisAnimationExporterUI();
+    ~KisAnimationExporterUI() override;
     KisImportExportFilter::ConversionStatus exportSequence(KisDocument *document);
 
 private:
@@ -56,7 +56,7 @@ public:
     typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP, KisPropertiesConfigurationSP)> SaveFrameCallback;
 public:
     KisAnimationExporter(KisDocument *document, int fromTime, int toTime);
-    ~KisAnimationExporter();
+    ~KisAnimationExporter() override;
 
     void setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration);
     KisImportExportFilter::ConversionStatus exportAnimation();
@@ -86,7 +86,7 @@ class KRITAUI_EXPORT KisAnimationExportSaver : public QObject
     Q_OBJECT
 public:
     KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset = 0);
-    ~KisAnimationExportSaver();
+    ~KisAnimationExportSaver() override;
 
     KisImportExportFilter::ConversionStatus exportAnimation(KisPropertiesConfigurationSP cfg = 0);
 

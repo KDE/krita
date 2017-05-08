@@ -36,13 +36,13 @@ class KRITAWIDGETS_EXPORT KisDoubleParseSpinBox : public QDoubleSpinBox
     Q_OBJECT
 public:
     KisDoubleParseSpinBox(QWidget* parent = 0);
-    ~KisDoubleParseSpinBox();
+    ~KisDoubleParseSpinBox() override;
 
-    virtual double valueFromText(const QString & text) const;
-    virtual QString textFromValue(double val) const;
-    virtual QValidator::State validate ( QString & input, int & pos ) const;
+    double valueFromText(const QString & text) const override;
+    QString textFromValue(double val) const override;
+    QValidator::State validate ( QString & input, int & pos ) const override;
 
-    virtual void stepBy(int steps);
+    void stepBy(int steps) override;
 
     void setValue(double value); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be useful.
 

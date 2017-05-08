@@ -33,7 +33,7 @@ class PAINTOP_EXPORT KisPressureRotationOption : public KisCurveOption
 public:
     KisPressureRotationOption();
     double apply(const KisPaintInformation & info) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
     void applyFanCornersInfo(KisPaintOp *op);
 
 private:

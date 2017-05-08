@@ -31,7 +31,7 @@ public:
     KoInvertColorTransformation(const KoColorSpace* cs) : m_colorSpace(cs), m_psize(cs->pixelSize()) {
     }
 
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override {
         quint16 m_rgba[4];
         while (nPixels--) {
             m_colorSpace->toRgbA16(src, reinterpret_cast<quint8 *>(m_rgba), 1);

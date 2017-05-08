@@ -33,7 +33,7 @@ class InsertInlineObjectActionBase : public QAction
     Q_OBJECT
 public:
     InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name);
-    virtual ~InsertInlineObjectActionBase();
+    ~InsertInlineObjectActionBase() override;
 
 private Q_SLOTS:
     void activated();

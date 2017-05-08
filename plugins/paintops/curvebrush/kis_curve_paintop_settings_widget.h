@@ -30,9 +30,9 @@ class KisCurvePaintOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisCurvePaintOpSettingsWidget();
+    ~KisCurvePaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private:
     KisCurveOpOption *m_curveOption;

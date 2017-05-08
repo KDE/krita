@@ -30,7 +30,7 @@ class LanguageTab : public QWidget
 
 public:
     explicit LanguageTab(/*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/bool uniqueFormat, QWidget *parent = 0, Qt::WFlags fl = 0);
-    ~LanguageTab();
+    ~LanguageTab() override;
 
     QString language() const;
     void setDisplay(KoCharacterStyle *style);

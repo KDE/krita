@@ -95,7 +95,7 @@ public:
      * The destructor does not delete any attached KisView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    virtual ~KisDocument();
+    ~KisDocument() override;
 
     /**
      * @brief reload Reloads the document from the original url
@@ -172,12 +172,12 @@ public:
      * Return the set of SupportedSpecialFormats that the application wants to
      * offer in the "Save" file dialog.
      */
-    virtual int supportedSpecialFormats() const;
+    int supportedSpecialFormats() const override;
 
     /**
      * Returns the actual mimetype of the document
      */
-    QByteArray mimeType() const;
+    QByteArray mimeType() const override;
 
     /**
      * @brief Sets the mime type for the document.
@@ -185,7 +185,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType(const QByteArray & mimeType);
+    void setMimeType(const QByteArray & mimeType) override;
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -196,9 +196,9 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0);
-    QByteArray outputMimeType() const;
-    int specialOutputFlag() const;
+    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) override;
+    QByteArray outputMimeType() const override;
+    int specialOutputFlag() const override;
 
     /**
      * Returns true if this document was the result of opening a foreign
@@ -266,7 +266,7 @@ public:
     /**
      *  @return true if the document is empty.
      */
-    virtual bool isEmpty() const;
+    bool isEmpty() const override;
 
     /**
      *  @brief Sets the document to empty.
@@ -289,16 +289,16 @@ public:
     bool loadFromStore(KoStore *store, const QString& url);
 
     /// Unused
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
+    bool loadOdf(KoOdfReadStore & odfStore) override;
     /// Unused
-    virtual bool saveOdf(SavingContext &documentContext);
+    bool saveOdf(SavingContext &documentContext) override;
 
     /**
      *  @brief Saves a sub-document to a store.
      *
      *  You should not have to reimplement this.
      */
-    virtual bool saveToStore(KoStore *store, const QString& path);
+    bool saveToStore(KoStore *store, const QString& path) override;
 
     /**
      *  Reimplement this method to load the contents of your Calligra document,
@@ -410,7 +410,7 @@ public:
      * Return true if url() is a real filename, false if url() is
      * an internal url in the store, like "tar:/..."
      */
-    virtual bool isStoredExtern() const;
+    bool isStoredExtern() const override;
 
     /**
      * @return the page layout associated with this document (margins, pageSize, etc).
@@ -433,7 +433,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified() const;
+    bool isModified() const override;
 
     /**
      * Returns true during loading (openUrl can be asynchronous)
@@ -466,7 +466,7 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to QUrl()
      */
-    void resetURL();
+    void resetURL() override;
 
     /**
      * Set when you want an external embedded document to be stored internally
@@ -697,19 +697,19 @@ private:
      * Legacy method from KoDocumentBase. Don't use it anywhere
      * outside KisDocument!
      */
-    bool isAutosaving() const;
+    bool isAutosaving() const override;
 
 public:
 
-    QString localFilePath() const;
+    QString localFilePath() const override;
     void setLocalFilePath( const QString &localFilePath );
 
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 
-    QUrl url() const;
-    void setUrl(const QUrl &url);
+    QUrl url() const override;
+    void setUrl(const QUrl &url) override;
 
     bool closeUrl(bool promptToSave = true);
 

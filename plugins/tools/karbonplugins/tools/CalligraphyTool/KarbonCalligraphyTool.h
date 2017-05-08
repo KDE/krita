@@ -32,18 +32,18 @@ class KarbonCalligraphyTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KarbonCalligraphyTool(KoCanvasBase *canvas);
-    ~KarbonCalligraphyTool();
+    ~KarbonCalligraphyTool() override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
 Q_SIGNALS:
     void pathSelectedChanged(bool selection);

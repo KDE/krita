@@ -37,15 +37,15 @@ class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
     Q_OBJECT
 public:
     KisCurveOptionWidget(KisCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider = false);
-    ~KisCurveOptionWidget();
+    ~KisCurveOptionWidget() override;
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
-    bool isCheckable() const;
-    bool isChecked() const;
-    void setChecked(bool checked);
+    bool isCheckable() const override;
+    bool isChecked() const override;
+    void setChecked(bool checked) override;
 
 protected:
 

@@ -27,7 +27,7 @@ class KisPhongBumpmapPlugin : public QObject
     Q_OBJECT
 public:
     KisPhongBumpmapPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisPhongBumpmapPlugin();
+    ~KisPhongBumpmapPlugin() override;
 };
 
 #endif //KIS_PHONG_BUMPMAP_PLUGIN_H

@@ -36,7 +36,7 @@ class KRITAWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
     Q_OBJECT
 public:
     KoResourceItemChooserSync();
-    virtual ~KoResourceItemChooserSync();
+    ~KoResourceItemChooserSync() override;
     static KoResourceItemChooserSync* instance();
 
     /// Gets the base length

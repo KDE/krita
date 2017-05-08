@@ -198,7 +198,7 @@ class LinearGradientStrategy : public GradientStrategy
 public:
     LinearGradientStrategy(KoShape *shape, const QLinearGradient *gradient, Target target);
 private:
-    virtual QBrush brush();
+    QBrush brush() override;
     enum Handles { start, stop };
 };
 
@@ -208,7 +208,7 @@ class RadialGradientStrategy : public GradientStrategy
 public:
     RadialGradientStrategy(KoShape *shape, const QRadialGradient *gradient, Target target);
 private:
-    virtual QBrush brush();
+    QBrush brush() override;
     enum Handles { center, focal, radius };
 };
 
@@ -218,7 +218,7 @@ class ConicalGradientStrategy : public GradientStrategy
 public:
     ConicalGradientStrategy(KoShape *shape, const QConicalGradient *gradient, Target target);
 private:
-    virtual QBrush brush();
+    QBrush brush() override;
     enum Handles { center, direction };
 };
 

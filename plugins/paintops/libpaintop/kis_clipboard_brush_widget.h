@@ -53,7 +53,7 @@ class KisClipboardBrushWidget : public KisWdgClipboardBrush
     Q_OBJECT
 public:
     KisClipboardBrushWidget(QWidget* parent, const QString& caption, KisImageWSP image);
-    virtual ~KisClipboardBrushWidget();
+    ~KisClipboardBrushWidget() override;
 
 private Q_SLOTS:
     void slotCreateBrush();
@@ -62,7 +62,7 @@ private Q_SLOTS:
     void slotAddPredefined();
 
 protected:
-    void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *) override;
 
 Q_SIGNALS:
     void sigNewPredefinedBrush(KoResource *);

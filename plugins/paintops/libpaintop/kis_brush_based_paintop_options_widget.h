@@ -30,13 +30,13 @@ class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpSetting
 {
 public:
     KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
-    virtual ~KisBrushBasedPaintopOptionWidget();
+    ~KisBrushBasedPaintopOptionWidget() override;
 
     void setPrecisionEnabled(bool value);
 
     KisBrushSP brush();
 
-    virtual bool presetIsValid();
+    bool presetIsValid() override;
 
 protected:
     KisBrushOptionWidget *brushOptionWidget() const;

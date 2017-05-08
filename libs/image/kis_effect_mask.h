@@ -40,10 +40,10 @@ public:
      */
     KisEffectMask();
 
-    virtual ~KisEffectMask();
+    ~KisEffectMask() override;
     KisEffectMask(const KisEffectMask& rhs);
 
-    QIcon icon() const;
+    QIcon icon() const override;
 
     using KisMask::apply;
 };

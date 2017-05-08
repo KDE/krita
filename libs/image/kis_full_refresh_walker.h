@@ -32,11 +32,11 @@ public:
         setCropRect(cropRect);
     }
 
-    UpdateType type() const {
+    UpdateType type() const override {
         return FULL_REFRESH;
     }
 
-    void startTrip(KisProjectionLeafSP startWith) {
+    void startTrip(KisProjectionLeafSP startWith) override {
         if(m_firstRun) {
             m_firstRun = false;
 
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    void registerChangeRect(KisProjectionLeafSP leaf, NodePosition position) {
+    void registerChangeRect(KisProjectionLeafSP leaf, NodePosition position) override {
         if(m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::registerChangeRect(leaf, position);
         }
@@ -81,7 +81,7 @@ public:
             }
         }
     }
-    void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position) {
+    void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position) override {
         if(m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::registerNeedRect(leaf, position);
         }
@@ -89,7 +89,7 @@ public:
             KisMergeWalker::registerNeedRect(leaf, position);
         }
     }
-    void adjustMasksChangeRect(KisProjectionLeafSP firstMask) {
+    void adjustMasksChangeRect(KisProjectionLeafSP firstMask) override {
         if(m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::adjustMasksChangeRect(firstMask);
         }

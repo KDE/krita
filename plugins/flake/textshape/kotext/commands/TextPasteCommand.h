@@ -40,9 +40,9 @@ public:
                      KoCanvasBase *canvas, KUndo2Command *parent = 0,
                      bool pasteAsText = false);
 
-    virtual void undo();
+    void undo() override;
 
-    virtual void redo();
+    void redo() override;
 
 private:
     const QMimeData *m_mimeData;

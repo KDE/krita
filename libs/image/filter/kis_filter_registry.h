@@ -38,7 +38,7 @@ class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KoGenericRegi
 
 public:
 
-    virtual ~KisFilterRegistry();
+    ~KisFilterRegistry() override;
 
     static KisFilterRegistry* instance();
     void add(KisFilterSP item);

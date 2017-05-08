@@ -87,7 +87,7 @@ public:
 #ifndef QT_NO_UNDOGROUP
     explicit KisUndoView(KUndo2Group *group, QWidget *parent = 0);
 #endif
-    ~KisUndoView();
+    ~KisUndoView() override;
 
     KUndo2QStack *stack() const;
 #ifndef QT_NO_UNDOGROUP

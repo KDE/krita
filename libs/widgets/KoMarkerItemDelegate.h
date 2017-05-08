@@ -29,10 +29,10 @@ class KoMarkerItemDelegate : public QAbstractItemDelegate
 {
 public:
     explicit KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent = 0);
-    virtual ~KoMarkerItemDelegate();
+    ~KoMarkerItemDelegate() override;
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const override;
 private:
     KoMarkerData::MarkerPosition m_position;
 };

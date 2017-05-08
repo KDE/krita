@@ -37,9 +37,9 @@ public:
      */
     EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal startEndAngle, KUndo2Command *parent = 0);
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
     EllipseShape *m_ellipse;
     EllipseShape::EllipseType m_oldType;

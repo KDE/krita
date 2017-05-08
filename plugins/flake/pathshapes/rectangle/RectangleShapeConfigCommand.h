@@ -37,9 +37,9 @@ public:
      */
     RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent = 0);
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
     RectangleShape *m_rectangle;
     qreal m_oldCornerRadiusX;

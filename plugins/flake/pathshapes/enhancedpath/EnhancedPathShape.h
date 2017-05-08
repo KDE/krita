@@ -51,7 +51,7 @@ class EnhancedPathShape : public KoParameterShape
 {
 public:
     explicit EnhancedPathShape(const QRect &viewBox);
-    virtual ~EnhancedPathShape();
+    ~EnhancedPathShape() override;
 
     /**
      * Evaluates the given reference to a identifier, modifier or formula.
@@ -79,9 +79,9 @@ public:
     void modifyReference(const QString &reference, qreal value);
 
     // from KoShape
-    virtual void setSize(const QSizeF &newSize);
+    void setSize(const QSizeF &newSize) override;
     // from KoParameterShape
-    virtual QPointF normalize();
+    QPointF normalize() override;
 
     /// Add formula with given name and textual represenation
     void addFormula(const QString &name, const QString &formula);
@@ -122,15 +122,15 @@ public:
 
 protected:
     // from KoShape
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // from KoShape
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     //from KoShape
-    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
     // from KoParameterShape
-    virtual void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
     // from KoParameterShape
-    virtual void updatePath(const QSizeF &size);
+    void updatePath(const QSizeF &size) override;
 
 private:
     void evaluateHandles();

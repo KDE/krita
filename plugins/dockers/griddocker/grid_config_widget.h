@@ -34,7 +34,7 @@ class GridConfigWidget : public QWidget
 
 public:
     explicit GridConfigWidget(QWidget *parent = 0);
-    ~GridConfigWidget();
+    ~GridConfigWidget() override;
 
     void setGridConfig(const KisGridConfig &value);
     KisGridConfig gridConfig() const;

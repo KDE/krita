@@ -27,7 +27,7 @@ class FilterEffectsPlugin : public QObject
     Q_OBJECT
 public:
     FilterEffectsPlugin(QObject *parent, const QList<QVariant> &);
-    ~FilterEffectsPlugin() {}
+    ~FilterEffectsPlugin() override {}
 };
 
 #endif // KARBONFILTEREFFECTSPLUGIN_H

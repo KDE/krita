@@ -28,10 +28,10 @@ class KisHatchingPreferences : public KisPaintOpOption
 
 public:
     KisHatchingPreferences();
-    ~KisHatchingPreferences();
+    ~KisHatchingPreferences() override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     KisHatchingPreferencesWidget * m_options;

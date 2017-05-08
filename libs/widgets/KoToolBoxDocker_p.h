@@ -36,9 +36,9 @@ public:
     explicit KoToolBoxDocker(KoToolBox *toolBox);
 
     /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
-    virtual QString observerName() { return "KoToolBoxDocker"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
+    QString observerName() override { return "KoToolBoxDocker"; }
 
 
 protected Q_SLOTS:

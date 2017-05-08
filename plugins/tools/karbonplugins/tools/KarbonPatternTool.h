@@ -34,24 +34,24 @@ class KarbonPatternTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KarbonPatternTool(KoCanvasBase *canvas);
-    ~KarbonPatternTool();
+    ~KarbonPatternTool() override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    void repaintDecorations();
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void repaintDecorations() override;
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-    void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
 public Q_SLOTS:
-    virtual void documentResourceChanged(int key, const QVariant &res);
+    void documentResourceChanged(int key, const QVariant &res) override;
 
 protected:
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private Q_SLOTS:
     void patternSelected(KoResource *resource);

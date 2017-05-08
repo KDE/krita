@@ -31,16 +31,16 @@ class PerspectiveAssistant : public KisAbstractPerspectiveGrid, public KisPainti
     Q_OBJECT
 public:
     PerspectiveAssistant(QObject * parent = 0);
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
-    virtual void endStroke();
-    virtual QPointF buttonPosition() const;
-    virtual int numHandles() const { return 4; }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true);
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    void endStroke() override;
+    QPointF buttonPosition() const override;
+    int numHandles() const override { return 4; }
+    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
 
-    virtual bool contains(const QPointF& point) const;
-    virtual qreal distance(const QPointF& point) const;
+    bool contains(const QPointF& point) const override;
+    qreal distance(const QPointF& point) const override;
 protected:
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true);
+    void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
@@ -61,10 +61,10 @@ class PerspectiveAssistantFactory : public KisPaintingAssistantFactory
 {
 public:
     PerspectiveAssistantFactory();
-    virtual ~PerspectiveAssistantFactory();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual KisPaintingAssistant* createPaintingAssistant() const;
+    ~PerspectiveAssistantFactory() override;
+    QString id() const override;
+    QString name() const override;
+    KisPaintingAssistant* createPaintingAssistant() const override;
 };
 
 #endif

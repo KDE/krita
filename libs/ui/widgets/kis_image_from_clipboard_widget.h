@@ -38,7 +38,7 @@ public:
      * @param doc the document that wants to be altered
      */
     KisImageFromClipboard(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
-    virtual ~KisImageFromClipboard();
+    ~KisImageFromClipboard() override;
 
 private Q_SLOTS:
     void createImage();

@@ -34,14 +34,14 @@ class MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    void saveOdf(KoShapeSavingContext &) const override {}
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
         return true;
     }
     int paintedCount;
@@ -51,15 +51,15 @@ class MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
     }
 
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    void saveOdf(KoShapeSavingContext &) const override {}
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
         return true;
     }
     int paintedCount;
@@ -67,7 +67,7 @@ public:
 
 class MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
@@ -80,44 +80,44 @@ class MockCanvas : public KoCanvasBase
 public:
     MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
             : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)) {}
-    ~MockCanvas() {}
+    ~MockCanvas() override {}
     void setHorz(qreal pHorz){
         m_horz = pHorz;
     }
     void setVert(qreal pVert){
         m_vert = pVert;
     }
-    void gridSize(QPointF *offset, QSizeF *spacing) const {
+    void gridSize(QPointF *offset, QSizeF *spacing) const override {
         Q_UNUSED(offset);
 
         spacing->setWidth(m_horz);
         spacing->setHeight(m_vert);
     }
-    bool snapToGrid() const  {
+    bool snapToGrid() const override  {
         return true;
     }
-    void addCommand(KUndo2Command*) { }
-    KoShapeManager *shapeManager() const  {
+    void addCommand(KUndo2Command*) override { }
+    KoShapeManager *shapeManager() const override  {
         return m_shapeManager;
     }
-    void updateCanvas(const QRectF&)  {}
-    KoToolProxy * toolProxy() const {
+    void updateCanvas(const QRectF&) override  {}
+    KoToolProxy * toolProxy() const override {
         return 0;
     }
-    KoViewConverter *viewConverter() const {
+    KoViewConverter *viewConverter() const override {
         return 0;
     }
-    QWidget* canvasWidget() {
+    QWidget* canvasWidget() override {
         return 0;
     }
-    const QWidget* canvasWidget() const {
+    const QWidget* canvasWidget() const override {
         return 0;
     }
-    KoUnit unit() const {
+    KoUnit unit() const override {
         return KoUnit(KoUnit::Millimeter);
     }
-    void updateInputMethodInfo() {}
-    void setCursor(const QCursor &) {}
+    void updateInputMethodInfo() override {}
+    void setCursor(const QCursor &) override {}
     private:
         KoShapeManager *m_shapeManager;
         qreal m_horz;
@@ -127,10 +127,10 @@ public:
 class MockShapeController : public KoShapeBasedDocumentBase
 {
 public:
-    void addShape(KoShape* shape) {
+    void addShape(KoShape* shape) override {
         m_shapes.insert(shape);
     }
-    void removeShape(KoShape* shape) {
+    void removeShape(KoShape* shape) override {
         m_shapes.remove(shape);
     }
     bool contains(KoShape* shape) {
@@ -148,47 +148,47 @@ public:
     }
 
     /// reimplemented
-    void add(KoShape *child) {
+    void add(KoShape *child) override {
         m_children.append(child); // note that we explicitly do not check for duplicates here!
     }
     /// reimplemented
-    void remove(KoShape *child) {
+    void remove(KoShape *child) override {
         m_children.removeAll(child);
     }
 
     /// reimplemented
-    void setClipped(const KoShape *, bool) { }  // ignored
+    void setClipped(const KoShape *, bool) override { }  // ignored
     /// reimplemented
-    bool isClipped(const KoShape *) const {
+    bool isClipped(const KoShape *) const override {
         return false;
     }// ignored
     /// reimplemented
-    bool isChildLocked(const KoShape *child) const {
+    bool isChildLocked(const KoShape *child) const override {
         return child->isGeometryProtected();
     }
     /// reimplemented
-    int count() const {
+    int count() const override {
         return m_children.count();
     }
     /// reimplemented
-    QList<KoShape*> shapes() const {
+    QList<KoShape*> shapes() const override {
         return m_children;
     }
     /// reimplemented
-    void containerChanged(KoShapeContainer *, KoShape::ChangeType) {
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType) override {
         m_containerChangedCalled++;
     }
     /// reimplemented
-    void proposeMove(KoShape *, QPointF &) {
+    void proposeMove(KoShape *, QPointF &) override {
         m_proposeMoveCalled++;
     }
     /// reimplemented
-    void childChanged(KoShape *, KoShape::ChangeType) {
+    void childChanged(KoShape *, KoShape::ChangeType) override {
         m_childChangedCalled++;
     }
-    void setInheritsTransform(const KoShape *, bool) {
+    void setInheritsTransform(const KoShape *, bool) override {
     }
-    bool inheritsTransform(const KoShape *) const {
+    bool inheritsTransform(const KoShape *) const override {
         return false;
     }
 

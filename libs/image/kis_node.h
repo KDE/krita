@@ -87,12 +87,12 @@ public:
     /**
      * Delete this node
      */
-    virtual ~KisNode();
+    ~KisNode() override;
 
     virtual KisNodeSP clone() const = 0;
 
-    virtual bool accept(KisNodeVisitor &v);
-    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     /**
      * Re-implement this method to add constraints for the
@@ -342,13 +342,13 @@ private:
     void createNodeProgressProxy();
 
 protected:
-    KisBaseNodeSP parentCallback() const;
-    void notifyParentVisibilityChanged(bool value);
-    void baseNodeChangedCallback();
-    void baseNodeInvalidateAllFramesCallback();
+    KisBaseNodeSP parentCallback() const override;
+    void notifyParentVisibilityChanged(bool value) override;
+    void baseNodeChangedCallback() override;
+    void baseNodeInvalidateAllFramesCallback() override;
 
 protected:
-    virtual void addKeyframeChannel(KisKeyframeChannel* channel);
+    void addKeyframeChannel(KisKeyframeChannel* channel) override;
 private:
 
     friend class KisNodeFacade;

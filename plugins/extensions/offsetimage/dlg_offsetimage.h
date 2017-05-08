@@ -42,7 +42,7 @@ class DlgOffsetImage: public KoDialog
 
 public:
     DlgOffsetImage(QWidget * parent = 0, const char* name = 0, QSize imageSize = QSize());
-    ~DlgOffsetImage();
+    ~DlgOffsetImage() override;
 
     int offsetX() const { return m_offsetX;}
     int offsetY() const { return m_offsetY;}

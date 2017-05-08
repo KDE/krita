@@ -11,7 +11,7 @@ public:
 
     explicit KoTosContainerPrivate(KoShapeContainer *q);
 
-    virtual ~KoTosContainerPrivate();
+    ~KoTosContainerPrivate() override;
 
     KoTosContainer::ResizeBehavior resizeBehavior;
     QRectF preferredTextRect;

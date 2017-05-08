@@ -37,7 +37,7 @@ public:
     } AcceptRejectResult;
 
     AcceptRejectChangeDialog(KoChangeTracker *changeTracker, int changeId);
-    ~AcceptRejectChangeDialog();
+    ~AcceptRejectChangeDialog() override;
 
 private:
     Ui::AcceptRejectChangeDialog ui;

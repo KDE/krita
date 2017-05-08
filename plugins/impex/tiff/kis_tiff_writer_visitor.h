@@ -37,38 +37,38 @@ public:
     using KisNodeVisitor::visit;
 
     KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options);
-    ~KisTIFFWriterVisitor();
+    ~KisTIFFWriterVisitor() override;
 
 public:
 
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisGeneratorLayer*);
+    bool visit(KisPaintLayer *layer) override;
+    bool visit(KisGroupLayer *layer) override;
+    bool visit(KisGeneratorLayer*) override;
 
-    bool visit(KisNode*) {
+    bool visit(KisNode*) override {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer*) override {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask*) override {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask*) override {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask*) override {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask*) override {
         return true;
     }
-    bool visit(KisColorizeMask*) {
+    bool visit(KisColorizeMask*) override {
         return true;
     }
-    bool visit(KisExternalLayer*);
+    bool visit(KisExternalLayer*) override;
 
-    bool visit(KisAdjustmentLayer*) {
+    bool visit(KisAdjustmentLayer*) override {
         return true;
     }
 

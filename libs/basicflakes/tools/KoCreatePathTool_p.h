@@ -120,7 +120,7 @@ public:
         m_angleStep = qAbs(angleStep);
     }
 
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) {
+    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override {
         Q_UNUSED(proxy);
 
         if (!m_active)
@@ -148,7 +148,7 @@ public:
         return true;
     }
 
-    virtual QPainterPath decoration(const KoViewConverter &converter) const {
+    QPainterPath decoration(const KoViewConverter &converter) const override {
         Q_UNUSED(converter);
 
         QPainterPath decoration;

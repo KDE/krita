@@ -99,7 +99,7 @@ public:
      * copy of the source with all the frames included.
      */
     KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false, KisNode *newParentNode = 0);
-    virtual ~KisPaintDevice();
+    ~KisPaintDevice() override;
 
 protected:
     /**
@@ -817,7 +817,7 @@ public:
 
 public:
     struct MemoryReleaseObject : public QObject {
-        ~MemoryReleaseObject();
+        ~MemoryReleaseObject() override;
     };
 
     static MemoryReleaseObject* createMemoryReleaseObject();

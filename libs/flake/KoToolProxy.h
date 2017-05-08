@@ -65,7 +65,7 @@ public:
      * @param parent a parent QObject for memory management purposes.
      */
     explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
-    virtual ~KoToolProxy();
+    ~KoToolProxy() override;
 
     /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);

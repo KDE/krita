@@ -28,9 +28,9 @@ class KisJPEGImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisJPEGImport(QObject *parent, const QVariantList &);
-    virtual ~KisJPEGImport();
+    ~KisJPEGImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

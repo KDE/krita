@@ -59,7 +59,7 @@ public:
     explicit KoDocumentInfo(QObject *parent = 0);
 
     /** The destructor */
-    ~KoDocumentInfo();
+    ~KoDocumentInfo() override;
 
     /**
      * Load the KoDocumentInfo from an OASIS document

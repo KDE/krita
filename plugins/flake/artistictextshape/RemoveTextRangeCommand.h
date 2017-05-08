@@ -33,8 +33,8 @@ class RemoveTextRangeCommand : public KUndo2Command
 public:
     RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     QPointer<ArtisticTextTool> m_tool;

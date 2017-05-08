@@ -29,9 +29,9 @@ class KisTGAExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisTGAExport(QObject *parent, const QVariantList &);
-    virtual ~KisTGAExport();
+    ~KisTGAExport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

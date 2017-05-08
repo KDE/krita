@@ -44,7 +44,7 @@ public:
 class KisDropAllProjectionUpdatesFilter : public KisProjectionUpdatesFilter
 {
 public:
-    bool filter(KisImage *image, KisNode *node, const QRect& rect);
+    bool filter(KisImage *image, KisNode *node, const QRect& rect) override;
 };
 
 #endif /* __KIS_PROJECTION_UPDATES_FILTER_H */

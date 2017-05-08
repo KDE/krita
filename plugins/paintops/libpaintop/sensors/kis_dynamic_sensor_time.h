@@ -32,17 +32,17 @@ public:
 
 
     KisDynamicSensorTime();
-    virtual ~KisDynamicSensorTime() { }
-    virtual qreal value(const KisPaintInformation&);
-    virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    ~KisDynamicSensorTime() override { }
+    qreal value(const KisPaintInformation&) override;
+    void reset() override;
+    QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
     virtual void setLength(int length);
 
 
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual void fromXML(const QDomElement&);
+    void toXML(QDomDocument&, QDomElement&) const override;
+    void fromXML(const QDomElement&) override;
 private:
     int m_time;
     bool m_periodic;

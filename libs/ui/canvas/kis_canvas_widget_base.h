@@ -40,28 +40,28 @@ class KRITAUI_EXPORT KisCanvasWidgetBase : public KisAbstractCanvasWidget
 public:
     KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter);
 
-    virtual ~KisCanvasWidgetBase();
+    ~KisCanvasWidgetBase() override;
 
 public: // KisAbstractCanvasWidget
 
-    virtual KoToolProxy *toolProxy() const;
+    KoToolProxy *toolProxy() const override;
 
 
     /// set the specified display filter on the canvas
-    virtual void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) = 0;
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override = 0;
 
     /**
      * Draw the specified decorations on the view.
      */
-    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const;
+    void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const override;
 
-    virtual void addDecoration(KisCanvasDecorationSP deco);
-    virtual KisCanvasDecorationSP decoration(const QString& id) const;
+    void addDecoration(KisCanvasDecorationSP deco) override;
+    KisCanvasDecorationSP decoration(const QString& id) const override;
 
-    virtual void setDecorations(const QList<KisCanvasDecorationSP > &);
-    virtual QList<KisCanvasDecorationSP > decorations() const;
+    void setDecorations(const QList<KisCanvasDecorationSP > &) override;
+    QList<KisCanvasDecorationSP > decorations() const override;
 
-    virtual void setWrapAroundViewingMode(bool value);
+    void setWrapAroundViewingMode(bool value) override;
 
     /**
      * Returns the color of the border, i.e. the part of the canvas

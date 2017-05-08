@@ -30,11 +30,11 @@ class FilterAddCommand : public KUndo2Command
 {
 public:
     FilterAddCommand(KoFilterEffect *filterEffect, KoShape *shape, KUndo2Command *parent = 0);
-    ~FilterAddCommand();
+    ~FilterAddCommand() override;
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     KoFilterEffect *m_filterEffect;

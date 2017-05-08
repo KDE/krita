@@ -24,25 +24,25 @@
 namespace TestUtil {
 
 struct DefaultNode : public KisNode {
-    KisPaintDeviceSP paintDevice() const {
+    KisPaintDeviceSP paintDevice() const override {
         return 0;
     }
 
-    KisPaintDeviceSP original() const {
+    KisPaintDeviceSP original() const override {
         return 0;
     }
 
-    KisPaintDeviceSP projection() const {
+    KisPaintDeviceSP projection() const override {
         return 0;
     }
 
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const override {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace * colorSpace() const override {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    const KoCompositeOp * compositeOp() const override {
         return 0;
     }
 };

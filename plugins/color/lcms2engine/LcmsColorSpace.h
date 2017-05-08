@@ -92,7 +92,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             profiles[2] = 0;
         }
 
-        ~KoLcmsColorTransformation()
+        ~KoLcmsColorTransformation() override
         {
 
             if (cmstransform) {
@@ -109,7 +109,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             }
         }
 
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+        void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
         {
             cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
 
@@ -188,7 +188,7 @@ protected:
         d->defaultTransformations = 0;
     }
 
-    virtual ~LcmsColorSpace()
+    ~LcmsColorSpace() override
     {
         delete d->colorProfile;
         delete[] d->qcolordata;
@@ -230,23 +230,23 @@ protected:
 
 public:
 
-    virtual bool hasHighDynamicRange() const
+    bool hasHighDynamicRange() const override
     {
         return false;
     }
 
-    virtual const KoColorProfile *profile() const
+    const KoColorProfile *profile() const override
     {
         return d->colorProfile;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile *profile) const
+    bool profileIsCompatible(const KoColorProfile *profile) const override
     {
         const IccColorProfile *p = dynamic_cast<const IccColorProfile *>(profile);
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
 
-    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = 0) const
+    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = 0) const override
     {
         QMutexLocker locker(&d->mutex);
         d->qcolordata[2] = color.red();
@@ -276,7 +276,7 @@ public:
         this->setOpacity(dst, (quint8)(color.alpha()), 1);
     }
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const
+    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const override
     {
         QMutexLocker locker(&d->mutex);
         LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
@@ -298,7 +298,7 @@ public:
         c->setAlpha(this->opacityU8(src));
     }
 
-    virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
+    KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const override
     {
         if (!d->profile) {
             return 0;
@@ -322,7 +322,7 @@ public:
         return adj;
     }
 
-    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 *const *transferValues) const
+    KoColorTransformation *createPerChannelAdjustment(const quint16 *const *transferValues) const override
     {
         if (!d->profile) {
             return 0;
@@ -359,7 +359,7 @@ public:
         return adj;
     }
 
-    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const
+    quint8 difference(const quint8 *src1, const quint8 *src2) const override
     {
         quint8 lab1[8], lab2[8];
         cmsCIELab labF1, labF2;
@@ -382,7 +382,7 @@ public:
         }
     }
 
-    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const
+    quint8 differenceA(const quint8 *src1, const quint8 *src2) const override
     {
         quint8 lab1[8];
         quint8 lab2[8];
@@ -461,24 +461,24 @@ public:
     {
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile *profile) const
+    bool profileIsCompatible(const KoColorProfile *profile) const override
     {
         const IccColorProfile *p = dynamic_cast<const IccColorProfile *>(profile);
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
 
-    virtual QString colorSpaceEngine() const
+    QString colorSpaceEngine() const override
     {
         return "icc";
     }
 
-    virtual bool isHdr() const
+    bool isHdr() const override
     {
         return false;
     }
 
-    virtual QList<KoColorConversionTransformationFactory *> colorConversionLinks() const;
-    virtual KoColorProfile *createColorProfile(const QByteArray &rawData) const;
+    QList<KoColorConversionTransformationFactory *> colorConversionLinks() const override;
+    KoColorProfile *createColorProfile(const QByteArray &rawData) const override;
 };
 
 #endif

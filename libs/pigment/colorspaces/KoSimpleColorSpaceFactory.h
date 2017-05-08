@@ -45,52 +45,52 @@ public:
     }
 
 
-    virtual QString id() const {
+    QString id() const override {
         return m_id;
     }
 
-    virtual QString name() const {
+    QString name() const override {
         return m_name;
     }
 
-    virtual bool userVisible() const {
+    bool userVisible() const override {
         return m_userVisible;
     }
 
-    virtual KoID colorModelId() const {
+    KoID colorModelId() const override {
         return m_colorModelId;
     }
 
-    virtual KoID colorDepthId() const {
+    KoID colorDepthId() const override {
         return m_colorDepthId;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
+    bool profileIsCompatible(const KoColorProfile* profile) const override {
         return dynamic_cast<const KoDummyColorProfile*>(profile);
     }
 
-    virtual QString colorSpaceEngine() const {
+    QString colorSpaceEngine() const override {
         return "simple";
     }
 
-    virtual bool isHdr() const {
+    bool isHdr() const override {
         return false;
     }
 
-    virtual int referenceDepth() const {
+    int referenceDepth() const override {
         return m_referenceDepth;
     }
 
 
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const {
+    QList<KoColorConversionTransformationFactory*> colorConversionLinks() const override {
         return QList<KoColorConversionTransformationFactory*>();
     }
 
-    virtual QString defaultProfile() const {
+    QString defaultProfile() const override {
         return QString("default");
     }
 protected:
-    virtual KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {
+    KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const override {
         return 0;
     }
 private:

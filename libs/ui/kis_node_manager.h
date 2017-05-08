@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KisNodeManager : public QObject
 public:
 
     KisNodeManager(KisViewManager * view);
-    ~KisNodeManager();
+    ~KisNodeManager() override;
     
     void setView(QPointer<KisView>imageView);
 

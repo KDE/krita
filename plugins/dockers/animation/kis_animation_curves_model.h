@@ -48,7 +48,7 @@ class KisAnimationCurvesModel : public KisTimeBasedItemModel
     Q_OBJECT
 public:
     KisAnimationCurvesModel(QObject *parent);
-    ~KisAnimationCurvesModel();
+    ~KisAnimationCurvesModel() override;
 
     bool hasConnectionToCanvas() const;
 
@@ -56,10 +56,10 @@ public:
     void removeCurve(KisAnimationCurve *curve);
     void setCurveVisible(KisAnimationCurve *curve, bool visible);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     /**
      * Begins a block of commands. The following calls to setData will be grouped to a single undo step.
@@ -84,8 +84,8 @@ public:
     };
 
 protected:
-    KisNodeSP nodeAt(QModelIndex index) const;
-    QList<KisKeyframeChannel *> channelsAt(QModelIndex index) const;
+    KisNodeSP nodeAt(QModelIndex index) const override;
+    QList<KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
 
 private Q_SLOTS:
     void slotKeyframeChanged(KisKeyframeSP keyframe);

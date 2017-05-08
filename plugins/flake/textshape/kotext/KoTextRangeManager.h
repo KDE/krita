@@ -40,7 +40,7 @@ class KRITATEXT_EXPORT KoTextRangeManager : public QObject
 public:
     /// Constructor
     explicit KoTextRangeManager(QObject *parent = 0);
-    virtual ~KoTextRangeManager();
+    ~KoTextRangeManager() override;
 
     QList<KoTextRange *> textRanges() const;
 

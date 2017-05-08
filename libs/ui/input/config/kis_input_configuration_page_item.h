@@ -40,7 +40,7 @@ class KisInputConfigurationPageItem : public QWidget
     Q_OBJECT
 public:
     KisInputConfigurationPageItem(QWidget *parent = 0, Qt::WindowFlags f = 0);
-    ~KisInputConfigurationPageItem();
+    ~KisInputConfigurationPageItem() override;
 
     void setAction(KisAbstractInputAction *action);
 

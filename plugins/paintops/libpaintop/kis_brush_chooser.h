@@ -40,7 +40,7 @@ class PAINTOP_EXPORT KisBrushChooser : public QWidget
 
 public:
     KisBrushChooser(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisBrushChooser();
+    ~KisBrushChooser() override;
 
     KisBrushSP brush() {
         return m_brush;

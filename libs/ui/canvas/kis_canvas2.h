@@ -76,26 +76,26 @@ public:
      */
     KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc);
 
-    virtual ~KisCanvas2();
+    ~KisCanvas2() override;
 
     void notifyZoomChanged();
 
-    virtual void disconnectCanvasObserver(QObject *object);
+    void disconnectCanvasObserver(QObject *object) override;
 
 public: // KoCanvasBase implementation
 
-    bool canvasIsOpenGL() const;
+    bool canvasIsOpenGL() const override;
 
     KisOpenGL::FilterMode openGLFilterMode() const;
 
-    void gridSize(QPointF *offset, QSizeF *spacing) const;
+    void gridSize(QPointF *offset, QSizeF *spacing) const override;
 
-    bool snapToGrid() const;
+    bool snapToGrid() const override;
 
     // XXX: Why?
-    void addCommand(KUndo2Command *command);
+    void addCommand(KUndo2Command *command) override;
 
-    virtual QPoint documentOrigin() const;
+    QPoint documentOrigin() const override;
     QPoint documentOffset() const;
 
     /**
@@ -104,27 +104,27 @@ public: // KoCanvasBase implementation
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
-    KoShapeManager * shapeManager() const;
+    KoShapeManager * shapeManager() const override;
 
     /**
      * Return the shape manager associated with this canvas
      */
     KoShapeManager * globalShapeManager() const;
 
-    void updateCanvas(const QRectF& rc);
+    void updateCanvas(const QRectF& rc) override;
 
-    virtual void updateInputMethodInfo();
+    void updateInputMethodInfo() override;
 
     const KisCoordinatesConverter* coordinatesConverter() const;
-    virtual KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const override;
 
-    virtual QWidget* canvasWidget();
+    QWidget* canvasWidget() override;
 
-    virtual const QWidget* canvasWidget() const;
+    const QWidget* canvasWidget() const override;
 
-    virtual KoUnit unit() const;
+    KoUnit unit() const override;
 
-    virtual KoToolProxy* toolProxy() const;
+    KoToolProxy* toolProxy() const override;
 
     const KoColorProfile* monitorProfile();
 
@@ -184,7 +184,7 @@ public: // KisCanvas2 methods
      * in KisOpenGL canvas.
      */bool proofingConfigUpdated();
 
-    void setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor) override;
     KisAnimationFrameCacheSP frameCache() const;
     KisAnimationPlayer *animationPlayer() const;
     void refetchDataFromImage();

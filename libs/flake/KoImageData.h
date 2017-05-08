@@ -62,7 +62,7 @@ public:
     /// default constructor, creates an invalid imageData object
     KoImageData();
 
-    virtual ~KoImageData();
+    ~KoImageData() override;
     KoImageData(const KoImageData &imageData);
     KoImageData &operator=(const KoImageData &other);
     inline bool operator!=(const KoImageData &other) const { return !operator==(other); }

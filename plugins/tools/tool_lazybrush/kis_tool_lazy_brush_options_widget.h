@@ -34,7 +34,7 @@ class KisToolLazyBrushOptionsWidget : public QWidget
     Q_OBJECT
 public:
     KisToolLazyBrushOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisToolLazyBrushOptionsWidget();
+    ~KisToolLazyBrushOptionsWidget() override;
 
 private Q_SLOTS:
     void entrySelected(QModelIndex index);
@@ -53,8 +53,8 @@ private Q_SLOTS:
     void slotUpdateNodeProperties();
 
 protected:
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private:
     struct Private;

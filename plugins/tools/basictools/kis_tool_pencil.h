@@ -35,7 +35,7 @@ class __KisToolPencilLocalTool : public KoPencilTool {
 public:
     __KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool);
     virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-    virtual void addPathShape(KoPathShape* pathShape, bool closePath);
+    void addPathShape(KoPathShape* pathShape, bool closePath) override;
 
     using KoPencilTool::createOptionWidgets;
 
@@ -53,10 +53,10 @@ class KisToolPencil : public DelegatedPencilTool
 
 public:
     KisToolPencil(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 private:
     friend class __KisToolPencilLocalTool;
@@ -75,9 +75,9 @@ public:
         setPriority(9);
     }
 
-    virtual ~KisToolPencilFactory() {}
+    ~KisToolPencilFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolPencil(canvas);
     }
 };

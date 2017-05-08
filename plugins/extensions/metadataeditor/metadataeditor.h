@@ -35,7 +35,7 @@ class metadataeditorPlugin : public KisViewPlugin
     Q_OBJECT
 public:
     metadataeditorPlugin(QObject *parent, const QVariantList &);
-    virtual ~metadataeditorPlugin();
+    ~metadataeditorPlugin() override;
 
 private Q_SLOTS:
 

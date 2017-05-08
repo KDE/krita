@@ -38,11 +38,11 @@ public:
      */
     KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape,
                          KUndo2Command *parent = 0);
-    virtual ~KoShapeCreateCommand();
+    ~KoShapeCreateCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

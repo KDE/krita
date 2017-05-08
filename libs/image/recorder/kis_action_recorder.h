@@ -33,7 +33,7 @@ class KRITAIMAGE_EXPORT KisActionRecorder : public QObject
     Q_OBJECT
 public:
     KisActionRecorder(QObject* parent = 0);
-    ~KisActionRecorder();
+    ~KisActionRecorder() override;
 
 public Q_SLOTS:
 

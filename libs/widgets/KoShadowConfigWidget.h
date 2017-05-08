@@ -33,7 +33,7 @@ class KRITAWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoShadowConfigWidget(QWidget *parent);
-    ~KoShadowConfigWidget();
+    ~KoShadowConfigWidget() override;
 
     /// Sets the shadow color
     void setShadowColor(const QColor &color);

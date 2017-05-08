@@ -36,7 +36,7 @@ class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject
     Q_OBJECT
 public:
     explicit KoMarkerCollection(QObject *parent = 0);
-    virtual ~KoMarkerCollection();
+    ~KoMarkerCollection() override;
 
     bool loadOdf(KoShapeLoadingContext &context);
     // For now we only save the used markers and that is done with a KoSharedSavingData when a marker usage is encountered.

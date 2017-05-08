@@ -30,7 +30,7 @@ class TasksetDockerPlugin : public QObject
     Q_OBJECT
 public:
     TasksetDockerPlugin(QObject *parent, const QVariantList &);
-    virtual ~TasksetDockerPlugin();
+    ~TasksetDockerPlugin() override;
 };
 
 #endif

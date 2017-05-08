@@ -60,7 +60,7 @@ protected:
      */
     KisFilterConfiguration(const KisFilterConfiguration & rhs);
 public:
-    virtual ~KisFilterConfiguration();
+    ~KisFilterConfiguration() override;
 
 public:
 
@@ -72,8 +72,8 @@ public:
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;
 
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
+    void fromXML(const QDomElement&) override;
+    void toXML(QDomDocument&, QDomElement&) const override;
 
     /**
      * Get the unique, language independent name of the filter.

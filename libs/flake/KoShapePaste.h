@@ -43,13 +43,13 @@ public:
      * @param parentLayer The layer on which the shapes will be pasted
      */
     KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *parentLayer);
-    virtual ~KoShapePaste();
+    ~KoShapePaste() override;
 
     QList<KoShape*> pastedShapes() const;
 
 protected:
     /// reimplemented
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore &odfStore);
+    bool process(const KoXmlElement & body, KoOdfReadStore &odfStore) override;
 
     class Private;
     Private * const d;

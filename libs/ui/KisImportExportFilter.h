@@ -97,7 +97,7 @@ public:
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
-    virtual ~KisImportExportFilter();
+    ~KisImportExportFilter() override;
 
     /**
      * @brief setChain set the chain information on the filter. The chain information

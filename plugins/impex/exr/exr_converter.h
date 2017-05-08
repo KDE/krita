@@ -33,7 +33,7 @@ class exrConverter : public QObject
     Q_OBJECT
 public:
     exrConverter(KisDocument *doc, bool showNotifications);
-    virtual ~exrConverter();
+    ~exrConverter() override;
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
     KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer);

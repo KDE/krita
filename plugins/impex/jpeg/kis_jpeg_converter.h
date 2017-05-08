@@ -66,7 +66,7 @@ class KisJPEGConverter : public QObject
     Q_OBJECT
 public:
     KisJPEGConverter(KisDocument *doc, bool batchMode = false);
-    virtual ~KisJPEGConverter();
+    ~KisJPEGConverter() override;
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
     KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);

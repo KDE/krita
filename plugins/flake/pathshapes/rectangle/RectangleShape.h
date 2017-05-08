@@ -35,7 +35,7 @@ class RectangleShape : public KoParameterShape, public SvgShape
 {
 public:
     RectangleShape();
-    ~RectangleShape();
+    ~RectangleShape() override;
 
     /// Returns the corner radius in x-direction
     qreal cornerRadiusX() const;
@@ -64,24 +64,24 @@ public:
     void setCornerRadiusY(qreal radius);
 
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     /// reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
     /// reimplemented from SvgShape
-    virtual bool saveSvg(SvgSavingContext &context);
+    bool saveSvg(SvgSavingContext &context) override;
 
     /// reimplemented from SvgShape
-    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
 
 protected:
 
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    void updatePath(const QSizeF &size);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
+    void updatePath(const QSizeF &size) override;
     void createPoints(int requiredPointCount);
     void updateHandles();
 

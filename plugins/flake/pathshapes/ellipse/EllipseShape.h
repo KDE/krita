@@ -43,10 +43,10 @@ public:
     };
 
     EllipseShape();
-    virtual ~EllipseShape();
+    ~EllipseShape() override;
 
-    void setSize(const QSizeF &newSize);
-    virtual QPointF normalize();
+    void setSize(const QSizeF &newSize) override;
+    QPointF normalize() override;
 
     /**
      * Sets the type of the ellipse.
@@ -76,22 +76,22 @@ public:
     qreal endAngle() const;
 
     /// reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
     /// reimplemented from SvgShape
-    virtual bool saveSvg(SvgSavingContext &context);
+    bool saveSvg(SvgSavingContext &context) override;
 
     /// reimplemented from SvgShape
-    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
 
 protected:
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    void updatePath(const QSizeF &size);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
+    void updatePath(const QSizeF &size) override;
     void createPoints(int requiredPointCount);
 
 private:

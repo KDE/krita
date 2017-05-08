@@ -44,20 +44,20 @@ class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public Ko
 public:
 
     KisShapeController(KisDocument *doc, KisNameServer *nameServer);
-    ~KisShapeController();
+    ~KisShapeController() override;
 
-    bool hasDummyForNode(KisNodeSP node) const;
-    KisNodeDummy* dummyForNode(KisNodeSP layer) const;
-    KisNodeDummy* rootDummy() const;
-    int dummiesCount() const;
+    bool hasDummyForNode(KisNodeSP node) const override;
+    KisNodeDummy* dummyForNode(KisNodeSP layer) const override;
+    KisNodeDummy* rootDummy() const override;
+    int dummiesCount() const override;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForCanvas(KisCanvas2 *canvas);
 
 
 private:
-    void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void removeNodeImpl(KisNodeSP node);
+    void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis) override;
+    void removeNodeImpl(KisNodeSP node) override;
 
 Q_SIGNALS:
     /**
@@ -73,8 +73,8 @@ Q_SIGNALS:
     void currentLayerChanged(const KoShapeLayer*);
 
 public:
-    void addShape(KoShape* shape);
-    void removeShape(KoShape* shape);
+    void addShape(KoShape* shape) override;
+    void removeShape(KoShape* shape) override;
 
 private:
     struct Private;

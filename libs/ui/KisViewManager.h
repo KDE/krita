@@ -71,7 +71,7 @@ public:
      * @param parent   a parent widget we show ourselves in.
      */
     KisViewManager(QWidget *parent, KActionCollection *actionCollection);
-    virtual ~KisViewManager();
+    ~KisViewManager() override;
 
     /**
      * Retrieves the entire action collection.

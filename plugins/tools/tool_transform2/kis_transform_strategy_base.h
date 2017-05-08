@@ -37,7 +37,7 @@ class KisTransformStrategyBase : public QObject
 {
 public:
     KisTransformStrategyBase();
-    ~KisTransformStrategyBase();
+    ~KisTransformStrategyBase() override;
 
     QImage originalImage() const;
     QTransform thumbToImageTransform() const;

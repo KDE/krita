@@ -75,7 +75,7 @@ public:
                      QObject *parent = 0);
 
     /// destructor
-    ~KoZoomController();
+    ~KoZoomController() override;
 
     /// returns the zoomAction that is maintained by this controller
     KoZoomAction *zoomAction() const;

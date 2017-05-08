@@ -38,7 +38,7 @@ class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListK
     Q_OBJECT
 public:
     TimelineFramesModel(QObject *parent);
-    ~TimelineFramesModel();
+    ~TimelineFramesModel() override;
 
     bool hasConnectionToCanvas() const;
 
@@ -62,21 +62,21 @@ public:
 
     void setLastClickedIndex(const QModelIndex &index);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
-    Qt::DropActions supportedDragActions() const;
-    Qt::DropActions supportedDropActions() const;
-    QStringList mimeTypes() const;
-    QMimeData * mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::DropActions supportedDragActions() const override;
+    Qt::DropActions supportedDropActions() const override;
+    QStringList mimeTypes() const override;
+    QMimeData * mimeData(const QModelIndexList &indexes) const override;
+    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    bool insertRows(int row, int count, const QModelIndex &parent);
-    bool removeRows(int row, int count, const QModelIndex &parent);
+    bool insertRows(int row, int count, const QModelIndex &parent) override;
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
 
     enum ItemDataRole
     {
@@ -108,8 +108,8 @@ public:
     void setNodeManipulationInterface(NodeManipulationInterface *iface);
 
 protected:
-    KisNodeSP nodeAt(QModelIndex index) const;
-    QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const;
+    KisNodeSP nodeAt(QModelIndex index) const override;
+    QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const override;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

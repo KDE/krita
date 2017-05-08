@@ -32,7 +32,7 @@ class OraConverter : public QObject
     Q_OBJECT
 public:
     OraConverter(KisDocument *doc);
-    virtual ~OraConverter();
+    ~OraConverter() override;
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
     KisImageBuilder_Result buildFile(const QString &filename, KisImageSP image, vKisNodeSP activeNodes);

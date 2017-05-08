@@ -30,24 +30,24 @@ public:
     KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
                            const KUndo2MagicString &transactionText,
                            KisRecordingAdapter *recordingAdapter = 0);
-    virtual ~KisToolMultihandHelper();
+    ~KisToolMultihandHelper() override;
 
     void setupTransformations(const QVector<QTransform> &transformations);
 
 protected:
     void createPainters(QVector<PainterInfo*> &painterInfos,
                         const QPointF &lastPosition,
-                        int lastTime);
+                        int lastTime) override;
 
-    void paintAt(const KisPaintInformation &pi);
+    void paintAt(const KisPaintInformation &pi) override;
 
     void paintLine(const KisPaintInformation &pi1,
-                   const KisPaintInformation &pi2);
+                   const KisPaintInformation &pi2) override;
 
     void paintBezierCurve(const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
-                          const KisPaintInformation &pi2);
+                          const KisPaintInformation &pi2) override;
 
     using KisToolFreehandHelper::paintAt;
     using KisToolFreehandHelper::paintLine;

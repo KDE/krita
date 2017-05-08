@@ -44,9 +44,9 @@ class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
 public:
     KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
-    virtual ~KisColorSmudgeOp();
+    ~KisColorSmudgeOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
 private:
     // Sets the m_maskDab _and m_maskDabRect

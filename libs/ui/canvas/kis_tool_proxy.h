@@ -49,7 +49,7 @@ public:
     bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent);
     bool primaryActionSupportsHiResEvents() const;
 
-    void setActiveTool(KoToolBase *tool);
+    void setActiveTool(KoToolBase *tool) override;
 
     void activateToolAction(KisTool::ToolAction action);
     void deactivateToolAction(KisTool::ToolAction action);
@@ -60,7 +60,7 @@ private:
     void forwardToTool(ActionState state, KisTool::ToolAction action, QEvent *event, const QPointF &docPoint);
 
 protected:
-    QPointF widgetToDocument(const QPointF &widgetPoint) const;
+    QPointF widgetToDocument(const QPointF &widgetPoint) const override;
 
 private:
     bool m_isActionActivated;

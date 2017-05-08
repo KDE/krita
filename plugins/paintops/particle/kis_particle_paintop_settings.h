@@ -29,13 +29,13 @@ class KisParticlePaintOpSettings : public KisNoSizePaintOpSettings
 public:
 
     KisParticlePaintOpSettings();
-    ~KisParticlePaintOpSettings();
+    ~KisParticlePaintOpSettings() override;
 
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
+    bool paintIncremental() override;
+    bool isAirbrushing() const override;
+    int rate() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
     struct Private;

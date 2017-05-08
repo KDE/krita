@@ -45,15 +45,15 @@ public:
      * @param direction the handle that was grabbed
      */
     ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
-    virtual ~ShapeShearStrategy() {}
+    ~ShapeShearStrategy() override {}
 
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KUndo2Command *createCommand();
-    void finishInteraction(Qt::KeyboardModifiers modifiers)
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override
     {
         Q_UNUSED(modifiers);
     }
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
 private:
     QPointF m_start;

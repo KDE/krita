@@ -30,7 +30,7 @@ class FastColorTransferPlugin : public QObject
     Q_OBJECT
 public:
     FastColorTransferPlugin(QObject *parent, const QVariantList &);
-    virtual ~FastColorTransferPlugin();
+    ~FastColorTransferPlugin() override;
 };
 
 class KisFilterFastColorTransfer : public KisFilter
@@ -42,14 +42,14 @@ public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater) const;
+                     KoUpdater* progressUpdater) const override;
     static inline KoID id() {
         return KoID("colortransfer", i18n("Color Transfer"));
     }
 
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 };
 
 #endif

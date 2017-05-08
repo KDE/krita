@@ -77,7 +77,7 @@ void KisShowPaletteAction::begin(int, QEvent *event)
 
 struct SinglePressEventEater : public QObject
 {
-    bool eventFilter(QObject *, QEvent *event) {
+    bool eventFilter(QObject *, QEvent *event) override {
         if (hungry && event->type() == QEvent::MouseButtonPress) {
             hungry = false;
             return true;

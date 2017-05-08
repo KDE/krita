@@ -36,7 +36,7 @@ class KisColorSliderWidget : public QWidget
     Q_OBJECT
 public:
     KisColorSliderWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent, KisCanvas2* canvas, QBitArray SlidersConfigArray);
-    ~KisColorSliderWidget();
+    ~KisColorSliderWidget() override;
 
     //bool customColorSpaceUsed();
 public Q_SLOTS:

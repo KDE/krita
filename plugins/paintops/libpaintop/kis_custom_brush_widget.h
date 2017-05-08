@@ -50,11 +50,11 @@ class KisCustomBrushWidget : public KisWdgCustomBrush
     Q_OBJECT
 public:
     KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image);
-    virtual ~KisCustomBrushWidget();
+    ~KisCustomBrushWidget() override;
     KisBrushSP brush();
 
 protected:
-    virtual void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *) override;
 
 private Q_SLOTS:
     void slotAddPredefined();

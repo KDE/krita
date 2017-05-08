@@ -31,10 +31,10 @@ public:
                                KisNodeSP node,
                                bool doRedoUpdates = true,
                                bool doUndoUpdates = true);
-    ~KisImageLayerRemoveCommand();
+    ~KisImageLayerRemoveCommand() override;
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     void addSubtree(KisImageWSP image, KisNodeSP node);

@@ -38,31 +38,31 @@ public:
      */
     KisTransformMask();
 
-    virtual ~KisTransformMask();
+    ~KisTransformMask() override;
 
-    QIcon icon() const;
+    QIcon icon() const override;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisTransformMask(*this));
     }
 
-    KisPaintDeviceSP paintDevice() const;
+    KisPaintDeviceSP paintDevice() const override;
 
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     KisTransformMask(const KisTransformMask& rhs);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy maskPos) const;
+                       PositionToFilthy maskPos) const override;
 
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 
-    QRect extent() const;
-    QRect exactBounds() const;
+    QRect extent() const override;
+    QRect exactBounds() const override;
 
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
@@ -70,11 +70,11 @@ public:
     void recaclulateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
 
-    void setX(qint32 x);
-    void setY(qint32 y);
+    void setX(qint32 x) override;
+    void setY(qint32 y) override;
 
 protected:
-    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 
 private Q_SLOTS:
     void slotDelayedStaticUpdate();

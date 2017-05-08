@@ -32,12 +32,12 @@ class KoColorConversionFromAlphaTransformationFactory : public KoColorConversion
 {
 public:
     KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
-                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-    virtual bool conserveColorInformation() const;
-    virtual bool conserveDynamicRange() const;
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
+    bool conserveColorInformation() const override;
+    bool conserveDynamicRange() const override;
 };
 
 /**
@@ -49,12 +49,12 @@ class KoColorConversionToAlphaTransformationFactory : public KoColorConversionTr
 {
 public:
     KoColorConversionToAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _srcProfileName);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
-                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-    virtual bool conserveColorInformation() const;
-    virtual bool conserveDynamicRange() const;
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
+    bool conserveColorInformation() const override;
+    bool conserveDynamicRange() const override;
 };
 
 #endif

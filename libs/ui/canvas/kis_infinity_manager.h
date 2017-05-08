@@ -35,8 +35,8 @@ public:
 KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas);
 
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
-    bool eventFilter(QObject *obj, QEvent *event);
+    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 public Q_SLOTS:
     void imagePositionChanged();

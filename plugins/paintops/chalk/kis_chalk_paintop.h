@@ -34,9 +34,9 @@ class KisChalkPaintOp : public KisPaintOp
 public:
 
     KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
-    virtual ~KisChalkPaintOp();
+    ~KisChalkPaintOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
 private:
     KisPaintDeviceSP m_dab;

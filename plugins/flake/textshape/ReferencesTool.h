@@ -43,12 +43,12 @@ class ReferencesTool : public TextTool
 public:
     explicit ReferencesTool(KoCanvasBase *canvas);
 
-    virtual ~ReferencesTool();
+    ~ReferencesTool() override;
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
-    virtual void createActions();
+    void createActions() override;
 
     KoTextEditor *editor();
     /// inserts a ToC and open a configure dialog for customization
@@ -58,7 +58,7 @@ public:
 
 protected:
     /// reimplemented from superclass
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private Q_SLOTS:
     /// insert a citation
@@ -123,7 +123,7 @@ private Q_SLOTS:
     void returnPressed();
 
 protected:
-    virtual void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) override;
 
 private :
     QLineEdit *m_lineEdit;

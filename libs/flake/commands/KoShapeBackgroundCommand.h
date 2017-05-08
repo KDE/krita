@@ -58,11 +58,11 @@ public:
      */
     KoShapeBackgroundCommand(const QList<KoShape*> &shapes, const QList<QSharedPointer<KoShapeBackground> > &fills, KUndo2Command *parent = 0);
 
-    virtual ~KoShapeBackgroundCommand();
+    ~KoShapeBackgroundCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

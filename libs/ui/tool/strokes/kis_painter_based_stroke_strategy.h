@@ -69,12 +69,12 @@ public:
                                   KisResourcesSnapshotSP resources,
                                   PainterInfo *painterInfo,bool useMergeID = false);
 
-    void initStrokeCallback();
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
+    void initStrokeCallback() override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
 
-    void suspendStrokeCallback();
-    void resumeStrokeCallback();
+    void suspendStrokeCallback() override;
+    void resumeStrokeCallback() override;
 
 protected:
     KisPaintDeviceSP targetDevice() const;

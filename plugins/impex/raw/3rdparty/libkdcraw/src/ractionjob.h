@@ -53,7 +53,7 @@ public:
 
     /** Re-implement destructor in you implementation. Don't forget to cancel job.
      */
-    virtual ~RActionJob();
+    ~RActionJob() override;
 
 Q_SIGNALS:
 

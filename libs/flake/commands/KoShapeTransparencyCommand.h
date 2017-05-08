@@ -55,11 +55,11 @@ public:
      */
     KoShapeTransparencyCommand(const QList<KoShape*> &shapes, const QList<qreal> &transparencies, KUndo2Command *parent = 0);
 
-    virtual ~KoShapeTransparencyCommand();
+    ~KoShapeTransparencyCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

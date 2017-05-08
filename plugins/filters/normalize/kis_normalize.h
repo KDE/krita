@@ -28,7 +28,7 @@ class KritaNormalizeFilter : public QObject
     Q_OBJECT
 public:
     KritaNormalizeFilter(QObject *parent, const QVariantList &);
-    virtual ~KritaNormalizeFilter();
+    ~KritaNormalizeFilter() override;
 };
 
 class KisFilterNormalize : public KisColorTransformationFilter
@@ -36,14 +36,14 @@ class KisFilterNormalize : public KisColorTransformationFilter
 public:
     KisFilterNormalize();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 };
 
 class KisNormalizeTransformation : public KoColorTransformation
 {
 public:
     KisNormalizeTransformation(const KoColorSpace* cs);
-    virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
+    void transform(const quint8* src, quint8* dst, qint32 nPixels) const override;
 private:
     const KoColorSpace* m_colorSpace;
     quint32 m_psize;

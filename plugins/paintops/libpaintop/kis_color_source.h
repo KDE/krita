@@ -70,14 +70,14 @@ class PAINTOP_EXPORT KisUniformColorSource : public KisColorSource
 {
 public:
     KisUniformColorSource();
-    virtual ~KisUniformColorSource();
+    ~KisUniformColorSource() override;
     virtual void rotate(double);
     virtual void resize(double , double);
-    virtual void applyColorTransformation(const KoColorTransformation* transfo);
-    virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const;
-    virtual bool isUniformColor() const;
-    virtual const KoColor& uniformColor() const;
+    void applyColorTransformation(const KoColorTransformation* transfo) override;
+    const KoColorSpace* colorSpace() const override;
+    void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const override;
+    bool isUniformColor() const override;
+    const KoColor& uniformColor() const override;
 protected:
     KoColor m_color;
 };
@@ -86,8 +86,8 @@ class PAINTOP_EXPORT KisPlainColorSource : public KisUniformColorSource
 {
 public:
     KisPlainColorSource(const KoColor& backGroundColor, const KoColor& foreGroundColor);
-    virtual ~KisPlainColorSource();
-    virtual void selectColor(double mix, const KisPaintInformation &pi);
+    ~KisPlainColorSource() override;
+    void selectColor(double mix, const KisPaintInformation &pi) override;
 private:
     KoColor m_backGroundColor;
     KoColor m_cachedBackGroundColor;
@@ -98,8 +98,8 @@ class PAINTOP_EXPORT KisGradientColorSource : public KisUniformColorSource
 {
 public:
     KisGradientColorSource(const KoAbstractGradient* gradient, const KoColorSpace* workingCS);
-    virtual ~KisGradientColorSource();
-    virtual void selectColor(double mix, const KisPaintInformation &pi);
+    ~KisGradientColorSource() override;
+    void selectColor(double mix, const KisPaintInformation &pi) override;
 private:
     const KoAbstractGradient* m_gradient;
 };
@@ -108,23 +108,23 @@ class PAINTOP_EXPORT KisUniformRandomColorSource : public KisUniformColorSource
 {
 public:
     KisUniformRandomColorSource();
-    virtual ~KisUniformRandomColorSource();
-    virtual void selectColor(double mix, const KisPaintInformation &pi);
+    ~KisUniformRandomColorSource() override;
+    void selectColor(double mix, const KisPaintInformation &pi) override;
 };
 
 class PAINTOP_EXPORT KisTotalRandomColorSource : public KisColorSource
 {
 public:
     KisTotalRandomColorSource();
-    virtual ~KisTotalRandomColorSource();
+    ~KisTotalRandomColorSource() override;
 public:
-    virtual void selectColor(double mix, const KisPaintInformation &pi);
-    virtual void applyColorTransformation(const KoColorTransformation* transfo);
-    virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const;
+    void selectColor(double mix, const KisPaintInformation &pi) override;
+    void applyColorTransformation(const KoColorTransformation* transfo) override;
+    const KoColorSpace* colorSpace() const override;
+    void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const override;
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
-    virtual bool isUniformColor() const;
+    bool isUniformColor() const override;
 private:
     const KoColorSpace* m_colorSpace;
 };
@@ -133,15 +133,15 @@ class PAINTOP_EXPORT KoPatternColorSource : public KisColorSource
 {
 public:
     KoPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked);
-    virtual ~KoPatternColorSource();
+    ~KoPatternColorSource() override;
 public:
-    virtual void selectColor(double mix, const KisPaintInformation &pi);
-    virtual void applyColorTransformation(const KoColorTransformation* transfo);
-    virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const;
+    void selectColor(double mix, const KisPaintInformation &pi) override;
+    void applyColorTransformation(const KoColorTransformation* transfo) override;
+    const KoColorSpace* colorSpace() const override;
+    void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const override;
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
-    virtual bool isUniformColor() const;
+    bool isUniformColor() const override;
 private:
     const KisPaintDeviceSP m_device;
     QRect m_bounds;

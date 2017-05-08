@@ -32,7 +32,7 @@ class KRITAANIMATIONDOCKER_EXPORT KisEqualizerColumn : public QWidget
 
 public:
     KisEqualizerColumn(QWidget *parent, int id, const QString &title);
-    ~KisEqualizerColumn();
+    ~KisEqualizerColumn() override;
 
     void setRightmost(bool value);
 

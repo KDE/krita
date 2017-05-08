@@ -27,9 +27,9 @@ class QMLExport : public KisImportExportFilter
     Q_OBJECT
 public:
     QMLExport(QObject *parent, const QVariantList &);
-    virtual ~QMLExport();
+    ~QMLExport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

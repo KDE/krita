@@ -35,25 +35,25 @@ class KisShapeSelectionModel: public QObject, public KoShapeContainerModel
     Q_OBJECT
 public:
     KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection);
-    ~KisShapeSelectionModel();
+    ~KisShapeSelectionModel() override;
 
-    void add(KoShape *child);
-    void remove(KoShape *child);
+    void add(KoShape *child) override;
+    void remove(KoShape *child) override;
 
     void setUpdatesEnabled(bool enabled);
     bool updatesEnabled() const;
 
-    void setClipped(const KoShape *child, bool clipping);
-    bool isClipped(const KoShape *child) const;
-    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
-    virtual bool inheritsTransform(const KoShape *shape) const;
+    void setClipped(const KoShape *child, bool clipping) override;
+    bool isClipped(const KoShape *child) const override;
+    void setInheritsTransform(const KoShape *shape, bool inherit) override;
+    bool inheritsTransform(const KoShape *shape) const override;
 
-    int count() const;
-    QList<KoShape*> shapes() const;
+    int count() const override;
+    QList<KoShape*> shapes() const override;
 
-    void containerChanged(KoShapeContainer *, KoShape::ChangeType);
-    void childChanged(KoShape * child, KoShape::ChangeType type);
-    bool isChildLocked(const KoShape *child) const;
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType) override;
+    void childChanged(KoShape * child, KoShape::ChangeType type) override;
+    bool isChildLocked(const KoShape *child) const override;
     void setShapeSelection(KisShapeSelection* selection);
 
 private Q_SLOTS:

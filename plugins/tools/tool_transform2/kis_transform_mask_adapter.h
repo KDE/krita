@@ -30,29 +30,29 @@ class KRITATOOLTRANSFORM_EXPORT KisTransformMaskAdapter : public KisTransformMas
 {
 public:
     KisTransformMaskAdapter(const ToolTransformArgs &args);
-    ~KisTransformMaskAdapter();
+    ~KisTransformMaskAdapter() override;
 
-    QTransform finalAffineTransform() const;
-    bool isAffine() const;
-    bool isHidden() const;
+    QTransform finalAffineTransform() const override;
+    bool isAffine() const override;
+    bool isHidden() const override;
 
-    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const;
+    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const override;
 
     virtual const ToolTransformArgs& transformArgs() const;
 
-    QString id() const;
-    void toXML(QDomElement *e) const;
+    QString id() const override;
+    void toXML(QDomElement *e) const override;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
-    virtual void translate(const QPointF &offset);
+    void translate(const QPointF &offset) override;
 
-    QRect nonAffineChangeRect(const QRect &rc);
-    QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
+    QRect nonAffineChangeRect(const QRect &rc) override;
+    QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) override;
 
     bool isAnimated() const;
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    void clearChangedFlag();
-    bool hasChanged() const;
+    void clearChangedFlag() override;
+    bool hasChanged() const override;
 
 private:
     struct Private;

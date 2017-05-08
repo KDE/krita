@@ -32,10 +32,10 @@ class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
 public:
     ChannelDockerDock();
 
-    QString observerName() { return "ChannelDockerDock"; }
-    void setCanvas(KoCanvasBase *canvas);
-    void unsetCanvas();
-    void showEvent(QShowEvent *event);
+    QString observerName() override { return "ChannelDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
+    void showEvent(QShowEvent *event) override;
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();

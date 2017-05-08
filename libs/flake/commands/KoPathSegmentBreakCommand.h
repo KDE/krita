@@ -37,12 +37,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     explicit KoPathSegmentBreakCommand(const KoPathPointData &pointData, KUndo2Command *parent = 0);
-    ~KoPathSegmentBreakCommand();
+    ~KoPathSegmentBreakCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     KoPathPointData m_pointData;
     KoPathPointIndex m_startIndex;

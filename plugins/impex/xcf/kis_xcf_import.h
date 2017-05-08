@@ -32,9 +32,9 @@ class KisXCFImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisXCFImport(QObject *parent, const QVariantList &);
-    virtual ~KisXCFImport();
+    ~KisXCFImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 private:
     KisImportExportFilter::ConversionStatus loadFromDevice(QIODevice* device, KisDocument* doc);
 };

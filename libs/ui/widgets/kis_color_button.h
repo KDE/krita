@@ -64,7 +64,7 @@ public:
      */
     KisColorButton(const KoColor &c, const KoColor &defaultColor, QWidget *parent = 0);
 
-    virtual ~KisColorButton();
+    ~KisColorButton() override;
 
     /**
      * Returns the currently chosen color.

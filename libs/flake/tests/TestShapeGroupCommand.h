@@ -31,7 +31,7 @@ class TestShapeGroupCommand : public QObject
     Q_OBJECT
 public:
     TestShapeGroupCommand();
-    ~TestShapeGroupCommand();
+    ~TestShapeGroupCommand() override;
 private Q_SLOTS:
     void init();
     void cleanup();

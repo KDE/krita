@@ -44,11 +44,11 @@ public:
      * @see KoShape::setTransformation()
      */
     KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, KUndo2Command * parent = 0);
-    ~KoShapeTransformCommand();
+    ~KoShapeTransformCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

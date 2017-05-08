@@ -32,9 +32,9 @@ public:
     SelectionTransformCommand(KoSelection *selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command *parent = 0);
 
     /// reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     /// reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 private:
     KoSelection *m_selection;
     QList<KoShape *> m_selectedShapes;

@@ -89,11 +89,11 @@ namespace KisLayerUtils
 
     public:
         SwitchFrameCommand(KisImageSP image, int time, bool finalize, SharedStorageSP storage);
-        ~SwitchFrameCommand();
+        ~SwitchFrameCommand() override;
 
     private:
-        void init();
-        void end();
+        void init() override;
+        void end() override;
 
     private:
         KisImageWSP m_image;
@@ -114,7 +114,7 @@ namespace KisLayerUtils
                              KisNodeSP activeAfter,
                              KisImageSP image,
                              bool finalize, KUndo2Command *parent = 0);
-    void end();
+    void end() override;
 
     private:
         KisNodeList m_selectedBefore;
@@ -141,10 +141,10 @@ namespace KisLayerUtils
         SimpleRemoveLayers(const KisNodeList &nodes,
                            KisImageSP image);
 
-        void populateChildCommands();
+        void populateChildCommands() override;
 
     protected:
-        virtual void addCommandImpl(KUndo2Command *cmd);
+        void addCommandImpl(KUndo2Command *cmd) override;
 
     private:
         KisNodeList m_nodes;
@@ -158,7 +158,7 @@ namespace KisLayerUtils
     {
     public:
         KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent = 0);
-        void end();
+        void end() override;
         static void updateNodes(const KisNodeList &nodes);
     private:
         KisNodeList m_nodes;

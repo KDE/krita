@@ -36,8 +36,8 @@ public:
         setupUi(this);
     }
 
-    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
-    KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 
@@ -46,12 +46,12 @@ class KisHeightMapExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisHeightMapExport(QObject *parent, const QVariantList &);
-    virtual ~KisHeightMapExport();
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
-    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
+    ~KisHeightMapExport() override;
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
+    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

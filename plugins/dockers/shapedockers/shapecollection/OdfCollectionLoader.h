@@ -38,7 +38,7 @@ class OdfCollectionLoader : public QObject
     Q_OBJECT
 public:
     explicit OdfCollectionLoader(const QString &path, QObject *parent = 0);
-    ~OdfCollectionLoader();
+    ~OdfCollectionLoader() override;
 
     void load();
 

@@ -43,9 +43,9 @@ public:
                    bool m_useBgColor);
 
 private:
-    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
-    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
+    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
+    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) override;
 
     void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
 

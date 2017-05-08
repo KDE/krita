@@ -47,7 +47,7 @@ class KRITAUI_EXPORT KisSelectionOptions : public QWidget
 
 public:
     KisSelectionOptions(KisCanvas2 * subject);
-    virtual ~KisSelectionOptions();
+    ~KisSelectionOptions() override;
 
     int action();
 

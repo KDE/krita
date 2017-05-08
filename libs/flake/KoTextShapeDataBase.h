@@ -42,7 +42,7 @@ class KRITAFLAKE_EXPORT KoTextShapeDataBase : public KoShapeUserData
 public:
     /// constructor
     KoTextShapeDataBase();
-    virtual ~KoTextShapeDataBase();
+    ~KoTextShapeDataBase() override;
 
     /// return the document
     QTextDocument *document() const;

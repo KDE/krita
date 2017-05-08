@@ -54,22 +54,22 @@ class KRITAUI_EXPORT KisToolShape : public KisToolPaint
 
 public:
     KisToolShape(KoCanvasBase * canvas, const QCursor & cursor);
-    virtual ~KisToolShape();
-    virtual int flags() const;
+    ~KisToolShape() override;
+    int flags() const override;
     WdgGeometryOptions *m_shapeOptionsWidget;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);
 
 protected:
-    QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
     virtual KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();
 
-    virtual void setupPaintAction(KisRecordedPaintAction* action);
+    void setupPaintAction(KisRecordedPaintAction* action) override;
 
     void addShape(KoShape* shape);
 

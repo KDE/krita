@@ -37,7 +37,7 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer
 public:
     KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
-    virtual ~KisGroupLayer();
+    ~KisGroupLayer() override;
 
     KisNodeSP clone() const override {
         return KisNodeSP(new KisGroupLayer(*this));
@@ -52,8 +52,8 @@ public:
 
     void setImage(KisImageWSP image) override;
 
-    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
+    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
 
     /**
      * Clear the projection

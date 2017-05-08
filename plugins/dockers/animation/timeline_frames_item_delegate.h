@@ -26,16 +26,16 @@ class TimelineFramesItemDelegate : public QItemDelegate
 {
 public:
     TimelineFramesItemDelegate(QObject *parent);
-    ~TimelineFramesItemDelegate();
+    ~TimelineFramesItemDelegate() override;
 
     static void paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame);
     static void paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc);
     void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
     void drawFocus(QPainter *painter,
                    const QStyleOptionViewItem &option,
-                   const QRect &rect) const;
+                   const QRect &rect) const override;
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
     QVector<QColor> labelColors;

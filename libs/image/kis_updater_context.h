@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
 
 public:
     KisUpdaterContext(qint32 threadCount = -1);
-    virtual ~KisUpdaterContext();
+    ~KisUpdaterContext() override;
 
 
     /**
@@ -152,15 +152,15 @@ public:
      * Creates an explicit number of threads
      */
     KisTestableUpdaterContext(qint32 threadCount);
-    ~KisTestableUpdaterContext();
+    ~KisTestableUpdaterContext() override;
 
     /**
      * The only difference - it doesn't start execution
      * of the job
      */
-    void addMergeJob(KisBaseRectsWalkerSP walker);
-    void addStrokeJob(KisStrokeJob *strokeJob);
-    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
+    void addMergeJob(KisBaseRectsWalkerSP walker) override;
+    void addStrokeJob(KisStrokeJob *strokeJob) override;
+    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob) override;
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();

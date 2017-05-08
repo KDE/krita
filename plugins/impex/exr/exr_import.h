@@ -29,9 +29,9 @@ class exrImport : public KisImportExportFilter
     Q_OBJECT
 public:
     exrImport(QObject *parent, const QVariantList &);
-    virtual ~exrImport();
+    ~exrImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

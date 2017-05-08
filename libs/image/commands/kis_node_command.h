@@ -36,7 +36,7 @@ public:
      * @param node The node the command will be working on.
      */
     KisNodeCommand(const KUndo2MagicString& name, KisNodeSP node);
-    virtual ~KisNodeCommand();
+    ~KisNodeCommand() override;
 
 protected:
     KisNodeSP m_node;

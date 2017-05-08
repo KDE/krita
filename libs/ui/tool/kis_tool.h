@@ -88,11 +88,11 @@ public:
     enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02 };
 
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
-    virtual ~KisTool();
+    ~KisTool() override;
 
     virtual int flags() const { return 0; }
 
-    void deleteSelection();
+    void deleteSelection() override;
 // KoToolBase Implementation.
 
 public:
@@ -195,18 +195,18 @@ public:
     virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
 
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseTripleClickEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void mouseTripleClickEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
     bool isActive() const;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
-    virtual void canvasResourceChanged(int key, const QVariant & res);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
+    void canvasResourceChanged(int key, const QVariant & res) override;
     // Implement this slot in case there are any widgets or properties which need
     // to be updated after certain operations, to reflect the inner state correctly.
     // At the moment this is used for smoothing options in the freehand brush, but
@@ -263,7 +263,7 @@ protected:
     /// Update the canvas for the given rectangle in view coordinates.
     void updateCanvasViewRect(const QRectF &viewRect);
 
-    virtual QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
     /**
      * To determine whether this tool will change its behavior when

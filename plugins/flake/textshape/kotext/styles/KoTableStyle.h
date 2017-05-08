@@ -82,7 +82,7 @@ public:
     /// Creates a KoTableStyle with the given table format, and \a parent
     explicit KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
     /// Destructor
-    ~KoTableStyle();
+    ~KoTableStyle() override;
 
     /// Creates a KoTableStyle that represents the formatting of \a table.
     static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = 0);

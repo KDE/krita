@@ -41,26 +41,26 @@ class KarbonGradientTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KarbonGradientTool(KoCanvasBase *canvas);
-    ~KarbonGradientTool();
+    ~KarbonGradientTool() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void repaintDecorations();
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void repaintDecorations() override;
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
 public Q_SLOTS:
-    virtual void documentResourceChanged(int key, const QVariant &res);
+    void documentResourceChanged(int key, const QVariant &res) override;
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private Q_SLOTS:
     void initialize();

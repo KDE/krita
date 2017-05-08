@@ -28,7 +28,7 @@ class KisOilPaintFilterPlugin : public QObject
     Q_OBJECT
 public:
     KisOilPaintFilterPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisOilPaintFilterPlugin();
+    ~KisOilPaintFilterPlugin() override;
 };
 
 #endif

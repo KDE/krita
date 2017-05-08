@@ -30,8 +30,8 @@ public:
     /// Constructor
     KoCreateShapesToolFactory();
     /// Destructor
-    ~KoCreateShapesToolFactory();
+    ~KoCreateShapesToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase* createTool(KoCanvasBase *canvas) override;
 };
 #endif

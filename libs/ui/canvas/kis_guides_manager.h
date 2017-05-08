@@ -34,7 +34,7 @@ class KRITAUI_EXPORT KisGuidesManager : public QObject
     Q_OBJECT
 public:
     KisGuidesManager(QObject *parent = 0);
-    ~KisGuidesManager();
+    ~KisGuidesManager() override;
 
     void setup(KisActionManager *actionManager);
     void setView(QPointer<KisView> view);
@@ -43,7 +43,7 @@ public:
     bool lockGuides() const;
     bool snapToGuides() const;
 
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 Q_SIGNALS:
     void sigRequestUpdateGuidesConfig(const KisGuidesConfig &config);

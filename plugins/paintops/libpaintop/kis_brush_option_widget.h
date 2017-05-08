@@ -48,14 +48,14 @@ public:
     void setCustomBrush(bool on);
     void setTextBrush(bool on);
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
     void setPrecisionEnabled(bool value);
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
     bool presetIsValid();
 

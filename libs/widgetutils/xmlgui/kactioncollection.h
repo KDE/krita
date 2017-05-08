@@ -70,7 +70,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KActionCollection();
+    ~KActionCollection() override;
 
     /**
      * Access the list of all action collections in existence for this app

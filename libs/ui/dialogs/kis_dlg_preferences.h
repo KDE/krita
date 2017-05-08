@@ -114,7 +114,7 @@ class ShortcutSettingsTab : public QWidget
 public:
 
     ShortcutSettingsTab(QWidget *parent = 0, const char *name = 0);
-    ~ShortcutSettingsTab();
+    ~ShortcutSettingsTab() override;
 
 public:
     void setDefault();
@@ -215,7 +215,7 @@ class PerformanceTab : public WdgPerformanceSettings
 public:
     PerformanceTab(QWidget *parent = 0, const char *name = 0);
 
-    ~PerformanceTab();
+    ~PerformanceTab() override;
 
     void load(bool requestDefault);
     void save();
@@ -307,7 +307,7 @@ public:
 protected:
 
     KisDlgPreferences(QWidget *parent = 0, const char *name = 0);
-    ~KisDlgPreferences();
+    ~KisDlgPreferences() override;
 
 protected:
 

@@ -22,8 +22,8 @@ class KisMD5Generator : public KoMD5Generator
 {
 public:
     KisMD5Generator();
-    ~KisMD5Generator();
+    ~KisMD5Generator() override;
 
-    QByteArray generateHash(const QString &filename);
+    QByteArray generateHash(const QString &filename) override;
     using KoMD5Generator::generateHash;
 };

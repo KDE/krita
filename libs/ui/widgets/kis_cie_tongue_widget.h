@@ -46,7 +46,7 @@ class KRITAUI_EXPORT KisCIETongueWidget : public QWidget
 public:
  
     KisCIETongueWidget(QWidget *parent=0);
-    ~KisCIETongueWidget();
+    ~KisCIETongueWidget() override;
  
     //this expects a qvector <double> (9), qvector <double> (3) and whether or not there's profile data?;
     void setProfileData(QVector <double> p, QVector <double> w, bool profileData = false);
@@ -78,8 +78,8 @@ protected:
     QRgb colorByCoord(double x, double y);
     void drawSmallElipse(QPointF xy, int r, int g, int b, int sz);
  
-    void resizeEvent(QResizeEvent* event);
-    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent*) override;
  
 private:
  

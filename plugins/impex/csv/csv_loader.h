@@ -36,7 +36,7 @@ class CSVLoader : public QObject {
 
 public:
     CSVLoader(KisDocument* doc, bool batchMode);
-    virtual ~CSVLoader();
+    ~CSVLoader() override;
 
     KisImageBuilder_Result buildAnimation(QString &filename);
 

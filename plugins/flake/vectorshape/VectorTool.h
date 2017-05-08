@@ -31,24 +31,24 @@ public:
     explicit VectorTool(KoCanvasBase *canvas);
 
     /// reimplemented from KoToolBase
-    virtual void paint(QPainter &, const KoViewConverter &) {}
+    void paint(QPainter &, const KoViewConverter &) override {}
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent *) {}
+    void mousePressEvent(KoPointerEvent *) override {}
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent *) {}
+    void mouseMoveEvent(KoPointerEvent *) override {}
     /// reimplemented from KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent *) {}
+    void mouseReleaseEvent(KoPointerEvent *) override {}
 
     /// reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented from KoToolBase
-    virtual void deactivate();
+    void deactivate() override;
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QWidget *createOptionWidget();
+    QWidget *createOptionWidget() override;
 
 private Q_SLOTS:
     void changeUrlPressed();

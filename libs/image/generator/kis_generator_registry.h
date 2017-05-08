@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisGeneratorRegistry : public QObject, public KoGenericR
     Q_OBJECT
 
 public:
-    virtual ~KisGeneratorRegistry();
+    ~KisGeneratorRegistry() override;
 
     static KisGeneratorRegistry* instance();
     void add(KisGeneratorSP item);

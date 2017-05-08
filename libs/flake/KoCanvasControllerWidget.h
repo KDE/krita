@@ -46,14 +46,14 @@ public:
      * @param parent the parent this widget will belong to
      */
     explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
-    virtual ~KoCanvasControllerWidget();
+    ~KoCanvasControllerWidget() override;
 
     /**
      * Reimplemented from QAbstractScrollArea.
      */
-    void scrollContentsBy(int dx, int dy);
+    void scrollContentsBy(int dx, int dy) override;
 
-    virtual QSize viewportSize() const;
+    QSize viewportSize() const override;
 
     /// Reimplemented from KoCanvasController
 
@@ -62,11 +62,11 @@ public:
      */
     virtual void activate();
 
-    virtual void setDrawShadow(bool drawShadow);
+    void setDrawShadow(bool drawShadow) override;
 
-    virtual void setCanvas(KoCanvasBase *canvas);
+    void setCanvas(KoCanvasBase *canvas) override;
 
-    virtual KoCanvasBase *canvas() const;
+    KoCanvasBase *canvas() const override;
 
     /**
      * Change the actual canvas widget used by the current canvas. This allows the canvas widget
@@ -76,14 +76,14 @@ public:
      */
     virtual void changeCanvasWidget(QWidget *widget);
 
-    virtual int visibleHeight() const;
-    virtual int visibleWidth() const;
-    virtual int canvasOffsetX() const;
-    virtual int canvasOffsetY() const;
+    int visibleHeight() const override;
+    int visibleWidth() const override;
+    int canvasOffsetX() const override;
+    int canvasOffsetY() const override;
 
-    virtual void ensureVisible(const QRectF &rect, bool smooth = false);
+    void ensureVisible(const QRectF &rect, bool smooth = false) override;
 
-    virtual void ensureVisible(KoShape *shape);
+    void ensureVisible(KoShape *shape) override;
 
     /**
      * will cause the toolOptionWidgetsChanged to be emitted and all
@@ -96,13 +96,13 @@ public:
      */
     void setToolOptionWidgets(const QList<QPointer<QWidget> > &widgets);
 
-    virtual void zoomIn(const QPoint &center);
+    void zoomIn(const QPoint &center) override;
 
-    virtual void zoomOut(const QPoint &center);
+    void zoomOut(const QPoint &center) override;
 
-    virtual void zoomBy(const QPoint &center, qreal zoom);
+    void zoomBy(const QPoint &center, qreal zoom) override;
 
-    virtual void zoomTo(const QRect &rect);
+    void zoomTo(const QRect &rect) override;
 
     /**
      * Zoom document keeping point \p widgetPoint unchanged
@@ -110,34 +110,34 @@ public:
      */
     virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
 
-    virtual void recenterPreferred();
+    void recenterPreferred() override;
 
-    virtual void setPreferredCenter(const QPointF &viewPoint);
+    void setPreferredCenter(const QPointF &viewPoint) override;
 
     /// Returns the currently set preferred center point in view coordinates (pixels)
-    virtual QPointF preferredCenter() const;
+    QPointF preferredCenter() const override;
 
-    virtual void pan(const QPoint &distance);
+    void pan(const QPoint &distance) override;
 
-    virtual void setMargin(int margin);
+    void setMargin(int margin) override;
 
-    virtual QPoint scrollBarValue() const;
+    QPoint scrollBarValue() const override;
 
     /**
      * Used by KisCanvasController to correct the scrollbars position
      * after the rotation.
      */
-    virtual void setScrollBarValue(const QPoint &value);
+    void setScrollBarValue(const QPoint &value) override;
 
-    virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
+    void updateDocumentSize(const QSize &sz, bool recalculateCenter = true) override;
 
     /**
      * Set mouse wheel to zoom behaviour
      * @param zoom if true wheel will zoom instead of scroll, control modifier will scroll
      */
-    void setZoomWithWheel(bool zoom);
+    void setZoomWithWheel(bool zoom) override;
 
-    virtual void setVastScrolling(qreal factor);
+    void setVastScrolling(qreal factor) override;
 
     /**
      * \internal
@@ -157,23 +157,23 @@ protected:
     friend class KisZoomAndPanTest;
 
     /// reimplemented from QWidget
-    virtual void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     /// reimplemented from QWidget
-    virtual void resizeEvent(QResizeEvent *resizeEvent);
+    void resizeEvent(QResizeEvent *resizeEvent) override;
     /// reimplemented from QWidget
-    virtual void dragEnterEvent(QDragEnterEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
     /// reimplemented from QWidget
-    virtual void dropEvent(QDropEvent *event);
+    void dropEvent(QDropEvent *event) override;
     /// reimplemented from QWidget
-    virtual void dragMoveEvent(QDragMoveEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event) override;
     /// reimplemented from QWidget
-    virtual void dragLeaveEvent(QDragLeaveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
     /// reimplemented from QWidget
-    virtual void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event) override;
     /// reimplemented from QWidget
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented from QWidget
-    virtual bool focusNextPrevChild(bool next);
+    bool focusNextPrevChild(bool next) override;
 
 private:
     Q_PRIVATE_SLOT(d, void activate())

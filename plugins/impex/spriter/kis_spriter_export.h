@@ -108,9 +108,9 @@ class KisSpriterExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisSpriterExport(QObject *parent, const QVariantList &);
-    virtual ~KisSpriterExport();
+    ~KisSpriterExport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) override;
 private:
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);

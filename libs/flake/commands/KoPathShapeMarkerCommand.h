@@ -43,11 +43,11 @@ public:
      */
     KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);
 
-    virtual ~KoPathShapeMarkerCommand();
+    ~KoPathShapeMarkerCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     QList<KoPathShape*> m_shapes;  ///< the shapes to set marker for

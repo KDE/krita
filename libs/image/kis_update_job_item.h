@@ -47,12 +47,12 @@ public:
     {
         setAutoDelete(false);
     }
-    ~KisUpdateJobItem()
+    ~KisUpdateJobItem() override
     {
         delete m_runnableJob;
     }
 
-    void run() {
+    void run() override {
         if(m_exclusive) {
             m_exclusiveJobLock->lockForWrite();
         } else {

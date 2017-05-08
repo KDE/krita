@@ -29,8 +29,8 @@ class KisImageSetProjectionColorSpaceCommand : public KisImageCommand
 public:
     KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     const KoColorSpace * m_beforeColorSpace;

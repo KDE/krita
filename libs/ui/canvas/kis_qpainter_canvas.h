@@ -46,40 +46,40 @@ public:
 
     KisQPainterCanvas(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent);
 
-    virtual ~KisQPainterCanvas();
+    ~KisQPainterCanvas() override;
 
     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
 public: // QWidget overrides
 
-    void paintEvent(QPaintEvent * ev);
+    void paintEvent(QPaintEvent * ev) override;
 
-    void resizeEvent(QResizeEvent *e);
+    void resizeEvent(QResizeEvent *e) override;
 
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    void inputMethodEvent(QInputMethodEvent *event) override;
 
 public: // Implement kis_abstract_canvas_widget interface
-    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
-    void setWrapAroundViewingMode(bool value);
-    void channelSelectionChanged(const QBitArray &channelFlags);
-    void setDisplayProfile(KisDisplayColorConverter *colorConverter);
-    void finishResizingImage(qint32 w, qint32 h);
-    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags);
-    QRect updateCanvasProjection(KisUpdateInfoSP info);
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
+    void setWrapAroundViewingMode(bool value) override;
+    void channelSelectionChanged(const QBitArray &channelFlags) override;
+    void setDisplayProfile(KisDisplayColorConverter *colorConverter) override;
+    void finishResizingImage(qint32 w, qint32 h) override;
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
+    QRect updateCanvasProjection(KisUpdateInfoSP info) override;
 
-    QWidget * widget() {
+    QWidget * widget() override {
         return this;
     }
 
-    bool isBusy() const {
+    bool isBusy() const override {
         return false;
     }
 
 protected: // KisCanvasWidgetBase
 
-    virtual bool callFocusNextPrevChild(bool next);
+    bool callFocusNextPrevChild(bool next) override;
 
 protected:
     virtual void drawImage(QPainter & gc, const QRect &updateWidgetRect) const;

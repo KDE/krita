@@ -30,8 +30,8 @@ class KRITAIMAGE_EXPORT KisSetLayerStyleCommand : public KUndo2Command
 public:
     KisSetLayerStyleCommand(KisLayerSP layer, KisPSDLayerStyleSP oldStyle, KisPSDLayerStyleSP newStyle, KUndo2Command *parent = 0);
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
     static void updateLayerStyle(KisLayerSP layer, KisPSDLayerStyleSP style);
 

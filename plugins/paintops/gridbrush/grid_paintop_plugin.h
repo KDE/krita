@@ -30,7 +30,7 @@ class GridPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     GridPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~GridPaintOpPlugin();
+    ~GridPaintOpPlugin() override;
 };
 
 #endif // GRID_PAINTOP_PLUGIN_H_

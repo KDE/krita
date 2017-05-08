@@ -51,7 +51,7 @@ class KisZoomManager : public QObject
 public:
 
     KisZoomManager(QPointer<KisView> view, KoZoomHandler*, KoCanvasController *);
-    ~KisZoomManager();
+    ~KisZoomManager() override;
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();

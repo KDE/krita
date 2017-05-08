@@ -30,7 +30,7 @@ class SprayPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     SprayPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~SprayPaintOpPlugin();
+    ~SprayPaintOpPlugin() override;
 };
 
 #endif // SPRAY_PAINTOP_PLUGIN_H_

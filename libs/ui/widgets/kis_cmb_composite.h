@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView
 {
 public:
      KisCompositeOpListWidget(QWidget* parent=0);
-    ~KisCompositeOpListWidget();
+    ~KisCompositeOpListWidget() override;
 
     KoID selectedCompositeOp() const;
 
@@ -49,9 +49,9 @@ class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox
     Q_OBJECT
 public:
      KisCompositeOpComboBox(QWidget* parent=0);
-    ~KisCompositeOpComboBox();
+    ~KisCompositeOpComboBox() override;
 
-    virtual void hidePopup();
+    void hidePopup() override;
 
     void validate(const KoColorSpace *cs);
     void selectCompositeOp(const KoID &op);

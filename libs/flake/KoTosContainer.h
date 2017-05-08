@@ -39,10 +39,10 @@ class KRITAFLAKE_EXPORT KoTosContainer : public KoShapeContainer
 {
 public:
     KoTosContainer();
-    virtual ~KoTosContainer();
+    ~KoTosContainer() override;
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     // reimplemented
     virtual bool loadText(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -91,17 +91,17 @@ public:
      */
     KoShape *createTextShape(KoDocumentResourceManager *documentResources = 0);
 
-    virtual void setRunThrough(short int runThrough);
+    void setRunThrough(short int runThrough) override;
 
 protected:
     /// constructor
     KoTosContainer(KoTosContainerPrivate &);
 
     //reimplemented
-    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     //reimplemented
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
 
     /**
      * Set the current preferred text rectangle. This rect contains the coordinates of
@@ -123,7 +123,7 @@ protected:
      */
     KoShape *textShape() const;
 
-    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
 private:
     Q_DECLARE_PRIVATE(KoTosContainer)

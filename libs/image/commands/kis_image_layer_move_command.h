@@ -44,8 +44,8 @@ public:
     KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, KisNodeSP newAbove, bool doUpdates = true);
     KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     KisNodeSP m_layer;

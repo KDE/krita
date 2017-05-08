@@ -37,7 +37,7 @@ class CSVSaver : public QObject {
 
 public:
     CSVSaver(KisDocument* doc, bool batchMode);
-    virtual ~CSVSaver();
+    ~CSVSaver() override;
 
     KisImageBuilder_Result buildAnimation(const QString &filename);
     KisImageSP image();

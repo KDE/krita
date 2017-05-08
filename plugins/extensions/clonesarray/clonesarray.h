@@ -27,7 +27,7 @@ class ClonesArray : public KisViewPlugin
     Q_OBJECT
 public:
     ClonesArray(QObject *parent, const QVariantList &);
-    virtual ~ClonesArray();
+    ~ClonesArray() override;
 
 private Q_SLOTS:
     void slotCreateClonesArray();

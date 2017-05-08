@@ -28,9 +28,9 @@ class KisTangentNormalPaintOpSettingsWidget : public KisBrushBasedPaintopOptionW
 
 public:
     KisTangentNormalPaintOpSettingsWidget(QWidget* parent = 0);
-    ~KisTangentNormalPaintOpSettingsWidget();
+    ~KisTangentNormalPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 

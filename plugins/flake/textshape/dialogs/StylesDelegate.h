@@ -33,12 +33,12 @@ class StylesDelegate : public QStyledItemDelegate
 public:
     StylesDelegate();
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                       const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model,
-                             const QStyleOptionViewItem &option, const QModelIndex &index);
+    bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                             const QStyleOptionViewItem &option, const QModelIndex &index) override;
     void setEditButtonEnable(bool enable);
 
 Q_SIGNALS:

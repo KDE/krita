@@ -83,7 +83,7 @@ public:
 #ifndef QT_NO_UNDOGROUP
     explicit KUndo2View(KUndo2Group *group, QWidget *parent = 0);
 #endif
-    ~KUndo2View();
+    ~KUndo2View() override;
 
     KUndo2QStack *stack() const;
 #ifndef QT_NO_UNDOGROUP

@@ -38,9 +38,9 @@ public:
     };
 
     KisSingleActionShortcut(KisAbstractInputAction *action, int index);
-    ~KisSingleActionShortcut();
+    ~KisSingleActionShortcut() override;
 
-    int priority() const;
+    int priority() const override;
 
     void setKey(const QSet<Qt::Key> &modifiers, Qt::Key key);
     void setWheel(const QSet<Qt::Key> &modifiers, WheelAction wheelAction);

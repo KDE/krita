@@ -36,11 +36,11 @@ class KisColorSelectorSimple : public KisColorSelectorComponent
 Q_OBJECT
 public:
     explicit KisColorSelectorSimple(KisColorSelector *parent);
-    void setColor(const KoColor &color);
+    void setColor(const KoColor &color) override;
 
 protected:
-    void paint(QPainter*);
-    KoColor selectColor(int x, int y);
+    void paint(QPainter*) override;
+    KoColor selectColor(int x, int y) override;
 
 private:
     friend class Acs::PixelCacheRenderer;

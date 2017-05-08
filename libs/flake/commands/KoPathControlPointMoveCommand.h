@@ -41,9 +41,9 @@ public:
     KoPathControlPointMoveCommand(const KoPathPointData &pointData, const QPointF &offset,
             KoPathPoint::PointType pointType, KUndo2Command *parent = 0);
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     KoPathPointData m_pointData;
     // the offset in shape coordinates

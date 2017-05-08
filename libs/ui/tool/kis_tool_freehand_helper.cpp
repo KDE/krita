@@ -92,10 +92,6 @@ struct KisToolFreehandHelper::Private
     int canvasRotation;
     bool canvasMirroredH;
 
-    KisPaintInformation
-    getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
-                           const KisPaintInformation &lastPaintInfo);
-
     qreal effectiveSmoothnessDistance() const;
 };
 
@@ -120,7 +116,7 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
 
     m_d->stabilizerDelayedPaintHelper.setPaintLineCallback(
                 [this](const KisPaintInformation &pi1, const KisPaintInformation &pi2) {
-                    paintLine(pi1, pi2);
+                    paintPointOrLine(pi1, pi2);
                 });
     m_d->stabilizerDelayedPaintHelper.setUpdateOutlineCallback(
                 [this]() {
@@ -217,6 +213,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
+    m_d->strokeTime.start();
     KisPaintInformation pi =
         m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
 
@@ -250,8 +247,6 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
     m_d->previousTangent = QPointF();
 
     m_d->hasPaintAtLeastOnce = false;
-
-    m_d->strokeTime.start();
 
     m_d->previousPaintInformation = previousPaintInformation;
 
@@ -531,8 +526,14 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
                 qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
 
-            paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
-                               m_d->previousTangent, newTangent);
+            if (m_d->resources->needsAirbrushing()
+                && (newTangent.isNull() || m_d->previousTangent.isNull()))
+            {
+                paintLine(m_d->previousPaintInformation, info);
+            } else {
+                paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
+                                   m_d->previousTangent, newTangent);
+            }
 
             m_d->previousTangent = newTangent;
         }
@@ -650,10 +651,18 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
 }
 
 KisPaintInformation
-KisToolFreehandHelper::Private::getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
-                                                       const KisPaintInformation &lastPaintInfo)
+KisToolFreehandHelper::getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
+                                              const KisPaintInformation &lastPaintInfo)
 {
-    KisPaintInformation result(lastPaintInfo);
+    KisPaintInformation result(lastPaintInfo.pos(),
+                               lastPaintInfo.pressure(),
+                               lastPaintInfo.xTilt(),
+                               lastPaintInfo.yTilt(),
+                               lastPaintInfo.rotation(),
+                               lastPaintInfo.tangentialPressure(),
+                               lastPaintInfo.perspective(),
+                               elapsedStrokeTime(),
+                               lastPaintInfo.drawingSpeed());
 
     if (queue.size() > 1) {
         QQueue<KisPaintInformation>::const_iterator it = queue.constBegin();
@@ -665,10 +674,10 @@ KisToolFreehandHelper::Private::getStabilizedPaintInfo(const QQueue<KisPaintInfo
         it++;
         int i = 2;
 
-        if (smoothingOptions->stabilizeSensors()) {
+        if (m_d->smoothingOptions->stabilizeSensors()) {
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mix(k, *it, result);
+                result = KisPaintInformation::mixWithoutTime(k, *it, result);
                 it++;
                 i++;
             }
@@ -704,17 +713,23 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             QPointF diff = sampledInfo.pos() - m_d->previousPaintInformation.pos();
             qreal dx = sqrt(pow2(diff.x()) + pow2(diff.y()));
 
-            canPaint = dx > R;
+            if (!(dx > R)) {
+                if (m_d->resources->needsAirbrushing()) {
+                    sampledInfo.setPos(m_d->previousPaintInformation.pos());
+                }
+                else {
+                    canPaint = false;
+                }
+            }
         }
 
         if (canPaint) {
-            KisPaintInformation newInfo =
-                    m_d->getStabilizedPaintInfo(m_d->stabilizerDeque, sampledInfo);
+            KisPaintInformation newInfo = getStabilizedPaintInfo(m_d->stabilizerDeque, sampledInfo);
 
             if (m_d->stabilizerDelayedPaintHelper.running()) {
                 delayedPaintTodoItems.append(newInfo);
             } else {
-                paintLine(m_d->previousPaintInformation, newInfo);
+                paintPointOrLine(m_d->previousPaintInformation, newInfo);
             }
             m_d->previousPaintInformation = newInfo;
 
@@ -817,7 +832,7 @@ int KisToolFreehandHelper::computeAirbrushTimerInterval() const
         realInterval *= FAST_AIRBRUSH_TIMER_FACTOR;
     }
 
-    return qMax(1, qFloor(realInterval));
+    return qMax(1, qRound(realInterval));
 }
 
 void KisToolFreehandHelper::paintAt(int painterInfoId,
@@ -844,6 +859,18 @@ void KisToolFreehandHelper::paintLine(int painterInfoId,
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addLine(pi1, pi2);
+    }
+}
+
+void KisToolFreehandHelper::paintPointOrLine(int painterInfoId,
+                                             const KisPaintInformation &pi1,
+                                             const KisPaintInformation &pi2)
+{
+    if (m_d->hasPaintAtLeastOnce) {
+        paintLine(painterInfoId, pi1, pi2);
+    }
+    else {
+        paintAt(painterInfoId, pi2);
     }
 }
 
@@ -904,6 +931,12 @@ void KisToolFreehandHelper::paintLine(const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
     paintLine(0, pi1, pi2);
+}
+
+void KisToolFreehandHelper::paintPointOrLine(const KisPaintInformation &pi1,
+                                             const KisPaintInformation &pi2)
+{
+    paintPointOrLine(0, pi1, pi2);
 }
 
 void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,

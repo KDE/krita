@@ -113,6 +113,10 @@ protected:
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
+    void paintPointOrLine(int painterInfoId,
+                          const KisPaintInformation &pi1,
+                          const KisPaintInformation &pi2);
+
     void paintBezierCurve(int painterInfoId,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
@@ -126,6 +130,9 @@ protected:
     virtual void paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2);
 
+    virtual void paintPointOrLine(const KisPaintInformation &pi1,
+                                  const KisPaintInformation &pi2);
+
     virtual void paintBezierCurve(const KisPaintInformation &pi1,
                                   const QPointF &control1,
                                   const QPointF &control2,
@@ -138,6 +145,8 @@ private:
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
+    KisPaintInformation getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
+                                               const KisPaintInformation &lastPaintInfo);
     int computeAirbrushTimerInterval() const;
 
 private Q_SLOTS:

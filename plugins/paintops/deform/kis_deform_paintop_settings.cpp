@@ -77,7 +77,7 @@ qreal KisDeformPaintOpSettings::airbrushInterval() const
         return getInt(AIRBRUSH_RATE);
     }
     else {
-        return KisPaintOpSettings::rate();
+        return KisPaintOpSettings::airbrushInterval();
     }
 }
 

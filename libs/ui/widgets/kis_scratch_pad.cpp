@@ -219,7 +219,7 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 
 void KisScratchPad::doStroke(KoPointerEvent *event)
 {
-    m_helper->paint(event);
+    m_helper->paintEvent(event);
 }
 
 void KisScratchPad::endStroke(KoPointerEvent *event)

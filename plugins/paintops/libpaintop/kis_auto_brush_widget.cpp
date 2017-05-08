@@ -264,7 +264,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     spacingWidget->setSpacing(aBrush->autoSpacingActive(),
                               aBrush->autoSpacingActive() ?
                               aBrush->autoSpacingCoeff() : aBrush->spacing());
-    timedSpacingWidget->setTimedSpacing(aBrush->isTimedSpacingEnabled(),
+    timedSpacingWidget->setTimedSpacing(aBrush->timedSpacingEnabled(),
                                         aBrush->timedSpacingRate());
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);

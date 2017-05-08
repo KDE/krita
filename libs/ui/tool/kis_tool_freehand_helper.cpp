@@ -405,7 +405,7 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
     paint(info);
 }
 
-void KisToolFreehandHelper::paint(const KisPaintInformation &info)
+void KisToolFreehandHelper::paint(KisPaintInformation &info)
 {
     /**
      * Smooth the coordinates out using the history and the

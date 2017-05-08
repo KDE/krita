@@ -182,7 +182,7 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
         m_helper->setCanvasHorizontalMirrorState(canvas2->xAxisMirrored());
         m_helper->setCanvasRotation(canvas2->rotationAngle());
     }
-    m_helper->paint(event);
+    m_helper->paintEvent(event);
 }
 
 void KisToolFreehand::endStroke()

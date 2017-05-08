@@ -127,7 +127,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     connect(timedSpacingSelectionWidget, SIGNAL(sigTimedSpacingChanged()),
-            SLOT(slotTimedSpacingChanged());
+            SLOT(slotTimedSpacingChanged()));
 
 
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));

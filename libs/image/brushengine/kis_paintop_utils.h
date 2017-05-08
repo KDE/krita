@@ -70,7 +70,7 @@ void paintLine(PaintOp &op,
     qreal t = 0.0;
 
     while ((t = currentDistance->getNextPointPosition(pi.pos(), end, pi.currentTime(), endTime)) >= 0.0) {
-        pi = KisPaintInformation::mix(pt, t, pi, pi2);
+        pi = KisPaintInformation::mix(t, pi, pi2);
 
         if (fanCornersEnabled &&
             currentDistance->hasLastPaintInformation()) {

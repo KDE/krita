@@ -29,13 +29,14 @@
 
 
 struct Q_DECL_HIDDEN KisDistanceInformation::Private {
-    Private() : lastDabInfoValid(false),
+    Private() :
+        accumDistance(),
+        accumTime(0.0),
+        lastDabInfoValid(false),
         lastPaintInfoValid(false),
         lockedDrawingAngle(0.0),
         hasLockedDrawingAngle(false),
-        totalDistance(0.0),
-        accumDistance(),
-        accumTime(0.0) {}
+        totalDistance(0.0) {}
 
     QPointF accumDistance;
     qreal accumTime;
@@ -172,7 +173,7 @@ qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
         getNextPointPositionAnisotropic(start, end);
 
     // Compute interpolation factor based on time.
-    qreal timeFactor = getNextPointPositionTemporal(startTime, endTime);
+    qreal timeFactor = getNextPointPositionTimed(startTime, endTime);
 
     // Return the distance-based or time-based factor, whichever is smallest.
     if (spaceFactor < 0.0) {

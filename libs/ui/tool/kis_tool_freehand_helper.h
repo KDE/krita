@@ -67,7 +67,6 @@ public:
                    KisNodeSP overrideNode = 0,
                    KisDefaultBoundsBaseSP bounds = 0);
     void paintEvent(KoPointerEvent *event);
-    void paint(const KisPaintInformation &info);
     void endPaint();
 
     const KisPaintOp* currentPaintOp() const;
@@ -133,6 +132,7 @@ protected:
                                   const KisPaintInformation &pi2);
 
 private:
+    void paint(KisPaintInformation &info);
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                    QPointF tangent1, QPointF tangent2);
 

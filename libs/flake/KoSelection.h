@@ -55,7 +55,7 @@ class KRITAFLAKE_EXPORT KoSelection : public QObject, public KoShape, public KoS
 public:
 
     KoSelection();
-    virtual ~KoSelection();
+    ~KoSelection() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     void setSize(const QSizeF &size) override;
@@ -131,7 +131,7 @@ public:
     /// return the selection count, i.e. the number of all selected shapes
     int count() const;
 
-    virtual bool hitTest(const QPointF &position) const;
+    bool hitTest(const QPointF &position) const override;
 
     /**
      * Sets the currently active layer.
@@ -146,7 +146,7 @@ public:
      */
     KoShapeLayer *activeLayer() const;
 
-    void notifyShapeChanged(ChangeType type, KoShape *shape);
+    void notifyShapeChanged(ChangeType type, KoShape *shape) override;
 
 Q_SIGNALS:
     /// emitted when the selection is changed
@@ -156,8 +156,8 @@ Q_SIGNALS:
     void currentLayerChanged(const KoShapeLayer *layer);
 
 private:
-    virtual void saveOdf(KoShapeSavingContext &) const;
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);
+    void saveOdf(KoShapeSavingContext &) const override;
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
 
     Q_DECLARE_PRIVATE_D(KoShape::d_ptr, KoSelection)
 };

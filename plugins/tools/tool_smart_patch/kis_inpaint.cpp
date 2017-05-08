@@ -198,7 +198,7 @@ public:
         Init(imageDev, imageSize);
     }
 
-    virtual ~ImageData()
+    ~ImageData() override
     {
         delete[] m_data; //ImageData owns m_data, so it has to delete it
     }

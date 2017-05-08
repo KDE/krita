@@ -66,15 +66,15 @@ public:
     static const int PointerRole = Qt::UserRole;
 
     explicit KoSectionModel(QTextDocument *doc);
-    virtual ~KoSectionModel();
+    ~KoSectionModel() override;
 
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &child) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &child) const override;
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     /// Creates KoSection in position of @param cursor with some allowed name
     KoSection *createSection(const QTextCursor &cursor, KoSection *parent);

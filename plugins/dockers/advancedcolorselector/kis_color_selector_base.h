@@ -41,7 +41,7 @@ Q_OBJECT
 public:
     enum Move {MoveToMousePosition, DontMove};
     explicit KisColorSelectorBase(QWidget *parent = 0);
-    ~KisColorSelectorBase();
+    ~KisColorSelectorBase() override;
 
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
@@ -70,20 +70,20 @@ public Q_SLOTS:
     virtual void showPopup(Move move=MoveToMousePosition);
 
 public:
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
 
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
 
 protected:
-    void keyPressEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *) override;
     virtual KisColorSelectorBase* createPopup() const = 0;
-    void dragEnterEvent(QDragEnterEvent *);
-    void dropEvent(QDropEvent *);
+    void dragEnterEvent(QDragEnterEvent *) override;
+    void dropEvent(QDropEvent *) override;
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
-    void mouseMoveEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event) override;
     void requestUpdateColorAndPreview(const KoColor &color, Acs::ColorRole role);
 
 private:

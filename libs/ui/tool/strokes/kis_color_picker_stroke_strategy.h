@@ -37,7 +37,7 @@ public:
             : dev(_dev), pt(_pt)
         {}
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) {
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
             KisLodTransform t(levelOfDetail);
             const QPoint realPoint = t.map(pt);
 
@@ -49,10 +49,10 @@ public:
     };
 public:
     KisColorPickerStrokeStrategy(int lod = 0);
-    ~KisColorPickerStrokeStrategy();
+    ~KisColorPickerStrokeStrategy() override;
 
-    void doStrokeCallback(KisStrokeJobData *data);
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    void doStrokeCallback(KisStrokeJobData *data) override;
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
 Q_SIGNALS:
     void sigColorUpdated(const KoColor &color);

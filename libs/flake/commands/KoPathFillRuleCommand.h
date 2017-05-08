@@ -38,11 +38,11 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathFillRuleCommand(const QList<KoPathShape*> &shapes, Qt::FillRule fillRule, KUndo2Command *parent = 0);
-    virtual ~KoPathFillRuleCommand();
+    ~KoPathFillRuleCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

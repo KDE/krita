@@ -32,13 +32,13 @@ class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 
 public:
     KisSketchPaintOpSettings();
-    virtual ~KisSketchPaintOpSettings() {}
+    ~KisSketchPaintOpSettings() override {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
+    bool paintIncremental() override;
+    bool isAirbrushing() const override;
+    int rate() const override;
 };
 
 typedef KisSharedPtr<KisSketchPaintOpSettings> KisSketchPaintOpSettingsSP;

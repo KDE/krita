@@ -71,7 +71,7 @@ public:
     qreal factor() {
         return m_factor;
     }
-    virtual void transform(qreal* x, qreal* y, qreal distance) {
+    void transform(qreal* x, qreal* y, qreal distance) override {
         qreal scaleFactor = (1.0 - distance) * m_factor + distance;
         *x = *x / scaleFactor;
         *y = *y / scaleFactor;
@@ -89,7 +89,7 @@ public:
     void setAlpha(qreal alpha) {
         m_alpha = alpha;
     }
-    virtual void transform(qreal* maskX, qreal* maskY, qreal distance) {
+    void transform(qreal* maskX, qreal* maskY, qreal distance) override {
         distance = 1.0 - distance;
         qreal rotX = cos(-m_alpha * distance) * (*maskX) - sin(-m_alpha * distance) * (*maskY);
         qreal rotY = sin(-m_alpha * distance) * (*maskX) + cos(-m_alpha * distance) * (*maskY);
@@ -113,7 +113,7 @@ public:
         m_dx = dx;
         m_dy = dy;
     }
-    virtual void transform(qreal* maskX, qreal* maskY, qreal distance) {
+    void transform(qreal* maskX, qreal* maskY, qreal distance) override {
         *maskX -= m_dx * m_factor * (1.0 - distance);
         *maskY -= m_dy * m_factor * (1.0 - distance);
     }
@@ -140,7 +140,7 @@ public:
         m_out = out;
     }
 
-    virtual void transform(qreal* maskX, qreal* maskY, qreal distance) {
+    void transform(qreal* maskX, qreal* maskY, qreal distance) override {
         Q_UNUSED(distance);
         //normalize
         qreal normX = *maskX / m_maxX;
@@ -179,7 +179,7 @@ public:
     void setFactor(qreal factor) {
         m_factor = factor;
     }
-    virtual void transform(qreal* x, qreal* y, qreal distance) {
+    void transform(qreal* x, qreal* y, qreal distance) override {
         Q_UNUSED(distance);
         qreal randomX = m_factor * ((drand48() * 2.0) - 1.0);
         qreal randomY = m_factor * ((drand48() * 2.0) - 1.0);

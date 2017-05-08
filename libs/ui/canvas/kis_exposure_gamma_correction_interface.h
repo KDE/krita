@@ -39,11 +39,11 @@ struct KRITAUI_EXPORT KisDumbExposureGammaCorrectionInterface : public KisExposu
 {
     static KisDumbExposureGammaCorrectionInterface* instance();
 
-    bool canChangeExposureAndGamma() const;
-    qreal currentExposure() const;
-    void setCurrentExposure(qreal value);
-    qreal currentGamma() const;
-    void setCurrentGamma(qreal value);
+    bool canChangeExposureAndGamma() const override;
+    qreal currentExposure() const override;
+    void setCurrentExposure(qreal value) override;
+    qreal currentGamma() const override;
+    void setCurrentGamma(qreal value) override;
 };
 
 #endif /* __KIS_EXPOSURE_GAMMA_CORRECTION_INTERFACE_H */

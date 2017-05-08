@@ -44,9 +44,9 @@ class KRITAUI_EXPORT KisStrokeShortcut : public KisAbstractShortcut
 {
 public:
     KisStrokeShortcut(KisAbstractInputAction *action, int index);
-    ~KisStrokeShortcut();
+    ~KisStrokeShortcut() override;
 
-    int priority() const;
+    int priority() const override;
 
     /**
      * Sets the configuration for this shortcut

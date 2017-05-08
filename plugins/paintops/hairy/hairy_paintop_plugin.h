@@ -30,7 +30,7 @@ class HairyPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     HairyPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~HairyPaintOpPlugin();
+    ~HairyPaintOpPlugin() override;
 };
 
 #endif // HAIRY_PAINTOP_PLUGIN_H_

@@ -26,10 +26,10 @@ class KisRoundMarkerOption : public KisPaintOpOption
 {
 public:
     KisRoundMarkerOption();
-    ~KisRoundMarkerOption();
+    ~KisRoundMarkerOption() override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(KisPropertiesConfigurationSP setting) override;
 
 private:
     KisRoundMarkerOptionWidget * m_options;

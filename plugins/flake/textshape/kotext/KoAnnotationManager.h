@@ -43,7 +43,7 @@ class KRITATEXT_EXPORT KoAnnotationManager : public QObject
 public:
     /// constructor
     KoAnnotationManager();
-    ~KoAnnotationManager();
+    ~KoAnnotationManager() override;
 
     /// @return an annotation with the specified name, or 0 if there is none
     KoAnnotation *annotation(const QString &name) const;

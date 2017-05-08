@@ -30,18 +30,18 @@ class KisLayerStyleFilterProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
     KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer);
-    ~KisLayerStyleFilterProjectionPlane();
+    ~KisLayerStyleFilterProjectionPlane() override;
 
     void setStyle(KisLayerStyleFilter *filter, KisPSDLayerStyleSP style);
 
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode);
-    void apply(KisPainter *painter, const QRect &rect);
+    QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
+    void apply(KisPainter *painter, const QRect &rect) override;
 
-    QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
-    QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
-    QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
+    QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
 
-    KisPaintDeviceList getLodCapableDevices() const;
+    KisPaintDeviceList getLodCapableDevices() const override;
 
 private:
     struct Private;

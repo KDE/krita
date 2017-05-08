@@ -169,7 +169,7 @@ public:
     explicit KoListStyle(QObject *parent = 0);
 
     /// Destructor
-    ~KoListStyle();
+    ~KoListStyle() override;
 
     /// creates a clone of this style with the specified parent
     KoListStyle *clone(QObject *parent = 0);

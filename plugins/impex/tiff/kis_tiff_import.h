@@ -28,10 +28,10 @@ class KisTIFFImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisTIFFImport(QObject *parent, const QVariantList &);
-    virtual ~KisTIFFImport();
-    virtual bool supportsIO() const { return false; }
+    ~KisTIFFImport() override;
+    bool supportsIO() const override { return false; }
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

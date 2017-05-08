@@ -41,10 +41,10 @@ class ShowChangesCommand : public QObject, public KoTextCommandBase
 public:
 
     ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent = 0);
-    ~ShowChangesCommand();
+    ~ShowChangesCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 Q_SIGNALS:
     void toggledShowChange(bool on);

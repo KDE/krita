@@ -31,29 +31,29 @@ class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationP
 {
 public:
     KisBrushBasedPaintOpSettings();
-    virtual ~KisBrushBasedPaintOpSettings() {}
+    ~KisBrushBasedPaintOpSettings() override {}
 
     ///Reimplemented
-    virtual bool paintIncremental();
+    bool paintIncremental() override;
 
     ///Reimplemented
-    virtual bool isAirbrushing() const;
+    bool isAirbrushing() const override;
 
     ///Reimplemented
-    virtual int rate() const;
+    int rate() const override;
 
     using KisPaintOpSettings::brushOutline;
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
     ///Reimplemented
-    virtual bool isValid() const;
+    bool isValid() const override;
 
     ///Reimplemented
-    virtual bool isLoadable();
+    bool isLoadable() override;
 
     KisBrushSP brush() const;
 
-    KisPaintOpSettingsSP clone() const;
+    KisPaintOpSettingsSP clone() const override;
 
     void setAngle(qreal value);
     qreal angle();
@@ -66,14 +66,14 @@ public:
     bool autoSpacingActive();
     qreal autoSpacingCoeff();
 
-    void setPaintOpSize(qreal value);
-    qreal paintOpSize() const;
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 protected:
 
-    void onPropertyChanged();
+    void onPropertyChanged() override;
     QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false);
     mutable KisBrushSP m_savedBrush;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;

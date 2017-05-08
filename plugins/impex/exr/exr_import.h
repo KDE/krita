@@ -29,9 +29,9 @@ class exrImport : public KisImportExportFilter
     Q_OBJECT
 public:
     exrImport(QObject *parent, const QVariantList &);
-    virtual ~exrImport();
-    virtual bool supportsIO() const { return false; }
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    ~exrImport() override;
+    bool supportsIO() const override { return false; }
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

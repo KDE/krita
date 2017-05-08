@@ -38,9 +38,9 @@ class KisSprayPaintOp : public KisPaintOp
 public:
 
     KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    ~KisSprayPaintOp();
+    ~KisSprayPaintOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
 private:
     KisShapeProperties m_shapeProperties;

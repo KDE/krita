@@ -31,17 +31,17 @@ public:
     SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape);
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewRootArea);
+    KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewRootArea) override;
 
-    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
+    void releaseAllAfter(KoTextLayoutRootArea *afterThis) override;
 
-    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
+    void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) override;
 
-    virtual void updateAll();
+    void updateAll() override;
 
-    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
+    QRectF suggestRect(KoTextLayoutRootArea *rootArea) override;
 
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
+    QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) override;
 
     TextShape *m_textShape;
 

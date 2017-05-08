@@ -77,7 +77,7 @@ public:
     /**
      * Destructor
      */
-    ~KXMLGUIFactory();
+    ~KXMLGUIFactory() override;
 
     // XXX move to somewhere else? (Simon)
     /// @internal

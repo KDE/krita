@@ -52,21 +52,21 @@ protected:
 class KRITAIMAGE_EXPORT KisErodeSelectionFilter : public KisSelectionFilter
 {
 public:
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 };
 
 class KRITAIMAGE_EXPORT KisDilateSelectionFilter : public KisSelectionFilter
 {
 public:
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 };
 
 class KRITAIMAGE_EXPORT KisBorderSelectionFilter : public KisSelectionFilter
@@ -74,11 +74,11 @@ class KRITAIMAGE_EXPORT KisBorderSelectionFilter : public KisSelectionFilter
 public:
     KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius);
 
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 
 private:
     qint32 m_xRadius;
@@ -90,11 +90,11 @@ class KRITAIMAGE_EXPORT KisFeatherSelectionFilter : public KisSelectionFilter
 public:
     KisFeatherSelectionFilter(qint32 radius);
 
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 private:
     qint32 m_radius;
 };
@@ -104,11 +104,11 @@ class KRITAIMAGE_EXPORT KisGrowSelectionFilter : public KisSelectionFilter
 public:
     KisGrowSelectionFilter(qint32 xRadius, qint32 yRadius);
 
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 
 private:
     qint32 m_xRadius;
@@ -120,11 +120,11 @@ class KRITAIMAGE_EXPORT KisShrinkSelectionFilter : public KisSelectionFilter
 public:
     KisShrinkSelectionFilter(qint32 xRadius, qint32 yRadius, bool edgeLock);
 
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 
 private:
     qint32 m_xRadius;
@@ -135,21 +135,21 @@ private:
 class KRITAIMAGE_EXPORT KisSmoothSelectionFilter : public KisSelectionFilter
 {
 public:
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 };
 
 class KRITAIMAGE_EXPORT KisInvertSelectionFilter : public KisSelectionFilter
 {
 public:
-    KUndo2MagicString name();
+    KUndo2MagicString name() override;
 
-    QRect changeRect(const QRect &rect);
+    QRect changeRect(const QRect &rect) override;
 
-    void process(KisPixelSelectionSP pixelSelection, const QRect &rect);
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 };
 
 #endif // KIS_SELECTION_FILTERS_H

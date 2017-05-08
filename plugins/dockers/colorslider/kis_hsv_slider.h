@@ -38,7 +38,7 @@ class KisHSVSlider : public KSelector
 public:
     explicit KisHSVSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     explicit KisHSVSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), KisCanvas2* canvas = 0);
-    virtual ~KisHSVSlider();
+    ~KisHSVSlider() override;
 
 public:
     void setColors( const KoColor& currentcolor, const int type, qreal hue_backup, qreal l_R=0.2126, qreal l_G=0.7152, qreal l_B=0.0722, qreal gamma=2.2);
@@ -49,8 +49,8 @@ public:
     KoColor HSXcolor(int type, qreal t) const;
     KisDisplayColorConverter* converter() const;
 protected:
-    virtual void drawContents( QPainter* );
-    virtual void drawArrow(QPainter *painter, const QPoint &pos);
+    void drawContents( QPainter* ) override;
+    void drawArrow(QPainter *painter, const QPoint &pos) override;
     struct Private;
     Private* const d;
 private:

@@ -51,9 +51,9 @@ public:
 
 public:
     explicit KoCompositeColorTransformation(Mode mode);
-    ~KoCompositeColorTransformation();
+    ~KoCompositeColorTransformation() override;
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override;
 
     /**
      * Append a transform to a composite. If \p transform is null,

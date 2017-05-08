@@ -30,15 +30,15 @@ class KRITAWIDGETS_EXPORT KoAnchorSelectionWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoAnchorSelectionWidget(QWidget *parent = 0);
-    ~KoAnchorSelectionWidget();
+    ~KoAnchorSelectionWidget() override;
 
     KoFlake::AnchorPosition value() const;
     QPointF value(const QRectF rect, bool *valid) const;
 
     void setValue(KoFlake::AnchorPosition value);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 Q_SIGNALS:
     void valueChanged(KoFlake::AnchorPosition id);

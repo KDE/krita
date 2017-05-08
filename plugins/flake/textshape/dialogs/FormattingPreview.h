@@ -37,7 +37,7 @@ class FormattingPreview : public QFrame
 
 public:
     explicit FormattingPreview(QWidget *parent = 0);
-    ~FormattingPreview();
+    ~FormattingPreview() override;
 
 public Q_SLOTS:
     ///Character properties
@@ -47,7 +47,7 @@ public Q_SLOTS:
     void setText(const QString &sampleText);
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     QString m_sampleText;

@@ -32,7 +32,7 @@ class ToolDyna : public QObject
 public:
 
     ToolDyna(QObject *parent, const QVariantList &);
-    virtual ~ToolDyna();
+    ~ToolDyna() override;
 
 };
 

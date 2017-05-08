@@ -31,7 +31,7 @@ class DefaultToolTabbedWidget : public KoTitledTabWidget
 
 public:
     explicit DefaultToolTabbedWidget(KoInteractionTool *tool, QWidget *parent = 0);
-    ~DefaultToolTabbedWidget();
+    ~DefaultToolTabbedWidget() override;
 
     enum TabType {
         GeometryTab,

@@ -31,13 +31,13 @@ class KRITAIMAGE_EXPORT KisChangeProjectionColorCommand : public KUndo2Command
 {
 public:
     KisChangeProjectionColorCommand(KisImageSP image, const KoColor &newColor, KUndo2Command *parent = 0);
-    ~KisChangeProjectionColorCommand();
+    ~KisChangeProjectionColorCommand() override;
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
-    int id() const;
-    bool mergeWith(const KUndo2Command* command);
+    int id() const override;
+    bool mergeWith(const KUndo2Command* command) override;
 
 private:
     KisImageWSP m_image;

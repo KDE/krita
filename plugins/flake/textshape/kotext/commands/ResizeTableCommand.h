@@ -31,10 +31,10 @@ class ResizeTableCommand : public KUndo2Command
 {
 public:
     ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent = 0);
-    virtual ~ResizeTableCommand();
+    ~ResizeTableCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     bool m_first;

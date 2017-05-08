@@ -45,15 +45,15 @@ public:
 
 public:
 
-	virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+	KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 
 	static inline KoID id() {
         return KoID("colorbalance", i18n("Color Balance"));
 	}
 
-    virtual KisFilterConfigurationSP  factoryConfiguration() const;
+    KisFilterConfigurationSP  factoryConfiguration() const override;
 
 };
 
@@ -64,10 +64,10 @@ class KisColorBalanceConfigWidget : public KisConfigWidget
 
 public:
     KisColorBalanceConfigWidget(QWidget * parent);
-	virtual ~KisColorBalanceConfigWidget();
+	~KisColorBalanceConfigWidget() override;
 
-	virtual KisPropertiesConfigurationSP  configuration() const;
-	virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+	KisPropertiesConfigurationSP  configuration() const override;
+	void setConfiguration(const KisPropertiesConfigurationSP config) override;
     Ui_Form * m_page;
     QString m_id;
 

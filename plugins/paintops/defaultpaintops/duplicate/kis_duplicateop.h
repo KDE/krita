@@ -47,9 +47,9 @@ class KisDuplicateOp : public KisBrushBasedPaintOp
 public:
 
     KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
-    ~KisDuplicateOp();
+    ~KisDuplicateOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
 private:
 

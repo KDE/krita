@@ -49,7 +49,7 @@ class  RActionThreadBase : public QThread
 public:
 
     RActionThreadBase(QObject* const parent=0);
-    virtual ~RActionThreadBase();
+    ~RActionThreadBase() override;
 
     /** Adjust maximum number of threads used to parallelize collection of job processing.
      */
@@ -72,7 +72,7 @@ protected:
 
     /** Main thread loop used to process jobs in todo list.
      */
-    void run();
+    void run() override;
 
     /** Append a collection of jobs to process into QThreadPool.
      *  Jobs are add to pending lists and will be deleted by RActionThreadBase, not QThreadPool.

@@ -35,7 +35,7 @@ class KRITATEXTLAYOUT_EXPORT KoTextLayoutEndNotesArea : public KoTextLayoutArea
 public:
     /// constructor
     explicit KoTextLayoutEndNotesArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
-    virtual ~KoTextLayoutEndNotesArea();
+    ~KoTextLayoutEndNotesArea() override;
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame

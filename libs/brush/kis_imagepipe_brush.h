@@ -60,7 +60,7 @@ public:
                       QVector< QVector<KisPaintDevice*> > devices,
                       QVector<KisParasite::SelectionMode> modes);
 
-    virtual ~KisImagePipeBrush();
+    ~KisImagePipeBrush() override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;

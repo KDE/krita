@@ -43,18 +43,18 @@ class ReviewTool : public TextTool
     Q_OBJECT
 public:
     explicit ReviewTool(KoCanvasBase *canvas);
-    ~ReviewTool();
+    ~ReviewTool() override;
 
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
-    virtual void deactivate();
-    virtual void createActions();
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
+    void createActions() override;
 
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 public Q_SLOTS:
     void removeAnnotation();

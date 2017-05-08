@@ -36,7 +36,7 @@ class ToCGenerator : public QObject
     Q_OBJECT
 public:
     explicit ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo);
-    virtual ~ToCGenerator();
+    ~ToCGenerator() override;
 
     virtual void setBlock(const QTextBlock &block);
 

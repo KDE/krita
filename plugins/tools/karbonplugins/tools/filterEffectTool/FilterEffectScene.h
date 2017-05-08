@@ -79,7 +79,7 @@ class FilterEffectScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit FilterEffectScene(QObject *parent = 0);
-    virtual ~FilterEffectScene();
+    ~FilterEffectScene() override;
 
     /// initializes the scene from the filter effect stack
     void initialize(KoFilterEffectStack *effectStack);
@@ -92,7 +92,7 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented from QGraphicsScene
-    virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void dropEvent(QGraphicsSceneDragDropEvent *event) override;
 
 private Q_SLOTS:
     void selectionChanged();

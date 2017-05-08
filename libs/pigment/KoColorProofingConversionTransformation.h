@@ -42,7 +42,7 @@ public:
                                             ConversionFlags conversionFlags,
                                             quint8 *gamutWarning,
                                             double adaptationState);
-    virtual ~KoColorProofingConversionTransformation();
+    ~KoColorProofingConversionTransformation() override;
 
 public:
 

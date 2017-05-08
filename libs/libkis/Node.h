@@ -37,7 +37,7 @@ class KRITALIBKIS_EXPORT Node : public QObject
 
 public:
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);
-    virtual ~Node();
+    ~Node() override;
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
 public Q_SLOTS:

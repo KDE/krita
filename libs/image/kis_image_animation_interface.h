@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisImageAnimationInterface : public QObject
 public:
     KisImageAnimationInterface(KisImage *image);
     KisImageAnimationInterface(const KisImageAnimationInterface &rhs, KisImage *newImage);
-    ~KisImageAnimationInterface();
+    ~KisImageAnimationInterface() override;
 
     /**
      * Returns true of the image has at least one animated layer

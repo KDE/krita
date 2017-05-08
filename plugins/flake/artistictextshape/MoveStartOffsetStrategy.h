@@ -32,14 +32,14 @@ class MoveStartOffsetStrategy : public KoInteractionStrategy
 {
 public:
     MoveStartOffsetStrategy(KoToolBase *tool, ArtisticTextShape *text);
-    ~MoveStartOffsetStrategy();
+    ~MoveStartOffsetStrategy() override;
 
     // reimplemnted from KoInteractionStrategy
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     // reimplemnted from KoInteractionStrategy
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
     // reimplemnted from KoInteractionStrategy
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 private:
     ArtisticTextShape *m_text;      ///< the text shape we are working on
     KoPathShape *m_baselineShape;   ///< path shape the text is put on

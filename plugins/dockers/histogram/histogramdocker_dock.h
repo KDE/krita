@@ -37,9 +37,9 @@ class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase {
 public:
     HistogramDockerDock();
 
-    QString observerName() { return "HistogramDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() override { return "HistogramDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();
@@ -47,7 +47,7 @@ public Q_SLOTS:
     void updateHistogram();
 
 protected:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private:
     QVBoxLayout *m_layout;

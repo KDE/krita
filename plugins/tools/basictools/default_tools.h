@@ -37,7 +37,7 @@ class DefaultTools : public QObject
     Q_OBJECT
 public:
     DefaultTools(QObject *parent, const QVariantList &);
-    virtual ~DefaultTools();
+    ~DefaultTools() override;
 
 };
 

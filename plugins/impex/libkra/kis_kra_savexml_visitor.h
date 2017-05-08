@@ -40,20 +40,20 @@ public:
 
 public:
 
-    bool visit(KisNode*) {
+    bool visit(KisNode*) override {
         return true;
     }
-    bool visit(KisExternalLayer *);
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer* layer);
-    bool visit(KisGeneratorLayer *layer);
-    bool visit(KisCloneLayer *layer);
-    bool visit(KisFilterMask *mask);
-    bool visit(KisTransformMask *mask);
-    bool visit(KisTransparencyMask *mask);
-    bool visit(KisSelectionMask *mask);
-    bool visit(KisColorizeMask *mask);
+    bool visit(KisExternalLayer *) override;
+    bool visit(KisPaintLayer *layer) override;
+    bool visit(KisGroupLayer *layer) override;
+    bool visit(KisAdjustmentLayer* layer) override;
+    bool visit(KisGeneratorLayer *layer) override;
+    bool visit(KisCloneLayer *layer) override;
+    bool visit(KisFilterMask *mask) override;
+    bool visit(KisTransformMask *mask) override;
+    bool visit(KisTransparencyMask *mask) override;
+    bool visit(KisSelectionMask *mask) override;
+    bool visit(KisColorizeMask *mask) override;
 
     QMap<const KisNode*, QString> nodeFileNames() {
         return m_nodeFileNames;

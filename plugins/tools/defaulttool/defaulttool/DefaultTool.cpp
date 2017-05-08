@@ -126,7 +126,7 @@ public:
     void handleMouseMove(const QPointF & /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) override {}
     void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
 
-    void paint(QPainter &painter, const KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter) override {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
@@ -140,7 +140,7 @@ public:
     {
     }
 
-    void paint(QPainter &painter, const KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter) override {
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
 };
@@ -186,7 +186,7 @@ public:
         return false;
     }
 
-    bool tryUseCustomCursor() {
+    bool tryUseCustomCursor() override {
         if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
             q->useCursor(Qt::OpenHandCursor);
         }

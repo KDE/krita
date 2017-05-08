@@ -33,10 +33,10 @@ class AcceptChangeCommand : public QObject, public KoTextCommandBase
     Q_OBJECT
 public:
     AcceptChangeCommand(int changeId, const QList<QPair<int, int> > &changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
-    ~AcceptChangeCommand();
+    ~AcceptChangeCommand() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 Q_SIGNALS:
     void acceptRejectChange();

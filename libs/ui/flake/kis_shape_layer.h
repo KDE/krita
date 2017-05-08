@@ -66,7 +66,7 @@ public:
      * This is used by createMergedLayer()
      */
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
-    virtual ~KisShapeLayer();
+    ~KisShapeLayer() override;
 private:
     void initShapeLayer(KoShapeBasedDocumentBase* controller);
 public:
@@ -78,8 +78,8 @@ public:
 
     void setImage(KisImageWSP image) override;
 
-    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
+    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
 public:
 
     // KoShape overrides

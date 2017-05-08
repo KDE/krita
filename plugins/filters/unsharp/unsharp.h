@@ -29,7 +29,7 @@ class UnsharpPlugin : public QObject
     Q_OBJECT
 public:
     UnsharpPlugin(QObject *parent, const QVariantList &);
-    virtual ~UnsharpPlugin();
+    ~UnsharpPlugin() override;
 };
 
 #endif

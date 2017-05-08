@@ -31,8 +31,8 @@ public:
                                 KUndo2Command *parent = 0);
 
 protected:
-    virtual KUndo2Command *createMergeCommand(const KoPathPointData &pointData1,
-                                              const KoPathPointData &pointData2);
+    KUndo2Command *createMergeCommand(const KoPathPointData &pointData1,
+                                              const KoPathPointData &pointData2) override;
 };
 
 #endif // KOMULTIPATHPOINTJOINCOMMAND_H

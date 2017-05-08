@@ -31,7 +31,7 @@ class KRITAFLAKE_EXPORT KoFilterEffectConfigWidgetBase : public QWidget
     Q_OBJECT
 public:
     explicit KoFilterEffectConfigWidgetBase(QWidget *parent = 0);
-    virtual ~KoFilterEffectConfigWidgetBase() {};
+    ~KoFilterEffectConfigWidgetBase() override {};
 
     /// Sets the filter effect to be edited by the config widget
     virtual bool editFilterEffect(KoFilterEffect *filterEffect) = 0;

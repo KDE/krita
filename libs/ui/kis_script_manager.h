@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisScriptManager : public QObject
     Q_OBJECT
 public:
     explicit KisScriptManager(KisViewManager * view);
-    ~KisScriptManager();
+    ~KisScriptManager() override;
 
     void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();

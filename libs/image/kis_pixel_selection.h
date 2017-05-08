@@ -49,11 +49,11 @@ public:
      */
     KisPixelSelection(const KisPixelSelection& rhs);
 
-    virtual ~KisPixelSelection();
+    ~KisPixelSelection() override;
 
-    KisSelectionComponent* clone(KisSelection*);
+    KisSelectionComponent* clone(KisSelection*) override;
 
-    const KoColorSpace* compositionSourceColorSpace() const;
+    const KoColorSpace* compositionSourceColorSpace() const override;
 
     bool read(QIODevice *stream);
 
@@ -78,7 +78,7 @@ public:
      * Reset the entire selection. The selectedRect and selectedExactRect
      * will be empty. The selection will be completely deselected.
      */
-    void clear();
+    void clear() override;
 
     /**
      * Copies alpha channel form the specified \p src device
@@ -114,13 +114,13 @@ public:
     /**
      * Overridden from KisPaintDevice to handle outline cache moves
      */
-    void moveTo(const QPoint& pt);
+    void moveTo(const QPoint& pt) override;
     using KisPaintDevice::moveTo;
 
-    bool isEmpty() const;
-    QPainterPath outlineCache() const;
-    bool outlineCacheValid() const;
-    void recalculateOutlineCache();
+    bool isEmpty() const override;
+    QPainterPath outlineCache() const override;
+    bool outlineCacheValid() const override;
+    void recalculateOutlineCache() override;
 
     void setOutlineCache(const QPainterPath &cache);
     void invalidateOutlineCache();
@@ -134,8 +134,8 @@ public:
     void setParentSelection(KisSelectionWSP selection);
     KisSelectionWSP parentSelection() const;
 
-    virtual void renderToProjection(KisPaintDeviceSP projection);
-    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
+    void renderToProjection(KisPaintDeviceSP projection) override;
+    void renderToProjection(KisPaintDeviceSP projection, const QRect& r) override;
 
 private:
     /**

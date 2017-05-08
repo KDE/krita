@@ -29,8 +29,8 @@ class KRITAIMAGE_EXPORT KisSelectionMoveCommand2 : public KisMoveCommandCommon<K
 public:
     KisSelectionMoveCommand2(KisSelectionSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0);
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 };
 
 #endif

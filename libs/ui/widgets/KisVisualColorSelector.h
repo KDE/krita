@@ -46,7 +46,7 @@ class KRITAUI_EXPORT KisVisualColorSelector : public KisColorSelectorInterface
 public:
 
     explicit KisVisualColorSelector(QWidget *parent = 0);
-    ~KisVisualColorSelector();
+    ~KisVisualColorSelector() override;
 
     /**
      * @brief setConfig
@@ -55,24 +55,24 @@ public:
      * @param forceSelfUpdate
      * force self-update is for making it update itself when using a modal dialog.
      */
-    void setConfig(bool forceCircular, bool forceSelfUpdate);
-    KoColor getCurrentColor() const;
+    void setConfig(bool forceCircular, bool forceSelfUpdate) override;
+    KoColor getCurrentColor() const override;
 
 public Q_SLOTS:
 
-    void slotSetColor(const KoColor &c);
+    void slotSetColor(const KoColor &c) override;
     void slotsetColorSpace(const KoColorSpace *cs);
     void slotRebuildSelectors();
     void configurationChanged();
-    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
+    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
 
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);
     void HSXwrangler();
 
 protected:
-    void leaveEvent(QEvent *);
-    void resizeEvent(QResizeEvent *);
+    void leaveEvent(QEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     struct Private;

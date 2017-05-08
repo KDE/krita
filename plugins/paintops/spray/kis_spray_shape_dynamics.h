@@ -54,10 +54,10 @@ class KisSprayShapeDynamicsOption : public KisPaintOpOption
     Q_OBJECT
 public:
     KisSprayShapeDynamicsOption();
-    ~KisSprayShapeDynamicsOption();
+    ~KisSprayShapeDynamicsOption() override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     void setupBrushPreviewSignals();

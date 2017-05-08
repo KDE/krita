@@ -30,22 +30,22 @@ class KisDynamicSensorDrawingAngle : public QObject, public KisDynamicSensor
     Q_OBJECT
 public:
     KisDynamicSensorDrawingAngle();
-    qreal value(const KisPaintInformation& info);
-    bool dependsOnCanvasRotation() const;
-    bool isAbsoluteRotation() const;
+    qreal value(const KisPaintInformation& info) override;
+    bool dependsOnCanvasRotation() const override;
+    bool isAbsoluteRotation() const override;
 
-    QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;
 
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
-    void toXML(QDomDocument&, QDomElement&) const;
-    void fromXML(const QDomElement&);
+    void toXML(QDomDocument&, QDomElement&) const override;
+    void fromXML(const QDomElement&) override;
 
     bool fanCornersEnabled() const;
     int fanCornersStep() const;
     int angleOffset() const;
 
-    void reset();
+    void reset() override;
 
 public Q_SLOTS:
     void setFanCornersEnabled(int state);

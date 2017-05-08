@@ -33,7 +33,7 @@ public:
     InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ);
 
 private:
-    virtual KoInlineObject *createInlineObject();
+    KoInlineObject *createInlineObject() override;
 
     KoInlineObjectFactoryBase *const m_factory;
     const QString m_templateId;

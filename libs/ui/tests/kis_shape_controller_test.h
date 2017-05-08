@@ -30,11 +30,11 @@ class KisShapeControllerTest : public KisDummiesFacadeBaseTest
     Q_OBJECT
 
 public:
-    ~KisShapeControllerTest();
+    ~KisShapeControllerTest() override;
 
 protected:
-    KisDummiesFacadeBase* dummiesFacadeFactory();
-    void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
+    KisDummiesFacadeBase* dummiesFacadeFactory() override;
+    void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade) override;
 
 private:
     KisDocument *m_doc;

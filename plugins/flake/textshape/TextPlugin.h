@@ -28,6 +28,6 @@ class TextPlugin : public QObject
 
 public:
     TextPlugin(QObject *parent, const QVariantList &);
-    ~TextPlugin() {}
+    ~TextPlugin() override {}
 };
 #endif

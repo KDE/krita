@@ -59,24 +59,24 @@ public:
      * @param parent the shapeanchor.
      */
     KoAnchorTextRange(KoShapeAnchor *parent, const QTextCursor &cursor);
-    virtual ~KoAnchorTextRange();
+    ~KoAnchorTextRange() override;
 
     /// returns the parent anchor
     KoShapeAnchor *anchor() const;
 
     /// reimplemented from KoShapeAnchor::TextLocation
-    const QTextDocument *document() const;
+    const QTextDocument *document() const override;
 
     /// reimplemented from KoShapeAnchor::TextLocation
-    int position() const;
+    int position() const override;
 
     void updateContainerModel();
 
     /// reimplemented from KoTextRange - should not do anything
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
 
     /// reimplemented from KoTextRange
-    void saveOdf(KoShapeSavingContext &context, int position, KoTextRange::TagType tagType) const;
+    void saveOdf(KoShapeSavingContext &context, int position, KoTextRange::TagType tagType) const override;
 
 private:
     KoAnchorTextRangePrivate * const d_ptr;

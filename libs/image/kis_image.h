@@ -82,22 +82,22 @@ public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
-    virtual ~KisImage();
+    ~KisImage() override;
 
 public: // KisNodeGraphListener implementation
 
-    void aboutToAddANode(KisNode *parent, int index);
-    void nodeHasBeenAdded(KisNode *parent, int index);
-    void aboutToRemoveANode(KisNode *parent, int index);
-    void nodeChanged(KisNode * node);
-    void invalidateAllFrames();
-    void notifySelectionChanged();
-    void requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache);
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
-    void requestTimeSwitch(int time);
+    void aboutToAddANode(KisNode *parent, int index) override;
+    void nodeHasBeenAdded(KisNode *parent, int index) override;
+    void aboutToRemoveANode(KisNode *parent, int index) override;
+    void nodeChanged(KisNode * node) override;
+    void invalidateAllFrames() override;
+    void notifySelectionChanged() override;
+    void requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache) override;
+    void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
+    void requestTimeSwitch(int time) override;
 
 public: // KisProjectionUpdateListener implementation
-    void notifyProjectionUpdated(const QRect &rc);
+    void notifyProjectionUpdated(const QRect &rc) override;
 
 public:
 
@@ -269,7 +269,7 @@ public:
      * wrapped into a special command and added to the undo stack. redo()
      * in not called.
      */
-    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const override;
 
     /**
      * Replace current undo store with the new one. The old store
@@ -777,21 +777,21 @@ public Q_SLOTS:
      */
     void waitForDone();
 
-    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisStrokeId id, KisStrokeJobData *data);
-    void endStroke(KisStrokeId id);
-    bool cancelStroke(KisStrokeId id);
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy) override;
+    void addJob(KisStrokeId id, KisStrokeJobData *data) override;
+    void endStroke(KisStrokeId id) override;
+    bool cancelStroke(KisStrokeId id) override;
 
     /**
      * @brief blockUpdates block updating the image projection
      */
-    void blockUpdates();
+    void blockUpdates() override;
 
     /**
      * @brief unblockUpdates unblock updating the image project. This
      * only restarts the scheduler and does not schedule a full refresh.
      */
-    void unblockUpdates();
+    void unblockUpdates() override;
 
     /**
      * Disables notification of the UI about the changes in the image.
@@ -800,12 +800,12 @@ public Q_SLOTS:
      * image will be reloaded into UI by sigSizeChanged(), so there is
      * no need to inform the UI about individual dirty rects.
      */
-    void disableUIUpdates();
+    void disableUIUpdates() override;
 
     /**
      * \see disableUIUpdates
      */
-    void enableUIUpdates();
+    void enableUIUpdates() override;
 
     /**
      * Disables the processing of all the setDirty() requests that
@@ -822,12 +822,12 @@ public Q_SLOTS:
      *       that installs a predefined filter that eats everything. Please
      *       note that these calls are *not* recursive
      */
-    void disableDirtyRequests();
+    void disableDirtyRequests() override;
 
     /**
      * \see disableDirtyRequests()
      */
-    void enableDirtyRequests();
+    void enableDirtyRequests() override;
 
     /**
      * Installs a filter object that will filter all the incoming projection update
@@ -835,16 +835,16 @@ public Q_SLOTS:
      *
      * NOTE: you cannot set filters recursively!
      */
-    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter);
+    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
 
     /**
      * \see setProjectionUpdatesFilter()
      */
-    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const;
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const override;
 
-    void refreshGraphAsync(KisNodeSP root = KisNodeSP());
-    void refreshGraphAsync(KisNodeSP root, const QRect &rc);
-    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
+    void refreshGraphAsync(KisNodeSP root = KisNodeSP()) override;
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc) override;
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) override;
 
     /**
      * Triggers synchronous recomposition of the projection

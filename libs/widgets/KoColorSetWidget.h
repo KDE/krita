@@ -53,7 +53,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KoColorSetWidget();
+    ~KoColorSetWidget() override;
 
     /**
      * Sets the color set that this widget shows.
@@ -75,7 +75,7 @@ public:
     KoColorSet* colorSet();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame
+    void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QFrame
 
 Q_SIGNALS:
 

@@ -45,11 +45,11 @@ public:
     /**
      * Empty implementation, as the layer itself is not visible
      */
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    virtual bool hitTest(const QPointF &position) const;
-    virtual QRectF boundingRect() const;
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    bool hitTest(const QPointF &position) const override;
+    QRectF boundingRect() const override;
+    void saveOdf(KoShapeSavingContext & context) const override;
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 
 private:
     Q_DECLARE_PRIVATE(KoShapeLayer)

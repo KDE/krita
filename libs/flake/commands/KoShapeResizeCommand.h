@@ -41,7 +41,7 @@ public:
                          bool usePostScaling, const QTransform &postScalingCoveringTransform,
                          KUndo2Command *parent = 0);
 
-    ~KoShapeResizeCommand();
+    ~KoShapeResizeCommand() override;
     void redoImpl() override;
     void undoImpl() override;
 

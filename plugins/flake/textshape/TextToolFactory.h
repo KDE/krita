@@ -26,9 +26,9 @@ class TextToolFactory : public KoToolFactoryBase
 {
 public:
     TextToolFactory();
-    ~TextToolFactory();
+    ~TextToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

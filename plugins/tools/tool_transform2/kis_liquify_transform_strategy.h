@@ -39,28 +39,28 @@ public:
     KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction, const KoCanvasResourceManager *manager);
-    ~KisLiquifyTransformStrategy();
+    ~KisLiquifyTransformStrategy() override;
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
-    void paint(QPainter &gc);
-    QCursor getCurrentCursor() const;
-    QPainterPath getCursorOutline() const;
+    void paint(QPainter &gc) override;
+    QCursor getCurrentCursor() const override;
+    QPainterPath getCursorOutline() const override;
 
-    bool acceptsClicks() const;
+    bool acceptsClicks() const override;
 
-    void externalConfigChanged();
+    void externalConfigChanged() override;
 
-    bool beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    bool endPrimaryAction(KoPointerEvent *event);
-    void hoverActionCommon(KoPointerEvent *event);
+    bool beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    bool endPrimaryAction(KoPointerEvent *event) override;
+    void hoverActionCommon(KoPointerEvent *event) override;
 
-    void activateAlternateAction(KisTool::AlternateAction action);
-    void deactivateAlternateAction(KisTool::AlternateAction action);
+    void activateAlternateAction(KisTool::AlternateAction action) override;
+    void deactivateAlternateAction(KisTool::AlternateAction action) override;
 
-    bool beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
-    void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
-    bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
+    bool beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
+    bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
 
 Q_SIGNALS:
     void requestCanvasUpdate();

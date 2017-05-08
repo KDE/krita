@@ -30,10 +30,10 @@ class ArrangeDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     ArrangeDockerDock();
-    ~ArrangeDockerDock();
-    QString observerName() { return "ArrangeDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    ~ArrangeDockerDock() override;
+    QString observerName() override { return "ArrangeDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private Q_SLOTS:
     void slotToolChanged();

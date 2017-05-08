@@ -57,7 +57,7 @@ private:
     OdfTextTrackStyles(KoStyleManager *manager);
 
     /// Destructor, called when the parent is deleted.
-    ~OdfTextTrackStyles();
+    ~OdfTextTrackStyles() override;
 
 private Q_SLOTS:
     void beginEdit();

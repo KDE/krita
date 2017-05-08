@@ -34,20 +34,20 @@ public:
         setObjectName("KisOverlayModeOption");
     }
 
-    virtual bool isCheckable() const {
+    bool isCheckable() const override {
         return true;
     }
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override {
         setting->setProperty("MergedPaint", isChecked());
     }
 
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override {
         bool enabled = setting->getBool("MergedPaint");
         setChecked(enabled);
     }
 
-    virtual void lodLimitations(KisPaintopLodLimitations *l) const {
+    void lodLimitations(KisPaintopLodLimitations *l) const override {
         l->blockers << KoID("colorsmudge-overlay", i18nc("PaintOp instant preview limitation", "Overlay Option"));
     }
 

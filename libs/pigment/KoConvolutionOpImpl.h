@@ -35,7 +35,7 @@ public:
 
     KoConvolutionOpImpl() { }
 
-    virtual ~KoConvolutionOpImpl() { }
+    ~KoConvolutionOpImpl() override { }
 
     /**
      * Calculates a weighted average of the pixels, mentioned in @colors
@@ -73,7 +73,7 @@ public:
      *      @factor and incremented by @offset.
      */
 
-    virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const {
+    void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const override {
 
         // Create and initialize to 0 the array of totals
         qreal totals[_CSTrait::channels_nb];

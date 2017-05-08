@@ -27,10 +27,10 @@ class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command
 public:
     KisTransactionBasedCommand(const KUndo2MagicString &text = KUndo2MagicString(), KUndo2Command *parent = 0);
 
-    ~KisTransactionBasedCommand();
+    ~KisTransactionBasedCommand() override;
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     virtual KUndo2Command* paint() = 0;

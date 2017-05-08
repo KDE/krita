@@ -29,16 +29,16 @@ class KisBrushHud : public QWidget
     Q_OBJECT
 public:
     KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisBrushHud();
+    ~KisBrushHud() override;
 
     void updateProperties();
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    bool event(QEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    bool event(QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant &resource);

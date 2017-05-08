@@ -156,7 +156,7 @@ public:
         }
     }
 
-    virtual void composite(quint8 *dstRowStart,
+    void composite(quint8 *dstRowStart,
                            qint32 dststride,
                            const quint8 *srcRowStart,
                            qint32 srcstride,
@@ -165,7 +165,7 @@ public:
                            qint32 rows,
                            qint32 cols,
                            quint8 U8_opacity,
-                           const QBitArray& channelFlags = QBitArray()) const
+                           const QBitArray& channelFlags = QBitArray()) const override
     {
         bool alphaLocked = false;
         if (!channelFlags.isEmpty()) {

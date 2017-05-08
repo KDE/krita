@@ -34,7 +34,7 @@ class KRITAWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
 
 public:
     KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layout);
-    ~KoPageLayoutWidget();
+    ~KoPageLayoutWidget() override;
 
     KoPageLayout pageLayout() const;
 

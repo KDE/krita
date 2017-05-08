@@ -40,21 +40,21 @@ class KisShapeSelectionCanvas : public KoCanvasBase
 public:
 
     KisShapeSelectionCanvas();
-    virtual ~KisShapeSelectionCanvas();
+    ~KisShapeSelectionCanvas() override;
 
-    void gridSize(QPointF *offset, QSizeF *spacing) const;
-    bool snapToGrid() const;
-    void addCommand(KUndo2Command *command);
+    void gridSize(QPointF *offset, QSizeF *spacing) const override;
+    bool snapToGrid() const override;
+    void addCommand(KUndo2Command *command) override;
     KoShapeManager *shapeManager() const override;
     KoSelectedShapesProxy *selectedShapesProxy() const override;
-    void updateCanvas(const QRectF& rc);
-    KoToolProxy * toolProxy() const;
-    KoViewConverter *viewConverter() const;
-    QWidget* canvasWidget();
-    const QWidget* canvasWidget() const;
-    KoUnit unit() const;
-    virtual void updateInputMethodInfo() {}
-    virtual void setCursor(const QCursor &) {}
+    void updateCanvas(const QRectF& rc) override;
+    KoToolProxy * toolProxy() const override;
+    KoViewConverter *viewConverter() const override;
+    QWidget* canvasWidget() override;
+    const QWidget* canvasWidget() const override;
+    KoUnit unit() const override;
+    void updateInputMethodInfo() override {}
+    void setCursor(const QCursor &) override {}
 private:
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;

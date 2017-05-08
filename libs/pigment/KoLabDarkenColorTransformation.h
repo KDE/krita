@@ -33,7 +33,7 @@ struct KoLabDarkenColorTransformation : public KoColorTransformation {
     KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_colorSpace(colorspace), m_shade(shade), m_compensate(compensate), m_compensation(compensation) {
 
     }
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override {
         *((quint32 *)dst)=*((const quint32 *)src);
         QColor c;
 

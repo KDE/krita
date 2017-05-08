@@ -57,7 +57,7 @@ public:
     };
 
     KisDlgInternalColorSelector(QWidget* parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
-    ~KisDlgInternalColorSelector();
+    ~KisDlgInternalColorSelector() override;
 
     /**
      * @brief slotColorSpaceChanged
@@ -171,7 +171,7 @@ private:
      */
     void updateAllElements(QObject *source);
 
-    virtual void focusInEvent(QFocusEvent *);
+    void focusInEvent(QFocusEvent *) override;
 };
 
 #endif // KISINTERNALCOLORSELECTOR_H

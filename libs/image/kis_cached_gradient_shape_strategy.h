@@ -31,9 +31,9 @@ class KRITAIMAGE_EXPORT KisCachedGradientShapeStrategy : public KisGradientShape
 {
 public:
     KisCachedGradientShapeStrategy(const QRect &rc, qreal xStep, qreal yStep, KisGradientShapeStrategy *baseStrategy);
-    ~KisCachedGradientShapeStrategy();
+    ~KisCachedGradientShapeStrategy() override;
 
-    double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
 private:
     struct Private;

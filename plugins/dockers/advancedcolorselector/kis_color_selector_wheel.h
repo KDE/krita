@@ -35,11 +35,11 @@ class KisColorSelectorWheel : public KisColorSelectorComponent
     Q_OBJECT
 public:
     explicit KisColorSelectorWheel(KisColorSelector *parent);
-    void setColor(const KoColor &color);
+    void setColor(const KoColor &color) override;
 
 protected:
-    KoColor selectColor(int x, int y);
-    void paint(QPainter*);
+    KoColor selectColor(int x, int y) override;
+    void paint(QPainter*) override;
 
 private:
     friend class Acs::PixelCacheRenderer;

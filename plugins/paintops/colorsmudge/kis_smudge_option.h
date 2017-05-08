@@ -50,8 +50,8 @@ public:
         m_mode = mode;
     }
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     Mode m_mode;

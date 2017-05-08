@@ -32,7 +32,7 @@ class AnchorStrategy  : public KoShapeAnchor::PlacementStrategy
 {
 public:
     AnchorStrategy(KoShapeAnchor *anchor, KoTextLayoutRootArea *rootArea);
-    virtual ~AnchorStrategy();
+    ~AnchorStrategy() override;
 
     /**
      * Moves the subject to it's right position.
@@ -41,7 +41,7 @@ public:
      */
     virtual bool moveSubject() = 0;
 
-    virtual void detachFromModel();
+    void detachFromModel() override;
 
     /**
      * Reparent the anchored shape under the rootArea's container this AnchorStrategy acts for
@@ -49,7 +49,7 @@ public:
      * If needed changes the parent KoShapeContainerModel and KoShapeContainer of the anchored shape.
      * It is changed so the anchored shape is now under the rootArea
      */
-    virtual void updateContainerModel();
+    void updateContainerModel() override;
 
     /// get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
     QRectF pageRect() const;

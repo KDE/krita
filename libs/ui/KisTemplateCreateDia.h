@@ -43,7 +43,7 @@ class KRITAUI_EXPORT KisTemplateCreateDia : public KoDialog
 private:
     KisTemplateCreateDia(const QString &templatesResourcePath,
                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
-    ~KisTemplateCreateDia();
+    ~KisTemplateCreateDia() override;
 
 public:
     static void createTemplate(const QString &templatesResourcePath, const char *suffix,

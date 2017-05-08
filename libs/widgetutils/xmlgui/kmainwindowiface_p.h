@@ -50,7 +50,7 @@ public:
     Destructor
     Cleans up the dcop action proxy object.
     **/
-    ~KMainWindowInterface();
+    ~KMainWindowInterface() override;
 
 public Q_SLOTS:
     /**

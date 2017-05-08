@@ -39,7 +39,7 @@ class KisBrushSizeOption : public KisPaintOpOption
 {
 public:
     KisBrushSizeOption();
-    ~KisBrushSizeOption();
+    ~KisBrushSizeOption() override;
 
     int diameter() const;
     void setDiameter(int diameter);
@@ -49,8 +49,8 @@ public:
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     KisBrushSizeOptionsWidget * m_options;
@@ -71,7 +71,7 @@ public:
 
 public:
 
-    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override {
         brush_diameter = setting->getDouble(BRUSH_DIAMETER);
         brush_aspect = setting->getDouble(BRUSH_ASPECT);
         brush_rotation = setting->getDouble(BRUSH_ROTATION);
@@ -82,7 +82,7 @@ public:
         brush_jitter_movement_enabled = setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED);
     }
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
         setting->setProperty(BRUSH_DIAMETER, brush_diameter);
         setting->setProperty(BRUSH_ASPECT, brush_aspect);
         setting->setProperty(BRUSH_ROTATION, brush_rotation);

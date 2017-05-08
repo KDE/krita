@@ -34,7 +34,7 @@ class KisParticleOpOption : public KisPaintOpOption
 {
 public:
     KisParticleOpOption();
-    ~KisParticleOpOption();
+    ~KisParticleOpOption() override;
 
     int particleCount() const;
     qreal weight() const;
@@ -42,9 +42,9 @@ public:
     int iterations() const;
     QPointF scale() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private:
     KisParticleOpOptionsWidget * m_options;

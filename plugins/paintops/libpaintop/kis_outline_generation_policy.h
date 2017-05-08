@@ -36,7 +36,7 @@ public:
     {
     }
 
-    virtual ~KisOutlineGenerationPolicy()
+    ~KisOutlineGenerationPolicy() override
     {
     }
 
@@ -50,7 +50,7 @@ public:
         return &m_outlineFetcher;
     }
 
-    void onPropertyChanged()
+    void onPropertyChanged() override
     {
         m_outlineFetcher.setDirty();
         ParentClass::onPropertyChanged();

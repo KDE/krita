@@ -30,7 +30,7 @@ class SpecificColorSelectorPlugin : public QObject
     Q_OBJECT
 public:
     SpecificColorSelectorPlugin(QObject *parent, const QVariantList &);
-    virtual ~SpecificColorSelectorPlugin();
+    ~SpecificColorSelectorPlugin() override;
 };
 
 #endif

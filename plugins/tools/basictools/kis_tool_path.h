@@ -35,8 +35,8 @@ class __KisToolPathLocalTool : public KoCreatePathTool {
 public:
     __KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool);
 
-    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-    virtual void addPathShape(KoPathShape* pathShape);
+    void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter) override;
+    void addPathShape(KoPathShape* pathShape) override;
 
     using KoCreatePathTool::createOptionWidgets;
     using KoCreatePathTool::endPathWithoutLastPoint;
@@ -58,21 +58,21 @@ class KisToolPath : public DelegatedPathTool
 
 public:
     KisToolPath(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
 
-    virtual QList< QPointer<QWidget> > createOptionWidgets();
+    QList< QPointer<QWidget> > createOptionWidgets() override;
 
-    bool eventFilter(QObject *obj, QEvent *event);
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
 protected:
-    void requestStrokeCancellation();
-    void requestStrokeEnd();
+    void requestStrokeCancellation() override;
+    void requestStrokeEnd() override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 private:
     friend class __KisToolPathLocalTool;
@@ -91,9 +91,9 @@ public:
         setPriority(7);
     }
 
-    virtual ~KisToolPathFactory() {}
+    ~KisToolPathFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolPath(canvas);
     }
 };

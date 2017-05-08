@@ -26,7 +26,7 @@ class KRITAUI_EXPORT KisTabletSupportX11 : public QAbstractNativeEventFilter
 {
 public:
     static void init();
-    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
 };
 
 #endif /* __KIS_TABLET_SUPPORT_X11_H */

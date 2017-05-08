@@ -29,13 +29,13 @@ class KRITAIMAGE_EXPORT KisSurrogateUndoAdapter : public KisUndoAdapter
 {
 public:
     KisSurrogateUndoAdapter();
-    ~KisSurrogateUndoAdapter();
+    ~KisSurrogateUndoAdapter() override;
 
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *command);
-    void beginMacro(const KUndo2MagicString& macroName);
-    void endMacro();
+    const KUndo2Command* presentCommand() override;
+    void undoLastCommand() override;
+    void addCommand(KUndo2Command *command) override;
+    void beginMacro(const KUndo2MagicString& macroName) override;
+    void endMacro() override;
 
     void undo();
     void redo();

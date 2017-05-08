@@ -29,9 +29,9 @@ class KisSprayPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisSprayPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisSprayPaintOpSettingsWidget();
+    ~KisSprayPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 public:
     KisSprayOpOption* m_sprayArea;

@@ -34,11 +34,11 @@ public:
 
     KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     KisGaussRectangleMaskGenerator(const KisGaussRectangleMaskGenerator &rhs);
-    virtual ~KisGaussRectangleMaskGenerator();
-    KisMaskGenerator* clone() const;
+    ~KisGaussRectangleMaskGenerator() override;
+    KisMaskGenerator* clone() const override;
 
-    virtual quint8 valueAt(qreal x, qreal y) const;
-    void setScale(qreal scaleX, qreal scaleY);
+    quint8 valueAt(qreal x, qreal y) const override;
+    void setScale(qreal scaleX, qreal scaleY) override;
 
 private:
     struct Private;

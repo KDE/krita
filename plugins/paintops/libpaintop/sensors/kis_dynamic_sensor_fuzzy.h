@@ -34,15 +34,15 @@ class KisDynamicSensorFuzzy : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
-    bool dependsOnCanvasRotation() const;
+    bool dependsOnCanvasRotation() const override;
 
-    bool isAdditive() const;
+    bool isAdditive() const override;
 
     KisDynamicSensorFuzzy(bool fuzzyPerStroke = false);
-    virtual ~KisDynamicSensorFuzzy() {}
-    qreal value(const KisPaintInformation &info);
+    ~KisDynamicSensorFuzzy() override {}
+    qreal value(const KisPaintInformation &info) override;
 
-    void reset();
+    void reset() override;
 
 private:
     const bool m_fuzzyPerStroke;

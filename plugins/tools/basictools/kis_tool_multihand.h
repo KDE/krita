@@ -37,16 +37,16 @@ class KisToolMultihand : public KisToolBrush
     Q_OBJECT
 public:
     KisToolMultihand(KoCanvasBase *canvas);
-    ~KisToolMultihand();
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    ~KisToolMultihand() override;
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
 
 protected:
-    void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
 private:
     void initTransformations();
@@ -109,9 +109,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolMultiBrushFactory() {}
+    ~KisToolMultiBrushFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolMultihand(canvas);
     }
 

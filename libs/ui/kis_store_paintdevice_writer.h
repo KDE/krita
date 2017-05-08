@@ -28,14 +28,14 @@ public:
     {
     }
 
-    virtual ~KisStorePaintDeviceWriter() {}
+    ~KisStorePaintDeviceWriter() override {}
 
-    bool write(const QByteArray &data) {
+    bool write(const QByteArray &data) override {
         qint64 len = m_store->write(data);
         return (len == data.size());
     }
 
-    bool write(const char* data, qint64 length) {
+    bool write(const char* data, qint64 length) override {
         qint64 len = m_store->write(data, length);
         return (length == len);
     }

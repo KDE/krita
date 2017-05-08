@@ -50,7 +50,7 @@ class KRITATEXT_EXPORT KoVariableManager : public QObject
 public:
     /// constructor
     explicit KoVariableManager(KoInlineTextObjectManager *inlineObjectManager);
-    ~KoVariableManager();
+    ~KoVariableManager() override;
 
     /**
      * Set or create a variable to the new value.

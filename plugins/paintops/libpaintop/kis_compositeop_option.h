@@ -37,10 +37,10 @@ class PAINTOP_EXPORT KisCompositeOpOption: public KisPaintOpOption
 
 public:
     KisCompositeOpOption(bool createConfigWidget = false);
-    ~KisCompositeOpOption();
+    ~KisCompositeOpOption() override;
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private Q_SLOTS:
     void slotCompositeOpChanged(const QModelIndex& index);

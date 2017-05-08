@@ -39,10 +39,10 @@ public:
      * @param node the node to remove
      */
     KisImageLayerRemoveCommandImpl(KisImageWSP image, KisNodeSP node, KUndo2Command *parent = 0);
-    ~KisImageLayerRemoveCommandImpl();
+    ~KisImageLayerRemoveCommandImpl() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     struct Private;

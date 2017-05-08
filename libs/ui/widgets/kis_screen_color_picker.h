@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisScreenColorPicker : public QWidget
     Q_OBJECT
 public:
     explicit KisScreenColorPicker(QWidget *parent = 0);
-    ~KisScreenColorPicker();
+    ~KisScreenColorPicker() override;
 
     KoColor currentColor();
 

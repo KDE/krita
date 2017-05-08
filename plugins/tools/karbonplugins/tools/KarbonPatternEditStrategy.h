@@ -137,12 +137,12 @@ class KarbonPatternEditStrategy : public KarbonPatternEditStrategyBase
 {
 public:
     explicit KarbonPatternEditStrategy(KoShape *shape, KoImageCollection *imageCollection);
-    virtual ~KarbonPatternEditStrategy();
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) const;
-    virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter);
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QRectF boundingRect() const;
-    virtual QSharedPointer<KoPatternBackground> updatedBackground();
+    ~KarbonPatternEditStrategy() override;
+    void paint(QPainter &painter, const KoViewConverter &converter) const override;
+    bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter) override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    QRectF boundingRect() const override;
+    QSharedPointer<KoPatternBackground> updatedBackground() override;
 
 private:
 
@@ -157,13 +157,13 @@ class KarbonOdfPatternEditStrategy : public KarbonPatternEditStrategyBase
 {
 public:
     explicit KarbonOdfPatternEditStrategy(KoShape *shape, KoImageCollection *imageCollection);
-    virtual ~KarbonOdfPatternEditStrategy();
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) const;
-    virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter);
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QRectF boundingRect() const;
-    virtual QSharedPointer<KoPatternBackground> updatedBackground();
-    virtual void updateHandles();
+    ~KarbonOdfPatternEditStrategy() override;
+    void paint(QPainter &painter, const KoViewConverter &converter) const override;
+    bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter) override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    QRectF boundingRect() const override;
+    QSharedPointer<KoPatternBackground> updatedBackground() override;
+    void updateHandles() override;
 private:
 
     enum Handles { origin, size };

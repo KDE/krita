@@ -25,4 +25,4 @@ if (CMAKE_COMPILER_IS_GNUCC)
 endif()
 endif()
 
-add_subdirectory( pykrita )
+#add_subdirectory( pykrita )

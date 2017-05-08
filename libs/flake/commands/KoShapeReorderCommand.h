@@ -41,7 +41,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, KUndo2Command *parent = 0);
-    ~KoShapeReorderCommand();
+    ~KoShapeReorderCommand() override;
 
     /// An enum for defining what kind of reordering to use.
     enum MoveShapeType  {
@@ -78,9 +78,9 @@ public:
                                                KUndo2Command *parent = 0);
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoShapeReorderCommandPrivate * const d;

@@ -43,9 +43,9 @@ public:
 
     KisMergeWalker(QRect cropRect, Flags flags = DEFAULT);
 
-    virtual ~KisMergeWalker();
+    ~KisMergeWalker() override;
 
-    UpdateType type() const;
+    UpdateType type() const override;
 
 protected:
     KisMergeWalker() : m_flags(DEFAULT) {}
@@ -58,7 +58,7 @@ protected:
      * Then it goes down to the bottom collecting needRects
      * for every branch.
      */
-    void startTrip(KisProjectionLeafSP startWith);
+    void startTrip(KisProjectionLeafSP startWith) override;
 
     using KisBaseRectsWalker::startTrip;
 

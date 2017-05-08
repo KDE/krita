@@ -35,7 +35,7 @@ public:
                                  const QString &name,
                                  KisPaintOpSettingsRestrictedSP settings,
                                  QObject *parent);
-    ~KisComboBasedPaintOpProperty();
+    ~KisComboBasedPaintOpProperty() override;
 
     // callback-compatible c-tor
     KisComboBasedPaintOpProperty(Type type,

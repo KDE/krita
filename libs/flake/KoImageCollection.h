@@ -39,16 +39,16 @@ class KRITAFLAKE_EXPORT KoImageCollection : public QObject, public KoDataCenterB
 public:
     /// constructor
     explicit KoImageCollection(QObject *parent = 0);
-    virtual ~KoImageCollection();
+    ~KoImageCollection() override;
 
     /// reimplemented
-    bool completeLoading(KoStore *store);
+    bool completeLoading(KoStore *store) override;
 
     /**
      * Save all images to the store which are in the context
      * @return returns true if save was successful (no images failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context) override;
 
     /**
      * Create a data object for the image data.

@@ -33,10 +33,10 @@ public:
     KisUpdateCommand(KisNodeSP node, QRect dirtyRect,
                      KisUpdatesFacade *updatesFacade,
                      bool needsFullRefresh = false);
-    ~KisUpdateCommand();
+    ~KisUpdateCommand() override;
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     void update();

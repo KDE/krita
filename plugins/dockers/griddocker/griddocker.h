@@ -31,7 +31,7 @@ class GridDockerPlugin : public QObject
     Q_OBJECT
     public:
         GridDockerPlugin(QObject *parent, const QVariantList &);
-        virtual ~GridDockerPlugin();
+        ~GridDockerPlugin() override;
     private:
         KisViewManager* m_view;
 };

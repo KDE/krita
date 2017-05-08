@@ -32,7 +32,7 @@ class KritaWaveFilter : public QObject
     Q_OBJECT
 public:
     KritaWaveFilter(QObject *parent, const QVariantList &);
-    virtual ~KritaWaveFilter();
+    ~KritaWaveFilter() override;
 };
 
 class KisFilterWave : public KisFilter
@@ -46,16 +46,16 @@ public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater) const;
+                     KoUpdater* progressUpdater) const override;
     static inline KoID id() {
         return KoID("wave", i18n("Wave"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 public:
-    virtual QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config = 0, int lod = 0) const;
+    QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config = 0, int lod = 0) const override;
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 };
 
 #endif

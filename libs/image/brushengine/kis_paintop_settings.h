@@ -53,7 +53,7 @@ class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration
 public:
 
     KisPaintOpSettings();
-    virtual ~KisPaintOpSettings();
+    ~KisPaintOpSettings() override;
     KisPaintOpSettings(const KisPaintOpSettings &rhs);
 
     /**
@@ -244,7 +244,7 @@ public:
      * Overrides the method in KisPropertiesCofiguration to allow
      * onPropertyChanged() callback
      */
-    void setProperty(const QString & name, const QVariant & value);
+    void setProperty(const QString & name, const QVariant & value) override;
 
     virtual QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 

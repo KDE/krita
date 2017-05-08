@@ -54,101 +54,101 @@ public:
         KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
     }
 
-    virtual quint32 colorChannelCount() const {
+    quint32 colorChannelCount() const override {
         if (_CSTrait::alpha_pos == -1)
             return _CSTrait::channels_nb;
         else
             return _CSTrait::channels_nb - 1;
     }
 
-    virtual quint32 channelCount() const {
+    quint32 channelCount() const override {
         return _CSTrait::channels_nb;
     }
 
-    virtual quint32 pixelSize() const {
+    quint32 pixelSize() const override {
         return _CSTrait::pixelSize;
     }
 
-    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const {
+    QString channelValueText(const quint8 *pixel, quint32 channelIndex) const override {
         return _CSTrait::channelValueText(pixel, channelIndex);
     }
 
-    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const {
+    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override {
         return _CSTrait::normalisedChannelValueText(pixel, channelIndex);
     }
 
-    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const {
+    void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const override {
         return _CSTrait::normalisedChannelsValue(pixel, channels);
     }
 
-    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const {
+    void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const override {
         return _CSTrait::fromNormalisedChannelsValue(pixel, values);
     }
 
-    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {
+    quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const override {
         typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
         return KoColorSpaceMaths<typename _CSTrait::channels_type, quint8>::scaleToA(c);
     }
 
-    virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const {
+    void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const override {
         _CSTrait::singleChannelPixel(dstPixel, srcPixel, channelIndex);
     }
 
-    virtual quint8 opacityU8(const quint8 * U8_pixel) const {
+    quint8 opacityU8(const quint8 * U8_pixel) const override {
         return _CSTrait::opacityU8(U8_pixel);
     }
 
-    virtual qreal opacityF(const quint8 * U8_pixel) const {
+    qreal opacityF(const quint8 * U8_pixel) const override {
         return _CSTrait::opacityF(U8_pixel);
     }
 
-    virtual void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const {
+    void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const override {
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
-    virtual void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const {
+    void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const override {
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
-    virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const {
+    void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const override {
         _CSTrait::multiplyAlpha(pixels, alpha, nPixels);
     }
 
-    virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const {
+    void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const override {
         _CSTrait::applyAlphaU8Mask(pixels, alpha, nPixels);
     }
 
-    virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const {
+    void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const override {
         _CSTrait::applyInverseAlphaU8Mask(pixels, alpha, nPixels);
     }
 
-    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+    void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const override {
         _CSTrait::applyAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
-    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+    void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const override {
         _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
-    virtual quint8 intensity8(const quint8 * src) const {
+    quint8 intensity8(const quint8 * src) const override {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
         return static_cast<quint8>(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11);
     }
 
-    virtual KoColorTransformation* createInvertTransformation() const {
+    KoColorTransformation* createInvertTransformation() const override {
         return new KoInvertColorTransformation(this);
     }
 
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const {
+    KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const override {
         return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
     }
 
-    virtual bool convertPixelsTo(const quint8 *src,
+    bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace *dstColorSpace,
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const override
     {
 
         // check whether we have the same profile and color model, but only a different bit

@@ -62,7 +62,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 public:
 
     KisBrushBasedPaintOp(const KisPropertiesConfigurationSP settings, KisPainter* painter);
-    ~KisBrushBasedPaintOp();
+    ~KisBrushBasedPaintOp() override;
 
     bool checkSizeTooSmall(qreal scale);
 
@@ -71,7 +71,7 @@ public:
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
-    virtual bool canPaint() const;
+    bool canPaint() const override;
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     typedef int needs_preinitialization;

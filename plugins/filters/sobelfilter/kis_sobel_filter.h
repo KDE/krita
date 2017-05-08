@@ -33,14 +33,14 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
 
     static inline KoID id() {
         return KoID("sobel", i18n("Sobel"));
     }
 
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 private:
     void prepareRow(const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w) const;
 };

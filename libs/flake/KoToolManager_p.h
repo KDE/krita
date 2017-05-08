@@ -178,7 +178,7 @@ class ShortcutToolAction : public QAction
     Q_OBJECT
 public:
     ShortcutToolAction(const QString &id, const QString &name, QObject *parent);
-    virtual ~ShortcutToolAction();
+    ~ShortcutToolAction() override;
 
 private Q_SLOTS:
     void actionTriggered();

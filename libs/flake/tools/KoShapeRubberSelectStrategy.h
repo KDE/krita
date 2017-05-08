@@ -51,10 +51,10 @@ public:
      */
     KoShapeRubberSelectStrategy(KoToolBase *tool, const QPointF &clicked, bool useSnapToGrid = false);
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command *createCommand();
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 protected:
     /// constructor

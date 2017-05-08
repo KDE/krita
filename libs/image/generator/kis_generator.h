@@ -47,7 +47,7 @@ class KRITAIMAGE_EXPORT KisGenerator : public KisBaseProcessor
 public:
 
     KisGenerator(const KoID& id, const KoID & category, const QString & entry);
-    virtual ~KisGenerator();
+    ~KisGenerator() override;
 
 public:
 

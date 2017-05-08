@@ -32,7 +32,7 @@ class ToolPolygon : public QObject
 public:
 
     ToolPolygon(QObject *parent, const QVariantList &);
-    virtual ~ToolPolygon();
+    ~ToolPolygon() override;
 
 };
 

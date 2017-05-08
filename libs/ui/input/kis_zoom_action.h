@@ -44,18 +44,18 @@ public:
         RelativeDiscreteZoomModeShortcut ///< Toggle discrete zoom mode relative to cursor
     };
     explicit KisZoomAction();
-    virtual ~KisZoomAction();
+    ~KisZoomAction() override;
 
-    virtual int priority() const;
+    int priority() const override;
 
-    void activate(int shortcut);
-    void deactivate(int shortcut);
+    void activate(int shortcut) override;
+    void deactivate(int shortcut) override;
 
-    void begin(int shortcut, QEvent *event = 0);
-    void inputEvent(QEvent* event);
-    void cursorMoved(const QPointF &lastPos, const QPointF &pos);
+    void begin(int shortcut, QEvent *event = 0) override;
+    void inputEvent(QEvent* event) override;
+    void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
 
-    virtual bool isShortcutRequired(int shortcut) const;
+    bool isShortcutRequired(int shortcut) const override;
 
 private:
     class Private;

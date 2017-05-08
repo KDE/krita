@@ -33,11 +33,11 @@ class KRITAFLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     KoPathShapeFactory(const QStringList&);
-    ~KoPathShapeFactory() {}
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    ~KoPathShapeFactory() override {}
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
     /// reimplemented
-    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
+    void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;
 };
 
 #endif

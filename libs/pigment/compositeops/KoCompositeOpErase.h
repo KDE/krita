@@ -52,7 +52,7 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray & channelFlags) const override {
         // XXX: How to use channelflags here? It would be cool to
         // erase all green from an image, for example.
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;

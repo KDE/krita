@@ -40,12 +40,12 @@ public:
                                const KoListLevelProperties &llp,
                                KUndo2Command *parent = 0);
 
-    ~ParagraphFormattingCommand();
+    ~ParagraphFormattingCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     bool m_first;

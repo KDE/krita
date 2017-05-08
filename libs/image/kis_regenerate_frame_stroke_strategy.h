@@ -54,16 +54,16 @@ public:
      */
     KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface);
 
-    ~KisRegenerateFrameStrokeStrategy();
+    ~KisRegenerateFrameStrokeStrategy() override;
 
-    void initStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
+    void initStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
-    void suspendStrokeCallback();
-    void resumeStrokeCallback();
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
+    void suspendStrokeCallback() override;
+    void resumeStrokeCallback() override;
 
     static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
 

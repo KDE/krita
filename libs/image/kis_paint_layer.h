@@ -71,7 +71,7 @@ public:
      * Copy Constructor
      */
     KisPaintLayer(const KisPaintLayer& rhs);
-    virtual ~KisPaintLayer();
+    ~KisPaintLayer() override;
 
     KisNodeSP clone() const override {
         return KisNodeSP(new KisPaintLayer(*this));

@@ -30,7 +30,7 @@ class DeformPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     DeformPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~DeformPaintOpPlugin();
+    ~DeformPaintOpPlugin() override;
 };
 
 #endif // DEFORM_PAINTOP_PLUGIN_H_

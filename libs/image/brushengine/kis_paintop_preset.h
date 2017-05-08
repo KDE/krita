@@ -45,7 +45,7 @@ public:
 
     KisPaintOpPreset(const QString& filename);
 
-    ~KisPaintOpPreset();
+    ~KisPaintOpPreset() override;
 
     KisPaintOpPresetSP clone() const;
 
@@ -63,11 +63,11 @@ public:
     KisPaintOpSettingsSP settings() const;
     KisPaintOpSettingsSP originalSettings() const;
 
-    bool load();
-    bool loadFromDevice(QIODevice *dev);
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
 
-    bool save();
-    bool saveToDevice(QIODevice* dev) const;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
@@ -77,7 +77,7 @@ public:
         return true;
     }
 
-    QString defaultFileExtension() const {
+    QString defaultFileExtension() const override {
         return ".kpp";
     }
     void setPresetDirty(bool value);

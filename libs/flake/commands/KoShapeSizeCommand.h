@@ -41,12 +41,12 @@ public:
      */
     KoShapeSizeCommand(const QList<KoShape*> &shapes, const QList<QSizeF> &previousSizes,
             const QList<QSizeF> &newSizes, KUndo2Command *parent = 0);
-    ~KoShapeSizeCommand();
+    ~KoShapeSizeCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

@@ -33,7 +33,7 @@ class KRITAIMAGE_EXPORT KisIdleWatcher : public QObject
     Q_OBJECT
 public:
     KisIdleWatcher(int delay, QObject* parent = 0);
-    ~KisIdleWatcher();
+    ~KisIdleWatcher() override;
 
     bool isIdle() const;
 

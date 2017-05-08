@@ -46,7 +46,7 @@ public:
 
 public:
     explicit KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent = 0);
-    ~KisDelayedSaveDialog();
+    ~KisDelayedSaveDialog() override;
 
     void blockIfImageIsBusy();
 

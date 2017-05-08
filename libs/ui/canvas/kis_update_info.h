@@ -71,8 +71,8 @@ public:
 
     KisTextureTileUpdateInfoSPList tileList;
 
-    QRect dirtyViewportRect();
-    QRect dirtyImageRect() const;
+    QRect dirtyViewportRect() override;
+    QRect dirtyImageRect() const override;
 
     void assignDirtyImageRect(const QRect &rect);
     void assignLevelOfDetail(int lod);
@@ -80,7 +80,7 @@ public:
     bool needsConversion() const;
     void convertColorSpace();
 
-    int levelOfDetail() const;
+    int levelOfDetail() const override;
 
 private:
     QRect m_dirtyImageRect;
@@ -97,9 +97,9 @@ public:
         PATCH
     };
 
-    QRect dirtyViewportRect();
-    QRect dirtyImageRect() const;
-    int levelOfDetail() const;
+    QRect dirtyViewportRect() override;
+    QRect dirtyImageRect() const override;
+    int levelOfDetail() const override;
 
     /**
      * The rect that was reported by KisImage as dirty

@@ -36,7 +36,7 @@ class KisMirrorManager : public QObject
 
 public:
     KisMirrorManager(KisViewManager* view);
-    virtual ~KisMirrorManager();
+    ~KisMirrorManager() override;
 
     void setup(KActionCollection* collection);
 

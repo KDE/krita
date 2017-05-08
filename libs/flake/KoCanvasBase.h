@@ -65,7 +65,7 @@ public:
      *   application provides to allow shapes to be added in multiple views.
      */
     explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager = 0);
-    virtual ~KoCanvasBase();
+    ~KoCanvasBase() override;
 
 public:
 

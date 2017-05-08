@@ -30,7 +30,7 @@ class SketchPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     SketchPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~SketchPaintOpPlugin();
+    ~SketchPaintOpPlugin() override;
 };
 
 #endif // SKETCH_PAINTOP_PLUGIN_H_

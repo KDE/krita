@@ -36,7 +36,7 @@ class KRITAPIGMENT_EXPORT KoColorTransformationFactoryRegistry : private KoGener
 {
     friend class KoColorSpace;
 public:
-    ~KoColorTransformationFactoryRegistry();
+    ~KoColorTransformationFactoryRegistry() override;
     /**
      * Add a KoColorTransformationFactory to the registry.
      */

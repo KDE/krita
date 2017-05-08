@@ -45,7 +45,7 @@ class KisToolSmartPatch : public KisToolPaint
     Q_OBJECT
 public:
     KisToolSmartPatch(KoCanvasBase * canvas);
-    virtual ~KisToolSmartPatch();
+    ~KisToolSmartPatch() override;
 
     QWidget * createOptionWidget() override;
 
@@ -55,16 +55,15 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
-
     void paint(QPainter &painter, const KoViewConverter &converter) override;
     int flags() const override { return KisTool::FLAG_USES_CUSTOM_SIZE; }
 
 protected Q_SLOTS:
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private:
     //QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
@@ -98,9 +97,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolSmartPatchFactory() {}
+    ~KisToolSmartPatchFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas)
+    KoToolBase * createTool(KoCanvasBase *canvas) override
     {
         return new KisToolSmartPatch(canvas);
     }

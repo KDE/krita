@@ -39,7 +39,7 @@ class KRITATEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
 public:
     /// constructor
     explicit KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
-    virtual ~KoTextLayoutTableArea();
+    ~KoTextLayoutTableArea() override;
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the table

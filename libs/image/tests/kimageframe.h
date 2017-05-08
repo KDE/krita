@@ -25,13 +25,13 @@ class KImageFrame : public QFrame
     Q_OBJECT
 public:
     KImageFrame(QWidget* parent = 0);
-    virtual ~KImageFrame() {}
+    ~KImageFrame() override {}
 
 public Q_SLOTS:
     void setImage(const QImage&);
 
 protected Q_SLOTS:
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
 protected:
     QImage _image;

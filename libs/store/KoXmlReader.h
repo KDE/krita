@@ -163,7 +163,7 @@ public:
     KoXmlElement();
     KoXmlElement(const KoXmlElement& element);
     KoXmlElement& operator=(const KoXmlElement& element);
-    virtual ~KoXmlElement();
+    ~KoXmlElement() override;
     bool operator== (const KoXmlElement&) const;
     bool operator!= (const KoXmlElement&) const;
 
@@ -193,10 +193,10 @@ public:
     KoXmlText();
     KoXmlText(const KoXmlText& text);
     KoXmlText& operator=(const KoXmlText& text);
-    virtual ~KoXmlText();
+    ~KoXmlText() override;
 
     QString data() const;
-    virtual bool isText() const;
+    bool isText() const override;
 
 private:
     friend class KoXmlNode;
@@ -215,9 +215,9 @@ public:
     KoXmlCDATASection();
     KoXmlCDATASection(const KoXmlCDATASection& cdata);
     KoXmlCDATASection& operator=(const KoXmlCDATASection& cdata);
-    virtual ~KoXmlCDATASection();
+    ~KoXmlCDATASection() override;
 
-    virtual bool isCDATASection() const;
+    bool isCDATASection() const override;
 
 private:
     friend class KoXmlNode;
@@ -239,7 +239,7 @@ public:
     KoXmlDocumentType();
     KoXmlDocumentType(const KoXmlDocumentType&);
     KoXmlDocumentType& operator=(const KoXmlDocumentType&);
-    virtual ~KoXmlDocumentType();
+    ~KoXmlDocumentType() override;
 
     QString name() const;
 
@@ -271,14 +271,14 @@ public:
     KoXmlDocument& operator=(const KoXmlDocument& node);
     bool operator==(const KoXmlDocument&) const;
     bool operator!=(const KoXmlDocument&) const;
-    virtual ~KoXmlDocument();
+    ~KoXmlDocument() override;
 
     KoXmlElement documentElement() const;
 
     KoXmlDocumentType doctype() const;
 
-    virtual QString nodeName() const;
-    virtual void clear();
+    QString nodeName() const override;
+    void clear() override;
 
     bool setContent(QIODevice* device, bool namespaceProcessing,
                     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);

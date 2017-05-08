@@ -31,15 +31,15 @@ class KisChangePrimarySettingAction : public KisAbstractInputAction
 {
 public:
     explicit KisChangePrimarySettingAction();
-    virtual ~KisChangePrimarySettingAction();
+    ~KisChangePrimarySettingAction() override;
 
-    void activate(int shortcut);
-    void deactivate(int shortcut);
-    int priority() const;
+    void activate(int shortcut) override;
+    void deactivate(int shortcut) override;
+    int priority() const override;
 
-    void begin(int shortcut, QEvent *event);
-    void end(QEvent *event);
-    void inputEvent(QEvent* event);
+    void begin(int shortcut, QEvent *event) override;
+    void end(QEvent *event) override;
+    void inputEvent(QEvent* event) override;
 };
 
 #endif // KISCHANGEPRIMARYSETTINGACTION_H

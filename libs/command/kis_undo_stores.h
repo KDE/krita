@@ -34,13 +34,13 @@ class KRITACOMMAND_EXPORT KisSurrogateUndoStore : public KisUndoStore
 {
 public:
     KisSurrogateUndoStore();
-    ~KisSurrogateUndoStore();
+    ~KisSurrogateUndoStore() override;
 
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
-    void endMacro();
+    const KUndo2Command* presentCommand() override;
+    void undoLastCommand() override;
+    void addCommand(KUndo2Command *cmd) override;
+    void beginMacro(const KUndo2MagicString& macroName) override;
+    void endMacro() override;
 
     void undo();
     void redo();
@@ -48,7 +48,7 @@ public:
     void undoAll();
     void redoAll();
 
-    void purgeRedoState();
+    void purgeRedoState() override;
 
     void clear();
 
@@ -63,12 +63,12 @@ private:
 class KRITACOMMAND_EXPORT KisDumbUndoStore : public KisUndoStore
 {
 public:
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
-    void endMacro();
-    void purgeRedoState();
+    const KUndo2Command* presentCommand() override;
+    void undoLastCommand() override;
+    void addCommand(KUndo2Command *cmd) override;
+    void beginMacro(const KUndo2MagicString& macroName) override;
+    void endMacro() override;
+    void purgeRedoState() override;
 };
 
 #endif /* __KIS_UNDO_STORES_H */

@@ -41,7 +41,7 @@ public:
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
     KoTextEditingRegistry() {}
-    virtual ~KoTextEditingRegistry();
+    ~KoTextEditingRegistry() override;
     static KoTextEditingRegistry *instance();
 
 private:

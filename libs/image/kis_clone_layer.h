@@ -51,9 +51,9 @@ public:
 
     KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity);
     KisCloneLayer(const KisCloneLayer& rhs);
-    virtual ~KisCloneLayer();
+    ~KisCloneLayer() override;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisCloneLayer(*this));
     }
 
@@ -65,29 +65,29 @@ public:
      */
     KisLayerSP reincarnateAsPaintLayer() const;
 
-    bool allowAsChild(KisNodeSP) const;
+    bool allowAsChild(KisNodeSP) const override;
 
-    KisPaintDeviceSP original() const;
-    KisPaintDeviceSP paintDevice() const;
-    bool needProjection() const;
+    KisPaintDeviceSP original() const override;
+    KisPaintDeviceSP paintDevice() const override;
+    bool needProjection() const override;
 
-    QIcon icon() const;
-    KisBaseNode::PropertyList sectionModelProperties() const;
+    QIcon icon() const override;
+    KisBaseNode::PropertyList sectionModelProperties() const override;
 
-    qint32 x() const;
-    qint32 y() const;
+    qint32 x() const override;
+    qint32 y() const override;
 
-    void setX(qint32);
-    void setY(qint32);
+    void setX(qint32) override;
+    void setY(qint32) override;
 
     /// Returns an approximation of where the bounds on actual data are in this layer
-    QRect extent() const;
+    QRect extent() const override;
 
     /// Returns the exact bounds of where the actual data resides in this layer
-    QRect exactBounds() const;
+    QRect exactBounds() const override;
 
-    bool accept(KisNodeVisitor &);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     /**
      * Used when loading: loading is done in two passes, and the copy
@@ -111,19 +111,19 @@ public:
 
     QRect needRectOnSourceForMasks(const QRect &rc) const;
 
-    void syncLodCache();
+    void syncLodCache() override;
 
 protected:
     // override from KisNode
-    QRect accessRect(const QRect &rect, PositionToFilthy pos) const;
+    QRect accessRect(const QRect &rect, PositionToFilthy pos) const override;
 
     // override from KisLayer
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
+                                  const QRect& rect) const override;
 
-    void notifyParentVisibilityChanged(bool value);
-    QRect outgoingChangeRect(const QRect &rect) const;
+    void notifyParentVisibilityChanged(bool value) override;
+    QRect outgoingChangeRect(const QRect &rect) const override;
 private:
 
     struct Private;

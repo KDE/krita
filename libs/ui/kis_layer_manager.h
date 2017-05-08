@@ -45,7 +45,7 @@ class KisLayerManager : public QObject
 public:
 
     KisLayerManager(KisViewManager * view);
-    ~KisLayerManager();
+    ~KisLayerManager() override;
     void setView(QPointer<KisView>view);
 
 Q_SIGNALS:

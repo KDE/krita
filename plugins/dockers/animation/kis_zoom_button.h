@@ -26,7 +26,7 @@ class KisZoomButton : public KisDraggableToolButton
     Q_OBJECT
 public:
     KisZoomButton(QWidget *parent);
-    ~KisZoomButton();
+    ~KisZoomButton() override;
 
     qreal zoomLevel() const;
     void setZoomLevel(qreal level);
@@ -34,7 +34,7 @@ public:
     void beginZoom(QPoint mousePos, qreal staticPoint);
     void continueZoom(QPoint mousePos);
 
-    void mousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
 
 Q_SIGNALS:
     void zoomStarted(qreal staticPoint);

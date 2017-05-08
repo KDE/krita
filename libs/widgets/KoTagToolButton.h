@@ -34,7 +34,7 @@ class KoTagToolButton : public QWidget
 
 private:
     explicit KoTagToolButton(QWidget* parent = 0);
-    virtual ~KoTagToolButton();
+    ~KoTagToolButton() override;
     void readOnlyMode(bool activate);
     void setUndeletionCandidate(const QString &deletedTagName);
 

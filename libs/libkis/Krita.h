@@ -43,7 +43,7 @@ class KRITALIBKIS_EXPORT Krita : public QObject
 
 public:
     explicit Krita(QObject *parent = 0);
-    virtual ~Krita();
+    ~Krita() override;
 
 public Q_SLOTS:
 

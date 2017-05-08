@@ -29,9 +29,9 @@ class KisRoundMarkerOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisRoundMarkerOpSettingsWidget(QWidget* parent = 0);
-    ~KisRoundMarkerOpSettingsWidget();
+    ~KisRoundMarkerOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private:
     KisSmudgeOptionWidget *m_smudgeOptionWidget;

@@ -56,7 +56,7 @@ public:
      */
     KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument);
     /// destructor
-    ~KoShapeController();
+    ~KoShapeController() override;
 
     /**
      * @brief reset sets the canvas and shapebased document to 0.

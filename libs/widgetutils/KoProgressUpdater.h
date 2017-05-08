@@ -80,7 +80,7 @@ public:
     explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded);
 
     /// destructor
-    virtual ~KoProgressUpdater();
+    ~KoProgressUpdater() override;
 
     /**
      * Start a new task.

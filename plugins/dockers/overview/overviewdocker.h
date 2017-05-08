@@ -31,7 +31,7 @@ class OverviewDockerPlugin : public QObject
     Q_OBJECT
     public:
         OverviewDockerPlugin(QObject *parent, const QVariantList &);
-        virtual ~OverviewDockerPlugin();
+        ~OverviewDockerPlugin() override;
     private:
         KisViewManager* m_view;
 };

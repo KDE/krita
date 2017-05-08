@@ -34,9 +34,9 @@ class BRUSH_EXPORT KisTextBrushFactory : public KisBrushFactory
 public:
 
     KisTextBrushFactory() {}
-    virtual ~KisTextBrushFactory() {}
+    ~KisTextBrushFactory() override {}
 
-    virtual QString id() const {
+    QString id() const override {
         return "kis_text_brush";
     }
 
@@ -46,7 +46,7 @@ public:
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy);
+    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy) override;
 
 
 };

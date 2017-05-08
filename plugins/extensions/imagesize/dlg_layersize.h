@@ -49,7 +49,7 @@ public:
 
     DlgLayerSize(QWidget * parent, const char* name,
                  int width, int height, double resolution);
-    ~DlgLayerSize();
+    ~DlgLayerSize() override;
 
     qint32 width();
     qint32 height();

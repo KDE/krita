@@ -34,7 +34,7 @@ class TrackedChangeManager : public QWidget
     Q_OBJECT
 public:
     explicit TrackedChangeManager(QWidget *parent = 0);
-    ~TrackedChangeManager();
+    ~TrackedChangeManager() override;
 
     void setModel(TrackedChangeModel *model);
 

@@ -118,7 +118,7 @@ public:
                                 = KisShortcutsEditor::LetterShortcutsAllowed,
                                 QWidget *parent = 0);
 
-    virtual ~KisShortcutsDialog();
+    ~KisShortcutsDialog() override;
 
     /**
      * Add all actions of the collection to the ones displayed and configured

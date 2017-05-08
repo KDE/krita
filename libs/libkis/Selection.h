@@ -55,7 +55,7 @@ public:
      * Create a new, empty selection object.
      */
     explicit Selection(QObject *parent = 0);
-    virtual ~Selection();
+    ~Selection() override;
     
     bool operator==(const Selection &other) const;
     bool operator!=(const Selection &other) const;

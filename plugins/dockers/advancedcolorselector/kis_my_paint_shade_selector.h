@@ -37,19 +37,19 @@ Q_OBJECT
 public:
     KisMyPaintShadeSelector(QWidget *parent = 0);
 
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
 
 public:
-    void setColor(const KoColor &color);
+    void setColor(const KoColor &color) override;
 
 protected Q_SLOTS:
-    void canvasResourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant& v) override;
 
 protected:
-    void paintEvent(QPaintEvent *);
-    KisColorSelectorBase* createPopup() const;
+    void paintEvent(QPaintEvent *) override;
+    KisColorSelectorBase* createPopup() const override;
 
 private:
     qreal m_colorH, m_colorS, m_colorV;

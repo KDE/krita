@@ -43,7 +43,7 @@ class KisPresetSelectorStrip : public QWidget, public Ui::WdgPresetSelectorStrip
     
 public:
     KisPresetSelectorStrip(QWidget *parent);
-    virtual ~KisPresetSelectorStrip();
+    ~KisPresetSelectorStrip() override;
 
     void setPresetFilter(const QString& paintOpId);
 

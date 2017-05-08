@@ -31,11 +31,11 @@ class AddConnectionPointCommand : public KUndo2Command
 public:
     /// Creates new comand to add connection point to shape
     AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, KUndo2Command *parent = 0);
-    virtual ~AddConnectionPointCommand();
+    ~AddConnectionPointCommand() override;
     /// reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     /// reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 
 private:
     void updateRoi();

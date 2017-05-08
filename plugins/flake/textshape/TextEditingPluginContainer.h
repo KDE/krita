@@ -38,7 +38,7 @@ public:
     };
 
     explicit TextEditingPluginContainer(QObject *parent = 0);
-    ~TextEditingPluginContainer();
+    ~TextEditingPluginContainer() override;
 
     KoTextEditingPlugin *spellcheck() const;
 

@@ -32,7 +32,7 @@ class ImageShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     ImageShapeFactory();
-    ~ImageShapeFactory() {}
+    ~ImageShapeFactory() override {}
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

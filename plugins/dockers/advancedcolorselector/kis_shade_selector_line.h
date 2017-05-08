@@ -50,21 +50,21 @@ public:
     explicit KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta,
                                   KisColorSelectorBaseProxy *parentProxy, QWidget *parent = 0, qreal hueShift = 0, qreal satShift = 0, qreal valShift = 0);
 
-    ~KisShadeSelectorLine();
+    ~KisShadeSelectorLine() override;
 
     void setParam(qreal hue, qreal sat, qreal val, qreal hueShift, qreal satShift, qreal shiftVal);
     void setColor(const KoColor& color);
     void updateSettings();
     void setCanvas(KisCanvas2* canvas);
     void showHelpText() {m_displayHelpText=true;}
-    QString toString() const;
-    void fromString(const QString& string);
+    QString toString() const override;
+    void fromString(const QString& string) override;
 
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
 
 private:
     qreal m_hueDelta;

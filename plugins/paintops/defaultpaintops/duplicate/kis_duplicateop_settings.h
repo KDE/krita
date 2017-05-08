@@ -36,25 +36,25 @@ public:
     using KisPaintOpSettings::toXML;
 
     KisDuplicateOpSettings();
-    virtual ~KisDuplicateOpSettings();
-    bool paintIncremental();
-    QString indirectPaintingCompositeOp() const;
+    ~KisDuplicateOpSettings() override;
+    bool paintIncremental() override;
+    QString indirectPaintingCompositeOp() const override;
 
     QPointF offset() const;
     QPointF position() const;
-    virtual bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
-    void activate();
+    bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode) override;
+    void activate() override;
 
-    void fromXML(const QDomElement& elt);
-    void toXML(QDomDocument& doc, QDomElement& rootElt) const;
+    void fromXML(const QDomElement& elt) override;
+    void toXML(QDomDocument& doc, QDomElement& rootElt) const override;
 
-    KisPaintOpSettingsSP clone() const;
+    KisPaintOpSettingsSP clone() const override;
     using KisBrushBasedPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
     KisNodeWSP sourceNode() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 public:
 

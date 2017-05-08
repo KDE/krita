@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KoStrokeConfigWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget *parent);
-    ~KoStrokeConfigWidget();
+    ~KoStrokeConfigWidget() override;
 
     void setNoSelectionTrackingMode(bool value);
 

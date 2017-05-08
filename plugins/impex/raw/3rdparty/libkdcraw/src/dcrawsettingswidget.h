@@ -76,7 +76,7 @@ public:
      * @param advSettings the default value is COLORSPACE
      */
     explicit DcrawSettingsWidget(QWidget* const parent, int advSettings = COLORSPACE);
-    virtual ~DcrawSettingsWidget();
+    ~DcrawSettingsWidget() override;
 
     RFileSelector* inputProfileUrlEdit()  const;
     RFileSelector* outputProfileUrlEdit() const;
@@ -93,8 +93,8 @@ public:
     void setSettings(const RawDecodingSettings& settings);
     RawDecodingSettings settings() const;
 
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
+    void readSettings(KConfigGroup& group) override;
+    void writeSettings(KConfigGroup& group) override;
 
 Q_SIGNALS:
 

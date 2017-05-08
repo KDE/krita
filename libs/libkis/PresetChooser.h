@@ -39,7 +39,7 @@ class KRITALIBKIS_EXPORT PresetChooser : public KisPresetChooser
     Q_OBJECT
 public:
     PresetChooser(QWidget *parent = 0);
-    virtual ~PresetChooser() {}
+    ~PresetChooser() override {}
 
 public Q_SLOTS:
 

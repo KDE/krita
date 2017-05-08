@@ -28,7 +28,7 @@ class TestNodeA : public TestUtil::DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestNodeA(*this);
     }
 };

@@ -42,12 +42,12 @@ public:
 
     KisRecordedPaintAction(const KisRecordedPaintAction&);
 
-    ~KisRecordedPaintAction();
+    ~KisRecordedPaintAction() override;
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const override;
 
     using KisRecordedNodeAction::play;
-    virtual void play(KisNodeSP node, const KisPlayInfo& info, KoUpdater* _updater = 0) const;
+    void play(KisNodeSP node, const KisPlayInfo& info, KoUpdater* _updater = 0) const override;
 
 protected:
     /**
@@ -92,7 +92,7 @@ class KisRecordedPaintActionFactory : public KisRecordedActionFactory
 {
 public:
     KisRecordedPaintActionFactory(const QString & id) : KisRecordedActionFactory(id) {}
-    virtual ~KisRecordedPaintActionFactory() {}
+    ~KisRecordedPaintActionFactory() override {}
 protected:
 
     void setupPaintAction(KisRecordedPaintAction* action, const QDomElement& elt, const KisRecordedActionLoadContext*);

@@ -48,7 +48,7 @@ class KRITAFLAKE_EXPORT KoShapeUserData : public QObject
 public:
     /// Constructor
     explicit KoShapeUserData(QObject *parent = 0);
-    virtual ~KoShapeUserData();
+    ~KoShapeUserData() override;
 
     virtual KoShapeUserData* clone() const = 0;
 

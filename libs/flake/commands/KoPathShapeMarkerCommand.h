@@ -45,7 +45,7 @@ public:
      */
     KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoFlake::MarkerPosition position, KUndo2Command *parent = 0);
 
-    ~KoPathShapeMarkerCommand();
+    ~KoPathShapeMarkerCommand() override;
 
     void redo() override;
     void undo() override;

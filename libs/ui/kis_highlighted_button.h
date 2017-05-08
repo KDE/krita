@@ -25,12 +25,12 @@ class HighlightedButtonBase : public BaseButton
 public:
     HighlightedButtonBase(QWidget *parent = 0) : BaseButton(parent) {}
 protected:
-    void checkStateSet() {
+    void checkStateSet() override {
         BaseButton::checkStateSet();
         updatePalette();
     }
 
-    void nextCheckState() {
+    void nextCheckState() override {
         BaseButton::nextCheckState();
         updatePalette();
     }

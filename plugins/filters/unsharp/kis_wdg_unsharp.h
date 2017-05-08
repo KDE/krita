@@ -30,12 +30,12 @@ class KisWdgUnsharp : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgUnsharp(QWidget * parent);
-    virtual ~KisWdgUnsharp();
+    ~KisWdgUnsharp() override;
     inline const Ui_WdgUnsharp* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 private:
     Ui_WdgUnsharp* m_widget;
 };

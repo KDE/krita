@@ -51,7 +51,7 @@ class DlgColorSpaceConversion: public KoDialog
 public:
 
     DlgColorSpaceConversion(QWidget * parent = 0, const char* name = 0);
-    ~DlgColorSpaceConversion();
+    ~DlgColorSpaceConversion() override;
 
     void setInitialColorSpace(const KoColorSpace *cs);
 

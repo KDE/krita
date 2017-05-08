@@ -37,7 +37,7 @@ public:
      * @param parent a parent for memory management purposes.
      */
     explicit KoToolSelection(QObject *parent = 0);
-    virtual ~KoToolSelection();
+    ~KoToolSelection() override;
 
     /// return true if the tool currently has something selected that can be copied or deleted.
     virtual bool hasSelection() {

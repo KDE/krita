@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisPatternChooser : public QFrame
 
 public:
     KisPatternChooser(QWidget *parent = 0);
-    virtual ~KisPatternChooser();
+    ~KisPatternChooser() override;
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected

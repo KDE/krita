@@ -36,11 +36,11 @@ class KisShowPaletteAction : public QObject, public KisAbstractInputAction
 
 public:
     explicit KisShowPaletteAction();
-    virtual ~KisShowPaletteAction();
+    ~KisShowPaletteAction() override;
 
-    virtual int priority() const;
+    int priority() const override;
 
-    virtual void begin(int, QEvent *);
+    void begin(int, QEvent *) override;
 
 private Q_SLOTS:
     void slotShowMenu();

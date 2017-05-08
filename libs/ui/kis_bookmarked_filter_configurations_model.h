@@ -37,8 +37,8 @@ public:
      * @param filter the filter
      */
     KisBookmarkedFilterConfigurationsModel(KisPaintDeviceSP thumb, KisFilterSP filter);
-    ~KisBookmarkedFilterConfigurationsModel();
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    ~KisBookmarkedFilterConfigurationsModel() override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     /**
      * @return the filter configuration
      */

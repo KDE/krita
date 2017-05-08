@@ -26,12 +26,12 @@ class KisExperimentPaintOpSettings : public KisNoSizePaintOpSettings
 {
 public:
     KisExperimentPaintOpSettings();
-    virtual ~KisExperimentPaintOpSettings();
+    ~KisExperimentPaintOpSettings() override;
 
-    bool paintIncremental();
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
+    bool paintIncremental() override;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
 

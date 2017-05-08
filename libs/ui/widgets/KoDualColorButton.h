@@ -78,7 +78,7 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
     /**
      * Destroys the KoDualColorButton.
      */
-    ~KoDualColorButton();
+    ~KoDualColorButton() override;
 
     /**
      * Returns the current foreground color.
@@ -101,7 +101,7 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
      * Returns the minimum size needed to display the widget and all its
      * controls.
      */
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   public Q_SLOTS:
     /**
@@ -169,13 +169,13 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
      */
     virtual void metrics( QRect &foregroundRect, QRect &backgroundRect );
 
-    virtual void paintEvent( QPaintEvent *event );
-    virtual void mousePressEvent( QMouseEvent *event );
-    virtual void mouseMoveEvent( QMouseEvent *event );
-    virtual void mouseReleaseEvent( QMouseEvent *event );
-    virtual void dragEnterEvent( QDragEnterEvent *event );
-    virtual void dropEvent( QDropEvent *event );
-    virtual void changeEvent(QEvent *event);
+    void paintEvent( QPaintEvent *event ) override;
+    void mousePressEvent( QMouseEvent *event ) override;
+    void mouseMoveEvent( QMouseEvent *event ) override;
+    void mouseReleaseEvent( QMouseEvent *event ) override;
+    void dragEnterEvent( QDragEnterEvent *event ) override;
+    void dropEvent( QDropEvent *event ) override;
+    void changeEvent(QEvent *event) override;
 
   private:
     class Private;

@@ -50,9 +50,9 @@ public:
      * track its key events
      */
     KisCustomModifiersCatcher(QObject *parent);
-    ~KisCustomModifiersCatcher();
+    ~KisCustomModifiersCatcher() override;
 
-    bool eventFilter(QObject* object, QEvent* event);
+    bool eventFilter(QObject* object, QEvent* event) override;
 
     /**
      * @brief addModifier registers a custom modifier

@@ -25,7 +25,7 @@
 struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
     KisPasteActionFactory() : KisOperation("paste-ui-action") {}
 
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
         run(config.getBool("paste-at-cursor-position", false), view);
     }
 

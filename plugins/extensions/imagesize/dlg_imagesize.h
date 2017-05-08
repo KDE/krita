@@ -47,7 +47,7 @@ class DlgImageSize: public KoDialog
 
 public:
     DlgImageSize(QWidget * parent, int width, int height, double resolution);
-    ~DlgImageSize();
+    ~DlgImageSize() override;
 
     qint32 width();
     qint32 height();

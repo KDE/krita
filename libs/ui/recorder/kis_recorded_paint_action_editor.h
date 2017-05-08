@@ -38,7 +38,7 @@ class KisRecordedPaintActionEditor : public QWidget
     Q_OBJECT
 public:
     KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action);
-    ~KisRecordedPaintActionEditor();
+    ~KisRecordedPaintActionEditor() override;
 private Q_SLOTS:
     void configurationUpdated();
     void paintOpChanged(int index);
@@ -60,9 +60,9 @@ class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactor
 {
 public:
     KisRecordedPaintActionEditorFactory();
-    virtual ~KisRecordedPaintActionEditorFactory();
-    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const;
-    virtual bool canEdit(const KisRecordedAction* action) const;
+    ~KisRecordedPaintActionEditorFactory() override;
+    QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const override;
+    bool canEdit(const KisRecordedAction* action) const override;
 };
 
 #endif

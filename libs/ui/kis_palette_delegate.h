@@ -28,12 +28,12 @@ class KRITAUI_EXPORT KisPaletteDelegate : public QAbstractItemDelegate
 {
 public:
     KisPaletteDelegate(QObject * parent = 0);
-    ~KisPaletteDelegate();
+    ~KisPaletteDelegate() override;
 
     void setCrossedKeyword(const QString &value);
 
-    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 
 private:
     QString m_crossedKeyword;

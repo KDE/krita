@@ -39,19 +39,19 @@ public:
      */
     explicit KoZoomTool(KoCanvasBase *canvas);
     /// reimplemented method
-    virtual void wheelEvent(KoPointerEvent *event);
+    void wheelEvent(KoPointerEvent *event) override;
     /// reimplemented method
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented method
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented method
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented method
-    virtual void keyReleaseEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event) override;
     /// reimplemented method
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// reimplemented method
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     void setCanvasController(KoCanvasController *controller) {
         m_controller = controller;
@@ -60,10 +60,10 @@ public:
     void setZoomInMode(bool zoomIn);
 
 protected:
-    QWidget *createOptionWidget();
+    QWidget *createOptionWidget() override;
 
 private:
-    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
     void updateCursor(bool swap);
 

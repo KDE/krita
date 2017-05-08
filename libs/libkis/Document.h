@@ -37,7 +37,7 @@ class KRITALIBKIS_EXPORT Document : public QObject
 
 public:
     explicit Document(KisDocument *document, QObject *parent = 0);
-    virtual ~Document();
+    ~Document() override;
 
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;

@@ -71,7 +71,7 @@ public:
      * @param canvas the canvas this shape manager is working on.
      */
     KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes);
-    virtual ~KoShapeManager();
+    ~KoShapeManager() override;
 
 
     /**

@@ -61,7 +61,7 @@ public:
                          const QColor &defaultColor);
 
     KisScratchPad(QWidget *parent = 0);
-    virtual ~KisScratchPad();
+    ~KisScratchPad() override;
 
     /// set the specified rect as the area taken for @see cutoutOverlay
     void setCutoutOverlayRect(const QRect&rc);
@@ -110,7 +110,7 @@ Q_SIGNALS:
     void sigUpdateCanvas(const QRect &rect);
 
 protected:
-    virtual void paintEvent ( QPaintEvent * event );
+    void paintEvent ( QPaintEvent * event ) override;
 
 
 private:

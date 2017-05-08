@@ -63,16 +63,16 @@ public:
      */
     KisAdjustmentLayer(KisImageWSP image, const QString &name, KisFilterConfigurationSP  kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
-    virtual ~KisAdjustmentLayer();
+    ~KisAdjustmentLayer() override;
 
-    bool accept(KisNodeVisitor &);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     /**
      * clones this AdjustmentLayer into a KisNodeSP type.
      * @return the KisNodeSP returned
      */
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisAdjustmentLayer(*this));
     }
 
@@ -80,7 +80,7 @@ public:
      * gets the adjustmentLayer's tool filter
      * @return QIcon returns the QIcon tool filter
      */
-    QIcon icon() const;
+    QIcon icon() const override;
 
     /**
      * gets the AdjustmentLayer properties describing whether
@@ -91,22 +91,22 @@ public:
      * @return KisBaseNode::PropertyList returns a list
      * of the properties
      */
-    KisBaseNode::PropertyList sectionModelProperties() const;
+    KisBaseNode::PropertyList sectionModelProperties() const override;
 
 public:
 
     /**
      * \see KisNodeFilterInterface::setFilter()
      */
-    void setFilter(KisFilterConfigurationSP filterConfig);
+    void setFilter(KisFilterConfigurationSP filterConfig) override;
 
-    void setChannelFlags(const QBitArray & channelFlags);
+    void setChannelFlags(const QBitArray & channelFlags) override;
 
 protected:
     // override from KisLayer
-    QRect incomingChangeRect(const QRect &rect) const;
+    QRect incomingChangeRect(const QRect &rect) const override;
     // override from KisNode
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 
 public Q_SLOTS:
     /**

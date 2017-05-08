@@ -53,7 +53,7 @@ public:
     static IccColorProfile *createFromLcmsProfile(const cmsHPROFILE profile);
 public:
 
-    virtual ~LcmsColorProfileContainer();
+    ~LcmsColorProfileContainer() override;
 
     /**
      * @return the ICC color space signature
@@ -66,44 +66,44 @@ public:
     /**
      * @return the name of the manufacturer
      */
-    QString manufacturer() const;
+    QString manufacturer() const override;
     /**
      * @return the embedded copyright
      */
-    QString copyright() const;
+    QString copyright() const override;
     /**
      * @return the structure to use with LCMS functions
      */
     cmsHPROFILE lcmsProfile() const;
 
-    virtual bool valid() const;
+    bool valid() const override;
     virtual float version() const;
 
-    virtual bool isSuitableForOutput() const;
+    bool isSuitableForOutput() const override;
 
-    virtual bool isSuitableForPrinting() const;
+    bool isSuitableForPrinting() const override;
 
-    virtual bool isSuitableForDisplay() const;
+    bool isSuitableForDisplay() const override;
 
     virtual bool supportsPerceptual() const;
     virtual bool supportsSaturation() const;
     virtual bool supportsAbsolute() const;
     virtual bool supportsRelative() const;
 
-    virtual bool hasColorants() const;
+    bool hasColorants() const override;
     virtual bool hasTRC() const;
-    virtual QVector <double> getColorantsXYZ() const;
-    virtual QVector <double> getColorantsxyY() const;
-    virtual QVector <double> getWhitePointXYZ() const;
-    virtual QVector <double> getWhitePointxyY() const;
-    virtual QVector <double> getEstimatedTRC() const;
+    QVector <double> getColorantsXYZ() const override;
+    QVector <double> getColorantsxyY() const override;
+    QVector <double> getWhitePointXYZ() const override;
+    QVector <double> getWhitePointxyY() const override;
+    QVector <double> getEstimatedTRC() const override;
     virtual void LinearizeFloatValue(QVector <double> & Value) const;
     virtual void DelinearizeFloatValue(QVector <double> & Value) const;
     virtual void LinearizeFloatValueFast(QVector <double> & Value) const;
     virtual void DelinearizeFloatValueFast(QVector <double> & Value) const;
-    virtual QString name() const;
-    virtual QString info() const;
-    virtual QByteArray getProfileUniqueId() const;
+    QString name() const override;
+    QString info() const override;
+    QByteArray getProfileUniqueId() const override;
 
 protected:
     LcmsColorProfileContainer();

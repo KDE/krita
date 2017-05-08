@@ -35,7 +35,7 @@ class KRITALIBKIS_EXPORT Window : public QObject
 
 public:
     explicit Window(KisMainWindow *window, QObject *parent = 0);
-    virtual ~Window();
+    ~Window() override;
 
     bool operator==(const Window &other) const;
     bool operator!=(const Window &other) const;

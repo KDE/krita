@@ -30,10 +30,10 @@ class KisAnimationCurvesKeyframeDelegate : public QAbstractItemDelegate
 
 public:
     KisAnimationCurvesKeyframeDelegate(const TimelineRulerHeader *horizontalRuler, const KisAnimationCurvesValueRuler *verticalRuler,  QObject *parent);
-    ~KisAnimationCurvesKeyframeDelegate();
+    ~KisAnimationCurvesKeyframeDelegate() override;
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
     QPointF nodeCenter(const QModelIndex index, bool selected) const;
     bool hasHandle(const QModelIndex index, int handle) const;

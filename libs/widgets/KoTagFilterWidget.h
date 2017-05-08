@@ -34,7 +34,7 @@ class KoTagFilterWidget : public QWidget
 
 public:
     explicit KoTagFilterWidget(QWidget* parent);
-    virtual ~KoTagFilterWidget();
+    ~KoTagFilterWidget() override;
     void allowSave(bool allow);
     void clear();
 Q_SIGNALS:

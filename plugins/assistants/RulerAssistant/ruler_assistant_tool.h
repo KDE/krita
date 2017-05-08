@@ -27,7 +27,7 @@ class RulerAssistantToolPlugin : public QObject
     Q_OBJECT
 public:
     RulerAssistantToolPlugin(QObject *parent, const QVariantList &);
-    virtual ~RulerAssistantToolPlugin();
+    ~RulerAssistantToolPlugin() override;
 
 };
 

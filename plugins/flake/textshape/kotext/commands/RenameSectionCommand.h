@@ -34,13 +34,13 @@ class RenameSectionCommand : public KUndo2Command
 public:
 
     RenameSectionCommand(KoSection *section, const QString &newName, QTextDocument *document);
-    virtual ~RenameSectionCommand();
+    ~RenameSectionCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
-    virtual bool mergeWith(const KUndo2Command *other);
-    virtual int id() const;
+    bool mergeWith(const KUndo2Command *other) override;
+    int id() const override;
 
 private:
     KoSectionModel *m_sectionModel; ///< Pointer to document's KoSectionModel

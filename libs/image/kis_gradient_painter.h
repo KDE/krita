@@ -40,7 +40,7 @@ public:
     KisGradientPainter(KisPaintDeviceSP device);
     KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
-    ~KisGradientPainter();
+    ~KisGradientPainter() override;
 
     enum enumGradientShape {
         GradientShapeLinear,

@@ -55,14 +55,14 @@ public:
      */
     explicit KoGroupButton(QWidget* parent = 0);
 
-    virtual ~KoGroupButton();
+    ~KoGroupButton() override;
 
     void setGroupPosition(KoGroupButton::GroupPosition groupPosition);
 
     KoGroupButton::GroupPosition groupPosition() const;
 
 protected:
-    virtual void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     class Private;

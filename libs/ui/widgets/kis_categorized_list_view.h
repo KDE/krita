@@ -29,10 +29,10 @@ class KRITAUI_EXPORT KisCategorizedListView: public QListView
     Q_OBJECT
 public:
     KisCategorizedListView(bool useCheckBoxHack=false, QWidget* parent=0);
-    virtual ~KisCategorizedListView();
-    virtual void setModel(QAbstractItemModel* model);
+    ~KisCategorizedListView() override;
+    void setModel(QAbstractItemModel* model) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 
 Q_SIGNALS:
@@ -44,11 +44,11 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void slotIndexChanged(const QModelIndex& index);
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles = QVector<int>());
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
-    virtual void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles = QVector<int>()) override;
+    void rowsInserted(const QModelIndex& parent, int start, int end) override;
+    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
 
 

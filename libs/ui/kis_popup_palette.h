@@ -55,8 +55,8 @@ class KisPopupPalette : public QWidget
 public:
     KisPopupPalette(KisViewManager*, KisCoordinatesConverter* ,KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
                     KisCanvasResourceProvider *provider, QWidget *parent = 0);
-    ~KisPopupPalette();
-    QSize sizeHint() const;
+    ~KisPopupPalette() override;
+    QSize sizeHint() const override;
 
     void showPopupPalette(const QPoint&);
     void showPopupPalette(bool b);
@@ -69,15 +69,15 @@ public:
     int selectedColor() const;
     void setParent(QWidget *parent);
 
-    virtual void tabletEvent(QTabletEvent * event);
+    void tabletEvent(QTabletEvent * event) override;
 
 protected:
 
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void mousePressEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
 
     //functions to calculate index of favorite brush or recent color in array
     //n is the total number of favorite brushes or recent colors
@@ -94,7 +94,7 @@ protected:
 
 
 private:
-    void setVisible(bool b);
+    void setVisible(bool b) override;
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);

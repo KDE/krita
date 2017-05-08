@@ -28,7 +28,7 @@ class KRITAUI_EXPORT KisOperationRegistry : public KoGenericRegistry<KisOperatio
 {
 public:
     KisOperationRegistry();
-    ~KisOperationRegistry();
+    ~KisOperationRegistry() override;
     static KisOperationRegistry* instance();
 };
 

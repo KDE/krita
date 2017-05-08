@@ -33,9 +33,9 @@ class KisSketchPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
     KisSketchPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisSketchPaintOpSettingsWidget();
+    ~KisSketchPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 public:
     KisSketchOpOption* m_sketchOption;

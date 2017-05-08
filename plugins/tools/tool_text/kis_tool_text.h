@@ -55,17 +55,17 @@ class KisToolText : public KisToolRectangleBase
 
 public:
     KisToolText(KoCanvasBase * canvas);
-    virtual ~KisToolText();
+    ~KisToolText() override;
 
     /// These functions are inherited from KisToolRectangleBase. They simply
     /// draw a rectangle. endPrimaryAction calls finishRect.
-    virtual void beginPrimaryAction(KoPointerEvent *event);
-    virtual void continuePrimaryAction(KoPointerEvent *event);
-    virtual void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
-    virtual KisPainter::FillStyle fillStyle();
+    KisPainter::FillStyle fillStyle() override;
 
 private:
     KConfigGroup m_configGroup;
@@ -80,7 +80,7 @@ private Q_SLOTS:
 
 protected:
     /// finishRect places the text box on canvas and calls slotActivateTextTool.
-    virtual void finishRect(const QRectF& rect);
+    void finishRect(const QRectF& rect) override;
     KisTextToolOptionWidget* m_optionsWidget;
 };
 
@@ -98,9 +98,9 @@ public:
         setPriority(1);
     }
 
-    virtual ~KisToolTextFactory() {}
+    ~KisToolTextFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return  new KisToolText(canvas);
     }
 

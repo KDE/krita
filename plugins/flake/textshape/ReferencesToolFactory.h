@@ -26,9 +26,9 @@ class ReferencesToolFactory : public KoToolFactoryBase
 {
 public:
     ReferencesToolFactory();
-    ~ReferencesToolFactory();
+    ~ReferencesToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

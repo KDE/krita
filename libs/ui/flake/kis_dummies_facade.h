@@ -34,16 +34,16 @@ class KRITAUI_EXPORT KisDummiesFacade : public KisDummiesFacadeBase
 
 public:
     KisDummiesFacade(QObject *parent = 0);
-    ~KisDummiesFacade();
+    ~KisDummiesFacade() override;
 
-    virtual bool hasDummyForNode(KisNodeSP node) const;
-    KisNodeDummy* dummyForNode(KisNodeSP node) const;
-    KisNodeDummy* rootDummy() const;
-    int dummiesCount() const;
+    bool hasDummyForNode(KisNodeSP node) const override;
+    KisNodeDummy* dummyForNode(KisNodeSP node) const override;
+    KisNodeDummy* rootDummy() const override;
+    int dummiesCount() const override;
 
 private:
-    void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void removeNodeImpl(KisNodeSP node);
+    void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis) override;
+    void removeNodeImpl(KisNodeSP node) override;
 
 private:
     struct Private;

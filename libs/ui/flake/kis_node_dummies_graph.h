@@ -59,7 +59,7 @@ public:
      * dummy and are deleted automatically.
      */
     KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node);
-    ~KisNodeDummy();
+    ~KisNodeDummy() override;
 
     KisNodeDummy* firstChild() const;
     KisNodeDummy* lastChild() const;

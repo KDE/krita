@@ -46,7 +46,7 @@ public:
      * @param server the server the resources will be loaded for
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
-    ~KoResourceLoaderThread();
+    ~KoResourceLoaderThread() override;
     void loadSynchronously();
 public Q_SLOTS:
     /**
@@ -59,7 +59,7 @@ protected:
     /**
      * Overridden from QThread
      */
-    void run();
+    void run() override;
 
 private:
 
@@ -77,7 +77,7 @@ class KRITAWIDGETS_EXPORT KoResourceServerProvider : public QObject
 
 public:
     KoResourceServerProvider();
-    virtual ~KoResourceServerProvider();
+    ~KoResourceServerProvider() override;
 
     static KoResourceServerProvider* instance();
 

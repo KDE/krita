@@ -29,7 +29,7 @@ class LayerGroupSwitcher : public KisViewPlugin
     Q_OBJECT
 public:
     LayerGroupSwitcher(QObject *parent, const QVariantList &);
-    virtual ~LayerGroupSwitcher();
+    ~LayerGroupSwitcher() override;
 
 private Q_SLOTS:
 

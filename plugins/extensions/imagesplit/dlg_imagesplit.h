@@ -40,7 +40,7 @@ class DlgImagesplit: public KoDialog
 public:
 
     DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeType, int defaultMimeIndex);
-    ~DlgImagesplit();
+    ~DlgImagesplit() override;
     bool autoSave();
     int horizontalLines();
     int verticalLines();

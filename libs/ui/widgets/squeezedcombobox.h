@@ -61,7 +61,7 @@ public:
     /**
      * destructor
      */
-    virtual ~SqueezedComboBox();
+    ~SqueezedComboBox() override;
 
     /**
      *
@@ -112,13 +112,13 @@ public:
     /**
      * Sets the sizeHint() of this widget.
      */
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 private Q_SLOTS:
     void slotTimeOut();
 
 private:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
     QString squeezeText(const QString& original);
 
     // Prevent these from being used.

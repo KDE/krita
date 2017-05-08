@@ -82,7 +82,7 @@ public:
     /**
     * Destructor.
     */
-    ~KoTextLoader();
+    ~KoTextLoader() override;
 
     enum LoadBodyMode
     {

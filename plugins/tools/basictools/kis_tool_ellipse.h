@@ -40,13 +40,13 @@ class KisToolEllipse : public KisToolEllipseBase
 
 public:
     KisToolEllipse(KoCanvasBase * canvas);
-    virtual ~KisToolEllipse();
+    ~KisToolEllipse() override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 protected:
-    virtual void finishRect(const QRectF& rect);
+    void finishRect(const QRectF& rect) override;
 };
 
 class KisToolEllipseFactory : public KoToolFactoryBase
@@ -62,9 +62,9 @@ public:
         setPriority(3);
     }
 
-    virtual ~KisToolEllipseFactory() {}
+    ~KisToolEllipseFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return  new KisToolEllipse(canvas);
     }
 

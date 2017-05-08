@@ -37,35 +37,35 @@ class ArtisticTextTool : public KoToolBase
     Q_OBJECT
 public:
     explicit ArtisticTextTool(KoCanvasBase *canvas);
-    ~ArtisticTextTool();
+    ~ArtisticTextTool() override;
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     /// reimplemented
-    virtual void repaintDecorations();
+    void repaintDecorations() override;
     /// reimplemented
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented
     virtual void shortcutOverrideEvent(QKeyEvent *event);
     /// reimplemented
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     /// reimplemented
-    virtual void deactivate();
+    void deactivate() override;
     /// reimplemented
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
     /// reimplemented
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented
-    virtual KoToolSelection *selection();
+    KoToolSelection *selection() override;
 
     /// reimplemented from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const override;
 
     /// Sets cursor for specified text shape it is the current text shape
     void setTextCursor(ArtisticTextShape *textShape, int textCursor);

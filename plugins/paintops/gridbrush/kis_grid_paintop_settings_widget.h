@@ -31,9 +31,9 @@ class KisGridPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisGridPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisGridPaintOpSettingsWidget();
+    ~KisGridPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 public:
     KisGridOpOption *m_gridOption;

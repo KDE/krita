@@ -34,7 +34,7 @@ class KisNormalPreviewWidget : public QLabel
 public:
 
     KisNormalPreviewWidget(QWidget* parent = 0);
-    ~KisNormalPreviewWidget();
+    ~KisNormalPreviewWidget() override;
 
 public Q_SLOTS:
     /* for the following functions 0=X+, 1=X-, 2=Y+, 3=Y-, 4=Z+ and 5=Z-*/

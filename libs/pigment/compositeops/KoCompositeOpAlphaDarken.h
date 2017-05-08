@@ -42,7 +42,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart != 0)
             genericComposite<true>(params);

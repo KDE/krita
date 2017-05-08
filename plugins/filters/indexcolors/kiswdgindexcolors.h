@@ -38,8 +38,8 @@ class KisWdgIndexColors : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgIndexColors(QWidget* parent = 0, Qt::WFlags f = 0, int delay = 500);
-    virtual KisPropertiesConfigurationSP configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
     void setup(QStringList shadesLabels, int ramps);
 
 private Q_SLOTS:

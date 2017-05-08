@@ -34,5 +34,5 @@ public Q_SLOTS:
     void getUrl(const QUrl &url);
 
 protected:
-    virtual QNetworkReply* createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData);
+    QNetworkReply* createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData) override;
 };

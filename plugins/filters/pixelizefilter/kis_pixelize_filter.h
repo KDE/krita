@@ -33,15 +33,15 @@ public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater) const;
+                     KoUpdater* progressUpdater) const override;
 
     static inline KoID id() {
         return KoID("pixelize", i18n("Pixelize"));
     }
 
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 };
 
 #endif

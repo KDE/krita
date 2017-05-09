@@ -225,6 +225,51 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     }
 
     {
+        d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
+        mainLayout->addWidget(d->fillConfigWidget);
+        connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
+
+        d->fillConfigWidget->layout()->setMargin(4);
+    }
+
+
+    QHBoxLayout *widthLineLayout = new QHBoxLayout();
+
+    // Line width
+    thicknessLabel = new QLabel(this);
+    thicknessLabel->setText(i18n("Thickness:"));
+    thicknessLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    thicknessLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    widthLineLayout->addWidget(thicknessLabel);
+
+    // set min/max/step and value in points, then set actual unit
+    d->lineWidth = new KisDoubleParseUnitSpinBox(this);
+    d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
+    d->lineWidth->setDecimals(2);
+    d->lineWidth->setUnit(KoUnit(KoUnit::Point));
+    d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
+    widthLineLayout->addWidget(d->lineWidth);
+
+    d->capNJoinButton = new QToolButton(this);
+    d->capNJoinButton->setMinimumHeight(25);
+    d->capNJoinMenu = new CapNJoinMenu(this);
+    d->capNJoinButton->setMenu(d->capNJoinMenu);
+    d->capNJoinButton->setText("...");
+    d->capNJoinButton->setPopupMode(QToolButton::InstantPopup);
+
+    widthLineLayout->addWidget(d->capNJoinButton);
+
+    mainLayout->addLayout(widthLineLayout);
+
+
+    { // add separator line
+        separatorLine = new QFrame();
+        separatorLine->setFrameShape(QFrame::HLine);
+        mainLayout->addWidget(separatorLine);
+    }
+
+
+    {
         QHBoxLayout *markersLineLayout = new QHBoxLayout();
 
         QList<KoMarker*> emptyMarkers;
@@ -261,47 +306,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
         mainLayout->addLayout(styleLineLayout);
     }
 
-    QHBoxLayout *widthLineLayout = new QHBoxLayout();
 
-    // Line width
-    thicknessLabel = new QLabel(this);
-    thicknessLabel->setText(i18n("Thickness:"));
-    thicknessLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    thicknessLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    widthLineLayout->addWidget(thicknessLabel);
 
-    // set min/max/step and value in points, then set actual unit
-    d->lineWidth = new KisDoubleParseUnitSpinBox(this);
-    d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
-    d->lineWidth->setDecimals(2);
-    d->lineWidth->setUnit(KoUnit(KoUnit::Point));
-    d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
-    widthLineLayout->addWidget(d->lineWidth);
-
-    d->capNJoinButton = new QToolButton(this);
-    d->capNJoinButton->setMinimumHeight(25);
-    d->capNJoinMenu = new CapNJoinMenu(this);
-    d->capNJoinButton->setMenu(d->capNJoinMenu);
-    d->capNJoinButton->setText("...");
-    d->capNJoinButton->setPopupMode(QToolButton::InstantPopup);
-
-    widthLineLayout->addWidget(d->capNJoinButton);
-
-    mainLayout->addLayout(widthLineLayout);
-
-    { // add separator line
-        separatorLine = new QFrame();
-        separatorLine->setFrameShape(QFrame::HLine);
-        mainLayout->addWidget(separatorLine);
-    }
-
-    {
-        d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
-        mainLayout->addWidget(d->fillConfigWidget);
-        connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
-
-        d->fillConfigWidget->layout()->setMargin(7);
-    }
 
     // Spacer
     d->spacer = new QWidget();

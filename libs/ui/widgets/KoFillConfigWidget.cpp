@@ -415,6 +415,8 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
     if (buttonId >= None && buttonId <= Pattern) {
         d->ui->stackWidget->setCurrentIndex(buttonId);
     }
+
+    emit fillIndexChanged(buttonId);
 }
 
 KoShapeStrokeSP KoFillConfigWidget::createShapeStroke()

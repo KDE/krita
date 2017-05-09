@@ -90,6 +90,9 @@ Q_SIGNALS:
 
     void sigInternalRequestColorToResourceManager();
 
+    /// notify outside widgets when fill type changed
+    void fillIndexChanged(int buttonId);
+
 private:
     /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);

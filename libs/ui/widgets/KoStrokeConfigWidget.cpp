@@ -33,7 +33,6 @@
 
 // Qt
 #include <QMenu>
-#include <QLabel>
 #include <QToolButton>
 #include <QButtonGroup>
 #include <QVBoxLayout>
@@ -265,11 +264,11 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     QHBoxLayout *widthLineLayout = new QHBoxLayout();
 
     // Line width
-    QLabel *l = new QLabel(this);
-    l->setText(i18n("Thickness:"));
-    l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    widthLineLayout->addWidget(l);
+    thicknessLabel = new QLabel(this);
+    thicknessLabel->setText(i18n("Thickness:"));
+    thicknessLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    thicknessLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    widthLineLayout->addWidget(thicknessLabel);
 
     // set min/max/step and value in points, then set actual unit
     d->lineWidth = new KisDoubleParseUnitSpinBox(this);
@@ -291,9 +290,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     mainLayout->addLayout(widthLineLayout);
 
     { // add separator line
-        QFrame* line = new QFrame();
-        line->setFrameShape(QFrame::HLine);
-        mainLayout->addWidget(line);
+        separatorLine = new QFrame();
+        separatorLine->setFrameShape(QFrame::HLine);
+        mainLayout->addWidget(separatorLine);
     }
 
     {
@@ -301,7 +300,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
         mainLayout->addWidget(d->fillConfigWidget);
         connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
 
-        d->fillConfigWidget->layout()->setMargin(0);
+        d->fillConfigWidget->layout()->setMargin(7);
     }
 
     // Spacer
@@ -340,6 +339,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     selectionChanged();
 
     d->fillConfigWidget->activate();
+    connect (d->fillConfigWidget, SIGNAL(fillIndexChanged(int)), this, SLOT(slotShowMarkers(int)));
+
     deactivate();
 }
 
@@ -426,6 +427,34 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
     d->startMarkerSelector->setEnabled(enabled);
     d->midMarkerSelector->setEnabled(enabled);
     d->endMarkerSelector->setEnabled(enabled);
+}
+
+void KoStrokeConfigWidget::slotShowMarkers(int strokeTypeIndex)
+{
+
+
+    // 0 means no fill, so hide the marker options
+    if (strokeTypeIndex == 0) {
+        d->lineWidth->setVisible(false);
+        d->capNJoinButton->setVisible(false);
+        d->lineStyle->setVisible(false);
+        d->startMarkerSelector->setVisible(false);
+        d->midMarkerSelector->setVisible(false);
+        d->endMarkerSelector->setVisible(false);
+        thicknessLabel->setVisible(false);
+        separatorLine->setVisible(false);
+    }
+    else {
+        d->lineWidth->setVisible(true);
+        d->capNJoinButton->setVisible(true);
+        d->lineStyle->setVisible(true);
+        d->startMarkerSelector->setVisible(true);
+        d->midMarkerSelector->setVisible(true);
+        d->endMarkerSelector->setVisible(true);
+        thicknessLabel->setVisible(true);
+        separatorLine->setVisible(true);
+    }
+
 }
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeShape)

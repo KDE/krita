@@ -33,6 +33,7 @@
 #include "kritaui_export.h"
 
 #include <QWidget>
+#include <QLabel>
 #include <KoFlakeTypes.h>
 #include <KoFlake.h>
 
@@ -65,6 +66,8 @@ public:
     KoMarker *endMarker() const;
     Qt::PenCapStyle capStyle() const;
     Qt::PenJoinStyle joinStyle() const;
+    QLabel *thicknessLabel;
+    QFrame* separatorLine;
 
     /**
      * Creates KoShapeStroke object filled with the options
@@ -86,6 +89,9 @@ private Q_SLOTS:
     void updateMarkers(const QList<KoMarker*> &markers);
 
     void canvasResourceChanged(int key, const QVariant &value);
+
+    /// notification when the stroke type changes
+    void slotShowMarkers(int strokeTypeIndex);
 
     /// selection has changed
     void selectionChanged();

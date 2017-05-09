@@ -102,6 +102,8 @@ private:
     void updateGradientSaveButtonAvailability();
     void loadCurrentFillFromResourceServer();
 
+    void updateWidgetComponentVisbility();
+
     class Private;
     Private * const d;
 };

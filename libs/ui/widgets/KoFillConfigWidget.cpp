@@ -779,6 +779,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
     d->ui->btnSaveGradient->setVisible(false);
     d->ui->gradientTypeLine->setVisible(false);
     d->ui->soldStrokeColorLabel->setVisible(false);
+    d->ui->presetLabel->setVisible(false);
 
     switch (d->selectedFillIndex) {
         case KoFillConfigWidget::None:
@@ -797,6 +798,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             d->ui->cmbGradientType->setVisible(true);
             d->ui->btnSaveGradient->setVisible(true);
             d->ui->gradientTypeLine->setVisible(true);
+            d->ui->presetLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Pattern:
             break;

@@ -257,6 +257,13 @@
    <item>
     <layout class="QHBoxLayout" name="gradientLayout2">
      <item>
+      <widget class="QLabel" name="presetLabel">
+       <property name="text">
+        <string>Preset:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="KoColorPopupButton" name="btnChoosePredefinedGradient">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

@@ -58,6 +58,11 @@ public:
     void activate();
     void deactivate();
 
+    /// useful for UI areas where there needs to be a spacer added
+    /// to help push everything up to the top
+    /// sometimes KoFillConfigWidget is just a component, so this isn't needed
+    void addBottomSpacerWidget();
+
 private Q_SLOTS:
     void styleButtonPressed(int buttonId);
 

@@ -306,6 +306,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
         mainLayout->addLayout(markersLineLayout);
     }
 
+
+    mainLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Expanding));
+
     // Spacer
     d->spacer = new QWidget();
     d->spacer->setObjectName("SpecialSpacer");

@@ -67,6 +67,7 @@ public:
     Qt::PenCapStyle capStyle() const;
     Qt::PenJoinStyle joinStyle() const;
     QLabel *thicknessLabel;
+    QLabel *strokeStyleLabel;
     QFrame* separatorLine;
 
     /**

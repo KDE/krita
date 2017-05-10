@@ -45,6 +45,7 @@
 #include <asl/kis_asl_reader_utils.h>
 
 #include "psd_pixel_utils.h"
+#include <kundo2command.h>
 
 
 // Just for pretty debug messages

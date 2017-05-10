@@ -774,6 +774,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
     d->ui->btnSolidColorPick->setVisible(false);
     d->ui->btnSaveGradient->setVisible(false);
     d->ui->gradientTypeLine->setVisible(false);
+    d->ui->soldStrokeColorLabel->setVisible(false);
 
     switch (d->selectedFillIndex) {
         case KoFillConfigWidget::None:
@@ -781,6 +782,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
         case KoFillConfigWidget::Solid:
             d->ui->btnChooseSolidColor->setVisible(true);
             d->ui->btnSolidColorPick->setVisible(true);
+            d->ui->soldStrokeColorLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Gradient:
             d->ui->wdgGradientEditor->setVisible(true);

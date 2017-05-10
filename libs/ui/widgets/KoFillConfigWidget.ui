@@ -148,6 +148,13 @@
    <item>
     <layout class="QHBoxLayout" name="solidFillLayout">
      <item>
+      <widget class="QLabel" name="soldStrokeColorLabel">
+       <property name="text">
+        <string>Color:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="KoColorPopupButton" name="btnChooseSolidColor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

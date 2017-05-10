@@ -262,11 +262,25 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     mainLayout->addLayout(widthLineLayout);
 
 
-    { // add separator line
-        separatorLine = new QFrame();
-        separatorLine->setFrameShape(QFrame::HLine);
-        mainLayout->addWidget(separatorLine);
+    {
+        QHBoxLayout *styleLineLayout = new QHBoxLayout();
+
+        // Line style
+        strokeStyleLabel = new QLabel(this);
+        strokeStyleLabel->setText(i18n("Line Style:"));
+        strokeStyleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        d->lineStyle = new KoLineStyleSelector(this);
+        d->lineStyle->setToolTip(i18nc("@info:tooltip", "Line style"));
+        //d->lineStyle->setMinimumWidth(50);
+        d->lineStyle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        d->lineStyle->setLineStyle(Qt::SolidLine,  QVector<qreal>());
+
+        styleLineLayout->addWidget(strokeStyleLabel);
+        styleLineLayout->addWidget(d->lineStyle);
+
+        mainLayout->addLayout(styleLineLayout);
     }
+
 
 
     {
@@ -291,23 +305,6 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
 
         mainLayout->addLayout(markersLineLayout);
     }
-
-
-    {
-        QHBoxLayout *styleLineLayout = new QHBoxLayout();
-
-        // Line style
-        d->lineStyle = new KoLineStyleSelector(this);
-        d->lineStyle->setToolTip(i18nc("@info:tooltip", "Line style"));
-        d->lineStyle->setMinimumWidth(70);
-        d->lineStyle->setLineStyle(Qt::SolidLine,  QVector<qreal>());
-        styleLineLayout->addWidget(d->lineStyle);
-
-        mainLayout->addLayout(styleLineLayout);
-    }
-
-
-
 
     // Spacer
     d->spacer = new QWidget();
@@ -448,7 +445,7 @@ void KoStrokeConfigWidget::slotShowMarkers(int strokeTypeIndex)
         d->midMarkerSelector->setVisible(false);
         d->endMarkerSelector->setVisible(false);
         thicknessLabel->setVisible(false);
-        separatorLine->setVisible(false);
+        strokeStyleLabel->setVisible(false);
     }
     else {
         d->lineWidth->setVisible(true);
@@ -458,7 +455,7 @@ void KoStrokeConfigWidget::slotShowMarkers(int strokeTypeIndex)
         d->midMarkerSelector->setVisible(true);
         d->endMarkerSelector->setVisible(true);
         thicknessLabel->setVisible(true);
-        separatorLine->setVisible(true);
+        strokeStyleLabel->setVisible(true);
     }
 
 }

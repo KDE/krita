@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>314</width>
-    <height>380</height>
+    <height>239</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -301,20 +301,11 @@
     </widget>
    </item>
    <item>
-    <widget class="KisStopGradientEditor" name="wdgGradientEditor" native="true"/>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    <layout class="QVBoxLayout" name="lastLayout">
+     <item>
+      <widget class="KisStopGradientEditor" name="wdgGradientEditor" native="true"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

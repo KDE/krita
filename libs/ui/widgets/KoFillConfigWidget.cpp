@@ -340,6 +340,10 @@ void KoFillConfigWidget::deactivate()
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
 
+void KoFillConfigWidget::addBottomSpacerWidget()
+{
+    d->ui->lastLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+}
 
 void KoFillConfigWidget::setNoSelectionTrackingMode(bool value)
 {

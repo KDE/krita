@@ -211,7 +211,7 @@ void KisImageConfig::setMemorySoftLimitPercent(qreal value)
 qreal KisImageConfig::memoryPoolLimitPercent(bool requestDefault) const
 {
     return !requestDefault ?
-        m_config.readEntry("memoryPoolLimitPercent", 2.) : 2.;
+        m_config.readEntry("memoryPoolLimitPercent", 0.0) : 0.0;
 }
 
 void KisImageConfig::setMemoryPoolLimitPercent(qreal value)

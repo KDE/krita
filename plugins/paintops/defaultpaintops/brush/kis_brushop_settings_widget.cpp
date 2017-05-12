@@ -40,6 +40,7 @@
 #include <kis_compositeop_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
+#include <kis_pressure_rate_option.h>
 #include "kis_texture_option.h"
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
@@ -59,6 +60,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")), i18n("Ratio"));
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
     addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
 

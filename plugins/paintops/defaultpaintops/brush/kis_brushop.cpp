@@ -72,6 +72,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_sizeOption.readOptionSetting(settings);
     m_ratioOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
@@ -163,8 +164,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(scale, rotation,
-                            m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_spacingOption, &m_rateOption, info);
 }
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

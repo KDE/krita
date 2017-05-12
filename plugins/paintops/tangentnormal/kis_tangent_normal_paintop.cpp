@@ -46,6 +46,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP sett
     m_opacityOption.readOptionSetting(settings);
     m_flowOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
@@ -55,6 +56,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP sett
     m_opacityOption.resetAllSensors();
     m_flowOption.resetAllSensors();
     m_spacingOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
@@ -165,7 +167,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     painter()->setCompositeOp(oldCompositeOpId);
 
     return effectiveSpacing(scale, rotation,
-                            m_spacingOption, info);
+                            &m_spacingOption, &m_rateOption, info);
 }
 
 void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

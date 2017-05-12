@@ -133,7 +133,7 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
 
     KisSpacingInformation spacingInfo =
         KisPaintOpUtils::effectiveSpacing(diameter, diameter,
-                                          extraSpacingScale, true, rotation, axesFlipped,
+                                          extraSpacingScale, 1.0, true, rotation, axesFlipped,
                                           m_markerOption.spacing,
                                           m_markerOption.use_auto_spacing,
                                           m_markerOption.auto_spacing_coeff,

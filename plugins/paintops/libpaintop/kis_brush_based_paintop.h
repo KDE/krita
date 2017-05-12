@@ -30,6 +30,7 @@
 
 class KisPropertiesConfiguration;
 class KisPressureSpacingOption;
+class KisPressureRateOption;
 class KisDabCache;
 
 /// Internal
@@ -69,6 +70,11 @@ public:
     KisSpacingInformation effectiveSpacing(qreal scale) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(qreal scale,
+                                           qreal rotation,
+                                           const KisPressureSpacingOption *spacingOption,
+                                           const KisPressureRateOption *rateOption,
+                                           const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;
@@ -79,7 +85,9 @@ public:
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:
-    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation, bool axesFlipped) const;
+    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale,
+                                           qreal extraRateScale, bool isotropicSpacing,
+                                           qreal rotation, bool axesFlipped) const;
 
 protected: // XXX: make private!
 

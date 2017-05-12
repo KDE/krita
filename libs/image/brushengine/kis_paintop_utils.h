@@ -153,6 +153,7 @@ QPointF calcAutoSpacing(const QPointF &pt, qreal coeff, qreal lodScale)
 KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal dabHeight,
                                        qreal extraScale,
+                                       qreal rateExtraScale,
                                        bool isotropicSpacing,
                                        qreal rotation,
                                        bool axesFlipped,
@@ -188,7 +189,8 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
     spacing *= extraScale;
 
     if (timedSpacingEnabled) {
-        return KisSpacingInformation(spacing, rotation, axesFlipped, timedSpacingInterval);
+        return KisSpacingInformation(spacing, rotation, axesFlipped,
+                                     timedSpacingInterval / rateExtraScale);
     } else {
         return KisSpacingInformation(spacing, rotation, axesFlipped);
     }

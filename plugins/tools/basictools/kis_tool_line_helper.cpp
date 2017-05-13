@@ -87,8 +87,10 @@ void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceManager *re
 {
     if (!m_d->enabled) return;
 
+    // Ignore the elapsed stroke time, so that the line tool will behave as if the whole stroke is
+    // drawn at once. This should prevent any possible spurious dabs caused by timed spacing.
     KisPaintInformation pi =
-            m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
+            m_d->infoBuilder->startStroke(event, 0, resourceManager);
 
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());
@@ -101,8 +103,9 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
 {
     if (!m_d->enabled) return;
 
+    // Ignore the elapsed stroke time.
     KisPaintInformation pi =
-            m_d->infoBuilder->continueStroke(event, elapsedStrokeTime());
+            m_d->infoBuilder->continueStroke(event, 0);
 
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());

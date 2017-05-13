@@ -32,7 +32,7 @@ public:
     {
     }
 
-    ~KoVectorPatternBackgroundPrivate()
+    ~KoVectorPatternBackgroundPrivate() override
     {
         qDeleteAll(shapes);
         shapes.clear();

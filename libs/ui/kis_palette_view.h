@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisPaletteView : public KoTableView
 {
 public:
     KisPaletteView(QWidget *parent = 0);
-    ~KisPaletteView();
+    ~KisPaletteView() override;
 
     void setPaletteModel(KisPaletteModel *model);
     KisPaletteModel* paletteModel() const;
@@ -40,7 +40,7 @@ public:
     void setCrossedKeyword(const QString &value);
 
 protected:
-    void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event) override;
 
 private:
     struct Private;

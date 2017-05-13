@@ -47,7 +47,7 @@ public Q_SLOTS:
     void slotAdapterResourceRemoved(KoResource * resource);
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
 private:
     KoResource *m_resource;

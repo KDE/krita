@@ -43,7 +43,7 @@ class KisRandomGeneratorDemo: public QWidget, Ui::NoiseDemoUi
     Q_OBJECT
 public:
     KisRandomGeneratorDemo(QWidget* parent = 0);
-    virtual ~KisRandomGeneratorDemo();
+    ~KisRandomGeneratorDemo() override;
 
 public Q_SLOTS:
     void updateNoise();

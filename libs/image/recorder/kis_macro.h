@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisMacro : public QObject
 public:
     KisMacro(QObject* parent = 0);
     KisMacro(const QList<KisRecordedAction*>& _actions);
-    ~KisMacro();
+    ~KisMacro() override;
 public:
     /**
      * Append a list of actions, and make clone of them.

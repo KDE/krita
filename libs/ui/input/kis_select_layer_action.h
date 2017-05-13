@@ -35,15 +35,15 @@ public:
     };
 
     explicit KisSelectLayerAction();
-    virtual ~KisSelectLayerAction();
+    ~KisSelectLayerAction() override;
 
-    virtual int priority() const;
+    int priority() const override;
 
-    void activate(int shortcut);
-    void deactivate(int shortcut);
+    void activate(int shortcut) override;
+    void deactivate(int shortcut) override;
 
-    void begin(int shortcut, QEvent *event);
-    void inputEvent(QEvent *event);
+    void begin(int shortcut, QEvent *event) override;
+    void inputEvent(QEvent *event) override;
 
 private:
     class Private;

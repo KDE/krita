@@ -31,10 +31,10 @@ class EllipseShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     EllipseShapeFactory();
-    virtual ~EllipseShapeFactory() {}
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
-    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
+    ~EllipseShapeFactory() override {}
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif /* KOELLIPSESHAPEFACTORY_H */

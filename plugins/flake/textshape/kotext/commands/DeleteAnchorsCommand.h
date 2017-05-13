@@ -33,10 +33,10 @@ class DeleteAnchorsCommand : public KUndo2Command
 {
 public:
     DeleteAnchorsCommand(const QList<KoShapeAnchor *> &anchors, QTextDocument *document, KUndo2Command *parent);
-    virtual ~DeleteAnchorsCommand();
+    ~DeleteAnchorsCommand() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     QList<KoAnchorInlineObject *> m_anchorObjects;

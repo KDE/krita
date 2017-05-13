@@ -78,14 +78,14 @@ public:
     /// Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
 
-    virtual ~KoColorSet();
+    ~KoColorSet() override;
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     void setColumnCount(int columns);
     int columnCount();

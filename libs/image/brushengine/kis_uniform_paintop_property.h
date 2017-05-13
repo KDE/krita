@@ -47,7 +47,7 @@ public:
                               const QString &name,
                               KisPaintOpSettingsRestrictedSP settings,
                               QObject *parent);
-    ~KisUniformPaintOpProperty();
+    ~KisUniformPaintOpProperty() override;
 
     QString id() const;
     QString name() const;

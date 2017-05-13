@@ -32,7 +32,7 @@ class KisChalkPaintOpSettings : public KisPaintOpSettings
 
 public:
     KisChalkPaintOpSettings();
-    virtual ~KisChalkPaintOpSettings() {}
+    ~KisChalkPaintOpSettings() override {}
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 

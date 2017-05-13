@@ -29,7 +29,7 @@ class KRITATEXT_EXPORT BibliographyGenerator : public QObject, public Bibliograp
     Q_OBJECT
 public:
     explicit BibliographyGenerator(QTextDocument *bibDocument, const QTextBlock &block, KoBibliographyInfo *bibInfo);
-    virtual ~BibliographyGenerator();
+    ~BibliographyGenerator() override;
 
     static QMap<QString, BibliographyEntryTemplate> defaultBibliographyEntryTemplates();
 

@@ -31,11 +31,11 @@ public:
     KisParticlePaintOpSettings();
     ~KisParticlePaintOpSettings();
 
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    qreal airbrushInterval() const;
+    bool paintIncremental() override;
+    bool isAirbrushing() const override;
+    qreal airbrushInterval() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
     struct Private;

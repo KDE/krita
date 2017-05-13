@@ -115,7 +115,7 @@ public:
                                 ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
 
     /// Destructor
-    virtual ~KisShortcutsEditor();
+    ~KisShortcutsEditor() override;
 
     /**
      * @ret true if there are unsaved changes.

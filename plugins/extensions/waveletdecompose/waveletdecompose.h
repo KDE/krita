@@ -29,7 +29,7 @@ class WaveletDecompose : public KisViewPlugin
     Q_OBJECT
 public:
     WaveletDecompose(QObject *parent, const QVariantList &);
-    virtual ~WaveletDecompose();
+    ~WaveletDecompose() override;
 
 private Q_SLOTS:
 

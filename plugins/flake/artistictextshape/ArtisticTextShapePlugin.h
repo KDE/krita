@@ -29,7 +29,7 @@ class ArtisticTextShapePlugin : public QObject
 
 public:
     ArtisticTextShapePlugin(QObject *parent, const QVariantList &);
-    ~ArtisticTextShapePlugin();
+    ~ArtisticTextShapePlugin() override;
 };
 
 #endif // ARTISTICTEXTSHAPEPLUGIN_H

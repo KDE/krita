@@ -27,8 +27,8 @@ class ArtisticTextShapeLoadingUpdater : public KoLoadingShapeUpdater
 {
 public:
     explicit ArtisticTextShapeLoadingUpdater(ArtisticTextShape *artisticTextShape);
-    virtual ~ArtisticTextShapeLoadingUpdater();
-    virtual void update(KoShape *shape);
+    ~ArtisticTextShapeLoadingUpdater() override;
+    void update(KoShape *shape) override;
 
 private:
     ArtisticTextShape *m_artisticTextShape;

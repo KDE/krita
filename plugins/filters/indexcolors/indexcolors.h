@@ -36,7 +36,7 @@ class IndexColors : public QObject
     Q_OBJECT
 public:
     IndexColors(QObject *parent, const QVariantList &);
-    virtual ~IndexColors();
+    ~IndexColors() override;
 };
 
 class KisFilterIndexColors : public KisColorTransformationFilter
@@ -44,20 +44,20 @@ class KisFilterIndexColors : public KisColorTransformationFilter
 public:
     KisFilterIndexColors();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
-    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
+    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
     static inline KoID id() {
         return KoID("indexcolors", i18n("Index Colors"));
     }
 protected:
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 };
 
 class KisIndexColorTransformation : public KoColorTransformation
 {
 public:
     KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace* cs, int alphaSteps);
-    virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
+    void transform(const quint8* src, quint8* dst, qint32 nPixels) const override;
 private:
     const KoColorSpace* m_colorSpace;
     quint32 m_psize;

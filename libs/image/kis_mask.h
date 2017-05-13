@@ -81,7 +81,7 @@ public:
      */
     KisMask(const KisMask& rhs);
 
-    virtual ~KisMask();
+    ~KisMask() override;
 
     void setImage(KisImageWSP image) override;
 

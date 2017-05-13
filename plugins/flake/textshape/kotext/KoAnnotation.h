@@ -54,10 +54,10 @@ public:
      */
     explicit KoAnnotation(const QTextCursor &);
 
-    virtual ~KoAnnotation();
+    ~KoAnnotation() override;
 
     /// reimplemented from super
-    virtual void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const;
+    void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const override;
 
     /**
      * Set the new name for this annotation
@@ -69,7 +69,7 @@ public:
     QString name() const;
 
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * This is called to allow Cut and Paste of annotations. This

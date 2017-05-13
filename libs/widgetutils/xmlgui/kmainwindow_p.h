@@ -78,7 +78,7 @@ class KMWSessionManager : public QObject
     Q_OBJECT
 public:
     KMWSessionManager();
-    ~KMWSessionManager();
+    ~KMWSessionManager() override;
 
 private Q_SLOTS:
     bool saveState(QSessionManager &);

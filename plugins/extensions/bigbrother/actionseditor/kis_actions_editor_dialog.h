@@ -28,7 +28,7 @@ class KisActionsEditorDialog : public KoDialog
 {
 public:
     KisActionsEditorDialog(QWidget* parent);
-    ~KisActionsEditorDialog();
+    ~KisActionsEditorDialog() override;
     KisActionsEditor* actionsEditor();
 private:
     KisActionsEditor* m_actionsEditor;

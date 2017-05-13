@@ -30,12 +30,12 @@ class FilterStackSetCommand : public KUndo2Command
 {
 public:
     FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent = 0);
-    ~FilterStackSetCommand();
+    ~FilterStackSetCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     KoFilterEffectStack *m_newFilterStack;

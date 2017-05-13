@@ -40,7 +40,7 @@ public:
     KisNodeSP clone() {
         return new TestLayer(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const override {
         return true;
     }
 
@@ -48,48 +48,48 @@ public:
         return "TEST";
     }
 
-    KisPaintDeviceSP original() const {
+    KisPaintDeviceSP original() const override {
         // This test doesn't use updateProjection so just return 0
         return 0;
     }
 
-    KisPaintDeviceSP paintDevice() const {
+    KisPaintDeviceSP paintDevice() const override {
         return 0;
     }
 
-    QIcon icon() const {
+    QIcon icon() const override {
         return QIcon();
     }
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestLayer(image(), name(), opacity());
     }
 
-    qint32 x() const {
+    qint32 x() const override {
         return 0;
     }
 
-    void setX(qint32) {
+    void setX(qint32) override {
     }
 
-    qint32 y() const {
+    qint32 y() const override {
         return 0;
     }
 
-    void setY(qint32) {
+    void setY(qint32) override {
     }
 
-    QRect extent() const {
+    QRect extent() const override {
         return QRect();
     }
 
-    QRect exactBounds() const {
+    QRect exactBounds() const override {
         return QRect();
     }
 
     using KisLayer::accept;
 
-    bool accept(KisNodeVisitor& v) {
+    bool accept(KisNodeVisitor& v) override {
         return v.visit(this);
     }
 

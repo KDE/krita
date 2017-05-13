@@ -158,7 +158,7 @@ public:
      *
      * Destroys dialogs and the menu pointer retuned by menu
      */
-    ~KHelpMenu();
+    ~KHelpMenu() override;
 
     /**
      * Returns a popup menu you can use in the menu bar or where you

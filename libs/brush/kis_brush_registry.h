@@ -38,7 +38,7 @@ class BRUSH_EXPORT KisBrushRegistry : public QObject, public KoGenericRegistry<K
 
 public:
     KisBrushRegistry();
-    virtual ~KisBrushRegistry();
+    ~KisBrushRegistry() override;
 
     static KisBrushRegistry* instance();
 

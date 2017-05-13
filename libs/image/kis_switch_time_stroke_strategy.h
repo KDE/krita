@@ -56,10 +56,10 @@ public:
                                 bool needsRegeneration,
                                 KisImageAnimationInterface *interface,
                                 KisPostExecutionUndoAdapter *undoAdapter);
-    ~KisSwitchTimeStrokeStrategy();
+    ~KisSwitchTimeStrokeStrategy() override;
 
-    void initStrokeCallback();
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    void initStrokeCallback() override;
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
     SharedTokenSP token() const;
 

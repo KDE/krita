@@ -39,14 +39,14 @@ public:
         return KoID("gradientmap", i18n("Gradient Map"));
     }
 
-    virtual void processImpl(KisPaintDeviceSP device,
+    void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater *progressUpdater) const;
+                     KoUpdater *progressUpdater) const override;
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
-    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 };
 
 #endif

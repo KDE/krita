@@ -45,11 +45,11 @@ public:
 
     /* Create a Tangent Normal Brush Operator*/
     KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
-    virtual ~KisTangentNormalPaintOp();
+    ~KisTangentNormalPaintOp() override;
 
     /*paint the dabs*/
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 private:
     //private functions//
     KisPressureSizeOption m_sizeOption;

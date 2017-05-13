@@ -30,11 +30,11 @@ public:
     {
     }
 
-    bool write(const QByteArray &data) {
+    bool write(const QByteArray &data) override {
         return (m_store->write(data) == data.length());
     }
 
-    bool write(const char* data, qint64 length) {
+    bool write(const char* data, qint64 length) override {
         return (m_store->write(data, length) == length);
     }
 
@@ -50,7 +50,7 @@ public:
         d_ptr->isOpen = true;
         m_buffer.open(QIODevice::ReadWrite);
     }
-    ~KoStoreFake() {
+    ~KoStoreFake() override {
         // Oh, no, please do not clean anything! :)
         d_ptr->stream = 0;
         d_ptr->isOpen = false;
@@ -61,13 +61,13 @@ public:
         d_ptr->mode = KoStore::Read;
     }
 
-    bool openWrite(const QString&) { return true; }
-    bool openRead(const QString&) { return true; }
-    bool closeRead() { return true; }
-    bool closeWrite() { return true; }
-    bool enterRelativeDirectory(const QString&) { return true; }
-    bool enterAbsoluteDirectory(const QString&) { return true; }
-    bool fileExists(const QString&) const { return true; }
+    bool openWrite(const QString&) override { return true; }
+    bool openRead(const QString&) override { return true; }
+    bool closeRead() override { return true; }
+    bool closeWrite() override { return true; }
+    bool enterRelativeDirectory(const QString&) override { return true; }
+    bool enterAbsoluteDirectory(const QString&) override { return true; }
+    bool fileExists(const QString&) const override { return true; }
 private:
     QBuffer m_buffer;
 };

@@ -35,16 +35,16 @@ class KisMaskProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
     KisMaskProjectionPlane(KisMask *mask);
-    ~KisMaskProjectionPlane();
+    ~KisMaskProjectionPlane() override;
 
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode);
-    void apply(KisPainter *painter, const QRect &rect);
+    QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
+    void apply(KisPainter *painter, const QRect &rect) override;
 
-    QRect needRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
-    QRect changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
-    QRect accessRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
+    QRect needRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
+    QRect changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
+    QRect accessRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
 
-    KisPaintDeviceList getLodCapableDevices() const;
+    KisPaintDeviceList getLodCapableDevices() const override;
 
 private:
     struct Private;

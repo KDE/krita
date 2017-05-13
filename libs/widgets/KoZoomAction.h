@@ -47,12 +47,12 @@ public:
    * @param parent The action's parent object.
    */
     KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
-    ~KoZoomAction();
+    ~KoZoomAction() override;
 
     /**
      * Reimplemented from QWidgetAction.
      */
-    virtual QWidget* createWidget(QWidget* parent);
+    QWidget* createWidget(QWidget* parent) override;
 
     enum SpecialButton {
         AspectMode = 1, ///< changing aspect mode

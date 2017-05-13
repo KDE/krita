@@ -184,7 +184,7 @@ public:
 
 public:
     KisCategoriesMapper() {}
-    virtual ~KisCategoriesMapper() {
+    ~KisCategoriesMapper() override {
         qDeleteAll(m_items);
     }
 

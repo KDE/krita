@@ -37,11 +37,11 @@ public:
      */
     KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfigurationSP config);
     KisRecordedFilterAction(const KisRecordedFilterAction&);
-    virtual ~KisRecordedFilterAction();
+    ~KisRecordedFilterAction() override;
     using KisRecordedNodeAction::play;
-    virtual void play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater = 0) const;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
-    virtual KisRecordedAction* clone() const;
+    void play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater = 0) const override;
+    void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const override;
+    KisRecordedAction* clone() const override;
     const KisFilter* filter() const;
     const KisFilterConfigurationSP filterConfiguration() const;
     /**
@@ -57,8 +57,8 @@ class KisRecordedFilterActionFactory : public KisRecordedActionFactory
 {
 public:
     KisRecordedFilterActionFactory();
-    virtual ~KisRecordedFilterActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    ~KisRecordedFilterActionFactory() override;
+    KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*) override;
 };
 
 #endif

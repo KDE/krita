@@ -28,9 +28,9 @@ public:
 
     KisBurnMidtonesAdjustmentFactory();
 
-    virtual QList< QPair< KoID, KoID > > supportedModels() const;
+    QList< QPair< KoID, KoID > > supportedModels() const override;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const override;
 
 };
 

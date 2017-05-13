@@ -42,7 +42,7 @@ public:
      */
     KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
                          KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes);
-    virtual ~KoTextShapeSavingContext();
+    ~KoTextShapeSavingContext() override;
 
     /**
      * @brief Get the changes (tracked)

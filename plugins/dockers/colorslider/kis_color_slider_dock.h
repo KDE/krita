@@ -35,10 +35,10 @@ class ColorSliderDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     ColorSliderDock();
-    QString observerName() { return "ColorSliderDock"; }
+    QString observerName() override { return "ColorSliderDock"; }
     /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 public Q_SLOTS:
     void udpateSliders();
 

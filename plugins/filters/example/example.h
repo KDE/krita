@@ -30,7 +30,7 @@ class KritaExample : public QObject
     Q_OBJECT
 public:
     KritaExample(QObject *parent, const QVariantList &);
-    virtual ~KritaExample();
+    ~KritaExample() override;
 };
 
 class KisFilterInvert : public KisColorTransformationFilter
@@ -39,13 +39,13 @@ public:
     KisFilterInvert();
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 
     static inline KoID id() {
         return KoID("invert", i18n("Invert"));
     }
 
-    bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const;
+    bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
 };
 
 #endif

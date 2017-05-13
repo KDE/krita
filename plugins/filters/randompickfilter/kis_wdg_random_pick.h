@@ -31,13 +31,13 @@ class KisWdgRandomPick : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgRandomPick(KisFilter* nfilter, QWidget* parent = 0);
-    ~KisWdgRandomPick();
+    ~KisWdgRandomPick() override;
 public:
     inline const Ui_WdgRandomPickOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 private:
     Ui_WdgRandomPickOptions* m_widget;
     int m_seedH, m_seedV, m_seedThreshold;

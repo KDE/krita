@@ -29,12 +29,12 @@ class KisMacroModel : public QAbstractListModel
 {
 public:
     KisMacroModel(KisMacro*);
-    ~KisMacroModel();
-    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
-    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
-    virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
+    ~KisMacroModel() override;
+    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex & index) const override;
+    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
+    bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex()) override;
     void addAction(const QModelIndex& _after, const KisRecordedAction& _action);
     void duplicateAction(const QModelIndex& index);
     void raise(const QModelIndex& index);

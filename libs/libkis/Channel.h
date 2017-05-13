@@ -37,7 +37,7 @@ class KRITALIBKIS_EXPORT Channel : public QObject
 
 public:
     explicit Channel(KisNodeSP node, KoChannelInfo *channel, QObject *parent = 0);
-    virtual ~Channel();
+    ~Channel() override;
 
     bool operator==(const Channel &other) const;
     bool operator!=(const Channel &other) const;

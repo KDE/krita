@@ -27,7 +27,7 @@ class KisDynaPaintOpSettings : public KisPaintOpSettings
 
 public:
     KisDynaPaintOpSettings();
-    ~KisDynaPaintOpSettings();
+    ~KisDynaPaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;

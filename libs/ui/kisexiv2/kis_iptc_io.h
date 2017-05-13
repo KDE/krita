@@ -28,25 +28,25 @@ class KisIptcIO : public KisMetaData::IOBackend
     struct Private;
 public:
     KisIptcIO();
-    virtual ~KisIptcIO();
-    virtual QString id() const {
+    ~KisIptcIO() override;
+    QString id() const override {
         return "iptc";
     }
-    virtual QString name() const {
+    QString name() const override {
         return i18n("Iptc");
     }
-    virtual BackendType type() const {
+    BackendType type() const override {
         return Binary;
     }
-    virtual bool supportSaving() const {
+    bool supportSaving() const override {
         return true;
     }
-    virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
-    virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
-    virtual bool supportLoading() const {
+    bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const override;
+    bool canSaveAllEntries(KisMetaData::Store* store) const override;
+    bool supportLoading() const override {
         return true;
     }
-    virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
+    bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const override;
 private:
     void initMappingsTable() const;
 private:

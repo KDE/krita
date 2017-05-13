@@ -69,10 +69,10 @@ public:
 
     using KisSimpleStrokeStrategy::setExclusive;
 
-    void initStrokeCallback();
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
+    void initStrokeCallback() override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
 
     /**
      * Set extra data that will be assigned to the command

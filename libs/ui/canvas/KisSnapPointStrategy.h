@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisSnapPointStrategy : public KoSnapStrategy
 {
 public:
     KisSnapPointStrategy(KoSnapGuide::Strategy type = KoSnapGuide::CustomSnapping);
-    ~KisSnapPointStrategy();
+    ~KisSnapPointStrategy() override;
 
     bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;

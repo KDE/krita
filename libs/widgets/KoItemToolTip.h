@@ -40,7 +40,7 @@ class KRITAWIDGETS_EXPORT KoItemToolTip : public QFrame
     Q_OBJECT
 public:
     KoItemToolTip();
-    virtual ~KoItemToolTip();
+    ~KoItemToolTip() override;
     void showTip(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index);
 
 protected:
@@ -75,12 +75,12 @@ private:
     void updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option);
 
 public:
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 protected:
-    virtual void paintEvent(QPaintEvent *e);
-    virtual void timerEvent(QTimerEvent *e);
-    virtual bool eventFilter(QObject *object, QEvent *event);
+    void paintEvent(QPaintEvent *e) override;
+    void timerEvent(QTimerEvent *e) override;
+    bool eventFilter(QObject *object, QEvent *event) override;
 };
 
 #endif

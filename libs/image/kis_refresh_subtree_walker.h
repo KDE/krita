@@ -32,11 +32,11 @@ public:
         setCropRect(cropRect);
     }
 
-    UpdateType type() const {
+    UpdateType type() const override {
         return UNSUPPORTED;
     }
 
-    virtual ~KisRefreshSubtreeWalker()
+    ~KisRefreshSubtreeWalker() override
     {
     }
 
@@ -84,7 +84,7 @@ protected:
         return tempRect;
     }
 
-    void startTrip(KisProjectionLeafSP startWith) {
+    void startTrip(KisProjectionLeafSP startWith) override {
         setExplicitChangeRect(startWith, requestedRect(), false);
 
         if (isStartLeaf(startWith)) {

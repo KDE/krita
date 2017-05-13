@@ -72,45 +72,45 @@ public:
 
     KoAlphaColorSpaceImpl();
 
-    virtual ~KoAlphaColorSpaceImpl();
+    ~KoAlphaColorSpaceImpl() override;
 
     static QString colorSpaceId() {
         return alphaIdFromChannelType<channels_type>().id();
     }
 
-    virtual KoID colorModelId() const {
+    KoID colorModelId() const override {
         return AlphaColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    KoID colorDepthId() const override {
         return colorDepthIdForChannelType<channels_type>();
     }
 
     virtual KoColorSpace* clone() const;
 
-    virtual bool willDegrade(ColorSpaceIndependence independence) const {
+    bool willDegrade(ColorSpaceIndependence independence) const override {
         Q_UNUSED(independence);
         return false;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const {
+    bool profileIsCompatible(const KoColorProfile* /*profile*/) const override {
         return false;
     }
 
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
+    void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const override;
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+    void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override;
 
-    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const;
-    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const;
+    quint8 difference(const quint8 *src1, const quint8 *src2) const override;
+    quint8 differenceA(const quint8 *src1, const quint8 *src2) const override;
 
-    virtual quint32 colorChannelCount() const {
+    quint32 colorChannelCount() const override {
         return 0;
     }
 
-    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
+    QString channelValueText(const quint8 *pixel, quint32 channelIndex) const override;
 
-    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
+    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override;
 
     virtual void convolveColors(quint8** colors, qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const;
 
@@ -118,37 +118,37 @@ public:
         return 0;
     }
 
-    virtual bool hasHighDynamicRange() const {
+    bool hasHighDynamicRange() const override {
         return false;
     }
 
-    virtual const KoColorProfile* profile() const {
+    const KoColorProfile* profile() const override {
         return m_profile;
     }
 
-    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
+    QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
 
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+    void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const override;
+    void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const override;
 
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+    void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const override;
+    void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const override;
 
-    virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const {
+    KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const override {
         Q_UNUSED(transferValues);
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
 
-    virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const {
+    KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
 
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
+    KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
@@ -157,30 +157,30 @@ public:
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
-    virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
+    void colorToXML(const quint8* , QDomDocument& , QDomElement&) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
-    virtual void colorFromXML(quint8* , const QDomElement&) const {
+    void colorFromXML(quint8* , const QDomElement&) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
-    virtual void toHSY(const QVector<double> &, qreal *, qreal *, qreal *) const {
+    void toHSY(const QVector<double> &, qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
-    virtual QVector <double> fromHSY(qreal *, qreal *, qreal *) const {
+    QVector <double> fromHSY(qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
         QVector <double> channelValues (1);
         channelValues.fill(0.0);
         return channelValues;
     }
 
-    virtual void toYUV(const QVector<double> &, qreal *, qreal *, qreal *) const {
+    void toYUV(const QVector<double> &, qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
-    virtual QVector <double> fromYUV(qreal *, qreal *, qreal *) const {
+    QVector <double> fromYUV(qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the alpha color space");
         QVector <double> channelValues (1);
         channelValues.fill(0.0);
@@ -188,7 +188,7 @@ public:
     }
 
 protected:
-    virtual bool preferCompositionInSourceColorSpace() const;
+    bool preferCompositionInSourceColorSpace() const override;
 
 private:
     KoColorProfile* m_profile;
@@ -226,11 +226,11 @@ public:
          */
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
+    KoColorSpace *createColorSpace(const KoColorProfile *) const override {
         return new KoAlphaColorSpaceImpl<_CSTrait>();
     }
 
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+    QList<KoColorConversionTransformationFactory*> colorConversionLinks() const override;
 };
 
 typedef KoAlphaColorSpaceFactoryImpl<AlphaU8Traits> KoAlphaColorSpaceFactory;

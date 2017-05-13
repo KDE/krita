@@ -48,7 +48,7 @@ class KRITATEXTLAYOUT_EXPORT KoTextShapeData : public KoTextShapeDataBase
 public:
     /// constructor
     KoTextShapeData();
-    virtual ~KoTextShapeData();
+    ~KoTextShapeData() override;
 
     KoShapeUserData* clone() const override;
 
@@ -100,7 +100,7 @@ public:
     * Load the TextShape from ODF.
     * Overloaded method provided for your convenience.
     */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) {
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override {
         return loadOdf(element, context, 0);
     }
 
@@ -114,15 +114,15 @@ public:
     * Store the TextShape data as ODF.
     * Overloaded method provided for your convenience.
     */
-    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const {
+    void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const override {
         saveOdf(context, 0, from, to);
     }
 
     // reimplemented
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     // reimplemented
-    virtual void saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+    void saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
 
     /**
      * Set the page direction.

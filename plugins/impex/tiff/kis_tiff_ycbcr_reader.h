@@ -41,9 +41,9 @@ public:
                                  int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
                                  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
                                  KisTIFFYCbCr::Position position);
-    ~KisTIFFYCbCrReaderTarget8Bit();
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
-    virtual void finalize();
+    ~KisTIFFYCbCrReaderTarget8Bit() override;
+    uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override;
+    void finalize() override;
 private:
     quint8* m_bufferCb;
     quint8* m_bufferCr;
@@ -66,9 +66,9 @@ public:
                                   int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
                                   KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
                                   KisTIFFYCbCr::Position position);
-    ~KisTIFFYCbCrReaderTarget16Bit();
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
-    virtual void finalize();
+    ~KisTIFFYCbCrReaderTarget16Bit() override;
+    uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override;
+    void finalize() override;
 private:
     quint16* m_bufferCb;
     quint16* m_bufferCr;

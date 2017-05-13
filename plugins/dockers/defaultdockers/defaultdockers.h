@@ -30,7 +30,7 @@ class KritaDefaultDockersPlugin : public QObject
     Q_OBJECT
 public:
     KritaDefaultDockersPlugin(QObject *parent, const QVariantList &);
-    virtual ~KritaDefaultDockersPlugin();
+    ~KritaDefaultDockersPlugin() override;
 
 };
 

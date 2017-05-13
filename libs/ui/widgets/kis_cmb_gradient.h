@@ -36,10 +36,10 @@ public:
     void setGradient(KoAbstractGradient *gradient);
     KoAbstractGradient *gradient() const;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 Q_SIGNALS:
 

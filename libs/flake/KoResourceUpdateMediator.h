@@ -39,7 +39,7 @@ class KRITAFLAKE_EXPORT KoResourceUpdateMediator : public QObject
     Q_OBJECT
 public:
     KoResourceUpdateMediator(int key);
-    virtual ~KoResourceUpdateMediator();
+    ~KoResourceUpdateMediator() override;
 
     int key() const;
     virtual void connectResource(QVariant sourceResource) = 0;

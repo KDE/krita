@@ -28,7 +28,7 @@ class SimpleShapeContainerModel: public KoShapeContainerModel
 {
 public:
     SimpleShapeContainerModel() {}
-    ~SimpleShapeContainerModel() {}
+    ~SimpleShapeContainerModel() override {}
 
     SimpleShapeContainerModel(const SimpleShapeContainerModel &rhs)
         : KoShapeContainerModel(rhs),
@@ -49,24 +49,24 @@ public:
         }
     }
 
-    void add(KoShape *child) {
+    void add(KoShape *child) override {
         if (m_members.contains(child))
             return;
         m_members.append(child);
         m_clipped.append(false);
         m_inheritsTransform.append(true);
     }
-    void setClipped(const KoShape *shape, bool value) {
+    void setClipped(const KoShape *shape, bool value) override {
         const int index = indexOf(shape);
         KIS_SAFE_ASSERT_RECOVER_RETURN(index >= 0);
         m_clipped[index] = value;
     }
-    bool isClipped(const KoShape *shape) const {
+    bool isClipped(const KoShape *shape) const override {
         const int index = indexOf(shape);
         KIS_SAFE_ASSERT_RECOVER(index >= 0) { return false;}
         return m_clipped[index];
     }
-    void remove(KoShape *shape) {
+    void remove(KoShape *shape) override {
         const int index = indexOf(shape);
         KIS_SAFE_ASSERT_RECOVER_RETURN(index >= 0);
 
@@ -74,14 +74,14 @@ public:
         m_clipped.removeAt(index);
         m_inheritsTransform.removeAt(index);
     }
-    int count() const {
+    int count() const override {
         return m_members.count();
     }
-    QList<KoShape*> shapes() const {
+    QList<KoShape*> shapes() const override {
         return QList<KoShape*>(m_members);
     }
-    void containerChanged(KoShapeContainer *, KoShape::ChangeType) { }
-    bool isChildLocked(const KoShape *child) const {
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType) override { }
+    bool isChildLocked(const KoShape *child) const override {
         Q_ASSERT(child->parent());
         if (child->parent()) {
            return child->isGeometryProtected() || child->parent()->isGeometryProtected();
@@ -90,18 +90,18 @@ public:
             return child->isGeometryProtected();
         }
     }
-    void setInheritsTransform(const KoShape *shape, bool value) {
+    void setInheritsTransform(const KoShape *shape, bool value) override {
         const int index = indexOf(shape);
         KIS_SAFE_ASSERT_RECOVER_RETURN(index >= 0);
         m_inheritsTransform[index] = value;
     }
-    bool inheritsTransform(const KoShape *shape) const {
+    bool inheritsTransform(const KoShape *shape) const override {
         const int index = indexOf(shape);
         KIS_SAFE_ASSERT_RECOVER(index >= 0)  { return true;}
         return m_inheritsTransform[index];
     }
 
-    void proposeMove(KoShape *shape, QPointF &move)
+    void proposeMove(KoShape *shape, QPointF &move) override
     {
         KoShapeContainer *parent = shape->parent();
         bool allowedToMove = true;

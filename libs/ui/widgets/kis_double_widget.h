@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisDoubleWidget : public QWidget
 public:
     KisDoubleWidget(QWidget* parent = 0, const char* name = 0);
     KisDoubleWidget(double min, double max, QWidget* parent = 0, const char* name = 0);
-    ~KisDoubleWidget();
+    ~KisDoubleWidget() override;
 
     double value() const;
     void setRange(double min, double max);

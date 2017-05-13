@@ -41,7 +41,7 @@ class KritaGradientMapFilterConfiguration : public KisColorTransformationConfigu
 {
 public:
     KritaGradientMapFilterConfiguration();
-    virtual ~KritaGradientMapFilterConfiguration();
+    ~KritaGradientMapFilterConfiguration() override;
 
     virtual void setGradient(const KoResource* gradient);
 
@@ -56,13 +56,13 @@ class KritaGradientMapConfigWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
-    virtual ~KritaGradientMapConfigWidget();
+    ~KritaGradientMapConfigWidget() override;
 
-    virtual KisPropertiesConfigurationSP configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
 
     WdgGradientMap * m_page;
-    void setView(KisViewManager *view);
+    void setView(KisViewManager *view) override;
     void gradientResourceChanged(KoResource *gradient);
 };
 
@@ -71,6 +71,6 @@ class KritaGradientMap : public QObject
     Q_OBJECT
 public:
     KritaGradientMap(QObject *parent, const QVariantList &);
-    virtual ~KritaGradientMap();
+    ~KritaGradientMap() override;
 };
 

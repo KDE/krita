@@ -32,9 +32,9 @@ class KisPPMImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisPPMImport(QObject *parent, const QVariantList &);
-    virtual ~KisPPMImport();
+    ~KisPPMImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

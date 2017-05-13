@@ -47,7 +47,7 @@ protected Q_SLOTS:
     void reactOnLayerChange();
 
 protected:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     KisColorSelector* m_colorSelector;

@@ -34,7 +34,7 @@ class KRITAFLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<
 {
 public:
     KoInputDeviceHandlerRegistry();
-    ~KoInputDeviceHandlerRegistry();
+    ~KoInputDeviceHandlerRegistry() override;
 
     /**
      * Return an instance of the KoInputDeviceHandlerRegistry

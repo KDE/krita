@@ -111,7 +111,7 @@ public:
     KoTableCellStyle& operator=(const KoTableCellStyle &other);
 
     /// Destructor
-    ~KoTableCellStyle();
+    ~KoTableCellStyle() override;
 
     /// Creates a KoTableCellStyle that represents the formatting of \a block.
     static KoTableCellStyle *fromTableCell(const QTextTableCell &table, QObject *parent = 0);

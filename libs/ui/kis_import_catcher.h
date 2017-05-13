@@ -43,7 +43,7 @@ class KisImportCatcher : QObject
 public:
 
     KisImportCatcher(const QUrl &url, KisViewManager* view, const QString &layerType);
-    ~KisImportCatcher();
+    ~KisImportCatcher() override;
 
     static void adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImageSP image);
 

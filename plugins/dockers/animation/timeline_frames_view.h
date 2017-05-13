@@ -33,11 +33,11 @@ class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
     Q_OBJECT
 public:
     TimelineFramesView(QWidget *parent);
-    ~TimelineFramesView();
+    ~TimelineFramesView() override;
 
-    void setModel(QAbstractItemModel *model);
+    void setModel(QAbstractItemModel *model) override;
 
-    void updateGeometries();
+    void updateGeometries() override;
 
     QMap<QString, KisAction*> globalActions() const;
 
@@ -86,20 +86,20 @@ private:
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
-                                                         const QEvent *event) const;
+                                                         const QEvent *event) const override;
 
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
-    void startDrag(Qt::DropActions supportedActions);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void dropEvent(QDropEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    void rowsInserted(const QModelIndex& parent, int start, int end);
-    bool viewportEvent(QEvent *event);
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+    void startDrag(Qt::DropActions supportedActions) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void rowsInserted(const QModelIndex& parent, int start, int end) override;
+    bool viewportEvent(QEvent *event) override;
 
 private:
     struct Private;

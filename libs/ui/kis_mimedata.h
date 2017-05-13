@@ -65,7 +65,7 @@ public:
      * <li>application/zip: allows drop targets that can handle zip files to open the data
      * </ul>
      */
-    QStringList formats() const;
+    QStringList formats() const override;
 
     /**
      * Loads a node from a mime container
@@ -101,7 +101,7 @@ public:
 
 protected:
 
-    QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
+    QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const override;
 
 private:
     static void initializeExternalNode(KisNodeSP *nodes,

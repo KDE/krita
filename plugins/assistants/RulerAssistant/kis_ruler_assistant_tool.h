@@ -41,17 +41,17 @@ class KisRulerAssistantTool : public KisTool
     };
 public:
     KisRulerAssistantTool(KoCanvasBase * canvas);
-    virtual ~KisRulerAssistantTool();
+    ~KisRulerAssistantTool() override;
 
     virtual quint32 priority() {
         return 3;
     }
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
-    virtual QWidget *createOptionWidget();
+    QWidget *createOptionWidget() override;
 
 private:
     void addAssistant();
@@ -66,8 +66,8 @@ private:
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private Q_SLOTS:
     void removeAllAssistants();
@@ -76,7 +76,7 @@ private Q_SLOTS:
 
 protected:
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
 protected:
     QPointer<KisCanvas2> m_canvas;
@@ -115,9 +115,9 @@ public:
     };
 
 
-    virtual ~KisRulerAssistantToolFactory() {}
+    ~KisRulerAssistantToolFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase * canvas) {
+    KoToolBase * createTool(KoCanvasBase * canvas) override {
         return new KisRulerAssistantTool(canvas);
     }
 

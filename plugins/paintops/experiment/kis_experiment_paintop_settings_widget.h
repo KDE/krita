@@ -27,9 +27,9 @@ class KisExperimentPaintOpSettingsWidget : public KisPaintOpSettingsWidget
     Q_OBJECT
 public:
     KisExperimentPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisExperimentPaintOpSettingsWidget();
+    ~KisExperimentPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 #endif

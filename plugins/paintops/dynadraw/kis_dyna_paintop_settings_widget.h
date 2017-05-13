@@ -28,9 +28,9 @@ class KisDynaPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisDynaPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisDynaPaintOpSettingsWidget();
+    ~KisDynaPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 #endif

@@ -28,11 +28,11 @@ class KisColorHistory : public KisColorPatches
     Q_OBJECT
 public:
     explicit KisColorHistory(QWidget *parent = 0);
-    void setCanvas(KisCanvas2 *canvas);
-    void unsetCanvas();
+    void setCanvas(KisCanvas2 *canvas) override;
+    void unsetCanvas() override;
 
 protected:
-    KisColorSelectorBase* createPopup() const;
+    KisColorSelectorBase* createPopup() const override;
 
 public Q_SLOTS:
     void addColorToHistory(const KoColor& color);

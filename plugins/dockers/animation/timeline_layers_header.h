@@ -29,13 +29,13 @@ class TimelineLayersHeader : public QHeaderView
 
 public:
     TimelineLayersHeader(QWidget *parent);
-    ~TimelineLayersHeader();
+    ~TimelineLayersHeader() override;
 
 protected:
-    QSize sectionSizeFromContents(int logicalIndex) const;
-    void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const;
-    bool viewportEvent(QEvent *e);
-    void mousePressEvent(QMouseEvent *e);
+    QSize sectionSizeFromContents(int logicalIndex) const override;
+    void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const override;
+    bool viewportEvent(QEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
 
 Q_SIGNALS:
     void sigRequestContextMenu(const QPoint &pos);

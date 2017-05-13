@@ -51,24 +51,24 @@ public:
     };
 
     ArtisticTextShape();
-    virtual ~ArtisticTextShape();
+    ~ArtisticTextShape() override;
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     /// reimplemented
-    virtual QSizeF size() const;
+    QSizeF size() const override;
     /// reimplemented
-    virtual void setSize(const QSizeF &size);
+    void setSize(const QSizeF &size) override;
     /// reimplemented
-    virtual QPainterPath outline() const;
+    QPainterPath outline() const override;
     /// reimplemented from SvgShape
-    virtual bool saveSvg(SvgSavingContext &context);
+    bool saveSvg(SvgSavingContext &context) override;
     /// reimplemented from SvgShape
-    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
 
     /// Sets the plain text to display
     void setPlainText(const QString &newText);
@@ -192,7 +192,7 @@ public:
     CharIndex indexOfChar(int charIndex) const;
 
     /// reimplemented from KoShape
-    virtual void shapeChanged(ChangeType type, KoShape *shape);
+    void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
     void updateSizeAndPosition(bool global = false);

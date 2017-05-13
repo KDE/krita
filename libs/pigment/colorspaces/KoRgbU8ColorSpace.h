@@ -38,20 +38,20 @@ public:
 
     KoRgbU8ColorSpace();
 
-    virtual ~KoRgbU8ColorSpace();
+    ~KoRgbU8ColorSpace() override;
 
     static QString colorSpaceId();
 
     virtual KoColorSpace* clone() const;
 
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
+    void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const override;
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+    void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override;
     
-    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
-    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
-    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const;
-    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
+    void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
+    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
 };
 
@@ -67,7 +67,7 @@ public:
                                         Integer8BitsColorDepthID) {
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
+    KoColorSpace *createColorSpace(const KoColorProfile *) const override {
         return new KoRgbU8ColorSpace();
     }
 

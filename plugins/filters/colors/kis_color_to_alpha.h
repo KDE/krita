@@ -34,7 +34,7 @@ public:
                      const QRect& rect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
 
     static inline KoID id() {
         return KoID("colortoalpha", i18n("Color to Alpha"));
@@ -42,8 +42,8 @@ public:
 
 public:
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 };
 
 #endif

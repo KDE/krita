@@ -31,10 +31,10 @@ class DeleteAnnotationsCommand : public KUndo2Command
 {
 public:
     DeleteAnnotationsCommand(const QList<KoAnnotation *> &annotations, QTextDocument *document, KUndo2Command *parent);
-    virtual ~DeleteAnnotationsCommand();
+    ~DeleteAnnotationsCommand() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     QList<KoAnnotation *> m_annotations;

@@ -42,14 +42,14 @@ public:
      * @param dstCs the last color space in the chain
      */
     KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, KoColorConversionTransformation::Intent, KoColorConversionTransformation::ConversionFlags conversionFlags);
-    ~KoMultipleColorConversionTransformation();
+    ~KoMultipleColorConversionTransformation() override;
     /**
      * Add a transformation to the chain.
      * @param transfo this transformation is then deleted when the
      *                KoMultipleColorConversionTransformation is deleted.
      */
     void appendTransfo(KoColorConversionTransformation* transfo);
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override;
 private:
     struct Private;
     Private* const d;

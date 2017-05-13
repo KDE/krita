@@ -59,7 +59,7 @@ public:
         */
     KSwitchLanguageDialog(QWidget *parent = 0);
 
-    virtual ~KSwitchLanguageDialog();
+    ~KSwitchLanguageDialog() override;
 
 protected Q_SLOTS:
     /**

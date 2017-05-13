@@ -39,12 +39,12 @@ class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {
 public:
     KisLockedPropertiesProxy(KisPropertiesConfiguration *, KisLockedPropertiesSP);
-    ~KisLockedPropertiesProxy();
+    ~KisLockedPropertiesProxy() override;
 
     using KisPropertiesConfiguration::getProperty;
-    QVariant getProperty(const QString &name) const;
+    QVariant getProperty(const QString &name) const override;
     using KisPropertiesConfiguration::setProperty;
-    void setProperty(const QString & name, const QVariant & value);
+    void setProperty(const QString & name, const QVariant & value) override;
 
 private:
     Q_DISABLE_COPY(KisLockedPropertiesProxy)

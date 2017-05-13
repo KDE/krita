@@ -34,7 +34,7 @@ class SaveZip : public KZip {
 public:
     SaveZip(const QString &filename) : KZip(filename) {}
     SaveZip(QIODevice *dev) : KZip(dev) {}
-    virtual ~SaveZip() {}
+    ~SaveZip() override {}
     void resetDevice() {
         closeArchive();
         setDevice(0);

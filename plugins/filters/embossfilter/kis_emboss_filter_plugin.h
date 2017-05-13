@@ -27,7 +27,7 @@ class KisEmbossFilterPlugin : public QObject
     Q_OBJECT
 public:
     KisEmbossFilterPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisEmbossFilterPlugin();
+    ~KisEmbossFilterPlugin() override;
 };
 
 #endif

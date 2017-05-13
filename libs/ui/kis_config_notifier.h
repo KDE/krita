@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisConfigNotifier : public QObject
     Q_OBJECT
 public:
     KisConfigNotifier();
-    ~KisConfigNotifier();
+    ~KisConfigNotifier() override;
 
     /**
      * @return the KisConfigNotifier singleton

@@ -35,13 +35,13 @@ public:
         // calligra-1.x behavior compat: a KoStoreDevice is automatically open
         setOpenMode(m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly);
     }
-    ~KoStoreDevice() {}
+    ~KoStoreDevice() override {}
 
-    virtual bool isSequential() const {
+    bool isSequential() const override {
         return true;
     }
 
-    virtual bool open(OpenMode m) {
+    bool open(OpenMode m) override {
         setOpenMode(m);
         if (m & QIODevice::ReadOnly)
             return (m_store->mode() == KoStore::Read);
@@ -49,9 +49,9 @@ public:
             return (m_store->mode() == KoStore::Write);
         return false;
     }
-    virtual void close() {}
+    void close() override {}
 
-    qint64 size() const {
+    qint64 size() const override {
         if (m_store->mode() == KoStore::Read)
             return m_store->size();
         else
@@ -59,24 +59,24 @@ public:
     }
 
     // See QIODevice
-    virtual qint64 pos() const {
+    qint64 pos() const override {
         return m_store->pos();
     }
-    virtual bool seek(qint64 pos) {
+    bool seek(qint64 pos) override {
         return m_store->seek(pos);
     }
-    virtual bool atEnd() const {
+    bool atEnd() const override {
         return m_store->atEnd();
     }
 
 protected:
     KoStore *m_store;
 
-    virtual qint64 readData(char *data, qint64 maxlen) {
+    qint64 readData(char *data, qint64 maxlen) override {
         return m_store->read(data, maxlen);
     }
 
-    virtual qint64 writeData(const char *data, qint64 len) {
+    qint64 writeData(const char *data, qint64 len) override {
         return m_store->write(data, len);
     }
 

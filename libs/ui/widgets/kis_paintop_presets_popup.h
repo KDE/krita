@@ -44,7 +44,7 @@ public:
 
     KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent = 0);
 
-    ~KisPaintOpPresetsPopup();
+    ~KisPaintOpPresetsPopup() override;
 
     void setPaintOpSettingsWidget(QWidget * widget);
 
@@ -68,7 +68,7 @@ public:
     ///@param image image that will be used, should be image of an existing preset resource
     void setPresetImage(const QImage& image);
 
-    virtual void resizeEvent(QResizeEvent* );
+    void resizeEvent(QResizeEvent* ) override;
 
     bool detached() const;
 
@@ -77,9 +77,9 @@ public:
     void currentPresetChanged(KisPaintOpPresetSP  preset);
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *);
-    void hideEvent(QHideEvent *);
-    void showEvent(QShowEvent *);
+    void contextMenuEvent(QContextMenuEvent *) override;
+    void hideEvent(QHideEvent *) override;
+    void showEvent(QShowEvent *) override;
 
 public Q_SLOTS:
     void slotWatchPresetNameLineEdit();

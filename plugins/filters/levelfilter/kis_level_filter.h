@@ -39,14 +39,14 @@ class KisLevelFilter : public KisColorTransformationFilter
 public:
 
     KisLevelFilter();
-    ~KisLevelFilter();
+    ~KisLevelFilter() override;
 
 public:
 
 //     virtual KisFilterConfigurationSP factoryConfiguration() const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 
     static inline KoID id() {
         return KoID("levels", i18n("Levels"));
@@ -60,10 +60,10 @@ class KisLevelConfigWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
-    virtual ~KisLevelConfigWidget();
+    ~KisLevelConfigWidget() override;
 
-    virtual KisPropertiesConfigurationSP configuration() const;
-    void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
     Ui::WdgLevel m_page;
 
 protected Q_SLOTS:

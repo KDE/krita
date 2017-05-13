@@ -1,0 +1,36 @@
+/*!
+ * @mainpage User Feedback Framework
+ * @section User Feedback
+ * Framework for collecting feedback from application users. This currently consists of two aspects:
+ *  - Telemetry
+ *  - Surveys
+ *
+ * @section Telemetry
+ *  - Extensible set of data sources for telemetry.
+ *  - Full control for the user on what data to contribute.
+ *
+ * @section Surveys
+ *  - Distribute surveys and offer users to participate in them.
+ *  - Allow the user to configure how often they want to participate in surveys.
+ *
+ * @section Integration
+ *  To use this framework in your application, on a high level you have to do
+ *  the following steps inside your program:
+ *   - Create an instance of UserFeedback::Provider for the entire lifetime of your
+ *     application, and configure it as described in its documetation.
+ *   - Add one or more data sources to the provider, choosing from the standard
+ *     built-in ones, or by adding custom ones deriving from UserFeedback::AbstractDataSource.
+ *   - Add a way to notify your users about surveys, and to encourage them to contriubute
+ *     in the first place, by hooking a suitable user interface up with the corresponding
+ *     signals in UserFeedback::Provider. UserFeedback::NotificationPopup provides a
+ *     reference widget for this purpose.
+ *   - Add a way for your users to configure what data to contribute, and how often
+ *     to be bothered by surveys. UserFeedback::FeedbackConfigDialog provides a
+ *     reference implementation of a configuration dialog for this.
+ */
+
+/*!
+ * @namespace UserFeedback
+ * Classes for integrating telemetry collection, survey targeting,
+ * and contribution encouragenemt and configuration into applications.
+ */

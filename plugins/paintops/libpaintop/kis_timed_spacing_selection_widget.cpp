@@ -3,9 +3,9 @@
 const qreal MINIMUM_RATE = 1.0;
 const qreal MAXIMUM_RATE = 1000.0;
 const int RATE_NUM_DECIMALS = 2;
-const qreal RATE_EXPONENT_RATIO = 1.0;
+const qreal RATE_EXPONENT_RATIO = 3.0;
 const qreal RATE_SINGLE_STEP = 0.01;
-const qreal DEFAULT_RATE = 10.0;
+const qreal DEFAULT_RATE = 20.0;
 
 KisTimedSpacingSelectionWidget::KisTimedSpacingSelectionWidget(QWidget *parent)
     : QWidget(parent)

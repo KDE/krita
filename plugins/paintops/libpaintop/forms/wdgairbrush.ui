@@ -34,7 +34,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="rateLbl">
        <property name="text">
-        <string>Rate:</string>
+        <string>Interval:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -42,7 +42,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisSliderSpinBox" name="sliderRate">
+      <widget class="KisSliderSpinBox" name="sliderRate" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>

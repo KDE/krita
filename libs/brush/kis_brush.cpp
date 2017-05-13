@@ -451,7 +451,7 @@ qreal KisBrush::timedSpacingRate() const {
 }
 
 qreal KisBrush::timedSpacingDelay() const {
-    return timedSpacingEnabled() ? d->timedSpacingDelay : std::numeric_limits<qreal>::infinity();
+    return d->timedSpacingDelay;
 }
 
 void KisBrush::notifyStrokeStarted()

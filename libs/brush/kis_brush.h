@@ -176,17 +176,16 @@ public:
     bool timedSpacingEnabled() const;
 
     /**
-     * @return The timed spacing rate, in dabs per second. Returns zero if timed spacing is
-     * disabled.
+     * @return The timed spacing rate, in dabs per second. This value should be ignored if timed
+     * spacing is disabled.
      */
     qreal timedSpacingRate() const;
 
     /**
      * @return The delay between dabs for the current timed spacing settings, in milliseconds.
-     * Returns infinity if timed spacing is disabled.
+     * This value should be ignored if timed spacing is disabled.
      */
     qreal timedSpacingDelay() const;
-
 
     /**
      * @return the width (for scale == 1.0)

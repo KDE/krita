@@ -303,6 +303,7 @@ if (NOT WIN32 AND NOT APPLE)
 
     find_package(XCB COMPONENTS XCB ATOM)
     set(HAVE_XCB ${XCB_FOUND})
+    find_package (UserFeedback)
 else()
     set(HAVE_DBUS FALSE)
     set(HAVE_X11 FALSE)

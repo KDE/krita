@@ -29,7 +29,7 @@ class KisParticlePaintOpSettings : public KisNoSizePaintOpSettings
 public:
 
     KisParticlePaintOpSettings();
-    ~KisParticlePaintOpSettings();
+    ~KisParticlePaintOpSettings() override;
 
     bool paintIncremental() override;
     bool isAirbrushing() const override;

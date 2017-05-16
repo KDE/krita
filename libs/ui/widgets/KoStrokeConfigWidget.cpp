@@ -437,30 +437,16 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
 
 void KoStrokeConfigWidget::slotShowMarkers(int strokeTypeIndex)
 {
+    const bool lineOptionsVisible = strokeTypeIndex > 0;
 
-
-    // 0 means no fill, so hide the marker options
-    if (strokeTypeIndex == 0) {
-        d->lineWidth->setVisible(false);
-        d->capNJoinButton->setVisible(false);
-        d->lineStyle->setVisible(false);
-        d->startMarkerSelector->setVisible(false);
-        d->midMarkerSelector->setVisible(false);
-        d->endMarkerSelector->setVisible(false);
-        thicknessLabel->setVisible(false);
-        strokeStyleLabel->setVisible(false);
-    }
-    else {
-        d->lineWidth->setVisible(true);
-        d->capNJoinButton->setVisible(true);
-        d->lineStyle->setVisible(true);
-        d->startMarkerSelector->setVisible(true);
-        d->midMarkerSelector->setVisible(true);
-        d->endMarkerSelector->setVisible(true);
-        thicknessLabel->setVisible(true);
-        strokeStyleLabel->setVisible(true);
-    }
-
+    d->lineWidth->setVisible(lineOptionsVisible);
+    d->capNJoinButton->setVisible(lineOptionsVisible);
+    d->lineStyle->setVisible(lineOptionsVisible);
+    d->startMarkerSelector->setVisible(lineOptionsVisible);
+    d->midMarkerSelector->setVisible(lineOptionsVisible);
+    d->endMarkerSelector->setVisible(lineOptionsVisible);
+    thicknessLabel->setVisible(lineOptionsVisible);
+    strokeStyleLabel->setVisible(lineOptionsVisible);
 }
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeShape)

@@ -275,15 +275,19 @@ qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
     if (!(startTime < endTime) || !m_d->spacing.isTimedSpacingEnabled()) {
         return -1.0;
     }
-
-    qreal newAccumTime = m_d->accumTime + endTime - startTime;
-
-    if (newAccumTime >= m_d->spacing.timedSpacingInterval()) {
+    
+    qreal nextPointInterval = m_d->spacing.timedSpacingInterval() - m_d->accumTime;
+    
+    if (nextPointInterval <= 0.0) {
         resetAccumulators();
-        return m_d->spacing.timedSpacingInterval() / newAccumTime;
+        return 0.0;
+    }
+    else if (nextPointInterval <= endTime - startTime) {
+        resetAccumulators();
+        return nextPointInterval / (endTime - startTime);
     }
     else {
-        m_d->accumTime = newAccumTime;
+        m_d->accumTime += endTime - startTime;
         return -1.0;
     }
 }

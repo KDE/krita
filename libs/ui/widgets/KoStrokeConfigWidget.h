@@ -37,13 +37,13 @@
 #include <KoFlakeTypes.h>
 #include <KoFlake.h>
 
+
 class KoUnit;
 class KoShapeStrokeModel;
 class KoShapeStroke;
 class KoMarker;
 class KoCanvasBase;
 class KoShapeStroke;
-
 class KisSpinBoxUnitManager;
 
 /// A widget for configuring the stroke of a shape

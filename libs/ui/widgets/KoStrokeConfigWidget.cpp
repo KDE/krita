@@ -231,6 +231,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     {
 
        d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
+       d->fillConfigWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
        d->ui->fillConfigWidgetLayout->addWidget(d->fillConfigWidget);
        connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
     }

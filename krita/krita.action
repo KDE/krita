@@ -1763,6 +1763,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="Select Hard Overlay Blending Mode">
+      <icon></icon>
+      <text>Select Hard Overlay Blending Mode</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Hard Overlay Blending Mode</toolTip>
+      <iconText>Select Hard Overlay Blending Mode</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Alt+Shift+P</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="Select Soft Light Blending Mode">
       <icon></icon>
       <text>Select Soft Light Blending Mode</text>

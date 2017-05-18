@@ -31,7 +31,8 @@
 #include "KoMultipleColorConversionTransformation.h"
 
 
-KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
+KoColorConversionSystem::KoColorConversionSystem(RegistryInterface *registryInterface)
+    : d(new Private(registryInterface))
 {
 }
 
@@ -69,7 +70,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoCol
 void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 {
     dbgPigment << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
-    const QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    const QList<const KoColorProfile*> profiles = d->registryInterface->profilesFor(csf);
     QString modelId = csf->colorModelId().id();
     QString depthId = csf->colorDepthId().id();
     if (profiles.isEmpty()) { // There is no profile for this CS, create a node without profile name if the color engine isn't icc-based
@@ -126,7 +127,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 void KoColorConversionSystem::insertColorProfile(const KoColorProfile* _profile)
 {
     dbgPigmentCCS << _profile->name();
-    const QList< const KoColorSpaceFactory* >& factories = KoColorSpaceRegistry::instance()->colorSpacesFor(_profile);
+    const QList< const KoColorSpaceFactory* >& factories = d->registryInterface->colorSpacesFor(_profile);
     Q_FOREACH (const KoColorSpaceFactory* factory, factories) {
         QString modelId = factory->colorModelId().id();
         QString depthId = factory->colorDepthId().id();
@@ -166,7 +167,7 @@ void KoColorConversionSystem::insertColorProfile(const KoColorProfile* _profile)
 
 const KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(node->modelId, node->depthId, node->profileName);
+    return d->registryInterface->colorSpace(node->modelId, node->depthId, node->profileName);
 }
 
 KoColorConversionSystem::Node* KoColorConversionSystem::createNode(const QString& _modelId, const QString& _depthId, const QString& _profileName)
@@ -255,7 +256,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     Path bestPath;
     typedef QPair<KoID, KoID> KoID2KoID;
     Q_FOREACH (const KoID2KoID & possibility, possibilities) {
-        const KoColorSpaceFactory* csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(KoColorSpaceRegistry::instance()->colorSpaceId(possibility.first.id(), possibility.second.id()));
+        const KoColorSpaceFactory* csf = d->registryInterface->colorSpaceFactory(possibility.first.id(), possibility.second.id());
         if (csf) {
             Path path = findBestPath(csNode, nodeFor(csf->colorModelId().id(), csf->colorDepthId().id(), csf->defaultProfile()));
             Q_ASSERT(path.length() > 0);

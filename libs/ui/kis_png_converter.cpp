@@ -575,19 +575,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 QApplication::restoreOverrideCursor();
                 dlg.exec();
                 if (!dlg.profile().isEmpty()) {
-
-                    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
-
-                    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-                    if (csf) {
-                        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-                        Q_FOREACH (const KoColorProfile *p, profileList) {
-                            if (p->name() == dlg.profile()) {
-                                profile = p;
-                                break;
-                            }
-                        }
-                    }
+                    profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
                 }
                 QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -596,10 +584,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         dbgFile << "no embedded profile, will use the default profile";
     }
 
+    const QString colorSpaceId =
+        KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
+
     // Check that the profile is used by the color space
-    if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
-                KoColorSpaceRegistry::instance()->colorSpaceId(
-                    csName.first, csName.second))->profileIsCompatible(profile)) {
+    if (profile && !KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
         profile = 0;
     }

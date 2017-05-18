@@ -23,8 +23,6 @@
 
 #include "kis_brush.h"
 
-#include <limits>
-
 #include <QDomElement>
 #include <QFile>
 #include <QPoint>

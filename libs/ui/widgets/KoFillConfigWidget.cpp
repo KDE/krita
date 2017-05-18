@@ -340,11 +340,6 @@ void KoFillConfigWidget::deactivate()
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
 
-void KoFillConfigWidget::addBottomSpacerWidget()
-{
-    d->ui->lastLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
-}
-
 void KoFillConfigWidget::setNoSelectionTrackingMode(bool value)
 {
     d->noSelectionTrackingMode = value;
@@ -398,6 +393,10 @@ QList<KoShape*> KoFillConfigWidget::currentShapes()
     return d->canvas->selectedShapesProxy()->selection()->selectedEditableShapes();
 }
 
+int KoFillConfigWidget::selectedFillIndex() {
+    return d->selectedFillIndex;
+}
+
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
     switch (buttonId) {
@@ -424,8 +423,6 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
     if (buttonId >= None && buttonId <= Pattern) {
         d->selectedFillIndex = static_cast<KoFillConfigWidget::StyleButton>(buttonId);
     }
-
-    emit fillIndexChanged(buttonId);
 }
 
 KoShapeStrokeSP KoFillConfigWidget::createShapeStroke()

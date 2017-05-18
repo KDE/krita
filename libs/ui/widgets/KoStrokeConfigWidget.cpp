@@ -326,8 +326,6 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     selectionChanged();
 
     d->fillConfigWidget->activate();
-    connect (d->fillConfigWidget, SIGNAL(fillIndexChanged(int)), this, SLOT(slotShowMarkers(int)));
-
     deactivate();
 }
 
@@ -414,20 +412,6 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
     d->startMarkerSelector->setEnabled(enabled);
     d->midMarkerSelector->setEnabled(enabled);
     d->endMarkerSelector->setEnabled(enabled);
-}
-
-void KoStrokeConfigWidget::slotShowMarkers(int strokeTypeIndex)
-{
-    const bool lineOptionsVisible = strokeTypeIndex > 0;
-
-    d->ui->lineWidth->setVisible(lineOptionsVisible);
-    d->ui->capNJoinButton->setVisible(lineOptionsVisible);
-    d->ui->lineStyle->setVisible(lineOptionsVisible);
-    d->startMarkerSelector->setVisible(lineOptionsVisible);
-    d->midMarkerSelector->setVisible(lineOptionsVisible);
-    d->endMarkerSelector->setVisible(lineOptionsVisible);
-    d->ui->thicknessLabel->setVisible(lineOptionsVisible);
-    d->ui->strokeStyleLabel->setVisible(lineOptionsVisible);
 }
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeShape)
@@ -749,6 +733,20 @@ void KoStrokeConfigWidget::selectionChanged()
             d->endMarkerSelector->setMarker(pathShape->marker(KoFlake::EndMarker));
         }
     }
+
+    const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() == 0 ? false : true;
+
+    d->ui->thicknessLineBreak->setVisible(lineOptionsVisible);
+    d->ui->lineWidth->setVisible(lineOptionsVisible);
+    d->ui->capNJoinButton->setVisible(lineOptionsVisible);
+    d->ui->lineStyle->setVisible(lineOptionsVisible);
+    d->startMarkerSelector->setVisible(lineOptionsVisible);
+    d->midMarkerSelector->setVisible(lineOptionsVisible);
+    d->endMarkerSelector->setVisible(lineOptionsVisible);
+    d->ui->thicknessLabel->setVisible(lineOptionsVisible);
+    d->ui->strokeStyleLabel->setVisible(lineOptionsVisible);
+
+
 
     blockChildSignals(false);
 

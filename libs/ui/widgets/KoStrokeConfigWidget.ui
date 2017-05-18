@@ -30,6 +30,13 @@
     <layout class="QVBoxLayout" name="fillConfigWidgetLayout"/>
    </item>
    <item>
+    <widget class="Line" name="thicknessLineBreak">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="thicknessLayout">
      <item>
       <widget class="QLabel" name="thicknessLabel">

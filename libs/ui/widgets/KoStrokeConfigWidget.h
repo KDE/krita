@@ -91,9 +91,6 @@ private Q_SLOTS:
 
     void canvasResourceChanged(int key, const QVariant &value);
 
-    /// notification when the stroke type changes
-    void slotShowMarkers(int strokeTypeIndex);
-
     /// selection has changed
     void selectionChanged();
 

@@ -53,15 +53,13 @@ public:
     /// If you need to use only one shape, call currentShape()
     QList<KoShape*> currentShapes();
 
+    /// returns the selected index of the fill type
+    int selectedFillIndex();
+
     KoShapeStrokeSP createShapeStroke();
 
     void activate();
     void deactivate();
-
-    /// useful for UI areas where there needs to be a spacer added
-    /// to help push everything up to the top
-    /// sometimes KoFillConfigWidget is just a component, so this isn't needed
-    void addBottomSpacerWidget();
 
 private Q_SLOTS:
     void styleButtonPressed(int buttonId);
@@ -94,9 +92,6 @@ Q_SIGNALS:
     void sigFillChanged();
 
     void sigInternalRequestColorToResourceManager();
-
-    /// notify outside widgets when fill type changed
-    void fillIndexChanged(int buttonId);
 
 private:
     /// update the widget with the KoShape background

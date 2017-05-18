@@ -26,6 +26,26 @@ class QString;
 class KoColorProfile;
 class KoColorSpaceFactory;
 
+/**
+ * @brief The KoColorProfileStorage class is a "composite subclass" of
+ * KoColorSpaceRegistry that ensures that the access to profiles is guarded
+ * by a separate lock and the hierarchy of locks is always followed (which
+ * avoid deadlocks).
+ *
+ * Registry locking hierarchy is basically the following:
+ *
+ * 1) KoColorSpaceRegistry::Private::registrylock
+ * 2) KoColorProfileStorage::Private::lock
+ *
+ * It means that we can take any single lock if we need it separately, but
+ * if we need to take both of them, we should always take them is a specified
+ * order.
+ *
+ * Encapsulation of the profile accesses inside a separate class lets us
+ * follow this rule without even thinking of it. KoColorProfileStorage just
+ * *never* calls any method of the registry, therefore lock order inverion is
+ * not possible,
+ */
 class KoColorProfileStorage
 {
 public:
@@ -39,8 +59,17 @@ public:
     void addProfile(KoColorProfile* profile);
     void addProfile(const KoColorProfile* profile); // TODO
 
+    /**
+     * Removes the profile from the storage.
+     * Please note that the caller should delete the profile object himself!
+     *
+     * @param profile the profile to be removed
+     */
     void removeProfile(KoColorProfile* profile);
 
+    /**
+     * @brief containsProfile shows if a profile is registered in teh storage
+     */
     bool containsProfile(const KoColorProfile *profile);
 
     /**

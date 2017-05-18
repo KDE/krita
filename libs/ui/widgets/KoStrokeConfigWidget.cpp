@@ -736,6 +736,23 @@ void KoStrokeConfigWidget::selectionChanged()
 
     const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() == 0 ? false : true;
 
+    // This switch statement is to help the tab widget "pages" to be closer to the correct size
+    // if we don't do this the internal widgets get rendered, then the tab page has to get resized to
+    // fill up the space, then the internal widgets have to resize yet again...causing flicker
+    switch(d->fillConfigWidget->selectedFillIndex()) {
+        case 0: // no fill
+            this->setMinimumHeight(130);
+            break;
+        case 1: // solid fill
+             this->setMinimumHeight(200);
+             break;
+        case 2: // gradient fill
+            this->setMinimumHeight(350);
+        case 3: // pattern fill
+            break;
+    }
+
+
     d->ui->thicknessLineBreak->setVisible(lineOptionsVisible);
     d->ui->lineWidth->setVisible(lineOptionsVisible);
     d->ui->capNJoinButton->setVisible(lineOptionsVisible);

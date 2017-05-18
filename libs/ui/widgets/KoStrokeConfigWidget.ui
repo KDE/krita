@@ -38,6 +38,12 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="thicknessLayout">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="QLabel" name="thicknessLabel">
        <property name="text">
@@ -59,6 +65,12 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="lineStyleLayout">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="QLabel" name="strokeStyleLabel">
        <property name="text">
@@ -72,7 +84,14 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="markerLayout"/>
+    <layout class="QHBoxLayout" name="markerLayout">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer_2">

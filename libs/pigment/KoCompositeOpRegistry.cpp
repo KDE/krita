@@ -88,6 +88,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[4], KoID(COMPOSITE_PARALLEL      , i18n("Parallel")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_ALLANON       , i18n("Allanon")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_OVERLAY    , i18n("Hard Overlay")));
 
     m_map.insert(m_categories[5], KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Map")));

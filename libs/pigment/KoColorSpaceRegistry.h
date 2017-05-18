@@ -41,6 +41,23 @@ class KoColorConversionTransformation;
  *      - a registry of colorspace instantiated with specific profiles.
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
+ *
+ * Locking policy details:
+ *
+ * Basically, we have two levels of locks in the registry:
+ * 1) (outer level) is Private::registrylock, which controls the structures
+ *     of the color space registry itself
+ * 2) (inner level) is KoColorProfileStorage::Private::lock controls
+ *    the structures related to profiles.
+ *
+ * The locks can be taken individually, but if you are going to take both
+ * of them, you should always follow the order 1) registry; 2) profiles.
+ * Otherwise you'll get a deadlock.
+ *
+ * To avoid recursive deadlocks, all the dependent classes
+ * (KoColorConversionSystem and KoColorSpaceFactory) now do not use the direct
+ * links to the registry. Instead, they use special private interfaces that
+ * skip recursive locking and ensure we take a lock twice.
  */
 class KRITAPIGMENT_EXPORT KoColorSpaceRegistry
 {

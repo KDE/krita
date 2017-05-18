@@ -34,6 +34,7 @@
 #include "kis_grid_config.h"
 #include "kis_guides_manager.h"
 #include "kis_guides_config.h"
+#include "kis_action.h"
 
 
 GridDockerDock::GridDockerDock( )
@@ -71,6 +72,12 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
             SIGNAL(sigRequestUpdateGridConfig(const KisGridConfig&)),
             this,
             SLOT(slotGridConfigUpdateRequested(const KisGridConfig&)));
+
+        KisAction* action = m_canvas->viewManager()->actionManager()->actionByName("view_ruler");
+
+        m_canvasConnections.addConnection(m_configWidget,SIGNAL(showRulersChanged(bool)),action,SLOT(setChecked(bool)));
+        m_canvasConnections.addConnection(action,SIGNAL(toggled(bool)),m_configWidget,SLOT(setShowRulers(bool)));
+        m_configWidget->setShowRulers(action->isChecked());
 
         m_canvasConnections.addConnection(
             m_canvas->viewManager()->guidesManager(),

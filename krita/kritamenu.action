@@ -1391,59 +1391,6 @@
       <statusTip></statusTip>
     </Action>
   </Actions>
-
-  <Actions category="Tools">
-    <text>Tools</text>
-    <Action name="Recording_Start_Recording_Macro">
-      <icon>media-record</icon>
-      <text>&amp;Start recording macro</text>
-      <whatsThis></whatsThis>
-      <toolTip>Start recording macro</toolTip>
-      <iconText>Start recording macro</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Recording_Stop_Recording_Macro">
-      <icon>media-playback-stop</icon>
-      <text>Stop &amp;recording actions</text>
-      <whatsThis></whatsThis>
-      <toolTip>Stop recording actions</toolTip>
-      <iconText>Stop recording actions</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Macro_Open_Play">
-      <icon>media-playback-start</icon>
-      <text>&amp;Open and play...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Open and play</toolTip>
-      <iconText>Open and play</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Macro_Open_Edit">
-      <icon>document-edit</icon>
-      <text>Open &amp;and edit...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Open and edit</toolTip>
-      <iconText>Open and edit</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-  </Actions>
-
   <Actions category="Settings">
     <text>Settings</text>
     <Action name="options_configure">

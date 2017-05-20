@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_airbrush_option.h"
+#include "kis_paintop_settings.h"
 #include <klocalizedstring.h>
 
 #include <QWidget>
@@ -23,7 +24,12 @@
 
 #include "ui_wdgairbrush.h"
 
-const int MAXIMUM_RATE = 1000;
+const qreal MINIMUM_RATE = 0.0;
+const qreal MAXIMUM_RATE = 1000.0;
+const int RATE_NUM_DECIMALS = 2;
+const qreal RATE_EXPONENT_RATIO = 3.0;
+const qreal RATE_SINGLE_STEP = 1.0;
+const qreal DEFAULT_RATE = 20.0;
 
 class KisAirbrushWidget: public QWidget, public Ui::WdgAirbrush
 {
@@ -32,9 +38,10 @@ public:
         : QWidget(parent) {
         setupUi(this);
 
-        sliderRate->setRange(0, MAXIMUM_RATE);
-        sliderRate->setExponentRatio(1.8);
-        sliderRate->setValue(100);
+        sliderRate->setRange(MINIMUM_RATE, MAXIMUM_RATE, RATE_NUM_DECIMALS);
+        sliderRate->setExponentRatio(RATE_EXPONENT_RATIO);
+        sliderRate->setSingleStep(RATE_SINGLE_STEP);
+        sliderRate->setValue(DEFAULT_RATE);
     }
 };
 
@@ -46,6 +53,8 @@ KisAirbrushOption::KisAirbrushOption(bool enabled)
     m_checkable = true;
     m_optionWidget = new KisAirbrushWidget();
     connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
+            SLOT(emitSettingChanged()));
     setConfigurationPage(m_optionWidget);
 }
 
@@ -58,11 +67,15 @@ void KisAirbrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
 {
     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
     setting->setProperty(AIRBRUSH_RATE, m_optionWidget->sliderRate->value());
+    setting->setProperty(AIRBRUSH_IGNORE_SPACING,
+                         m_optionWidget->checkBoxIgnoreSpacing->isChecked());
 }
 
 void KisAirbrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool(AIRBRUSH_ENABLED));
-    m_optionWidget->sliderRate->setValue(setting->getInt(AIRBRUSH_RATE, 100));
+    m_optionWidget->sliderRate->setValue(setting->getDouble(AIRBRUSH_RATE, DEFAULT_RATE));
+    m_optionWidget->checkBoxIgnoreSpacing->setChecked(setting->getBool(AIRBRUSH_IGNORE_SPACING,
+                                                                       false));
 }
 

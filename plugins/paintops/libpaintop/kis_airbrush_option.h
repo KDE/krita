@@ -21,9 +21,6 @@
 #include <kis_paintop_option.h>
 #include <kritapaintop_export.h>
 
-const QString AIRBRUSH_ENABLED = "AirbrushOption/isAirbrushing";
-const QString AIRBRUSH_RATE = "AirbrushOption/rate";
-
 class KisAirbrushWidget;
 
 /**

@@ -103,9 +103,6 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), m_updateCompressor.data(), SLOT(start()));
 
-    connect(timedSpacingWidget, SIGNAL(sigTimedSpacingChanged()), m_updateCompressor.data(),
-            SLOT(start()));
-
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
     density->setValue(100);
@@ -190,8 +187,6 @@ void KisAutoBrushWidget::paramChanged()
     m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0);
     m_autoBrush->setSpacing(spacingWidget->spacing());
     m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
-    m_autoBrush->setTimedSpacing(timedSpacingWidget->isTimedSpacingEnabled(),
-                                 timedSpacingWidget->rate());
     m_brush = m_autoBrush->image();
 
     QImage pi(m_brush);
@@ -238,8 +233,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     KisSignalsBlocker b1(comboBoxShape, comboBoxMaskType);
     KisSignalsBlocker b2(inputRadius, inputRatio, inputHFade, inputVFade, inputAngle, inputSpikes);
-    KisSignalsBlocker b3(spacingWidget, timedSpacingWidget, inputRandomness, density, softnessCurve,
-                         btnAntialiasing);
+    KisSignalsBlocker b3(spacingWidget, inputRandomness, density, softnessCurve, btnAntialiasing);
 
     if (aBrush->maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
         comboBoxShape->setCurrentIndex(0);
@@ -264,8 +258,6 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     spacingWidget->setSpacing(aBrush->autoSpacingActive(),
                               aBrush->autoSpacingActive() ?
                               aBrush->autoSpacingCoeff() : aBrush->spacing());
-    timedSpacingWidget->setTimedSpacing(aBrush->timedSpacingEnabled(),
-                                        aBrush->timedSpacingRate());
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
 

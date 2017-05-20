@@ -61,7 +61,6 @@ private Q_SLOTS:
     void slotSetItemSize(qreal);
     void slotSetItemRotation(qreal);
     void slotSpacingChanged();
-    void slotTimedSpacingChanged();
     void slotSetItemUseColorAsMask(bool);
     void slotActivatedBrush(KoResource *);
     void slotOpenStampBrush();

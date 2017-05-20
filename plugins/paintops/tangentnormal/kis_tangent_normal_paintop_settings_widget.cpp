@@ -58,7 +58,6 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisTangentTiltOption(), i18n("Tangent Tilt"));
 
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
     addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")), i18n("Softness"));
@@ -66,6 +65,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));

@@ -88,7 +88,7 @@ void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceManager *re
     if (!m_d->enabled) return;
 
     // Ignore the elapsed stroke time, so that the line tool will behave as if the whole stroke is
-    // drawn at once. This should prevent any possible spurious dabs caused by timed spacing.
+    // drawn at once. This should prevent any possible spurious dabs caused by airbrushing features.
     KisPaintInformation pi =
             m_d->infoBuilder->startStroke(event, 0, resourceManager);
 

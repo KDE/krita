@@ -58,7 +58,6 @@ public:
 private Q_SLOTS:
     void slotCreateBrush();
     void slotSpacingChanged();
-    void slotTimedSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
     void slotAddPredefined();
 

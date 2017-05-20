@@ -42,16 +42,6 @@ bool KisParticlePaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-bool KisParticlePaintOpSettings::isAirbrushing() const
-{
-    return getBool(AIRBRUSH_ENABLED);
-}
-
-qreal KisParticlePaintOpSettings::airbrushInterval() const
-{
-    return getInt(AIRBRUSH_RATE);
-}
-
 
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"

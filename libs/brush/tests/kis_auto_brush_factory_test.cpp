@@ -15,7 +15,6 @@ void KisAutoBrushFactoryTest::testXMLClone()
                                         0.0);
     brush->setSpacing(0.15);
     brush->setAutoSpacing(true, 0.1);
-    brush->setTimedSpacing(true, 40.0);
 
     // Try to clone the brush by converting to XML and back.
     QDomDocument d;
@@ -30,9 +29,6 @@ void KisAutoBrushFactoryTest::testXMLClone()
     QCOMPARE(brush->spacing(), clone->spacing());
     QCOMPARE(brush->autoSpacingActive(), clone->autoSpacingActive());
     QCOMPARE(brush->autoSpacingCoeff(), clone->autoSpacingCoeff());
-    QCOMPARE(brush->timedSpacingEnabled(), clone->timedSpacingEnabled());
-    QCOMPARE(brush->timedSpacingDelay(), clone->timedSpacingDelay());
-    QCOMPARE(brush->timedSpacingRate(), clone->timedSpacingRate());
 
     // Test that the clone draws the same as the original brush.
 

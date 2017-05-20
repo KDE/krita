@@ -78,16 +78,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="colorAsmask">
-         <property name="text">
-          <string>Create mask from color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="nameEdit"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="spacingLbl">
          <property name="maximumSize">
@@ -117,18 +107,15 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="timedSpacingLbl">
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="colorAsmask">
          <property name="text">
-          <string>Timed Spacing:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <string>Create mask from color</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="KisTimedSpacingSelectionWidget" name="timedSpacingWidget" native="true"/>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="nameEdit"/>
        </item>
       </layout>
      </item>
@@ -181,12 +168,6 @@
    <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
    <header>kis_spacing_selection_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisTimedSpacingSelectionWidget</class>
-   <extends>QWidget</extends>
-   <header>kis_timed_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

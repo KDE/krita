@@ -44,8 +44,6 @@ public:
     }
 
     bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    qreal airbrushInterval() const override;
 
 protected:
 

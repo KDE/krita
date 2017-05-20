@@ -69,8 +69,6 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     colorAsMask->setChecked(true); // use color as mask by default. This is by far the most common way to make tip.
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
-
-    connect(timedSpacingWidget, SIGNAL(sigTimedSpacingChanged()), SLOT(slotTimedSpacingChanged()));
 }
 
 KisCustomBrushWidget::~KisCustomBrushWidget()
@@ -108,14 +106,6 @@ void KisCustomBrushWidget::slotSpacingChanged()
     if (m_brush) {
         m_brush->setSpacing(spacingWidget->spacing());
         m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
-    }
-}
-
-void KisCustomBrushWidget::slotTimedSpacingChanged()
-{
-    if (m_brush) {
-        m_brush->setTimedSpacing(timedSpacingWidget->isTimedSpacingEnabled(),
-                                 timedSpacingWidget->rate());
     }
 }
 
@@ -255,8 +245,6 @@ void KisCustomBrushWidget::createBrush()
     static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
-    m_brush->setTimedSpacing(timedSpacingWidget->isTimedSpacingEnabled(),
-                             timedSpacingWidget->rate());
     m_brush->setFilename(TEMPORARY_FILENAME);
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);

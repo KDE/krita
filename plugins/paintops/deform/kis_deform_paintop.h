@@ -25,6 +25,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_rate_option.h>
 
 #include "deform_brush.h"
 
@@ -54,6 +55,9 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;
+    KisPressureRateOption m_rateOption;
+
+    KisPaintOpSettingsSP m_settings;
 
     qreal m_xSpacing;
     qreal m_ySpacing;

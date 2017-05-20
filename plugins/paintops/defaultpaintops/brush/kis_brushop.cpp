@@ -84,6 +84,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_flowOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     m_ratioOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
     m_darkenOption.resetAllSensors();

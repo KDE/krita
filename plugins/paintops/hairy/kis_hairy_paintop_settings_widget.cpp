@@ -53,8 +53,6 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
                   << "KisAutoBrushWidget/density"
                   << "KisAutoBrushWidget/lblSpacing"
                   << "KisAutoBrushWidget/spacingWidget"
-                  << "KisAutoBrushWidget/lblTimedSpacing"
-                  << "KisAutoBrushWidget/timedSpacingWidget"
                   << "KisAutoBrushWidget/lblRandomness"
                   << "KisAutoBrushWidget/inputRandomness"
                      ;

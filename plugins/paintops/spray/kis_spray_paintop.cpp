@@ -38,6 +38,7 @@
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
 #include <kis_lod_transform.h>
+#include <kis_paintop_plugin_utils.h>
 
 
 KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -53,10 +54,12 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
 
     m_rotationOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
 
     m_brushOption.readOptionSettingForceCopy(settings);
 
@@ -127,5 +130,8 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    return KisSpacingInformation(m_spacing * additionalScale);
+    return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false,
+                                                   m_spacing * additionalScale, false, 1.0,
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   m_settings, nullptr, &m_rateOption, info);
 }

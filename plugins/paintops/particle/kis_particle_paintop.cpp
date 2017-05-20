@@ -31,7 +31,9 @@
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_lod_transform.h>
 #include <kis_types.h>
+#include <kis_paintop_plugin_utils.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 
@@ -41,6 +43,7 @@
 
 KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
@@ -54,6 +57,9 @@ KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisP
     m_particleBrush.setProperties(&m_properties);
     m_particleBrush.initParticles();
 
+    m_rateOption.readOptionSetting(settings);
+    m_rateOption.resetAllSensors();
+
     m_first = true;
 }
 
@@ -65,7 +71,9 @@ KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& inf
 {
     KisDistanceInformation di;
     paintLine(info, info, &di);
-    return di.currentSpacing();
+    return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   m_settings, nullptr, &m_rateOption, info);
 }
 
 void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)

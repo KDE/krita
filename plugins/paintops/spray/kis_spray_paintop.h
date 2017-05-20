@@ -28,6 +28,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_rate_option.h>
 
 class KisPainter;
 
@@ -58,6 +59,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
+    KisPressureRateOption m_rateOption;
     KisNodeSP m_node;
 };
 

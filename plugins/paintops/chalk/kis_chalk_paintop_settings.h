@@ -40,9 +40,6 @@ public:
     qreal paintOpSize() const override;
 
     bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    qreal airbrushInterval() const override;
-
 };
 
 #endif

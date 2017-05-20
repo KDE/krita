@@ -189,9 +189,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     m_lastPaintPos = newCenterPos;
 
-    KisSpacingInformation spacingInfo =
-        effectiveSpacing(scale, rotation,
-                         m_spacingOption, info);
+    KisSpacingInformation spacingInfo = effectiveSpacing(scale, rotation, m_spacingOption, info);
 
     if (m_firstRun) {
         m_firstRun = false;

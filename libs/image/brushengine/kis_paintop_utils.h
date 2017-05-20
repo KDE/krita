@@ -154,6 +154,7 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal dabHeight,
                                        qreal extraScale,
                                        qreal rateExtraScale,
+                                       bool distanceSpacingEnabled,
                                        bool isotropicSpacing,
                                        qreal rotation,
                                        bool axesFlipped,
@@ -188,12 +189,8 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
 
     spacing *= extraScale;
 
-    if (timedSpacingEnabled) {
-        return KisSpacingInformation(spacing, rotation, axesFlipped,
-                                     timedSpacingInterval / rateExtraScale);
-    } else {
-        return KisSpacingInformation(spacing, rotation, axesFlipped);
-    }
+    return KisSpacingInformation(distanceSpacingEnabled, spacing, rotation, axesFlipped,
+                                 timedSpacingEnabled, timedSpacingInterval / rateExtraScale);
 }
 
 }

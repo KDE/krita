@@ -85,17 +85,17 @@ public:
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:
-    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale,
-                                           qreal extraRateScale, bool isotropicSpacing,
-                                           qreal rotation, bool axesFlipped) const;
+    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation, bool axesFlipped) const;
 
 protected: // XXX: make private!
-
+    KisDabCache *m_dabCache;
     KisBrushSP m_brush;
+
+private:
     KisTextureProperties m_textureProperties;
     KisPressureMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
-    KisDabCache *m_dabCache;
+    KisPropertiesConfigurationSP m_settings;
 };
 
 #endif

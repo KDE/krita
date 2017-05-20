@@ -77,21 +77,6 @@ bool KisBrushBasedPaintOpSettings::paintIncremental()
     return true;
 }
 
-bool KisBrushBasedPaintOpSettings::isAirbrushing() const
-{
-    return brush()->timedSpacingEnabled() || getBool(AIRBRUSH_ENABLED);
-}
-
-bool KisBrushBasedPaintOpSettings::isAirbrushRateControlled() const
-{
-    return brush()->timedSpacingEnabled();
-}
-
-qreal KisBrushBasedPaintOpSettings::airbrushInterval() const
-{
-    return brush()->timedSpacingEnabled() ? brush()->timedSpacingDelay() : getInt(AIRBRUSH_RATE);
-}
-
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();

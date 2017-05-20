@@ -60,7 +60,6 @@ private Q_SLOTS:
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
     void slotSpacingChanged();
-    void slotTimedSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
 
 Q_SIGNALS:

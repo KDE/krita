@@ -168,20 +168,26 @@ qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
                                                    qreal endTime)
 {
     // Compute interpolation factor based on distance.
-    qreal spaceFactor = m_d->spacing.isIsotropic() ?
-        getNextPointPositionIsotropic(start, end) :
-        getNextPointPositionAnisotropic(start, end);
+    qreal distanceFactor = -1.0;
+    if (m_d->spacing.isDistanceSpacingEnabled()) {
+        distanceFactor = m_d->spacing.isIsotropic() ?
+            getNextPointPositionIsotropic(start, end) :
+            getNextPointPositionAnisotropic(start, end);
+    }
 
     // Compute interpolation factor based on time.
-    qreal timeFactor = getNextPointPositionTimed(startTime, endTime);
+    qreal timeFactor = -1.0;
+    if (m_d->spacing.isTimedSpacingEnabled()) {
+        timeFactor = getNextPointPositionTimed(startTime, endTime);
+    }
 
     // Return the distance-based or time-based factor, whichever is smallest.
-    if (spaceFactor < 0.0) {
+    if (distanceFactor < 0.0) {
         return timeFactor;
     } else if (timeFactor < 0.0) {
-        return spaceFactor;
+        return distanceFactor;
     } else {
-        return qMin(spaceFactor, timeFactor);
+        return qMin(distanceFactor, timeFactor);
     }
 }
 
@@ -189,7 +195,7 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
                                                             const QPointF &end)
 {
     qreal distance = m_d->accumDistance.x();
-    qreal spacing = qMax(qreal(0.5), m_d->spacing.spacing().x());
+    qreal spacing = qMax(qreal(0.5), m_d->spacing.distanceSpacing().x());
 
     if (start == end) {
         return -1;
@@ -218,8 +224,8 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
         return -1;
     }
 
-    qreal a_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.spacing().x());
-    qreal b_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.spacing().y());
+    qreal a_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.distanceSpacing().x());
+    qreal b_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.distanceSpacing().y());
 
     qreal x = m_d->accumDistance.x();
     qreal y = m_d->accumDistance.y();
@@ -271,13 +277,15 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
 qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
                                                         qreal endTime)
 {
-    // If start time is not before end time, or if timed spacing is disabled, do not interpolate.
-    if (!(startTime < endTime) || !m_d->spacing.isTimedSpacingEnabled()) {
+    // If start time is not before end time, do not interpolate.
+    if (!(startTime < endTime)) {
         return -1.0;
     }
     
     qreal nextPointInterval = m_d->spacing.timedSpacingInterval() - m_d->accumTime;
     
+    // Note: nextPointInterval SHOULD always be positive, but I wasn't sure if floating point
+    // roundoff error might make it nonpositive in some cases, so I included this check.
     if (nextPointInterval <= 0.0) {
         resetAccumulators();
         return 0.0;

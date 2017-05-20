@@ -30,6 +30,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_brush_option.h>
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_rate_option.h>
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
 
@@ -62,12 +63,15 @@ private:
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
+    KisPressureRateOption m_rateOption;
     KisDensityOption m_densityOption;
     KisLineWidthOption m_lineWidthOption;
     KisOffsetScaleOption m_offsetScaleOption;
 
     KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;
+
+    KisPaintOpSettingsSP m_settings;
 
     QVector<QPointF> m_points;
     int m_count;

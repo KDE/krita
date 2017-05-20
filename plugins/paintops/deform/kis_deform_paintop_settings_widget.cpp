@@ -25,6 +25,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_rate_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
@@ -43,6 +44,7 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
 }
 
 KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()

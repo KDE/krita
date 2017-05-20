@@ -70,7 +70,6 @@ public:
     KisSelectionSP activeSelection() const;
 
     bool needsAirbrushing() const;
-    bool isAirbrushRateControlled() const;
     qreal airbrushingInterval() const;
 
     void setOpacity(qreal opacity);

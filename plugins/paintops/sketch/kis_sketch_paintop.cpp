@@ -33,6 +33,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
+#include <kis_paintop_plugin_utils.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
@@ -64,6 +65,7 @@
 
 KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
@@ -71,6 +73,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
     m_brushOption.readOptionSettingForceCopy(settings);
     m_densityOption.readOptionSetting(settings);
@@ -83,6 +86,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     m_opacityOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
 
     m_painter = 0;
     m_count = 0;
@@ -296,5 +300,7 @@ KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
     KisDistanceInformation di;
     paintLine(info, info, &di);
-    return di.currentSpacing();
+    return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
+                                          KisLodTransform::lodToScale(painter()->device()),
+                                          m_settings, nullptr, &m_rateOption, info);
 }

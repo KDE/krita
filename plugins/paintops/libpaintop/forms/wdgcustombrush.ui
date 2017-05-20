@@ -72,7 +72,7 @@
        <item row="1" column="1">
         <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
        </item>
-       <item row="3" column="1">
+       <item row="2" column="1">
         <widget class="QCheckBox" name="colorAsMask">
          <property name="text">
           <string>Create mask from color</string>
@@ -101,19 +101,6 @@
        </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="nameLineEdit"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="timedSpacingLbl">
-         <property name="text">
-          <string>Timed Spacing:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="KisTimedSpacingSelectionWidget" name="timedSpacingWidget" native="true"/>
        </item>
       </layout>
      </item>
@@ -290,12 +277,6 @@
    <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
    <header>kis_spacing_selection_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisTimedSpacingSelectionWidget</class>
-   <extends>QWidget</extends>
-   <header>kis_timed_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

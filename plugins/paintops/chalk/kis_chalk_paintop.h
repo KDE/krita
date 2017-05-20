@@ -25,6 +25,7 @@
 
 #include "chalk_brush.h"
 #include "kis_chalk_paintop_settings.h"
+#include "kis_pressure_rate_option.h"
 
 class KisPainter;
 
@@ -42,7 +43,9 @@ private:
     KisPaintDeviceSP m_dab;
     ChalkBrush * m_chalkBrush;
     KisPressureOpacityOption m_opacityOption;
+    KisPressureRateOption m_rateOption;
     ChalkProperties m_properties;
+    KisPaintOpSettingsSP m_settings;
 };
 
 #endif // KIS_CHALK_PAINTOP_H_

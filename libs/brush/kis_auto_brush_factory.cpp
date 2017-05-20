@@ -37,13 +37,9 @@ KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinit
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "1.0"));
     bool useAutoSpacing = KisDomUtils::toInt(brushDefinition.attribute("useAutoSpacing", "0"));
     qreal autoSpacingCoeff = KisDomUtils::toDouble(brushDefinition.attribute("autoSpacingCoeff", "1.0"));
-    bool useTimedSpacing = KisDomUtils::toInt(brushDefinition.attribute("useTimedSpacing", "0"));
-    qreal timedSpacingRate = KisDomUtils::toDouble(brushDefinition.attribute("timedSpacingRate",
-                                                                             "10.0"));
 
     KisBrushSP brush = new KisAutoBrush(mask, angle, randomness, density);
     brush->setSpacing(spacing);
     brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);
-    brush->setTimedSpacing(useTimedSpacing, timedSpacingRate);
     return brush;
 }

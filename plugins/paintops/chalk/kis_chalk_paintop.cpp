@@ -37,15 +37,19 @@
 
 #include <kis_pressure_opacity_option.h>
 #include <kis_lod_transform.h>
+#include <kis_paintop_plugin_utils.h>
 
 
 KisChalkPaintOp::KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
     m_opacityOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_opacityOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
 
     m_properties.readOptionSetting(settings);
 
@@ -87,5 +91,7 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-    return KisSpacingInformation(1.0);
+
+    return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, 1.0, false, 1.0, 1.0,
+                                                   m_settings, nullptr, &m_rateOption, info);
 }

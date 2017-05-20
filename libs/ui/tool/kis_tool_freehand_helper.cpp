@@ -44,9 +44,10 @@
 
 //#define DEBUG_BEZIER_CURVES
 
-// Factor by which to scale the airbrush timer's interval if we want it to be faster than the actual
-// airbrushing rate.
-const qreal FAST_AIRBRUSH_TIMER_FACTOR = 0.7;
+// Factor by which to scale the airbrush timer's interval, relative to the actual airbrushing rate.
+// Setting this less than 1 makes the timer-generated pseudo-events happen faster than the desired
+// airbrush rate, which might improve responsiveness.
+const qreal AIRBRUSH_INTERVAL_FACTOR = 0.7;
 
 struct KisToolFreehandHelper::Private
 {
@@ -811,9 +812,8 @@ void KisToolFreehandHelper::doAirbrushing()
                                   prevPaint.perspective(),
                                   elapsedStrokeTime(),
                                   0.0);
-    // If the paintop can control the airbrush timing itself, treat the new point as a direct
-    // continuation of the stroke. Otherwise, try to force a dab to be painted immediately.
-    if (m_d->resources->isAirbrushRateControlled() && m_d->hasPaintAtLeastOnce) {
+
+    if (m_d->hasPaintAtLeastOnce) {
         paint(nextPaint);
     }
     else {
@@ -827,12 +827,8 @@ int KisToolFreehandHelper::computeAirbrushTimerInterval() const
     // responsiveness by setting the tool's airbrush timer to update faster than the desired rate.
     // If the paintop is not controlling the timing, the tool needs to make its updates happen as
     // close as possible to the desired rate.
-    qreal realInterval = m_d->resources->airbrushingInterval();
-    if (m_d->resources->isAirbrushRateControlled()) {
-        realInterval *= FAST_AIRBRUSH_TIMER_FACTOR;
-    }
-
-    return qMax(1, qRound(realInterval));
+    qreal realInterval = m_d->resources->airbrushingInterval() * AIRBRUSH_INTERVAL_FACTOR;
+    return qMax(1, qFloor(realInterval));
 }
 
 void KisToolFreehandHelper::paintAt(int painterInfoId,

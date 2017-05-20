@@ -291,12 +291,8 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
 
 bool KisResourcesSnapshot::needsAirbrushing() const
 {
-    return m_d->currentPaintOpPreset->settings()->isAirbrushing();
-}
-
-bool KisResourcesSnapshot::isAirbrushRateControlled() const
-{
-    return m_d->currentPaintOpPreset->settings()->isAirbrushRateControlled();
+    return m_d->currentPaintOpPreset->settings()->isAirbrushing()
+           && airbrushingInterval() < std::numeric_limits<qreal>::infinity();
 }
 
 qreal KisResourcesSnapshot::airbrushingInterval() const

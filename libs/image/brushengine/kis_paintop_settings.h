@@ -35,6 +35,22 @@ class KisPaintOpConfigWidget;
 class KisPaintopSettingsUpdateProxy;
 
 /**
+ * Configuration property used to control whether airbrushing is enabled.
+ */
+const QString AIRBRUSH_ENABLED = "PaintOpSettings/isAirbrushing";
+
+/**
+ * Configuration property used to control airbrushing rate. The value should be in dabs per second.
+ */
+const QString AIRBRUSH_RATE = "PaintOpSettings/rate";
+
+/**
+ * Configuration property used to control whether airbrushing is configured to ignore distance-based
+ * spacing.
+ */
+const QString AIRBRUSH_IGNORE_SPACING = "PaintOpSettings/ignoreSpacing";
+
+/**
  * This class is used to cache the settings for a paintop
  * between two creations. There is one KisPaintOpSettings per input device (mouse, tablet,
  * etc...).
@@ -107,28 +123,21 @@ public:
      * Whether this paintop wants to deposit paint even when not moving, i.e. the tool needs to
      * activate its timer. If this is true, painting updates need to be generated at regular
      * intervals even in the absence of input device events, e.g. when the cursor is not moving.
+     *
+     * The default implementation checks the property AIRBRUSH_ENABLED, defaulting to false if the
+     * property is not found. This should be suitable for most paintops.
      */
-    virtual bool isAirbrushing() const {
-        return false;
-    }
-
-    /**
-     * Indicates whether this paintop controls the rate of its airbrushing (e.g. using timed
-     * spacing), meaning the tool itself does not need to precisely manage the timing. This value
-     * should be ignored if isAirbrushing() is false.
-     */
-    virtual bool isAirbrushRateControlled() const {
-        return false;
-    }
+    virtual bool isAirbrushing() const;
 
     /**
      * Indicates the minimum time interval that might be needed between airbrush dabs, in
      * milliseconds. A lower value means painting updates need to happen more frequently. This value
      * should be ignored if isAirbrushing() is false.
+     *
+     * The default implementation uses the property AIRBRUSH_RATE, defaulting to an interval of
+     * infinity if the property is not found. This should be suitable for most paintops.
      */
-    virtual qreal airbrushInterval() const {
-        return 100.0;
-    }
+    virtual qreal airbrushInterval() const;
 
     /**
      * This enum defines the current mode for painting an outline.

@@ -165,29 +165,6 @@ public:
     qreal autoSpacingCoeff() const;
 
     /**
-     * @param enabled True if and only if timed spacing should be enabled
-     * @param rate The timed spacing rate, in dabs per second
-     */
-    virtual void setTimedSpacing(bool enabled, qreal rate);
-
-    /**
-     * @return True if and only if timed spacing is enabled
-     */
-    bool timedSpacingEnabled() const;
-
-    /**
-     * @return The timed spacing rate, in dabs per second. This value should be ignored if timed
-     * spacing is disabled.
-     */
-    qreal timedSpacingRate() const;
-
-    /**
-     * @return The delay between dabs for the current timed spacing settings, in milliseconds.
-     * This value should be ignored if timed spacing is disabled.
-     */
-    qreal timedSpacingDelay() const;
-
-    /**
      * @return the width (for scale == 1.0)
      */
     qint32 width() const;

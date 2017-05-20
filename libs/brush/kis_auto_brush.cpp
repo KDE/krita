@@ -343,8 +343,6 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
-    e.setAttribute("useTimedSpacing", QString::number(timedSpacingEnabled()));
-    e.setAttribute("timedSpacingRate", QString::number(timedSpacingRate()));
     e.setAttribute("angle", QString::number(KisBrush::angle()));
     e.setAttribute("randomness", QString::number(d->randomness));
     e.setAttribute("density", QString::number(d->density));

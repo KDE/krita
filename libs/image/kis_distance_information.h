@@ -36,7 +36,8 @@ class KisPaintInformation;
 class KisSpacingInformation {
 public:
     explicit KisSpacingInformation()
-        : m_spacing(0.0, 0.0)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(0.0, 0.0)
         , m_timedSpacingEnabled(false)
         , m_timedSpacingInterval(0.0)
         , m_rotation(0.0)
@@ -45,7 +46,8 @@ public:
     }
 
     explicit KisSpacingInformation(qreal isotropicSpacing)
-        : m_spacing(isotropicSpacing, isotropicSpacing)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
         , m_timedSpacingEnabled(false)
         , m_timedSpacingInterval(0.0)
         , m_rotation(0.0)
@@ -54,7 +56,8 @@ public:
     }
 
     explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation, bool coordinateSystemFlipped)
-        : m_spacing(anisotropicSpacing)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(anisotropicSpacing)
         , m_timedSpacingEnabled(false)
         , m_timedSpacingInterval(0.0)
         , m_rotation(rotation)
@@ -64,7 +67,8 @@ public:
 
     explicit KisSpacingInformation(qreal isotropicSpacing,
                                    qreal timedSpacingInterval)
-        : m_spacing(isotropicSpacing, isotropicSpacing)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
         , m_timedSpacingEnabled(true)
         , m_timedSpacingInterval(timedSpacingInterval)
         , m_rotation(0.0)
@@ -76,7 +80,8 @@ public:
                                    qreal rotation,
                                    bool coordinateSystemFlipped,
                                    qreal timedSpacingInterval)
-        : m_spacing(anisotropicSpacing)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(anisotropicSpacing)
         , m_timedSpacingEnabled(true)
         , m_timedSpacingInterval(timedSpacingInterval)
         , m_rotation(rotation)
@@ -84,12 +89,47 @@ public:
     {
     }
 
-    inline QPointF spacing() const {
-        return m_spacing;
+    explicit KisSpacingInformation(bool distanceSpacingEnabled,
+                                   qreal isotropicSpacing,
+                                   bool timedSpacingEnabled,
+                                   qreal timedSpacingInterval)
+        : m_distanceSpacingEnabled(distanceSpacingEnabled)
+        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
+        , m_timedSpacingEnabled(timedSpacingEnabled)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(0.0)
+        , m_coordinateSystemFlipped(false)
+    {
+    }
+
+    explicit KisSpacingInformation(bool distanceSpacingEnabled,
+                                   const QPointF &anisotropicSpacing,
+                                   qreal rotation,
+                                   bool coordinateSystemFlipped,
+                                   bool timedSpacingEnabled,
+                                   qreal timedSpacingInterval)
+        : m_distanceSpacingEnabled(distanceSpacingEnabled)
+        , m_distanceSpacing(anisotropicSpacing)
+        , m_timedSpacingEnabled(timedSpacingEnabled)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(rotation)
+        , m_coordinateSystemFlipped(coordinateSystemFlipped)
+    {
     }
 
     /**
-     * @return True if and only if timed spacing is enabled.
+     * @return True if and only if distance-based spacing is enabled.
+     */
+    inline bool isDistanceSpacingEnabled() const {
+        return m_distanceSpacingEnabled;
+    }
+
+    inline QPointF distanceSpacing() const {
+        return m_distanceSpacing;
+    }
+
+    /**
+     * @return True if and only if time-based spacing is enabled.
      */
     inline bool isTimedSpacingEnabled() const {
         return m_timedSpacingEnabled;
@@ -97,7 +137,7 @@ public:
 
     /**
      * @return The desired maximum amount of time between dabs, in milliseconds. Returns infinity if
-     * timed spacing is disabled.
+     * time-based spacing is disabled.
      */
     inline qreal timedSpacingInterval() const {
         return isTimedSpacingEnabled() ?
@@ -106,11 +146,11 @@ public:
     }
 
     inline bool isIsotropic() const {
-        return m_spacing.x() == m_spacing.y();
+        return m_distanceSpacing.x() == m_distanceSpacing.y();
     }
 
     inline qreal scalarApprox() const {
-        return isIsotropic() ? m_spacing.x() : QVector2D(m_spacing).length();
+        return isIsotropic() ? m_distanceSpacing.x() : QVector2D(m_distanceSpacing).length();
     }
 
     inline qreal rotation() const {
@@ -122,11 +162,15 @@ public:
     }
 
 private:
-    QPointF m_spacing;
+
+    // Distance-based spacing
+    bool m_distanceSpacingEnabled;
+    QPointF m_distanceSpacing;
+
+    // Time-based spacing (interval is in milliseconds)
     bool m_timedSpacingEnabled;
-    // Desired time between dabs, in milliseconds. This should be ignored if m_timedSpacingEnabled
-    // is false.
     qreal m_timedSpacingInterval;
+
     qreal m_rotation;
     bool m_coordinateSystemFlipped;
 };

@@ -46,8 +46,8 @@
 
 // Factor by which to scale the airbrush timer's interval, relative to the actual airbrushing rate.
 // Setting this less than 1 makes the timer-generated pseudo-events happen faster than the desired
-// airbrush rate, which might improve responsiveness.
-const qreal AIRBRUSH_INTERVAL_FACTOR = 0.7;
+// airbrush rate, which can improve responsiveness.
+const qreal AIRBRUSH_INTERVAL_FACTOR = 0.5;
 
 struct KisToolFreehandHelper::Private
 {
@@ -286,6 +286,8 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerStart(m_d->previousPaintInformation);
     }
+
+    paintAt(previousPaintInformation);
 }
 
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,

@@ -52,7 +52,7 @@ KisAirbrushOption::KisAirbrushOption(bool enabled)
     setObjectName("KisAirBrushOption");
     m_checkable = true;
     m_optionWidget = new KisAirbrushWidget();
-    connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
             SLOT(emitSettingChanged()));
     setConfigurationPage(m_optionWidget);

@@ -61,8 +61,9 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
     bool timedSpacingEnabled = false;
     qreal timedSpacingInterval = std::numeric_limits<qreal>::infinity();
     if (propsConfig) {
-        distanceSpacingEnabled = !propsConfig->getBool(AIRBRUSH_IGNORE_SPACING, false);
         timedSpacingEnabled = propsConfig->getBool(AIRBRUSH_ENABLED, false);
+        distanceSpacingEnabled
+                = !(timedSpacingEnabled && propsConfig->getBool(AIRBRUSH_IGNORE_SPACING, false));
         timedSpacingInterval = 1000.0 / propsConfig->getDouble(AIRBRUSH_RATE, 0.0);
     }
     qreal extraScale = 1.0;

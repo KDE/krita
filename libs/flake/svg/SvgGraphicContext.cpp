@@ -48,11 +48,10 @@ SvgGraphicsContext::SvgGraphicsContext()
     clipRule = Qt::WindingFill;
     preserveWhitespace = false;
 
-    letterSpacing = 0.0;
-    wordSpacing = 0.0;
     pixelsPerInch = 72.0;
 
     autoFillMarkers = false;
+    textProperties = KoSvgTextProperties::defaultProperties();
 }
 
 void SvgGraphicsContext::workaroundClearInheritedFillProperties()

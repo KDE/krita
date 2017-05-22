@@ -16,33 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTSVGTEXT_H
-#define TESTSVGTEXT_H
+#ifndef KOSVGTEXTSHAPE_H
+#define KOSVGTEXTSHAPE_H
 
-#include <QtTest>
+#include "kritaflake_export.h"
 
-class TestSvgText : public QObject
+#include <KoSvgTextChunkShape.h>
+#include <SvgShape.h>
+
+class KoSvgTextProperties;
+class KoSvgTextShapePrivate;
+
+class KRITAFLAKE_EXPORT KoSvgTextShape : public KoSvgTextChunkShape
 {
-    Q_OBJECT
-private Q_SLOTS:
-    void testTextProperties();
-    void testDefaultTextProperties();
-    void testTextPropertiesDifference();
+public:
+    KoSvgTextShape();
+    KoSvgTextShape(const KoSvgTextShape &rhs);
+    ~KoSvgTextShape() override;
 
-    void testParseFontStyles();
-    void testParseTextStyles();
+    KoShape* cloneShape() const;
 
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 
-    void testSimpleText();
-    void testComplexText();
-    void testTextAlignment();
-    void testTextBaselineShift();
-    void testTextSpacing();
-    void testTextDecorations();
-    void testRightToLeft();
+    void relayout();
 
-    void testQtBidi();
-    void testQtDxDy();
+private:
+    Q_DECLARE_PRIVATE(KoSvgTextShape)
 };
 
-#endif // TESTSVGTEXT_H
+#endif // KOSVGTEXTSHAPE_H

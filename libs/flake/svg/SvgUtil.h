@@ -27,6 +27,7 @@ class QString;
 class SvgGraphicsContext;
 class QTransform;
 class KoXmlElement;
+class QStringList;
 
 class KRITAFLAKE_EXPORT SvgUtil
 {
@@ -111,6 +112,8 @@ public:
     static qreal parseNumber(const QString &string);
 
     static QString mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element);
+
+    static QStringList simplifyList(const QString &str);
 
     struct PreserveAspectRatioParser
     {

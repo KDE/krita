@@ -1354,8 +1354,11 @@ ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, Artist
     }
 
     range.setRotations(context.rotations(textLength));
+
+#if 0
     range.setLetterSpacing(gc->letterSpacing);
     range.setWordSpacing(gc->wordSpacing);
+
     if (gc->baselineShift == "sub") {
         range.setBaselineShift(ArtisticTextRange::Sub);
     } else if (gc->baselineShift == "super") {
@@ -1368,6 +1371,7 @@ ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, Artist
             range.setBaselineShift(ArtisticTextRange::Length, value);
         }
     }
+#endif
 
     //range.printDebug();
 

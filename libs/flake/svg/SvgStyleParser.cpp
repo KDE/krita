@@ -27,6 +27,7 @@
 #include "SvgLoadingContext.h"
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
+#include <text/KoSvgTextProperties.h>
 
 #include <QStringList>
 #include <QColor>
@@ -38,9 +39,12 @@ public:
     Private(SvgLoadingContext &loadingContext)
         : context(loadingContext)
     {
+        textAttributes << KoSvgTextProperties::supportedXmlAttributes();
+
         // the order of the font attributes is important, don't change without reason !!!
-        fontAttributes << "font-family" << "font-size" << "font-weight";
-        fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
+        fontAttributes << "font-family" << "font-size" << "font-weight" << "font-style"
+                       << "font-variant" << "font-stretch" << "font-size-adjust" << "font"
+                       << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -51,6 +55,7 @@ public:
     }
 
     SvgLoadingContext &context;
+    QStringList textAttributes; ///< text related attributes
     QStringList fontAttributes; ///< font related attributes
     QStringList styleAttributes; ///< style related attributes
 };
@@ -94,8 +99,16 @@ void SvgStyleParser::parseFont(const SvgStyles &styles)
             continue;
         parsePA(gc, command, params);
     }
-}
 
+    // make sure to only parse font attributes here
+    Q_FOREACH (const QString & command, d->textAttributes) {
+        const QString &params = styles.value(command);
+        if (params.isEmpty())
+            continue;
+        parsePA(gc, command, params);
+    }
+}
+#include <kis_debug.h>
 void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QString &params)
 {
     QColor fillcolor = gc->fillColor;
@@ -188,13 +201,70 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "opacity") {
         gc->opacity = SvgUtil::fromPercentage(params);
     } else if (command == "font-family") {
-        QString family = params;
-        family.replace('\'' , ' ');
-        gc->font.setFamily(family);
+        QStringList familiesList = params.split(',', QString::SkipEmptyParts);
+        for (QString &family : familiesList) {
+            family = family.trimmed();
+            if ((family.startsWith('\"') && family.endsWith('\"')) ||
+                (family.startsWith('\'') && family.endsWith('\''))) {
+
+                family = family.mid(1, family.size() - 2);
+            }
+        }
+
+        gc->font.setFamily(familiesList.first());
+        gc->fontFamiliesList = familiesList;
     } else if (command == "font-size") {
         float pointSize = SvgUtil::parseUnitY(gc, params);
         if (pointSize > 0.0f)
             gc->font.setPointSizeF(pointSize);
+    } else if (command == "font-style") {
+        gc->font.setStyle(
+            params == "italic" ? QFont::StyleItalic :
+            params == "oblique" ? QFont::StyleOblique :
+            QFont::StyleNormal);
+    } else if (command == "font-variant") {
+        gc->font.setCapitalization(
+            params == "small-caps" ? QFont::SmallCaps :
+            QFont::MixedCase);
+    } else if (command == "font-stretch") {
+        int newStretch = 100;
+
+        static const std::vector<int> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
+
+        if (params == "wider") {
+            auto it = std::upper_bound(fontStretches.begin(),
+                                       fontStretches.end(),
+                                       gc->font.stretch());
+
+            newStretch = it != fontStretches.end() ? *it : fontStretches.back();
+        } else if (params == "narrower") {
+            auto it = std::upper_bound(fontStretches.rbegin(),
+                                       fontStretches.rend(),
+                                       gc->font.stretch(),
+                                       std::greater<int>());
+
+            newStretch = it != fontStretches.rend() ? *it : fontStretches.front();
+
+        } else if (params == "ultra-condensed") {
+            newStretch = QFont::UltraCondensed;
+        } else if (params == "extra-condensed") {
+            newStretch = QFont::ExtraCondensed;
+        } else if (params == "condensed") {
+            newStretch = QFont::Condensed;
+        } else if (params == "semi-condensed") {
+            newStretch = QFont::SemiCondensed;
+        } else if (params == "semi-expanded") {
+            newStretch = QFont::SemiExpanded;
+        } else if (params == "expanded") {
+            newStretch = QFont::Expanded;
+        } else if (params == "extra-expanded") {
+            newStretch = QFont::ExtraExpanded;
+        } else if (params == "ultra-expanded") {
+            newStretch = QFont::UltraExpanded;
+        }
+
+        gc->font.setStretch(newStretch);
+
     } else if (command == "font-weight") {
         int weight = QFont::Normal;
 
@@ -206,44 +276,23 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         // 700              75          (bold)
         // 800,900          87,99
 
+        static const std::vector<int> fontWeights = {1,17,33,50,58,66,75,87,99};
+
         if (params == "bold")
             weight = QFont::Bold;
-        else if (params == "lighter") {
-            weight = gc->font.weight();
-            if (weight <= 17)
-                weight = 1;
-            else if (weight <= 33)
-                weight = 17;
-            else if (weight <= 50)
-                weight = 33;
-            else if (weight <= 58)
-                weight = 50;
-            else if (weight <= 66)
-                weight = 58;
-            else if (weight <= 75)
-                weight = 66;
-            else if (weight <= 87)
-                weight = 75;
-            else if (weight <= 99)
-                weight = 87;
-        } else if (params == "bolder") {
-            weight = gc->font.weight();
-            if (weight >= 87)
-                weight = 99;
-            else if (weight >= 75)
-                weight = 87;
-            else if (weight >= 66)
-                weight = 75;
-            else if (weight >= 58)
-                weight = 66;
-            else if (weight >= 50)
-                weight = 58;
-            else if (weight >= 33)
-                weight = 50;
-            else if (weight >= 17)
-                weight = 50;
-            else if (weight >= 1)
-                weight = 17;
+        else if (params == "bolder") {
+            auto it = std::upper_bound(fontWeights.begin(),
+                                       fontWeights.end(),
+                                       gc->font.weight());
+
+            weight = it != fontWeights.end() ? *it : fontWeights.back();
+        } else if (params == "lighter") {
+            auto it = std::upper_bound(fontWeights.rbegin(),
+                                       fontWeights.rend(),
+                                       gc->font.weight(),
+                                       std::greater<int>());
+
+            weight = it != fontWeights.rend() ? *it : fontWeights.front();
         } else {
             bool ok;
             // try to read numerical weight value
@@ -265,17 +314,24 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             }
         }
         gc->font.setWeight(weight);
+    } else if (command == "font-size-adjust") {
+        warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
+    } else if (command == "font") {
+        warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
     } else if (command == "text-decoration") {
-        if (params == "line-through")
-            gc->font.setStrikeOut(true);
-        else if (params == "underline")
-            gc->font.setUnderline(true);
-    } else if (command == "letter-spacing") {
-        gc->letterSpacing = SvgUtil::parseUnitX(gc, params);
-    } else if (command == "baseline-shift") {
-        gc->baselineShift = params;
-    } else if (command == "word-spacing") {
-        gc->wordSpacing = SvgUtil::parseUnitX(gc, params);
+        gc->font.setStrikeOut(false);
+        gc->font.setUnderline(false);
+        gc->font.setOverline(false);
+
+        Q_FOREACH (const QString &param, params.split(' ', QString::SkipEmptyParts)) {
+            if (param == "line-through") {
+                gc->font.setStrikeOut(true);
+            } else if (param == "underline") {
+                gc->font.setUnderline(true);
+            } else if (param == "overline") {
+                gc->font.setOverline(true);
+            }
+        }
     } else if (command == "color") {
         QColor color;
         parseColor(color, params);
@@ -337,6 +393,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         }
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";
+    } else if (d->textAttributes.contains(command)) {
+        gc->textProperties.parseSVGTextAttribute(d->context, command, params);
     }
 
     gc->fillColor = fillcolor;
@@ -486,6 +544,11 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
     }
+    Q_FOREACH (const QString & command, d->textAttributes) {
+        const QString attribute = e.attribute(command);
+        if (!attribute.isEmpty())
+            styleMap[command] = attribute;
+    }
 
     // match css style rules to element
     QStringList cssStyles = d->context.matchingCssStyles(e);
@@ -506,8 +569,12 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
             command.replace("|", ":");
 
             // only use style and font attributes
-            if (d->styleAttributes.contains(command) || d->fontAttributes.contains(command))
+            if (d->styleAttributes.contains(command) ||
+                d->fontAttributes.contains(command) ||
+                d->textAttributes.contains(command)) {
+
                 styleMap[command] = params;
+            }
         }
     }
 

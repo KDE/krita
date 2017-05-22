@@ -244,6 +244,7 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
         else if (unit.right(2) == "in")
             value = ptToPx(gc, INCH_TO_POINT(value));
         else if (unit.right(2) == "em")
+            // NOTE: all the fonts should be created with 'pt' size, not px!
             value = ptToPx(gc, value * gc->font.pointSize());
         else if (unit.right(2) == "ex") {
             QFontMetrics metrics(gc->font);
@@ -420,6 +421,15 @@ QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const KoXmlElement 
     }
 
     return result;
+}
+
+QStringList SvgUtil::simplifyList(const QString &str)
+{
+    QString attribute = str;
+    attribute.replace(',', ' ');
+    attribute.remove('\r');
+    attribute.remove('\n');
+    return attribute.simplified().split(' ', QString::SkipEmptyParts);
 }
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)

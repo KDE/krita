@@ -45,7 +45,7 @@ public:
      * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    static KoShapeGroupCommand *createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+    static KoShapeGroupCommand *createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
 
     /**
      * Command to group a set of shapes into a predefined container.
@@ -80,7 +80,7 @@ public:
      * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+    KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
     virtual ~KoShapeGroupCommand();
     /// redo the command
     virtual void redo();

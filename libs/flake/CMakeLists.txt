@@ -4,6 +4,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/flake/commands
     ${CMAKE_SOURCE_DIR}/libs/flake/tools
     ${CMAKE_SOURCE_DIR}/libs/flake/svg
+    ${CMAKE_SOURCE_DIR}/libs/flake/text
     ${CMAKE_BINARY_DIR}/libs/flake
 )
 
@@ -201,6 +202,10 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+    text/KoSvgText.cpp
+    text/KoSvgTextProperties.cpp
+    text/KoSvgTextChunkShape.cpp
+    text/KoSvgTextShape.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp
@@ -220,6 +225,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/commands>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tools>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/svg>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
 target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritacommand KF5::WidgetsAddons Qt5::Svg)

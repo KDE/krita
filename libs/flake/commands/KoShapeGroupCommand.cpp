@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 
 // static
-KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
+KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
 {
     QList<KoShape*> orderedShapes(shapes);
     qSort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
@@ -60,7 +60,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QLis
     d->init(this);
 }
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
     : KUndo2Command(parent),
     d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), true))
 {

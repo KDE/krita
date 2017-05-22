@@ -94,15 +94,16 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &e
     SvgGraphicsContext *gc = new SvgGraphicsContext;
 
     // copy data from current context
-    if (! d->gcStack.isEmpty() && inherit)
+    if (! d->gcStack.isEmpty() && inherit) {
         *gc = *(d->gcStack.top());
+    }
 
+    gc->textProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited
     gc->filterId.clear(); // filters are not inherited
     gc->clipPathId.clear(); // clip paths are not inherited
     gc->clipMaskId.clear(); // clip masks are not inherited
     gc->display = true; // display is not inherited
     gc->opacity = 1.0; // opacity is not inherited
-    gc->baselineShift.clear(); // baseline-shift is not inherited
 
     if (!element.isNull()) {
         if (element.hasAttribute("transform")) {

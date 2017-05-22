@@ -25,6 +25,7 @@
 #include <KoShapeStroke.h>
 #include <QFont>
 #include <QTransform>
+#include <text/KoSvgTextProperties.h>
 
 class KRITAFLAKE_EXPORT SvgGraphicsContext
 {
@@ -56,6 +57,7 @@ public:
 
     QTransform matrix;      ///< the current transformation matrix
     QFont   font;           ///< the current font
+    QStringList fontFamiliesList; ///< the full list of all the families to search glyphs in
     QColor  currentColor;   ///< the current color
     QString xmlBaseDir;     ///< the current base directory (used for loading external content)
     bool preserveWhitespace;///< preserve whitespace in element text
@@ -63,10 +65,6 @@ public:
     QRectF currentBoundingBox; ///< the current bound box used for bounding box units
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
     QTransform viewboxTransform; ///< view box transformation
-
-    qreal letterSpacing;    ///< additional spacing between characters of text elements
-    qreal wordSpacing;      ///< additional spacing between words of text elements
-    QString baselineShift;  ///< basline shift mode for text elements
 
     bool display;           ///< controls display of shape
     bool visible;           ///< controls visibility of the shape (inherited)
@@ -77,6 +75,8 @@ public:
     QString markerEndId;
 
     bool autoFillMarkers;
+
+    KoSvgTextProperties textProperties;
 };
 
 #endif // SVGGRAPHICCONTEXT_H

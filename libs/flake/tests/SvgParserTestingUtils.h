@@ -37,14 +37,14 @@ struct SvgTester
     SvgTester (const QString &data)
         :  parser(&resourceManager)
     {
-        QVERIFY(doc.setContent(data.toLatin1()));
+        QVERIFY(doc.setContent(data.toUtf8()));
         root = doc.documentElement();
 
         parser.setXmlBaseDir("./");
 
 
         savedData = data;
-        //printf("%s", savedData.toLatin1().data());
+        //printf("%s", savedData.toUtf8().data());
 
     }
 

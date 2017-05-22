@@ -2,7 +2,7 @@
 
 If you need to build Krita's dependencies for the following reasons:
 
-* you develop on Windows and aren't using Emerge
+* you develop on Windows and aren't using Craft
 * you develop on OSX and aren't using Homebrew
 * you want to build a generic, distro-agnostic version of Krita for Linux
 * you develop on Linux, but some dependencies aren't available for your distribution
@@ -10,7 +10,7 @@ If you need to build Krita's dependencies for the following reasons:
 and you know what you're doing, you can use the following guide to build
 the dependencies that Krita needs.
 
-If you develop on Linux and your distribution has the dependencies available,
+If you develop on Linux and your distribution has all dependencies available,
 
 YOU DO NOT NEED THIS GUIDE AND YOU SHOULD STOP READING NOW
 
@@ -21,7 +21,7 @@ Otherwise you risk major confusion.
 Note: on all operating systems the entire procedure is done in a terminal window.
 
 1. git: https://git-scm.com/downloads. Make sure git is in your path
-2. cmake 3.3.2: https://cmake.org/download/. Make sure cmake is in your path.
+2. cmake 3.3.2 or later: https://cmake.org/download/. Make sure cmake is in your path.
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
@@ -56,12 +56,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
 1. enter the BUILDROOT/b directory
 
-2. The cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
-
-    set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
-    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
-
-3. run cmake:
+2. run cmake:
 
     * Linux:
     export PATH=$BUILDROOT/i/bin
@@ -94,7 +89,7 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
-4. build the packages:
+3. build the packages:
 
 With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
 
@@ -244,12 +239,3 @@ On OSX
 If you want to create a stripped down version of Krita to distribute, after building everything just copy the makepkg.bat file from the "windows" folder inside krita root source folder to BUILDROOT and run it.
 
 That will copy the necessary files into the specified folder and leave behind developer related files, so the resulting folder will be a smaller install folder.
-
-== Common Issues ==
-
-- On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command:
-  "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
-
-- On Windows, if you get an error about Qt5Core.dll missing/not found or nmake exit with an error that mention QT_PLUGIN_PATH, you have to copy a couple of dlls in the Qt build directory, look for the N.B. in the Qt instructions at the start of the Readme.
-
-- If you receive an error while compiling about "missing QtCore5.cmake", or something similar, check to make sure qmake is in your PATH. Restart your command line after any changes are made.

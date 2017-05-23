@@ -37,6 +37,7 @@ public:
     KoShape* cloneShape() const;
 
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 
     void relayout();
 

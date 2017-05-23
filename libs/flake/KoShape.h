@@ -176,7 +176,7 @@ public:
     virtual KoShape* cloneShape() const;
 
     /**
-     * @brief Paint the shape
+     * @brief Paint the shape fill
      * The class extending this one is responsible for painting itself.  Since we do not
      * assume the shape is square the paint must also clear its background if it will draw
      * something transparent on top.
@@ -192,6 +192,15 @@ public:
      * @param paintcontext the painting context.
      */
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
+
+    /**
+     * @brief paintStroke paints the shape's stroked outline
+     * @param painter used for painting the shape
+     * @param converter to convert between internal and view coordinates.
+     * @see applyConversion()
+     * @param paintcontext the painting context.
+     */
+    virtual void paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /**
      * @brief Paint the shape's border

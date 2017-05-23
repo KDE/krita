@@ -805,5 +805,30 @@ void TestSvgText::testQtDxDy()
 }
 
 
+void TestSvgText::testTextOutlineSolid()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testRect\" x=\"2\" y=\"5\""
+            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
+            "        SA"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard("text_outline_solid", QSize(30, 30), 72.0);
+}
+
+
 
 QTEST_MAIN(TestSvgText)

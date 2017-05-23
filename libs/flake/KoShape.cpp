@@ -334,6 +334,15 @@ KoShape *KoShape::cloneShape() const
     return 0;
 }
 
+void KoShape::paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+{
+    Q_UNUSED(paintcontext);
+
+    if (stroke()) {
+        stroke()->paint(this, painter, converter);
+    }
+}
+
 void KoShape::scale(qreal sx, qreal sy)
 {
     Q_D(KoShape);

@@ -340,12 +340,8 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 
         shapePainter->save();
         shape->paint(*shapePainter, converter, paintContext);
+        shape->paintStroke(*shapePainter, converter, paintContext);
         shapePainter->restore();
-        if (shape->stroke()) {
-            shapePainter->save();
-            shape->stroke()->paint(shape, *shapePainter, converter);
-            shapePainter->restore();
-        }
 
         if (clipMask) {
             shape->clipMask()->drawMask(clipMaskPainter->maskPainter(), shape);
@@ -390,12 +386,8 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             } else {
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
+                shape->paintStroke(imagePainter, converter, paintContext);
                 imagePainter.restore();
-                if (shape->stroke()) {
-                    imagePainter.save();
-                    shape->stroke()->paint(shape, imagePainter, converter);
-                    imagePainter.restore();
-                }
                 imagePainter.end();
             }
         }

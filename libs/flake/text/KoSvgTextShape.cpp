@@ -92,6 +92,15 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
     }
 }
 
+void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    Q_UNUSED(paintContext);
+
+    // do nothing! everything is painted in paintComponent()
+}
+
 struct TextChunk {
     QString text;
     QList<QTextLayout::FormatRange> formats;

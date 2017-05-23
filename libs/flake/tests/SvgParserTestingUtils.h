@@ -138,7 +138,21 @@ struct SvgRenderTester : public SvgTester
     }
 
     void test_standard_30px_72ppi(const QString &testName, bool verifyGeometry = true, const QSize &canvasSize = QSize(30,30)) {
-        parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
+        test_standard_impl(testName, verifyGeometry, canvasSize, 72.0);
+    }
+
+    void test_standard(const QString &testName, const QSize &canvasSize, qreal pixelsPerInch) {
+        test_standard_impl(testName, false, canvasSize, pixelsPerInch);
+    }
+
+    void test_standard_impl(const QString &testName, bool verifyGeometry, const QSize &canvasSize, qreal pixelsPerInch) {
+
+        QSize sizeInPx = canvasSize;
+        QSizeF sizeInPt = QSizeF(canvasSize) * 72.0 / pixelsPerInch;
+        Q_UNUSED(sizeInPt); // used in some definitions only!
+
+
+        parser.setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
         run();
 
 #ifdef USE_CLONED_SHAPES
@@ -159,7 +173,6 @@ struct SvgRenderTester : public SvgTester
 
 #ifdef USE_ROUND_TRIP
 
-        const QSizeF sizeInPt(30,30);
         QBuffer writeBuf;
         writeBuf.open(QIODevice::WriteOnly);
 

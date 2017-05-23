@@ -394,6 +394,10 @@ KoSvgTextChunkShapePrivate::~KoSvgTextChunkShapePrivate()
 {
 }
 
+#include <QBrush>
+#include <KoColorBackground.h>
+#include <KoShapeStroke.h>
+
 KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShapePrivate::fetchCharFormat() const
 {
     Q_Q(const KoSvgTextChunkShape);
@@ -438,6 +442,31 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShapePrivate::fetchCharFormat() co
         format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
         format.setFontLetterSpacing(format.fontLetterSpacing() + kerning.customValue);
     }
+
+
+    QBrush textBrush = Qt::NoBrush;
+
+    if (q->background()) {
+        KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(q->background().data());
+        KIS_SAFE_ASSERT_RECOVER (colorBackground) {
+            textBrush = Qt::red;
+        }
+
+        textBrush = colorBackground->brush();
+    }
+
+    format.setForeground(textBrush);
+
+    QPen textPen = Qt::NoPen;
+
+    if (q->stroke()) {
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke*>(q->stroke().data());
+        if (stroke) {
+            textPen = stroke->resultLinePen();
+        }
+    }
+
+    format.setTextOutline(textPen);
 
     return format;
 }

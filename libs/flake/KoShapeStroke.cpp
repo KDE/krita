@@ -274,18 +274,23 @@ bool KoShapeStroke::hasTransparency() const
     return d->color.alpha() > 0;
 }
 
+QPen KoShapeStroke::resultLinePen() const
+{
+    QPen pen = d->pen;
+
+    if (d->brush.gradient()) {
+        pen.setBrush(d->brush);
+    } else {
+        pen.setColor(d->color);
+    }
+
+    return pen;
+}
+
 void KoShapeStroke::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
     KoShape::applyConversion(painter, converter);
-
-    QPen pen = d->pen;
-
-    if (d->brush.gradient())
-        pen.setBrush(d->brush);
-    else
-        pen.setColor(d->color);
-
-    d->paintBorder(shape, painter, pen);
+    d->paintBorder(shape, painter, resultLinePen());
 }
 
 bool KoShapeStroke::compareFillTo(const KoShapeStrokeModel *other)

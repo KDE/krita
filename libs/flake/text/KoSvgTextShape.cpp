@@ -32,6 +32,11 @@
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 
+#include <vector>
+#include <memory>
+#include <QPainter>
+#include <boost/optional.hpp>
+
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
 
 
@@ -47,7 +52,9 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
     {
     }
 
-    QTextLayout textLayout;
+    std::vector<std::unique_ptr<QTextLayout>> layouts;
+    std::vector<QPointF> layoutOffsets;
+
 
     Q_DECLARE_PUBLIC(KoSvgTextShape)
 };
@@ -75,15 +82,15 @@ KoShape *KoSvgTextShape::cloneShape() const
 
 void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-    Q_UNUSED(paintContext);
-}
+    Q_D(KoSvgTextShape);
 
-#include <vector>
-#include <memory>
-#include <QPainter>
-#include <boost/optional.hpp>
+    Q_UNUSED(paintContext);
+
+    applyConversion(painter, converter);
+    for (int i = 0; i < (int)d->layouts.size(); i++) {
+        d->layouts[i]->draw(&painter, d->layoutOffsets[i]);
+    }
+}
 
 struct TextChunk {
     QString text;
@@ -158,14 +165,9 @@ QVector<TextChunk> mergeIntoChunks(const QVector<KoSvgTextChunkShapeLayoutInterf
 
 void KoSvgTextShape::relayout()
 {
+    Q_D(KoSvgTextShape);
+
     QPointF currentTextPos;
-
-    QImage canvas(500,500, QImage::Format_ARGB32);
-    canvas.fill(0);
-    QPainter gc(&canvas);
-
-    std::vector<std::unique_ptr<QTextLayout>> layouts;
-    std::vector<QPointF> layoutOffsets;
 
     QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
 
@@ -249,17 +251,10 @@ void KoSvgTextShape::relayout()
             diff.ry() = 0;
         }
 
-        layouts.push_back(std::move(layout));
-        layoutOffsets.push_back(-diff);
+        d->layouts.push_back(std::move(layout));
+        d->layoutOffsets.push_back(-diff);
 
     }
-
-    for (int i = 0; i < (int)layouts.size(); i++) {
-        qDebug() << "drawing layout" << i;
-        layouts[i]->draw(&gc, layoutOffsets[i]);
-    }
-
-    canvas.save("canvas.png");
 }
 
 

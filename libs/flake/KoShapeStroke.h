@@ -36,6 +36,7 @@
 class KoShape;
 class QPainter;
 class QBrush;
+class QPen;
 class KoViewConverter;
 struct KoInsets;
 
@@ -104,6 +105,9 @@ public:
     virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const;
     virtual qreal strokeMaxMarkersInset(const KoShape *shape) const;
     virtual bool hasTransparency() const;
+
+
+    QPen resultLinePen() const;
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other);

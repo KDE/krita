@@ -329,12 +329,12 @@ void TestSvgText::testSimpleText()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"7\" y=\"8\""
+            "    <text id=\"testRect\" x=\"7\" y=\"8\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
             "        Hello, out there!"
             "    </text>"
@@ -344,12 +344,9 @@ void TestSvgText::testSimpleText()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
+    t.test_standard("text_simple", QSize(175, 40), 72.0);
 
-
-    KoShape *shape = t.findShape("testText");
+    KoShape *shape = t.findShape("testRect");
     KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
     QVERIFY(chunkShape);
 
@@ -396,12 +393,12 @@ void TestSvgText::testComplexText()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"7\" y=\"8\" dx=\"0,1,2,3,4,5,6,7,8\""
+            "    <text id=\"testRect\" x=\"7\" y=\"8\" dx=\"0,1,2,3,4,5,6,7,8\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
             "        Hello, <tspan fill=\"red\" x=\"20\" y=\"27\" text-anchor=\"start\">ou"
             "t</tspan> there <![CDATA[cool cdata --> nice work]]>"
@@ -412,11 +409,9 @@ void TestSvgText::testComplexText()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
+    t.test_standard("text_complex", QSize(385, 56), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testText"));
+    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);
 
     // root shape is not just a chunk!
@@ -529,12 +524,12 @@ void TestSvgText::testHindiText()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"7\" y=\"8\""
+            "    <text id=\"testRect\" x=\"4\" y=\"5\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
             "मौखिक रूप से हिंदी के काफी सामान"
             "    </text>"
@@ -544,58 +539,7 @@ void TestSvgText::testHindiText()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
-}
-
-void TestSvgText::testTextAlignment()
-{
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
-
-            "<g id=\"testRect\">"
-
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
-
-            "    <text id=\"testText\" x=\"200\" y=\"15\" "
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
-
-            "        <tspan text-anchor=\"start\" x=\"200\" dy=\"0\">start_aligned</tspan>"
-            "        <tspan text-anchor=\"start\">tail</tspan>"
-            "        <tspan text-anchor=\"middle\" x=\"200\" dy=\"1.5em\">middle_aligned</tspan>"
-            "        <tspan text-anchor=\"start\">tail</tspan>"
-            "        <tspan text-anchor=\"end\" x=\"200\" dy=\"1.5em\">end_aligned</tspan>"
-            "        <tspan text-anchor=\"start\">tail</tspan>"
-
-            "        <tspan direction=\"rtl\" text-anchor=\"start\" x=\"200\" dy=\"1.5em\">rtl_start_aligned</tspan>"
-            "        <tspan direction=\"rtl\" text-anchor=\"start\">tail</tspan>"
-            "        <tspan direction=\"rtl\" text-anchor=\"middle\" x=\"200\" dy=\"1.5em\">rtl_middle_aligned</tspan>"
-            "        <tspan direction=\"rtl\" text-anchor=\"start\">tail</tspan>"
-            "        <tspan direction=\"rtl\" text-anchor=\"end\" x=\"200\" dy=\"1.5em\">rtl_end_aligned</tspan>"
-            "        <tspan direction=\"rtl\" text-anchor=\"start\">tail</tspan>"
-
-            "        <tspan x=\"200\" dy=\"3.5em\">rtl<tspan baseline-shift=\"super\">start</tspan>aligned</tspan>"
-
-            "    </text>"
-
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
-
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testText"));
-    QVERIFY(baseShape);
-
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
-
+    t.test_standard("text_hindi", QSize(260, 30), 72);
 }
 
 void TestSvgText::testTextBaselineShift()
@@ -604,17 +548,15 @@ void TestSvgText::testTextBaselineShift()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"200\" y=\"15\" "
+            "    <text id=\"testRect\" x=\"4\" y=\"10\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
 
-            "        <tspan x=\"20\" dy=\"3.5em\">rtl<tspan baseline-shift=\"super\">start </tspan>aligned<tspan baseline-shift=\"sub\">end</tspan></tspan>"
-
-            "        <tspan x=\"20\" dy=\"3.5em\" font-size=\"15\">WRONG!!! NOT ACCORDING TO SVG! FIXME!</tspan>"
+            "        <tspan>text<tspan baseline-shift=\"super\">super </tspan>normal<tspan baseline-shift=\"sub\">sub</tspan></tspan>"
 
             "    </text>"
 
@@ -623,11 +565,9 @@ void TestSvgText::testTextBaselineShift()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
+    t.test_standard("text_baseline_shift", QSize(180, 40), 72);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testText"));
+    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);
 
     // root shape is not just a chunk!
@@ -641,26 +581,26 @@ void TestSvgText::testTextSpacing()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"20\" y=\"15\" "
+            "    <text id=\"testRect\" x=\"5\" y=\"5\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
 
-            "        <tspan x=\"20\" dy=\"2.0em\">Lorem ipsum dolor sit amet</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" letter-spacing=\"4.0\">Lorem ipsum dolor sit amet (ls = 4)</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" letter-spacing=\"-2.0\">Lorem ipsum dolor sit amet (ls = -2)</tspan>"
+            "        <tspan x=\"5\" dy=\"0.0em\">Lorem ipsum</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" letter-spacing=\"4.0\">Lorem ipsum (ls=4)</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" letter-spacing=\"-2.0\">Lorem ipsum (ls=-2)</tspan>"
 
-            "        <tspan x=\"20\" dy=\"2.0em\">Lorem ipsum dolor sit amet</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" word-spacing=\"4.0\">Lorem ipsum dolor sit amet (ws = 4)</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" word-spacing=\"-2.0\">Lorem ipsum dolor sit amet (ws = -2)</tspan>"
+            "        <tspan x=\"5\" dy=\"2.0em\">Lorem ipsum</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" word-spacing=\"4.0\">Lorem ipsum (ws=4)</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" word-spacing=\"-2.0\">Lorem ipsum (ws=-2)</tspan>"
 
-            "        <tspan x=\"20\" dy=\"2.0em\">Lorem ipsum dolor sit amet</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" kerning=\"0.0\">Lorem ipsum dolor sit amet (k = 0)</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" kerning=\"2.0\">Lorem ipsum dolor sit amet (k = 2)</tspan>"
-            "        <tspan x=\"20\" dy=\"1.5em\" kerning=\"2.0\" letter-spacing=\"2.0\">Lorem ipsum dolor sit amet (k = 2, ls = 2)</tspan>"
+            "        <tspan x=\"5\" dy=\"2.0em\">Lorem ipsum</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" kerning=\"0.0\">Lorem ipsum (k=0)</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" kerning=\"2.0\">Lorem ipsum (k=2)</tspan>"
+            "        <tspan x=\"5\" dy=\"1.5em\" kerning=\"2.0\" letter-spacing=\"2.0\">Lorem ipsum (k=2,ls=2)</tspan>"
 
             "    </text>"
 
@@ -669,11 +609,9 @@ void TestSvgText::testTextSpacing()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
+    t.test_standard("text_letter_word_spacing", QSize(340, 250), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testText"));
+    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);
 
     // root shape is not just a chunk!
@@ -687,17 +625,18 @@ void TestSvgText::testTextDecorations()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"20\" y=\"15\" "
+            "    <text id=\"testRect\" x=\"4\" y=\"5\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
 
-            "        <tspan x=\"20\" dy=\"2.0em\" text-decoration=\"underline\">Lorem ipsum <tspan>dolor</tspan> sit amet</tspan>"
-            "        <tspan x=\"20\" dy=\"2.5em\" text-decoration=\"overline\">Lorem ipsum <tspan>dolor</tspan> sit amet</tspan>"
-            "        <tspan x=\"20\" dy=\"2.5em\" text-decoration=\"line-through\">Lorem ipsum <tspan>dolor</tspan> sit amet</tspan>"
+            "        <tspan x=\"20\" dy=\"0.0em\" text-decoration=\"underline\">Lorem ipsum</tspan>"
+            "        <tspan x=\"20\" dy=\"2.5em\" text-decoration=\"overline\">Lorem ipsum</tspan>"
+            "        <tspan x=\"20\" dy=\"2.0em\" text-decoration=\"line-through\">Lorem ipsum</tspan>"
+            "        <tspan x=\"20\" dy=\"2.0em\" text-decoration=\"underline\">Lorem <tspan fill=\"red\">ipsum</tspan> (WRONG!!!)</tspan>"
 
             "    </text>"
 
@@ -706,11 +645,9 @@ void TestSvgText::testTextDecorations()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
+    t.test_standard("text_decorations", QSize(290, 135), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testText"));
+    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);
 
     // root shape is not just a chunk!
@@ -724,12 +661,12 @@ void TestSvgText::testRightToLeft()
             "<svg width=\"100px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g id=\"testRect\">"
+            "<g id=\"test\">"
 
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testText\" x=\"20\" y=\"15\" "
+            "    <text id=\"testRect\" x=\"20\" y=\"15\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" text-anchor=\"end\">"
 
             "        <tspan x=\"250\" dy=\"0.0em\" text-anchor=\"middle\" direction=\"rtl\">aa bb cc dd</tspan>"
@@ -764,11 +701,9 @@ void TestSvgText::testRightToLeft()
             "</svg>";
 
     SvgRenderTester t (data);
-    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
-    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
-    t.run();
+    t.test_standard("text_right_to_left", QSize(500,450), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testText"));
+    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);
 
     // root shape is not just a chunk!

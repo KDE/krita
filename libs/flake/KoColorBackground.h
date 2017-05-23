@@ -26,6 +26,7 @@
 
 class KoColorBackgroundPrivate;
 class QColor;
+class QBrush;
 
 /// A simple solid color shape background
 class KRITAFLAKE_EXPORT KoColorBackground : public KoShapeBackground
@@ -48,6 +49,8 @@ public:
 
     /// Returns the background style
     Qt::BrushStyle style() const;
+
+    QBrush brush() const;
 
     // reimplemented from KoShapeBackground
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;

@@ -403,8 +403,8 @@ void TestSvgText::testComplexText()
 
             "    <text id=\"testText\" x=\"7\" y=\"8\" dx=\"0,1,2,3,4,5,6,7,8\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
-            "        Hello, <tspan fill=\"red\" x=\"60\" y=\"27\" text-anchor=\"end\">ou"
-            "t</tspan> there <![CDATA[cool cdata --> nice work]]> <tspan x=\"6\" y=\"55\">मौखिक रूप से हिंदी के काफी सामान</tspan>"
+            "        Hello, <tspan fill=\"red\" x=\"20\" y=\"27\" text-anchor=\"start\">ou"
+            "t</tspan> there <![CDATA[cool cdata --> nice work]]>"
             "    </text>"
 
             "</g>"
@@ -441,8 +441,11 @@ void TestSvgText::testComplexText()
         QVERIFY(!bool(transform[1].xPos));
 
         for (int i = 0; i < 7; i++) {
-            QVERIFY(bool(transform[i].dxPos));
-            QCOMPARE(*transform[i].dxPos, qreal(i));
+            QVERIFY(!i || bool(transform[i].dxPos));
+
+            if (i) {
+                QCOMPARE(*transform[i].dxPos, qreal(i));
+            }
         }
 
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
@@ -518,6 +521,32 @@ void TestSvgText::testComplexText()
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 24);
     }
+}
+
+void TestSvgText::testHindiText()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"testRect\">"
+
+            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testText\" x=\"7\" y=\"8\""
+            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "मौखिक रूप से हिंदी के काफी सामान"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    //t.test_standard_30px_72ppi("test_simple_text", false, QSize(100, 50));
+    t.parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
+    t.run();
 }
 
 void TestSvgText::testTextAlignment()

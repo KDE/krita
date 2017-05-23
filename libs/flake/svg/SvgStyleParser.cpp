@@ -100,7 +100,6 @@ void SvgStyleParser::parseFont(const SvgStyles &styles)
         parsePA(gc, command, params);
     }
 
-    // make sure to only parse font attributes here
     Q_FOREACH (const QString & command, d->textAttributes) {
         const QString &params = styles.value(command);
         if (params.isEmpty())
@@ -534,12 +533,13 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
 
     // collect individual presentation style attributes which have the priority 0
     // according to SVG standard
-    Q_FOREACH (const QString &command, d->styleAttributes) {
+    // NOTE: font attributes should be parsed the first, because they defines 'em' and 'ex'
+    Q_FOREACH (const QString & command, d->fontAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
     }
-    Q_FOREACH (const QString & command, d->fontAttributes) {
+    Q_FOREACH (const QString &command, d->styleAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;

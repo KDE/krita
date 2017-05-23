@@ -98,3 +98,11 @@ ecm_add_test(
     TEST_NAME libs-kritaflake-TestSvgText
     LINK_LIBRARIES kritaflake Qt5::Test
 )
+
+ecm_add_test(
+    TestSvgText.cpp
+    TEST_NAME libs-kritaflake-TestSvgTextCloned
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+set_property(TARGET libs-kritaflake-TestSvgTextCloned
+             PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)

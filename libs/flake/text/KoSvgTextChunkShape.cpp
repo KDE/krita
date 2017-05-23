@@ -379,6 +379,8 @@ KoSvgTextChunkShapeLayoutInterface *KoSvgTextChunkShape::layoutInterface()
 /*                 KoSvgTextChunkShapePrivate                                                     */
 /**************************************************************************************************/
 
+#include "SimpleShapeContainerModel.h"
+
 KoSvgTextChunkShapePrivate::KoSvgTextChunkShapePrivate(KoSvgTextChunkShape *_q)
     : KoShapeContainerPrivate(_q)
 {
@@ -386,8 +388,19 @@ KoSvgTextChunkShapePrivate::KoSvgTextChunkShapePrivate(KoSvgTextChunkShape *_q)
 
 KoSvgTextChunkShapePrivate::KoSvgTextChunkShapePrivate(const KoSvgTextChunkShapePrivate &rhs, KoSvgTextChunkShape *q)
     : KoShapeContainerPrivate(rhs, q),
-      properties(rhs.properties)
+      properties(rhs.properties),
+      font(rhs.font),
+      fontFamiliesList(rhs.fontFamiliesList),
+      localTransformations(rhs.localTransformations),
+      textLength(rhs.textLength),
+      lengthAdjust(rhs.lengthAdjust),
+      text(rhs.text)
 {
+    if (rhs.model) {
+        SimpleShapeContainerModel *otherModel = dynamic_cast<SimpleShapeContainerModel*>(rhs.model);
+        KIS_ASSERT_RECOVER_RETURN(otherModel);
+        model = new SimpleShapeContainerModel(*otherModel);
+    }
 }
 
 KoSvgTextChunkShapePrivate::~KoSvgTextChunkShapePrivate()

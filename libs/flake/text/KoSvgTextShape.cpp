@@ -69,6 +69,9 @@ KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     : KoSvgTextChunkShape(new KoSvgTextShapePrivate(*rhs.d_func(), this))
 {
     Q_D(KoSvgTextShape);
+
+    // QTextLayout has no copy-ctor, so just relayout everything!
+    relayout();
 }
 
 KoSvgTextShape::~KoSvgTextShape()

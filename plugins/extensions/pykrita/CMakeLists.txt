@@ -31,6 +31,6 @@ add_subdirectory(sip)
 add_subdirectory(plugin)
 add_subdirectory(kritarunner)
 
-add_test(pythonUnitTests ${PYTHON_EXECUTABLE}  -m unittest discover "${CMAKE_INSTALL_PREFIX}" -s ${CMAKE_SOURCE_DIR}/plugins/extensions/pykrita/tests -p "*_test.py")
+add_test(pythonUnitTests ${PYTHON_EXECUTABLE} -m unittest discover "${CMAKE_INSTALL_PREFIX}" "${CMAKE_SOURCE_DIR}" -s ${CMAKE_SOURCE_DIR}/plugins/extensions/pykrita/tests -p "*_test.py")
 
 endif ()

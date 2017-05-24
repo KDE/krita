@@ -3,9 +3,10 @@ class Action : QObject
 %TypeHeaderCode
 #include "Action.h"
 %End
+
 public:
-    Action(QObject*  parent /TransferThis/ = 0);
-    Action(const QString & name, QAction*  action, QObject*  parent /TransferThis/ = 0);
+    explicit Action(QObject *parent /TransferThis/ = 0);
+    Action(const QString &name, QAction* action, QObject *parent /TransferThis/ = 0);
     virtual ~Action();
     bool operator==(const Action &other) const;
     bool operator!=(const Action &other) const;
@@ -32,4 +33,3 @@ private:
     private:
     Action(const Action &); // Generated
 };
-

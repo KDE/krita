@@ -45,7 +45,7 @@ public:
      */
     Action(const QString &name, QAction *action, QObject *parent = 0);
     ~Action() override;
-    
+
     bool operator==(const Action &other) const;
     bool operator!=(const Action &other) const;
 
@@ -59,7 +59,7 @@ public Q_SLOTS:
     /**
      * set the user-visible text of the action to @param text.
      */
-    void settext(QString text);
+    void setText(QString text);
 
     /**
      * @return the internal name of the action.

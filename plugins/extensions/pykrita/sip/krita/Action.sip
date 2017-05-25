@@ -12,7 +12,7 @@ public:
     bool operator!=(const Action &other) const;
 public Q_SLOTS:
     QString text() const;
-    void settext(QString text);
+    void setText(QString text);
     QString name() const;
     void setName(QString value);
     bool isCheckable() const;

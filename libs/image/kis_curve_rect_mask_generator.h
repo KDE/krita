@@ -37,16 +37,16 @@ public:
 
     KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve& curve, bool antialiasEdges);
     KisCurveRectangleMaskGenerator(const KisCurveRectangleMaskGenerator &rhs);
-    virtual ~KisCurveRectangleMaskGenerator();
-    KisMaskGenerator* clone() const;
+    ~KisCurveRectangleMaskGenerator() override;
+    KisMaskGenerator* clone() const override;
 
-    virtual quint8 valueAt(qreal x, qreal y) const;
+    quint8 valueAt(qreal x, qreal y) const override;
 
-    void setScale(qreal scaleX, qreal scaleY);
+    void setScale(qreal scaleX, qreal scaleY) override;
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument& , QDomElement&) const override;
     
-    virtual void setSoftness(qreal softness);
+    void setSoftness(qreal softness) override;
 
 private:
     struct Private;

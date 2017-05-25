@@ -69,7 +69,7 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
 
 inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
-    dbgKrita << node->name();
+    qDebug() << node->name();
     KisNodeSP child = node->firstChild();
 
     while (child) {
@@ -77,7 +77,7 @@ inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
         if (child->childCount() > 0) {
             dumpNodeStack(child, prefix + "\t");
         } else {
-            dbgKrita << prefix << child->name();
+            qDebug() << prefix << child->name();
         }
         child = child->nextSibling();
     }
@@ -89,17 +89,17 @@ public:
         : m_min(0), m_max(0), m_value(0)
     {}
 
-    int maximum() const {
+    int maximum() const override {
         return m_max;
     }
-    void setValue(int value) {
+    void setValue(int value) override {
         m_value = value;
     }
-    void setRange(int min, int max) {
+    void setRange(int min, int max) override {
         m_min = min;
         m_max = max;
     }
-    void setFormat(const QString &format) {
+    void setFormat(const QString &format) override {
         m_format = format;
     }
 
@@ -143,7 +143,7 @@ inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const 
         iter1->nextRow();
         iter2->nextRow();
     }
-    //     dbgKrita << "comparePaintDevices time elapsed:" << t.elapsed();
+    //     qDebug() << "comparePaintDevices time elapsed:" << t.elapsed();
     return true;
 }
 
@@ -154,7 +154,7 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
     QRect rc2 = dev2->exactBounds();
 
     if (rc1 != rc2) {
-        dbgKrita << "Devices have different size" << ppVar(rc1) << ppVar(rc2);
+        qDebug() << "Devices have different size" << ppVar(rc1) << ppVar(rc2);
         return false;
     }
 
@@ -172,9 +172,9 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 
                 if (p1[3] < alphaThreshold && p2[3] < alphaThreshold) continue;
 
-                dbgKrita << "Failed compare paint devices:" << iter1->x() << iter1->y();
-                dbgKrita << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
-                dbgKrita << "dst:" << p2[0] << p2[1] << p2[2] << p2[3];
+                qDebug() << "Failed compare paint devices:" << iter1->x() << iter1->y();
+                qDebug() << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
+                qDebug() << "dst:" << p2[0] << p2[1] << p2[2] << p2[3];
                 return false;
             }
         } while (iter1->nextPixel() && iter2->nextPixel());
@@ -280,7 +280,7 @@ class TestNode : public DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new TestNode(*this));
     }
 };
@@ -289,32 +289,32 @@ class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode(KisNode *parent, int index) {
+    void aboutToAddANode(KisNode *parent, int index) override {
         KisNodeGraphListener::aboutToAddANode(parent, index);
         beforeInsertRow = true;
     }
 
-    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+    void nodeHasBeenAdded(KisNode *parent, int index) override {
         KisNodeGraphListener::nodeHasBeenAdded(parent, index);
         afterInsertRow = true;
     }
 
-    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+    void aboutToRemoveANode(KisNode *parent, int index) override {
         KisNodeGraphListener::aboutToRemoveANode(parent, index);
         beforeRemoveRow  = true;
     }
 
-    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+    void nodeHasBeenRemoved(KisNode *parent, int index) override {
         KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
 
-    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+    void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) override {
         KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
         beforeMove = true;
     }
 
-    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+    void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) override {
         KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
         afterMove = true;
     }
@@ -393,10 +393,10 @@ public:
 private:
     void printValues(bool force = false) {
         if (m_cycles > m_period || force) {
-            dbgKrita << "Val / Total:" << qreal(m_val) / qreal(m_total);
-            dbgKrita << "Avg. Val:   " << qreal(m_val) / m_cycles;
-            dbgKrita << "Avg. Total: " << qreal(m_total) / m_cycles;
-            dbgKrita << ppVar(m_val) << ppVar(m_total) << ppVar(m_cycles);
+            qDebug() << "Val / Total:" << qreal(m_val) / qreal(m_total);
+            qDebug() << "Avg. Val:   " << qreal(m_val) / m_cycles;
+            qDebug() << "Avg. Total: " << qreal(m_total) / m_cycles;
+            qDebug() << ppVar(m_val) << ppVar(m_total) << ppVar(m_cycles);
 
             m_val = 0;
             m_total = 0;

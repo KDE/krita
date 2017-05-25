@@ -42,7 +42,7 @@ class KisTangentTiltOption: public KisPaintOpOption//not really//
 {
 public:
     KisTangentTiltOption();
-    ~KisTangentTiltOption();
+    ~KisTangentTiltOption() override;
     /*These three give away which the index of the combobox for a given channel*/
     int redChannel() const;
     int greenChannel() const;
@@ -59,8 +59,8 @@ public:
     //takes the RGB values and will deform them depending on tilt.
     void apply(const KisPaintInformation& info, qreal *r, qreal *g, qreal *b);
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 private:
     KisTangentTiltOptionWidget * m_options;
 };

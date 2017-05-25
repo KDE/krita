@@ -28,7 +28,7 @@ class KisDlgBlacklistCleanup : public KoDialog, public Ui_WdgDisplayBlacklist
 
 public:
     KisDlgBlacklistCleanup();
-    virtual void accept();
+    void accept() override;
 };
 
 #endif // KIS_DLG_BLACKLIST_CLEANUP_H

@@ -268,8 +268,11 @@ uint qHash(const KoColorConversionSystem::NodeKey &key)
 
 struct Q_DECL_HIDDEN KoColorConversionSystem::Private {
 
+    Private(RegistryInterface *_registryInterface) : registryInterface(_registryInterface) {}
+
     QHash<NodeKey, Node*> graph;
     QList<Vertex*> vertexes;
+    RegistryInterface *registryInterface;
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \

@@ -76,7 +76,7 @@ public:
      * @param canvas the canvas interface this tool will work for.
      */
     explicit KoToolBase(KoCanvasBase *canvas);
-    virtual ~KoToolBase();
+    ~KoToolBase() override;
 
     /**
      * connect the tool to the new shapecontroller. Old connections are removed.

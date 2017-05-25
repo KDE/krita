@@ -28,8 +28,8 @@ class BlendEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     BlendEffectFactory();
-    virtual KoFilterEffect *createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // BLENDEFFECTFACTORY_H

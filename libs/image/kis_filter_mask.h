@@ -43,28 +43,28 @@ public:
      */
     KisFilterMask();
 
-    virtual ~KisFilterMask();
+    ~KisFilterMask() override;
 
-    QIcon icon() const;
+    QIcon icon() const override;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisFilterMask(*this));
     }
 
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     KisFilterMask(const KisFilterMask& rhs);
 
-    void setFilter(KisFilterConfigurationSP filterConfig);
+    void setFilter(KisFilterConfigurationSP filterConfig) override;
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy maskPos) const;
+                       PositionToFilthy maskPos) const override;
 
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 };
 
 #endif //_KIS_FILTER_MASK_

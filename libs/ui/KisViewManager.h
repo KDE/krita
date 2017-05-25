@@ -72,7 +72,7 @@ public:
      * @param parent   a parent widget we show ourselves in.
      */
     KisViewManager(QWidget *parent, KActionCollection *actionCollection);
-    virtual ~KisViewManager();
+    ~KisViewManager() override;
 
     /**
      * Retrieves the entire action collection.
@@ -163,7 +163,7 @@ public:  // Krita specific interfaces
     KisUndoAdapter *undoAdapter();
 
     KisDocument *document() const;
-    
+
     KisScriptManager *scriptManager() const;
 
     int viewCount() const;
@@ -190,7 +190,6 @@ public:
 
     KisGridManager * gridManager() const;
     KisGuidesManager * guidesManager() const;
-    KisPaintingAssistantsManager* paintingAssistantsManager() const;
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();

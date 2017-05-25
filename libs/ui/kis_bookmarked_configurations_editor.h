@@ -41,7 +41,7 @@ public:
      *                      entry or to replace an existing entry
      */
     KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfigurationSP currentConfig);
-    ~KisBookmarkedConfigurationsEditor();
+    ~KisBookmarkedConfigurationsEditor() override;
 private Q_SLOTS:
     void currentConfigChanged(const QItemSelection& selected, const QItemSelection&);
     void addCurrentConfiguration();

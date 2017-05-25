@@ -32,7 +32,7 @@ class KRITAWIDGETS_EXPORT KoConfigAuthorPage : public QWidget
 
 public:
     KoConfigAuthorPage();
-    ~KoConfigAuthorPage();
+    ~KoConfigAuthorPage() override;
 
     void apply();
 

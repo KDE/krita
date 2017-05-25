@@ -45,7 +45,7 @@ protected:
     KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0, int delay = 200);
 
 public:
-    virtual ~KisConfigWidget();
+    ~KisConfigWidget() override;
 
     /**
      * @param config the configuration for this configuration widget.

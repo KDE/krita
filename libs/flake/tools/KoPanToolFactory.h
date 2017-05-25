@@ -30,6 +30,6 @@ public:
     /// constructor
     KoPanToolFactory();
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 #endif

@@ -35,10 +35,10 @@ class KoPathSegmentChangeStrategy : public KoInteractionStrategy
 {
 public:
     KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam);
-    virtual ~KoPathSegmentChangeStrategy();
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command *createCommand();
+    ~KoPathSegmentChangeStrategy() override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
 
 private:
     QPointF m_originalPosition;

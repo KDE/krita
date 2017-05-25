@@ -56,7 +56,7 @@ public:
     /**
      * Destructor.
      */
-    ~KisInputManager();
+    ~KisInputManager() override;
 
 
 
@@ -78,7 +78,7 @@ public:
     /**
      * Event filter method. Overridden from QObject.
      */
-    bool eventFilter(QObject* object, QEvent* event );
+    bool eventFilter(QObject* object, QEvent* event ) override;
 
     void attachPriorityEventFilter(QObject *filter, int priority = 0);
     void detachPriorityEventFilter(QObject *filter);

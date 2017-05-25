@@ -26,9 +26,9 @@ class VectorToolFactory : public KoToolFactoryBase
 {
 public:
     VectorToolFactory();
-    ~VectorToolFactory();
+    ~VectorToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

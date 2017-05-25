@@ -55,11 +55,11 @@ public:
 
     KisShapeSelection(KisImageWSP image, KisSelectionWSP selection);
 
-    virtual ~KisShapeSelection();
+    ~KisShapeSelection() override;
 
     KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection);
 
-    KisSelectionComponent* clone(KisSelection* selection);
+    KisSelectionComponent* clone(KisSelection* selection) override;
 
     bool saveSelection(KoStore * store) const;
 
@@ -70,25 +70,25 @@ public:
      *
      * @param projection the target selection
      */
-    virtual void renderToProjection(KisPaintDeviceSP projection);
-    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
+    void renderToProjection(KisPaintDeviceSP projection) override;
+    void renderToProjection(KisPaintDeviceSP projection, const QRect& r) override;
 
-    KUndo2Command* resetToEmpty();
-    bool isEmpty() const;
+    KUndo2Command* resetToEmpty() override;
+    bool isEmpty() const override;
 
-    QPainterPath outlineCache() const;
-    bool outlineCacheValid() const;
-    void recalculateOutlineCache();
+    QPainterPath outlineCache() const override;
+    bool outlineCacheValid() const override;
+    void recalculateOutlineCache() override;
 
     KoShapeManager *shapeManager() const;
 
-    void moveX(qint32 x);
-    void moveY(qint32 y);
+    void moveX(qint32 x) override;
+    void moveY(qint32 y) override;
 
-    KUndo2Command* transform(const QTransform &transform);
+    KUndo2Command* transform(const QTransform &transform) override;
 protected:
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
 
 private:
     friend class KisTakeAllShapesCommand;
@@ -114,14 +114,14 @@ class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactoryBase
 public:
 
     KisShapeSelectionFactory();
-    ~KisShapeSelectionFactory() {}
+    ~KisShapeSelectionFactory() override {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const {
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override {
         Q_UNUSED(documentResources);
         return 0;
     }
 
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const {
+    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override {
         Q_UNUSED(e);
         Q_UNUSED(context);
         return false;

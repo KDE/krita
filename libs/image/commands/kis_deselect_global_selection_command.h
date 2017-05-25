@@ -34,10 +34,10 @@ public:
      * @param parent the parent command
      */
     KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0);
-    virtual ~KisDeselectGlobalSelectionCommand();
+    ~KisDeselectGlobalSelectionCommand() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     KisImageWSP m_image;

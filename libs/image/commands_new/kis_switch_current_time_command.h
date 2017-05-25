@@ -31,13 +31,13 @@ class KRITAIMAGE_EXPORT KisSwitchCurrentTimeCommand : public KUndo2Command
 {
 public:
     KisSwitchCurrentTimeCommand(KisImageAnimationInterface *animation, int oldTime, int newTime, KUndo2Command *parent = 0);
-    ~KisSwitchCurrentTimeCommand();
+    ~KisSwitchCurrentTimeCommand() override;
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
-    int id() const;
-    bool mergeWith(const KUndo2Command* command);
+    int id() const override;
+    bool mergeWith(const KUndo2Command* command) override;
 
 private:
     KisImageAnimationInterface *m_animation;

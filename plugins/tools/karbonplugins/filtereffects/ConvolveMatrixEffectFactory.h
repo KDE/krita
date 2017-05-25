@@ -28,8 +28,8 @@ class ConvolveMatrixEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     ConvolveMatrixEffectFactory();
-    virtual KoFilterEffect *createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // CONVOLVEMATRIXEFFECTFACTORY_H

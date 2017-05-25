@@ -39,7 +39,7 @@ public:
      * Creates a widget to select a merge strategy.
      */
     KisMetaDataMergeStrategyChooserWidget(QWidget* parent);
-    ~KisMetaDataMergeStrategyChooserWidget();
+    ~KisMetaDataMergeStrategyChooserWidget() override;
 
     const KisMetaData::MergeStrategy* currentStrategy();
 

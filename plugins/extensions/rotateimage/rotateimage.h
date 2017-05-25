@@ -29,7 +29,7 @@ class RotateImage : public KisViewPlugin
     Q_OBJECT
 public:
     RotateImage(QObject *parent, const QVariantList &);
-    virtual ~RotateImage();
+    ~RotateImage() override;
 
 private Q_SLOTS:
 

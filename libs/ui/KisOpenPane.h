@@ -46,7 +46,7 @@ public:
      * @param templateType the template-type (group) that should be selected on creation.
      */
     KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
-    virtual ~KisOpenPane();
+    ~KisOpenPane() override;
 
     QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
     QTreeWidgetItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
@@ -96,8 +96,8 @@ protected:
     void initTemplates(const QString& templatesResourcePath);
 
     // QWidget overrides
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void dropEvent(QDropEvent * event);
+    void dragEnterEvent(QDragEnterEvent * event) override;
+    void dropEvent(QDropEvent * event) override;
 
 private:
     QStringList m_mimeFilter;

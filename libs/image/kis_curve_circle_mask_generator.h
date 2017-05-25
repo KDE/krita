@@ -43,17 +43,17 @@ public:
 
     KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve, bool antialiasEdges);
     KisCurveCircleMaskGenerator(const KisCurveCircleMaskGenerator &rhs);
-    virtual ~KisCurveCircleMaskGenerator();
-    KisMaskGenerator* clone() const;
+    ~KisCurveCircleMaskGenerator() override;
+    KisMaskGenerator* clone() const override;
 
-    virtual quint8 valueAt(qreal x, qreal y) const;
+    quint8 valueAt(qreal x, qreal y) const override;
 
-    void setScale(qreal scaleX, qreal scaleY);
+    void setScale(qreal scaleX, qreal scaleY) override;
 
-    bool shouldSupersample() const;
+    bool shouldSupersample() const override;
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-    virtual void setSoftness(qreal softness);
+    void toXML(QDomDocument& , QDomElement&) const override;
+    void setSoftness(qreal softness) override;
 
     static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
 

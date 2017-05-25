@@ -43,7 +43,7 @@ public:
 
 
     TimelineNodeListKeeper(ModelWithExternalNotifications *model, KisDummiesFacadeBase *dummiesFacade);
-    ~TimelineNodeListKeeper();
+    ~TimelineNodeListKeeper() override;
 
     KisNodeDummy* dummyFromRow(int row);
     int rowForDummy(KisNodeDummy *dummy);

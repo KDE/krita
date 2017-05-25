@@ -40,13 +40,13 @@ public:
     KoHatchBackground();
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
 
     // reimplemented
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
+    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
 
     // reimplemented
-    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize);
+    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
 
 private:
     QString saveHatchStyle(KoShapeSavingContext &context) const;

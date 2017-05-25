@@ -41,7 +41,7 @@ public:
     Q_DECLARE_FLAGS(Types, Type)
 
     explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);
-    ~PathToolOptionWidget();
+    ~PathToolOptionWidget() override;
 
 public Q_SLOTS:
     void setSelectionType(int type);
@@ -54,7 +54,7 @@ Q_SIGNALS:
     void sigRequestUpdateActions();
 
 protected:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private:
     Ui::PathToolOptionWidgetBase widget;

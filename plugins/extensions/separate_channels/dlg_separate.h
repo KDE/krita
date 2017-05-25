@@ -45,7 +45,7 @@ public:
 
     DlgSeparate(const QString & imageCS, const QString & layerCS, QWidget * parent = 0,
                 const char* name = 0);
-    ~DlgSeparate();
+    ~DlgSeparate() override;
 
 public:
 

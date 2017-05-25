@@ -42,7 +42,7 @@ public:
 
     explicit KoDeferredShapeFactoryBase(QObject *parent);
 
-    virtual ~KoDeferredShapeFactoryBase();
+    ~KoDeferredShapeFactoryBase() override;
 
     virtual QString deferredPluginName() = 0;
 

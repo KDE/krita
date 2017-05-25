@@ -49,24 +49,24 @@ class KisToolLine : public KisToolShape
 
 public:
     KisToolLine(KoCanvasBase * canvas);
-    virtual ~KisToolLine();
+    ~KisToolLine() override;
 
-    void requestStrokeCancellation();
-    void requestStrokeEnd();
+    void requestStrokeCancellation() override;
+    void requestStrokeEnd() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
-    virtual int flags() const;
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    int flags() const override;
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    virtual QString quickHelp() const;
+    QString quickHelp() const override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 private Q_SLOTS:
     void updateStroke();
@@ -79,7 +79,7 @@ private:
     QPointF straightLine(QPointF point);
     void updateGuideline();
     void updatePreviewTimer(bool showGuide);
-    virtual QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
     void endStroke();
     void cancelStroke();
@@ -122,9 +122,9 @@ public:
         setIconName(koIconNameCStr("krita_tool_line"));
     }
 
-    virtual ~KisToolLineFactory() {}
+    ~KisToolLineFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolLine(canvas);
     }
 

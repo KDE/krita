@@ -30,7 +30,7 @@ class ToolText : public QObject
     Q_OBJECT
 public:
     ToolText(QObject *parent, const QVariantList &);
-    virtual ~ToolText();
+    ~ToolText() override;
 
 };
 

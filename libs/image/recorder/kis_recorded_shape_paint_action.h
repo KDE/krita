@@ -44,15 +44,15 @@ public:
 
     KisRecordedShapePaintAction(const KisRecordedShapePaintAction&);
 
-    ~KisRecordedShapePaintAction();
+    ~KisRecordedShapePaintAction() override;
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const override;
 
-    virtual KisRecordedAction* clone() const;
+    KisRecordedAction* clone() const override;
 
 protected:
 
-    virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
+    void playPaint(const KisPlayInfo& info, KisPainter* painter) const override;
 
 private:
 
@@ -65,8 +65,8 @@ class KisRecordedShapePaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
     KisRecordedShapePaintActionFactory();
-    virtual ~KisRecordedShapePaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    ~KisRecordedShapePaintActionFactory() override;
+    KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*) override;
 };
 
 #endif

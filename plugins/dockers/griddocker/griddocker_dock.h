@@ -33,10 +33,10 @@ class GridDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     GridDockerDock();
-    ~GridDockerDock();
-    QString observerName() { return "GridDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    ~GridDockerDock() override;
+    QString observerName() override { return "GridDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 public Q_SLOTS:
     void slotGuiGridConfigChanged();

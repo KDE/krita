@@ -30,7 +30,7 @@ class KisAnimationCachePopulator : public QObject
 
 public:
     KisAnimationCachePopulator(KisPart *part);
-    ~KisAnimationCachePopulator();
+    ~KisAnimationCachePopulator() override;
 
     /**
      * Request generation of given frame. The request will

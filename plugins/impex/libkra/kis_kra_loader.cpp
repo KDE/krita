@@ -367,7 +367,8 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
                     res = image->assignImageProfile(profile);
                 }
                 if (!res) {
-                    profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
+                    const QString defaultProfileId = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(image->colorSpace()->id());
+                    profile = KoColorSpaceRegistry::instance()->profileByName(defaultProfileId);
                     Q_ASSERT(profile && profile->valid());
                     image->assignImageProfile(profile);
                 }

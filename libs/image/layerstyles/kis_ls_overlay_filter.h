@@ -43,10 +43,10 @@ public:
                          KisMultipleProjection *dst,
                          const QRect &applyRect,
                          KisPSDLayerStyleSP style,
-                         KisLayerStyleFilterEnvironment *env) const;
+                         KisLayerStyleFilterEnvironment *env) const override;
 
-    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const;
-    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const;
+    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
+    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
 
 private:
     const psd_layer_effects_overlay_base* getOverlayStruct(KisPSDLayerStyleSP style) const;

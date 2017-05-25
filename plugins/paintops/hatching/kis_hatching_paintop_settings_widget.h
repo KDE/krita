@@ -33,9 +33,9 @@ class KisHatchingPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
     KisHatchingPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisHatchingPaintOpSettingsWidget();
+    ~KisHatchingPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 #endif

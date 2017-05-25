@@ -28,8 +28,8 @@ class KRITATOOLTRANSFORM_EXPORT KisModifyTransformMaskCommand : public KUndo2Com
 public:
     KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params);
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     void updateMask(bool isHidden);

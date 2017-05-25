@@ -29,13 +29,13 @@ class KisVideoExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisVideoExport(QObject *parent, const QVariantList &);
-    virtual ~KisVideoExport();
+    ~KisVideoExport() override;
 public:
-    virtual bool supportsIO() const { return false; }
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    bool supportsIO() const override { return false; }
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from, const QByteArray& to) const;
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from, const QByteArray& to) const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
 };
 
 #endif

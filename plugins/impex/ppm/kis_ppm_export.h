@@ -36,8 +36,8 @@ public:
         setupUi(this);
     }
 
-    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
-    KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 
@@ -47,12 +47,12 @@ class KisPPMExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisPPMExport(QObject *parent, const QVariantList &);
-    virtual ~KisPPMExport();
+    ~KisPPMExport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
-    void initializeCapabilities();
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
+    void initializeCapabilities() override;
 };
 
 #endif

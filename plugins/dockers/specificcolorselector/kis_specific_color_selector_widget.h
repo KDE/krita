@@ -37,7 +37,7 @@ class KisSpecificColorSelectorWidget : public QWidget
     Q_OBJECT
 public:
     KisSpecificColorSelectorWidget(QWidget* parent);
-    ~KisSpecificColorSelectorWidget();
+    ~KisSpecificColorSelectorWidget() override;
     bool customColorSpaceUsed();
 public Q_SLOTS:
     void setDisplayConverter(KisDisplayColorConverter *colorConverter);

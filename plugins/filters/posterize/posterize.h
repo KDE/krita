@@ -29,7 +29,7 @@ class Posterize : public QObject
     Q_OBJECT
 public:
     Posterize(QObject *parent, const QVariantList &);
-    virtual ~Posterize();
+    ~Posterize() override;
 };
 
 class KisFilterPosterize : public KisColorTransformationFilter
@@ -37,20 +37,20 @@ class KisFilterPosterize : public KisColorTransformationFilter
 public:
     KisFilterPosterize();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
-    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
+    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
     static inline KoID id() {
         return KoID("posterize", i18n("Posterize"));
     }
 protected:
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 };
 
 class KisPosterizeColorTransformation : public KoColorTransformation
 {
 public:
     KisPosterizeColorTransformation(int steps, const KoColorSpace* cs);
-    virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
+    void transform(const quint8* src, quint8* dst, qint32 nPixels) const override;
 private:
     const KoColorSpace* m_colorSpace;
     quint32 m_psize;

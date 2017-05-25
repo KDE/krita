@@ -36,12 +36,12 @@ class KRITAWIDGETS_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
     explicit KoToolBoxFactory();
-    ~KoToolBoxFactory();
+    ~KoToolBoxFactory() override;
 
-    virtual QString id() const;
-    KoDockFactoryBase::DockPosition defaultDockPosition() const;
-    QDockWidget* createDockWidget();
-    virtual bool isCollapsable() const { return false; }
+    QString id() const override;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const override;
+    QDockWidget* createDockWidget() override;
+    bool isCollapsable() const override { return false; }
 };
 
 #endif

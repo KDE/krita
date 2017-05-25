@@ -41,13 +41,13 @@ class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 public:
 
     explicit KisTextureOption();
-    virtual ~KisTextureOption();
+    ~KisTextureOption() override;
 
 public Q_SLOTS:
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private Q_SLOTS:
 

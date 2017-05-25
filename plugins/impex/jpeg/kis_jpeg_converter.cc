@@ -195,10 +195,11 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
             }
         }
 
+        const QString colorSpaceId =
+            KoColorSpaceRegistry::instance()->colorSpaceId(modelId, Integer8BitsColorDepthID.id());
+
         // Check that the profile is used by the color space
-        if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
-                    KoColorSpaceRegistry::instance()->colorSpaceId(
-                        modelId, Integer8BitsColorDepthID.id()))->profileIsCompatible(profile)) {
+        if (profile && !KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)) {
             warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << modelId;
             profile = 0;
         }

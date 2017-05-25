@@ -62,6 +62,7 @@ public:
     static qreal scaleFromPerspectiveMatrixX(const QTransform &t, const QPointF &basePt);
     static qreal scaleFromPerspectiveMatrixY(const QTransform &t, const QPointF &basePt);
     static qreal effectiveSize(const QRectF &rc);
+    static bool thumbnailTooSmall(const QTransform &resultThumbTransform, const QRect &originalImageRect);
 
     static QRectF handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOutX, qreal *dOutY);
     static QRectF handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint);

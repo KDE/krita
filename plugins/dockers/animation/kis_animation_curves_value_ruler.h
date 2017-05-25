@@ -27,7 +27,7 @@ class KisAnimationCurvesValueRuler : public QHeaderView
 
 public:
     KisAnimationCurvesValueRuler(QWidget *parent);
-    ~KisAnimationCurvesValueRuler();
+    ~KisAnimationCurvesValueRuler() override;
 
     void setScale(float scale);
     float scaleFactor() const;
@@ -38,8 +38,8 @@ public:
     float mapValueToView(float value) const;
     float mapViewToValue(float y) const;
 
-    QSize sizeHint() const;
-    void paintEvent(QPaintEvent *e);
+    QSize sizeHint() const override;
+    void paintEvent(QPaintEvent *e) override;
 
 private:
     struct Private;

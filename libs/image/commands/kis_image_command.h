@@ -41,7 +41,7 @@ public:
      * @param image The image the command will be working on.
      */
     KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent = 0);
-    virtual ~KisImageCommand();
+    ~KisImageCommand() override;
 
 protected:
 

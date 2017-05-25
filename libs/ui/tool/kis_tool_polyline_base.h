@@ -34,21 +34,21 @@ public:
 
     KisToolPolylineBase(KoCanvasBase * canvas, KisToolPolylineBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
-    void beginPrimaryDoubleClickAction(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
-    void deactivate();
-    virtual void listenToModifiers(bool listen);
-    virtual bool listeningToModifiers();
-    void requestStrokeEnd();
-    void requestStrokeCancellation();
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
+    void listenToModifiers(bool listen) override;
+    bool listeningToModifiers() override;
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
 
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points) = 0;

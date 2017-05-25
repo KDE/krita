@@ -59,7 +59,7 @@ class KRITAVECTORIMAGE_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
     WmfPainterBackend(QPainter *painter, const QSizeF &outputSize);
-    ~WmfPainterBackend();
+    ~WmfPainterBackend() override;
 
     using WmfAbstractBackend::play;
 
@@ -68,23 +68,23 @@ public:
      */
     //bool play(QPaintDevice& target);
     //bool play(QPainter &painter);
-    bool play();
+    bool play() override;
 
 
 private:
     // -------------------------------------------------------------------------
     // A virtual QPainter
-    bool  begin(const QRect &boundingBox);
-    bool  end();
-    void  save();
-    void  restore();
+    bool  begin(const QRect &boundingBox) override;
+    bool  end() override;
+    void  save() override;
+    void  restore() override;
 
     /// Recalculate the world transform and then apply it to the painter
     /// This must be called at the end of every function that changes the transform.
     void recalculateWorldTransform();
 
     // Drawing attributes/modes
-    void  setCompositionMode(QPainter::CompositionMode mode);
+    void  setCompositionMode(QPainter::CompositionMode mode) override;
 
     /**
      * Change logical Coordinate
@@ -92,39 +92,39 @@ private:
      * others wmf files doesn't call setWindow* at all
      * negative width and height are possible
      */
-    void  setWindowOrg(int left, int top);
-    void  setWindowExt(int width, int height);
-    void  setViewportOrg(int left, int top);
-    void  setViewportExt(int width, int height);
+    void  setWindowOrg(int left, int top) override;
+    void  setWindowExt(int width, int height) override;
+    void  setViewportOrg(int left, int top) override;
+    void  setViewportExt(int width, int height) override;
 
     // Graphics drawing functions
-    void  setPixel(WmfDeviceContext &context, int x, int y, QColor color);
-    void  lineTo(WmfDeviceContext &context, int x, int y);
-    void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h);
-    void  drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h, int = 25, int = 25);
-    void  drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h);
-    void  drawArc(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
-    void  drawPie(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
-    void  drawChord(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
-    void  drawPolyline(WmfDeviceContext &context, const QPolygon& pa);
-    void  drawPolygon(WmfDeviceContext &context, const QPolygon& pa);
+    void  setPixel(WmfDeviceContext &context, int x, int y, QColor color) override;
+    void  lineTo(WmfDeviceContext &context, int x, int y) override;
+    void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h) override;
+    void  drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h, int = 25, int = 25) override;
+    void  drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h) override;
+    void  drawArc(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) override;
+    void  drawPie(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) override;
+    void  drawChord(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) override;
+    void  drawPolyline(WmfDeviceContext &context, const QPolygon& pa) override;
+    void  drawPolygon(WmfDeviceContext &context, const QPolygon& pa) override;
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa);
+    void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa) override;
     void  drawImage(WmfDeviceContext &context, int x, int y, const QImage &,
-                    int sx = 0, int sy = 0, int sw = -1, int sh = -1);
+                    int sx = 0, int sy = 0, int sw = -1, int sh = -1) override;
     void  patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
-                 quint32 rasterOperation);
+                 quint32 rasterOperation) override;
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
-    void  drawText(WmfDeviceContext &context, int x, int y, const QString &s);
+    void  drawText(WmfDeviceContext &context, int x, int y, const QString &s) override;
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false);
+    void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false) override;
 
  private:
     void updateFromDeviceContext(WmfDeviceContext &context);

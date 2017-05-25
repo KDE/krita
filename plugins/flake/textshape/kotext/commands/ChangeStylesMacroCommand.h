@@ -35,13 +35,13 @@ class ChangeStylesMacroCommand : public KUndo2Command
 public:
     ChangeStylesMacroCommand(const QList<QTextDocument *> &documents, KoStyleManager *styleManager);
 
-    virtual ~ChangeStylesMacroCommand();
+    ~ChangeStylesMacroCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
 
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
     void changedStyle(KoCharacterStyle *s) {m_changedCharacterStyles.append(s);}
     void origStyle(KoCharacterStyle *s) {m_origCharacterStyles.append(s);}

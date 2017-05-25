@@ -34,12 +34,12 @@ class KRITATEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
 public:
     KoTextOdfSaveHelper(const QTextDocument *document, int from, int to);
-    virtual ~KoTextOdfSaveHelper();
+    ~KoTextOdfSaveHelper() override;
 
     /// reimplemented
-    virtual bool writeBody();
+    bool writeBody() override;
 
-    virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver);
+    KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver) override;
 
 #ifdef SHOULD_BUILD_RDF
     /**

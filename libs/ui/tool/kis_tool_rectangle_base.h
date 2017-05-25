@@ -41,16 +41,16 @@ public:
 
     explicit KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 
-    virtual void beginPrimaryAction(KoPointerEvent *event);
-    virtual void continuePrimaryAction(KoPointerEvent *event);
-    virtual void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-    virtual void deactivate();
-    void listenToModifiers(bool listen);
-    bool listeningToModifiers();
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
+    void deactivate() override;
+    void listenToModifiers(bool listen) override;
+    bool listeningToModifiers() override;
 
-    QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 protected:
     virtual void finishRect(const QRectF&)=0;

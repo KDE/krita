@@ -662,7 +662,7 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     qDebug() << ppVar(wintabDesktopRect);
 
     // Show screen choice dialog
-    {
+    if (!dialogOpen) {
         KisScreenSizeChoiceDialog dlg(0,
                                       wintabDesktopRect,
                                       qtDesktopRect);
@@ -681,6 +681,11 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
 
         result.virtualDesktopArea = dlg.screenRect();
         dialogOpen = false;
+    } else {
+        // this branch is really improbable and most probably means
+        // a bug in the tablet driver. Anyway, we just shouldn't show
+        // hundreds of tablet initialization dialogs
+        result.virtualDesktopArea = qtDesktopRect;
     }
 
     return result;

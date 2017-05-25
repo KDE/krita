@@ -29,12 +29,12 @@ class KCanvasPreview : public QWidget
 public:
     KCanvasPreview(QWidget * parent = 0);
 
-    virtual ~KCanvasPreview();
+    ~KCanvasPreview() override;
 
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
     void setImageSize(qint32 w, qint32 h);
     void setCanvasSize(qint32 w, qint32 h);

@@ -44,7 +44,7 @@ public:
      * @param parent the parent if it's in a QObject hierarchy
      */
     Action(const QString &name, QAction *action, QObject *parent = 0);
-    virtual ~Action();
+    ~Action() override;
     
     bool operator==(const Action &other) const;
     bool operator!=(const Action &other) const;

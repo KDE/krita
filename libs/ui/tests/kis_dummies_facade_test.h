@@ -27,11 +27,11 @@ class KisDummiesFacadeTest : public KisDummiesFacadeBaseTest
     Q_OBJECT
 
 public:
-    ~KisDummiesFacadeTest();
+    ~KisDummiesFacadeTest() override;
 
 protected:
-    KisDummiesFacadeBase* dummiesFacadeFactory();
-    void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
+    KisDummiesFacadeBase* dummiesFacadeFactory() override;
+    void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade) override;
 };
 
 #endif /* __KIS_DUMMIES_FACADE_TEST_H */

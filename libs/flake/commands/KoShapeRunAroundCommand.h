@@ -30,12 +30,12 @@ class KRITAFLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command
 {
 public:
     KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent = 0);
-    virtual ~KoShapeRunAroundCommand();
+    ~KoShapeRunAroundCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

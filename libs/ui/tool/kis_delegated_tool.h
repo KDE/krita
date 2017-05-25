@@ -45,7 +45,7 @@ public:
         return m_localTool.data();
     }
 
-    void activate(typename BaseClass::ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+    void activate(typename BaseClass::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override
     {
         BaseClass::activate(toolActivation, shapes);
         m_localTool->activate(toolActivation, shapes);
@@ -57,7 +57,7 @@ public:
         }
     }
 
-    void deactivate()
+    void deactivate() override
     {
         m_localTool->deactivate();
         BaseClass::deactivate();
@@ -68,7 +68,7 @@ public:
         }
     }
 
-    void mousePressEvent(KoPointerEvent *event)
+    void mousePressEvent(KoPointerEvent *event) override
     {
         if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                               Qt::LeftButton, Qt::ShiftModifier |
@@ -84,7 +84,7 @@ public:
         }
     }
 
-    void mouseDoubleClickEvent(KoPointerEvent *event)
+    void mouseDoubleClickEvent(KoPointerEvent *event) override
     {
         if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                               Qt::LeftButton, Qt::ShiftModifier |
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    void mouseMoveEvent(KoPointerEvent *event)
+    void mouseMoveEvent(KoPointerEvent *event) override
     {
         Q_ASSERT(m_localTool);
         m_localTool->mouseMoveEvent(event);
@@ -106,7 +106,7 @@ public:
         BaseClass::mouseMoveEvent(event);
     }
 
-    void mouseReleaseEvent(KoPointerEvent *event)
+    void mouseReleaseEvent(KoPointerEvent *event) override
     {
         if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
             this->setMode(KisTool::HOVER_MODE);
@@ -119,13 +119,13 @@ public:
         }
     }
 
-    void paint(QPainter &painter, const KoViewConverter &converter)
+    void paint(QPainter &painter, const KoViewConverter &converter) override
     {
         Q_ASSERT(m_localTool);
         m_localTool->paint(painter, converter);
     }
 
-    QList<QPointer<QWidget> > createOptionWidgets()
+    QList<QPointer<QWidget> > createOptionWidgets() override
     {
         QList<QPointer<QWidget> > list = BaseClass::createOptionWidgets();
         list.append(m_localTool->createOptionWidgets());

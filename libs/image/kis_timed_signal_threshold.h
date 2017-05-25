@@ -35,7 +35,7 @@ class KRITAIMAGE_EXPORT KisTimedSignalThreshold : public QObject
     Q_OBJECT
 public:
     KisTimedSignalThreshold(int delay, int cancelDelay = -1, QObject *parent = 0);
-    ~KisTimedSignalThreshold();
+    ~KisTimedSignalThreshold() override;
 
 public Q_SLOTS:
     /**

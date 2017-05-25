@@ -52,7 +52,7 @@ public:
                           const KUndo2MagicString &transactionText = KUndo2MagicString(),
                           KisRecordingAdapter *recordingAdapter = 0,
                           KisSmoothingOptions *smoothingOptions = 0);
-    ~KisToolFreehandHelper();
+    ~KisToolFreehandHelper() override;
 
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
     KisSmoothingOptionsSP smoothingOptions() const;

@@ -31,7 +31,7 @@ class PAINTOP_EXPORT KisPressureMirrorOptionWidget : public KisCurveOptionWidget
 public:
     KisPressureMirrorOptionWidget();
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private Q_SLOTS:
     void horizontalMirrorChanged(bool mirror);

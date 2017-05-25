@@ -40,13 +40,13 @@ class PAINTOP_EXPORT KisPaintActionTypeOption : public KisPaintOpOption
 public:
     KisPaintActionTypeOption();
 
-    ~KisPaintActionTypeOption();
+    ~KisPaintActionTypeOption() override;
 
     enumPaintActionType paintActionType() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 
 private:

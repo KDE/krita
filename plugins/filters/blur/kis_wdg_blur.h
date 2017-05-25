@@ -30,12 +30,12 @@ class KisWdgBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgBlur(QWidget * parent);
-    virtual ~KisWdgBlur();
+    ~KisWdgBlur() override;
     inline const Ui_WdgBlur* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private Q_SLOTS:
 

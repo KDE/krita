@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
 public:
 
     KisAnimationExporterUI(QWidget *parent);
-    virtual ~KisAnimationExporterUI();
+    ~KisAnimationExporterUI() override;
 
 private:
     struct Private;
@@ -55,7 +55,7 @@ public:
     typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP, KisPropertiesConfigurationSP)> SaveFrameCallback;
 public:
     KisAnimationExporter(KisDocument *document, int fromTime, int toTime);
-    ~KisAnimationExporter();
+    ~KisAnimationExporter() override;
 
     void setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration);
     KisImportExportFilter::ConversionStatus exportAnimation();
@@ -85,11 +85,20 @@ class KRITAUI_EXPORT KisAnimationExportSaver : public QObject
     Q_OBJECT
 public:
     KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset = 0);
-    ~KisAnimationExportSaver();
+    ~KisAnimationExportSaver() override;
 
     KisImportExportFilter::ConversionStatus exportAnimation(KisPropertiesConfigurationSP cfg = 0);
 
+    /**
+     * A standard exported files mask for ffmpeg
+     */
     QString savedFilesMask() const;
+
+    /**
+     * Wildcards are not supported ffmpeg on Windows, so they are used for QDir
+     * only.
+     */
+    QString savedFilesMaskWildcard() const;
 
 private:
     KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration = 0);

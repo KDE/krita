@@ -26,30 +26,30 @@ class KoDummyColorProfile : public KoColorProfile
 {
 public:
     KoDummyColorProfile();
-    virtual ~KoDummyColorProfile();
-    virtual KoColorProfile* clone() const;
-    virtual bool valid() const;
-    virtual float version() const;
-    virtual bool isSuitableForOutput() const;
-    virtual bool isSuitableForPrinting() const;
-    virtual bool isSuitableForDisplay() const;
-    virtual bool supportsPerceptual() const;
-    virtual bool supportsSaturation() const;
-    virtual bool supportsAbsolute() const;
-    virtual bool supportsRelative() const;
-    virtual bool hasColorants() const;
-    virtual bool hasTRC() const;
-    virtual QVector <double> getColorantsXYZ() const;
-    virtual QVector <double> getColorantsxyY() const;
-    virtual QVector <double> getWhitePointXYZ() const;
-    virtual QVector <double> getWhitePointxyY() const;
-    virtual QVector <double> getEstimatedTRC() const;
-    virtual void linearizeFloatValue(QVector <double> & Value) const;
-    virtual void delinearizeFloatValue(QVector <double> & Value) const;
-    virtual void linearizeFloatValueFast(QVector <double> & Value) const;
-    virtual void delinearizeFloatValueFast(QVector <double> & Value) const;
-    virtual bool operator==(const KoColorProfile&) const;
-    virtual QByteArray uniqueId() const;
+    ~KoDummyColorProfile() override;
+    KoColorProfile* clone() const override;
+    bool valid() const override;
+    float version() const override;
+    bool isSuitableForOutput() const override;
+    bool isSuitableForPrinting() const override;
+    bool isSuitableForDisplay() const override;
+    bool supportsPerceptual() const override;
+    bool supportsSaturation() const override;
+    bool supportsAbsolute() const override;
+    bool supportsRelative() const override;
+    bool hasColorants() const override;
+    bool hasTRC() const override;
+    QVector <double> getColorantsXYZ() const override;
+    QVector <double> getColorantsxyY() const override;
+    QVector <double> getWhitePointXYZ() const override;
+    QVector <double> getWhitePointxyY() const override;
+    QVector <double> getEstimatedTRC() const override;
+    void linearizeFloatValue(QVector <double> & Value) const override;
+    void delinearizeFloatValue(QVector <double> & Value) const override;
+    void linearizeFloatValueFast(QVector <double> & Value) const override;
+    void delinearizeFloatValueFast(QVector <double> & Value) const override;
+    bool operator==(const KoColorProfile&) const override;
+    QByteArray uniqueId() const override;
 };
 
 #endif

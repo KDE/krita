@@ -35,13 +35,13 @@ class DefaultToolGeometryWidget : public QWidget, Ui::DefaultToolGeometryWidget
     Q_OBJECT
 public:
     explicit DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent = 0);
-    ~DefaultToolGeometryWidget();
+    ~DefaultToolGeometryWidget() override;
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);
 
 protected:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private Q_SLOTS:
     void slotAnchorPointChanged();

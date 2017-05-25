@@ -27,16 +27,16 @@ class KisEqualizerButton : public QAbstractButton
 {
 public:
     KisEqualizerButton(QWidget *parent);
-    ~KisEqualizerButton();
+    ~KisEqualizerButton() override;
 
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     void setRightmost(bool value);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 
 private:
     struct Private;

@@ -41,7 +41,7 @@ public:
     KisExternalLayer(KisImageWSP image, const QString &name, quint8 opacity)
             : KisLayer(image, name, opacity) {}
 
-    virtual QIcon icon() const {
+    QIcon icon() const override {
         return KisIconUtils::loadIcon("view-refresh");
     }
 

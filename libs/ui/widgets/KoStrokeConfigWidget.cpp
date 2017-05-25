@@ -33,7 +33,6 @@
 
 // Qt
 #include <QMenu>
-#include <QLabel>
 #include <QToolButton>
 #include <QButtonGroup>
 #include <QVBoxLayout>
@@ -65,10 +64,10 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
 #include <KoSelectedShapesProxy.h>
-#include <KoFillConfigWidget.h>
+#include "ui_KoStrokeConfigWidget.h"
 #include <KoFlakeUtils.h>
 #include <KoCanvasBase.h>
-
+#include <KoFillConfigWidget.h>
 #include "kis_canvas_resource_provider.h"
 #include "kis_acyclic_signal_connector.h"
 
@@ -181,8 +180,7 @@ public:
     KoMarkerSelector    *midMarkerSelector;
     KoMarkerSelector    *endMarkerSelector;
 
-    QToolButton *capNJoinButton;
-    CapNJoinMenu *capNJoinMenu;
+   CapNJoinMenu *capNJoinMenu;
 
     QWidget *spacer;
 
@@ -198,6 +196,8 @@ public:
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
+
+    Ui_KoStrokeConfigWidget *ui;
 };
 
 
@@ -205,9 +205,11 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     : QWidget(parent)
     , d(new Private())
 {
+    // confure GUI
+    d->ui = new Ui_KoStrokeConfigWidget();
+    d->ui->setupUi(this);
+
     setObjectName("Stroke widget");
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(2);
 
     { // connect the canvas
         d->shapeChangedAcyclicConnector.connectBackwardVoid(
@@ -225,92 +227,76 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
         d->canvas = canvas;
     }
 
-    {
-        QHBoxLayout *markersLineLayout = new QHBoxLayout();
 
+    {
+
+       d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
+       d->fillConfigWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+       d->ui->fillConfigWidgetLayout->addWidget(d->fillConfigWidget);
+       connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
+    }
+
+    d->ui->thicknessLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    d->ui->thicknessLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    // set min/max/step and value in points, then set actual unit
+    d->ui->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
+    d->ui->lineWidth->setDecimals(2);
+    d->ui->lineWidth->setUnit(KoUnit(KoUnit::Point));
+    d->ui->lineWidth->setToolTip(i18n("Set line width of actual selection"));
+
+    d->ui->capNJoinButton->setMinimumHeight(25);
+    d->capNJoinMenu = new CapNJoinMenu(this);
+    d->ui->capNJoinButton->setMenu(d->capNJoinMenu);
+    d->ui->capNJoinButton->setText("...");
+    d->ui->capNJoinButton->setPopupMode(QToolButton::InstantPopup);
+
+
+    {
+        // Line style
+        d->ui->strokeStyleLabel->setText(i18n("Line Style:"));
+        d->ui->strokeStyleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        d->ui->lineStyle->setToolTip(i18nc("@info:tooltip", "Line style"));
+        d->ui->lineStyle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        d->ui->lineStyle->setLineStyle(Qt::SolidLine,  QVector<qreal>());
+    }
+
+
+    {
         QList<KoMarker*> emptyMarkers;
+
 
         d->startMarkerSelector = new KoMarkerSelector(KoFlake::StartMarker, this);
         d->startMarkerSelector->setToolTip(i18nc("@info:tooltip", "Start marker"));
         d->startMarkerSelector->updateMarkers(emptyMarkers);
-        markersLineLayout->addWidget(d->startMarkerSelector);
+        d->startMarkerSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred );
+        d->ui->markerLayout->addWidget(d->startMarkerSelector);
+
 
         d->midMarkerSelector = new KoMarkerSelector(KoFlake::MidMarker, this);
         d->midMarkerSelector->setToolTip(i18nc("@info:tooltip", "Node marker"));
         d->midMarkerSelector->updateMarkers(emptyMarkers);
-        markersLineLayout->addWidget(d->midMarkerSelector);
+        d->midMarkerSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred );
+        d->ui->markerLayout->addWidget(d->midMarkerSelector);
+
 
         d->endMarkerSelector = new KoMarkerSelector(KoFlake::EndMarker, this);
         d->endMarkerSelector->setToolTip(i18nc("@info:tooltip", "End marker"));
         d->endMarkerSelector->updateMarkers(emptyMarkers);
-        markersLineLayout->addWidget(d->endMarkerSelector);
+        d->endMarkerSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred );
 
-        mainLayout->addLayout(markersLineLayout);
-    }
-
-
-    {
-        QHBoxLayout *styleLineLayout = new QHBoxLayout();
-
-        // Line style
-        d->lineStyle = new KoLineStyleSelector(this);
-        d->lineStyle->setToolTip(i18nc("@info:tooltip", "Line style"));
-        d->lineStyle->setMinimumWidth(70);
-        d->lineStyle->setLineStyle(Qt::SolidLine,  QVector<qreal>());
-        styleLineLayout->addWidget(d->lineStyle);
-
-        mainLayout->addLayout(styleLineLayout);
-    }
-
-    QHBoxLayout *widthLineLayout = new QHBoxLayout();
-
-    // Line width
-    QLabel *l = new QLabel(this);
-    l->setText(i18n("Thickness:"));
-    l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    widthLineLayout->addWidget(l);
-
-    // set min/max/step and value in points, then set actual unit
-    d->lineWidth = new KisDoubleParseUnitSpinBox(this);
-    d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
-    d->lineWidth->setDecimals(2);
-    d->lineWidth->setUnit(KoUnit(KoUnit::Point));
-    d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
-    widthLineLayout->addWidget(d->lineWidth);
-
-    d->capNJoinButton = new QToolButton(this);
-    d->capNJoinButton->setMinimumHeight(25);
-    d->capNJoinMenu = new CapNJoinMenu(this);
-    d->capNJoinButton->setMenu(d->capNJoinMenu);
-    d->capNJoinButton->setText("...");
-    d->capNJoinButton->setPopupMode(QToolButton::InstantPopup);
-
-    widthLineLayout->addWidget(d->capNJoinButton);
-
-    mainLayout->addLayout(widthLineLayout);
-
-    { // add separator line
-        QFrame* line = new QFrame();
-        line->setFrameShape(QFrame::HLine);
-        mainLayout->addWidget(line);
-    }
-
-    {
-        d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
-        mainLayout->addWidget(d->fillConfigWidget);
-        connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
-
-        d->fillConfigWidget->layout()->setMargin(0);
+        d->ui->markerLayout->addWidget(d->endMarkerSelector);
     }
 
     // Spacer
     d->spacer = new QWidget();
     d->spacer->setObjectName("SpecialSpacer");
-    mainLayout->addWidget(d->spacer);
 
-    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyDashStyleChanges()));
-    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyLineWidthChanges()));
+    d->ui->markerLayout->addWidget(d->spacer);
+
+    connect(d->ui->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyDashStyleChanges()));
+    connect(d->ui->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyLineWidthChanges()));
 
     connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
     connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
@@ -363,17 +349,17 @@ void KoStrokeConfigWidget::setNoSelectionTrackingMode(bool value)
 
 Qt::PenStyle KoStrokeConfigWidget::lineStyle() const
 {
-    return d->lineStyle->lineStyle();
+    return d->ui->lineStyle->lineStyle();
 }
 
 QVector<qreal> KoStrokeConfigWidget::lineDashes() const
 {
-    return d->lineStyle->lineDashes();
+    return d->ui->lineStyle->lineDashes();
 }
 
 qreal KoStrokeConfigWidget::lineWidth() const
 {
-    return d->lineWidth->value();
+    return d->ui->lineWidth->value();
 }
 
 qreal KoStrokeConfigWidget::miterLimit() const
@@ -419,9 +405,9 @@ KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke()
 
 void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
 {
-    d->lineWidth->setEnabled(enabled);
+    d->ui->lineWidth->setEnabled(enabled);
     d->capNJoinMenu->setEnabled(enabled);
-    d->lineStyle->setEnabled(enabled);
+    d->ui->lineStyle->setEnabled(enabled);
 
     d->startMarkerSelector->setEnabled(enabled);
     d->midMarkerSelector->setEnabled(enabled);
@@ -447,10 +433,10 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeSh
         newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation(0));
     }
 
-    d->lineWidth->setUnit(newUnit);
+    d->ui->lineWidth->setUnit(newUnit);
     d->capNJoinMenu->miterLimit->setUnit(newUnit);
 
-    d->lineWidth->setLineStep(1.0);
+    d->ui->lineWidth->setLineStep(1.0);
     d->capNJoinMenu->miterLimit->setLineStep(1.0);
 
     blockChildSignals(false);
@@ -461,7 +447,7 @@ void KoStrokeConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerLineWid
 {
     blockChildSignals(true);
     d->allowLocalUnitManagement = false;
-    d->lineWidth->setUnitManager(managerLineWidth);
+    d->ui->lineWidth->setUnitManager(managerLineWidth);
     d->capNJoinMenu->miterLimit->setUnitManager(managerMitterLimit);
     blockChildSignals(false);
 }
@@ -497,11 +483,11 @@ void KoStrokeConfigWidget::deactivate()
 
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
-    d->lineWidth->blockSignals(block);
+    d->ui->lineWidth->blockSignals(block);
     d->capNJoinMenu->capGroup->blockSignals(block);
     d->capNJoinMenu->joinGroup->blockSignals(block);
     d->capNJoinMenu->miterLimit->blockSignals(block);
-    d->lineStyle->blockSignals(block);
+    d->ui->lineStyle->blockSignals(block);
     d->startMarkerSelector->blockSignals(block);
     d->midMarkerSelector->blockSignals(block);
     d->endMarkerSelector->blockSignals(block);
@@ -676,12 +662,15 @@ struct CheckShapeMarkerPolicy
 
 void KoStrokeConfigWidget::selectionChanged()
 {
+
     KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) return;
+
 
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     KoShape *shape = !shapes.isEmpty() ? shapes.first() : 0;
+
     const KoShapeStrokeSP stroke = shape ? qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) : KoShapeStrokeSP();
 
     // setUnit uses blockChildSignals() so take care not to use it inside the block
@@ -691,10 +680,11 @@ void KoStrokeConfigWidget::selectionChanged()
 
     // line width
     if (stroke && KoFlake::compareShapePropertiesEqual<CheckShapeStrokeWidthPolicy>(shapes)) {
-        d->lineWidth->changeValue(stroke->lineWidth());
+        d->ui->lineWidth->changeValue(stroke->lineWidth());
     } else {
-        d->lineWidth->changeValue(0);
+        d->ui->lineWidth->changeValue(0);
     }
+
 
     // caps & joins
     if (stroke && KoFlake::compareShapePropertiesEqual<CheckShapeStrokeCapJoinPolicy>(shapes)) {
@@ -722,11 +712,12 @@ void KoStrokeConfigWidget::selectionChanged()
         d->capNJoinMenu->miterLimit->setEnabled(true);
     }
 
+
     // dashes style
     if (stroke && KoFlake::compareShapePropertiesEqual<CheckShapeStrokeDashesPolicy>(shapes)) {
-        d->lineStyle->setLineStyle(stroke->lineStyle(), stroke->lineDashes());
+        d->ui->lineStyle->setLineStyle(stroke->lineStyle(), stroke->lineDashes());
     } else {
-        d->lineStyle->setLineStyle(Qt::SolidLine, QVector<qreal>());
+        d->ui->lineStyle->setLineStyle(Qt::SolidLine, QVector<qreal>());
     }
 
     // markers
@@ -743,9 +734,41 @@ void KoStrokeConfigWidget::selectionChanged()
         }
     }
 
+    const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() == 0 ? false : true;
+
+    // This switch statement is to help the tab widget "pages" to be closer to the correct size
+    // if we don't do this the internal widgets get rendered, then the tab page has to get resized to
+    // fill up the space, then the internal widgets have to resize yet again...causing flicker
+    switch(d->fillConfigWidget->selectedFillIndex()) {
+        case 0: // no fill
+            this->setMinimumHeight(130);
+            break;
+        case 1: // solid fill
+             this->setMinimumHeight(200);
+             break;
+        case 2: // gradient fill
+            this->setMinimumHeight(350);
+        case 3: // pattern fill
+            break;
+    }
+
+
+    d->ui->thicknessLineBreak->setVisible(lineOptionsVisible);
+    d->ui->lineWidth->setVisible(lineOptionsVisible);
+    d->ui->capNJoinButton->setVisible(lineOptionsVisible);
+    d->ui->lineStyle->setVisible(lineOptionsVisible);
+    d->startMarkerSelector->setVisible(lineOptionsVisible);
+    d->midMarkerSelector->setVisible(lineOptionsVisible);
+    d->endMarkerSelector->setVisible(lineOptionsVisible);
+    d->ui->thicknessLabel->setVisible(lineOptionsVisible);
+    d->ui->strokeStyleLabel->setVisible(lineOptionsVisible);
+
+
+
     blockChildSignals(false);
 
     updateStyleControlsAvailability(!shapes.isEmpty());
+
 }
 
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
@@ -758,7 +781,7 @@ void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
         break;
     case KisCanvasResourceProvider::Size:
         if (d->noSelectionTrackingMode) {
-            d->lineWidth->changeValue(d->canvas->unit().fromUserValue(value.toReal()));
+            d->ui->lineWidth->changeValue(d->canvas->unit().fromUserValue(value.toReal()));
         }
         break;
     }

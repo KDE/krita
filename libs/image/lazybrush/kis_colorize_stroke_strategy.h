@@ -39,13 +39,13 @@ public:
                               bool filteredSourceValid,
                               const QRect &boundingRect, KisNodeSP dirtyNode);
     KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail);
-    ~KisColorizeStrokeStrategy();
+    ~KisColorizeStrokeStrategy() override;
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
-    void initStrokeCallback();
+    void initStrokeCallback() override;
 
-    KisStrokeStrategy *createLodClone(int levelOfDetail);
+    KisStrokeStrategy *createLodClone(int levelOfDetail) override;
 
 Q_SIGNALS:
     void sigFinished();

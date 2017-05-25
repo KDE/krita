@@ -31,7 +31,7 @@ class KisMultiSensorsSelector : public QWidget
 public:
 
     KisMultiSensorsSelector(QWidget* parent);
-    ~KisMultiSensorsSelector();
+    ~KisMultiSensorsSelector() override;
 
     void setCurveOption(KisCurveOption *curveOption);
     void setCurrent(KisDynamicSensorSP _sensor);

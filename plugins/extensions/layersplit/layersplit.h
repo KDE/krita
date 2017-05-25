@@ -29,7 +29,7 @@ class LayerSplit : public KisViewPlugin
     Q_OBJECT
 public:
     LayerSplit(QObject *parent, const QVariantList &);
-    virtual ~LayerSplit();
+    ~LayerSplit() override;
 
 private Q_SLOTS:
 

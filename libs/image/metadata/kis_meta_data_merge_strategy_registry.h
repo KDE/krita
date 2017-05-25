@@ -31,7 +31,7 @@ class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const K
 {
 public:
     MergeStrategyRegistry();
-    virtual ~MergeStrategyRegistry();
+    ~MergeStrategyRegistry() override;
     static MergeStrategyRegistry* instance();
 private:
 

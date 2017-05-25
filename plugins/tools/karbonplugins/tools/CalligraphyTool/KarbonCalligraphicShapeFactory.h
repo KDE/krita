@@ -30,9 +30,9 @@ class KarbonCalligraphicShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     KarbonCalligraphicShapeFactory();
-    virtual ~KarbonCalligraphicShapeFactory();
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    ~KarbonCalligraphicShapeFactory() override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
     //virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

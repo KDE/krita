@@ -29,10 +29,10 @@ class KisColorSelectorNgDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     KisColorSelectorNgDock();
-    QString observerName() { return "KisColorSelectorNgDock"; }
+    QString observerName() override { return "KisColorSelectorNgDock"; }
     /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 private:
     KisColorSelectorNgDockerWidget *m_colorSelectorNgWidget;
 };

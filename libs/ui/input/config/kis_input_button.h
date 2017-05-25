@@ -52,7 +52,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KisInputButton();
+    ~KisInputButton() override;
 
     /**
      * \return The type of input this button detects.
@@ -126,11 +126,11 @@ Q_SIGNALS:
     void dataChanged();
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void wheelEvent(QWheelEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 private Q_SLOTS:
     void reset();

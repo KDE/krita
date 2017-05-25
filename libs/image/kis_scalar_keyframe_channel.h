@@ -32,13 +32,13 @@ public:
     };
 
     KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation=KisKeyframe::Constant);
-    ~KisScalarKeyframeChannel();
+    ~KisScalarKeyframeChannel() override;
 
-    bool hasScalarValue() const;
-    qreal minScalarValue() const;
-    qreal maxScalarValue() const;
-    qreal scalarValue(const KisKeyframeSP keyframe) const;
-    void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
+    bool hasScalarValue() const override;
+    qreal minScalarValue() const override;
+    qreal maxScalarValue() const override;
+    qreal scalarValue(const KisKeyframeSP keyframe) const override;
+    void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0) override;
 
     void setInterpolationMode(KisKeyframeSP keyframe, KisKeyframe::InterpolationMode mode, KUndo2Command *parentCommand = 0);
     void setInterpolationTangents(KisKeyframeSP keyframe, KisKeyframe::InterpolationTangentsMode, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand);
@@ -48,16 +48,16 @@ public:
 
     static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
 protected:
-    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
+    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
     KisKeyframeSP createKeyframe(int time, qreal value, KUndo2Command *parentCommand);
 
-    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
-    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
+    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
+    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
 
-    QRect affectedRect(KisKeyframeSP key);
+    QRect affectedRect(KisKeyframeSP key) override;
 
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
-    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
+    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
 
 private:
     void notifyKeyframeChanged(KisKeyframeSP keyframe);

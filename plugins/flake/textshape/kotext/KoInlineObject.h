@@ -95,7 +95,7 @@ public:
      * @see propertyChangeListener()
      */
     explicit KoInlineObject(bool propertyChangeListener = false);
-    virtual ~KoInlineObject();
+    ~KoInlineObject() override;
 
     /**
      * Will be called by the manager when this variable is added.

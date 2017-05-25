@@ -28,7 +28,7 @@ class KRITAIMAGE_EXPORT KisOnionSkinCompositor : public QObject
 
 public:
     KisOnionSkinCompositor();
-    ~KisOnionSkinCompositor();
+    ~KisOnionSkinCompositor() override;
     static KisOnionSkinCompositor *instance();
 
     void composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect &rect);

@@ -53,11 +53,11 @@ public:
      */
     KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute,
             const QRectF &boundingRect, KUndo2Command *parent = 0);
-    virtual ~KoShapeDistributeCommand();
+    ~KoShapeDistributeCommand() override;
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
 
     class Private;

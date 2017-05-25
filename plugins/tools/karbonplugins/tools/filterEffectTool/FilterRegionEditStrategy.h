@@ -34,13 +34,13 @@ public:
     FilterRegionEditStrategy(KoToolBase *parent, KoShape *shape, KoFilterEffect *effect, KarbonFilterEffectsTool::EditMode mode);
 
     // reimplemented from KoInteractionStrategy
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     // reimplemented from KoInteractionStrategy
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
     // reimplemented from KoInteractionStrategy
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
     // reimplemented from KoInteractionStrategy
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
 private:
     KoFilterEffect *m_effect;

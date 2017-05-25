@@ -70,7 +70,7 @@ class GroupItem : public QObject, public QWidgetItem
 
 public:
     explicit GroupItem(QWidget* widget);
-    ~GroupItem() {}
+    ~GroupItem() override {}
 
     void setSize(const QSize &size) { m_size = size; }
 
@@ -85,10 +85,10 @@ public:
     KisSizeGroupPrivate* getGroup() { return m_group; }
     void setGroup(KisSizeGroupPrivate* group) { m_group = group; }
 
-    QSize sizeHint() const;
-    QSize minimumSize() const;
+    QSize sizeHint() const override;
+    QSize minimumSize() const override;
 
-    bool eventFilter(QObject*, QEvent *event);
+    bool eventFilter(QObject*, QEvent *event) override;
 
 private:
     bool m_hidden;

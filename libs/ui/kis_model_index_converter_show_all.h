@@ -37,15 +37,15 @@ public:
     KisModelIndexConverterShowAll(KisDummiesFacadeBase *dummiesFacade,
                            KisNodeModel *model);
 
-    KisNodeDummy* dummyFromRow(int row, QModelIndex parent);
-    KisNodeDummy* dummyFromIndex(QModelIndex index);
+    KisNodeDummy* dummyFromRow(int row, QModelIndex parent) override;
+    KisNodeDummy* dummyFromIndex(QModelIndex index) override;
 
-    QModelIndex indexFromDummy(KisNodeDummy *dummy);
+    QModelIndex indexFromDummy(KisNodeDummy *dummy) override;
     bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index,
                              const QString &newNodeMetaObjectType,
-                             QModelIndex &parentIndex, int &row);
+                             QModelIndex &parentIndex, int &row) override;
 
-    int rowCount(QModelIndex parent);
+    int rowCount(QModelIndex parent) override;
 
 private:
     KisDummiesFacadeBase *m_dummiesFacade;

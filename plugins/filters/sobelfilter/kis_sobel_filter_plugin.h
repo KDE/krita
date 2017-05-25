@@ -28,7 +28,7 @@ class KisSobelFilterPlugin : public QObject
     Q_OBJECT
 public:
     KisSobelFilterPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisSobelFilterPlugin();
+    ~KisSobelFilterPlugin() override;
 };
 
 #endif

@@ -29,10 +29,10 @@ class AddAnnotationCommand : public AddTextRangeCommand
 {
 public:
     explicit AddAnnotationCommand(KoAnnotation *range, KUndo2Command *parent = 0);
-    virtual ~AddAnnotationCommand();
+    ~AddAnnotationCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     KoAnnotation *m_annotation;

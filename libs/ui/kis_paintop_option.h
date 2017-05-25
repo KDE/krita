@@ -52,7 +52,7 @@ public:
     };
 
     KisPaintOpOption(KisPaintOpOption::PaintopCategory category, bool checked);
-    virtual ~KisPaintOpOption();
+    ~KisPaintOpOption() override;
 
     KisPaintOpOption::PaintopCategory category() const;
     virtual bool isCheckable() const;

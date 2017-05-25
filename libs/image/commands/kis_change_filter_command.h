@@ -55,12 +55,12 @@ public:
         m_filterNameAfter = filterNameAfter;
     }
 public:
-    virtual void redo() {
+    void redo() override {
         m_filterInterface->setFilter(createConfiguration(m_filterNameAfter, m_xmlAfter));
         m_node->setDirty();
     }
 
-    virtual void undo() {
+    void undo() override {
         m_filterInterface->setFilter(createConfiguration(m_filterNameBefore, m_xmlBefore));
         m_node->setDirty();
     }

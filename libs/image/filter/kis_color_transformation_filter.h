@@ -31,18 +31,18 @@ class KRITAIMAGE_EXPORT KisColorTransformationFilter : public KisFilter
 {
 public:
     KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry);
-    virtual ~KisColorTransformationFilter();
-    virtual void processImpl(KisPaintDeviceSP device,
+    ~KisColorTransformationFilter() override;
+    void processImpl(KisPaintDeviceSP device,
                              const QRect& applyRect,
                              const KisFilterConfigurationSP config,
                              KoUpdater* progressUpdater
-                             ) const;
+                             ) const override;
     /**
      * Create the color transformation that will be applied on the device.
      */
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const = 0;
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 };
 
 #endif

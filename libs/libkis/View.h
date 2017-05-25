@@ -36,7 +36,7 @@ class KRITALIBKIS_EXPORT View : public QObject
 
 public:
     explicit View(KisView *view, QObject *parent = 0);
-    virtual ~View();
+    ~View() override;
     
     bool operator==(const View &other) const;
     bool operator!=(const View &other) const;

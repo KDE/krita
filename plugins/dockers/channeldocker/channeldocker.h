@@ -30,7 +30,7 @@ class ChannelDockerPlugin : public QObject
     Q_OBJECT
 public:
     ChannelDockerPlugin(QObject *parent, const QVariantList &);
-    virtual ~ChannelDockerPlugin();
+    ~ChannelDockerPlugin() override;
 };
 
 #endif

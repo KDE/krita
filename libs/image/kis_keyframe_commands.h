@@ -26,8 +26,8 @@ class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command
 public:
     KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCommand);
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     void doSwap(bool insert);
@@ -44,8 +44,8 @@ class KRITAIMAGE_EXPORT KisMoveFrameCommand : public KUndo2Command
 public:
     KisMoveFrameCommand(KisKeyframeChannel *channel, KisKeyframeSP keyframe, int oldTime, int newTime, KUndo2Command *parentCommand);
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     KisKeyframeChannel *m_channel;

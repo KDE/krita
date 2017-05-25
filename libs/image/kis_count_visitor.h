@@ -59,56 +59,56 @@ public:
         return m_count;
     }
 
-    bool visit(KisNode* node) {
+    bool visit(KisNode* node) override {
         return check(node);
     }
 
-    bool visit(KisPaintLayer *layer) {
+    bool visit(KisPaintLayer *layer) override {
         return check(layer);
     }
 
-    bool visit(KisGroupLayer *layer) {
-        return check(layer);
-    }
-
-
-    bool visit(KisAdjustmentLayer *layer) {
+    bool visit(KisGroupLayer *layer) override {
         return check(layer);
     }
 
 
-    bool visit(KisExternalLayer *layer) {
+    bool visit(KisAdjustmentLayer *layer) override {
         return check(layer);
     }
 
 
-    bool visit(KisCloneLayer *layer) {
+    bool visit(KisExternalLayer *layer) override {
         return check(layer);
     }
 
 
-    bool visit(KisFilterMask *mask) {
+    bool visit(KisCloneLayer *layer) override {
+        return check(layer);
+    }
+
+
+    bool visit(KisFilterMask *mask) override {
         return check(mask);
     }
 
-    bool visit(KisTransformMask *mask) {
+    bool visit(KisTransformMask *mask) override {
         return check(mask);
     }
 
-    bool visit(KisTransparencyMask *mask) {
+    bool visit(KisTransparencyMask *mask) override {
         return check(mask);
     }
 
 
-    bool visit(KisGeneratorLayer * layer) {
+    bool visit(KisGeneratorLayer * layer) override {
         return check(layer);
     }
 
-    bool visit(KisSelectionMask* mask) {
+    bool visit(KisSelectionMask* mask) override {
         return check(mask);
     }
 
-    bool visit(KisColorizeMask* mask) {
+    bool visit(KisColorizeMask* mask) override {
         return check(mask);
     }
 

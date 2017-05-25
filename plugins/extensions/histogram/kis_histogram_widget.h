@@ -43,7 +43,7 @@ class KisHistogramWidget : public WdgHistogram
 
 public:
     KisHistogramWidget(QWidget *parent, const char *name);
-    virtual ~KisHistogramWidget();
+    ~KisHistogramWidget() override;
 
     void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 

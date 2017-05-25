@@ -45,13 +45,16 @@ class KRITAUI_EXPORT KoFillConfigWidget : public QWidget
 
 public:
     explicit KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, QWidget *parent);
-    ~KoFillConfigWidget();
+    ~KoFillConfigWidget() override;
 
     void setNoSelectionTrackingMode(bool value);
 
     /// Returns the list of the selected shape
     /// If you need to use only one shape, call currentShape()
     QList<KoShape*> currentShapes();
+
+    /// returns the selected index of the fill type
+    int selectedFillIndex();
 
     KoShapeStrokeSP createShapeStroke();
 
@@ -98,6 +101,8 @@ private:
     void setNewGradientBackgroundToShape();
     void updateGradientSaveButtonAvailability();
     void loadCurrentFillFromResourceServer();
+
+    void updateWidgetComponentVisbility();
 
     class Private;
     Private * const d;

@@ -56,7 +56,7 @@ public:
 
     /// when deleting an updater, make sure the accompanying thread is
     /// interrupted, too.
-    virtual ~KoUpdaterPrivate();
+    ~KoUpdaterPrivate() override;
 
     bool interrupted() const { return m_interrupted; }
 

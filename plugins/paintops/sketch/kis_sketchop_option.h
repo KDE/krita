@@ -37,15 +37,15 @@ class KisSketchOpOption : public KisPaintOpOption
 {
 public:
     KisSketchOpOption();
-    ~KisSketchOpOption();
+    ~KisSketchOpOption() override;
 
     void setThreshold(int radius) const;
     int threshold() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP settings);
+    void writeOptionSetting(KisPropertiesConfigurationSP settings) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP settings) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private:
 

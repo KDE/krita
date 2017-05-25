@@ -46,11 +46,11 @@ public:
      */
     explicit KoCreateShapesTool(KoCanvasBase *canvas);
     /// destructor
-    virtual ~KoCreateShapesTool();
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    ~KoCreateShapesTool() override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     /**
      * Each shape-type has an Id; as found in KoShapeFactoryBase::id().id(), to choose which
@@ -78,7 +78,7 @@ public:
     const KoProperties *shapeProperties();
 
 protected:
-    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
 private:
     Q_DECLARE_PRIVATE(KoCreateShapesTool)

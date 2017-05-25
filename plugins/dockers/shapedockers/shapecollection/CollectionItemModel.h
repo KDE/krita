@@ -50,11 +50,11 @@ class CollectionItemModel : public QAbstractListModel
 public:
     explicit CollectionItemModel(QObject *parent = 0);
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
-    virtual QStringList mimeTypes() const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    QStringList mimeTypes() const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     /**
      * Set the list of KoCollectionItem to be stored in the model

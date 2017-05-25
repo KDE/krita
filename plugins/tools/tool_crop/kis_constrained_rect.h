@@ -45,7 +45,7 @@ public:
 
 public:
     KisConstrainedRect();
-    ~KisConstrainedRect();
+    ~KisConstrainedRect() override;
 
     void setRectInitial(const QRect &rect);
     void setCropRect(const QRect &cropRect);

@@ -35,11 +35,11 @@ class AnimationDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     AnimationDocker();
-    ~AnimationDocker();
-    QString observerName() { return "AnimationDocker"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
-    void setMainWindow(KisViewManager *kisview);
+    ~AnimationDocker() override;
+    QString observerName() override { return "AnimationDocker"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
+    void setMainWindow(KisViewManager *kisview) override;
 
 private Q_SLOTS:
     void slotPreviousFrame();

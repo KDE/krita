@@ -30,7 +30,7 @@ class DynaPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     DynaPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~DynaPaintOpPlugin();
+    ~DynaPaintOpPlugin() override;
 };
 
 #endif // DYNA_PAINTOP_PLUGIN_H_

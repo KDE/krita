@@ -30,7 +30,7 @@ class ToolTransform : public QObject
     Q_OBJECT
 public:
     ToolTransform(QObject *parent, const QVariantList &);
-    virtual ~ToolTransform();
+    ~ToolTransform() override;
 };
 
 #endif // TOOL_TRANSFORM_H_

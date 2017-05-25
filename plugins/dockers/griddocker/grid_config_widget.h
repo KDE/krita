@@ -34,7 +34,7 @@ class GridConfigWidget : public QWidget
 
 public:
     explicit GridConfigWidget(QWidget *parent = 0);
-    ~GridConfigWidget();
+    ~GridConfigWidget() override;
 
     void setGridConfig(const KisGridConfig &value);
     KisGridConfig gridConfig() const;
@@ -44,6 +44,11 @@ public:
 
     void setGridDivision(int w, int h);
 
+    bool showRulers() const;
+
+public Q_SLOTS:
+    void setShowRulers(bool value);
+
 private Q_SLOTS:
     void slotGridGuiChanged();
     void slotGuidesGuiChanged();
@@ -52,6 +57,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void gridValueChanged();
     void guidesValueChanged();
+    void showRulersChanged(bool);
 
 private:
     KisGridConfig fetchGuiGridConfig() const;

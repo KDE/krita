@@ -35,7 +35,7 @@ class KisMouseInputEditor : public QPushButton
     Q_OBJECT
 public:
     KisMouseInputEditor(QWidget *parent = 0);
-    ~KisMouseInputEditor();
+    ~KisMouseInputEditor() override;
 
     QList<Qt::Key> keys() const;
     void setKeys(const QList<Qt::Key> &newKeys);

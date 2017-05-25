@@ -58,7 +58,7 @@ public:
 
     RClickLabel(QWidget* const parent = 0);
     explicit RClickLabel(const QString& text, QWidget* const parent = 0);
-    ~RClickLabel();
+    ~RClickLabel() override;
 
 Q_SIGNALS:
 
@@ -69,9 +69,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 };
 
 // -------------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
 
     RSqueezedClickLabel(QWidget* const parent = 0);
     explicit RSqueezedClickLabel(const QString& text, QWidget* const parent = 0);
-    ~RSqueezedClickLabel();
+    ~RSqueezedClickLabel() override;
 
 Q_SIGNALS:
 
@@ -93,9 +93,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 };
 
 // -------------------------------------------------------------------------
@@ -107,12 +107,12 @@ class  RArrowClickLabel : public QWidget
 public:
 
     RArrowClickLabel(QWidget* const parent = 0);
-    ~RArrowClickLabel();
+    ~RArrowClickLabel() override;
 
     void setArrowType(Qt::ArrowType arrowType);
     Qt::ArrowType arrowType() const;
 
-    virtual QSize sizeHint () const;
+    QSize sizeHint () const override;
 
 Q_SIGNALS:
 
@@ -120,9 +120,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
 protected:
 
@@ -140,7 +140,7 @@ class  RLabelExpander : public QWidget
 public:
 
     RLabelExpander(QWidget* const parent = 0);
-    ~RLabelExpander();
+    ~RLabelExpander() override;
 
     void setCheckBoxVisible(bool b);
     bool checkBoxIsVisible() const;
@@ -177,7 +177,7 @@ private Q_SLOTS:
 
 private:
 
-    bool eventFilter(QObject* obj, QEvent* ev);
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
 private:
 
@@ -194,7 +194,7 @@ class  RExpanderBox : public QScrollArea
 public:
 
     RExpanderBox(QWidget* const parent = 0);
-    ~RExpanderBox();
+    ~RExpanderBox() override;
 
     /** Add RLabelExpander item at end of box layout with these settings :
         'w'               : the widget hosted by RLabelExpander.
@@ -279,7 +279,7 @@ class  RExpanderBoxExclusive : public RExpanderBox
 public:
 
     RExpanderBoxExclusive(QWidget* const parent = 0);
-    ~RExpanderBoxExclusive();
+    ~RExpanderBoxExclusive() override;
 
     /** Show one expander open at most */
     void setIsToolBox(bool b);

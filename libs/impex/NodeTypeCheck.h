@@ -39,7 +39,7 @@ public:
         }
     }
 
-    bool checkNeeded(KisImageSP image) const
+    bool checkNeeded(KisImageSP image) const override
     {
         QStringList nodetypes = QStringList() << m_nodeType;
         KoProperties props;
@@ -55,7 +55,7 @@ public:
         }
     }
 
-    Level check(KisImageSP /*image*/) const
+    Level check(KisImageSP /*image*/) const override
     {
         return m_level;
     }
@@ -72,14 +72,14 @@ public:
         , m_description(description)
     {}
 
-    virtual ~NodeTypeCheckFactory() {}
+    ~NodeTypeCheckFactory() override {}
 
-    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning)
+    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning) override
     {
         return new NodeTypeCheck(m_nodeType, m_description, id(), level, customWarning);
     }
 
-    QString id() const {
+    QString id() const override {
         return "NodeTypeCheck/" + m_nodeType;
     }
 

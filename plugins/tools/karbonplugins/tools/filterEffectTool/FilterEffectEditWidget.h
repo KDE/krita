@@ -36,16 +36,16 @@ class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
     Q_OBJECT
 public:
     explicit FilterEffectEditWidget(QWidget *parent = 0);
-    ~FilterEffectEditWidget();
+    ~FilterEffectEditWidget() override;
 
     /// Edits effects of given shape
     void editShape(KoShape *shape, KoCanvasBase *canvas);
 
 protected:
     /// reimplemented from QWidget
-    virtual void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
     /// reimplemented from QWidget
-    virtual void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 private Q_SLOTS:
     void addSelectedEffect();
     void removeSelectedItem();

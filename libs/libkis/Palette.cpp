@@ -24,7 +24,7 @@ struct Palette::Private {
 };
 
 Palette::Palette(Resource *resource): d(new Private()) {
-    d->palette = dynamic_cast<KoColorSet*>(resource);
+    d->palette = dynamic_cast<KoColorSet*>(resource->resource());
 }
 
 int Palette::columnCount()

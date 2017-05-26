@@ -46,6 +46,9 @@ public:
     }
 
 private:
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+
+private:
     KisDynaProperties m_properties;
     KisPaintDeviceSP m_dab;
     DynaBrush m_dynaBrush;

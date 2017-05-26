@@ -82,7 +82,7 @@ private:
 private:
     void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);
     void updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation);
-
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 };
 
 #endif // KIS_SKETCH_PAINTOP_H_

@@ -83,9 +83,21 @@ KisDynaPaintOp::~KisDynaPaintOp()
 {
 }
 
-void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,
+                                 KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(currentDistance);
+    // Use superclass behavior for lines of zero length. Otherwise, airbrushing can happen faster
+    // than it is supposed to.
+    if (pi1.pos() == pi2.pos()) {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    }
+    else {
+        doPaintLine(pi1, pi2);
+    }
+}
+
+void KisDynaPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+{
     Q_UNUSED(pi2);
     if (!painter()) return;
 

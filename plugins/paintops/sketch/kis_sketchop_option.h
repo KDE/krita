@@ -47,6 +47,8 @@ public:
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+
 private:
 
     KisSketchOpOptionsWidget * m_options;

@@ -41,6 +41,9 @@ public:
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
 private:
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+
+private:
     KisParticleBrushProperties m_properties;
     KisPaintDeviceSP m_dab;
     ParticleBrush m_particleBrush;

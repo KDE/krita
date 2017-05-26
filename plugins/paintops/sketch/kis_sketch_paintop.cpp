@@ -123,10 +123,20 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
                         0.5 * m_brushBoundingBox.height());
 }
 
-void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,
+                                 KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(currentDistance);
-
+    // Use superclass behavior for lines of zero length. Otherwise, airbrushing can happen faster
+    // than it is supposed to.
+    if (pi1.pos() == pi2.pos()) {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    }
+    else {
+        doPaintLine(pi1, pi2);
+    }
+} 
+void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+{
     if (!m_brush || !painter()) return;
 
     if (!m_dab) {
@@ -301,6 +311,6 @@ KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
     KisDistanceInformation di;
     paintLine(info, info, &di);
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
-                                          KisLodTransform::lodToScale(painter()->device()),
-                                          m_settings, nullptr, &m_rateOption, info);
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   m_settings, nullptr, &m_rateOption, info);
 }

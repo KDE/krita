@@ -30,7 +30,7 @@ class KisAirbrushWidget;
 class PAINTOP_EXPORT KisAirbrushOption : public KisPaintOpOption
 {
 public:
-    KisAirbrushOption(bool enabled = true);
+    KisAirbrushOption(bool enabled = true, bool canIgnoreSpacing = true);
     ~KisAirbrushOption() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;

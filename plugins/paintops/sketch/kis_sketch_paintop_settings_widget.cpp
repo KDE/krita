@@ -50,7 +50,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()  , i18n("0%"), i18n("100%")), i18n("Line width"));
     addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")), i18n("Offset scale"));
     addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")), i18n("Density"));
-    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+    addPaintOpOption(new KisAirbrushOption(false, false), i18n("Airbrush"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
 
     m_paintActionType = new KisPaintActionTypeOption();

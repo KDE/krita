@@ -33,7 +33,7 @@ KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
 {
     addPaintOpOption(new KisDynaOpOption(), i18n("Brush size"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+    addPaintOpOption(new KisAirbrushOption(false, false), i18n("Airbrush"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"),
                                               i18n("100%")), i18n("Rate"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));

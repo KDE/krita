@@ -34,7 +34,7 @@ const qreal DEFAULT_RATE = 20.0;
 class KisAirbrushWidget: public QWidget, public Ui::WdgAirbrush
 {
 public:
-    KisAirbrushWidget(QWidget *parent = 0)
+    KisAirbrushWidget(QWidget *parent = 0, bool canIgnoreSpacing = true)
         : QWidget(parent) {
         setupUi(this);
 
@@ -42,16 +42,19 @@ public:
         sliderRate->setExponentRatio(RATE_EXPONENT_RATIO);
         sliderRate->setSingleStep(RATE_SINGLE_STEP);
         sliderRate->setValue(DEFAULT_RATE);
+
+        checkBoxIgnoreSpacing->setVisible(canIgnoreSpacing);
+        checkBoxIgnoreSpacing->setEnabled(canIgnoreSpacing);
     }
 };
 
 
-KisAirbrushOption::KisAirbrushOption(bool enabled)
+KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
     : KisPaintOpOption(KisPaintOpOption::COLOR, enabled)
 {
     setObjectName("KisAirBrushOption");
     m_checkable = true;
-    m_optionWidget = new KisAirbrushWidget();
+    m_optionWidget = new KisAirbrushWidget(nullptr, canIgnoreSpacing);
     connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
             SLOT(emitSettingChanged()));

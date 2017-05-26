@@ -136,7 +136,13 @@ public:
     /// XXX !!! :-| Please add dox!
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
 
-    /// XXX !!! :-| Please add dox!
+    /**
+     * Causes the specified distance information to be temporarily registered with this
+     * KisPaintInformation object, so that the KisPaintInformation can compute certain values that
+     * may be needed at painting time, such as the drawing direction. When the returned object is
+     * destroyed, the KisDistanceInformation will be unregistered. At most one
+     * KisDistanceInformation can be registered with a given KisPaintInformation at a time.
+     */
     DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**

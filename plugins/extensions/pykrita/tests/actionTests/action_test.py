@@ -1,6 +1,4 @@
 import unittest
-import os
-import sys
 from krita import Action
 from PyQt5.QtWidgets import QAction
 
@@ -18,6 +16,10 @@ class TestAction(unittest.TestCase):
     def testConstructorWithStringQAction(self):
         new_action = Action("test", QAction("test"))
         self.assertEqual(bool(new_action), True)
+
+    def testConstructorInvalidParameter(self):
+        with self.assertRaises(TypeError):
+            Action(str(''))
 
     def testEqualOperator(self):
         new_action = self.instance
@@ -77,5 +79,6 @@ class TestAction(unittest.TestCase):
         self.instance.trigger()
         self.assertEqual(self.triggered, True)
 
+    #helper method
     def slotTriggered(self):
         self.triggered = True

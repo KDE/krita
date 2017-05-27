@@ -286,8 +286,6 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerStart(m_d->previousPaintInformation);
     }
-
-    paintAt(previousPaintInformation);
 }
 
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,

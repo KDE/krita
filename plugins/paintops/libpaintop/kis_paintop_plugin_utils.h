@@ -56,7 +56,6 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        const KisPaintInformation &pi)
 {
     // Extract required parameters.
-    // Note: timedSpacingInterval might end up being infinity. That shouldn't cause any problems.
     bool distanceSpacingEnabled = true;
     bool timedSpacingEnabled = false;
     qreal timedSpacingInterval = 0.0;

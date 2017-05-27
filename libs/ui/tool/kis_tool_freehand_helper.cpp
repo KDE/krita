@@ -823,10 +823,6 @@ void KisToolFreehandHelper::doAirbrushing()
 
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 {
-    // If the paintop is controlling the airbrush timing, we might be able to get better
-    // responsiveness by setting the tool's airbrush timer to update faster than the desired rate.
-    // If the paintop is not controlling the timing, the tool needs to make its updates happen as
-    // close as possible to the desired rate.
     qreal realInterval = m_d->resources->airbrushingInterval() * AIRBRUSH_INTERVAL_FACTOR;
     return qMax(1, qFloor(realInterval));
 }

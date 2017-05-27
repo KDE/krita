@@ -42,7 +42,7 @@ public:
 
     qreal airbrushInterval() const override
     {
-        return std::numeric_limits<qreal>::infinity();
+        return 1000.0;
     }
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;

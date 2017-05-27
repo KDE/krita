@@ -135,7 +135,7 @@ public:
      * should be ignored if isAirbrushing() is false.
      *
      * The default implementation uses the property AIRBRUSH_RATE, defaulting to an interval of
-     * infinity if the property is not found. This should be suitable for most paintops.
+     * one second if the property is not found. This should be suitable for most paintops.
      */
     virtual qreal airbrushInterval() const;
 

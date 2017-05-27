@@ -317,7 +317,13 @@ bool KisPaintOpSettings::isAirbrushing() const
 
 qreal KisPaintOpSettings::airbrushInterval() const
 {
-    return 1000.0 / getDouble(AIRBRUSH_RATE, 0.0);
+    qreal rate = getDouble(AIRBRUSH_RATE, 1.0);
+    if (rate == 0.0) {
+        return 1000.0;
+    }
+    else {
+        return 1000.0 / rate;
+    }
 }
 
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)

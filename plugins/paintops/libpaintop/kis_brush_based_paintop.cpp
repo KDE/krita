@@ -173,8 +173,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qre
                                              m_brush->spacing(),
                                              m_brush->autoSpacingActive(),
                                              m_brush->autoSpacingCoeff(),
-                                             false,
-                                             std::numeric_limits<qreal>::infinity(),
+                                             false, 1000.0,
                                              KisLodTransform::lodToScale(painter()->device()));
 }
 

@@ -20,8 +20,6 @@
 #ifndef _KIS_DISTANCE_INFORMATION_H_
 #define _KIS_DISTANCE_INFORMATION_H_
 
-#include <limits>
-
 #include <QPointF>
 #include <QVector2D>
 #include "kritaimage_export.h"
@@ -136,13 +134,13 @@ public:
     }
 
     /**
-     * @return The desired maximum amount of time between dabs, in milliseconds. Returns infinity if
-     * time-based spacing is disabled.
+     * @return The desired maximum amount of time between dabs, in milliseconds. Returns a time of
+     * approximately 1 year if time-based spacing is disabled.
      */
     inline qreal timedSpacingInterval() const {
         return isTimedSpacingEnabled() ?
                     m_timedSpacingInterval :
-                    std::numeric_limits<qreal>::infinity();
+                    32000000000.0;
     }
 
     inline bool isIsotropic() const {

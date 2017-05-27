@@ -59,12 +59,16 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
     // Note: timedSpacingInterval might end up being infinity. That shouldn't cause any problems.
     bool distanceSpacingEnabled = true;
     bool timedSpacingEnabled = false;
-    qreal timedSpacingInterval = std::numeric_limits<qreal>::infinity();
+    qreal timedSpacingInterval = 0.0;
     if (propsConfig) {
         timedSpacingEnabled = propsConfig->getBool(AIRBRUSH_ENABLED, false);
         distanceSpacingEnabled
                 = !(timedSpacingEnabled && propsConfig->getBool(AIRBRUSH_IGNORE_SPACING, false));
-        timedSpacingInterval = 1000.0 / propsConfig->getDouble(AIRBRUSH_RATE, 0.0);
+        qreal timedSpacingRate = propsConfig->getDouble(AIRBRUSH_RATE, 1.0);
+        if (timedSpacingRate == 0.0) {
+            timedSpacingRate = 1.0;
+        }
+        timedSpacingInterval = 1000.0 / timedSpacingRate;
     }
     qreal extraScale = 1.0;
     if (spacingOption && spacingOption->isChecked()) {

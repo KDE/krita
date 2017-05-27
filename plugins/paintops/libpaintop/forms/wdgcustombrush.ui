@@ -69,13 +69,19 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="1">
-        <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="nameLineEdit"/>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="colorAsMask">
+       <item row="1" column="1">
+        <widget class="KisSpacingSelectionWidget" name="spacingWidget"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="spacingLbl">
          <property name="text">
-          <string>Create mask from color</string>
+          <string>Spacing:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -89,18 +95,12 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="spacingLbl">
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="colorAsMask">
          <property name="text">
-          <string>Spacing:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <string>Create mask from color</string>
          </property>
         </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="nameLineEdit"/>
        </item>
       </layout>
      </item>

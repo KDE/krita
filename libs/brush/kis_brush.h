@@ -164,6 +164,7 @@ public:
     bool autoSpacingActive() const;
     qreal autoSpacingCoeff() const;
 
+
     /**
      * @return the width (for scale == 1.0)
      */

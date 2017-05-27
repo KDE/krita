@@ -29,6 +29,9 @@
 
 const qreal MIN_DISTANCE_SPACING = 0.5;
 
+// Smallest allowed interval when timed spacing is enabled, in milliseconds.
+const qreal MIN_TIMED_INTERVAL = 0.5;
+
 // Largest allowed interval when timed spacing is enabled, in milliseconds.
 const qreal MAX_TIMED_INTERVAL = 1000.0;
 
@@ -287,6 +290,7 @@ qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
     }
     
     qreal timedSpacingInterval = qMin(MAX_TIMED_INTERVAL, m_d->spacing.timedSpacingInterval());
+    timedSpacingInterval = qMax(MIN_TIMED_INTERVAL, timedSpacingInterval);
     qreal nextPointInterval = timedSpacingInterval - m_d->accumTime;
     
     // Note: nextPointInterval SHOULD always be positive, but I wasn't sure if floating point

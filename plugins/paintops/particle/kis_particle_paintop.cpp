@@ -69,8 +69,7 @@ KisParticlePaintOp::~KisParticlePaintOp()
 
 KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di;
-    paintLine(info, info, &di);
+    doPaintLine(info, info);
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
                                                    m_settings, nullptr, &m_rateOption, info);

@@ -816,12 +816,7 @@ void KisToolFreehandHelper::doAirbrushing()
                                   elapsedStrokeTime(),
                                   0.0);
 
-    if (m_d->hasPaintAtLeastOnce) {
-        paint(nextPaint);
-    }
-    else {
-        paintAt(nextPaint);
-    }
+    paint(nextPaint);
 }
 
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const

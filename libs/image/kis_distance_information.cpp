@@ -27,6 +27,10 @@
 
 #include "kis_lod_transform.h"
 
+const qreal MIN_DISTANCE_SPACING = 0.5;
+
+// Largest allowed interval when timed spacing is enabled, in milliseconds.
+const qreal MAX_TIMED_INTERVAL = 1000.0;
 
 struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     Private() :
@@ -195,7 +199,7 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
                                                             const QPointF &end)
 {
     qreal distance = m_d->accumDistance.x();
-    qreal spacing = qMax(qreal(0.5), m_d->spacing.distanceSpacing().x());
+    qreal spacing = qMax(MIN_DISTANCE_SPACING, m_d->spacing.distanceSpacing().x());
 
     if (start == end) {
         return -1;
@@ -224,8 +228,8 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
         return -1;
     }
 
-    qreal a_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.distanceSpacing().x());
-    qreal b_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.distanceSpacing().y());
+    qreal a_rev = 1.0 / qMax(MIN_DISTANCE_SPACING, m_d->spacing.distanceSpacing().x());
+    qreal b_rev = 1.0 / qMax(MIN_DISTANCE_SPACING, m_d->spacing.distanceSpacing().y());
 
     qreal x = m_d->accumDistance.x();
     qreal y = m_d->accumDistance.y();
@@ -282,7 +286,8 @@ qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
         return -1.0;
     }
     
-    qreal nextPointInterval = m_d->spacing.timedSpacingInterval() - m_d->accumTime;
+    qreal timedSpacingInterval = qMin(MAX_TIMED_INTERVAL, m_d->spacing.timedSpacingInterval());
+    qreal nextPointInterval = timedSpacingInterval - m_d->accumTime;
     
     // Note: nextPointInterval SHOULD always be positive, but I wasn't sure if floating point
     // roundoff error might make it nonpositive in some cases, so I included this check.

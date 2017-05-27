@@ -113,10 +113,6 @@ protected:
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintPointOrLine(int painterInfoId,
-                          const KisPaintInformation &pi1,
-                          const KisPaintInformation &pi2);
-
     void paintBezierCurve(int painterInfoId,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
@@ -129,9 +125,6 @@ protected:
 
     virtual void paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2);
-
-    virtual void paintPointOrLine(const KisPaintInformation &pi1,
-                                  const KisPaintInformation &pi2);
 
     virtual void paintBezierCurve(const KisPaintInformation &pi1,
                                   const QPointF &control1,

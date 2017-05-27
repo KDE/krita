@@ -110,40 +110,6 @@ void KisToolMultihandHelper::paintLine(const KisPaintInformation &pi1,
     }
 }
 
-void KisToolMultihandHelper::paintPointOrLine(const KisPaintInformation &pi1,
-                                              const KisPaintInformation &pi2)
-{
-    // TODO: Reduce code duplication in paintAt, paintLine, paintPointOrLine, and paintBezierCurve.
-    for (int i = 0; i < d->transformations.size(); i++) {
-        const QTransform &transform = d->transformations[i];
-
-        KisPaintInformation __pi1 = pi1;
-        KisPaintInformation __pi2 = pi2;
-        __pi1.setPos(transform.map(__pi1.pos()));
-        __pi2.setPos(transform.map(__pi2.pos()));
-
-        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
-        rotateme.setAngle(__pi1.canvasRotation());
-        QLineF rotated = transform.map(rotateme);
-        __pi1.setCanvasRotation(rotated.angle());
-
-        rotateme.setAngle(__pi2.canvasRotation());
-        rotated = transform.map(rotateme);
-        __pi2.setCanvasRotation(rotated.angle());
-
-        //check mirroring
-        if (__pi2.canvasMirroredH()) {
-            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
-            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);
-            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
-            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
-        }
-
-
-        paintPointOrLine(i, __pi1, __pi2);
-    }
-}
-
 void KisToolMultihandHelper::paintBezierCurve(const KisPaintInformation &pi1,
                                               const QPointF &control1,
                                               const QPointF &control2,

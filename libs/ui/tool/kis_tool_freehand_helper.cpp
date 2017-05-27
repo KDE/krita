@@ -117,7 +117,7 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
 
     m_d->stabilizerDelayedPaintHelper.setPaintLineCallback(
                 [this](const KisPaintInformation &pi1, const KisPaintInformation &pi2) {
-                    paintPointOrLine(pi1, pi2);
+                    paintLine(pi1, pi2);
                 });
     m_d->stabilizerDelayedPaintHelper.setUpdateOutlineCallback(
                 [this]() {
@@ -732,7 +732,7 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             if (m_d->stabilizerDelayedPaintHelper.running()) {
                 delayedPaintTodoItems.append(newInfo);
             } else {
-                paintPointOrLine(m_d->previousPaintInformation, newInfo);
+                paintLine(m_d->previousPaintInformation, newInfo);
             }
             m_d->previousPaintInformation = newInfo;
 
@@ -860,18 +860,6 @@ void KisToolFreehandHelper::paintLine(int painterInfoId,
     }
 }
 
-void KisToolFreehandHelper::paintPointOrLine(int painterInfoId,
-                                             const KisPaintInformation &pi1,
-                                             const KisPaintInformation &pi2)
-{
-    if (m_d->hasPaintAtLeastOnce) {
-        paintLine(painterInfoId, pi1, pi2);
-    }
-    else {
-        paintAt(painterInfoId, pi2);
-    }
-}
-
 void KisToolFreehandHelper::paintBezierCurve(int painterInfoId,
                                              const KisPaintInformation &pi1,
                                              const QPointF &control1,
@@ -929,12 +917,6 @@ void KisToolFreehandHelper::paintLine(const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
     paintLine(0, pi1, pi2);
-}
-
-void KisToolFreehandHelper::paintPointOrLine(const KisPaintInformation &pi1,
-                                             const KisPaintInformation &pi2)
-{
-    paintPointOrLine(0, pi1, pi2);
 }
 
 void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,

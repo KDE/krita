@@ -44,9 +44,6 @@ protected:
     void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2) override;
 
-    void paintPointOrLine(const KisPaintInformation &pi1,
-                          const KisPaintInformation &pi2);
-
     void paintBezierCurve(const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
@@ -54,7 +51,6 @@ protected:
 
     using KisToolFreehandHelper::paintAt;
     using KisToolFreehandHelper::paintLine;
-    using KisToolFreehandHelper::paintPointOrLine;
     using KisToolFreehandHelper::paintBezierCurve;
 
 private:

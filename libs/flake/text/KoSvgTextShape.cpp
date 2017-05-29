@@ -226,7 +226,7 @@ void KoSvgTextShape::relayout()
                 currentTextPos += lastSubChunkOffset;
 
                 line.setNumColumns(numChars);
-                line.setPosition(currentTextPos);
+                line.setPosition(currentTextPos - QPointF(0, line.ascent()));
                 currentTextPos.rx() += line.horizontalAdvance();
 
 
@@ -239,7 +239,7 @@ void KoSvgTextShape::relayout()
                     line.setNumColumns(numChars);
 
                     currentTextPos += lastSubChunkOffset;
-                    line.setPosition(currentTextPos);
+                    line.setPosition(currentTextPos - QPointF(0, line.ascent()));
                     currentTextPos.rx() += line.horizontalAdvance();
                 }
 

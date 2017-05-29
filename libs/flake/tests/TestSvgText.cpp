@@ -334,7 +334,7 @@ void TestSvgText::testSimpleText()
             "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"7\" y=\"8\""
+            "    <text id=\"testRect\" x=\"7\" y=\"27\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
             "        Hello, out there!"
             "    </text>"
@@ -368,7 +368,7 @@ void TestSvgText::testSimpleText()
     QVERIFY(!transform[0].rotate);
 
     QCOMPARE(*transform[0].xPos, 7.0);
-    QCOMPARE(*transform[0].yPos, 8.0);
+    QCOMPARE(*transform[0].yPos, 27.0);
 
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
             chunkShape->layoutInterface()->collectSubChunks();
@@ -398,9 +398,9 @@ void TestSvgText::testComplexText()
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"7\" y=\"8\" dx=\"0,1,2,3,4,5,6,7,8\""
+            "    <text id=\"testRect\" x=\"7\" y=\"27\" dx=\"0,1,2,3,4,5,6,7,8\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
-            "        Hello, <tspan fill=\"red\" x=\"20\" y=\"27\" text-anchor=\"start\">ou"
+            "        Hello, <tspan fill=\"red\" x=\"20\" y=\"46\" text-anchor=\"start\">ou"
             "t</tspan> there <![CDATA[cool cdata --> nice work]]>"
             "    </text>"
 
@@ -529,7 +529,7 @@ void TestSvgText::testHindiText()
             "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"4\" y=\"5\""
+            "    <text id=\"testRect\" x=\"4\" y=\"24\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
             "मौखिक रूप से हिंदी के काफी सामान"
             "    </text>"
@@ -553,7 +553,7 @@ void TestSvgText::testTextBaselineShift()
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"4\" y=\"10\" "
+            "    <text id=\"testRect\" x=\"4\" y=\"29\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
 
             "        <tspan>text<tspan baseline-shift=\"super\">super </tspan>normal<tspan baseline-shift=\"sub\">sub</tspan></tspan>"
@@ -587,7 +587,7 @@ void TestSvgText::testTextSpacing()
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"5\" y=\"5\" "
+            "    <text id=\"testRect\" x=\"5\" y=\"24\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
 
             "        <tspan x=\"5\" dy=\"0.0em\">Lorem ipsum</tspan>"
@@ -631,7 +631,7 @@ void TestSvgText::testTextDecorations()
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"4\" y=\"5\" "
+            "    <text id=\"testRect\" x=\"4\" y=\"24\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
 
             "        <tspan x=\"20\" dy=\"0.0em\" text-decoration=\"underline\">Lorem ipsum</tspan>"
@@ -667,7 +667,7 @@ void TestSvgText::testRightToLeft()
             "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"20\" y=\"15\" "
+            "    <text id=\"testRect\" x=\"20\" y=\"34\" "
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" text-anchor=\"end\">"
 
             "        <tspan x=\"250\" dy=\"0.0em\" text-anchor=\"middle\" direction=\"rtl\">aa bb cc dd</tspan>"
@@ -817,7 +817,7 @@ void TestSvgText::testTextOutlineSolid()
             "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"2\" y=\"5\""
+            "    <text id=\"testRect\" x=\"2\" y=\"24\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
             "        SA"
             "    </text>"
@@ -841,7 +841,7 @@ void TestSvgText::testNbspHandling()
             "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
             "        fill=\"none\" stroke=\"red\"/>"
 
-            "    <text id=\"testRect\" x=\"2\" y=\"5\""
+            "    <text id=\"testRect\" x=\"2\" y=\"24\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
             "        S\u00A0A"
             "    </text>"

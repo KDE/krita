@@ -1,9 +1,16 @@
-find_package(KF5NewStuffCore REQUIRED)
+find_package(KF5NewStuffCore)
+set_package_properties(KF5NewStuffCore PROPERTIES
+    DESCRIPTION "The KNewStuff library implements collaborative data sharing for applications."
+    URL "https://api.kde.org/frameworks/knewstuff/html/index.html"
+    TYPE REQUIRED
+    PURPOSE "Required to implement sharing functionality with share.krita.org and krita")
 
 set(kritaresourcemanager_SOURCES
     resourcemanager.cpp
     dlg_create_bundle.cpp
     dlg_bundle_manager.cpp
+    dlg_content_downloader.cpp
+    content_downloader_backend.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

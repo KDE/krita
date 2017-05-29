@@ -68,6 +68,8 @@
 #include <text/KoSvgTextShape.h>
 #include <text/KoSvgTextChunkShape.h>
 
+#include "kis_dom_utils.h"
+
 #include "kis_debug.h"
 #include "kis_global.h"
 
@@ -1460,11 +1462,11 @@ KoShape * SvgParser::createPath(const KoXmlElement &element)
             QStringList pointList = SvgUtil::simplifyList(element.attribute("points"));
             for (QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it) {
                 QPointF point;
-                point.setX(SvgUtil::fromUserSpace((*it).toDouble()));
+                point.setX(SvgUtil::fromUserSpace(KisDomUtils::toDouble(*it)));
                 ++it;
                 if (it == pointList.end())
                     break;
-                point.setY(SvgUtil::fromUserSpace((*it).toDouble()));
+                point.setY(SvgUtil::fromUserSpace(KisDomUtils::toDouble(*it)));
                 if (bFirst) {
                     path->moveTo(point);
                     bFirst = false;

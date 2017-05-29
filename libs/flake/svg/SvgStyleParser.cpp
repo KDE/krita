@@ -28,6 +28,8 @@
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
 
+#include "kis_dom_utils.h"
+
 #include <text/KoSvgText.h>
 #include <text/KoSvgTextProperties.h>
 
@@ -335,17 +337,17 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
 
         if (r.contains('%')) {
             r = r.left(r.length() - 1);
-            r = QString::number(int((double(255 * r.toDouble()) / 100.0)));
+            r = QString::number(int((double(255 * KisDomUtils::toDouble(r)) / 100.0)));
         }
 
         if (g.contains('%')) {
             g = g.left(g.length() - 1);
-            g = QString::number(int((double(255 * g.toDouble()) / 100.0)));
+            g = QString::number(int((double(255 * KisDomUtils::toDouble(g)) / 100.0)));
         }
 
         if (b.contains('%')) {
             b = b.left(b.length() - 1);
-            b = QString::number(int((double(255 * b.toDouble()) / 100.0)));
+            b = QString::number(int((double(255 * KisDomUtils::toDouble(b)) / 100.0)));
         }
 
         color = QColor(r.toInt(), g.toInt(), b.toInt());
@@ -411,7 +413,7 @@ void SvgStyleParser::parseColorStops(QGradient *gradient,
             }
 
             if (!stopOpacityStr.isEmpty() && stopOpacityStr != "inherit") {
-                color.setAlphaF(qBound(0.0, stopOpacityStr.toDouble(), 1.0));
+                color.setAlphaF(qBound(0.0, KisDomUtils::toDouble(stopOpacityStr), 1.0));
             }
 
             stops.append(QPair<qreal, QColor>(offset, color));

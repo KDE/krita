@@ -77,9 +77,9 @@ QString SvgUtil::toPercentage(qreal value)
 double SvgUtil::fromPercentage(QString s)
 {
     if (s.endsWith('%'))
-        return s.remove('%').toDouble() / 100.0;
+        return KisDomUtils::toDouble(s.remove('%')) / 100.0;
     else
-        return s.toDouble();
+        return KisDomUtils::toDouble(s);
 }
 
 QPointF SvgUtil::objectToUserSpace(const QPointF &position, const QRectF &objectBound)

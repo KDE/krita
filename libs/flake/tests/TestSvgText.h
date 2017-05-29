@@ -46,6 +46,7 @@ private Q_SLOTS:
 
     void testTextOutlineSolid();
     void testNbspHandling();
+    void testMulticolorText();
 };
 
 #endif // TESTSVGTEXT_H

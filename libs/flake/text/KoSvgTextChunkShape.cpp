@@ -356,6 +356,18 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
     QMap<QString,QString> attributes = ownProperties.convertToSvgTextAttributes();
 
+
+    // we write down stroke/fill iff they are different from the parent's value
+    if (!isRootTextNode()) {
+        if (ownProperties.hasProperty(KoSvgTextProperties::FillId)) {
+            SvgStyleWriter::saveSvgFill(this, context);
+        }
+
+        if (ownProperties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            SvgStyleWriter::saveSvgStroke(this, context);
+        }
+    }
+
     for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
         context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
     }
@@ -508,7 +520,12 @@ void KoSvgTextChunkShape::normalizeCharTransformations()
 KoSvgTextProperties KoSvgTextChunkShape::textProperties() const
 {
     Q_D(const KoSvgTextChunkShape);
-    return d->properties;
+
+    KoSvgTextProperties properties = d->properties;
+    properties.setProperty(KoSvgTextProperties::FillId, QVariant::fromValue(KoSvgText::BackgroundProperty(background())));
+    properties.setProperty(KoSvgTextProperties::StrokeId, QVariant::fromValue(KoSvgText::StrokeProperty(stroke())));
+
+    return properties;
 }
 
 bool KoSvgTextChunkShape::isTextNode() const

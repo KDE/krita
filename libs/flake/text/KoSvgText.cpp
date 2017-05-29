@@ -23,6 +23,11 @@
 #include <QDebug>
 #include "kis_dom_utils.h"
 
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KoVectorPatternBackground.h>
+#include <KoShapeStroke.h>
+
 
 namespace {
 
@@ -32,9 +37,13 @@ struct TextPropertiesStaticRegistrar {
         QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
         QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
 
-        qRegisterMetaType<KoSvgText::TextDecorations>("KoSvgText::TextDecorations");
-        QMetaType::registerEqualsComparator<KoSvgText::TextDecorations>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::TextDecorations>();
+        qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
+        QMetaType::registerEqualsComparator<KoSvgText::BackgroundProperty>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::BackgroundProperty>();
+
+        qRegisterMetaType<KoSvgText::StrokeProperty>("KoSvgText::StrokeProperty");
+        QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
     }
 };
 
@@ -342,6 +351,44 @@ QDebug operator<<(QDebug dbg, const CharTransformation &t)
         dbg = addSeparator(dbg, hasContent);
         dbg.nospace() << "rotate = " << *t.rotate;
         hasContent = true;
+    }
+
+    dbg.nospace() << ")";
+    return dbg.space();
+}
+
+
+
+QDebug operator<<(QDebug dbg, const BackgroundProperty &prop)
+{
+    dbg.nospace() << "BackgroundProperty(";
+
+    dbg.nospace() << prop.property.data();
+
+    if (KoColorBackground *fill = dynamic_cast<KoColorBackground*>(prop.property.data())) {
+        dbg.nospace() << ", color, " << fill->color();
+    }
+
+    if (KoGradientBackground *fill = dynamic_cast<KoGradientBackground*>(prop.property.data())) {
+        dbg.nospace() << ", gradient, " << fill->gradient();
+    }
+
+    if (KoVectorPatternBackground *fill = dynamic_cast<KoVectorPatternBackground*>(prop.property.data())) {
+        dbg.nospace() << ", pattern, num shapes: " << fill->shapes().size();
+    }
+
+    dbg.nospace() << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const StrokeProperty &prop)
+{
+    dbg.nospace() << "StrokeProperty(";
+
+    dbg.nospace() << prop.property.data();
+
+    if (KoShapeStroke *stroke = dynamic_cast<KoShapeStroke*>(prop.property.data())) {
+        dbg.nospace() << ", " << stroke->resultLinePen();
     }
 
     dbg.nospace() << ")";

@@ -27,6 +27,10 @@
 #include <boost/optional.hpp>
 #include <boost/operators.hpp>
 
+#include <QSharedPointer>
+#include <KoShapeBackground.h>
+#include <KoShapeStrokeModel.h>
+
 #include <kritaflake_export.h>
 
 class KoXmlElement;
@@ -153,7 +157,7 @@ QString writeAlignmentBaseline(AlignmentBaseline value);
 QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion);
 QString writeLengthAdjust(LengthAdjust value);
 
-struct CharTransformation : public boost::equality_comparable<AutoValue>
+struct CharTransformation : public boost::equality_comparable<CharTransformation>
 {
     boost::optional<qreal> xPos;
     boost::optional<qreal> yPos;
@@ -212,42 +216,43 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
 
 };
 
-struct Style
+struct BackgroundProperty : public boost::equality_comparable<BackgroundProperty>
 {
-    QList<qreal> globalX;
-    QList<qreal> globalY;
+    BackgroundProperty() {}
+    BackgroundProperty(QSharedPointer<KoShapeBackground> p) : property(p) {}
 
-    QList<qreal> globalDX;
-    QList<qreal> globalDY;
+    bool operator==(const BackgroundProperty &rhs) const {
+        return (!property && !rhs.property) ||
+                (property && rhs.property &&
+                 property->compareTo(rhs.property.data()));
+    }
 
-    QList<qreal> globalRotate;
-
-    qreal expectedLength = -1.0;
-
-    //// inheriting properties
-
-    QList<QFont> fontList;
-
-    boost::optional<AutoValue> kerning;
-    boost::optional<WritingMode> writingMode;
-    boost::optional<Direction> direction;
-    boost::optional<UnicodeBidi> unicodeBidi;
-
-    boost::optional<AutoValue> glyphOrientationVertical;
-    boost::optional<AutoValue> glyphOrientationHorizontal;
-
-    boost::optional<TextAnchor> textAnchor;
-
-    //// non-inheriting properties
-    DominantBaseline dominantBaseline = DominantBaselineAuto;
-    AlignmentBaseline alignmentBaseline = AlignmentBaselineAuto;
-    BaselineShiftMode baselineShiftMode = ShiftNone;
-    qreal baselineShiftPercentage = 0;
+    QSharedPointer<KoShapeBackground> property;
 };
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::BackgroundProperty &prop);
+
+struct StrokeProperty : public boost::equality_comparable<StrokeProperty>
+{
+    StrokeProperty() {}
+    StrokeProperty(QSharedPointer<KoShapeStrokeModel> p) : property(p) {}
+
+    bool operator==(const StrokeProperty &rhs) const {
+        return (!property && !rhs.property) ||
+                (property && rhs.property &&
+                 property->compareFillTo(rhs.property.data()) && property->compareStyleTo(rhs.property.data()));
+    }
+
+    QSharedPointer<KoShapeStrokeModel> property;
+};
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::StrokeProperty &prop);
 
 }
 
 Q_DECLARE_METATYPE(KoSvgText::AutoValue)
 Q_DECLARE_METATYPE(KoSvgText::TextDecorations)
+Q_DECLARE_METATYPE(KoSvgText::BackgroundProperty)
+Q_DECLARE_METATYPE(KoSvgText::StrokeProperty)
 
 #endif // KOSVGTEXT_H

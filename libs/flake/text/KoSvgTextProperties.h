@@ -54,6 +54,9 @@ public:
         FontSizeId,
         FontSizeAdjustId,
         TextDecorationId,
+
+        FillId,
+        StrokeId
     };
 
 public:

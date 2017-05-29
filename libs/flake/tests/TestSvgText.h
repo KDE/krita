@@ -45,6 +45,7 @@ private Q_SLOTS:
     void testQtDxDy();
 
     void testTextOutlineSolid();
+    void testNbspHandling();
 };
 
 #endif // TESTSVGTEXT_H

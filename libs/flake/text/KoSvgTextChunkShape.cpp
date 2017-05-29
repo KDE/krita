@@ -309,8 +309,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     if (isRootTextNode()) {
         context.shapeWriter().startElement("text", false);
         context.shapeWriter().addAttribute("id", context.getID(this));
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
-
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
         SvgStyleWriter::saveSvgStyle(this, context);
     } else {
         context.shapeWriter().startElement("tspan", false);

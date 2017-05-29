@@ -1052,7 +1052,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
     if (layout() == ArtisticTextShape::Straight) {
         context.shapeWriter().addAttributePt("x", anchorOffset);
         context.shapeWriter().addAttributePt("y", baselineOffset());
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
         Q_FOREACH (const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }

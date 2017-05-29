@@ -33,6 +33,7 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
+#include <KoXmlWriter.h>
 #include "kis_dom_utils.h"
 
 #define DPI 72.0
@@ -131,6 +132,15 @@ QString SvgUtil::transformToString(const QTransform &transform)
                      .arg(KisDomUtils::toString(transform.m22()))
                      .arg(KisDomUtils::toString(toUserSpace(transform.dx())))
                      .arg(KisDomUtils::toString(toUserSpace(transform.dy())));
+    }
+}
+
+void SvgUtil::writeTransformAttributeLazy(const QString &name, const QTransform &transform, KoXmlWriter &shapeWriter)
+{
+    const QString value = transformToString(transform);
+
+    if (!value.isEmpty()) {
+        shapeWriter.addAttribute(name.toLatin1().data(), value);
     }
 }
 

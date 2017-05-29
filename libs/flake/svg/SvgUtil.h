@@ -27,6 +27,7 @@ class QString;
 class SvgGraphicsContext;
 class QTransform;
 class KoXmlElement;
+class KoXmlWriter;
 class QStringList;
 
 class KRITAFLAKE_EXPORT SvgUtil
@@ -84,6 +85,9 @@ public:
 
     /// Converts specified transformation to a string
     static QString transformToString(const QTransform &transform);
+
+    /// Writes a \p transform as an attribute \p name iff the transform is not empty
+    static void writeTransformAttributeLazy(const QString &name, const QTransform &transform, KoXmlWriter &shapeWriter);
 
     /// Parses a viewbox attribute into an rectangle
     static bool parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);

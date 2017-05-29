@@ -99,6 +99,16 @@ enum LengthAdjust {
     LengthAdjustSpacingAndGlyphs
 };
 
+enum TextDecoration {
+    DecorationNone = 0x0,
+    DecorationUnderline = 0x1,
+    DecorationOverline = 0x2,
+    DecorationLineThrough = 0x4
+};
+
+Q_DECLARE_FLAGS(TextDecorations, TextDecoration)
+Q_DECLARE_OPERATORS_FOR_FLAGS(TextDecorations)
+
 struct AutoValue : public boost::equality_comparable<AutoValue>
 {
     AutoValue() {}
@@ -125,15 +135,23 @@ AutoValue parseAutoValueAngular(const QString &value, const SvgLoadingContext &c
 
 WritingMode parseWritingMode(const QString &value);
 Direction parseDirection(const QString &value);
-
-
-
 UnicodeBidi parseUnicodeBidi(const QString &value);
 TextAnchor parseTextAnchor(const QString &value);
 DominantBaseline parseDominantBaseline(const QString &value);
 AlignmentBaseline parseAlignmentBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
 LengthAdjust parseLengthAdjust(const QString &value);
+
+QString writeAutoValue(const AutoValue &value, const QString &autoKeyword = "auto");
+
+QString writeWritingMode(WritingMode value);
+QString writeDirection(Direction value);
+QString writeUnicodeBidi(UnicodeBidi value);
+QString writeTextAnchor(TextAnchor value);
+QString writeDominantBaseline(DominantBaseline value);
+QString writeAlignmentBaseline(AlignmentBaseline value);
+QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion);
+QString writeLengthAdjust(LengthAdjust value);
 
 struct CharTransformation : public boost::equality_comparable<AutoValue>
 {
@@ -230,5 +248,6 @@ struct Style
 }
 
 Q_DECLARE_METATYPE(KoSvgText::AutoValue)
+Q_DECLARE_METATYPE(KoSvgText::TextDecorations)
 
 #endif // KOSVGTEXT_H

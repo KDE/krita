@@ -47,6 +47,9 @@ public:
     /// Saves the style of the specified shape
     static void saveSvgStyle(KoShape *shape, SvgSavingContext &context);
 
+    /// Saves only stroke, fill and transparency of the shape
+    static void saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context);
+
 protected:
     /// Saves fill style of specified shape
     static void saveSvgFill(KoShape *shape, SvgSavingContext &context);

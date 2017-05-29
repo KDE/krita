@@ -269,6 +269,11 @@ void KoSvgTextShape::relayout()
     }
 }
 
+bool KoSvgTextShape::isRootTextNode() const
+{
+    return true;
+}
+
 
 
 

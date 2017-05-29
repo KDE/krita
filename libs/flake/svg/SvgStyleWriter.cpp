@@ -64,16 +64,23 @@
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
-    saveSvgFill(shape, context);
-    saveSvgStroke(shape, context);
+    saveSvgBasicStyle(shape, context);
+
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
     saveSvgMasking(shape, context);
     saveSvgMarkers(shape, context);
-    if (! shape->isVisible())
+}
+
+void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context)
+{
+    saveSvgFill(shape, context);
+    saveSvgStroke(shape, context);
+    if (! shape->isVisible()) {
         context.shapeWriter().addAttribute("display", "none");
-    if (shape->transparency() > 0.0)
+    } if (shape->transparency() > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
+    }
 }
 
 void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)

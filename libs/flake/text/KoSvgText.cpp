@@ -21,6 +21,8 @@
 #include <KoXmlReader.h>
 #include <SvgLoadingContext.h>
 #include <QDebug>
+#include "kis_dom_utils.h"
+
 
 namespace {
 
@@ -29,6 +31,10 @@ struct TextPropertiesStaticRegistrar {
         qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
         QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
         QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
+
+        qRegisterMetaType<KoSvgText::TextDecorations>("KoSvgText::TextDecorations");
+        QMetaType::registerEqualsComparator<KoSvgText::TextDecorations>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::TextDecorations>();
     }
 };
 
@@ -120,15 +126,83 @@ BaselineShiftMode parseBaselineShiftMode(const QString &value)
            ShiftPercentage;
 }
 
+LengthAdjust parseLengthAdjust(const QString &value)
+{
+    return value == "spacingAndGlyphs" ? LengthAdjustSpacingAndGlyphs : LengthAdjustSpacing;
+}
+
+QString writeAutoValue(const AutoValue &value, const QString &autoKeyword)
+{
+    return value.isAuto ? autoKeyword : KisDomUtils::toString(value.customValue);
+}
+
+QString writeWritingMode(WritingMode value)
+{
+    return value == TopToBottom ? "tb" : value == RightToLeft ? "rl" : "lr";
+}
+
+QString writeDirection(Direction value)
+{
+    return value == DirectionRightToLeft ? "rtl" : "ltr";
+}
+
+QString writeUnicodeBidi(UnicodeBidi value)
+{
+    return value == BidiEmbed ? "embed" : value == BidiOverride ? "bidi-override" : "normal";
+}
+
+QString writeTextAnchor(TextAnchor value)
+{
+    return value == AnchorEnd ? "end" : value == AnchorMiddle ? "middle" : "start";
+}
+
+QString writeDominantBaseline(DominantBaseline value)
+{
+    return value == DominantBaselineUseScript ? "use-script" :
+           value == DominantBaselineNoChange ? "no-change" :
+           value == DominantBaselineResetSize ? "reset-size" :
+           value == DominantBaselineIdeographic ? "ideographic" :
+           value == DominantBaselineAlphabetic ? "alphabetic" :
+           value == DominantBaselineHanging ? "hanging" :
+           value == DominantBaselineMathematical ? "mathematical" :
+           value == DominantBaselineCentral ? "central" :
+           value == DominantBaselineMiddle ? "middle" :
+           value == DominantBaselineTextAfterEdge ? "text-after-edge" :
+           value == DominantBaselineTextBeforeEdge ? "text-before-edge" :
+           "auto";
+}
+
+QString writeAlignmentBaseline(AlignmentBaseline value)
+{
+    return value == AlignmentBaselineDominant ? "baseline" :
+           value == AlignmentBaselineIdeographic ? "ideographic" :
+           value == AlignmentBaselineAlphabetic ? "alphabetic" :
+           value == AlignmentBaselineHanging ? "hanging" :
+           value == AlignmentBaselineMathematical ? "mathematical" :
+           value == AlignmentBaselineCentral ? "central" :
+           value == AlignmentBaselineMiddle ? "middle" :
+           value == AlignmentBaselineTextAfterEdge ? "text-after-edge" :
+           value == AlignmentBaselineTextBeforeEdge ? "text-before-edge" :
+           "auto";
+}
+
+QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion)
+{
+    return value == ShiftNone ? "baseline" :
+           value == ShiftSub ? "sub" :
+           value == ShiftSuper ? "super" :
+           SvgUtil::toPercentage(portion);
+}
+
+QString writeLengthAdjust(LengthAdjust value)
+{
+    return value == LengthAdjustSpacingAndGlyphs ? "spacingAndGlyphs" : "spacing";
+}
+
 QDebug operator<<(QDebug dbg, const KoSvgText::AutoValue &value)
 {
     dbg.nospace() << (value.isAuto ? "auto" : QString::number(value.customValue));
     return dbg.space();
-}
-
-LengthAdjust parseLengthAdjust(const QString &value)
-{
-    return value == "spacingAndGlyphs" ? LengthAdjustSpacingAndGlyphs : LengthAdjustSpacing;
 }
 
 void CharTransformation::mergeInParentTransformation(const CharTransformation &t)
@@ -273,7 +347,6 @@ QDebug operator<<(QDebug dbg, const CharTransformation &t)
     dbg.nospace() << ")";
     return dbg.space();
 }
-
 
 }
 

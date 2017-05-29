@@ -41,6 +41,9 @@ public:
 
     void relayout();
 
+protected:
+    bool isRootTextNode() const override;
+
 private:
     Q_DECLARE_PRIVATE(KoSvgTextShape)
 };

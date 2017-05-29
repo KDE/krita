@@ -35,7 +35,7 @@ void addProp(SvgLoadingContext &context,
              KoSvgTextProperties::PropertyId id,
              int newValue)
 {
-    props.parseSVGTextAttribute(context, attribute, value);
+    props.parseSvgTextAttribute(context, attribute, value);
     if (props.property(id).toInt() != newValue) {
         qDebug() << "Failed to load the property:";
         qDebug() << ppVar(attribute) << ppVar(value);
@@ -52,7 +52,7 @@ void addProp(SvgLoadingContext &context,
              KoSvgTextProperties::PropertyId id,
              KoSvgText::AutoValue newValue)
 {
-    props.parseSVGTextAttribute(context, attribute, value);
+    props.parseSvgTextAttribute(context, attribute, value);
     if (props.property(id).value<KoSvgText::AutoValue>() != newValue) {
         qDebug() << "Failed to load the property:";
         qDebug() << ppVar(attribute) << ppVar(value);
@@ -70,7 +70,7 @@ void addProp(SvgLoadingContext &context,
              KoSvgTextProperties::PropertyId id,
              qreal newValue)
 {
-    props.parseSVGTextAttribute(context, attribute, value);
+    props.parseSvgTextAttribute(context, attribute, value);
     if (props.property(id).toReal() != newValue) {
         qDebug() << "Failed to load the property:";
         qDebug() << ppVar(attribute) << ppVar(value);
@@ -565,6 +565,7 @@ void TestSvgText::testTextBaselineShift()
             "</svg>";
 
     SvgRenderTester t (data);
+
     t.test_standard("text_baseline_shift", QSize(180, 40), 72);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));

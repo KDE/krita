@@ -25,10 +25,16 @@
 
 #include "kis_debug.h"
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
+
+#include <SvgSavingContext.h>
+#include <SvgStyleWriter.h>
+#include <kis_dom_utils.h>
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
 
@@ -68,6 +74,16 @@ QVector<qreal> parseListAttributeAngular(const QString &value, SvgLoadingContext
     }
 
     return result;
+}
+
+QString convertListAttribute(const QVector<qreal> &values) {
+    QStringList stringValues;
+
+    Q_FOREACH (qreal value, values) {
+        stringValues.append(KisDomUtils::toString(value));
+    }
+
+    return stringValues.join(',');
 }
 }
 
@@ -160,7 +176,11 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         if (isTextNode()) {
             const QString text = q->d_func()->text;
             const KoSvgText::KoSvgCharChunkFormat format = q->d_func()->fetchCharFormat();
-            const QVector<KoSvgText::CharTransformation> transforms = q->d_func()->localTransformations;
+            QVector<KoSvgText::CharTransformation> transforms = q->d_func()->localTransformations;
+
+            KIS_SAFE_ASSERT_RECOVER(text.size() >= transforms.size()) {
+                transforms.clear();
+            }
 
             KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(q->d_func()->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
             KoSvgText::Direction direction = KoSvgText::Direction(q->d_func()->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
@@ -263,8 +283,97 @@ bool KoSvgTextChunkShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
     return false;
 }
 
+void writeTextListAttribute(const QString &attribute, const QVector<qreal> &values, KoXmlWriter &writer)
+{
+    const QString value = convertListAttribute(values);
+    if (!value.isEmpty()) {
+        writer.addAttribute(attribute.toLatin1().data(), value);
+    }
+}
+
+void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, qreal defaultValue)
+{
+    if (!value) return;
+
+    while (list->size() < iteration) {
+        list->append(defaultValue);
+    }
+
+    list->append(*value);
+}
+
 bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 {
+    Q_D(KoSvgTextChunkShape);
+
+    if (isRootTextNode()) {
+        context.shapeWriter().startElement("text", false);
+        context.shapeWriter().addAttribute("id", context.getID(this));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+        SvgStyleWriter::saveSvgStyle(this, context);
+    } else {
+        context.shapeWriter().startElement("tspan", false);
+        SvgStyleWriter::saveSvgBasicStyle(this, context);
+    }
+
+    if (layoutInterface()->isTextNode()) {
+
+        QVector<qreal> xPos;
+        QVector<qreal> yPos;
+        QVector<qreal> dxPos;
+        QVector<qreal> dyPos;
+        QVector<qreal> rotate;
+
+        for (int i = 0; i < d->localTransformations.size(); i++) {
+            const KoSvgText::CharTransformation &t = d->localTransformations[i];
+
+            appendLazy(&xPos, t.xPos, i, 0.0);
+            appendLazy(&yPos, t.yPos, i, 0.0);
+            appendLazy(&dxPos, t.dxPos, i, 0.0);
+            appendLazy(&dyPos, t.dyPos, i, 0.0);
+            appendLazy(&rotate, t.rotate, i, 0.0);
+        }
+
+        writeTextListAttribute("x", xPos, context.shapeWriter());
+        writeTextListAttribute("y", yPos, context.shapeWriter());
+        writeTextListAttribute("dx", dxPos, context.shapeWriter());
+        writeTextListAttribute("dy", dyPos, context.shapeWriter());
+        writeTextListAttribute("rotate", rotate, context.shapeWriter());
+    }
+
+    if (!d->textLength.isAuto) {
+        context.shapeWriter().addAttribute("textLength", KisDomUtils::toString(d->textLength.customValue));
+
+        if (d->lengthAdjust == KoSvgText::LengthAdjustSpacingAndGlyphs) {
+            context.shapeWriter().addAttribute("lengthAdjust", "spacingAndGlyphs");
+        }
+    }
+
+    KoSvgTextChunkShape *parent = !isRootTextNode() ? dynamic_cast<KoSvgTextChunkShape*>(this->parent()) : 0;
+    KoSvgTextProperties parentProperties =
+        parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
+
+    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+    QMap<QString,QString> attributes = ownProperties.convertToSvgTextAttributes();
+
+    for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
+        context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
+    }
+
+    if (layoutInterface()->isTextNode()) {
+        context.shapeWriter().addTextNode(d->text);
+    } else {
+        Q_FOREACH (KoShape *child, this->shapes()) {
+            KoSvgTextChunkShape *childText = dynamic_cast<KoSvgTextChunkShape*>(child);
+            KIS_SAFE_ASSERT_RECOVER(childText) { continue; }
+
+            childText->saveSvg(context);
+        }
+    }
+
+    context.shapeWriter().endElement();
+
     Q_UNUSED(context);
     return true;
 }
@@ -324,6 +433,40 @@ bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &cont
     return true;
 }
 
+namespace {
+bool hasNextSibling(const KoXmlNode &node)
+{
+    if (!node.nextSibling().isNull()) return true;
+
+    KoXmlNode parentNode = node.parentNode();
+
+    if (!parentNode.isNull() &&
+        parentNode.isElement() &&
+        parentNode.toElement().tagName() == "tspan") {
+
+        return hasNextSibling(parentNode);
+    }
+
+    return false;
+}
+
+bool hasPreviousSibling(const KoXmlNode &node)
+{
+    if (!node.previousSibling().isNull()) return true;
+
+    KoXmlNode parentNode = node.parentNode();
+
+    if (!parentNode.isNull() &&
+        parentNode.isElement() &&
+        parentNode.toElement().tagName() == "tspan") {
+
+        return hasPreviousSibling(parentNode);
+    }
+
+    return false;
+}
+}
+
 bool KoSvgTextChunkShape::loadSvgTextNode(const KoXmlText &text, SvgLoadingContext &context)
 {
     Q_D(KoSvgTextChunkShape);
@@ -338,13 +481,19 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const KoXmlText &text, SvgLoadingConte
     data.replace(QRegExp("[\\r\\n]"), "");
     data.replace(QRegExp("\\s{2,}"), " ");
 
-    if (text.previousSibling().isNull() && data.startsWith(' ')) {
+    if (data.startsWith(' ') && !hasPreviousSibling(text)) {
         data.remove(0, 1);
     }
 
-    if (text.nextSibling().isNull() && data.endsWith(' ')) {
+    if (data.endsWith(' ') && !hasNextSibling(text)) {
         data.remove(data.size() - 1, 1);
     }
+
+    if (data == " ") {
+        data = "";
+    }
+
+    //ENTER_FUNCTION() << text.data() << "-->" << data;
 
     d->text = data;
 
@@ -373,6 +522,11 @@ KoSvgTextChunkShapeLayoutInterface *KoSvgTextChunkShape::layoutInterface()
 {
     Q_D(KoSvgTextChunkShape);
     return d->layoutInterface.data();
+}
+
+bool KoSvgTextChunkShape::isRootTextNode() const
+{
+    return false;
 }
 
 /**************************************************************************************************/

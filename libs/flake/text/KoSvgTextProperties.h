@@ -44,7 +44,16 @@ public:
         GlyphOrientationVerticalId,
         GlyphOrientationHorizontalId,
         LetterSpacingId,
-        WordSpacingId
+        WordSpacingId,
+
+        FontFamiliesId,
+        FontStyleId,
+        FontIsSmallCapsId,
+        FontStretchId,
+        FontWeightId,
+        FontSizeId,
+        FontSizeAdjustId,
+        TextDecorationId,
     };
 
 public:
@@ -72,7 +81,8 @@ public:
     bool inheritsProperty(PropertyId id, const KoSvgTextProperties &parentProperties) const;
     KoSvgTextProperties ownProperties(const KoSvgTextProperties &parentProperties) const;
 
-    void parseSVGTextAttribute(const SvgLoadingContext &context, const QString &command, const QString &value);
+    void parseSvgTextAttribute(const SvgLoadingContext &context, const QString &command, const QString &value);
+    QMap<QString,QString> convertToSvgTextAttributes() const;
     static QStringList supportedXmlAttributes();
 
     static const KoSvgTextProperties& defaultProperties();

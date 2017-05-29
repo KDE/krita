@@ -51,6 +51,9 @@ public:
     KoSvgTextChunkShapeLayoutInterface* layoutInterface();
 
 protected:
+    virtual bool isRootTextNode() const;
+
+protected:
     KoSvgTextChunkShape(KoSvgTextChunkShapePrivate *dd);
 
 private:

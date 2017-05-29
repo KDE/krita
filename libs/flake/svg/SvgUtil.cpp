@@ -69,12 +69,9 @@ QSizeF SvgUtil::toUserSpace(const QSizeF &size)
     return QSizeF(toUserSpace(size.width()), toUserSpace(size.height()));
 }
 
-double SvgUtil::toPercentage(QString s)
+QString SvgUtil::toPercentage(qreal value)
 {
-    if (s.endsWith('%'))
-        return s.remove('%').toDouble();
-    else
-        return s.toDouble() * 100.0;
+    return KisDomUtils::toString(value * 100.0) + "%";
 }
 
 double SvgUtil::fromPercentage(QString s)

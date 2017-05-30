@@ -1,0 +1,7 @@
+[KNewStuff3]
+ProvidersUrl=https://share.krita.org/ocs/providers.xml
+Categories=Krita Pattern
+XdgTargetDir=krita/patterns
+Uncompress=never
+
+

@@ -1,0 +1,8 @@
+[KNewStuff3]
+ProvidersUrl=https://share.krita.org/ocs/providers.xml
+Categories=Krita Preset
+XdgTargetDir=krita/paintoppresets
+Uncompress=never
+
+
+ 

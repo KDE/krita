@@ -1,0 +1,6 @@
+[KNewStuff3]
+ProvidersUrl=https://share.krita.org/ocs/providers.xml
+Categories=Krita Gradient
+XdgTargetDir=krita/gradients
+Uncompress=never
+ 

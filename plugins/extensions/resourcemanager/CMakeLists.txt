@@ -10,13 +10,20 @@ set(kritaresourcemanager_SOURCES
     dlg_create_bundle.cpp
     dlg_bundle_manager.cpp
     dlg_content_downloader.cpp
-    content_downloader_backend.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES
     wdgdlgcreatebundle.ui 
     wdgdlgbundlemanager.ui
 )
+
+install( FILES
+    data/kritapresets.knsrc
+    datakritabrushes.knsrc
+    data/kritapatterns.knsrc
+    data/kritagradients.knsrc
+    DESTINATION ${CONFIG_INSTALL_DIR} )
+
 
 add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})
 target_link_libraries(kritaresourcemanager kritawidgets kritaui kritalibpaintop KF5::NewStuffCore)

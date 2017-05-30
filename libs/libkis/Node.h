@@ -330,6 +330,17 @@ public Q_SLOTS:
     QByteArray pixelData(int x, int y, int w, int h) const;
 
     /**
+     * @brief pixelDataAtTime a basic function to get pixeldata from an animated node at a given time.
+     * @param x the position from the left to start reading.
+     * @param y the position from the top to start reader
+     * @param w the row length to read
+     * @param h the number of rows to read
+     * @param time the frame number
+     * @return a QByteArray with the pixel data. The byte array may be empty.
+     */
+    QByteArray pixelDataAtTime(int x, int y, int w, int h, int time) const;
+
+    /**
      * @brief projectionPixelData reads the given rectangle from the Node's projection (that is, what the node
      * looks like after all sub-Nodes (like layers in a group or masks on a layer) have been applied,
      * and returns it as a byte array. The pixel data starts top-left, and is ordered row-first.

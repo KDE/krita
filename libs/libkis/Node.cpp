@@ -46,6 +46,9 @@
 #include <kis_meta_data_merge_strategy.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 
+#include <kis_raster_keyframe_channel.h>
+#include <kis_keyframe.h>
+
 #include "Krita.h"
 #include "Node.h"
 #include "Channel.h"
@@ -377,6 +380,27 @@ QByteArray Node::pixelData(int x, int y, int w, int h) const
 
     KisPaintDeviceSP dev = d->node->paintDevice();
     if (!dev) return ba;
+
+    ba.resize(w * h * dev->pixelSize());
+    dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
+    return ba;
+}
+
+QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
+{
+    QByteArray ba;
+
+    if (!d->node || !d->node->isAnimated()) return ba;
+
+    //
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    if (!rkc) return ba;
+    KisKeyframeSP frame = rkc->keyframeAt(time);
+    if (!frame) return ba;
+    KisPaintDeviceSP dev = d->node->paintDevice();
+    if (!dev) return ba;
+
+    rkc->fetchFrame(frame, dev);
 
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);

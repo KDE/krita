@@ -42,6 +42,7 @@ public Q_SLOTS:
     bool visible() const;
     void setVisible(bool value);
     QByteArray pixelData(int x, int y, int w, int h) const;
+    QByteArray pixelDataAtTime(int x, int y, int w, int h, int time) const;
     QByteArray projectionPixelData(int x, int y, int w, int h) const;
     void setPixelData(QByteArray value, int x, int y, int w, int h);
     QRect bounds() const;

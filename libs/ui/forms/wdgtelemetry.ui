@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WgtTelemetry</class>
+ <widget class="QWidget" name="WgtTelemetry">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>271</width>
+    <height>106</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="1" column="3">
+      <widget class="KoGroupButton" name="intersect">
+       <property name="toolTip">
+        <string>Intersect</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="KoGroupButton" name="shape">
+       <property name="toolTip">
+        <string>Vector Selection</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KoGroupButton" name="replace">
+       <property name="toolTip">
+        <string>Replace (Shortcut R)</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <widget class="KoGroupButton" name="add">
+       <property name="toolTip">
+        <string>Add (Shortcut A)</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblMode">
+       <property name="cursor">
+        <cursorShape>CrossCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Mode:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblAction">
+       <property name="text">
+        <string>Action:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KoGroupButton" name="pixel">
+       <property name="toolTip">
+        <string>Pixel Selection</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="7">
+      <widget class="KoGroupButton" name="subtract">
+       <property name="toolTip">
+        <string>Subtract (Shortcut S)</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="2">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="chkAntiAliasing">
+     <property name="text">
+      <string>Anti-aliasing</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoGroupButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">KoGroupButton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

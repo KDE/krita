@@ -107,6 +107,8 @@ public:
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
+    QScopedPointer<UserFeedback::Provider> provider;
+
 };
 
 
@@ -365,6 +367,11 @@ KisIdleWatcher* KisPart::idleWatcher() const
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
     return &d->animationCachePopulator;
+}
+
+UserFeedback::Provider* KisPart::provider()
+{
+    return d->provider.data();
 }
 
 void KisPart::openExistingFile(const QUrl &url)

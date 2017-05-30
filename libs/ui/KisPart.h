@@ -25,12 +25,15 @@
 #define KIS_PART_H
 
 #include <QList>
+#include <QScopedPointer>
+
 #include <QPointer>
 #include <QUrl>
 
 #include "kritaui_export.h"
 #include <KoConfig.h>
 #include <KisMainWindow.h>
+#include <UserFeedback/provider.h>
 
 namespace KIO {
 }
@@ -154,6 +157,12 @@ public:
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
+
+    // ----------------- Telemetry management -----------------
+    /**
+     * @return the telemetry provider.
+     */
+    UserFeedback::Provider *provider();
 
 
 public Q_SLOTS:

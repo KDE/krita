@@ -464,6 +464,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+   <Action name="send_info">
+      <icon></icon>
+      <text>Sen&amp;d info</text>
+      <whatsThis></whatsThis>
+      <toolTip>Send info</toolTip>
+      <iconText>Send info</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="delete_keyframe">
       <icon></icon>
       <text>Delete keyframe</text>

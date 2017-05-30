@@ -453,6 +453,46 @@ public Q_SLOTS:
     Node *mergeDown();
 
     /**
+     * @brief scaleNode
+     * @param width
+     * @param height
+     * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
+     * <ul>
+     * <li>hermite</li>
+     * <li>bicubic - Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.</li>
+     * <li>box - Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.</li>
+     * <li>bilinear - Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.</li>
+     * <li>bell</li>
+     * <li>bspline</li>
+     * <li>lanczos3 - Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.</li>
+     * <li>mitchell</li>
+     * </ul>
+     */
+    void scaleNode(int width, int height, QString strategy);
+
+    /**
+     * @brief rotateNode rotate this layer by the given radians.
+     * @param radians amount the layer should be rotated in, in radians.
+     */
+    void rotateNode(double radians);
+
+    /**
+     * @brief cropNode crop this layer.
+     * @param x the left edge of the cropping rectangle.
+     * @param y the top edge of the cropping rectangle
+     * @param w the right edge of the cropping rectangle
+     * @param h the bottom edge of the cropping rectangle
+     */
+    void cropNode(int x, int y, int w, int h);
+
+    /**
+     * @brief shearNode perform a shear operation on this node.
+     * @param angleX the X-angle in degrees to shear by
+     * @param angleY the Y-angle in degrees to shear by
+     */
+    void shearNode(double angleX, double angleY);
+
+    /**
      * @brief thumbnail create a thumbnail of the given dimensions. The thumbnail is sized according
      * to the layer dimensions, not the image dimensions. If the requested size is too big a null
      * QImage is created. If the current node cannot generate a thumbnail, a transparent QImage of the

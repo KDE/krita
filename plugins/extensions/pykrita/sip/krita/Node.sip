@@ -52,6 +52,10 @@ public Q_SLOTS:
     Node *duplicate() /Factory/;
     void save(const QString &filename, double xRes, double yRes);
     Node *mergeDown() /Factory/;
+    void scaleNode(int width, int height, QString strategy);
+    void rotateNode(double radians);
+    void cropNode(int x, int y, int w, int h);
+    void shearNode(double angleX, double angleY);
     QImage thumbnail(int w, int h);
 Q_SIGNALS:
 private:

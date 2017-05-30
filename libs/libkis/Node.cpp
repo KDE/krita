@@ -45,6 +45,7 @@
 #include <kis_layer.h>
 #include <kis_meta_data_merge_strategy.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_filter_strategy.h>
 
 #include <kis_raster_keyframe_channel.h>
 #include <kis_keyframe.h>
@@ -503,6 +504,62 @@ Node *Node::mergeDown()
     d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     d->image->waitForDone();
     return new Node(d->image, d->node->parent()->at(index));
+}
+
+void Node::scaleNode(int width, int height, QString strategy)
+{
+    if (!d->node) return;
+    if (!qobject_cast<KisLayer*>(d->node.data())) return;
+    if (!d->node->parent()) return;
+
+    KisFilterStrategy *actualStrategy;
+
+    if (strategy == "hermite") {
+        actualStrategy = new KisHermiteFilterStrategy();
+    } else if (strategy == "bicubic") {
+        actualStrategy = new KisBicubicFilterStrategy();
+    } else if (strategy == "box") {
+        actualStrategy = new KisBoxFilterStrategy();
+    } else if (strategy == "bilinear") {
+        actualStrategy = new KisBilinearFilterStrategy();
+    } else if (strategy == "bell") {
+        actualStrategy = new KisBellFilterStrategy();
+    } else if (strategy == "bspline") {
+        actualStrategy = new KisBSplineFilterStrategy();
+    } else if (strategy == "lanczos3") {
+        actualStrategy = new KisLanczos3FilterStrategy();
+    } else if (strategy == "mitchell") {
+        actualStrategy = new KisMitchellFilterStrategy();
+    }
+    d->image->scaleNode(d->node, width, height, actualStrategy);
+}
+
+void Node::rotateNode(double radians)
+{
+    if (!d->node) return;
+    if (!qobject_cast<KisLayer*>(d->node.data())) return;
+    if (!d->node->parent()) return;
+
+    d->image->rotateNode(d->node, radians);
+}
+
+void Node::cropNode(int x, int y, int w, int h)
+{
+    if (!d->node) return;
+    if (!qobject_cast<KisLayer*>(d->node.data())) return;
+    if (!d->node->parent()) return;
+
+    QRect rect = QRect(x, y, w, h);
+    d->image->cropNode(d->node, rect);
+}
+
+void Node::shearNode(double angleX, double angleY)
+{
+    if (!d->node) return;
+    if (!qobject_cast<KisLayer*>(d->node.data())) return;
+    if (!d->node->parent()) return;
+
+    d->image->shearNode(d->node, angleX, angleY);
 }
 
 QImage Node::thumbnail(int w, int h)

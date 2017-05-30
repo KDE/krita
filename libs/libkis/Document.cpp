@@ -46,6 +46,7 @@
 #include <kis_shape_layer.h>
 #include <kis_filter_configuration.h>
 #include <kis_selection.h>
+#include <KisMimeDatabase.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -382,6 +383,8 @@ void Document::crop(int x, int y, int w, int h)
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
 {
     if (!d->document) return false;
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename);
+    d->document->setOutputMimeType(mimeType.toLatin1());
     return d->document->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration.configuration());
 }
 

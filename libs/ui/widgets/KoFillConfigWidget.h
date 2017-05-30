@@ -53,6 +53,9 @@ public:
     /// If you need to use only one shape, call currentShape()
     QList<KoShape*> currentShapes();
 
+    /// returns the selected index of the fill type
+    int selectedFillIndex();
+
     KoShapeStrokeSP createShapeStroke();
 
     void activate();
@@ -98,6 +101,8 @@ private:
     void setNewGradientBackgroundToShape();
     void updateGradientSaveButtonAvailability();
     void loadCurrentFillFromResourceServer();
+
+    void updateWidgetComponentVisbility();
 
     class Private;
     Private * const d;

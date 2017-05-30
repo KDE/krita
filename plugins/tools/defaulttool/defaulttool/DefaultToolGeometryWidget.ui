@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>305</width>
+    <width>182</width>
     <height>303</height>
    </rect>
   </property>
@@ -40,6 +40,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="minimum">
         <double>-10000.000000000000000</double>
        </property>
@@ -55,6 +61,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="minimum">
         <double>-10000.000000000000000</double>
@@ -92,6 +104,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="minimum">
         <double>-10000.000000000000000</double>
        </property>
@@ -107,6 +125,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="minimum">
         <double>-10000.000000000000000</double>
@@ -180,6 +204,12 @@
        </item>
        <item>
         <widget class="QCheckBox" name="chkGlobalCoordinates">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In &amp;quot;Global Coordinates&amp;quot; mode Width and Height fields show the size of the shape's bounding box in image-aligned coordinates, even when the shape is rotated or has any other transform. &lt;/p&gt;&lt;p&gt;If &amp;quot;Global Coordinates&amp;quot; mode is disabled, Width and Height fields show the shape's &amp;quot;local&amp;quot; size, before application of any transformations.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>

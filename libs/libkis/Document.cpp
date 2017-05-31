@@ -47,6 +47,7 @@
 #include <kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <KisMimeDatabase.h>
+#include <kis_filter_strategy.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -404,6 +405,53 @@ void Document::resizeImage(int w, int h)
     rc.setWidth(w);
     rc.setHeight(h);
     image->resizeImage(rc);
+}
+
+void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
+{
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    QRect rc = image->bounds();
+    rc.setWidth(w);
+    rc.setHeight(h);
+
+    KisFilterStrategy *actualStrategy;
+
+    if (strategy == "hermite") {
+        actualStrategy = new KisHermiteFilterStrategy();
+    } else if (strategy == "bicubic") {
+        actualStrategy = new KisBicubicFilterStrategy();
+    } else if (strategy == "box") {
+        actualStrategy = new KisBoxFilterStrategy();
+    } else if (strategy == "bilinear") {
+        actualStrategy = new KisBilinearFilterStrategy();
+    } else if (strategy == "bell") {
+        actualStrategy = new KisBellFilterStrategy();
+    } else if (strategy == "bspline") {
+        actualStrategy = new KisBSplineFilterStrategy();
+    } else if (strategy == "lanczos3") {
+        actualStrategy = new KisLanczos3FilterStrategy();
+    } else if (strategy == "mitchell") {
+        actualStrategy = new KisMitchellFilterStrategy();
+    }
+    image->scaleImage(rc.size(), xres, yres, actualStrategy);
+}
+
+void Document::rotateImage(double radians)
+{
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    image->rotateImage(radians);
+}
+
+void Document::shearImage(double angleX, double angleY)
+{
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    image->shear(angleX, angleY);
 }
 
 bool Document::save()

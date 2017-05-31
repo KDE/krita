@@ -39,25 +39,25 @@ public:
 
     // KoResourceServer::state state() override; this is to verify the state of the content. need to implement, ie, enumaration stating that if the package is downloading, processing etc.
 
-    QString name() override;
-    QString packagename() const override; // Have a doubt if name() and this isn't similar? KNSCore issue
+    QString name();
+    QString packagename() const; // Have a doubt if name() and this isn't similar? KNSCore issue
 
 //    QVariant icon() const override;
 
-    QString author() override;
-    QStringList categories() override; //Need to implement. No idea yet.
-    int downloadcount() override; //no of downloads done
-    QString source() override; //orgin / providerID
-    QString license() override;
-    QString details() override; //Long description
+    QString author();
+    QStringList categories(); //Need to implement. No idea yet.
+    int downloadcount(); //no of downloads done
+    QString source(); //orgin / providerID
+    QString license();
+    QString details(); //Long description
 
 //    QString iconName() const { return m_iconName; }
 
-    void downloadResources(KoResourceServer* app) override;
+    void downloadResources(KoResourceServer* app);
 
-//    void removeResources(KoResourceServer* res) override;
+//    void removeResources(KoResourceServer* res);
 
-    void setKnsrcFile(const QString& knsrcFileArg) override;
+    void setKnsrcFile(const QString& knsrcFileArg);
 
 //    QUrl thumbnailUrl() override;  // If needed.
 //    QUrl screenshotUrl() override; // If needed.

@@ -206,6 +206,7 @@ set(kritaflake_SRCS
     text/KoSvgTextProperties.cpp
     text/KoSvgTextChunkShape.cpp
     text/KoSvgTextShape.cpp
+    text/KoSvgTextShapeMarkupConverter.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp

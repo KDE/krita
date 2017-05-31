@@ -20,6 +20,8 @@
 #ifndef SVGSAVINGCONTEXT_H
 #define SVGSAVINGCONTEXT_H
 
+#include <QtGlobal>
+
 class KoXmlWriter;
 class KoShape;
 class KoImageData;
@@ -36,6 +38,7 @@ class KRITAFLAKE_EXPORT SvgSavingContext
 public:
     /// Creates a new svg saving context on the specified output device
     explicit SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages = true);
+    explicit SvgSavingContext(QIODevice &shapesDevice, QIODevice &styleDevice, bool saveInlineImages = true);
 
     /// Virtual destructor
     virtual ~SvgSavingContext();
@@ -66,6 +69,12 @@ public:
 
     /// Saves given image and returns the href used
     QString saveImage(KoImageData *image);
+
+    void setStrippedTextMode(bool value);
+    bool strippedTextMode() const;
+
+private:
+    Q_DISABLE_COPY(SvgSavingContext);
 
 private:
     class Private;

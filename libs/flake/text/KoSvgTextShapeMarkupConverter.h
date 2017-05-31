@@ -16,38 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSVGTEXTSHAPE_H
-#define KOSVGTEXTSHAPE_H
+#ifndef KOSVGTEXTSHAPEMARKUPCONVERTER_H
+#define KOSVGTEXTSHAPEMARKUPCONVERTER_H
 
 #include "kritaflake_export.h"
 
-#include <KoSvgTextChunkShape.h>
-#include <SvgShape.h>
+#include <QScopedPointer>
+#include <QList>
 
-class KoSvgTextProperties;
-class KoSvgTextShapePrivate;
+class QRectF;
+class KoSvgTextShape;
 
-class KRITAFLAKE_EXPORT KoSvgTextShape : public KoSvgTextChunkShape
+class KRITAFLAKE_EXPORT KoSvgTextShapeMarkupConverter
 {
 public:
-    KoSvgTextShape();
-    KoSvgTextShape(const KoSvgTextShape &rhs);
-    ~KoSvgTextShape() override;
+    KoSvgTextShapeMarkupConverter(KoSvgTextShape *shape);
+    ~KoSvgTextShapeMarkupConverter();
 
-    KoShape* cloneShape() const override;
+    bool convertToSvg(QString *svgText, QString *stylesText);
+    bool convertFromSvg(const QString &svgText, const QString &stylesText, const QRectF &boundsInPixels, qreal pixelsPerInch);
 
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
-    void paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
-
-    void resetTextShape() override;
-
-    void relayout();
-
-protected:
-    bool isRootTextNode() const override;
+    QStringList errors() const;
+    QStringList warnings() const;
 
 private:
-    Q_DECLARE_PRIVATE(KoSvgTextShape)
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif // KOSVGTEXTSHAPE_H
+#endif // KOSVGTEXTSHAPEMARKUPCONVERTER_H

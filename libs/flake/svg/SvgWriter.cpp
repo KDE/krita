@@ -140,6 +140,16 @@ bool SvgWriter::saveDetached(QIODevice &outputDevice)
     return true;
 }
 
+bool SvgWriter::saveDetached(SvgSavingContext &savingContext)
+{
+    if (m_toplevelShapes.isEmpty())
+        return false;
+
+    saveShapes(m_toplevelShapes, savingContext);
+
+    return true;
+}
+
 void SvgWriter::saveShapes(const QList<KoShape *> shapes, SvgSavingContext &savingContext)
 {
     // top level shapes

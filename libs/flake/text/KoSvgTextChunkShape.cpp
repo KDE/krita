@@ -37,7 +37,7 @@
 #include <kis_dom_utils.h>
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
-
+#include <commands/KoShapeUngroupCommand.h>
 
 namespace {
 QVector<qreal> parseListAttributeX(const QString &value, SvgLoadingContext &context)
@@ -294,6 +294,7 @@ void writeTextListAttribute(const QString &attribute, const QVector<qreal> &valu
 void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, qreal defaultValue)
 {
     if (!value) return;
+    if (value && *value == defaultValue && list->isEmpty()) return;
 
     while (list->size() < iteration) {
         list->append(defaultValue);
@@ -308,12 +309,20 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 
     if (isRootTextNode()) {
         context.shapeWriter().startElement("text", false);
-        context.shapeWriter().addAttribute("id", context.getID(this));
-        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
-        SvgStyleWriter::saveSvgStyle(this, context);
+
+        if (!context.strippedTextMode()) {
+            context.shapeWriter().addAttribute("id", context.getID(this));
+            SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+            SvgStyleWriter::saveSvgStyle(this, context);
+        } else {
+            SvgStyleWriter::saveSvgFill(this, context);
+            SvgStyleWriter::saveSvgStroke(this, context);
+        }
     } else {
         context.shapeWriter().startElement("tspan", false);
-        SvgStyleWriter::saveSvgBasicStyle(this, context);
+        if (!context.strippedTextMode()) {
+            SvgStyleWriter::saveSvgBasicStyle(this, context);
+        }
     }
 
     if (layoutInterface()->isTextNode()) {
@@ -396,6 +405,27 @@ void KoSvgTextChunkShapePrivate::loadContextBasedProperties(SvgGraphicsContext *
     font = gc->font;
     fontFamiliesList = gc->fontFamiliesList;
 }
+
+void KoSvgTextChunkShape::resetTextShape()
+{
+    Q_D(KoSvgTextChunkShape);
+
+    using namespace KoSvgText;
+
+    d->properties = KoSvgTextProperties();
+    d->font = QFont();
+    d->fontFamiliesList = QStringList();
+
+    d->textLength = AutoValue();
+    d->lengthAdjust = LengthAdjustSpacing;
+
+    d->localTransformations.clear();
+    d->text.clear();
+
+    // all the subchunks are destroyed!
+    qDeleteAll(shapes());
+}
+
 
 bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &context)
 {

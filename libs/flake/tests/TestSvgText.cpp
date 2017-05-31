@@ -878,6 +878,139 @@ void TestSvgText::testMulticolorText()
     t.test_standard("text_multicolor", QSize(30, 30), 72.0);
 }
 
+#include <KoSvgTextShapeMarkupConverter.h>
+#include <KoColorBackground.h>
+
+void TestSvgText::testConvertToStrippedSvg()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text transform=\"translate(2)\" id=\"testRect\" x=\"2\" y=\"24\""
+            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        S<tspan fill=\"red\">A</tspan><![CDATA[some stuff<><><<<>]]>"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
+    t.run();
+
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
+    QVERIFY(baseShape);
+
+    {
+        KoColorBackground *bg = dynamic_cast<KoColorBackground*>(baseShape->background().data());
+        QVERIFY(bg);
+        QCOMPARE(bg->color(), QColor(Qt::blue));
+    }
+
+    KoSvgTextShapeMarkupConverter converter(baseShape);
+
+    QString svgText;
+    QString stylesText;
+    QVERIFY(converter.convertToSvg(&svgText, &stylesText));
+
+    QCOMPARE(stylesText, QString("<defs/>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"Verdana\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+
+    // test loading
+
+    svgText = "<text fill=\"#00ff00\" font-family=\"Verdana\" font-size=\"19\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>";
+
+    QVERIFY(converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
+
+    {
+        KoColorBackground *bg = dynamic_cast<KoColorBackground*>(baseShape->background().data());
+        QVERIFY(bg);
+        QCOMPARE(bg->color(), QColor(Qt::green));
+    }
+
+    {
+        KoSvgTextProperties props = baseShape->textProperties();
+        QVERIFY(props.hasProperty(KoSvgTextProperties::FontSizeId));
+
+        const qreal fontSize = props.property(KoSvgTextProperties::FontSizeId).toReal();
+        QCOMPARE(fontSize, 19.0);
+    }
+
+    QCOMPARE(baseShape->shapeCount(), 3);
+}
+
+void TestSvgText::testConvertToStrippedSvgNullOrigin()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text transform=\"translate(2)\" id=\"testRect\" x=\"0\" y=\"0\""
+            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        S<tspan fill=\"red\">A</tspan><![CDATA[some stuff<><><<<>]]>"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
+    t.run();
+
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
+    QVERIFY(baseShape);
+
+    KoSvgTextShapeMarkupConverter converter(baseShape);
+
+    QString svgText;
+    QString stylesText;
+    QVERIFY(converter.convertToSvg(&svgText, &stylesText));
+
+    QCOMPARE(stylesText, QString("<defs/>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"Verdana\" font-size=\"15\"><tspan>S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+}
+
+void TestSvgText::testConvertFromIncorrectStrippedSvg()
+{
+    QScopedPointer<KoSvgTextShape> baseShape(new KoSvgTextShape());
+
+    KoSvgTextShapeMarkupConverter converter(baseShape.data());
+
+    QString svgText;
+    QString stylesText;
+
+    svgText = "<text>blah text</text>";
+    QVERIFY(converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
+    QCOMPARE(converter.errors().size(), 0);
+
+    svgText = "<text>>><<><blah text</text>";
+    QVERIFY(!converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
+    qDebug() << ppVar(converter.errors());
+    QCOMPARE(converter.errors().size(), 1);
+
+    svgText = "<notext>blah text</notext>";
+    QVERIFY(!converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
+    qDebug() << ppVar(converter.errors());
+    QCOMPARE(converter.errors().size(), 1);
+
+    svgText = "<defs/>";
+    QVERIFY(!converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
+    qDebug() << ppVar(converter.errors());
+    QCOMPARE(converter.errors().size(), 1);
+}
 
 
 QTEST_MAIN(TestSvgText)

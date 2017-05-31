@@ -62,6 +62,8 @@ public:
 
     bool saveDetached(QIODevice &outputDevice);
 
+    bool saveDetached(SvgSavingContext &savingContext);
+
 private:
     void saveShapes(const QList<KoShape*> shapes, SvgSavingContext &savingContext);
 

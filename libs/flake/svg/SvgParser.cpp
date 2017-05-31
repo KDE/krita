@@ -1271,12 +1271,18 @@ KoXmlText getTheOnlyTextChild(const KoXmlElement &e)
                 firstChild.toText() : KoXmlText();
 }
 
-KoShape *SvgParser::parseTextElement(const KoXmlElement &e)
+KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *mergeIntoShape)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || e.tagName() == "tspan", 0);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_isInsideTextSubtree || e.tagName() == "text", 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || !mergeIntoShape, 0);
 
-    KoSvgTextShape *rootTextShape = e.tagName() == "text" ? new KoSvgTextShape() : 0;
+    KoSvgTextShape *rootTextShape  = 0;
+
+    if (e.tagName() == "text") {
+        rootTextShape = mergeIntoShape ? mergeIntoShape : new KoSvgTextShape();
+    }
+
     if (rootTextShape) {
         m_isInsideTextSubtree = true;
     }
@@ -1297,13 +1303,18 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e)
         addToGroup(childShapes, textChunk);
     }
 
-    // groups should also have their own coordinate system!
-    textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-    const QPointF extraOffset = extraShapeOffset(textChunk, m_context.currentGC()->matrix);
+    // apply transformation only in case we are not overriding the shape!
+    if (!mergeIntoShape) {
+        // groups should also have their own coordinate system!
+        textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        const QPointF extraOffset = extraShapeOffset(textChunk, m_context.currentGC()->matrix);
 
-    // handle id
-    applyId(e.attribute("id"), textChunk);
-    applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
+        // handle id
+        applyId(e.attribute("id"), textChunk);
+        applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
+    } else {
+        applyCurrentBasicStyle(textChunk);
+    }
 
     m_context.popGraphicsContext();
 
@@ -1365,6 +1376,12 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e, bool parseTextN
     return shapes;
 }
 
+void SvgParser::parseDefsElement(const KoXmlElement &e)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(e.tagName() == "defs");
+    parseSingleElement(e);
+}
+
 QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
 {
     QList<KoShape*> shapes;
@@ -1390,6 +1407,8 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
              */
             KoShape *defsShape = parseGroup(b);
             defsShape->setVisible(false);
+
+            // TODO: where to delete the shape!?
         }
     } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
     } else if (b.tagName() == "pattern") {

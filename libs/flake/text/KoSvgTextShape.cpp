@@ -104,6 +104,12 @@ void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &conve
     // do nothing! everything is painted in paintComponent()
 }
 
+void KoSvgTextShape::resetTextShape()
+{
+    KoSvgTextChunkShape::resetTextShape();
+    relayout();
+}
+
 struct TextChunk {
     QString text;
     QList<QTextLayout::FormatRange> formats;
@@ -178,6 +184,9 @@ QVector<TextChunk> mergeIntoChunks(const QVector<KoSvgTextChunkShapeLayoutInterf
 void KoSvgTextShape::relayout()
 {
     Q_D(KoSvgTextShape);
+
+    d->layouts.clear();
+    d->layoutOffsets.clear();
 
     QPointF currentTextPos;
 

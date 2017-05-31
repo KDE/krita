@@ -37,7 +37,7 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
     d->shapes = orderdShapes;
 
     QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->shapes(): topLevelShapes;
-    if (ancestors.count()) {
+    if (!ancestors.isEmpty()) {
         qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
         QList<KoShape*>::const_iterator it(qFind(ancestors, d->container));
 

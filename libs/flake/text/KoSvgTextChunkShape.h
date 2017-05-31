@@ -35,11 +35,14 @@ public:
     KoSvgTextChunkShape(const KoSvgTextChunkShape &rhs);
     ~KoSvgTextChunkShape() override;
 
-    KoShape* cloneShape() const;
+    KoShape* cloneShape() const override;
 
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     void saveOdf(KoShapeSavingContext &Context) const override;
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
+
+    virtual void resetTextShape();
+
     bool saveSvg(SvgSavingContext &context) override;
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
     bool loadSvgTextNode(const KoXmlText &text, SvgLoadingContext &context);

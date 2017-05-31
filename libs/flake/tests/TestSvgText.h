@@ -47,6 +47,10 @@ private Q_SLOTS:
     void testTextOutlineSolid();
     void testNbspHandling();
     void testMulticolorText();
+
+    void testConvertToStrippedSvg();
+    void testConvertToStrippedSvgNullOrigin();
+    void testConvertFromIncorrectStrippedSvg();
 };
 
 #endif // TESTSVGTEXT_H

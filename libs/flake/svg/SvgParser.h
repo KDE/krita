@@ -46,7 +46,7 @@ class KoDocumentResourceManager;
 class KoVectorPatternBackground;
 class KoMarker;
 class KoPathShape;
-
+class KoSvgTextShape;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
@@ -70,12 +70,14 @@ public:
 
     QList<QExplicitlySharedDataPointer<KoMarker>> knownMarkers() const;
 
+    void parseDefsElement(const KoXmlElement &e);
+    KoShape* parseTextElement(const KoXmlElement &e, KoSvgTextShape *mergeIntoShape = 0);
+
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties
     KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement());
     KoShape* parseTextNode(const KoXmlText &e);
-    KoShape* parseTextElement(const KoXmlElement &e);
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const KoXmlElement &, bool parseTextNodes = false);
     QList<KoShape*> parseSingleElement(const KoXmlElement &b);

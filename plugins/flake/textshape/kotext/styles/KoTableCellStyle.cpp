@@ -608,12 +608,6 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     }
 
     paragraphStyle()->loadOdf(element, scontext, true); // load the par and char properties
-#ifndef KOXML_USE_QDOM
-    // Borders - we don't handle inheritance unfortunately - hope it's not a big problem
-    KoBorder borders = this->borders();
-    borders.loadOdf(element->namedItemNS(KoXmlNS::style, "table-cell-properties").toElement());
-    setBorders(borders);
-#endif
     context.styleStack().save();
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-cell");
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.

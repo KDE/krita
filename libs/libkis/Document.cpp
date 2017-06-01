@@ -201,7 +201,7 @@ QString Document::documentInfo() const
 
 void Document::setDocumentInfo(const QString &document)
 {
-    KoXmlDocument doc = KoXmlDocument(true);
+    KoXmlDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
     doc.setContent(document, &errorMsg, &errorLine, &errorColumn);
@@ -416,7 +416,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     rc.setWidth(w);
     rc.setHeight(h);
 
-    KisFilterStrategy *actualStrategy;
+    KisFilterStrategy *actualStrategy = 0;
 
     if (strategy == "hermite") {
         actualStrategy = new KisHermiteFilterStrategy();

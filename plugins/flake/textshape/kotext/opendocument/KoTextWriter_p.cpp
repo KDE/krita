@@ -384,28 +384,8 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
     return generatedName;
 }
 
-void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
+void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* , TagInformation* )
 {
-#ifndef KOXML_USE_QDOM
-    QBuffer rdfXmlData;
-    KoXmlWriter rdfXmlWriter(&rdfXmlData);
-    rdfXmlWriter.startDocument("rdf");
-    rdfXmlWriter.startElement("rdf");
-    rdf->saveOdf(context, &rdfXmlWriter);
-    rdfXmlWriter.endElement();
-    rdfXmlWriter.endDocument();
-
-    KoXmlDocument xmlReader;
-    xmlReader.setContent(rdfXmlData.data(), true);
-    KoXmlElement mainElement = xmlReader.documentElement();
-    foreach (const Attribute &attributeNameNS, mainElement.attributeFullNames()) {
-        QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
-                                                .arg(attributeNameNS.second);
-        if (attributeName.startsWith(':'))
-            attributeName.prepend("xml");
-        tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
-    }
-#endif
 }
 
 /*
@@ -1095,21 +1075,9 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
 }
 
 
-void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element)
+void KoTextWriter::Private::writeAttributes(QTextStream &, KoXmlElement &)
 {
-#ifndef KOXML_USE_QDOM
 
-    QList<QPair<QString, QString> > attributes = element.attributeFullNames();
-
-    foreach (const Attribute &attributeNamePair, attributes) {
-        if (attributeNamePair.first == KoXmlNS::text) {
-            outputXmlStream << " text:" << attributeNamePair.second << "=";
-            outputXmlStream << "\"" << element.attributeNS(KoXmlNS::text, attributeNamePair.second) << "\"";
-        } else {
-            //To Be Added when needed
-        }
-    }
-#endif
 }
 
 void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren)

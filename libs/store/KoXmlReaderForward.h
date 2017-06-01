@@ -24,8 +24,6 @@
 // use standard QDom, useful to test KoXml classes against Qt's QDom
 #define KOXML_USE_QDOM
 
-#ifdef KOXML_USE_QDOM
-
 #include <QDomDocument>
 
 typedef QDomNode KoXmlNode;
@@ -35,15 +33,5 @@ typedef QDomCDATASection KoXmlCDATASection;
 typedef QDomDocumentType KoXmlDocumentType;
 typedef QDomDocument KoXmlDocument;
 
-#else
-
-class KoXmlElement;
-class KoXmlNode;
-class KoXmlText;
-class KoXmlCDATASection;
-class KoXmlDocumentType;
-class KoXmlDocument;
-
-#endif
 
 #endif // KOXMLREADERFORWARD_H

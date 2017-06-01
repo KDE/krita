@@ -15,7 +15,7 @@ class RunAction(QAction):
         self.scripter = scripter
 
         self.editor = self.scripter.uicontroller.editor
-        self.output = self.scripter.uicontroller.findTabWidget('OutPut')
+        self.output = self.scripter.uicontroller.findTabWidget('OutPut', 'OutPutTextEdit')
 
         self.triggered.connect(self.run)
 
@@ -54,9 +54,9 @@ class RunAction(QAction):
                 users_module.main()
             else:
                 code = compile(script, '<string>', 'exec')
-                empty_scope = {}
                 exec(script, {})
         except Exception as e:
             self.scripter.uicontroller.showException(str(e))
+
         sys.stdout = stdout
         sys.stderr = stderr

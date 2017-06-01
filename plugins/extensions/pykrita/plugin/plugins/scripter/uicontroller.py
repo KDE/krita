@@ -112,10 +112,12 @@ class UIController(object):
                 if method:
                     return method()
 
-    def findTabWidget(self, widgetName):
+    def findTabWidget(self, widgetName, childName=''):
         for index in range(self.tabWidget.count()):
             widget = self.tabWidget.widget(index)
             if widget.objectName() == widgetName:
+                if childName:
+                    widget = widget.findChild(QObject, childName)
                 return widget
 
     def showException(self, exception):

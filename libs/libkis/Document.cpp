@@ -416,25 +416,9 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     rc.setWidth(w);
     rc.setHeight(h);
 
-    KisFilterStrategy *actualStrategy = 0;
+    KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
+    if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    if (strategy == "hermite") {
-        actualStrategy = new KisHermiteFilterStrategy();
-    } else if (strategy == "bicubic") {
-        actualStrategy = new KisBicubicFilterStrategy();
-    } else if (strategy == "box") {
-        actualStrategy = new KisBoxFilterStrategy();
-    } else if (strategy == "bilinear") {
-        actualStrategy = new KisBilinearFilterStrategy();
-    } else if (strategy == "bell") {
-        actualStrategy = new KisBellFilterStrategy();
-    } else if (strategy == "bspline") {
-        actualStrategy = new KisBSplineFilterStrategy();
-    } else if (strategy == "lanczos3") {
-        actualStrategy = new KisLanczos3FilterStrategy();
-    } else if (strategy == "mitchell") {
-        actualStrategy = new KisMitchellFilterStrategy();
-    }
     image->scaleImage(rc.size(), xres, yres, actualStrategy);
 }
 

@@ -369,15 +369,16 @@ public Q_SLOTS:
     * @param xres the new xres
     * @param yres the new yres
     * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
+    * The list of filters is extensible and can be retrieved with Krita::filter
     * <ul>
-    * <li>hermite</li>
-    * <li>bicubic - Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.</li>
-    * <li>box - Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.</li>
-    * <li>bilinear - Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.</li>
-    * <li>bell</li>
-    * <li>bspline</li>
-    * <li>lanczos3 - Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.</li>
-    * <li>mitchell</li>
+    * <li>Hermite</li>
+    * <li>Bicubic - Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.</li>
+    * <li>Box - Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.</li>
+    * <li>Bilinear - Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.</li>
+    * <li>Bell</li>
+    * <li>BSpline</li>
+    * <li>Kanczos3 - Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.</li>
+    * <li>Mitchell</li>
     * </ul>
     */
    void scaleImage(int w, int h, int xres, int yres, QString strategy);

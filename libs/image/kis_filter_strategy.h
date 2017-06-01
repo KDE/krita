@@ -31,7 +31,7 @@ class KRITAIMAGE_EXPORT KisFilterStrategy
 {
 public:
     KisFilterStrategy(KoID id) : m_id(id) {}
-    virtual ~KisFilterStrategy() {}
+    virtual ~KisFilterStrategy() {  }
 
     QString id() {
         return m_id.id();
@@ -194,7 +194,7 @@ public:
      * This function return a string formated in HTML that contains the descriptions of all objects
      * (with a non empty description) stored in the registry.
      */
-    QString formatedDescriptions() const;
+    QString formattedDescriptions() const;
 
 private:
 

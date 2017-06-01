@@ -28,7 +28,6 @@
 #include <kis_size_group.h>
 #include <klocalizedstring.h>
 
-
 #include <kis_filter_strategy.h>
 
 #include "kis_double_parse_unit_spin_box.h"
@@ -85,7 +84,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelHeightUnit->setCurrentText("px");
 
     m_page->pixelFilterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formatedDescriptions());
+    m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
     m_page->pixelFilterCmb->setCurrent("Bicubic");
 
     _printWidthUnitManager = new KisSpinBoxUnitManager(this);

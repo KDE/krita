@@ -512,25 +512,9 @@ void Node::scaleNode(int width, int height, QString strategy)
     if (!qobject_cast<KisLayer*>(d->node.data())) return;
     if (!d->node->parent()) return;
 
-    KisFilterStrategy *actualStrategy;
+    KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
+    if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    if (strategy == "hermite") {
-        actualStrategy = new KisHermiteFilterStrategy();
-    } else if (strategy == "bicubic") {
-        actualStrategy = new KisBicubicFilterStrategy();
-    } else if (strategy == "box") {
-        actualStrategy = new KisBoxFilterStrategy();
-    } else if (strategy == "bilinear") {
-        actualStrategy = new KisBilinearFilterStrategy();
-    } else if (strategy == "bell") {
-        actualStrategy = new KisBellFilterStrategy();
-    } else if (strategy == "bspline") {
-        actualStrategy = new KisBSplineFilterStrategy();
-    } else if (strategy == "lanczos3") {
-        actualStrategy = new KisLanczos3FilterStrategy();
-    } else if (strategy == "mitchell") {
-        actualStrategy = new KisMitchellFilterStrategy();
-    }
     d->image->scaleNode(d->node, width, height, actualStrategy);
 }
 

@@ -55,6 +55,8 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
     std::vector<std::unique_ptr<QTextLayout>> layouts;
     std::vector<QPointF> layoutOffsets;
 
+    void clearAssociatedOutlines(KoShape *rootShape);
+
 
     Q_DECLARE_PUBLIC(KoSvgTextShape)
 };
@@ -276,37 +278,62 @@ void KoSvgTextShape::relayout()
         d->layoutOffsets.push_back(-diff);
 
     }
+
+    d->clearAssociatedOutlines(this);
+
+    for (int i = 0; i < int(d->layouts.size()); i++) {
+        const QTextLayout &layout = *d->layouts[i];
+        const QPointF layoutOffset = d->layoutOffsets[i];
+
+        using namespace KoSvgText;
+
+        QVector<AssociatedShapeWrapper> shapeMap;
+        shapeMap.resize(layout.text().size());
+
+        Q_FOREACH (const QTextLayout::FormatRange &range, layout.additionalFormats()) {
+            for (int k = range.start; k < range.start + range.length; k++) {
+                KIS_SAFE_ASSERT_RECOVER_BREAK(k >= 0 && k < shapeMap.size());
+
+                const KoSvgCharChunkFormat &format =
+                    static_cast<const KoSvgCharChunkFormat&>(range.format);
+
+                shapeMap[k] = format.associatedShapeWrapper();
+            }
+        }
+
+
+        for (int j = 0; j < layout.lineCount(); j++) {
+            const QTextLine line = layout.lineAt(j);
+
+            for (int k = line.textStart(); k < line.textStart() + line.textLength(); k++) {
+                KIS_SAFE_ASSERT_RECOVER_BREAK(k >= 0 && k < shapeMap.size());
+
+                AssociatedShapeWrapper wrapper = shapeMap[k];
+                if (!wrapper.isValid()) continue;
+
+                const qreal x1 = line.cursorToX(k, QTextLine::Leading);
+                const qreal x2 = line.cursorToX(k, QTextLine::Trailing);
+
+                QRectF rect(qMin(x1, x2), line.y(), qAbs(x1 - x2), line.height());
+                wrapper.addCharacterRect(rect.translated(layoutOffset));
+            }
+        }
+    }
+}
+
+void KoSvgTextShapePrivate::clearAssociatedOutlines(KoShape *rootShape)
+{
+    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    chunkShape->layoutInterface()->clearAssociatedOutline();
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        clearAssociatedOutlines(child);
+    }
 }
 
 bool KoSvgTextShape::isRootTextNode() const
 {
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -28,6 +28,9 @@
 #include <KoVectorPatternBackground.h>
 #include <KoShapeStroke.h>
 
+#include <KoSvgTextChunkShape.h>
+#include <KoSvgTextChunkShapeLayoutInterface.h>
+
 
 namespace {
 
@@ -44,6 +47,8 @@ struct TextPropertiesStaticRegistrar {
         qRegisterMetaType<KoSvgText::StrokeProperty>("KoSvgText::StrokeProperty");
         QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
         QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
+
+        qRegisterMetaType<KoSvgText::AssociatedShapeWrapper>("KoSvgText::AssociatedShapeWrapper");
     }
 };
 
@@ -393,6 +398,60 @@ QDebug operator<<(QDebug dbg, const StrokeProperty &prop)
 
     dbg.nospace() << ")";
     return dbg.space();
+}
+
+AssociatedShapeWrapper::AssociatedShapeWrapper()
+{
+}
+
+AssociatedShapeWrapper::AssociatedShapeWrapper(KoSvgTextChunkShape *shape)
+    : m_shape(shape)
+{
+    if (m_shape) {
+        m_shape->addShapeChangeListener(this);
+    }
+}
+
+AssociatedShapeWrapper::AssociatedShapeWrapper(const AssociatedShapeWrapper &rhs)
+    : AssociatedShapeWrapper(rhs.m_shape)
+{
+}
+
+AssociatedShapeWrapper &AssociatedShapeWrapper::operator=(const AssociatedShapeWrapper &rhs)
+{
+    if (m_shape) {
+        m_shape->removeShapeChangeListener(this);
+        m_shape = 0;
+    }
+
+    m_shape = rhs.m_shape;
+
+    if (m_shape) {
+        m_shape->addShapeChangeListener(this);
+    }
+
+    return *this;
+}
+
+bool AssociatedShapeWrapper::isValid() const
+{
+    return m_shape;
+}
+
+void AssociatedShapeWrapper::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape == m_shape);
+
+    if (type == KoShape::Deleted) {
+        m_shape = 0;
+    }
+}
+
+void AssociatedShapeWrapper::addCharacterRect(const QRectF &rect)
+{
+    if (m_shape) {
+        m_shape->layoutInterface()->addAssociatedOutline(rect);
+    }
 }
 
 }

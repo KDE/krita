@@ -46,6 +46,9 @@ public:
 
     virtual QVector<KoSvgText::CharTransformation> localCharTransformations() const = 0;
 
+    virtual void addAssociatedOutline(const QRectF &rect) = 0;
+    virtual void clearAssociatedOutline() = 0;
+
     struct SubChunk
     {
         SubChunk()

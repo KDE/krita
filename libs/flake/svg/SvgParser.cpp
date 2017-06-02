@@ -1295,15 +1295,8 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
 
     textChunk->loadSvg(e, m_context);
 
-    KoXmlText onlyTextChild = getTheOnlyTextChild(e);
-    if (!onlyTextChild.isNull()) {
-        textChunk->loadSvgTextNode(onlyTextChild, m_context);
-    } else {
-        QList<KoShape*> childShapes = parseContainer(e, true);
-        addToGroup(childShapes, textChunk);
-    }
-
-    // apply transformation only in case we are not overriding the shape!
+    // 1) apply transformation only in case we are not overriding the shape!
+    // 2) the transformation should be applied *before* the shape is added to the group!
     if (!mergeIntoShape) {
         // groups should also have their own coordinate system!
         textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
@@ -1314,6 +1307,14 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
         applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
     } else {
         applyCurrentBasicStyle(textChunk);
+    }
+
+    KoXmlText onlyTextChild = getTheOnlyTextChild(e);
+    if (!onlyTextChild.isNull()) {
+        textChunk->loadSvgTextNode(onlyTextChild, m_context);
+    } else {
+        QList<KoShape*> childShapes = parseContainer(e, true);
+        addToGroup(childShapes, textChunk);
     }
 
     m_context.popGraphicsContext();

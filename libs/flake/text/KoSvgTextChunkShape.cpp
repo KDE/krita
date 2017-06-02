@@ -229,6 +229,29 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
+    void addAssociatedOutline(const QRectF &rect) override {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(isTextNode());
+        QPainterPath path;
+        path.addRect(rect);
+        path |= q->d_func()->associatedOutline;
+        path.setFillRule(Qt::WindingFill);
+        path = path.simplified();
+
+        q->d_func()->associatedOutline = path;
+        q->d_func()->size = path.boundingRect().size();
+
+        q->notifyChanged();
+        q->d_func()->shapeChanged(KoShape::SizeChanged);
+    }
+
+    void clearAssociatedOutline() override {
+        q->d_func()->associatedOutline = QPainterPath();
+        q->d_func()->size = QSizeF();
+
+        q->notifyChanged();
+        q->d_func()->shapeChanged(KoShape::SizeChanged);
+    }
+
 private:
     KoSvgTextChunkShape *q;
 };
@@ -263,6 +286,42 @@ KoShape *KoSvgTextChunkShape::cloneShape() const
     return new KoSvgTextChunkShape(*this);
 }
 
+QSizeF KoSvgTextChunkShape::size() const
+{
+    return outlineRect().size();
+}
+
+void KoSvgTextChunkShape::setSize(const QSizeF &size)
+{
+    Q_UNUSED(size);
+    // we do not support resizing!
+}
+
+QRectF KoSvgTextChunkShape::outlineRect() const
+{
+    return outline().boundingRect();
+}
+
+QPainterPath KoSvgTextChunkShape::outline() const
+{
+    Q_D(const KoSvgTextChunkShape);
+
+    QPainterPath result;
+    result.setFillRule(Qt::WindingFill);
+
+    if (d->layoutInterface->isTextNode()) {
+        result = d->associatedOutline;
+    } else {
+        Q_FOREACH (KoShape *shape, shapes()) {
+            KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+            KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
+
+            result |= chunkShape->outline();
+        }
+    }
+
+    return result.simplified();
+}
 
 void KoSvgTextChunkShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
@@ -680,6 +739,9 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShapePrivate::fetchCharFormat() co
     }
 
     format.setTextOutline(textPen);
+
+    // TODO: avoid const_cast somehow...
+    format.setAssociatedShape(const_cast<KoSvgTextChunkShape*>(q));
 
     return format;
 }

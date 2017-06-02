@@ -37,6 +37,9 @@ class KoXmlElement;
 class SvgLoadingContext;
 class QDebug;
 
+#include <KoShape.h>
+class KoSvgTextChunkShape;
+
 namespace KoSvgText
 {
 enum WritingMode {
@@ -179,6 +182,43 @@ struct CharTransformation : public boost::equality_comparable<CharTransformation
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CharTransformation &t);
 
+/**
+ * @brief The AssociatedShapeWrapper struct is a special shared-pointer-like class
+ * to store a safe reference to the associated shape. It implements the shape listener
+ * interface and handles 'delete' signal to safely shutdown the link.
+ *
+ * It is used in KoSvgCharChunkFormat to store a backward link to a shape containing this
+ * subchunk of text, so that the layouting engine could notify the shape, where its text
+ * is located.
+ */
+struct AssociatedShapeWrapper : public KoShape::ShapeChangeListener
+{
+    AssociatedShapeWrapper();
+    AssociatedShapeWrapper(KoSvgTextChunkShape *shape);
+    AssociatedShapeWrapper(const AssociatedShapeWrapper &rhs);
+    AssociatedShapeWrapper& operator=(const AssociatedShapeWrapper &rhs);
+
+    /**
+     * @brief isValid shows whether the link to the associated shape is still valid
+     * @return true if the link is valid
+     */
+    bool isValid() const;
+
+    /**
+     * @brief addCharacterRect notifies the associated shape that one of its characters
+     *                         occupies the location \p rect. The shape is expected to add
+     *                         this rect to its outline.
+     * @param rect the rectangle associated by the shape
+     * @see KoSvgTextChunkShapeLayoutInterface::addAssociatedOutline
+     */
+    void addCharacterRect(const QRectF &rect);
+
+    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
+
+private:
+    KoSvgTextChunkShape *m_shape = 0;
+};
+
 struct KoSvgCharChunkFormat : public QTextCharFormat
 {
     KoSvgCharChunkFormat() {}
@@ -186,7 +226,8 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
     KoSvgCharChunkFormat(const QTextCharFormat &rhs) : QTextCharFormat(rhs) {}
 
     enum SvgCharProperty {
-        TextAnchor = UserProperty + 1
+        TextAnchor = UserProperty + 1,
+        AssociatedShape
     };
 
     inline void setTextAnchor(KoSvgText::TextAnchor value) {
@@ -214,6 +255,13 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
         return result;
     }
 
+    inline void setAssociatedShape(KoSvgTextChunkShape *shape) {
+        setProperty(AssociatedShape, QVariant::fromValue(AssociatedShapeWrapper(shape)));
+    }
+
+    inline AssociatedShapeWrapper associatedShapeWrapper() const {
+        return property(AssociatedShape).value<AssociatedShapeWrapper>();
+    }
 };
 
 struct BackgroundProperty : public boost::equality_comparable<BackgroundProperty>
@@ -254,5 +302,6 @@ Q_DECLARE_METATYPE(KoSvgText::AutoValue)
 Q_DECLARE_METATYPE(KoSvgText::TextDecorations)
 Q_DECLARE_METATYPE(KoSvgText::BackgroundProperty)
 Q_DECLARE_METATYPE(KoSvgText::StrokeProperty)
+Q_DECLARE_METATYPE(KoSvgText::AssociatedShapeWrapper)
 
 #endif // KOSVGTEXT_H

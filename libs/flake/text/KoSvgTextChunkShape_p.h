@@ -45,6 +45,8 @@ struct KoSvgTextChunkShapePrivate : public KoShapeContainerPrivate
     struct LayoutInterface;
     QScopedPointer<LayoutInterface> layoutInterface;
 
+    QPainterPath associatedOutline;
+
     KoSvgText::KoSvgCharChunkFormat fetchCharFormat() const;
 
     void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);

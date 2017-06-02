@@ -326,6 +326,7 @@ KoShape::~KoShape()
 {
     Q_D(KoShape);
     d->shapeChanged(Deleted);
+    d->listeners.clear();
     delete d_ptr;
 }
 

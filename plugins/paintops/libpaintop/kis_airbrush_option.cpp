@@ -48,37 +48,93 @@ public:
     }
 };
 
+struct KisAirbrushOption::Private {
+public:
+    bool ignoreSpacing;
+    // We store the airbrush interval (in milliseconds) instead of the rate because the interval is
+    // likely to be accessed more often.
+    qreal airbrushInterval;
+    KisAirbrushWidget *configPage;
+};
 
 KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
     : KisPaintOpOption(KisPaintOpOption::COLOR, enabled)
+    , m_d(new Private())
 {
     setObjectName("KisAirBrushOption");
-    m_checkable = true;
-    m_optionWidget = new KisAirbrushWidget(nullptr, canIgnoreSpacing);
-    connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
-            SLOT(emitSettingChanged()));
-    setConfigurationPage(m_optionWidget);
-}
 
+    // Initialize GUI.
+    m_checkable = true;
+    m_d->configPage = new KisAirbrushWidget(nullptr, canIgnoreSpacing);
+    connect(m_d->configPage->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(intervalChanged()));
+    connect(m_d->configPage->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
+            SLOT(ignoreSpacingChanged()));
+    setConfigurationPage(m_d->configPage);
+
+    // Read initial configuration from the GUI.
+    updateIgnoreSpacing();
+    updateInterval();
+}
 
 KisAirbrushOption::~KisAirbrushOption()
 {
+    delete m_d;
 }
 
 void KisAirbrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
+    KIS_ASSERT_RECOVER (m_d->airbrushInterval > 0.0) {
+        m_d->airbrushInterval = 1.0;
+    }
     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
-    setting->setProperty(AIRBRUSH_RATE, m_optionWidget->sliderRate->value());
-    setting->setProperty(AIRBRUSH_IGNORE_SPACING,
-                         m_optionWidget->checkBoxIgnoreSpacing->isChecked());
+    setting->setProperty(AIRBRUSH_RATE, 1000.0 / m_d->airbrushInterval);
+    setting->setProperty(AIRBRUSH_IGNORE_SPACING, m_d->ignoreSpacing);
 }
 
 void KisAirbrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool(AIRBRUSH_ENABLED));
-    m_optionWidget->sliderRate->setValue(setting->getDouble(AIRBRUSH_RATE, DEFAULT_RATE));
-    m_optionWidget->checkBoxIgnoreSpacing->setChecked(setting->getBool(AIRBRUSH_IGNORE_SPACING,
-                                                                       false));
+    // Update settings in the widget. The widget's signals should cause the changes to be propagated
+    // to this->m_d as well.
+    m_d->configPage->sliderRate->setValue(setting->getDouble(AIRBRUSH_RATE, DEFAULT_RATE));
+    m_d->configPage->checkBoxIgnoreSpacing->setChecked(setting->getBool(AIRBRUSH_IGNORE_SPACING,
+                                                                        false));
 }
 
+qreal KisAirbrushOption::airbrushInterval() const
+{
+    return m_d->airbrushInterval;
+}
+
+bool KisAirbrushOption::ignoreSpacing() const
+{
+    return m_d->ignoreSpacing;
+}
+
+void KisAirbrushOption::slotIntervalChanged()
+{
+    updateInterval();
+    emitSettingChanged();
+}
+
+void KisAirbrushOption::slotIgnoreSpacingChanged()
+{
+    updateIgnoreSpacing();
+    emitSettingChanged();
+}
+
+void KisAirbrushOption::updateInterval()
+{
+    // Get rate in dabs per second, then convert to interval in milliseconds.
+    qreal rate = m_d->configPage->sliderRate->value();
+    KIS_ASSERT_RECOVER(rate > 0.0) {
+        rate = 1.0;
+    }
+    m_d->airbrushInterval = 1000.0 / rate;
+}
+
+void KisAirbrushOption::updateIgnoreSpacing()
+{
+    m_d->ignoreSpacing = m_d->configPage->checkBoxIgnoreSpacing->isChecked();
+    emitSettingChanged();
+}

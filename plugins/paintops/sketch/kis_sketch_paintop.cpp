@@ -65,11 +65,11 @@
 
 KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
 
+    m_airbrushOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
@@ -311,5 +311,5 @@ KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
     doPaintLine(info, info);
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   m_settings, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }

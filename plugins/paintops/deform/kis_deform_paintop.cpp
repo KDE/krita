@@ -51,7 +51,6 @@
 
 KisDeformPaintOp::KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
@@ -59,6 +58,7 @@ KisDeformPaintOp::KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPaint
 
     m_sizeProperties.readOptionSetting(settings);
     m_properties.readOptionSetting(settings);
+    m_airbrushOption.readOptionSetting(settings);
 
     // sensors
     m_sizeOption.readOptionSetting(settings);
@@ -146,7 +146,7 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, m_spacing, false,
                                                    1.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   m_settings, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }
 
 

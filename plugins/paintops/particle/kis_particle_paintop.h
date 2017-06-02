@@ -21,6 +21,7 @@
 
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
+#include <kis_airbrush_option.h>
 #include <kis_pressure_rate_option.h>
 
 #include "kis_particle_paintop_settings.h"
@@ -47,8 +48,8 @@ private:
     KisParticleBrushProperties m_properties;
     KisPaintDeviceSP m_dab;
     ParticleBrush m_particleBrush;
+    KisAirbrushOption m_airbrushOption;
     KisPressureRateOption m_rateOption;
-    KisPaintOpSettingsSP m_settings;
     bool m_first;
 };
 

@@ -42,10 +42,10 @@
 
 KisChalkPaintOp::KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
+    m_airbrushOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_rateOption.readOptionSetting(settings);
     m_opacityOption.resetAllSensors();
@@ -93,5 +93,5 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
 
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, 1.0, false, 1.0, 1.0,
-                                                   m_settings, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }

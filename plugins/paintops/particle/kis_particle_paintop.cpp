@@ -43,7 +43,6 @@
 
 KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
@@ -56,6 +55,8 @@ KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisP
 
     m_particleBrush.setProperties(&m_properties);
     m_particleBrush.initParticles();
+
+    m_airbrushOption.readOptionSetting(settings);
 
     m_rateOption.readOptionSetting(settings);
     m_rateOption.resetAllSensors();
@@ -72,7 +73,7 @@ KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& inf
     doPaintLine(info, info);
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   m_settings, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }
 
 void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,

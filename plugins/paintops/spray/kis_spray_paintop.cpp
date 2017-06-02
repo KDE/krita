@@ -43,13 +43,14 @@
 
 KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(static_cast<KisSprayPaintOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
     , m_isPresetValid(true)
     , m_node(node)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     Q_UNUSED(image);
+
+    m_airbrushOption.readOptionSetting(settings);
 
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
@@ -133,5 +134,5 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false,
                                                    m_spacing * additionalScale, false, 1.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   m_settings, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }

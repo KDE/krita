@@ -22,6 +22,7 @@
 #include "kis_paint_information.h"
 #include "kis_paintop_utils.h"
 #include "kis_paintop_settings.h"
+#include "kis_airbrush_option.h"
 #include "kis_pressure_spacing_option.h"
 #include "kis_pressure_rate_option.h"
 
@@ -31,10 +32,10 @@ namespace KisPaintOpPluginUtils {
  * Similar to KisPaintOpUtils::effectiveSpacing, but some of the required parameters are obtained
  * from the provided configuration options. This function assumes a common configuration where
  * curve-based spacing and rate options provide pressure sensitivity, and airbrush settings are
- * configured through a KisPropertiesConfiguration. This type of configuration is used by several
- * different paintops.
- * @param propsConfig - The properties configuration for the paintop. Can be null to use a default
- *                      configuration.
+ * configured through a KisAirbrushOption. This type of configuration is used by several different
+ * paintops.
+ * @param airbrushOption - The airbrushing option. Can be null for paintops that don't support
+ *                         airbrushing.
  * @param spacingOption - The pressure-curve spacing option. Can be null for paintops that don't
  *                        support pressure-based spacing.
  * @param rateOption - The pressure-curve airbrush rate option. Can be null for paintops that don't
@@ -50,7 +51,7 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        bool autoSpacingActive,
                                        qreal autoSpacingCoeff,
                                        qreal lodScale,
-                                       const KisPropertiesConfigurationSP propsConfig,
+                                       const KisAirbrushOption *airbrushOption,
                                        const KisPressureSpacingOption *spacingOption,
                                        const KisPressureRateOption *rateOption,
                                        const KisPaintInformation &pi)
@@ -59,15 +60,11 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
     bool distanceSpacingEnabled = true;
     bool timedSpacingEnabled = false;
     qreal timedSpacingInterval = 0.0;
-    if (propsConfig) {
-        timedSpacingEnabled = propsConfig->getBool(AIRBRUSH_ENABLED, false);
+    if (airbrushOption) {
+        timedSpacingEnabled = airbrushOption->isChecked();
         distanceSpacingEnabled
-                = !(timedSpacingEnabled && propsConfig->getBool(AIRBRUSH_IGNORE_SPACING, false));
-        qreal timedSpacingRate = propsConfig->getDouble(AIRBRUSH_RATE, 1.0);
-        if (timedSpacingRate == 0.0) {
-            timedSpacingRate = 1.0;
-        }
-        timedSpacingInterval = 1000.0 / timedSpacingRate;
+                = !(timedSpacingEnabled && airbrushOption->ignoreSpacing());
+        timedSpacingInterval = airbrushOption->airbrushInterval();
     }
     qreal extraScale = 1.0;
     if (spacingOption && spacingOption->isChecked()) {

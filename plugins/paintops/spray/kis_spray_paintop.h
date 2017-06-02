@@ -25,6 +25,7 @@
 #include "spray_brush.h"
 #include "kis_spray_paintop_settings.h"
 #include "kis_brush_option.h"
+#include <kis_airbrush_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
@@ -50,12 +51,11 @@ private:
     KisColorProperties m_colorProperties;
     KisBrushOption m_brushOption;
 
-    KisSprayPaintOpSettingsSP m_settings;
-
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
     qreal m_xSpacing, m_ySpacing, m_spacing;
     bool m_isPresetValid;
+    KisAirbrushOption m_airbrushOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

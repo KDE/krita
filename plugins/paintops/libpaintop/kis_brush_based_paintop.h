@@ -24,6 +24,7 @@
 #include "kis_brush.h"
 #include "kis_texture_option.h"
 #include "kis_precision_option.h"
+#include "kis_airbrush_option.h"
 #include "kis_pressure_mirror_option.h"
 #include <kis_threaded_text_rendering_workaround.h>
 
@@ -72,6 +73,7 @@ public:
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale,
                                            qreal rotation,
+                                           const KisAirbrushOption *airbrushOption,
                                            const KisPressureSpacingOption *spacingOption,
                                            const KisPressureRateOption *rateOption,
                                            const KisPaintInformation &pi) const;
@@ -95,7 +97,6 @@ private:
     KisTextureProperties m_textureProperties;
     KisPressureMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
-    KisPropertiesConfigurationSP m_settings;
 };
 
 #endif

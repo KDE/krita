@@ -21,8 +21,6 @@
 #include <kis_paintop_option.h>
 #include <kritapaintop_export.h>
 
-class KisAirbrushWidget;
-
 /**
  * Allows the user to activate airbrushing of the brush mask (brush is painted at the same position over and over)
  * Rate is set in miliseconds.
@@ -36,9 +34,31 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-private:
-    KisAirbrushWidget * m_optionWidget;
+    /**
+     * Returns the airbrushing interval, in milliseconds. This value should be ignored if the
+     * KisAirbrushOption is not checked according to isChecked().
+     */
+    qreal airbrushInterval() const;
 
+    /**
+     * Returns true if regular distance-based spacing should be ignored and overridden by time-based
+     * spacing. This value should be ignored if the KisAirbrushOption is not checked according to
+     * isChecked().
+     */
+    bool ignoreSpacing() const;
+
+private Q_SLOTS:
+    void slotIntervalChanged();
+    void slotIgnoreSpacingChanged();
+
+private:
+    // Reads the airbrush interval from the GUI.
+    void updateInterval();
+    // Reads the "ignore spacing" setting from the GUI.
+    void updateIgnoreSpacing();
+
+    struct Private;
+    Private *const m_d;
 };
 
 #endif

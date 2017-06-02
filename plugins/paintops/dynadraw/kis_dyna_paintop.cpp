@@ -44,7 +44,6 @@
 
 KisDynaPaintOp::KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     Q_UNUSED(node);
 
@@ -74,6 +73,8 @@ KisDynaPaintOp::KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter *
     m_properties.useFixedAngle = settings->getBool(DYNA_USE_FIXED_ANGLE);
 
     m_dynaBrush.setProperties(&m_properties);
+
+    m_airbrushOption.readOptionSetting(settings);
 
     m_rateOption.readOptionSetting(settings);
     m_rateOption.resetAllSensors();
@@ -127,5 +128,5 @@ KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
     doPaintLine(info, info);
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   m_settings, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }

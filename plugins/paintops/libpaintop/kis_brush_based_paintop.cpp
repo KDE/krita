@@ -79,8 +79,7 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(KisPaintOpSettingsSP settin
 
 KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP settings, KisPainter* painter)
     : KisPaintOp(painter),
-      m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail()),
-      m_settings(settings)
+      m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail())
 {
     Q_ASSERT(settings);
 
@@ -128,15 +127,16 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale) const
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const
 {
-    return effectiveSpacing(scale, rotation, nullptr, nullptr, pi);
+    return effectiveSpacing(scale, rotation, nullptr, nullptr, nullptr, pi);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
 {
-    return effectiveSpacing(scale, rotation, &spacingOption, nullptr, pi);
+    return effectiveSpacing(scale, rotation, nullptr, &spacingOption, nullptr, pi);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
+                                                             const KisAirbrushOption *airbrushOption,
                                                              const KisPressureSpacingOption *spacingOption,
                                                              const KisPressureRateOption *rateOption,
                                                              const KisPaintInformation &pi) const
@@ -155,7 +155,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
                                                    m_brush->autoSpacingActive(),
                                                    m_brush->autoSpacingCoeff(),
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   m_settings, spacingOption, rateOption,
+                                                   airbrushOption, spacingOption, rateOption,
                                                    pi);
 }
 

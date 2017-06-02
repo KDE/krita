@@ -79,6 +79,7 @@
 #include "kis_action.h"
 #include "kis_action_registry.h"
 
+
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
 
@@ -90,6 +91,7 @@ public:
         , idleWatcher(2500)
         , animationCachePopulator(_part)
     {
+           provider.reset(new KisTelemetryProvider);
     }
 
     ~Private()
@@ -107,7 +109,7 @@ public:
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    QScopedPointer<UserFeedback::Provider> provider;
+    QScopedPointer<KisTelemetryProvider> provider;
 
 };
 
@@ -371,7 +373,7 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
 
 UserFeedback::Provider* KisPart::provider()
 {
-    return d->provider.data();
+    return d->provider->provider();
 }
 
 void KisPart::openExistingFile(const QUrl &url)

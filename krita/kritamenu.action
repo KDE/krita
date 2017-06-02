@@ -106,7 +106,7 @@
       <whatsThis></whatsThis>
       <toolTip>Export as PDF</toolTip>
       <iconText>Export as PDF</iconText>
-      <activationFlags>1</activationFlags>
+      <activationFlags>100000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -119,6 +119,18 @@
       <toolTip>Import animation frames</toolTip>
       <iconText>Import animation frames</iconText>
       <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="send_info">
+      <icon></icon>
+      <text>Sen&amp;d info</text>
+      <whatsThis></whatsThis>
+      <toolTip>Send info</toolTip>
+      <iconText>Send info</iconText>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -458,18 +470,6 @@
       <whatsThis></whatsThis>
       <toolTip>Stroke selection</toolTip>
       <iconText>Stroke selection</iconText>
-      <activationFlags>10000000000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-   <Action name="send_info">
-      <icon></icon>
-      <text>Sen&amp;d info</text>
-      <whatsThis></whatsThis>
-      <toolTip>Send info</toolTip>
-      <iconText>Send info</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

@@ -33,7 +33,7 @@
 #include "kritaui_export.h"
 #include <KoConfig.h>
 #include <KisMainWindow.h>
-#include <UserFeedback/provider.h>
+#include "plugins/telemetry/kis_telemetry_provider.h"
 
 namespace KIO {
 }

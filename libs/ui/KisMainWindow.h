@@ -347,6 +347,11 @@ private Q_SLOTS:
      */
     void slotThemeChanged();
 
+    /**
+     * send Telemetry - temporary solution
+     */
+    void sendInfo();
+
     void undo();
     void redo();
     void updateWindowMenu();

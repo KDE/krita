@@ -33,6 +33,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_print_preview"/-->
       <Separator/>
       <Action name="file_documentinfo"/>
+      <Action name="send_info"/>
       <Separator/>
       <Action name="file_close"/>
       <Action name="file_close_all"/>
@@ -57,7 +58,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="fill_selection_pattern"/>
       <Action name="stroke_shapes"/>
       <Action name="stroke_selection"/>
-      <Action name="send_info"/>
       <Action name="delete"/>
       <Separator/>
       <Action name="revert"/>

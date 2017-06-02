@@ -20,24 +20,23 @@
 
 #include "ui_wdgtelemetry.h"
 #include <KoDialog.h>
-#include "KisProofingConfiguration.h"
-#include <kis_types.h>
-#include "KisViewManager.h"
-#include "KoStrokeConfigWidget.h"
-#include <kis_painter.h>
-#include <kis_canvas2.h>
 
-class WdgTelemetry : public QWidget, public Ui::WgtTelemetry
- {
+#include "KisViewManager.h"
+#include <QScopedPointer>
+
+class WdgTelemetry : public QWidget, public Ui::WgtTelemetry {
     Q_OBJECT
 
-
 public:
-    WdgTelemetry (QWidget *parent) ;
-
-
+    WdgTelemetry(QWidget* parent);
 };
 
-class KisDlgSendTelemtry{
+class KisDlgSendTelemtry : public KoDialog {
+    Q_OBJECT
+public:
+    KisDlgSendTelemtry(KisViewManager* view);
+
+private:
+    QScopedPointer<WdgTelemetry> m_widget;
 };
- #endif KIS_DLG_SEND_TELEMETRY_H_
+#endif // KIS_DLG_SEND_TELEMETRY_H_

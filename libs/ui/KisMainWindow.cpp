@@ -133,6 +133,7 @@
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include "kis_animation_exporter.h"
+#include "dialogs/kis_dlg_send_telemetry.h"
 
 #include <mutex>
 
@@ -211,6 +212,7 @@ public:
     KisAction *redo {0};
     KisAction *newWindow {0};
     KisAction *close {0};
+    KisAction *sendInfo{0};
     KisAction *mdiCascade {0};
     KisAction *mdiTile {0};
     KisAction *mdiNextWindow {0};
@@ -248,6 +250,7 @@ public:
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
     QMutex savingEntryMutex;
 
+    QScopedPointer<KisDlgSendTelemtry > telemetry;
     KisActionManager * actionManager() {
         return viewManager->actionManager();
     }
@@ -627,6 +630,15 @@ void KisMainWindow::slotThemeChanged()
     }
 
     emit themeChanged();
+}
+
+void KisMainWindow::sendInfo()
+{
+    qDebug()<<"send_enfo"<<"\n";
+    d->telemetry.reset(new KisDlgSendTelemtry(this->viewManager()));
+    if(d->telemetry->exec()== QDialog::Accepted){
+        UserFeedback::Provider* provider = KisPart::instance()->provider();
+    };
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
@@ -2306,6 +2318,10 @@ void KisMainWindow::createActions()
 
     d->close = actionManager->createAction("file_close");
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+
+    d->sendInfo = actionManager->createAction("send_info");
+    connect(d->sendInfo, SIGNAL(triggered()), SLOT(sendInfo()));
+
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 

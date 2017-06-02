@@ -123,6 +123,7 @@ KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
       userData(rhs.userData ? rhs.userData->clone() : 0),
       stroke(rhs.stroke),
       fill(rhs.fill),
+      inheritBackground(rhs.inheritBackground),
       dependees(), // FIXME: how to initialize them?
       shadow(0), // WARNING: not implemented in Krita
       border(0), // WARNING: not implemented in Krita
@@ -749,7 +750,7 @@ QRectF KoShape::outlineRect() const
 QPainterPath KoShape::shadowOutline() const
 {
     Q_D(const KoShape);
-    if (d->fill) {
+    if (background()) {
         return outline();
     }
 
@@ -829,10 +830,9 @@ KoShapeUserData *KoShape::userData() const
 bool KoShape::hasTransparency() const
 {
     Q_D(const KoShape);
-    if (! d->fill)
-        return true;
-    else
-        return d->fill->hasTransparency() || d->transparency > 0.0;
+    QSharedPointer<KoShapeBackground> bg = background();
+
+    return !bg || bg->hasTransparency() || d->transparency > 0.0;
 }
 
 void KoShape::setTransparency(qreal transparency)
@@ -1095,6 +1095,7 @@ void KoShape::setTextRunAroundContour(KoShape::TextRunAroundContour contour)
 void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 {
     Q_D(KoShape);
+    d->inheritBackground = false;
     d->fill = fill;
     d->shapeChanged(BackgroundChanged);
     notifyChanged();
@@ -1103,7 +1104,32 @@ void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 QSharedPointer<KoShapeBackground> KoShape::background() const
 {
     Q_D(const KoShape);
-    return d->fill;
+
+    QSharedPointer<KoShapeBackground> bg;
+
+    if (!d->inheritBackground) {
+        bg = d->fill;
+    } else if (parent()) {
+        bg = parent()->background();
+    }
+
+    return bg;
+}
+
+void KoShape::setInheritBackground(bool value)
+{
+    Q_D(KoShape);
+
+    d->inheritBackground = value;
+    if (d->inheritBackground) {
+        d->fill.clear();
+    }
+}
+
+bool KoShape::inheritBackground() const
+{
+    Q_D(const KoShape);
+    return d->inheritBackground;
 }
 
 void KoShape::setZIndex(int zIndex)

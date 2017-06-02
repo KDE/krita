@@ -30,7 +30,7 @@ public:
     KoColorBackgroundPrivate()
     : color(Qt::black)
     , style(Qt::SolidPattern)
-    {};
+    {}
 
     QColor color;
     Qt::BrushStyle style;

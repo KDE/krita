@@ -46,6 +46,8 @@ public:
 protected:
     bool isRootTextNode() const override;
 
+    void shapeChanged(ChangeType type, KoShape *shape) override;
+
 private:
     Q_DECLARE_PRIVATE(KoSvgTextShape)
 };

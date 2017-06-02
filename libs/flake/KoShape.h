@@ -524,6 +524,10 @@ public:
      * or have a complex fill.
      * Setting such a background will allow the shape to be filled and will be able to tell
      * if it is transparent or not.
+     *
+     * If the shape inherited the background from its parent, its stops inheriting it, that
+     * is inheritBackground property resets to false.
+     *
      * @param background the new shape background.
      */
     void setBackground(QSharedPointer<KoShapeBackground> background);
@@ -536,6 +540,19 @@ public:
      * @return the background-brush
      */
     QSharedPointer<KoShapeBackground> background() const;
+
+    /**
+     * @brief setInheritBackground marks a shape as inhiriting the background
+     * from the parent shape. NOTE: The currently selected background is destroyed.
+     * @param value true if the shape should inherit the filling background
+     */
+    void setInheritBackground(bool value);
+
+    /**
+     * @brief inheritBackground shows if the shape inherits background from its parent
+     * @return true if the shape inherits the fill
+     */
+    bool inheritBackground() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.

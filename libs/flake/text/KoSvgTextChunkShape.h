@@ -52,6 +52,7 @@ public:
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
     bool loadSvgTextNode(const KoXmlText &text, SvgLoadingContext &context);
     void normalizeCharTransformations();
+    void simplifyFillStrokeInheritance();
 
     KoSvgTextProperties textProperties() const;
     bool isTextNode() const;

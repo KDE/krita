@@ -85,6 +85,15 @@ KoShape *KoSvgTextShape::cloneShape() const
     return new KoSvgTextShape(*this);
 }
 
+void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
+{
+    KoSvgTextChunkShape::shapeChanged(type, shape);
+
+    if (type == StrokeChanged || type == BackgroundChanged || type == ContentChanged) {
+        relayout();
+    }
+}
+
 void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     Q_D(KoSvgTextShape);

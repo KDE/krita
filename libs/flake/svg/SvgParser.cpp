@@ -1322,6 +1322,8 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
     textChunk->normalizeCharTransformations();
 
     if (rootTextShape) {
+        textChunk->simplifyFillStrokeInheritance();
+
         m_isInsideTextSubtree = false;
         rootTextShape->relayout();
     }

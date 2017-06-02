@@ -606,6 +606,34 @@ void KoSvgTextChunkShape::normalizeCharTransformations()
     d->applyParentCharTransformations(d->localTransformations);
 }
 
+void KoSvgTextChunkShape::simplifyFillStrokeInheritance()
+{
+    Q_D(KoSvgTextChunkShape);
+
+    if (!isRootTextNode()) {
+        KoShape *parentShape = parent();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(parentShape);
+
+        QSharedPointer<KoShapeBackground> bg = background();
+
+        if (bg &&
+            parentShape->background() &&
+            !inheritBackground() &&
+            bg->compareTo(parentShape->background().data())) {
+
+            setInheritBackground(true);
+        }
+    }
+
+
+    Q_FOREACH (KoShape *shape, shapes()) {
+        KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+        chunkShape->simplifyFillStrokeInheritance();
+    }
+}
+
 KoSvgTextProperties KoSvgTextChunkShape::textProperties() const
 {
     Q_D(const KoSvgTextChunkShape);
@@ -724,7 +752,9 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShapePrivate::fetchCharFormat() co
             textBrush = Qt::red;
         }
 
-        textBrush = colorBackground->brush();
+        if (colorBackground) {
+            textBrush = colorBackground->brush();
+        }
     }
 
     format.setForeground(textBrush);

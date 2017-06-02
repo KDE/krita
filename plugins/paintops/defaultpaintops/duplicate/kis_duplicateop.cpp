@@ -75,9 +75,11 @@ KisDuplicateOp::KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
+
     m_sizeOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
+
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
@@ -132,7 +134,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
-    KisDabShape shape(scale, 1.0, 0.0);
+    KisDabShape shape(scale, 1.0, rotation);
 
 
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();

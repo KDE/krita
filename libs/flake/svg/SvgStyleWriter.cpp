@@ -361,7 +361,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
-        SvgUtil::writeTransformAttributeLazy("gradientTransform", gradientTransform, context.shapeWriter());
+        SvgUtil::writeTransformAttributeLazy("gradientTransform", gradientTransform, context.styleWriter());
         context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("x1", g->start().x());
         context.styleWriter().addAttribute("y1", g->start().y());
@@ -375,7 +375,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
-        SvgUtil::writeTransformAttributeLazy("gradientTransform", gradientTransform, context.shapeWriter());
+        SvgUtil::writeTransformAttributeLazy("gradientTransform", gradientTransform, context.styleWriter());
         context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("cx", g->center().x());
         context.styleWriter().addAttribute("cy", g->center().y());
@@ -522,7 +522,7 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
         context.styleWriter().addAttributePt("height", rect.height());
     }
 
-    SvgUtil::writeTransformAttributeLazy("patternTransform", pattern->patternTransform(), context.shapeWriter());
+    SvgUtil::writeTransformAttributeLazy("patternTransform", pattern->patternTransform(), context.styleWriter());
 
     if (pattern->contentCoordinates() == KoFlake::ObjectBoundingBox) {
         // TODO: move this normalization into the KoVectorPatternBackground itself

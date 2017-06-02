@@ -288,9 +288,9 @@ qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
     if (!(startTime < endTime)) {
         return -1.0;
     }
-    
-    qreal timedSpacingInterval = qMin(MAX_TIMED_INTERVAL, m_d->spacing.timedSpacingInterval());
-    timedSpacingInterval = qMax(MIN_TIMED_INTERVAL, timedSpacingInterval);
+
+    qreal timedSpacingInterval = qBound(MIN_TIMED_INTERVAL, m_d->spacing.timedSpacingInterval(),
+                                        MAX_TIMED_INTERVAL);
     qreal nextPointInterval = timedSpacingInterval - m_d->accumTime;
     
     // Note: nextPointInterval SHOULD always be positive, but I wasn't sure if floating point

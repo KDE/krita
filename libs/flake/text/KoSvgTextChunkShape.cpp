@@ -615,13 +615,26 @@ void KoSvgTextChunkShape::simplifyFillStrokeInheritance()
         KIS_SAFE_ASSERT_RECOVER_RETURN(parentShape);
 
         QSharedPointer<KoShapeBackground> bg = background();
+        QSharedPointer<KoShapeBackground> parentBg = parentShape->background();
 
-        if (bg &&
-            parentShape->background() &&
-            !inheritBackground() &&
-            bg->compareTo(parentShape->background().data())) {
+        if (!inheritBackground() &&
+            ((!bg && !parentBg) ||
+             (bg && parentBg &&
+              bg->compareTo(parentShape->background().data())))) {
 
             setInheritBackground(true);
+        }
+
+        KoShapeStrokeModelSP stroke = this->stroke();
+        KoShapeStrokeModelSP parentStroke= parentShape->stroke();
+
+        if (!inheritStroke() &&
+            ((!stroke && !parentStroke) ||
+             (stroke && parentStroke &&
+              stroke->compareFillTo(parentShape->stroke().data()) &&
+              stroke->compareStyleTo(parentShape->stroke().data())))) {
+
+            setInheritStroke(true);
         }
     }
 

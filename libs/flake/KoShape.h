@@ -800,10 +800,23 @@ public:
     KoShapeStrokeModelSP stroke() const;
 
     /**
-     * Set a new stroke, removing the old one.
+     * Set a new stroke, removing the old one. The stroke inheritance becomes disabled.
      * @param stroke the new stroke, or 0 if there should be no stroke.
      */
     void setStroke(KoShapeStrokeModelSP stroke);
+
+    /**
+     * @brief setInheritStroke marks a shape as inhiriting the stroke
+     * from the parent shape. NOTE: The currently selected stroke is destroyed.
+     * @param value true if the shape should inherit the stroke style
+     */
+    void setInheritStroke(bool value);
+
+    /**
+     * @brief inheritStroke shows if the shape inherits the stroke from its parent
+     * @return true if the shape inherits the stroke style
+     */
+    bool inheritStroke() const;
 
     /**
      * Return the insets of the stroke.

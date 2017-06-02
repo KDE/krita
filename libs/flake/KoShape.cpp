@@ -124,6 +124,7 @@ KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
       stroke(rhs.stroke),
       fill(rhs.fill),
       inheritBackground(rhs.inheritBackground),
+      inheritStroke(rhs.inheritStroke),
       dependees(), // FIXME: how to initialize them?
       shadow(0), // WARNING: not implemented in Krita
       border(0), // WARNING: not implemented in Krita
@@ -1277,7 +1278,16 @@ bool KoShape::collisionDetection()
 KoShapeStrokeModelSP KoShape::stroke() const
 {
     Q_D(const KoShape);
-    return d->stroke;
+
+    KoShapeStrokeModelSP stroke;
+
+    if (!d->inheritStroke) {
+        stroke = d->stroke;
+    } else if (parent()) {
+        stroke = parent()->stroke();
+    }
+
+    return stroke;
 }
 
 void KoShape::setStroke(KoShapeStrokeModelSP stroke)
@@ -1287,11 +1297,27 @@ void KoShape::setStroke(KoShapeStrokeModelSP stroke)
     // TODO: check if it really updates stuff
     d->updateStroke();
 
+    d->inheritStroke = false;
     d->stroke = stroke;
     d->updateStroke();
 
     d->shapeChanged(StrokeChanged);
     notifyChanged();
+}
+
+void KoShape::setInheritStroke(bool value)
+{
+    Q_D(KoShape);
+    d->inheritStroke = value;
+    if (d->inheritStroke) {
+        d->stroke.clear();
+    }
+}
+
+bool KoShape::inheritStroke() const
+{
+    Q_D(const KoShape);
+    return d->inheritStroke;
 }
 
 void KoShape::setShadow(KoShapeShadow *shadow)

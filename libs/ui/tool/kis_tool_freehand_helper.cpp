@@ -803,20 +803,23 @@ void KisToolFreehandHelper::finishStroke()
 
 void KisToolFreehandHelper::doAirbrushing()
 {
-    // Add a new painting update at a point identical to the previous one, except for the time and
-    // speed information.
-    const KisPaintInformation &prevPaint = m_d->previousPaintInformation;
-    KisPaintInformation nextPaint(prevPaint.pos(),
-                                  prevPaint.pressure(),
-                                  prevPaint.xTilt(),
-                                  prevPaint.yTilt(),
-                                  prevPaint.rotation(),
-                                  prevPaint.tangentialPressure(),
-                                  prevPaint.perspective(),
-                                  elapsedStrokeTime(),
-                                  0.0);
+    // Check that the stroke hasn't ended.
+    if (!m_d->painterInfos.isEmpty()) {
 
-    paint(nextPaint);
+        // Add a new painting update at a point identical to the previous one, except for the time
+        // and speed information.
+        const KisPaintInformation &prevPaint = m_d->previousPaintInformation;
+        KisPaintInformation nextPaint(prevPaint.pos(),
+                                      prevPaint.pressure(),
+                                      prevPaint.xTilt(),
+                                      prevPaint.yTilt(),
+                                      prevPaint.rotation(),
+                                      prevPaint.tangentialPressure(),
+                                      prevPaint.perspective(),
+                                      elapsedStrokeTime(),
+                                      0.0);
+        paint(nextPaint);
+    }
 }
 
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const

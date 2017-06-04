@@ -25,34 +25,37 @@
 #include <QOpenGLFunctions>
 #include <QWindow>
 
+#include <QDesktopWidget>
+#include <QClipboard>
+
 #include "kis_document_aware_spin_box_unit_manager.h"
 
 DlgBugInfo::DlgBugInfo(QWidget *parent)
     : KoDialog(parent)
 {
     setCaption(i18n("Please paste this information in your bug report"));
-    setButtons(Ok);
+
+    setButtons(User1 | Ok);
+    setButtonText(User1, i18n("Copy to clipboard"));
     setDefaultButton(Ok);
 
     m_page = new WdgBugInfo(this);
     Q_CHECK_PTR(m_page);
 
     setMainWidget(m_page);
-    resize(m_page->sizeHint());
 
     // OS information
     QString info;
     info.append("OS Information");
-    info.append("  Build ABI: ").append(QSysInfo::buildAbi());
+    info.append("\n  Build ABI: ").append(QSysInfo::buildAbi());
     info.append("\n  Build CPU: ").append(QSysInfo::buildCpuArchitecture());
     info.append("\n  CPU: ").append(QSysInfo::currentCpuArchitecture());
     info.append("\n  Kernel Type: ").append(QSysInfo::kernelType());
     info.append("\n  Kernel Version: ").append(QSysInfo::kernelVersion());
-    info.append("\n  Hostname: ").append(QSysInfo::machineHostName());
     info.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
     info.append("\n  Product Type: ").append(QSysInfo::productType());
     info.append("\n  Product Version: ").append(QSysInfo::productVersion());
-    info.append("\n\n");
+    info.append("\n");
 
     // OpenGL information
     // we need a QSurface active to get our GL functions from the context
@@ -90,9 +93,19 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
 
     // Installation information
 
-
+    // calculate a default height for the widget
+    int wheight = m_page->sizeHint().height();
     m_page->txtBugInfo->setText(info);
 
+    QFontMetrics fm = m_page->txtBugInfo->fontMetrics();
+    int target_height = fm.height() * info.split('\n').size() + wheight;
+
+    QDesktopWidget dw;
+    QRect screen_rect = dw.availableGeometry(dw.primaryScreen());
+
+    resize(sizeHint().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
+
+    connect(this, &KoDialog::user1Clicked, this, [this](){ QGuiApplication::clipboard()->setText(m_page->txtBugInfo->toPlainText()); });
 }
 
 DlgBugInfo::~DlgBugInfo()

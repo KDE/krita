@@ -18,6 +18,7 @@
 
 #include "kis_tool_line_helper.h"
 
+#include "kis_algebra_2d.h"
 #include "kis_painting_information_builder.h"
 #include "kis_image.h"
 
@@ -71,10 +72,17 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
     cancelPaint();
     if (m_d->linePoints.isEmpty()) return;
 
+    qreal startAngle = 0.0;
+    if (m_d->linePoints.length() > 1) {
+        startAngle = KisAlgebra2D::directionBetweenPoints(m_d->linePoints[0].pos(),
+                                                          m_d->linePoints[1].pos(),
+                                                          0.0);
+    }
+
     QVector<KisPaintInformation>::const_iterator it = m_d->linePoints.constBegin();
     QVector<KisPaintInformation>::const_iterator end = m_d->linePoints.constEnd();
 
-    initPaintImpl(*it, resourceManager, image, node, strokesFacade);
+    initPaintImpl(startAngle, *it, resourceManager, image, node, strokesFacade);
     ++it;
 
     while (it != end) {

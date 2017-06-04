@@ -180,7 +180,7 @@ private:
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
@@ -214,9 +214,22 @@ public:
     qreal lockedDrawingAngle() const;
     void setLockedDrawingAngle(qreal angle);
 
+    /**
+     * Computes the next drawing angle assuming that the next painting position will be nextPos.
+     * This method should not be called when hasLastDabInformation() is false.
+     */
+    qreal nextDrawingAngle(const QPointF &nextPos, bool considerLockedAngle = true) const;
+
+    /**
+     * Returns a unit vector pointing in the direction that would have been indicated by a call to
+     * nextDrawingAngle. This method should not be called when hasLastDabInformation() is false.
+     */
+    QPointF nextDrawingDirectionVector(const QPointF &nextPos,
+                                       bool considerLockedAngle = true) const;
+
     qreal scalarDistanceApprox() const;
 
-    void overrideLastValues(const QPointF &lastPosition, qreal lastTime);
+    void overrideLastValues(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
@@ -226,6 +239,13 @@ private:
     qreal getNextPointPositionTimed(qreal startTime,
                                     qreal endTime);
     void resetAccumulators();
+
+    qreal drawingAngleImpl(const QPointF &start, const QPointF &end,
+                           bool considerLockedAngle = true, qreal defaultAngle = 0.0) const;
+    QPointF drawingDirectionVectorImpl(const QPointF &start, const QPointF &end,
+                                       bool considerLockedAngle = true,
+                                       qreal defaultAngle = 0.0) const;
+
 private:
     struct Private;
     Private * const m_d;

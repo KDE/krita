@@ -48,6 +48,7 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     QPointF accumDistance;
     qreal accumTime;
     KisSpacingInformation spacing;
+
     QPointF lastPosition;
     qreal lastTime;
     bool lastDabInfoValid;
@@ -67,11 +68,13 @@ KisDistanceInformation::KisDistanceInformation()
 }
 
 KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
-                                               qreal lastTime)
+                                               qreal lastTime,
+                                               qreal lastAngle)
     : m_d(new Private)
 {
     m_d->lastPosition = lastPosition;
     m_d->lastTime = lastTime;
+    m_d->lastAngle = lastAngle;
 
     m_d->lastDabInfoValid = true;
 }
@@ -100,10 +103,12 @@ KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInfor
     return *this;
 }
 
-void KisDistanceInformation::overrideLastValues(const QPointF &lastPosition, qreal lastTime)
+void KisDistanceInformation::overrideLastValues(const QPointF &lastPosition, qreal lastTime,
+                                                qreal lastAngle)
 {
     m_d->lastPosition = lastPosition;
     m_d->lastTime = lastTime;
+    m_d->lastAngle = lastAngle;
 
     m_d->lastDabInfoValid = true;
 }
@@ -158,10 +163,10 @@ void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
 {
     m_d->totalDistance += KisAlgebra2D::norm(info.pos() - m_d->lastPosition);
 
-    m_d->lastAngle = info.drawingAngleSafe(*this);
     m_d->lastPaintInformation = info;
     m_d->lastPaintInfoValid = true;
 
+    m_d->lastAngle = nextDrawingAngle(info.pos());
     m_d->lastPosition = info.pos();
     m_d->lastTime = info.currentTime();
     m_d->lastDabInfoValid = true;
@@ -331,7 +336,65 @@ void KisDistanceInformation::setLockedDrawingAngle(qreal angle)
     m_d->lockedDrawingAngle = angle;
 }
 
+qreal KisDistanceInformation::nextDrawingAngle(const QPointF &nextPos,
+                                               bool considerLockedAngle) const
+{
+    if (!m_d->lastDabInfoValid) {
+        warnKrita << "KisDistanceInformation::nextDrawingAngle()" << "No last dab data";
+        return 0.0;
+    }
+
+    // Compute the drawing angle. If the new position is the same as the previous position, an angle
+    // can't be computed. In that case, act as if the angle is the same as in the previous dab.
+    return drawingAngleImpl(m_d->lastPosition, nextPos, considerLockedAngle, m_d->lastAngle);
+}
+
+QPointF KisDistanceInformation::nextDrawingDirectionVector(const QPointF &nextPos,
+                                                           bool considerLockedAngle) const
+{
+    if (!m_d->lastDabInfoValid) {
+        warnKrita << "KisDistanceInformation::nextDrawingDirectionVector()" << "No last dab data";
+        return QPointF(1.0, 0.0);
+    }
+
+    // Compute the direction vector. If the new position is the same as the previous position, a
+    // direction can't be computed. In that case, act as if the direction is the same as in the
+    // previous dab.
+    return drawingDirectionVectorImpl(m_d->lastPosition, nextPos, considerLockedAngle,
+                                      m_d->lastAngle);
+}
+
 qreal KisDistanceInformation::scalarDistanceApprox() const
 {
     return m_d->totalDistance;
+}
+
+qreal KisDistanceInformation::drawingAngleImpl(const QPointF &start, const QPointF &end,
+                                               bool considerLockedAngle, qreal defaultAngle) const
+{
+    if (m_d->hasLockedDrawingAngle && considerLockedAngle) {
+        return m_d->lockedDrawingAngle;
+    }
+
+    // If the start and end positions are the same, we can't compute an angle. In that case, use the
+    // provided default.
+    return KisAlgebra2D::directionBetweenPoints(start, end, defaultAngle);
+}
+
+QPointF KisDistanceInformation::drawingDirectionVectorImpl(const QPointF &start, const QPointF &end,
+                                                           bool considerLockedAngle,
+                                                           qreal defaultAngle) const
+{
+    if (m_d->hasLockedDrawingAngle && considerLockedAngle) {
+        return QPointF(cos(m_d->lockedDrawingAngle), sin(m_d->lockedDrawingAngle));
+    }
+
+    // If the start and end positions are the same, we can't compute a drawing direction. In that
+    // case, use the provided default.
+    if (KisAlgebra2D::fuzzyPointCompare(start, end)) {
+        return QPointF(cos(defaultAngle), sin(defaultAngle));
+    }
+
+    const QPointF diff(end - start);
+    return KisAlgebra2D::normalize(diff);
 }

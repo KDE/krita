@@ -26,7 +26,8 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceManager.h>
 
-#include <kis_distance_information.h>
+#include "kis_algebra_2d.h"
+#include "kis_distance_information.h"
 #include "kis_painting_information_builder.h"
 #include "kis_recording_adapter.h"
 #include "kis_image.h"
@@ -82,7 +83,9 @@ struct KisToolFreehandHelper::Private
     QList<KisPaintInformation> history;
     QList<qreal> distanceHistory;
 
-    KisPaintOpUtils::PositionHistory lastOutlinePos;
+    // Keeps track of past cursor positions. This is used to determine the drawing angle when
+    // drawing the brush outline or starting a stroke.
+    KisPaintOpUtils::PositionHistory lastCursorPos;
 
     // Stabilizer data
     QQueue<KisPaintInformation> stabilizerDeque;
@@ -147,9 +150,11 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 {
     KisPaintOpSettingsSP settings = globalSettings;
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos);
+    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, savedCursorPos, 0);
     info.setCanvasRotation(m_d->canvasRotation);
     info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
-    KisDistanceInformation distanceInfo(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
+    KisDistanceInformation distanceInfo(prevPoint, 0, startAngle);
 
     if (!m_d->painterInfos.isEmpty()) {
         settings = m_d->resources->currentPaintOpPreset()->settings();
@@ -180,7 +185,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
              * local copy of the coordinates.
              */
             distanceInfo = *buddyDistance;
-            distanceInfo.overrideLastValues(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
+            distanceInfo.overrideLastValues(prevPoint, 0, startAngle);
 
         } else if (m_d->painterInfos.first()->dragDistance->isStarted()) {
             distanceInfo = *m_d->painterInfos.first()->dragDistance;
@@ -207,6 +212,11 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     return outline;
 }
 
+void KisToolFreehandHelper::cursorMoved(const QPointF &cursorPos)
+{
+    m_d->lastCursorPos.pushThroughHistory(cursorPos);
+}
+
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KoCanvasResourceManager *resourceManager,
                                       KisImageWSP image, KisNodeSP currentNode,
@@ -214,11 +224,14 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(event->point);
     m_d->strokeTime.start();
     KisPaintInformation pi =
         m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
+    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pi.pos(), 0.0);
 
-    initPaintImpl(pi,
+    initPaintImpl(startAngle,
+                  pi,
                   resourceManager,
                   image,
                   currentNode,
@@ -232,7 +245,8 @@ bool KisToolFreehandHelper::isRunning() const
     return m_d->strokeId;
 }
 
-void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPaintInformation,
+void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
+                                          const KisPaintInformation &pi,
                                           KoCanvasResourceManager *resourceManager,
                                           KisImageWSP image,
                                           KisNodeSP currentNode,
@@ -249,11 +263,12 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
 
     m_d->hasPaintAtLeastOnce = false;
 
-    m_d->previousPaintInformation = previousPaintInformation;
+    m_d->previousPaintInformation = pi;
 
     createPainters(m_d->painterInfos,
                    m_d->previousPaintInformation.pos(),
-                   m_d->previousPaintInformation.currentTime());
+                   m_d->previousPaintInformation.currentTime(),
+                   startAngle);
 
     m_d->resources = new KisResourcesSnapshot(image,
                                               currentNode,
@@ -288,7 +303,7 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
     }
 
     // Paint initial dab and initialize spacing.
-    paintAt(previousPaintInformation);
+    paintAt(pi);
 }
 
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
@@ -898,9 +913,10 @@ void KisToolFreehandHelper::paintBezierCurve(int painterInfoId,
 
 void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
                                            const QPointF &lastPosition,
-                                           int lastTime)
+                                           int lastTime,
+                                           qreal lastAngle)
 {
-    painterInfos << new PainterInfo(lastPosition, lastTime);
+    painterInfos << new PainterInfo(lastPosition, lastTime, lastAngle);
 }
 
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)

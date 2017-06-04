@@ -90,6 +90,12 @@ KisToolFreehand::~KisToolFreehand()
     delete m_infoBuilder;
 }
 
+void KisToolFreehand::mouseMoveEvent(KoPointerEvent *event)
+{
+    KisToolPaint::mouseMoveEvent(event);
+    m_helper->cursorMoved(event->point);
+}
+
 KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
 {
     return m_helper->smoothingOptions();

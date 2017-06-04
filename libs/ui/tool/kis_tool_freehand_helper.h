@@ -59,6 +59,7 @@ public:
 
     bool isRunning() const;
 
+    void cursorMoved(const QPointF &cursorPos);
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
@@ -91,7 +92,8 @@ protected:
     void cancelPaint();
     int elapsedStrokeTime() const;
 
-    void initPaintImpl(const KisPaintInformation &previousPaintInformation,
+    void initPaintImpl(qreal startAngle,
+                       const KisPaintInformation &pi,
                        KoCanvasResourceManager *resourceManager,
                        KisImageWSP image,
                        KisNodeSP node,
@@ -103,7 +105,8 @@ protected:
 
     virtual void createPainters(QVector<PainterInfo*> &painterInfos,
                                 const QPointF &lastPosition,
-                                int lastTime);
+                                int lastTime,
+                                qreal lastAngle);
 
     // lo-level methods for painting primitives
 

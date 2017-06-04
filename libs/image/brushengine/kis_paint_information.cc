@@ -331,8 +331,11 @@ qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distan
 {
     if (d->drawingAngleOverride) return *d->drawingAngleOverride;
 
-    QVector2D diff(pos() - distance.lastPosition());
-    return atan2(diff.y(), diff.x());
+    if (!distance.hasLastDabInformation()) {
+        warnKrita << "KisPaintInformation::drawingAngleSafe()" << "Cannot access Distance Info last dab data";
+    }
+
+    return distance.nextDrawingAngle(pos());
 }
 
 KisPaintInformation::DistanceInformationRegistrar
@@ -350,25 +353,19 @@ qreal KisPaintInformation::drawingAngle() const
         return 0.0;
     }
 
-    if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
-        return d->currentDistanceInfo->lockedDrawingAngle();
-    }
-
-    QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
-    return atan2(diff.y(), diff.x());
+    return d->currentDistanceInfo->nextDrawingAngle(pos());
 }
 
 void KisPaintInformation::lockCurrentDrawingAngle(qreal alpha_unused) const
 {
     Q_UNUSED(alpha_unused);
 
-    if (!d->currentDistanceInfo) {
+    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
         warnKrita << "KisPaintInformation::lockCurrentDrawingAngle()" << "Cannot access Distance Info last dab data";
         return;
     }
 
-    const QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
-    const qreal angle = atan2(diff.y(), diff.x());
+    qreal angle = d->currentDistanceInfo->nextDrawingAngle(pos(), false);
 
     qreal newAngle = angle;
 
@@ -401,8 +398,7 @@ QPointF KisPaintInformation::drawingDirectionVector() const
         return QPointF(1.0, 0.0);
     }
 
-    QPointF diff(pos() - d->currentDistanceInfo->lastPosition());
-    return KisAlgebra2D::normalize(diff);
+    return d->currentDistanceInfo->nextDrawingDirectionVector(pos());
 }
 
 qreal KisPaintInformation::drawingDistance() const

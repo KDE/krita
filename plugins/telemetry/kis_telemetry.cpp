@@ -18,28 +18,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_PROVIDER_H
-#define KIS_TELEMETRY_PROVIDER_H
-#include "QScopedPointer"
-#include <QVariant>
-#include "UserFeedback/AbstractDataSource"
-#include "UserFeedback/cpuinfosource.h"
-#include <UserFeedback/provider.h>
-#include <kis_telemetry_abstruct.h>
-#include <memory>
-#include <vector>
+#include "kis_telemetry.h"
+#include "KPluginFactory"
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
+#include <kis_global.h>
+#include <kis_types.h>
+#include <KoToolRegistry.h>
+#include "kis_telemetry_provider.h"
+#include "KisPart.h"
 
 
-class KisTelemetryProvider : public KisTelemetryAbstruct {
-public:
-    KisTelemetryProvider();
-    UserFeedback::Provider* provider() override;
-    void sendData() override;
-    virtual ~KisTelemetryProvider();
+K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerPlugin<KisTelemetry>();)
 
-private:
-    QScopedPointer<UserFeedback::Provider> m_provider;
-    std::vector<std::unique_ptr<UserFeedback::AbstractDataSource> > m_sources;
-};
+KisTelemetry::KisTelemetry(QObject* parent, const QVariantList&)
+    : QObject(parent)
+{
+    KisPart::instance()->setProvider(new KisTelemetryProvider);
+}
 
-#endif
+KisTelemetry::~KisTelemetry()
+{
+
+}
+
+#include "kis_telemetry.moc"
+

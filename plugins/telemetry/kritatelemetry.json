@@ -1,0 +1,9 @@
+{
+    "Id": "Telemetry Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatelemetry",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

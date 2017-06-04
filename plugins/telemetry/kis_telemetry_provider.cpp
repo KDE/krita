@@ -19,14 +19,28 @@
 */
 
 #include "kis_telemetry_provider.h"
+#include "KPluginFactory"
+#include "KisPart.h"
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
+
+#include <kis_debug.h>
+#include <kpluginfactory.h>
+
+#include <kis_global.h>
+#include <kis_types.h>
+#include <KoToolRegistry.h>
+#include <iostream>
 
 
 KisTelemetryProvider::KisTelemetryProvider()
 {
-   m_provider.reset(new UserFeedback::Provider);
-   m_sources[0].reset(new UserFeedback::CpuInfoSource());
-
-   m_provider.data()->addDataSource(m_sources[0].data(),UserFeedback::Provider::DetailedUsageStatistics);
+    m_provider.reset(new UserFeedback::Provider);
+    std::unique_ptr<UserFeedback::AbstractDataSource> cpu(new UserFeedback::CpuInfoSource());
+    m_sources.push_back(std::move(cpu));
+    std::cout << "\n"
+              << "PROVIDER LOADED" << std::endl;
+    m_provider.data()->addDataSource(m_sources[0].get(), UserFeedback::Provider::DetailedUsageStatistics);
 }
 
 UserFeedback::Provider* KisTelemetryProvider::provider()
@@ -37,3 +51,10 @@ UserFeedback::Provider* KisTelemetryProvider::provider()
 void KisTelemetryProvider::sendData()
 {
 }
+
+KisTelemetryProvider::~KisTelemetryProvider()
+{
+
+}
+
+

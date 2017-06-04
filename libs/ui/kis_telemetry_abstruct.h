@@ -18,28 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_PROVIDER_H
-#define KIS_TELEMETRY_PROVIDER_H
+#ifndef KIS_TELEMETRY_ABSTRUCT_H
+#define KIS_TELEMETRY_ABSTRUCT_H
 #include "QScopedPointer"
-#include <QVariant>
+#include <UserFeedback/provider.h>
 #include "UserFeedback/AbstractDataSource"
 #include "UserFeedback/cpuinfosource.h"
-#include <UserFeedback/provider.h>
-#include <kis_telemetry_abstruct.h>
-#include <memory>
-#include <vector>
+#include <QVector>
+#include "kritaflake_export.h"
 
-
-class KisTelemetryProvider : public KisTelemetryAbstruct {
+class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
 public:
-    KisTelemetryProvider();
-    UserFeedback::Provider* provider() override;
-    void sendData() override;
-    virtual ~KisTelemetryProvider();
+    virtual UserFeedback::Provider *provider() = 0 ;
+    virtual void sendData() = 0;
+    virtual ~KisTelemetryAbstruct(){};
 
-private:
-    QScopedPointer<UserFeedback::Provider> m_provider;
-    std::vector<std::unique_ptr<UserFeedback::AbstractDataSource> > m_sources;
 };
 
 #endif
+

@@ -18,28 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_PROVIDER_H
-#define KIS_TELEMETRY_PROVIDER_H
+#ifndef KIS_TELEMETRY_H
+#define KIS_TELEMETRY_H
 #include "QScopedPointer"
 #include <QVariant>
-#include "UserFeedback/AbstractDataSource"
-#include "UserFeedback/cpuinfosource.h"
-#include <UserFeedback/provider.h>
-#include <kis_telemetry_abstruct.h>
-#include <memory>
-#include <vector>
 
-
-class KisTelemetryProvider : public KisTelemetryAbstruct {
+class KisTelemetry : public QObject {
+    Q_OBJECT
 public:
-    KisTelemetryProvider();
-    UserFeedback::Provider* provider() override;
-    void sendData() override;
-    virtual ~KisTelemetryProvider();
-
-private:
-    QScopedPointer<UserFeedback::Provider> m_provider;
-    std::vector<std::unique_ptr<UserFeedback::AbstractDataSource> > m_sources;
+    KisTelemetry(QObject* parent, const QVariantList&);
+    ~KisTelemetry() override;
 };
+
+
 
 #endif

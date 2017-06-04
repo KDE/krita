@@ -224,7 +224,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
-    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(event->point);
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(image->documentToPixel(event->point));
     m_d->strokeTime.start();
     KisPaintInformation pi =
         m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
@@ -302,8 +302,12 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
         stabilizerStart(m_d->previousPaintInformation);
     }
 
-    // Paint initial dab and initialize spacing.
-    paintAt(pi);
+    // If airbrushing, paint an initial dab immediately. This is a workaround for an issue where
+    // some paintops (Dyna, Particle, Sketch) might never initialize their spacing information until
+    // paintAt is called.
+    if (m_d->resources->needsAirbrushing()) {
+        paintAt(pi);
+    }
 }
 
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,

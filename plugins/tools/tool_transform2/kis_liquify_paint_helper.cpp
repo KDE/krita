@@ -69,8 +69,7 @@ void KisLiquifyPaintHelper::Private::updatePreviousPaintInfo(const KisPaintInfor
     qreal angle = KisAlgebra2D::directionBetweenPoints(prevPos, info.pos(), 0);
 
     previousDistanceInfo =
-        KisDistanceInformation(
-            lastOutlinePos.pushThroughHistory(info.pos()), 0, angle);
+        KisDistanceInformation(prevPos, 0, angle);
 
     previousPaintInfo = info;
 }

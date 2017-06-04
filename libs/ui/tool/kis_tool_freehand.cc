@@ -93,7 +93,7 @@ KisToolFreehand::~KisToolFreehand()
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *event)
 {
     KisToolPaint::mouseMoveEvent(event);
-    m_helper->cursorMoved(event->point);
+    m_helper->cursorMoved(currentImage()->documentToPixel(event->point));
 }
 
 KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const

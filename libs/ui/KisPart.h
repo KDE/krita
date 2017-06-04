@@ -167,7 +167,7 @@ public:
     /**
      * @return the telemetry provider.
      */
-    UserFeedback::Provider *provider();
+    KisTelemetryAbstruct *provider();
 
 
 public Q_SLOTS:

@@ -24,6 +24,7 @@
 #include <QVariant>
 #include "UserFeedback/AbstractDataSource"
 #include "UserFeedback/cpuinfosource.h"
+#include "UserFeedback/QtVersionSource"
 #include <UserFeedback/provider.h>
 #include <kis_telemetry_abstruct.h>
 #include <memory>

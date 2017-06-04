@@ -637,7 +637,8 @@ void KisMainWindow::sendInfo()
     qDebug()<<"send_enfo"<<"\n";
     d->telemetry.reset(new KisDlgSendTelemtry(this->viewManager()));
     if(d->telemetry->exec()== QDialog::Accepted){
-        UserFeedback::Provider* provider = KisPart::instance()->provider();
+        KisTelemetryAbstruct* provider = KisPart::instance()->provider();
+        provider->sendData();
     };
 }
 

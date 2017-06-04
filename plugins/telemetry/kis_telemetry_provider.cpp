@@ -40,7 +40,13 @@ KisTelemetryProvider::KisTelemetryProvider()
     m_sources.push_back(std::move(cpu));
     std::cout << "\n"
               << "PROVIDER LOADED" << std::endl;
+    UserFeedback::AbstractDataSource *src2= new UserFeedback::QtVersionSource();
+    m_provider.data()->setStatisticsCollectionMode(UserFeedback::Provider::DetailedUsageStatistics);
+
     m_provider.data()->addDataSource(m_sources[0].get(), UserFeedback::Provider::DetailedUsageStatistics);
+    m_provider.data()->addDataSource(src2, UserFeedback::Provider::DetailedUsageStatistics);
+
+
 }
 
 UserFeedback::Provider* KisTelemetryProvider::provider()
@@ -50,6 +56,8 @@ UserFeedback::Provider* KisTelemetryProvider::provider()
 
 void KisTelemetryProvider::sendData()
 {
+    m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me/"));
+    m_provider.data()->submit();
 }
 
 KisTelemetryProvider::~KisTelemetryProvider()

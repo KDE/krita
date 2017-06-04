@@ -368,11 +368,11 @@ void KisPart::setProvider(KisTelemetryAbstruct *provider)
    d->provider.reset(provider);
 }
 
-UserFeedback::Provider* KisPart::provider()
+KisTelemetryAbstruct* KisPart::provider()
 {
     if (d->provider.isNull())
         return nullptr;
-    return d->provider->provider();
+    return d->provider.data();
 }
 
 void KisPart::openExistingFile(const QUrl& url)

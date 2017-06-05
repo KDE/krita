@@ -28,8 +28,6 @@
 #include <QDesktopWidget>
 #include <QClipboard>
 
-#include "kis_document_aware_spin_box_unit_manager.h"
-
 DlgBugInfo::DlgBugInfo(QWidget *parent)
     : KoDialog(parent)
 {

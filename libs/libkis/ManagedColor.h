@@ -30,19 +30,57 @@
 class KoColor;
 
 /**
- * @brief The ManagedColor class ...
+ * @brief The ManagedColor class is a class to handle colors that are color managed.
+ * A managed color is a color of which we know the model(RGB, LAB, CMYK, etc), the bitdepth and
+ * the specific properties of its colorspace, such as the whitepoint, chromacities, trc, etc, as represented
+ * by the color profile.
+ *
+ * Krita has two color management systems. LCMS and OCIO.
+ * LCMS is the one handling the ICC profile stuff, and the major one handling that ManagedColor deals with.
+ * OCIO support is only in the display of the colors. ManagedColor has some support for it in colorForCanvas()
+ *
+ * All colors in Krita are color managed. QColors are understood as RGB-type colors in the sRGB space.
+ *
+ * We recommend you make a color like this:
+ *
+ * @code
+ * colorYellow = ManagedColor("RGBA", "U8", "")
+ * QVector<float> yellowComponents = colorYellow.components()
+ * yellowComponents[0] = 1.0
+ * yellowComponents[1] = 1.0
+ * yellowComponents[2] = 0
+ * yellowComponents[3] = 1.0
+ *
+ * colorYellow.setComponents(yellowComponents)
+ * QColor yellow = colorYellow.colorForCanvas(canvas)
+ * @endcode
  */
 class KRITALIBKIS_EXPORT ManagedColor : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief ManagedColor
+     * Create a ManagedColor that is black and transparent.
+     */
     explicit ManagedColor(QObject *parent = 0);
+    /**
+     * @brief ManagedColor create a managed color with the given color space properties.
+     * @see setColorModel() for more details.
+     */
     ManagedColor(const QString &colorModel, const QString &colorDepth, const QString &colorProfile, QObject *parent = 0);
     ManagedColor(KoColor color, QObject *parent = 0);
     ~ManagedColor() override;
 
     bool operator==(const ManagedColor &other) const;
 
+    /**
+     * @brief colorForCanvas
+     * @param canvas the canvas whose color management you'd like to use. In Krita, different views have
+     * seperate canvasses, and these can have different OCIO configurations active.
+     * @return the QColor as it would be displaying on the canvas. This result can be used to draw widgets with
+     * the correct configuration applied.
+     */
     QColor colorForCanvas(Canvas *canvas) const;
     /**
      * colorDepth A string describing the color depth of the image:
@@ -115,13 +153,15 @@ public:
 
     /**
      * @brief components
-     * @return
+     * @return a QVector containing the channel/components of this color normalized. This includes the alphachannel.
      */
     QVector<float> components() const;
 
     /**
      * @brief setComponents
-     * @param values
+     * Set the channel/components with normalized values. For integer colorspace, this obviously means the limit
+     * is between 0.0-1.0, but for floating point colorspaces, 2.4 or 103.5 are still meaningful (if bright) values.
+     * @param values the QVector containing the new channel/component values. These should be normalized.
      */
     void setComponents(const QVector<float> &values);
 

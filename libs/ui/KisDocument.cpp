@@ -821,7 +821,7 @@ bool KisDocument::isExporting() const
 
 void KisDocument::slotAutoSave()
 {
-    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "url" << url() << localFilePath();
+    //qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "url" << url() << localFilePath();
 
     if (!d->isAutosaving && d->modified && d->modifiedAfterAutosave) {
 

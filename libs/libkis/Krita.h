@@ -150,7 +150,7 @@ public Q_SLOTS:
      * closed, the configuration changes, views are opened and closed or windows are opened.
      * @return the notifier object
      */
-    Notifier* notifier() const;
+    Notifier *notifier() const;
 
     /**
      * @brief version Determine the version of Krita

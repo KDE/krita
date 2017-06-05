@@ -684,8 +684,10 @@ namespace KisLayerUtils {
             KIS_SAFE_ASSERT_RECOVER_RETURN(newLayer);
 
             foreach (KisSelectionMaskSP mask, selectionMasks) {
-                addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
-                addCommand(new KisActivateSelectionMaskCommand(mask, false));
+                if (mask) {
+                    addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
+                    addCommand(new KisActivateSelectionMaskCommand(mask, false));
+                }
             }
         }
     private:

@@ -821,10 +821,13 @@ bool KisDocument::isExporting() const
 
 void KisDocument::slotAutoSave()
 {
-    //qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "url" << url() << localFilePath();
+    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "url" << url() << localFilePath();
 
     if (!d->isAutosaving && d->modified && d->modifiedAfterAutosave) {
 
+        bool batchmode = d->importExportManager->batchMode();
+        d->importExportManager->setBatchMode(true);
+        qApp->setOverrideCursor(Qt::BusyCursor);
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         emit statusBarMessage(i18n("Autosaving..."));
         d->isAutosaving = true;
@@ -839,6 +842,8 @@ void KisDocument::slotAutoSave()
             d->modifiedAfterAutosave = false;
             d->autoSaveTimer.stop(); // until the next change
         }
+        qApp->restoreOverrideCursor();
+        d->importExportManager->setBatchMode(batchmode);
         d->isAutosaving = false;
 
         emit clearStatusBarMessage();

@@ -35,6 +35,8 @@ class KRITALIBKIS_EXPORT Palette : public QObject
 {
 public:
     Palette(Resource *resource);
+    ~Palette() override;
+
 
     /**
      * @brief columnCount

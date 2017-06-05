@@ -27,6 +27,11 @@ Palette::Palette(Resource *resource): d(new Private()) {
     d->palette = dynamic_cast<KoColorSet*>(resource->resource());
 }
 
+Palette::~Palette()
+{
+    delete d;
+}
+
 int Palette::columnCount()
 {
     return d->palette->columnCount();

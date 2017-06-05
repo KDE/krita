@@ -30,7 +30,7 @@ typedef QMap<QString, QString> SvgStyles;
 
 class SvgLoadingContext;
 class SvgGraphicsContext;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class QColor;
 class QGradient;
 

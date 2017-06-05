@@ -29,7 +29,6 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -173,12 +172,12 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     if (l) {
-        QHBoxLayout * hbox = new QHBoxLayout();
-        Q_CHECK_PTR(hbox);
-        l->insertLayout(1, hbox);
+
+        QGridLayout * gridLayout = new QGridLayout();
+        l->insertLayout(1, gridLayout);
 
         QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
-        hbox->addWidget(lbl);
+        gridLayout->addWidget(lbl, 0, 0, 1, 1);
 
         KisSliderSpinBox *input = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(input);
@@ -186,34 +185,27 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setRange(1, 100);
         input->setSingleStep(1);
         input->setExponentRatio(2);
-        hbox->addWidget(input);
-
-        hbox = new QHBoxLayout();
-        Q_CHECK_PTR(hbox);
-        l->insertLayout(2, hbox);
+        gridLayout->addWidget(input, 0, 1, 1, 1);
 
         lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
-        hbox->addWidget(lbl);
+        gridLayout->addWidget(lbl, 1, 0, 1, 1);
 
         KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(sizemod);
         sizemod->setObjectName("sizemod"); //grow/shrink selection
         sizemod->setRange(-40, 40);
         sizemod->setSingleStep(1);
-        hbox->addWidget(sizemod);
+        gridLayout->addWidget(sizemod, 1, 1, 1, 1);
 
-        hbox = new QHBoxLayout();
-        Q_CHECK_PTR(hbox);
-        l->insertLayout(3, hbox);
-
-        hbox->addWidget(new QLabel(i18n("Feathering radius: "), selectionWidget));
+        lbl = new QLabel(i18n("Feathering radius: "), selectionWidget);
+        gridLayout->addWidget(lbl, 2, 0, 1, 1);
 
         KisSliderSpinBox *feather = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(feather);
         feather->setObjectName("feathering");
         feather->setRange(0, 40);
         feather->setSingleStep(1);
-        hbox->addWidget(feather);
+        gridLayout->addWidget(feather, 2, 1, 1, 1);
 
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));

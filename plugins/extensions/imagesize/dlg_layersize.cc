@@ -73,7 +73,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->newHeightDouble->setValue(height);
 
     m_page->filterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formatedDescriptions());
+    m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
     m_page->filterCmb->setCurrent("Bicubic");
 
     m_page->newWidthUnit->setModel(_widthUnitManager);

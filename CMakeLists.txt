@@ -61,8 +61,10 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.9 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
-if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-    add_definitions(-Werror=delete-incomplete)
+if (LINUX)
+    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
+        add_definitions(-Werror=delete-incomplete)
+    endif()
 endif()
 
  ######################

@@ -172,7 +172,7 @@ QVector<TextChunk> mergeIntoChunks(const QVector<KoSvgTextChunkShapeLayoutInterf
         if (it->transformation.hasRelativeOffset()) {
             TextChunk::SubChunkOffset o;
             o.start = currentChunk.text.size();
-            o.offset = it->transformation.adjustRelativePos();
+            o.offset = it->transformation.relativeOffset();
 
             KIS_SAFE_ASSERT_RECOVER_NOOP(!o.offset.isNull());
             currentChunk.offsets.append(o);

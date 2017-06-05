@@ -116,6 +116,14 @@ enum TextDecoration {
 Q_DECLARE_FLAGS(TextDecorations, TextDecoration)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextDecorations)
 
+/**
+ * AutoValue represents the "auto-or-real" values used in SVG
+ *
+ * Some SVG attributes can be set to either "auto" or some floating point
+ * value. E.g. 'kerning' attribute. If its value is "auto", the kerning is
+ * defined by the kerning tables of the font. And if its value is a real
+ * number, e.g. 0 or 5.5, the font kerning is set to this particular number.
+ */
 struct AutoValue : public boost::equality_comparable<AutoValue>
 {
     AutoValue() {}
@@ -170,12 +178,11 @@ struct CharTransformation : public boost::equality_comparable<CharTransformation
 
     void mergeInParentTransformation(const CharTransformation &t);
     bool isNull() const;
-    QPointF adjustedTextPos(const QPointF &pos) const;
     bool startsNewChunk() const;
     bool hasRelativeOffset() const;
 
     QPointF absolutePos() const;
-    QPointF adjustRelativePos(const QPointF &pos = QPointF()) const;
+    QPointF relativeOffset() const;
 
     bool operator==(const CharTransformation & other) const;
 };
@@ -264,6 +271,9 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
     }
 };
 
+/**
+ * @brief BackgroundProperty is a special wrapper around KoShapeBackground for managing it in KoSvgTextProperties
+ */
 struct BackgroundProperty : public boost::equality_comparable<BackgroundProperty>
 {
     BackgroundProperty() {}
@@ -280,6 +290,9 @@ struct BackgroundProperty : public boost::equality_comparable<BackgroundProperty
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::BackgroundProperty &prop);
 
+/**
+ * @brief StrokeProperty is a special wrapper around KoShapeStrokeModel for managing it in KoSvgTextProperties
+ */
 struct StrokeProperty : public boost::equality_comparable<StrokeProperty>
 {
     StrokeProperty() {}

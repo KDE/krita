@@ -247,29 +247,6 @@ bool CharTransformation::isNull() const
     return !xPos && !yPos && !dxPos && !dyPos && !rotate;
 }
 
-QPointF CharTransformation::adjustedTextPos(const QPointF &pos) const
-{
-    QPointF result = pos;
-
-    if (xPos) {
-        result.rx() = *xPos;
-    }
-
-    if (yPos) {
-        result.ry() = *yPos;
-    }
-
-    if (dxPos) {
-        result.rx() += *dxPos;
-    }
-
-    if (dyPos) {
-        result.ry() += *dyPos;
-    }
-
-    return result;
-}
-
 bool CharTransformation::startsNewChunk() const
 {
     return xPos || yPos;
@@ -295,16 +272,16 @@ QPointF CharTransformation::absolutePos() const
     return result;
 }
 
-QPointF CharTransformation::adjustRelativePos(const QPointF &pos) const
+QPointF CharTransformation::relativeOffset() const
 {
-    QPointF result = pos;
+    QPointF result;
 
     if (dxPos) {
-        result.rx() += *dxPos;
+        result.rx() = *dxPos;
     }
 
     if (dyPos) {
-        result.ry() += *dyPos;
+        result.ry() = *dyPos;
     }
 
     return result;

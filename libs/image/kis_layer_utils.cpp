@@ -340,13 +340,13 @@ namespace KisLayerUtils {
     };
 
     struct CreateMergedLayerMultiple : public KisCommandUtils::AggregateCommand {
-        CreateMergedLayerMultiple(MergeMultipleInfoSP info, const QString name = QString() ) 
+        CreateMergedLayerMultiple(MergeMultipleInfoSP info, const QString name = QString() )
             : m_info(info),
               m_name(name) {}
 
         void populateChildCommands() override {
             QString mergedLayerName;
-            
+
             if (m_name.isEmpty()){
                 const QString mergedLayerSuffix = i18n("Merged");
                 mergedLayerName = m_info->mergedNodes.first()->name();
@@ -358,7 +358,7 @@ namespace KisLayerUtils {
             } else {
                 mergedLayerName = m_name;
             }
-                
+
             m_info->dstNode = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
 
             if (m_info->frames.size() > 0) {
@@ -581,14 +581,14 @@ namespace KisLayerUtils {
     struct InsertNode : public KisCommandUtils::AggregateCommand {
         InsertNode(MergeDownInfoBaseSP info, KisNodeSP putAfter)
             : m_info(info), m_putAfter(putAfter) {}
-        
+
         void populateChildCommands() override {
             addCommand(new KisImageLayerAddCommand(m_info->image,
                                                            m_info->dstNode,
                                                            m_putAfter->parent(),
                                                            m_putAfter,
                                                            true, false));
-        
+
         }
 
     private:
@@ -674,8 +674,10 @@ namespace KisLayerUtils {
                                     const QVector<KisSelectionMaskSP> &selectionMasks) {
 
             foreach (KisSelectionMaskSP mask, selectionMasks) {
-                addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
-                addCommand(new KisActivateSelectionMaskCommand(mask, false));
+                if (mask) {
+                    addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
+                    addCommand(new KisActivateSelectionMaskCommand(mask, false));
+                }
             }
         }
     private:
@@ -1055,8 +1057,8 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
-    void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, 
-                                           bool flattenSingleLayer, const KUndo2MagicString &actionName, 
+    void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter,
+                                           bool flattenSingleLayer, const KUndo2MagicString &actionName,
                                            bool cleanupNodes = true, const QString layerName = QString())
     {
         filterMergableNodes(mergedNodes);
@@ -1141,7 +1143,7 @@ namespace KisLayerUtils {
     {
         mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
     }
-    
+
     void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter)
     {
         KisNodeList mergedNodes;

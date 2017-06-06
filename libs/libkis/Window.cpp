@@ -94,6 +94,14 @@ void Window::showView(View *view)
     }
 }
 
+View *Window::activeView() const
+{
+    if (d->window) {
+        return new View(d->window->activeView());
+    }
+    return 0;
+}
+
 void Window::activate()
 {
     if (d->window) {

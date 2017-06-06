@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=palette_docker
+X-Python-2-Compatible=false
+Name=Palette docker
+Comment=A Python-based docker to edit color palettes.

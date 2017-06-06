@@ -29,6 +29,7 @@
 #include <Canvas.h>
 
 #include <kis_display_color_converter.h>
+#include <KoColorDisplayRendererInterface.h>
 
 struct ManagedColor::Private {
     KoColor color;
@@ -69,11 +70,20 @@ bool ManagedColor::operator==(const ManagedColor &other) const
 {
     return d->color == other.d->color;
 }
-
 QColor ManagedColor::colorForCanvas(Canvas *canvas) const
 {
-    KisDisplayColorConverter *converter = canvas->displayColorConverter();
-    return converter->toQColor(d->color);
+    QColor c = QColor(0,0,0);
+    if (canvas && canvas->displayColorConverter() && canvas->displayColorConverter()->displayRendererInterface()) {
+        KoColorDisplayRendererInterface *converter = canvas->displayColorConverter()->displayRendererInterface();
+        if (converter) {
+            c = converter->toQColor(d->color);
+        } else {
+            c = KoDumbColorDisplayRenderer::instance()->toQColor(d->color);
+        }
+    } else {
+        c = KoDumbColorDisplayRenderer::instance()->toQColor(d->color);
+    }
+    return c;
 }
 
 QString ManagedColor::colorDepth() const

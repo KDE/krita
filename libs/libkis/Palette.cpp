@@ -18,6 +18,7 @@
 
 #include "Palette.h"
 #include <KoColorSet.h>
+#include <ManagedColor.h>
 
 struct Palette::Private {
     KoColorSet *palette {0};
@@ -32,37 +33,70 @@ Palette::~Palette()
     delete d;
 }
 
+int Palette::numberOfEntries() const
+{
+    if (!d->palette) return 0;
+    return d->palette->nColors();
+}
+
 int Palette::columnCount()
 {
+    if (!d->palette) return 0;
     return d->palette->columnCount();
 }
 
 void Palette::setColumnCount(int columns)
 {
-    d->palette->setColumnCount(columns);
+    if (d->palette)
+        d->palette->setColumnCount(columns);
 }
 
 QString Palette::comment()
 {
+    if (!d->palette) return "";
     return d->palette->comment();
 }
 
 QStringList Palette::groupNames()
 {
+    if (!d->palette) return QStringList();
     return d->palette->getGroupNames();
 }
 
 bool Palette::addGroup(QString name)
 {
+    if (!d->palette) return false;
     return d->palette->addGroup(name);
 }
 
 bool Palette::removeGroup(QString name, bool keepColors)
 {
+    if (!d->palette) return false;
     return d->palette->removeGroup(name, keepColors);
 }
 
 int Palette::colorsCountGroup(QString name)
 {
+    if (!d->palette) return 0;
     return d->palette->nColorsGroup(name);
+}
+
+KoColorSetEntry Palette::colorSetEntryByIndex(int index)
+{
+    if (!d->palette) return KoColorSetEntry();
+    return d->palette->getColorGlobal(index);
+}
+
+KoColorSetEntry Palette::colorSetEntryFromGroup(int index, const QString &groupName)
+{
+    if (!d->palette) return KoColorSetEntry();
+
+    return d->palette->getColorGroup(index, groupName);
+}
+
+ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
+{
+    if (!d->palette) return 0;
+    ManagedColor *color = new ManagedColor(entry.color);
+    return color;
 }

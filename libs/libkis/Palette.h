@@ -25,10 +25,30 @@
 #include "Resource.h"
 #include "KoColorSet.h"
 
+class ManagedColor;
+
+
 /**
  * @brief The Palette class
  * Palette is a resource object that stores organised color data.
  * It's purpose is to allow artists to save colors and store them.
+ *
+ * An example for printing all the palettes and the entries:
+ *
+ * @code
+import sys
+from krita import *
+
+resources = Application.resources("palette")
+
+for (k, v) in resources.items():
+    print(k)
+    palette = Palette(v)
+    for x in range(palette.numberOfEntries()):
+        entry = palette.colorSetEntryByIndex(x)
+        c = palette.colorForEntry(entry);
+        print(x, entry.name, entry.id, entry.spotColor, c.toQString())
+ * @endcode
  */
 
 class KRITALIBKIS_EXPORT Palette : public QObject
@@ -37,6 +57,11 @@ public:
     Palette(Resource *resource);
     ~Palette() override;
 
+    /**
+     * @brief numberOfEntries
+     * @return
+     */
+    int numberOfEntries() const;
 
     /**
      * @brief columnCount
@@ -78,6 +103,11 @@ public:
      * @return the amount of colors within that group.
      */
     int colorsCountGroup(QString name);
+
+    KoColorSetEntry colorSetEntryByIndex(int index);
+    KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);
+
+    ManagedColor *colorForEntry(KoColorSetEntry entry);
 
     //getcolorgroup
     //Add

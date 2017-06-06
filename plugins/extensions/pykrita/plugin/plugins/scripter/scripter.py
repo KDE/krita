@@ -15,7 +15,7 @@ class ScripterExtension(Extension):
 
     def initialize(self):
         configPath = QStandardPaths.writableLocation(QStandardPaths.GenericConfigLocation)
-        self.settings = QSettings(configPath + '/kritarc', QSettings.IniFormat)
+        self.settings = QSettings(configPath + '/krita-scripterrc', QSettings.IniFormat)
         self.uicontroller = uicontroller.UIController()
         self.documentcontroller = documentcontroller.DocumentController()
         self.debugcontroller = debugcontroller.DebugController(self)

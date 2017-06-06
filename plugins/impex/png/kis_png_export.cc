@@ -92,12 +92,12 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
-
     if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
         if (!getBatchMode()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
+            qApp->setOverrideCursor(Qt::ArrowCursor);
+            QMessageBox::warning(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save 8 and 16 bits integer/channel grayscale and RGB images to PNG. Your image will be saved as 8 bits/channel RGB."));
+            qApp->restoreOverrideCursor();
         }
-        return KisImportExportFilter::UsageError;
     }
 
 

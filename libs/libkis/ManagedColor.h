@@ -191,6 +191,10 @@ public:
 
 
 private:
+
+    friend class View;
+    KoColor color() const;
+
     struct Private;
     const QScopedPointer<Private> d;
 

@@ -111,6 +111,7 @@ public Q_SLOTS:
      */
     View *view() const;
 
+
 private:
 
     friend class ManagedColor;

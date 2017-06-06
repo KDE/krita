@@ -147,3 +147,8 @@ QString ManagedColor::toQString()
 {
     return KoColor::toQString(d->color);
 }
+
+KoColor ManagedColor::color() const
+{
+    return d->color;
+}

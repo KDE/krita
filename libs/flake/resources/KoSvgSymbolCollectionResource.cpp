@@ -43,6 +43,8 @@
 
 struct KoSvgSymbolCollectionResource::Private {
     QVector<KoSvgSymbol*> symbols;
+    QString title;
+    QString description;
 };
 
 
@@ -134,9 +136,16 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     // We're not interested in the shapes themselves
     qDeleteAll(parser.parseSvg(doc.documentElement(), &fragmentSize));
     d->symbols = parser.takeSymbols();
-    qDebug() << "Loaded" << filename() << "got" << d->symbols.size() << "symbols"
+    qDebug() << "Loaded" << filename() << "\n\t"
+             << "Title" << parser.documentTitle() << "\n\t"
+             << "Description" << parser.documentDescription()
+             << "\n\tgot" << d->symbols.size() << "symbols"
              << d->symbols[0]->shape->outlineRect()
              << d->symbols[0]->shape->size();
+
+    d->title = parser.documentTitle();
+    d->description = parser.documentDescription();
+
     if (d->symbols.size() < 1) {
         setValid(false);
         return false;
@@ -189,12 +198,12 @@ QString KoSvgSymbolCollectionResource::defaultFileExtension() const
 
 QString KoSvgSymbolCollectionResource::title() const
 {
-    return "";
+    return d->title;
 }
 
 QString KoSvgSymbolCollectionResource::description() const
 {
-    return "";
+    return d->description;
 }
 
 QString KoSvgSymbolCollectionResource::creator() const

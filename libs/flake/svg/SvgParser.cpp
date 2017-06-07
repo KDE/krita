@@ -1196,6 +1196,25 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 
     QList<KoShape*> shapes;
 
+    // First find the metadata
+
+    for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement b = n.toElement();
+        if (b.isNull())
+            continue;
+
+        if (b.tagName() == "title") {
+            m_documentTitle = b.text().trimmed();
+        }
+        else if (b.tagName() == "desc") {
+            m_documentDescription = b.text().trimmed();
+        }
+        else if (b.tagName() == "metadata") {
+            // TODO: parse the metadata
+        }
+    }
+
+
     // SVG 1.1: skip the rendering of the element if it has null viewBox
     if (gc->currentBoundingBox.isValid()) {
         shapes = parseContainer(e);
@@ -1224,6 +1243,16 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
 QList<QExplicitlySharedDataPointer<KoMarker> > SvgParser::knownMarkers() const
 {
     return m_markers.values();
+}
+
+QString SvgParser::documentTitle() const
+{
+    return m_documentTitle;
+}
+
+QString SvgParser::documentDescription() const
+{
+    return m_documentDescription;
 }
 
 void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)

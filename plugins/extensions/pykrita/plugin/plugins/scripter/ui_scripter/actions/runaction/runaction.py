@@ -5,7 +5,7 @@ import sys
 from . import docwrapper
 import os
 from scripter import resources_rc
-import importlib.util
+import importlib
 
 
 class RunAction(QAction):

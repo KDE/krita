@@ -111,9 +111,11 @@ QList<KoShape*> SvgParser::shapes() const
     return m_shapes;
 }
 
-QVector<KoSvgSymbol *> SvgParser::symbols() const
+QVector<KoSvgSymbol *> SvgParser::takeSymbols()
 {
-    return m_symbols;
+    QVector<KoSvgSymbol*> symbols = m_symbols;
+    m_symbols.clear();
+    return symbols;
 }
 
 // Helper functions
@@ -416,7 +418,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
      * the pattern should be painted in "user" coordinates. Therefore, we should handle
      * this offfset separately.
      *
-     * TODO: Please also not that this offset is different from extraShapeOffset(),
+     * TODO: Please also note that this offset is different from extraShapeOffset(),
      * because A.inverted() * B != A * B.inverted(). I'm not sure which variant is
      * correct (DK)
      */
@@ -581,6 +583,38 @@ bool SvgParser::parseMarker(const KoXmlElement &e)
     marker->setShapes({markerShape});
 
     m_markers.insert(id, QExplicitlySharedDataPointer<KoMarker>(marker.take()));
+
+    return true;
+}
+
+bool SvgParser::parseSymbol(const KoXmlElement &e)
+{
+    const QString id = e.attribute("id");
+
+    qDebug() << "parsing symbol" << id << e.text();
+
+    if (id.isEmpty()) return false;
+
+    KoSvgSymbol *svgSymbol = new KoSvgSymbol();
+
+    // ensure that the clip path is loaded in local coordinates system
+    m_context.pushGraphicsContext(e, false);
+    m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->currentBoundingBox = QRectF(0.0, 0.0, 1.0, 1.0);
+
+    QString title = e.firstChildElement("title").toElement().text();
+
+    KoShape *symbolShape = parseGroup(e);
+
+    m_context.popGraphicsContext();
+
+    if (!symbolShape) return false;
+    svgSymbol->shape = symbolShape;
+    svgSymbol->title = title;
+
+    qDebug() << "created symbol" << svgSymbol->id << svgSymbol->title << svgSymbol->shape->boundingRect();
+
+    m_symbols << svgSymbol;
 
     return true;
 }
@@ -1290,7 +1324,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
 
     if (b.tagName() == "svg") {
         shapes += parseSvg(b);
-    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
+    } else if (b.tagName() == "g" || b.tagName() == "a") {
         // treat svg link <a> as group so we don't miss its child elements
         shapes += parseGroup(b);
     } else if (b.tagName() == "switch") {
@@ -1317,6 +1351,8 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         parseClipMask(b);
     } else if (b.tagName() == "marker") {
         parseMarker(b);
+    } else if (b.tagName() == "symbol") {
+        parseSymbol(b);
     } else if (b.tagName() == "style") {
         m_context.addStyleSheet(b);
     } else if (b.tagName() == "rect" ||

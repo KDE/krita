@@ -64,8 +64,9 @@ public:
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 
-    /// Returns the collection of symbols contained in the svg document.
-    QVector<KoSvgSymbol*> symbols() const;
+    /// Takes the collection of symbols contained in the svg document. The parser will
+    /// no longer know about the symbols.
+    QVector<KoSvgSymbol*> takeSymbols();
 
     typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
     void setFileFetcher(FileFetcherFunc func);
@@ -91,6 +92,7 @@ protected:
     bool parseClipPath(const KoXmlElement &);
     bool parseClipMask(const KoXmlElement &e);
     bool parseMarker(const KoXmlElement &e);
+    bool parseSymbol(const KoXmlElement &e);
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
     /// parses a length attribute in x-direction
@@ -168,8 +170,7 @@ private:
     QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
-    QList<KoSvgSymbol*> m_symbols;
-    QList<KoShape*> m_symbolShapes;
+    QVector<KoSvgSymbol*> m_symbols;
     QList<KoShape*> m_toplevelShapes;
 };
 

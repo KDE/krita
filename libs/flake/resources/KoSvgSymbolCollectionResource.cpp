@@ -40,7 +40,7 @@
 #include <SvgParser.h>
 
 struct KoSvgSymbolCollectionResource::Private {
-    QVector<KoSvgSymbol> symbols;
+    QVector<KoSvgSymbol*> symbols;
 };
 
 
@@ -108,10 +108,9 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     SvgParser parser(&manager);
     parser.setResolution(QRectF(0,0,100,100), 72); // initialize with default values
     QSizeF fragmentSize;
-    QList<KoShape*> shapes = parser.parseSvg(doc.documentElement(), &fragmentSize);
-
-    KoViewConverter converter;
-    KoShapePaintingContext context;
+    parser.parseSvg(doc.documentElement(), &fragmentSize);
+    d->symbols = parser.takeSymbols();
+    qDebug() << "Loaded" << filename() << "got" << d->symbols.size() << "symbols";
 
     return true;
 }

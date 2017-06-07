@@ -26,7 +26,8 @@
 
 #include <resources/KoResource.h>
 
-class KoShape;
+#include <KoShape.h>
+
 
 #include "kritaflake_export.h"
 
@@ -34,6 +35,11 @@ struct KoSvgSymbol {
     KoSvgSymbol() {}
     KoSvgSymbol(const QString &_title)
         : title(_title) {}
+
+    ~KoSvgSymbol()
+    {
+        delete shape;
+    }
 
     QString id;
     QString title;

@@ -333,6 +333,7 @@ qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distan
 
     if (!distance.hasLastDabInformation()) {
         warnKrita << "KisPaintInformation::drawingAngleSafe()" << "Cannot access Distance Info last dab data";
+        return 0.0;
     }
 
     return distance.nextDrawingAngle(pos());

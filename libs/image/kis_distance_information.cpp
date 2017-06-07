@@ -51,10 +51,10 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
 
     QPointF lastPosition;
     qreal lastTime;
+    qreal lastAngle;
     bool lastDabInfoValid;
 
     KisPaintInformation lastPaintInformation;
-    qreal lastAngle;
     bool lastPaintInfoValid;
 
     qreal lockedDrawingAngle;

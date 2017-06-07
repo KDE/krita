@@ -210,7 +210,6 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     }
     d->svgSymbolCollectionThread = new KoResourceLoaderThread(d->svgSymbolCollectionServer);
     d->svgSymbolCollectionThread ->loadSynchronously();
-
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()

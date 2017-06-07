@@ -27,6 +27,9 @@
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
+#include "ui_WdgSvgCollection.h"
+
+
 class SvgSymbolCollectionDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -51,7 +54,13 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-    
+private Q_SLOTS:
+
+    void collectionActivated(int index);
+
+private:
+
+    Ui_WdgSvgCollection *m_wdgSvgCollection;
 };
 
 #endif //KOSHAPECOLLECTIONDOCKER_H

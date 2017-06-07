@@ -144,6 +144,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
              << d->symbols[0]->shape->size();
 
     d->title = parser.documentTitle();
+    setName(d->title);
     d->description = parser.documentDescription();
 
     if (d->symbols.size() < 1) {
@@ -152,21 +153,23 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     }
     setValid(true);;
 
-    QImage image(100, 100, QImage::Format_ARGB32_Premultiplied);
-    QPainter gc(&image);
-    image.fill(Qt::white);
-    KoViewConverter vc;
-    KoShapePaintingContext ctx;
+    for(int i = 0; i < d->symbols.size(); ++i) {
 
-    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(d->symbols[0]->shape);
-    group->setSize(QSizeF(100.0, 100.0));
-    Q_ASSERT(group);
-    paintGroup(group, gc, vc, ctx);
+        QImage image(100, 100, QImage::Format_ARGB32_Premultiplied);
+        QPainter gc(&image);
+        image.fill(Qt::white);
+        KoViewConverter vc;
+        KoShapePaintingContext ctx;
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(d->symbols[i]->shape);
+        group->setSize(QSizeF(100.0, 100.0));
+        Q_ASSERT(group);
+        paintGroup(group, gc, vc, ctx);
+        gc.end();
+        d->symbols[i]->icon = image;
 
-    gc.end();
-    setImage(image);
+    }
 
-    image.save("bla.png");
+    setImage(d->symbols[0]->icon);
     return true;
 }
 
@@ -234,4 +237,9 @@ QString KoSvgSymbolCollectionResource::license() const
 QStringList KoSvgSymbolCollectionResource::permits() const
 {
     return QStringList();
+}
+
+QVector<KoSvgSymbol *> KoSvgSymbolCollectionResource::symbols() const
+{
+    return d->symbols;
 }

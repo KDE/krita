@@ -23,6 +23,7 @@
 #include <QColor>
 #include <QVector>
 #include <QScopedPointer>
+#include <QImage>
 
 #include <resources/KoResource.h>
 
@@ -44,6 +45,7 @@ struct KoSvgSymbol {
     QString id;
     QString title;
     KoShape *shape;
+    QImage icon;
 
     bool operator==(const KoSvgSymbol& rhs) const {
         return title == rhs.title;
@@ -85,6 +87,9 @@ public:
     QStringList subjects() const;
     QString license() const;
     QStringList permits() const;
+
+    QVector<KoSvgSymbol *> symbols() const;
+
 
 private:
 

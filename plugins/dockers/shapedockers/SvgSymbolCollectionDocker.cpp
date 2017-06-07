@@ -23,6 +23,11 @@
 
 #include <QDebug>
 
+#include <KoResourceServerProvider.h>
+#include <KoResourceServer.h>
+
+#include "ui_WdgSvgCollection.h"
+
 //
 // SvgSymbolCollectionDockerFactory
 //
@@ -50,8 +55,27 @@ QDockWidget *SvgSymbolCollectionDockerFactory::createDockWidget()
 
 SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     : QDockWidget(parent)
+    , m_wdgSvgCollection(new Ui_WdgSvgCollection())
 {
     setWindowTitle(i18n("Vector Libraries"));
+    QWidget* mainWidget = new QWidget(this);
+    setWidget(mainWidget);
+    m_wdgSvgCollection->setupUi(mainWidget);
+
+    connect(m_wdgSvgCollection->cmbCollections, SIGNAL(activated(int)), SLOT(collectionActivated(int)));
+
+    KoResourceServer<KoSvgSymbolCollectionResource>  *svgCollectionProvider = KoResourceServerProvider::instance()->svgSymbolCollectionServer();
+    Q_FOREACH(KoSvgSymbolCollectionResource *r, svgCollectionProvider->resources()) {
+        QVariant v = QVariant::fromValue<KoSvgSymbolCollectionResource*>(r);
+        m_wdgSvgCollection->cmbCollections->addItem(r->name(), v);
+    }
+
+    m_wdgSvgCollection->listCollection->setDragEnabled(true);
+    m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
+    m_wdgSvgCollection->listCollection->setSelectionMode(QListView::SingleSelection);
+
+    collectionActivated(0);
+
 }
 
 void SvgSymbolCollectionDocker::setCanvas(KoCanvasBase *canvas)
@@ -62,4 +86,19 @@ void SvgSymbolCollectionDocker::setCanvas(KoCanvasBase *canvas)
 void SvgSymbolCollectionDocker::unsetCanvas()
 {
     setEnabled(false);
+}
+
+void SvgSymbolCollectionDocker::collectionActivated(int index)
+{
+    QVariant v = m_wdgSvgCollection->cmbCollections->itemData(index);
+    KoSvgSymbolCollectionResource *r = v.value<KoSvgSymbolCollectionResource *>();
+    if (r) {
+        m_wdgSvgCollection->listCollection->clear();
+        Q_FOREACH(KoSvgSymbol *symbol, r->symbols()) {
+            QListWidgetItem *item = new QListWidgetItem(symbol->title);
+            item->setIcon(QIcon(QPixmap::fromImage(symbol->icon)));
+            m_wdgSvgCollection->listCollection->addItem(item);
+        }
+    }
+
 }

@@ -1,12 +1,17 @@
 project(calligradockers)
 
 set(calligradockers_SRCS
-    shapecollection/ShapeCollectionDocker.cpp
-    shapecollection/CollectionItemModel.cpp
-    svgsymbolcollection/SvgSymbolCollectionDocker.cpp
+    ShapeCollectionDocker.cpp
+    CollectionItemModel.cpp
+    SvgSymbolCollectionDocker.cpp
 
     Plugin.cpp
 )
+
+ki18n_wrap_ui(calligradockers_SRCS
+    WdgSvgCollection.ui
+)
+
 
 add_library(krita_docker_defaults MODULE ${calligradockers_SRCS})
 

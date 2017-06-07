@@ -37,7 +37,7 @@
 #include "SvgLoadingContext.h"
 #include "SvgStyleParser.h"
 #include "KoClipMask.h"
-
+#include <resources/KoSvgSymbolCollectionResource.h>
 
 class KoShape;
 class KoShapeGroup;
@@ -63,6 +63,9 @@ public:
 
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
+
+    /// Returns the collection of symbols contained in the svg document.
+    QVector<KoSvgSymbol*> symbols() const;
 
     typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
     void setFileFetcher(FileFetcherFunc func);
@@ -165,6 +168,8 @@ private:
     QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
+    QList<KoSvgSymbol*> m_symbols;
+    QList<KoShape*> m_symbolShapes;
     QList<KoShape*> m_toplevelShapes;
 };
 

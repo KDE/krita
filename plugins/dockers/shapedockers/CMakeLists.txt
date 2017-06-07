@@ -3,6 +3,7 @@ project(calligradockers)
 set(calligradockers_SRCS
     shapecollection/ShapeCollectionDocker.cpp
     shapecollection/CollectionItemModel.cpp
+    svgsymbolcollection/SvgSymbolCollectionDocker.cpp
 
     Plugin.cpp
 )

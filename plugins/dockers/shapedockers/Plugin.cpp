@@ -18,6 +18,7 @@
  */
 #include "Plugin.h"
 #include "shapecollection/ShapeCollectionDocker.h"
+#include "svgsymbolcollection/SvgSymbolCollectionDocker.h"
 
 #include <KoDockRegistry.h>
 
@@ -30,6 +31,7 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
     KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
+    KoDockRegistry::instance()->add(new SvgSymbolCollectionDockerFactory());
 }
 
 #include <Plugin.moc>

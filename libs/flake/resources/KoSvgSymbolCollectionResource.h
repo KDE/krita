@@ -32,15 +32,15 @@ class KoShape;
 
 struct KoSvgSymbol {
     KoSvgSymbol() {}
-    KoSvgSymbol(const QString &_name)
-        : name(_name) {}
+    KoSvgSymbol(const QString &_title)
+        : title(_title) {}
 
-    QString name;
     QString id;
+    QString title;
     KoShape *shape;
 
     bool operator==(const KoSvgSymbol& rhs) const {
-        return name == rhs.name;
+        return title == rhs.title;
     }
 };
 
@@ -71,7 +71,14 @@ public:
 
     QString defaultFileExtension() const override;
 
-
+    QString title() const;
+    QString description() const;
+    QString creator() const;
+    QString rights() const;
+    QString language() const;
+    QStringList subjects() const;
+    QString license() const;
+    QStringList permits() const;
 
 private:
 

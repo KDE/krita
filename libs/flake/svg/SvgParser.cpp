@@ -111,6 +111,11 @@ QList<KoShape*> SvgParser::shapes() const
     return m_shapes;
 }
 
+QVector<KoSvgSymbol *> SvgParser::symbols() const
+{
+    return m_symbols;
+}
+
 // Helper functions
 // ---------------------------------------------------------------------------------------
 

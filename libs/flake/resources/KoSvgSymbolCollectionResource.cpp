@@ -142,3 +142,42 @@ QString KoSvgSymbolCollectionResource::defaultFileExtension() const
     return QString(".svg");
 }
 
+QString KoSvgSymbolCollectionResource::title() const
+{
+    return "";
+}
+
+QString KoSvgSymbolCollectionResource::description() const
+{
+    return "";
+}
+
+QString KoSvgSymbolCollectionResource::creator() const
+{
+    return "";
+}
+
+QString KoSvgSymbolCollectionResource::rights() const
+{
+    return "";
+}
+
+QString KoSvgSymbolCollectionResource::language() const
+{
+    return "";
+}
+
+QStringList KoSvgSymbolCollectionResource::subjects() const
+{
+    return QStringList();
+}
+
+QString KoSvgSymbolCollectionResource::license() const
+{
+    return "";
+}
+
+QStringList KoSvgSymbolCollectionResource::permits() const
+{
+    return QStringList();
+}

@@ -35,6 +35,8 @@
 #include "kis_debug.h"
 
 #include <KoShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeManager.h>
 #include <KoViewConverter.h>
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
@@ -84,6 +86,27 @@ bool KoSvgSymbolCollectionResource::load()
     return res;
 }
 
+
+void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+{
+    QList<KoShape*> shapes = group->shapes();
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    Q_FOREACH (KoShape *child, shapes) {
+        // we paint recursively here, so we do not have to check recursively for visibility
+        if (!child->isVisible())
+            continue;
+        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
+        if (childGroup) {
+            paintGroup(childGroup, painter, converter, paintContext);
+        } else {
+            painter.save();
+            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
+            painter.restore();
+        }
+    }
+
+}
+
 bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 {
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
@@ -108,10 +131,33 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     SvgParser parser(&manager);
     parser.setResolution(QRectF(0,0,100,100), 72); // initialize with default values
     QSizeF fragmentSize;
-    parser.parseSvg(doc.documentElement(), &fragmentSize);
+    // We're not interested in the shapes themselves
+    qDeleteAll(parser.parseSvg(doc.documentElement(), &fragmentSize));
     d->symbols = parser.takeSymbols();
-    qDebug() << "Loaded" << filename() << "got" << d->symbols.size() << "symbols";
+    qDebug() << "Loaded" << filename() << "got" << d->symbols.size() << "symbols"
+             << d->symbols[0]->shape->outlineRect()
+             << d->symbols[0]->shape->size();
+    if (d->symbols.size() < 1) {
+        setValid(false);
+        return false;
+    }
+    setValid(true);;
 
+    QImage image(100, 100, QImage::Format_ARGB32_Premultiplied);
+    QPainter gc(&image);
+    image.fill(Qt::white);
+    KoViewConverter vc;
+    KoShapePaintingContext ctx;
+
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(d->symbols[0]->shape);
+    group->setSize(QSizeF(100.0, 100.0));
+    Q_ASSERT(group);
+    paintGroup(group, gc, vc, ctx);
+
+    gc.end();
+    setImage(image);
+
+    image.save("bla.png");
     return true;
 }
 

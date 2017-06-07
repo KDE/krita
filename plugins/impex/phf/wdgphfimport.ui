@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgRawImport</class>
+ <widget class="QWidget" name="WdgRawImport">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>709</width>
+    <height>453</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+  </layout>
+ </widget>
+ <customwidgets>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

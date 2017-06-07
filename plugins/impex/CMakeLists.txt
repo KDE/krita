@@ -12,6 +12,7 @@ endif()
 
 if(TIFF_FOUND)
 	add_subdirectory(tiff)
+	add_subdirectory(phf)
 endif()
 
 if(PNG_FOUND)
@@ -27,9 +28,9 @@ if(Poppler_Qt5_FOUND)
     add_subdirectory(pdf)
 endif()
 
-if(LIBRAW_FOUND)
-    add_subdirectory(raw)
-endif()
+#if(LIBRAW_FOUND)
+#    add_subdirectory(raw)
+#endif()
 
 add_subdirectory(svg)
 

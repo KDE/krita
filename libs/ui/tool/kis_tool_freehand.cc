@@ -155,7 +155,8 @@ void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
 
 int KisToolFreehand::flags() const
 {
-    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET
+           |KisTool::FLAG_USES_CUSTOM_SIZE;
 }
 
 void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)

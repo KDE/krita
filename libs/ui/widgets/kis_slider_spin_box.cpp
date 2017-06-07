@@ -32,7 +32,7 @@
 #include <QTimer>
 #include <QtDebug>
 #include <QDoubleSpinBox>
-
+#include "kis_cursor.h"
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
 
@@ -111,6 +111,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->parseInt = false;
 
     setExponentRatio(1.0);
+    setCursor(KisCursor::splitHCursor());
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);

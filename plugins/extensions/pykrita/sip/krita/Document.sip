@@ -46,6 +46,9 @@ public Q_SLOTS:
     bool exportImage(const QString &filename, const InfoObject & exportConfiguration);
     void flatten();
     void resizeImage(int w, int h);
+    void scaleImage(int w, int h, int xres, int yres, QString strategy);
+    void rotateImage(double radians);
+    void shearImage(double angleX, double angleY);
     bool save();
     bool saveAs(const QString & filename);
     Node *createNode(const QString & name, const QString & nodeType)  /Factory/;

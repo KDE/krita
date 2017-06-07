@@ -27,6 +27,8 @@
  */
 class PAINTOP_EXPORT KisAirbrushOption : public KisPaintOpOption
 {
+    Q_OBJECT
+
 public:
     KisAirbrushOption(bool enabled = true, bool canIgnoreSpacing = true);
     ~KisAirbrushOption() override;

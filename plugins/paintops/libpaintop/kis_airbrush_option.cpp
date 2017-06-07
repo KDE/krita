@@ -61,14 +61,14 @@ KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
     : KisPaintOpOption(KisPaintOpOption::COLOR, enabled)
     , m_d(new Private())
 {
-    setObjectName("KisAirBrushOption");
+    setObjectName("KisAirbrushOption");
 
     // Initialize GUI.
     m_checkable = true;
     m_d->configPage = new KisAirbrushWidget(nullptr, canIgnoreSpacing);
-    connect(m_d->configPage->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(intervalChanged()));
+    connect(m_d->configPage->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(slotIntervalChanged()));
     connect(m_d->configPage->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
-            SLOT(ignoreSpacingChanged()));
+            SLOT(slotIgnoreSpacingChanged()));
     setConfigurationPage(m_d->configPage);
 
     // Read initial configuration from the GUI.
@@ -136,5 +136,4 @@ void KisAirbrushOption::updateInterval()
 void KisAirbrushOption::updateIgnoreSpacing()
 {
     m_d->ignoreSpacing = m_d->configPage->checkBoxIgnoreSpacing->isChecked();
-    emitSettingChanged();
 }

@@ -70,6 +70,9 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
                 QColor color = m_displayRenderer->toQColor(m_colorSet->getColorGlobal(i).color);
                 return QBrush(color);
             }
+            case Qt::ToolTipRole: {
+                return m_colorSet->getColorGlobal(i).name;
+            }
             }
         }
     }

@@ -38,7 +38,7 @@ class AssignProfileDialog(Extension):
         doc.setColorProfile(self.cmbProfile.currentText())
 
     def setup(self):
-        action = Application.createAction("Assign Profile to Image")
+        action = Application.createAction("assing_profile_to_image", "Assign Profile to Image")
         action.triggered.connect(self.assignProfile)
 
 Scripter.addExtension(AssignProfileDialog(Application))

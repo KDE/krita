@@ -41,6 +41,9 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     verticalHeader()->setVisible(false);
     setItemDelegate(new KisPaletteDelegate());
 
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
+
     KisConfig cfg;
     QPalette pal(palette());
     pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());

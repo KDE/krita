@@ -77,6 +77,10 @@ install_pykrita_plugin(assignprofiledialog)
 install_pykrita_plugin(scripter)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
+install( FILES
+    tenbrushes/tenbrushes.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+
 install_pykrita_plugin(palette_docker)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)

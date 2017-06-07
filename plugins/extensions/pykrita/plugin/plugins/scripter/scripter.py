@@ -10,7 +10,7 @@ class ScripterExtension(Extension):
         super().__init__(parent)
 
     def setup(self):
-        action = Krita.instance().createAction("Scripter")
+        action = Krita.instance().createAction("python_scripter", "Scripter")
         action.triggered.connect(self.initialize)
 
     def initialize(self):

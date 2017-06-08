@@ -568,6 +568,11 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(groupMenu, "create_quick_group");
             addActionToMenu(groupMenu, "create_quick_clipping_group");
             addActionToMenu(groupMenu, "quick_ungroup");
+            QMenu *locksMenu = menu.addMenu(i18n("&Locks && visibility"));
+            addActionToMenu(locksMenu, "toggle_layer_lock");
+            addActionToMenu(locksMenu, "toggle_layer_visibility");
+            addActionToMenu(locksMenu, "toggle_layer_alpha_lock");
+            addActionToMenu(locksMenu, "toggle_layer_inherit_alpha");
 
             if (singleLayer) {
                 QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));

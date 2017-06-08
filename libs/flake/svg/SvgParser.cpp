@@ -305,7 +305,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
         }
         gradHelper.setGradient(g);
     } else {
-        qDebug() << "WARNING: Failed to parse gradient with tag" << e.tagName();
+        qWarning() << "WARNING: Failed to parse gradient with tag" << e.tagName();
     }
 
     // handle spread method
@@ -591,8 +591,6 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
 {
     const QString id = e.attribute("id");
 
-    qDebug() << "parsing symbol" << id << e.text();
-
     if (id.isEmpty()) return false;
 
     KoSvgSymbol *svgSymbol = new KoSvgSymbol();
@@ -611,8 +609,6 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
     if (!symbolShape) return false;
     svgSymbol->shape = symbolShape;
     svgSymbol->title = title;
-
-    qDebug() << "created symbol" << svgSymbol->id << svgSymbol->title << svgSymbol->shape->boundingRect();
 
     m_symbols << svgSymbol;
 

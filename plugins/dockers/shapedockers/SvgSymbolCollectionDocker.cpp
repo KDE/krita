@@ -26,6 +26,7 @@
 #include <QMimeData>
 #include <QDomDocument>
 #include <QDomElement>
+#include <squeezedcombobox.h>
 
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -167,7 +168,7 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     KoResourceServer<KoSvgSymbolCollectionResource>  *svgCollectionProvider = KoResourceServerProvider::instance()->svgSymbolCollectionServer();
     Q_FOREACH(KoSvgSymbolCollectionResource *r, svgCollectionProvider->resources()) {
-        m_wdgSvgCollection->cmbCollections->addItem(r->name());
+        m_wdgSvgCollection->cmbCollections->addSqueezedItem(r->name());
         SvgCollectionModel *model = new SvgCollectionModel();
         model->setSvgSymbolCollectionResource(r);
         m_models.append(model);

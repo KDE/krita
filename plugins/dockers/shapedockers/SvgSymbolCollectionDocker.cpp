@@ -33,6 +33,9 @@
 #include <KoProperties.h>
 #include <KoDrag.h>
 
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
 #include "ui_WdgSvgCollection.h"
 
 #include <resources/KoSvgSymbolCollectionResource.h>
@@ -174,8 +177,13 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
     m_wdgSvgCollection->listCollection->setSelectionMode(QListView::SingleSelection);
 
-    collectionActivated(0);
-
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("SvgSymbolCollection");
+    int i = cfg.readEntry("currentCollection", 0);
+    if (i > m_wdgSvgCollection->cmbCollections->count()) {
+        i = 0;
+    }
+    m_wdgSvgCollection->cmbCollections->setCurrentIndex(i);
+    collectionActivated(i);
 }
 
 void SvgSymbolCollectionDocker::setCanvas(KoCanvasBase *canvas)
@@ -191,6 +199,8 @@ void SvgSymbolCollectionDocker::unsetCanvas()
 void SvgSymbolCollectionDocker::collectionActivated(int index)
 {
     if (index < m_models.size()) {
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("SvgSymbolCollection");
+        cfg.writeEntry("currentCollection", index);
         m_wdgSvgCollection->listCollection->setModel(m_models[index]);
     }
 

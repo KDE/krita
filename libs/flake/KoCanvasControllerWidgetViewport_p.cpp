@@ -117,6 +117,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
     }
 
     const QMimeData *data = event->mimeData();
+
     if (data->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
             data->hasFormat(SHAPEID_MIMETYPE) ||
             data->hasFormat("image/svg+xml"))
@@ -129,6 +130,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
                                                                      canvas->shapeController()->documentRectInPixels(),
                                                                      canvas->shapeController()->pixelsPerInch(),
                                                                      &fragmentSize);
+
             if (!shapes.isEmpty()) {
                 m_draggedShape = shapes[0];
             }
@@ -210,18 +212,22 @@ void Viewport::handleDropEvent(QDropEvent *event)
     m_parent->canvas()->clipToDocument(m_draggedShape, newPos); // ensure the shape is dropped inside the document.
     m_draggedShape->setAbsolutePosition(newPos);
 
+
     KUndo2Command * cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape);
+
     if (cmd) {
         m_parent->canvas()->addCommand(cmd);
         KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
 
         // repaint selection before selecting newly create shape
-        Q_FOREACH (KoShape * shape, selection->selectedShapes())
+        Q_FOREACH (KoShape * shape, selection->selectedShapes()) {
             shape->update();
+        }
 
         selection->deselectAll();
         selection->select(m_draggedShape);
     } else {
+
         delete m_draggedShape;
     }
 

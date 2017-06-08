@@ -232,8 +232,3 @@ set_target_properties(kritaflake PROPERTIES
 
 install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES 
-    resources/BalloonSymbols.svg
-    DESTINATION  ${DATA_INSTALL_DIR}/krita/symbols)
-
-

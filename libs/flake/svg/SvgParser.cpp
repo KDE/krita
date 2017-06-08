@@ -78,6 +78,7 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 
 SvgParser::~SvgParser()
 {
+    qDeleteAll(m_symbols);
 }
 
 void SvgParser::setXmlBaseDir(const QString &baseDir)
@@ -305,7 +306,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
         }
         gradHelper.setGradient(g);
     } else {
-        qWarning() << "WARNING: Failed to parse gradient with tag" << e.tagName();
+        qDebug() << "WARNING: Failed to parse gradient with tag" << e.tagName();
     }
 
     // handle spread method
@@ -607,8 +608,17 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
     m_context.popGraphicsContext();
 
     if (!symbolShape) return false;
+
     svgSymbol->shape = symbolShape;
     svgSymbol->title = title;
+    svgSymbol->id = id;
+    if (title.isEmpty()) svgSymbol->title = id;
+
+    if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
+        qWarning() << "Symbol" << id << "seems to be empty, discarding";
+        delete svgSymbol;
+        return false;
+    }
 
     m_symbols << svgSymbol;
 
@@ -1193,7 +1203,6 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
     QList<KoShape*> shapes;
 
     // First find the metadata
-
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement b = n.toElement();
         if (b.isNull())
@@ -1211,8 +1220,9 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
     }
 
 
-    // SVG 1.1: skip the rendering of the element if it has null viewBox
-    if (gc->currentBoundingBox.isValid()) {
+    // SVG 1.1: skip the rendering of the element if it has null viewBox; however an inverted viewbox is just peachy
+    // and as mother makes them -- if mother is inkscape.
+    if (gc->currentBoundingBox.normalized().isValid()) {
         shapes = parseContainer(e);
     }
 

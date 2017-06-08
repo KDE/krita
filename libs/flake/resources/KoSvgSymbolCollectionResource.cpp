@@ -153,17 +153,27 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 
     for(int i = 0; i < d->symbols.size(); ++i) {
 
-        QImage image(100, 100, QImage::Format_ARGB32_Premultiplied);
+        KoSvgSymbol *symbol = d->symbols[i];
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(symbol->shape);
+        Q_ASSERT(group);
+
+        QRectF rc = group->boundingRect().normalized();
+
+        QImage image(rc.width(), rc.height(), QImage::Format_ARGB32_Premultiplied);
         QPainter gc(&image);
-        image.fill(Qt::white);
+        image.fill(Qt::gray);
+
         KoViewConverter vc;
         KoShapePaintingContext ctx;
-        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(d->symbols[i]->shape);
-        group->setSize(QSizeF(100.0, 100.0));
-        Q_ASSERT(group);
+
+//        qDebug() << "Going to render. Original bounding rect:" << group->boundingRect()
+//                 << "Normalized: " << rc
+//                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
+
+        gc.translate(-rc.x(), -rc.y());
         paintGroup(group, gc, vc, ctx);
         gc.end();
-        d->symbols[i]->icon = image;
+        d->symbols[i]->icon = image.scaled(500, 500, Qt::KeepAspectRatio);
 
     }
 
@@ -184,7 +194,7 @@ bool KoSvgSymbolCollectionResource::save()
 
 bool KoSvgSymbolCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    bool res;
+    bool res = false;
     // XXX
     if (res) {
         KoResource::saveToDevice(dev);

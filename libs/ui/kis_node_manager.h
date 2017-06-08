@@ -170,8 +170,6 @@ public Q_SLOTS:
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
-    void nodeVisibilityChanged();
-    void layerLockedChanged();
     void duplicateActiveNode();
     void removeNode();
     void mirrorNodeX();
@@ -201,6 +199,11 @@ public Q_SLOTS:
     void slotSplitAlphaIntoMask();
     void slotSplitAlphaWrite();
     void slotSplitAlphaSaveMerged();
+
+    void toggleLock();
+    void toggleVisibility();
+    void toggleAlphaLock();
+    void toggleInheritAlpha();
 
     /**
      * @brief slotSetSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.

@@ -107,6 +107,21 @@ public Q_SLOTS:
     Filter *filter(const QString &name) const;
 
     /**
+     * @brief colorModels creates a list with all color models id's registered.
+     * @return a list of all color models or a empty list if there is no such color models.
+     */
+    QStringList colorModels() const;
+
+    /**
+     * @brief colorDepths creates a list with the names of all color depths
+     * compatible with the given color model.
+     * @param colorModel the id of a color model.
+     * @return a list of all color depths or a empty list if there is no such
+     * color depths.
+     */
+    QStringList colorDepths(const QString &colorModel) const;
+
+    /**
      * @brief profiles creates a list with the names of all color profiles compatible
      * with the given color model and color depth.
      * @param colorModel A string describing the color model of the image:

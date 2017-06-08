@@ -174,6 +174,18 @@ Filter *Krita::filter(const QString &name) const
     return filter;
 }
 
+QStringList Krita::colorModels() const
+{
+    QSet<QString> colorModelsIds;
+    return colorModelsIds.toList();
+}
+
+QStringList Krita::colorDepths(const QString &colorModel) const
+{
+    QSet<QString> colorDepthsIds;
+    return colorDepthsIds.toList();
+}
+
 QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth) const
 {
     QSet<QString> profileNames;
@@ -374,4 +386,3 @@ QObject *Krita::fromVariant(const QVariant& v)
     else
         return 0;
 }
-

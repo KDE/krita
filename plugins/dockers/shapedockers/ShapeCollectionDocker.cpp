@@ -315,7 +315,6 @@ void ShapeCollectionDocker::activateShapeCollection(QListWidgetItem *item)
         qCritical() << "Didn't find a model with id ==" << id;
     }
 
-    m_closeCollectionButton->setEnabled(id != "default");
 }
 
 bool ShapeCollectionDocker::addCollection(const QString &id, const QString &title, CollectionItemModel *model)

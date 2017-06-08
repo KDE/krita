@@ -73,8 +73,8 @@ protected Q_SLOTS:
 
 protected:
     /**
-         * Load the default calligra shapes
-         */
+     * Load the default calligra shapes
+     */
     void loadDefaultShapes();
 
 
@@ -91,8 +91,6 @@ private:
     QMenu *m_moreShapesContainer;
     QListWidget *m_collectionChooser;
     QListView *m_collectionView;
-    QToolButton *m_closeCollectionButton;
-    QToolButton *m_addCollectionButton;
     QSpacerItem *m_spacer;
     QGridLayout *m_layout;
 

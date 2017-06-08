@@ -20,6 +20,7 @@
 #define SVGSYMBOLCOLLECTIONDOCKER_H
 
 #include <QDockWidget>
+#include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QMap>
 #include <QIcon>
@@ -28,6 +29,24 @@
 #include <KoCanvasObserverBase.h>
 
 #include "ui_WdgSvgCollection.h"
+
+class KoSvgSymbolCollectionResource;
+
+class SvgCollectionModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    explicit SvgCollectionModel(QObject *parent = 0);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    QStringList mimeTypes() const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+public:
+    void setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource);
+private:
+    KoSvgSymbolCollectionResource *m_symbolCollection;
+};
 
 
 class SvgSymbolCollectionDockerFactory : public KoDockFactoryBase
@@ -61,6 +80,7 @@ private Q_SLOTS:
 private:
 
     Ui_WdgSvgCollection *m_wdgSvgCollection;
+    QVector<SvgCollectionModel*> m_models;
 };
 
 #endif //KOSHAPECOLLECTIONDOCKER_H

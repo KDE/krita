@@ -18,7 +18,7 @@
     <widget class="QComboBox" name="cmbCollections"/>
    </item>
    <item>
-    <widget class="QListWidget" name="listCollection"/>
+    <widget class="QListView" name="listCollection"/>
    </item>
   </layout>
  </widget>

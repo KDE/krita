@@ -22,11 +22,109 @@
 #include <klocalizedstring.h>
 
 #include <QDebug>
+#include <QAbstractListModel>
+#include <QMimeData>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
+#include <KoDrag.h>
 
 #include "ui_WdgSvgCollection.h"
+
+#include <resources/KoSvgSymbolCollectionResource.h>
+
+//
+// SvgCollectionModel
+//
+SvgCollectionModel::SvgCollectionModel(QObject *parent)
+    : QAbstractListModel(parent)
+{
+    setSupportedDragActions(Qt::CopyAction);
+}
+
+QVariant SvgCollectionModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || index.row() > m_symbolCollection->symbols().count()) {
+        return QVariant();
+    }
+
+    switch (role) {
+    case Qt::ToolTipRole:
+        return m_symbolCollection->symbols()[index.row()]->title;
+
+    case Qt::DecorationRole:
+    {
+        QPixmap px = QPixmap::fromImage(m_symbolCollection->symbols()[index.row()]->icon);
+        QIcon icon(px);
+        return icon;
+    }
+    case Qt::UserRole:
+        return m_symbolCollection->symbols()[index.row()]->id;
+
+    case Qt::DisplayRole:
+        return m_symbolCollection->symbols()[index.row()]->title;
+
+    default:
+        return QVariant();
+    }
+
+    return QVariant();
+}
+
+int SvgCollectionModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return m_symbolCollection->symbols().count();
+}
+
+QMimeData *SvgCollectionModel::mimeData(const QModelIndexList &indexes) const
+{
+    if (indexes.isEmpty()) {
+        return 0;
+    }
+
+    QModelIndex index = indexes.first();
+
+    if (!index.isValid()) {
+        return 0;
+    }
+
+    if (m_symbolCollection->symbols().isEmpty()) {
+        return 0;
+    }
+
+    QList<KoShape*> shapes;
+    shapes.append(m_symbolCollection->symbols()[index.row()]->shape);
+    KoDrag drag;
+    drag.setSvg(shapes);
+    QMimeData *mimeData = drag.mimeData();
+
+    return mimeData;
+}
+
+QStringList SvgCollectionModel::mimeTypes() const
+{
+    return QStringList() << SHAPETEMPLATE_MIMETYPE << "image/svg+xml";
+}
+
+Qt::ItemFlags SvgCollectionModel::flags(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        return QAbstractListModel::flags(index) | Qt::ItemIsDragEnabled;
+    }
+    return QAbstractListModel::flags(index);
+}
+
+void SvgCollectionModel::setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource)
+{
+    m_symbolCollection = resource;
+}
+
+
 
 //
 // SvgSymbolCollectionDockerFactory
@@ -66,8 +164,10 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     KoResourceServer<KoSvgSymbolCollectionResource>  *svgCollectionProvider = KoResourceServerProvider::instance()->svgSymbolCollectionServer();
     Q_FOREACH(KoSvgSymbolCollectionResource *r, svgCollectionProvider->resources()) {
-        QVariant v = QVariant::fromValue<KoSvgSymbolCollectionResource*>(r);
-        m_wdgSvgCollection->cmbCollections->addItem(r->name(), v);
+        m_wdgSvgCollection->cmbCollections->addItem(r->name());
+        SvgCollectionModel *model = new SvgCollectionModel();
+        model->setSvgSymbolCollectionResource(r);
+        m_models.append(model);
     }
 
     m_wdgSvgCollection->listCollection->setDragEnabled(true);
@@ -90,15 +190,8 @@ void SvgSymbolCollectionDocker::unsetCanvas()
 
 void SvgSymbolCollectionDocker::collectionActivated(int index)
 {
-    QVariant v = m_wdgSvgCollection->cmbCollections->itemData(index);
-    KoSvgSymbolCollectionResource *r = v.value<KoSvgSymbolCollectionResource *>();
-    if (r) {
-        m_wdgSvgCollection->listCollection->clear();
-        Q_FOREACH(KoSvgSymbol *symbol, r->symbols()) {
-            QListWidgetItem *item = new QListWidgetItem(symbol->title);
-            item->setIcon(QIcon(QPixmap::fromImage(symbol->icon)));
-            m_wdgSvgCollection->listCollection->addItem(item);
-        }
+    if (index < m_models.size()) {
+        m_wdgSvgCollection->listCollection->setModel(m_models[index]);
     }
 
 }

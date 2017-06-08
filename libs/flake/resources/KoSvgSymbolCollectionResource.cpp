@@ -76,8 +76,6 @@ KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 
 bool KoSvgSymbolCollectionResource::load()
 {
-    qDebug() << "Going to load" << filename();
-
     QFile file(filename());
     if (file.size() == 0) return false;
     if (!file.open(QIODevice::ReadOnly)) {
@@ -136,12 +134,12 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     // We're not interested in the shapes themselves
     qDeleteAll(parser.parseSvg(doc.documentElement(), &fragmentSize));
     d->symbols = parser.takeSymbols();
-    qDebug() << "Loaded" << filename() << "\n\t"
-             << "Title" << parser.documentTitle() << "\n\t"
-             << "Description" << parser.documentDescription()
-             << "\n\tgot" << d->symbols.size() << "symbols"
-             << d->symbols[0]->shape->outlineRect()
-             << d->symbols[0]->shape->size();
+//    qDebug() << "Loaded" << filename() << "\n\t"
+//             << "Title" << parser.documentTitle() << "\n\t"
+//             << "Description" << parser.documentDescription()
+//             << "\n\tgot" << d->symbols.size() << "symbols"
+//             << d->symbols[0]->shape->outlineRect()
+//             << d->symbols[0]->shape->size();
 
     d->title = parser.documentTitle();
     setName(d->title);

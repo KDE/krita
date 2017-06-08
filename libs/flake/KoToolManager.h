@@ -280,12 +280,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * Emitted when a new tool is going to override the current tool
-     * @param canvas the currently active canvas.
-     */
-    void aboutToChangeTool(KoCanvasController *canvas);
-
-    /**
      * Emitted when a new tool was selected or became active.
      * @param canvas the currently active canvas.
      * @param uniqueToolId a random but unique code for the new tool.

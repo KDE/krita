@@ -111,7 +111,6 @@ public Q_SLOTS:
     void slotFocusOnEnter(bool value);
 
 private Q_SLOTS:
-    void slotAboutToChangeTool();
     void slotToolChanged();
     void profileChanged();
     void slotCompressedMoveEvent();

@@ -62,24 +62,11 @@ public:
     void unsetCanvas() override;
 
 protected Q_SLOTS:
-    /**
-         * Activates the shape creation tool when a shape is selected.
-         */
-    void activateShapeCreationTool(const QModelIndex &index);
-    void activateShapeCreationToolFromQuick(const QModelIndex &index);
 
     /**
-         * Changes the current shape collection
-         */
+     * Changes the current shape collection
+    */
     void activateShapeCollection(QListWidgetItem *item);
-
-    /**
-         * Called when a collection is added from the add collection menu
-         */
-    void loadCollection();
-
-    /// Called when the close collection button is clicked
-    void removeCurrentCollection();
 
     /// Called when the docker changes area
     void locationChanged(Qt::DockWidgetArea area);
@@ -90,24 +77,15 @@ protected:
          */
     void loadDefaultShapes();
 
-    /**
-         * Add a collection to the docker
-         */
-    bool addCollection(const QString &id, const QString &title, CollectionItemModel *model);
-    void removeCollection(const QString &id);
-
-    /**
-         * Builds the menu for the Add Collection Button
-         */
-    void buildAddCollectionMenu();
 
     /// Generate an icon from @p shape
     QIcon generateShapeIcon(KoShape *shape);
 
-private:
-    void scanCollectionDir(const QString &dirName, QMenu *menu);
 
 private:
+
+    bool addCollection(const QString &id, const QString &title, CollectionItemModel *model);
+
     QListView *m_quickView;
     QToolButton *m_moreShapes;
     QMenu *m_moreShapesContainer;

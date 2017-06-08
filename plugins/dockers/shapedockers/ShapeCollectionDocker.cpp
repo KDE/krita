@@ -147,9 +147,6 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget *parent)
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
-    connect(m_quickView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(activateShapeCreationToolFromQuick(QModelIndex)));
-
     m_moreShapes = new QToolButton(mainWidget);
     m_moreShapes->setText(i18n("More"));
     m_moreShapes->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -176,27 +173,6 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget *parent)
     connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(activateShapeCollection(QListWidgetItem*)));
 
-    m_addCollectionButton = new QToolButton(m_moreShapesContainer);
-    containerLayout->addWidget(m_addCollectionButton, 1, 0);
-    m_addCollectionButton->setIcon(koIcon("list-add"));
-    m_addCollectionButton->setIconSize(QSize(16, 16));
-    m_addCollectionButton->setToolTip(i18n("Open Shape Collection"));
-    m_addCollectionButton->setPopupMode(QToolButton::InstantPopup);
-    m_addCollectionButton->setVisible(false);
-
-    m_closeCollectionButton = new QToolButton(m_moreShapesContainer);
-    containerLayout->addWidget(m_closeCollectionButton, 1, 1);
-    m_closeCollectionButton->setIcon(koIcon("list-remove"));
-    m_closeCollectionButton->setIconSize(QSize(16, 16));
-    m_closeCollectionButton->setToolTip(i18n("Remove Shape Collection"));
-    m_closeCollectionButton->setVisible(false);
-
-    connect(m_closeCollectionButton, SIGNAL(clicked()),
-            this, SLOT(removeCurrentCollection()));
-
-    if (!KoResourcePaths::resourceDirs("app_shape_collections").isEmpty()) {
-        buildAddCollectionMenu();
-    }
 
     m_collectionView = new QListView(m_moreShapesContainer);
     containerLayout->addWidget(m_collectionView, 0, 2, -1, 1);
@@ -208,8 +184,6 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget *parent)
     m_collectionView->setFixedSize(QSize(165, 345));
     m_collectionView->setWordWrap(true);
 
-    connect(m_collectionView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(activateShapeCreationTool(QModelIndex)));
 
     // Load the default shapes and add them to the combobox
     loadDefaultShapes();
@@ -331,47 +305,6 @@ void ShapeCollectionDocker::loadDefaultShapes()
     activateShapeCollection(m_collectionChooser->item(0));
 }
 
-void ShapeCollectionDocker::activateShapeCreationToolFromQuick(const QModelIndex &index)
-{
-    m_collectionView->setFont(m_quickView->font());
-    if (!index.isValid()) {
-        return;
-    }
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-
-    if (canvasController) {
-        KoCreateShapesTool *tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
-        QString id = m_quickView->model()->data(index, Qt::UserRole).toString();
-        const KoProperties *properties = static_cast<CollectionItemModel *>(m_quickView->model())->properties(index);
-
-        tool->setShapeId(id);
-        tool->setShapeProperties(properties);
-        KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
-    }
-    m_quickView->clearSelection();
-}
-
-void ShapeCollectionDocker::activateShapeCreationTool(const QModelIndex &index)
-{
-    if (!index.isValid()) {
-        return;
-    }
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-
-    if (canvasController) {
-        KoCreateShapesTool *tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
-        QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
-        const KoProperties *properties = static_cast<CollectionItemModel *>(m_collectionView->model())->properties(index);
-
-        tool->setShapeId(id);
-        tool->setShapeProperties(properties);
-        KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
-    }
-    m_moreShapesContainer->hide();
-}
-
 void ShapeCollectionDocker::activateShapeCollection(QListWidgetItem *item)
 {
     QString id = item->data(Qt::UserRole).toString();
@@ -385,8 +318,7 @@ void ShapeCollectionDocker::activateShapeCollection(QListWidgetItem *item)
     m_closeCollectionButton->setEnabled(id != "default");
 }
 
-bool ShapeCollectionDocker::addCollection(const QString &id, const QString &title,
-        CollectionItemModel *model)
+bool ShapeCollectionDocker::addCollection(const QString &id, const QString &title, CollectionItemModel *model)
 {
     if (m_modelMap.contains(id)) {
         return false;
@@ -397,78 +329,6 @@ bool ShapeCollectionDocker::addCollection(const QString &id, const QString &titl
     collectionChooserItem->setData(Qt::UserRole, id);
     m_collectionChooser->addItem(collectionChooserItem);
     return true;
-}
-
-void ShapeCollectionDocker::buildAddCollectionMenu()
-{
-    QStringList dirs = KoResourcePaths::resourceDirs("app_shape_collections");
-    QMenu *menu = new QMenu(m_addCollectionButton);
-    m_addCollectionButton->setMenu(menu);
-
-    Q_FOREACH (const QString &dirName, dirs) {
-        QDir dir(dirName);
-
-        if (!dir.exists()) {
-            continue;
-        }
-
-        QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-        Q_FOREACH (const QString &collectionDirName, collectionDirs) {
-            scanCollectionDir(dirName + collectionDirName, menu);
-        }
-    }
-}
-
-void ShapeCollectionDocker::scanCollectionDir(const QString &path, QMenu *menu)
-{
-    QDir dir(path);
-
-    if (!dir.exists(".directory")) {
-        return;
-    }
-
-    KDesktopFile directory(dir.absoluteFilePath(".directory"));
-    KConfigGroup dg = directory.desktopGroup();
-    QString name = dg.readEntry("Name");
-    QString icon = dg.readEntry("Icon");
-    QString type = dg.readEntry("X-KDE-DirType");
-
-    if (type == "subdir") {
-        QMenu *submenu = menu->addMenu(QIcon(dir.absoluteFilePath(icon)), name);
-        QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-        Q_FOREACH (const QString &collectionDirName, collectionDirs) {
-            scanCollectionDir(dir.absoluteFilePath(collectionDirName), submenu);
-        }
-    } else {
-        QAction *action = menu->addAction(QIcon(dir.absoluteFilePath(icon)), name, this, SLOT(loadCollection()));
-        action->setIconText(name);
-        action->setData(QVariant(type + ':' + path + QDir::separator()));
-        action->setEnabled(!m_modelMap.contains(action->data().toString()));
-    }
-}
-
-void ShapeCollectionDocker::loadCollection()
-{
-    QAction *action = qobject_cast<QAction *>(sender());
-
-    if (!action) {
-        return;
-    }
-
-    QString path = action->data().toString();
-    int index = path.indexOf(':');
-    QString type = path.left(index);
-    path = path.mid(index + 1);
-
-    if (m_modelMap.contains(path)) {
-        return;
-    }
-
-    CollectionItemModel *model = new CollectionItemModel(this);
-    addCollection(path, action->iconText(), model);
-    action->setEnabled(false);
 }
 
 
@@ -490,27 +350,4 @@ QIcon ShapeCollectionDocker::generateShapeIcon(KoShape *shape)
     painter.end();
 
     return QIcon(pixmap);
-}
-
-void ShapeCollectionDocker::removeCollection(const QString &id)
-{
-//TODO    m_collectionsCombo->removeItem(m_collectionsCombo->findData(id));
-
-    if (m_modelMap.contains(id)) {
-        CollectionItemModel *model = m_modelMap[id];
-        QList<KoCollectionItem> list = model->shapeTemplateList();
-        Q_FOREACH (const KoCollectionItem &temp, list) {
-            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(temp.id);
-            KoShapeRegistry::instance()->remove(temp.id);
-            delete factory;
-        }
-
-        m_modelMap.remove(id);
-        delete model;
-    }
-}
-
-void ShapeCollectionDocker::removeCurrentCollection()
-{
-//TODO    removeCollection(m_collectionsCombo->itemData(m_collectionsCombo->currentIndex()).toString());
 }

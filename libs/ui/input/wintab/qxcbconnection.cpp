@@ -544,8 +544,13 @@ public:
 
     class WheelEvent : public InputEvent {
     public:
+#if QT_VERSION >= 0x050700
+        WheelEvent(QWindow *w, ulong time, const QPointF & local, const QPointF & global, QPoint pixelD, QPoint angleD, int qt4D, Qt::Orientation qt4O,
+                   Qt::KeyboardModifiers mods, Qt::ScrollPhase phase = Qt::NoScrollPhase, Qt::MouseEventSource src = Qt::MouseEventNotSynthesized)
+#else
         WheelEvent(QWindow *w, ulong time, const QPointF & local, const QPointF & global, QPoint pixelD, QPoint angleD, int qt4D, Qt::Orientation qt4O,
                    Qt::KeyboardModifiers mods, Qt::ScrollPhase phase = Qt::ScrollUpdate, Qt::MouseEventSource src = Qt::MouseEventNotSynthesized)
+#endif
             : InputEvent(w, time, Wheel, mods), pixelDelta(pixelD), angleDelta(angleD), qt4Delta(qt4D), qt4Orientation(qt4O), localPos(local), globalPos(global), phase(phase), source(src) { }
         QPoint pixelDelta;
         QPoint angleDelta;

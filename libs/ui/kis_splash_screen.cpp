@@ -36,7 +36,11 @@
 #include <QIcon>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | f),
+    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
+#ifdef Q_OS_LINUX
+              | Qt::WindowStaysOnTopHint
+#endif
+              | f),
       m_themed(themed)
 {
 

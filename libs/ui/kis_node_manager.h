@@ -170,6 +170,8 @@ public Q_SLOTS:
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
+    void nodeVisibilityChanged();
+    void layerLockedChanged();
     void duplicateActiveNode();
     void removeNode();
     void mirrorNodeX();

@@ -2670,6 +2670,30 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="nodeVisibility">
+      <icon></icon>
+      <text>Node Visibility</text>
+      <whatsThis></whatsThis>
+      <toolTip>Node Visibility</toolTip>
+      <iconText>Node Visibility</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Shift+K</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="layerLock">
+      <icon></icon>
+      <text>Layer Lock</text>
+      <whatsThis></whatsThis>
+      <toolTip>Layer Lock</toolTip>
+      <iconText>Layer Lock</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Shift+J</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="mirrorNodeY">
       <icon>symmetry-vertical</icon>
       <text>Mirror Layer &amp;Vertically</text>

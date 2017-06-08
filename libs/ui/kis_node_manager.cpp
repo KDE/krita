@@ -243,6 +243,12 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     KisAction * action  = actionManager->createAction("mirrorNodeX");
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
+    action = actionManager->createAction("nodeVisibility");
+    connect(action,SIGNAL(triggered(bool)),this,SLOT(nodeVisibilityChanged()));
+
+    action = actionManager->createAction("layerLock");
+    connect(action,SIGNAL(triggered(bool)),this,SLOT(layerLockedChanged()));
+
     action  = actionManager->createAction("mirrorNodeY");
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 
@@ -690,6 +696,8 @@ void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
     m_d->commandsAdapter.setCompositeOp(node, compositeOp);
 }
 
+
+
 void KisNodeManager::slotImageRequestNodeReselection(KisNodeSP activeNode, const KisNodeList &selectedNodes)
 {
     if (activeNode) {
@@ -733,6 +741,21 @@ void KisNodeManager::nodeCompositeOpChanged(const KoCompositeOp* op)
     KisNodeSP node = activeNode();
 
     setNodeCompositeOp(node, op);
+}
+
+void KisNodeManager::nodeVisibilityChanged()
+{
+    KisNodeSP node = activeNode();
+    if(!node) return;
+    node->setVisible(!node->visible());
+    node->setDirty();
+}
+
+void KisNodeManager::layerLockedChanged()
+{
+    KisNodeSP node = activeNode();
+    if(!node) return;
+    node->setUserLocked(!node->userLocked());
 }
 
 void KisNodeManager::duplicateActiveNode()

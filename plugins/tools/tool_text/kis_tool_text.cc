@@ -40,7 +40,7 @@
 KisToolText::KisToolText(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
-    setObjectName("tool_text");  
+    setObjectName("tool_text");
 }
 
 KisToolText::~KisToolText()
@@ -106,7 +106,17 @@ void KisToolText::finishRect(const QRectF &rect)
         return;
 
     QRectF r = convertToPt(rect);
-    QString shapeString = (m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
+    QString shapeString;
+    switch (m_optionsWidget->mode()) {
+    case KisTextToolOptionWidget::MODE_ARTISTIC:
+        shapeString = "ArtisticText";
+        break;
+    case KisTextToolOptionWidget::MODE_MULTILINE:
+        shapeString = "TextShapeID";
+        break;
+    default:
+        shapeString = "KoSvgTextShapeID";
+    };
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());

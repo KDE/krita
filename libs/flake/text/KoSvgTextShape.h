@@ -21,6 +21,7 @@
 
 #include "kritaflake_export.h"
 
+#include <KoShapeFactoryBase.h>
 #include <KoSvgTextChunkShape.h>
 #include <SvgShape.h>
 
@@ -71,5 +72,23 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoSvgTextShape)
 };
+
+class KoSvgTextShapeFactory : public KoShapeFactoryBase
+{
+
+public:
+    /// constructor
+    KoSvgTextShapeFactory();
+    ~KoSvgTextShapeFactory() {}
+
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+
+    /// Reimplemented
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+
+//    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
+};
+
+
 
 #endif // KOSVGTEXTSHAPE_H

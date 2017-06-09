@@ -20,13 +20,21 @@
 
 #include <QTextLayout>
 
+#include <klocalizedstring.h>
+
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 #include <KoShapeContainer_p.h>
 #include <text/KoSvgTextChunkShape_p.h>
+#include <text/KoSvgTextShapeMarkupConverter.h>
 
 #include "kis_debug.h"
+
 #include <KoXmlReader.h>
+#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
+#include <KoIcon.h>
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -310,7 +318,6 @@ void KoSvgTextShape::relayout()
             }
         }
 
-
         for (int j = 0; j < layout.lineCount(); j++) {
             const QTextLine line = layout.lineAt(j);
 
@@ -345,4 +352,41 @@ void KoSvgTextShapePrivate::clearAssociatedOutlines(KoShape *rootShape)
 bool KoSvgTextShape::isRootTextNode() const
 {
     return true;
+}
+
+KoSvgTextShapeFactory::KoSvgTextShapeFactory()
+    : KoShapeFactoryBase(KoSvgTextShape_SHAPEID, i18n("Text"))
+{
+    setToolTip(i18n("SVG Text Shape"));
+    setIconName(koIconNameCStr("x-shape-text"));
+    setLoadingPriority(5);
+    setXmlElementNames(KoXmlNS::svg, QStringList("text"));
+
+    KoShapeTemplate t;
+    t.name = i18n("SVG Text");
+    t.iconName = koIconName("x-shape-text");
+    t.toolTip = i18n("SVG Text Shape");
+    addTemplate(t);
+}
+
+KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const
+{
+    qDebug() << "Create default svg text shape";
+
+    KoSvgTextShape *shape = new KoSvgTextShape();
+    shape->setShapeId(KoSvgTextShape_SHAPEID);
+
+    KoSvgTextShapeMarkupConverter converter(shape);
+    converter.convertFromSvg("<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>",
+                             "<defs/>",
+                             QRectF(0, 0, 200, 60),
+                             72.0);
+    qDebug() << converter.errors() << converter.warnings();
+
+    return shape;
+}
+
+bool KoSvgTextShapeFactory::supports(const KoXmlElement &/*e*/, KoShapeLoadingContext &/*context*/) const
+{
+    return false;
 }

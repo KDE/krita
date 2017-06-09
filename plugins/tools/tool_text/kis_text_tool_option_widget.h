@@ -33,11 +33,12 @@ public:
 
     enum TextMode{
         MODE_ARTISTIC,
-        MODE_MULTILINE
+        MODE_MULTILINE,
+        MODE_SVG
     };
-    
+
     TextMode mode();
-    
+
     KisPainter::FillStyle style();
 private Q_SLOTS:
     void modeChanged(int mode);

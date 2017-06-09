@@ -615,7 +615,7 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
     if (title.isEmpty()) svgSymbol->title = id;
 
     if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
-        qWarning() << "Symbol" << id << "seems to be empty, discarding";
+        warnFlake() << "Symbol" << id << "seems to be empty, discarding";
         delete svgSymbol;
         return false;
     }

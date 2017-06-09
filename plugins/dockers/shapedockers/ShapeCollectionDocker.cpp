@@ -104,7 +104,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget *parent)
     m_quickView->setSelectionMode(QListView::SingleSelection);
     m_quickView->setResizeMode(QListView::Adjust);
     m_quickView->setFlow(QListView::LeftToRight);
-    m_quickView->setGridSize(QSize(40, 44));
+    m_quickView->setGridSize(QSize(128, 128));
     m_quickView->setTextElideMode(Qt::ElideNone);
     m_quickView->setWordWrap(true);
     setWidget(m_quickView);
@@ -137,8 +137,6 @@ void ShapeCollectionDocker::loadDefaultShapes()
 
         Q_FOREACH (const KoShapeTemplate &shapeTemplate, factory->templates()) {
 
-            qDebug() << "Adding factory" << shapeTemplate.name;
-
             oneAdded = true;
             KoCollectionItem temp;
             temp.id = shapeTemplate.id;
@@ -165,8 +163,6 @@ void ShapeCollectionDocker::loadDefaultShapes()
             quicklist.append(temp);
         }
     }
-
-    qDebug() << "quickList:" << quicklist.size();
 
     CollectionItemModel *quickModel = new CollectionItemModel(this);
     quickModel->setShapeTemplateList(quicklist);

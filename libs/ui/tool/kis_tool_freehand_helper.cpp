@@ -550,8 +550,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
                 qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
 
-            if (m_d->resources->needsAirbrushing()
-                && (newTangent.isNull() || m_d->previousTangent.isNull()))
+            if (newTangent.isNull() || m_d->previousTangent.isNull())
             {
                 paintLine(m_d->previousPaintInformation, info);
             } else {

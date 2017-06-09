@@ -27,6 +27,8 @@
 class KoSvgTextProperties;
 class KoSvgTextShapePrivate;
 
+
+#define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
  * KoSvgTextShape is a root chunk of the <text> element subtree.
  */

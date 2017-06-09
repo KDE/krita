@@ -26,6 +26,8 @@
 class QString;
 class QTransform;
 class QStringList;
+class KoXmlWriter;
+
 #include <KoXmlReaderForward.h>
 
 class SvgGraphicsContext;

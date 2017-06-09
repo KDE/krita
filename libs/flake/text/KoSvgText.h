@@ -31,9 +31,10 @@
 #include <KoShapeBackground.h>
 #include <KoShapeStrokeModel.h>
 
+#include <KoXmlReaderForward.h>
+
 #include <kritaflake_export.h>
 
-class KoXmlElement;
 class SvgLoadingContext;
 class QDebug;
 

@@ -27,17 +27,22 @@
 
 #include <kis_types.h>
 #include "kritaui_export.h"
+#include <KoColorSet.h>
+#include <QScopedPointer>
 
 class KoColorSet;
 
-
+/**
+ * @brief The KisPaletteModel class
+ * This, together with kis_palette_view and kis_palette_delegate forms a mvc way to access kocolorsets.
+ */
 class KRITAUI_EXPORT KisPaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     KisPaletteModel(QObject* parent = 0);
     ~KisPaletteModel() override;
-    
+
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;

@@ -20,29 +20,58 @@
 
 #include "SvgTextEditor.h"
 
-#include "KoSvgTextShape.h"
-// Qt
 #include <QVBoxLayout>
 #include <QUrl>
 #include <QPushButton>
+#include <QDebug>
 
 #include <klocalizedstring.h>
 
-#include <kis_file_name_requester.h>
+#include "KoSvgTextShape.h"
+#include "KoSvgTextShapeMarkupConverter.h"
 
-SvgTextEditor::SvgTextEditor(KoSvgTextShape *shape, QWidget *parent, Qt::WindowFlags flags)
+#include <kis_file_name_requester.h>
+#include <BasicXMLSyntaxHighlighter.h>
+
+SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KoDialog(parent, flags)
+    , m_page(new QWidget(this))
+    , m_shape(0)
 {
-    m_shape = dynamic_cast<KoSvgTextShape *>(shape);
-    Q_ASSERT(m_shape);
-    widget.setupUi(this);
+    widget.setupUi(m_page);
+    setMainWidget(m_page);
+
+    BasicXMLSyntaxHighlighter *hl = new BasicXMLSyntaxHighlighter(widget.textEdit);
+    Q_UNUSED(hl);
+
+    connect(this, SIGNAL(okClicked()), SLOT(save()));
 }
 
 SvgTextEditor::~SvgTextEditor()
 {
 }
 
-void SvgTextEditor::save() const
+void SvgTextEditor::setShape(KoSvgTextShape *shape)
 {
+    m_shape = shape;
+    if (m_shape) {
+        KoSvgTextShapeMarkupConverter converter(m_shape);
+        QString svg;
+        QString styles;
+        if (converter.convertToSvg(&svg, &styles)) {
+            //widget.textEdit->setPlainText(QString("%1\n%2").arg(defs).arg(svg));
+            widget.textEdit->setPlainText(svg);
+        }
+        else {
+            qWarning() << "Could not get svg text from the shape:" << converter.errors() << converter.warnings();
+        }
 
+    }
+}
+
+void SvgTextEditor::save()
+{
+    // We don't do defs or styles yet...
+    emit textUpdated(widget.textEdit->document()->toPlainText(), "");
+    hide();
 }

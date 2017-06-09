@@ -24,7 +24,7 @@
 #include <KoToolBase.h>
 #include <QPushButton>
 
-
+class SvgTextEditor;
 class KoSvgTextShape;
 
 class SvgTextTool : public KoToolBase
@@ -56,9 +56,11 @@ protected:
 private Q_SLOTS:
 
     void showEditor() const;
+    void textUpdated(const QString &svg, const QString &defs);
 
 private:
     KoSvgTextShape *m_shape;
+    SvgTextEditor *m_editor;
     QPushButton *m_edit;
 };
 

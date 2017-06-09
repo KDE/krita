@@ -29,7 +29,9 @@ class SvgTextChangeCommand : public KUndo2Command
 {
 public:
     SvgTextChangeCommand(KoSvgTextShape *shape,
-                            KUndo2Command *parent = 0);
+                         const QString &svg,
+                         const QString &defs,
+                         KUndo2Command *parent = 0);
     virtual ~SvgTextChangeCommand();
 
     /// redo the command
@@ -39,6 +41,10 @@ public:
 
 private:
     KoSvgTextShape *m_shape;
+    QString m_svg;
+    QString m_defs;
+    QString m_oldSvg;
+    QString m_oldDefs;
 };
 
 #endif /* CHANGETEXTNGDATACOMMAND_H */

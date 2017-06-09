@@ -20,7 +20,7 @@
 
 #include "SvgTextTool.h"
 #include "KoSvgTextShape.h"
-//#include "ChangeSvgTextDataCommand.h"
+#include "SvgTextChangeCommand.h"
 
 #include <QLabel>
 #include <QToolButton>
@@ -28,6 +28,8 @@
 #include <QDesktopServices>
 
 #include <klocalizedstring.h>
+
+#include <KisPart.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -37,10 +39,14 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 
+#include "SvgTextEditor.h"
+
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
+    , m_editor(new SvgTextEditor())
 {
+    connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
 }
 
 void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
@@ -80,7 +86,18 @@ QWidget *SvgTextTool::createOptionWidget()
 
 void SvgTextTool::showEditor() const
 {
+    if (!m_shape) return;
+    m_editor->setShape(m_shape);
+    m_editor->setModal(false);
+    m_editor->show();
+}
 
+void SvgTextTool::textUpdated(const QString &svg, const QString &defs)
+{
+    qDebug() << "text updated" << svg;
+
+    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(m_shape, svg, defs);
+    canvas()->addCommand(cmd);
 }
 
 void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -89,5 +106,6 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->ignore(); // allow the event to be used by another
         return;
     }
+    showEditor();
 }
 

@@ -34,14 +34,22 @@ class SvgTextEditor : public KoDialog
 {
     Q_OBJECT
 public:
-    SvgTextEditor(KoSvgTextShape *shape, QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~SvgTextEditor();
+
+    void setShape(KoSvgTextShape *shape);
+
 private Q_SLOTS:
 
-    void save() const;
+    void save();
+
+Q_SIGNALS:
+
+    void textUpdated(const QString &svg, const QString &defs);
 
 private:
     Ui_WdgSvgTextEditor widget;
+    QWidget *m_page;
     KoSvgTextShape *m_shape;
 };
 

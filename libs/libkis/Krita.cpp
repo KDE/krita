@@ -29,6 +29,7 @@
 #include <KoDockRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoColorModelStandardIds.h>
+#include <KoID.h>
 
 #include <kactioncollection.h>
 #include <KisPart.h>
@@ -177,13 +178,21 @@ Filter *Krita::filter(const QString &name) const
 QStringList Krita::colorModels() const
 {
     QSet<QString> colorModelsIds;
-    return colorModelsIds.toList();
+    QList<KoID> ids = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(KoID id, ids) {
+        colorModelsIds << id.id();
+    }
+    return colorModelsIds.toList();;
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
 {
     QSet<QString> colorDepthsIds;
-    return colorDepthsIds.toList();
+    QList<KoID> ids = KoColorSpaceRegistry::instance()->colorDepthList(colorModel, KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(KoID id, ids) {
+        colorDepthsIds << id.id();
+    }
+    return colorDepthsIds.toList();;
 }
 
 QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth) const

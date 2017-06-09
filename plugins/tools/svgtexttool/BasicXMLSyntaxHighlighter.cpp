@@ -21,6 +21,9 @@
  */
 #include "BasicXMLSyntaxHighlighter.h"
 
+#include <QApplication>
+#include <QPalette>
+
 BasicXMLSyntaxHighlighter::BasicXMLSyntaxHighlighter(QObject * parent) :
     QSyntaxHighlighter(parent)
 {
@@ -96,18 +99,25 @@ void BasicXMLSyntaxHighlighter::setRegexes()
 
 void BasicXMLSyntaxHighlighter::setFormats()
 {
-    m_xmlKeywordFormat.setForeground(Qt::blue);
-    m_xmlKeywordFormat.setFontWeight(QFont::Bold);
-
-    m_xmlElementFormat.setForeground(Qt::darkMagenta);
-    m_xmlElementFormat.setFontWeight(QFont::Bold);
-
-    m_xmlAttributeFormat.setForeground(Qt::darkGreen);
-    m_xmlAttributeFormat.setFontWeight(QFont::Bold);
+    QColor background = qApp->palette().background().color();
+    if (background.value() < 100) {
+        m_xmlKeywordFormat.setForeground(Qt::cyan);
+        m_xmlElementFormat.setForeground(Qt::magenta);
+        m_xmlAttributeFormat.setForeground(Qt::green);
+        m_xmlValueFormat.setForeground(Qt::red);
+        m_xmlCommentFormat.setForeground(Qt::lightGray);
+    }
+    else {
+        m_xmlKeywordFormat.setForeground(Qt::blue);
+        m_xmlElementFormat.setForeground(Qt::darkMagenta);
+        m_xmlAttributeFormat.setForeground(Qt::darkGreen);
+        m_xmlValueFormat.setForeground(Qt::darkRed);
+        m_xmlCommentFormat.setForeground(Qt::gray);
+    }
     m_xmlAttributeFormat.setFontItalic(true);
+    m_xmlElementFormat.setFontWeight(QFont::Bold);
+    m_xmlKeywordFormat.setFontWeight(QFont::Bold);
+    m_xmlAttributeFormat.setFontWeight(QFont::Bold);
 
-    m_xmlValueFormat.setForeground(Qt::darkRed);
-
-    m_xmlCommentFormat.setForeground(Qt::gray);
 }
 

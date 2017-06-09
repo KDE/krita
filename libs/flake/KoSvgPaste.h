@@ -25,14 +25,15 @@
 class KoShape;
 class QRectF;
 class QSizeF;
+class QByteArray;
 
 class KRITAFLAKE_EXPORT KoSvgPaste
 {
 public:
-    KoSvgPaste();
+    static bool hasShapes();
+    static QList<KoShape*> fetchShapes(const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize = 0);
+    static QList<KoShape*> fetchShapesFromData(const QByteArray &data, const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize = 0);
 
-    bool hasShapes() const;
-    QList<KoShape*> fetchShapes(const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize = 0) const;
 };
 
 #endif // KOSVGPASTE_H

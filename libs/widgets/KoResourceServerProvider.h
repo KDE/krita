@@ -32,6 +32,8 @@
 #include <resources/KoPattern.h>
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoColorSet.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoSvgSymbolCollectionResource.h>
 
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
@@ -84,6 +86,7 @@ public:
     KoResourceServer<KoPattern>* patternServer(bool block = true);
     KoResourceServer<KoAbstractGradient>* gradientServer(bool block = true);
     KoResourceServer<KoColorSet>* paletteServer(bool block = true);
+    KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer(bool block = true);
 
 private:
     KoResourceServerProvider(const KoResourceServerProvider&);

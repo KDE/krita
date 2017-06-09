@@ -2262,6 +2262,54 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="toggle_layer_lock">
+      <icon>layer-locked</icon>
+      <text>&amp;Lock/unlock layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock/unlock layer</toolTip>
+      <iconText>Lock/unlock layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_visibility">
+      <icon>visible</icon>
+      <text>Toggle layer &amp;visibility</text>
+      <whatsThis></whatsThis>
+      <toolTip>Toggle layer visibility</toolTip>
+      <iconText>Toggle layer visibility</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_alpha_lock">
+      <icon>transparency-locked</icon>
+      <text>Lock/unlock layer &amp;alpha</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock/unlock layer's alpha</toolTip>
+      <iconText>Lock/unlock layer's alpha</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_inherit_alpha">
+      <icon>transparency-enabled</icon>
+      <text>Toggle layer alpha &amp;inheritance</text>
+      <whatsThis></whatsThis>
+      <toolTip>Toggle layer alpha inheritance</toolTip>
+      <iconText>Toggle layer alpha inheritance</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="add_new_paint_layer">
       <icon>paintLayer</icon>
       <text>&amp;Paint Layer</text>

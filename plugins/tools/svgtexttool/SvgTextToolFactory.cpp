@@ -18,15 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSvgTextToolFactory.h"
+#include "SvgTextToolFactory.h"
 
 #include "KoSvgTextShape.h"
-#include "KoSvgTextTool.h"
+#include "SvgTextTool.h"
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 
-KoSvgTextToolFactory::KoSvgTextToolFactory()
+SvgTextToolFactory::SvgTextToolFactory()
     : KoToolFactoryBase("SvgTextTool")
 {
     setToolTip(i18n("SVG Text Tool"));
@@ -36,12 +36,12 @@ KoSvgTextToolFactory::KoSvgTextToolFactory()
     setActivationShapeId(KoSvgTextShape_SHAPEID);
 }
 
-KoSvgTextToolFactory::~KoSvgTextToolFactory()
+SvgTextToolFactory::~SvgTextToolFactory()
 {
 }
 
-KoToolBase *KoSvgTextToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *SvgTextToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new KoSvgTextTool(canvas);
+    return new SvgTextTool(canvas);
 }
 

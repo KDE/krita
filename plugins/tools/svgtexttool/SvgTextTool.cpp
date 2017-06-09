@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSvgTextTool.h"
+#include "SvgTextTool.h"
 #include "KoSvgTextShape.h"
 //#include "ChangeSvgTextDataCommand.h"
 
@@ -37,13 +37,13 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 
-KoSvgTextTool::KoSvgTextTool(KoCanvasBase *canvas)
+SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
 {
 }
 
-void KoSvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
+void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(activation, shapes);
 
@@ -60,22 +60,30 @@ void KoSvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &s
     useCursor(Qt::ArrowCursor);
 }
 
-void KoSvgTextTool::deactivate()
+void SvgTextTool::deactivate()
 {
     m_shape = 0;
     KoToolBase::deactivate();
 }
 
-QWidget *KoSvgTextTool::createOptionWidget()
+QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
-    layout->addWidget(new QLabel("KoSvgTexts!"));
+    m_edit = new QPushButton(optionWidget);
+    m_edit->setText(i18n("Edit Text"));
+    connect(m_edit, SIGNAL(clicked(bool)), SLOT(showEditor()));
+    layout->addWidget(m_edit);
 
     return optionWidget;
 }
 
-void KoSvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
+void SvgTextTool::showEditor() const
+{
+
+}
+
+void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     if (canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
         event->ignore(); // allow the event to be used by another

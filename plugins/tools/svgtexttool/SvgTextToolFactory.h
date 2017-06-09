@@ -18,30 +18,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "TextNGToolFactory.h"
+#ifndef SVG_TEXT_TOOL_FACTORY
+#define SVG_TEXT_TOOL_FACTORY
 
-#include "TextNGShape.h"
-#include "TextNGTool.h"
+#include <KoToolFactoryBase.h>
 
-#include <KoIcon.h>
-#include <klocalizedstring.h>
-
-TextNGToolFactory::TextNGToolFactory()
-    : KoToolFactoryBase("TextNGTool")
+class SvgTextToolFactory : public KoToolFactoryBase
 {
-    setToolTip(i18n("Speech TextNG Tool"));
-    setIconName(koIconNameCStrNeededWithSubs("a generic textng image icon", "x-shape-textngimage", "application-x-wmf"));
-    setSection(dynamicToolType());
-    setPriority(2);
-    setActivationShapeId(TextNGShape_SHAPEID);
-}
+public:
+    SvgTextToolFactory();
+    ~SvgTextToolFactory();
 
-TextNGToolFactory::~TextNGToolFactory()
-{
-}
+    KoToolBase *createTool(KoCanvasBase *canvas);
+};
 
-KoToolBase *TextNGToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new TextNGTool(canvas);
-}
-
+#endif

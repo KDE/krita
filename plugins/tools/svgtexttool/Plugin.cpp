@@ -17,9 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-// Own
-#include "TextNGShapePlugin.h"
+#include "Plugin.h"
 
 // KDE
 #include <kpluginfactory.h>
@@ -28,17 +26,15 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-// TextNGShape
-#include "TextNGToolFactory.h"
-#include "TextNGShapeFactory.h"
+#include "SvgTextToolFactory.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(TextNGShapePluginFactory, "krita_shape_textng.json", registerPlugin<TextNGShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "krita_tool_svgtext.json", registerPlugin<Plugin>();)
 
-TextNGShapePlugin::TextNGShapePlugin(QObject *parent, const QVariantList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new TextNGToolFactory());
-    KoShapeRegistry::instance()->add(new TextNGShapeFactory());
+    KoToolRegistry::instance()->add(new SvgTextToolFactory());
 }
 
-#include <TextNGShapePlugin.moc>
+#include <Plugin.moc>
+

@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TextNGShapeConfigWidget.h"
+#include "SvgTextEditor.h"
 
-#include "TextNGShape.h"
+#include "KoSvgTextShape.h"
 // Qt
 #include <QVBoxLayout>
 #include <QUrl>
@@ -30,33 +30,19 @@
 
 #include <kis_file_name_requester.h>
 
-TextNGShapeConfigWidget::TextNGShapeConfigWidget()
-    : m_shape(0)
+SvgTextEditor::SvgTextEditor(KoSvgTextShape *shape, QWidget *parent, Qt::WindowFlags flags)
+    : KoDialog(parent, flags)
 {
+    m_shape = dynamic_cast<KoSvgTextShape *>(shape);
+    Q_ASSERT(m_shape);
     widget.setupUi(this);
 }
 
-TextNGShapeConfigWidget::~TextNGShapeConfigWidget()
+SvgTextEditor::~SvgTextEditor()
 {
 }
 
-void TextNGShapeConfigWidget::open(KoShape *shape)
-{
-    m_shape = dynamic_cast<TextNGShape *>(shape);
-    Q_ASSERT(m_shape);
-}
-
-void TextNGShapeConfigWidget::save()
+void SvgTextEditor::save() const
 {
 
-}
-
-bool TextNGShapeConfigWidget::showOnShapeCreate()
-{
-    return true;
-}
-
-bool TextNGShapeConfigWidget::showOnShapeSelect()
-{
-    return true;
 }

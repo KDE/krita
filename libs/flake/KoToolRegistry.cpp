@@ -31,7 +31,6 @@
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
-#include "tools/KoSvgTextToolFactory.h"
 #include "KoToolManager.h"
 #include <KoPluginLoader.h>
 
@@ -59,7 +58,6 @@ void KoToolRegistry::init()
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
-    add(new KoSvgTextToolFactory());
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());

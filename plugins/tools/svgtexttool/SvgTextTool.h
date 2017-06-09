@@ -18,29 +18,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TEXTNG_TOOL
-#define TEXTNG_TOOL
+#ifndef SVG_TEXT_TOOL
+#define SVG_TEXT_TOOL
 
 #include <KoToolBase.h>
+#include <QPushButton>
 
-class TextNGShape;
 
-class TextNGTool : public KoToolBase
+class KoSvgTextShape;
+
+class SvgTextTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit TextNGTool(KoCanvasBase *canvas);
+    explicit SvgTextTool(KoCanvasBase *canvas);
 
     /// reimplemented from KoToolBase
-    virtual void paint(QPainter &, const KoViewConverter &) {}
+    void paint(QPainter &, const KoViewConverter &) override {}
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent *) {}
+    void mousePressEvent(KoPointerEvent *) override {}
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent *) {}
+    virtual void mouseMoveEvent(KoPointerEvent *) override{}
     /// reimplemented from KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent *) {}
+    virtual void mouseReleaseEvent(KoPointerEvent *) override {}
 
     /// reimplemented from KoToolBase
     virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
@@ -51,9 +53,13 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
+private Q_SLOTS:
+
+    void showEditor() const;
 
 private:
-    TextNGShape *m_shape;
+    KoSvgTextShape *m_shape;
+    QPushButton *m_edit;
 };
 
 #endif

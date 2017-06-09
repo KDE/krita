@@ -21,33 +21,28 @@
 #ifndef TEXTNGSHAPECONFIGWIDGET_H
 #define TEXTNGSHAPECONFIGWIDGET_H
 
-#include <KoShapeConfigWidgetBase.h>
 #include <QWidget>
 
-#include "ui_wdgtextngtexteditor.h"
+#include "ui_WdgSvgTextEditor.h"
 
-class TextNGShape;
+#include <KoDialog.h>
+
+class KoSvgTextShape;
 class KisFileNameRequester;
 
-class TextNGShapeConfigWidget : public KoShapeConfigWidgetBase
+class SvgTextEditor : public KoDialog
 {
     Q_OBJECT
 public:
-    TextNGShapeConfigWidget();
-    ~TextNGShapeConfigWidget();
+    SvgTextEditor(KoSvgTextShape *shape, QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    ~SvgTextEditor();
+private Q_SLOTS:
 
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void open(KoShape *shape);
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void save();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeCreate();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeSelect();
+    void save() const;
 
 private:
-    Ui_WdgTextNGTextEditor widget;
-    TextNGShape *m_shape;
+    Ui_WdgSvgTextEditor widget;
+    KoSvgTextShape *m_shape;
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

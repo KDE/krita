@@ -18,28 +18,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEXTNGSHAPE_FACTORY_H
-#define TEXTNGSHAPE_FACTORY_H
+#ifndef SVG_TEXT_TOOL_PLUGIN_H
+#define SVG_TEXT_TOOL_PLUGIN_H
 
-// Calligra
-#include <KoShapeFactoryBase.h>
+#include <QObject>
+#include <QVariantList>
 
-class KoShape;
-
-class TextNGShapeFactory : public KoShapeFactoryBase
+class Plugin : public QObject
 {
+    Q_OBJECT
 
 public:
-    /// constructor
-    TextNGShapeFactory();
-    ~TextNGShapeFactory() {}
-
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-
-    /// Reimplemented
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
-
-    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
+    Plugin(QObject *parent, const QVariantList &);
+    ~Plugin() {}
 };
 
 #endif
+

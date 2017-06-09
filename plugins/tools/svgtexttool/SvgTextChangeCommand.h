@@ -17,19 +17,28 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#ifndef CHANGETEXTNGDATACOMMAND_H
+#define CHANGETEXTNGDATACOMMAND_H
 
-#ifndef KO_SVG_TEXT_TOOL_FACTORY
-#define KO_SVG_TEXT_TOOL_FACTORY
+#include <kundo2command.h>
+#include <QByteArray>
 
-#include <KoToolFactoryBase.h>
+#include "KoSvgTextShape.h"
 
-class KoSvgTextToolFactory : public KoToolFactoryBase
+class SvgTextChangeCommand : public KUndo2Command
 {
 public:
-    KoSvgTextToolFactory();
-    ~KoSvgTextToolFactory();
+    SvgTextChangeCommand(KoSvgTextShape *shape,
+                            KUndo2Command *parent = 0);
+    virtual ~SvgTextChangeCommand();
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
+
+private:
+    KoSvgTextShape *m_shape;
 };
 
-#endif
+#endif /* CHANGETEXTNGDATACOMMAND_H */

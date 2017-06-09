@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- 
+
    Copyright 2017 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,19 +17,37 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "SvgTextChangeCommand.h"
 
-#ifndef TEXTNG_TOOL_FACTORY
-#define TEXTNG_TOOL_FACTORY
+#include <math.h>
+#include <klocalizedstring.h>
+#include <KoImageData.h>
 
-#include <KoToolFactoryBase.h>
+#include "KoSvgTextShape.h"
 
-class TextNGToolFactory : public KoToolFactoryBase
+SvgTextChangeCommand::SvgTextChangeCommand(KoSvgTextShape *shape,
+                                                   KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shape(shape)
 {
-public:
-    TextNGToolFactory();
-    ~TextNGToolFactory();
+    Q_ASSERT(shape);
+    setText(kundo2_i18n("Change SvgTextTool"));
+}
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
-};
+SvgTextChangeCommand::~SvgTextChangeCommand()
+{
+}
 
-#endif
+void SvgTextChangeCommand::redo()
+{
+    m_shape->update();
+    //m_shape->setCompressedContents(m_newImageData, m_newSvgTextToolType);
+    m_shape->update();
+}
+
+void SvgTextChangeCommand::undo()
+{
+    m_shape->update();
+    //m_shape->setCompressedContents(m_oldImageData, m_oldSvgTextToolType);
+    m_shape->update();
+}

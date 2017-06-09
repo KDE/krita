@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WdgTextNGTextEditor</class>
- <widget class="QWidget" name="WdgTextNGTextEditor">
+ <class>WdgSvgTextEditor</class>
+ <widget class="QWidget" name="WdgSvgTextEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -253,9 +253,9 @@
        <string>Effects</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="tabTextNG">
+     <widget class="QWidget" name="tabSvgTextTool">
       <attribute name="title">
-       <string>TextNG</string>
+       <string>SvgTextTool</string>
       </attribute>
      </widget>
     </widget>

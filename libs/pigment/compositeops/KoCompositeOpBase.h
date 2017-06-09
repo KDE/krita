@@ -55,7 +55,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const {
+    void composite(const KoCompositeOp::ParameterInfo& params) const override {
 
         const QBitArray& flags           = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
         bool             allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb,true);

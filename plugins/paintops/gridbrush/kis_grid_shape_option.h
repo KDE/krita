@@ -29,13 +29,13 @@ class KisGridShapeOption : public KisPaintOpOption
 {
 public:
     KisGridShapeOption();
-    ~KisGridShapeOption();
+    ~KisGridShapeOption() override;
 
     /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 private:
     KisShapeOptionsWidget * m_options;
 };

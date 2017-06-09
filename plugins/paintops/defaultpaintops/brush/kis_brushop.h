@@ -49,10 +49,10 @@ class KisBrushOp : public KisBrushBasedPaintOp
 public:
 
     KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    ~KisBrushOp();
+    ~KisBrushOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
 private:
     KisColorSource *m_colorSource;

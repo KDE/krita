@@ -28,9 +28,9 @@ class KisSVGImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisSVGImport(QObject *parent, const QVariantList &);
-    virtual ~KisSVGImport();
+    ~KisSVGImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration) override;
 };
 
 #endif

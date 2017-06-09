@@ -28,7 +28,7 @@ class KisPixelizeFilterPlugin : public QObject
     Q_OBJECT
 public:
     KisPixelizeFilterPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisPixelizeFilterPlugin();
+    ~KisPixelizeFilterPlugin() override;
 };
 
 #endif

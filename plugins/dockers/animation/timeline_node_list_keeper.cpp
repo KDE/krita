@@ -133,7 +133,7 @@ void TimelineNodeListKeeper::slotUpdateDummyContent(QObject *_dummy)
 
 void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
 {
-    QList<KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
+    QMap<QString, KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
 
     if (channels.isEmpty()) {
         if (connectionsSet.contains(dummy)) {
@@ -162,7 +162,7 @@ void TimelineNodeListKeeper::Private::disconnectDummy(KisNodeDummy *dummy)
 {
     if (!connectionsSet.contains(dummy)) return;
 
-    QList<KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
+    QMap<QString, KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
 
     if (channels.isEmpty()) {
         if (connectionsSet.contains(dummy)) {

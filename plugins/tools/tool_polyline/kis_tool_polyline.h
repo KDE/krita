@@ -32,14 +32,14 @@ class KisToolPolyline : public KisToolPolylineBase
 
 public:
     KisToolPolyline(KoCanvasBase * canvas);
-    virtual ~KisToolPolyline();
+    ~KisToolPolyline() override;
 
 protected:
-    QWidget* createOptionWidget();
-    void finishPolyline(const QVector<QPointF>& points);
+    QWidget* createOptionWidget() override;
+    void finishPolyline(const QVector<QPointF>& points) override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
 
@@ -58,9 +58,9 @@ public:
         setPriority(5);
     }
 
-    virtual ~KisToolPolylineFactory() {}
+    ~KisToolPolylineFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolPolyline(canvas);
     }
 

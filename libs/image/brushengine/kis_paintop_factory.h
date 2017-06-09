@@ -52,7 +52,7 @@ public:
      * @param whiteListedCompositeOps list of compositeops that don't work with this paintop
      */
     KisPaintOpFactory(const QStringList & whiteListedCompositeOps = QStringList());
-    virtual ~KisPaintOpFactory() {}
+    ~KisPaintOpFactory() override {}
 
     static QString categoryStable();
 

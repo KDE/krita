@@ -32,8 +32,8 @@ class ChangeTextFontCommand : public KUndo2Command
 public:
     ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font, KUndo2Command *parent = 0);
     ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font, KUndo2Command *parent = 0);
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     ArtisticTextShape *m_shape;

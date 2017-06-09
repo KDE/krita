@@ -36,11 +36,11 @@ public:
     {
     }
 
-    ~KisStrokeJob() {
+    ~KisStrokeJob() override {
         delete m_dabData;
     }
 
-    void run() {
+    void run() override {
         m_dabStrategy->run(m_dabData);
     }
 

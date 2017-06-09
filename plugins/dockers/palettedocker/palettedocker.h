@@ -30,7 +30,7 @@ class PaletteDockerPlugin : public QObject
     Q_OBJECT
 public:
     PaletteDockerPlugin(QObject *parent, const QVariantList &);
-    virtual ~PaletteDockerPlugin();
+    ~PaletteDockerPlugin() override;
 };
 
 #endif

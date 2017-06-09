@@ -30,14 +30,14 @@ class SelectTextStrategy : public KoInteractionStrategy
 {
 public:
     SelectTextStrategy(ArtisticTextTool *textTool, int cursor);
-    ~SelectTextStrategy();
+    ~SelectTextStrategy() override;
 
     // reimplemnted from KoInteractionStrategy
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     // reimplemnted from KoInteractionStrategy
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
     // reimplemnted from KoInteractionStrategy
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 private:
     ArtisticTextToolSelection *m_selection;

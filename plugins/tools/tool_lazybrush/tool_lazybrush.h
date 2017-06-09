@@ -27,7 +27,7 @@ class ToolLazyBrush : public QObject
     Q_OBJECT
 public:
     ToolLazyBrush(QObject *parent, const QVariantList &);
-    virtual ~ToolLazyBrush();
+    ~ToolLazyBrush() override;
 
 };
 

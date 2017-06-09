@@ -28,9 +28,9 @@ class KRITAIMAGE_EXPORT KisRecalculateTransformMaskJob : public KisSpontaneousJo
 public:
     KisRecalculateTransformMaskJob(KisTransformMaskSP mask);
 
-    bool overrides(const KisSpontaneousJob *otherJob);
-    void run();
-    int levelOfDetail() const;
+    bool overrides(const KisSpontaneousJob *otherJob) override;
+    void run() override;
+    int levelOfDetail() const override;
 
 private:
     KisTransformMaskSP m_mask;

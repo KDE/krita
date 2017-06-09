@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisFilterManager : public QObject
 public:
 
     KisFilterManager(KisViewManager * parent);
-    ~KisFilterManager();
+    ~KisFilterManager() override;
     void setView(QPointer<KisView>imageView);
 
     void setup(KActionCollection * ac, KisActionManager *actionManager);

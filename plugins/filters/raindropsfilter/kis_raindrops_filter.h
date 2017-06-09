@@ -34,14 +34,14 @@ public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater) const;
+                     KoUpdater* progressUpdater) const override;
     static inline KoID id() {
         return KoID("raindrops", i18n("Raindrops"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 private:
     bool** CreateBoolArray(uint Columns, uint Rows) const;
     void   FreeBoolArray(bool** lpbArray, uint Columns) const;

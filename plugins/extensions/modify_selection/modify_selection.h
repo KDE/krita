@@ -29,7 +29,7 @@ class ModifySelection : public KisViewPlugin
     Q_OBJECT
 public:
     ModifySelection(QObject *parent, const QVariantList &);
-    virtual ~ModifySelection();
+    ~ModifySelection() override;
 };
 
 #endif // MODIFY_SELECTION_H

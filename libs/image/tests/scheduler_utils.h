@@ -68,15 +68,15 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
     }
 
-    bool overrides(const KisSpontaneousJob *otherJob) {
+    bool overrides(const KisSpontaneousJob *otherJob) override {
         Q_UNUSED(otherJob);
         return m_overridesEverything;
     }
 
-    int levelOfDetail() const {
+    int levelOfDetail() const override {
         return m_lod;
     }
 
@@ -95,7 +95,7 @@ public:
       m_isMarked(false)
     {}
 
-    void run(KisStrokeJobData *data) {
+    void run(KisStrokeJobData *data) override {
         Q_UNUSED(data);
 
         globalExecutedDabs << m_name;
@@ -132,7 +132,7 @@ public:
     {
     }
 
-    KisStrokeJobData* createLodClone(int levelOfDetail) {
+    KisStrokeJobData* createLodClone(int levelOfDetail) override {
         Q_UNUSED(levelOfDetail);
         return new KisTestingStrokeJobData(*this);
     }
@@ -166,26 +166,26 @@ public:
         m_prefix = QString("clone%1_%2").arg(levelOfDetail).arg(m_prefix);
     }
 
-    KisStrokeJobStrategy* createInitStrategy() {
+    KisStrokeJobStrategy* createInitStrategy() override {
         return m_forceAllowInitJob || !m_inhibitServiceJobs ?
             new KisNoopDabStrategy(m_prefix + "init") : 0;
     }
 
-    KisStrokeJobStrategy* createFinishStrategy() {
+    KisStrokeJobStrategy* createFinishStrategy() override {
         return !m_inhibitServiceJobs ?
             new KisNoopDabStrategy(m_prefix + "finish") : 0;
     }
 
-    KisStrokeJobStrategy* createCancelStrategy() {
+    KisStrokeJobStrategy* createCancelStrategy() override {
         return m_forceAllowCancelJob || !m_inhibitServiceJobs ?
             new KisNoopDabStrategy(m_prefix + "cancel") : 0;
     }
 
-    KisStrokeJobStrategy* createDabStrategy() {
+    KisStrokeJobStrategy* createDabStrategy() override {
         return new KisNoopDabStrategy(m_prefix + "dab");
     }
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail) {
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override {
         return new KisTestingStrokeStrategy(*this, levelOfDetail);
     }
 
@@ -199,7 +199,7 @@ public:
         int m_seqNo;
     };
 
-    KisStrokeJobData* createCancelData() {
+    KisStrokeJobData* createCancelData() override {
         return new CancelData(m_cancelSeqNo++);
     }
 

@@ -45,7 +45,7 @@ private Q_SLOTS:
     void linkClicked(const QString &link);
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void updateText();

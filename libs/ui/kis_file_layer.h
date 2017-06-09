@@ -41,18 +41,18 @@ public:
 
     KisFileLayer(KisImageWSP image, const QString &name, quint8 opacity);
     KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
-    ~KisFileLayer();
+    ~KisFileLayer() override;
     KisFileLayer(const KisFileLayer& rhs);
 
-    QIcon icon() const;
+    QIcon icon() const override;
 
-    void resetCache();
+    void resetCache() override;
 
-    virtual const KoColorSpace *colorSpace() const;
+    const KoColorSpace *colorSpace() const override;
 
-    KisPaintDeviceSP original() const;
-    KisPaintDeviceSP paintDevice() const;
-    KisBaseNode::PropertyList sectionModelProperties() const;
+    KisPaintDeviceSP original() const override;
+    KisPaintDeviceSP paintDevice() const override;
+    KisBaseNode::PropertyList sectionModelProperties() const override;
 
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;
@@ -60,14 +60,14 @@ public:
 
     ScalingMethod scalingMethod() const;
 
-    KisNodeSP clone() const;
-    bool allowAsChild(KisNodeSP) const;
+    KisNodeSP clone() const override;
+    bool allowAsChild(KisNodeSP) const override;
 
-    bool accept(KisNodeVisitor&);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor&) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
-    KUndo2Command* crop(const QRect & rect);
-    KUndo2Command* transform(const QTransform &transform);
+    KUndo2Command* crop(const QRect & rect) override;
+    KUndo2Command* transform(const QTransform &transform) override;
 
 public Q_SLOTS:
     void slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes);

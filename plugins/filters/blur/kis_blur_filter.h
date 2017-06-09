@@ -33,16 +33,16 @@ public:
                      const QRect& size,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
     static inline KoID id() {
         return KoID("blur", i18n("Blur"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
 };
 
 #endif

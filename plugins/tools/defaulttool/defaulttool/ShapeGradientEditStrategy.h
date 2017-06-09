@@ -31,7 +31,7 @@ public:
                               KoShape *shape,
                               KoShapeGradientHandles::Handle::Type startHandleType,
                               const QPointF &clicked);
-    ~ShapeGradientEditStrategy();
+    ~ShapeGradientEditStrategy() override;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;

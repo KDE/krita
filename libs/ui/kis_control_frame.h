@@ -50,7 +50,7 @@ class KisControlFrame : public QObject
 public:
 
     KisControlFrame(KisViewManager *view, QWidget *parent = 0, const char *name = 0);
-    virtual ~KisControlFrame() {}
+    ~KisControlFrame() override {}
     void setup(QWidget *parent);
 
     KisPaintopBox* paintopBox() {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Eugene Ingerman
+ * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,36 +15,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_INPAINT_MASK_
-#define _KIS_INPAINT_MASK_
 
-#include "kis_types.h"
-#include "kis_transparency_mask.h"
+#ifndef DLG_BUGINFO
+#define DLG_BUGINFO
 
-class QRect;
+#include <KoDialog.h>
 
-/**
- *  A inpaint mask is a single channel mask that works with inpaint operation to denote area affected by inpaint operation.
- *
- */
-class KRITAIMAGE_EXPORT KisInpaintMask : public KisTransparencyMask
+#include "ui_wdg_buginfo.h"
+
+
+class WdgBugInfo : public QWidget, public Ui::WdgBugInfo
 {
     Q_OBJECT
 
 public:
-
-    KisInpaintMask();
-    KisInpaintMask(const KisInpaintMask& rhs);
-    virtual ~KisInpaintMask();
-
-    KisNodeSP clone() const
-    {
-        return KisNodeSP(new KisInpaintMask(*this));
+    WdgBugInfo(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
     }
-
-    QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
-                       const QRect & rc,
-                       PositionToFilthy maskPos) const;
 };
 
-#endif //_KIS_INPAINT_MASK_
+class DlgBugInfo: public KoDialog
+{
+    Q_OBJECT
+public:
+    DlgBugInfo(QWidget * parent = 0);
+    ~DlgBugInfo() override;
+private:
+    WdgBugInfo *m_page;
+};
+
+#endif // DLG_BUGINFO

@@ -32,20 +32,20 @@ class KisWdgColorToAlpha : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgColorToAlpha(QWidget * parent);
-    virtual ~KisWdgColorToAlpha();
+    ~KisWdgColorToAlpha() override;
     inline const Ui_WdgColorToAlphaBase* widget() const {
         return m_widget;
     }
 
-    void setView(KisViewManager *view);
+    void setView(KisViewManager *view) override;
 
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 
 protected:
 
-    void hideEvent(QHideEvent *);
-    void showEvent(QShowEvent *);
+    void hideEvent(QHideEvent *) override;
+    void showEvent(QShowEvent *) override;
 
 private Q_SLOTS:
     void slotFgColorChanged(const KoColor &color);

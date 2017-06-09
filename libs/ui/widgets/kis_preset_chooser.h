@@ -41,7 +41,7 @@ class KRITAUI_EXPORT KisPresetChooser : public QWidget
 public:
 
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisPresetChooser();
+    ~KisPresetChooser() override;
 
     enum ViewMode{
         THUMBNAIL, /// Shows thumbnails
@@ -80,7 +80,7 @@ private Q_SLOTS:
     void notifyConfigChanged();
 
 protected:
-    virtual void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
 
 private:
     KoResourceItemChooser *m_chooser;

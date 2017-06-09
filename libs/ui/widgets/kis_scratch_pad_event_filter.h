@@ -36,7 +36,7 @@ public:
     void setWidgetToDocumentTransform(const QTransform &transform);
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     inline QWidget* parentWidget();

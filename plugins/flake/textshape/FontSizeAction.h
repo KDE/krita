@@ -49,7 +49,7 @@ public:
     FontSizeAction(const QString &text, QObject *parent);
     FontSizeAction(const QIcon &icon, const QString &text, QObject *parent);
 
-    virtual ~FontSizeAction();
+    ~FontSizeAction() override;
 
     qreal fontSize() const;
 
@@ -62,7 +62,7 @@ protected Q_SLOTS:
     /**
      * This function is called whenever an action from the selections is triggered.
      */
-    virtual void actionTriggered(QAction *action);
+    void actionTriggered(QAction *action) override;
 
 private:
     class Private;

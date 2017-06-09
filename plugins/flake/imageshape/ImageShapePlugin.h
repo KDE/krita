@@ -31,7 +31,7 @@ class ImageShapePlugin : public QObject
 
 public:
     ImageShapePlugin(QObject *parent, const QVariantList &);
-    ~ImageShapePlugin() {}
+    ~ImageShapePlugin() override {}
 };
 
 #endif

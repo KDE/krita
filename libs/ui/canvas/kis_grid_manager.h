@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisGridManager : public QObject
     Q_OBJECT
 public:
     KisGridManager(KisViewManager * parent);
-    virtual ~KisGridManager();
+    ~KisGridManager() override;
 public:
 
     void setup(KisActionManager * actionManager);

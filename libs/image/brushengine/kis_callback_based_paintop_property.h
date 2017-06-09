@@ -47,9 +47,9 @@ public:
     void setIsVisibleCallback(VisibleCallback func) { m_visibleFunc = func; }
 
 protected:
-    virtual void readValueImpl() { if (m_readFunc) m_readFunc(this); }
-    virtual void writeValueImpl() { if (m_writeFunc) m_writeFunc(this); }
-    virtual bool isVisible() const { return m_visibleFunc ? m_visibleFunc(this) : true; }
+    void readValueImpl() override { if (m_readFunc) m_readFunc(this); }
+    void writeValueImpl() override { if (m_writeFunc) m_writeFunc(this); }
+    bool isVisible() const override { return m_visibleFunc ? m_visibleFunc(this) : true; }
 
 private:
     Callback m_readFunc;

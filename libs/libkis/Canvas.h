@@ -36,7 +36,7 @@ class KRITALIBKIS_EXPORT Canvas : public QObject
 
 public:
     explicit Canvas(KoCanvasBase *canvas, QObject *parent = 0);
-    virtual ~Canvas();
+    ~Canvas() override;
 
     bool operator==(const Canvas &other) const;
     bool operator!=(const Canvas &other) const;

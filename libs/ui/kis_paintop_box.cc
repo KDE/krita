@@ -1090,13 +1090,20 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         }
 
         if (flags & KisTool::FLAG_USES_CUSTOM_PRESET) {
-            setWidgetState(ENABLE_PRESETS | ENABLE_SIZE | ENABLE_FLOW);
+            setWidgetState(ENABLE_PRESETS);
             slotUpdatePreset();
             m_presetsEnabled = true;
         } else {
-            setWidgetState(DISABLE_PRESETS | DISABLE_SIZE | DISABLE_FLOW);
+            setWidgetState(DISABLE_PRESETS);
             m_presetsEnabled = false;
         }
+
+        if (flags & KisTool::FLAG_USES_CUSTOM_SIZE) {
+            setWidgetState(ENABLE_SIZE | ENABLE_FLOW);
+        } else {
+            setWidgetState(DISABLE_SIZE | DISABLE_FLOW);
+        }
+
     } else setWidgetState(DISABLE_ALL);
 }
 

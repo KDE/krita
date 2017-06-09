@@ -50,7 +50,7 @@ public:
 
     DlgRotateImage(QWidget * parent = 0,
                    const char* name = 0);
-    ~DlgRotateImage();
+    ~DlgRotateImage() override;
 
     void setAngle(quint32 w);
     double angle();

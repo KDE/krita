@@ -45,7 +45,7 @@ public:
     /// Copy constructor
     KoListLevelProperties(const KoListLevelProperties &other);
     /// Destructor
-    ~KoListLevelProperties();
+    ~KoListLevelProperties() override;
 
     /// each style has a unique ID (non persistent) given out by the styleManager
     int styleId() const;

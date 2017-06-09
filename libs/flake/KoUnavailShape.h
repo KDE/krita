@@ -52,21 +52,21 @@ class QPainter;
 class KoUnavailShape : public KoFrameShape, public KoShapeContainer {
 public:
     KoUnavailShape();
-    virtual ~KoUnavailShape();
+    ~KoUnavailShape() override;
 
     // Inherited methods
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     /// reimplemented from KoShapeContainer
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    void saveOdf(KoShapeSavingContext & context) const override;
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
     /// Load the real contents of the frame shape.
-    virtual bool loadOdfFrameElement(const KoXmlElement& frameElement,
-                                     KoShapeLoadingContext& context);
+    bool loadOdfFrameElement(const KoXmlElement& frameElement,
+                                     KoShapeLoadingContext& context) override;
 
 private:
     class Private;

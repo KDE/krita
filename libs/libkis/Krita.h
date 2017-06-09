@@ -43,7 +43,7 @@ class KRITALIBKIS_EXPORT Krita : public QObject
 
 public:
     explicit Krita(QObject *parent = 0);
-    virtual ~Krita();
+    ~Krita() override;
 
 public Q_SLOTS:
 
@@ -105,6 +105,14 @@ public Q_SLOTS:
      * @return the filter or None if there is no such filter.
      */
     Filter *filter(const QString &name) const;
+
+    /**
+     * @brief filterStrategies Retrieves all installed filter strategies. A filter
+     * strategy is used when transforming (scaling, shearing, rotating) an image to
+     * calculate the value of the new pixels. You can use th
+     * @return the id's of all available filters.
+     */
+    QStringList filterStrategies() const;
 
     /**
      * @brief profiles creates a list with the names of all color profiles compatible

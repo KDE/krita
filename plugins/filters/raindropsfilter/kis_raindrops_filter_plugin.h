@@ -29,7 +29,7 @@ class KisRainDropsFilterPlugin : public QObject
     Q_OBJECT
 public:
     KisRainDropsFilterPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisRainDropsFilterPlugin();
+    ~KisRainDropsFilterPlugin() override;
 };
 
 #endif

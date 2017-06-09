@@ -57,7 +57,7 @@ class KisToolColorPicker : public KisTool
 
 public:
     KisToolColorPicker(KoCanvasBase* canvas);
-    virtual ~KisToolColorPicker();
+    ~KisToolColorPicker() override;
 
 public:
     struct Configuration {
@@ -75,13 +75,13 @@ public:
     };
 
 public:
-    virtual QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
     bool toForeground() const;
 
@@ -89,8 +89,8 @@ Q_SIGNALS:
     void toForegroundChanged();
 
 protected:
-    void activate(ToolActivation activation, const QSet<KoShape*> &);
-    void deactivate();
+    void activate(ToolActivation activation, const QSet<KoShape*> &) override;
+    void deactivate() override;
 
 public Q_SLOTS:
     void setToForeground(bool newValue);
@@ -135,9 +135,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolColorPickerFactory() {}
+    ~KisToolColorPickerFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolColorPicker(canvas);
     }
 };

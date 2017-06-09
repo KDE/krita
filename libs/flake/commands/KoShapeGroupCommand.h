@@ -81,11 +81,13 @@ public:
      * @param shapes a list of all the shapes that should be grouped.
      */
     KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
-    virtual ~KoShapeGroupCommand();
+    ~KoShapeGroupCommand() override;
+
     /// redo the command
-    virtual void redo();
+    void redo() override;
+
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 protected:
     KoShapeGroupCommandPrivate *d;

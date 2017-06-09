@@ -88,7 +88,7 @@ public:
     /**
      *  Destructor.
      */
-    virtual ~KRecentFilesAction();
+    ~KRecentFilesAction() override;
 
     /**
      * Adds \a action to the list of URLs, with \a url and title \a name.

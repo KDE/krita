@@ -39,12 +39,12 @@ public:
      */
     KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
                        KUndo2Command *parent = 0);
-    ~KoShapeLockCommand();
+    ~KoShapeLockCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     QList<KoShape*> m_shapes;    /// the shapes to set background for

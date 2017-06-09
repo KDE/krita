@@ -100,7 +100,7 @@ public:
     {
     public:
         ProximityNotifier(Private *_d, QObject *p);
-        bool eventFilter(QObject* object, QEvent* event );
+        bool eventFilter(QObject* object, QEvent* event ) override;
     private:
         KisInputManager::Private *d;
     };
@@ -111,7 +111,7 @@ public:
         CanvasSwitcher(Private *_d, QObject *p);
         void addCanvas(KisCanvas2 *canvas);
         void removeCanvas(KisCanvas2 *canvas);
-        bool eventFilter(QObject* object, QEvent* event );
+        bool eventFilter(QObject* object, QEvent* event ) override;
 
     private:
         void setupFocusThreshold(QObject *object);

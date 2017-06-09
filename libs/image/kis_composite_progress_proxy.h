@@ -30,10 +30,10 @@ public:
     void addProxy(KoProgressProxy *proxy);
     void removeProxy(KoProgressProxy *proxy);
 
-    int maximum() const;
-    void setValue(int value);
-    void setRange(int minimum, int maximum);
-    void setFormat(const QString &format);
+    int maximum() const override;
+    void setValue(int value) override;
+    void setRange(int minimum, int maximum) override;
+    void setFormat(const QString &format) override;
 
 private:
     QList<KoProgressProxy*> m_proxies;

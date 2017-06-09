@@ -48,7 +48,7 @@ public:
 public:
 
     KisPressureHSVOption(const QString& parameterName);
-    ~KisPressureHSVOption();
+    ~KisPressureHSVOption() override;
 
     void apply(KoColorTransformation* hsvTransfo, const KisPaintInformation& info) const;
 private:

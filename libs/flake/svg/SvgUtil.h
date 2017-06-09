@@ -24,11 +24,11 @@
 #include <QRectF>
 
 class QString;
-class SvgGraphicsContext;
 class QTransform;
-class KoXmlElement;
-class KoXmlWriter;
 class QStringList;
+#include <KoXmlReaderForward.h>
+
+class SvgGraphicsContext;
 
 class KRITAFLAKE_EXPORT SvgUtil
 {

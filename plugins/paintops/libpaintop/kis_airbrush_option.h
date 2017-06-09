@@ -34,10 +34,10 @@ class PAINTOP_EXPORT KisAirbrushOption : public KisPaintOpOption
 {
 public:
     KisAirbrushOption(bool enabled = true);
-    ~KisAirbrushOption();
+    ~KisAirbrushOption() override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     KisAirbrushWidget * m_optionWidget;

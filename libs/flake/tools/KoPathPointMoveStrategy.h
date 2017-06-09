@@ -34,10 +34,10 @@ class KoPathPointMoveStrategy : public KoInteractionStrategy
 {
 public:
     KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos);
-    virtual ~KoPathPointMoveStrategy();
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command *createCommand();
+    ~KoPathPointMoveStrategy() override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
 
 private:
     QPointF m_originalPosition;

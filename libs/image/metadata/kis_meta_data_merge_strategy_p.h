@@ -33,41 +33,41 @@ class DropMergeStrategy : public MergeStrategy
 {
 public:
     DropMergeStrategy();
-    virtual ~DropMergeStrategy();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+    ~DropMergeStrategy() override;
+    QString id() const override;
+    QString name() const override;
+    QString description() const override;
+    void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const override;
 };
 class PriorityToFirstMergeStrategy : public MergeStrategy
 {
 public:
     PriorityToFirstMergeStrategy();
-    virtual ~PriorityToFirstMergeStrategy();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+    ~PriorityToFirstMergeStrategy() override;
+    QString id() const override;
+    QString name() const override;
+    QString description() const override;
+    void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const override;
 };
 class OnlyIdenticalMergeStrategy : public MergeStrategy
 {
 public:
     OnlyIdenticalMergeStrategy();
-    virtual ~OnlyIdenticalMergeStrategy();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+    ~OnlyIdenticalMergeStrategy() override;
+    QString id() const override;
+    QString name() const override;
+    QString description() const override;
+    void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const override;
 };
 class SmartMergeStrategy : public MergeStrategy
 {
 public:
     SmartMergeStrategy();
-    virtual ~SmartMergeStrategy();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+    ~SmartMergeStrategy() override;
+    QString id() const override;
+    QString name() const override;
+    QString description() const override;
+    void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const override;
 protected:
     /**
      * Merge multiple entries in one.

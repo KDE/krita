@@ -30,10 +30,10 @@ class EnhancedPathShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     EnhancedPathShapeFactory();
-    ~EnhancedPathShapeFactory() {}
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    ~EnhancedPathShapeFactory() override {}
+    KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 private:
     void addCross();
     void addArrow();

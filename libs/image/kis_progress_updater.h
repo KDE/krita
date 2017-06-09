@@ -43,7 +43,7 @@ class KRITAIMAGE_EXPORT KisProgressUpdater : public KoProgressUpdater
 public:
     KisProgressUpdater(KisProgressInterface* progressInterface, KoProgressProxy* proxy,
                        KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
-    virtual ~KisProgressUpdater();
+    ~KisProgressUpdater() override;
 private:
     KisProgressInterface* m_interface;
 };

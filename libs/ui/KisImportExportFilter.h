@@ -95,7 +95,7 @@ public:
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
-    virtual ~KisImportExportFilter();
+    ~KisImportExportFilter() override;
 
     void setBatchMode(bool batchmode);
     void setFilename(const QString &filename);

@@ -39,7 +39,7 @@ class KRITALIBKIS_EXPORT Notifier : public QObject
 
 public:
     explicit Notifier(QObject *parent = 0);
-    virtual ~Notifier();
+    ~Notifier() override;
 
     /**
      * @return true if the Notifier is active.

@@ -71,7 +71,8 @@ void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 int KisToolShape::flags() const
 {
-    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET
+           |KisTool::FLAG_USES_CUSTOM_SIZE;
 }
 
 QWidget * KisToolShape::createOptionWidget()

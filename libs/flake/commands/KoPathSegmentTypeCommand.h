@@ -53,12 +53,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathSegmentTypeCommand(const QList<KoPathPointData> &pointDataList, SegmentType segmentType, KUndo2Command *parent = 0);
-    ~KoPathSegmentTypeCommand();
+    ~KoPathSegmentTypeCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     // used for storing the data for undo

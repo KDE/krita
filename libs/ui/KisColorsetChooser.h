@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisColorsetChooser : public QWidget
     Q_OBJECT
 public:
     KisColorsetChooser(QWidget* parent = 0);
-    virtual ~KisColorsetChooser();
+    ~KisColorsetChooser() override;
 
 Q_SIGNALS:
     void paletteSelected(KoColorSet* colorSet);

@@ -32,14 +32,14 @@ class VectorShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     VectorShapeFactory();
-    ~VectorShapeFactory() {}
+    ~VectorShapeFactory() override {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
 
     /// Reimplemented
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 
-    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif

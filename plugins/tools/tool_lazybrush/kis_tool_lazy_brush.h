@@ -40,23 +40,23 @@ class KisToolLazyBrush : public KisToolFreehand
     Q_OBJECT
 public:
     KisToolLazyBrush(KoCanvasBase * canvas);
-    virtual ~KisToolLazyBrush();
+    ~KisToolLazyBrush() override;
 
-    QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
-    void activatePrimaryAction();
-    void deactivatePrimaryAction();
+    void activatePrimaryAction() override;
+    void deactivatePrimaryAction() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
 protected Q_SLOTS:
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 Q_SIGNALS:
 
@@ -87,9 +87,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolLazyBrushFactory() {}
+    ~KisToolLazyBrushFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolLazyBrush(canvas);
     }
 

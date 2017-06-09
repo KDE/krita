@@ -39,7 +39,7 @@ public:
      * Initialized thee model with the bookmarks manager
      */
     KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager*);
-    ~KisBookmarkedConfigurationsModel();
+    ~KisBookmarkedConfigurationsModel() override;
     /**
      * @return  the bookmarked configuration manager associated with this model.
      */
@@ -48,13 +48,13 @@ public:
      * @return the number of configurations (the minimum is always 2, the default
      * configuration and the last used configuration are always present)
      */
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     /**
      * When role == Qt::DisplayRole, this function will return the name of the
      * configuration.
      */
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
     /**
      * @return the configuration at the given index
      */
@@ -70,7 +70,7 @@ public:
     /**
      * @return the flags associated to the index
      */
-    Qt::ItemFlags flags(const QModelIndex & index) const;
+    Qt::ItemFlags flags(const QModelIndex & index) const override;
     /**
      * Insert a new configuration.
      */

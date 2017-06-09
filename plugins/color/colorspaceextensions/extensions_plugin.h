@@ -28,7 +28,7 @@ class ExtensionsPlugin : public QObject
     Q_OBJECT
 public:
     ExtensionsPlugin(QObject *parent, const QVariantList &);
-    virtual ~ExtensionsPlugin();
+    ~ExtensionsPlugin() override;
 
 };
 

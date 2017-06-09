@@ -103,7 +103,7 @@ public:
             m_data->m_cache.setupCache();
         }
 
-        void redo() {
+        void redo() override {
             KUndo2Command::redo();
 
             if (!m_firstRun) {
@@ -114,7 +114,7 @@ public:
             forcedRedo();
         }
 
-        void undo() {
+        void undo() override {
             m_data->m_dataManager = m_oldDm;
             m_data->m_colorSpace = m_oldCs;
             m_data->m_cache.setupCache();
@@ -262,7 +262,7 @@ private:
     struct CacheInvalidator : public KisIteratorCompleteListener {
         CacheInvalidator(KisPaintDeviceData *_q) : q(_q) {}
 
-        void notifyWritableIteratorCompleted() {
+        void notifyWritableIteratorCompleted() override {
             q->cache()->invalidate();
         }
     private:

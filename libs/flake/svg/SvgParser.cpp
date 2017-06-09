@@ -42,6 +42,7 @@
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
+#include <KoXmlReader.h>
 #include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
@@ -82,6 +83,7 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 
 SvgParser::~SvgParser()
 {
+    qDeleteAll(m_symbols);
 }
 
 void SvgParser::setXmlBaseDir(const QString &baseDir)
@@ -113,6 +115,13 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
 QList<KoShape*> SvgParser::shapes() const
 {
     return m_shapes;
+}
+
+QVector<KoSvgSymbol *> SvgParser::takeSymbols()
+{
+    QVector<KoSvgSymbol*> symbols = m_symbols;
+    m_symbols.clear();
+    return symbols;
 }
 
 // Helper functions
@@ -164,7 +173,7 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return 0;
 
     const KoXmlElement &e = m_context.definition(id);
-    if (e.childNodesCount() == 0) {
+    if (KoXml::childNodesCount(e) == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
         if (m_context.hasDefinition(mhref))
@@ -415,7 +424,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
      * the pattern should be painted in "user" coordinates. Therefore, we should handle
      * this offfset separately.
      *
-     * TODO: Please also not that this offset is different from extraShapeOffset(),
+     * TODO: Please also note that this offset is different from extraShapeOffset(),
      * because A.inverted() * B != A * B.inverted(). I'm not sure which variant is
      * correct (DK)
      */
@@ -580,6 +589,43 @@ bool SvgParser::parseMarker(const KoXmlElement &e)
     marker->setShapes({markerShape});
 
     m_markers.insert(id, QExplicitlySharedDataPointer<KoMarker>(marker.take()));
+
+    return true;
+}
+
+bool SvgParser::parseSymbol(const KoXmlElement &e)
+{
+    const QString id = e.attribute("id");
+
+    if (id.isEmpty()) return false;
+
+    KoSvgSymbol *svgSymbol = new KoSvgSymbol();
+
+    // ensure that the clip path is loaded in local coordinates system
+    m_context.pushGraphicsContext(e, false);
+    m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->currentBoundingBox = QRectF(0.0, 0.0, 1.0, 1.0);
+
+    QString title = e.firstChildElement("title").toElement().text();
+
+    KoShape *symbolShape = parseGroup(e);
+
+    m_context.popGraphicsContext();
+
+    if (!symbolShape) return false;
+
+    svgSymbol->shape = symbolShape;
+    svgSymbol->title = title;
+    svgSymbol->id = id;
+    if (title.isEmpty()) svgSymbol->title = id;
+
+    if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
+        warnFlake() << "Symbol" << id << "seems to be empty, discarding";
+        delete svgSymbol;
+        return false;
+    }
+
+    m_symbols << svgSymbol;
 
     return true;
 }
@@ -1170,8 +1216,27 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 
     QList<KoShape*> shapes;
 
-    // SVG 1.1: skip the rendering of the element if it has null viewBox
-    if (gc->currentBoundingBox.isValid()) {
+    // First find the metadata
+    for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement b = n.toElement();
+        if (b.isNull())
+            continue;
+
+        if (b.tagName() == "title") {
+            m_documentTitle = b.text().trimmed();
+        }
+        else if (b.tagName() == "desc") {
+            m_documentDescription = b.text().trimmed();
+        }
+        else if (b.tagName() == "metadata") {
+            // TODO: parse the metadata
+        }
+    }
+
+
+    // SVG 1.1: skip the rendering of the element if it has null viewBox; however an inverted viewbox is just peachy
+    // and as mother makes them -- if mother is inkscape.
+    if (gc->currentBoundingBox.normalized().isValid()) {
         shapes = parseContainer(e);
     }
 
@@ -1198,6 +1263,16 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
 QList<QExplicitlySharedDataPointer<KoMarker> > SvgParser::knownMarkers() const
 {
     return m_markers.values();
+}
+
+QString SvgParser::documentTitle() const
+{
+    return m_documentTitle;
+}
+
+QString SvgParser::documentDescription() const
+{
+    return m_documentDescription;
 }
 
 void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
@@ -1394,7 +1469,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
 
     if (b.tagName() == "svg") {
         shapes += parseSvg(b);
-    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
+    } else if (b.tagName() == "g" || b.tagName() == "a") {
         // treat svg link <a> as group so we don't miss its child elements
         shapes += parseGroup(b);
     } else if (b.tagName() == "switch") {
@@ -1402,7 +1477,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         shapes += parseContainer(b);
         m_context.popGraphicsContext();
     } else if (b.tagName() == "defs") {
-        if (b.childNodesCount() > 0) {
+        if (KoXml::childNodesCount(b) > 0) {
             /**
              * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
              *          any role in shapes outline calculation. But setVisible(false) shapes do!
@@ -1410,8 +1485,8 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
              */
             KoShape *defsShape = parseGroup(b);
             defsShape->setVisible(false);
+            m_defsShapes << defsShape; // TODO: where to delete the shape!?
 
-            // TODO: where to delete the shape!?
         }
     } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
     } else if (b.tagName() == "pattern") {
@@ -1423,6 +1498,8 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         parseClipMask(b);
     } else if (b.tagName() == "marker") {
         parseMarker(b);
+    } else if (b.tagName() == "symbol") {
+        parseSymbol(b);
     } else if (b.tagName() == "style") {
         m_context.addStyleSheet(b);
     } else if (b.tagName() == "text" ||
@@ -1616,7 +1693,7 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
     return object;
 }
 
-KoShape * SvgParser::createShape(const QString &shapeID)
+KoShape *SvgParser::createShape(const QString &shapeID)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
     if (!factory) {

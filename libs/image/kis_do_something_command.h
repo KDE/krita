@@ -29,14 +29,14 @@ public:
         : m_layer(layer),
           m_finalUpdate(finalUpdate) {}
 
-    void undo() {
+    void undo() override {
         DoSomethingOp<LayerType> op;
         if (!m_finalUpdate) {
             op(m_layer);
         }
     }
 
-    void redo() {
+    void redo() override {
         DoSomethingOp<LayerType> op;
         if (m_finalUpdate) {
             op(m_layer);

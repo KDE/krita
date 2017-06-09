@@ -36,7 +36,7 @@ class KRITAANIMATIONDOCKER_EXPORT KisTimeBasedItemModel : public QAbstractTableM
 
 public:
     KisTimeBasedItemModel(QObject *parent);
-    ~KisTimeBasedItemModel();
+    ~KisTimeBasedItemModel() override;
 
     void setImage(KisImageWSP image);
     void setFrameCache(KisAnimationFrameCacheSP cache);
@@ -44,12 +44,12 @@ public:
 
     void setLastVisibleFrame(int time);
 
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
     bool removeFrames(const QModelIndexList &indexes);
     bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames);
@@ -74,7 +74,7 @@ public:
 
 protected:
     virtual KisNodeSP nodeAt(QModelIndex index) const = 0;
-    virtual QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const = 0;
+    virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
     KisImageWSP image() const;
 
     KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0);

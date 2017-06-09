@@ -38,7 +38,7 @@ class LinkInsertionDialog : public QDialog
     Q_OBJECT
 public :
     explicit LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
-    virtual ~LinkInsertionDialog();
+    ~LinkInsertionDialog() override;
 
 private Q_SLOTS:
     void insertLink();
@@ -74,7 +74,7 @@ private :
     QNetworkAccessManager *m_networkAccessManager;
     QUrl m_linkURL;
     QTimer m_timeoutTimer;
-    void accept();
+    void accept() override;
     void sendRequest();
     void insertBookmarkLink(const QString &URL, const QString &text);
     void insertHyperlink(QString &linkURL, const QString &linkText);

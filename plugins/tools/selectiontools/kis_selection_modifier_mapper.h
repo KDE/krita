@@ -33,7 +33,7 @@ class KisSelectionModifierMapper : public QObject
 
 public:
     KisSelectionModifierMapper();
-    ~KisSelectionModifierMapper();
+    ~KisSelectionModifierMapper() override;
     static KisSelectionModifierMapper *instance();
     static SelectionAction map(Qt::KeyboardModifiers m);
 

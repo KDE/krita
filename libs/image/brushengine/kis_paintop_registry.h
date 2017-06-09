@@ -46,7 +46,7 @@ class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericReg
 
 public:
     KisPaintOpRegistry();
-    virtual ~KisPaintOpRegistry();
+    ~KisPaintOpRegistry() override;
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     void preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset);

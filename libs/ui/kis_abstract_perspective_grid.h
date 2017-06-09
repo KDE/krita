@@ -33,7 +33,7 @@ public:
 
     KisAbstractPerspectiveGrid(QObject * parent = 0);
 
-    virtual ~KisAbstractPerspectiveGrid() {}
+    ~KisAbstractPerspectiveGrid() override {}
 
     virtual bool contains(const QPointF& pt) const = 0;
     /**

@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisPopupButton : public QPushButton
 public:
 
     KisPopupButton(QWidget* parent);
-    ~KisPopupButton();
+    ~KisPopupButton() override;
 
     /**
      * Set the popup widget, the KisPopupButton becomes
@@ -65,7 +65,7 @@ public Q_SLOTS:
 
     void adjustPosition();
 protected:
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent* event) override;
     
     void paintPopupArrow();
 private:

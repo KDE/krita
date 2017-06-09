@@ -39,39 +39,39 @@ class KisOpenRasterStackSaveVisitor : public KisNodeVisitor
 {
 public:
     KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*, vKisNodeSP activeNodes);
-    virtual ~KisOpenRasterStackSaveVisitor();
+    ~KisOpenRasterStackSaveVisitor() override;
 
     using KisNodeVisitor::visit;
 
 public:
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer *layer);
-    bool visit(KisGeneratorLayer * layer);
+    bool visit(KisPaintLayer *layer) override;
+    bool visit(KisGroupLayer *layer) override;
+    bool visit(KisAdjustmentLayer *layer) override;
+    bool visit(KisGeneratorLayer * layer) override;
 
-    bool visit(KisNode*) {
-        return true;
-    }
-
-    bool visit(KisCloneLayer*);
-
-    bool visit(KisFilterMask*) {
-        return true;
-    }
-    bool visit(KisTransformMask*) {
-        return true;
-    }
-    bool visit(KisTransparencyMask*) {
-        return true;
-    }
-    bool visit(KisSelectionMask*) {
-        return true;
-    }
-    bool visit(KisColorizeMask*) {
+    bool visit(KisNode*) override {
         return true;
     }
 
-    bool visit(KisExternalLayer*);
+    bool visit(KisCloneLayer*) override;
+
+    bool visit(KisFilterMask*) override {
+        return true;
+    }
+    bool visit(KisTransformMask*) override {
+        return true;
+    }
+    bool visit(KisTransparencyMask*) override {
+        return true;
+    }
+    bool visit(KisSelectionMask*) override {
+        return true;
+    }
+    bool visit(KisColorizeMask*) override {
+        return true;
+    }
+
+    bool visit(KisExternalLayer*) override;
 
 private:
     bool saveLayer(KisLayer *layer);

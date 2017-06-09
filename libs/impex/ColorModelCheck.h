@@ -47,12 +47,12 @@ public:
         }
     }
 
-    bool checkNeeded(KisImageSP image) const
+    bool checkNeeded(KisImageSP image) const override
     {
         return (image->colorSpace()->colorModelId() == m_colorModelID && image->colorSpace()->colorDepthId() == m_colorDepthID);
     }
 
-    Level check(KisImageSP /*image*/) const
+    Level check(KisImageSP /*image*/) const override
     {
         return m_level;
     }
@@ -71,14 +71,14 @@ public:
     {
     }
 
-    virtual ~ColorModelCheckFactory() {}
+    ~ColorModelCheckFactory() override {}
 
-    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning)
+    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning) override
     {
         return new ColorModelCheck(m_colorModelID, m_colorDepthID, id(), level, customWarning);
     }
 
-    QString id() const {
+    QString id() const override {
         return "ColorModelCheck/" + m_colorModelID.id() + "/" + m_colorDepthID.id();
     }
 

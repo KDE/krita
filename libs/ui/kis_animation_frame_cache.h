@@ -46,7 +46,7 @@ public:
     static const QList<KisAnimationFrameCache*> caches();
 
     KisAnimationFrameCache(KisOpenGLImageTexturesSP textures);
-    ~KisAnimationFrameCache();
+    ~KisAnimationFrameCache() override;
 
     QImage getFrame(int time);
     bool uploadFrame(int time);

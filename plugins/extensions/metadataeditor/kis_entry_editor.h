@@ -34,7 +34,7 @@ class KisEntryEditor : public QObject
     struct Private;
 public:
     KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex);
-    ~KisEntryEditor();
+    ~KisEntryEditor() override;
 public Q_SLOTS:
     void valueEdited();
     void valueChanged();

@@ -30,11 +30,11 @@ class KisSelectedShapesProxy : public KoSelectedShapesProxy
     Q_OBJECT
 public:
     KisSelectedShapesProxy(KoShapeManager *globalShapeManager);
-    ~KisSelectedShapesProxy();
+    ~KisSelectedShapesProxy() override;
 
     void setShapeManager(KoShapeManager *manager);
 
-    KoSelection *selection();
+    KoSelection *selection() override;
 
 
 Q_SIGNALS:

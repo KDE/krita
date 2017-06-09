@@ -35,18 +35,18 @@ class KisImagePyramid : QObject, public KisProjectionBackend
 
 public:
     KisImagePyramid(qint32 pyramidHeight);
-    virtual ~KisImagePyramid();
+    ~KisImagePyramid() override;
 
-    void setImage(KisImageWSP newImage);
-    void setImageSize(qint32 w, qint32 h);
-    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
-    void setChannelFlags(const QBitArray &channelFlags);
-    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
-    void updateCache(const QRect &dirtyImageRect);
-    void recalculateCache(KisPPUpdateInfoSP info);
+    void setImage(KisImageWSP newImage) override;
+    void setImageSize(qint32 w, qint32 h) override;
+    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) override;
+    void setChannelFlags(const QBitArray &channelFlags) override;
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
+    void updateCache(const QRect &dirtyImageRect) override;
+    void recalculateCache(KisPPUpdateInfoSP info) override;
 
-    KisImagePatch getNearestPatch(KisPPUpdateInfoSP info);
-    void drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info);
+    KisImagePatch getNearestPatch(KisPPUpdateInfoSP info) override;
+    void drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info) override;
 
     /**
      * Render the projection onto a QImage.
@@ -71,7 +71,7 @@ public:
                    const QPoint& topLeftScaled,
                    const QRect& unscaledSourceRect);
 
-    void alignSourceRect(QRect& rect, qreal scale);
+    void alignSourceRect(QRect& rect, qreal scale) override;
 
 private:
 

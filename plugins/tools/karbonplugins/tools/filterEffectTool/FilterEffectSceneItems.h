@@ -78,9 +78,9 @@ protected:
     void createOutput(const QPointF &position, const QString &name);
     void createInput(const QPointF &position);
 
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
-    virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dropEvent(QGraphicsSceneDragDropEvent *event) override;
 
     ConnectorItem *connectorAtPosition(const QPointF &scenePosition);
 

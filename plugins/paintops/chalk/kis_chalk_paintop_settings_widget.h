@@ -31,9 +31,9 @@ class KisChalkPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisChalkPaintOpSettingsWidget();
+    ~KisChalkPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 public:
     KisChalkOpOption* m_chalkOption;

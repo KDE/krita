@@ -28,24 +28,24 @@ class KoDirectoryStore : public KoStore
 {
 public:
     KoDirectoryStore(const QString& path, Mode _mode, bool writeMimetype);
-    ~KoDirectoryStore();
+    ~KoDirectoryStore() override;
 protected:
     void init();
-    virtual bool openWrite(const QString &name) {
+    bool openWrite(const QString &name) override {
         return openReadOrWrite(name, QIODevice::WriteOnly);
     }
-    virtual bool openRead(const QString &name) {
+    bool openRead(const QString &name) override {
         return openReadOrWrite(name, QIODevice::ReadOnly);
     }
-    virtual bool closeRead() {
+    bool closeRead() override {
         return true;
     }
-    virtual bool closeWrite() {
+    bool closeWrite() override {
         return true;
     }
-    virtual bool enterRelativeDirectory(const QString &dirName);
-    virtual bool enterAbsoluteDirectory(const QString &path);
-    virtual bool fileExists(const QString &absPath) const;
+    bool enterRelativeDirectory(const QString &dirName) override;
+    bool enterAbsoluteDirectory(const QString &path) override;
+    bool fileExists(const QString &absPath) const override;
 
     bool openReadOrWrite(const QString &name, QIODevice::OpenModeFlag ioMode);
 private:

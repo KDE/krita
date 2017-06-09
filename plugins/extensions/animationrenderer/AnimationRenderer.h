@@ -27,7 +27,7 @@ class AnimaterionRenderer : public KisViewPlugin
     Q_OBJECT
 public:
     AnimaterionRenderer(QObject *parent, const QVariantList &);
-    virtual ~AnimaterionRenderer();
+    ~AnimaterionRenderer() override;
 
 private Q_SLOTS:
 

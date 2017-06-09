@@ -32,9 +32,9 @@ class InlineAnchorStrategy  : public AnchorStrategy
 {
 public:
     InlineAnchorStrategy(KoAnchorInlineObject *anchor, KoTextLayoutRootArea *rootArea);
-    virtual ~InlineAnchorStrategy();
+    ~InlineAnchorStrategy() override;
 
-    virtual bool moveSubject();
+    bool moveSubject() override;
 
 private:
 

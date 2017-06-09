@@ -37,12 +37,12 @@ public:
         }
     }
 
-    bool checkNeeded(KisImageSP image) const
+    bool checkNeeded(KisImageSP image) const override
     {
         return (image->compositions().size() > 0);
     }
 
-    Level check(KisImageSP /*image*/) const
+    Level check(KisImageSP /*image*/) const override
     {
         return m_level;
     }
@@ -56,14 +56,14 @@ public:
     {
     }
 
-    virtual ~CompositionsCheckFactory() {}
+    ~CompositionsCheckFactory() override {}
 
-    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning)
+    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning) override
     {
         return new CompositionsCheck(id(), level, customWarning);
     }
 
-    QString id() const {
+    QString id() const override {
         return "CompositionsCheck";
     }
 };

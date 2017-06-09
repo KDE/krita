@@ -29,12 +29,12 @@ class KisColorSmudgeOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
     KisColorSmudgeOpSettingsWidget(QWidget* parent = 0);
-    ~KisColorSmudgeOpSettingsWidget();
+    ~KisColorSmudgeOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 protected:
-    void notifyPageChanged();
+    void notifyPageChanged() override;
 
 private:
     KisSmudgeOptionWidget *m_smudgeOptionWidget;

@@ -37,7 +37,7 @@ public:
     /// Creates background from given color and style
     explicit KoColorBackground(const QColor &color, Qt::BrushStyle style = Qt::SolidPattern);
 
-    virtual ~KoColorBackground();
+    ~KoColorBackground() override;
 
     bool compareTo(const KoShapeBackground *other) const override;
 
@@ -53,11 +53,11 @@ public:
     QBrush brush() const;
 
     // reimplemented from KoShapeBackground
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
     // reimplemented from KoShapeBackground
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
+    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     // reimplemented from KoShapeBackground
-    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
+    bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) override;
 protected:
     KoColorBackground(KoShapeBackgroundPrivate &dd);
 private:

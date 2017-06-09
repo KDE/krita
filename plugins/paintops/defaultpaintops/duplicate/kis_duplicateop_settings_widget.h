@@ -38,12 +38,12 @@ public:
 
     KisDuplicateOpSettingsWidget(QWidget* parent = 0);
 
-    ~KisDuplicateOpSettingsWidget();
+    ~KisDuplicateOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
-    KisPaintopLodLimitations lodLimitations() const;
+    KisPropertiesConfigurationSP configuration() const override;
+    KisPaintopLodLimitations lodLimitations() const override;
 
-    virtual bool supportScratchBox() {
+    bool supportScratchBox() override {
         return false;
     }
 

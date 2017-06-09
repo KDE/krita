@@ -60,9 +60,9 @@ class KisToolBrush : public KisToolFreehand
 
 public:
     KisToolBrush(KoCanvasBase * canvas);
-    virtual ~KisToolBrush();
+    ~KisToolBrush() override;
 
-    QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
@@ -80,11 +80,11 @@ protected:
     KConfigGroup m_configGroup; // only used in the multihand tool for now
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
@@ -99,7 +99,7 @@ public Q_SLOTS:
 
     void setFinishStabilizedCurve(bool value);
 
-    virtual void updateSettingsViews();
+    void updateSettingsViews() override;
 
 Q_SIGNALS:
     void smoothnessQualityChanged();
@@ -153,9 +153,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolBrushFactory() {}
+    ~KisToolBrushFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolBrush(canvas);
     }
 

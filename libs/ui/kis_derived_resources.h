@@ -28,8 +28,8 @@ class KisPresetUpdateMediator : public KoResourceUpdateMediator
     Q_OBJECT
 public:
     KisPresetUpdateMediator();
-    ~KisPresetUpdateMediator();
-    void connectResource(QVariant sourceResource);
+    ~KisPresetUpdateMediator() override;
+    void connectResource(QVariant sourceResource) override;
 
 private Q_SLOTS:
     void slotSettingsChanged();
@@ -44,8 +44,8 @@ class KisCompositeOpResourceConverter : public KoDerivedResourceConverter
 public:
     KisCompositeOpResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 class KisEffectiveCompositeOpResourceConverter : public KoDerivedResourceConverter
@@ -53,8 +53,8 @@ class KisEffectiveCompositeOpResourceConverter : public KoDerivedResourceConvert
 public:
     KisEffectiveCompositeOpResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 class KisOpacityResourceConverter : public KoDerivedResourceConverter, public QObject
@@ -62,8 +62,8 @@ class KisOpacityResourceConverter : public KoDerivedResourceConverter, public QO
 public:
     KisOpacityResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 class KisFlowResourceConverter : public KoDerivedResourceConverter, public QObject
@@ -71,8 +71,8 @@ class KisFlowResourceConverter : public KoDerivedResourceConverter, public QObje
 public:
     KisFlowResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 class KisSizeResourceConverter : public KoDerivedResourceConverter, public QObject
@@ -80,8 +80,8 @@ class KisSizeResourceConverter : public KoDerivedResourceConverter, public QObje
 public:
     KisSizeResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 class KisLodAvailabilityResourceConverter : public KoDerivedResourceConverter
@@ -89,8 +89,8 @@ class KisLodAvailabilityResourceConverter : public KoDerivedResourceConverter
 public:
     KisLodAvailabilityResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 class KisEraserModeResourceConverter : public KoDerivedResourceConverter
@@ -98,8 +98,8 @@ class KisEraserModeResourceConverter : public KoDerivedResourceConverter
 public:
     KisEraserModeResourceConverter();
 
-    QVariant fromSource(const QVariant &value);
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
 

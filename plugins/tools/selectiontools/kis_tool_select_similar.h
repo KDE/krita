@@ -36,13 +36,13 @@ class KisToolSelectSimilar: public KisToolSelect
 
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
-    void beginPrimaryAction(KoPointerEvent *event);
-    void paint(QPainter&, const KoViewConverter &) {}
-    QWidget* createOptionWidget();
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void paint(QPainter&, const KoViewConverter &) override {}
+    QWidget* createOptionWidget() override;
 
 
     public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void slotSetFuzziness(int);
     void setSelectionAction(int);
 
@@ -67,8 +67,8 @@ public:
         setIconName(koIconNameCStr("tool_similar_selection"));
         setPriority(5);
     }
-    virtual ~KisToolSelectSimilarFactory() {}
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    ~KisToolSelectSimilarFactory() override {}
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return  new KisToolSelectSimilar(canvas);
     }
 };

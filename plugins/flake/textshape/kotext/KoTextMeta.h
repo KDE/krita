@@ -43,21 +43,21 @@ public:
      */
     explicit KoTextMeta(const QTextDocument *document);
 
-    virtual ~KoTextMeta();
+    ~KoTextMeta() override;
 
     /// reimplemented from super
-    void saveOdf(KoShapeSavingContext &context);
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void saveOdf(KoShapeSavingContext &context) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
+    void updatePosition(const QTextDocument *document,
+                                int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented from super
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object,
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented from super
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
 
     void setType(BookmarkType type);
 

@@ -54,12 +54,12 @@ public:
     using KoViewConverter::viewToDocument;
 
     /// reimplemented from superclass
-    void zoom(qreal *zoomX, qreal *zoomY) const;
+    void zoom(qreal *zoomX, qreal *zoomY) const override;
 
-    qreal documentToViewX(qreal documentX) const;
-    qreal documentToViewY(qreal documentY) const;
-    qreal viewToDocumentX(qreal viewX) const;
-    qreal viewToDocumentY(qreal viewY) const;
+    qreal documentToViewX(qreal documentX) const override;
+    qreal documentToViewY(qreal documentY) const override;
+    qreal viewToDocumentX(qreal viewX) const override;
+    qreal viewToDocumentY(qreal viewY) const override;
 
     // This method shouldn't be used for image
     qreal zoom() const;

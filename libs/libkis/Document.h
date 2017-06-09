@@ -37,7 +37,7 @@ class KRITALIBKIS_EXPORT Document : public QObject
 
 public:
     explicit Document(KisDocument *document, QObject *parent = 0);
-    virtual ~Document();
+    ~Document() override;
 
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
@@ -355,11 +355,47 @@ public Q_SLOTS:
     void flatten();
 
     /**
-     * @brief resizeImage resize the image to the given width and height.
+     * @brief resizeImage resizes the canvas to the given width and height.
+     * Note: This doesn't scale, use scale image for that.
      * @param w the new width
      * @param h the new height
      */
     void resizeImage(int w, int h);
+
+    /**
+    * @brief scaleImage
+    * @param w the new width
+    * @param h the new height
+    * @param xres the new xres
+    * @param yres the new yres
+    * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
+    * The list of filters is extensible and can be retrieved with Krita::filter
+    * <ul>
+    * <li>Hermite</li>
+    * <li>Bicubic - Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.</li>
+    * <li>Box - Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.</li>
+    * <li>Bilinear - Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.</li>
+    * <li>Bell</li>
+    * <li>BSpline</li>
+    * <li>Kanczos3 - Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.</li>
+    * <li>Mitchell</li>
+    * </ul>
+    */
+   void scaleImage(int w, int h, int xres, int yres, QString strategy);
+
+   /**
+    * @brief rotateImage
+    * Rotate the image by the given radians.
+    * @param radians the amount you wish to rotate the image in radians
+    */
+   void rotateImage(double radians);
+
+   /**
+    * @brief shearImage shear the whole image.
+    * @param angleX the X-angle in degrees to shear by
+    * @param angleY the Y-angle in degrees to shear by
+    */
+   void shearImage(double angleX, double angleY);
 
     /**
      * @brief save the image to its currently set path. The modified flag of the

@@ -57,12 +57,12 @@ class KRITALIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserve
 
 public:
     explicit DockWidget();
-    virtual ~DockWidget();
+    ~DockWidget() override;
 
 protected Q_SLOTS: // Krita API
 
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase* canvas) override;
+    void unsetCanvas() override;
 
 protected Q_SLOTS: // PyKrita API
 

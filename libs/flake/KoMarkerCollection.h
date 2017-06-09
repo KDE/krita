@@ -28,7 +28,7 @@
 #include <QMetaType>
 
 class KoMarker;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 
 class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject
@@ -36,7 +36,7 @@ class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject
     Q_OBJECT
 public:
     explicit KoMarkerCollection(QObject *parent = 0);
-    virtual ~KoMarkerCollection();
+    ~KoMarkerCollection() override;
 
     QList<KoMarker*> markers() const;
 

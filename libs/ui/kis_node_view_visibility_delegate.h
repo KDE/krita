@@ -26,10 +26,10 @@ class KisNodeViewVisibilityDelegate : public QAbstractItemDelegate
 {
 public:
     KisNodeViewVisibilityDelegate(QObject *parent);
-    ~KisNodeViewVisibilityDelegate();
+    ~KisNodeViewVisibilityDelegate() override;
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 #endif /* __KIS_NODE_VIEW_VISIBILITY_DELEGATE_H */

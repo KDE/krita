@@ -26,9 +26,9 @@ class OraLoadContext : public KisOpenRasterLoadContext
 {
 public:
     OraLoadContext(KoStore* _store);
-    virtual ~OraLoadContext();
-    virtual KisImageSP loadDeviceData(const QString & fileName);
-    virtual QDomDocument loadStack();
+    ~OraLoadContext() override;
+    KisImageSP loadDeviceData(const QString & fileName) override;
+    QDomDocument loadStack() override;
 
 
 private:

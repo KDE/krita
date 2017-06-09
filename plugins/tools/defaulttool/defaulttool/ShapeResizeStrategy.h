@@ -44,12 +44,12 @@ public:
      * Constructor
      */
     ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
-    ~ShapeResizeStrategy();
+    ~ShapeResizeStrategy() override;
 
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KUndo2Command *createCommand();
-    void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 private:
     void resizeBy(const QPointF &stillPoint, qreal zoomX, qreal zoomY);
 

@@ -84,7 +84,7 @@ public:
      * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
      */
     KisPNGConverter(KisDocument *doc, bool batchMode = false);
-    virtual ~KisPNGConverter();
+    ~KisPNGConverter() override;
 public:
     /**
      * Load an image from an URL. If the image is not on a local drive, the image is first downloaded to a

@@ -38,7 +38,7 @@ class DlgLayerSplit: public KoDialog
 public:
 
     DlgLayerSplit();
-    ~DlgLayerSplit();
+    ~DlgLayerSplit() override;
 
     bool createBaseGroup() const;
     bool createSeparateGroups() const;

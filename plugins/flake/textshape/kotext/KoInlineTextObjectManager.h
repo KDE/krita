@@ -51,7 +51,7 @@ public:
 
     /// Constructor
     explicit KoInlineTextObjectManager(QObject *parent = 0);
-    virtual ~KoInlineTextObjectManager();
+    ~KoInlineTextObjectManager() override;
 
     /**
      * Retrieve a formerly added inline object based on the format.

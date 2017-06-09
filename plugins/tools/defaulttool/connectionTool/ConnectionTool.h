@@ -46,29 +46,29 @@ public:
     /**
      * @brief Destructor
      */
-    ~ConnectionTool();
+    ~ConnectionTool() override;
 
     /// reimplemented from superclass
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     /// reimplemented from superclass
-    virtual void repaintDecorations();
+    void repaintDecorations() override;
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented from superclass
-    virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     /// reimplemented from superclass
-    virtual void deactivate();
+    void deactivate() override;
     /// reimplemented from superclass
-    virtual void deleteSelection();
+    void deleteSelection() override;
 
 Q_SIGNALS:
     void connectionPointEnabled(bool enabled);
@@ -88,7 +88,7 @@ private Q_SLOTS:
 
 private:
     /// reimplemented from superclass
-    virtual QList<QPointer<QWidget> >  createOptionWidgets();
+    QList<QPointer<QWidget> >  createOptionWidgets() override;
 
     /**
      * @brief Return the square of the absolute distance between p1 and p2

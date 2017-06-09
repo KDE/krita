@@ -33,7 +33,7 @@ class KRITAUI_EXPORT KisAnimationImporter : public QObject
 public:
     KisAnimationImporter(KisImageSP image);
     KisAnimationImporter(KisDocument* document);
-    ~KisAnimationImporter();
+    ~KisAnimationImporter() override;
 
     KisImportExportFilter::ConversionStatus import(QStringList files, int firstFrame, int step);
 

@@ -58,21 +58,21 @@ public:
     };
 
     explicit StylesModel(KoStyleManager *styleManager, AbstractStylesModel::Type modelType, QObject *parent = 0);
-    ~StylesModel();
+    ~StylesModel() override;
 
     /** Re-implemented from QAbstractItemModel. */
 
-    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
 
-    virtual int rowCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent) const override;
 
-    virtual QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const override;
 
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    virtual QModelIndex parent(const QModelIndex &child) const;
+    QModelIndex parent(const QModelIndex &child) const override;
 
-    virtual int columnCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const override;
 
     /** *********************************** */
     /** Specific methods of the StylesModel */
@@ -95,7 +95,7 @@ public:
     void setStyleManager(KoStyleManager *manager);
 
     /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
-    void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
+    void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer) override;
 
     /** *************** */
     /** Using the model */
@@ -103,12 +103,12 @@ public:
     /** Return a @class QModelIndex for the specified @param style.
       * @param style may be either a character or paragraph style.
     */
-    QModelIndex indexOf(const KoCharacterStyle *style) const;
+    QModelIndex indexOf(const KoCharacterStyle *style) const override;
 
     /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
-    QImage stylePreview(int row, const QSize &size = QSize());
+    QImage stylePreview(int row, const QSize &size = QSize()) override;
 //    QImage stylePreview(QModelIndex &index, const QSize &size = QSize());
 
     /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
@@ -137,7 +137,7 @@ public:
     void clearStyleModel();
 
     /** Returns the type of styles in the model */
-    AbstractStylesModel::Type stylesType() const;
+    AbstractStylesModel::Type stylesType() const override;
 
 private Q_SLOTS:
     void removeParagraphStyle(KoParagraphStyle *);

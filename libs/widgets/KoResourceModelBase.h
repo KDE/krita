@@ -31,16 +31,16 @@ class KRITAWIDGETS_EXPORT KoResourceModelBase : public QAbstractTableModel
     Q_OBJECT
 public:
     explicit KoResourceModelBase(QObject * parent = 0 );
-    virtual ~KoResourceModelBase();
+    ~KoResourceModelBase() override;
 
     /// reimplemented
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const =0;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override =0;
     /// reimplemented
-    virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const =0;
+    int columnCount ( const QModelIndex & parent = QModelIndex() ) const override =0;
     /// reimplemented
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const =0;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override =0;
     /// reimplemented
-    virtual QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const =0;
+    QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const override =0;
 
     virtual QModelIndex indexFromResource(KoResource* resource) const =0;
     virtual QStringList assignedTagsList(KoResource *resource) const =0;

@@ -61,38 +61,15 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-protected Q_SLOTS:
-
-    /**
-     * Changes the current shape collection
-    */
-    void activateShapeCollection(QListWidgetItem *item);
-
-    /// Called when the docker changes area
-    void locationChanged(Qt::DockWidgetArea area);
-
 protected:
     /**
      * Load the default calligra shapes
      */
     void loadDefaultShapes();
 
-
-    /// Generate an icon from @p shape
-    QIcon generateShapeIcon(KoShape *shape);
-
-
 private:
 
-    bool addCollection(const QString &id, const QString &title, CollectionItemModel *model);
-
     QListView *m_quickView;
-    QToolButton *m_moreShapes;
-    QMenu *m_moreShapesContainer;
-    QListWidget *m_collectionChooser;
-    QListView *m_collectionView;
-    QSpacerItem *m_spacer;
-    QGridLayout *m_layout;
 
     QMap<QString, CollectionItemModel *> m_modelMap;
 };

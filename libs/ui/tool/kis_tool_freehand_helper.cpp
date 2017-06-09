@@ -218,17 +218,18 @@ void KisToolFreehandHelper::cursorMoved(const QPointF &cursorPos)
 }
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
+                                      const QPointF &pixelCoords,
                                       KoCanvasResourceManager *resourceManager,
                                       KisImageWSP image, KisNodeSP currentNode,
                                       KisStrokesFacade *strokesFacade,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
-    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(image->documentToPixel(event->point));
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelCoords);
     m_d->strokeTime.start();
     KisPaintInformation pi =
         m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
-    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pi.pos(), 0.0);
+    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pixelCoords, 0.0);
 
     initPaintImpl(startAngle,
                   pi,

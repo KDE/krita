@@ -93,7 +93,7 @@ KisToolFreehand::~KisToolFreehand()
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *event)
 {
     KisToolPaint::mouseMoveEvent(event);
-    m_helper->cursorMoved(currentImage()->documentToPixel(event->point));
+    m_helper->cursorMoved(convertToPixelCoord(event));
 }
 
 KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
@@ -175,7 +175,9 @@ void KisToolFreehand::deactivate()
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
-    m_helper->initPaint(event, canvas()->resourceManager(),
+    m_helper->initPaint(event,
+                        convertToPixelCoord(event),
+                        canvas()->resourceManager(),
                         image(),
                         currentNode(),
                         image().data());
@@ -450,7 +452,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
-    QPointF imagePos = currentImage()->documentToPixel(documentPos);
+    QPointF imagePos = convertToPixelCoord(documentPos);
 
     if (currentPaintOpPreset())
         return m_helper->paintOpOutline(imagePos,

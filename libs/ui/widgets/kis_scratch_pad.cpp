@@ -102,6 +102,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_resourceProvider(0)
 {
     setAutoFillBackground(false);
+    setMouseTracking(true);
 
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
@@ -190,6 +191,7 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
 
 void KisScratchPad::pointerMove(KoPointerEvent *event)
 {
+    m_helper->cursorMoved(documentToWidget().map(event->point));
     if (m_toolMode == PAINTING) {
         doStroke(event);
         event->accept();
@@ -207,8 +209,8 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
 void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
     KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
-
     m_helper->initPaint(event,
+                        documentToWidget().map(event->point),
                         resourceManager,
                         0,
                         0,

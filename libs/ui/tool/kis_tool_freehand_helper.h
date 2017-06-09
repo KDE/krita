@@ -60,7 +60,12 @@ public:
     bool isRunning() const;
 
     void cursorMoved(const QPointF &cursorPos);
+
+    /**
+     * @param pixelCoords - The position of the KoPointerEvent, in pixel coordinates.
+     */
     void initPaint(KoPointerEvent *event,
+                   const QPointF &pixelCoords,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
                    KisNodeSP currentNode,

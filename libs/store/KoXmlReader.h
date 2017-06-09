@@ -20,7 +20,6 @@
 #ifndef KO_XMLREADER_H
 #define KO_XMLREADER_H
 
-// KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
 
 #include "kritastore_export.h"
@@ -30,14 +29,6 @@
 
 class QIODevice;
 
-#ifndef KOXML_USE_QDOM
-
-class QXmlStreamReader;
-
-class KoXmlNodeData;
-class KoXmlDocumentData;
-class QDomDocument;
-class QStringList;
 
 /**
  * The office-text-content-prelude type.
@@ -47,266 +38,6 @@ enum KoXmlNamedItemType {
     //KoXmlTextContentMain, ///< office-text-content-main
     //KoXmlTextContentEpilogue ///< office-text-content-epilogue
 };
-
-/**
-* KoXmlNode represents a node in a DOM tree.
-*
-* KoXmlNode is a base class for KoXmlElement, KoXmlText.
-* Often, these subclasses are used for getting the data instead of KoXmlNode.
-* However, as base class, KoXmlNode is very helpful when for example iterating
-* all child nodes within one parent node.
-*
-* KoXmlNode implements an explicit sharing, a node shares its data with
-* other copies (if exist).
-*
-* XXX: DO NOT ADD CONVENIENCE API HERE BECAUSE THIS CLASS MUST REMAIN COMPATIBLE WITH QDOMNODE!
-*
-* @author Ariya Hidayat <ariya@kde.org>
-*/
-class KRITASTORE_EXPORT KoXmlNode
-{
-public:
-
-    enum NodeType {
-        NullNode = 0,
-        ElementNode,
-        TextNode,
-        CDATASectionNode,
-        ProcessingInstructionNode,
-        DocumentNode,
-        DocumentTypeNode
-    };
-
-    KoXmlNode();
-    KoXmlNode(const KoXmlNode& node);
-    KoXmlNode& operator=(const KoXmlNode& node);
-    bool operator== (const KoXmlNode&) const;
-    bool operator!= (const KoXmlNode&) const;
-    virtual ~KoXmlNode();
-
-    virtual KoXmlNode::NodeType nodeType() const;
-    virtual bool isNull() const;
-    virtual bool isElement() const;
-    virtual bool isText() const;
-    virtual bool isCDATASection() const;
-    virtual bool isDocument() const;
-    virtual bool isDocumentType() const;
-
-    virtual void clear();
-    KoXmlElement toElement() const;
-    KoXmlText toText() const;
-    KoXmlCDATASection toCDATASection() const;
-    KoXmlDocument toDocument() const;
-
-    virtual QString nodeName() const;
-    virtual QString namespaceURI() const;
-    virtual QString prefix() const;
-    virtual QString localName() const;
-
-    KoXmlDocument ownerDocument() const;
-    KoXmlNode parentNode() const;
-
-    bool hasChildNodes() const;
-    KoXmlNode firstChild() const;
-    KoXmlNode lastChild() const;
-    KoXmlNode nextSibling() const;
-    KoXmlNode previousSibling() const;
-
-    KoXmlElement firstChildElement() const;
-
-    // equivalent to node.childNodes().count() if node is a QDomNode instance
-    int childNodesCount() const;
-
-    // workaround to get and iterate over all attributes
-    QStringList attributeNames() const;
-    QList< QPair<QString, QString> > attributeFullNames() const;
-
-    KoXmlNode namedItem(const QString& name) const;
-    KoXmlNode namedItemNS(const QString& nsURI, const QString& name) const;
-    KoXmlNode namedItemNS(const QString& nsURI, const QString& name, KoXmlNamedItemType type) const;
-
-    /**
-    * Loads all child nodes (if any) of this node. Normally you do not need
-    * to call this function as the child nodes will be automatically
-    * loaded when necessary.
-    */
-    void load(int depth = 1);
-
-    /**
-    * Releases all child nodes of this node.
-    */
-    void unload();
-
-    // compatibility
-    /**
-     * @internal do not call directly
-     * Use KoXml::asQDomDocument(), KoXml::asQDomElement() or KoXml::asQDomNode() instead
-     */
-    void asQDomNode(QDomDocument& ownerDoc) const;
-
-protected:
-    KoXmlNodeData* d;
-    explicit KoXmlNode(KoXmlNodeData*);
-};
-
-/**
-* KoXmlElement represents a tag element in a DOM tree.
-*
-* KoXmlElement holds information about an XML tag, along with its attributes.
-*
-* @author Ariya Hidayat <ariya@kde.org>
-*/
-
-class KRITASTORE_EXPORT KoXmlElement: public KoXmlNode
-{
-public:
-    KoXmlElement();
-    KoXmlElement(const KoXmlElement& element);
-    KoXmlElement& operator=(const KoXmlElement& element);
-    ~KoXmlElement() override;
-    bool operator== (const KoXmlElement&) const;
-    bool operator!= (const KoXmlElement&) const;
-
-    QString tagName() const;
-    QString text() const;
-
-    QString attribute(const QString& name) const;
-    QString attribute(const QString& name, const QString& defaultValue) const;
-    QString attributeNS(const QString& namespaceURI, const QString& localName,
-                        const QString& defaultValue = QString()) const;
-    bool hasAttribute(const QString& name) const;
-    bool hasAttributeNS(const QString& namespaceURI, const QString& localName) const;
-
-private:
-    friend class KoXmlNode;
-    friend class KoXmlDocument;
-    explicit KoXmlElement(KoXmlNodeData*);
-};
-
-/**
-* KoXmlText represents a text in a DOM tree.
-* @author Ariya Hidayat <ariya@kde.org>
-*/
-class KRITASTORE_EXPORT KoXmlText: public KoXmlNode
-{
-public:
-    KoXmlText();
-    KoXmlText(const KoXmlText& text);
-    KoXmlText& operator=(const KoXmlText& text);
-    ~KoXmlText() override;
-
-    QString data() const;
-    bool isText() const override;
-
-private:
-    friend class KoXmlNode;
-    friend class KoXmlCDATASection;
-    friend class KoXmlDocument;
-    explicit KoXmlText(KoXmlNodeData*);
-};
-
-/**
-* KoXmlCDATASection represents a CDATA section in a DOM tree.
-* @author Ariya Hidayat <ariya@kde.org>
-*/
-class KRITASTORE_EXPORT KoXmlCDATASection: public KoXmlText
-{
-public:
-    KoXmlCDATASection();
-    KoXmlCDATASection(const KoXmlCDATASection& cdata);
-    KoXmlCDATASection& operator=(const KoXmlCDATASection& cdata);
-    ~KoXmlCDATASection() override;
-
-    bool isCDATASection() const override;
-
-private:
-    friend class KoXmlNode;
-    friend class KoXmlDocument;
-    explicit KoXmlCDATASection(KoXmlNodeData*);
-};
-
-/**
-* KoXmlDocumentType represents the DTD of the document. At the moment,
-* it can used only to get the document type, i.e. no support for
-* entities etc.
-*
-* @author Ariya Hidayat <ariya@kde.org>
-*/
-
-class KRITASTORE_EXPORT KoXmlDocumentType: public KoXmlNode
-{
-public:
-    KoXmlDocumentType();
-    KoXmlDocumentType(const KoXmlDocumentType&);
-    KoXmlDocumentType& operator=(const KoXmlDocumentType&);
-    ~KoXmlDocumentType() override;
-
-    QString name() const;
-
-private:
-    friend class KoXmlNode;
-    friend class KoXmlDocument;
-    friend class KoXmlDocumentData;
-    explicit KoXmlDocumentType(KoXmlNodeData*);
-};
-
-
-/**
-* KoXmlDocument represents an XML document, structured in a DOM tree.
-*
-* KoXmlDocument is designed to be memory efficient. Unlike QDomDocument from
-* Qt's XML module, KoXmlDocument does not store all nodes in the DOM tree.
-* Some nodes will be loaded and parsed on-demand only.
-*
-* KoXmlDocument is read-only, you can not modify its content.
-*
-* @author Ariya Hidayat <ariya@kde.org>
-*/
-
-class KRITASTORE_EXPORT KoXmlDocument: public KoXmlNode
-{
-public:
-    explicit KoXmlDocument(bool stripSpaces = false);
-    KoXmlDocument(const KoXmlDocument& node);
-    KoXmlDocument& operator=(const KoXmlDocument& node);
-    bool operator==(const KoXmlDocument&) const;
-    bool operator!=(const KoXmlDocument&) const;
-    ~KoXmlDocument() override;
-
-    KoXmlElement documentElement() const;
-
-    KoXmlDocumentType doctype() const;
-
-    QString nodeName() const override;
-    void clear() override;
-
-    bool setContent(QIODevice* device, bool namespaceProcessing,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(QIODevice* device,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(QXmlStreamReader *reader,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(const QByteArray& text, bool namespaceProcessing,
-                    QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    bool setContent(const QString& text, bool namespaceProcessing,
-                    QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-
-    // no namespace processing
-    bool setContent(const QString& text,
-                    QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-     /**
-     * Change the way an XMLDocument will be read: <a> <b/> <a/>
-     * if stripSpaces = true then a will only have one child
-     * if stripSpaces = false then a will have 3 children.
-     */
-    void setWhitespaceStripping(bool stripSpaces);
-
-private:
-    friend class KoXmlNode;
-    explicit KoXmlDocument(KoXmlDocumentData*);
-};
-
-#endif // KOXML_USE_QDOM
 
 /**
  * This namespace contains a few convenience functions to simplify code using QDom
@@ -394,7 +125,7 @@ KRITASTORE_EXPORT QStringList attributeNames(const KoXmlNode& node);
  * NOTE:
  * - If ownerDoc is not empty, this may fail, @see QDomDocument
  * - @p node must not be a KoXmlDocument, use asQDomDocument()
- * 
+ *
  * @see asQDomDocument, asQDomElement
  */
 KRITASTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
@@ -403,7 +134,7 @@ KRITASTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node)
  * Convert KoXmlNode classes to the corresponding QDom classes, which has
  * @p ownerDoc as the owner document (QDomDocument instance).
  * The converted @p element (and its children) is added to ownerDoc.
- * 
+ *
  * NOTE: If ownerDoc is not empty, this may fail, @see QDomDocument
  *
  */
@@ -411,7 +142,6 @@ KRITASTORE_EXPORT void asQDomElement(QDomDocument& ownerDoc, const KoXmlElement&
 
 /**
  * Converts the whole @p document into a QDomDocument
- * If KOXML_USE_QDOM is defined, just returns @p document
  */
 KRITASTORE_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
 

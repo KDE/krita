@@ -61,6 +61,12 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.9 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
+if (LINUX)
+    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
+        add_definitions(-Werror=delete-incomplete)
+    endif()
+endif()
+
  ######################
 #######################
 ## Constants defines ##
@@ -194,7 +200,7 @@ find_package(PythonLibrary 3.0)
 #########################
 ########################
 
-find_package(ECM 1.7.0 REQUIRED NOMODULE)
+find_package(ECM 5.19 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
@@ -583,7 +589,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test for qt-poppler
 ##
-find_package(Poppler)
+find_package(Poppler COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"

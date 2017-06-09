@@ -30,7 +30,7 @@
 
 DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidget *parent)
     : KoTitledTabWidget(parent)
-{
+{    
     setObjectName("default-tool-tabbed-widget");
 
     DefaultToolGeometryWidget *geometryWidget = new DefaultToolGeometryWidget(tool, this);
@@ -47,6 +47,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     m_strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
 
     addTab(m_strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
+
 
     m_fillWidget = new KoFillConfigWidget(tool->canvas(), KoFlake::Fill, this);
     m_fillWidget->setWindowTitle(i18n("Fill"));

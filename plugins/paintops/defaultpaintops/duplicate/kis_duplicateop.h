@@ -31,6 +31,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
 
 #include "kis_duplicateop_settings.h"
 
@@ -66,6 +67,7 @@ private:
     QPointF m_duplicateStart;
     bool m_duplicateStartIsSet;
     KisPressureSizeOption m_sizeOption;
+    KisPressureRotationOption m_rotationOption;
     bool m_healing;
     bool m_perspectiveCorrection;
     bool m_moveSourcePoint;

@@ -30,6 +30,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoColorModelStandardIds.h>
 
+#include <kis_filter_strategy.h>
 #include <kactioncollection.h>
 #include <KisPart.h>
 #include <KisMainWindow.h>
@@ -172,6 +173,11 @@ Filter *Krita::filter(const QString &name) const
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
+}
+
+QStringList Krita::filterStrategies() const
+{
+    return KisFilterStrategyRegistry::instance()->keys();
 }
 
 QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth) const

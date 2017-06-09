@@ -141,11 +141,8 @@ struct KisAnimationCachePopulator::Private
                 if (activeNode) {
                     int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
-                    const QList<KisKeyframeChannel*> channels =
-                        activeNode->keyframeChannels();
-
-                    if (!channels.isEmpty()) {
-                        Q_FOREACH (const KisKeyframeChannel *channel, channels) {
+                    if (!activeNode->keyframeChannels().isEmpty()) {
+                        Q_FOREACH (const KisKeyframeChannel *channel, activeNode->keyframeChannels()) {
                             skipRange |= channel->affectedFrames(currentTime);
                         }
                     } else {

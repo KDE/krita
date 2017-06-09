@@ -330,6 +330,17 @@ public Q_SLOTS:
     QByteArray pixelData(int x, int y, int w, int h) const;
 
     /**
+     * @brief pixelDataAtTime a basic function to get pixeldata from an animated node at a given time.
+     * @param x the position from the left to start reading.
+     * @param y the position from the top to start reader
+     * @param w the row length to read
+     * @param h the number of rows to read
+     * @param time the frame number
+     * @return a QByteArray with the pixel data. The byte array may be empty.
+     */
+    QByteArray pixelDataAtTime(int x, int y, int w, int h, int time) const;
+
+    /**
      * @brief projectionPixelData reads the given rectangle from the Node's projection (that is, what the node
      * looks like after all sub-Nodes (like layers in a group or masks on a layer) have been applied,
      * and returns it as a byte array. The pixel data starts top-left, and is ordered row-first.
@@ -440,6 +451,46 @@ public Q_SLOTS:
      * @param node the node to merge down; this node will be removed from the layer stack
      */
     Node *mergeDown();
+
+    /**
+     * @brief scaleNode
+     * @param width
+     * @param height
+     * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
+     * <ul>
+     * <li>Hermite</li>
+     * <li>Bicubic - Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.</li>
+     * <li>Box - Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.</li>
+     * <li>Bilinear - Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.</li>
+     * <li>Bell</li>
+     * <li>BSpline</li>
+     * <li>Lanczos3 - Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.</li>
+     * <li>Mitchell</li>
+     * </ul>
+     */
+    void scaleNode(int width, int height, QString strategy);
+
+    /**
+     * @brief rotateNode rotate this layer by the given radians.
+     * @param radians amount the layer should be rotated in, in radians.
+     */
+    void rotateNode(double radians);
+
+    /**
+     * @brief cropNode crop this layer.
+     * @param x the left edge of the cropping rectangle.
+     * @param y the top edge of the cropping rectangle
+     * @param w the right edge of the cropping rectangle
+     * @param h the bottom edge of the cropping rectangle
+     */
+    void cropNode(int x, int y, int w, int h);
+
+    /**
+     * @brief shearNode perform a shear operation on this node.
+     * @param angleX the X-angle in degrees to shear by
+     * @param angleY the Y-angle in degrees to shear by
+     */
+    void shearNode(double angleX, double angleY);
 
     /**
      * @brief thumbnail create a thumbnail of the given dimensions. The thumbnail is sized according

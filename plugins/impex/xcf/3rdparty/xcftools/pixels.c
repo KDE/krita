@@ -2,7 +2,7 @@
  *
  * This file was written by Henning Makholm <henning@makholm.net>
  * It is hereby in the public domain.
- * 
+ *
  * In jurisdictions that do not recognise grants of copyright to the
  * public domain: I, the author and (presumably, in those jurisdictions)
  * copyright holder, hereby permit anyone to distribute and use this code,
@@ -99,8 +99,9 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
   if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return ;
 
   xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIX32,ptr);
-  if( xcfL(ptr + dim->ntiles*4) != 0 )
-    FatalBadXCF("Wrong sized tile directory at %" PRIX32,ptr);
+/*  if( xcfL(ptr + dim->ntiles*4) != 0 )
+    FatalBadXCF("Wrong sized tile directory at %" PRIX32,ptr);*/
+
 #define REUSE_RAW_DATA tiles->tileptrs = (uint32_t*)(xcf_file + ptr)
 #if defined(WORDS_BIGENDIAN) && defined(CAN_DO_UNALIGNED_WORDS)
   REUSE_RAW_DATA;
@@ -216,7 +217,7 @@ tileSummary(struct Tile *tile)
   tile->summary = summary ;
   return summary ;
 }
-  
+
 void
 fillTile(struct Tile *tile,rgba data)
 {
@@ -268,7 +269,7 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
           ptr,params->bpp,npixels,base_pixel);
 #endif
 
-  
+
   /* This algorithm depends on the indexed byte always being the first one */
   if( params->shift[0] < -1 )
     base_pixel = 0 ;
@@ -354,11 +355,11 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
     fillTile(tile,0);
     return tile ;
   }
-  
+
 #ifdef xDEBUG
   fprintf(stderr,"getMaskOrLayer: (%d-%d),(%d-%d)\n",left,right,top,bottom);
 #endif
-  
+
   if( isSubrect(want,dim->c) &&
       (want.l - dim->c.l) % TILE_WIDTH == 0 &&
       (want.t - dim->c.t) % TILE_HEIGHT == 0 ) {
@@ -380,7 +381,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
     int x, tx, c0, c1 ;
     unsigned lstart, lnum ;
     unsigned cstart, cnum ;
-    
+
     if( !isSubrect(want,dim->c) ) {
       if( want.l < dim->c.l ) pixvert += (dim->c.l - want.l),
                                 want.l = dim->c.l ;
@@ -403,7 +404,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
       l1 = TILEYn(*dim,ty+1) ;
       lstart = y - l0 ;
       lnum = (l1 > want.b ? want.b : l1) - y ;
-      
+
       pixhoriz = pixvert ;
       for( x=want.l, tx=TILE_NUM(want.l-dim->c.l), c0=TILEXn(*dim,tx);
            x<want.r;
@@ -467,7 +468,7 @@ getLayerTile(struct xcfLayer *layer,const struct rect *where)
     fillTile(data,0);
     return data ;
   }
-  
+
   data = getMaskOrLayerTile(&layer->dim,&layer->pixels,*where);
   if( (data->summary & TILESUMMARY_ALLNULL) != 0 )
     return data ;
@@ -487,4 +488,4 @@ getLayerTile(struct xcfLayer *layer,const struct rect *where)
   }
   return data ;
 }
-  
+

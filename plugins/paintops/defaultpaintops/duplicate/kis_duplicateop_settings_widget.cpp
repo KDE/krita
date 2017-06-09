@@ -29,6 +29,7 @@
 #include <kis_paintop_settings_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
+#include <kis_pressure_rotation_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
 #include "kis_texture_option.h"
@@ -47,6 +48,7 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
     addPaintOpOption(new KisDuplicateOpOption(), i18n("Painting Mode"));
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));

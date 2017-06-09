@@ -522,19 +522,14 @@ void ColorSettingsTab::setDefault()
 }
 
 
-void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
+void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
 {
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
-
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         m_monitorProfileWidgets[i]->clear();
     }
 
-    if (!csf)
-        return;
-
     QMap<QString, const KoColorProfile *>  profileList;
-    Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(csf)) {
+    Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId.id())) {
         profileList[profile->name()] = profile;
     }
 
@@ -549,7 +544,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen %1:", i + 1));
-        m_monitorProfileWidgets[i]->setCurrent(csf->defaultProfile());
+        m_monitorProfileWidgets[i]->setCurrent(KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId.id()));
     }
 }
 

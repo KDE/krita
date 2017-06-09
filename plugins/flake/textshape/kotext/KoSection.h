@@ -29,7 +29,7 @@
 #include <QScopedPointer>
 #include <QTextCursor>
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShapeSavingContext;
 class KoTextSharedLoadingData;
 class KoSectionEnd;

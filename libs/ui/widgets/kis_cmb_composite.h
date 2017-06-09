@@ -78,6 +78,7 @@ private Q_SLOTS:
     void slotColorDodge();
     void slotLinearDodge();
     void slotOverlay();
+    void slotHardOverlay();
     void slotSoftLight();
     void slotHardLight();
     void slotVividLight();

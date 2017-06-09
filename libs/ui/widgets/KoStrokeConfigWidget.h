@@ -33,8 +33,10 @@
 #include "kritaui_export.h"
 
 #include <QWidget>
+#include <QLabel>
 #include <KoFlakeTypes.h>
 #include <KoFlake.h>
+
 
 class KoUnit;
 class KoShapeStrokeModel;
@@ -42,7 +44,6 @@ class KoShapeStroke;
 class KoMarker;
 class KoCanvasBase;
 class KoShapeStroke;
-
 class KisSpinBoxUnitManager;
 
 /// A widget for configuring the stroke of a shape
@@ -65,6 +66,9 @@ public:
     KoMarker *endMarker() const;
     Qt::PenCapStyle capStyle() const;
     Qt::PenJoinStyle joinStyle() const;
+    QLabel *thicknessLabel;
+    QLabel *strokeStyleLabel;
+    QFrame* separatorLine;
 
     /**
      * Creates KoShapeStroke object filled with the options

@@ -367,7 +367,8 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
                     res = image->assignImageProfile(profile);
                 }
                 if (!res) {
-                    profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
+                    const QString defaultProfileId = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(image->colorSpace()->id());
+                    profile = KoColorSpaceRegistry::instance()->profileByName(defaultProfileId);
                     Q_ASSERT(profile && profile->valid());
                     image->assignImageProfile(profile);
                 }
@@ -558,7 +559,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
                     if (node) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
-                        if (node->inherits("KisLayer") && child.childNodesCount() > 0) {
+                        if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
                     }

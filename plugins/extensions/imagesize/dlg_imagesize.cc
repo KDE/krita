@@ -61,15 +61,15 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->layout()->setMargin(0);
     m_page->setObjectName("image_size");
 
-    _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
-    _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
+    m_widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
+    m_heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
 
     //configure the unit to image length, default unit is pixel and printing units are forbiden.
-    _widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
-    _heightUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
+    m_widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
+    m_heightUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
 
-    m_page->pixelWidthDouble->setUnitManager(_widthUnitManager);
-    m_page->pixelHeightDouble->setUnitManager(_heightUnitManager);
+    m_page->pixelWidthDouble->setUnitManager(m_widthUnitManager);
+    m_page->pixelHeightDouble->setUnitManager(m_heightUnitManager);
 
     m_page->pixelWidthDouble->changeValue(width);
     m_page->pixelHeightDouble->changeValue(height);
@@ -78,8 +78,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelWidthDouble->setDisplayUnit(false);
     m_page->pixelHeightDouble->setDisplayUnit(false);
 
-    m_page->pixelWidthUnit->setModel(_widthUnitManager);
-    m_page->pixelHeightUnit->setModel(_widthUnitManager);
+    m_page->pixelWidthUnit->setModel(m_widthUnitManager);
+    m_page->pixelHeightUnit->setModel(m_widthUnitManager);
     m_page->pixelWidthUnit->setCurrentText("px");
     m_page->pixelHeightUnit->setCurrentText("px");
 
@@ -87,11 +87,11 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
     m_page->pixelFilterCmb->setCurrent("Bicubic");
 
-    _printWidthUnitManager = new KisSpinBoxUnitManager(this);
-    _printHeightUnitManager = new KisSpinBoxUnitManager(this);
+    m_printWidthUnitManager = new KisSpinBoxUnitManager(this);
+    m_printHeightUnitManager = new KisSpinBoxUnitManager(this);
 
-    m_page->printWidth->setUnitManager(_printWidthUnitManager);
-    m_page->printHeight->setUnitManager(_printHeightUnitManager);
+    m_page->printWidth->setUnitManager(m_printWidthUnitManager);
+    m_page->printHeight->setUnitManager(m_printHeightUnitManager);
     m_page->printWidth->setDecimals(2);
     m_page->printHeight->setDecimals(2);
     m_page->printWidth->setDisplayUnit(false);
@@ -99,8 +99,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printResolution->setDecimals(2);
     m_page->printResolution->setAlignment(Qt::AlignRight);
 
-    m_page->printWidthUnit->setModel(_printWidthUnitManager);
-    m_page->printHeightUnit->setModel(_printHeightUnitManager);
+    m_page->printWidthUnit->setModel(m_printWidthUnitManager);
+    m_page->printHeightUnit->setModel(m_printHeightUnitManager);
 
     m_page->printWidth->changeValue(m_printWidth);
     m_page->printHeight->changeValue(m_printHeight);
@@ -142,17 +142,17 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->pixelWidthDouble, SIGNAL(valueChangedPt(double)), this, SLOT(slotPixelWidthChanged(double)));
     connect(m_page->pixelHeightDouble, SIGNAL(valueChangedPt(double)), this, SLOT(slotPixelHeightChanged(double)));
-    connect(m_page->pixelWidthUnit, SIGNAL(currentIndexChanged(int)), _widthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
-    connect(m_page->pixelHeightUnit, SIGNAL(currentIndexChanged(int)), _heightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
-    connect(_widthUnitManager, SIGNAL(unitChanged(int)), m_page->pixelWidthUnit, SLOT(setCurrentIndex(int)));
-    connect(_heightUnitManager, SIGNAL(unitChanged(int)), m_page->pixelHeightUnit, SLOT(setCurrentIndex(int)));
+    connect(m_page->pixelWidthUnit, SIGNAL(currentIndexChanged(int)), m_widthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_page->pixelHeightUnit, SIGNAL(currentIndexChanged(int)), m_heightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_widthUnitManager, SIGNAL(unitChanged(int)), m_page->pixelWidthUnit, SLOT(setCurrentIndex(int)));
+    connect(m_heightUnitManager, SIGNAL(unitChanged(int)), m_page->pixelHeightUnit, SLOT(setCurrentIndex(int)));
 
     connect(m_page->printWidth, SIGNAL(valueChangedPt(double)), this, SLOT(slotPrintWidthChanged(double)));
     connect(m_page->printHeight, SIGNAL(valueChangedPt(double)), this, SLOT(slotPrintHeightChanged(double)));
-    connect(m_page->printWidthUnit, SIGNAL(currentIndexChanged(int)), _printWidthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
-    connect(m_page->printHeightUnit, SIGNAL(currentIndexChanged(int)), _printHeightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
-    connect(_printWidthUnitManager, SIGNAL(unitChanged(int)), m_page->printWidthUnit, SLOT(setCurrentIndex(int)));
-    connect(_printHeightUnitManager, SIGNAL(unitChanged(int)), m_page->printHeightUnit, SLOT(setCurrentIndex(int)));
+    connect(m_page->printWidthUnit, SIGNAL(currentIndexChanged(int)), m_printWidthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_page->printHeightUnit, SIGNAL(currentIndexChanged(int)), m_printHeightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    connect(m_printWidthUnitManager, SIGNAL(unitChanged(int)), m_page->printWidthUnit, SLOT(setCurrentIndex(int)));
+    connect(m_printHeightUnitManager, SIGNAL(unitChanged(int)), m_page->printHeightUnit, SLOT(setCurrentIndex(int)));
 
     connect(m_page->printResolution, SIGNAL(valueChanged(double)), this, SLOT(slotPrintResolutionChanged(double)));
     connect(m_page->printResolution, SIGNAL(editingFinished()), this, SLOT(slotPrintResolutionEditFinished()));

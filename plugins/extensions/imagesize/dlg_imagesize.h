@@ -81,11 +81,11 @@ private:
     double m_resolution;
     bool m_keepAspect;
 
-    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* m_widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* m_heightUnitManager;
 
-    KisSpinBoxUnitManager* _printWidthUnitManager;
-    KisSpinBoxUnitManager* _printHeightUnitManager;
+    KisSpinBoxUnitManager* m_printWidthUnitManager;
+    KisSpinBoxUnitManager* m_printHeightUnitManager;
 };
 
 #endif // DLG_IMAGESIZE

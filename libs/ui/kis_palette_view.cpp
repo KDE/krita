@@ -79,6 +79,21 @@ KisPaletteModel* KisPaletteView::paletteModel() const
     return m_d->model;
 }
 
+void KisPaletteView::updateRows()
+{
+    for (int r=0; r<=m_d->model->rowCount(); r++) {
+        QModelIndex index = m_d->model->index(r, 0);
+        if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+            setSpan(r, 0, 1, m_d->model->columnCount());
+            setRowHeight(r, this->fontMetrics().lineSpacing()+6);
+        } else {
+            if (columnSpan(r, 0)>1){
+                setSpan(r, 0, 1, 1);
+            }
+        }
+    }
+}
+
 
 void KisPaletteView::wheelEvent(QWheelEvent *event)
 {

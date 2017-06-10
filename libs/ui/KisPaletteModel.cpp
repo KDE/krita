@@ -98,6 +98,15 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
                 QColor color = QColor(Qt::white);
                 return QBrush(color);
             }
+            case IsHeaderRole: {
+                return true;
+            }
+            case RetrieveEntryRole: {
+                QStringList entryList;
+                entryList.append(indexGroupName);
+                entryList.append(QString::number(0));
+                return entryList;
+            }
             }
         } else {
             if (indexInGroup < m_colorSet->nColorsGroup(indexGroupName)) {
@@ -110,6 +119,15 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
                 case Qt::BackgroundRole: {
                     QColor color = m_displayRenderer->toQColor(entry.color);
                     return QBrush(color);
+                }
+                case IsHeaderRole: {
+                    return false;
+                }
+                case RetrieveEntryRole: {
+                    QStringList entryList;
+                    entryList.append(indexGroupName);
+                    entryList.append(QString::number(indexInGroup));
+                    return entryList;
                 }
                 }
             }
@@ -124,10 +142,13 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
         return 0;
     }
     if (m_colorSet->columnCount() > 0) {
-        int countedrows = m_colorSet->nColorsGroup("")/m_colorSet->columnCount() +1;
+        int countedrows = m_colorSet->nColorsGroup("")/m_colorSet->columnCount();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()) {
             countedrows += 1; //add one for the name;
-            countedrows += (m_colorSet->nColorsGroup(groupName)/ m_colorSet->columnCount()) +1;
+            countedrows += (m_colorSet->nColorsGroup(groupName)/ m_colorSet->columnCount());
+            if (m_colorSet->nColorsGroup(groupName)%m_colorSet->columnCount() > 0) {
+                countedrows+=1;
+            }
         }
         return countedrows;
     }

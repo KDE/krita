@@ -43,6 +43,12 @@ public:
     KisPaletteModel(QObject* parent = 0);
     ~KisPaletteModel() override;
 
+    enum AdditionalRoles {
+        IsHeaderRole       = Qt::UserRole + 1,
+        ExpandCategoryRole = Qt::UserRole + 2,
+        RetrieveEntryRole  = Qt::UserRole + 3
+    };
+
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;

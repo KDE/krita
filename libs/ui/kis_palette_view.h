@@ -37,6 +37,8 @@ public:
     void setPaletteModel(KisPaletteModel *model);
     KisPaletteModel* paletteModel() const;
 
+    void updateRows();
+
     void setCrossedKeyword(const QString &value);
 
 protected:

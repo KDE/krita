@@ -163,6 +163,7 @@ void PaletteDockerDock::resourceChanged(KoColorSet *resource)
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 {
     m_model->setColorSet(colorSet);
+    m_wdgPaletteDock->paletteView->updateRows();
     if (colorSet && colorSet->removable()) {
         m_wdgPaletteDock->bnAdd->setEnabled(true);
         m_wdgPaletteDock->bnRemove->setEnabled(false);
@@ -222,16 +223,17 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
         return;
     }
 
-    quint32 i = (quint32)(index.row()*m_model->columnCount()+index.column());
-    if (i < m_currentColorSet->nColors()) {
-        KoColorSetEntry entry = m_currentColorSet->getColorGlobal(i);
+    QStringList entryList =  qVariantValue<QStringList>(m_model->data(index, KisPaletteModel::RetrieveEntryRole));
+    QString groupName = entryList.at(0);
+    quint32 i = QString(entryList.at(1)).toInt();
+    if (i < m_currentColorSet->nColorsGroup(groupName)) {
+        KoColorSetEntry entry = m_currentColorSet->getColorGroup(i, groupName);
         quint32 li = 0;
-        QString groupName = m_currentColorSet->findGroupByGlobalIndex(i, &li);
+        QString seperator;
         if (groupName != QString()) {
-            groupName = groupName+" - ";
+            seperator = " - ";
         }
-        m_wdgPaletteDock->lblColorName->setText(groupName+entry.name);
-        qDebug()<<"The index of the currently selected color within its group is: "<<li;
+        m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
         if (m_resourceProvider) {
             m_resourceProvider->setFGColor(entry.color);
         }

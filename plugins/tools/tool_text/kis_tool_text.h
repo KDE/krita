@@ -30,8 +30,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
-
 /**
  * You are now reading a beautiful solution to a hideous abstraction. The old
  * Calligra suite developed text interaction methods that were intended to be
@@ -54,7 +52,7 @@ class KisToolText : public KisToolRectangleBase
     Q_OBJECT
 
 public:
-    KisToolText(KoCanvasBase * canvas);
+    KisToolText(KoCanvasBase *canvas);
     ~KisToolText() override;
 
     /// These functions are inherited from KisToolRectangleBase. They simply

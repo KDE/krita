@@ -100,6 +100,27 @@ void SvgTextTool::textUpdated(const QString &svg, const QString &defs)
     canvas()->addCommand(cmd);
 }
 
+void SvgTextTool::paint(QPainter &, const KoViewConverter &)
+{
+
+}
+
+void SvgTextTool::mousePressEvent(KoPointerEvent *)
+{
+
+}
+
+void SvgTextTool::mouseMoveEvent(KoPointerEvent *)
+{
+
+}
+
+void SvgTextTool::mouseReleaseEvent(KoPointerEvent *)
+{
+
+}
+
+
 void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     if (canvas()->shapeManager()->shapeAt(event->point) != m_shape) {

@@ -375,23 +375,21 @@ KoCanvasController *KoToolManager::activeCanvasController() const
 
 QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 {
-    QList<QString> types;
+    QSet<QString> shapeTypes;
     Q_FOREACH (KoShape *shape, shapes) {
-        types << shape->shapeId();
+        shapeTypes << shape->shapeId();
     }
-
-    KritaUtils::makeContainerUnique(types);
+    //KritaUtils::makeContainerUnique(types);
 
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;
     Q_FOREACH (ToolHelper *helper, d->tools) {
         if (helper->id() == KoCreateShapesTool_ID) continue;
-
         if (helper->priority() >= prio)
             continue;
 
         bool toolWillWork = false;
-        foreach (const QString &type, types) {
+        foreach (const QString &type, shapeTypes) {
             if (helper->activationShapeId().split(',').contains(type)) {
                 toolWillWork = true;
                 break;

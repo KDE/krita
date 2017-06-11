@@ -129,7 +129,8 @@ void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
 
 void KisNodeFilterProxyModel::setActiveNode(KisNodeSP node)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+    // the new node may temporary become null when the last layer
+    // of the document in removed
     m_d->pendingActiveNode = node;
 
     if (node && indexFromNode(node).isValid()) {

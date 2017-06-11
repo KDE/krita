@@ -220,7 +220,7 @@ void PaletteDockerDock::removeColor()
 void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
 {
     quint32 index = 0;
-    QString groupName = m_currentColorSet->findGroupByName(entry.name, &index);
+    QString groupName = m_currentColorSet->findGroupByColorName(entry.name, &index);
     QString seperator;
     if (groupName != QString()) {
         seperator = " - ";

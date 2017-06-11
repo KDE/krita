@@ -95,6 +95,8 @@ public:
      */
     QString comment();
 
+    void setComment(QString comment);
+
 public:
 
     /**
@@ -138,6 +140,10 @@ public:
      * @return returns a list of group names, excluding the unsorted group.
      */
     QStringList getGroupNames();
+
+    bool changeGroupName(QString oldGroupName, QString newGroupName);
+
+    bool changeColorSetEntry(KoColorSetEntry entry, QString groupName, quint32 index);
 
     /**
      * @brief nColorsGroup

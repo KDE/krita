@@ -470,6 +470,34 @@ QStringList KoColorSet::getGroupNames()
     return d->groupNames;
 }
 
+bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
+{
+    if (d->groupNames.contains(oldGroupName)==false) {
+        return false;
+    }
+    QVector<KoColorSetEntry> dummyList = d->groups.value(oldGroupName);
+    d->groups.remove(oldGroupName);
+    d->groups[newGroupName] = dummyList;
+    //rename the string in the stringlist;
+    int index = d->groupNames.indexOf(oldGroupName);
+    d->groupNames.replace(index, newGroupName);
+    return true;
+}
+
+bool KoColorSet::changeColorSetEntry(KoColorSetEntry entry, QString groupName, quint32 index)
+{
+    if (index>=nColorsGroup(groupName) || (d->groupNames.contains(groupName)==false &&  groupName.size()>0)) {
+        return false;
+    }
+
+    if (groupName==QString()) {
+        d->colors[index] = entry;
+    } else {
+        d->groups[groupName][index] = entry;
+    }
+    return true;
+}
+
 void KoColorSet::setColumnCount(int columns)
 {
     d->columns = columns;
@@ -483,6 +511,11 @@ int KoColorSet::columnCount()
 QString KoColorSet::comment()
 {
     return d->comment;
+}
+
+void KoColorSet::setComment(QString comment)
+{
+    d->comment = comment;
 }
 
 bool KoColorSet::addGroup(const QString &groupName)

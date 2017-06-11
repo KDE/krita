@@ -94,10 +94,6 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
             case Qt::DisplayRole: {
                 return indexGroupName;
             }
-            case Qt::BackgroundRole: {
-                QColor color = QColor(Qt::white);
-                return QBrush(color);
-            }
             case IsHeaderRole: {
                 return true;
             }

@@ -38,10 +38,19 @@ public:
     void setPaletteModel(KisPaletteModel *model);
     KisPaletteModel* paletteModel() const;
 
+    /**
+     * @brief updateRows
+     * update the rows so they have the proper columnspanning.
+     */
     void updateRows();
 
     void setCrossedKeyword(const QString &value);
 Q_SIGNALS:
+    /**
+     * @brief entrySelected
+     * signals when an entry is selected.
+     * @param entry the selected entry.
+     */
     void entrySelected(KoColorSetEntry entry);
 protected:
     void wheelEvent(QWheelEvent *event) override;
@@ -50,10 +59,16 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 private Q_SLOTS:
-    //the function that will set the last changed color.
+    /**
+     * @brief entrySelection
+     * the function that will emit entrySelected when the entry changes.
+     */
     void entrySelection();
-    //the function that allows changing the last selected color.
-    void modifyEntry();
+    /**
+     * @brief modifyEntry
+     * function for changing the entry at the given index.
+     */
+    void modifyEntry(QModelIndex index);
 };
 
 #endif /* __KIS_PALETTE_VIEW_H */

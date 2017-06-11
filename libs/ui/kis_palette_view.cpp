@@ -24,6 +24,10 @@
 #include "kis_palette_delegate.h"
 #include "KisPaletteModel.h"
 #include "kis_config.h"
+#include <KoDialog.h>
+#include <QFormLayout>
+#include <QLabel>
+#include <QLineEdit>
 
 
 struct KisPaletteView::Private
@@ -54,6 +58,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
     verticalHeader()->setDefaultSectionSize(defaultSectionSize);
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelection()) );
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
 }
 
 KisPaletteView::~KisPaletteView()
@@ -119,18 +124,34 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 
 void KisPaletteView::entrySelection() {
     QModelIndex index = selectedIndexes().last();
-    KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-    emit(entrySelected(entry));
+    if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
+        KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
+        emit(entrySelected(entry));
+    }
 }
 
-void KisPaletteView::modifyEntry() {
-    //let's assume the last item is the one that is selected.
-    QModelIndex index = selectedIndexes().last();
+void KisPaletteView::modifyEntry(QModelIndex index) {
+    KoDialog *group = new KoDialog();
+    group->setLayout(new QFormLayout());
+    group->layout()->addWidget(new QLabel("Group Name"));
+    QLineEdit *lnGroupName = new QLineEdit();
+    group->layout()->addWidget(lnGroupName);
+
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         QString groupName = qVariantValue<QString>(index.data(Qt::DisplayRole));
+        lnGroupName->setText(groupName);
+        if (group->exec() == KoDialog::Accepted) {
+            m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
+            updateRows();
+        }
         //rename the group.
     } else {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-        //and then we do stuff with the entry :)
+        QStringList entryList = qVariantValue<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
+        lnGroupName->setText(entry.name);
+        if (group->exec() == KoDialog::Accepted) {
+            entry.name = lnGroupName->text();
+            m_d->model->colorSet()->changeColorSetEntry(entry, entryList.at(0), entryList.at(1).toUInt());
+        }
     }
 }

@@ -22,10 +22,18 @@
 #include "KoColorSpaceRegistry.h"
 #include "kis_sequential_iterator.h"
 #include <QVector2D>
+#include <KoColorSpaceMaths.h>
+
+using namespace Arithmetic;
 
 KisWetMap::KisWetMap()
 {
     m_wetMap = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+}
+
+KisWetMap::~KisWetMap()
+{
+    delete m_wetMap;
 }
 
 // Adding water in circle with the given center and radius
@@ -36,33 +44,41 @@ void KisWetMap::addWater(QPoint pos, qreal radius)
     KisSequentialIterator it(m_wetMap, rect);
 
     do {
-        qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
-        mydata[0] = 255;
+        //qDebug() << it.x() << it.y() << it.x() * it.x() + it.y() * it.y() << radius * radius;
 
         QPoint place(it.x(), it.y());
         QVector2D vec(place - pos);
-
-        vec.normalize();
-
-        mydata[1] = 255 * vec.length();
-        mydata[2] = 255 * vec.length();
+        if ((vec.x() * vec.x() + vec.y() * vec.y()) <= (radius * radius)) {
+            quint16 *mydata = reinterpret_cast<quint16*>(it.rawData());
+            vec.normalize();
+            mydata[0] = unitValue<quint16>();
+            mydata[3] = unitValue<quint16>();
+            mydata[1] = unitValue<quint16>() * vec.x();
+            mydata[2] = unitValue<quint16>() * vec.y();
+        }
     } while (it.nextPixel());
 }
 
 // Updating wetmap for simulating drying process
 void KisWetMap::update()
 {
-    KisSequentialIterator it(m_wetMap, m_wetMap->exactBounds());
+    if (m_wetMap->exactBounds().size() != QSize(0, 0)) {
+        KisSequentialIterator it(m_wetMap, m_wetMap->exactBounds());
 
-    do {
-        qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
-        if (mydata[0] > 0) {            // If there some water
-            mydata[0]--;                // The "evaporated" part of the water
-        } else {                        // If there is no water
-            mydata[1] = 0;              // Remove speed vector
-            mydata[2] = 0;
-        }
-    } while (it.nextPixel());
+        do {
+            quint16 *mydata = reinterpret_cast<quint16*>(it.rawData());
+            if (mydata[0] > 255) {            // If there some water
+                mydata[0] -= 256;           // The "evaporated" part of the water
+            } else {                           // If there is no water
+                mydata[1] = zeroValue<quint16>();             // Remove speed vector
+                mydata[2] = zeroValue<quint16>();
+                mydata[3] = zeroValue<quint16>();
+                mydata[0] = zeroValue<quint16>();
+            }
+            if (m_wetMap->exactBounds().size() == QSize(0, 0))
+                break;
+        } while (it.nextPixel());
+    }
 }
 
 // Returns water count in point (x, y)
@@ -72,7 +88,7 @@ int KisWetMap::getWater(int x, int y)
     while (it.x() != x && it.y() != y)
         it.nextPixel();
 
-    qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
+    quint16 *mydata = reinterpret_cast<quint16*>(it.rawData());
 
     return mydata[0];
 }

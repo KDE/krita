@@ -18,26 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_WETMAP_H
-#define KIS_WETMAP_H
+#ifndef __KIS_WATERCOLOROP_TEST_H
+#define __KIS_WATERCOLOROP_TEST_H
 
-#include "kritawatercolorpaintop_export.h"
+#include <QtTest>
 
-#include "kis_paint_device.h"
-
-class WATERCOLORPAINT_EXPORT KisWetMap
+class WetMapTest : public QObject
 {
-public:
-    KisWetMap();
-    ~KisWetMap();
-
-    void addWater(QPoint pos, qreal radius);
-    void update();
-    int getWater(int x, int y);
-
-    KisPaintDeviceSP getPaintDevice();
-private:
-    KisPaintDeviceSP m_wetMap;
+    Q_OBJECT
+private Q_SLOTS:
+	void testWetMap();
 };
 
-#endif
+#endif /* __KIS_WATERCOLOROP_TEST_H */

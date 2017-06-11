@@ -53,6 +53,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
     verticalHeader()->setDefaultSectionSize(defaultSectionSize);
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelection()) );
 }
 
 KisPaletteView::~KisPaletteView()
@@ -113,5 +114,23 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
         event->accept();
     } else {
         KoTableView::wheelEvent(event);
+    }
+}
+
+void KisPaletteView::entrySelection() {
+    QModelIndex index = selectedIndexes().last();
+    KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
+    emit(entrySelected(entry));
+}
+
+void KisPaletteView::modifyEntry() {
+    //let's assume the last item is the one that is selected.
+    QModelIndex index = selectedIndexes().last();
+    if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+        QString groupName = qVariantValue<QString>(index.data(Qt::DisplayRole));
+        //rename the group.
+    } else {
+        KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
+        //and then we do stuff with the entry :)
     }
 }

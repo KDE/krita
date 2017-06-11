@@ -68,6 +68,14 @@ public:
     QModelIndex indexFromId(int i) const;
     int idFromIndex(const QModelIndex &index) const;
 
+    /**
+     * @brief colorSetEntryFromIndex
+     * This gives the colorset entry for the given table model index.
+     * @param index the QModelIndex
+     * @return the kocolorsetentry
+     */
+    KoColorSetEntry colorSetEntryFromIndex(const QModelIndex &index);
+
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
 

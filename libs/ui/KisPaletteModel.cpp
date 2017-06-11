@@ -150,6 +150,7 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
                 countedrows+=1;
             }
         }
+        countedrows +=1; //Our code up till now doesn't take 0 into account.
         return countedrows;
     }
     return m_colorSet->nColors()/15 + 1;
@@ -221,4 +222,11 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
     return index.isValid() ? index.row() * columnCount() + index.column() : -1;
 }
 
+KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index)
+{
+    QStringList entryList = qVariantValue<QStringList>(data(index, RetrieveEntryRole));
+    QString groupName = entryList.at(0);
+    quint32 indexInGroup = entryList.at(1).toUInt();
+    return m_colorSet->getColorGroup(indexInGroup, groupName);
+}
 

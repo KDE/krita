@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 #include <KoTableView.h>
-
+#include <KoColorSet.h>
 #include "kritaui_export.h"
 
 class KisPaletteModel;
@@ -30,6 +30,7 @@ class QWheelEvent;
 
 class KRITAUI_EXPORT KisPaletteView : public KoTableView
 {
+    Q_OBJECT
 public:
     KisPaletteView(QWidget *parent = 0);
     ~KisPaletteView() override;
@@ -40,13 +41,19 @@ public:
     void updateRows();
 
     void setCrossedKeyword(const QString &value);
-
+Q_SIGNALS:
+    void entrySelected(KoColorSetEntry entry);
 protected:
     void wheelEvent(QWheelEvent *event) override;
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+private Q_SLOTS:
+    //the function that will set the last changed color.
+    void entrySelection();
+    //the function that allows changing the last selected color.
+    void modifyEntry();
 };
 
 #endif /* __KIS_PALETTE_VIEW_H */

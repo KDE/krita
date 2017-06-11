@@ -76,7 +76,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
 
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
@@ -217,29 +217,20 @@ void PaletteDockerDock::removeColor()
     setColorSet(m_currentColorSet); // update model
 }
 
-void PaletteDockerDock::entrySelected(QModelIndex index)
+void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
 {
-    if (!index.isValid()) {
-        return;
+    quint32 index = 0;
+    QString groupName = m_currentColorSet->findGroupByName(entry.name, &index);
+    QString seperator;
+    if (groupName != QString()) {
+        seperator = " - ";
     }
-
-    QStringList entryList =  qVariantValue<QStringList>(m_model->data(index, KisPaletteModel::RetrieveEntryRole));
-    QString groupName = entryList.at(0);
-    quint32 i = QString(entryList.at(1)).toInt();
-    if (i < m_currentColorSet->nColorsGroup(groupName)) {
-        KoColorSetEntry entry = m_currentColorSet->getColorGroup(i, groupName);
-        quint32 li = 0;
-        QString seperator;
-        if (groupName != QString()) {
-            seperator = " - ";
-        }
-        m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
-        if (m_resourceProvider) {
-            m_resourceProvider->setFGColor(entry.color);
-        }
-        if (m_currentColorSet->removable()) {
-            m_wdgPaletteDock->bnRemove->setEnabled(true);
-        }
+    m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
+    if (m_resourceProvider) {
+        m_resourceProvider->setFGColor(entry.color);
+    }
+    if (m_currentColorSet->removable()) {
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
     }
 }
 

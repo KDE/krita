@@ -1,9 +1,13 @@
 from colorspace import colorspacedialog
+from colorspace.components import colormodelcombobox, colordepthcombobox, colorprofilecombobox
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
                              QAbstractItemView, QComboBox, QDialogButtonBox,
-                             QVBoxLayout, QFrame, QMessageBox)
+                             QVBoxLayout, QFrame, QMessageBox, QPushButton,
+                             QHBoxLayout)
+from PyQt5.QtGui import QIcon
 import krita
+from colorspace import resources_rc
 
 
 class UIColorSpace(object):
@@ -11,10 +15,12 @@ class UIColorSpace(object):
         self.mainDialog = colorspacedialog.ColorSpaceDialog()
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
+        self.documentLayout = QVBoxLayout()
+        self.refreshButton = QPushButton(QIcon(':/icons/refresh.svg'), "Refresh")
         self.widgetDocuments = QListWidget()
-        self.colorModelComboBox = QComboBox()
-        self.colorDepthComboBox = QComboBox()
-        self.colorProfileComboBox = QComboBox()
+        self.colorModelComboBox = colormodelcombobox.ColorModelComboBox(self)
+        self.colorDepthComboBox = colordepthcombobox.ColorDepthComboBox(self)
+        self.colorProfileComboBox = colorprofilecombobox.ColorProfileComboBox(self)
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
@@ -23,8 +29,7 @@ class UIColorSpace(object):
         self.colorDepthsList = []
         self.colorProfilesList = []
 
-        self.colorModelComboBox.currentTextChanged.connect(self.changedColorModelComboBox)
-        self.colorDepthComboBox.currentTextChanged.connect(self.changedColorDepthComboBox)
+        self.refreshButton.clicked.connect(self.refreshButtonClicked)
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
 
@@ -37,7 +42,10 @@ class UIColorSpace(object):
         self.loadColorDepths()
         self.loadColorProfiles()
 
-        self.formLayout.addRow('Documents', self.widgetDocuments)
+        self.documentLayout.addWidget(self.widgetDocuments)
+        self.documentLayout.addWidget(self.refreshButton)
+
+        self.formLayout.addRow('Documents', self.documentLayout)
         self.formLayout.addRow('Color Model', self.colorModelComboBox)
         self.formLayout.addRow('Color Depth', self.colorDepthComboBox)
         self.formLayout.addRow('Color Profile', self.colorProfileComboBox)
@@ -61,24 +69,21 @@ class UIColorSpace(object):
 
         self.colorModelComboBox.addItems(self.colorModelsList)
 
-    def loadColorDepths(self, colorModel=None):
+    def loadColorDepths(self):
         self.colorDepthComboBox.clear()
 
-        if not colorModel:
-            colorModel = self.colorModelComboBox.currentText()
+        colorModel = self.colorModelComboBox.currentText()
         self.colorDepthsList = sorted(self.kritaInstance.colorDepths(colorModel))
 
         self.colorDepthComboBox.addItems(self.colorDepthsList)
 
-    def loadColorProfiles(self, colorModel=None, colorDepth=None):
+    def loadColorProfiles(self):
         self.colorProfileComboBox.clear()
 
-        if not colorModel:
-            colorModel = self.colorModelComboBox.currentText()
-        if not colorDepth:
-            colorDepth = self.colorDepthComboBox.currentText()
-
+        colorModel = self.colorModelComboBox.currentText()
+        colorDepth = self.colorDepthComboBox.currentText()
         self.colorProfilesList = sorted(self.kritaInstance.profiles(colorModel, colorDepth))
+
         self.colorProfileComboBox.addItems(self.colorProfilesList)
 
     def loadDocuments(self):
@@ -89,20 +94,19 @@ class UIColorSpace(object):
         for document in self.documentsList:
             self.widgetDocuments.addItem(document.fileName())
 
-    def changedColorModelComboBox(self, colorModel):
-        self.loadColorDepths(colorModel=colorModel)
-
-    def changedColorDepthComboBox(self, colorDepth):
-        self.loadColorProfiles(colorDepth=colorDepth)
+    def refreshButtonClicked(self):
+        self.loadDocuments()
 
     def confirmButton(self):
         selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
         selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path==document.fileName()]
 
-        self.convertColorSpace(selectedDocuments)
-
         self.msgBox  = QMessageBox(self.mainDialog)
-        self.msgBox.setText("The selected documents has been converted.")
+        if selectedDocuments:
+            self.convertColorSpace(selectedDocuments)
+            self.msgBox.setText("The selected documents has been converted.")
+        else:
+            self.msgBox.setText("Select at least one document.")
         self.msgBox.exec_()
 
 

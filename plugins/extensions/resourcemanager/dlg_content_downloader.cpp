@@ -33,6 +33,7 @@
 #include <klocalizedstring.h>
 
 #include <KNSCore/ItemsModel>
+#include "entry_p.h"
 
 using namespace KNS3;
 

@@ -97,16 +97,4 @@ public:
 
 };
 
-class EntryPrivate : public QSharedData
-{
-public:
-    KNSCore::EntryInternal e;
-    static KNS3::Entry fromInternal(const KNSCore::EntryInternal* internal)
-    {
-        KNS3::Entry e;
-        e.d->e = *internal;
-        return e;
-    }
-};
-
 #endif // DLG_CONTENT_DOWNLOADER_P_H

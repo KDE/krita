@@ -25,6 +25,7 @@ set(kritaresourcemanager_SOURCES
     itemsview.cpp
     imagepreviewwidget.cpp
     dlg_content_downloader.cpp
+    entry.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

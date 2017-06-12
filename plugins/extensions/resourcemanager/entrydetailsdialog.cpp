@@ -26,8 +26,6 @@
 #include <KNSCore/Engine>
 #include <Attica/Provider>
 
-using namespace KNS3;
-
 EntryDetails::EntryDetails(KNSCore::Engine *engine, Ui::WdgDlgContentDownloader *widget)
     : QObject(widget->m_listView), m_engine(engine), ui(widget)
 {
@@ -177,34 +175,34 @@ void EntryDetails::updateButtons()
     ui->updateButton->setVisible(false);
 
     switch (m_entry.status()) {
-    case Entry::Installed:
+    case KNS3::Entry::Installed:
         ui->uninstallButton->setVisible(true);
         ui->uninstallButton->setEnabled(true);
         break;
-    case Entry::Updateable:
+    case KNS3::Entry::Updateable:
         ui->updateButton->setVisible(true);
         ui->updateButton->setEnabled(true);
         ui->uninstallButton->setVisible(true);
         ui->uninstallButton->setEnabled(true);
         break;
 
-    case Entry::Invalid:
-    case Entry::Downloadable:
+    case KNS3::Entry::Invalid:
+    case KNS3::Entry::Downloadable:
         ui->installButton->setVisible(true);
         ui->installButton->setEnabled(true);
         break;
 
-    case Entry::Installing:
+    case KNS3::Entry::Installing:
         ui->installButton->setVisible(true);
         ui->installButton->setEnabled(false);
         break;
-    case Entry::Updating:
+    case KNS3::Entry::Updating:
         ui->updateButton->setVisible(true);
         ui->updateButton->setEnabled(false);
         ui->uninstallButton->setVisible(true);
         ui->uninstallButton->setEnabled(false);
         break;
-    case Entry::Deleted:
+    case KNS3::Entry::Deleted:
         ui->installButton->setVisible(true);
         ui->installButton->setEnabled(true);
         break;

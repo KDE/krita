@@ -29,8 +29,6 @@
 #include <qstandardpaths.h>
 #include <kiconloader.h>
 
-using namespace KNS3;
-
 ItemsViewBaseDelegate::ItemsViewBaseDelegate(QAbstractItemView *itemView, KNSCore::Engine *engine, QObject *parent)
     : KWidgetItemDelegate(itemView, parent)
     , m_engine(engine)
@@ -78,7 +76,7 @@ void ItemsViewBaseDelegate::slotInstallClicked()
             return;
         }
 
-        if (entry.status() == Entry::Installed) {
+        if (entry.status() == KNS3::Entry::Installed) {
             m_engine->uninstall(entry);
         } else {
             m_engine->install(entry);

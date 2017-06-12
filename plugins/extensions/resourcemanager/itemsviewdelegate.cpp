@@ -38,8 +38,6 @@
 
 #include "entrydetailsdialog_p.h"
 
-using namespace KNS3;
-
 enum { DelegateLabel, DelegateInstallButton, DelegateDetailsButton,  DelegateRatingWidget };
 
 ItemsViewDelegate::ItemsViewDelegate(QAbstractItemView *itemView, KNSCore::Engine *engine, QObject *parent)
@@ -119,31 +117,31 @@ void ItemsViewDelegate::updateItemWidgets(const QList<QWidget *> widgets,
         QIcon icon;
 
         switch (entry.status()) {
-        case Entry::Installed:
+        case KNS3::Entry::Installed:
             text = i18n("Uninstall");
             icon = m_iconDelete;
             break;
-        case Entry::Updateable:
+        case KNS3::Entry::Updateable:
             text = i18n("Update");
             icon = m_iconUpdate;
             installable = true;
             break;
-        case Entry::Installing:
+        case KNS3::Entry::Installing:
             text = i18n("Installing");
             enabled = false;
             icon = m_iconUpdate;
             break;
-        case Entry::Updating:
+        case KNS3::Entry::Updating:
             text = i18n("Updating");
             enabled = false;
             icon = m_iconUpdate;
             break;
-        case Entry::Downloadable:
+        case KNS3::Entry::Downloadable:
             text = i18n("Install");
             icon = m_iconInstall;
             installable = true;
             break;
-        case Entry::Deleted:
+        case KNS3::Entry::Deleted:
             text = i18n("Install Again");
             icon = m_iconInstall;
             installable = true;
@@ -167,7 +165,7 @@ void ItemsViewDelegate::updateItemWidgets(const QList<QWidget *> widgets,
                 installAction->setData(QPoint(index.row(), info.id));
             }
             installButton->setMenu(installMenu);
-        } else if (entry.status() == Entry::Installed && m_engine->hasAdoptionCommand()) {
+        } else if (entry.status() == KNS3::Entry::Installed && m_engine->hasAdoptionCommand()) {
             QMenu* m = new QMenu(installButton);
             m->addAction(i18n("Use"), m, [this, entry](){
                 QStringList args = KShell::splitArgs(m_engine->adoptionCommand(entry));

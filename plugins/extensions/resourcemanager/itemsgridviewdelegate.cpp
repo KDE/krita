@@ -38,8 +38,6 @@
 
 #include <KNSCore/ItemsModel>
 
-using namespace KNS3;
-
 enum { DelegateTitleLabel, DelegateAuthorLabel, DelegateDownloadCounterLabel,
        DelegateGridRatingWidget
      };
@@ -330,31 +328,31 @@ void ItemsGridViewDelegate::displayOperationBar(const QRect &rect, const QModelI
         QIcon icon;
 
         switch (entry.status()) {
-        case Entry::Installed:
+        case KNS3::Entry::Installed:
             text = i18n("Uninstall");
             icon = m_iconDelete;
             break;
-        case Entry::Updateable:
+        case KNS3::Entry::Updateable:
             text = i18n("Update");
             icon = m_iconUpdate;
             installable = true;
             break;
-        case Entry::Installing:
+        case KNS3::Entry::Installing:
             text = i18n("Installing");
             enabled = false;
             icon = m_iconUpdate;
             break;
-        case Entry::Updating:
+        case KNS3::Entry::Updating:
             text = i18n("Updating");
             enabled = false;
             icon = m_iconUpdate;
             break;
-        case Entry::Downloadable:
+        case KNS3::Entry::Downloadable:
             text = i18n("Install");
             icon = m_iconInstall;
             installable = true;
             break;
-        case Entry::Deleted:
+        case KNS3::Entry::Deleted:
             text = i18n("Install Again");
             icon = m_iconInstall;
             installable = true;

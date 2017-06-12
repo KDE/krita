@@ -33,9 +33,9 @@
 #include <klocalizedstring.h>
 
 #include <KNSCore/ItemsModel>
-#include "entry_p.h"
+#include <KNSCore/EntryInternal>
 
-using namespace KNS3;
+using namespace KNSCore;
 
 DlgContentDownloader::DlgContentDownloader(QWidget *parent)
     : QWidget(parent)
@@ -78,21 +78,21 @@ KNSCore::Engine *DlgContentDownloader::engine()
     return d->engine;
 }
 
-Entry::List DlgContentDownloader::changedEntries()
+EntryInternal::List DlgContentDownloader::changedEntries()
 {
-    Entry::List entries;
+    EntryInternal::List entries;
     foreach (const KNSCore::EntryInternal &e, d->changedEntries) {
-        entries.append(EntryPrivate::fromInternal(&e));
+        entries.append(&e);
     }
     return entries;
 }
 
-Entry::List DlgContentDownloader::installedEntries()
+EntryInternal::List DlgContentDownloader::installedEntries()
 {
-    Entry::List entries;
+    EntryInternal::List entries;
     foreach (const KNSCore::EntryInternal &e, d->changedEntries) {
-        if (e.status() == Entry::Installed) {
-            entries.append(EntryPrivate::fromInternal(&e));
+        if (e.status() == KNSCore::EntryInternal::Installed) {
+            entries.append(&e);
         }
     }
     return entries;
@@ -122,7 +122,7 @@ void DlgContentDownloaderPrivate::slotResetMessage()
 
 void DlgContentDownloaderPrivate::slotNetworkTimeout()
 {
-    displayMessage(i18n("Timeout. Please Check your Internet connection."), KTitleWidget::ErrrorMessage);
+    displayMessage(i18n("Timeout. Please Check your Internet connection."), KTitleWidget::ErrorMessage);
 }
 
 void DlgContentDownloaderPrivate::sortingChanged()
@@ -321,7 +321,7 @@ void DlgContentDownloaderPrivate::slotProvidersLoaded()
     engine->reloadEntries();
 }
 
-void DlgContentDownloaderPrivate::slotEntriesLoaded(const KNSCore::EntryInternal::List &entries)
+void DlgContentDownloaderPrivate::slotEntriesLoaded(const EntryInternal::List &entries)
 {
     foreach (const KNSCore::EntryInternal &entry, entries) {
         if (!categories.contains(entry.category())) {

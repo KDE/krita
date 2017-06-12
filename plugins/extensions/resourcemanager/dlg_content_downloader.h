@@ -25,12 +25,9 @@
 
 //KNS Includes
 
-#include <KNS3/Entry>
+#include <KNSCore/EntryInternal>
 
-namespace KNSCore
-{
-class Engine;
-}
+using namespace KNSCore;
 
 class DlgContentDownloaderPrivate;
 
@@ -66,13 +63,13 @@ public:
      * The list of entries with changed status (installed/uninstalled)
      * @return the list of entries
      */
-    KNS3::Entry::List changedEntries();
+    EntryInternal::List changedEntries();
 
     /**
      * The list of entries that have been newly installed
      * @return the list of entries
      */
-    KNS3::Entry::List installedEntries();
+    EntryInternal::List installedEntries();
 
     /**
      * Set the title for display purposes in the widget's title.

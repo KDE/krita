@@ -294,8 +294,9 @@ quint32 KoColorSet::nColorsGroup(QString groupName) {
         return d->groups.value(groupName).size();
     } else if (groupName.isEmpty()){
         return d->colors.size();
+    } else {
+        return 0;
     }
-    return 0;
 }
 
 quint32 KoColorSet::getIndexClosestColor(const KoColor color, bool useGivenColorSpace)

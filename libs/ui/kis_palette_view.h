@@ -44,6 +44,19 @@ public:
      */
     void updateRows();
 
+    /**
+     * @brief setAllowModification
+     * Set whether doubleclick calls up a modification window. This is to prevent users from editing
+     * the palette when the palette is intended to be a list of items.
+     */
+    void setAllowModification(bool allow);
+
+    /**
+     * @brief setCrossedKeyword
+     * this apparently allows you to set keywords that can cross out colors.
+     * This is implemented to mark the lazybrush "transparent" color.
+     * @param value
+     */
     void setCrossedKeyword(const QString &value);
 Q_SIGNALS:
     /**
@@ -67,6 +80,7 @@ private Q_SLOTS:
     /**
      * @brief modifyEntry
      * function for changing the entry at the given index.
+     * if modification isn't allow(@see setAllowModification), this does nothing.
      */
     void modifyEntry(QModelIndex index);
 };

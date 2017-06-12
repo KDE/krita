@@ -66,14 +66,14 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         quint32 indexInGroup = 0;
         QString indexGroupName = QString();
 
-        int rowstotal = m_colorSet->nColorsGroup()/m_colorSet->columnCount();
+        int rowstotal = m_colorSet->nColorsGroup()/columnCount();
         if (index.row()<=rowstotal) {
             indexInGroup = (quint32)(index.row()*columnCount()+index.column());
         }
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
             //we make an int for the rows added by the current group.
-            int newrows = 1+m_colorSet->nColorsGroup(groupName)/m_colorSet->columnCount();
-            if (m_colorSet->nColorsGroup(groupName)%m_colorSet->columnCount() > 0) {
+            int newrows = 1+m_colorSet->nColorsGroup(groupName)/columnCount();
+            if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
                 newrows+=1;
             }
             if (index.row() == rowstotal+1) {
@@ -137,12 +137,12 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
     if (!m_colorSet) {
         return 0;
     }
-    if (m_colorSet->columnCount() > 0) {
-        int countedrows = m_colorSet->nColorsGroup("")/m_colorSet->columnCount();
+    if (columnCount() > 0) {
+        int countedrows = m_colorSet->nColorsGroup("")/columnCount();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()) {
             countedrows += 1; //add one for the name;
-            countedrows += (m_colorSet->nColorsGroup(groupName)/ m_colorSet->columnCount());
-            if (m_colorSet->nColorsGroup(groupName)%m_colorSet->columnCount() > 0) {
+            countedrows += (m_colorSet->nColorsGroup(groupName)/ columnCount());
+            if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
                 countedrows+=1;
             }
         }
@@ -171,15 +171,15 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     if (m_colorSet) {
 
         //make an int to hold the amount of rows we've looked at. The initial is the total rows in the default group.
-        int rowstotal = m_colorSet->nColorsGroup()/m_colorSet->columnCount();
+        int rowstotal = m_colorSet->nColorsGroup()/columnCount();
         if (row<=rowstotal) {
             //if the total rows are in the default group, we just return an index.
             return QAbstractTableModel::index(row, column, parent);
         }
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
             //we make an int for the rows added by the current group.
-            int newrows = 1 + m_colorSet->nColorsGroup(groupName)/m_colorSet->columnCount();
-            if (m_colorSet->nColorsGroup(groupName)%m_colorSet->columnCount() > 0) {
+            int newrows = 1 + m_colorSet->nColorsGroup(groupName)/columnCount();
+            if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
                 newrows+=1;
             }
             if (row == rowstotal+1) {
@@ -209,13 +209,50 @@ KoColorSet* KisPaletteModel::colorSet() const
 
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
-    const int width = columnCount();
-    return width > 0 ? index(i / width, i & width) : QModelIndex();
+    QModelIndex index = QModelIndex();
+    if (i<colorSet()->nColorsGroup(0)) {
+        index = QAbstractTableModel::index(i/columnCount(), i%columnCount());
+        return index;
+    } else {
+        int rowstotal = m_colorSet->nColorsGroup()/columnCount();
+        int totalIndexes = colorSet()->nColorsGroup();
+        Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
+            totalIndexes += colorSet()->nColorsGroup(groupName);
+            if (totalIndexes<i) {
+                rowstotal += m_colorSet->nColorsGroup(groupName)/columnCount();
+                if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
+                    rowstotal+=1;
+                }
+                rowstotal+=1;
+            } else {
+                index = QAbstractTableModel::index(rowstotal, i-(rowstotal*columnCount()));
+            }
+        }
+    }
+    return index;
 }
 
 int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 {
-    return index.isValid() ? index.row() * columnCount() + index.column() : -1;
+    if (index.isValid()==false || qVariantValue<bool>(index.data(IsHeaderRole))) {
+        return -1;
+    }
+    int i=0;
+    QStringList entryList = qVariantValue<QStringList>(data(index, RetrieveEntryRole));
+    if (entryList.at(0)==QString()) {
+        return entryList.at(1).toUInt();
+    }
+
+    i = colorSet()->nColorsGroup("");
+    //find at which position the group is.
+    int groupIndex = colorSet()->getGroupNames().indexOf(entryList.at(0));
+    //add all the groupsizes onto it till we get to our group.
+    for(int g=0; g<groupIndex; g++) {
+        i+=colorSet()->nColorsGroup(colorSet()->getGroupNames().at(g));
+    }
+    //then add the index.
+    i += entryList.at(1).toUInt();
+    return i;
 }
 
 KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index)

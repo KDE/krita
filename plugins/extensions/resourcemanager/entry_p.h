@@ -24,6 +24,8 @@
 #include <QtCore/QStringList>
 #include <KNSCore/EntryInternal>
 
+using namespace KNS3;
+
 class EntryPrivate : public QSharedData
 {
 public:

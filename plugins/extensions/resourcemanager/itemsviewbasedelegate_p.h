@@ -73,7 +73,6 @@ protected:
     QIcon m_iconUpdate;
     QIcon m_iconDelete;
     QPixmap m_frameImage;
-    QPixmap m_noImage;
     QSize m_buttonSize;
 };
 

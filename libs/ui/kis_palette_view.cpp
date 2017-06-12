@@ -28,6 +28,8 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <kis_color_button.h>
+#include <QCheckBox>
 
 
 struct KisPaletteView::Private
@@ -132,13 +134,18 @@ void KisPaletteView::entrySelection() {
 
 void KisPaletteView::modifyEntry(QModelIndex index) {
     KoDialog *group = new KoDialog();
-    group->setLayout(new QFormLayout());
-    group->layout()->addWidget(new QLabel("Group Name"));
+    //QHBoxLayout *mainLayout = new QHBoxLayout();
+    QFormLayout *editableItems = new QFormLayout();
+    group->mainWidget()->setLayout(editableItems);
+    QLineEdit *lnIDName = new QLineEdit();
     QLineEdit *lnGroupName = new QLineEdit();
-    group->layout()->addWidget(lnGroupName);
+    KisColorButton *bnColor = new KisColorButton();
+    QCheckBox *chkSpot = new QCheckBox();
+
 
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         QString groupName = qVariantValue<QString>(index.data(Qt::DisplayRole));
+        editableItems->addRow(tr("Name"), lnGroupName);
         lnGroupName->setText(groupName);
         if (group->exec() == KoDialog::Accepted) {
             m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
@@ -148,9 +155,19 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
     } else {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
         QStringList entryList = qVariantValue<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
+        editableItems->addRow(tr("ID"), lnIDName);
+        editableItems->addRow(tr("Name"), lnGroupName);
+        editableItems->addRow(tr("Color"), bnColor);
+        editableItems->addRow(tr("Spot"), chkSpot);
         lnGroupName->setText(entry.name);
+        lnIDName->setText(entry.id);
+        bnColor->setColor(entry.color);
+        chkSpot->setChecked(entry.spotColor);
         if (group->exec() == KoDialog::Accepted) {
             entry.name = lnGroupName->text();
+            entry.id = lnIDName->text();
+            entry.color = bnColor->color();
+            entry.spotColor = chkSpot->isChecked();
             m_d->model->colorSet()->changeColorSetEntry(entry, entryList.at(0), entryList.at(1).toUInt());
         }
     }

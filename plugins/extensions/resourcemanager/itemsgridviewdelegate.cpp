@@ -1,4 +1,7 @@
 /*
+ *  Copyright (C) 2008 Jeremy Whiting <jpwhiting@kde.org>
+ *  Copyright (C) 2010 Reza Fatahilah Shah <rshah0385@kireihana.com>
+ *  Copyright (C) 2010 Frederik Gladhorn <gladhorn@kde.org>
  *  Copyright (c) 2017 Aniketh Girish anikethgireesh@gmail.com
  *
  * This library is free software; you can redistribute it and/or

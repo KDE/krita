@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2016 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *  Copyright (c) 2017 Aniketh Girish anikethgireesh@gmail.com
  *
  * This library is free software; you can redistribute it and/or

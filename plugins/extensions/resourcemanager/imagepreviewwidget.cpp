@@ -27,8 +27,6 @@
 
 #include <KNSCore/EntryInternal>
 
-using namespace KNS3;
-
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent) :
     QWidget(parent)
 {

@@ -41,8 +41,8 @@ DlgContentDownloader::DlgContentDownloader(QWidget *parent)
     : QWidget(parent)
     , d(new DlgContentDownloaderPrivate(this))
 {
-    const Qstring name = QCoreApplication::applicationName();
-    init(name + ".knsrc")
+    const QString name = QCoreApplication::applicationName();
+    init(name + ".knsrc");
 }
 
 DlgContentDownloader::DlgContentDownloader(const QString &knsrc, QWidget *parent)
@@ -63,12 +63,12 @@ DlgContentDownloader::~DlgContentDownloader()
     delete d;
 }
 
-void DlgContentDownloader::setTitle(const Qstring &title)
+void DlgContentDownloader::setTitle(const QString &title)
 {
     d->ui.m_titleWidget->setText(title);
 }
 
-void DlgContentDownloader::title() const
+QString DlgContentDownloader::title() const
 {
     return d->ui.m_titleWidget->text();
 }
@@ -82,7 +82,7 @@ EntryInternal::List DlgContentDownloader::changedEntries()
 {
     EntryInternal::List entries;
     foreach (const KNSCore::EntryInternal &e, d->changedEntries) {
-        entries.append(&e);
+        entries.append(e);
     }
     return entries;
 }
@@ -91,8 +91,8 @@ EntryInternal::List DlgContentDownloader::installedEntries()
 {
     EntryInternal::List entries;
     foreach (const KNSCore::EntryInternal &e, d->changedEntries) {
-        if (e.status() == KNSCore::EntryInternal::Installed) {
-            entries.append(&e);
+        if (e.status() == KNS3::Entry::Installed) {
+            entries.append(e);
         }
     }
     return entries;
@@ -178,6 +178,13 @@ void DlgContentDownloaderPrivate::slotCategoryChanged(int idx)
             QStringList filter(category);
             engine->setCategoriesFilter(filter);
         }
+    }
+}
+
+void DlgContentDownloaderPrivate::scrollbarValueChanged(int value)
+{
+    if ((double)value / ui.m_listView->verticalScrollBar()->maximum() > 0.9) {
+        engine->requestMoreData();
     }
 }
 
@@ -275,7 +282,7 @@ void DlgContentDownloaderPrivate::init(const QString &configFile)
     q->connect(ui.m_listView, SIGNAL(doubleClicked(QModelIndex)), delegate, SLOT(slotDetailsClicked(QModelIndex)));
 
     details = new EntryDetails(engine, &ui);
-    q->connect(delegate, &KNS3::ItemsViewBaseDelegate::signalShowDetails, this, &DlgContentDownloaderPrivate::slotShowDetails);
+    q->connect(delegate, &ItemsViewBaseDelegate::signalShowDetails, this, &DlgContentDownloaderPrivate::slotShowDetails);
 
     slotShowOverview();
 }

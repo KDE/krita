@@ -64,7 +64,7 @@ public:
     QSet<QString> providers;
 
     QString titleText;
-    QString m_knsrc;
+    QString m_configFile;
     bool dialogMode;
 
     explicit DlgContentDownloaderPrivate(DlgContentDownloader *q);
@@ -90,6 +90,8 @@ public:
     void slotSearchTextChanged();
     void slotUpdateSearch();
     void slotCategoryChanged(int);
+
+    void scrollbarValueChanged(int value);
 
     void slotListViewListMode();
     void slotListViewIconMode();

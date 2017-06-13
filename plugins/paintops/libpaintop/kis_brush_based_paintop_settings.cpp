@@ -77,17 +77,6 @@ bool KisBrushBasedPaintOpSettings::paintIncremental()
     return true;
 }
 
-bool KisBrushBasedPaintOpSettings::isAirbrushing() const
-{
-    return getBool(AIRBRUSH_ENABLED);
-}
-
-
-int KisBrushBasedPaintOpSettings::rate() const
-{
-    return getInt(AIRBRUSH_RATE);
-}
-
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();

@@ -24,6 +24,7 @@
 #define KIS_BRUSHOP_H_
 
 #include "kis_brush_based_paintop.h"
+#include <kis_airbrush_option.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_size_option.h>
@@ -37,6 +38,7 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
+#include <kis_pressure_rate_option.h>
 #include <kis_brush_based_paintop_settings.h>
 
 class KisPainter;
@@ -56,9 +58,11 @@ public:
 
 private:
     KisColorSource *m_colorSource;
+    KisAirbrushOption m_airbrushOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRatioOption m_ratioOption;
     KisPressureSpacingOption m_spacingOption;
+    KisPressureRateOption m_rateOption;
     KisPressureFlowOption m_flowOption;
     KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;

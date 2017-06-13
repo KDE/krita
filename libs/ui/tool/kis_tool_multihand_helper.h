@@ -37,7 +37,8 @@ public:
 protected:
     void createPainters(QVector<PainterInfo*> &painterInfos,
                         const QPointF &lastPosition,
-                        int lastTime) override;
+                        int lastTime,
+                        qreal lastAngle) override;
 
     void paintAt(const KisPaintInformation &pi) override;
 

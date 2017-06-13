@@ -132,6 +132,9 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 }
 
 void KisPaletteView::entrySelection() {
+    if (selectedIndexes().last().isValid()) {
+        return;
+    }
     QModelIndex index = selectedIndexes().last();
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);

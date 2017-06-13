@@ -246,6 +246,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
+    KoResourcePaths::addResourceType("symbols", "data", "/symbols");
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -269,6 +270,8 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
 }
 
 void KisApplication::loadResources()
@@ -295,6 +298,11 @@ void KisApplication::loadResources()
     setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
     processEvents();
     KisResourceServerProvider::instance()->paintOpPresetServer(true);
+
+    // load symbols
+    setSplashScreenLoadingText(i18n("Loading SVG Symbol Collections..."));
+    processEvents();
+    KoResourceServerProvider::instance()->svgSymbolCollectionServer(true);
 
     setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
     processEvents();

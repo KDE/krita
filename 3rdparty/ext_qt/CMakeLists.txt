@@ -130,7 +130,7 @@ else( APPLE )
         # Fix Xcode xcrun related issue.
         # NOTE: This should be fixed by Qt 5.7.1 see here: http://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=77a71c32c9d19b87f79b208929e71282e8d8b5d9
         # NOTE: but no one's holding their breath.
-        set(ext_qt_PATCH_COMMAND $${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
+        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
                 COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
                 COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/qtbase-configure.patch
                 COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch)
@@ -149,7 +149,7 @@ else( APPLE )
       if(NOT NUM_CORES EQUAL 0)
         if (NUM_CORES GREATER 2)
           # be nice...
-          MATH( EXPR NUM_CORES "${NUM_CORES} - 2" ) 
+          MATH( EXPR NUM_CORES "${NUM_CORES} - 2" )
         endif()
         set(PARALLEL_MAKE "make;-j${NUM_CORES}")
         message(STATUS "${EXTPREFIX_qt}:Parallelized make: ${PARALLEL_MAKE}")

@@ -30,8 +30,9 @@
 #include "kis_wetmap.h"
 #include "kis_random_generator.h"
 
+#include "kritawatercolorpaintop_export.h"
 
-class KisSplat
+class WATERCOLORPAINT_EXPORT KisSplat
 {
 public:
     enum SplatState {

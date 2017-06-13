@@ -34,6 +34,7 @@ public:
     void addWater(QPoint pos, qreal radius);
     void update();
     int getWater(int x, int y);
+    QPoint getSpeed(int x, int y);
 
     KisPaintDeviceSP getPaintDevice();
 private:

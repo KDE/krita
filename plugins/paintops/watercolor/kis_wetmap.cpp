@@ -49,12 +49,12 @@ void KisWetMap::addWater(QPoint pos, qreal radius)
         QPoint place(it.x(), it.y());
         QVector2D vec(place - pos);
         if ((vec.x() * vec.x() + vec.y() * vec.y()) <= (radius * radius)) {
-            quint16 *mydata = reinterpret_cast<quint16*>(it.rawData());
+            qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
             vec.normalize();
-            mydata[0] = unitValue<quint16>();
-            mydata[3] = unitValue<quint16>();
-            mydata[1] = unitValue<quint16>() * vec.x();
-            mydata[2] = unitValue<quint16>() * vec.y();
+            mydata[0] = unitValue<qint16>();
+            mydata[3] = unitValue<qint16>();
+            mydata[1] = unitValue<qint16>() * vec.x();
+            mydata[2] = unitValue<qint16>() * vec.y();
         }
     } while (it.nextPixel());
 }
@@ -66,14 +66,14 @@ void KisWetMap::update()
         KisSequentialIterator it(m_wetMap, m_wetMap->exactBounds());
 
         do {
-            quint16 *mydata = reinterpret_cast<quint16*>(it.rawData());
-            if (mydata[0] > 255) {            // If there some water
-                mydata[0] -= 256;           // The "evaporated" part of the water
+            qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
+            if (mydata[0] > 127) {            // If there some water
+                mydata[0] -= 128;           // The "evaporated" part of the water
             } else {                           // If there is no water
-                mydata[1] = zeroValue<quint16>();             // Remove speed vector
-                mydata[2] = zeroValue<quint16>();
-                mydata[3] = zeroValue<quint16>();
-                mydata[0] = zeroValue<quint16>();
+                mydata[1] = zeroValue<qint16>();             // Remove speed vector
+                mydata[2] = zeroValue<qint16>();
+                mydata[3] = zeroValue<qint16>();
+                mydata[0] = zeroValue<qint16>();
             }
             if (m_wetMap->exactBounds().size() == QSize(0, 0))
                 break;
@@ -85,12 +85,27 @@ void KisWetMap::update()
 int KisWetMap::getWater(int x, int y)
 {
     KisSequentialIterator it(m_wetMap, m_wetMap->exactBounds());
-    while (it.x() != x && it.y() != y)
-        it.nextPixel();
 
-    quint16 *mydata = reinterpret_cast<quint16*>(it.rawData());
+    do {
+        if (it.x() == x && it.y() == y)
+            break;
+    } while (it.nextPixel());
 
+    qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
     return mydata[0];
+}
+
+QPoint KisWetMap::getSpeed(int x, int y)
+{
+    KisSequentialIterator it(m_wetMap, m_wetMap->exactBounds());
+
+    do {
+        if (it.x() == x && it.y() == y)
+            break;
+    } while (it.nextPixel());
+
+    qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
+    return QPoint(mydata[1], mydata[2]);
 }
 
 // Returns paint device for visualizing wet map

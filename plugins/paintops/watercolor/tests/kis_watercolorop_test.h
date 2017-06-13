@@ -23,11 +23,12 @@
 
 #include <QtTest>
 
-class WetMapTest : public QObject
+class WaterColorTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-	void testWetMap();
+    void testWetMap();
+    void testSplat();
 };
 
 #endif /* __KIS_WATERCOLOROP_TEST_H */

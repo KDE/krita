@@ -20,6 +20,7 @@
 
 #include "kis_splat.h"
 #include "kis_random_generator.h"
+#include <cmath>
 
 #define START_OPACITY 50
 #define STANDART_LIFETIME 30
@@ -147,7 +148,7 @@ int KisSplat::update(KisWetMap *wetMap)
 
     m_life--;
 
-    KisRandomGenerator randG(NULL);
+    KisRandomGenerator randG(0);
 
     for (int i = 0; i < m_vertices.length(); i++) {
         QPointF x = m_vertices[i];
@@ -156,8 +157,7 @@ int KisSplat::update(KisWetMap *wetMap)
 
         QPointF x1 = x + m_flow * d; + QPointF(randG.doubleRandomAt(-m_roughness, m_roughness),
                                                randG.doubleRandomAt(-m_roughness, m_roughness));
-        int wet = wetMap->getWater((int)x1.x(), (int)x1.y()); // Считываение количества жидкости
-
+        quint16 wet = wetMap->getWater((int)x1.x(), (int)x1.y()); // Считываение количества жидкости
         if (wet > 0)
            m_vertices[i] = x1;
     }

@@ -4,10 +4,12 @@
 #include <qimage_based_test.h>
 
 #include "plugins/paintops/watercolor/kis_wetmap.h"
+#include "plugins/paintops/watercolor/kis_splat.h"
 
 #include <QString>
 #include <QVector>
 #include <kis_filter_configuration.h>
+#include "kis_painter.h"
 
 class TestWetMap : public TestUtil::QImageBasedTest
 {
@@ -66,8 +68,10 @@ public:
         for (int i = 0; i < pos.size(); i++) {
             wetMap->addWater(pos.at(i), radius.at(i));
         }
-        QVERIFY(TestUtil::checkQImage(wetMap->getPaintDevice()->convertToQImage(0), QString("WaterColor"),
-                              QString("WetMap"), QString("Adding_Water")));
+        QVERIFY(TestUtil::checkQImage(wetMap->getPaintDevice()->convertToQImage(0),
+                                      "WetMap",
+                                      "multiple",
+                                      "adding_water"));
         delete wetMap;
     }
 
@@ -83,8 +87,10 @@ public:
             wetMap->update();
         }
 
-        QVERIFY(TestUtil::checkQImage(wetMap->getPaintDevice()->convertToQImage(0), QString("WaterColor"),
-                              QString("WetMap"), prefix));
+        QVERIFY(TestUtil::checkQImage(wetMap->getPaintDevice()->convertToQImage(0),
+                                      "WetMap",
+                                      prefix,
+                                      "drying"));
         delete wetMap;
     }
 
@@ -100,8 +106,10 @@ public:
             wetMap->update();
         }
 
-        QVERIFY(TestUtil::checkQImage(wetMap->getPaintDevice()->convertToQImage(0), QString("WaterColor"),
-                              QString("WetMap_Multiple_Actions"), prefix));
+        QVERIFY(TestUtil::checkQImage(wetMap->getPaintDevice()->convertToQImage(0),
+                                      "WetMap",
+                                      prefix,
+                                      "multiple_actions"));
         delete wetMap;
     }
 
@@ -111,18 +119,117 @@ public:
         wetMap->addWater(QPoint(50, 50), 50);
         for (int i = 0; i < time; i++)
             wetMap->update();
-        int realVal = wetMap->getWater(50, 50);
-        int expectedVal = 65535 - 256 * time;
+        int realVal = wetMap->getWater(75, 63);
+        int expectedVal = 32767 - 128 * time;
         if (expectedVal < 0)
             expectedVal = 0;
         QCOMPARE(realVal, expectedVal);
+
+        QPoint realSpeed = wetMap->getSpeed(57, 74);
+        QPoint expectedSpeed = (realVal == 0) ? QPoint(0, 0) : QPoint(9174, 31456);
+        QCOMPARE (realSpeed, expectedSpeed);
     }
 };
 
-void WetMapTest::testWetMap()
+class TestSplat : public TestUtil::QImageBasedTest
+{
+public:
+    TestSplat() : QImageBasedTest("Splat") {}
+
+    void test() {
+        test(QPoint(50, 50), 25);
+
+        QVector<QPoint> pos;
+        QVector<qreal> radius;
+        QVector<KoColor> colors;
+        for (int i = 0; i < 3; i++)
+            radius.push_back(50);
+        pos.push_back(QPoint(50, 50));
+        pos.push_back(QPoint(100, 50));
+        pos.push_back(QPoint(150, 50));
+        KoColor clr;
+        clr.fromQColor(QColor(Qt::white));
+        colors.push_back(clr);
+        clr.fromQColor(QColor(Qt::blue));
+        colors.push_back(clr);
+        clr.fromQColor(QColor(Qt::red));
+        colors.push_back(clr);
+
+        test(pos, radius, colors, 24, "full_lifetime_line");
+
+        pos.clear();
+        pos.push_back(QPoint(50, 50));
+        pos.push_back(QPoint(125, 50));
+        pos.push_back(QPoint(100, 125));
+
+        test(pos, radius, colors, 24, "full_lifetime_triange");
+    }
+
+    // Test one splat
+    void test(QPoint pos, qreal radius) {
+        KoColor clr;
+        clr.fromQColor(QColor(Qt::red));
+        KisSplat *splat = new KisSplat(pos, 2*radius, clr);
+        KisWetMap *wetMap = new KisWetMap();
+        wetMap->addWater(pos, 2*radius);
+        for (int i = 0; i < 20; i++) {
+            splat->update(wetMap);
+            wetMap->update();
+        }
+
+        KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+        KisPainter painter(dev);
+        painter.setPaintColor(splat->getColor());
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.fillPainterPath(splat->shape());
+        QVERIFY(TestUtil::checkQImage(dev->convertToQImage(0),
+                                      "splat",
+                                      "one_splat",
+                                      ""));
+    }
+
+    // Test making different splats with different colors
+    void test(QVector<QPoint> pos, QVector<qreal> radius, QVector<KoColor> colors, int time, QString prefix) {
+        QVector<KisSplat *> splats;
+        KisWetMap *wetMap = new KisWetMap();
+        for (int i = 0; i < pos.size(); i++) {
+            splats.push_back(new KisSplat(pos.at(i),
+                                          2 * radius.at(i),
+                                          colors.at(i)));
+            wetMap->addWater(pos.at(i),
+                             radius.at(i) + 5);
+        }
+
+        for (int i = 0; i < time; i++) {
+            foreach (KisSplat *splat, splats)
+                splat->update(wetMap);
+            wetMap->update();
+        }
+
+        KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+        KisPainter painter(dev);
+        foreach (KisSplat *splat, splats) {
+            painter.setPaintColor(splat->getColor());
+            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+            painter.fillPainterPath(splat->shape());
+        }
+        QVERIFY(TestUtil::checkQImage(dev->convertToQImage(0),
+                                      "splat",
+                                      "many_splats",
+                                      prefix));
+    }
+};
+
+void WaterColorTest::testWetMap()
 {
     TestWetMap t;
     t.test();
 }
 
-QTEST_MAIN(WetMapTest)
+void WaterColorTest::testSplat()
+{
+    TestSplat t;
+    t.test();
+}
+
+QTEST_MAIN(WaterColorTest)

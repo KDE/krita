@@ -23,6 +23,7 @@
 
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
+#include <kis_pressure_rate_option.h>
 
 #include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
@@ -35,6 +36,7 @@ KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(m_chalkOption, i18n("Brush size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 

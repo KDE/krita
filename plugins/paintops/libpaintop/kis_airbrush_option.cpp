@@ -83,7 +83,7 @@ KisAirbrushOption::~KisAirbrushOption()
 
 void KisAirbrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KIS_ASSERT_RECOVER (m_d->airbrushInterval > 0.0) {
+    KIS_SAFE_ASSERT_RECOVER (m_d->airbrushInterval > 0.0) {
         m_d->airbrushInterval = 1.0;
     }
     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
@@ -127,7 +127,7 @@ void KisAirbrushOption::updateInterval()
 {
     // Get rate in dabs per second, then convert to interval in milliseconds.
     qreal rate = m_d->configPage->sliderRate->value();
-    KIS_ASSERT_RECOVER(rate > 0.0) {
+    KIS_SAFE_ASSERT_RECOVER(rate > 0.0) {
         rate = 1.0;
     }
     m_d->airbrushInterval = 1000.0 / rate;

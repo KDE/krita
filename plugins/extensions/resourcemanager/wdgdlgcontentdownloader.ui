@@ -78,7 +78,7 @@
           <widget class="KComboBox" name="m_categoryCombo"/>
          </item>
          <item row="5" column="1" colspan="3">
-          <widget class="KComboBox" name="m_categoryCombo"/>
+          <widget class="QComboBox" name="m_orderbyCombo"/>
          </item>
          <item row="8" column="1" colspan="3">
           <spacer name="verticalSpacer">
@@ -446,13 +446,6 @@
        </property>
        <property name="text">
         <string>Uninstall</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="becomeFanButton">
-       <property name="text">
-        <string>Become a Fan</string>
        </property>
       </widget>
      </item>

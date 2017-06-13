@@ -28,6 +28,7 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 #include <QCoreApplication>
+#include <QCheckBox>
 
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
@@ -129,11 +130,14 @@ void DlgContentDownloaderPrivate::sortingChanged()
 {
     KNSCore::Provider::SortMode sortMode = KNSCore::Provider::Newest;
     KNSCore::Provider::Filter filter = KNSCore::Provider::None;
-    if (ui.ratingRadio->isChecked()) {
+
+    if (ui.m_orderbyCombo->currentIndex() == 0) {
+        sortMode = KNSCore::Provider::Newest;
+    } else if (ui.m_orderbyCombo->currentIndex() == 1) {
         sortMode = KNSCore::Provider::Rating;
-    } else if (ui.mostDownloadsRadio->isChecked()) {
+    } else if (ui.m_orderbyCombo->currentIndex() == 2) {
         sortMode = KNSCore::Provider::Downloads;
-    } else if (ui.installedRadio->isChecked()) {
+    } else if (ui.m_orderbyCombo->currentIndex() == 3) {
         filter = KNSCore::Provider::Installed;
     }
 
@@ -242,10 +246,12 @@ void DlgContentDownloaderPrivate::init(const QString &configFile)
     q->connect(ui.listViewButton, &QPushButton::clicked, this, &DlgContentDownloaderPrivate::slotListViewListMode);
     q->connect(ui.iconViewButton, &QPushButton::clicked, this, &DlgContentDownloaderPrivate::slotListViewIconMode);
 
-    q->connect(ui.newestRadio,        &QRadioButton::clicked, this, &DlgContentDownloaderPrivate::sortingChanged);
-    q->connect(ui.ratingRadio,        &QRadioButton::clicked, this, &DlgContentDownloaderPrivate::sortingChanged);
-    q->connect(ui.mostDownloadsRadio, &QRadioButton::clicked, this, &DlgContentDownloaderPrivate::sortingChanged);
-    q->connect(ui.installedRadio,     &QRadioButton::clicked, this, &DlgContentDownloaderPrivate::sortingChanged);
+    ui.m_orderbyCombo->addItem("Newest");
+    ui.m_orderbyCombo->addItem("Ratings");
+    ui.m_orderbyCombo->addItem("Most Downloaded");
+    ui.m_orderbyCombo->addItem("Installed");
+
+    q->connect(ui.m_orderbyCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &DlgContentDownloaderPrivate::sortingChanged);
 
     q->connect(ui.m_searchEdit, &KLineEdit::textChanged,     this, &DlgContentDownloaderPrivate::slotSearchTextChanged);
     q->connect(ui.m_searchEdit, &KLineEdit::editingFinished, this, &DlgContentDownloaderPrivate::slotUpdateSearch);

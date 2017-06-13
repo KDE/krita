@@ -391,7 +391,6 @@ void DlgContentDownloaderPrivate::slotShowOverview()
 
     ui.updateButton->setVisible(false);
     ui.installButton->setVisible(false);
-    ui.becomeFanButton->setVisible(false);
     ui.uninstallButton->setVisible(false);
 
     ui.detailsStack->setCurrentIndex(0);

@@ -318,12 +318,15 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     while (!stream.atEnd()) {
 
         KoColorSetEntry entry;
-
+        QString oldGroupName;
+        int indexInGroup;
         QString colorXml;
 
         stream >> entry.name
                 >> entry.id
                 >> entry.spotColor
+                >> indexInGroup
+                >> oldGroupName
                 >> colorXml;
 
         QDomDocument doc;
@@ -334,7 +337,6 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
             entry.color = KoColor::fromXML(c, colorDepthId);
         }
-
 
         beginInsertRows(QModelIndex(), endRow, endRow);
         QModelIndex index = this->index(endRow, endColumn);//indexFromId((endColumn)+((endRow)*columnCount()));
@@ -349,7 +351,14 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         int location = entryInGroup.toInt();
         // Insert the entry
         m_colorSet->insertBefore(entry, location, groupName);
-
+        if (groupName==oldGroupName && location<indexInGroup) {
+            indexInGroup+=1;
+        }
+        if (action == Qt::MoveAction){
+            qDebug()<<"removing "<<indexInGroup<<"in "<<oldGroupName;
+            m_colorSet->removeAt(indexInGroup, oldGroupName);
+        }
+        m_colorSet->save();
         endInsertRows();
 
         ++endRow;
@@ -367,18 +376,30 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 
     Q_FOREACH(const QModelIndex &index, indexes) {
         if (index.isValid()) {
-            KoColorSetEntry entry = colorSetEntryFromIndex(index);
+            if (!qVariantValue<bool>(index.data(IsHeaderRole))) {
+                KoColorSetEntry entry = colorSetEntryFromIndex(index);
+                QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+                QString groupName = QString();
+                int indexInGroup = 0;
+                if (!entryList.isEmpty()) {
+                    groupName = entryList.at(0);
+                    QString iig = entryList.at(1);
+                    indexInGroup = iig.toInt();
+                }
 
-            QDomDocument doc;
-            QDomElement root = doc.createElement("Color");
-            root.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
-            doc.appendChild(root);
-            entry.color.toXML(doc, root);
+                QDomDocument doc;
+                QDomElement root = doc.createElement("Color");
+                root.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+                doc.appendChild(root);
+                entry.color.toXML(doc, root);
 
-            stream << entry.name
-                   << entry.id
-                   << entry.spotColor
-                   << doc.toString();
+                stream << entry.name
+                       << entry.id
+                       << entry.spotColor
+                       << indexInGroup
+                       << groupName
+                       << doc.toString();
+            }
         }
     }
 

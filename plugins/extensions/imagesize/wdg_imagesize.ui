@@ -45,9 +45,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QComboBox" name="pixelWidthUnit"/>
-      </item>
       <item row="0" column="0">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
@@ -93,9 +90,6 @@
          <string/>
         </property>
        </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QComboBox" name="pixelHeightUnit"/>
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="lblPixelHeight">
@@ -148,6 +142,9 @@
       <item row="2" column="2" colspan="2">
        <widget class="KisCmbIDList" name="pixelFilterCmb" native="true"/>
       </item>
+      <item row="0" column="3" rowspan="2">
+       <widget class="QComboBox" name="pixelSizeUnit"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -172,9 +169,6 @@
          <cstring>printHeight</cstring>
         </property>
        </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QComboBox" name="printHeightUnit"/>
       </item>
       <item row="0" column="2">
        <widget class="KisDoubleParseUnitSpinBox" name="printWidth">
@@ -239,9 +233,6 @@
          <string/>
         </property>
        </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QComboBox" name="printWidthUnit"/>
       </item>
       <item row="2" column="1">
        <widget class="QLabel" name="lblResolution">
@@ -312,6 +303,9 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="3" rowspan="2">
+       <widget class="QComboBox" name="printWidthUnit"/>
       </item>
      </layout>
     </widget>
@@ -395,14 +389,12 @@
  </customwidgets>
  <tabstops>
   <tabstop>pixelWidthDouble</tabstop>
-  <tabstop>pixelWidthUnit</tabstop>
+  <tabstop>pixelSizeUnit</tabstop>
   <tabstop>pixelHeightDouble</tabstop>
-  <tabstop>pixelHeightUnit</tabstop>
   <tabstop>pixelFilterCmb</tabstop>
   <tabstop>printWidth</tabstop>
   <tabstop>printWidthUnit</tabstop>
   <tabstop>printHeight</tabstop>
-  <tabstop>printHeightUnit</tabstop>
   <tabstop>printResolution</tabstop>
   <tabstop>printResolutionUnit</tabstop>
   <tabstop>constrainProportionsCkb</tabstop>

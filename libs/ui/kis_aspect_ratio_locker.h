@@ -50,6 +50,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void sliderValueChanged();
     void aspectButtonChanged();
+    void aspectButtonToggled(bool value);
 
 private:
     struct Private;

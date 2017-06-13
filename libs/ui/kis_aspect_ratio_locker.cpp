@@ -200,6 +200,7 @@ void KisAspectRatioLocker::slotAspectButtonChanged()
 
     if (!m_d->spinTwo->isDragging()) {
         emit aspectButtonChanged();
+        emit aspectButtonToggled(m_d->aspectButton->keepAspectRatio());
     }
 }
 

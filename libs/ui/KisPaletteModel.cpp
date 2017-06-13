@@ -287,7 +287,7 @@ bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)
 }
 
 bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                   int row, int /*column*/, const QModelIndex &parent)
+                                   int row, int column, const QModelIndex &parent)
 {
     if (!data->hasFormat("krita/x-colorsetentry")) {
         return false;
@@ -297,14 +297,19 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     }
 
     int endRow;
+    int endColumn;
 
     if (!parent.isValid()) {
-        if (row < 0)
-            endRow = m_colorSet->nColors();
-        else
-            endRow = qMin(row, (int)m_colorSet->nColors());
+        if (row < 0) {
+            endRow = indexFromId(m_colorSet->nColors()).row();
+            endColumn = indexFromId(m_colorSet->nColors()).column();
+        } else {
+            endRow = qMin(row, indexFromId(m_colorSet->nColors()).row());
+            endColumn = qMin(column, m_colorSet->columnCount());
+            }
     } else {
         endRow = parent.row();
+        endColumn = parent.column();
     }
 
     QByteArray encodedData = data->data("krita/x-colorsetentry");
@@ -324,7 +329,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         QDomDocument doc;
         doc.setContent(colorXml);
         QDomElement e = doc.documentElement();
-        QDomElement c = e.firstChildElement("Color");
+        QDomElement c = e.firstChildElement();
         if (!c.isNull()) {
             QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
             entry.color = KoColor::fromXML(c, colorDepthId);
@@ -332,9 +337,18 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
 
         beginInsertRows(QModelIndex(), endRow, endRow);
+        QModelIndex index = this->index(endRow, endColumn);//indexFromId((endColumn)+((endRow)*columnCount()));
+        QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+        QString entryInGroup = "0";
+        QString groupName = QString();
+        if (!entryList.isEmpty()) {
+            groupName = entryList.at(0);
+            entryInGroup = entryList.at(1);
+        }
 
+        int location = entryInGroup.toInt();
         // Insert the entry
-        m_colorSet->insertBefore(entry, endRow, "Vogel Dit Maar Uit!");
+        m_colorSet->insertBefore(entry, location, groupName);
 
         endInsertRows();
 

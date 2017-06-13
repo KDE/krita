@@ -4,13 +4,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
                              QAbstractItemView, QComboBox, QDialogButtonBox,
                              QVBoxLayout, QFrame, QMessageBox, QPushButton,
-                             QHBoxLayout)
+                             QHBoxLayout, QAbstractScrollArea)
 from PyQt5.QtGui import QIcon
 import krita
 from colorspace import resources_rc
 
 
 class UIColorSpace(object):
+
     def __init__(self):
         self.mainDialog = colorspacedialog.ColorSpaceDialog()
         self.mainLayout = QVBoxLayout(self.mainDialog)
@@ -35,6 +36,7 @@ class UIColorSpace(object):
 
         self.mainDialog.setWindowModality(Qt.NonModal)
         self.widgetDocuments.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.widgetDocuments.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 
     def initialize(self):
         self.loadDocuments()

@@ -1,6 +1,3 @@
-import sys
-from PyQt5.QtWidgets import QPushButton, QDialog, QDialogButtonBox, QVBoxLayout, QHBoxLayout
-from PyQt5.QtCore import Qt
 import krita
 from colorspace import uicolorspace
 

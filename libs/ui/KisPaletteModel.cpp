@@ -316,29 +316,28 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     }
 
     if (data->hasFormat("krita/x-colorsetgroup")) {
-        /** This doesn't quite work yet.
-        qDebug()<<"attempt to move group";
         QByteArray encodedData = data->data("krita/x-colorsetgroup");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
         while (!stream.atEnd()) {
             QString groupName;
+            stream >> groupName;
             QModelIndex index = this->index(endRow, 0);
             if (index.isValid()) {
-                beginInsertRows(QModelIndex(), endRow, endRow);
                 QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
                 QString groupDroppedOn = QString();
                 if (!entryList.isEmpty()) {
                     groupDroppedOn = entryList.at(0);
                 }
+                int groupIndex = colorSet()->getGroupNames().indexOf(groupName);
+                beginMoveRows(  QModelIndex(), groupIndex, groupIndex, QModelIndex(), endRow);
                 m_colorSet->moveGroup(groupName, groupDroppedOn);
                 m_colorSet->save();
-                endInsertRows();
+                endMoveRows();
 
                 ++endRow;
             }
         }
-        **/
     } else {
         QByteArray encodedData = data->data("krita/x-colorsetentry");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -439,40 +438,40 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     QString mimeTypeName = "krita/x-colorsetentry";
-    Q_FOREACH(const QModelIndex &index, indexes) {
-        if (index.isValid()) {
-            if (!qVariantValue<bool>(index.data(IsHeaderRole))) {
-                KoColorSetEntry entry = colorSetEntryFromIndex(index);
-                QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
-                QString groupName = QString();
-                int indexInGroup = 0;
-                if (!entryList.isEmpty()) {
-                    groupName = entryList.at(0);
-                    QString iig = entryList.at(1);
-                    indexInGroup = iig.toInt();
-                }
-
-                QDomDocument doc;
-                QDomElement root = doc.createElement("Color");
-                root.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
-                doc.appendChild(root);
-                entry.color.toXML(doc, root);
-
-                stream << entry.name
-                       << entry.id
-                       << entry.spotColor
-                       << indexInGroup
-                       << groupName
-                       << doc.toString();
-            } else {
-                mimeTypeName = "krita/x-colorsetgroup";
-                QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
-                QString groupName = QString();
-                if (!entryList.isEmpty()) {
-                    groupName = entryList.at(0);
-                }
-                stream << groupName;
+    //Q_FOREACH(const QModelIndex &index, indexes) {
+    QModelIndex index = indexes.last();
+    if (index.isValid()) {
+        if (qVariantValue<bool>(index.data(IsHeaderRole))==false) {
+            KoColorSetEntry entry = colorSetEntryFromIndex(index);
+            QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+            QString groupName = QString();
+            int indexInGroup = 0;
+            if (!entryList.isEmpty()) {
+                groupName = entryList.at(0);
+                QString iig = entryList.at(1);
+                indexInGroup = iig.toInt();
             }
+
+            QDomDocument doc;
+            QDomElement root = doc.createElement("Color");
+            root.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+            doc.appendChild(root);
+            entry.color.toXML(doc, root);
+
+            stream << entry.name
+                   << entry.id
+                   << entry.spotColor
+                   << indexInGroup
+                   << groupName
+                   << doc.toString();
+        } else {
+            mimeTypeName = "krita/x-colorsetgroup";
+            QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+            QString groupName = QString();
+            if (!entryList.isEmpty()) {
+                groupName = entryList.at(0);
+            }
+            stream << groupName;
         }
     }
 
@@ -482,8 +481,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 
 QStringList KisPaletteModel::mimeTypes() const
 {
-    return QStringList() << "krita/x-colorsetentry";
-    return QStringList() << "krita/x-colorsetgroup";
+    return QStringList() << "krita/x-colorsetentry" << "krita/x-colorsetgroup";
 }
 
 Qt::DropActions KisPaletteModel::supportedDropActions() const

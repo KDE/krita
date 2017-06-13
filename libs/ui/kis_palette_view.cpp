@@ -92,6 +92,7 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     setModel(model);
     connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
+    connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
 
 }
 

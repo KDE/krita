@@ -74,7 +74,20 @@ public:
      * @param index the QModelIndex
      * @return the kocolorsetentry
      */
-    KoColorSetEntry colorSetEntryFromIndex(const QModelIndex &index);
+    KoColorSetEntry colorSetEntryFromIndex(const QModelIndex &index) const;
+
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
+
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+                      int row, int column, const QModelIndex &parent) override;
+
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+
+    QStringList mimeTypes() const override;
+
+    Qt::DropActions supportedDropActions() const override;
+
+
 
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();

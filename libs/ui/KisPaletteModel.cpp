@@ -19,6 +19,11 @@
 #include "KisPaletteModel.h"
 
 #include <QBrush>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QMimeData>
+
+#include <KoColor.h>
 
 #include <KoColorSpace.h>
 #include <resources/KoColorSet.h>
@@ -160,10 +165,14 @@ int KisPaletteModel::columnCount(const QModelIndex& /*parent*/) const
     return 15;
 }
 
-Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& /*index*/) const
+Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 {
-    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
-    return flags;
+    if (index.isValid()) {
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled
+                | Qt::ItemIsUserCheckable
+                | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    }
+    return Qt::ItemIsDropEnabled;
 }
 
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
@@ -210,7 +219,7 @@ KoColorSet* KisPaletteModel::colorSet() const
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
     QModelIndex index = QModelIndex();
-    if (i<colorSet()->nColorsGroup(0)) {
+    if (i < (int)colorSet()->nColorsGroup(0)) {
         index = QAbstractTableModel::index(i/columnCount(), i%columnCount());
         return index;
     } else {
@@ -255,7 +264,7 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
     return i;
 }
 
-KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index)
+KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
     QStringList entryList = qVariantValue<QStringList>(data(index, RetrieveEntryRole));
     QString groupName = entryList.at(0);
@@ -263,3 +272,112 @@ KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index
     return m_colorSet->getColorGroup(indexInGroup, groupName);
 }
 
+bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    Q_ASSERT(!parent.isValid());
+
+    int beginRow = qMax(0, row);
+    int endRow = qMin(row + count - 1, (int)m_colorSet->nColors() - 1);
+    beginRemoveRows(parent, beginRow, endRow);
+
+    // Find the palette entry at row, count, remove from KoColorSet
+
+    endRemoveRows();
+    return true;
+}
+
+bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+                                   int row, int /*column*/, const QModelIndex &parent)
+{
+    if (!data->hasFormat("krita/x-colorsetentry")) {
+        return false;
+    }
+    if (action == Qt::IgnoreAction) {
+        return false;
+    }
+
+    int endRow;
+
+    if (!parent.isValid()) {
+        if (row < 0)
+            endRow = m_colorSet->nColors();
+        else
+            endRow = qMin(row, (int)m_colorSet->nColors());
+    } else {
+        endRow = parent.row();
+    }
+
+    QByteArray encodedData = data->data("krita/x-colorsetentry");
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+
+    while (!stream.atEnd()) {
+
+        KoColorSetEntry entry;
+
+        QString colorXml;
+
+        stream >> entry.name
+                >> entry.id
+                >> entry.spotColor
+                >> colorXml;
+
+        QDomDocument doc;
+        doc.setContent(colorXml);
+        QDomElement e = doc.documentElement();
+        QDomElement c = e.firstChildElement("Color");
+        if (!c.isNull()) {
+            QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
+            entry.color = KoColor::fromXML(c, colorDepthId);
+        }
+
+
+        beginInsertRows(QModelIndex(), endRow, endRow);
+
+        // Insert the entry
+        m_colorSet->insertBefore(entry, endRow, "Vogel Dit Maar Uit!");
+
+        endInsertRows();
+
+        ++endRow;
+    }
+
+    return true;
+}
+
+QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodedData;
+
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+    Q_FOREACH(const QModelIndex &index, indexes) {
+        if (index.isValid()) {
+            KoColorSetEntry entry = colorSetEntryFromIndex(index);
+
+            QDomDocument doc;
+            QDomElement root = doc.createElement("Color");
+            root.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+            doc.appendChild(root);
+            entry.color.toXML(doc, root);
+
+            stream << entry.name
+                   << entry.id
+                   << entry.spotColor
+                   << doc.toString();
+        }
+    }
+
+    mimeData->setData("krita/x-colorsetentry", encodedData);
+    return mimeData;
+}
+
+QStringList KisPaletteModel::mimeTypes() const
+{
+    return QStringList() << "krita/x-colorsetentry";
+}
+
+Qt::DropActions KisPaletteModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
+}

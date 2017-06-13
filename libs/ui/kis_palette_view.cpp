@@ -78,10 +78,21 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
     delegate->setCrossedKeyword(value);
 }
 
+void KisPaletteView::paletteModelChanged()
+{
+    updateView();
+    updateRows();
+}
+
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
+    if (m_d->model) {
+        disconnect(m_d->model, 0, this, 0);
+    }
     m_d->model = model;
     setModel(model);
+    connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
+
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const

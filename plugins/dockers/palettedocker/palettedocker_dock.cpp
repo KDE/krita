@@ -173,7 +173,7 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_wdgPaletteDock->paletteView->updateRows();
     if (colorSet && colorSet->removable()) {
         m_wdgPaletteDock->bnAdd->setEnabled(true);
-        m_wdgPaletteDock->bnRemove->setEnabled(false);
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
     } else {
         m_wdgPaletteDock->bnAdd->setEnabled(false);
         m_wdgPaletteDock->bnRemove->setEnabled(false);

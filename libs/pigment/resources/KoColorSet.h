@@ -164,6 +164,15 @@ public:
      * @return whether thegroup was made.
      */
     bool addGroup(const QString &groupName);
+
+    /**
+     * @brief moveGroup
+     * Move a group in the internal stringlist.
+     * @param groupName the groupname to move.
+     * @param groupNameInsertBefore the groupname to insert before. Empty means it will be added to the end.
+     * @return
+     */
+    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
     /**
      * @brief removeGroup
      * Remove a group from the KoColorSet

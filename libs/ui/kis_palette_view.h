@@ -58,6 +58,8 @@ public:
      * @param value
      */
     void setCrossedKeyword(const QString &value);
+public Q_SLOTS:
+    void paletteModelChanged();
 Q_SIGNALS:
     /**
      * @brief entrySelected

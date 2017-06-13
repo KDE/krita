@@ -289,7 +289,7 @@ bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)
 bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                                    int row, int column, const QModelIndex &parent)
 {
-    if (!data->hasFormat("krita/x-colorsetentry")) {
+    if (!data->hasFormat("krita/x-colorsetentry") && !data->hasFormat("krita/x-colorsetgroup")) {
         return false;
     }
     if (action == Qt::IgnoreAction) {
@@ -306,62 +306,97 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         } else {
             endRow = qMin(row, indexFromId(m_colorSet->nColors()).row());
             endColumn = qMin(column, m_colorSet->columnCount());
-            }
+        }
     } else {
         endRow = parent.row();
-        endColumn = parent.column();
+        endColumn = qMin(parent.column(), columnCount());
     }
 
-    QByteArray encodedData = data->data("krita/x-colorsetentry");
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    if (data->hasFormat("krita/x-colorsetgroup")) {
+        /** This doesn't quite work yet.
+        qDebug()<<"attempt to move group";
+        QByteArray encodedData = data->data("krita/x-colorsetgroup");
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
-    while (!stream.atEnd()) {
+        while (!stream.atEnd()) {
+            QString groupName;
+            QModelIndex index = this->index(endRow, 0);
+            if (index.isValid()) {
+                beginInsertRows(QModelIndex(), endRow, endRow);
+                QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+                QString groupDroppedOn = QString();
+                if (!entryList.isEmpty()) {
+                    groupDroppedOn = entryList.at(0);
+                }
+                m_colorSet->moveGroup(groupName, groupDroppedOn);
+                m_colorSet->save();
+                endInsertRows();
 
-        KoColorSetEntry entry;
-        QString oldGroupName;
-        int indexInGroup;
-        QString colorXml;
-
-        stream >> entry.name
-                >> entry.id
-                >> entry.spotColor
-                >> indexInGroup
-                >> oldGroupName
-                >> colorXml;
-
-        QDomDocument doc;
-        doc.setContent(colorXml);
-        QDomElement e = doc.documentElement();
-        QDomElement c = e.firstChildElement();
-        if (!c.isNull()) {
-            QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
-            entry.color = KoColor::fromXML(c, colorDepthId);
+                ++endRow;
+            }
         }
+        **/
+    } else {
+        QByteArray encodedData = data->data("krita/x-colorsetentry");
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
-        beginInsertRows(QModelIndex(), endRow, endRow);
-        QModelIndex index = this->index(endRow, endColumn);//indexFromId((endColumn)+((endRow)*columnCount()));
-        QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
-        QString entryInGroup = "0";
-        QString groupName = QString();
-        if (!entryList.isEmpty()) {
-            groupName = entryList.at(0);
-            entryInGroup = entryList.at(1);
-        }
+        while (!stream.atEnd()) {
+            KoColorSetEntry entry;
+            QString oldGroupName;
+            int indexInGroup;
+            QString colorXml;
 
-        int location = entryInGroup.toInt();
-        // Insert the entry
-        m_colorSet->insertBefore(entry, location, groupName);
-        if (groupName==oldGroupName && location<indexInGroup) {
-            indexInGroup+=1;
-        }
-        if (action == Qt::MoveAction){
-            qDebug()<<"removing "<<indexInGroup<<"in "<<oldGroupName;
-            m_colorSet->removeAt(indexInGroup, oldGroupName);
-        }
-        m_colorSet->save();
-        endInsertRows();
+            stream >> entry.name
+                    >> entry.id
+                    >> entry.spotColor
+                    >> indexInGroup
+                    >> oldGroupName
+                    >> colorXml;
 
-        ++endRow;
+            QDomDocument doc;
+            doc.setContent(colorXml);
+            QDomElement e = doc.documentElement();
+            QDomElement c = e.firstChildElement();
+            if (!c.isNull()) {
+                QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
+                entry.color = KoColor::fromXML(c, colorDepthId);
+            }
+
+            QModelIndex index = this->index(endRow, endColumn);
+            if (index.isValid()) {
+                if (action == Qt::MoveAction){
+                    beginMoveRows(QModelIndex(), indexInGroup, indexInGroup, QModelIndex(), endRow);
+                } else {
+                    beginInsertRows(QModelIndex(), endRow, endRow);
+                }
+                QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+                QString entryInGroup = "0";
+                QString groupName = QString();
+                if (!entryList.isEmpty()) {
+                    groupName = entryList.at(0);
+                    entryInGroup = entryList.at(1);
+                }
+
+                int location = entryInGroup.toInt();
+                // Insert the entry
+                m_colorSet->insertBefore(entry, location, groupName);
+                if (groupName==oldGroupName && location<indexInGroup) {
+                    indexInGroup+=1;
+                }
+                if (action == Qt::MoveAction){
+                    qDebug()<<"removing "<<indexInGroup<<"in "<<oldGroupName;
+                    m_colorSet->removeAt(indexInGroup, oldGroupName);
+                }
+                m_colorSet->save();
+                if (action == Qt::MoveAction){
+                    endMoveRows();
+                } else {
+                    endInsertRows();
+                }
+
+                ++endRow;
+            }
+        }
     }
 
     return true;
@@ -373,7 +408,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
-
+    QString mimeTypeName = "krita/x-colorsetentry";
     Q_FOREACH(const QModelIndex &index, indexes) {
         if (index.isValid()) {
             if (!qVariantValue<bool>(index.data(IsHeaderRole))) {
@@ -399,17 +434,26 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
                        << indexInGroup
                        << groupName
                        << doc.toString();
+            } else {
+                mimeTypeName = "krita/x-colorsetgroup";
+                QStringList entryList = qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+                QString groupName = QString();
+                if (!entryList.isEmpty()) {
+                    groupName = entryList.at(0);
+                }
+                stream << groupName;
             }
         }
     }
 
-    mimeData->setData("krita/x-colorsetentry", encodedData);
+    mimeData->setData(mimeTypeName, encodedData);
     return mimeData;
 }
 
 QStringList KisPaletteModel::mimeTypes() const
 {
     return QStringList() << "krita/x-colorsetentry";
+    return QStringList() << "krita/x-colorsetgroup";
 }
 
 Qt::DropActions KisPaletteModel::supportedDropActions() const

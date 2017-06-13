@@ -528,6 +528,20 @@ bool KoColorSet::addGroup(const QString &groupName)
     return true;
 }
 
+bool KoColorSet::moveGroup(const QString &groupName, const QString &groupNameInsertBefore)
+{
+    if (d->groupNames.contains(groupName)==false || d->groupNames.contains(groupNameInsertBefore)==false) {
+        return false;
+    }
+    d->groupNames.removeAt(d->groupNames.indexOf(groupName));
+    int index = d->groupNames.size();
+    if (groupNameInsertBefore!=QString()) {
+        index = d->groupNames.indexOf(groupNameInsertBefore);
+    }
+    d->groupNames.insert(index, groupName);
+    return true;
+}
+
 bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
 {
     if (!d->groups.contains(groupName)) {

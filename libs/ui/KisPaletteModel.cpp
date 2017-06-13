@@ -191,6 +191,9 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
             if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
                 newrows+=1;
             }
+            if (rowstotal + newrows>rowCount()) {
+                newrows = rowCount() - rowstotal;
+            }
             if (row == rowstotal+1) {
                 //rowstotal+1 is taken up by the groupname.
                 return QAbstractTableModel::index(row, 0, parent);
@@ -308,7 +311,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             endColumn = qMin(column, m_colorSet->columnCount());
         }
     } else {
-        endRow = parent.row();
+        endRow = qMin(parent.row(), rowCount());
         endColumn = qMin(parent.column(), columnCount());
     }
 
@@ -363,9 +366,34 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             }
 
             QModelIndex index = this->index(endRow, endColumn);
+            bool indexTooBig = false;
+            while (qVariantValue<QStringList>(index.data(RetrieveEntryRole)).isEmpty()) {
+                index = this->index(endRow, endColumn);
+                endColumn -=1;
+                if (endColumn<0) {
+                    endColumn = columnCount();
+                    endRow-=1;
+                }
+                indexTooBig = true;
+            }
             if (index.isValid()) {
+                /*this is to figure out the row of the old color.
+                 * That way we can in turn avoid moverows from complaining the
+                 * index is out of bounds when using index.
+                 * Makes me wonder if we shouldn't just insert the index of the
+                 * old color when requesting the mimetype...
+                 */
+                int i = colorSet()->nColorsGroup("");
+                //find at which position the group is.
+                int groupIndex = colorSet()->getGroupNames().indexOf(oldGroupName);
+                //add all the groupsizes onto it till we get to our group.
+                for(int g=0; g<groupIndex; g++) {
+                    i+=colorSet()->nColorsGroup(colorSet()->getGroupNames().at(g));
+                }
+                i+=indexInGroup;
+                QModelIndex indexOld = indexFromId(i);
                 if (action == Qt::MoveAction){
-                    beginMoveRows(QModelIndex(), indexInGroup, indexInGroup, QModelIndex(), endRow);
+                    beginMoveRows(QModelIndex(), indexOld.row(), indexOld.row(), QModelIndex(), endRow);
                 } else {
                     beginInsertRows(QModelIndex(), endRow, endRow);
                 }
@@ -378,13 +406,15 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
 
                 int location = entryInGroup.toInt();
+                if (indexTooBig) {
+                    location+=1;
+                }
                 // Insert the entry
                 m_colorSet->insertBefore(entry, location, groupName);
                 if (groupName==oldGroupName && location<indexInGroup) {
                     indexInGroup+=1;
                 }
                 if (action == Qt::MoveAction){
-                    qDebug()<<"removing "<<indexInGroup<<"in "<<oldGroupName;
                     m_colorSet->removeAt(indexInGroup, oldGroupName);
                 }
                 m_colorSet->save();

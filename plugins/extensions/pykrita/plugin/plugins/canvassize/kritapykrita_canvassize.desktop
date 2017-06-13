@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=canvassize
+X-Python-2-Compatible=false
+Name=Canvas Size
+Name[en_GB]=Canvas Size
+Name[pt]=Tamanho da tela
+Comment=Plugin to change canvas size to selected documents
+Comment[en_GB]=Plugin to change canvas size to selected documents
+Comment[pt]='Plugin' para alterar o tamanho da tela de documentos selecionados

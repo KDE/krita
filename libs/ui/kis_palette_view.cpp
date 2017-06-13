@@ -50,6 +50,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::InternalMove);
+    setDropIndicatorShown(true);
 
     KisConfig cfg;
     QPalette pal(palette());

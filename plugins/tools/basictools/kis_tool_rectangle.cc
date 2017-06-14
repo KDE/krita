@@ -79,7 +79,11 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
-        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
+
+        KoShapeStrokeSP border;
+        if (strokeStyle() == KisPainter::StrokeStyleBrush) {
+            border = toQShared(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
+        }
         shape->setStroke(border);
         addShape(shape);
     }

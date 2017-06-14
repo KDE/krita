@@ -62,6 +62,22 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
     reset();
 }
 
+QModelIndex KisPaletteModel::getLastEntryIndex()
+{
+    int endRow = rowCount();
+    int endColumn = columnCount();
+    QModelIndex i = this->index(endRow, endColumn, QModelIndex());
+    while (qVariantValue<QStringList>(i.data(RetrieveEntryRole)).isEmpty()) {
+        i = this->index(endRow, endColumn);
+        endColumn -=1;
+        if (endColumn<0) {
+            endColumn = columnCount();
+            endRow-=1;
+        }
+    }
+    return i;
+}
+
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     KoColorSetEntry entry;
@@ -273,6 +289,42 @@ KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index
     QString groupName = entryList.at(0);
     quint32 indexInGroup = entryList.at(1).toUInt();
     return m_colorSet->getColorGroup(indexInGroup, groupName);
+}
+
+bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
+{
+    QModelIndex i = getLastEntryIndex();
+    beginInsertRows(QModelIndex(), i.row(), i.row()+1);
+    m_colorSet->add(entry, groupName);
+    endInsertRows();
+    return true;
+}
+
+bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
+{
+    QStringList entryList =  qVariantValue<QStringList>(index.data(RetrieveEntryRole));
+    if (entryList.empty()) {
+        return false;
+    }
+    QString groupName = entryList.at(0);
+    quint32 indexInGroup = entryList.at(1).toUInt();
+    beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
+    if (qVariantValue<bool>(index.data(IsHeaderRole))==false) {
+        m_colorSet->removeAt(indexInGroup, groupName);
+    } else {
+        m_colorSet->removeGroup(groupName, keepColors);
+    }
+    endRemoveRows();
+    return true;
+}
+
+bool KisPaletteModel::addGroup(QString groupName)
+{
+    QModelIndex i = getLastEntryIndex();
+    beginInsertRows(QModelIndex(), i.row(), i.row()+1);
+    m_colorSet->addGroup(groupName);
+    endInsertRows();
+    return true;
 }
 
 bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)

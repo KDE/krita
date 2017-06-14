@@ -65,7 +65,21 @@ public:
      */
     void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
 
+    /**
+     * @brief indexFromId
+     * convenience function to get the tableindex from the global palette color.
+     * used by lazybrush.
+     * @param i
+     * @return index in table.
+     */
     QModelIndex indexFromId(int i) const;
+    /**
+     * @brief idFromIndex
+     * convenience function to get the global colorset entry id from the table index.
+     * If you just want to use this to get the kocolorsetentry, use colorsetEntryFromIndex instead.
+     * @param index
+     * @return
+     */
     int idFromIndex(const QModelIndex &index) const;
 
     /**
@@ -76,11 +90,46 @@ public:
      */
     KoColorSetEntry colorSetEntryFromIndex(const QModelIndex &index) const;
 
+    /**
+     * @brief addColorSetEntry
+     * proper function to handle adding entries.
+     * @return whether succesful.
+     */
+    bool addColorSetEntry(KoColorSetEntry entry, QString groupName=QString());
+    /**
+     * @brief removeEntry
+     * proper function to remove the colorsetentry at the given index.
+     * The consolidtes both removeentry and removegroup.
+     * @param keepColors: This bool determines whether, when deleting a group,
+     * the colors should be added to the default group. This is usually desirable,
+     * so hence the default is true.
+     * @return if succesful
+     */
+    bool removeEntry(QModelIndex index, bool keepColors=true);
+    /**
+     * @brief addGroup
+     * Adds a group to the list.
+     * @param groupName
+     * @return if succesful
+     */
+    bool addGroup(QString groupName = QString());
+
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
+    /**
+     * @brief dropMimeData
+     * This is an overriden function that handles dropped mimedata.
+     * right now only colorsetentries and colorsetgroups are handled.
+     * @return
+     */
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent) override;
-
+    /**
+     * @brief mimeData
+     * gives the mimedata for a kocolorsetentry or a kocolorsetgroup.
+     * @param indexes
+     * @return the mimedata for the given indices
+     */
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
 
     QStringList mimeTypes() const override;
@@ -95,6 +144,7 @@ private Q_SLOTS:
 private:
     KoColorSet* m_colorSet;
     QPointer<KoColorDisplayRendererInterface> m_displayRenderer;
+    QModelIndex getLastEntryIndex();
 };
 
 #endif

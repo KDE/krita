@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <kis_color_button.h>
 #include <QCheckBox>
+#include <QComboBox>
 
 
 struct KisPaletteView::Private
@@ -78,6 +79,90 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
     delegate->setCrossedKeyword(value);
 }
 
+bool KisPaletteView::addEntryWithDialog(KoColor color)
+{
+    KoDialog *window = new KoDialog();
+    window->setWindowTitle("Add a new Colorset Entry");
+    QFormLayout *editableItems = new QFormLayout();
+    window->mainWidget()->setLayout(editableItems);
+    QComboBox *cmbGroups = new QComboBox();
+    QString defaultGroupName = "Default";
+    cmbGroups->addItem(defaultGroupName);
+    cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
+    QLineEdit *lnIDName = new QLineEdit();
+    QLineEdit *lnName = new QLineEdit();
+    KisColorButton *bnColor = new KisColorButton();
+    QCheckBox *chkSpot = new QCheckBox();
+    editableItems->addRow(tr("Group"), cmbGroups);
+    editableItems->addRow(tr("ID"), lnIDName);
+    editableItems->addRow(tr("Name"), lnName);
+    editableItems->addRow(tr("Color"), bnColor);
+    editableItems->addRow(tr("Spot"), chkSpot);
+    cmbGroups->setCurrentIndex(0);
+    lnName->setText("Color "+QString::number(m_d->model->colorSet()->nColors()+1));
+    lnIDName->setText(QString::number(m_d->model->colorSet()->nColors()+1));
+    bnColor->setColor(color);
+    chkSpot->setChecked(false);
+
+    //
+    if (window->exec() == KoDialog::Accepted) {
+        QString groupName = cmbGroups->currentText();
+        if (groupName == defaultGroupName) {
+            groupName = QString();
+        }
+        KoColorSetEntry newEntry;
+        newEntry.color = bnColor->color();
+        newEntry.name = lnName->text();
+        newEntry.id = lnIDName->text();
+        newEntry.spotColor = chkSpot->isChecked();
+        m_d->model->addColorSetEntry(newEntry, groupName);
+        m_d->model->colorSet()->save();
+        return true;
+    }
+    return false;
+}
+
+bool KisPaletteView::addGroupWithDialog()
+{
+    KoDialog *window = new KoDialog();
+    window->setWindowTitle("Add a new group");
+    QFormLayout *editableItems = new QFormLayout();
+    window->mainWidget()->setLayout(editableItems);
+    QLineEdit *lnName = new QLineEdit();
+    editableItems->addRow(tr("Name"), lnName);
+    lnName->setText("Color Group "+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
+    if (window->exec() == KoDialog::Accepted) {
+        QString groupName = lnName->text();
+        m_d->model->addGroup(groupName);
+        m_d->model->colorSet()->save();
+        return true;
+    }
+    return false;
+}
+
+bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
+{
+    bool keepColors = true;
+    if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+        KoDialog *window = new KoDialog();
+        window->setWindowTitle("Removing Group");
+        QFormLayout *editableItems = new QFormLayout();
+        QCheckBox *chkKeep = new QCheckBox();
+        window->mainWidget()->setLayout(editableItems);
+        editableItems->addRow(tr("Keep the Colors"), chkKeep);
+        chkKeep->setChecked(keepColors);
+        if (window->exec() == KoDialog::Accepted) {
+            keepColors = chkKeep->isChecked();
+            m_d->model->removeEntry(index, keepColors);
+            m_d->model->colorSet()->save();
+        }
+    } else {
+        m_d->model->removeEntry(index, keepColors);
+        m_d->model->colorSet()->save();
+    }
+    return true;
+}
+
 void KisPaletteView::paletteModelChanged()
 {
     updateView();
@@ -93,6 +178,8 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     setModel(model);
     connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
+    connect(m_d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
+    connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
 
 }
 
@@ -146,12 +233,10 @@ void KisPaletteView::entrySelection() {
         index = selectedIndexes().first();
     }
     if (!index.isValid()) {
-        qDebug()<<"invalid";
         return;
     }
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-        qDebug()<<entry.name;
         emit(entrySelected(entry));
     }
 }

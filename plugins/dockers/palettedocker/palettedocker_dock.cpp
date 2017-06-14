@@ -73,14 +73,17 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
+    m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
+    m_wdgPaletteDock->bnAddGroup->setIconSize(QSize(16, 16));
 
-    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
-    connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
-    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
 
     m_model = new KisPaletteModel(this);
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
+    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
+    connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
+    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
+    connect(m_wdgPaletteDock->bnAddGroup, SIGNAL(clicked(bool)), m_wdgPaletteDock->paletteView, SLOT(addGroupWithDialog()));
 
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
 
@@ -185,44 +188,7 @@ void PaletteDockerDock::addColorForeground()
 {
     if (m_resourceProvider) {
         //setup dialog
-        KoDialog *window = new KoDialog();
-        window->setWindowTitle(i18n("Add a new Colorset Entry"));
-        QFormLayout *editableItems = new QFormLayout();
-        window->mainWidget()->setLayout(editableItems);
-        QComboBox *cmbGroups = new QComboBox();
-        QString defaultGroupName = i18n("Default");
-        cmbGroups->addItem(defaultGroupName);
-        cmbGroups->addItems(m_currentColorSet->getGroupNames());
-        QLineEdit *lnIDName = new QLineEdit();
-        QLineEdit *lnName = new QLineEdit();
-        KisColorButton *bnColor = new KisColorButton();
-        QCheckBox *chkSpot = new QCheckBox();
-        editableItems->addRow(tr("Group"), cmbGroups);
-        editableItems->addRow(tr("ID"), lnIDName);
-        editableItems->addRow(tr("Name"), lnName);
-        editableItems->addRow(tr("Color"), bnColor);
-        editableItems->addRow(tr("Spot"), chkSpot);
-        cmbGroups->setCurrentIndex(0);
-        lnName->setText(i18n("Color ")+QString::number(m_currentColorSet->nColors()+1));
-        lnIDName->setText(QString::number(m_currentColorSet->nColors()+1));
-        bnColor->setColor(m_resourceProvider->fgColor());
-        chkSpot->setChecked(false);
-
-        //
-        if (window->exec() == KoDialog::Accepted) {
-            QString groupName = cmbGroups->currentText();
-            if (groupName == defaultGroupName) {
-                groupName = QString();
-            }
-            KoColorSetEntry newEntry;
-            newEntry.color = bnColor->color();
-            newEntry.name = lnName->text();
-            newEntry.id = lnIDName->text();
-            newEntry.spotColor = chkSpot->isChecked();
-            m_currentColorSet->add(newEntry, groupName);
-            m_currentColorSet->save();
-            setColorSet(m_currentColorSet); // update model
-        }
+        m_wdgPaletteDock->paletteView->addEntryWithDialog(m_resourceProvider->fgColor());
     }
 }
 
@@ -249,13 +215,10 @@ void PaletteDockerDock::addColor()
 void PaletteDockerDock::removeColor()
 {
     QModelIndex index = m_wdgPaletteDock->paletteView->currentIndex();
-    if (!index.isValid() || qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+    if (!index.isValid()) {
         return;
     }
-    QStringList entryList = qVariantValue<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
-    m_currentColorSet->removeAt(entryList.at(1).toUInt(), entryList.at(0));
-    m_currentColorSet->save();
-    setColorSet(m_currentColorSet); // update model
+    m_wdgPaletteDock->paletteView->removeEntryWithDialog(index);
 }
 
 void PaletteDockerDock::entrySelected(KoColorSetEntry entry)

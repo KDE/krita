@@ -58,8 +58,22 @@ public:
      * @param value
      */
     void setCrossedKeyword(const QString &value);
+
 public Q_SLOTS:
     void paletteModelChanged();
+    /**
+     * add an entry with a dialog window.
+     */
+    bool addEntryWithDialog(KoColor color);
+    /**
+     * @brief addGroupWithDialog
+     * summons a little dialog to name the new group.
+     */
+    bool addGroupWithDialog();
+    /**
+     * remove entry with a dialog window.(Necessary for groups.
+     */
+    bool removeEntryWithDialog(QModelIndex index);
 Q_SIGNALS:
     /**
      * @brief entrySelected

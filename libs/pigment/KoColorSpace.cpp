@@ -195,9 +195,9 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
             max = this->channels()[0]->getUIMax();
         }
-        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16");
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32");
         quint8 *data = new quint8[pixelSize()];
-        quint8 data2[8]; // xyza is 8 bytes per pixel.
+        quint8 data2[xyzColorSpace->pixelSize()];
 
         // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
         QVector <float> channelValuesF(5);//for getting the coordinates.

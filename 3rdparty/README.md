@@ -145,6 +145,11 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
 
+On All operating systems:
+    If you want to build your own SIP and PyQt instead of the system one:
+    cmake --build . --config RelWithDebInfo --target ext_sip
+    cmake --build . --config RelWithDebInfo --target ext_pyqt
+
 On Windows
 
     cmake --build . --config RelWithDebInfo --target ext_freetype
@@ -195,7 +200,14 @@ Or this to use jom (faster compiling, uses all cores, ships with QtCreator/pre-b
 
 On Linux
 
-    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfobg
+   cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfobg
+
+   # Troubleshooting: if you built your own SIP and CMake fails to find it, please set
+   #                  the following environment variable to the SIP installation directory:
+   export PYTHONPATH=$BUILDROOT/i/sip/
+
+   # If you also have KIO installed in the system, don't forget to disable it by bassing to cmake:
+   # cmake -DCMAKE_DISABLE_FIND_PACKAGE_KF5KIO=true .
 
 On OSX
 

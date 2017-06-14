@@ -192,14 +192,14 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
 {
     if (d->TRCXYY.empty()){
         qreal max = 1.0;
-        if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
+        if ((colorModelId().id() == "CMYKA" || colorModelId().id() == "LABA") && colorDepthId().id() == "F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
             max = this->channels()[0]->getUIMax();
         }
-        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
-        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
+        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF32")->defaultProfile();
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32", name);
         quint8 *data = new quint8[pixelSize()];
-        quint8 data2[8]; // xyza is 8 bytes per pixel.
+        quint8 data2[xyzColorSpace->pixelSize()]; // 32 bits floating point xyza is 16 bytes per pixel.
 
         // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
         QVector <float> channelValuesF(5);//for getting the coordinates.
@@ -213,8 +213,8 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
 
                     if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
                         fromNormalisedChannelsValue(data, channelValuesF);
-                        convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
-                        xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                        convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                        xyzColorSpace->normalisedChannelsValue(data2, channelValuesF);
                     }
 
                     if (j==0) {
@@ -235,7 +235,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
 
                     fromNormalisedChannelsValue(data, channelValuesF);
 
-                    convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
+                    convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
 
                     xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
 

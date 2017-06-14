@@ -30,10 +30,10 @@ SvgTextToolFactory::SvgTextToolFactory()
     : KoToolFactoryBase("SvgTextTool")
 {
     setToolTip(i18n("SVG Text Tool"));
-    setIconName(koIconNameCStrNeededWithSubs("a generic SvgText image icon", "x-shape-svgtextimage", "application-x-wmf"));
-    setSection(dynamicToolType());
-    setPriority(2);
-    setActivationShapeId(KoSvgTextShape_SHAPEID);
+    setIconName(koIconNameCStr("draw-text"));
+    setSection(mainToolType());
+    setPriority(1);
+    setActivationShapeId(QString("flake/always,%1").arg(KoSvgTextShape_SHAPEID));
 }
 
 SvgTextToolFactory::~SvgTextToolFactory()

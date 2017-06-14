@@ -85,8 +85,6 @@ public:
 
     /// Reimplemented
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
-
-//    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 

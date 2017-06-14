@@ -85,7 +85,10 @@ namespace KisLayerUtils {
         QSet<int> frames;
 
         virtual KisNodeList allSrcNodes() = 0;
-        virtual KisLayerSP dstLayer() { return 0; }
+
+        KisLayerSP dstLayer() {
+            return qobject_cast<KisLayer*>(dstNode.data());
+        }
     };
 
     struct MergeDownInfo : public MergeDownInfoBase {
@@ -109,10 +112,6 @@ namespace KisLayerUtils {
             mergedNodes << currLayer;
             mergedNodes << prevLayer;
             return mergedNodes;
-        }
-
-        KisLayerSP dstLayer() override {
-            return qobject_cast<KisLayer*>(dstNode.data());
         }
     };
 
@@ -674,9 +673,14 @@ namespace KisLayerUtils {
                                                            true, false));
                 }
 
-                reparentSelectionMasks(m_info->image,
-                                       m_info->dstLayer(),
-                                       m_info->selectionMasks);
+                /**
+                 * We can merge selection masks, in this case dstLayer is not defined!
+                 */
+                if (m_info->dstLayer()) {
+                    reparentSelectionMasks(m_info->image,
+                                           m_info->dstLayer(),
+                                           m_info->selectionMasks);
+                }
 
                 safeRemoveMultipleNodes(m_info->allSrcNodes(), m_info->image);
             }
@@ -693,11 +697,11 @@ namespace KisLayerUtils {
                                     KisLayerSP newLayer,
                                     const QVector<KisSelectionMaskSP> &selectionMasks) {
 
+            KIS_SAFE_ASSERT_RECOVER_RETURN(newLayer);
+
             foreach (KisSelectionMaskSP mask, selectionMasks) {
-                if (mask) {
-                    addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
-                    addCommand(new KisActivateSelectionMaskCommand(mask, false));
-                }
+                addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
+                addCommand(new KisActivateSelectionMaskCommand(mask, false));
             }
         }
     private:

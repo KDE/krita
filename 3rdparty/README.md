@@ -248,6 +248,6 @@ On OSX
 
 == Packaging a Windows Build ==
 
-If you want to create a stripped down version of Krita to distribute, after building everything just copy the makepkg.bat file from the "windows" folder inside krita root source folder to BUILDROOT and run it.
+If you want to create a stripped down version of Krita to distribute, after building everything just copy the package_2.cmd file from the "windows" folder inside krita root source folder to BUILDROOT and run it (most likely C:\dev\).
 
-That will copy the necessary files into the specified folder and leave behind developer related files, so the resulting folder will be a smaller install folder.
+That script will copy the necessary files into the specified folder and leave out developer related files. After the script runs there will be two new ZIP files that contain a small portable version of Krita and a separate portable debug version. 

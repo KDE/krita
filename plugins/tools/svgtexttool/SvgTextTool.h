@@ -34,20 +34,20 @@ public:
     explicit SvgTextTool(KoCanvasBase *canvas);
 
     /// reimplemented from KoToolBase
-    void paint(QPainter &, const KoViewConverter &) override {}
+    void paint(QPainter &, const KoViewConverter &) override;
     /// reimplemented from KoToolBase
-    void mousePressEvent(KoPointerEvent *) override {}
+    void mousePressEvent(KoPointerEvent *) override;
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent *) override{}
+    void mouseMoveEvent(KoPointerEvent *) override;
     /// reimplemented from KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent *) override {}
+    void mouseReleaseEvent(KoPointerEvent *) override;
 
     /// reimplemented from KoToolBase
-    virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     /// reimplemented from KoToolBase
-    virtual void deactivate();
+    void deactivate() override;
 
 protected:
     /// reimplemented from KoToolBase

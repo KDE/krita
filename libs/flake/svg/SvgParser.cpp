@@ -1355,6 +1355,7 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
     KoSvgTextShape *rootTextShape  = 0;
 
     if (e.tagName() == "text") {
+        // XXX: Shapes need to be created by their factories
         rootTextShape = mergeIntoShape ? mergeIntoShape : new KoSvgTextShape();
     }
 
@@ -1706,14 +1707,15 @@ KoShape *SvgParser::createShape(const QString &shapeID)
         debugFlake << "Could not create Default shape for shape id" << shapeID;
         return 0;
     }
-    if (shape->shapeId().isEmpty())
+    if (shape->shapeId().isEmpty()) {
         shape->setShapeId(factory->id());
+    }
 
     // reset tranformation that might come from the default shape
     shape->setTransformation(QTransform());
 
     // reset border
-    KoShapeStrokeModelSP oldStroke = shape->stroke();
+    // ??? KoShapeStrokeModelSP oldStroke = shape->stroke();
     shape->setStroke(KoShapeStrokeModelSP());
 
     // reset fill

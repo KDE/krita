@@ -505,7 +505,7 @@ void KisShortcutMatcher::forceEndRunningShortcut(const QPointF &localPos)
     KisStrokeShortcut *runningShortcut = m_d->runningShortcut;
     m_d->runningShortcut = 0;
 
-    if (m_d->runningShortcut->action()) {
+    if (runningShortcut->action()) {
         DEBUG_ACTION("Forced ending running shortcut at event");
         KisAbstractInputAction* action = runningShortcut->action();
         int shortcutIndex = runningShortcut->shortcutIndex();

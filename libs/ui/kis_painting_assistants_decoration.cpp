@@ -194,7 +194,7 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
     return hs;
 }
 
-QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants()
+QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants() const
 {
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
     return assistants;

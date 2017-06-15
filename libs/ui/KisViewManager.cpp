@@ -101,7 +101,7 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
-#include "kis_painting_assistants_manager.h"
+#include "KisDecorationsManager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
 #include <brushengine/kis_paintop_preset.h>
@@ -227,7 +227,7 @@ public:
     KisImageManager imageManager;
     KisGridManager gridManager;
     KisCanvasControlsManager canvasControlsManager;
-    KisPaintingAssistantsManager paintingAssistantsManager;
+    KisDecorationsManager paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisActionManager actionManager;
     QMainWindow* mainWindow;

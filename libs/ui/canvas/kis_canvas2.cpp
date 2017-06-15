@@ -1012,3 +1012,9 @@ KisPaintingAssistantsDecorationSP KisCanvas2::paintingAssistantsDecoration() con
     KisCanvasDecorationSP deco = decoration("paintingAssistantsDecoration");
     return qobject_cast<KisPaintingAssistantsDecoration*>(deco.data());
 }
+
+KisReferenceImagesDecorationSP KisCanvas2::referenceImagesDecoration() const
+{
+    KisCanvasDecorationSP deco = decoration("referenceImagesDecoration");
+    return qobject_cast<KisReferenceImagesDecoration*>(deco.data());
+}

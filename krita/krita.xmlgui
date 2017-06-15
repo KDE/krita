@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="110"
+version="111"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -117,6 +117,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
 
       <Action name="view_toggle_painting_assistants"/>
       <Action name="view_toggle_assistant_previews"/>
+      <Action name="view_toggle_reference_images"/>
       <Separator/>
       <Action name="view_palette_action_menu"/>
       <Separator/>

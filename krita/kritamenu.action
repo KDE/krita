@@ -147,7 +147,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
-    </Action>    
+    </Action>
     <Action name="save_incremental_version">
       <icon></icon>
       <text>Save Incremental &amp;Version</text>
@@ -882,6 +882,20 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+    <Action name="view_toggle_reference_images">
+      <icon></icon>
+      <text>S&amp;how Reference Images</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Reference Images</toolTip>
+      <iconText>Show Reference Images</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
   </Actions>
 
   <Actions category="Image">

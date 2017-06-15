@@ -177,6 +177,10 @@ class KisPaintingAssistant;
 typedef QSharedPointer<KisPaintingAssistant> KisPaintingAssistantSP;
 typedef QWeakPointer<KisPaintingAssistant> KisPaintingAssistantWSP;
 
+class KisReferenceImage;
+typedef QSharedPointer<KisReferenceImage> KisReferenceImageSP;
+typedef QWeakPointer<KisReferenceImage> KisReferenceImageWSP;
+
 // Repeat iterators
 class KisHLineIterator2;
 template<class T> class KisRepeatHLineIteratorPixelBase;

@@ -38,6 +38,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
 #include "kis_painting_assistants_decoration.h"
+#include "KisReferenceImagesDecoration.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -149,7 +150,7 @@ public: // KoCanvasBase implementation
     KisInputManager* globalInputManager() const;
 
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
-
+    KisReferenceImagesDecorationSP referenceImagesDecoration() const;
 
 public: // KisCanvas2 methods
 

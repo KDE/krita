@@ -340,6 +340,9 @@ KisImportExportManager::askUserAboutExportConfiguration(
     if (!m_document->assistants().isEmpty() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>assistants</b>. The assistants will not be saved."));
     }
+    if (!m_document->referenceImages().isEmpty() && to != m_document->nativeFormatMimeType()) {
+        warnings.append(i18nc("image conversion warning", "The image contains <b>reference images</b>. The reference images will not be saved."));
+    }
     if (m_document->guidesConfig().hasGuides() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>guides</b>. The guides will not be saved."));
     }

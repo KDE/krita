@@ -84,6 +84,7 @@
 #include "kis_composite_progress_proxy.h"
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
+#include "KisReferenceImagesDecoration.h"
 #include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
@@ -115,6 +116,7 @@ public:
         , canvas(&viewConverter, resourceManager, _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
+        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -143,6 +145,7 @@ public:
     KisViewManager *viewManager = 0;
     KisNodeSP currentNode;
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration;
+    KisReferenceImagesDecorationSP referenceImagesDecoration;
     bool isCurrent = false;
     bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
@@ -254,6 +257,9 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
+
+    d->canvas.addDecoration(d->referenceImagesDecoration);
+    d->referenceImagesDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }

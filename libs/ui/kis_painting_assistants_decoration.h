@@ -32,7 +32,8 @@ class KisPaintingAssistantsDecoration;
 typedef KisSharedPtr<KisPaintingAssistantsDecoration> KisPaintingAssistantsDecorationSP;
 
 /**
- * This class hold a list of painting assistants.
+ * KisPaintingAssistantsDecoration draws the assistants stored in the document on
+ * the canvas.
  */
 class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoration
 {
@@ -46,7 +47,7 @@ public:
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
-    QList<KisPaintingAssistantSP> assistants();
+    QList<KisPaintingAssistantSP> assistants() const;
     /*sets whether the main assistant is visible*/
     void setAssistantVisible(bool set);
     /*sets whether the preview is visible*/

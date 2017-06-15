@@ -34,6 +34,7 @@
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
+#include <KisReferenceImage.h>
 #include <kis_debug.h>
 
 #include "kritaui_export.h"
@@ -55,7 +56,6 @@ class KoProgressProxy;
 class KoDocumentInfoDlg;
 class KisImportExportManager;
 class KisUndoStore;
-class KisPaintingAssistant;
 class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
@@ -595,8 +595,14 @@ public:
      */
     KisNodeSP preActivatedNode() const;
 
+    /// @return the list of assistants associated with this document
     QList<KisPaintingAssistantSP> assistants() const;
-    void setAssistants(const QList<KisPaintingAssistantSP> value);
+
+    /// @replace the current list of assistants with @param value
+    void setAssistants(const QList<KisPaintingAssistantSP> &value);
+
+    QList<KisReferenceImageSP> referenceImages() const;
+    void setReferenceImages(const QList<KisReferenceImageSP> &referenceImages);
 
     bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
 

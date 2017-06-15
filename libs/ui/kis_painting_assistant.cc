@@ -264,7 +264,7 @@ void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
     handle.data()->setType('S');
 }
 
-void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
+void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);

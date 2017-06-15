@@ -32,6 +32,8 @@
 
 #include "kritawatercolorpaintop_export.h"
 
+#include "kis_painter.h"
+
 class WATERCOLORPAINT_EXPORT KisSplat
 {
 public:
@@ -45,19 +47,21 @@ public:
     KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
           qreal roughness, qreal flow, qreal radialSpeed, KoColor splatColor);
 
-    qreal CalcSize();
-    KoColor getColor();
+    void doPaint(KisPainter *painter);
 
     QPainterPath shape() const;
     QRectF boundingRect() const;
 
     int update(KisWetMap *wetMap);
+    int rewet(KisWetMap *wetMap, QPointF pos, qreal radius);
 
 private:
+    qreal CalcSize();
+
     const float alpha = 0.33f;
 
     QPolygonF m_vertices;
-    QList<QPointF> m_velocities;
+    QVector<QPointF> m_velocities;
     int m_life;
     qreal m_roughness;
     qreal m_flow;

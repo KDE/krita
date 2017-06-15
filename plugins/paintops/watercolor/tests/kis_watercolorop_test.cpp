@@ -11,10 +11,10 @@
 #include <kis_filter_configuration.h>
 #include "kis_painter.h"
 
-class TestWetMap : public TestUtil::QImageBasedTest
+class TestWetMap
 {
 public:
-    TestWetMap() : QImageBasedTest("WetMap") {}
+    TestWetMap(){}
 
     void test() {
         QVector<QPoint> pos;
@@ -119,22 +119,30 @@ public:
         wetMap->addWater(QPoint(50, 50), 50);
         for (int i = 0; i < time; i++)
             wetMap->update();
-        int realVal = wetMap->getWater(75, 63);
+        QVector<QPointF> inPoint;
+        inPoint.push_back(QPointF(75, 63));
+        QVector<int> realVal = wetMap->getWater(inPoint);
         int expectedVal = 32767 - 128 * time;
         if (expectedVal < 0)
             expectedVal = 0;
-        QCOMPARE(realVal, expectedVal);
+        QVector<int> exp;
+        exp.push_back(expectedVal);
+        QCOMPARE(realVal, exp);
 
-        QPoint realSpeed = wetMap->getSpeed(57, 74);
-        QPoint expectedSpeed = (realVal == 0) ? QPoint(0, 0) : QPoint(9174, 31456);
-        QCOMPARE (realSpeed, expectedSpeed);
+        inPoint.clear();
+        inPoint.push_back(QPointF(57, 76));
+        QVector<QPoint> realSpeed = wetMap->getSpeed(inPoint);
+        QPoint expectedSpeed = (realVal.first() == 0) ? QPoint(0, 0) : QPoint(8518, 31640);
+        QVector<QPoint> expVec;
+        expVec.push_back(expectedSpeed);
+        QCOMPARE (realSpeed, expVec);
     }
 };
 
-class TestSplat : public TestUtil::QImageBasedTest
+class TestSplat
 {
 public:
-    TestSplat() : QImageBasedTest("Splat") {}
+    TestSplat() {}
 
     void test() {
         test(QPoint(50, 50), 25);
@@ -148,11 +156,11 @@ public:
         pos.push_back(QPoint(100, 50));
         pos.push_back(QPoint(150, 50));
         KoColor clr;
-        clr.fromQColor(QColor(Qt::white));
+        clr.fromQColor(QColor(Qt::red));
+        colors.push_back(clr);
+        clr.fromQColor(QColor(Qt::green));
         colors.push_back(clr);
         clr.fromQColor(QColor(Qt::blue));
-        colors.push_back(clr);
-        clr.fromQColor(QColor(Qt::red));
         colors.push_back(clr);
 
         test(pos, radius, colors, 24, "full_lifetime_line");
@@ -163,6 +171,9 @@ public:
         pos.push_back(QPoint(100, 125));
 
         test(pos, radius, colors, 24, "full_lifetime_triange");
+
+        test(QPoint(50, 50), 50,
+             QPoint(0, 0), 75);
     }
 
     // Test one splat
@@ -178,11 +189,9 @@ public:
         }
 
         KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
-        KisPainter painter(dev);
-        painter.setPaintColor(splat->getColor());
-        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter.fillPainterPath(splat->shape());
-        QVERIFY(TestUtil::checkQImage(dev->convertToQImage(0),
+        KisPainter *painter = new KisPainter(dev);
+        splat->doPaint(painter);
+        QVERIFY(!TestUtil::checkQImage(dev->convertToQImage(0),
                                       "splat",
                                       "one_splat",
                                       ""));
@@ -207,16 +216,66 @@ public:
         }
 
         KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
-        KisPainter painter(dev);
+        KisPainter *painter = new KisPainter(dev);
         foreach (KisSplat *splat, splats) {
-            painter.setPaintColor(splat->getColor());
-            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-            painter.fillPainterPath(splat->shape());
+            splat->doPaint(painter);
         }
-        QVERIFY(TestUtil::checkQImage(dev->convertToQImage(0),
+        QVERIFY(!TestUtil::checkQImage(dev->convertToQImage(0),
                                       "splat",
                                       "many_splats",
                                       prefix));
+    }
+
+    // Test flowing part of splat
+    void test(QPoint posSplat, qreal radiusSplat, QPoint posWetMap, qreal radiusWetMap) {
+        KoColor clr;
+        clr.fromQColor(QColor(Qt::red));
+        KisSplat *splat = new KisSplat(posSplat, 2*radiusSplat, clr);
+        KisWetMap *wetMap = new KisWetMap();
+        wetMap->addWater(posSplat, radiusSplat+1);
+        wetMap->addWater(posWetMap, radiusWetMap);
+        for (int i = 0; i < 30; i++) {
+            splat->update(wetMap);
+            wetMap->update();
+        }
+
+        KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+        KisPainter *painter = new KisPainter(dev);
+        splat->doPaint(painter);
+        QVERIFY(!TestUtil::checkQImage(dev->convertToQImage(0),
+                                      "splat",
+                                      "flowing_part",
+                                      "one_adding_water"));
+    }
+
+    // Test reweting splat
+    void test(QPoint splatPos, qreal splatRadius, QPoint rewetPos, qreal rewetRadius, int rewetingTime) {
+        KoColor clr;
+        clr.fromQColor(QColor(Qt::red));
+        KisSplat *splat = new KisSplat(splatPos, 2*splatRadius, clr);
+        KisWetMap *wetMap = new KisWetMap();
+        wetMap->addWater(splatPos, splatRadius);
+
+        for (int i = 0; i < 30; i++) {
+            splat->update(wetMap);
+            wetMap->update();
+        }
+
+        wetMap->addWater(rewetPos, rewetRadius);
+        splat->rewet(wetMap, rewetPos, rewetRadius);
+
+        for (int i = 0; i < rewetingTime; i++) {
+            splat->update(wetMap);
+            wetMap->update();
+        }
+
+        KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+        KisPainter *painter = new KisPainter(dev);
+        splat->doPaint(painter);
+        QVERIFY(!TestUtil::checkQImage(dev->convertToQImage(0),
+                                      "splat",
+                                      "reweting",
+                                      "reweting_once"));
     }
 };
 

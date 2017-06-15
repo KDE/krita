@@ -29,12 +29,11 @@ class WATERCOLORPAINT_EXPORT KisWetMap
 {
 public:
     KisWetMap();
-    ~KisWetMap();
 
     void addWater(QPoint pos, qreal radius);
     void update();
-    int getWater(int x, int y);
-    QPoint getSpeed(int x, int y);
+    QVector<int> getWater(QVector<QPointF> points);
+    QVector<QPoint> getSpeed(QVector<QPointF> points);
 
     KisPaintDeviceSP getPaintDevice();
 private:

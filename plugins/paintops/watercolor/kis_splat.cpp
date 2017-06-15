@@ -22,8 +22,16 @@
 #include "kis_random_generator.h"
 #include <cmath>
 
-#define START_OPACITY 50
+#include <QVector2D>
+
+#define START_OPACITY 220
 #define STANDART_LIFETIME 30
+
+double get_random(qreal min, qreal max)
+{
+    return (qreal)rand() / RAND_MAX*(max - min) + min;
+}
+
 
 KisSplat::KisSplat(QPointF offset, int width, KoColor splatColor)
     : m_life(STANDART_LIFETIME), m_roughness(1.f), m_flow(1.f),
@@ -102,16 +110,17 @@ qreal KisSplat::CalcSize()
     return s >= 0 ? s : -s;
 }
 
-KoColor KisSplat::getColor()
+void KisSplat::doPaint(KisPainter *painter)
 {
-    KoColor current;
-    current = m_initColor;
+    painter->setPaintColor(m_initColor);
+
     qreal multiply = m_initSize / CalcSize();
     if (multiply < 0.f || multiply > 1.f)
         multiply = 1;
 
-    current.setOpacity(current.opacityU8() * multiply);
-    return current;
+    painter->setOpacity(m_initColor.opacityU8() * multiply);
+    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter->fillPainterPath(this->shape());
 }
 
 QPainterPath KisSplat::shape() const
@@ -148,18 +157,20 @@ int KisSplat::update(KisWetMap *wetMap)
 
     m_life--;
 
-    KisRandomGenerator randG(0);
-
+    QVector<QPointF> newVertices;
     for (int i = 0; i < m_vertices.length(); i++) {
         QPointF x = m_vertices[i];
         QPointF v = m_velocities[i];
-        QPointF d = (1.f - alpha) * m_motionBias + alpha / randG.doubleRandomAt(1.f, 1.f + m_roughness) * v;
+        QPointF d = (1.f - alpha) * m_motionBias + alpha / get_random(1.f, 1.f + m_roughness) * v;
 
-        QPointF x1 = x + m_flow * d; + QPointF(randG.doubleRandomAt(-m_roughness, m_roughness),
-                                               randG.doubleRandomAt(-m_roughness, m_roughness));
-        quint16 wet = wetMap->getWater((int)x1.x(), (int)x1.y()); // Считываение количества жидкости
-        if (wet > 0)
-           m_vertices[i] = x1;
+        QPointF x1 = x + m_flow * d; + QPointF(get_random(-m_roughness, m_roughness),
+                                               get_random(-m_roughness, m_roughness));
+        newVertices.push_back(x1);
+    }
+    QVector<int> wetPoints = wetMap->getWater(newVertices);
+    for (int i = 0; i < wetPoints.size(); i++) {
+        if (wetPoints.at(i) > 0)
+            m_vertices[i] = newVertices.at(i);
     }
 
     if (!m_life) {
@@ -169,4 +180,30 @@ int KisSplat::update(KisWetMap *wetMap)
     }
 
     return KisSplat::Flowing;
+}
+
+int KisSplat::rewet(KisWetMap *wetMap, QPointF pos, qreal radius)
+{
+    QVector<int> vertNum;
+    QVector<QPointF> vertUpdate;
+
+    for (int i = 0; i < m_vertices.size(); i++) {
+        QVector2D vec(m_vertices.at(i) - pos);
+        if (vec.length() <= radius) {
+            vertNum.push_back(i);
+            vertUpdate.push_back(m_vertices[i]);
+        }
+    }
+
+    if (vertNum.size() > 0) {
+        QVector<QPoint> newSpeed = wetMap->getSpeed(vertUpdate);
+        for (int i = 0; i < vertNum.size(); i++) {
+            int num = vertNum.at(i);
+            m_velocities[num] = newSpeed.at(i);
+        }
+        m_life = STANDART_LIFETIME;
+        m_fix = 8*STANDART_LIFETIME;
+        return KisSplat::Flowing;
+    } else
+        return KisSplat::Fixed;
 }

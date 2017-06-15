@@ -1025,7 +1025,7 @@ void TestSvgText::testEmptyTextChunk()
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
             "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
-            "        aaa" // no actual text! should not crash!
+            "        " // no actual text! should not crash!
             "    </text>"
 
             "</g>"

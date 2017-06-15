@@ -24,8 +24,7 @@
 
 struct KisReferenceImage::Private {
     QImage image;
-    int x;
-    int y;
+    QPointF pos;
 };
 
 KisReferenceImage::KisReferenceImage()
@@ -39,7 +38,17 @@ KisReferenceImage::~KisReferenceImage()
 
 }
 
-void KisReferenceImage::draw(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
+void KisReferenceImage::setImage(QImage image)
+{
+    d->image = image;
+}
+
+void KisReferenceImage::setPosition(QPointF pos)
+{
+    d->pos = pos;
+}
+
+void KisReferenceImage::draw(QPainter &gc, const QRectF &/*updateRect*/, const KisCoordinatesConverter *converter, KisCanvas2 */*canvas*/)
 {
     gc.save();
     gc.resetTransform();
@@ -47,7 +56,7 @@ void KisReferenceImage::draw(QPainter &gc, const QRectF &updateRect, const KisCo
     QTransform initialTransform = converter->documentToWidgetTransform();
     gc.setTransform(initialTransform);
 
-    gc.drawImage(d->x, d->y, d->image);
+    gc.drawImage(d->pos, d->image);
 
     gc.restore();
 }

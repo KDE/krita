@@ -44,6 +44,8 @@ public:
     KisReferenceImagesDecoration(QPointer<KisView> parent);
     ~KisReferenceImagesDecoration() override;
 
+    void addReferenceImage(KisReferenceImageSP referenceImage);
+
     QList<KisReferenceImageSP> referenceImages() const;
 
 Q_SIGNALS:

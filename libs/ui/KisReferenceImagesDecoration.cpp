@@ -37,6 +37,15 @@ KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 
 }
 
+void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImageSP referenceImage)
+{
+    QList<KisReferenceImageSP> images = view()->document()->referenceImages();
+    images.append(referenceImage);
+    view()->document()->setReferenceImages(images);
+    setVisible(!images.isEmpty());
+    emit referenceImagesChanged();
+}
+
 QList<KisReferenceImageSP> KisReferenceImagesDecoration::referenceImages() const
 {
     return view()->document()->referenceImages();

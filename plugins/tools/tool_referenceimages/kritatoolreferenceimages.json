@@ -1,0 +1,9 @@
+{
+    "Id": "ReferenceImageSTool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoolreferenceimages",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

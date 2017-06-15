@@ -241,7 +241,7 @@ void KoColor::fromKoColor(const KoColor& src)
     src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
-const KoColorProfile *  KoColor::profile() const
+const KoColorProfile *KoColor::profile() const
 {
     return d->colorSpace->profile();
 }

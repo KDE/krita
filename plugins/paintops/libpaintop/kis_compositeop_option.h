@@ -22,9 +22,6 @@
 #include <kritapaintop_export.h>
 #include <QString>
 
-// const QString AIRBRUSH_ENABLED = "AirbrushOption/isAirbrushing";
-// const QString AIRBRUSH_RATE = "AirbrushOption/rate";
-
 class QLabel;
 class QModelIndex;
 class QPushButton;

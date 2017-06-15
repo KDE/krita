@@ -85,7 +85,10 @@ namespace KisLayerUtils {
         QSet<int> frames;
 
         virtual KisNodeList allSrcNodes() = 0;
-        virtual KisLayerSP dstLayer() { return 0; }
+
+        KisLayerSP dstLayer() {
+            return qobject_cast<KisLayer*>(dstNode.data());
+        }
     };
 
     struct MergeDownInfo : public MergeDownInfoBase {
@@ -109,10 +112,6 @@ namespace KisLayerUtils {
             mergedNodes << currLayer;
             mergedNodes << prevLayer;
             return mergedNodes;
-        }
-
-        KisLayerSP dstLayer() override {
-            return qobject_cast<KisLayer*>(dstNode.data());
         }
     };
 
@@ -361,13 +360,13 @@ namespace KisLayerUtils {
     };
 
     struct CreateMergedLayerMultiple : public KisCommandUtils::AggregateCommand {
-        CreateMergedLayerMultiple(MergeMultipleInfoSP info, const QString name = QString() ) 
+        CreateMergedLayerMultiple(MergeMultipleInfoSP info, const QString name = QString() )
             : m_info(info),
               m_name(name) {}
 
         void populateChildCommands() override {
             QString mergedLayerName;
-            
+
             if (m_name.isEmpty()){
                 const QString mergedLayerSuffix = i18n("Merged");
                 mergedLayerName = m_info->mergedNodes.first()->name();
@@ -379,7 +378,7 @@ namespace KisLayerUtils {
             } else {
                 mergedLayerName = m_name;
             }
-                
+
             m_info->dstNode = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
 
             if (m_info->frames.size() > 0) {
@@ -602,14 +601,14 @@ namespace KisLayerUtils {
     struct InsertNode : public KisCommandUtils::AggregateCommand {
         InsertNode(MergeDownInfoBaseSP info, KisNodeSP putAfter)
             : m_info(info), m_putAfter(putAfter) {}
-        
+
         void populateChildCommands() override {
             addCommand(new KisImageLayerAddCommand(m_info->image,
                                                            m_info->dstNode,
                                                            m_putAfter->parent(),
                                                            m_putAfter,
                                                            true, false));
-        
+
         }
 
     private:
@@ -674,9 +673,14 @@ namespace KisLayerUtils {
                                                            true, false));
                 }
 
-                reparentSelectionMasks(m_info->image,
-                                       m_info->dstLayer(),
-                                       m_info->selectionMasks);
+                /**
+                 * We can merge selection masks, in this case dstLayer is not defined!
+                 */
+                if (m_info->dstLayer()) {
+                    reparentSelectionMasks(m_info->image,
+                                           m_info->dstLayer(),
+                                           m_info->selectionMasks);
+                }
 
                 safeRemoveMultipleNodes(m_info->allSrcNodes(), m_info->image);
             }
@@ -692,6 +696,8 @@ namespace KisLayerUtils {
         void reparentSelectionMasks(KisImageSP image,
                                     KisLayerSP newLayer,
                                     const QVector<KisSelectionMaskSP> &selectionMasks) {
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(newLayer);
 
             foreach (KisSelectionMaskSP mask, selectionMasks) {
                 addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
@@ -1077,8 +1083,8 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
-    void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, 
-                                           bool flattenSingleLayer, const KUndo2MagicString &actionName, 
+    void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter,
+                                           bool flattenSingleLayer, const KUndo2MagicString &actionName,
                                            bool cleanupNodes = true, const QString layerName = QString())
     {
         if (!putAfter) {
@@ -1169,7 +1175,7 @@ namespace KisLayerUtils {
     {
         mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
     }
-    
+
     void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter)
     {
         KisNodeList mergedNodes;

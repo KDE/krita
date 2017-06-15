@@ -23,6 +23,8 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
+#include "kis_airbrush_option.h"
+#include "kis_pressure_rate_option.h"
 #include "dyna_brush.h"
 
 
@@ -45,9 +47,14 @@ public:
     }
 
 private:
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+
+private:
     KisDynaProperties m_properties;
     KisPaintDeviceSP m_dab;
     DynaBrush m_dynaBrush;
+    KisAirbrushOption m_airbrushOption;
+    KisPressureRateOption m_rateOption;
 };
 
 #endif // KIS_DYNA_PAINTOP_H_

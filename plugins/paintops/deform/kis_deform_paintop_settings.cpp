@@ -71,16 +71,6 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     }
 }
 
-int KisDeformPaintOpSettings::rate() const
-{
-    if (hasProperty(AIRBRUSH_RATE)) {
-        return getInt(AIRBRUSH_RATE);
-    }
-    else {
-        return KisPaintOpSettings::rate();
-    }
-}
-
 QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;

@@ -11,5 +11,6 @@ ecm_add_tests(
     TestDocument.cpp
     TestNode.cpp
     TestFilter.cpp
+    TestManagedColor.cpp
     NAME_PREFIX "libs-kritalibkis-"
     LINK_LIBRARIES kritalibkis Qt5::Test)

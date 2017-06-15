@@ -8,9 +8,11 @@ set(kritalibkis_LIB_SRCS
     Filter.cpp
     InfoObject.cpp
     Krita.cpp
+    ManagedColor.cpp
     Node.cpp
     Notifier.cpp
     PresetChooser
+    Palette.cpp
     Resource.cpp
     Selection.cpp
     View.cpp

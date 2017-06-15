@@ -9,7 +9,7 @@ class HighpassExtension(Extension):
         super().__init__(parent)
 
     def setup(self):
-        action = Application.createAction("High Pass")
+        action = Application.createAction("high_pass_filter", "High Pass")
         action.triggered.connect(self.showDialog)
 
     def showDialog(self):

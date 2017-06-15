@@ -57,16 +57,6 @@ bool KisDynaPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-bool KisDynaPaintOpSettings::isAirbrushing() const
-{
-    return getBool(AIRBRUSH_ENABLED);
-}
-
-int KisDynaPaintOpSettings::rate() const
-{
-    return getInt(AIRBRUSH_RATE);
-}
-
 
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include <brushengine/kis_combo_based_paintop_property.h>

@@ -53,6 +53,7 @@ public:
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText);
     ~KisToolFreehand() override;
     int flags() const override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
@@ -138,4 +139,3 @@ private:
 
 
 #endif // KIS_TOOL_FREEHAND_H_
-

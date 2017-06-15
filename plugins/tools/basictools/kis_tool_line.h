@@ -60,7 +60,6 @@ public:
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
-    int flags() const override;
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
     QString quickHelp() const override;
@@ -134,4 +133,3 @@ public:
 
 
 #endif //KIS_TOOL_LINE_H_
-

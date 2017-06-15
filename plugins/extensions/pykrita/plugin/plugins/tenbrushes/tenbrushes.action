@@ -109,7 +109,7 @@
 
     <Action name="activate_preset_9">
       <icon></icon>
-      <text>Activate Brush Preset</text>
+      <text>Activate Brush Preset 9</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>

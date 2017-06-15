@@ -1012,5 +1012,32 @@ void TestSvgText::testConvertFromIncorrectStrippedSvg()
     QCOMPARE(converter.errors().size(), 1);
 }
 
+void TestSvgText::testEmptyTextChunk()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testRect\" x=\"2\" y=\"24\""
+            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        aaa" // no actual text! should not crash!
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    // it just shouldn't assert or fail when seeing an empty text block
+    t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
+    t.run();
+}
+
 
 QTEST_MAIN(TestSvgText)

@@ -178,8 +178,12 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
             const KoSvgText::KoSvgCharChunkFormat format = q->d_func()->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->d_func()->localTransformations;
 
-            KIS_SAFE_ASSERT_RECOVER(text.size() >= transforms.size()) {
-                transforms.clear();
+            /**
+             * Sometimes SVG can contain the X,Y offets for the pieces for the pieses of text that
+             * do not exist, just skip them.
+             */
+            if (text.size() <= transforms.size()) {
+                transforms.resize(text.size());
             }
 
             KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(q->d_func()->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());

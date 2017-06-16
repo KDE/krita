@@ -20,12 +20,14 @@
 #define __KIS_LIQUIFY_PROPERTIES_H
 
 #include <QtGlobal>
+#include <QDebug>
 #include <boost/operators.hpp>
+#include "kritatooltransform_export.h"
 
 class QDomElement;
 
 
-class KisLiquifyProperties : boost::equality_comparable<KisLiquifyProperties>
+class KRITATOOLTRANSFORM_EXPORT KisLiquifyProperties : boost::equality_comparable<KisLiquifyProperties>
 {
 public:
     enum LiquifyMode {
@@ -144,5 +146,7 @@ private:
     bool m_useWashMode;
     qreal m_flow;
 };
+
+QDebug KRITATOOLTRANSFORM_EXPORT operator<<(QDebug dbg, const KisLiquifyProperties &properties);
 
 #endif /* __KIS_LIQUIFY_PROPERTIES_H */

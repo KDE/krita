@@ -88,12 +88,28 @@ KisLiquifyTransformWorker::~KisLiquifyTransformWorker()
 
 bool KisLiquifyTransformWorker::operator==(const KisLiquifyTransformWorker &other) const
 {
-    return
-        m_d->srcBounds == other.m_d->srcBounds &&
-        m_d->originalPoints == other.m_d->originalPoints &&
-        m_d->transformedPoints == other.m_d->transformedPoints &&
-        m_d->pixelPrecision == other.m_d->pixelPrecision &&
-        m_d->gridSize == other.m_d->gridSize;
+    bool result =
+            m_d->srcBounds == other.m_d->srcBounds &&
+            m_d->pixelPrecision == other.m_d->pixelPrecision &&
+            m_d->gridSize == other.m_d->gridSize &&
+            m_d->originalPoints.size() == other.m_d->originalPoints.size() &&
+            m_d->transformedPoints.size() == other.m_d->transformedPoints.size();
+
+    if (!result) return false;
+
+    const qreal eps = 1e-6;
+
+    for (int i = 0; i < m_d->originalPoints.size(); i++) {
+        result = KisAlgebra2D::fuzzyPointCompare(m_d->originalPoints[i], other.m_d->originalPoints[i], eps);
+        if (!result) return false;
+    }
+
+    for (int i = 0; i < m_d->transformedPoints.size(); i++) {
+        result = KisAlgebra2D::fuzzyPointCompare(m_d->transformedPoints[i], other.m_d->transformedPoints[i], eps);
+        if (!result) return false;
+    }
+
+    return result;
 }
 
 int KisLiquifyTransformWorker::pointToIndex(const QPoint &cellPt)

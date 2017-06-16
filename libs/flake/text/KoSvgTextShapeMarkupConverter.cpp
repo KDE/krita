@@ -69,7 +69,7 @@ bool KoSvgTextShapeMarkupConverter::convertToSvg(QString *svgText, QString *styl
     {
         SvgSavingContext savingContext(shapesBuffer, stylesBuffer);
         savingContext.setStrippedTextMode(true);
-        SvgWriter writer({m_d->shape}, QSizeF(666, 666)); // size is not used since we don't save the preamble of the document
+        SvgWriter writer({m_d->shape});
         writer.saveDetached(savingContext);
     }
 

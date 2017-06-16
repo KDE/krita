@@ -67,10 +67,13 @@ KoShapeMoveCommand::~KoShapeMoveCommand()
 void KoShapeMoveCommand::redo()
 {
     KUndo2Command::redo();
+
     for (int i = 0; i < d->shapes.count(); i++) {
-        d->shapes.at(i)->update();
-        d->shapes.at(i)->setAbsolutePosition(d->newPositions.at(i), d->anchor);
-        d->shapes.at(i)->update();
+        KoShape *shape = d->shapes.at(i);
+
+        const QRectF oldDirtyRect = shape->boundingRect();
+        shape->setAbsolutePosition(d->newPositions.at(i), d->anchor);
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 
@@ -78,9 +81,11 @@ void KoShapeMoveCommand::undo()
 {
     KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
-        d->shapes.at(i)->update();
-        d->shapes.at(i)->setAbsolutePosition(d->previousPositions.at(i), d->anchor);
-        d->shapes.at(i)->update();
+        KoShape *shape = d->shapes.at(i);
+
+        const QRectF oldDirtyRect = shape->boundingRect();
+        shape->setAbsolutePosition(d->previousPositions.at(i), d->anchor);
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 

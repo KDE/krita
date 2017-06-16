@@ -45,7 +45,7 @@ public:
      */
     Action(const QString &name, QAction *action, QObject *parent = 0);
     ~Action() override;
-    
+
     bool operator==(const Action &other) const;
     bool operator!=(const Action &other) const;
 
@@ -130,6 +130,18 @@ public Q_SLOTS:
      * Trigger this action
      */
     void trigger();
+
+    /**
+     * @brief setMenu determines in which menu the action will be placed. The default is tools/scripts
+     * @param menu the menu where the action should go, / -separated to drill down the hierarchy
+     */
+    void setMenu(const QString menu);
+
+    /**
+     * @return the menu in which this action is to be placed.
+     */
+    QString menu() const;
+
 
 Q_SIGNALS:
 

@@ -397,12 +397,15 @@ void TextShape::update() const
     KoShapeContainer::update();
 }
 
-void TextShape::update(const QRectF &shape) const
+void TextShape::updateAbsolute(const QRectF &shape) const
 {
     // this is done to avoid updates which are called during the paint event and not needed.
-    if (!m_paintRegion.contains(shape.toRect())) {
-        KoShape::update(shape);
-    }
+    //if (!m_paintRegion.contains(shape.toRect())) {
+        //KoShape::update(shape);
+    //}
+
+    // FIXME: just a hack to remove outdated call from the deprecated shape
+    KoShape::updateAbsolute(shape);
 }
 
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const

@@ -545,34 +545,41 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    QTransform transform = absoluteTransformation(0);
-    // calculate the bounding rect of the transformed outline
-    QRectF bb;
+    const QTransform transform = absoluteTransformation(0);
+
+    /**
+     * First we approximate the insets of the stroke by rendering a fat bezier curve
+     * with width set to the maximum inset of miters and markers. The are swept by this
+     * curve will be a good approximation of the real curve bounding rect.
+     */
+    qreal outlineSweepWidth = 0;
+
     const QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(stroke());
-    QPen pen;
     if (lineBorder) {
-        pen.setWidthF(lineBorder->lineWidth());
+        outlineSweepWidth = lineBorder->lineWidth();
     }
-    bb = transform.map(pathStroke(pen)).boundingRect();
 
     if (stroke()) {
         KoInsets inset;
         stroke()->strokeInsets(this, inset);
+        const qreal maxInset = std::max({inset.left, inset.top, inset.right, inset.bottom});
 
-        // calculate transformed border insets
-        QPointF center = transform.map(QPointF());
-        QPointF tl = transform.map(QPointF(-inset.left,-inset.top)) - center;
-        QPointF br = transform.map(QPointF(inset.right,inset.bottom)) -center;
-        qreal left = qMin(tl.x(),br.x());
-        qreal right = qMax(tl.x(),br.x());
-        qreal top = qMin(tl.y(),br.y());
-        qreal bottom = qMax(tl.y(),br.y());
-        bb.adjust(left, top, right, bottom);
-
-        // TODO: take care about transformations!
-        // take care about markers!
-        bb = kisGrowRect(bb, stroke()->strokeMaxMarkersInset(this));
+        // insets extend outside the shape, but width extends both inside and outside,
+        // so we should multiply insets by 2.0
+        outlineSweepWidth = std::max({outlineSweepWidth,
+                                      2.0 * maxInset,
+                                      2.0 * stroke()->strokeMaxMarkersInset(this)});
     }
+
+    QPen pen(Qt::black, outlineSweepWidth);
+
+    // select round joins and caps to ensure it sweeps exactly
+    // 'outlineSweepWidth' pixels in every possible
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setCapStyle(Qt::RoundCap);
+
+    QRectF bb = transform.map(pathStroke(pen)).boundingRect();
+
     if (shadow()) {
         KoInsets insets;
         shadow()->insets(insets);

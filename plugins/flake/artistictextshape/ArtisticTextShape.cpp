@@ -76,14 +76,14 @@ void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converte
 
 void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    SvgWriter svgWriter(QList<KoShape *>() << const_cast<ArtisticTextShape *>(this), size());
+    SvgWriter svgWriter(QList<KoShape *>() << const_cast<ArtisticTextShape *>(this));
     QByteArray fileContent;
     QBuffer fileContentDevice(&fileContent);
     if (!fileContentDevice.open(QIODevice::WriteOnly)) {
         return;
     }
 
-    if (!svgWriter.save(fileContentDevice)) {
+    if (!svgWriter.save(fileContentDevice, size())) {
         qWarning() << "Could not write svg content";
         return;
     }

@@ -23,10 +23,13 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
+class ManagedColor;
+class Resource;
+
 class KisView;
 
 /**
- * View represents one view on a document. A document can be 
+ * View represents one view on a document. A document can be
  * shown in more than one view at a time.
  */
 class KRITALIBKIS_EXPORT View : public QObject
@@ -37,7 +40,7 @@ class KRITALIBKIS_EXPORT View : public QObject
 public:
     explicit View(KisView *view, QObject *parent = 0);
     ~View() override;
-    
+
     bool operator==(const View &other) const;
     bool operator!=(const View &other) const;
 
@@ -50,14 +53,14 @@ public Q_SLOTS:
 
     /**
      * @return the document this view is showing.
-     */    
+     */
     Document* document() const;
 
     /**
      * @return true if the current view is visible, false if not.
      */
     bool visible() const;
-    
+
     /**
      * Make the current view visible.
      */
@@ -74,6 +77,52 @@ public Q_SLOTS:
      * @param resource: a pattern, gradient or paintop preset
      */
     void activateResource(Resource *resource);
+
+    /**
+     * @brief foreGroundColor allows access to the currently active color.
+     * This is nominally per canvas/view, but in practice per mainwindow.
+     * @code
+color = Application.activeWindow().activeView().foreGroundColor()
+components = color.components()
+components[0] = 1.0
+components[1] = 0.6
+components[2] = 0.7
+color.setComponents(components)
+Application.activeWindow().activeView().setForeGroundColor(color)
+     * @endcode
+     */
+    ManagedColor *foreGroundColor() const;
+    void setForeGroundColor(ManagedColor *color);
+
+    ManagedColor *backGroundColor() const;
+    void setBackGroundColor(ManagedColor *color);
+
+    Resource *currentBrushPreset() const;
+    void setCurrentBrushPreset(Resource *resource);
+
+    Resource *currentPattern() const;
+    void setCurrentPattern(Resource *resource);
+
+    Resource *currentGradient() const;
+    void setCurrentGradient(Resource *resource);
+
+    QString currentBlendingMode() const;
+    void setCurrentBlendingMode(const QString &blendingMode);
+
+    float HDRExposure() const;
+    void setHDRExposure(float exposure);
+
+    float HDRGamma() const;
+    void setHDRGamma(float gamma);
+
+    qreal paintingOpacity() const;
+    void setPaintingOpacity(qreal opacity);
+
+    qreal brushSize() const;
+    void setBrushSize(qreal brushSize);
+
+    qreal paintingFlow() const;
+    void setPaintingFlow(qreal flow);
 
 private:
 

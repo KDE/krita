@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=palette_docker
+X-Python-2-Compatible=false
+Name=Palette docker
+Name[ca]=Acoblador de paletes
+Name[nl]=Vastzetter van palet
+Name[pt]=Área acoplável da paleta
+Name[sv]=Dockningsfönster för palett
+Name[uk]=Панель палітри
+Name[x-test]=xxPalette dockerxx
+Comment=A Python-based docker to edit color palettes.
+Comment[ca]=Un acoblador basant en el Python per editar paletes de colors.
+Comment[nl]=Een op Python gebaseerde vastzetter om kleurpaletten te bewerken.
+Comment[pt]=Uma área acoplável, feita em Python, para editar paletas de cores.
+Comment[sv]=Ett Python-baserat dockningsfönster för att redigera färgpaletter.
+Comment[uk]=Бічна панель для редагування палітр кольорів на основі Python.
+Comment[x-test]=xxA Python-based docker to edit color palettes.xx

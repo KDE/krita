@@ -191,28 +191,6 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
     }
 }
 
-void KoShapePrivate::updateStroke()
-{
-    Q_Q(KoShape);
-    if (!stroke) return;
-
-    KoInsets insets;
-    stroke->strokeInsets(q, insets);
-    QSizeF inner = q->size();
-    // update left
-    q->update(QRectF(-insets.left, -insets.top, insets.left,
-                     inner.height() + insets.top + insets.bottom));
-    // update top
-    q->update(QRectF(-insets.left, -insets.top,
-                     inner.width() + insets.left + insets.right, insets.top));
-    // update right
-    q->update(QRectF(inner.width(), -insets.top, insets.right,
-                     inner.height() + insets.top + insets.bottom));
-    // update bottom
-    q->update(QRectF(-insets.left, inner.height(),
-                     inner.width() + insets.left + insets.right, insets.bottom));
-}
-
 void KoShapePrivate::addShapeManager(KoShapeManager *manager)
 {
     shapeManagers.insert(manager);
@@ -717,7 +695,7 @@ void KoShape::update() const
     }
 }
 
-void KoShape::update(const QRectF &rect) const
+void KoShape::updateAbsolute(const QRectF &rect) const
 {
 
     if (rect.isEmpty() && !rect.isNull()) {
@@ -727,9 +705,8 @@ void KoShape::update(const QRectF &rect) const
     Q_D(const KoShape);
 
     if (!d->shapeManagers.empty() && isVisible()) {
-        QRectF rc(absoluteTransformation(0).mapRect(rect));
         Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
-            manager->update(rc);
+            manager->update(rect);
         }
     }
 }
@@ -1294,13 +1271,8 @@ void KoShape::setStroke(KoShapeStrokeModelSP stroke)
 {
     Q_D(KoShape);
 
-    // TODO: check if it really updates stuff
-    d->updateStroke();
-
     d->inheritStroke = false;
     d->stroke = stroke;
-    d->updateStroke();
-
     d->shapeChanged(StrokeChanged);
     notifyChanged();
 }

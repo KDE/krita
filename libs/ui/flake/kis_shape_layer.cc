@@ -68,6 +68,10 @@
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
 
+#include "SvgWriter.h"
+#include "SvgParser.h"
+#include <QXmlStreamReader>
+
 #include <kis_types.h>
 #include <kis_image.h>
 #include "kis_default_bounds.h"
@@ -397,10 +401,6 @@ void KisShapeLayer::forceUpdateTimedNode()
     m_d->canvas->forceRepaint();
 }
 
-#include "SvgWriter.h"
-#include "SvgParser.h"
-#include <QXmlStreamReader>
-
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {
     if (!store->open("content.svg")) {
@@ -412,8 +412,8 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    SvgWriter writer(shapes, sizeInPt);
-    writer.save(storeDev);
+    SvgWriter writer(shapes);
+    writer.save(storeDev, sizeInPt);
 
     if (!store->close()) {
         return false;

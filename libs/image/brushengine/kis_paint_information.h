@@ -136,7 +136,13 @@ public:
     /// XXX !!! :-| Please add dox!
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
 
-    /// XXX !!! :-| Please add dox!
+    /**
+     * Causes the specified distance information to be temporarily registered with this
+     * KisPaintInformation object, so that the KisPaintInformation can compute certain values that
+     * may be needed at painting time, such as the drawing direction. When the returned object is
+     * destroyed, the KisDistanceInformation will be unregistered. At most one
+     * KisDistanceInformation can be registered with a given KisPaintInformation at a time.
+     */
     DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**
@@ -257,8 +263,13 @@ public:
     static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
+    static KisPaintInformation mixWithoutTime(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2);
+    static KisPaintInformation mixWithoutTime(qreal t, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
     static qreal tiltDirection(const KisPaintInformation& info, bool normalize = true);
     static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
+
+private:
+    static KisPaintInformation mixImpl(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2, bool posOnly, bool mixTime);
 
 private:
     struct Private;

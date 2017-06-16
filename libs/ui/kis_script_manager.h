@@ -23,7 +23,7 @@
 
 #include <kritaui_export.h>
 
-class QAction;
+class KisAction;
 
 class KisActionManager;
 class KisViewManager;
@@ -42,7 +42,7 @@ public:
     void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
-    void addAction(QAction *action);
+    void addAction(KisAction *action);
 
 private:
     struct Private;

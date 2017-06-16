@@ -26,6 +26,13 @@
 
 #include "SvgParserTestingUtils.h"
 
+#include "../../sdk/tests/qimage_test_util.h"
+
+#ifdef USE_ROUND_TRIP
+#include "SvgWriter.h"
+#include <QBuffer>
+#include <QDomDocument>
+#endif
 
 
 void TestSvgParser::testUnitPx()
@@ -615,6 +622,8 @@ void TestSvgParser::testTransformRotation2()
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(5,15));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(25,5));
 }
+
+
 
 void TestSvgParser::testRenderStrokeNone()
 {

@@ -10,12 +10,12 @@ class ScripterExtension(Extension):
         super().__init__(parent)
 
     def setup(self):
-        action = Krita.instance().createAction("Scripter")
+        action = Krita.instance().createAction("python_scripter", "Scripter")
         action.triggered.connect(self.initialize)
 
     def initialize(self):
         configPath = QStandardPaths.writableLocation(QStandardPaths.GenericConfigLocation)
-        self.settings = QSettings(configPath + '/kritarc', QSettings.IniFormat)
+        self.settings = QSettings(configPath + '/krita-scripterrc', QSettings.IniFormat)
         self.uicontroller = uicontroller.UIController()
         self.documentcontroller = documentcontroller.DocumentController()
         self.debugcontroller = debugcontroller.DebugController(self)

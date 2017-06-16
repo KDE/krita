@@ -78,8 +78,8 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
     buffer.open(QIODevice::WriteOnly);
 
     const QSizeF pageSize(boundingRect.right(), boundingRect.bottom());
-    SvgWriter writer(shapes, pageSize);
-    writer.save(buffer);
+    SvgWriter writer(shapes);
+    writer.save(buffer, pageSize);
 
     buffer.close();
 

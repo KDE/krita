@@ -39,7 +39,7 @@ public:
     class KRITAUI_EXPORT PainterInfo {
     public:
         PainterInfo();
-        PainterInfo(const QPointF &lastPosition, int lastTime);
+        PainterInfo(const QPointF &lastPosition, int lastTime, qreal lastAngle);
         PainterInfo(PainterInfo *rhs, int levelOfDetail);
         ~PainterInfo();
 

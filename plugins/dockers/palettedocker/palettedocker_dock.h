@@ -64,7 +64,7 @@ private Q_SLOTS:
     void addColorForeground();
     void addColor();
     void removeColor();
-    void entrySelected(QModelIndex index);
+    void entrySelected(KoColorSetEntry entry);
     void setColorSet(KoColorSet* colorSet);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);

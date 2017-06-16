@@ -33,8 +33,6 @@ public:
     qreal paintOpSize() const override;
 
     bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    int rate() const override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 

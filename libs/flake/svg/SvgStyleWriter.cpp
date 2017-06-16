@@ -190,7 +190,7 @@ void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     {
-        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
+        SvgWriter shapesWriter(shapes);
         shapesWriter.saveDetached(buffer);
     }
     buffer.close();

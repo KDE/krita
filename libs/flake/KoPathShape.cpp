@@ -563,11 +563,9 @@ QRectF KoPathShape::boundingRect() const
         QPointF center = transform.map(QPointF());
         QPointF tl = transform.map(QPointF(-inset.left,-inset.top)) - center;
         QPointF br = transform.map(QPointF(inset.right,inset.bottom)) -center;
-        qreal left = qMin(tl.x(),br.x());
-        qreal right = qMax(tl.x(),br.x());
-        qreal top = qMin(tl.y(),br.y());
-        qreal bottom = qMax(tl.y(),br.y());
-        bb.adjust(left, top, right, bottom);
+
+        const qreal growOffset = std::max({tl.x(), tl.y(), br.x(), br.y()});
+        bb = kisGrowRect(bb, growOffset);
 
         // TODO: take care about transformations!
         // take care about markers!

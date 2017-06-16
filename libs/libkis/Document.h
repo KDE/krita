@@ -274,8 +274,29 @@ public Q_SLOTS:
     void setWidth(int value);
 
     /**
+     * @return the left edge of the canvas in pixels.
+     */
+    int xOffset() const;
+
+    /**
+     * @brief setXOffset sets the left edge of the canvas to @param x.
+     */
+    void setXOffset(int x);
+
+    /**
+     * @return the top edge of the canvas in pixels.
+     */
+    int yOffset() const;
+
+    /**
+     * @brief setYOffset sets the top edge of the canvas to @param y.
+     */
+    void setYOffset(int y);
+
+    /**
      * @return xRes the horizontal resolution of the image in pixels per pt (there are 72 pts to an inch)
      */
+
     double xRes() const;
 
     /**
@@ -355,12 +376,14 @@ public Q_SLOTS:
     void flatten();
 
     /**
-     * @brief resizeImage resizes the canvas to the given width and height.
+     * @brief resizeImage resizes the canvas to the given left edge, top edge, width and height.
      * Note: This doesn't scale, use scale image for that.
+     * @param x the new left edge
+     * @param y the new top edge
      * @param w the new width
      * @param h the new height
      */
-    void resizeImage(int w, int h);
+    void resizeImage(int x, int y, int w, int h);
 
     /**
     * @brief scaleImage

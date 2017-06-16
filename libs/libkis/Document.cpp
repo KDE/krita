@@ -208,6 +208,7 @@ void Document::setDocumentInfo(const QString &document)
     d->document->documentInfo()->load(doc);
 }
 
+
 QString Document::fileName() const
 {
     if (!d->document) return QString::null;
@@ -233,7 +234,10 @@ void Document::setHeight(int value)
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    resizeImage(d->document->image()->width(), value);
+    resizeImage(d->document->image()->bounds().x(),
+                d->document->image()->bounds().y(),
+                d->document->image()->width(),
+                value);
 }
 
 
@@ -311,8 +315,50 @@ void Document::setWidth(int value)
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    resizeImage(value, d->document->image()->height());
+    resizeImage(d->document->image()->bounds().x(),
+                d->document->image()->bounds().y(),
+                value,
+                d->document->image()->height());
 }
+
+
+int Document::xOffset() const
+{
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+    return image->bounds().x();
+}
+
+void Document::setXOffset(int x)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    resizeImage(x,
+                d->document->image()->bounds().y(),
+                d->document->image()->width(),
+                d->document->image()->height());
+}
+
+
+int Document::yOffset() const
+{
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+    return image->bounds().y();
+}
+
+void Document::setYOffset(int y)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    resizeImage(d->document->image()->bounds().x(),
+                y,
+                d->document->image()->width(),
+                d->document->image()->height());
+}
+
 
 double Document::xRes() const
 {
@@ -396,14 +442,17 @@ void Document::flatten()
     d->document->image()->flatten();
 }
 
-void Document::resizeImage(int w, int h)
+void Document::resizeImage(int x, int y, int w, int h)
 {
     if (!d->document) return;
     KisImageSP image = d->document->image();
     if (!image) return;
-    QRect rc = image->bounds();
+    QRect rc;
+    rc.setX(x);
+    rc.setY(y);
     rc.setWidth(w);
     rc.setHeight(h);
+
     image->resizeImage(rc);
 }
 

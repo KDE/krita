@@ -8,7 +8,7 @@ class ColorSpaceExtension(krita.Extension):
         super(ColorSpaceExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("Color Space")
+        action = krita.Krita.instance().createAction("color_space", "Color Space")
         action.setToolTip("Plugin to change color space to selected documents")
         action.triggered.connect(self.initialize)
 

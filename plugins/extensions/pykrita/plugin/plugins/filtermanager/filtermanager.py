@@ -8,7 +8,7 @@ class FilterManagerExtension(krita.Extension):
         super(FilterManagerExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("Filter Manager")
+        action = krita.Krita.instance().createAction("filter_manager", "Filter Manager")
         action.setToolTip("Plugin to filters management")
         action.triggered.connect(self.initialize)
 

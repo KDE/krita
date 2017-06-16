@@ -8,7 +8,7 @@ class CanvasSizeExtension(krita.Extension):
         super(CanvasSizeExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("Canvas Size")
+        action = krita.Krita.instance().createAction("canvas_size", "Canvas Size")
         action.setToolTip("Plugin to change canvas size to selected documents")
         action.triggered.connect(self.initialize)
 

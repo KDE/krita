@@ -60,7 +60,7 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
 {
     Q_UNUSED(isNewRootArea);
 
-    m_textShape->update(m_textShape->outlineRect());
+    m_textShape->update();
 
     QSizeF newSize = m_textShape->size()
                      - QSizeF(m_textShapeData->leftPadding() + m_textShapeData->rightPadding(),
@@ -136,7 +136,7 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
         m_textShape->setSize(newSize);
     }
 
-    m_textShape->update(m_textShape->outlineRect());
+    m_textShape->update();
 }
 
 void SimpleRootAreaProvider::updateAll()

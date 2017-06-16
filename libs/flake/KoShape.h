@@ -703,13 +703,13 @@ public:
     /**
      * Request a repaint to be queued.
      * The repaint will be restricted to the parameters rectangle, which is expected to be
-     * in points (the internal coordinates system of KoShape) and it is expected to be
+     * in absolute coordinates of the canvas and it is expected to be
      * normalized.
      * <p>This method will return immediately and only request a repaint. Successive calls
      * will be merged into an appropriate repaint action.
      * @param rect the rectangle (in pt) to queue for repaint.
      */
-    virtual void update(const QRectF &rect) const;
+    virtual void updateAbsolute(const QRectF &rect) const;
 
     /// Used by compareShapeZIndex() to order shapes
     enum ChildZOrderPolicy {

@@ -57,7 +57,7 @@ void AddConnectionPointCommand::undo()
 void AddConnectionPointCommand::updateRoi()
 {
     // TODO: is there a way we can get at the correct update size?
-    QRectF roi(0, 0, 10, 10);
-    roi.moveCenter(m_connectionPoint);
-    m_shape->update(roi);
+    //QRectF roi(0, 0, 10, 10);
+    //roi.moveCenter(m_connectionPoint);
+    //m_shape->update(roi);
 }

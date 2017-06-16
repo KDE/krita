@@ -2,7 +2,8 @@ from canvassize import canvassizedialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget,QAbstractItemView,
                              QDialogButtonBox, QVBoxLayout, QFrame,
-                             QPushButton, QAbstractScrollArea)
+                             QPushButton, QAbstractScrollArea, QSpinBox,
+                             QHBoxLayout)
 import krita
 
 
@@ -13,8 +14,13 @@ class UICanvasSize(object):
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
+        self.offsetLayout = QHBoxLayout()
         self.refreshButton = QPushButton("Refresh")
         self.widgetDocuments = QListWidget()
+        self.widthSpinBox = QSpinBox()
+        self.heightSpinBox = QSpinBox()
+        self.xOffsetSpinBox = QSpinBox()
+        self.yOffsetSpinBox = QSpinBox()
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
@@ -34,7 +40,13 @@ class UICanvasSize(object):
         self.documentLayout.addWidget(self.widgetDocuments)
         self.documentLayout.addWidget(self.refreshButton)
 
+        self.offsetLayout.addWidget(self.xOffsetSpinBox)
+        self.offsetLayout.addWidget(self.yOffsetSpinBox)
+
         self.formLayout.addRow('Documents', self.documentLayout)
+        self.formLayout.addRow('Width', self.widthSpinBox)
+        self.formLayout.addRow('Height', self.heightSpinBox)
+        self.formLayout.addRow('Offset', self.offsetLayout)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)

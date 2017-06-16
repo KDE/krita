@@ -22,10 +22,18 @@
 #define KIS_TELEMETRY_PROVIDER_H
 #include "QScopedPointer"
 #include <QVariant>
-#include "UserFeedback/AbstractDataSource"
-#include "UserFeedback/cpuinfosource.h"
-#include "UserFeedback/QtVersionSource"
-#include <UserFeedback/provider.h>
+#include <KUserFeedback/AbstractDataSource>
+#include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/CompilerInfoSource>
+#include <KUserFeedback/LocaleInfoSource>
+#include <KUserFeedback/OpenGLInfoSource>
+#include <KUserFeedback/PlatformInfoSource>
+#include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/ScreenInfoSource>
+#include <KUserFeedback/provider.h>
+
+#include "kis_cpuinfosource.h"
+
 #include <kis_telemetry_abstruct.h>
 #include <memory>
 #include <vector>
@@ -34,13 +42,13 @@
 class KisTelemetryProvider : public KisTelemetryAbstruct {
 public:
     KisTelemetryProvider();
-    UserFeedback::Provider* provider() override;
+    KUserFeedback::Provider* provider() override;
     void sendData() override;
     virtual ~KisTelemetryProvider();
 
 private:
-    QScopedPointer<UserFeedback::Provider> m_provider;
-    std::vector<std::unique_ptr<UserFeedback::AbstractDataSource> > m_sources;
+    QScopedPointer<KUserFeedback::Provider> m_provider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_sources;
 };
 
 #endif

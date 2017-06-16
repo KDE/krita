@@ -18,22 +18,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_ABSTRUCT_H
-#define KIS_TELEMETRY_ABSTRUCT_H
-#include "QScopedPointer"
-#include <KUserFeedback/provider.h>
-#include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/cpuinfosource.h>
-#include <QVector>
-#include "kritaflake_export.h"
+#ifndef KISUSERFEEDBACK_CPUINFOSOURCE_H
+#define KISUSERFEEDBACK_CPUINFOSOURCE_H
 
-class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
+#include "abstractdatasource.h"
+#include "kuserfeedbackcore_export.h"
+
+namespace KisUserFeedback {
+
+/*! Data source reporting the type and amount of CPUs.
+ *
+ *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
+ */
+class CpuInfoSource : public KUserFeedback::AbstractDataSource {
 public:
-    virtual KUserFeedback::Provider *provider() = 0 ;
-    virtual void sendData() = 0;
-    virtual ~KisTelemetryAbstruct(){};
-
+    CpuInfoSource();
+    QString description() const override;
+    QVariant data() override;
 };
+}
 
-#endif
-
+#endif // KISUSERFEEDBACK_CPUINFOSOURCE_H

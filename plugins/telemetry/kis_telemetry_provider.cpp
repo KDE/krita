@@ -27,42 +27,49 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <kis_global.h>
-#include <kis_types.h>
 #include <KoToolRegistry.h>
 #include <iostream>
-
+#include <kis_global.h>
+#include <kis_types.h>
+#include "Vc/cpuid.h"
 
 KisTelemetryProvider::KisTelemetryProvider()
 {
-    m_provider.reset(new UserFeedback::Provider);
-    std::unique_ptr<UserFeedback::AbstractDataSource> cpu(new UserFeedback::CpuInfoSource());
+    m_provider.reset(new KUserFeedback::Provider);
+    m_provider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+
+    std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new KisUserFeedback::CpuInfoSource());
     m_sources.push_back(std::move(cpu));
-    std::cout << "\n"
-              << "PROVIDER LOADED" << std::endl;
-    UserFeedback::AbstractDataSource *src2= new UserFeedback::QtVersionSource();
-    m_provider.data()->setStatisticsCollectionMode(UserFeedback::Provider::DetailedUsageStatistics);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
+    m_sources.push_back(std::move(qt));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
+    m_sources.push_back(std::move(compiler));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
+    m_sources.push_back(std::move(locale));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
+    m_sources.push_back(std::move(opengl));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
+    m_sources.push_back(std::move(platform));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
+    m_sources.push_back(std::move(screen));
 
-    m_provider.data()->addDataSource(m_sources[0].get(), UserFeedback::Provider::DetailedUsageStatistics);
-    m_provider.data()->addDataSource(src2, UserFeedback::Provider::DetailedUsageStatistics);
-
-
+    for (auto &source : m_sources) {
+        m_provider.data()->addDataSource(source.get());
+    }
 }
 
-UserFeedback::Provider* KisTelemetryProvider::provider()
+KUserFeedback::Provider* KisTelemetryProvider::provider()
 {
     return m_provider.data();
 }
 
 void KisTelemetryProvider::sendData()
 {
-    m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me/"));
+    // m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me:8080/"));
+    m_provider.data()->setFeedbackServer(QUrl("http://localhost:8080/"));
     m_provider.data()->submit();
 }
 
 KisTelemetryProvider::~KisTelemetryProvider()
 {
-
 }
-
-

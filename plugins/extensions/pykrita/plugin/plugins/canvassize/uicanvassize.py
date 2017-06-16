@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget,QAbstractItemView,
                              QDialogButtonBox, QVBoxLayout, QFrame,
                              QPushButton, QAbstractScrollArea, QSpinBox,
-                             QHBoxLayout)
+                             QHBoxLayout, QMessageBox)
 import krita
 
 
@@ -36,6 +36,11 @@ class UICanvasSize(object):
 
     def initialize(self):
         self.loadDocuments()
+
+        self.widthSpinBox.setRange(1, 10000)
+        self.heightSpinBox.setRange(1, 10000)
+        self.xOffsetSpinBox.setRange(-10000, 10000)
+        self.yOffsetSpinBox.setRange(-10000, 10000)
 
         self.documentLayout.addWidget(self.widgetDocuments)
         self.documentLayout.addWidget(self.refreshButton)
@@ -74,4 +79,20 @@ class UICanvasSize(object):
         self.loadDocuments()
 
     def confirmButton(self):
-        pass
+        selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
+        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path==document.fileName()]
+
+        self.msgBox  = QMessageBox(self.mainDialog)
+        if selectedDocuments:
+            self._resizeAllDocuments(selectedDocuments)
+            self.msgBox.setText("The selected documents has been resized.")
+        else:
+            self.msgBox.setText("Select at least one document.")
+        self.msgBox.exec_()
+
+    def _resizeAllDocuments(self, documents):
+        for document in documents:
+            document.resizeImage(self.xOffsetSpinBox.value(),
+                                 self.yOffsetSpinBox.value(),
+                                 self.widthSpinBox.value(),
+                                 self.heightSpinBox.value())

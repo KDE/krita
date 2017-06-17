@@ -46,6 +46,7 @@
 #include "KoShapeSavingContext.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeBackground.h"
+#include "KisQPainterStateSaver.h"
 
 #include <FlakeDebug.h>
 
@@ -185,9 +186,9 @@ KoUnavailShape::~KoUnavailShape()
     delete d;
 }
 
-
 void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
+    KisQPainterStateSaver saver(&painter);
     applyConversion(painter, converter);
 
     // If the frame is empty, just draw a background.

@@ -45,6 +45,7 @@
 #include <KoPathSegment.h>
 #include <KoPathPoint.h>
 #include <cmath>
+#include "KisQPainterStateSaver.h"
 
 #include "kis_global.h"
 
@@ -288,6 +289,9 @@ QPen KoShapeStroke::resultLinePen() const
 
 void KoShapeStroke::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
+    KisQPainterStateSaver saver(&painter);
+
+    // TODO: move apply conversion to some centralized place
     KoShape::applyConversion(painter, converter);
     d->paintBorder(shape, painter, resultLinePen());
 }

@@ -46,6 +46,7 @@
 #include <KoGenStyle.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
+#include "KisQPainterStateSaver.h"
 
 #include <FlakeDebug.h>
 #include <QPainter>
@@ -400,6 +401,9 @@ void KoPathShape::clear()
 void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     Q_D(KoPathShape);
+
+    KisQPainterStateSaver saver(&painter);
+
     applyConversion(painter, converter);
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);

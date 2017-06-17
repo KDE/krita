@@ -38,6 +38,7 @@
 #include <SvgStyleParser.h>
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
+#include <KisQPainterStateSaver.h>
 
 #include <klocalizedstring.h>
 
@@ -68,6 +69,8 @@ ArtisticTextShape::~ArtisticTextShape()
 
 void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
+    KisQPainterStateSaver saver(&painter);
+
     applyConversion(painter, converter);
     if (background()) {
         background()->paint(painter, converter, paintContext, outline());

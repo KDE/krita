@@ -344,10 +344,19 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             shapePainter = clipMaskPainter->shapePainter();
         }
 
-        shapePainter->save();
+        /**
+         * We expect the shape to save/restore the painter's state itself. Such design was not
+         * not always here, so we need a period of sanity checks to ensure all the shapes are
+         * ported correctly.
+         */
+        const QTransform sanityCheckTransformSaved = shapePainter->transform();
+
         shape->paint(*shapePainter, converter, paintContext);
         shape->paintStroke(*shapePainter, converter, paintContext);
-        shapePainter->restore();
+
+        KIS_SAFE_ASSERT_RECOVER(shapePainter->transform() == sanityCheckTransformSaved) {
+            shapePainter->setTransform(sanityCheckTransformSaved);
+        }
 
         if (clipMask) {
             shape->clipMask()->drawMask(clipMaskPainter->maskPainter(), shape);

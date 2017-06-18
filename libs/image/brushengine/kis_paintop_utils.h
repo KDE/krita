@@ -21,6 +21,7 @@
 
 #include "kis_global.h"
 #include "kis_paint_information.h"
+#include "kis_distance_information.h"
 
 namespace KisPaintOpUtils {
 
@@ -194,8 +195,11 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
 
     spacing *= extraScale;
 
+    qreal scaledInterval = rateExtraScale <= 0.0 ? LONG_TIME :
+                                                   timedSpacingInterval / rateExtraScale;
+
     return KisSpacingInformation(distanceSpacingEnabled, spacing, rotation, axesFlipped,
-                                 timedSpacingEnabled, timedSpacingInterval / rateExtraScale);
+                                 timedSpacingEnabled, scaledInterval);
 }
 
 }

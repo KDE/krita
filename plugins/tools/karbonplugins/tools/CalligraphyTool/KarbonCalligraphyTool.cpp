@@ -126,6 +126,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_strokeTime.start();
     m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
     m_strokeWidth = currentStrokeWidth();
+    m_currentDistance = new KisDistanceInformation(QPoint(), 0.0, 0.0);
     m_shape = new KarbonCalligraphicShape(m_caps);
     m_shape->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor())));
     //addPoint( event );
@@ -223,7 +224,11 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
         distDiff = canvas()->viewConverter()->documentToView(QSizeF(distDiff, 0)).width();
         if (distDiff>m_smoothIntervalDistance) {
             KisPaintInformation infoToAdd = m_intervalStore.first();
-            m_shape->appendPoint(infoToAdd.pos(), m_rotationOption.apply(infoToAdd), m_sizeOption.apply(infoToAdd)*m_strokeWidth);
+            {
+                KisPaintInformation::DistanceInformationRegistrar r = infoToAdd.registerDistanceInformation(m_currentDistance);
+                m_shape->appendPoint(infoToAdd.pos(), m_rotationOption.apply(infoToAdd), m_sizeOption.apply(infoToAdd)*m_strokeWidth);
+            }
+            m_currentDistance->registerPaintedDab(infoToAdd, KisSpacingInformation(1.0));
             m_intervalStoreOld = m_intervalStore;
             m_intervalStore.clear();
             m_intervalStore.append(paintInfo);
@@ -236,7 +241,11 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
             pressure+=m_intervalStore.at(j).pressure();
         }
         paintInfo.setPressure(pressure / m_intervalStore.count());
-        m_shape->appendPoint(paintInfo.pos(), m_rotationOption.apply(paintInfo), m_sizeOption.apply(paintInfo)*m_strokeWidth);
+        {
+            KisPaintInformation::DistanceInformationRegistrar r = paintInfo.registerDistanceInformation(m_currentDistance);
+            m_shape->appendPoint(paintInfo.pos(), m_rotationOption.apply(paintInfo), m_sizeOption.apply(paintInfo)*m_strokeWidth);
+        }
+        m_currentDistance->registerPaintedDab(paintInfo, KisSpacingInformation(1.0));
         m_intervalStore.count();
         m_intervalStore.clear();
         m_intervalStoreOld.clear();
@@ -373,6 +382,8 @@ void KarbonCalligraphyTool::setNoAdjust(bool none)
 void KarbonCalligraphyTool::setSettings(KisPropertiesConfigurationSP settings) {
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
+    m_sizeOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
     m_caps = settings->getFloat("capSize", 0.0);
 }
 

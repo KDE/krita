@@ -103,6 +103,7 @@ private:
     qreal m_smoothIntervalTime;
     qreal m_smoothIntervalDistance;
 
+
     KoPathShape *m_selectedPath;
     QPainterPath m_selectedPathOutline;
     QPointF m_firstPathPosition;
@@ -113,7 +114,7 @@ private:
     bool m_isDrawing;
     QTime m_strokeTime;
     KisPaintInformation m_lastInfo;
-    KisDistanceInformation m_currentDistance;
+    KisDistanceInformation *m_currentDistance;
     KisPaintingInformationBuilder *m_infoBuilder;
     int m_pointCount;
 

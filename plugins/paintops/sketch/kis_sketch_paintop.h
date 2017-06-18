@@ -47,7 +47,11 @@ public:
     ~KisSketchPaintOp() override;
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     // pixel buffer

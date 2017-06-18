@@ -88,6 +88,11 @@ void paintLine(PaintOp &op,
          */
         pi.paintAt(op, currentDistance);
     }
+
+    // Perform a spacing update between dabs if appropriate.
+    if (currentDistance->needsSpacingUpdate()) {
+        op.updateSpacing(pi2, *currentDistance);
+    }
 }
 
 /**

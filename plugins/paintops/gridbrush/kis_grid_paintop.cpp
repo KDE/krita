@@ -237,7 +237,18 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
-    return KisSpacingInformation(m_spacing * additionalScale);
+    return computeSpacing(additionalScale);
+}
+
+KisSpacingInformation KisGridPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    Q_UNUSED(info);
+    return computeSpacing(KisLodTransform::lodToScale(painter()->device()));
+}
+
+KisSpacingInformation KisGridPaintOp::computeSpacing(qreal lodScale) const
+{
+    return KisSpacingInformation(m_spacing * lodScale);
 }
 
 void KisGridProperties::readOptionSetting(const KisPropertiesConfigurationSP setting)

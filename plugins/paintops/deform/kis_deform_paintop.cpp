@@ -135,7 +135,7 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     // this happens for the first dab of the move mode, we need more information for being able to move
     if (!mask) {
-        return KisSpacingInformation(m_spacing);
+        return updateSpacingImpl(info);
     }
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
@@ -143,11 +143,14 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width() , mask->bounds().height())), dab, mask);
     painter()->setOpacity(origOpacity);
 
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisDeformPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, m_spacing, false,
                                                    1.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
                                                    &m_airbrushOption, nullptr, &m_rateOption, info);
 }
-
-
 

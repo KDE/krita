@@ -171,6 +171,14 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                             info);
 }
 
+KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    qreal rotation = m_rotationOption.apply(info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, &m_rateOption,
+                            info);
+}
+
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
 {
     if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {

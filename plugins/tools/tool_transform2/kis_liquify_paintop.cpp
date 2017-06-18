@@ -105,13 +105,25 @@ QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
     return outline;
 }
 
+// TODO: Reduce code duplication between KisLiquifyPaintop and KisPaintOp. It might be possible to
+// make them both subclasses of some more general base class.
+void KisLiquifyPaintop::updateSpacing(const KisPaintInformation &info,
+                               KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisSpacingInformation spacingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        spacingInfo = updateSpacingImpl(pi);
+    }
+
+    currentDistance.setSpacing(spacingInfo);
+}
+
 KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 {
-    static const qreal sizeToSigmaCoeff = 1.0 / 3.0;
-    const qreal size = sizeToSigmaCoeff *
-        (m_d->props.sizeHasPressure() ?
-         pi.pressure() * m_d->props.size():
-         m_d->props.size());
+    const qreal size = computeSize(pi);
 
     const qreal spacing = m_d->props.spacing() * size;
 
@@ -163,4 +175,18 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
     }
 
     return KisSpacingInformation(spacing);
+}
+
+KisSpacingInformation KisLiquifyPaintop::updateSpacingImpl(const KisPaintInformation &pi) const
+{
+    return KisSpacingInformation(m_d->props.spacing() * computeSize(pi));
+}
+
+qreal KisLiquifyPaintop::computeSize(const KisPaintInformation &pi) const
+{
+    static const qreal sizeToSigmaCoeff = 1.0 / 3.0;
+    return sizeToSigmaCoeff *
+        (m_d->props.sizeHasPressure() ?
+         pi.pressure() * m_d->props.size():
+         m_d->props.size());
 }

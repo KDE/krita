@@ -50,6 +50,10 @@
 // airbrush rate, which can improve responsiveness.
 const qreal AIRBRUSH_INTERVAL_FACTOR = 0.5;
 
+// The amount of time, in milliseconds, to allow between updates of the spacing information. Only
+// used when airbrushing.
+const qreal SPACING_UPDATE_INTERVAL = 50.0;
+
 struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
@@ -266,10 +270,14 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     m_d->previousPaintInformation = pi;
 
+    KisDistanceInitInfo startDistInfo(m_d->previousPaintInformation.pos(),
+                                      m_d->previousPaintInformation.currentTime(),
+                                      startAngle,
+                                      SPACING_UPDATE_INTERVAL);
+    KisDistanceInformation startDist = startDistInfo.makeDistInfo();
+
     createPainters(m_d->painterInfos,
-                   m_d->previousPaintInformation.pos(),
-                   m_d->previousPaintInformation.currentTime(),
-                   startAngle);
+                   startDist);
 
     m_d->resources = new KisResourcesSnapshot(image,
                                               currentNode,
@@ -281,7 +289,7 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     }
 
     if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->startStroke(image, m_d->resources);
+        m_d->recordingAdapter->startStroke(image, m_d->resources, startDistInfo);
     }
 
     KisStrokeStrategy *stroke =
@@ -916,11 +924,9 @@ void KisToolFreehandHelper::paintBezierCurve(int painterInfoId,
 }
 
 void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
-                                           const QPointF &lastPosition,
-                                           int lastTime,
-                                           qreal lastAngle)
+                                           const KisDistanceInformation &startDist)
 {
-    painterInfos << new PainterInfo(lastPosition, lastTime, lastAngle);
+    painterInfos << new PainterInfo(startDist);
 }
 
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)

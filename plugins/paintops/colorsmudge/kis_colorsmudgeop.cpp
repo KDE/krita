@@ -285,3 +285,10 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     return spacingInfo;
 }
+
+KisSpacingInformation KisColorSmudgeOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    const qreal rotation = m_rotationOption.apply(info);
+    return effectiveSpacing(scale, rotation, m_spacingOption, info);
+}

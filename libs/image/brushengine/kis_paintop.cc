@@ -160,6 +160,20 @@ void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation
     pi.paintAt(*this, currentDistance);
 }
 
+void KisPaintOp::updateSpacing(const KisPaintInformation &info,
+                               KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisSpacingInformation spacingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        spacingInfo = updateSpacingImpl(pi);
+    }
+
+    currentDistance.setSpacing(spacingInfo);
+}
+
 KisPainter* KisPaintOp::painter() const
 {
     return d->painter;

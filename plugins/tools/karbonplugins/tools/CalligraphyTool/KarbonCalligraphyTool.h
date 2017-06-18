@@ -25,6 +25,8 @@
 #include <KoPathShape.h>
 #include <QPointer>
 #include <QTime>
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
 #include <kis_painting_information_builder.h>
 #include <kis_paint_information.h>
 #include <kis_properties_configuration.h>
@@ -102,7 +104,9 @@ private:
     bool m_usePath;         // follow selected path
     bool m_useAssistant;
     qreal m_strokeWidth;
-    KisPropertiesConfigurationSP m_settings;
+    qreal m_caps;
+    KisPressureSizeOption m_sizeOption;
+    KisPressureRotationOption m_rotationOption;
     qreal m_smoothIntervalTime;
     qreal m_smoothIntervalDistance;
 

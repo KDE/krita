@@ -139,7 +139,6 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
     dbgImage << "play path paint action with " << d->curveSlices.size() << " slices";
     if (d->curveSlices.size() <= 0) return;
 
-    // Copy the startDist object so it can be reused if playPaint is called again.
     KisDistanceInformation savedDist = d->startDistInfo.makeDistInfo();
 
     Q_FOREACH (const Private::BezierCurveSlice &slice, d->curveSlices)

@@ -96,7 +96,7 @@ public:
     KoShape* cloneShape() const override;
 
     void appendPoint(const QPointF &p1, qreal angle, qreal width);
-    void appendPointToPath(const KarbonCalligraphicPoint &p);
+    void appendPointToPath(int indexPoint);
 
     // returns the bounding rect of whan needs to be repainted
     // after new points are added

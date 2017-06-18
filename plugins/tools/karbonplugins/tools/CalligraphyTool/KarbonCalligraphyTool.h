@@ -114,6 +114,7 @@ private:
     bool m_isDrawing;
     QTime m_strokeTime;
     KisPaintInformation m_lastInfo;
+    qreal m_lastAngle;
     KisDistanceInformation *m_currentDistance;
     KisPaintingInformationBuilder *m_infoBuilder;
     int m_pointCount;

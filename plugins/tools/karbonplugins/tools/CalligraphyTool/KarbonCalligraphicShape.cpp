@@ -38,6 +38,7 @@
 #include <QColor>
 
 #include <cmath>
+#include <QtMath>
 #include <cstdlib>
 
 #undef M_PI
@@ -73,30 +74,31 @@ void KarbonCalligraphicShape::appendPoint(const QPointF &p1, qreal angle, qreal 
 {
     // convert the point from canvas to shape coordinates
     QPointF p = p1 - position();
-        KarbonCalligraphicPoint *calligraphicPoint =
-     new KarbonCalligraphicPoint(p, angle, width);
+    KarbonCalligraphicPoint *calligraphicPoint =
+            new KarbonCalligraphicPoint(p, angle, width);
 
     QList<QPointF> handles = this->handles();
     handles.append(p);
     setHandles(handles);
     m_points.append(calligraphicPoint);
-     appendPointToPath(*calligraphicPoint);
+    appendPointToPath(m_points.count()-1);
 
     if (m_points.count() == 4) {
-            m_points[0]->setAngle(angle);
-            m_points[1]->setAngle(angle);
-            m_points[2]->setAngle(angle);
-     }
+        m_points[0]->setAngle(angle);
+        m_points[1]->setAngle(angle);
+        m_points[2]->setAngle(angle);
+    }
 }
 
-void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p)
+void KarbonCalligraphicShape::appendPointToPath(int indexPoint)
 {
-    qreal dx = std::cos(p.angle()) * p.width();
-    qreal dy = std::sin(p.angle()) * p.width();
+    KarbonCalligraphicPoint *p =m_points.at(indexPoint);
+    qreal dx = std::cos(p->angle()) * p->width();
+    qreal dy = std::sin(p->angle()) * p->width();
 
     // find the outline points
-    QPointF p1 = p.point() - QPointF(dx / 2, dy / 2);
-    QPointF p2 = p.point() + QPointF(dx / 2, dy / 2);
+    QPointF p1 = p->point() - QPointF(dx / 2, dy / 2);
+    QPointF p2 = p->point() + QPointF(dx / 2, dy / 2);
 
     if (pointCount() == 0) {
         moveTo(p1);
@@ -106,18 +108,62 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     }
     // pointCount > 0
 
-     bool flip = (pointCount() >= 2) ? flipDetected(p1, p2) : false;
-
-
-    // if there was a flip add additional points
-    if (flip) {
-       if (pointCount() > 4) {
-            appendPointsToPathAux(p1, p2);
+    //flip is within the path
+    bool flip = (pointCount() >= 2) ? flipDetected(p1, p2) : false;
+    if (pointCount()>=2) {
+        int index = pointCount() / 2;
+        // find the last two points
+        KoPathPoint *last1 = pointByIndex(KoPathPointIndex(0, index - 1));
+        KoPathPoint *last2 = pointByIndex(KoPathPointIndex(0, index));
+        QPointF intersect = QPointF();
+        if (QLineF(last1->point(), p1).intersect(QLineF(last2->point(), p2),&intersect)==QLineF::BoundedIntersection) {
+            flip = true;
         }
 
+    }
+    //cornerflip is a special case where the path turns more that 90 or -90 degrees.
+    bool cornerFlip = false;
+    if (indexPoint>2) {
+        qreal angleDiff = m_points.at(indexPoint-1)->angle()-p->angle();
+        //if (angleDiff>=M_PI/2 || angleDiff < -M_PI/2) {
+        //    cornerFlip = true;
+        //}
+        QPointF m2 =m_points.at(indexPoint-2)->point();
+        QPointF m1 =m_points.at(indexPoint-1)->point();
+        //qreal minX = m1.x()-m2.x();
+        //qreal minY = m1.y()-m2.y();
+        //qreal length1 = sqrt( minX*minX + minY*minY );
+        //minX = m2.x()-p->point().x();
+        //minY = m2.y()-p->point().y();
+        //qreal length2 = sqrt( minX*minX + minY*minY );
+        //minX = p->point().x()-m1.x();
+        //minY = p->point().y()-m1.y();
+        //qreal length3 = sqrt( minX*minX + minY*minY );
+        //angleDiff = fmod((length2*length2+length1*length1-length3*length3) / 2*length1*length3, 180.0);
+        angleDiff = fmod(fabs(QLineF(m2, m1).angle()-QLineF(m1, p->point()).angle()), 180);
+        qDebug()<<angleDiff;
+        if (angleDiff>90) {
+            cornerFlip = true;
+        }
+        qDebug()<<cornerFlip;
+    }
+
+    // if there was a flip add additional points
+    if (flip || cornerFlip) {
+        if (cornerFlip) {
+            int index = pointCount() / 2;
+            appendPointsToPathAux(pointByIndex(KoPathPointIndex(0, index))->point(),pointByIndex(KoPathPointIndex(0, index-1))->point());
+            appendPointsToPathAux(p1, p2);
+        } else {
+            appendPointsToPathAux(p2, p1);
+        }
+        if (pointCount() > 4) {
+            smoothLastPoints();
+        }
     } else {
         appendPointsToPathAux(p1, p2);
     }
+
 
     if (pointCount() > 4) {
         smoothLastPoints();
@@ -157,7 +203,7 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     // this code is here because this function is called from different places
     // pointCount() == 8 may causes crashes because it doesn't take possible
     // flips into account
-    if (m_points.count() >= 4 && &p == m_points[3] && m_caps>0) {
+    if (m_points.count() >= 4 && p == m_points[3] && m_caps>0) {
         addCap(3, 0, 0, true);
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
@@ -268,7 +314,7 @@ int KarbonCalligraphicShape::ccw(const QPointF &p1, const QPointF &p2,const QPoi
 {
     // calculate two times the area of the triangle fomed by the points given
     qreal area2 = (p2.x() - p1.x()) * (p3.y() - p1.y()) -
-                  (p2.y() - p1.y()) * (p3.x() - p1.x());
+            (p2.y() - p1.y()) * (p3.x() - p1.x());
     if (area2 > 0) {
         return +1; // the points are given in counterclockwise order
     } else if (area2 < 0) {
@@ -303,8 +349,8 @@ QPointF KarbonCalligraphicShape::normalize()
 }
 
 void KarbonCalligraphicShape::moveHandleAction(int handleId,
-        const QPointF &point,
-        Qt::KeyboardModifiers modifiers)
+                                               const QPointF &point,
+                                               Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     m_points[handleId]->setPoint(point);
@@ -316,10 +362,9 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     // remove all points
     clear();
     //KarbonCalligraphicPoint *pLast = m_points.at(0);
-    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
-            appendPointToPath(*p);
-     }
-
+    for (int i=0; i<m_points.count();i++) {
+        appendPointToPath(i);
+    }
     simplifyPath();
 
     QList<QPointF> handles;

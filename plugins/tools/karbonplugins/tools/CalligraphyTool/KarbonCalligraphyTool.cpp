@@ -62,6 +62,8 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
 {
     connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
     m_infoBuilder = new KisPaintingInformationBuilder();
+    m_sizeOption = KisPressureSizeOption();
+    m_rotationOption = KisPressureRotationOption();
     m_rotationOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     updateSelectedPath();
@@ -125,6 +127,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_intervalStore.clear();
     m_strokeTime.start();
     m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
+    m_lastAngle = 0.0;
     m_strokeWidth = currentStrokeWidth();
     m_currentDistance = new KisDistanceInformation(QPoint(), 0.0, 0.0);
     m_shape = new KarbonCalligraphicShape(m_caps);
@@ -226,7 +229,9 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
             KisPaintInformation infoToAdd = m_intervalStore.first();
             {
                 KisPaintInformation::DistanceInformationRegistrar r = infoToAdd.registerDistanceInformation(m_currentDistance);
-                m_shape->appendPoint(infoToAdd.pos(), m_rotationOption.apply(infoToAdd), m_sizeOption.apply(infoToAdd)*m_strokeWidth);
+                qreal angle = m_rotationOption.apply(infoToAdd);
+                m_shape->appendPoint(infoToAdd.pos(), angle, m_sizeOption.apply(infoToAdd)*m_strokeWidth);
+                m_lastPoint = infoToAdd.pos();
             }
             m_currentDistance->registerPaintedDab(infoToAdd, KisSpacingInformation(1.0));
             m_intervalStoreOld = m_intervalStore;
@@ -243,15 +248,16 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
         paintInfo.setPressure(pressure / m_intervalStore.count());
         {
             KisPaintInformation::DistanceInformationRegistrar r = paintInfo.registerDistanceInformation(m_currentDistance);
-            m_shape->appendPoint(paintInfo.pos(), m_rotationOption.apply(paintInfo), m_sizeOption.apply(paintInfo)*m_strokeWidth);
+            qreal angle = m_rotationOption.apply(paintInfo);
+            m_shape->appendPoint(paintInfo.pos(), angle, m_sizeOption.apply(paintInfo)*m_strokeWidth);
+            m_lastPoint = paintInfo.pos();
+            m_lastAngle = angle;
         }
         m_currentDistance->registerPaintedDab(paintInfo, KisSpacingInformation(1.0));
-        m_intervalStore.count();
         m_intervalStore.clear();
         m_intervalStoreOld.clear();
     }
     //m_speed = newSpeed;
-    //m_lastPoint = newPoint;
     canvas()->updateCanvas(m_shape->lastPieceBoundingRect());
 
 }

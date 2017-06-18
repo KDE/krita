@@ -27,9 +27,9 @@ class KoPathToolFactory : public KoToolFactoryBase
 {
 public:
     KoPathToolFactory();
-    ~KoPathToolFactory();
+    ~KoPathToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

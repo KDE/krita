@@ -40,23 +40,23 @@ public:
 
     KisPaintOpSettingsWidget(QWidget * parent = 0);
 
-    ~KisPaintOpSettingsWidget();
+    ~KisPaintOpSettingsWidget() override;
 
     void addPaintOpOption(KisPaintOpOption * option, const QString &label);
 
     /// Reimplemented
-    virtual void setConfiguration(const KisPropertiesConfigurationSP  config);
+    void setConfiguration(const KisPropertiesConfigurationSP  config) override;
 
     /// Reimplemented
-    virtual void writeConfiguration(KisPropertiesConfigurationSP config) const;
+    void writeConfiguration(KisPropertiesConfigurationSP config) const override;
 
-    virtual KisPaintopLodLimitations lodLimitations() const;
+    KisPaintopLodLimitations lodLimitations() const override;
 
     ///Reimplemented, sets image on option widgets
-    virtual void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
     ///Reimplemented, sets node on option widgets
-    virtual void setNode(KisNodeWSP node);
+    void setNode(KisNodeWSP node) override;
 
 private Q_SLOTS:
 

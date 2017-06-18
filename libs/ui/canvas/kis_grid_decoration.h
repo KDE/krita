@@ -33,12 +33,12 @@ class KisGridDecoration : public KisCanvasDecoration
     Q_OBJECT
 public:
     KisGridDecoration(KisView* parent);
-    virtual ~KisGridDecoration();
+    ~KisGridDecoration() override;
 
     void setGridConfig(const KisGridConfig &config);
 
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
+    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas) override;
 
 private:
     struct Private;

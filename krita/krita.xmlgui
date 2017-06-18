@@ -98,20 +98,20 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="showStatusBar" />
       <Separator/>
       <Action name="view_grid"/>
-      
-      
+
+
       <Separator/>
       <Menu name="SnapTo">
         <text>&amp;Snap To</text>
         <Action name="view_snap_to_guides"/>
-  	    <Action name="view_snap_to_grid"/>
-    	  <Action name="view_snap_orthogonal" />
-  	    <Action name="view_snap_node" />
-  	    <Action name="view_snap_extension" />
-  	    <Action name="view_snap_intersection" />
-  	    <Action name="view_snap_bounding_box" />
-  	    <Action name="view_snap_image_bounds" />
-	     <Action name="view_snap_image_center" />
+            <Action name="view_snap_to_grid"/>
+          <Action name="view_snap_orthogonal" />
+            <Action name="view_snap_node" />
+            <Action name="view_snap_extension" />
+            <Action name="view_snap_intersection" />
+            <Action name="view_snap_bounding_box" />
+            <Action name="view_snap_image_bounds" />
+             <Action name="view_snap_image_center" />
       </Menu>
       <Separator/>
 
@@ -210,29 +210,29 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       </Menu>
       <Menu name="LayerTransform">
          <text>&amp;Transform</text>
-	 <Action name="mirrorNodeX"/>
-	 <Action name="mirrorNodeY"/>
-	 <Action name="layersize"/>
-	 <Menu name="Rotate">
-	     <text>&amp;Rotate</text>
-	     <Action name="rotatelayer"/>
-	     <Separator/>
-	     <Action name="rotateLayerCW90"/>
-	     <Action name="rotateLayerCCW90"/>
-	     <Action name="rotateLayer180"/>
-	 </Menu>      
+         <Action name="mirrorNodeX"/>
+         <Action name="mirrorNodeY"/>
+         <Action name="layersize"/>
+         <Menu name="Rotate">
+             <text>&amp;Rotate</text>
+             <Action name="rotatelayer"/>
+             <Separator/>
+             <Action name="rotateLayerCW90"/>
+             <Action name="rotateLayerCCW90"/>
+             <Action name="rotateLayer180"/>
+         </Menu>
          <Action name="shearlayer"/>
-         <Action name="offsetlayer"/>         
-      </Menu>    
+         <Action name="offsetlayer"/>
+      </Menu>
       <Menu name="LayerSplitAlpha">
          <text>S&amp;plit</text>
-	 <Menu name="LayerSplitAlpha">
-	     <text>S&amp;plit Alpha</text>
-	     <Action name="split_alpha_into_mask"/>
-	     <Action name="split_alpha_write"/>
-	     <Action name="split_alpha_save_merged"/>
-	 </Menu>
-	 <Action name="layersplit"/>
+         <Menu name="LayerSplitAlpha">
+             <text>S&amp;plit Alpha</text>
+             <Action name="split_alpha_into_mask"/>
+             <Action name="split_alpha_write"/>
+             <Action name="split_alpha_save_merged"/>
+         </Menu>
+         <Action name="layersplit"/>
          <Action name="clones_array"/>
       </Menu>
 
@@ -342,6 +342,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="help_show_tip"/>
       <Separator/>
       <Action name="help_report_bug"/>
+      <Action name="buginfo"/>
       <Separator/>
       <Action name="help_about_app"/>
       <Action name="help_about_kde"/>

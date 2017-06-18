@@ -72,12 +72,12 @@ class KisLayerBox : public QDockWidget, public KisMainwindowObserver
 public:
 
     KisLayerBox();
-    virtual ~KisLayerBox();
-    QString observerName() { return "KisLayerBox"; }
+    ~KisLayerBox() override;
+    QString observerName() override { return "KisLayerBox"; }
     /// reimplemented from KisMainwindowObserver
-    virtual void setMainWindow(KisViewManager* kisview);
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setMainWindow(KisViewManager* kisview) override;
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 private Q_SLOTS:
 
     void notifyImageDeleted();
@@ -169,11 +169,11 @@ class KisLayerBoxFactory : public KoDockFactoryBase
 public:
     KisLayerBoxFactory() { }
 
-    virtual QString id() const {
+    QString id() const override {
         return QString("KisLayerBox");
     }
 
-    virtual QDockWidget* createDockWidget() {
+    QDockWidget* createDockWidget() override {
         KisLayerBox * dockWidget = new KisLayerBox();
 
         dockWidget->setObjectName(id());
@@ -181,7 +181,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const override {
         return DockRight;
     }
 };

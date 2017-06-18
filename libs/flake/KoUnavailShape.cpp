@@ -554,35 +554,6 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     const QByteArray name(el.nodeName().toLatin1());
     writer.startElement(name.constData());
 
-#ifndef KOXML_USE_QDOM
-    // Copy all the attributes, including namespaces.
-    QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
-    for (int i = 0; i < attributeNames.size(); ++i) {
-        QPair<QString, QString> attrPair(attributeNames.value(i));
-        if (attrPair.first.isEmpty()) {
-            writer.addAttribute(attrPair.second.toLatin1(), el.attribute(attrPair.second));
-        }
-        else {
-            // This somewhat convoluted code is because we need the
-            // namespace, not the namespace URI.
-            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toLatin1());
-            // in case we don't find the namespace in our list create a own one and use that
-            // so the document created on saving is valid.
-            if (nsShort.isEmpty()) {
-                nsShort = unknownNamespaces.value(attrPair.first);
-                if (nsShort.isEmpty()) {
-                    nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
-                    unknownNamespaces.insert(attrPair.first, nsShort);
-                }
-                QString name = QString("xmlns:") + nsShort;
-                writer.addAttribute(name.toLatin1(), attrPair.first.toLatin1());
-            }
-            QString attr(nsShort + ':' + attrPair.second);
-            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,
-                                                               attrPair.second));
-        }
-    }
-#endif
     // Child elements
     // Loop through all the child elements of the draw:frame.
     KoXmlNode n = el.firstChild();

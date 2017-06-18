@@ -37,7 +37,7 @@ class KRITAWIDGETUTILS_EXPORT KShortcutWidget : public QWidget
     Q_PROPERTY(bool modifierlessAllowed READ isModifierlessAllowed WRITE setModifierlessAllowed)
 public:
     KShortcutWidget(QWidget *parent = 0);
-    ~KShortcutWidget();
+    ~KShortcutWidget() override;
 
     void setModifierlessAllowed(bool allow);
     bool isModifierlessAllowed();

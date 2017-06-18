@@ -102,7 +102,7 @@ public:
     // after new points are added
     const QRectF lastPieceBoundingRect();
 
-    void setSize(const QSizeF &newSize);
+    void setSize(const QSizeF &newSize) override;
     //virtual QPointF normalize();
 
     QPointF normalize() override;
@@ -112,10 +112,11 @@ public:
     void simplifyGuidePath();
 
     // reimplemented
-    virtual QString pathShapeId() const override;
 
     bool saveSvg(SvgSavingContext &context);
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+
+    QString pathShapeId() const override;
 
 protected:
     // reimplemented

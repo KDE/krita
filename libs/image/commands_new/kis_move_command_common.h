@@ -44,11 +44,11 @@ public:
     {
     }
 
-    void redo() {
+    void redo() override {
         moveTo(m_newPos);
     }
 
-    void undo() {
+    void undo() override {
         moveTo(m_oldPos);
     }
 

@@ -30,8 +30,8 @@ public:
     /// Constructor
     KoCreatePathToolFactory();
     /// Destructor
-    ~KoCreatePathToolFactory();
+    ~KoCreatePathToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase* createTool(KoCanvasBase *canvas) override;
 };
 #endif

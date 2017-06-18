@@ -9,7 +9,7 @@ class KisSyncedAudioPlayback : public QObject
     Q_OBJECT
 public:
     KisSyncedAudioPlayback(const QString &fileName);
-    virtual ~KisSyncedAudioPlayback();
+    ~KisSyncedAudioPlayback() override;
 
     void setSoundOffsetTolerance(qint64 value);
     void syncWithVideo(qint64 position);

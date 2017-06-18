@@ -34,36 +34,121 @@ class KisPaintInformation;
 class KisSpacingInformation {
 public:
     explicit KisSpacingInformation()
-        : m_spacing(0.0, 0.0)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(0.0, 0.0)
+        , m_timedSpacingEnabled(false)
+        , m_timedSpacingInterval(0.0)
         , m_rotation(0.0)
         , m_coordinateSystemFlipped(false)
     {
     }
 
     explicit KisSpacingInformation(qreal isotropicSpacing)
-        : m_spacing(isotropicSpacing, isotropicSpacing)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
+        , m_timedSpacingEnabled(false)
+        , m_timedSpacingInterval(0.0)
         , m_rotation(0.0)
         , m_coordinateSystemFlipped(false)
     {
     }
 
     explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation, bool coordinateSystemFlipped)
-        : m_spacing(anisotropicSpacing)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(anisotropicSpacing)
+        , m_timedSpacingEnabled(false)
+        , m_timedSpacingInterval(0.0)
         , m_rotation(rotation)
         , m_coordinateSystemFlipped(coordinateSystemFlipped)
     {
     }
 
-    inline QPointF spacing() const {
-        return m_spacing;
+    explicit KisSpacingInformation(qreal isotropicSpacing,
+                                   qreal timedSpacingInterval)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
+        , m_timedSpacingEnabled(true)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(0.0)
+        , m_coordinateSystemFlipped(false)
+    {
+    }
+
+    explicit KisSpacingInformation(const QPointF &anisotropicSpacing,
+                                   qreal rotation,
+                                   bool coordinateSystemFlipped,
+                                   qreal timedSpacingInterval)
+        : m_distanceSpacingEnabled(true)
+        , m_distanceSpacing(anisotropicSpacing)
+        , m_timedSpacingEnabled(true)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(rotation)
+        , m_coordinateSystemFlipped(coordinateSystemFlipped)
+    {
+    }
+
+    explicit KisSpacingInformation(bool distanceSpacingEnabled,
+                                   qreal isotropicSpacing,
+                                   bool timedSpacingEnabled,
+                                   qreal timedSpacingInterval)
+        : m_distanceSpacingEnabled(distanceSpacingEnabled)
+        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
+        , m_timedSpacingEnabled(timedSpacingEnabled)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(0.0)
+        , m_coordinateSystemFlipped(false)
+    {
+    }
+
+    explicit KisSpacingInformation(bool distanceSpacingEnabled,
+                                   const QPointF &anisotropicSpacing,
+                                   qreal rotation,
+                                   bool coordinateSystemFlipped,
+                                   bool timedSpacingEnabled,
+                                   qreal timedSpacingInterval)
+        : m_distanceSpacingEnabled(distanceSpacingEnabled)
+        , m_distanceSpacing(anisotropicSpacing)
+        , m_timedSpacingEnabled(timedSpacingEnabled)
+        , m_timedSpacingInterval(timedSpacingInterval)
+        , m_rotation(rotation)
+        , m_coordinateSystemFlipped(coordinateSystemFlipped)
+    {
+    }
+
+    /**
+     * @return True if and only if distance-based spacing is enabled.
+     */
+    inline bool isDistanceSpacingEnabled() const {
+        return m_distanceSpacingEnabled;
+    }
+
+    inline QPointF distanceSpacing() const {
+        return m_distanceSpacing;
+    }
+
+    /**
+     * @return True if and only if time-based spacing is enabled.
+     */
+    inline bool isTimedSpacingEnabled() const {
+        return m_timedSpacingEnabled;
+    }
+
+    /**
+     * @return The desired maximum amount of time between dabs, in milliseconds. Returns a time of
+     * approximately 1 year if time-based spacing is disabled.
+     */
+    inline qreal timedSpacingInterval() const {
+        return isTimedSpacingEnabled() ?
+                    m_timedSpacingInterval :
+                    32000000000.0;
     }
 
     inline bool isIsotropic() const {
-        return m_spacing.x() == m_spacing.y();
+        return m_distanceSpacing.x() == m_distanceSpacing.y();
     }
 
     inline qreal scalarApprox() const {
-        return isIsotropic() ? m_spacing.x() : QVector2D(m_spacing).length();
+        return isIsotropic() ? m_distanceSpacing.x() : QVector2D(m_distanceSpacing).length();
     }
 
     inline qreal rotation() const {
@@ -75,7 +160,15 @@ public:
     }
 
 private:
-    QPointF m_spacing;
+
+    // Distance-based spacing
+    bool m_distanceSpacingEnabled;
+    QPointF m_distanceSpacing;
+
+    // Time-based spacing (interval is in milliseconds)
+    bool m_timedSpacingEnabled;
+    qreal m_timedSpacingInterval;
+
     qreal m_rotation;
     bool m_coordinateSystemFlipped;
 };
@@ -87,7 +180,7 @@ private:
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
@@ -107,7 +200,9 @@ public:
                             const KisSpacingInformation &spacing);
 
     qreal getNextPointPosition(const QPointF &start,
-                               const QPointF &end);
+                               const QPointF &end,
+                               qreal startTime,
+                               qreal endTime);
 
     /**
      * \return true if at least one dab has been painted with this
@@ -119,15 +214,38 @@ public:
     qreal lockedDrawingAngle() const;
     void setLockedDrawingAngle(qreal angle);
 
+    /**
+     * Computes the next drawing angle assuming that the next painting position will be nextPos.
+     * This method should not be called when hasLastDabInformation() is false.
+     */
+    qreal nextDrawingAngle(const QPointF &nextPos, bool considerLockedAngle = true) const;
+
+    /**
+     * Returns a unit vector pointing in the direction that would have been indicated by a call to
+     * nextDrawingAngle. This method should not be called when hasLastDabInformation() is false.
+     */
+    QPointF nextDrawingDirectionVector(const QPointF &nextPos,
+                                       bool considerLockedAngle = true) const;
+
     qreal scalarDistanceApprox() const;
 
-    void overrideLastValues(const QPointF &lastPosition, qreal lastTime);
+    void overrideLastValues(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
                                         const QPointF &end);
     qreal getNextPointPositionAnisotropic(const QPointF &start,
                                           const QPointF &end);
+    qreal getNextPointPositionTimed(qreal startTime,
+                                    qreal endTime);
+    void resetAccumulators();
+
+    qreal drawingAngleImpl(const QPointF &start, const QPointF &end,
+                           bool considerLockedAngle = true, qreal defaultAngle = 0.0) const;
+    QPointF drawingDirectionVectorImpl(const QPointF &start, const QPointF &end,
+                                       bool considerLockedAngle = true,
+                                       qreal defaultAngle = 0.0) const;
+
 private:
     struct Private;
     Private * const m_d;

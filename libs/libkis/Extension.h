@@ -65,7 +65,7 @@ public:
      * owned by @param parent.
      */
     explicit Extension(QObject *parent = 0);
-    virtual ~Extension();
+    ~Extension() override;
     
     /**
      * Override this function to setup your Extension. You can use it to add

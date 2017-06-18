@@ -35,14 +35,14 @@ class BibliographyPreview : public QFrame
     Q_OBJECT
 public:
     explicit BibliographyPreview(QWidget *parent = 0);
-    ~BibliographyPreview();
+    ~BibliographyPreview() override;
     void setStyleManager(KoStyleManager *styleManager);
     /// sets the size of the generated preview pixmap if not set then it takes the widget's size
     void setPreviewSize(const QSize &size);
     QPixmap previewPixmap();
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 Q_SIGNALS:
     void pixmapGenerated();

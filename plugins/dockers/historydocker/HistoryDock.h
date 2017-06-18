@@ -41,9 +41,9 @@ class HistoryDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     HistoryDock();
-    QString observerName() { return "HistoryDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() override { return "HistoryDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private Q_SLOTS:
     void configure();

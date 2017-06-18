@@ -34,7 +34,7 @@ class KRITAIMAGE_EXPORT KisTileDataSwapper : public QThread
 public:
 
     KisTileDataSwapper(KisTileDataStore *store);
-    virtual ~KisTileDataSwapper();
+    ~KisTileDataSwapper() override;
 
     void kick();
     void terminateSwapper();
@@ -44,7 +44,7 @@ public:
 
 private:
     void waitForWork();
-    void run();
+    void run() override;
 
     void doJob();
     template<class strategy> qint64 pass(qint64 needToFreeMetric);

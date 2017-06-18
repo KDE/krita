@@ -26,9 +26,9 @@ class KoLineStyleItemDelegate : public QAbstractItemDelegate
 {
 public:
     explicit KoLineStyleItemDelegate(QObject *parent = 0);
-    ~KoLineStyleItemDelegate() {}
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    ~KoLineStyleItemDelegate() override {}
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 #endif

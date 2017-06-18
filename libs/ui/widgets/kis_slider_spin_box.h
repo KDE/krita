@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisAbstractSliderSpinBox : public QWidget
 protected:
     explicit KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate*);
 public:
-    virtual ~KisAbstractSliderSpinBox();
+    ~KisAbstractSliderSpinBox() override;
 
     void showEdit();
     void hideEdit();
@@ -57,21 +57,21 @@ public:
      */
     void setBlockUpdateSignalOnDrag(bool block);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
     virtual QSize minimumSize() const;
 
     bool isDragging() const;
 
 protected:
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void mouseReleaseEvent(QMouseEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void keyPressEvent(QKeyEvent* e);
-    virtual void wheelEvent(QWheelEvent *);
+    void paintEvent(QPaintEvent* e) override;
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void keyPressEvent(QKeyEvent* e) override;
+    void wheelEvent(QWheelEvent *) override;
 
-    virtual bool eventFilter(QObject* recv, QEvent* e);
+    bool eventFilter(QObject* recv, QEvent* e) override;
 
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
@@ -92,14 +92,14 @@ protected:
     virtual void setInternalValue(int value, bool blockUpdateSignal) = 0;
 
 protected Q_SLOTS:
-    void contextMenuEvent(QContextMenuEvent * event);
+    void contextMenuEvent(QContextMenuEvent * event) override;
     void editLostFocus();
 protected:
     KisAbstractSliderSpinBoxPrivate* const d_ptr;
 
     // QWidget interface
 protected:
-    virtual void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e) override;
     void paint(QPainter& painter);
     void paintFusion(QPainter& painter);
     void paintPlastique(QPainter& painter);
@@ -117,7 +117,7 @@ class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
     Q_PROPERTY( int maximum READ maximum WRITE setMaximum )
 public:
     KisSliderSpinBox(QWidget* parent = 0);
-    ~KisSliderSpinBox();
+    ~KisSliderSpinBox() override;
 
     void setRange(int minimum, int maximum);
 
@@ -140,8 +140,8 @@ public Q_SLOTS:
     void setValue(int value);
 
 protected:
-    virtual QString valueString() const;
-    virtual void setInternalValue(int value, bool blockUpdateSignal);
+    QString valueString() const override;
+    void setInternalValue(int value, bool blockUpdateSignal) override;
 Q_SIGNALS:
     void valueChanged(int value);
 };
@@ -152,7 +152,7 @@ class KRITAUI_EXPORT KisDoubleSliderSpinBox : public KisAbstractSliderSpinBox
     Q_DECLARE_PRIVATE(KisDoubleSliderSpinBox)
 public:
     KisDoubleSliderSpinBox(QWidget* parent = 0);
-    ~KisDoubleSliderSpinBox();
+    ~KisDoubleSliderSpinBox() override;
 
     void setRange(qreal minimum, qreal maximum, int decimals = 0);
 
@@ -170,8 +170,8 @@ public Q_SLOTS:
     void setValue(qreal value);
 
 protected:
-    virtual QString valueString() const;
-    virtual void setInternalValue(int value, bool blockUpdateSignal);
+    QString valueString() const override;
+    void setInternalValue(int value, bool blockUpdateSignal) override;
 Q_SIGNALS:
     void valueChanged(qreal value);
 };

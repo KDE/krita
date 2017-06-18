@@ -40,7 +40,7 @@ class SimpleCharacterWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
-    virtual ~SimpleCharacterWidget();
+    ~SimpleCharacterWidget() override;
 
     void setInitialUsedStyles(QVector<int> list);
 

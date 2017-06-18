@@ -37,7 +37,7 @@ class KisGridOpOption : public KisPaintOpOption
 {
 public:
     KisGridOpOption();
-    ~KisGridOpOption();
+    ~KisGridOpOption() override;
 
     int gridWidth() const;
     void setWidth(int width) const;
@@ -54,8 +54,8 @@ public:
     qreal horizBorder() const;
     bool randomBorder() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     KisGridOpOptionsWidget * m_options;
@@ -74,7 +74,7 @@ struct GridOption : public KisBaseOption
     bool grid_random_border;
 
 
-    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override {
         grid_width = qMax(1, setting->getInt(GRID_WIDTH));
         grid_height = qMax(1, setting->getInt(GRID_HEIGHT));
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
@@ -85,7 +85,7 @@ struct GridOption : public KisBaseOption
         grid_random_border = setting->getBool(GRID_RANDOM_BORDER);
     }
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
         setting->setProperty(GRID_WIDTH, qMax(1, grid_width));
         setting->setProperty(GRID_HEIGHT, qMax(1, grid_height));
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);

@@ -103,7 +103,7 @@ public:
     Q_DECLARE_FLAGS(Constrains, Constrain)
 
     explicit KisSpinBoxUnitManager(QObject *parent = 0);
-    virtual ~KisSpinBoxUnitManager();
+    ~KisSpinBoxUnitManager() override;
 
     int getUnitDimensionType() const;
     QString getReferenceUnitSymbol() const;
@@ -122,8 +122,8 @@ public:
     //! \brief some units conversions are done via an affine transform, not just a linear transform. This function gives the constant of this affine transform (usually 0).
     virtual qreal getConversionConstant(int dim, QString symbol) const;
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
 

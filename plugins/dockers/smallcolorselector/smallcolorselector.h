@@ -30,7 +30,7 @@ class SmallColorSelectorPlugin : public QObject
     Q_OBJECT
 public:
     SmallColorSelectorPlugin(QObject *parent, const QVariantList &);
-    virtual ~SmallColorSelectorPlugin();
+    ~SmallColorSelectorPlugin() override;
 };
 
 #endif

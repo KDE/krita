@@ -30,7 +30,7 @@ class KRITATEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
 {
 public:
     explicit KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
-    virtual ~KoTextLayoutNoteArea();
+    ~KoTextLayoutNoteArea() override;
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 

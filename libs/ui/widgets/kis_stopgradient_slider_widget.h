@@ -35,7 +35,7 @@ public:
     KisStopGradientSliderWidget(QWidget *parent = 0, Qt::WFlags f = 0);
 
 public:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
     void setGradientResource(KoStopGradient* gradient);
 
     int selectedStop();
@@ -49,9 +49,9 @@ Q_SIGNALS:
      void sigSelectedStop(int stop);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent * e);
-    virtual void mouseReleaseEvent(QMouseEvent * e);
-    virtual void mouseMoveEvent(QMouseEvent * e);
+    void mousePressEvent(QMouseEvent * e) override;
+    void mouseReleaseEvent(QMouseEvent * e) override;
+    void mouseMoveEvent(QMouseEvent * e) override;
 
 private Q_SLOTS:
      void updateHandleSize();

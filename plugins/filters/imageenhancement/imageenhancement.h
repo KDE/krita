@@ -30,7 +30,7 @@ class KritaImageEnhancement : public QObject
     Q_OBJECT
 public:
     KritaImageEnhancement(QObject *parent, const QVariantList &);
-    virtual ~KritaImageEnhancement();
+    ~KritaImageEnhancement() override;
 };
 
 #endif

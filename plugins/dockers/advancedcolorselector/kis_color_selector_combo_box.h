@@ -29,13 +29,13 @@ class KisColorSelectorComboBox : public QComboBox
     Q_OBJECT
 public:
     KisColorSelectorComboBox(QWidget* parent=0);
-    ~KisColorSelectorComboBox();
-    void hidePopup();
-    void showPopup();
+    ~KisColorSelectorComboBox() override;
+    void hidePopup() override;
+    void showPopup() override;
     KisColorSelectorConfiguration configuration() const;
     //int m_model;
 protected:
-    void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 public Q_SLOTS:
     void setColorSpace(const KoColorSpace* colorSpace);
     void setConfiguration(KisColorSelectorConfiguration);

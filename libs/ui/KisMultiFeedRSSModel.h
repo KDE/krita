@@ -67,12 +67,12 @@ class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel
     Q_PROPERTY(int articleCount READ articleCount WRITE setArticleCount NOTIFY articleCountChanged)
 public:
     explicit MultiFeedRssModel(QObject *parent = 0);
-    ~MultiFeedRssModel();
+    ~MultiFeedRssModel() override;
     void addFeed(const QString& feed);
     void removeFeed(const QString& feed);
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     int articleCount() const {
         return m_articleCount;

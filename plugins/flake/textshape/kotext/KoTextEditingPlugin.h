@@ -45,7 +45,7 @@ class KRITATEXT_EXPORT KoTextEditingPlugin : public QObject
 public:
     /// constructor
     KoTextEditingPlugin();
-    virtual ~KoTextEditingPlugin();
+    ~KoTextEditingPlugin() override;
 
     /**
      * This method will be called when the user makes at least one change to

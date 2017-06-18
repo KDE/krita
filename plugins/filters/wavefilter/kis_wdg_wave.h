@@ -31,13 +31,13 @@ class KisWdgWave : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgWave(KisFilter* nfilter, QWidget* parent = 0);
-    ~KisWdgWave();
+    ~KisWdgWave() override;
 public:
     inline const Ui_WdgWaveOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 private:
     Ui_WdgWaveOptions* m_widget;
 };

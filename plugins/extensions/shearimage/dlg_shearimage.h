@@ -43,7 +43,7 @@ public:
 
     DlgShearImage(QWidget * parent = 0,
                   const char* name = 0);
-    ~DlgShearImage();
+    ~DlgShearImage() override;
 
     void setAngleX(quint32 w);
     void setAngleY(quint32 w);

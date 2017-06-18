@@ -29,7 +29,7 @@ class KisPaintopSettingsUpdateProxy : public QObject
 
 public:
     KisPaintopSettingsUpdateProxy(QObject *parent = 0);
-    ~KisPaintopSettingsUpdateProxy();
+    ~KisPaintopSettingsUpdateProxy() override;
 
     void notifySettingsChanged();
     void notifyUniformPropertiesChanged();

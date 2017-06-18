@@ -23,6 +23,7 @@
 #include <KoUnit.h>
 #include "tool_transform_args.h"
 #include "kis_paint_device.h"
+#include "kis_algebra_2d.h"
 
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
@@ -64,6 +65,11 @@ qreal KisTransformUtils::scaleFromPerspectiveMatrixY(const QTransform &t, const 
 
 qreal KisTransformUtils::effectiveSize(const QRectF &rc) {
     return 0.5 * (rc.width() + rc.height());
+}
+
+bool KisTransformUtils::thumbnailTooSmall(const QTransform &resultThumbTransform, const QRect &originalImageRect)
+{
+    return KisAlgebra2D::minDimension(resultThumbTransform.mapRect(originalImageRect)) < 32;
 }
 
 QRectF handleRectImpl(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint, qreal *dOutX, qreal *dOutY) {

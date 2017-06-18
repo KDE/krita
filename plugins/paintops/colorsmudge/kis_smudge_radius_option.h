@@ -40,8 +40,8 @@ public:
                qreal posy,
                KisPaintDeviceSP dev) const;
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 
 

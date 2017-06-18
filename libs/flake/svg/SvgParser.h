@@ -37,7 +37,7 @@
 #include "SvgLoadingContext.h"
 #include "SvgStyleParser.h"
 #include "KoClipMask.h"
-
+#include <resources/KoSvgSymbolCollectionResource.h>
 
 class KoShape;
 class KoShapeGroup;
@@ -64,38 +64,61 @@ public:
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 
+    /// Takes the collection of symbols contained in the svg document. The parser will
+    /// no longer know about the symbols.
+    QVector<KoSvgSymbol*> takeSymbols();
+
     typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
     void setFileFetcher(FileFetcherFunc func);
 
     QList<QExplicitlySharedDataPointer<KoMarker>> knownMarkers() const;
 
+    QString documentTitle() const;
+    QString documentDescription() const;
+
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties
     KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement());
+
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const KoXmlElement &);
+
+    /// XXX
     QList<KoShape*> parseSingleElement(const KoXmlElement &b);
+
     /// Parses a use element, returning a list of child shapes
     KoShape* parseUse(const KoXmlElement &);
+
     /// Parses a gradient element
     SvgGradientHelper *parseGradient(const KoXmlElement &);
+
     /// Parses a pattern element
     QSharedPointer<KoVectorPatternBackground> parsePattern(const KoXmlElement &e, const KoShape *__shape);
+
     /// Parses a filter element
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+
     /// Parses a clip path element
     bool parseClipPath(const KoXmlElement &);
     bool parseClipMask(const KoXmlElement &e);
+
     bool parseMarker(const KoXmlElement &e);
+
+    bool parseSymbol(const KoXmlElement &e);
+
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
+
     /// parses a length attribute in x-direction
     qreal parseUnitX(const QString &unit);
+
     /// parses a length attribute in y-direction
     qreal parseUnitY(const QString &unit);
+
     /// parses a length attribute in xy-direction
     qreal parseUnitXY(const QString &unit);
+
     /// parses a angular attribute values, result in radians
     qreal parseAngular(const QString &unit);
 
@@ -103,14 +126,19 @@ protected:
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
+
     /// Create path object from the given xml element
     KoShape * createPath(const KoXmlElement &);
+
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient(const QString &id);
+
     /// find pattern with given id in pattern map
     QSharedPointer<KoVectorPatternBackground> findPattern(const QString &id, const KoShape *shape);
+
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
+
     /// find clip path with given id in clip path map
     SvgClipPathHelper* findClipPath(const QString &id);
 
@@ -119,6 +147,7 @@ protected:
 
     /// creates a shape from the given shape id
     KoShape * createShape(const QString &shapeID);
+
     /// Creates shape from specified svg element
     KoShape * createShapeFromElement(const KoXmlElement &element, SvgLoadingContext &context);
 
@@ -165,7 +194,12 @@ private:
     QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
+    QVector<KoSvgSymbol*> m_symbols;
     QList<KoShape*> m_toplevelShapes;
+
+    QString m_documentTitle;
+    QString m_documentDescription;
+
 };
 
 #endif

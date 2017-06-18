@@ -36,11 +36,11 @@ public:
     void setImage(const QPixmap& pixmap, qreal scale);
     void setScale(qreal scale);
     
-    virtual QSize sizeHint() const;
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    QSize sizeHint() const override;
+    void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
     
 private:
     qreal       m_scale;
@@ -81,7 +81,7 @@ private Q_SLOTS:
 private:
     qreal calcScale(qreal scale, int viewMode, const QSizeF& imgSize) const;
     QSize viewportSize(bool withScrollbars) const;
-    virtual void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
     
 private:
     qreal             m_scale;

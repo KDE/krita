@@ -140,7 +140,7 @@ class KRITAIMAGE_EXPORT KisImageSignalRouter : public QObject
 
 public:
     KisImageSignalRouter(KisImageWSP image);
-    ~KisImageSignalRouter();
+    ~KisImageSignalRouter() override;
 
     void emitNotification(KisImageSignalType type);
     void emitNotifications(KisImageSignalVector notifications);

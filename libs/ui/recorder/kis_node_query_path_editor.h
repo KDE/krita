@@ -30,7 +30,7 @@ class KisNodeQueryPathEditor : public QWidget
     Q_OBJECT
 public:
     KisNodeQueryPathEditor(QWidget* parent);
-    ~KisNodeQueryPathEditor();
+    ~KisNodeQueryPathEditor() override;
     void setNodeQueryPath(const KisNodeQueryPath& path);
     /**
      * Generate a node query path based on the state of the widgets

@@ -38,11 +38,11 @@ public:
      * @param handleId the id of the handle to modify
      */
     KoParameterChangeStrategy(KoToolBase *tool, KoParameterShape *parameterShape, int handleId);
-    virtual ~KoParameterChangeStrategy();
+    ~KoParameterChangeStrategy() override;
 
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
 
 protected:
     /// constructor

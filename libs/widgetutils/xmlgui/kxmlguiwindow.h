@@ -110,7 +110,7 @@ public:
      * Will also destroy the toolbars, and menubar if
      * needed.
      */
-    virtual ~KXmlGuiWindow();
+    ~KXmlGuiWindow() override;
 
     /**
      * Enables the build of a standard help menu when calling createGUI/setupGUI().

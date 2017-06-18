@@ -38,15 +38,15 @@ class KisSprayOpOption : public KisPaintOpOption
 {
 public:
     KisSprayOpOption();
-    ~KisSprayOpOption();
+    ~KisSprayOpOption() override;
 
     void setDiameter(int diameter) const;
     int diameter() const;
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     KisSprayOpOptionsWidget *m_options;
@@ -74,7 +74,7 @@ public:
 
 public:
 
-    void readOptionSettingImpl(const KisPropertiesConfiguration *settings) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *settings) override {
         diameter = settings->getInt(SPRAY_DIAMETER);
         aspect = settings->getDouble(SPRAY_ASPECT);
         particleCount = settings->getDouble(SPRAY_PARTICLE_COUNT);
@@ -88,7 +88,7 @@ public:
         gaussian = settings->getBool(SPRAY_GAUSS_DISTRIBUTION);
     }
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
         setting->setProperty(SPRAY_DIAMETER, diameter);
         setting->setProperty(SPRAY_ASPECT, aspect);
         setting->setProperty(SPRAY_COVERAGE, coverage * 100.0);

@@ -151,7 +151,7 @@ public:
      * Will also destroy the toolbars, and menubar if
      * needed.
      */
-    virtual ~KMainWindow();
+    ~KMainWindow() override;
 
     /**
      * If the session did contain so high a number, @p true is returned,

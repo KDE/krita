@@ -26,9 +26,9 @@ class ArtisticTextToolFactory : public KoToolFactoryBase
 {
 public:
     ArtisticTextToolFactory();
-    ~ArtisticTextToolFactory();
+    ~ArtisticTextToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // ARTISTICTEXTTOOLFACTORY_H

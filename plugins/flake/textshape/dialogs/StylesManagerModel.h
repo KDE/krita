@@ -35,8 +35,8 @@ public:
 
     explicit StylesManagerModel(QObject *parent = 0);
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
     void setStyles(const QList<KoCharacterStyle *> &styles);

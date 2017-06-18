@@ -27,7 +27,7 @@ class KisToolOptionsPopup : public QWidget
     Q_OBJECT
 public:
     explicit KisToolOptionsPopup(QWidget *parent = 0);
-    virtual ~KisToolOptionsPopup();
+    ~KisToolOptionsPopup() override;
 
     bool detached() const;
 
@@ -40,9 +40,9 @@ public Q_SLOTS:
     void switchDetached(bool show = true);
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *);
-    void hideEvent(QHideEvent *);
-    void showEvent(QShowEvent *);
+    void contextMenuEvent(QContextMenuEvent *) override;
+    void hideEvent(QHideEvent *) override;
+    void showEvent(QShowEvent *) override;
 
 private:
 

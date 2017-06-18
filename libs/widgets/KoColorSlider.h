@@ -32,7 +32,7 @@ class KRITAWIDGETS_EXPORT KoColorSlider : public KSelector
 public:
     explicit KoColorSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     explicit KoColorSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
-    virtual ~KoColorSlider();
+    ~KoColorSlider() override;
 
 public:
     void setColors( const KoColor& minColor, const KoColor& maxColor);
@@ -41,8 +41,8 @@ public:
      */
     KoColor currentColor() const;
 protected:
-    virtual void drawContents( QPainter* );
-    virtual void drawArrow(QPainter *painter, const QPoint &pos);
+    void drawContents( QPainter* ) override;
+    void drawArrow(QPainter *painter, const QPoint &pos) override;
 
 protected:
     struct Private;

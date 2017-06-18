@@ -29,11 +29,11 @@ class KisHatchingOptions : public KisPaintOpOption
 
 public:
     KisHatchingOptions();
-    ~KisHatchingOptions();
+    ~KisHatchingOptions() override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private:
     KisHatchingOptionsWidget *m_options;

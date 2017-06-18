@@ -36,8 +36,8 @@ public:
         setupUi(this);
     }
 
-    void setConfiguration(const KisPropertiesConfigurationSP  config);
-    KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP  config) override;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private Q_SLOTS:
     void on_alpha_toggled(bool checked);
@@ -50,13 +50,13 @@ class KisPNGExport : public KisImportExportFilter
 public:
 
     KisPNGExport(QObject *parent, const QVariantList &);
-    virtual ~KisPNGExport();
+    ~KisPNGExport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
-    void initializeCapabilities();
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
+    void initializeCapabilities() override;
 };
 
 #endif

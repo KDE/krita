@@ -61,19 +61,19 @@ public:
     ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
                       KoTextEditor::ChangeListFlags flags,
                       KUndo2Command *parent = 0);
-    ~ChangeListCommand();
+    ~ChangeListCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
     /// reimplemnted from KUndo2Command
-    virtual int id() const {
+    int id() const override {
         return 58450687;
     }
     /// reimplemnted from KUndo2Command
-    virtual bool mergeWith(const KUndo2Command *other);
+    bool mergeWith(const KUndo2Command *other) override;
 
 private:
     enum CommandAction {

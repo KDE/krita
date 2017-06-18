@@ -35,19 +35,19 @@ public:
 public:
     KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     KisCircleMaskGenerator(const KisCircleMaskGenerator &rhs);
-    virtual ~KisCircleMaskGenerator();
-    KisMaskGenerator* clone() const;
+    ~KisCircleMaskGenerator() override;
+    KisMaskGenerator* clone() const override;
 
-    virtual quint8 valueAt(qreal x, qreal y) const;
+    quint8 valueAt(qreal x, qreal y) const override;
 
-    virtual bool shouldSupersample() const;
+    bool shouldSupersample() const override;
 
-    virtual bool shouldVectorize() const;
+    bool shouldVectorize() const override;
 
-    KisBrushMaskApplicatorBase* applicator();
+    KisBrushMaskApplicatorBase* applicator() override;
 
-    virtual void setSoftness(qreal softness);
-    virtual void setScale(qreal scaleX, qreal scaleY);
+    void setSoftness(qreal softness) override;
+    void setScale(qreal scaleX, qreal scaleY) override;
 
 private:
 

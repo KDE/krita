@@ -23,7 +23,7 @@
 
 #include <kritaui_export.h>
 
-class QAction;
+class KisAction;
 
 class KisActionManager;
 class KisViewManager;
@@ -37,12 +37,12 @@ class KRITAUI_EXPORT KisScriptManager : public QObject
     Q_OBJECT
 public:
     explicit KisScriptManager(KisViewManager * view);
-    ~KisScriptManager();
+    ~KisScriptManager() override;
 
     void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
-    void addAction(QAction *action);
+    void addAction(KisAction *action);
 
 private:
     struct Private;

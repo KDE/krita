@@ -53,18 +53,18 @@ public:
     using KisFilterConfiguration::toXML;
     using KisFilterConfiguration::fromLegacyXML;
 
-    virtual void fromLegacyXML(const QDomElement& root);
+    void fromLegacyXML(const QDomElement& root) override;
 
-    virtual void fromXML(const QDomElement& e);
-    virtual void toXML(QDomDocument& doc, QDomElement& root) const;
+    void fromXML(const QDomElement& e) override;
+    void toXML(QDomDocument& doc, QDomElement& root) const override;
 
     KisBrightnessContrastFilterConfiguration();
-    virtual ~KisBrightnessContrastFilterConfiguration();
+    ~KisBrightnessContrastFilterConfiguration() override;
 
-    virtual void setCurve(const KisCubicCurve &curve);
+    void setCurve(const KisCubicCurve &curve) override;
 
     const QVector<quint16>& transfer() const;
-    virtual const KisCubicCurve& curve() const;
+    const KisCubicCurve& curve() const override;
 
 private:
     void updateTransfer();
@@ -86,14 +86,14 @@ public:
 
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 
     static inline KoID id() {
         return KoID("brightnesscontrast", i18n("Brightness / Contrast"));
     }
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 };
 
 
@@ -102,12 +102,12 @@ class KisBrightnessContrastConfigWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
-    virtual ~KisBrightnessContrastConfigWidget();
+    ~KisBrightnessContrastConfigWidget() override;
 
-    virtual KisPropertiesConfigurationSP configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
     WdgBrightnessContrast * m_page;
-    void setView(KisViewManager *view);
+    void setView(KisViewManager *view) override;
 
 public Q_SLOTS:
     void slotDrawLine(const KoColor &color);

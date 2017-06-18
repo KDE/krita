@@ -32,10 +32,10 @@ class PAINTOP_EXPORT KisFlowOpacityOption: public KisCurveOption
 {
 public:
     KisFlowOpacityOption(KisNodeSP currentNode);
-    virtual ~KisFlowOpacityOption() { }
+    ~KisFlowOpacityOption() override { }
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     void setFlow(qreal flow);
     void setOpacity(qreal opacity);

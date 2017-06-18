@@ -57,7 +57,7 @@ class KisDlgLayerProperties : public KoDialog
 public:
     KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
-    virtual ~KisDlgLayerProperties();
+    ~KisDlgLayerProperties() override;
 
 protected Q_SLOTS:
     void updatePreview();

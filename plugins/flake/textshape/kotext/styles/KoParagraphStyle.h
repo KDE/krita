@@ -183,9 +183,9 @@ public:
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
     KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent = 0);
     /// Destructor
-    ~KoParagraphStyle();
+    ~KoParagraphStyle() override;
 
-    virtual KoCharacterStyle::Type styleType() const;
+    KoCharacterStyle::Type styleType() const override;
 
     /// Creates a KoParagraphStyle that represents the formatting of \a block.
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);

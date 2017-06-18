@@ -36,10 +36,10 @@ class KRITAFLAKE_EXPORT KoPathConnectionPointStrategy : public KoParameterChange
 {
 public:
     KoPathConnectionPointStrategy(KoToolBase *tool, KoConnectionShape *parameterShape, int handleId);
-    virtual ~KoPathConnectionPointStrategy();
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    ~KoPathConnectionPointStrategy() override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
 
 private:
     Q_DECLARE_PRIVATE(KoPathConnectionPointStrategy)

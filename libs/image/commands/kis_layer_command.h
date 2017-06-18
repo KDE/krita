@@ -36,7 +36,7 @@ public:
      * @param layer The layer the command will be working on.
      */
     KisLayerCommand(const KUndo2MagicString& name, KisLayerSP layer);
-    virtual ~KisLayerCommand();
+    ~KisLayerCommand() override;
 
 protected:
     KisLayerSP m_layer;

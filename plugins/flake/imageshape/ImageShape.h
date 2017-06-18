@@ -31,11 +31,11 @@ class ImageShape : public KoTosContainer, public SvgShape
 {
 public:
     ImageShape();
-    ~ImageShape();
+    ~ImageShape() override;
 
-    KoShape *cloneShape() const;
+    KoShape *cloneShape() const override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 
     void setSize(const QSizeF &size) override;
 

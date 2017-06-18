@@ -37,7 +37,7 @@ class KisHairyInkOption : public KisPaintOpOption
 {
 public:
     KisHairyInkOption();
-    ~KisHairyInkOption();
+    ~KisHairyInkOption() override;
 
     int inkAmount() const;
     QList<float> curve() const;
@@ -53,8 +53,8 @@ public:
 
     int m_curveSamples;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP config) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP config);
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP config) override;
 private:
     KisInkOptionsWidget * m_options;
 };

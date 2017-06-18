@@ -25,18 +25,18 @@ class KoTosContainerModel : public KoShapeContainerModel
 {
 public:
     KoTosContainerModel();
-    virtual ~KoTosContainerModel();
+    ~KoTosContainerModel() override;
 
-    virtual void add(KoShape *shape);
-    virtual void remove(KoShape *shape);
-    virtual void setClipped(const KoShape *shape, bool clipping);
-    virtual bool isClipped(const KoShape *shape) const;
-    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
-    virtual bool inheritsTransform(const KoShape *shape) const;
-    virtual bool isChildLocked(const KoShape *child) const;
-    virtual int count() const;
-    virtual QList<KoShape*> shapes() const;
-    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    void add(KoShape *shape) override;
+    void remove(KoShape *shape) override;
+    void setClipped(const KoShape *shape, bool clipping) override;
+    bool isClipped(const KoShape *shape) const override;
+    void setInheritsTransform(const KoShape *shape, bool inherit) override;
+    bool inheritsTransform(const KoShape *shape) const override;
+    bool isChildLocked(const KoShape *child) const override;
+    int count() const override;
+    QList<KoShape*> shapes() const override;
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
 
 private:
     KoShape *m_textShape;

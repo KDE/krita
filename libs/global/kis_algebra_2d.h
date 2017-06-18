@@ -171,6 +171,13 @@ QPointF KRITAGLOBAL_EXPORT transformAsBase(const QPointF &pt, const QPointF &bas
 
 qreal KRITAGLOBAL_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2);
 
+/**
+ * Computes an angle indicating the direction from p1 to p2. If p1 and p2 are too close together to
+ * compute an angle, defaultAngle is returned.
+ */
+qreal KRITAGLOBAL_EXPORT directionBetweenPoints(const QPointF &p1, const QPointF &p2,
+                                                qreal defaultAngle);
+
 namespace Private {
     inline void resetEmptyRectangle(const QPoint &pt, QRect *rc) {
         *rc = QRect(pt, QSize(1, 1));
@@ -252,6 +259,11 @@ inline Point clampPoint(Point pt, const Rect &bounds)
 template <class Size>
 auto maxDimension(Size size) -> decltype(size.width()) {
     return qMax(size.width(), size.height());
+}
+
+template <class Size>
+auto minDimension(Size size) -> decltype(size.width()) {
+    return qMin(size.width(), size.height());
 }
 
 QPainterPath KRITAGLOBAL_EXPORT smallArrow();
@@ -478,6 +490,17 @@ inline QPointF absoluteToRelative(const QPointF &pt, const QRectF &rc) {
  * Compare the matrices with tolerance \p delta
  */
 bool KRITAGLOBAL_EXPORT fuzzyMatrixCompare(const QTransform &t1, const QTransform &t2, qreal delta);
+
+/**
+ * Returns true if the two points are equal within some tolerance, where the tolerance is determined
+ * by Qt's built-in fuzzy comparison functions.
+ */
+bool KRITAGLOBAL_EXPORT fuzzyPointCompare(const QPointF &p1, const QPointF &p2);
+
+/**
+ * Returns true if the two points are equal within the specified tolerance
+ */
+bool KRITAGLOBAL_EXPORT fuzzyPointCompare(const QPointF &p1, const QPointF &p2, qreal delta);
 
 /**
  * Compare two rectangles with tolerance \p tolerance. The tolerance means that the

@@ -106,7 +106,7 @@ public:
                           QWidget *parent = 0);
 
     /// destructor
-    ~KEditToolBar();
+    ~KEditToolBar() override;
 
     /**
      * Sets the default toolbar that will be selected when the dialog is shown.

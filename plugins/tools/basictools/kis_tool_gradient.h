@@ -52,25 +52,25 @@ class KisToolGradient : public KisToolPaint
 
 public:
     KisToolGradient(KoCanvasBase * canvas);
-    virtual ~KisToolGradient();
+    ~KisToolGradient() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 private Q_SLOTS:
 
@@ -119,9 +119,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolGradientFactory() {}
+    ~KisToolGradientFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return  new KisToolGradient(canvas);
     }
 

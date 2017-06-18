@@ -58,11 +58,11 @@ public:
      * @param transfo the color transformation (working in the fallback color space)
      */
     KoFallBackColorTransformation(KoColorConversionTransformation* _csToFallBack, KoColorConversionTransformation* _fallBackToCs, KoColorTransformation* _transfo);
-    virtual ~KoFallBackColorTransformation();
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
-    virtual QList<QString> parameters() const;
-    virtual int parameterId(const QString& name) const;
-    virtual void setParameter(int id, const QVariant& parameter);
+    ~KoFallBackColorTransformation() override;
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override;
+    QList<QString> parameters() const override;
+    int parameterId(const QString& name) const override;
+    void setParameter(int id, const QVariant& parameter) override;
 private:
     struct Private;
     Private* const d;

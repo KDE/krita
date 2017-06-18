@@ -39,23 +39,23 @@ public:
     };
 
     explicit KarbonFilterEffectsTool(KoCanvasBase *canvas);
-    virtual ~KarbonFilterEffectsTool();
+    ~KarbonFilterEffectsTool() override;
 
     /// reimplemented from KoToolBase
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     /// reimplemented from KoToolBase
-    virtual void repaintDecorations();
+    void repaintDecorations() override;
     /// reimplemented from KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
     /// reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
     /// reimplemented from KoToolBase
-    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 private Q_SLOTS:
     void editFilter();
     void clearFilter();

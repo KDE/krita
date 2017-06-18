@@ -35,15 +35,15 @@ public:
     KisTransformArgsKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds, const ToolTransformArgs &initialValue);
 
     ToolTransformArgs &transformArgs(KisKeyframeSP keyframe) const;
-    bool hasScalarValue() const;
+    bool hasScalarValue() const override;
 
 protected:
-    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
-    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
-    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
-    QRect affectedRect(KisKeyframeSP key);
-    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
+    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
+    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
+    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
+    QRect affectedRect(KisKeyframeSP key) override;
+    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
 };
 
 #endif

@@ -34,7 +34,7 @@ class KisDeformOption : public KisPaintOpOption
 {
 public:
     KisDeformOption();
-    ~KisDeformOption();
+    ~KisDeformOption() override;
 
     double deformAmount() const;
     int deformAction() const;
@@ -43,10 +43,10 @@ public:
     bool useCounter() const;
     bool useOldData() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private:
     KisDeformOptionsWidget * m_options;

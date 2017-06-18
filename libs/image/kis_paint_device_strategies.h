@@ -212,7 +212,7 @@ public:
         return m_wrapRect;
     }
 
-    void move(const QPoint& pt) {
+    void move(const QPoint& pt) override {
         QPoint offset (pt.x() - m_device->x(), pt.y() - m_device->y());
 
         QRect exactBoundsBeforeMove = m_device->exactBounds();
@@ -256,33 +256,33 @@ public:
         }
     }
 
-    QRect extent() const {
+    QRect extent() const override {
         return KisPaintDeviceStrategy::extent() & m_wrapRect;
     }
 
-    QRegion region() const {
+    QRegion region() const override {
         return KisPaintDeviceStrategy::region() & m_wrapRect;
     }
 
-    void crop(const QRect &rect) {
+    void crop(const QRect &rect) override {
         KisPaintDeviceStrategy::crop(rect & m_wrapRect);
     }
 
-    void clear(const QRect &rect) {
+    void clear(const QRect &rect) override {
         KisWrappedRect splitRect(rect, m_wrapRect);
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::clear(rc);
         }
     }
 
-    void fill(const QRect &rect, const quint8 *fillPixel) {
+    void fill(const QRect &rect, const quint8 *fillPixel) override {
         KisWrappedRect splitRect(rect, m_wrapRect);
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fill(rc, fillPixel);
         }
     }
 
-    virtual KisHLineIteratorSP createHLineIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) {
+    KisHLineIteratorSP createHLineIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) override {
         KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineIteratorNG(dataManager, x, y, w, offsetX, offsetY);
@@ -290,7 +290,7 @@ public:
         return new KisWrappedHLineIterator(dataManager, splitRect, offsetX, offsetY, true, m_d->cacheInvalidator());
     }
 
-    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) const {
+    KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) const override {
         KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineConstIteratorNG(dataManager, x, y, w, offsetX, offsetY);
@@ -298,7 +298,7 @@ public:
         return new KisWrappedHLineIterator(dataManager, splitRect, offsetX, offsetY, false, m_d->cacheInvalidator());
     }
 
-    virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h) {
+    KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h) override {
         m_d->cache()->invalidate();
 
         KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect);
@@ -308,7 +308,7 @@ public:
         return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), true, m_d->cacheInvalidator());
     }
 
-    virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const {
+    KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const override {
         KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect);
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createVLineConstIteratorNG(x, y, h);
@@ -316,41 +316,41 @@ public:
         return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
-    virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
+    KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) override {
         m_d->cache()->invalidate();
         return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true, m_d->cacheInvalidator(), m_wrapRect);
     }
 
-    virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const {
+    KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const override {
         return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_d->cacheInvalidator(), m_wrapRect);
     }
 
-    void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) {
+    void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) override {
         KisWrappedRect splitRect(rect, m_wrapRect);
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltImpl(srcDataManager, rc);
         }
     }
 
-    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) override {
         KisWrappedRect splitRect(rect, m_wrapRect);
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltOldData(src, rc);
         }
     }
 
-    virtual void fastBitBltRoughImpl(KisDataManagerSP srcDataManager, const QRect &rect)
+    void fastBitBltRoughImpl(KisDataManagerSP srcDataManager, const QRect &rect) override
     {
         // no rough version in wrapped mode
         fastBitBltImpl(srcDataManager, rect);
     }
 
-    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect) override {
         // no rough version in wrapped mode
         fastBitBltOldData(src, rect);
     }
 
-    void readBytes(quint8 *data, const QRect &rect) const {
+    void readBytes(quint8 *data, const QRect &rect) const override {
         KisWrappedRect splitRect(rect, m_wrapRect);
 
         if (!splitRect.isSplit()) {
@@ -400,7 +400,7 @@ public:
         }
     }
 
-    void writeBytes(const quint8 *data, const QRect &rect) {
+    void writeBytes(const quint8 *data, const QRect &rect) override {
         KisWrappedRect splitRect(rect, m_wrapRect);
 
         if (!splitRect.isSplit()) {

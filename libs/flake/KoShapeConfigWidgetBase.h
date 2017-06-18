@@ -50,7 +50,7 @@ public:
      * Default constructor
      */
     KoShapeConfigWidgetBase();
-    virtual ~KoShapeConfigWidgetBase();
+    ~KoShapeConfigWidgetBase() override;
 
     /**
      * Open the argument shape by interpreting the data and setting that data on this

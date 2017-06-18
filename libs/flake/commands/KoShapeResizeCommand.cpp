@@ -68,7 +68,7 @@ KoShapeResizeCommand::~KoShapeResizeCommand()
 void KoShapeResizeCommand::redoImpl()
 {
     Q_FOREACH (KoShape *shape, m_d->shapes) {
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
 
         KoFlake::resizeShape(shape,
                              m_d->scaleX, m_d->scaleY,
@@ -77,7 +77,7 @@ void KoShapeResizeCommand::redoImpl()
                              m_d->usePostScaling,
                              m_d->postScalingCoveringTransform);
 
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 
@@ -86,10 +86,10 @@ void KoShapeResizeCommand::undoImpl()
     for (int i = 0; i < m_d->shapes.size(); i++) {
         KoShape *shape = m_d->shapes[i];
 
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setSize(m_d->oldSizes[i]);
         shape->setTransformation(m_d->oldTransforms[i]);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 

@@ -28,12 +28,22 @@ class KisRoundMarkerOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSet
 {
 public:
     KisRoundMarkerOpSettings();
-    ~KisRoundMarkerOpSettings();
+    ~KisRoundMarkerOpSettings() override;
 
     bool paintIncremental() override;
 
     qreal paintOpSize() const override;
     void setPaintOpSize(qreal value) override;
+
+    bool isAirbrushing() const override
+    {
+        return false;
+    }
+
+    qreal airbrushInterval() const override
+    {
+        return 1000.0;
+    }
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 

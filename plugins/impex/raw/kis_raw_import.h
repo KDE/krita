@@ -38,10 +38,10 @@ class KisRawImport : public KisImportExportFilter
 
 public:
     KisRawImport(QObject *parent, const QVariantList &);
-    virtual ~KisRawImport();
+    ~KisRawImport() override;
 
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 
 
 private Q_SLOTS:

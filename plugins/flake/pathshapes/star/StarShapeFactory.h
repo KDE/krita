@@ -30,11 +30,11 @@ class StarShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     StarShapeFactory();
-    ~StarShapeFactory() {}
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
-    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
+    ~StarShapeFactory() override {}
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif // KOSTARHAPEFACTORY_H

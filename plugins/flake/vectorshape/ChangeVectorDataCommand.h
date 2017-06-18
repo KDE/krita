@@ -30,12 +30,12 @@ class ChangeVectorDataCommand : public KUndo2Command
 public:
     ChangeVectorDataCommand(VectorShape *shape, const QByteArray &newImageData, VectorShape::VectorType newVectorType,
                             KUndo2Command *parent = 0);
-    virtual ~ChangeVectorDataCommand();
+    ~ChangeVectorDataCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     VectorShape *m_shape;

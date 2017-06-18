@@ -171,7 +171,7 @@ class KRITACOMMAND_EXPORT KUndo2QStack : public QObject
 
 public:
     explicit KUndo2QStack(QObject *parent = 0);
-    virtual ~KUndo2QStack();
+    ~KUndo2QStack() override;
     void clear();
 
     void push(KUndo2Command *cmd);

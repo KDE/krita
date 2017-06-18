@@ -45,7 +45,7 @@ public:
     explicit KoShapeOdfSaveHelper(const QList<KoShape *> &shapes);
 
     /// reimplemented
-    virtual bool writeBody();
+    bool writeBody() override;
 
 private:
     Q_DECLARE_PRIVATE(KoShapeOdfSaveHelper)

@@ -31,7 +31,7 @@ class KRITAIMAGE_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaD
 {
 public:
     FilterRegistry();
-    virtual ~FilterRegistry();
+    ~FilterRegistry() override;
     static FilterRegistry* instance();
 private:
     FilterRegistry(const FilterRegistry&);

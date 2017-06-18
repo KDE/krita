@@ -45,7 +45,7 @@ class KRITAWIDGETS_EXPORT KisFileNameRequester : public QWidget
 
 public:
     explicit KisFileNameRequester(QWidget *parent = 0);
-    ~KisFileNameRequester();
+    ~KisFileNameRequester() override;
 
     void setStartDir(const QString &path);
 

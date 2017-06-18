@@ -31,7 +31,7 @@ class ColorSelectorNgPlugin : public QObject
     Q_OBJECT
 public:
     ColorSelectorNgPlugin(QObject *parent, const QVariantList &);
-    virtual ~ColorSelectorNgPlugin();
+    ~ColorSelectorNgPlugin() override;
 };
 
 #endif

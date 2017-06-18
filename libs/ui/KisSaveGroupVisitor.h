@@ -60,33 +60,33 @@ public:
                         const QString &extension,
                         const QString &mimeFilter);
 
-    virtual ~KisSaveGroupVisitor();
+    ~KisSaveGroupVisitor() override;
 
 public:
 
-    bool visit(KisNode* );
+    bool visit(KisNode* ) override;
 
-    bool visit(KisPaintLayer *);
+    bool visit(KisPaintLayer *) override;
 
-    bool visit(KisAdjustmentLayer *);
+    bool visit(KisAdjustmentLayer *) override;
 
-    bool visit(KisExternalLayer *);
+    bool visit(KisExternalLayer *) override;
 
-    bool visit(KisCloneLayer *);
+    bool visit(KisCloneLayer *) override;
 
-    bool visit(KisFilterMask *);
+    bool visit(KisFilterMask *) override;
 
-    bool visit(KisTransformMask *);
+    bool visit(KisTransformMask *) override;
 
-    bool visit(KisTransparencyMask *);
+    bool visit(KisTransparencyMask *) override;
 
-    bool visit(KisGeneratorLayer * );
+    bool visit(KisGeneratorLayer * ) override;
 
-    bool visit(KisSelectionMask* );
+    bool visit(KisSelectionMask* ) override;
 
-    bool visit(KisColorizeMask* );
+    bool visit(KisColorizeMask* ) override;
 
-    bool visit(KisGroupLayer *layer);
+    bool visit(KisGroupLayer *layer) override;
 
 private:
 

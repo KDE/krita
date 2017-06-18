@@ -37,9 +37,9 @@ public:
 
     KisFilterOpSettingsWidget(QWidget* parent = 0);
 
-    virtual ~KisFilterOpSettingsWidget();
+    ~KisFilterOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 public:
     KisFilterOption* m_filterOption;

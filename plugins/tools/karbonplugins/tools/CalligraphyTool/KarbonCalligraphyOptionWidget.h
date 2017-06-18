@@ -37,7 +37,7 @@ class KarbonCalligraphyOptionWidget : public QWidget
     Q_OBJECT
 public:
     explicit KarbonCalligraphyOptionWidget();
-    ~KarbonCalligraphyOptionWidget();
+    ~KarbonCalligraphyOptionWidget() override;
 
     // emits all signals with the appropriate values
     // called once the signals are connected inside KarbonCalligraphyTool

@@ -47,7 +47,7 @@ public:
      * @param parent the parent qobject that is passed for memory management purposes.
      */
     explicit KisPrintJob(KisImageWSP image);
-    virtual ~KisPrintJob();
+    ~KisPrintJob() override;
 
     /// A policy to allow the printjob to delete itself after its done printing.
     enum RemovePolicy {

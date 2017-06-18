@@ -33,7 +33,7 @@ class KoVectorPatternBackground : public KoShapeBackground
 {
 public:
     KoVectorPatternBackground();
-    ~KoVectorPatternBackground();
+    ~KoVectorPatternBackground() override;
 
     bool compareTo(const KoShapeBackground *other) const override;
 

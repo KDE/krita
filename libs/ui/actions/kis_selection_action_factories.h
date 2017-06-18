@@ -28,7 +28,7 @@ class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
 {
 public:
     KisNoParameterActionFactory(const QString &id) : KisOperation(id) {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
         Q_UNUSED(config);
         run(view);
     }
@@ -37,23 +37,23 @@ public:
 
 struct KRITAUI_EXPORT KisSelectAllActionFactory : public KisNoParameterActionFactory {
     KisSelectAllActionFactory() : KisNoParameterActionFactory("select-all-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisDeselectActionFactory : public KisNoParameterActionFactory {
     KisDeselectActionFactory() : KisNoParameterActionFactory("deselect-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisReselectActionFactory : public KisNoParameterActionFactory {
     KisReselectActionFactory() : KisNoParameterActionFactory("reselect-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisFillActionFactory : public KisOperation
 {
     KisFillActionFactory() : KisOperation("fill-ui-action") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
         run(config.getString("fill-source", "fg"), view);
     }
     /**
@@ -67,17 +67,17 @@ struct KRITAUI_EXPORT KisFillActionFactory : public KisOperation
 
 struct KRITAUI_EXPORT KisClearActionFactory : public KisNoParameterActionFactory {
     KisClearActionFactory() : KisNoParameterActionFactory("clear-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisImageResizeToSelectionActionFactory : public KisNoParameterActionFactory {
     KisImageResizeToSelectionActionFactory() : KisNoParameterActionFactory("resize-to-selection-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisCutCopyActionFactory : public KisOperation {
     KisCutCopyActionFactory() : KisOperation("cut-copy-ui-action") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
         run(config.getBool("will-cut", false), config.getBool("use-sharp-clip", false), view);
     }
 
@@ -86,32 +86,32 @@ struct KRITAUI_EXPORT KisCutCopyActionFactory : public KisOperation {
 
 struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFactory {
     KisCopyMergedActionFactory() : KisNoParameterActionFactory("copy-merged-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {
     KisPasteNewActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KisInvertSelectionOperation : public KisFilterSelectionOperation {
     KisInvertSelectionOperation() : KisFilterSelectionOperation("invertselection") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 struct KRITAUI_EXPORT KisSelectionToVectorActionFactory : public KisNoParameterActionFactory {
     KisSelectionToVectorActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoParameterActionFactory {
     KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisSelectionToShapeActionFactory : public KisNoParameterActionFactory {
     KisSelectionToShapeActionFactory() : KisNoParameterActionFactory("selection-to-shape-action") {}
-    void run(KisViewManager *view);
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisStrokeSelectionActionFactory : public  KisOperation  {

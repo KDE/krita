@@ -29,20 +29,20 @@ class KoMixColorsOpImpl : public KoMixColorsOp
 public:
     KoMixColorsOpImpl() {
     }
-    virtual ~KoMixColorsOpImpl() { }
-    virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
+    ~KoMixColorsOpImpl() override { }
+    void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
         mixColorsImpl(ArrayOfPointers(colors), WeightsWrapper(weights), nColors, dst);
     }
 
-    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
+    void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
         mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), WeightsWrapper(weights), nColors, dst);
     }
 
-    virtual void mixColors(const quint8 * const* colors, quint32 nColors, quint8 *dst) const override {
+    void mixColors(const quint8 * const* colors, quint32 nColors, quint8 *dst) const override {
         mixColorsImpl(ArrayOfPointers(colors), NoWeightsSurrogate(nColors), nColors, dst);
     }
 
-    virtual void mixColors(const quint8 *colors, quint32 nColors, quint8 *dst) const override {
+    void mixColors(const quint8 *colors, quint32 nColors, quint8 *dst) const override {
         mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), NoWeightsSurrogate(nColors), nColors, dst);
     }
 

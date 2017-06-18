@@ -39,25 +39,18 @@ class KarbonCalligraphyTool : public KisToolShape
     Q_OBJECT
 public:
     explicit KarbonCalligraphyTool(KoCanvasBase *canvas);
-    ~KarbonCalligraphyTool();
+    ~KarbonCalligraphyTool() override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    /**
-     * @brief configuration holds the interpretation of the paintinfo,
-     * this is similar to a vector version of a paintop.
-     * @return the configuration that is currently held by the object.
-     */
-    KisPropertiesConfigurationSP configuration();
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
-    QList<QPointer<QWidget> > createOptionWidgets();
-
-    virtual void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
-    void deactivate();
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
 Q_SIGNALS:
     void pathSelectedChanged(bool selection);

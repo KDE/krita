@@ -38,7 +38,7 @@ class KisRemoteFileFetcher : public QObject
     Q_OBJECT
 public:
     explicit KisRemoteFileFetcher(QObject *parent = 0);
-    virtual ~KisRemoteFileFetcher();
+    ~KisRemoteFileFetcher() override;
     bool fetchFile(const QUrl &remote, QIODevice *io);
 
 private Q_SLOTS:

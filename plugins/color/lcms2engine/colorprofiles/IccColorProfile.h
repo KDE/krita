@@ -81,40 +81,40 @@ public:
     explicit IccColorProfile(const QString &fileName = QString());
     explicit IccColorProfile(const QByteArray &rawData);
     IccColorProfile(const IccColorProfile &rhs);
-    virtual ~IccColorProfile();
+    ~IccColorProfile() override;
 
-    virtual KoColorProfile *clone() const;
+    KoColorProfile *clone() const override;
 
-    virtual bool load();
+    bool load() override;
     virtual bool save();
 
     /**
     * @return an array with the raw data of the profile
     */
-    QByteArray rawData() const;
-    virtual bool valid() const;
-    virtual float version() const;
-    virtual bool isSuitableForOutput() const;
-    virtual bool isSuitableForPrinting() const;
-    virtual bool isSuitableForDisplay() const;
-    virtual bool supportsPerceptual() const;
-    virtual bool supportsSaturation() const;
-    virtual bool supportsAbsolute() const;
-    virtual bool supportsRelative() const;
-    virtual bool hasColorants() const;
-    virtual bool hasTRC() const;
-    virtual QVector <qreal> getColorantsXYZ() const;
-    virtual QVector <qreal> getColorantsxyY() const;
-    virtual QVector <qreal> getWhitePointXYZ() const;
-    virtual QVector <qreal> getWhitePointxyY() const;
-    virtual QVector <qreal> getEstimatedTRC() const;
-    virtual void linearizeFloatValue(QVector <qreal> & Value) const;
-    virtual void delinearizeFloatValue(QVector <qreal> & Value) const;
-    virtual void linearizeFloatValueFast(QVector <qreal> & Value) const;
-    virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const;
-    virtual QByteArray uniqueId() const;
-    virtual bool operator==(const KoColorProfile &) const;
-    virtual QString type() const
+    QByteArray rawData() const override;
+    bool valid() const override;
+    float version() const override;
+    bool isSuitableForOutput() const override;
+    bool isSuitableForPrinting() const override;
+    bool isSuitableForDisplay() const override;
+    bool supportsPerceptual() const override;
+    bool supportsSaturation() const override;
+    bool supportsAbsolute() const override;
+    bool supportsRelative() const override;
+    bool hasColorants() const override;
+    bool hasTRC() const override;
+    QVector <qreal> getColorantsXYZ() const override;
+    QVector <qreal> getColorantsxyY() const override;
+    QVector <qreal> getWhitePointXYZ() const override;
+    QVector <qreal> getWhitePointxyY() const override;
+    QVector <qreal> getEstimatedTRC() const override;
+    void linearizeFloatValue(QVector <qreal> & Value) const override;
+    void delinearizeFloatValue(QVector <qreal> & Value) const override;
+    void linearizeFloatValueFast(QVector <qreal> & Value) const override;
+    void delinearizeFloatValueFast(QVector <qreal> & Value) const override;
+    QByteArray uniqueId() const override;
+    bool operator==(const KoColorProfile &) const override;
+    QString type() const override
     {
         return "icc";
     }

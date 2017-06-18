@@ -31,10 +31,10 @@ class KRITAUI_EXPORT KisColorLabelSelectorWidget : public QWidget
 
 public:
     KisColorLabelSelectorWidget(QWidget *parent);
-    ~KisColorLabelSelectorWidget();
+    ~KisColorLabelSelectorWidget() override;
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
 
     int currentIndex() const;
 
@@ -46,13 +46,13 @@ Q_SIGNALS:
 
 protected:
 
-    void resizeEvent(QResizeEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void leaveEvent(QEvent *e);
+    void resizeEvent(QResizeEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void leaveEvent(QEvent *e) override;
 
 private:
     struct Private;

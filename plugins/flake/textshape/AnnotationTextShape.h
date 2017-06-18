@@ -42,13 +42,13 @@ public:
     // For now we should give these parameters for TextShape.
     AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
                         KoTextRangeManager *textRangeManager);
-    virtual ~AnnotationTextShape();
+    ~AnnotationTextShape() override;
 
     void setAnnotaionTextData(KoTextShapeData *textShape);
 
     // reimplemented
     void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                        KoShapePaintingContext &paintcontext);
+                        KoShapePaintingContext &paintcontext) override;
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -61,14 +61,14 @@ public:
      * @param context the KoShapeLoadingContext used for loading.
      * @return false if loading failed.
      */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * From KoShape reimplemented method to store the TextShape data as ODF.
      *
      * @param context the KoShapeSavingContext used for saving.
      */
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     void setCreator(const QString &creator);
     QString creator() const;

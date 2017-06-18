@@ -44,7 +44,7 @@ public:
                    qreal tangentialPressure, qreal rotation, int z,
                    Qt::KeyboardModifiers keyState, qint64 uniqueID,
                    Qt::MouseButton button, Qt::MouseButtons buttons);
-    ~KisTabletEvent();
+    ~KisTabletEvent() override;
 
     inline const QPoint &pos() const { return mPos; }
     inline const QPoint &globalPos() const { return mGPos; }

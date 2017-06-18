@@ -36,7 +36,7 @@ struct KisTransformArgsKeyframe : public KisKeyframe
 
     ToolTransformArgs args;
 
-    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const override
     {
         KisTransformArgsKeyframeChannel *argsChannel = dynamic_cast<KisTransformArgsKeyframeChannel*>(channel);
         Q_ASSERT(argsChannel);

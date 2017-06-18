@@ -33,7 +33,7 @@ public:
                      const QRect& size,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
 
     static inline KoID id() {
         return KoID("maximize", i18n("Maximize Channel"));
@@ -51,7 +51,7 @@ public:
                      const QRect& rect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
     static inline KoID id() {
         return KoID("minimize", i18n("Minimize Channel"));
     }

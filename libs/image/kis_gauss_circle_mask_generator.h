@@ -34,12 +34,12 @@ public:
 
     KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     KisGaussCircleMaskGenerator(const KisGaussCircleMaskGenerator &rhs);
-    virtual ~KisGaussCircleMaskGenerator();
-    KisMaskGenerator* clone() const;
+    ~KisGaussCircleMaskGenerator() override;
+    KisMaskGenerator* clone() const override;
 
-    virtual quint8 valueAt(qreal x, qreal y) const;
+    quint8 valueAt(qreal x, qreal y) const override;
 
-    void setScale(qreal scaleX, qreal scaleY);
+    void setScale(qreal scaleX, qreal scaleY) override;
 
 private:
 

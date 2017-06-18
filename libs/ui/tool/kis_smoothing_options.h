@@ -39,7 +39,7 @@ public:
 public:
 
     KisSmoothingOptions(bool useSavedSmoothing = true);
-    ~KisSmoothingOptions();
+    ~KisSmoothingOptions() override;
 
     SmoothingType smoothingType() const;
     void setSmoothingType(SmoothingType value);

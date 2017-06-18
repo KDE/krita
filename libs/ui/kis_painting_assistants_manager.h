@@ -36,7 +36,7 @@ class KisPaintingAssistantsManager : public QObject
 
 public:
     KisPaintingAssistantsManager(KisViewManager* view);
-    virtual ~KisPaintingAssistantsManager();
+    ~KisPaintingAssistantsManager() override;
 
     void setup(KisActionManager* actionManager);
 

@@ -38,12 +38,12 @@ public:
     };
 
     SpiralShape();
-    ~SpiralShape();
+    ~SpiralShape() override;
 
     KoShape* cloneShape() const override;
 
-    void setSize(const QSizeF &newSize);
-    virtual QPointF normalize();
+    void setSize(const QSizeF &newSize) override;
+    QPointF normalize() override;
 
     /**
      * Sets the type of the spiral.
@@ -67,18 +67,18 @@ public:
     void setClockWise(bool clockwise);
 
     /// reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
 protected:
     SpiralShape(const SpiralShape &rhs);
 
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    void updatePath(const QSizeF &size);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
+    void updatePath(const QSizeF &size) override;
     void createPath(const QSizeF &size);
 
 private:

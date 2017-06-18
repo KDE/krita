@@ -732,11 +732,6 @@ KisGuidesManager * KisViewManager::guidesManager() const
     return &d->guidesManager;
 }
 
-KisPaintingAssistantsManager* KisViewManager::paintingAssistantsManager() const
-{
-    return &d->paintingAssistantsManager;
-}
-
 KisDocument *KisViewManager::document() const
 {
     if (d->currentImageView && d->currentImageView->document()) {

@@ -28,10 +28,10 @@ class KisSnapLineStrategy : public KoSnapStrategy
 {
 public:
     KisSnapLineStrategy(KoSnapGuide::Strategy type = KoSnapGuide::CustomSnapping);
-    ~KisSnapLineStrategy();
+    ~KisSnapLineStrategy() override;
 
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
-    QPainterPath decoration(const KoViewConverter &converter) const;
+    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    QPainterPath decoration(const KoViewConverter &converter) const override;
 
     void addLine(Qt::Orientation orientation, qreal pos);
 

@@ -43,16 +43,16 @@ public:
     /**
      * Destructor
      */
-    virtual ~KoColorPopupButton();
+    ~KoColorPopupButton() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void iconSizeChanged();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *); ///< reimplemented from QToolButton
+    void resizeEvent(QResizeEvent *) override; ///< reimplemented from QToolButton
 };
 
 #endif

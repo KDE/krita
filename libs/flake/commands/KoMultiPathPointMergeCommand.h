@@ -38,10 +38,10 @@ public:
                                  KoShapeBasedDocumentBase *controller,
                                  KoSelection *selection,
                                  KUndo2Command *parent = 0);
-    ~KoMultiPathPointMergeCommand();
+    ~KoMultiPathPointMergeCommand() override;
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
     KoPathShape *testingCombinedPath() const;
 

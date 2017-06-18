@@ -43,7 +43,7 @@ class KRITAUI_EXPORT KisProgressWidget : public QWidget, public KisProgressInter
 
 public:
     KisProgressWidget(QWidget* parent = 0);
-    virtual ~KisProgressWidget();
+    ~KisProgressWidget() override;
 
 public:
     KoProgressProxy* progressProxy();
@@ -56,8 +56,8 @@ public:
      * Note: it is _your_ duty to call deleteLater on the
      * koprogressupdater when you are done!
      */
-    void detachUpdater(KoProgressUpdater* updater);
-    void attachUpdater(KoProgressUpdater* updater);
+    void detachUpdater(KoProgressUpdater* updater) override;
+    void attachUpdater(KoProgressUpdater* updater) override;
 
 public Q_SLOTS:
 

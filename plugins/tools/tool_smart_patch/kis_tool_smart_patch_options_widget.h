@@ -34,7 +34,7 @@ class KisToolSmartPatchOptionsWidget : public QWidget
     Q_OBJECT
 public:
     KisToolSmartPatchOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisToolSmartPatchOptionsWidget();
+    ~KisToolSmartPatchOptionsWidget() override;
 
     int getPatchRadius(void);
     int getAccuracy(void);

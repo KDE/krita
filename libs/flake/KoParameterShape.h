@@ -48,7 +48,7 @@ class KRITAFLAKE_EXPORT KoParameterShape : public KoPathShape
 {
 public:
     KoParameterShape();
-    virtual ~KoParameterShape();
+    ~KoParameterShape() override;
 
     /**
      * @brief Move handle to point
@@ -97,7 +97,7 @@ public:
     void paintHandle(KisHandlePainterHelper &handlesHelper, int handleId);
 
     /// reimplemented from KoShape
-    virtual void setSize(const QSizeF &size);
+    void setSize(const QSizeF &size) override;
 
     /**
      * @brief Check if object is a parametric shape
@@ -119,7 +119,7 @@ public:
      */
     void setParametricShape(bool parametric);
 
-    virtual QPointF normalize();
+    QPointF normalize() override;
 
     /// return the number of handles set on the shape
     int handleCount() const;

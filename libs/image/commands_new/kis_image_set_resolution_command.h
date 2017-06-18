@@ -29,8 +29,8 @@ class KRITAIMAGE_EXPORT KisImageSetResolutionCommand : public KUndo2Command
 {
 public:
     KisImageSetResolutionCommand(KisImageWSP image, qreal newXRes, qreal newYRes, KUndo2Command *parent = 0);
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     KisImageWSP m_image;
@@ -56,8 +56,8 @@ class KRITAIMAGE_EXPORT KisResetShapesCommand : public KUndo2Command
 public:
     KisResetShapesCommand(KisNodeSP rootNode);
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     void resetNode(KisNodeSP node);

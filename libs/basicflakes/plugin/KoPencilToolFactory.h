@@ -26,9 +26,9 @@ class KoPencilToolFactory : public KoToolFactoryBase
 {
 public:
     KoPencilToolFactory();
-    ~KoPencilToolFactory();
+    ~KoPencilToolFactory() override;
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // _KOPENCILTOOLFACTORY_H_

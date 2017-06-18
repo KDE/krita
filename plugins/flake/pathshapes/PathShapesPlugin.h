@@ -29,7 +29,7 @@ class PathShapesPlugin : public QObject
 
 public:
     PathShapesPlugin(QObject *parent, const QVariantList &);
-    ~PathShapesPlugin() {}
+    ~PathShapesPlugin() override {}
 
 };
 

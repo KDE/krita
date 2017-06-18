@@ -34,7 +34,7 @@ class SimpleSpellCheckingWidget : public QWidget
 
 public:
     explicit SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *parent = 0);
-    ~SimpleSpellCheckingWidget();
+    ~SimpleSpellCheckingWidget() override;
 
 private:
     Ui::SimpleSpellCheckingWidget *ui;

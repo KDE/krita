@@ -547,7 +547,7 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
     return shapes;
 }
 
-void KoShapeManager::update(QRectF &rect, const KoShape *shape, bool selectionHandles)
+void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selectionHandles)
 {
     d->canvas->updateCanvas(rect);
     if (selectionHandles && d->selection->isSelected(shape)) {

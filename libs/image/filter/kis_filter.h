@@ -56,7 +56,7 @@ public:
      * Construct a Krita filter
      */
     KisFilter(const KoID& id, const KoID & category, const QString & entry);
-    virtual ~KisFilter();
+    ~KisFilter() override;
 
 public:
 

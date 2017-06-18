@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KisStabilizerDelayedPaintHelper : public QObject
 
 public:
     KisStabilizerDelayedPaintHelper();
-    virtual ~KisStabilizerDelayedPaintHelper() override {}
+    ~KisStabilizerDelayedPaintHelper() override {}
 
     bool running() const {
         return m_paintTimer.isActive();

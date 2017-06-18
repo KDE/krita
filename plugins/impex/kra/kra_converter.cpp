@@ -65,11 +65,7 @@ KisImageBuilder_Result KraConverter::buildImage(QIODevice *io)
     bool success;
     {
         if (m_store->hasFile("root") || m_store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
-#ifdef KOXML_USE_QDOM
             KoXmlDocument doc;
-#else
-            KoXmlDocument doc = KoXmlDocument(true);
-#endif
 
             bool ok = oldLoadAndParse(m_store, "root", doc);
             if (ok)
@@ -85,11 +81,7 @@ KisImageBuilder_Result KraConverter::buildImage(QIODevice *io)
         }
 
         if (m_store->hasFile("documentinfo.xml")) {
-#ifdef KOXML_USE_QDOM
             KoXmlDocument doc;
-#else
-            KoXmlDocument doc = KoXmlDocument(true);
-#endif
             if (oldLoadAndParse(m_store, "documentinfo.xml", doc)) {
                 m_doc->documentInfo()->load(doc);
             }

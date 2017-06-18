@@ -35,7 +35,7 @@ class KisDlgConfigureBrushHud : public QDialog
 
 public:
     explicit KisDlgConfigureBrushHud(KisPaintOpPresetSP preset, QWidget *parent = 0);
-    ~KisDlgConfigureBrushHud();
+    ~KisDlgConfigureBrushHud() override;
 
 private Q_SLOTS:
     void slotConfigAccepted();

@@ -47,7 +47,7 @@ class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
 public:
     KisBrushSelectionWidget(QWidget * parent = 0);
 
-    ~KisBrushSelectionWidget();
+    ~KisBrushSelectionWidget() override;
 
     KisBrushSP brush() const;
 

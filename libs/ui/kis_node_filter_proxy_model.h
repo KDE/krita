@@ -34,11 +34,13 @@ class KRITAUI_EXPORT KisNodeFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 public:
     KisNodeFilterProxyModel(QObject *parent);
-    ~KisNodeFilterProxyModel();
+    ~KisNodeFilterProxyModel() override;
 
     void setNodeModel(KisNodeModel *model);
 
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     void setAcceptedLabels(const QList<int> &value);
 
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;

@@ -64,7 +64,7 @@ class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGeneric
 {
 public:
     KisPreferenceSetRegistry();
-    virtual ~KisPreferenceSetRegistry();
+    ~KisPreferenceSetRegistry() override;
     static KisPreferenceSetRegistry * instance();
 
 private:

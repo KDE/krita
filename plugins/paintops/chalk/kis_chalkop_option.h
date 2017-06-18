@@ -31,7 +31,7 @@ class KisChalkOpOption : public KisPaintOpOption
 {
 public:
     KisChalkOpOption();
-    ~KisChalkOpOption();
+    ~KisChalkOpOption() override;
 
     void setRadius(int radius) const;
     int radius() const;
@@ -40,8 +40,8 @@ public:
     bool saturation() const;
     bool opacity() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 
 private:
@@ -58,14 +58,14 @@ public:
     bool useOpacity;
     bool useSaturation;
 
-    void readOptionSettingImpl(const KisPropertiesConfiguration *settings) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *settings) override {
         radius = settings->getInt(CHALK_RADIUS);
         inkDepletion = settings->getBool(CHALK_INK_DEPLETION);
         useOpacity = settings->getBool(CHALK_USE_OPACITY);
         useSaturation = settings->getBool(CHALK_USE_SATURATION);
     }
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration* settings) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration* settings) const override {
         settings->setProperty(CHALK_RADIUS, radius);
         settings->setProperty(CHALK_INK_DEPLETION, inkDepletion);
         settings->setProperty(CHALK_USE_OPACITY, useOpacity);

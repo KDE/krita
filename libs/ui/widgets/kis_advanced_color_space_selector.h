@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisAdvancedColorSpaceSelector : public QDialog
     Q_OBJECT
 public:
     KisAdvancedColorSpaceSelector(QWidget* parent, const QString &caption);
-    ~KisAdvancedColorSpaceSelector();
+    ~KisAdvancedColorSpaceSelector() override;
     const KoColorSpace* currentColorSpace();
     void setCurrentColorModel(const KoID& id);
     void setCurrentColorDepth(const KoID& id);

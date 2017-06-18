@@ -54,7 +54,7 @@ public:
      * @param parent the parent widget
      */
     explicit KoUnitDoubleSpinBox( QWidget *parent = 0);
-    ~KoUnitDoubleSpinBox();
+    ~KoUnitDoubleSpinBox() override;
 
     /**
      * Set the new value in points which will then be converted to the current unit for display
@@ -86,20 +86,20 @@ public:
     void setMinMaxStep( double min, double max, double step );
 
     /// reimplemented from superclass, will forward to KoUnitDoubleValidator
-    virtual QValidator::State validate(QString &input, int &pos) const;
+    QValidator::State validate(QString &input, int &pos) const override;
 
     /**
      * Transform the double in a nice text, using locale symbols
      * @param value the number as double
      * @return the resulting string
      */
-    virtual QString textFromValue( double value ) const;
+    QString textFromValue( double value ) const override;
     /**
      * Transfrom a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @return the value as double
      */
-    virtual double valueFromText( const QString& str ) const;
+    double valueFromText( const QString& str ) const override;
 
 
 Q_SIGNALS:

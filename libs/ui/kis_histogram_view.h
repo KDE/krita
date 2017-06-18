@@ -61,7 +61,7 @@ public:
 
     KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
-    virtual ~KisHistogramView();
+    ~KisHistogramView() override;
 
     void setPaintDevice(KisPaintDeviceSP dev, KoHistogramProducer *producer, const QRect &bounds);
 
@@ -73,7 +73,7 @@ public:
     void setColor(bool set);
     void setProducer(KoHistogramProducer* producer);
     void setChannels(QList<KoChannelInfo*> & channels);
-    virtual void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent* event) override;
     virtual void updateHistogramCalculation();
     void setSmoothHistogram(bool smoothHistogram);
 
@@ -86,7 +86,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent * e);
+    void mousePressEvent(QMouseEvent * e) override;
 
 private:
 

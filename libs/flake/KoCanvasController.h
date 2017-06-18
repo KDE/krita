@@ -443,34 +443,34 @@ public:
         : KoCanvasController(actionCollection)
     {}
 
-    virtual ~KoDummyCanvasController()
+    ~KoDummyCanvasController() override
     {}
 
 
-    virtual void scrollContentsBy(int /*dx*/, int /*dy*/) {}
-    virtual QSize viewportSize() const { return QSize(); }
-    virtual void setDrawShadow(bool /*drawShadow*/) {}
-    virtual void setCanvas(KoCanvasBase *canvas) {Q_UNUSED(canvas)}
-    virtual KoCanvasBase *canvas() const {return 0;}
-    virtual int visibleHeight() const {return 0;}
-    virtual int visibleWidth() const {return 0;}
-    virtual int canvasOffsetX() const {return 0;}
-    virtual int canvasOffsetY() const {return 0;}
-    virtual void ensureVisible(const QRectF &/*rect*/, bool /*smooth */ = false) {}
-    virtual void ensureVisible(KoShape *shape) {Q_UNUSED(shape)}
-    virtual void zoomIn(const QPoint &/*center*/) {}
-    virtual void zoomOut(const QPoint &/*center*/) {}
-    virtual void zoomBy(const QPoint &/*center*/, qreal /*zoom*/) {}
-    virtual void zoomTo(const QRect &/*rect*/) {}
-    virtual void recenterPreferred() {}
-    virtual void setPreferredCenter(const QPointF &/*viewPoint*/) {}
-    virtual QPointF preferredCenter() const {return QPointF();}
-    virtual void pan(const QPoint &/*distance*/) {}
-    virtual QPoint scrollBarValue() const {return QPoint();}
-    virtual void setScrollBarValue(const QPoint &/*value*/) {}
-    virtual void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) {}
-    virtual void setZoomWithWheel(bool /*zoom*/) {}
-    virtual void setVastScrolling(qreal /*factor*/) {}
+    void scrollContentsBy(int /*dx*/, int /*dy*/) override {}
+    QSize viewportSize() const override { return QSize(); }
+    void setDrawShadow(bool /*drawShadow*/) override {}
+    void setCanvas(KoCanvasBase *canvas) override {Q_UNUSED(canvas)}
+    KoCanvasBase *canvas() const override {return 0;}
+    int visibleHeight() const override {return 0;}
+    int visibleWidth() const override {return 0;}
+    int canvasOffsetX() const override {return 0;}
+    int canvasOffsetY() const override {return 0;}
+    void ensureVisible(const QRectF &/*rect*/, bool /*smooth */ = false) override {}
+    void ensureVisible(KoShape *shape) override {Q_UNUSED(shape)}
+    void zoomIn(const QPoint &/*center*/) override {}
+    void zoomOut(const QPoint &/*center*/) override {}
+    void zoomBy(const QPoint &/*center*/, qreal /*zoom*/) override {}
+    void zoomTo(const QRect &/*rect*/) override {}
+    void recenterPreferred() override {}
+    void setPreferredCenter(const QPointF &/*viewPoint*/) override {}
+    QPointF preferredCenter() const override {return QPointF();}
+    void pan(const QPoint &/*distance*/) override {}
+    QPoint scrollBarValue() const override {return QPoint();}
+    void setScrollBarValue(const QPoint &/*value*/) override {}
+    void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) override {}
+    void setZoomWithWheel(bool /*zoom*/) override {}
+    void setVastScrolling(qreal /*factor*/) override {}
     QPointF currentCursorPosition() const override { return QPointF(); }
 
 };

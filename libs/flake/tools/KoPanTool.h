@@ -41,21 +41,21 @@ public:
     explicit KoPanTool(KoCanvasBase *canvas);
 
     /// reimplemented from superclass
-    virtual bool wantsAutoScroll() const;
+    bool wantsAutoScroll() const override;
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented from superclass
-    virtual void paint(QPainter &, const KoViewConverter &) {}
+    void paint(QPainter &, const KoViewConverter &) override {}
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// reimplemented method
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
 
     /// set the canvasController this tool works on.

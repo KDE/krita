@@ -35,7 +35,7 @@ class ParagraphSettingsDialog : public KoDialog
     Q_OBJECT
 public:
     explicit ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget *parent = 0);
-    ~ParagraphSettingsDialog();
+    ~ParagraphSettingsDialog() override;
 
     void setUnit(const KoUnit &unit);
 

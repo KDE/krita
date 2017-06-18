@@ -45,6 +45,16 @@ class KoID;
 class KRITAPIGMENT_EXPORT KoColorConversionSystem
 {
 public:
+    struct RegistryInterface {
+        virtual ~RegistryInterface() {}
+
+        virtual const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName) = 0;
+        virtual const KoColorSpaceFactory* colorSpaceFactory(const QString &colorModelId, const QString &colorDepthId) const = 0;
+        virtual QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * csf) const = 0;
+        virtual QList<const KoColorSpaceFactory*> colorSpacesFor(const KoColorProfile* profile) const = 0;
+    };
+
+public:
     struct Node;
     struct Vertex;
     struct NodeKey;
@@ -54,7 +64,7 @@ public:
      * Construct a Color Conversion System, leave to the KoColorSpaceRegistry to
      * create it.
      */
-    KoColorConversionSystem();
+    KoColorConversionSystem(RegistryInterface *registryInterface);
     ~KoColorConversionSystem();
     /**
      * This function is called by the KoColorSpaceRegistry to add a new color space

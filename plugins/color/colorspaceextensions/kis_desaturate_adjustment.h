@@ -27,9 +27,9 @@ public:
 
     KisDesaturateAdjustmentFactory();
 
-    virtual QList< QPair< KoID, KoID > > supportedModels() const;
+    QList< QPair< KoID, KoID > > supportedModels() const override;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const override;
 
 };
 #endif // KIS_DESATURATE_ADJUSTMENT_H

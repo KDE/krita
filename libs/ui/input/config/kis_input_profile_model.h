@@ -30,9 +30,9 @@ class KisInputProfileModel : public QStringListModel
     Q_OBJECT
 public:
     KisInputProfileModel(QObject *parent = 0);
-    ~KisInputProfileModel();
+    ~KisInputProfileModel() override;
 
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int = Qt::EditRole);
+    bool setData(const QModelIndex &index, const QVariant &value, int = Qt::EditRole) override;
 
     QString profileName(const QModelIndex &index);
     QModelIndex find(const QString &name);

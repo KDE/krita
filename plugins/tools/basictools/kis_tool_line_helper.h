@@ -29,7 +29,7 @@ public:
                       const KUndo2MagicString &transactionText,
                       KisRecordingAdapter *recordingAdapter = 0);
 
-    ~KisToolLineHelper();
+    ~KisToolLineHelper() override;
 
     void setEnabled(bool value);
     void setUseSensors(bool value);

@@ -536,12 +536,12 @@ struct TestUndoCommand : public KUndo2Command
 {
     TestUndoCommand(const QString &text) : KUndo2Command(kundo2_noi18n(text)) {}
 
-    void undo() {
+    void undo() override {
         ENTER_FUNCTION();
         undoCount++;
     }
 
-    void redo() {
+    void redo() override {
         ENTER_FUNCTION();
         redoCount++;
     }

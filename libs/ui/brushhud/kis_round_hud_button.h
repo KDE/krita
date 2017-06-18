@@ -28,16 +28,16 @@ class KisRoundHudButton : public QAbstractButton
 {
 public:
     KisRoundHudButton(QWidget *parent);
-    ~KisRoundHudButton();
+    ~KisRoundHudButton() override;
 
     void setOnOffIcons(const QIcon &on, const QIcon &off);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    bool hitButton(const QPoint &pos) const;
+    void paintEvent(QPaintEvent *event) override;
+    bool hitButton(const QPoint &pos) const override;
 
-    void mouseMoveEvent(QMouseEvent *event);
-    void leaveEvent(QEvent *event);
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 
 private:
     struct Private;

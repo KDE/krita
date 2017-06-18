@@ -35,10 +35,10 @@ class KoResourceItemView : public KoTableView
 public:
 
     explicit KoResourceItemView(QWidget *parent = 0);
-    virtual ~KoResourceItemView() { disconnect(); }
+    ~KoResourceItemView() override { disconnect(); }
 
     /// reimplemented
-    virtual bool viewportEvent(QEvent *event);
+    bool viewportEvent(QEvent *event) override;
 
 Q_SIGNALS:
 
@@ -48,10 +48,10 @@ Q_SIGNALS:
     void contextMenuRequested(const QPoint &);
 
 protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
 
 private Q_SLOTS:
     void slotItemClicked(const QModelIndex &index);

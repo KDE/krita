@@ -31,12 +31,12 @@ class KisAnimationCurveDocker : public QDockWidget, public KisMainwindowObserver
     Q_OBJECT
 public:
     KisAnimationCurveDocker();
-    ~KisAnimationCurveDocker();
+    ~KisAnimationCurveDocker() override;
 
-    QString observerName() { return "AnimationCurveDocker"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
-    void setMainWindow(KisViewManager *kisview);
+    QString observerName() override { return "AnimationCurveDocker"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
+    void setMainWindow(KisViewManager *kisview) override;
 
 private Q_SLOTS:
     void slotUpdateIcons();

@@ -34,7 +34,7 @@ class ArrangeDockerWidget : public QWidget
 
 public:
     explicit ArrangeDockerWidget(QWidget *parent = 0);
-    ~ArrangeDockerWidget();
+    ~ArrangeDockerWidget() override;
 
     void setActionCollection(KActionCollection *collection);
 

@@ -55,12 +55,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     explicit KoPathPointRemoveCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = 0);
-    ~KoPathPointRemoveCommand();
+    ~KoPathPointRemoveCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoPathPointRemoveCommandPrivate *d;

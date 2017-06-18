@@ -31,7 +31,7 @@ class Imagesplit : public KisViewPlugin
     Q_OBJECT
 public:
     Imagesplit(QObject *parent, const QVariantList &);
-    virtual ~Imagesplit();
+    ~Imagesplit() override;
 
 private Q_SLOTS:
 

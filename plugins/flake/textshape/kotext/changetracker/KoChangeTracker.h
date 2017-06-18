@@ -53,7 +53,7 @@ public:
     };
 
     explicit KoChangeTracker(QObject *parent = 0);
-    ~KoChangeTracker();
+    ~KoChangeTracker() override;
 
     void setRecordChanges(bool enabled);
     bool recordChanges() const;

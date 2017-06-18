@@ -28,21 +28,21 @@ class KisSimpleNoiseReducer : public KisFilter
 {
 public:
     KisSimpleNoiseReducer();
-    ~KisSimpleNoiseReducer();
+    ~KisSimpleNoiseReducer() override;
 public:
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+                     ) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
     static inline KoID id() {
         return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer"));
     }
 protected:
-    virtual KisFilterConfigurationSP  factoryConfiguration() const;
+    KisFilterConfigurationSP  factoryConfiguration() const override;
 };
 
 #endif

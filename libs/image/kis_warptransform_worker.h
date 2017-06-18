@@ -62,7 +62,7 @@ public:
 
     // Prepare the transformation on dev
     KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
-    ~KisWarpTransformWorker();
+    ~KisWarpTransformWorker() override;
     // Perform the prepared transformation
     void run();
 

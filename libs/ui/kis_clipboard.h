@@ -47,7 +47,7 @@ class KRITAUI_EXPORT KisClipboard : public QObject
 
 public:
     KisClipboard();
-    virtual ~KisClipboard();
+    ~KisClipboard() override;
 
     static KisClipboard* instance();
 

@@ -35,7 +35,7 @@ public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater) const;
+                     KoUpdater* progressUpdater) const override;
 protected:
     void setIgnoreAlpha(bool v);
 

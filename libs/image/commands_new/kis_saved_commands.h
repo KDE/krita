@@ -30,11 +30,11 @@ class KRITAIMAGE_EXPORT KisSavedCommandBase : public KUndo2Command
 {
 public:
     KisSavedCommandBase(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
-    virtual ~KisSavedCommandBase();
+    ~KisSavedCommandBase() override;
 
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 protected:
     virtual void addCommands(KisStrokeId id, bool undo) = 0;
@@ -52,22 +52,22 @@ class KRITAIMAGE_EXPORT KisSavedCommand : public KisSavedCommandBase
 {
 public:
     KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
-    virtual int timedId();
-    void setTimedID(int timedID);
+    int timedId() override;
+    void setTimedID(int timedID) override;
 
-    int id() const;
-    bool mergeWith(const KUndo2Command* command);
+    int id() const override;
+    bool mergeWith(const KUndo2Command* command) override;
 
-    virtual bool timedMergeWith(KUndo2Command *other);
-    virtual QVector<KUndo2Command*> mergeCommandsVector();
-    virtual void setTime();
-    virtual QTime time();
-    virtual void setEndTime();
-    virtual QTime endTime();
-    virtual bool isMerged();
+    bool timedMergeWith(KUndo2Command *other) override;
+    QVector<KUndo2Command*> mergeCommandsVector() override;
+    void setTime() override;
+    QTime time() override;
+    void setEndTime() override;
+    QTime endTime() override;
+    bool isMerged() override;
 
 protected:
-    void addCommands(KisStrokeId id, bool undo);
+    void addCommands(KisStrokeId id, bool undo) override;
 
 private:
     KUndo2CommandSP m_command;
@@ -77,10 +77,10 @@ class KRITAIMAGE_EXPORT KisSavedMacroCommand : public KisSavedCommandBase
 {
 public:
     KisSavedMacroCommand(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
-    ~KisSavedMacroCommand();
+    ~KisSavedMacroCommand() override;
 
-    int id() const;
-    bool mergeWith(const KUndo2Command* command);
+    int id() const override;
+    bool mergeWith(const KUndo2Command* command) override;
 
     void setMacroId(int value);
 
@@ -91,7 +91,7 @@ public:
     void performCancel(KisStrokeId id, bool strokeUndo);
 
 protected:
-    void addCommands(KisStrokeId id, bool undo);
+    void addCommands(KisStrokeId id, bool undo) override;
 
 private:
     struct Private;

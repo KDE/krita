@@ -45,7 +45,7 @@ public:
 
 public:
     KisColorizeMask();
-    ~KisColorizeMask();
+    ~KisColorizeMask() override;
 
     KisColorizeMask(const KisColorizeMask& rhs);
 

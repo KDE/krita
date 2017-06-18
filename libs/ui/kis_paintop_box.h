@@ -104,7 +104,7 @@ class KRITAUI_EXPORT KisPaintopBox : public QWidget
 public:
 
     KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
-    ~KisPaintopBox();
+    ~KisPaintopBox() override;
 
     void restoreResource(KoResource* resource);
     /**

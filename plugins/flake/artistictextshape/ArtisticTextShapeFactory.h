@@ -28,11 +28,11 @@ class ArtisticTextShapeFactory : public KoShapeFactoryBase
 {
 public:
     ArtisticTextShapeFactory();
-    ~ArtisticTextShapeFactory() {}
+    ~ArtisticTextShapeFactory() override {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     // reimplemented from KoShapeFactoryBase
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 };
 
 #endif // ARTISTICTEXTSHAPEFACTORY_H

@@ -30,7 +30,7 @@ class ParticlePaintOpPlugin : public QObject
     Q_OBJECT
 public:
     ParticlePaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~ParticlePaintOpPlugin();
+    ~ParticlePaintOpPlugin() override;
 };
 
 #endif // PARTICLE_PAINTOP_PLUGIN_H_

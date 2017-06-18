@@ -29,7 +29,7 @@ class PresetHistoryPlugin : public QObject
     Q_OBJECT
     public:
         PresetHistoryPlugin(QObject *parent, const QVariantList &);
-        virtual ~PresetHistoryPlugin();
+        ~PresetHistoryPlugin() override;
 };
 
 #endif

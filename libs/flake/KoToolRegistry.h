@@ -35,7 +35,7 @@ class KRITAFLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryB
 {
 public:
     KoToolRegistry();
-    ~KoToolRegistry();
+    ~KoToolRegistry() override;
 
     /**
      * Return an instance of the KoToolRegistry

@@ -27,8 +27,8 @@ class ColorDisplayLabel: public QLabel
 {
 public:
     explicit ColorDisplayLabel(QWidget *parent = 0);
-    ~ColorDisplayLabel();
-    void paintEvent(QPaintEvent *event);
+    ~ColorDisplayLabel() override;
+    void paintEvent(QPaintEvent *event) override;
     const QColor &color() const;
     void setColor(const QColor &color);
 
@@ -51,7 +51,7 @@ class ChangeConfigureDialog: public QDialog
 
 public:
     ChangeConfigureDialog(const QColor &insertionColor, const QColor &deletionColor, const QColor &formatChangeColor, const QString &authorName, KoChangeTracker::ChangeSaveFormat changeSaveFormat, QWidget *parent = 0);
-    ~ChangeConfigureDialog();
+    ~ChangeConfigureDialog() override;
 
     const QColor &getInsertionBgColor();
     const QColor &getDeletionBgColor();

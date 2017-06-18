@@ -88,10 +88,10 @@ protected:
     {
     public:
         PlainColoringInformation(const quint8* color);
-        virtual ~PlainColoringInformation();
-        virtual const quint8* color() const ;
-        virtual void nextColumn();
-        virtual void nextRow();
+        ~PlainColoringInformation() override;
+        const quint8* color() const override ;
+        void nextColumn() override;
+        void nextRow() override;
     private:
         const quint8* m_color;
     };
@@ -102,10 +102,10 @@ protected:
     public:
 
         PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width);
-        virtual ~PaintDeviceColoringInformation();
-        virtual const quint8* color() const ;
-        virtual void nextColumn();
-        virtual void nextRow();
+        ~PaintDeviceColoringInformation() override;
+        const quint8* color() const override ;
+        void nextColumn() override;
+        void nextRow() override;
 
     private:
 
@@ -118,25 +118,25 @@ public:
     KisBrush();
     KisBrush(const QString& filename);
 
-    virtual ~KisBrush();
+    ~KisBrush() override;
 
     virtual qreal userEffectiveSize() const = 0;
     virtual void setUserEffectiveSize(qreal value) = 0;
 
-    virtual bool load() {
+    bool load() override {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) {
+    bool loadFromDevice(QIODevice *) override {
         return false;
     }
 
 
-    virtual bool save() {
+    bool save() override {
         return false;
     }
 
-    virtual bool saveToDevice(QIODevice* ) const {
+    bool saveToDevice(QIODevice* ) const override {
         return false;
     }
 

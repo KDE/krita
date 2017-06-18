@@ -31,7 +31,7 @@ class FontDecorations : public QWidget
 
 public:
     explicit FontDecorations(bool uniqueFormat, QWidget *parent = 0);
-    ~FontDecorations() {}
+    ~FontDecorations() override {}
 
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style) const;

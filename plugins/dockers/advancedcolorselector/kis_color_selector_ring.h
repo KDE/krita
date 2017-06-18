@@ -28,13 +28,13 @@ class KisColorSelectorRing : public KisColorSelectorComponent
 public:
     explicit KisColorSelectorRing(KisColorSelector *parent);
     int innerRadius() const;
-    void setColor(const KoColor &color);
+    void setColor(const KoColor &color) override;
     void setInnerRingRadiusFraction(qreal newFraction);
 
 protected:
-    void paint(QPainter*);
-    KoColor selectColor(int x, int y);
-    bool containsPointInComponentCoords(int x, int y) const;
+    void paint(QPainter*) override;
+    KoColor selectColor(int x, int y) override;
+    bool containsPointInComponentCoords(int x, int y) const override;
 
 private:
     void paintCache();

@@ -17,10 +17,8 @@ void TestKoColorSpaceRegistry::testConstruction()
 
 void TestKoColorSpaceRegistry::testRgbU8()
 {
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
-                           Integer8BitsColorDepthID);
-    const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
-    QVERIFY(colorSpaceFactory != 0);
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
+                                                                                Integer8BitsColorDepthID);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     QVERIFY(colorSpace != 0);
@@ -28,7 +26,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
     const KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
-    QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
+    QCOMPARE(profile->name(), KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
 
     cmsHPROFILE lcmsProfile = cmsCreate_sRGBProfile();
     QString testProfileName = "TestRGBU8ProfileName";
@@ -41,10 +39,8 @@ void TestKoColorSpaceRegistry::testRgbU8()
 
 void TestKoColorSpaceRegistry::testRgbU16()
 {
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
-                           Integer16BitsColorDepthID);
-    const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
-    QVERIFY(colorSpaceFactory != 0);
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
+                                                                                Integer16BitsColorDepthID);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb16();
     QVERIFY(colorSpace != 0);
@@ -52,7 +48,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
     const KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
-    QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
+    QCOMPARE(profile->name(), KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
 
     cmsHPROFILE lcmsProfile = cmsCreate_sRGBProfile();
     QString testProfileName = "TestRGBU16ProfileName";
@@ -65,10 +61,8 @@ void TestKoColorSpaceRegistry::testRgbU16()
 
 void TestKoColorSpaceRegistry::testLab()
 {
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID,
-                           Integer16BitsColorDepthID);
-    const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
-    QVERIFY(colorSpaceFactory != 0);
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID,
+                                                                                Integer16BitsColorDepthID);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->lab16();
     QVERIFY(colorSpace != 0);
@@ -76,7 +70,7 @@ void TestKoColorSpaceRegistry::testLab()
     const KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
-    QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
+    QCOMPARE(profile->name(), KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
 
     cmsCIExyY whitepoint;
     whitepoint.x = 0.33;

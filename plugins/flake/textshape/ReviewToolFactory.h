@@ -26,9 +26,9 @@ class ReviewToolFactory : public KoToolFactoryBase
 {
 public:
     ReviewToolFactory();
-    ~ReviewToolFactory();
+    ~ReviewToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

@@ -36,11 +36,11 @@ class KRITAIMAGE_EXPORT FilterRegistryModel : public KoGenericRegistryModel<cons
 {
 public:
     FilterRegistryModel();
-    ~FilterRegistryModel();
+    ~FilterRegistryModel() override;
 public:
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
-    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex & index) const override;
+    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
     /// @return a list of filters that are enabled
     QList<const Filter*> enabledFilters() const;
     /// enable the filters in the given list; others will be disabled.

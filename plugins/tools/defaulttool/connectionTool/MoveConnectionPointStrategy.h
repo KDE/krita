@@ -33,22 +33,22 @@ public:
     /// Constructor
     MoveConnectionPointStrategy(KoShape *shape, int connectionPointId, KoToolBase *parent);
     /// Destructor
-    virtual ~MoveConnectionPointStrategy();
+    ~MoveConnectionPointStrategy() override;
 
     /// reimplemented from KoInteractionStrategy
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     /// reimplemented from KoInteractionStrategy
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
 
     /// reimplemented from KoInteractionStrategy
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
 
     /// reimplemented from KoInteractionStrategy
-    virtual void cancelInteraction();
+    void cancelInteraction() override;
 
     /// reimplemented from KoInteractionStrategy
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 private:
     KoShape *m_shape;

@@ -50,33 +50,33 @@ public:
     /**
      * Destructor.
      */
-    ~KisActionShortcutsModel();
+    ~KisActionShortcutsModel() override;
 
     /**
      * Reimplemented from QAbstractItemModel::data()
      */
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     /**
      * Reimplemented from QAbstractItemModel::rowCount()
      */
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     /**
      * Reimplemented from QAbstractItemModel::columnCount()
      */
-    virtual int columnCount(const QModelIndex &) const;
+    int columnCount(const QModelIndex &) const override;
     /**
      * Reimplemented from QAbstractItemModel::headerData()
      */
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role =
-                                    Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role =
+                                    Qt::DisplayRole) const override;
     /**
      * Reimplemented from QAbstractItemModel::flags()
      */
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
     /**
      * Reimplemented from QAbstractItemModel::setData()
      */
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     /**
      * Reimplemented from QAbstractItemModel::removeRows.
@@ -86,7 +86,7 @@ public:
      * \note The associated shortcuts will also be removed from the profile and completely
      * deleted.
      */
-    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
     /**
      * \return The action used as data constraint for this model.

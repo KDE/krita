@@ -56,6 +56,7 @@ set(kritapigment_SRCS
     KoColorSpaceFactory.cpp
     KoColorSpaceMaths.cpp
     KoColorSpaceRegistry.cpp
+    KoColorProfileStorage.cpp
     KoColorTransformation.cpp
     KoColorTransformationFactory.cpp
     KoColorTransformationFactoryRegistry.cpp
@@ -106,6 +107,7 @@ target_link_libraries( kritapigment
     PUBLIC
         kritaplugin
         kritastore
+        kritaglobal
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         KF5::ConfigCore

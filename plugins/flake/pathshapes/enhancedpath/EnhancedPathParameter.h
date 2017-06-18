@@ -66,8 +66,8 @@ class EnhancedPathConstantParameter : public EnhancedPathParameter
 public:
     /// Constructs the constant parameter with the given value
     EnhancedPathConstantParameter(qreal value, EnhancedPathShape *parent);
-    qreal evaluate();
-    virtual QString toString() const;
+    qreal evaluate() override;
+    QString toString() const override;
 private:
     qreal m_value; ///< the constant value
 };
@@ -80,10 +80,10 @@ public:
     EnhancedPathNamedParameter(Identifier identifier, EnhancedPathShape *parent);
     /// Constructs named parameter from given identifier string
     EnhancedPathNamedParameter(const QString &identifier, EnhancedPathShape *parent);
-    qreal evaluate();
+    qreal evaluate() override;
     /// Returns identfier type from given string
     static Identifier identifierFromString(const QString &text);
-    virtual QString toString() const;
+    QString toString() const override;
 private:
     Identifier m_identifier; ///< the identifier type
 };
@@ -94,9 +94,9 @@ class EnhancedPathReferenceParameter : public EnhancedPathParameter
 public:
     /// Constructs reference parameter from the given reference string
     explicit EnhancedPathReferenceParameter(const QString &reference, EnhancedPathShape *parent);
-    qreal evaluate();
-    virtual void modify(qreal value);
-    virtual QString toString() const;
+    qreal evaluate() override;
+    void modify(qreal value) override;
+    QString toString() const override;
 private:
     QString m_reference; ///< the reference, formula or modifier
 };

@@ -27,10 +27,10 @@ class KisDraggableToolButton : public QToolButton
     Q_OBJECT
 public:
     KisDraggableToolButton(QWidget *parent);
-    ~KisDraggableToolButton();
+    ~KisDraggableToolButton() override;
 
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
 
     static int unitRadius();
 

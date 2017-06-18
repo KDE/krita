@@ -536,7 +536,6 @@
   <zorder>presetsContainer</zorder>
   <zorder>brushEditorSettingsControls</zorder>
   <zorder>scratchpadControls</zorder>
-  <zorder></zorder>
  </widget>
  <customwidgets>
   <customwidget>

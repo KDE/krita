@@ -32,19 +32,19 @@ public:
     explicit FilterEffectResource(const QString &filename);
 
     /// reimplemented from KoResource
-    virtual bool load();
+    bool load() override;
 
     /// reimplemented from KoResource
-    virtual bool loadFromDevice(QIODevice *dev);
+    bool loadFromDevice(QIODevice *dev) override;
 
     /// reimplemented from KoResource
-    virtual bool save();
+    bool save() override;
 
     /// reimplemented from KoResource
-    virtual bool saveToDevice(QIODevice *dev) const;
+    bool saveToDevice(QIODevice *dev) const override;
 
     /// reimplemented from KoResource
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     /// Creates resource from given filter effect stack
     static FilterEffectResource *fromFilterEffectStack(KoFilterEffectStack *filterStack);
@@ -52,7 +52,7 @@ public:
     /// Creates a new filter stack from this filter resource
     KoFilterEffectStack *toFilterStack() const;
 protected:
-    virtual QByteArray generateMD5() const;
+    QByteArray generateMD5() const override;
 private:
     QDomDocument m_data;
 };

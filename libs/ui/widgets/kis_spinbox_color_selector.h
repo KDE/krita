@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisSpinboxColorSelector : public QWidget
     Q_OBJECT
 public:
     explicit KisSpinboxColorSelector(QWidget *parent);
-    ~KisSpinboxColorSelector();
+    ~KisSpinboxColorSelector() override;
 
     void chooseAlpha(bool chooseAlpha);
 

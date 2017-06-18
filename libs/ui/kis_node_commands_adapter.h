@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisNodeCommandsAdapter : public QObject
 
 public:
     KisNodeCommandsAdapter(KisViewManager * view);
-    virtual ~KisNodeCommandsAdapter();
+    ~KisNodeCommandsAdapter() override;
 public:
     void beginMacro(const KUndo2MagicString& macroName);
     void addExtraCommand(KUndo2Command *command);

@@ -45,7 +45,7 @@ class KisCustomPattern : public KisWdgCustomPattern
     Q_OBJECT
 public:
     KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view);
-    virtual ~KisCustomPattern();
+    ~KisCustomPattern() override;
 
 Q_SIGNALS:
     void activatedResource(KoResource *);

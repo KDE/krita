@@ -47,7 +47,7 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutoBrush
 public:
 
     KisAutoBrushWidget(QWidget *parent, const char* name);
-    ~KisAutoBrushWidget();
+    ~KisAutoBrushWidget() override;
 
     void activate();
 
@@ -67,7 +67,7 @@ Q_SIGNALS:
     void sigBrushChanged();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     QImage m_brush;

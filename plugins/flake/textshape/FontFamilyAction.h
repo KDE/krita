@@ -49,13 +49,13 @@ public:
     explicit KoFontFamilyAction(QObject *parent);
     KoFontFamilyAction(const QString &text, QObject *parent);
     KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent);
-    virtual ~KoFontFamilyAction();
+    ~KoFontFamilyAction() override;
 
     QString font() const;
 
     void setFont(const QString &family);
 
-    virtual QWidget *createWidget(QWidget *parent);
+    QWidget *createWidget(QWidget *parent) override;
 
 private:
     class KoFontFamilyActionPrivate;

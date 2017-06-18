@@ -44,12 +44,12 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
     setXmlElementNames(KoXmlNS::draw, QStringList("custom-shape"));
     setLoadingPriority(1);
 
-    addCross();
-    addArrow();
-    addCallout();
-    addSmiley();
-    addCircularArrow();
-    addGearhead();
+//    addCross();
+//    addArrow();
+//    addCallout();
+//    addSmiley();
+//    addCircularArrow();
+//    addGearhead();
 }
 
 KoShape *EnhancedPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) const

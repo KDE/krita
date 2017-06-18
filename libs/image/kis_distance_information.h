@@ -216,6 +216,10 @@ public:
     explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
                         qreal spacingUpdateInterval);
 
+    bool operator==(const KisDistanceInitInfo &other) const;
+
+    bool operator!=(const KisDistanceInitInfo &other) const;
+
     /**
      * Constructs a KisDistanceInformation with initial settings based on this object.
      */

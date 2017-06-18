@@ -103,6 +103,29 @@ KisDistanceInitInfo::KisDistanceInitInfo(const QPointF &lastPosition, qreal last
 {
 }
 
+bool KisDistanceInitInfo::operator==(const KisDistanceInitInfo &other) const
+{
+    if (m_spacingUpdateInterval != other.m_spacingUpdateInterval
+        || m_hasLastInfo != other.m_hasLastInfo)
+    {
+        return false;
+    }
+    if (m_hasLastInfo) {
+        if (m_lastPosition != other.m_lastPosition || m_lastTime != other.m_lastTime
+            || m_lastAngle != other.m_lastAngle)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool KisDistanceInitInfo::operator!=(const KisDistanceInitInfo &other) const
+{
+    return !(*this == other);
+}
+
 KisDistanceInformation KisDistanceInitInfo::makeDistInfo()
 {
     if (m_hasLastInfo) {
@@ -122,7 +145,7 @@ void KisDistanceInitInfo::toXML(QDomDocument &doc, QDomElement &elt) const
         lastInfoElt.setAttribute("lastPosX", QString::number(m_lastPosition.x(), 'g', 15));
         lastInfoElt.setAttribute("lastPosY", QString::number(m_lastPosition.y(), 'g', 15));
         lastInfoElt.setAttribute("lastTime", QString::number(m_lastTime, 'g', 15));
-        lastInfoElt.setAttribute("lastAngle", QString::number(m_spacingUpdateInterval, 'g', 15));
+        lastInfoElt.setAttribute("lastAngle", QString::number(m_lastAngle, 'g', 15));
         elt.appendChild(lastInfoElt);
     }
 }

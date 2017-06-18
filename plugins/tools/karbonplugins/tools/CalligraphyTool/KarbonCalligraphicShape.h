@@ -52,7 +52,7 @@ public:
     {
         m_angle = angle;
     }
-    void setWidth(real width) {
+    void setWidth(qreal width) {
         m_width = width;
     }
 
@@ -101,8 +101,6 @@ public:
     // returns the bounding rect of whan needs to be repainted
     // after new points are added
     const QRectF lastPieceBoundingRect();
-
-    void setSize(const QSizeF &newSize) override;
 
     void setSize(const QSizeF &newSize);
     //virtual QPointF normalize();

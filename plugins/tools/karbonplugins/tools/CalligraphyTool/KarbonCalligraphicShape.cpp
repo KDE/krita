@@ -72,7 +72,7 @@ KoShape *KarbonCalligraphicShape::cloneShape() const
 void KarbonCalligraphicShape::appendPoint(const QPointF &p1, qreal angle, qreal width)
 {
     // convert the point from canvas to shape coordinates
-    QPointF p = point - position();
+    QPointF p = p1 - position();
         KarbonCalligraphicPoint *calligraphicPoint =
      new KarbonCalligraphicPoint(p, angle, width);
 
@@ -95,8 +95,8 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     qreal dy = std::sin(p.angle()) * p.width();
 
     // find the outline points
-    QPointF p1 = p->point() - QPointF(dx / 2, dy / 2);
-    QPointF p2 = p->point() + QPointF(dx / 2, dy / 2);
+    QPointF p1 = p.point() - QPointF(dx / 2, dy / 2);
+    QPointF p2 = p.point() + QPointF(dx / 2, dy / 2);
 
     if (pointCount() == 0) {
         moveTo(p1);
@@ -157,7 +157,7 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     // this code is here because this function is called from different places
     // pointCount() == 8 may causes crashes because it doesn't take possible
     // flips into account
-    if (m_points.count() >= 4 && p == m_points[3] && m_caps>0) {
+    if (m_points.count() >= 4 && &p == m_points[3] && m_caps>0) {
         addCap(3, 0, 0, true);
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
@@ -179,11 +179,6 @@ void KarbonCalligraphicShape::appendPointsToPathAux(const QPointF &p1, const QPo
 
     insertPoint(pathPoint2, KoPathPointIndex(0, index));
     insertPoint(pathPoint1, KoPathPointIndex(0, index));
-}
-
-KarbonCalligraphicPoint *KarbonCalligraphicShape::lastPoint()
-{
-    return m_points.last();
 }
 
 void KarbonCalligraphicShape::smoothLastPoints()
@@ -288,7 +283,8 @@ void KarbonCalligraphicShape::setSize(const QSizeF &newSize)
     QTransform matrix(resizeMatrix(newSize));
     for (int i = 0; i < m_points.size(); ++i) {
         m_points[i]->setPoint(matrix.map(m_points[i]->point()));
-        m_points[i]->setWidth(matrix.map(m_points[i]->width()));
+        QPointF widthDummy = matrix.map(QPointF(m_points[i]->width(), m_points[i]->width()));
+        m_points[i]->setWidth(widthDummy.x());
     }
     KoParameterShape::setSize(newSize);
 }
@@ -320,11 +316,9 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     // remove all points
     clear();
     //KarbonCalligraphicPoint *pLast = m_points.at(0);
-    for (int i=0; i< m_points.count(); i++) {
-        KarbonCalligraphicPoint *p = m_points.at(i);
-        appendPointToPath(i);
-        // after the point is "painter" it should be added to the distance information as the "previous" point
-    }
+    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
+            appendPointToPath(*p);
+     }
 
     simplifyPath();
 
@@ -363,13 +357,13 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
     }
 
     QPointF direction = QLineF(QPointF(0, 0), delta).unitVector().p2();
-    qreal width = calculateWidth(m_points[index2]->paintInfo());
-    qreal capSize = configuration()->getFloat("capSize");
+    qreal width = m_points[index2]->width();
+    qreal capSize = m_caps;
     QPointF p = p2 + direction * capSize * width;
 
     KoPathPoint *newPoint = new KoPathPoint(this, p);
 
-    qreal angle = calculateAngle(m_points[index2]->paintInfo());
+    qreal angle = m_points[index2]->angle();
     if (inverted) {
         angle += M_PI;
     }
@@ -459,8 +453,8 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     while (i != m_points.end() - 1) {
         QPointF point = (*i)->point();
 
-        qreal width = calculateWidth((*i)->paintInfo());
-        qreal prevWidth = calculateWidth((*(i - 1))->paintInfo());
+        qreal width = (*i)->width();
+        qreal prevWidth = (*(i - 1))->angle();
         qreal widthDiff = width - prevWidth;
         widthDiff /= qMax(width, prevWidth);
 
@@ -480,8 +474,7 @@ void KarbonCalligraphicShape::simplifyGuidePath()
                 widthChange * widthDiff >= 0 &&
                 qAbs(widthChange + widthDiff) < 0.1) {
             // deleted point
-            //(*i)->paintInfo();
-            delete *i;
+            //(*i)->paintInfo();            delete *i;
             i = m_points.erase(i);
             directionChange += directionDiff;
             widthChange += widthDiff;

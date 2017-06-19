@@ -16,7 +16,6 @@ set(kritaresourcemanager_SOURCES
     resourcemanager.cpp
     dlg_create_bundle.cpp
     dlg_bundle_manager.cpp
-
     widgetquestionlistener.cpp
     entrydetailsdialog.cpp
     itemsgridviewdelegate.cpp
@@ -25,6 +24,7 @@ set(kritaresourcemanager_SOURCES
     itemsview.cpp
     imagepreviewwidget.cpp
     dlg_content_downloader.cpp
+    content_dowloader_dialog.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

@@ -109,6 +109,8 @@ private:
     Q_PRIVATE_SLOT(d, void slotSearchTextChanged())
     Q_PRIVATE_SLOT(d, void slotUpdateSearch())
     Q_PRIVATE_SLOT(d, void slotCategoryChanged(int))
+
+    friend class ContentDownloaderDialog;
 };
 
 #endif // DLG_CONTENT_DOWNLOADER_H

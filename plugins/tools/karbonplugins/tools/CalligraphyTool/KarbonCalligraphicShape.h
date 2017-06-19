@@ -139,7 +139,7 @@ private:
     bool flipDetected(const QPointF &p1, const QPointF &p2);
 
     void smoothLastPoints();
-    void smoothPoint(const int index);
+    void smoothPoint(const int index, const int subPathIndex = 0);
 
     // determine whether the points given are in counterclockwise order or not
     // returns +1 if they are, -1 if they are given in clockwise order

@@ -92,127 +92,59 @@ void KarbonCalligraphicShape::appendPoint(const QPointF &p1, qreal angle, qreal 
 
 void KarbonCalligraphicShape::appendPointToPath(int indexPoint)
 {
+    if (indexPoint<1) return;
+    KarbonCalligraphicPoint *pm1 =m_points.at(indexPoint-1);
     KarbonCalligraphicPoint *p =m_points.at(indexPoint);
-    qreal dx = std::cos(p->angle()) * p->width();
-    qreal dy = std::sin(p->angle()) * p->width();
+
+
+    qreal dx = std::cos(pm1->angle()) * pm1->width();
+    qreal dy = std::sin(pm1->angle()) * pm1->width();
+    qreal dx2 = std::cos(p->angle()) * p->width();
+    qreal dy2 = std::sin(p->angle()) * p->width();
 
     // find the outline points
-    QPointF p1 = p->point() - QPointF(dx / 2, dy / 2);
-    QPointF p2 = p->point() + QPointF(dx / 2, dy / 2);
-
-    if (pointCount() == 0) {
-        moveTo(p1);
-        lineTo(p2);
-        normalize();
-        return;
-    }
-    // pointCount > 0
-
-    //flip is within the path
-    bool flip = (pointCount() >= 2) ? flipDetected(p1, p2) : false;
-    if (pointCount()>=2) {
-        int index = pointCount() / 2;
-        // find the last two points
-        KoPathPoint *last1 = pointByIndex(KoPathPointIndex(0, index - 1));
-        KoPathPoint *last2 = pointByIndex(KoPathPointIndex(0, index));
-        QPointF intersect = QPointF();
-        if (QLineF(last1->point(), p1).intersect(QLineF(last2->point(), p2),&intersect)==QLineF::BoundedIntersection) {
-            flip = true;
-        }
-
-    }
-    //cornerflip is a special case where the path turns more that 90 or -90 degrees.
-    bool cornerFlip = false;
+    QPointF p1 = pm1->point() - QPointF(dx / 2, dy / 2);
+    QPointF p2 = p->point() - QPointF(dx2 / 2, dy2 / 2);
+    QPointF p3 = p->point() + QPointF(dx2 / 2, dy2 / 2);
+    QPointF p4 = pm1->point() + QPointF(dx / 2, dy / 2);
+    QLineF line = QLineF(p1, p2);
+    qreal angle = QLineF(pm1->point(), p->point()).angle();
     if (indexPoint>2) {
-        qreal angleDiff = m_points.at(indexPoint-1)->angle()-p->angle();
-        //if (angleDiff>=M_PI/2 || angleDiff < -M_PI/2) {
-        //    cornerFlip = true;
-        //}
-        QPointF m2 =m_points.at(indexPoint-2)->point();
-        QPointF m1 =m_points.at(indexPoint-1)->point();
-        //qreal minX = m1.x()-m2.x();
-        //qreal minY = m1.y()-m2.y();
-        //qreal length1 = sqrt( minX*minX + minY*minY );
-        //minX = m2.x()-p->point().x();
-        //minY = m2.y()-p->point().y();
-        //qreal length2 = sqrt( minX*minX + minY*minY );
-        //minX = p->point().x()-m1.x();
-        //minY = p->point().y()-m1.y();
-        //qreal length3 = sqrt( minX*minX + minY*minY );
-        //angleDiff = fmod((length2*length2+length1*length1-length3*length3) / 2*length1*length3, 180.0);
-        angleDiff = fmod(fabs(QLineF(m2, m1).angle()-QLineF(m1, p->point()).angle()), 180);
-        qDebug()<<angleDiff;
-        if (angleDiff>90) {
-            cornerFlip = true;
-        }
-        qDebug()<<cornerFlip;
+        angle = QLineF(m_points.at(indexPoint-2)->point(),p->point()).angle();
     }
+    line.setLength(line.length()*0.33);
+    line.setAngle(angle);
+    QPointF c1 = line.p2();
+    line = QLineF(p2, p1);
+    line.setLength(line.length()*0.33);
+    QPointF c2 = line.p2();
+    line = QLineF(p3, p4);
+    line.setLength(line.length()*0.33);
+    QPointF c3 = line.p2();
+    line = QLineF(p4, p3);
+    line.setLength(line.length()*0.33);
+    line.setAngle(angle);
+    QPointF c4 = line.p2();
 
-    // if there was a flip add additional points
-    if (flip || cornerFlip) {
-        if (cornerFlip) {
-            int index = pointCount() / 2;
-            appendPointsToPathAux(pointByIndex(KoPathPointIndex(0, index))->point(),pointByIndex(KoPathPointIndex(0, index-1))->point());
-            appendPointsToPathAux(p1, p2);
-        } else {
-            appendPointsToPathAux(p2, p1);
-        }
-        if (pointCount() > 4) {
-            smoothLastPoints();
-        }
+
+
+    if (ccw(p1, p2, p3)>0) {
+        moveTo(p4);
+        curveTo((c4), (c3), p3);
+        lineTo(p2);
+        curveTo((c2), (c1), p1);
+        close();
     } else {
-        appendPointsToPathAux(p1, p2);
-    }
-
-
-    if (pointCount() > 4) {
-        smoothLastPoints();
-
-        if (flip) {
-            int index = pointCount() / 2;
-            // find the last two points
-            KoPathPoint *last1 = pointByIndex(KoPathPointIndex(0, index - 1));
-            KoPathPoint *last2 = pointByIndex(KoPathPointIndex(0, index));
-
-            last1->removeControlPoint1();
-            last1->removeControlPoint2();
-            last2->removeControlPoint1();
-            last2->removeControlPoint2();
-            m_lastWasFlip = true;
-        }
-
-        if (m_lastWasFlip) {
-            int index = pointCount() / 2;
-            // find the previous two points
-            KoPathPoint *prev1 = pointByIndex(KoPathPointIndex(0, index - 2));
-            KoPathPoint *prev2 = pointByIndex(KoPathPointIndex(0, index + 1));
-
-            prev1->removeControlPoint1();
-            prev1->removeControlPoint2();
-            prev2->removeControlPoint1();
-            prev2->removeControlPoint2();
-
-            if (!flip) {
-                m_lastWasFlip = false;
-            }
-        }
-    }
-    normalize();
-
-    // add initial cap if it's the fourth added point
-    // this code is here because this function is called from different places
-    // pointCount() == 8 may causes crashes because it doesn't take possible
-    // flips into account
-    if (m_points.count() >= 4 && p == m_points[3] && m_caps>0) {
-        addCap(3, 0, 0, true);
-        // duplicate the last point to make the points remain "balanced"
-        // needed to keep all indexes code (else I would need to change
-        // everything in the code...)
-        KoPathPoint *last = pointByIndex(KoPathPointIndex(0, pointCount() - 1));
-        KoPathPoint *newPoint = new KoPathPoint(this, last->point());
-        insertPoint(newPoint, KoPathPointIndex(0, pointCount()));
+        moveTo(p1);
+        curveTo((c1), (c2), p2);
+        lineTo(p3);
+        curveTo((c3), (c4), p4);
         close();
     }
+    //smoothLastPoints();
+
+
+    normalize();
 }
 
 void KarbonCalligraphicShape::appendPointsToPathAux(const QPointF &p1, const QPointF &p2)
@@ -229,22 +161,23 @@ void KarbonCalligraphicShape::appendPointsToPathAux(const QPointF &p1, const QPo
 
 void KarbonCalligraphicShape::smoothLastPoints()
 {
-    int index = pointCount() / 2;
-    smoothPoint(index - 2);
-    smoothPoint(index + 1);
+    int index = subpathPointCount(qMax(subpathCount()-1, 0)) / 2;
+    qDebug()<<"subpath"<<subpathPointCount(qMax(subpathCount()-1, 0))<<"index"<<index;
+    smoothPoint(index - 1, qMax(subpathCount()-1, 0));
+    smoothPoint(index + 2, qMax(subpathCount()-1, 0));
 }
 
-void KarbonCalligraphicShape::smoothPoint(const int index)
+void KarbonCalligraphicShape::smoothPoint(const int index, const int subPathIndex)
 {
-    if (pointCount() < index + 2) {
+    if (subpathPointCount(subPathIndex) <= index + 2) {
         return;
     } else if (index < 1) {
         return;
     }
 
-    const KoPathPointIndex PREV(0, index - 1);
-    const KoPathPointIndex INDEX(0, index);
-    const KoPathPointIndex NEXT(0, index + 1);
+    const KoPathPointIndex PREV(subPathIndex, index - 1);
+    const KoPathPointIndex INDEX(subPathIndex, index);
+    const KoPathPointIndex NEXT(subPathIndex, index + 1);
 
     QPointF prev = pointByIndex(PREV)->point();
     QPointF point = pointByIndex(INDEX)->point();
@@ -271,6 +204,7 @@ void KarbonCalligraphicShape::smoothPoint(const int index)
 
 const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
 {
+    /**
     if (pointCount() < 6) {
         return QRectF();
     }
@@ -292,8 +226,10 @@ const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
     p.lineTo(p4);
     p.lineTo(p5);
     p.lineTo(p6);
+    **/
 
-    return p.boundingRect().translated(position());
+
+    return this->boundingRect();
 }
 
 bool KarbonCalligraphicShape::flipDetected(const QPointF &p1, const QPointF &p2)
@@ -387,7 +323,7 @@ void KarbonCalligraphicShape::simplifyPath()
 
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
-    karbonSimplifyPath(this, 0.3);
+    //karbonSimplifyPath(this, 0.3);
 }
 
 void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, bool inverted)

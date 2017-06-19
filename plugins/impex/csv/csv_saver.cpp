@@ -138,7 +138,7 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
             layerRecord->density = (float)(paintLayer->opacity()) / OPACITY_OPAQUE_U8;
             layerRecord->blending = convertToBlending(paintLayer->compositeOpId());
             layerRecord->layer = paintLayer;
-            layerRecord->channel = paintLayer->projection()->keyframeChannel();
+            layerRecord->channel = paintLayer->original()->keyframeChannel();
             layerRecord->last = "";
             layerRecord->frame = 0;
             idx++;

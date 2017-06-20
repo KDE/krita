@@ -18,29 +18,45 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_telemetry.h"
+#include "kis_telemetry_regular_provider.h"
 #include "KPluginFactory"
+#include "KisPart.h"
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
+
+#include <kis_debug.h>
+#include <kpluginfactory.h>
+
+#include <KoToolRegistry.h>
+#include <iostream>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <KoToolRegistry.h>
-#include "kis_telemetry_install_provider.h"
-#include "KisPart.h"
+#include "Vc/cpuid.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerPlugin<KisTelemetry>();)
-
-KisTelemetry::KisTelemetry(QObject* parent, const QVariantList&)
-    : QObject(parent)
+KisTelemetryRegularProvider::KisTelemetryRegularProvider()
 {
-    KisPart::instance()->setProvider(new KisTelemetryInstallProvider);
+    m_provider.reset(new KUserFeedback::Provider);
+    m_provider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+
+    for (auto &source : m_sources) {
+        m_provider.data()->addDataSource(source.get());
+    }
 }
 
-KisTelemetry::~KisTelemetry()
+KUserFeedback::Provider* KisTelemetryRegularProvider::provider()
 {
-
+    return m_provider.data();
 }
 
-#include "kis_telemetry.moc"
+void KisTelemetryRegularProvider::sendData()
+{
+    // m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me:8080/"));
+    m_provider.data()->setFeedbackServer(QUrl(m_adress));
+    m_provider.data()->submit();
+}
 
+KisTelemetryRegularProvider::~KisTelemetryRegularProvider()
+{
+}
+
+\

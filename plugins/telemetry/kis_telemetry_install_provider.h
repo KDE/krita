@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_PROVIDER_H
-#define KIS_TELEMETRY_PROVIDER_H
+#ifndef KIS_TELEMETRY_INSTALL_PROVIDER_H
+#define KIS_TELEMETRY_INSTALL_PROVIDER_H
 #include "QScopedPointer"
 #include <QVariant>
 #include <KUserFeedback/AbstractDataSource>
@@ -39,12 +39,12 @@
 #include <vector>
 
 
-class KisTelemetryProvider : public KisTelemetryAbstruct {
+class KisTelemetryInstallProvider : public KisTelemetryAbstruct {
 public:
-    KisTelemetryProvider();
+    KisTelemetryInstallProvider();
     KUserFeedback::Provider* provider() override;
     void sendData() override;
-    virtual ~KisTelemetryProvider();
+    virtual ~KisTelemetryInstallProvider();
 
 private:
     QScopedPointer<KUserFeedback::Provider> m_provider;

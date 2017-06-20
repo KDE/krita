@@ -18,25 +18,38 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_ABSTRUCT_H
-#define KIS_TELEMETRY_ABSTRUCT_H
+#ifndef KIS_TELEMETRY_REGULAR_PROVIDER_H
+#define KIS_TELEMETRY_REGULAR_PROVIDER_H
 #include "QScopedPointer"
-#include "kritaflake_export.h"
+#include <QVariant>
 #include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/cpuinfosource.h>
+#include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/CompilerInfoSource>
+#include <KUserFeedback/LocaleInfoSource>
+#include <KUserFeedback/OpenGLInfoSource>
+#include <KUserFeedback/PlatformInfoSource>
+#include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/ScreenInfoSource>
 #include <KUserFeedback/provider.h>
-#include <QString>
-#include <QVector>
 
-class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
+#include "kis_cpuinfosource.h"
+
+#include <kis_telemetry_abstruct.h>
+#include <memory>
+#include <vector>
+
+
+class KisTelemetryRegularProvider : public KisTelemetryAbstruct {
 public:
-    virtual KUserFeedback::Provider* provider() = 0;
-    virtual void sendData() = 0;
-    virtual ~KisTelemetryAbstruct(){};
+    KisTelemetryRegularProvider();
+    KUserFeedback::Provider* provider() override;
+    void sendData() override;
+    virtual ~KisTelemetryRegularProvider();
 
-protected:
-    QString m_adress = "http://localhost:8080/";
-    // QString m_adress = "http://akapustin.me:8080/";
+private:
+    QScopedPointer<KUserFeedback::Provider> m_provider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_sources;
 };
 
 #endif
+

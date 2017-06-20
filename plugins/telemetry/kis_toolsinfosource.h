@@ -18,29 +18,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_telemetry.h"
-#include "KPluginFactory"
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <KoToolRegistry.h>
-#include "kis_telemetry_install_provider.h"
-#include "KisPart.h"
+#ifndef KISUSERFEEDBACK_TOOLSINFOSOURCE_H
+#define KISUSERFEEDBACK_TOOLSINFOSOURCE_H
 
+#include "abstractdatasource.h"
+#include "kuserfeedbackcore_export.h"
+#include <QMap>
+#include <QMutex>
+#include <QPair>
+#include <QTime>
+#include <QVariantMap>
+#include <QVector>
 
-K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerPlugin<KisTelemetry>();)
+namespace KisUserFeedback {
 
-KisTelemetry::KisTelemetry(QObject* parent, const QVariantList&)
-    : QObject(parent)
-{
-    KisPart::instance()->setProvider(new KisTelemetryInstallProvider);
+/*! Data source reporting the type and amount of CPUs.
+ *
+ *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
+ */
+class ToolsInfoSource : public KUserFeedback::AbstractDataSource {
+public:
+    ToolsInfoSource();
+    QString description() const override;
+    QVariant data() override;
+    void activateTool(QString toolName);
+    void deactivateTool(QString toolName);
+
+private:
+    QVariantList m_tools;
+    QMap<QString, QTime> m_currentTools;
+    QMutex m_mutex;
+};
 }
 
-KisTelemetry::~KisTelemetry()
-{
-
-}
-
-#include "kis_telemetry.moc"
-
+#endif // KISUSERFEEDBACK_TOOLSINFOSOURCE_H

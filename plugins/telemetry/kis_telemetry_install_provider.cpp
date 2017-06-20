@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_telemetry_provider.h"
+#include "kis_telemetry_install_provider.h"
 #include "KPluginFactory"
 #include "KisPart.h"
 #include <klocalizedstring.h>
@@ -33,7 +33,7 @@
 #include <kis_types.h>
 #include "Vc/cpuid.h"
 
-KisTelemetryProvider::KisTelemetryProvider()
+KisTelemetryInstallProvider::KisTelemetryInstallProvider()
 {
     m_provider.reset(new KUserFeedback::Provider);
     m_provider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
@@ -58,18 +58,18 @@ KisTelemetryProvider::KisTelemetryProvider()
     }
 }
 
-KUserFeedback::Provider* KisTelemetryProvider::provider()
+KUserFeedback::Provider* KisTelemetryInstallProvider::provider()
 {
     return m_provider.data();
 }
 
-void KisTelemetryProvider::sendData()
+void KisTelemetryInstallProvider::sendData()
 {
     // m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me:8080/"));
-    m_provider.data()->setFeedbackServer(QUrl("http://localhost:8080/"));
+    m_provider.data()->setFeedbackServer(QUrl(m_adress));
     m_provider.data()->submit();
 }
 
-KisTelemetryProvider::~KisTelemetryProvider()
+KisTelemetryInstallProvider::~KisTelemetryInstallProvider()
 {
 }

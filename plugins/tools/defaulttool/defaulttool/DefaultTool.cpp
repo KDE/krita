@@ -45,6 +45,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
+#include <commands/KoShapeTransformCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
 #include <commands/KoShapeCreateCommand.h>
 #include <commands/KoShapeGroupCommand.h>
@@ -84,6 +85,16 @@
 namespace {
 static const QString EditFillGradientFactoryId = "edit_fill_gradient";
 static const QString EditStrokeGradientFactoryId = "edit_stroke_gradient";
+
+enum TransformActionType {
+    TransformRotate90CW,
+    TransformRotate90CCW,
+    TransformRotate180,
+    TransformMirrorX,
+    TransformMirrorY,
+    TransformReset
+};
+
 }
 
 QPolygonF selectionPolygon(KoSelection *selection)
@@ -413,6 +424,16 @@ void DefaultTool::setupActions()
     QAction *actionUngroupBottom = actionRegistry->makeQAction("object_ungroup", this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
+
+    QSignalMapper *transformSignalsMapper = new QSignalMapper(this);
+    connect(transformSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionTransform(int)));
+
+    addMappedAction(transformSignalsMapper, "object_transform_rotate_90_cw", TransformRotate90CW);
+    addMappedAction(transformSignalsMapper, "object_transform_rotate_90_ccw", TransformRotate90CCW);
+    addMappedAction(transformSignalsMapper, "object_transform_rotate_180", TransformRotate180);
+    addMappedAction(transformSignalsMapper, "object_transform_mirror_horizontally", TransformMirrorX);
+    addMappedAction(transformSignalsMapper, "object_transform_mirror_vertically", TransformMirrorY);
+    addMappedAction(transformSignalsMapper, "object_transform_reset", TransformReset);
 
     m_contextMenu.reset(new QMenu());
 }
@@ -1013,6 +1034,84 @@ void DefaultTool::selectionUngroup()
     }
 }
 
+void DefaultTool::selectionTransform(int transformAction)
+{
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
+        return;
+    }
+
+    QTransform applyTransform;
+    bool shouldReset = false;
+    KUndo2MagicString actionName = kundo2_noi18n("BUG: No transform action");
+
+
+    switch (TransformActionType(transformAction)) {
+    case TransformRotate90CW:
+        applyTransform.rotate(90.0);
+        actionName = kundo2_i18n("Rotate Object 90° CW");
+        break;
+    case TransformRotate90CCW:
+        applyTransform.rotate(-90.0);
+        actionName = kundo2_i18n("Rotate Object 90° CCW");
+        break;
+    case TransformRotate180:
+        applyTransform.rotate(180.0);
+        actionName = kundo2_i18n("Rotate Object 180°");
+        break;
+    case TransformMirrorX:
+        applyTransform.scale(-1.0, 1.0);
+        actionName = kundo2_i18n("Mirror Object Horizontally");
+        break;
+    case TransformMirrorY:
+        applyTransform.scale(1.0, -1.0);
+        actionName = kundo2_i18n("Mirror Object Vertically");
+        break;
+    case TransformReset:
+        shouldReset = true;
+        actionName = kundo2_i18n("Reset Object Transformations");
+        break;
+    }
+
+    if (!shouldReset && applyTransform.isIdentity()) return;
+
+    QList<QTransform> oldTransforms;
+    QList<QTransform> newTransforms;
+
+    const QRectF outlineRect = KoShape::absoluteOutlineRect(editableShapes);
+    const QPointF centerPoint = outlineRect.center();
+    const QTransform centerTrans = QTransform::fromTranslate(centerPoint.x(), centerPoint.y());
+    const QTransform centerTransInv = QTransform::fromTranslate(-centerPoint.x(), -centerPoint.y());
+
+    // we also add selection to the list of trasformed shapes, so that its outline is updated correctly
+    QList<KoShape*> transformedShapes = editableShapes;
+    transformedShapes << selection;
+
+    Q_FOREACH (KoShape *shape, transformedShapes) {
+        oldTransforms.append(shape->transformation());
+
+        QTransform t;
+
+        if (!shouldReset) {
+            const QTransform world = shape->absoluteTransformation(0);
+            t =  world * centerTransInv * applyTransform * centerTrans * world.inverted() * shape->transformation();
+        } else {
+            const QPointF center = shape->outlineRect().center();
+            const QPointF offset = shape->transformation().map(center) - center;
+            t = QTransform::fromTranslate(offset.x(), offset.y());
+        }
+
+        newTransforms.append(t);
+    }
+
+    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(transformedShapes, oldTransforms, newTransforms);
+    cmd->setText(actionName);
+    canvas()->addCommand(cmd);
+}
+
 void DefaultTool::selectionAlign(int _align)
 {
     KoShapeAlignCommand::Align align =
@@ -1263,12 +1362,19 @@ void DefaultTool::updateActions()
         editableShapes = koSelection()->selectedEditableShapes();
     }
 
-    const bool orderingEnabled = !editableShapes.isEmpty();
+    const bool hasEditableShapes = !editableShapes.isEmpty();
 
-    action("object_order_front")->setEnabled(orderingEnabled);
-    action("object_order_raise")->setEnabled(orderingEnabled);
-    action("object_order_lower")->setEnabled(orderingEnabled);
-    action("object_order_back")->setEnabled(orderingEnabled);
+    action("object_order_front")->setEnabled(hasEditableShapes);
+    action("object_order_raise")->setEnabled(hasEditableShapes);
+    action("object_order_lower")->setEnabled(hasEditableShapes);
+    action("object_order_back")->setEnabled(hasEditableShapes);
+
+    action("object_transform_rotate_90_cw")->setEnabled(hasEditableShapes);
+    action("object_transform_rotate_90_ccw")->setEnabled(hasEditableShapes);
+    action("object_transform_rotate_180")->setEnabled(hasEditableShapes);
+    action("object_transform_mirror_horizontally")->setEnabled(hasEditableShapes);
+    action("object_transform_mirror_vertically")->setEnabled(hasEditableShapes);
+    action("object_transform_reset")->setEnabled(hasEditableShapes);
 
     const bool alignmentEnabled =
        editableShapes.size() > 1 ||
@@ -1337,6 +1443,16 @@ QMenu* DefaultTool::popupActionsMenu()
             m_contextMenu->addAction(action("object_group"));
             m_contextMenu->addAction(action("object_ungroup"));
         }
+
+        QMenu *transform = m_contextMenu->addMenu(i18n("Transform"));
+        transform->addAction(action("object_transform_rotate_90_cw"));
+        transform->addAction(action("object_transform_rotate_90_ccw"));
+        transform->addAction(action("object_transform_rotate_180"));
+        transform->addSeparator();
+        transform->addAction(action("object_transform_mirror_horizontally"));
+        transform->addAction(action("object_transform_mirror_vertically"));
+        transform->addSeparator();
+        transform->addAction(action("object_transform_reset"));
     }
 
     return m_contextMenu.data();

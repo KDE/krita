@@ -106,8 +106,6 @@ void KoSelection::select(KoShape *shape)
     d->selectedShapes << shape;
     shape->addShapeChangeListener(this);
 
-    d->savedMatrices = d->fetchShapesMatrices();
-
     if (d->selectedShapes.size() == 1) {
         setTransformation(shape->absoluteTransformation(0));
     } else {
@@ -125,7 +123,6 @@ void KoSelection::deselect(KoShape *shape)
 
     d->selectedShapes.removeAll(shape);
     shape->removeShapeChangeListener(this);
-    d->savedMatrices = d->fetchShapesMatrices();
 
     if (d->selectedShapes.size() == 1) {
         setTransformation(d->selectedShapes.first()->absoluteTransformation(0));
@@ -144,7 +141,6 @@ void KoSelection::deselectAll()
     Q_FOREACH (KoShape *shape, d->selectedShapes) {
         shape->removeShapeChangeListener(this);
     }
-    d->savedMatrices = d->fetchShapesMatrices();
 
     // reset the transformation matrix of the selection
     setTransformation(QTransform());
@@ -245,20 +241,10 @@ void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 
     if (type == KoShape::Deleted) {
         deselect(shape);
-        // HACK ALERT: the caller will also remove the listener, so re-add it here
+
+        // HACK ALERT: the caller will also remove the listener, which was
+        // removed in deselect(), so re-add it here
         shape->addShapeChangeListener(this);
-
-    } else if (type >= KoShape::PositionChanged && type <= KoShape::GenericMatrixChange) {
-        QList<QTransform> matrices = d->fetchShapesMatrices();
-
-        QTransform newTransform;
-        if (d->checkMatricesConsistent(matrices, &newTransform)) {
-            d->savedMatrices = matrices;
-            setTransformation(newTransform);
-        } else {
-            d->savedMatrices = matrices;
-            setTransformation(QTransform());
-        }
     }
 }
 
@@ -268,42 +254,5 @@ void KoSelection::saveOdf(KoShapeSavingContext &) const
 
 bool KoSelection::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
 {
-    return true;
-}
-
-
-QList<QTransform> KoSelectionPrivate::fetchShapesMatrices() const
-{
-    QList<QTransform> result;
-    Q_FOREACH (KoShape *shape, selectedShapes) {
-        result << shape->absoluteTransformation(0);
-    }
-    return result;
-}
-
-bool KoSelectionPrivate::checkMatricesConsistent(const QList<QTransform> &matrices, QTransform *newTransform)
-{
-    Q_Q(KoSelection);
-
-    QTransform commonDiff;
-    bool haveCommonDiff = false;
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(matrices.size() == selectedShapes.size(), false);
-
-    for (int i = 0; i < matrices.size(); i++) {
-        QTransform t = savedMatrices[i];
-        QTransform diff = t.inverted() * matrices[i];
-
-
-        if (haveCommonDiff) {
-            if (!KisAlgebra2D::fuzzyMatrixCompare(commonDiff, diff, 1e-5)) {
-                return false;
-            }
-        } else {
-            commonDiff = diff;
-        }
-    }
-
-    *newTransform = q->transformation() * commonDiff;
     return true;
 }

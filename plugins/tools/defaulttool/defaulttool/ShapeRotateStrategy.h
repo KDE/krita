@@ -61,7 +61,7 @@ private:
     QTransform m_rotationMatrix;
     QList<QTransform> m_oldTransforms;
     QPointF m_rotationCenter;
-    QList<KoShape *> m_selectedShapes;
+    QList<KoShape *> m_transformedShapesAndSelection;
 };
 
 #endif

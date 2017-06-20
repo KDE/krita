@@ -37,8 +37,14 @@ ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicke
     : KoInteractionStrategy(tool)
     , m_start(clicked)
 {
-    m_selectedShapes = tool->canvas()->shapeManager()->selection()->selectedEditableShapes();
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    /**
+     * The outline of the selection should look as if it is also rotated, so we
+     * add it to the transformed shapes list.
+     */
+    m_transformedShapesAndSelection = tool->canvas()->shapeManager()->selection()->selectedEditableShapes();
+    m_transformedShapesAndSelection << tool->canvas()->shapeManager()->selection();
+
+    Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         m_oldTransforms << shape->transformation();
     }
 
@@ -80,7 +86,7 @@ void ShapeRotateStrategy::rotateBy(qreal angle)
 
     QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         const QRectF oldDirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
         shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
@@ -101,11 +107,11 @@ void ShapeRotateStrategy::paint(QPainter &painter, const KoViewConverter &conver
 KUndo2Command *ShapeRotateStrategy::createCommand()
 {
     QList<QTransform> newTransforms;
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         newTransforms << shape->transformation();
     }
 
-    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_selectedShapes, m_oldTransforms, newTransforms);
+    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_transformedShapesAndSelection, m_oldTransforms, newTransforms);
     cmd->setText(kundo2_i18n("Rotate"));
     return cmd;
 }

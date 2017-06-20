@@ -106,6 +106,8 @@ private Q_SLOTS:
     void selectionGroup();
     void selectionUngroup();
 
+    void selectionTransform(int transformAction);
+
     void slotActivateEditFillGradient(bool value);
     void slotActivateEditStrokeGradient(bool value);
 

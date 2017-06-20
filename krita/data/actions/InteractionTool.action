@@ -196,5 +196,67 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
     </Action>
+
+    <Action name="object_transform_rotate_90_cw">
+      <text>Rotate 90° CW</text>
+      <toolTip>Rotate object 90° clockwise</toolTip>
+      <shortcut></shortcut>
+      <icon>object-rotate-right</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_rotate_90_ccw">
+      <text>Rotate 90° CCW</text>
+      <toolTip>Rotate object 90° counterclockwise</toolTip>
+      <shortcut></shortcut>
+      <icon>object-rotate-left</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_rotate_180">
+      <text>Rotate 180° CCW</text>
+      <toolTip>Rotate object 180°</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_mirror_horizontally">
+      <text>Mirror Horizontally</text>
+      <toolTip>Mirror object horizontally</toolTip>
+      <shortcut></shortcut>
+      <icon>symmetry-horizontal</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_mirror_vertically">
+      <text>Mirror Vertically</text>
+      <toolTip>Mirror object vertically</toolTip>
+      <shortcut></shortcut>
+      <icon>symmetry-vertical</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_reset">
+      <text>Reset Transformations</text>
+      <toolTip>Reset object transformations</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+
   </Actions>
 </ActionCollection>

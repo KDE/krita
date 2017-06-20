@@ -28,12 +28,12 @@
 #include "KoColor.h"
 #include "kis_types.h"
 
-class SplatGenerator
+class WATERCOLORPAINT_EXPORT SplatGenerator
 {
 public:
-    SplatGenerator(int width, KoColor &clr, KisPaintDeviceSP dev);
+    SplatGenerator(int width, KoColor clr, KisPaintDeviceSP dev);
 
-    void generateFromPoints(QVector<QPointF> &points, int msec);
+    void generateFromPoints(QVector<QPointF> points, int msec);
 
 private:
     QVector<KisSplat*> *m_flowing;

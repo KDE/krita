@@ -21,7 +21,7 @@
 #include "kis_splat_generator.h"
 #include "kis_painter.h"
 
-SplatGenerator::SplatGenerator(int width, KoColor &clr,
+SplatGenerator::SplatGenerator(int width, KoColor clr,
                                KisPaintDeviceSP dev) : m_width(width),
                                                        m_color(clr),
                                                        m_device(dev)
@@ -33,20 +33,17 @@ SplatGenerator::SplatGenerator(int width, KoColor &clr,
     m_dried = new QVector<KisSplat*>();
 }
 
-void SplatGenerator::generateFromPoints(QVector<QPointF> &points, int msec)
+void SplatGenerator::generateFromPoints(QVector<QPointF> points, int msec)
 {
     foreach (QPointF pnt, points) {
-        m_flowing->push_back(new KisSplat(pnt, m_width, m_color));
+        m_flowing->push_back(new KisSplat(pnt, 2*m_width, m_color));
         m_wetMap->addWater(pnt.toPoint(), m_width);
     }
 
-    KisPainter painter(m_device);
-    painter.setPaintColor(m_color);
+    KisPainter *painter = new KisPainter(m_device);
 
     for (int i = 0; i <= msec; i +=33) {
         foreach (KisSplat *splat, *m_flowing) {
-            painter.fillPainterPath(splat->shape());
-
             if (splat->update(m_wetMap) == KisSplat::Fixed) {
                 m_fixed->push_back(splat);
                 m_flowing->removeOne(splat);
@@ -61,5 +58,14 @@ void SplatGenerator::generateFromPoints(QVector<QPointF> &points, int msec)
         }
 
         m_wetMap->update();
+    }
+    foreach (KisSplat *splat, *m_flowing) {
+        splat->doPaint(painter);
+    }
+    foreach (KisSplat *splat, *m_fixed) {
+        splat->doPaint(painter);
+    }
+    foreach (KisSplat *splat, *m_dried) {
+        splat->doPaint(painter);
     }
 }

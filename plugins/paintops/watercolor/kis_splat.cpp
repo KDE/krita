@@ -24,7 +24,7 @@
 
 #include <QVector2D>
 
-#define START_OPACITY 220
+#define START_OPACITY 100
 #define STANDART_LIFETIME 30
 
 double get_random(qreal min, qreal max)

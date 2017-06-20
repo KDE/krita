@@ -5,11 +5,13 @@
 
 #include "plugins/paintops/watercolor/kis_wetmap.h"
 #include "plugins/paintops/watercolor/kis_splat.h"
+#include "plugins/paintops/watercolor/kis_splat_generator.h"
 
 #include <QString>
 #include <QVector>
 #include <kis_filter_configuration.h>
 #include "kis_painter.h"
+#include <cmath>
 
 class TestWetMap
 {
@@ -279,6 +281,69 @@ public:
     }
 };
 
+class TestGenerator
+{
+public:
+    TestGenerator() {}
+
+    void test() {
+        KoColor clr;
+        clr.fromQColor(Qt::white);
+
+        test(25, clr, "white_25radius");
+        test(50, clr, "white_50radius");
+        test(100, clr, "white_100radius");
+
+        clr.fromQColor(Qt::blue);
+
+        test(25, clr, "blue_25radius");
+        test(50, clr, "blue_50radius");
+        test(100, clr, "blue_100radius");
+
+        clr.fromQColor(Qt::red);
+
+        test(25, clr, "red_25radius");
+        test(50, clr, "red_50radius");
+        test(100, clr, "red_100radius");
+    }
+
+    void test(int width, KoColor clr, QString prefix) {
+        QVector<QPointF> points;
+        for (int i = 0; i < 50; i++) {
+            points.push_back(QPointF(i*width, width));
+        }
+        QString newPrefix = prefix + QString("_line_1sec");
+        test(width, clr, points, 1000, newPrefix);
+        newPrefix = prefix + QString("_line_5sec");
+        test(width, clr, points, 5000, newPrefix);
+        newPrefix = prefix + QString("_line_10sec");
+        test(width, clr, points, 10000, newPrefix);
+
+        points.clear();
+        for (int i = 0; i < 50; i++) {
+            points.push_back(QPointF(i*width, width * sin(i*width)));
+        }
+        newPrefix = prefix + QString("_sin_1sec");
+        test(width, clr, points, 1000, newPrefix);
+        newPrefix = prefix + QString("_sin_5sec");
+        test(width, clr, points, 5000, newPrefix);
+        newPrefix = prefix + QString("_sin_10sec");
+        test(width, clr, points, 10000, newPrefix);
+    }
+
+    void test(int width, KoColor clr,
+              QVector<QPointF> points, int msec, QString prefix) {
+        KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+
+        SplatGenerator generator(width, clr, dev);
+        generator.generateFromPoints(points, msec);
+        QVERIFY(!TestUtil::checkQImage(dev->convertToQImage(0),
+                                      "Splat_Generator",
+                                      "generating",
+                                      prefix));
+    }
+};
+
 void WaterColorTest::testWetMap()
 {
     TestWetMap t;
@@ -288,6 +353,12 @@ void WaterColorTest::testWetMap()
 void WaterColorTest::testSplat()
 {
     TestSplat t;
+    t.test();
+}
+
+void WaterColorTest::testGenerator()
+{
+    TestGenerator t;
     t.test();
 }
 

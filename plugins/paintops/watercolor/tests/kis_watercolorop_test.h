@@ -29,6 +29,7 @@ class WaterColorTest : public QObject
 private Q_SLOTS:
     void testWetMap();
     void testSplat();
+    void testGenerator();
 };
 
 #endif /* __KIS_WATERCOLOROP_TEST_H */

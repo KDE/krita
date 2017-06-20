@@ -45,7 +45,7 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject, public KisShared
 public:
     KisCanvasDecoration(const QString& id, QPointer<KisView>parent);
 
-    ~KisCanvasDecoration();
+    ~KisCanvasDecoration() override;
 
     void setView(QPointer<KisView> imageView);
 

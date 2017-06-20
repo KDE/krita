@@ -29,11 +29,11 @@ class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
 public:
     PatternDockerDock( );
 
-    virtual void setMainWindow(KisViewManager* kisview);
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setMainWindow(KisViewManager* kisview) override;
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
-    QString observerName() { return "PatternDockerDock"; }
+    QString observerName() override { return "PatternDockerDock"; }
 public Q_SLOTS:
     void patternChanged(KoPattern *pattern);
 private Q_SLOTS:

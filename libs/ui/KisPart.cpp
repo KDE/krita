@@ -208,7 +208,7 @@ void KisPart::removeDocument(KisDocument *document)
 KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
-    Q_FOREACH(QAction *action, d->scriptActions) {
+    Q_FOREACH(KisAction *action, d->scriptActions) {
         mw->viewManager()->scriptManager()->addAction(action);
     }
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;

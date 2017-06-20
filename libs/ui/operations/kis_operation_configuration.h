@@ -28,7 +28,7 @@ class KRITAUI_EXPORT KisOperationConfiguration : public KisPropertiesConfigurati
 {
 public:
     KisOperationConfiguration();
-    virtual ~KisOperationConfiguration() {}
+    ~KisOperationConfiguration() override {}
     KisOperationConfiguration(const QString &id);
 
     QString id() const;

@@ -60,36 +60,36 @@ public:
      * @param parent the shapeanchor.
      */
     explicit  KoAnchorInlineObject(KoShapeAnchor *parent);
-    virtual ~KoAnchorInlineObject();
+    ~KoAnchorInlineObject() override;
 
     /// returns the parent anchor
     KoShapeAnchor *anchor() const;
 
     /// returns the cursor position in the document where this anchor is positioned.
-    int position() const;
+    int position() const override;
 
     /// returns the document that this anchor is associated with.
-    const QTextDocument *document() const;
+    const QTextDocument *document() const override;
 
     /// reimplemented from KoInlineObject
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
+    void updatePosition(const QTextDocument *document,
+                                int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented from KoInlineObject
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object,
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented from KoInlineObject
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
 
     qreal inlineObjectAscent() const;
 
     qreal inlineObjectDescent() const;
 
     /// reimplemented from KoInlineObject - should not do anything
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
 
     /// reimplemented from KoInlineObject
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) override;
 
 
 private:

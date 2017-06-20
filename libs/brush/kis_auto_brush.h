@@ -38,7 +38,7 @@ public:
     KisAutoBrush(const KisAutoBrush& rhs);
     KisBrush* clone() const override;
 
-    virtual ~KisAutoBrush();
+    ~KisAutoBrush() override;
 
 public:
 
@@ -51,21 +51,21 @@ public:
         const KisPaintInformation& info) const override;
     QSizeF characteristicSize(KisDabShape const&) const override;
 
-    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
+    KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
             KisDabShape const&,
             const KisPaintInformation&,
             double = 0, double = 0) const override {
         return 0; // The autobrush does NOT support images!
     }
 
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             KisBrush::ColoringInformation* src,
             KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0,
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
-    virtual QPainterPath outline() const override;
+    QPainterPath outline() const override;
 
 public:
 
@@ -73,7 +73,7 @@ public:
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) override {
+    bool loadFromDevice(QIODevice *) override {
         return false;
     }
 

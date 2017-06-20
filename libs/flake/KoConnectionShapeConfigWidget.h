@@ -32,15 +32,15 @@ class KoConnectionShapeConfigWidget : public KoShapeConfigWidgetBase
 public:
     KoConnectionShapeConfigWidget();
     /// reimplemented
-    virtual void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented
-    virtual void save();
+    void save() override;
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    bool showOnShapeCreate() override {
         return false;
     }
     /// reimplemented
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
 
 Q_SIGNALS:
     void connectionTypeChanged(int type);

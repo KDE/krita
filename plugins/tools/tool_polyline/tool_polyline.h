@@ -30,7 +30,7 @@ class ToolPolyline : public QObject
     Q_OBJECT
 public:
     ToolPolyline(QObject *parent, const QVariantList &);
-    virtual ~ToolPolyline();
+    ~ToolPolyline() override;
 };
 
 #endif // TOOL_POLYLINE_H_

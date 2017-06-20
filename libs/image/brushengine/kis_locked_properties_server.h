@@ -35,7 +35,7 @@ class KRITAIMAGE_EXPORT KisLockedPropertiesServer: public QObject
 {
 public:
     KisLockedPropertiesServer();
-    ~KisLockedPropertiesServer();
+    ~KisLockedPropertiesServer() override;
     static KisLockedPropertiesServer* instance();
 
     KisLockedPropertiesSP lockedProperties();

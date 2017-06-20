@@ -91,7 +91,7 @@ public:
                                     const KoColorSpace* dstCs,
                                     Intent renderingIntent,
                                     ConversionFlags conversionFlags);
-    ~KoColorConversionTransformation();
+    ~KoColorConversionTransformation() override;
 public:
 
     /**
@@ -119,12 +119,12 @@ public:
      * perform the color conversion between two buffers.
      * @param nPixels the number of pixels in the buffers.
      */
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const = 0;
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override = 0;
 
     /**
      * @return false if the  transformation is not valid
      */
-    virtual bool isValid() const { return true; }
+    bool isValid() const override { return true; }
 
 private:
 

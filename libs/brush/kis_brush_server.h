@@ -43,7 +43,7 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 
 public:
     KisBrushServer();
-    virtual ~KisBrushServer();
+    ~KisBrushServer() override;
     KisBrushResourceServer* brushServer(bool block = true);
 
     static KisBrushServer* instance();

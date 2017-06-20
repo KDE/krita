@@ -54,7 +54,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
 public:
 
     KisSelectionManager(KisViewManager * view);
-    virtual ~KisSelectionManager();
+    ~KisSelectionManager() override;
 
     void setup(KisActionManager* actionManager);
 

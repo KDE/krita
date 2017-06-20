@@ -27,7 +27,7 @@
 
 typedef QList<qreal> CharTransforms;
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class SvgGraphicsContext;
 
 class ArtisticTextLoadingContext

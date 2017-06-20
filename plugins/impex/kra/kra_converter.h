@@ -40,7 +40,7 @@ class KraConverter : public QObject
 public:
 
     KraConverter(KisDocument *doc);
-    virtual ~KraConverter();
+    ~KraConverter() override;
 
     KisImageBuilder_Result buildImage(QIODevice *io);
     KisImageBuilder_Result buildFile(QIODevice *io);

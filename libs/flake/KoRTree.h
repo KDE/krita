@@ -259,21 +259,21 @@ class NonLeafNode : virtual public Node
     {
     public:
         NonLeafNode(int capacity, int level, Node * parent);
-        virtual ~NonLeafNode();
+        ~NonLeafNode() override;
 
         virtual void insert(const QRectF& bb, Node * data);
-        virtual void remove(int index);
-        virtual void move(Node * node, int index);
+        void remove(int index) override;
+        void move(Node * node, int index) override;
 
-        virtual LeafNode * chooseLeaf(const QRectF& bb);
-        virtual NonLeafNode * chooseNode(const QRectF& bb, int level);
+        LeafNode * chooseLeaf(const QRectF& bb) override;
+        NonLeafNode * chooseNode(const QRectF& bb, int level) override;
 
-        virtual void intersects(const QRectF& rect, QMap<int, T> & result) const;
-        virtual void contains(const QPointF & point, QMap<int, T> & result) const;
-        virtual void contained(const QRectF & point, QMap<int, T> & result) const;
+        void intersects(const QRectF& rect, QMap<int, T> & result) const override;
+        void contains(const QPointF & point, QMap<int, T> & result) const override;
+        void contained(const QRectF & point, QMap<int, T> & result) const override;
 
-        virtual void keys(QList<QRectF> & result) const;
-        virtual void values(QMap<int, T> & result) const;
+        void keys(QList<QRectF> & result) const override;
+        void values(QMap<int, T> & result) const override;
 
         virtual Node * getNode(int index) const;
 
@@ -293,27 +293,27 @@ class LeafNode : virtual public Node
         static int dataIdCounter;
 
         LeafNode(int capacity, int level, Node * parent);
-        virtual ~LeafNode();
+        ~LeafNode() override;
 
         virtual void insert(const QRectF& bb, const T& data, int id);
-        virtual void remove(int index);
+        void remove(int index) override;
         virtual void remove(const T& data);
-        virtual void move(Node * node, int index);
+        void move(Node * node, int index) override;
 
-        virtual LeafNode * chooseLeaf(const QRectF& bb);
-        virtual NonLeafNode * chooseNode(const QRectF& bb, int level);
+        LeafNode * chooseLeaf(const QRectF& bb) override;
+        NonLeafNode * chooseNode(const QRectF& bb, int level) override;
 
-        virtual void intersects(const QRectF& rect, QMap<int, T> & result) const;
-        virtual void contains(const QPointF & point, QMap<int, T> & result) const;
-        virtual void contained(const QRectF & point, QMap<int, T> & result) const;
+        void intersects(const QRectF& rect, QMap<int, T> & result) const override;
+        void contains(const QPointF & point, QMap<int, T> & result) const override;
+        void contained(const QRectF & point, QMap<int, T> & result) const override;
 
-        virtual void keys(QList<QRectF> & result) const;
-        virtual void values(QMap<int, T> & result) const;
+        void keys(QList<QRectF> & result) const override;
+        void values(QMap<int, T> & result) const override;
 
         virtual const T& getData(int index) const;
         virtual int getDataId(int index) const;
 
-        virtual bool isLeaf() const {
+        bool isLeaf() const override {
             return true;
         }
 

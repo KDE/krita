@@ -31,7 +31,7 @@ class KRITAFLAKE_EXPORT KoInputDeviceHandler : public QObject
     Q_OBJECT
 public:
     KoInputDeviceHandler(QObject *parent, const QString &id);
-    virtual ~KoInputDeviceHandler();
+    ~KoInputDeviceHandler() override;
 
     /**
      * Return the id for the device.

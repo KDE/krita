@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisColorSpaceSelector : public QWidget
     Q_OBJECT
 public:
     KisColorSpaceSelector(QWidget* parent);
-    ~KisColorSpaceSelector();
+    ~KisColorSpaceSelector() override;
     const KoColorSpace* currentColorSpace();
     void setCurrentColorModel(const KoID& id);
     void setCurrentColorDepth(const KoID& id);

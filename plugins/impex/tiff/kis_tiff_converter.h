@@ -51,7 +51,7 @@ class KisTIFFConverter : public QObject
     Q_OBJECT
 public:
     KisTIFFConverter(KisDocument *doc);
-    virtual ~KisTIFFConverter();
+    ~KisTIFFConverter() override;
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
     KisImageBuilder_Result buildFile(const QString &filename, KisImageSP layer, KisTIFFOptions);

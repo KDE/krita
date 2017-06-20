@@ -56,7 +56,7 @@ class KRITAUI_EXPORT KisWidgetChooser: public QFrame
     
 public:
      KisWidgetChooser(int id, QWidget* parent=0);
-    ~KisWidgetChooser();
+    ~KisWidgetChooser() override;
     
     QWidget* chooseWidget(const QString& id);
     void     addWidget(const QString& id, const QString& label, QWidget* widget);
@@ -90,7 +90,7 @@ protected Q_SLOTS:
 
     // QWidget interface
 protected:
-    virtual void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e) override;
 
 private:
     int           m_chooserid;

@@ -24,6 +24,7 @@
 #include "libkis.h"
 
 class KoCanvasBase;
+class KisDisplayColorConverter;
 
 /**
  * Canvas wraps the canvas inside a view on an image/document.
@@ -36,11 +37,11 @@ class KRITALIBKIS_EXPORT Canvas : public QObject
 
 public:
     explicit Canvas(KoCanvasBase *canvas, QObject *parent = 0);
-    virtual ~Canvas();
+    ~Canvas() override;
 
     bool operator==(const Canvas &other) const;
     bool operator!=(const Canvas &other) const;
-    
+
 public Q_SLOTS:
 
     /**
@@ -110,7 +111,13 @@ public Q_SLOTS:
      */
     View *view() const;
 
+
 private:
+
+    friend class ManagedColor;
+
+    KisDisplayColorConverter *displayColorConverter() const;
+
     struct Private;
     Private *const d;
 

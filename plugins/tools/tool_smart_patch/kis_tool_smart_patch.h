@@ -20,7 +20,9 @@
 #define KIS_TOOL_SMART_PATCH_H_
 
 #include <QScopedPointer>
-#include "kis_tool_freehand.h"
+#include <QPainterPath>
+
+#include "kis_tool_paint.h"
 
 #include "KoToolFactoryBase.h"
 
@@ -34,42 +36,47 @@
 
 class KActionCollection;
 class KoCanvasBase;
+class KisPaintInformation;
+class KisSpacingInfomation;
 
-class KisToolSmartPatch : public KisToolFreehand
+
+class KisToolSmartPatch : public KisToolPaint
 {
     Q_OBJECT
 public:
     KisToolSmartPatch(KoCanvasBase * canvas);
-    virtual ~KisToolSmartPatch();
+    ~KisToolSmartPatch() override;
 
-    QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
-    void activatePrimaryAction();
-    void deactivatePrimaryAction();
+    void activatePrimaryAction() override;
+    void deactivatePrimaryAction() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    int flags() const override { return KisTool::FLAG_USES_CUSTOM_SIZE; }
 
 protected Q_SLOTS:
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
-
-Q_SIGNALS:
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private:
-    bool canCreateInpaintMask() const;
-    QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
+    //QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
+    QPainterPath getBrushOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
+    QPainterPath brushOutline();
+    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event) override;
 
 private:
     struct Private;
+    class InpaintCommand;
     const QScopedPointer<Private> m_d;
 
-    void createInpaintMask();
-    void deleteInpaintMask();
+    void addMaskPath(KoPointerEvent *event);
 };
 
 
@@ -90,9 +97,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolSmartPatchFactory() {}
+    ~KisToolSmartPatchFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas)
+    KoToolBase * createTool(KoCanvasBase *canvas) override
     {
         return new KisToolSmartPatch(canvas);
     }

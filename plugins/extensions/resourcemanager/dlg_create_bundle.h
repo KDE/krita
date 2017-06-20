@@ -34,7 +34,7 @@ class DlgCreateBundle : public KoDialog
 
 public:
     explicit DlgCreateBundle(KisResourceBundle *bundle = 0, QWidget *parent = 0);
-    ~DlgCreateBundle();
+    ~DlgCreateBundle() override;
 
     QString bundleName() const;
     QString authorName() const;
@@ -54,7 +54,7 @@ public:
 
 private Q_SLOTS:
 
-    void accept();
+    void accept() override;
     void selectSaveLocation();
     void addSelected();
     void removeSelected();

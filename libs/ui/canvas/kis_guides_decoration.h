@@ -31,14 +31,14 @@ class KRITAUI_EXPORT KisGuidesDecoration : public KisCanvasDecoration
     Q_OBJECT
 public:
     KisGuidesDecoration(QPointer<KisView> view);
-    ~KisGuidesDecoration();
+    ~KisGuidesDecoration() override;
 
 
     void setGuidesConfig(const KisGuidesConfig &value);
     const KisGuidesConfig& guidesConfig() const;
 
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
+    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas) override;
 
 private:
     struct Private;

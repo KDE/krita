@@ -38,9 +38,9 @@ class KisFilterOp : public KisBrushBasedPaintOp
 public:
 
     KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    ~KisFilterOp();
+    ~KisFilterOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
 private:
 

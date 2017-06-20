@@ -38,12 +38,12 @@ class OnionSkinsDocker : public QDockWidget, public KisMainwindowObserver
 
 public:
     explicit OnionSkinsDocker(QWidget *parent = 0);
-    ~OnionSkinsDocker();
+    ~OnionSkinsDocker() override;
 
-    QString observerName() { return "OnionSkinsDocker"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
-    void setMainWindow(KisViewManager *kisview);
+    QString observerName() override { return "OnionSkinsDocker"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
+    void setMainWindow(KisViewManager *kisview) override;
 
 private:
     Ui::OnionSkinsDocker *ui;

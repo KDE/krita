@@ -32,6 +32,8 @@
 #include <resources/KoPattern.h>
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoColorSet.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoSvgSymbolCollectionResource.h>
 
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
@@ -46,7 +48,7 @@ public:
      * @param server the server the resources will be loaded for
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
-    ~KoResourceLoaderThread();
+    ~KoResourceLoaderThread() override;
     void loadSynchronously();
 public Q_SLOTS:
     /**
@@ -59,7 +61,7 @@ protected:
     /**
      * Overridden from QThread
      */
-    void run();
+    void run() override;
 
 private:
 
@@ -77,13 +79,14 @@ class KRITAWIDGETS_EXPORT KoResourceServerProvider : public QObject
 
 public:
     KoResourceServerProvider();
-    virtual ~KoResourceServerProvider();
+    ~KoResourceServerProvider() override;
 
     static KoResourceServerProvider* instance();
 
     KoResourceServer<KoPattern>* patternServer(bool block = true);
     KoResourceServer<KoAbstractGradient>* gradientServer(bool block = true);
     KoResourceServer<KoColorSet>* paletteServer(bool block = true);
+    KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer(bool block = true);
 
 private:
     KoResourceServerProvider(const KoResourceServerProvider&);

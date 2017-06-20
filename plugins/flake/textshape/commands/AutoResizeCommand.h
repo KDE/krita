@@ -33,8 +33,8 @@ class AutoResizeCommand : public KUndo2Command
 public:
     AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enable);
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     KoTextShapeData *m_shapeData;

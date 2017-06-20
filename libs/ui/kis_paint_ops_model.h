@@ -61,7 +61,7 @@ class KRITAUI_EXPORT KisPaintOpListModel : public BasePaintOpCategorizedListMode
 {
 public:
     KisPaintOpListModel(QObject *parent);
-    virtual QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const override;
     void fill(const QList<KisPaintOpFactory*>& list);
 };
 
@@ -80,7 +80,7 @@ public:
     }
 
 protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override {
         return lessThanPriority(left, right, KisPaintOpFactory::categoryStable());
     }
 

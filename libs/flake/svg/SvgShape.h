@@ -24,7 +24,7 @@
 
 class SvgSavingContext;
 class SvgLoadingContext;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 
 /// An interface providing svg loading and saving routines
 class KRITAFLAKE_EXPORT SvgShape

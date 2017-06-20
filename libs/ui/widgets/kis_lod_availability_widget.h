@@ -33,7 +33,7 @@ class KisLodAvailabilityWidget : public QWidget
 
 public:
     KisLodAvailabilityWidget(QWidget *parent);
-    ~KisLodAvailabilityWidget();
+    ~KisLodAvailabilityWidget() override;
 
     void setCanvasResourceManager(KoCanvasResourceManager *resourceManager);
 

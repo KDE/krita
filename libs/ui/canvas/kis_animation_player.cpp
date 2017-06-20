@@ -334,8 +334,11 @@ void KisAnimationPlayer::play()
         const KisTimeRange &range = animation->playbackRange();
         if (!range.isValid()) return;
 
-        KisAnimationCacheUpdateProgressDialog dlg(200, KisPart::instance()->currentMainwindow());
-        dlg.regenerateRange(m_d->canvas->frameCache(), range, m_d->canvas->viewManager());
+        // when openGL is disabled, there is no animation cache
+        if (m_d->canvas->frameCache()) {
+            KisAnimationCacheUpdateProgressDialog dlg(200, KisPart::instance()->currentMainwindow());
+            dlg.regenerateRange(m_d->canvas->frameCache(), range, m_d->canvas->viewManager());
+        }
     }
 
     m_d->playing = true;

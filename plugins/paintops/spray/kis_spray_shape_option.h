@@ -38,13 +38,13 @@ class KisSprayShapeOption : public KisPaintOpOption
     Q_OBJECT
 public:
     KisSprayShapeOption();
-    ~KisSprayShapeOption();
+    ~KisSprayShapeOption() override;
 
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     KisShapeOptionsWidget * m_options;

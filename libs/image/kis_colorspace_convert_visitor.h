@@ -38,44 +38,44 @@ public:
                                 const KoColorSpace *dstColorSpace,
                                 KoColorConversionTransformation::Intent renderingIntent,
                                 KoColorConversionTransformation::ConversionFlags conversionFlags);
-    virtual ~KisColorSpaceConvertVisitor();
+    ~KisColorSpaceConvertVisitor() override;
 
 public:
 
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer* layer);
-    bool visit(KisGeneratorLayer * layer);
+    bool visit(KisPaintLayer *layer) override;
+    bool visit(KisGroupLayer *layer) override;
+    bool visit(KisAdjustmentLayer* layer) override;
+    bool visit(KisGeneratorLayer * layer) override;
 
-    bool visit(KisExternalLayer *) {
+    bool visit(KisExternalLayer *) override {
         return true;
     }
 
-    bool visit(KisNode*) {
+    bool visit(KisNode*) override {
         return true;
     }
 
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer*) override {
         return true;
     }
 
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask*) override {
         return true;
     }
 
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask*) override {
         return true;
     }
 
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask*) override {
         return true;
     }
 
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask*) override {
         return true;
     }
 
-    bool visit(KisColorizeMask *mask);
+    bool visit(KisColorizeMask *mask) override;
 
 private:
 

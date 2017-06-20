@@ -29,18 +29,17 @@ class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSet
 
 public:
     KisDeformPaintOpSettings();
-    ~KisDeformPaintOpSettings();
+    ~KisDeformPaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
+    bool paintIncremental() override;
+    bool isAirbrushing() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
     struct Private;

@@ -29,9 +29,9 @@ class KisHairyPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
     KisHairyPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisHairyPaintOpSettingsWidget();
+    ~KisHairyPaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 #endif

@@ -152,7 +152,7 @@ class KritaConvolutionFilters : public QObject
     Q_OBJECT
 public:
     KritaConvolutionFilters(QObject *parent, const QVariantList &);
-    virtual ~KritaConvolutionFilters();
+    ~KritaConvolutionFilters() override;
 };
 
 #endif

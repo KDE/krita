@@ -55,21 +55,21 @@ public:
     };
 
     VectorShape();
-    virtual ~VectorShape();
+    ~VectorShape() override;
 
     // reimplemented methods.
 
     /// reimplemented from KoShape
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     /// reimplemented from KoShape
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented from KoShape
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     /// Load the real contents of the frame shape.  reimplemented  from KoFrameShape
-    virtual bool loadOdfFrameElement(const KoXmlElement &frameElement,
-                                     KoShapeLoadingContext &context);
+    bool loadOdfFrameElement(const KoXmlElement &frameElement,
+                                     KoShapeLoadingContext &context) override;
     /// reimplemented from KoShape
-    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
+    void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const override;
 
     // Methods specific to the vector shape.
     QByteArray  compressedContents() const;
@@ -103,8 +103,8 @@ class RenderThread : public QObject, public QRunnable
 public:
     RenderThread(const QByteArray &contents, VectorShape::VectorType type,
                  const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
-    virtual ~RenderThread();
-    virtual void run();
+    ~RenderThread() override;
+    void run() override;
 Q_SIGNALS:
     void finished(QSize boundingSize, QImage *image);
 private:

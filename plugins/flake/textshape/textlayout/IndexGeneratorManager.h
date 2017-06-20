@@ -36,7 +36,7 @@ class IndexGeneratorManager : public QObject
 private:
     explicit IndexGeneratorManager(QTextDocument *document);
 public:
-    virtual ~IndexGeneratorManager();
+    ~IndexGeneratorManager() override;
 
     static IndexGeneratorManager *instance(QTextDocument *document);
 

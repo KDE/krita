@@ -35,7 +35,7 @@ class KRITALIBKIS_EXPORT Window : public QObject
 
 public:
     explicit Window(KisMainWindow *window, QObject *parent = 0);
-    virtual ~Window();
+    ~Window() override;
 
     bool operator==(const Window &other) const;
     bool operator!=(const Window &other) const;
@@ -63,6 +63,12 @@ public Q_SLOTS:
      * does not belong to this window, nothing happens.
      */
     void showView(View *view);
+
+
+    /**
+     * @return the currently active view or 0 if no view is active
+     */
+    View *activeView() const;
 
     /**
      * @brief activate activates this Window.

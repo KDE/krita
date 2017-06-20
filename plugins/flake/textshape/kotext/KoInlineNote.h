@@ -45,7 +45,7 @@ public:
      */
     explicit KoInlineNote(Type type);
     // destructor
-    virtual ~KoInlineNote();
+    ~KoInlineNote() override;
 
     /**
      * Set the textframe where we will create our own textframe within
@@ -86,23 +86,23 @@ public:
     /// return the type of note.
     Type type() const;
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     ///reimplemented
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) override;
 
     int getPosInDocument() const;
 
 protected:
     /// reimplemented
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
+    void updatePosition(const QTextDocument *document,
+                                int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object,
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
 
 private:
     friend class InsertNoteCommand;

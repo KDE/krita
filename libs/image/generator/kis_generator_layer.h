@@ -47,19 +47,19 @@ public:
      */
     KisGeneratorLayer(KisImageWSP image, const QString &name, KisFilterConfigurationSP  kfc, KisSelectionSP selection);
     KisGeneratorLayer(const KisGeneratorLayer& rhs);
-    virtual ~KisGeneratorLayer();
+    ~KisGeneratorLayer() override;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisGeneratorLayer(*this));
     }
 
-    void setFilter(KisFilterConfigurationSP filterConfig);
+    void setFilter(KisFilterConfigurationSP filterConfig) override;
 
-    bool accept(KisNodeVisitor &);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
-    QIcon icon() const;
-    KisBaseNode::PropertyList sectionModelProperties() const;
+    QIcon icon() const override;
+    KisBaseNode::PropertyList sectionModelProperties() const override;
 
     /**
      * re-run the generator. This happens over the bounds
@@ -68,9 +68,9 @@ public:
     void update();
 
     using KisSelectionBasedLayer::setDirty;
-    void setDirty(const QRect & rect);
-    void setX(qint32 x);
-    void setY(qint32 y);
+    void setDirty(const QRect & rect) override;
+    void setX(qint32 x) override;
+    void setY(qint32 y) override;
 
 private Q_SLOTS:
     void slotDelayedStaticUpdate();

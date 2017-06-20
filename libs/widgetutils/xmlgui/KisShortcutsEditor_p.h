@@ -131,7 +131,7 @@ public:
     KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action);
 
     //! Destructor will erase unsaved changes.
-    virtual ~KisShortcutsEditorItem();
+    ~KisShortcutsEditorItem() override;
 
     //! Undo the changes since the last commit.
     void undo();

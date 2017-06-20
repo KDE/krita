@@ -37,7 +37,7 @@ public:
     KisPressureSizeOption();
     double apply(const KisPaintInformation & info) const;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 };
 

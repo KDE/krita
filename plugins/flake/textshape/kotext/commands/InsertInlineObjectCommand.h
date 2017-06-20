@@ -29,12 +29,12 @@ class InsertInlineObjectCommand : public KUndo2Command
 {
 public:
     InsertInlineObjectCommand(KoInlineObject *inlineObject, QTextDocument *document, KUndo2Command *parent);
-    virtual ~InsertInlineObjectCommand();
+    ~InsertInlineObjectCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
 
     KoInlineObject *m_inlineObject;

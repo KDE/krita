@@ -43,7 +43,7 @@ public:
 
     KisWdgGenerator(QWidget * parent, KisPaintDeviceSP dev);
 
-    ~KisWdgGenerator();
+    ~KisWdgGenerator() override;
 
     void initialize(KisViewManager *view);
 

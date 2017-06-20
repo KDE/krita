@@ -48,7 +48,7 @@ public:
 
     KoShapeMoveCommand(const QList<KoShape*> &shapes, const QPointF &offset, KUndo2Command *parent = 0);
 
-    ~KoShapeMoveCommand();
+    ~KoShapeMoveCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo

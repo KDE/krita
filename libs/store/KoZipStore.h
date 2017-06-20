@@ -39,25 +39,25 @@ public:
      */
     KoZipStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode _mode,
                const QByteArray & appIdentification, bool writeMimetype = true);
-    ~KoZipStore();
+    ~KoZipStore() override;
 
-    virtual void setCompressionEnabled(bool e);
-    virtual qint64 write(const char* _data, qint64 _len);
+    void setCompressionEnabled(bool e) override;
+    qint64 write(const char* _data, qint64 _len) override;
 
-    virtual QStringList directoryList() const;
+    QStringList directoryList() const override;
 
 protected:
     void init(const QByteArray& appIdentification);
-    virtual bool doFinalize();
-    virtual bool openWrite(const QString& name);
-    virtual bool openRead(const QString& name);
-    virtual bool closeWrite();
-    virtual bool closeRead() {
+    bool doFinalize() override;
+    bool openWrite(const QString& name) override;
+    bool openRead(const QString& name) override;
+    bool closeWrite() override;
+    bool closeRead() override {
         return true;
     }
-    virtual bool enterRelativeDirectory(const QString& dirName);
-    virtual bool enterAbsoluteDirectory(const QString& path);
-    virtual bool fileExists(const QString& absPath) const;
+    bool enterRelativeDirectory(const QString& dirName) override;
+    bool enterAbsoluteDirectory(const QString& path) override;
+    bool fileExists(const QString& absPath) const override;
 
 private:
 

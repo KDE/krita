@@ -41,14 +41,14 @@ public:
         }
     }
 
-    bool checkNeeded(KisImageSP image) const
+    bool checkNeeded(KisImageSP image) const override
     {
         KisExifInfoVisitor eIV;
         eIV.visit(image->rootLayer().data());
         return eIV.exifInfo();
     }
 
-    Level check(KisImageSP /*image*/) const
+    Level check(KisImageSP /*image*/) const override
     {
         return m_level;
     }
@@ -63,14 +63,14 @@ public:
     {
     }
 
-    virtual ~ExifCheckFactory() {}
+    ~ExifCheckFactory() override {}
 
-    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning)
+    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning) override
     {
         return new ExifCheck(id(), level, customWarning);
     }
 
-    QString id() const {
+    QString id() const override {
         return "ExifCheck";
     }
 

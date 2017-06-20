@@ -61,7 +61,7 @@ public:
      */
     KisCurveWidget(QWidget *parent = 0, Qt::WFlags f = 0);
 
-    virtual ~KisCurveWidget();
+    ~KisCurveWidget() override;
 
     /**
      * Reset the curve to the default shape
@@ -112,13 +112,13 @@ protected Q_SLOTS:
 
 protected:
 
-    void keyPressEvent(QKeyEvent *);
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent * e);
-    void mouseReleaseEvent(QMouseEvent * e);
-    void mouseMoveEvent(QMouseEvent * e);
-    void leaveEvent(QEvent *);
-    void resizeEvent(QResizeEvent *e);
+    void keyPressEvent(QKeyEvent *) override;
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent * e) override;
+    void mouseReleaseEvent(QMouseEvent * e) override;
+    void mouseMoveEvent(QMouseEvent * e) override;
+    void leaveEvent(QEvent *) override;
+    void resizeEvent(QResizeEvent *e) override;
 
 public:
 

@@ -39,11 +39,11 @@ public:
 
     explicit DockerStylesComboModel(QObject *parent = 0);
 
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void setStyleManager(KoStyleManager *sm);
 
@@ -55,7 +55,7 @@ public Q_SLOTS:
     void styleApplied(const KoCharacterStyle *style);
 
 protected:
-    virtual void createMapping();
+    void createMapping() override;
 
 private:
     KoCharacterStyle *findStyle(int styleId) const;

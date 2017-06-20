@@ -33,7 +33,7 @@ class KRITAUI_EXPORT KisPaintOpPresetsChooserPopup : public QWidget
     Q_OBJECT
 public:
     KisPaintOpPresetsChooserPopup(QWidget * parent = 0);
-    virtual ~KisPaintOpPresetsChooserPopup();
+    ~KisPaintOpPresetsChooserPopup() override;
     
     void showButtons(bool show);
     void updateViewSettings();
@@ -46,7 +46,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotThumbnailMode();
     void slotDetailMode();
-    virtual void paintEvent(QPaintEvent* );
+    void paintEvent(QPaintEvent* ) override;
    
 private:
 

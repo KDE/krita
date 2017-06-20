@@ -30,7 +30,7 @@ class ColorSmudgePaintOpPlugin: public QObject
     Q_OBJECT
 public:
     ColorSmudgePaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~ColorSmudgePaintOpPlugin();
+    ~ColorSmudgePaintOpPlugin() override;
 };
 
 #endif // _COLORSMUDGE_PAINTOP_PLUGIN_H_

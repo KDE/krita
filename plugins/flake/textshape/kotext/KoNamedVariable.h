@@ -34,8 +34,8 @@ public:
         return m_name;
     }
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) override;
 
 protected:
     friend class KoVariableManager;
@@ -48,9 +48,9 @@ protected:
 
 private:
     /// reimplemented method
-    void propertyChanged(Property property, const QVariant &value);
+    void propertyChanged(Property property, const QVariant &value) override;
     /// reimplemented method
-    void setup();
+    void setup() override;
 
     const QString m_name;
     const Property m_key;

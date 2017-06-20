@@ -33,7 +33,7 @@ class KisAnimationCacheUpdateProgressDialog : public QObject
     Q_OBJECT
 public:
     explicit KisAnimationCacheUpdateProgressDialog(int busyWait = 200, QWidget *parent = 0);
-    ~KisAnimationCacheUpdateProgressDialog();
+    ~KisAnimationCacheUpdateProgressDialog() override;
 
     void regenerateRange(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange, KisViewManager *viewManager);
 

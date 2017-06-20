@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisViewPlugin : public QObject
     Q_OBJECT
 public:
     KisViewPlugin(QObject* parent = 0);
-    virtual ~KisViewPlugin();
+    ~KisViewPlugin() override;
 
 protected:
 

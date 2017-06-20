@@ -30,7 +30,7 @@ class KRITAFLAKE_EXPORT KoSelectedShapesProxySimple : public KoSelectedShapesPro
     Q_OBJECT
 public:
     KoSelectedShapesProxySimple(KoShapeManager *shapeManager);
-    KoSelection *selection();
+    KoSelection *selection() override;
 
 private:
     QPointer<KoShapeManager> m_shapeManager;

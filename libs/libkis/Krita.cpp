@@ -30,6 +30,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoColorModelStandardIds.h>
 
+#include <kis_filter_strategy.h>
 #include <kactioncollection.h>
 #include <KisPart.h>
 #include <KisMainWindow.h>
@@ -49,6 +50,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
 #include <KoResourceServerProvider.h>
+#include <kis_action_registry.h>
 
 #include "View.h"
 #include "Document.h"
@@ -172,6 +174,11 @@ Filter *Krita::filter(const QString &name) const
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
+}
+
+QStringList Krita::filterStrategies() const
+{
+    return KisFilterStrategyRegistry::instance()->keys();
 }
 
 QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth) const
@@ -308,9 +315,19 @@ Window* Krita::openWindow()
 }
 
 
-Action *Krita::createAction(const QString &text)
+Action *Krita::createAction(const QString &id, const QString &text)
 {
     KisAction *action = new KisAction(text, this);
+    action->setObjectName(id);
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    actionRegistry->propertizeAction(action->objectName(), action);
+    bool ok; // We will skip this check
+    int activationFlags = actionRegistry->getActionProperty(id, "activationFlags").toInt(&ok, 2);
+    int activationConditions = actionRegistry->getActionProperty(id, "activationConditions").toInt(&ok, 2);
+    action->setActivationFlags((KisAction::ActivationFlags) activationFlags);
+    action->setActivationConditions((KisAction::ActivationConditions) activationConditions);
+
     KisPart::instance()->addScriptAction(action);
     return new Action(action->objectName(), action);
 }

@@ -148,9 +148,11 @@ KoColorConversionFromAlphaTransformationFactoryImpl<alpha_channel_type>::
                dstColorSpace->colorDepthId() == Integer16BitsColorDepthID) {
             return new KoColorConversionGrayAFromAlphaTransformation<alpha_channel_type, quint16>(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
 
+    #ifdef HAVE_OPENEXR
     } else if (dstColorSpace->colorModelId() == GrayAColorModelID &&
                dstColorSpace->colorDepthId() == Float16BitsColorDepthID) {
             return new KoColorConversionGrayAFromAlphaTransformation<alpha_channel_type, half>(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+    #endif
 
     } else if (dstColorSpace->colorModelId() == GrayAColorModelID &&
                dstColorSpace->colorDepthId() == Float32BitsColorDepthID) {
@@ -306,9 +308,11 @@ KoColorConversionToAlphaTransformationFactoryImpl<alpha_channel_type>::
                srcColorSpace->colorDepthId() == Integer16BitsColorDepthID) {
             return new KoColorConversionGrayAToAlphaTransformation<quint16, alpha_channel_type>(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
 
+#ifdef HAVE_OPENEXR
     } else if (srcColorSpace->colorModelId() == GrayAColorModelID &&
                srcColorSpace->colorDepthId() == Float16BitsColorDepthID) {
             return new KoColorConversionGrayAToAlphaTransformation<half, alpha_channel_type>(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+#endif
 
     } else if (srcColorSpace->colorModelId() == GrayAColorModelID &&
                srcColorSpace->colorDepthId() == Float32BitsColorDepthID) {

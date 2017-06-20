@@ -42,10 +42,10 @@ TextPlugin::TextPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new TextToolFactory());
-    KoToolRegistry::instance()->add(new ReviewToolFactory());
-    KoToolRegistry::instance()->add(new ReferencesToolFactory());
+    //KoToolRegistry::instance()->add(new ReviewToolFactory());
+    //KoToolRegistry::instance()->add(new ReferencesToolFactory());
     KoShapeRegistry::instance()->add(new TextShapeFactory());
-    KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
+    //KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
 }
 
 #include <TextPlugin.moc>

@@ -58,7 +58,7 @@ class KRITATEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBa
 
 public:
     explicit KoDocumentRdfBase(QObject *parent = 0);
-    virtual ~KoDocumentRdfBase();
+    ~KoDocumentRdfBase() override;
 
     /**
      * Get the Soprano::Model that contains all the Rdf
@@ -85,8 +85,8 @@ public:
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 
     // reimplemented in komain/rdf/KoDocumentRdf
-    virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
+    bool completeLoading(KoStore *store) override;
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context) override;
 };
 
 Q_DECLARE_METATYPE(KoDocumentRdfBase*)

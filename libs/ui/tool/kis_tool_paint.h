@@ -60,30 +60,30 @@ class KRITAUI_EXPORT KisToolPaint : public KisTool
 
 public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
-    virtual ~KisToolPaint();
-    virtual int flags() const;
+    ~KisToolPaint() override;
+    int flags() const override;
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
 protected:
 
-    void setMode(ToolMode mode);
+    void setMode(ToolMode mode) override;
 
-    virtual void canvasResourceChanged(int key, const QVariant & v);
+    void canvasResourceChanged(int key, const QVariant & v) override;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    virtual void activatePrimaryAction();
-    virtual void deactivatePrimaryAction();
+    void activatePrimaryAction() override;
+    void deactivatePrimaryAction() override;
 
-    virtual void activateAlternateAction(AlternateAction action);
-    virtual void deactivateAlternateAction(AlternateAction action);
+    void activateAlternateAction(AlternateAction action) override;
+    void deactivateAlternateAction(AlternateAction action) override;
 
-    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
-    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
-    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
     virtual void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
@@ -113,7 +113,7 @@ protected:
     void showControl(QWidget *control, bool value);
     void enableControl(QWidget *control, bool value);
 
-    virtual QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
     /**
      * Quick help is a short help text about the way the tool functions.
@@ -122,7 +122,7 @@ protected:
         return QString();
     }
 
-    virtual void setupPaintAction(KisRecordedPaintAction* action);
+    void setupPaintAction(KisRecordedPaintAction* action) override;
 
     qreal pressureToCurve(qreal pressure){
         qreal p =  qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION);
@@ -147,8 +147,8 @@ protected:
     const KoCompositeOp* compositeOp();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private Q_SLOTS:
 

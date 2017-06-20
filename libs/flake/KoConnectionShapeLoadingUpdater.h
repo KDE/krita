@@ -35,9 +35,9 @@ public:
     };
 
     KoConnectionShapeLoadingUpdater(KoConnectionShape *connectionShape, ConnectionPosition position);
-    virtual ~KoConnectionShapeLoadingUpdater();
+    ~KoConnectionShapeLoadingUpdater() override;
 
-    virtual void update(KoShape *shape);
+    void update(KoShape *shape) override;
 
 private:
     KoConnectionShape *m_connectionShape;

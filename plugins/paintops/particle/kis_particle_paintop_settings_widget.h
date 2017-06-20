@@ -33,9 +33,9 @@ class KisParticlePaintOpSettingsWidget : public KisPaintOpSettingsWidget
 
 public:
     KisParticlePaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisParticlePaintOpSettingsWidget();
+    ~KisParticlePaintOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;

@@ -32,11 +32,13 @@
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_random_accessor_ng.h"
+#include "kis_lod_transform.h"
 
 #include <kis_fixed_paint_device.h>
 
 #include "kis_deform_option.h"
 #include "kis_brush_size_option.h"
+#include "kis_paintop_plugin_utils.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
@@ -56,14 +58,17 @@ KisDeformPaintOp::KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPaint
 
     m_sizeProperties.readOptionSetting(settings);
     m_properties.readOptionSetting(settings);
+    m_airbrushOption.readOptionSetting(settings);
 
     // sensors
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_sizeOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
 
     m_deformBrush.setProperties(&m_properties);
     m_deformBrush.setSizeProperties(&m_sizeProperties);
@@ -138,7 +143,10 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width() , mask->bounds().height())), dab, mask);
     painter()->setOpacity(origOpacity);
 
-    return KisSpacingInformation(m_spacing);
+    return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, m_spacing, false,
+                                                   1.0,
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
 }
 
 

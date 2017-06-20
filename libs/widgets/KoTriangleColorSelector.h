@@ -34,18 +34,18 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public KisColorSelectorInter
     public:
         explicit KoTriangleColorSelector(QWidget *parent);
         explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
-        ~KoTriangleColorSelector();
+        ~KoTriangleColorSelector() override;
     protected: // events
-        void paintEvent( QPaintEvent * event );
-        void resizeEvent( QResizeEvent * event );
-        void mouseReleaseEvent( QMouseEvent * event );
-        void mousePressEvent( QMouseEvent * event );
-        void mouseMoveEvent( QMouseEvent * event );
+        void paintEvent( QPaintEvent * event ) override;
+        void resizeEvent( QResizeEvent * event ) override;
+        void mouseReleaseEvent( QMouseEvent * event ) override;
+        void mousePressEvent( QMouseEvent * event ) override;
+        void mouseMoveEvent( QMouseEvent * event ) override;
     public:
         int hue() const;
         int value() const;
         int saturation() const;
-        KoColor getCurrentColor() const;
+        KoColor getCurrentColor() const override;
 
         // please use realColor() instead!
         Q_DECL_DEPRECATED QColor color() const;
@@ -55,7 +55,7 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public KisColorSelectorInter
         void setValue(int v);
         void setSaturation(int s);
         void setHSV(int h, int s, int v);
-        void slotSetColor(const KoColor& );
+        void slotSetColor(const KoColor& ) override;
     Q_SIGNALS:
         void colorChanged(const QColor& );
     private Q_SLOTS:

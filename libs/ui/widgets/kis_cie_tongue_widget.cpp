@@ -335,9 +335,7 @@ QRgb KisCIETongueWidget::colorByCoord(double x, double y)
     // particular case we are substituting XYZ with xyz
     
     //Need to use KoColor here.
-    QString space = KoColorSpaceRegistry::instance()->colorSpaceId("XYZA", "U8");
-    QString profile = KoColorSpaceRegistry::instance()->colorSpaceFactory(space)->defaultProfile();
-    const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "U8", profile);
+    const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "U8");
     quint8 data[4]; 
     data[0]= cx*255;
     data[1]= cy*255;

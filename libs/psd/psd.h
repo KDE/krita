@@ -850,7 +850,7 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureVerticalPhase = value;
     }
 
-    virtual void scaleLinearSizes(qreal scale) {
+    void scaleLinearSizes(qreal scale) override {
         psd_layer_effects_shadow_base::scaleLinearSizes(scale);
         m_soften *= scale;
         m_textureScale *= scale;
@@ -990,7 +990,7 @@ public:
         return QPointF(m_horizontalPhase, m_verticalPhase);
     }
 
-    virtual void scaleLinearSizes(qreal scale) {
+    void scaleLinearSizes(qreal scale) override {
         psd_layer_effects_shadow_base::scaleLinearSizes(scale);
         m_scale *= scale;
     }

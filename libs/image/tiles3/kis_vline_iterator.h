@@ -39,20 +39,20 @@ public:
 
 public:
     KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener);
-    ~KisVLineIterator2();
+    ~KisVLineIterator2() override;
 
-    virtual void resetPixelPos();
-    virtual void resetColumnPos();
+    void resetPixelPos() override;
+    void resetColumnPos() override;
 
-    virtual bool nextPixel();
-    virtual void nextColumn();
-    virtual const quint8* rawDataConst() const;
-    virtual const quint8* oldRawData() const;
-    virtual quint8* rawData();
-    virtual qint32 nConseqPixels() const;
-    virtual bool nextPixels(qint32 n);
-    virtual qint32 x() const;
-    virtual qint32 y() const;
+    bool nextPixel() override;
+    void nextColumn() override;
+    const quint8* rawDataConst() const override;
+    const quint8* oldRawData() const override;
+    quint8* rawData() override;
+    qint32 nConseqPixels() const override;
+    bool nextPixels(qint32 n) override;
+    qint32 x() const override;
+    qint32 y() const override;
 
 private:
     qint32 m_offsetX;

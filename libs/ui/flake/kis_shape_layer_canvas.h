@@ -45,7 +45,7 @@ class KisShapeLayerCanvas : public KoCanvasBase
 public:
 
     KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image);
-    virtual ~KisShapeLayerCanvas();
+    ~KisShapeLayerCanvas() override;
 
     /// This canvas won't render onto a widget, but a projection
     void setProjection(KisPaintDeviceSP projection) {
@@ -55,19 +55,19 @@ public:
     void setImage(KisImageWSP image);
 
     void prepareForDestroying();
-    void gridSize(QPointF *offset, QSizeF *spacing) const;
-    bool snapToGrid() const;
-    void addCommand(KUndo2Command *command);
+    void gridSize(QPointF *offset, QSizeF *spacing) const override;
+    bool snapToGrid() const override;
+    void addCommand(KUndo2Command *command) override;
     KoShapeManager *shapeManager() const override;
     KoSelectedShapesProxy *selectedShapesProxy() const override;
-    void updateCanvas(const QRectF& rc);
-    KoToolProxy * toolProxy() const;
-    KoViewConverter* viewConverter() const;
-    QWidget* canvasWidget();
-    const QWidget* canvasWidget() const;
-    KoUnit unit() const;
-    virtual void updateInputMethodInfo() {}
-    virtual void setCursor(const QCursor &) {}
+    void updateCanvas(const QRectF& rc) override;
+    KoToolProxy * toolProxy() const override;
+    KoViewConverter* viewConverter() const override;
+    QWidget* canvasWidget() override;
+    const QWidget* canvasWidget() const override;
+    KoUnit unit() const override;
+    void updateInputMethodInfo() override {}
+    void setCursor(const QCursor &) override {}
 
     void forceRepaint();
 

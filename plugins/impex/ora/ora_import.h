@@ -27,9 +27,9 @@ class OraImport : public KisImportExportFilter
     Q_OBJECT
 public:
     OraImport(QObject *parent, const QVariantList &);
-    virtual ~OraImport();
+    ~OraImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

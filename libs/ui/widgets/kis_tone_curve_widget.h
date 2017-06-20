@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisToneCurveWidget : public QWidget
 public:
  
     KisToneCurveWidget(QWidget *parent=0);
-    ~KisToneCurveWidget();
+    ~KisToneCurveWidget() override;
 
     void setGreyscaleCurve(QPolygonF poly);
     void setRGBCurve(QPolygonF red, QPolygonF green, QPolygonF blue);
@@ -49,8 +49,8 @@ protected:
  
     int  grids(double val) const;
     void drawGrid();
-    void resizeEvent(QResizeEvent* event);
-    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent*) override;
  
 private:
  

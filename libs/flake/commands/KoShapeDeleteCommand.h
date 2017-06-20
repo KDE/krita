@@ -46,11 +46,11 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
-    virtual ~KoShapeDeleteCommand();
+    ~KoShapeDeleteCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

@@ -30,24 +30,24 @@ class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisT
 public:
     KisAnimatedTransformMaskParameters();
     KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform);
-    ~KisAnimatedTransformMaskParameters();
+    ~KisAnimatedTransformMaskParameters() override;
 
-    const ToolTransformArgs& transformArgs() const;
+    const ToolTransformArgs& transformArgs() const override;
 
-    QString id() const;
-    void toXML(QDomElement *e) const;
+    QString id() const override;
+    void toXML(QDomElement *e) const override;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
     static KisTransformMaskParamsInterfaceSP animate(KisTransformMaskParamsInterfaceSP params);
 
-    void translate(const QPointF &offset);
+    void translate(const QPointF &offset) override;
 
-    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
+    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds) override;
 
-    bool isHidden() const;
+    bool isHidden() const override;
     void setHidden(bool hidden);
 
-    void clearChangedFlag();
-    bool hasChanged() const;
+    void clearChangedFlag() override;
+    bool hasChanged() const override;
     bool isAnimated() const;
 
     static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);

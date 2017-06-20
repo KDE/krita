@@ -81,44 +81,44 @@ public:
         setPriority(priority);
     }
 
-    virtual ~KisSimplePaintOpFactory() {
+    ~KisSimplePaintOpFactory() override {
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
-    void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings) {
+    void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings) override {
         preinitializeOpStatically<Op>(settings);
     }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-    KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) {
+    KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) override {
         KisPaintOp * op = new Op(settings, painter, node, image);
         Q_CHECK_PTR(op);
         return op;
     }
 
-    KisPaintOpSettingsSP settings() {
+    KisPaintOpSettingsSP settings() override {
         KisPaintOpSettingsSP settings = new OpSettings();
         settings->setModelName(m_model);
         return settings;
     }
 
-    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) {
+    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) override {
         return new OpSettingsWidget(parent);
     }
 
-    QString id() const {
+    QString id() const override {
         return m_id;
     }
 
-    QString name() const {
+    QString name() const override {
         return m_name;
     }
 
-    QString pixmap() {
+    QString pixmap() override {
         return m_pixmap;
     }
 
-    QString category() const {
+    QString category() const override {
         return m_category;
     }
 private:

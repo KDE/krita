@@ -37,23 +37,23 @@ class KRITAPIGMENT_EXPORT KoAbstractGradient : public KoResource
 {
 public:
     explicit KoAbstractGradient(const QString &filename);
-    virtual ~KoAbstractGradient();
+    ~KoAbstractGradient() override;
 
     virtual KoAbstractGradient* clone() const = 0;
 
-    virtual bool load() {
+    bool load() override {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) {
+    bool loadFromDevice(QIODevice *) override {
         return false;
     }
 
-    virtual bool save() {
+    bool save() override {
         return false;
     }
 
-    virtual bool saveToDevice(QIODevice*) const {
+    bool saveToDevice(QIODevice*) const override {
         return false;
     }
 

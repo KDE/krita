@@ -37,10 +37,10 @@ class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, publi
     Q_OBJECT
 public:
     TasksetDockerDock();
-    ~TasksetDockerDock();
-    QString observerName() { return "TasksetDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    ~TasksetDockerDock() override;
+    QString observerName() override { return "TasksetDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
     
 private Q_SLOTS:
     void actionTriggered(QAction* action);

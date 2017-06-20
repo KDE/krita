@@ -40,12 +40,12 @@ public:
      * @param indexId the index of the inline object that is the locator.  See KoInlineObject::id()
      */
     explicit KoTextReference(int indexId);
-    ~KoTextReference();
+    ~KoTextReference() override;
 
-    virtual void variableMoved(const QTextDocument *document, int posInDocument);
-    virtual void setup();
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context);
+    void variableMoved(const QTextDocument *document, int posInDocument) override;
+    void setup() override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) override;
 
 private:
     KoTextLocator *locator();

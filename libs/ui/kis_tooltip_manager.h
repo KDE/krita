@@ -28,7 +28,7 @@ class KisTooltipManager : public QObject
 
 public:
     KisTooltipManager(KisViewManager* view);
-    ~KisTooltipManager();
+    ~KisTooltipManager() override;
 
     void record();
 

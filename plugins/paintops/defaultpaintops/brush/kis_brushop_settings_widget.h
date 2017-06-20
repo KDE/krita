@@ -35,9 +35,9 @@ public:
 
     KisBrushOpSettingsWidget(QWidget* parent = 0);
 
-    virtual ~KisBrushOpSettingsWidget();
+    ~KisBrushOpSettingsWidget() override;
 
-    KisPropertiesConfigurationSP configuration() const;
+    KisPropertiesConfigurationSP configuration() const override;
 };
 
 

@@ -30,9 +30,9 @@ public:
     /// Constructor
     ConnectionToolFactory();
     /// Destructor
-    ~ConnectionToolFactory();
+    ~ConnectionToolFactory() override;
     /// reimplemented
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

@@ -42,7 +42,7 @@ public:
      * @param parent the parent command if this is a compound undo command.
      */
     KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, KUndo2Command *parent = 0);
-    virtual ~KoParameterHandleMoveCommand();
+    ~KoParameterHandleMoveCommand() override;
 
     /// redo the command
     void redo() override;

@@ -336,9 +336,9 @@ void KisBaseNode::setSupportsLodMoves(bool value)
 }
 
 
-QList<KisKeyframeChannel*> KisBaseNode::keyframeChannels() const
+QMap<QString, KisKeyframeChannel*> KisBaseNode::keyframeChannels() const
 {
-    return m_d->keyframeChannels.values();
+    return m_d->keyframeChannels;
 }
 
 KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id) const

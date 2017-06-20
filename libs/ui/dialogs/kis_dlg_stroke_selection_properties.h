@@ -85,7 +85,7 @@ class KisDlgStrokeSelection : public KoDialog
 
 public:
     KisDlgStrokeSelection(KisImageWSP image, KisViewManager *view, bool isVectorLayer);
-    virtual ~KisDlgStrokeSelection();
+    ~KisDlgStrokeSelection() override;
     int getLineSize() const;
     linePosition getLinePosition() const;
     KoColor getSelectedColor() const;

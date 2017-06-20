@@ -35,9 +35,9 @@ class KisRoundMarkerOp: public KisPaintOp
 {
 public:
     KisRoundMarkerOp(KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
-    virtual ~KisRoundMarkerOp();
+    ~KisRoundMarkerOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
 private:
     bool                      m_firstRun;

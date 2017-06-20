@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisAnimationCacheRegenerator : public QObject
     Q_OBJECT
 public:
     explicit KisAnimationCacheRegenerator(QObject *parent = 0);
-    ~KisAnimationCacheRegenerator();
+    ~KisAnimationCacheRegenerator() override;
 
     static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache,
                                    const KisTimeRange &playbackRange,

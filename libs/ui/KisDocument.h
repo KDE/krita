@@ -93,7 +93,7 @@ public:
      * The destructor does not delete any attached KisView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    virtual ~KisDocument();
+    ~KisDocument() override;
 
     /**
      * @brief reload Reloads the document from the original url
@@ -160,7 +160,7 @@ public:
     /**
      * Returns the actual mimetype of the document
      */
-    QByteArray mimeType() const;
+    QByteArray mimeType() const override;
 
     /**
      * @brief Sets the mime type for the document.
@@ -168,7 +168,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType(const QByteArray & mimeType);
+    void setMimeType(const QByteArray & mimeType) override;
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -178,8 +178,8 @@ public:
      *
      * @param mimeType the mime type (format) to use.
      */
-    void setOutputMimeType(const QByteArray & mimeType);
-    QByteArray outputMimeType() const;
+    void setOutputMimeType(const QByteArray & mimeType) override;
+    QByteArray outputMimeType() const override;
 
     /**
      * @return true if file operations should inhibit the option dialog
@@ -309,7 +309,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified() const;
+    bool isModified() const override;
 
     /**
      * @return caption of the document
@@ -508,19 +508,19 @@ private:
 
 public:
 
-    bool isAutosaving() const;
+    bool isAutosaving() const override;
 
 public:
 
-    QString localFilePath() const;
+    QString localFilePath() const override;
     void setLocalFilePath( const QString &localFilePath );
 
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 
-    QUrl url() const;
-    void setUrl(const QUrl &url);
+    QUrl url() const override;
+    void setUrl(const QUrl &url) override;
 
     bool closeUrl(bool promptToSave = true);
 

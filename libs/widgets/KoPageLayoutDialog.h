@@ -33,7 +33,7 @@ class KRITAWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog
     Q_OBJECT
 public:
     explicit KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layout);
-    ~KoPageLayoutDialog();
+    ~KoPageLayoutDialog() override;
 
     void showTextDirection(bool on);
     void showPageSpread(bool on);
@@ -52,8 +52,8 @@ public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
 
 protected Q_SLOTS:
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
 private:
     class Private;

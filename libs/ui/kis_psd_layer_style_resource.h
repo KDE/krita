@@ -34,15 +34,15 @@ public:
 
 public:
     explicit KisPSDLayerStyleCollectionResource(const QString &filename);
-    virtual ~KisPSDLayerStyleCollectionResource();
+    ~KisPSDLayerStyleCollectionResource() override;
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
 
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice *dev) const;
+    bool save() override;
+    bool saveToDevice(QIODevice *dev) const override;
 
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     StylesVector layerStyles() const;
     void setLayerStyles(StylesVector styles);
@@ -52,7 +52,7 @@ public:
 
 protected:
 
-    virtual QByteArray generateMD5() const;
+    QByteArray generateMD5() const override;
 
 private:
     StylesVector m_layerStyles;

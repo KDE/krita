@@ -319,13 +319,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     uint8 dstDepth = 0;
-    QPair<QString, QString> colorSpaceId = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
-    if (colorSpaceId.first.isEmpty()) {
+    QPair<QString, QString> colorSpaceIdTag = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
+    if (colorSpaceIdTag.first.isEmpty()) {
         dbgFile << "Image has an unsupported colorspace :" << color_type << " for this depth :" << depth;
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    dbgFile << "Colorspace is :" << colorSpaceId.first << colorSpaceId.second << " with a depth of" << depth << " and with a nb of channels of" << nbchannels;
+    dbgFile << "Colorspace is :" << colorSpaceIdTag.first << colorSpaceIdTag.second << " with a depth of" << depth << " and with a nb of channels of" << nbchannels;
 
     // Read image profile
     dbgFile << "Reading profile";
@@ -338,19 +338,21 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         QByteArray rawdata;
         rawdata.resize(EmbedLen);
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
-        profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first, colorSpaceId.second, rawdata);
+        profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceIdTag.first, colorSpaceIdTag.second, rawdata);
     }
 
-    // Check that the profile is used by the color space
+    const QString colorSpaceId =
+        KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceIdTag.first, colorSpaceIdTag.second);
 
-    if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId.first, colorSpaceId.second))->profileIsCompatible(profile)) {
-        dbgFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceId.first << " " << colorSpaceId.second;
+    // Check that the profile is used by the color space
+    if (profile && !KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)) {
+        dbgFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceIdTag.first << " " << colorSpaceIdTag.second;
         profile = 0;
     }
 
     // Do not use the linear gamma profile for 16 bits/channel by default, tiff files are usually created with
     // gamma correction. XXX: Should we ask the user?
-    if (!profile && colorSpaceId.first == RGBAColorModelID.id() && colorSpaceId.second == Integer16BitsColorDepthID.id()) {
+    if (!profile && colorSpaceIdTag.first == RGBAColorModelID.id() && colorSpaceIdTag.second == Integer16BitsColorDepthID.id()) {
         profile = KoColorSpaceRegistry::instance()->profileByName("sRGB-elle-V2-srgbtrc.icc");
         dbgFile << "Getting srgb profile" << profile;
      }
@@ -359,14 +361,14 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     const KoColorSpace* cs = 0;
     if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile:" << profile -> name() << "";
-        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceIdTag.first, colorSpaceIdTag.second, profile);
     }
     else {
-        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, 0);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceIdTag.first, colorSpaceIdTag.second, 0);
     }
 
     if (cs == 0) {
-        dbgFile << "Colorspace" << colorSpaceId.first << colorSpaceId.second << " is not available, please check your installation.";
+        dbgFile << "Colorspace" << colorSpaceIdTag.first << colorSpaceIdTag.second << " is not available, please check your installation.";
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
@@ -375,7 +377,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         dbgFile << "The profile can't be used in krita, need conversion";
-        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceIdTag.first, colorSpaceIdTag.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     // Check if there is an alpha channel

@@ -28,7 +28,6 @@ Action::Action(QObject *parent)
     , d(new Private)
 {
     d->action = new KisAction(this);
-    d->action->setProperty("menu", "tools/scripts");
     connect(d->action, SIGNAL(triggered(bool)), SIGNAL(triggered(bool)));
 }
 
@@ -38,7 +37,6 @@ Action::Action(const QString &name, QAction *action, QObject *parent)
 {
     d->action = action;
     d->action->setObjectName(name);
-    d->action->setProperty("menu", "tools/scripts");
     connect(d->action, SIGNAL(triggered(bool)), SIGNAL(triggered(bool)));
 }
 
@@ -122,18 +120,13 @@ void Action::setShortcut(QString value)
 bool Action::isVisible() const
 {
     if (!d->action) return false;
-    return d->action->property("menu").toString() == "tools/scripts";
+    return d->action->isVisible();
 }
 
 void Action::setVisible(bool value)
 {
     if (!d->action) return;
-    if (value) {
-        d->action->setProperty("menu", "tools/scripts");
-    }
-    else {
-        d->action->setProperty("menu", "");
-    }
+    d->action->setVisible(value);
 }
 
 bool Action::isEnabled() const
@@ -157,4 +150,15 @@ void Action::setToolTip(QString tooltip)
 void Action::trigger()
 {
     d->action->trigger();
+}
+
+
+void Action::setMenu(const QString menu)
+{
+    d->action->setProperty("menu", menu);
+}
+
+QString Action::menu() const
+{
+    return d->action->property("menu").toString();
 }

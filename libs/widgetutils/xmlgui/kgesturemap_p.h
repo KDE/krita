@@ -59,7 +59,7 @@ private Q_SLOTS:
 private:
     friend class KGestureMapContainer;
     KGestureMap();
-    virtual ~KGestureMap();
+    ~KGestureMap() override;
 
     friend class KApplicationPrivate;
     //intended to be used at application initialization

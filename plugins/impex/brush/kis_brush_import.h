@@ -29,9 +29,9 @@ class KisBrushImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisBrushImport(QObject *parent, const QVariantList &);
-    virtual ~KisBrushImport();
+    ~KisBrushImport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

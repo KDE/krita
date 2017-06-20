@@ -48,7 +48,7 @@ public:
     KoList(const QTextDocument *document, KoListStyle *style, Type type = TextList);
 
     /// Destructor
-    ~KoList();
+    ~KoList() override;
 
     /// Adds \a block to \a level of this list
     void add(const QTextBlock &block, int level);

@@ -33,17 +33,17 @@ public:
 
     explicit KisMultiSensorsModel(QObject* parent = 0);
 
-    virtual ~KisMultiSensorsModel();
+    ~KisMultiSensorsModel() override;
 
     void setCurveOption(KisCurveOption *curveOption);
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
+    Qt::ItemFlags flags(const QModelIndex & index) const override;
 
     KisDynamicSensorSP getSensor(const QModelIndex& index);
 

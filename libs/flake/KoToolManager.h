@@ -57,7 +57,7 @@ class KRITAFLAKE_EXPORT KoToolAction : public QObject
 public:
     // toolHelper takes over ownership, and those live till the end of KoToolManager.
     explicit KoToolAction(ToolHelper *toolHelper);
-    ~KoToolAction();
+    ~KoToolAction() override;
 
 public:
     QString id() const;             ///< The id of the tool
@@ -146,7 +146,7 @@ public:
     KoToolManager();
     /// Return the toolmanager singleton
     static KoToolManager* instance();
-    ~KoToolManager();
+    ~KoToolManager() override;
 
     /**
      * Register actions for switching to tools at the actionCollection parameter.

@@ -38,19 +38,19 @@ public:
      */
     ListItemNumberingCommand(const QTextBlock &block, bool numbered, KUndo2Command *parent = 0);
 
-    ~ListItemNumberingCommand();
+    ~ListItemNumberingCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
     /// reimplemnted from KUndo2Command
-    virtual int id() const {
+    int id() const override {
         return 58450688;
     }
     /// reimplemnted from KUndo2Command
-    virtual bool mergeWith(const KUndo2Command *other);
+    bool mergeWith(const KUndo2Command *other) override;
 
 private:
     void setNumbered(bool numbered);

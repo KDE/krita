@@ -20,10 +20,13 @@
 
 #include <QMenu>
 
+#include <KisPart.h>
+
 #include <kactionmenu.h>
 #include <klocalizedstring.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kis_action.h>
 
 #include <kis_action_manager.h>
 #include "KisViewManager.h"
@@ -32,15 +35,16 @@ struct KisScriptManager::Private {
     Private()
         : actionCollection(0)
         , actionManager(0)
-        , view(0)
+        , viewManager(0)
         , scriptMenu(0)
     {
     }
 
     KActionCollection *actionCollection;
     KisActionManager *actionManager;
-    KisViewManager *view;
+    KisViewManager *viewManager;
     KActionMenu *scriptMenu;
+    KActionMenu *hiddenMenu;
 };
 
 
@@ -48,7 +52,7 @@ KisScriptManager::KisScriptManager(KisViewManager *view)
     : QObject(view)
     , d(new Private())
 {
-    d->view = view;
+    d->viewManager = view;
 }
 
 KisScriptManager::~KisScriptManager()
@@ -62,19 +66,25 @@ void KisScriptManager::setup(KActionCollection * ac, KisActionManager *actionMan
     d->actionCollection = ac;
     d->actionManager = actionManager;
 
-    d->scriptMenu = new KActionMenu(i18n("Scripts"),this);
+    d->scriptMenu = new KActionMenu(i18n("Scripts"), this);
     d->actionCollection->addAction("scripts", d->scriptMenu);
+    d->hiddenMenu = new KActionMenu("hidden", this);
 }
 
 void KisScriptManager::updateGUI()
 {
-    if (!d->view) return;
+    if (!d->viewManager) return;
 }
 
-void KisScriptManager::addAction(QAction *action)
+void KisScriptManager::addAction(KisAction *action)
 {
-    Q_ASSERT(d->actionCollection);
-    if (action->property("menu").toString().toLower() == "tools/scripts") {
+    d->actionManager->addAction(action->objectName(), action);
+    if (action->property("menu").toString() != "None") {
+        // XXX: find the right menu and add it there.
         d->scriptMenu->addAction(action);
+    }
+    else {
+        d->hiddenMenu->addAction(action);
+        action->setShortcutContext(Qt::ApplicationShortcut);
     }
 }

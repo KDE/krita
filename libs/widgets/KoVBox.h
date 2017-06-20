@@ -49,7 +49,7 @@ public:
     /**
      * Destructor.
      */
-    ~KoVBox();
+    ~KoVBox() override;
 
     /**
      * Sets the @p margin of the hbox.

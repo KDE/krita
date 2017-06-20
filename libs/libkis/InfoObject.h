@@ -39,7 +39,7 @@ public:
      * Create a new, empty InfoObject.
      */
     explicit InfoObject(QObject *parent = 0);
-    virtual ~InfoObject();
+    ~InfoObject() override;
 
     bool operator==(const InfoObject &other) const;
     bool operator!=(const InfoObject &other) const;

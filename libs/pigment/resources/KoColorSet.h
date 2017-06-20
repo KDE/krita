@@ -78,14 +78,14 @@ public:
     /// Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
 
-    virtual ~KoColorSet();
+    ~KoColorSet() override;
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     void setColumnCount(int columns);
     int columnCount();
@@ -94,6 +94,8 @@ public:
      * @return the comment.
      */
     QString comment();
+
+    void setComment(QString comment);
 
 public:
 
@@ -139,6 +141,10 @@ public:
      */
     QStringList getGroupNames();
 
+    bool changeGroupName(QString oldGroupName, QString newGroupName);
+
+    bool changeColorSetEntry(KoColorSetEntry entry, QString groupName, quint32 index);
+
     /**
      * @brief nColorsGroup
      * @param groupName string name of the group, when not specified, returns unsorted colors.
@@ -158,6 +164,15 @@ public:
      * @return whether thegroup was made.
      */
     bool addGroup(const QString &groupName);
+
+    /**
+     * @brief moveGroup
+     * Move a group in the internal stringlist.
+     * @param groupName the groupname to move.
+     * @param groupNameInsertBefore the groupname to insert before. Empty means it will be added to the end.
+     * @return
+     */
+    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
     /**
      * @brief removeGroup
      * Remove a group from the KoColorSet

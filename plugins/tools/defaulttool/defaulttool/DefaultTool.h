@@ -54,7 +54,7 @@ public:
      * @param canvas the canvas this tool will be working for.
      */
     explicit DefaultTool(KoCanvasBase *canvas);
-    virtual ~DefaultTool();
+    ~DefaultTool() override;
 
     enum CanvasResource {
         HotPosition = 1410100299
@@ -62,21 +62,21 @@ public:
 
 public:
 
-    virtual bool wantsAutoScroll() const;
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    bool wantsAutoScroll() const override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    virtual void repaintDecorations();
-
-    ///reimplemented
-    virtual void copy() const;
+    void repaintDecorations() override;
 
     ///reimplemented
-    virtual void deleteSelection();
+    void copy() const override;
 
     ///reimplemented
-    virtual bool paste();
+    void deleteSelection() override;
+
     ///reimplemented
-    virtual KoToolSelection *selection();
+    bool paste() override;
+    ///reimplemented
+    KoToolSelection *selection() override;
 
     QMenu* popupActionsMenu() override;
 
@@ -123,7 +123,7 @@ public: // Events
 
     void explicitUserStrokeEndRequest() override;
 protected:
-    QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
     KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
@@ -148,7 +148,7 @@ private:
     // convenience method;
     KoSelection *koSelection();
 
-    void canvasResourceChanged(int key, const QVariant &res);
+    void canvasResourceChanged(int key, const QVariant &res) override;
 
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::AnchorPosition m_hotPosition;

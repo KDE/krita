@@ -37,7 +37,7 @@ class KisWheelInputEditor : public QPushButton
     Q_OBJECT
 public:
     KisWheelInputEditor(QWidget *parent = 0);
-    ~KisWheelInputEditor();
+    ~KisWheelInputEditor() override;
 
     QList<Qt::Key> keys() const;
     void setKeys(const QList<Qt::Key> &newKeys);

@@ -34,15 +34,15 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
     static inline KoID id() {
         return KoID("emboss", i18n("Emboss with Variable Depth"));
     }
 
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 protected:
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
 private:
     inline int Lim_Max(int Now, int Up, int Max) const;

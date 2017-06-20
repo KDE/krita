@@ -40,30 +40,30 @@ class KRITATEXTLAYOUT_EXPORT DummyDocumentLayout : public QAbstractTextDocumentL
 public:
     /// constructor
     explicit DummyDocumentLayout(QTextDocument *doc);
-    virtual ~DummyDocumentLayout();
+    ~DummyDocumentLayout() override;
 
     /// Returns the bounding rectangle of block.
-    virtual QRectF blockBoundingRect(const QTextBlock & block) const;
+    QRectF blockBoundingRect(const QTextBlock & block) const override;
     /**
      * Returns the total size of the document. This is useful to display
      * widgets since they can use to information to update their scroll bars
      * correctly
      */
-    virtual QSizeF documentSize() const;
+    QSizeF documentSize() const override;
 
     /// Draws the layout on the given painter with the given context.
-    virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);
+    void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context) override;
 
-    virtual QRectF frameBoundingRect(QTextFrame*) const;
+    QRectF frameBoundingRect(QTextFrame*) const override;
 
     /// reimplemented DO NOT CALL - USE HITTEST IN THE ROOTAREAS INSTEAD
-    virtual int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const;
+    int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const override;
 
     /// reimplemented to always return 1
-    virtual int pageCount() const;
+    int pageCount() const override;
 
     /// reimplemented from QAbstractTextDocumentLayout
-    virtual void documentChanged(int position, int charsRemoved, int charsAdded);
+    void documentChanged(int position, int charsRemoved, int charsAdded) override;
 /*
 protected:
     /// reimplemented

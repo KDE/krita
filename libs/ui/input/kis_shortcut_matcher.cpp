@@ -22,6 +22,7 @@
 #include <QMouseEvent>
 #include <QTabletEvent>
 
+#include "kis_assert.h"
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
@@ -478,14 +479,18 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
     Q_ASSERT(!m_d->readyShortcut);
 
     if (m_d->runningShortcut->matchBegin(button)) {
-        if (m_d->runningShortcut->action()) {
+
+        // first reset running shortcut to avoid infinite recursion via end()
+        KisStrokeShortcut *runningShortcut = m_d->runningShortcut;
+        m_d->runningShortcut = 0;
+
+        if (runningShortcut->action()) {
             DEBUG_EVENT_ACTION("Ending running shortcut at event", event);
-            KisAbstractInputAction* action = m_d->runningShortcut->action();
-            int shortcutIndex = m_d->runningShortcut->shortcutIndex();
+            KisAbstractInputAction* action = runningShortcut->action();
+            int shortcutIndex = runningShortcut->shortcutIndex();
             action->end(event);
             action->deactivate(shortcutIndex);
         }
-        m_d->runningShortcut = 0;
     }
 
     return !m_d->runningShortcut;
@@ -493,20 +498,23 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
 
 void KisShortcutMatcher::forceEndRunningShortcut(const QPointF &localPos)
 {
-    Q_ASSERT(m_d->runningShortcut);
-    Q_ASSERT(!m_d->readyShortcut);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->runningShortcut);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->readyShortcut);
 
-    if (m_d->runningShortcut->action()) {
+    // first reset running shortcut to avoid infinite recursion via end()
+    KisStrokeShortcut *runningShortcut = m_d->runningShortcut;
+    m_d->runningShortcut = 0;
+
+    if (runningShortcut->action()) {
         DEBUG_ACTION("Forced ending running shortcut at event");
-        KisAbstractInputAction* action = m_d->runningShortcut->action();
-        int shortcutIndex = m_d->runningShortcut->shortcutIndex();
+        KisAbstractInputAction* action = runningShortcut->action();
+        int shortcutIndex = runningShortcut->shortcutIndex();
 
-        QMouseEvent event = m_d->runningShortcut->fakeEndEvent(localPos);
+        QMouseEvent event = runningShortcut->fakeEndEvent(localPos);
 
         action->end(&event);
         action->deactivate(shortcutIndex);
     }
-    m_d->runningShortcut = 0;
 }
 
 bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
@@ -544,9 +552,12 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
 bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
 {
     if(m_d->touchShortcut) {
-        m_d->touchShortcut->action()->end(event);
-        m_d->touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
+        // first reset running shortcut to avoid infinite recursion via end()
+        KisTouchShortcut *touchShortcut = m_d->touchShortcut;
         m_d->touchShortcut = 0;
+
+        touchShortcut->action()->end(event);
+        touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
 
         return true;
     }

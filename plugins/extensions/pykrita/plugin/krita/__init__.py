@@ -30,7 +30,7 @@ import builtins
 builtins.i18n = lambda s: unicode(QCoreApplication.translate("PyKrita", s))
 builtins.Scripter = Krita.instance()
 builtins.Application = Krita.instance()
-builtins.Scripter = Krita.instance()
+builtins.Krita = Krita.instance()
 
 def qDebug(text):
     '''Use KDE way to show debug info

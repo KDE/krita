@@ -186,21 +186,21 @@ KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 {
     Q_FOREACH (const QString &id, keys()) {
         delete get(id);
-    }    
+    }
     dbgRegistry << "deleting KisFilterStrategyRegistry";
 }
 
 KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
 {
     if (!s_instance.exists()) {
-        // s_instance->add(new KisHermiteFilterStrategy);
+        s_instance->add(new KisHermiteFilterStrategy);
         s_instance->add(new KisBicubicFilterStrategy);
         s_instance->add(new KisBoxFilterStrategy);
         s_instance->add(new KisBilinearFilterStrategy);
-        // s_instance->add(new KisBellFilterStrategy);
-        // s_instance->add(new KisBSplineFilterStrategy);
+        s_instance->add(new KisBellFilterStrategy);
+        s_instance->add(new KisBSplineFilterStrategy);
         s_instance->add(new KisLanczos3FilterStrategy);
-        // s_instance->add(new KisMitchellFilterStrategy);
+        s_instance->add(new KisMitchellFilterStrategy);
 
     }
     return s_instance;
@@ -216,7 +216,7 @@ QList<KoID> KisFilterStrategyRegistry::listKeys() const
     return answer;
 }
 
-QString KisFilterStrategyRegistry::formatedDescriptions() const
+QString KisFilterStrategyRegistry::formattedDescriptions() const
 {
     QString formatedDescription("<html><head/><body>");
 

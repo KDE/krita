@@ -89,7 +89,7 @@ public:
 
     /// constructor
     explicit KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootAreaProvider *provider = 0);
-    virtual ~KoTextDocumentLayout();
+    ~KoTextDocumentLayout() override;
 
     /// return the rootAreaProvider.
     KoTextLayoutRootAreaProvider *provider() const;
@@ -111,15 +111,15 @@ public:
     void setStyleManager(KoStyleManager *manager);
 
     /// Returns the bounding rectangle of block.
-    QRectF blockBoundingRect(const QTextBlock &block) const;
+    QRectF blockBoundingRect(const QTextBlock &block) const override;
     /**
      * Returns the total size of the document. This is useful to display
      * widgets since they can use to information to update their scroll bars
      * correctly
      */
-    virtual QSizeF documentSize() const;
+    QSizeF documentSize() const override;
 
-    virtual QRectF frameBoundingRect(QTextFrame*) const;
+    QRectF frameBoundingRect(QTextFrame*) const override;
 
     /// the default tab size for this document
     qreal defaultTabSpacing() const;
@@ -143,13 +143,13 @@ public:
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
     /// Draws the layout on the given painter with the given context.
-    virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);
+    void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context) override;
 
     /// reimplemented DO NOT CALL - USE HITTEST IN THE ROOTAREAS INSTEAD
-    virtual int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const;
+    int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const override;
 
     /// reimplemented to always return 1
-    virtual int pageCount() const;
+    int pageCount() const override;
 
     QList<KoShapeAnchor *> textAnchors() const;
 
@@ -226,7 +226,7 @@ public:
     void removeRootArea(KoTextLayoutRootArea *rootArea = 0);
 
     /// reimplemented from QAbstractTextDocumentLayout
-    virtual void documentChanged(int position, int charsRemoved, int charsAdded);
+    void documentChanged(int position, int charsRemoved, int charsAdded) override;
 
     void setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction);
 
@@ -307,11 +307,11 @@ private Q_SLOTS:
 
 protected:
     /// reimplemented
-    virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
+    void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format) override;
     /// reimplemented
-    virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+    void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format) override;
     /// reimplemented
-    virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+    void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format) override;
 
     /// should we continue layout when done with current root area
     bool continuousLayout() const;

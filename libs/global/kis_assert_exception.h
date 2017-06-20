@@ -30,8 +30,8 @@ public:
     {
     }
 
-    QException* clone() const { return new KisAssertException(*this); }
-    void raise() const { throw *this; }
+    QException* clone() const override { return new KisAssertException(*this); }
+    void raise() const override { throw *this; }
 };
 
 #endif /* __KIS_ASSERT_EXCEPTION_H */

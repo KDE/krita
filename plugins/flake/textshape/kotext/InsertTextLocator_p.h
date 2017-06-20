@@ -31,7 +31,7 @@ public:
     explicit InsertTextLocator(KoCanvasBase *canvas);
 
 private:
-    virtual KoInlineObject *createInlineObject();
+    KoInlineObject *createInlineObject() override;
 };
 
 #endif

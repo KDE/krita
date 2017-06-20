@@ -47,28 +47,28 @@ public:
     KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent);
     KisAbrBrush(const KisAbrBrush& rhs);
     KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent);
-    KisBrush* clone() const;
+    KisBrush* clone() const override;
 
-    virtual bool load();
+    bool load() override;
 
-    virtual bool loadFromDevice(QIODevice *dev);
+    bool loadFromDevice(QIODevice *dev) override;
 
-    virtual bool save();
+    bool save() override;
 
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool saveToDevice(QIODevice* dev) const override;
 
     /**
      * @return default file extension for saving the brush
      */
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
-    virtual QImage brushTipImage() const;
+    QImage brushTipImage() const override;
 
     friend class KisAbrBrushCollection;
 
-    virtual void setBrushTipImage(const QImage& image);
+    void setBrushTipImage(const QImage& image) override;
 
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument& d, QDomElement& e) const override;
 
 private:
     KisAbrBrushCollection *m_parent;

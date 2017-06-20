@@ -37,19 +37,19 @@ class KisToolSelectOutline : public KisToolSelect
 
 public:
     KisToolSelectOutline(KoCanvasBase *canvas);
-    virtual ~KisToolSelectOutline();
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    ~KisToolSelectOutline() override;
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
-    void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
 public Q_SLOTS:
-    virtual void deactivate();
+    void deactivate() override;
     void setSelectionAction(int);
 
 protected:
@@ -80,9 +80,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolSelectOutlineFactory() {}
+    ~KisToolSelectOutlineFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectOutline(canvas);
     }
 };

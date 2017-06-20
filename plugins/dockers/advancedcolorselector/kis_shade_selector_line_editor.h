@@ -36,8 +36,8 @@ class KisShadeSelectorLineEditor : public KisShadeSelectorLineBase {
 public:
     KisShadeSelectorLineEditor(QWidget* parent);
 
-    QString toString() const;
-    void fromString(const QString &string);
+    QString toString() const override;
+    void fromString(const QString &string) override;
 
 private Q_SLOTS:
     void valueChanged();

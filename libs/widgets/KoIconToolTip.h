@@ -30,10 +30,10 @@ class KRITAWIDGETS_EXPORT KoIconToolTip: public KoItemToolTip
 
     public:
         KoIconToolTip();
-        virtual ~KoIconToolTip();
+        ~KoIconToolTip() override;
 
     protected:
-        virtual QTextDocument *createDocument( const QModelIndex &index );
+        QTextDocument *createDocument( const QModelIndex &index ) override;
 
     private:
         typedef KoItemToolTip super;

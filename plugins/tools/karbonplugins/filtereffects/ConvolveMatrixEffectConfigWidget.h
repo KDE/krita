@@ -37,7 +37,7 @@ public:
     explicit ConvolveMatrixEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    virtual bool editFilterEffect(KoFilterEffect *filterEffect);
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void orderChanged(int value);

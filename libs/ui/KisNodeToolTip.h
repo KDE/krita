@@ -34,10 +34,10 @@ class KisNodeToolTip: public KoItemToolTip
 
 public:
     KisNodeToolTip();
-    virtual ~KisNodeToolTip();
+    ~KisNodeToolTip() override;
 
 protected:
-    virtual QTextDocument *createDocument(const QModelIndex &index);
+    QTextDocument *createDocument(const QModelIndex &index) override;
 
 private:
     typedef KisNodeModel Model;

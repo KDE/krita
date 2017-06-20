@@ -36,7 +36,7 @@ public:
 
     KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent = 0);
 
-    ~KisDlgFilter();
+    ~KisDlgFilter() override;
 
     void setFilter(KisFilterSP f);
 
@@ -51,7 +51,7 @@ protected Q_SLOTS:
 
     void filterSelectionChanged();
 
-    virtual void resizeEvent(QResizeEvent* );
+    void resizeEvent(QResizeEvent* ) override;
 
 public Q_SLOTS:
     void adjustSize();

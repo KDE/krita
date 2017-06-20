@@ -32,23 +32,23 @@ class KisSimplifiedActionPolicyStrategy : public KisTransformStrategyBase
 {
 public:
     KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter, KoSnapGuide *snapGuide = 0);
-    ~KisSimplifiedActionPolicyStrategy();
+    ~KisSimplifiedActionPolicyStrategy() override;
 
-    void activatePrimaryAction();
+    void activatePrimaryAction() override;
 
-    virtual bool beginPrimaryAction(KoPointerEvent *event);
-    virtual void continuePrimaryAction(KoPointerEvent *event);
-    virtual bool endPrimaryAction(KoPointerEvent *event);
-    virtual void hoverActionCommon(KoPointerEvent *event);
+    bool beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    bool endPrimaryAction(KoPointerEvent *event) override;
+    void hoverActionCommon(KoPointerEvent *event) override;
 
     virtual QPointF handleSnapPoint(const QPointF &imagePos);
 
-    virtual void activateAlternateAction(KisTool::AlternateAction action);
-    virtual void deactivateAlternateAction(KisTool::AlternateAction action);
+    void activateAlternateAction(KisTool::AlternateAction action) override;
+    void deactivateAlternateAction(KisTool::AlternateAction action) override;
 
-    virtual bool beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
-    virtual void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
-    virtual bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
+    bool beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
+    bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
 
 protected:
 

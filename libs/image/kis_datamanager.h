@@ -57,7 +57,7 @@ public:
 KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
     KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
 
-    ~KisDataManager() {
+    ~KisDataManager() override {
     }
 
 public:

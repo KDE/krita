@@ -30,7 +30,7 @@ class Histogram : public KisViewPlugin
     Q_OBJECT
 public:
     Histogram(QObject *parent, const QVariantList &);
-    virtual ~Histogram();
+    ~Histogram() override;
 
 private Q_SLOTS:
     void slotActivated();

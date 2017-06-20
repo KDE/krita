@@ -27,7 +27,7 @@ class ToolSmartPatch : public QObject
     Q_OBJECT
 public:
     ToolSmartPatch(QObject *parent, const QVariantList &);
-    virtual ~ToolSmartPatch();
+    ~ToolSmartPatch() override;
 
 };
 

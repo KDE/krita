@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
 public:
     KisDisplayColorConverter();
     KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent);
-    virtual ~KisDisplayColorConverter();
+    ~KisDisplayColorConverter() override;
 
     static KisDisplayColorConverter* dumbConverterInstance();
 

@@ -30,7 +30,7 @@ class KRITAIMAGE_EXPORT KisRecordedNodeAction : public KisRecordedAction
 public:
     KisRecordedNodeAction(const QString& id, const QString& name, const KisNodeQueryPath& path);
     KisRecordedNodeAction(const KisRecordedNodeAction& _rhs);
-    virtual ~KisRecordedNodeAction();
+    ~KisRecordedNodeAction() override;
     /**
      * Play the action on one node
      */
@@ -38,8 +38,8 @@ public:
     /**
      * Play the action on all the nodes returned by the nodeQueryPath
      */
-    virtual void play(const KisPlayInfo& _info, KoUpdater* _updater) const;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    void play(const KisPlayInfo& _info, KoUpdater* _updater) const override;
+    void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const override;
 public:
     const KisNodeQueryPath& nodeQueryPath() const;
     void setNodeQueryPath(const KisNodeQueryPath&);

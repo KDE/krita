@@ -48,7 +48,7 @@ class KRITACOLORD_EXPORT KisColord : public QObject
     Q_OBJECT
 public:
     KisColord(QObject *parent = 0);
-    ~KisColord();
+    ~KisColord() override;
 
     QStringList devices(const QString &type) const;
     const QString deviceName(const QString &id) const;

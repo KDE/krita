@@ -379,79 +379,8 @@ KoFormatChangeInformation *KoChangeTracker::formatChangeInformation(int formatCh
     return d->changeInformation.value(formatChangeId);
 }
 
-void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
+void KoChangeTracker::loadOdfChanges(const KoXmlElement& )
 {
-    if (element.namespaceURI() == KoXmlNS::text) {
-        KoXmlElement tag;
-        forEachElement(tag, element) {
-            if (! tag.isNull()) {
-                const QString localName = tag.localName();
-                if (localName == "changed-region") {
-                    KoChangeTrackerElement *changeElement = 0;
-                    KoXmlElement region;
-                    forEachElement(region, tag) {
-                        if (!region.isNull()) {
-                            if (region.localName() == "insertion") {
-                                changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::text,"id")),KoGenChange::InsertChange);
-                            } else if (region.localName() == "format-change") {
-                                changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::text,"id")),KoGenChange::FormatChange);
-                            } else if (region.localName() == "deletion") {
-                                changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::text,"id")),KoGenChange::DeleteChange);
-                            }
-                            KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
-                            if (!metadata.isNull()) {
-                                KoXmlElement date = metadata.namedItem("dc:date").toElement();
-                                if (!date.isNull()) {
-                                    changeElement->setDate(date.text());
-                                }
-                                KoXmlElement creator = metadata.namedItem("dc:creator").toElement();
-                                if (!date.isNull()) {
-                                    changeElement->setCreator(creator.text());
-                                }
-                                //TODO load comments
-/*                              KoXmlElement extra = metadata.namedItem("dc-").toElement();
-                                if (!date.isNull()) {
-                                    debugText << "creator: " << creator.text();
-                                    changeElement->setCreator(creator.text());
-                                }*/
-                            }
-                            changeElement->setEnabled(d->recordChanges);
-                            d->changes.insert( d->changeId, changeElement);
-                            d->loadedChanges.insert(tag.attributeNS(KoXmlNS::text,"id"), d->changeId++);
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        //This is the ODF 1.2 Change Format
-        KoXmlElement tag;
-        forEachElement(tag, element) {
-            if (! tag.isNull()) {
-                const QString localName = tag.localName();
-                if (localName == "change-transaction") {
-                    KoChangeTrackerElement *changeElement = 0;
-                    //Set the change element as an insertion element for now
-                    //Will be changed to the correct type when actual changes referencing this change-id are encountered
-                    changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::delta,"change-id")),KoGenChange::InsertChange);
-                    KoXmlElement metadata = tag.namedItemNS(KoXmlNS::delta,"change-info").toElement();
-                    if (!metadata.isNull()) {
-                           KoXmlElement date = metadata.namedItem("dc:date").toElement();
-                           if (!date.isNull()) {
-                                changeElement->setDate(date.text());
-                            }
-                            KoXmlElement creator = metadata.namedItem("dc:creator").toElement();
-                            if (!creator.isNull()) {
-                                changeElement->setCreator(creator.text());
-                            }
-                    }
-                    changeElement->setEnabled(d->recordChanges);
-                    d->changes.insert( d->changeId, changeElement);
-                    d->loadedChanges.insert(tag.attributeNS(KoXmlNS::delta,"change-id"), d->changeId++);
-               }
-           }
-        }
-    }
 }
 
 int KoChangeTracker::getLoadedChangeId(const QString &odfId) const
@@ -530,7 +459,7 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor 
         for (int i = cursor.anchor();i <= cursor.position(); i++) {
             if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
                 editCursor.setPosition(i+1);
-	    }
+        }
         }
     }
 

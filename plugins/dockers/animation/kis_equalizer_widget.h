@@ -33,7 +33,7 @@ class KRITAANIMATIONDOCKER_EXPORT KisEqualizerWidget : public QWidget
 
 public:
     KisEqualizerWidget(int maxDistance, QWidget *parent);
-    ~KisEqualizerWidget();
+    ~KisEqualizerWidget() override;
 
     struct EqualizerValues {
         int maxDistance;
@@ -46,9 +46,9 @@ public:
 
     void toggleMasterSwitch();
 
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
-    void mouseMoveEvent(QMouseEvent *ev);
+    void mouseMoveEvent(QMouseEvent *ev) override;
 
 Q_SIGNALS:
     void sigConfigChanged();

@@ -48,23 +48,23 @@ class KisColorSelectorBaseProxyNoop : public KisColorSelectorBaseProxy
 {
 public:
     KisColorSelectorBaseProxyNoop();
-    ~KisColorSelectorBaseProxyNoop();
+    ~KisColorSelectorBaseProxyNoop() override;
 
-    const KoColorSpace* colorSpace() const;
+    const KoColorSpace* colorSpace() const override;
 
-    void showColorPreview() {}
+    void showColorPreview() override {}
 
-    void updateColorPreview(const KoColor &color) {
+    void updateColorPreview(const KoColor &color) override {
         Q_UNUSED(color);
     }
 
-    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset) {
+    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset) override {
         Q_UNUSED(color);
         Q_UNUSED(role);
         Q_UNUSED(needsExplicitColorReset);
     }
 
-    KisDisplayColorConverter* converter() const;
+    KisDisplayColorConverter* converter() const override;
 };
 
 
@@ -75,11 +75,11 @@ class KisColorSelectorBaseProxyObject : public KisColorSelectorBaseProxy
 public:
     KisColorSelectorBaseProxyObject(KisColorSelectorBase *parent);
 
-    const KoColorSpace* colorSpace() const;
-    void showColorPreview();
-    void updateColorPreview(const KoColor &color);
-    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
-    KisDisplayColorConverter* converter() const;
+    const KoColorSpace* colorSpace() const override;
+    void showColorPreview() override;
+    void updateColorPreview(const KoColor &color) override;
+    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset) override;
+    KisDisplayColorConverter* converter() const override;
 
 private:
     KisColorSelectorBase *m_parent;

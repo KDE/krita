@@ -55,11 +55,11 @@ public:
      */
     KoShapeShadowCommand(KoShape *shape, KoShapeShadow *shadow, KUndo2Command *parent = 0);
 
-    virtual ~KoShapeShadowCommand();
+    ~KoShapeShadowCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

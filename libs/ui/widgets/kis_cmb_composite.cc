@@ -182,6 +182,13 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     connect(action, SIGNAL(triggered()), SLOT(slotOverlay()));
     m_actions << action;
 
+    //    Hard Overlay
+    //    Shift + Alt + P
+    action = new KisAction(i18n("Select Hard Overlay Blending Mode"), this);
+    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_P));
+    connect(action, SIGNAL(triggered()), SLOT(slotHardOverlay()));
+    m_actions << action;
+
     //    Soft Light
     //    Shift + Alt + F
     action = new KisAction(i18n("Select Soft Light Blending Mode"), this);
@@ -406,6 +413,11 @@ void KisCompositeOpComboBox::slotLinearDodge()
 void KisCompositeOpComboBox::slotOverlay()
 {
     selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_OVERLAY));
+}
+
+void KisCompositeOpComboBox::slotHardOverlay()
+{
+    selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_OVERLAY));
 }
 
 void KisCompositeOpComboBox::slotSoftLight()

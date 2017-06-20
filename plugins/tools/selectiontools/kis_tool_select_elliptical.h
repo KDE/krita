@@ -44,7 +44,7 @@ protected:
     virtual SelectionAction selectionAction() const = 0;
     virtual bool antiAliasSelection() const = 0;
 private:
-    void finishRect(const QRectF &rect);
+    void finishRect(const QRectF &rect) override;
 };
 
 
@@ -74,9 +74,9 @@ public:
         setPriority(1);
     }
 
-    virtual ~KisToolSelectEllipticalFactory() {}
+    ~KisToolSelectEllipticalFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectElliptical(canvas);
     }
 

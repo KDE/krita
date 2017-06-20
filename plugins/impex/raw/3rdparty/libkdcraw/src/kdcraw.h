@@ -64,7 +64,7 @@ public:
 
     /** Standard destructor.
      */
-    virtual ~KDcraw();
+    ~KDcraw() override;
 
 public:
 

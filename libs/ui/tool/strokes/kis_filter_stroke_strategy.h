@@ -33,7 +33,7 @@ public:
             : KisStrokeJobData(concurrent ? CONCURRENT : SEQUENTIAL),
               processRect(_processRect) {}
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) {
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
             return new Data(*this, levelOfDetail);
         }
 
@@ -55,7 +55,7 @@ public:
             : KisStrokeJobData(SEQUENTIAL)
         {}
 
-        KisStrokeJobData* createLodClone(int /*levelOfDetail*/) {
+        KisStrokeJobData* createLodClone(int /*levelOfDetail*/) override {
             return new CancelSilentlyMarker(*this);
         }
     };
@@ -66,15 +66,15 @@ public:
                             KisResourcesSnapshotSP resources);
     KisFilterStrokeStrategy(const KisFilterStrokeStrategy &rhs, int levelOfDetail);
 
-    ~KisFilterStrokeStrategy();
+    ~KisFilterStrokeStrategy() override;
 
 
-    void initStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
-    void cancelStrokeCallback();
-    void finishStrokeCallback();
+    void initStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
+    void cancelStrokeCallback() override;
+    void finishStrokeCallback() override;
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
 private:
     struct Private;

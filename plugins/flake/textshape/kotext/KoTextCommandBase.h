@@ -58,15 +58,15 @@ public:
 
     /// constructor
     explicit KoTextCommandBase(KUndo2Command *parent);
-    virtual ~KoTextCommandBase();
+    ~KoTextCommandBase() override;
 
     /// method called by the tool.
     void setTool(KoUndoableTool *tool);
 
     // reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     // reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 
     /// Sets the m_allowAddUndoCommand of the associated tool
     void setAllow(bool set);

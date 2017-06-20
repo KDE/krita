@@ -32,7 +32,7 @@ class ColorSliderPlugin : public QObject
     Q_OBJECT
 public:
     ColorSliderPlugin(QObject *parent, const QVariantList &);
-    virtual ~ColorSliderPlugin();
+    ~ColorSliderPlugin() override;
 private:
     KisViewManager* m_view;
 };

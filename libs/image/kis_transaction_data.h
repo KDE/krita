@@ -37,11 +37,11 @@ class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
     KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
-    virtual ~KisTransactionData();
+    ~KisTransactionData() override;
 
 public:
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
     virtual void endTransaction();
 

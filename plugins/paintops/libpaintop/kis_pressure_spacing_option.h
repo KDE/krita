@@ -37,8 +37,8 @@ public:
     void setIsotropicSpacing(bool isotropic);
     bool isotropicSpacing() const;
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
 private:
     bool m_isotropicSpacing;

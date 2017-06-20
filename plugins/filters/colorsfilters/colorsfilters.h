@@ -31,7 +31,7 @@ class ColorsFilters : public QObject
     Q_OBJECT
 public:
     ColorsFilters(QObject *parent, const QVariantList &);
-    virtual ~ColorsFilters();
+    ~ColorsFilters() override;
 };
 
 class KisAutoContrast : public KisFilter
@@ -44,7 +44,7 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
     static inline KoID id() {
         return KoID("autocontrast", i18n("Auto Contrast"));
     }

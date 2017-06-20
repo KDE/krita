@@ -43,7 +43,7 @@ class KRITATEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
 {
 public:
     KoTextSharedSavingData();
-    virtual ~KoTextSharedSavingData();
+    ~KoTextSharedSavingData() override;
 
     void setGenChanges(KoGenChanges &changes);
 

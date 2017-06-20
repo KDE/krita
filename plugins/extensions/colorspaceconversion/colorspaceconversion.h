@@ -33,7 +33,7 @@ class ColorSpaceConversion : public KisViewPlugin
     Q_OBJECT
 public:
     ColorSpaceConversion(QObject *parent, const QVariantList &);
-    virtual ~ColorSpaceConversion();
+    ~ColorSpaceConversion() override;
 
 private Q_SLOTS:
 

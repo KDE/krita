@@ -73,10 +73,10 @@ public:
     **/
     KisLayer(KisImageWSP image, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
-    virtual ~KisLayer();
+    ~KisLayer() override;
 
     /// returns the image's colorSpace or null, if there is no image
-    virtual const KoColorSpace * colorSpace() const override;
+    const KoColorSpace * colorSpace() const override;
 
     /// returns the layer's composite op for the colorspace of the layer's parent.
     const KoCompositeOp * compositeOp() const override;
@@ -87,7 +87,7 @@ public:
     /**
      * \see a comment in KisNode::projectionPlane()
      */
-    virtual KisAbstractProjectionPlaneSP projectionPlane() const override;
+    KisAbstractProjectionPlaneSP projectionPlane() const override;
 
     /**
      * The projection plane representing the layer itself without any
@@ -111,7 +111,7 @@ public:
      * Return the layer data before the effect masks have had their go
      * at it.
      */
-    virtual KisPaintDeviceSP original() const override = 0;
+    KisPaintDeviceSP original() const override = 0;
 
     /**
      * @return the selection associated with this layer, if there is
@@ -125,8 +125,8 @@ public:
      */
     virtual KisSelectionSP selection() const;
 
-    virtual KisBaseNode::PropertyList sectionModelProperties() const override;
-    virtual void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
+    KisBaseNode::PropertyList sectionModelProperties() const override;
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
 
     /**
      * set/unset the channel flag for the alpha channel of this layer

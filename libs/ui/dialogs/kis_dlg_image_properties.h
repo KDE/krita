@@ -43,7 +43,7 @@ public:
     KisDlgImageProperties(KisImageWSP image,
                           QWidget *parent = 0,
                           const char *name = 0);
-    virtual ~KisDlgImageProperties();
+    ~KisDlgImageProperties() override;
 
     const KoColorSpace * colorSpace();
 

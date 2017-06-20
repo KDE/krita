@@ -30,7 +30,7 @@ class HatchingPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     HatchingPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~HatchingPaintOpPlugin();
+    ~HatchingPaintOpPlugin() override;
 };
 
 #endif // HATCHING_PAINTOP_PLUGIN_H_

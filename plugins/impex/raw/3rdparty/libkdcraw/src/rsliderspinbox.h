@@ -58,7 +58,7 @@ protected:
 
 public:
 
-    virtual ~RAbstractSliderSpinBox();
+    ~RAbstractSliderSpinBox() override;
 
     void showEdit();
     void hideEdit();
@@ -69,16 +69,16 @@ public:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void mouseReleaseEvent(QMouseEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void keyPressEvent(QKeyEvent* e);
-    virtual void wheelEvent(QWheelEvent *);
-    virtual bool eventFilter(QObject* recv, QEvent* e);
+    void paintEvent(QPaintEvent* e) override;
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void keyPressEvent(QKeyEvent* e) override;
+    void wheelEvent(QWheelEvent *) override;
+    bool eventFilter(QObject* recv, QEvent* e) override;
 
-    virtual QSize sizeHint()        const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint()        const override;
+    QSize minimumSizeHint() const override;
 
     QStyleOptionSpinBox spinBoxOptions()         const;
     QStyleOptionProgressBar progressBarOptions() const;
@@ -95,7 +95,7 @@ protected:
 
 protected Q_SLOTS:
 
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
     void editLostFocus();
 
 protected:
@@ -115,7 +115,7 @@ class RSliderSpinBox : public RAbstractSliderSpinBox
 public:
 
     RSliderSpinBox(QWidget* const parent = 0);
-    ~RSliderSpinBox();
+    ~RSliderSpinBox() override;
 
     void setRange(int minimum, int maximum);
 
@@ -138,8 +138,8 @@ Q_SIGNALS:
 
 protected:
 
-    virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    QString valueString() const override;
+    void setInternalValue(int value) override;
 };
 
 // ---------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ class RDoubleSliderSpinBox : public RAbstractSliderSpinBox
 public:
 
     RDoubleSliderSpinBox(QWidget* const parent = 0);
-    ~RDoubleSliderSpinBox();
+    ~RDoubleSliderSpinBox() override;
 
     void setRange(double minimum, double maximum, int decimals = 0);
 
@@ -174,8 +174,8 @@ Q_SIGNALS:
 
 protected:
 
-    virtual QString valueString() const;
-    virtual void setInternalValue(int val);
+    QString valueString() const override;
+    void setInternalValue(int val) override;
 };
 
 }  // namespace KDcrawIface

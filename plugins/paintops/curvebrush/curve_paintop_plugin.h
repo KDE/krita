@@ -30,7 +30,7 @@ class CurvePaintOpPlugin : public QObject
     Q_OBJECT
 public:
     CurvePaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~CurvePaintOpPlugin();
+    ~CurvePaintOpPlugin() override;
 };
 
 #endif // CURVE_PAINTOP_PLUGIN_H_

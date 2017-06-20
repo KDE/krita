@@ -30,13 +30,13 @@ class KisCommonColors : public KisColorPatches
 Q_OBJECT
 public:
     explicit KisCommonColors(QWidget *parent = 0);
-    void setCanvas(KisCanvas2 *canvas);
-    void unsetCanvas() {}
-    KisColorSelectorBase* createPopup() const;
+    void setCanvas(KisCanvas2 *canvas) override;
+    void unsetCanvas() override {}
+    KisColorSelectorBase* createPopup() const override;
 
 public Q_SLOTS:
     void setColors(QList<KoColor> colors);
-    void updateSettings();
+    void updateSettings() override;
     void recalculate();
 
 private:

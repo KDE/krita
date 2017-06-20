@@ -30,28 +30,28 @@ class KisAnimationCurvesView : public QAbstractItemView
     Q_OBJECT
 public:
     KisAnimationCurvesView(QWidget *parent);
-    ~KisAnimationCurvesView();
+    ~KisAnimationCurvesView() override;
 
-    void setModel(QAbstractItemModel *model);
+    void setModel(QAbstractItemModel *model) override;
     void setZoomButtons(KisZoomButton *horizontal, KisZoomButton *vertical);
 
-    QRect visualRect(const QModelIndex &index) const;
-    void scrollTo(const QModelIndex &index, ScrollHint hint);
-    QModelIndex indexAt(const QPoint &point) const;
+    QRect visualRect(const QModelIndex &index) const override;
+    void scrollTo(const QModelIndex &index, ScrollHint hint) override;
+    QModelIndex indexAt(const QPoint &point) const override;
 
 protected:
-    void paintEvent(QPaintEvent *);
-    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
-    int horizontalOffset() const;
-    int verticalOffset() const;
-    bool isIndexHidden(const QModelIndex &index) const;
-    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
-    QRegion visualRegionForSelection(const QItemSelection &selection) const;
-    void scrollContentsBy(int dx, int dy);
+    void paintEvent(QPaintEvent *) override;
+    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
+    int horizontalOffset() const override;
+    int verticalOffset() const override;
+    bool isIndexHidden(const QModelIndex &index) const override;
+    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
+    void scrollContentsBy(int dx, int dy) override;
 
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
 
 public Q_SLOTS:
     void applyConstantMode();
@@ -66,7 +66,7 @@ public Q_SLOTS:
     void zoomToFit();
 
 protected Q_SLOTS:
-    void updateGeometries();
+    void updateGeometries() override;
 
 private Q_SLOTS:
     void slotRowsChanged(const QModelIndex &parentIndex, int first, int last);

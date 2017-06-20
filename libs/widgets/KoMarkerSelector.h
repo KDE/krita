@@ -33,7 +33,7 @@ class KRITAWIDGETS_EXPORT KoMarkerSelector : public QComboBox
     Q_OBJECT
 public:
     explicit KoMarkerSelector(KoFlake::MarkerPosition position, QWidget *parent = 0);
-    virtual ~KoMarkerSelector();
+    ~KoMarkerSelector() override;
 
     // set the current marker style
     void setMarker(KoMarker *marker);
@@ -49,7 +49,7 @@ public:
     void updateMarkers(const QList<KoMarker*> markers);
 
 protected:
-    void paintEvent(QPaintEvent *pe);
+    void paintEvent(QPaintEvent *pe) override;
 
 private:
     class Private;

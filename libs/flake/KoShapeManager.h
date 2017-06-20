@@ -71,7 +71,7 @@ public:
      * @param canvas the canvas this shape manager is working on.
      */
     KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes);
-    virtual ~KoShapeManager();
+    ~KoShapeManager() override;
 
 
     /**
@@ -147,7 +147,7 @@ public:
      * @param selectionHandles if true; find out if the shape is selected and repaint its
      *   selection handles at the same time.
      */
-    void update(QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false);
+    void update(const QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false);
 
     /**
      * Update the tree for finding the shapes.

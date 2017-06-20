@@ -39,7 +39,7 @@ class KisActionsEditor : public QWidget
     Q_OBJECT
 public:
     KisActionsEditor(QWidget* parent);
-    ~KisActionsEditor();
+    ~KisActionsEditor() override;
     void setMacro(KisMacro*);
 private Q_SLOTS:
     void slotCreateAction(const QString& _id);

@@ -55,7 +55,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KoSliderCombo();
+    ~KoSliderCombo() override;
 
     /**
      * The precision of values given as the number of digits after the period.
@@ -99,8 +99,8 @@ public:
      */
     qreal value() const;
 
-    virtual QSize minimumSizeHint() const; ///< reimplemented from QComboBox
-    virtual QSize sizeHint() const; ///< reimplemented from QComboBox
+    QSize minimumSizeHint() const override; ///< reimplemented from QComboBox
+    QSize sizeHint() const override; ///< reimplemented from QComboBox
 
 public Q_SLOTS:
 
@@ -122,12 +122,12 @@ Q_SIGNALS:
     void valueChanged(qreal value, bool final);
 
 protected:
-    virtual void paintEvent(QPaintEvent *); ///< reimplemented from QComboBox
-    virtual void hideEvent(QHideEvent *); ///< reimplemented from QComboBox
-    virtual void changeEvent(QEvent *e); ///< reimplemented from QComboBox
-    virtual void mousePressEvent(QMouseEvent *e); ///< reimplemented from QComboBox
-    virtual void keyPressEvent(QKeyEvent *e); ///< reimplemented from QComboBox
-    virtual void wheelEvent(QWheelEvent *e); ///< reimplemented from QComboBox
+    void paintEvent(QPaintEvent *) override; ///< reimplemented from QComboBox
+    void hideEvent(QHideEvent *) override; ///< reimplemented from QComboBox
+    void changeEvent(QEvent *e) override; ///< reimplemented from QComboBox
+    void mousePressEvent(QMouseEvent *e) override; ///< reimplemented from QComboBox
+    void keyPressEvent(QKeyEvent *e) override; ///< reimplemented from QComboBox
+    void wheelEvent(QWheelEvent *e) override; ///< reimplemented from QComboBox
 
 private:
     Q_PRIVATE_SLOT(d, void sliderValueChanged(int value))

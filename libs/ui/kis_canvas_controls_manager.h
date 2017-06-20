@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisCanvasControlsManager: public QObject
 
 public:
     KisCanvasControlsManager(KisViewManager * view);
-    virtual ~KisCanvasControlsManager();
+    ~KisCanvasControlsManager() override;
 
     void setup(KisActionManager *actionManager);
     void setView(QPointer<KisView>imageView);

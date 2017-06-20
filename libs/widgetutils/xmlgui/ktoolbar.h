@@ -123,7 +123,7 @@ public:
     /**
      * Destroys the toolbar.
      */
-    virtual ~KToolBar();
+    ~KToolBar() override;
 
     /**
      * Returns the main window that this toolbar is docked with.

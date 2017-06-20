@@ -38,10 +38,10 @@ public:
     };
 
     explicit SplitSectionsCommand(QTextDocument *document, SplitType type, int splitPosition);
-    virtual ~SplitSectionsCommand();
+    ~SplitSectionsCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     bool m_first; ///< Checks first call of redo

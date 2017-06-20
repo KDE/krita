@@ -92,11 +92,11 @@ Q_SIGNALS:
     void sigBgColorChanged(const KisColor& color);
     
 private:
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void resizeEvent(QResizeEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
     void requestUpdateColorAndPreview(const KisColor &color, Acs::ColorRole role);
 

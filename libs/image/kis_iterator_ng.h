@@ -26,7 +26,7 @@ class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisBaseConstAccessor
     Q_DISABLE_COPY(KisBaseConstIteratorNG)
 public:
     KisBaseConstIteratorNG() {}
-    virtual ~KisBaseConstIteratorNG();
+    ~KisBaseConstIteratorNG() override;
     /**
      * Move to the next pixel
      * @return false if there is no more pixel in the line
@@ -58,7 +58,7 @@ class KRITAIMAGE_EXPORT KisHLineConstIteratorNG : public virtual KisBaseConstIte
     Q_DISABLE_COPY(KisHLineConstIteratorNG)
 public:
     KisHLineConstIteratorNG() {}
-    virtual ~KisHLineConstIteratorNG();
+    ~KisHLineConstIteratorNG() override;
     /**
      * Move to the next row
      */
@@ -76,7 +76,7 @@ class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, pub
     Q_DISABLE_COPY(KisHLineIteratorNG)
 public:
     KisHLineIteratorNG() {}
-    virtual ~KisHLineIteratorNG();
+    ~KisHLineIteratorNG() override;
 };
 
 /**
@@ -87,7 +87,7 @@ class KRITAIMAGE_EXPORT KisVLineConstIteratorNG : public virtual KisBaseConstIte
     Q_DISABLE_COPY(KisVLineConstIteratorNG)
 public:
     KisVLineConstIteratorNG() {}
-    virtual ~KisVLineConstIteratorNG();
+    ~KisVLineConstIteratorNG() override;
     /**
      * Move to the next row
      */
@@ -105,7 +105,7 @@ class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, pub
     Q_DISABLE_COPY(KisVLineIteratorNG)
 public:
     KisVLineIteratorNG() {}
-    virtual ~KisVLineIteratorNG();
+    ~KisVLineIteratorNG() override;
 };
 
 #include "kis_sequential_iterator.h"

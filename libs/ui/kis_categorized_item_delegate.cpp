@@ -46,8 +46,6 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     if(!index.data(__CategorizedListModelBase::IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi(option);
 
-
-
         if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
 
             const int iconSize = qMax(16, m_minimumItemHeight - 2);

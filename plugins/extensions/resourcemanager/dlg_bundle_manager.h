@@ -28,6 +28,7 @@
 class KisResourceBundle;
 class QListWidget;
 class QListWidgetItem;
+class KoAbstractResourceServerAdapter;
 
 namespace Ui
 {
@@ -52,6 +53,8 @@ private Q_SLOTS:
     void slotCreateBundle();
     void slotDeleteBackupFiles();
     void slotOpenResourceFolder();
+    void slotShareResources();
+    void setKnsrcFile(const QString& knsrcFileArg);
 
 private:
 
@@ -67,6 +70,9 @@ private:
     KisResourceBundle *m_currentBundle;
     KisActionManager *m_actionManager;
     ResourceManager *m_resourceManager;
+
+    class Private;
+    Private *const d;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

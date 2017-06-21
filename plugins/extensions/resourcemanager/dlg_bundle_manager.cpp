@@ -32,8 +32,22 @@
 #include <kis_icon.h>
 #include "kis_action.h"
 #include <kis_resource_server_provider.h>
+#include "KoResourceModel.h"
+
+#include "content_dowloader_dialog.h"
 
 #define ICON_SIZE 48
+
+class DlgBundleManager::Private
+{
+public:
+    Private()
+        :model(0)
+    {}
+
+    KoResourceModel *model;
+    QString knsrcFile;
+};
 
 DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent)
     : KoDialog(parent)
@@ -41,6 +55,7 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     , m_ui(new Ui::WdgDlgBundleManager)
     , m_currentBundle(0)
     , m_resourceManager(resourceManager)
+    , d(new Private())
 {
     setCaption(i18n("Manage Resource Bundles"));
     m_ui->setupUi(m_page);
@@ -48,6 +63,9 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     resize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+
+    QString knsrcFile = "kritabrushes.knsrc";
+    setKnsrcFile(knsrcFile);
 
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -81,7 +99,7 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     connect(m_ui->bnImportPresets, SIGNAL(clicked()), SLOT(slotImportResource()));
     connect(m_ui->bnImportWorkspaces, SIGNAL(clicked()), SLOT(slotImportResource()));
     connect(m_ui->bnImportBundles, SIGNAL(clicked()), SLOT(slotImportResource()));
-
+    connect(m_ui->bnShareResources, SIGNAL(clicked()), SLOT(slotShareResources()));
 
     connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
     connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
@@ -390,5 +408,29 @@ void DlgBundleManager::slotOpenResourceFolder() {
         KisAction *action = m_actionManager->actionByName("open_resources_directory");
         action->trigger();
     }
+}
+
+void DlgBundleManager::slotShareResources()
+{
+    ContentDownloaderDialog dialog(d->knsrcFile, this);
+    dialog.exec();
+
+    foreach (const KNSCore::EntryInternal& e, dialog.changedEntries()) {
+
+        foreach(const QString &file, e.installedFiles()) {
+            QFileInfo fi(file);
+            d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+        }
+
+        foreach(const QString &file, e.uninstalledFiles()) {
+            QFileInfo fi(file);
+            d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+        }
+    }
+}
+
+void DlgBundleManager::setKnsrcFile(const QString &knsrcFileArg)
+{
+    d->knsrcFile = knsrcFileArg;
 }
 

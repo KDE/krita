@@ -90,7 +90,15 @@ void paintLine(PaintOp &op,
         pi.paintAt(op, currentDistance);
     }
 
-    // Perform a spacing update between dabs if appropriate.
+    /*
+     * Perform a spacing update between dabs if appropriate. Typically, this will not happen if the
+     * above loop actually painted anything. This is because the getNextPointPosition() call before
+     * the paint operation will reset the accumulators in currentDistance and therefore make
+     * needsSpacingUpdate() false. The temporal distance between pi1 and pi2 is typically too small
+     * for the accumulators to build back up enough to require a spacing update after that.
+     * (The accumulated time value is updated not during the paint operation, but during the call to
+     * getNextPointPosition(), that is, updated during every paintLine() call.)
+     */
     if (currentDistance->needsSpacingUpdate()) {
         op.updateSpacing(pi2, *currentDistance);
     }

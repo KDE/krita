@@ -361,7 +361,7 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
     // last interpolation attempt. In that case, have a point painted immediately.
     if (nextPointDistance <= 0.0) {
         resetAccumulators();
-        return 0.0;
+        t = 0.0;
     }
     else if (nextPointDistance <= dragVecLength) {
         t = nextPointDistance / dragVecLength;
@@ -450,21 +450,25 @@ qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
     qreal timedSpacingInterval = qBound(MIN_TIMED_INTERVAL, m_d->spacing.timedSpacingInterval(),
                                         MAX_TIMED_INTERVAL);
     qreal nextPointInterval = timedSpacingInterval - m_d->accumTime;
+    
+    qreal t = -1.0;
 
     // nextPointInterval can sometimes be negative if the spacing info has been modified since the
     // last interpolation attempt. In that case, have a point painted immediately.
     if (nextPointInterval <= 0.0) {
         resetAccumulators();
-        return 0.0;
+        t = 0.0;
     }
     else if (nextPointInterval <= endTime - startTime) {
         resetAccumulators();
-        return nextPointInterval / (endTime - startTime);
+        t = nextPointInterval / (endTime - startTime);
     }
     else {
         m_d->accumTime += endTime - startTime;
-        return -1.0;
+        t = -1.0;
     }
+    
+    return t;
 }
 
 void KisDistanceInformation::resetAccumulators()

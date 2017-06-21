@@ -1,7 +1,7 @@
 [KNewStuff3]
 ProvidersUrl=https://share.krita.org/ocs/providers.xml
-Categories=Krita Brush
-XdgTargetDir=krita/brushes
+Categories=Krita Resource Bundles
+XdgTargetDir=krita/downlaodedResources
 Uncompress=never
 
 

@@ -64,7 +64,7 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
-    QString knsrcFile = "kritabrushes.knsrc";
+    QString knsrcFile = "KritaResourceBundles.knsrc";
     setKnsrcFile(knsrcFile);
 
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));

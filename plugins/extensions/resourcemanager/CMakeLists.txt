@@ -34,10 +34,7 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
 )
 
 install( FILES
-    data/kritapresets.knsrc
-    data/kritabrushes.knsrc
-    data/kritapatterns.knsrc
-    data/kritagradients.knsrc
+    data/KritaResourceBundles.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )
 
 

@@ -23,5 +23,6 @@ class DocumentTreeWidget(QTreeWidget):
             self.item.setText(0, document.fileName())
             self.item.setData(0, Qt.DecorationRole, QPixmap.fromImage(document.thumbnail(30, 30)))
             self.item.setText(1, "Document")
+            self.item.setData(1, Qt.UserRole + 1, document.rootNode())
 
             self.addTopLevelItem(self.item)

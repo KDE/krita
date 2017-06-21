@@ -287,3 +287,8 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     return effectiveSpacing(scale);
 }
+
+KisSpacingInformation KisDuplicateOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    return effectiveSpacing(m_sizeOption.apply(info));
+}

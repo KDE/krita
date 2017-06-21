@@ -109,9 +109,7 @@ protected:
 protected:
 
     virtual void createPainters(QVector<PainterInfo*> &painterInfos,
-                                const QPointF &lastPosition,
-                                int lastTime,
-                                qreal lastAngle);
+                                const KisDistanceInformation &startDist);
 
     // lo-level methods for painting primitives
 

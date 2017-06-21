@@ -115,14 +115,14 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     // Spray Brush is capable of working with zero scale,
     // so no additional checks for 'zero'ness are needed
     const qreal scale = m_sizeOption.apply(info);
-    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
+    const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
 
 
     m_sprayBrush.paint(m_dab,
                        m_node->paintDevice(),
                        info,
                        rotation,
-                       scale, additionalScale,
+                       scale, lodScale,
                        painter()->paintColor(),
                        painter()->backgroundColor());
 
@@ -131,8 +131,18 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
+    return computeSpacing(info, lodScale);
+}
+
+KisSpacingInformation KisSprayPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    return computeSpacing(info, KisLodTransform::lodToScale(painter()->device()));
+}
+
+KisSpacingInformation KisSprayPaintOp::computeSpacing(const KisPaintInformation &info,
+                                                      qreal lodScale) const
+{
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false,
-                                                   m_spacing * additionalScale, false, 1.0,
-                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   m_spacing * lodScale, false, 1.0, lodScale,
                                                    &m_airbrushOption, nullptr, &m_rateOption, info);
 }

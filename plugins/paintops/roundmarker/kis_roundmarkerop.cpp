@@ -76,7 +76,6 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
     const qreal scale = m_sizeOption.apply(info) * lodScale;
     const qreal rotation = 0; // TODO
-    const bool axesFlipped = false; // TODO
 
     const qreal diameter = m_markerOption.diameter * scale;
     qreal radius = 0.5 * diameter;
@@ -126,20 +125,7 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
 
     //m_lastPaintPos = newCenterPos;
 
-    qreal extraSpacingScale = 1.0;
-    if (m_spacingOption.isChecked()) {
-        extraSpacingScale = m_spacingOption.apply(info);
-    }
-
-    KisSpacingInformation spacingInfo =
-        KisPaintOpUtils::effectiveSpacing(diameter, diameter,
-                                          extraSpacingScale, 1.0, true, true, rotation, axesFlipped,
-                                          m_markerOption.spacing,
-                                          m_markerOption.use_auto_spacing,
-                                          m_markerOption.auto_spacing_coeff,
-                                          false,
-                                          0.0,
-                                          lodScale);
+    KisSpacingInformation spacingInfo = computeSpacing(info, diameter);
 
     if (m_firstRun) {
         m_firstRun = false;
@@ -148,4 +134,31 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
 
 
     return spacingInfo;
+}
+
+KisSpacingInformation KisRoundMarkerOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
+    const qreal diameter = m_markerOption.diameter * m_sizeOption.apply(info) * lodScale;
+
+    return computeSpacing(info, diameter);
+}
+
+KisSpacingInformation KisRoundMarkerOp::computeSpacing(const KisPaintInformation &info,
+                                                       qreal diameter) const
+{
+    const qreal rotation = 0; // TODO
+    const bool axesFlipped = false; // TODO
+
+    qreal extraSpacingScale = 1.0;
+    if (m_spacingOption.isChecked()) {
+        extraSpacingScale = m_spacingOption.apply(info);
+    }
+
+    return KisPaintOpUtils::effectiveSpacing(diameter, diameter,
+                                             extraSpacingScale, 1.0, true, true, rotation,
+                                             axesFlipped, m_markerOption.spacing,
+                                             m_markerOption.use_auto_spacing,
+                                             m_markerOption.auto_spacing_coeff, false, 0.0,
+                                             KisLodTransform::lodToScale(painter()->device()));
 }

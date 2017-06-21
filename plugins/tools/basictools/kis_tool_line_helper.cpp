@@ -111,7 +111,8 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
 {
     if (!m_d->enabled) return;
 
-    // Ignore the elapsed stroke time.
+    // Ignore the elapsed stroke time, so that the line tool will behave as if the whole stroke is
+    // drawn at once. This should prevent any possible spurious dabs caused by airbrushing features.
     KisPaintInformation pi =
             m_d->infoBuilder->continueStroke(event, 0);
 

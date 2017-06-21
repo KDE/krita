@@ -38,7 +38,11 @@ public:
     KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisChalkPaintOp() override;
 
+protected:
+
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     KisPaintDeviceSP m_dab;

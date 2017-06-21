@@ -167,6 +167,19 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldCompositeOpId);
 
+    return computeSpacing(info, scale, rotation);
+}
+
+KisSpacingInformation KisTangentNormalPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    qreal rotation = m_rotationOption.apply(info);
+    return computeSpacing(info, scale, rotation);
+}
+
+KisSpacingInformation KisTangentNormalPaintOp::computeSpacing(const KisPaintInformation &info,
+                                                              qreal scale, qreal rotation) const
+{
     return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, &m_rateOption,
                             info);
 }

@@ -175,10 +175,10 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
         if (gmicSpectrum == 3 || gmicSpectrum == 4)
         {
             colorTransformation = new KisColorFromFloat< float, KoRgbTraits < float > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
+        } else if (gmicSpectrum == 1)
         {
             colorTransformation = new KisColorFromGrayScaleFloat<float, KoRgbTraits < float > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
+        } else if (gmicSpectrum == 2)
         {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat<float, KoRgbTraits < float > >(gmicUnitValue);
         }
@@ -188,10 +188,10 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
         if (gmicSpectrum == 3 || gmicSpectrum == 4)
         {
             colorTransformation = new KisColorFromFloat< half, KoRgbTraits < half > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
+        } else if (gmicSpectrum == 1)
         {
             colorTransformation = new KisColorFromGrayScaleFloat< half, KoRgbTraits < half > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
+        } else if (gmicSpectrum == 2)
         {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat< half, KoRgbTraits < half > >(gmicUnitValue);
         }
@@ -201,10 +201,10 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
         if (gmicSpectrum == 3 || gmicSpectrum == 4)
         {
             colorTransformation = new KisColorFromFloat< quint16, KoBgrTraits < quint16 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
+        } else if (gmicSpectrum == 1)
         {
             colorTransformation = new KisColorFromGrayScaleFloat< quint16, KoBgrTraits < quint16 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
+        } else if (gmicSpectrum == 2)
         {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat< quint16, KoBgrTraits < quint16 > >(gmicUnitValue);
         }
@@ -212,10 +212,10 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
         if (gmicSpectrum == 3 || gmicSpectrum == 4)
         {
             colorTransformation = new KisColorFromFloat< quint8, KoBgrTraits < quint8 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
+        } else if (gmicSpectrum == 1)
         {
             colorTransformation = new KisColorFromGrayScaleFloat< quint8, KoBgrTraits < quint8 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
+        } else if (gmicSpectrum == 2)
         {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat< quint8, KoBgrTraits < quint8 > >(gmicUnitValue);
         }
@@ -538,8 +538,7 @@ void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     Q_ASSERT(!dev.isNull());
     Q_ASSERT(gmicImage._spectrum == 4); // rgba
 
-    if (rc.isEmpty())
-    {
+    if (rc.isEmpty()) {
         rc = QRect(0,0,gmicImage._width, gmicImage._height);
     }
 

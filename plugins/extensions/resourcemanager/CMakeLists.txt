@@ -1,4 +1,4 @@
-find_package(KF5NewStuffCore ${KF5_DEP_VERSION} CONFIG REQUIRED)
+find_package(KF5NewStuffCore ${KF5_DEP_VERSION} CONFIG OPTIONAL)
 set_package_properties(KF5NewStuffCore PROPERTIES
     DESCRIPTION "The KNewStuff library implements collaborative data sharing for applications."
     URL "https://api.kde.org/frameworks/knewstuff/html/index.html"
@@ -34,7 +34,7 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
 )
 
 install( FILES
-    data/KritaResourceBundles.knsrc
+    data/kritaresourcebundles.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )
 
 

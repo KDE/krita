@@ -1,8 +1,10 @@
 from filtermanager import filtermanagerdialog
-from filtermanager.components import filtercombobox, documenttreewidget
+from filtermanager.components import (filtercombobox, documenttreewidget,
+                                      filtermanagertreemodel)
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
-                             QVBoxLayout, QFrame, QAbstractScrollArea, QWidget)
+                             QVBoxLayout, QFrame, QAbstractScrollArea, QWidget,
+                             QTreeView)
 import krita
 
 
@@ -17,8 +19,9 @@ class UIFilterManager(object):
         self.kritaInstance = krita.Krita.instance()
         self._filters = sorted(self.kritaInstance.filters())
         self._documents = self.kritaInstance.documents()
+        self.treeModel = filtermanagertreemodel.FilterManagerTreeModel("test")
 
-        self.documentsTreeWidget = documenttreewidget.DocumentTreeWidget(self)
+        self.documentsTreeView = QTreeView()
         self.filterComboBox = filtercombobox.FilterComboBox(self)
 
         self.buttonBox.accepted.connect(self.confirmButton)
@@ -27,7 +30,10 @@ class UIFilterManager(object):
         self.mainDialog.setWindowModality(Qt.NonModal)
 
     def initialize(self):
-        self.formLayout.addRow("Documents Tree", self.documentsTreeWidget)
+        self.documentsTreeView.setModel(self.treeModel)
+        self.documentsTreeView.setWindowTitle("Document Tree Model")
+
+        self.formLayout.addRow(self.documentsTreeView)
         self.formLayout.addRow("Filters", self.filterComboBox)
 
         self.line = QFrame()

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgSaveBrushPreset</class>
+ <widget class="QWidget" name="WdgSaveBrushPreset">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>492</width>
+    <height>296</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Save Brush Preset</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="1" colspan="2">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>120</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Load Thumbnail</string>
+     </property>
+     <widget class="QRadioButton" name="loadFromImageRadioButton">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>30</y>
+        <width>109</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>from image</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="fromTemplateRadioButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>129</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>from template</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="placeholderOptionsLabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>140</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Options to go here...</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QDialogButtonBox" name="saveCancelButtonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+     </property>
+     <property name="centerButtons">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="loadThumbnailLabel">
+     <property name="text">
+      <string>Load Thumbnail</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="brushPresetNameLabel">
+     <property name="text">
+      <string>Brush Preset Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="currentBrushNameLabel">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>BrushName</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QCheckBox" name="useExistingThumbnailCheckbox">
+     <property name="text">
+      <string>Use Existing Thumbnail</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="5">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Thumbnail Area</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

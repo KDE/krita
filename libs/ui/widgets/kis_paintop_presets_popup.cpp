@@ -206,6 +206,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
 
+    connect(m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveBrushPreset()));
+
     connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
             this, SIGNAL(reloadPresetClicked()));
 
@@ -559,6 +562,10 @@ void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
         filterPaintOpId = "";
     }
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(filterPaintOpId);
+}
+
+void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
+    saveDialog = new KisPresetSaveWidget(this);
 }
 
 void KisPaintOpPresetsPopup::updateViewSettings()

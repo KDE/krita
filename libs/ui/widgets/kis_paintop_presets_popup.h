@@ -27,6 +27,7 @@
 #include <kis_types.h>
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
+#include <widgets/kis_paintop_presets_save.h>
 
 class QString;
 class KisCanvasResourceProvider;
@@ -92,7 +93,8 @@ public Q_SLOTS:
     void slotUpdateLodAvailability();
 
 Q_SIGNALS:
-    void savePresetClicked();
+    void savePresetClicked();   
+    void saveBrushPreset();
     void defaultPresetClicked();
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
@@ -110,6 +112,7 @@ private Q_SLOTS:
     void slotSwitchShowEditor(bool visible);
     void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);
+    void slotSaveBrushPreset();
 
 
 
@@ -119,6 +122,7 @@ private:
     Private * const m_d;
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
+    KisPresetSaveWidget * saveDialog;
 
 };
 

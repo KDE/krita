@@ -27,7 +27,6 @@
 #include "entrydetailsdialog_p.h"
 
 #include <qstandardpaths.h>
-#include <kiconloader.h>
 
 ItemsViewBaseDelegate::ItemsViewBaseDelegate(QAbstractItemView *itemView, KNSCore::Engine *engine, QObject *parent)
     : KWidgetItemDelegate(itemView, parent)

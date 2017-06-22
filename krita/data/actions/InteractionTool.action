@@ -287,6 +287,16 @@
       <isCheckable>false</isCheckable>
     </Action>
 
+    <Action name="object_split">
+      <text>Split</text>
+      <toolTip>Split objects with multiple subpaths into multiple objects</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
 
   </Actions>
 </ActionCollection>

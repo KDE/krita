@@ -450,6 +450,10 @@ void DefaultTool::setupActions()
     addMappedAction(booleanSignalsMapper, "object_intersect", BooleanIntersection);
     addMappedAction(booleanSignalsMapper, "object_subtract", BooleanSubtraction);
 
+    QAction *actionSplit = actionRegistry->makeQAction("object_split", this);
+    addAction("object_split", actionSplit);
+    connect(actionSplit, SIGNAL(triggered()), this, SLOT(selectionSplitShapes()));
+
     m_contextMenu.reset(new QMenu());
 }
 
@@ -1210,6 +1214,41 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
     canvas()->addCommand(cmd);
 }
 
+void DefaultTool::selectionSplitShapes()
+{
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
+        return;
+    }
+
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Split Shapes"));
+
+    new KoKeepShapesSelectedCommand(editableShapes, {}, selection, false, cmd);
+    QList<KoShape*> newShapes;
+
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        if (!pathShape) return;
+
+        QList<KoPathShape*> splitShapes;
+        if (pathShape->separate(splitShapes)) {
+            QList<KoShape*> normalShapes = implicitCastList<KoShape*>(splitShapes);
+
+            KoShapeContainer *parent = shape->parent();
+            canvas()->shapeController()->addShapesDirect(normalShapes, parent, cmd);
+            canvas()->shapeController()->removeShape(shape, cmd);
+            newShapes << normalShapes;
+        }
+    }
+
+    new KoKeepShapesSelectedCommand({}, newShapes, selection, true, cmd);
+
+    canvas()->addCommand(cmd);
+}
+
 void DefaultTool::selectionAlign(int _align)
 {
     KoShapeAlignCommand::Align align =
@@ -1495,6 +1534,17 @@ void DefaultTool::updateActions()
     action("object_intersect")->setEnabled(multipleSelected);
     action("object_subtract")->setEnabled(multipleSelected);
 
+    bool hasShapesWithMultipleSegments = false;
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape && pathShape->subpathCount() > 1) {
+            hasShapesWithMultipleSegments = true;
+            break;
+        }
+    }
+    action("object_split")->setEnabled(hasShapesWithMultipleSegments);
+
+
     const bool distributionEnabled = editableShapes.size() > 2;
 
     action("object_distribute_horizontal_left")->setEnabled(distributionEnabled);
@@ -1563,12 +1613,14 @@ QMenu* DefaultTool::popupActionsMenu()
 
         if (action("object_unite")->isEnabled() ||
             action("object_intersect")->isEnabled() ||
-            action("object_subtract")->isEnabled()) {
+            action("object_subtract")->isEnabled() ||
+            action("object_split")->isEnabled()) {
 
             QMenu *transform = m_contextMenu->addMenu(i18n("Logical Operations"));
             transform->addAction(action("object_unite"));
             transform->addAction(action("object_intersect"));
             transform->addAction(action("object_subtract"));
+            transform->addAction(action("object_split"));
         }
     }
 

@@ -1293,7 +1293,9 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
         if (! shape) continue;
 
         shape->setStroke(stroke());
+        shape->setBackground(background());
         shape->setShapeId(shapeId());
+        shape->setZIndex(zIndex());
 
         KoSubpath *newSubpath = new KoSubpath();
 

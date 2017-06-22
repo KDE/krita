@@ -21,11 +21,12 @@
 
 #include <QProcess>
 #include <QVariant>
-
+#include <QVector>
 #include <kis_view_plugin.h>
 
 class KisAction;
 class QLocalServer;
+class QSharedMemory;
 
 class QMic : public KisViewPlugin
 {
@@ -42,13 +43,15 @@ private Q_SLOTS:
     void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
 
-    bool prepareCroppedImages(QByteArray &message, const QRect &rc, int inputMode);
+    bool prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode);
 
     QProcess *m_pluginProcess {0};
     QLocalServer *m_localServer {0};
     QString m_key;
     KisAction *m_qmicAction {0};
     KisAction *m_againAction {0};
+    QVector<QSharedMemory *> m_sharedMemorySegments;
+
 };
 
 #endif // QMic_H

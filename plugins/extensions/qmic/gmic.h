@@ -53,6 +53,14 @@ template<typename T> struct gmic_image {
     unsigned int _spectrum;    // Number of image channels (dimension along the C-axis).
     bool _is_shared;           // Tells if the data buffer is shared by another structure.
     T *_data;                  // Pointer to the first pixel value.
+
+    void assign(unsigned int w, unsigned int h, unsigned int d, unsigned int s) {
+        _width = w;
+        _height = h;
+        _depth = d;
+        _spectrum = s;
+
+    }
 };
 
 #endif // GMIC_H

@@ -40,6 +40,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
 #include <KoShapeOdfSaveHelper.h>
+#include <KoPathShape.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceManager.h>
@@ -51,6 +52,7 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <commands/KoShapeDistributeCommand.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
@@ -93,6 +95,12 @@ enum TransformActionType {
     TransformMirrorX,
     TransformMirrorY,
     TransformReset
+};
+
+enum BooleanOp {
+    BooleanUnion,
+    BooleanIntersection,
+    BooleanSubtraction
 };
 
 }
@@ -434,6 +442,13 @@ void DefaultTool::setupActions()
     addMappedAction(transformSignalsMapper, "object_transform_mirror_horizontally", TransformMirrorX);
     addMappedAction(transformSignalsMapper, "object_transform_mirror_vertically", TransformMirrorY);
     addMappedAction(transformSignalsMapper, "object_transform_reset", TransformReset);
+
+    QSignalMapper *booleanSignalsMapper = new QSignalMapper(this);
+    connect(booleanSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionBooleanOp(int)));
+
+    addMappedAction(booleanSignalsMapper, "object_unite", BooleanUnion);
+    addMappedAction(booleanSignalsMapper, "object_intersect", BooleanIntersection);
+    addMappedAction(booleanSignalsMapper, "object_subtract", BooleanSubtraction);
 
     m_contextMenu.reset(new QMenu());
 }
@@ -999,7 +1014,7 @@ void DefaultTool::selectionGroup()
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
-    canvas()->shapeController()->addShapeDirect(group, cmd);
+    canvas()->shapeController()->addShapeDirect(group, 0, cmd);
     new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
     canvas()->addCommand(cmd);
 
@@ -1109,6 +1124,89 @@ void DefaultTool::selectionTransform(int transformAction)
 
     KoShapeTransformCommand *cmd = new KoShapeTransformCommand(transformedShapes, oldTransforms, newTransforms);
     cmd->setText(actionName);
+    canvas()->addCommand(cmd);
+}
+
+void DefaultTool::selectionBooleanOp(int booleanOp)
+{
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
+        return;
+    }
+
+    QVector<QPainterPath> srcOutlines;
+    QPainterPath dstOutline;
+    KUndo2MagicString actionName = kundo2_noi18n("BUG: boolean action name");
+
+    // TODO: implement a reference shape selection dialog!
+    const int referenceShapeIndex = 0;
+    KoShape *referenceShape = editableShapes[referenceShapeIndex];
+
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        srcOutlines << shape->absoluteTransformation(0).map(shape->outline());
+    }
+
+    if (booleanOp == BooleanUnion) {
+        Q_FOREACH (const QPainterPath &path, srcOutlines) {
+            dstOutline |= path;
+        }
+        actionName = kundo2_i18n("Unite Shapes");
+    } else if (booleanOp == BooleanIntersection) {
+        for (int i = 0; i < srcOutlines.size(); i++) {
+            if (i == 0) {
+                dstOutline = srcOutlines[i];
+            } else {
+                dstOutline &= srcOutlines[i];
+            }
+        }
+
+        // there is a bug in Qt, sometimes it leaves the resulting
+        // outline open, so just close it explicitly.
+        dstOutline.closeSubpath();
+
+        actionName = kundo2_i18n("Intersect Shapes");
+
+    } else if (booleanOp == BooleanSubtraction) {
+        for (int i = 0; i < srcOutlines.size(); i++) {
+            dstOutline = srcOutlines[referenceShapeIndex];
+            if (i != referenceShapeIndex) {
+                dstOutline -= srcOutlines[i];
+            }
+        }
+
+        actionName = kundo2_i18n("Subtract Shapes");
+    }
+
+    KoShape *newShape = 0;
+
+    if (!dstOutline.isEmpty()) {
+        newShape = KoPathShape::createShapeFromPainterPath(dstOutline);
+    }
+
+    KUndo2Command *cmd = new KUndo2Command(actionName);
+
+    new KoKeepShapesSelectedCommand(editableShapes, {}, selection, false, cmd);
+
+    QList<KoShape*> newSelectedShapes;
+
+    if (newShape) {
+        newShape->setBackground(referenceShape->background());
+        newShape->setStroke(referenceShape->stroke());
+        newShape->setZIndex(referenceShape->zIndex());
+
+        KoShapeContainer *parent = referenceShape->parent();
+        canvas()->shapeController()->addShapeDirect(newShape, parent, cmd);
+
+        newSelectedShapes << newShape;
+    }
+
+    canvas()->shapeController()->removeShapes(editableShapes, cmd);
+
+    new KoKeepShapesSelectedCommand({}, newSelectedShapes, selection, true, cmd);
+
     canvas()->addCommand(cmd);
 }
 
@@ -1376,8 +1474,10 @@ void DefaultTool::updateActions()
     action("object_transform_mirror_vertically")->setEnabled(hasEditableShapes);
     action("object_transform_reset")->setEnabled(hasEditableShapes);
 
+    const bool multipleSelected = editableShapes.size() > 1;
+
     const bool alignmentEnabled =
-       editableShapes.size() > 1 ||
+       multipleSelected ||
        (!editableShapes.isEmpty() &&
         canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
 
@@ -1388,7 +1488,12 @@ void DefaultTool::updateActions()
     action("object_align_vertical_center")->setEnabled(alignmentEnabled);
     action("object_align_vertical_bottom")->setEnabled(alignmentEnabled);
 
-    action("object_group")->setEnabled(editableShapes.size() > 1);
+
+    action("object_group")->setEnabled(multipleSelected);
+
+    action("object_unite")->setEnabled(multipleSelected);
+    action("object_intersect")->setEnabled(multipleSelected);
+    action("object_subtract")->setEnabled(multipleSelected);
 
     const bool distributionEnabled = editableShapes.size() > 2;
 
@@ -1444,6 +1549,8 @@ QMenu* DefaultTool::popupActionsMenu()
             m_contextMenu->addAction(action("object_ungroup"));
         }
 
+        m_contextMenu->addSeparator();
+
         QMenu *transform = m_contextMenu->addMenu(i18n("Transform"));
         transform->addAction(action("object_transform_rotate_90_cw"));
         transform->addAction(action("object_transform_rotate_90_ccw"));
@@ -1453,6 +1560,16 @@ QMenu* DefaultTool::popupActionsMenu()
         transform->addAction(action("object_transform_mirror_vertically"));
         transform->addSeparator();
         transform->addAction(action("object_transform_reset"));
+
+        if (action("object_unite")->isEnabled() ||
+            action("object_intersect")->isEnabled() ||
+            action("object_subtract")->isEnabled()) {
+
+            QMenu *transform = m_contextMenu->addMenu(i18n("Logical Operations"));
+            transform->addAction(action("object_unite"));
+            transform->addAction(action("object_intersect"));
+            transform->addAction(action("object_subtract"));
+        }
     }
 
     return m_contextMenu.data();

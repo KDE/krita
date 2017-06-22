@@ -289,7 +289,7 @@ void TestShapePainting::testGroupUngroup()
             group->setName("group");
 
             KUndo2Command groupingCommand;
-            canvas.shapeController()->addShapeDirect(group, &groupingCommand);
+            canvas.shapeController()->addShapeDirect(group, 0, &groupingCommand);
             new KoShapeGroupCommand(group, groupedShapes, false, true, true, &groupingCommand);
 
             groupingCommand.redo();

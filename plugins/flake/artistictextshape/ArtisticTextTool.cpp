@@ -600,14 +600,13 @@ void ArtisticTextTool::convertText()
     }
 
     KoPathShape *path = KoPathShape::createShapeFromPainterPath(m_currentShape->outline());
-    path->setParent(m_currentShape->parent());
     path->setZIndex(m_currentShape->zIndex());
     path->setStroke(m_currentShape->stroke());
     path->setBackground(m_currentShape->background());
     path->setTransformation(m_currentShape->transformation());
     path->setShapeId(KoPathShapeId);
 
-    KUndo2Command *cmd = canvas()->shapeController()->addShapeDirect(path);
+    KUndo2Command *cmd = canvas()->shapeController()->addShapeDirect(path, 0);
     cmd->setText(kundo2_i18n("Convert to Path"));
     canvas()->shapeController()->removeShape(m_currentShape, cmd);
     canvas()->addCommand(cmd);

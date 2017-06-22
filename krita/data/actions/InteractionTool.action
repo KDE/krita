@@ -257,6 +257,36 @@
       <isCheckable>false</isCheckable>
     </Action>
 
+    <Action name="object_unite">
+      <text>Unite</text>
+      <toolTip>Create boolean onion of multiple objects</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_intersect">
+      <text>Intersect</text>
+      <toolTip>Create boolean intersection of multiple objects</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_subtract">
+      <text>Subtract</text>
+      <toolTip>Subtract multiple objects from the first selected one</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
 
   </Actions>
 </ActionCollection>

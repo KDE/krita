@@ -54,7 +54,7 @@ public:
     KoCanvasBase *canvas;
     KoShapeBasedDocumentBase *shapeBasedDocument;
 
-    KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
+    KUndo2Command* addShape(KoShape *shape, bool showDialog, KoShapeContainer *parentShape, KUndo2Command *parent) {
 
         if (canvas) {
             if (showDialog && !shape->shapeId().isEmpty()) {
@@ -98,12 +98,12 @@ public:
             }
         }
 
-        return addShapesDirect({shape}, parent);
+        return addShapesDirect({shape}, parentShape, parent);
     }
 
-    KUndo2Command* addShapesDirect(const QList<KoShape*> shapes, KUndo2Command *parent)
+    KUndo2Command* addShapesDirect(const QList<KoShape*> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
     {
-        return new KoShapeCreateCommand(shapeBasedDocument, shapes, parent);
+        return new KoShapeCreateCommand(shapeBasedDocument, shapes, parentShape, parent);
     }
 
     void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
@@ -143,19 +143,19 @@ void KoShapeController::reset()
     d->shapeBasedDocument = 0;
 }
 
-KUndo2Command* KoShapeController::addShape(KoShape *shape, KUndo2Command *parent)
+KUndo2Command* KoShapeController::addShape(KoShape *shape, KoShapeContainer *parentShape, KUndo2Command *parent)
 {
-    return d->addShape(shape, true, parent);
+    return d->addShape(shape, true, parentShape, parent);
 }
 
-KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *parent)
+KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KoShapeContainer *parentShape, KUndo2Command *parent)
 {
-    return d->addShapesDirect({shape}, parent);
+    return d->addShapesDirect({shape}, parentShape, parent);
 }
 
-KUndo2Command *KoShapeController::addShapesDirect(const QList<KoShape *> shapes, KUndo2Command *parent)
+KUndo2Command *KoShapeController::addShapesDirect(const QList<KoShape *> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
 {
-    return d->addShapesDirect(shapes, parent);
+    return d->addShapesDirect(shapes, parentShape, parent);
 }
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)

@@ -162,6 +162,7 @@ set(kritaflake_SRCS
     commands/KoShapeConnectionChangeCommand.cpp
     commands/KoMultiPathPointMergeCommand.cpp
     commands/KoMultiPathPointJoinCommand.cpp
+    commands/KoKeepShapesSelectedCommand.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp

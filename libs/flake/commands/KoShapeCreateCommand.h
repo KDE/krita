@@ -24,6 +24,7 @@
 #include <kundo2command.h>
 
 class KoShape;
+class KoShapeContainer;
 class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for creating shapes
@@ -37,6 +38,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape,
+                         KoShapeContainer *parentShape = 0,
                          KUndo2Command *parent = 0);
 
    /**
@@ -46,6 +48,7 @@ public:
     * @param parent the parent command used for macro commands
     */
     KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> shape,
+                         KoShapeContainer *parentShape = 0,
                          KUndo2Command *parent = 0);
 
     ~KoShapeCreateCommand() override;

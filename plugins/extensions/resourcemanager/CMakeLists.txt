@@ -1,4 +1,4 @@
-find_package(KF5NewStuffCore ${KF5_DEP_VERSION} CONFIG OPTIONAL)
+find_package(KF5NewStuffCore ${KF5_DEP_VERSION} CONFIG REQUIRED)
 set_package_properties(KF5NewStuffCore PROPERTIES
     DESCRIPTION "The KNewStuff library implements collaborative data sharing for applications."
     URL "https://api.kde.org/frameworks/knewstuff/html/index.html"

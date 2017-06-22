@@ -60,6 +60,8 @@ protected:
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
 private:
     KisColorSource *m_colorSource;
     KisAirbrushOption m_airbrushOption;

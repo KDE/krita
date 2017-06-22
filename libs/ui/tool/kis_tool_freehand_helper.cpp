@@ -51,8 +51,12 @@
 const qreal AIRBRUSH_INTERVAL_FACTOR = 0.5;
 
 // The amount of time, in milliseconds, to allow between updates of the spacing information. Only
-// used when airbrushing.
+// used when spacing updates between dabs are enabled.
 const qreal SPACING_UPDATE_INTERVAL = 50.0;
+
+// The amount of time, in milliseconds, to allow between updates of the spacing information. Only
+// used when airbrushing.
+const qreal TIMING_UPDATE_INTERVAL = 50.0;
 
 struct KisToolFreehandHelper::Private
 {
@@ -270,19 +274,23 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     m_d->previousPaintInformation = pi;
 
-    KisDistanceInitInfo startDistInfo(m_d->previousPaintInformation.pos(),
-                                      m_d->previousPaintInformation.currentTime(),
-                                      startAngle,
-                                      SPACING_UPDATE_INTERVAL);
-    KisDistanceInformation startDist = startDistInfo.makeDistInfo();
-
-    createPainters(m_d->painterInfos,
-                   startDist);
-
     m_d->resources = new KisResourcesSnapshot(image,
                                               currentNode,
                                               resourceManager,
                                               bounds);
+
+    const bool airbrushing = m_d->resources->needsAirbrushing();
+    const bool useSpacingUpdates = m_d->resources->needsSpacingUpdates();
+
+    KisDistanceInitInfo startDistInfo(m_d->previousPaintInformation.pos(),
+                                      m_d->previousPaintInformation.currentTime(),
+                                      startAngle,
+                                      useSpacingUpdates ? SPACING_UPDATE_INTERVAL : LONG_TIME,
+                                      airbrushing ? TIMING_UPDATE_INTERVAL : LONG_TIME);
+    KisDistanceInformation startDist = startDistInfo.makeDistInfo();
+
+    createPainters(m_d->painterInfos,
+                   startDist);
 
     if(overrideNode) {
         m_d->resources->setCurrentNode(overrideNode);
@@ -302,20 +310,13 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     m_d->history.clear();
     m_d->distanceHistory.clear();
 
-    if(m_d->resources->needsAirbrushing()) {
+    if(airbrushing) {
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
         m_d->airbrushingTimer.start();
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerStart(m_d->previousPaintInformation);
-    }
-
-    // If airbrushing, paint an initial dab immediately. This is a workaround for an issue where
-    // some paintops (Dyna, Particle, Sketch) might never initialize their spacing information until
-    // paintAt is called.
-    if (m_d->resources->needsAirbrushing()) {
-        paintAt(pi);
     }
 }
 

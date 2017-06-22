@@ -33,6 +33,7 @@ public:
 
 private Q_SLOTS:
     void setIsotropicSpacing(int isotropic);
+    void setUseSpacingUpdates(int useSpacingUpdates);
 };
 
 #endif // KIS_PRESSURE_SPACING_OPTION_WIDGET_H

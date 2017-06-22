@@ -59,6 +59,7 @@
 #include <kis_random_sub_accessor.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_iterator_ng.h>
+#include <kis_spacing_information.h>
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"

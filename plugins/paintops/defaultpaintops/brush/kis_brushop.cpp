@@ -41,6 +41,7 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_paintop_plugin_utils.h>
 
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -167,16 +168,19 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, &m_rateOption,
-                            info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 }
 
 KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
     const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(info);
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, &m_rateOption,
-                            info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+}
+
+KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

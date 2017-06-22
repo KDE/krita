@@ -24,6 +24,7 @@
 class KisLiquifyTransformWorker;
 class KisPaintInformation;
 class KisSpacingInformation;
+class KisTimingInformation;
 class KisDistanceInformation;
 class KisLiquifyProperties;
 class QPainterPath;
@@ -43,6 +44,14 @@ public:
      */
     void updateSpacing(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
         const;
+
+    /**
+     * Updates the timing in currentDistance based on the provided information.
+     */
+    void updateTiming(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
+        const;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &pi) const;
 
     static QPainterPath brushOutline(const KisLiquifyProperties &props, const KisPaintInformation &info);
 

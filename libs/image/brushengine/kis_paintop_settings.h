@@ -51,6 +51,12 @@ const QString AIRBRUSH_RATE = "PaintOpSettings/rate";
 const QString AIRBRUSH_IGNORE_SPACING = "PaintOpSettings/ignoreSpacing";
 
 /**
+ * Configuration property used to control whether the spacing settings can be updated between
+ * painted dabs.
+ */
+const QString SPACING_USE_UPDATES = "PaintOpSettings/updateSpacingBetweenDabs";
+
+/**
  * This class is used to cache the settings for a paintop
  * between two creations. There is one KisPaintOpSettings per input device (mouse, tablet,
  * etc...).
@@ -138,6 +144,12 @@ public:
      * one second if the property is not found. This should be suitable for most paintops.
      */
     virtual qreal airbrushInterval() const;
+
+    /**
+     * Indicates whether this configuration allows spacing information to be updated between painted
+     * dabs during a stroke.
+     */
+    virtual bool useSpacingUpdates() const;
 
     /**
      * This enum defines the current mode for painting an outline.

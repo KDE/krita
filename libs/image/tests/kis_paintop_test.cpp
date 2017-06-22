@@ -22,6 +22,7 @@
 #include "kis_paintop.h"
 #include "kis_painter.h"
 #include "kis_paint_device.h"
+#include "kis_spacing_information.h"
 
 class TestPaintOp : public KisPaintOp
 {

@@ -31,6 +31,7 @@
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 #include <kis_cross_device_color_picker.h>
+#include <kis_spacing_information.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

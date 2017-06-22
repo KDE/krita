@@ -37,6 +37,7 @@
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 #include "kis_marker_painter.h"
 #include "kis_paintop_utils.h"
 
@@ -156,9 +157,9 @@ KisSpacingInformation KisRoundMarkerOp::computeSpacing(const KisPaintInformation
     }
 
     return KisPaintOpUtils::effectiveSpacing(diameter, diameter,
-                                             extraSpacingScale, 1.0, true, true, rotation,
-                                             axesFlipped, m_markerOption.spacing,
+                                             extraSpacingScale, true, true, rotation, axesFlipped,
+                                             m_markerOption.spacing,
                                              m_markerOption.use_auto_spacing,
-                                             m_markerOption.auto_spacing_coeff, false, 0.0,
+                                             m_markerOption.auto_spacing_coeff,
                                              KisLodTransform::lodToScale(painter()->device()));
 }

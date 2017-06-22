@@ -171,7 +171,27 @@ void KisPaintOp::updateSpacing(const KisPaintInformation &info,
         spacingInfo = updateSpacingImpl(pi);
     }
 
-    currentDistance.setSpacing(spacingInfo);
+    currentDistance.updateSpacing(spacingInfo);
+}
+
+void KisPaintOp::updateTiming(const KisPaintInformation &info,
+                              KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisTimingInformation timingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        timingInfo = updateTimingImpl(pi);
+    }
+
+    currentDistance.updateTiming(timingInfo);
+}
+
+KisTimingInformation KisPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    Q_UNUSED(info);
+    return KisTimingInformation();
 }
 
 KisPainter* KisPaintOp::painter() const

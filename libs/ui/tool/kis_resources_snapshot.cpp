@@ -299,6 +299,11 @@ qreal KisResourcesSnapshot::airbrushingInterval() const
     return m_d->currentPaintOpPreset->settings()->airbrushInterval();
 }
 
+bool KisResourcesSnapshot::needsSpacingUpdates() const
+{
+    return m_d->currentPaintOpPreset->settings()->useSpacingUpdates();
+}
+
 void KisResourcesSnapshot::setOpacity(qreal opacity)
 {
     m_d->opacity = opacity * OPACITY_OPAQUE_U8;

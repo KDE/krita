@@ -19,7 +19,7 @@ class UIFilterManager(object):
         self.kritaInstance = krita.Krita.instance()
         self._filters = sorted(self.kritaInstance.filters())
         self._documents = self.kritaInstance.documents()
-        self.treeModel = filtermanagertreemodel.FilterManagerTreeModel("test")
+        self.treeModel = filtermanagertreemodel.FilterManagerTreeModel(self)
 
         self.documentsTreeView = QTreeView()
         self.filterComboBox = filtercombobox.FilterComboBox(self)
@@ -27,6 +27,7 @@ class UIFilterManager(object):
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
 
+        self.documentsTreeView.setSelectionMode(QAbstractItemView.MultiSelection)
         self.mainDialog.setWindowModality(Qt.NonModal)
 
     def initialize(self):
@@ -51,7 +52,9 @@ class UIFilterManager(object):
         self.mainDialog.activateWindow()
 
     def confirmButton(self):
-        pass
+        selectionModel = self.documentsTreeView.selectionModel()
+        for index in selectionModel.selectedRows():
+            self.treeModel.data(index, Qt.UserRole + 1)
 
     @property
     def filters(self):

@@ -2,11 +2,14 @@ class FilterManagerTreeItem(object):
 
     def __init__(self, data, parent=None):
         self.itemData = data
-        self.parent = parent
+        self.parentItem = parent
         self.childItems = []
 
     def appendChild(self, child):
         self.childItems.append(child)
+
+    def appenChildren(self, children):
+        self.childItems.extend(children)
 
     def child(self, row):
         return self.childItems[row]
@@ -24,9 +27,9 @@ class FilterManagerTreeItem(object):
             return None
 
     def row(self):
-        if self.parent:
-            return self.parent.childItems.index(self)
+        if self.parentItem:
+            return self.parentItem.childItems.index(self)
         return 0
 
-    def parentItem(self):
-        return self.parent
+    def parent(self):
+        return self.parentItem

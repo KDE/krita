@@ -509,6 +509,7 @@ QString KisPaintOpPresetsPopup::currentPaintOpId() {
 void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
 {
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
+    saveDialog->scratchPadWidget->setPresetImage(image);
 }
 
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)

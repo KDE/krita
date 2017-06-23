@@ -39,13 +39,10 @@ void KisPresetSaveWidget::scratchPadSetup(KisCanvasResourceProvider* resourcePro
     m_resourceProvider = resourceProvider;
 
     this->scratchPadWidget->setupScratchPad(m_resourceProvider, Qt::white);
-
-    // this is setting the area we will "capture" for saving the brush preset. It can potentially be a different
-    // area that the entire scratchpad
-    this->scratchPadWidget->setCutoutOverlayRect(QRect(0, 0, scratchPadWidget->height(), scratchPadWidget->width()));
 }
 
-void KisPresetSaveWidget::showDialog() {
+void KisPresetSaveWidget::showDialog()
+{
 
     setModal(true);
 
@@ -57,6 +54,12 @@ void KisPresetSaveWidget::showDialog() {
     }
 
     show();
+
+    // this is setting the area we will "capture" for saving the brush preset. It can potentially be a different
+    // area that the entire scratchpad
+    this->scratchPadWidget->setCutoutOverlayRect(QRect(0, 0, scratchPadWidget->height(), scratchPadWidget->width()));
+
+
 
     // we will default to reusing the previous preset thumbnail
     // have that checked by default, hide the other elements, and load the last preset image
@@ -75,7 +78,8 @@ void KisPresetSaveWidget::showDialog() {
 }
 
 
-void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious) {
+void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious)
+{
 
     // hide other elements if we are using the previous thumbnail
     this->loadThumbnailGroupBox->setVisible(!usePrevious);
@@ -83,11 +87,11 @@ void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious) {
 
 
     // load the previous thumbnail if we are using the existing one
-    //TODO: figure out why this is grabbing a null image when it runs
-   // if (usePrevious) {
-
-       // this->scratchPadWidget->paintPresetImage();
-   // }
+    if (usePrevious) {
+        this->scratchPadWidget->paintPresetImage();
+    } else {
+        scratchPadWidget->fillDefault(); // fill with white if we want a new preview area
+    }
 
     this->scratchPadWidget->allowPainting(!usePrevious); // don't allow drawing if we are using the existing preset
 }

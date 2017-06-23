@@ -385,6 +385,7 @@ QImage KisScratchPad::cutoutOverlay() const
     if(!m_paintLayer) return QImage();
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
+
     QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
     QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
@@ -405,13 +406,13 @@ void KisScratchPad::paintPresetImage()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
+
     QRect overlayRect = widgetToDocument().mapRect(m_cutoutOverlay);
     QRect imageRect(QPoint(), overlayRect.size());
 
     QImage scaledImage = m_presetImage.scaled(overlayRect.size(),
                                               Qt::IgnoreAspectRatio,
                                               Qt::SmoothTransformation);
-
     KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
     device->convertFromQImage(scaledImage, 0);
 

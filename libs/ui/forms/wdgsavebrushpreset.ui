@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
+    <width>614</width>
     <height>268</height>
    </rect>
   </property>
@@ -34,7 +34,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="KisScratchPad" name="scratchPadWidget" native="true">
+     <widget class="KisScratchPad" name="brushPresetThumbnailWidget" native="true">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -56,7 +56,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="clearScratchpadButton">
+     <widget class="QPushButton" name="clearBrushPresetThumbnailButton">
       <property name="geometry">
        <rect>
         <x>154</x>

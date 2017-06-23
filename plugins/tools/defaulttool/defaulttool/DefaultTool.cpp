@@ -1018,8 +1018,10 @@ void DefaultTool::selectionGroup()
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
+    new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
     canvas()->shapeController()->addShapeDirect(group, 0, cmd);
     new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
+    new KoKeepShapesSelectedCommand({}, {group}, selection, true, cmd);
     canvas()->addCommand(cmd);
 
     // update selection so we can ungroup immediately again
@@ -1036,12 +1038,17 @@ void DefaultTool::selectionUngroup()
     qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
     KUndo2Command *cmd = 0;
+    QList<KoShape*> newShapes;
 
     // add a ungroup command for each found shape container to the macro command
     Q_FOREACH (KoShape *shape, selectedShapes) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
         if (group) {
-            cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));
+            if (!cmd) {
+                cmd = new KUndo2Command(kundo2_i18n("Ungroup shapes"));
+                new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
+            }
+            newShapes << group->shapes();
             new KoShapeUngroupCommand(group, group->shapes(),
                                       group->parent() ? QList<KoShape *>() : canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
@@ -1049,6 +1056,7 @@ void DefaultTool::selectionUngroup()
         }
     }
     if (cmd) {
+        new KoKeepShapesSelectedCommand({}, newShapes, selection, true, cmd);
         canvas()->addCommand(cmd);
     }
 }

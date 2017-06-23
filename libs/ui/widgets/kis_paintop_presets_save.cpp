@@ -21,25 +21,9 @@
 #include <QDebug>
 
 
-
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     : KisPaintOpPresetSaveDialog(parent)
 {
-
-    setModal(true);
-
-
-
-    QDialog::DialogCode result = (QDialog::DialogCode)this->exec();
-
-    if(result) {
-        qDebug() << "stuff ran in the dialog";
-    }
-
-    // TODO:
-    // might be able to just add a scratchpad widget for that part to the UI
-    //  <widget class="KisScratchPad" name="scratchPad" native="true">
-    // maybe then hide the "load preset" icon as that will be done elsewhere
 }
 
 
@@ -48,3 +32,66 @@ KisPresetSaveWidget::~KisPresetSaveWidget()
 {
 
 }
+
+
+void KisPresetSaveWidget::scratchPadSetup(KisCanvasResourceProvider* resourceProvider)
+{
+    m_resourceProvider = resourceProvider;
+
+    this->scratchPadWidget->setupScratchPad(m_resourceProvider, Qt::white);
+
+    // this is setting the area we will "capture" for saving the brush preset. It can potentially be a different
+    // area that the entire scratchpad
+    this->scratchPadWidget->setCutoutOverlayRect(QRect(0, 0, scratchPadWidget->height(), scratchPadWidget->width()));
+}
+
+void KisPresetSaveWidget::showDialog() {
+
+    setModal(true);
+
+    // set the name of the current brush preset area.
+    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+
+    if (preset) {
+        this->currentBrushNameLabel->setText(preset->name());
+    }
+
+    show();
+
+    // we will default to reusing the previous preset thumbnail
+    // have that checked by default, hide the other elements, and load the last preset image
+    connect(clearScratchpadButton, SIGNAL(clicked(bool)), scratchPadWidget, SLOT(fillDefault()));
+    connect(useExistingThumbnailCheckbox, SIGNAL(clicked(bool)), this, SLOT(usePreviousThumbnail(bool)));
+
+
+    this->useExistingThumbnailCheckbox->setChecked(true);
+    usePreviousThumbnail(true);
+
+    QDialog::DialogCode result = (QDialog::DialogCode)this->exec();
+
+    if(result) {
+        qDebug() << "stuff ran in the dialog";
+    }
+}
+
+
+void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious) {
+
+    // hide other elements if we are using the previous thumbnail
+    this->loadThumbnailGroupBox->setVisible(!usePrevious);
+    this->clearScratchpadButton->setVisible(!usePrevious);
+
+
+    // load the previous thumbnail if we are using the existing one
+    //TODO: figure out why this is grabbing a null image when it runs
+   // if (usePrevious) {
+
+       // this->scratchPadWidget->paintPresetImage();
+   // }
+
+    this->scratchPadWidget->allowPainting(!usePrevious); // don't allow drawing if we are using the existing preset
+}
+
+
+
+#include "moc_kis_paintop_presets_save.cpp"

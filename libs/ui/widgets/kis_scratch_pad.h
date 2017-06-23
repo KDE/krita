@@ -100,6 +100,11 @@ public Q_SLOTS:
      */
     void paintPresetImage();
 
+    /**
+     * Disables the ability for the person to paint
+     */
+    void allowPainting(bool allowEditing);
+
 private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
     void setDisplayProfile(const KoColorProfile* colorProfile);
@@ -164,6 +169,8 @@ private:
 
     QPointF m_panDocPoint;
     int m_scaleBorderWidth;
+
+    bool m_allowPainting;
 
     QImage m_presetImage;
 };

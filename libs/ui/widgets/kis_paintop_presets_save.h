@@ -21,12 +21,15 @@
 
 #include <QWidget>
 #include <QDialog>
-#include <ui_wdgsavebrushpreset.h>
 
+#include "ui_wdgsavebrushpreset.h"
+#include "kis_canvas_resource_provider.h"
 
-class KisPaintOpPresetSaveDialog : public QDialog , Ui::WdgSaveBrushPreset
+class KisPaintOpPresetSaveDialog : public QDialog , public Ui::WdgSaveBrushPreset
 {
     Q_OBJECT
+
+
 
 public:
     KisPaintOpPresetSaveDialog(QWidget* parent) : QDialog(parent) {
@@ -42,6 +45,15 @@ class KisPresetSaveWidget : public KisPaintOpPresetSaveDialog
 public:
     KisPresetSaveWidget(QWidget* parent);
     virtual ~KisPresetSaveWidget();
+
+    void showDialog();
+
+    void scratchPadSetup(KisCanvasResourceProvider* resourceProvider);
+    KisCanvasResourceProvider* m_resourceProvider;
+
+public Q_SLOTS:
+    void usePreviousThumbnail(bool usePrevious);
+
 };
 
 

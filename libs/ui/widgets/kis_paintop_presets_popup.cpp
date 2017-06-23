@@ -105,6 +105,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
 
+    saveDialog = new KisPresetSaveWidget(this->parentWidget());
+    saveDialog->scratchPadSetup(resourceProvider);
+    saveDialog->hide();
 
     // DETAIL and THUMBNAIL view changer
     QMenu* menu = new QMenu(this);
@@ -222,8 +225,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
             this, SIGNAL(eraserBrushSizeToggled(bool)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(eraserBrushOpacityToggled(bool)));    
-    
+            this, SIGNAL(eraserBrushOpacityToggled(bool)));
+
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.txtPreset, SLOT(clear()));
 
@@ -565,7 +568,7 @@ void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
 }
 
 void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
-    saveDialog = new KisPresetSaveWidget(this);
+    saveDialog->showDialog();
 }
 
 void KisPaintOpPresetsPopup::updateViewSettings()
@@ -574,7 +577,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 }
 
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
-{     
+{
      m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
      setCurrentPaintOpId(preset->paintOp().id());
 }

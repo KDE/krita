@@ -233,7 +233,7 @@ void QMic::connected()
     }
     else if (messageMap["command"] == "gmic_qt_output_images") {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
-
+        qDebug() << "gmic_qt_output_images";
 
     }
     else if (messageMap["command"] == "gmic_qt_detach") {
@@ -308,30 +308,30 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             qDebug() << "crop rect from" << cropRect << QRect(ix, iy, iw, ih);
 
 
-            QImage img = node->projection()->convertToQImage(0);
-            QBuffer buf;
-            buf.open(QBuffer::ReadWrite);
-            QDataStream out(&buf);
-            out << img;
+//            QImage img = node->projection()->convertToQImage(0);
+//            QBuffer buf;
+//            buf.open(QBuffer::ReadWrite);
+//            QDataStream out(&buf);
+//            out << img;
 
             QSharedMemory *m = new QSharedMemory(QString("key_%1").arg(QUuid::createUuid().toString()));
             m_sharedMemorySegments.append(m);
-            if (!m->create(buf.size())) { //iw * ih * 4 * sizeof(float))) {
+            if (!m->create(iw * ih * 4 * sizeof(float))) {  //buf.size())) {
                 qDebug() << "Could not create shared memory segment" << m->error() << m->errorString();
                 return false;
             }
             m->lock();
 
-            char *to = (char*)m->data();
-            const char *from = buf.data().data();
-            Q_ASSERT(m->size() == buf.size());
-            memcpy(to, from, m->size());
+//            char *to = (char*)m->data();
+//            const char *from = buf.data().data();
+//            Q_ASSERT(m->size() == buf.size());
+//            memcpy(to, from, m->size());
 
-//            gmic_image<float> img;
-//            img.assign(iw, ih, 1, 4);
-//            img._data = reinterpret_cast<float*>(m->data());
+            gmic_image<float> img;
+            img.assign(iw, ih, 1, 4);
+            img._data = reinterpret_cast<float*>(m->data());
 
-//            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, QRect(ix, iy, iw, ih));
+            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, QRect(ix, iy, iw, ih));
 
 //            KisPaintDeviceSP dev2 = new KisPaintDevice(node->colorSpace());
 //            KisQmicSimpleConvertor::convertFromGmicFast(img, dev2, 1.0);

@@ -37,19 +37,25 @@ class KisColorToFloatConvertor : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisColorToFloatConvertor(){}
+    KisColorToFloatConvertor(float gmicUnitValue = 255.0f)
+        : m_gmicUnitValue(gmicUnitValue)
+    {}
+
+    float m_gmicUnitValue;
 
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
     {
+        float gmicUnitValue2KritaUnitValue = m_gmicUnitValue / KoColorSpaceMathsTraits<float>::unitValue;
+
         const RGBPixel* srcPixel = reinterpret_cast<const RGBPixel*>(src);
         KoRgbF32Traits::Pixel* dstPixel = reinterpret_cast<KoRgbF32Traits::Pixel*>(dst);
 
         while(nPixels > 0)
         {
-            dstPixel->red = SCALE_TO_FLOAT(srcPixel->red);
-            dstPixel->green = SCALE_TO_FLOAT(srcPixel->green);
-            dstPixel->blue = SCALE_TO_FLOAT(srcPixel->blue);
-            dstPixel->alpha = SCALE_TO_FLOAT(srcPixel->alpha);
+            dstPixel->red = SCALE_TO_FLOAT(srcPixel->red) * gmicUnitValue2KritaUnitValue;
+            dstPixel->green = SCALE_TO_FLOAT(srcPixel->green) * gmicUnitValue2KritaUnitValue;
+            dstPixel->blue = SCALE_TO_FLOAT(srcPixel->blue) * gmicUnitValue2KritaUnitValue;
+            dstPixel->alpha = SCALE_TO_FLOAT(srcPixel->alpha) * gmicUnitValue2KritaUnitValue;
 
             --nPixels;
             ++srcPixel;
@@ -66,7 +72,10 @@ class KisColorFromFloat : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisColorFromFloat(float gmicUnitValue = 255.0f):m_gmicUnitValue(gmicUnitValue){}
+    KisColorFromFloat(float gmicUnitValue = 255.0f)
+        : m_gmicUnitValue(gmicUnitValue)
+    {
+    }
 
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
     {
@@ -170,55 +179,52 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
     }
 
     if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-        if (gmicSpectrum == 3 || gmicSpectrum == 4)
-        {
+        if (gmicSpectrum == 3 || gmicSpectrum == 4) {
             colorTransformation = new KisColorFromFloat< float, KoRgbTraits < float > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
-        {
+        }
+        else if (gmicSpectrum == 1) {
             colorTransformation = new KisColorFromGrayScaleFloat<float, KoRgbTraits < float > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
-        {
+        }
+        else if (gmicSpectrum == 2) {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat<float, KoRgbTraits < float > >(gmicUnitValue);
         }
     }
 #ifdef HAVE_OPENEXR
     else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
-        if (gmicSpectrum == 3 || gmicSpectrum == 4)
-        {
+        if (gmicSpectrum == 3 || gmicSpectrum == 4) {
             colorTransformation = new KisColorFromFloat< half, KoRgbTraits < half > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
-        {
+        }
+        else if (gmicSpectrum == 1) {
             colorTransformation = new KisColorFromGrayScaleFloat< half, KoRgbTraits < half > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
-        {
+        }
+        else if (gmicSpectrum == 2) {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat< half, KoRgbTraits < half > >(gmicUnitValue);
         }
     }
 #endif
     else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        if (gmicSpectrum == 3 || gmicSpectrum == 4)
-        {
+        if (gmicSpectrum == 3 || gmicSpectrum == 4) {
             colorTransformation = new KisColorFromFloat< quint16, KoBgrTraits < quint16 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
-        {
+        }
+        else if (gmicSpectrum == 1) {
             colorTransformation = new KisColorFromGrayScaleFloat< quint16, KoBgrTraits < quint16 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
-        {
+        }
+        else if (gmicSpectrum == 2) {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat< quint16, KoBgrTraits < quint16 > >(gmicUnitValue);
         }
-    } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
-        if (gmicSpectrum == 3 || gmicSpectrum == 4)
-        {
+    }
+    else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
+        if (gmicSpectrum == 3 || gmicSpectrum == 4) {
             colorTransformation = new KisColorFromFloat< quint8, KoBgrTraits < quint8 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 1)
-        {
+        }
+        else if (gmicSpectrum == 1) {
             colorTransformation = new KisColorFromGrayScaleFloat< quint8, KoBgrTraits < quint8 > >(gmicUnitValue);
-        }else if (gmicSpectrum == 2)
-        {
+        }
+        else if (gmicSpectrum == 2) {
             colorTransformation = new KisColorFromGrayScaleAlphaFloat< quint8, KoBgrTraits < quint8 > >(gmicUnitValue);
         }
-    } else
-    {
+    }
+    else {
         dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
         return 0;
     }

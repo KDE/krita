@@ -1550,6 +1550,8 @@ KoPathShape * KoPathShape::createShapeFromPainterPath(const QPainterPath &path)
         }
     }
 
+    shape->setShapeId(KoPathShapeId);
+
     //shape->normalize();
     return shape;
 }

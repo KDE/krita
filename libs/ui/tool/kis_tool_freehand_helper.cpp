@@ -315,6 +315,13 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerStart(m_d->previousPaintInformation);
     }
+
+    // If airbrushing, paint an initial dab immediately. This is a workaround for an issue where
+    // some paintops (Dyna, Particle, Sketch) might never initialize their spacing/timing
+    // information until paintAt is called.
+    if (airbrushing) {
+        paintAt(pi);
+    }
 }
 
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,

@@ -1380,16 +1380,25 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="gmic">
+    <Action name="QMic">
       <icon>gmic</icon>
-      <text>G'MIC</text>
+      <text>Start G'MIC-Qt</text>
       <whatsThis></whatsThis>
-      <toolTip>Apply G'Mic Action</toolTip>
-      <iconText>Apply G'Mic Action</iconText>
+      <toolTip>Start G'Mic-Qt</toolTip>
+      <iconText>Start G'Mic-Qt</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+  <Action name="QMicAgain">
+      <icon>gmic</icon>
+      <text>Re-apply the last G'MIC filter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Apply the last G'Mic-Qt action again</toolTip>
+      <iconText>Apply the last G'Mic-Qt action again</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
   </Actions>
   <Actions category="Settings">
     <text>Settings</text>

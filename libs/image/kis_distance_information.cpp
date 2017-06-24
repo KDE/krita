@@ -137,6 +137,11 @@ KisDistanceInitInfo::KisDistanceInitInfo(const QPointF &lastPosition, qreal last
     m_d->timingUpdateInterval = timingUpdateInterval;
 }
 
+KisDistanceInitInfo::KisDistanceInitInfo(const KisDistanceInitInfo &rhs)
+    : m_d(new Private(*rhs.m_d))
+{
+}
+
 KisDistanceInitInfo::~KisDistanceInitInfo()
 {
     delete m_d;

@@ -65,6 +65,8 @@ public:
     explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
                                  qreal spacingUpdateInterval, qreal timingUpdateInterval);
 
+    KisDistanceInitInfo(const KisDistanceInitInfo &rhs);
+
     ~KisDistanceInitInfo();
 
     bool operator==(const KisDistanceInitInfo &other) const;

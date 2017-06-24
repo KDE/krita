@@ -187,9 +187,6 @@ private:
                                           const QPointF &end);
     qreal getNextPointPositionTimed(qreal startTime,
                                     qreal endTime);
-    void accumulateDistanceIsotropic(qreal distX);
-    void accumulateDistanceAnisotropic(const QPointF &dist);
-    void accumulateTime(qreal time);
     void resetAccumulators();
 
     qreal drawingAngleImpl(const QPointF &start, const QPointF &end,

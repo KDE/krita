@@ -46,37 +46,37 @@ void KisDistanceInformationTest::testInterpolation()
 
     KisDistanceInformation dist2(interval/2.0, interval/3.0);
     dist2.updateSpacing(KisSpacingInformation(dist*2.0));
-    dist1.updateTiming(KisTimingInformation(interval*1.5));
+    dist2.updateTiming(KisTimingInformation(interval*1.5));
     testInterpolationImpl(p1, p2, dist2, -1.0, true, true, interpTolerance);
 
     KisDistanceInformation dist3(interval*1.1, interval*1.2);
     dist3.updateSpacing(KisSpacingInformation(dist/40.0));
-    dist1.updateTiming(KisTimingInformation());
+    dist3.updateTiming(KisTimingInformation());
     testInterpolationImpl(p1, p2, dist3, 1.0/40.0, false, false, interpTolerance);
 
     KisDistanceInformation dist4;
     dist4.updateSpacing(KisSpacingInformation(false, 1.0));
-    dist1.updateTiming(KisTimingInformation());
+    dist4.updateTiming(KisTimingInformation());
     testInterpolationImpl(p1, p2, dist4, -1.0, false, false, interpTolerance);
 
     KisDistanceInformation dist5;
     dist5.updateSpacing(KisSpacingInformation(false, 1.0));
-    dist1.updateTiming(KisTimingInformation(interval/20.0));
+    dist5.updateTiming(KisTimingInformation(interval/20.0));
     testInterpolationImpl(p1, p2, dist5, 1.0/20.0, false, false, interpTolerance);
 
     KisDistanceInformation dist6;
     dist6.updateSpacing(KisSpacingInformation(dist/10.0));
-    dist1.updateTiming(KisTimingInformation(interval/15.0));
+    dist6.updateTiming(KisTimingInformation(interval/15.0));
     testInterpolationImpl(p1, p2, dist6, 1.0/15.0, false, false, interpTolerance);
 
     KisDistanceInformation dist7;
     dist7.updateSpacing(KisSpacingInformation(dist/15.0));
-    dist1.updateTiming(KisTimingInformation(interval/10.0));
+    dist7.updateTiming(KisTimingInformation(interval/10.0));
     testInterpolationImpl(p1, p2, dist7, 1.0/15.0, false, false, interpTolerance);
 
     KisDistanceInformation dist8;
     dist8.updateSpacing(KisSpacingInformation(dist*2.0));
-    dist1.updateTiming(KisTimingInformation(interval*1.5));
+    dist8.updateTiming(KisTimingInformation(interval*1.5));
     testInterpolationImpl(p1, p2, dist8, -1.0, false, false, interpTolerance);
 
     KisDistanceInformation dist9;

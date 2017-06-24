@@ -409,13 +409,29 @@ qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
     }
 
     // Return the distance-based or time-based factor, whichever is smallest.
+    qreal t = -1.0;
     if (distanceFactor < 0.0) {
-        return timeFactor;
+        t = timeFactor;
     } else if (timeFactor < 0.0) {
-        return distanceFactor;
+        t = distanceFactor;
     } else {
-        return qMin(distanceFactor, timeFactor);
+        t = qMin(distanceFactor, timeFactor);
     }
+
+    // If we aren't ready to paint a dab, accumulate time for the spacing/timing updates that might
+    // be needed between dabs.
+    if (t < 0.0) {
+        m_d->timeSinceSpacingUpdate += endTime - startTime;
+        m_d->timeSinceTimingUpdate += endTime - startTime;
+    }
+
+    // If we are ready to paint a dab, reset the accumulated time for spacing/timing updates.
+    else {
+        m_d->timeSinceSpacingUpdate = 0.0;
+        m_d->timeSinceTimingUpdate = 0.0;
+    }
+
+    return t;
 }
 
 qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start,
@@ -444,7 +460,8 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
         resetAccumulators();
     } else {
         t = -1;
-        accumulateDistanceIsotropic(dragVecLength);
+
+        m_d->accumDistance.rx() += dragVecLength;
     }
 
     return t;
@@ -506,7 +523,7 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             t = k;
             resetAccumulators();
         } else {
-            accumulateDistanceAnisotropic(KisAlgebra2D::abs(diff));
+            m_d->accumDistance += KisAlgebra2D::abs(diff);
         }
     } else {
         warnKrita << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";
@@ -540,43 +557,17 @@ qreal KisDistanceInformation::getNextPointPositionTimed(qreal startTime,
         t = nextPointInterval / (endTime - startTime);
     }
     else {
-        accumulateTime(endTime - startTime);
+        m_d->accumTime += endTime - startTime;
         t = -1.0;
     }
     
     return t;
 }
 
-void KisDistanceInformation::accumulateDistanceIsotropic(qreal distX)
-{
-    KIS_SAFE_ASSERT_RECOVER(distX >= 0.0) {
-        distX = 0.0;
-    }
-    m_d->accumDistance.rx() += distX;
-}
-
-void KisDistanceInformation::accumulateDistanceAnisotropic(const QPointF &dist)
-{
-    KIS_SAFE_ASSERT_RECOVER_NOOP(dist == KisAlgebra2D::abs(dist))
-    m_d->accumDistance += dist;
-}
-
-void KisDistanceInformation::accumulateTime(qreal time)
-{
-    KIS_SAFE_ASSERT_RECOVER(time >= 0.0) {
-        time = 0.0;
-    }
-    m_d->accumTime += time;
-    m_d->timeSinceSpacingUpdate += time;
-    m_d->timeSinceTimingUpdate += time;
-}
-
 void KisDistanceInformation::resetAccumulators()
 {
     m_d->accumDistance = QPointF();
     m_d->accumTime = 0.0;
-    m_d->timeSinceSpacingUpdate = 0.0;
-    m_d->timeSinceTimingUpdate = 0.0;
 }
 
 bool KisDistanceInformation::hasLockedDrawingAngle() const

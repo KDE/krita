@@ -35,6 +35,7 @@ KisQmicSynchronizeLayersCommand::KisQmicSynchronizeLayersCommand(KisNodeListSP n
         m_selection(selection),
         m_firstRedo(true)
 {
+    qDebug() << "KisQmicSynchronizeLayersCommand";
 }
 
 KisQmicSynchronizeLayersCommand::~KisQmicSynchronizeLayersCommand()
@@ -45,8 +46,9 @@ KisQmicSynchronizeLayersCommand::~KisQmicSynchronizeLayersCommand()
 
 void KisQmicSynchronizeLayersCommand::redo()
 {
-    if (m_firstRedo)
-    {
+    qDebug() << "KisQmicSynchronizeLayersCommand::Redo" << m_firstRedo;
+
+    if (m_firstRedo) {
         // if gmic produces more layers
         if (m_nodes->size() < m_images.size()) {
 

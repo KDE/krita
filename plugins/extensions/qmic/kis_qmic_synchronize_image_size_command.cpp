@@ -24,6 +24,7 @@ KisQmicSynchronizeImageSizeCommand::KisQmicSynchronizeImageSizeCommand(QVector<g
     , m_image(image)
     , m_resizeCommand(0)
 {
+    qDebug() << "KisQmicSynchronizeImageSizeCommand" << "gmic images" << m_images.size();
 }
 
 KisQmicSynchronizeImageSizeCommand::~KisQmicSynchronizeImageSizeCommand()
@@ -34,11 +35,14 @@ KisQmicSynchronizeImageSizeCommand::~KisQmicSynchronizeImageSizeCommand()
 
 void KisQmicSynchronizeImageSizeCommand::redo()
 {
+    qDebug() << "KisQmicSynchronizeImageSizeCommand::redo";
     // sync image size
     if (m_image)
     {
         QSize gmicBoundingLayerSize = findMaxLayerSize(m_images);
         QSize kritaSize = m_image->size();
+
+        qDebug() << "\tkrita image" << kritaSize << "gmic size" << gmicBoundingLayerSize;
 
         if (kritaSize != gmicBoundingLayerSize)
         {
@@ -51,8 +55,8 @@ void KisQmicSynchronizeImageSizeCommand::redo()
 
 void KisQmicSynchronizeImageSizeCommand::undo()
 {
-    if (m_resizeCommand)
-    {
+    qDebug() << "KisQmicSynchronizeImageSizeCommand::undo";
+    if (m_resizeCommand) {
         m_resizeCommand->undo();
     }
 }
@@ -72,5 +76,6 @@ QSize KisQmicSynchronizeImageSizeCommand::findMaxLayerSize(QVector<gmic_image<fl
         maxHeight = qMax(height, maxHeight);
     }
 
+    qDebug() << "MaxLayerSize" << maxWidth << maxHeight;
     return QSize(maxWidth, maxHeight);
 }

@@ -26,6 +26,7 @@
 #include <QThread>
 
 #include "gmic.h"
+#include "kis_qmic_data.h"
 
 class KisProcessingApplicator;
 
@@ -42,6 +43,8 @@ public:
     void cancel();
     void finish();
 
+    float getProgress() const;
+
 Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
@@ -53,6 +56,7 @@ private:
     KisNodeListSP m_kritaNodes;
     bool m_applicatorStrokeEnded;
     QVector<gmic_image<float> *> m_images;
+    KisQmicDataSP m_gmicData;
 };
 
 #endif

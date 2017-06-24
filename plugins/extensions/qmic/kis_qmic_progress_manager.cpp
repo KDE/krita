@@ -23,7 +23,8 @@
 
 static const int UPDATE_PROGRESS_TIMEOUT = 500;
 
-KisQmicProgressManager::KisQmicProgressManager(KisViewManager* viewManager):m_progressPulseRequest(0)
+KisQmicProgressManager::KisQmicProgressManager(KisViewManager* viewManager)
+    : m_progressPulseRequest(0)
 {
         m_progressUpdater = viewManager->createProgressUpdater(KoProgressUpdater::Unthreaded);
         m_progressTimer.setInterval(UPDATE_PROGRESS_TIMEOUT);
@@ -48,8 +49,7 @@ void KisQmicProgressManager::initProgress()
 void KisQmicProgressManager::updateProgress(float progress)
 {
     int currentProgress = 0.0;
-    if (progress >= 0.0)
-    {
+    if (progress >= 0.0)  {
         if (m_progressPulseRequest > 0)
         {
             m_progressUpdater->start(100);
@@ -58,8 +58,7 @@ void KisQmicProgressManager::updateProgress(float progress)
         }
         currentProgress = (int)progress;
     }
-    else
-    {
+    else  {
         // pulse
         m_progressPulseRequest++;
         if (m_updater->progress() >= 90)

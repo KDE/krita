@@ -33,12 +33,14 @@ KisQmicApplicator::KisQmicApplicator():m_applicator(0),m_applicatorStrokeEnded(f
 
 KisQmicApplicator::~KisQmicApplicator()
 {
-    dbgPlugins << "Destructor: " << m_applicator;
+    qDebug() << "Destructor: " << m_applicator;
     delete m_applicator;
 }
 
 void KisQmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, QVector<gmic_image<float> *> images, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes)
 {
+    qDebug() << "KisQmicApplicator::setProperties();" << ppVar(image) << ppVar(node) << images.size() << actionName << kritaNodes->count();
+
     m_image = image;
     m_node = node;
     m_actionName = actionName;
@@ -50,7 +52,7 @@ void KisQmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, QVector
 void KisQmicApplicator::preview()
 {
     // cancel previous preview if there is one
-    dbgPlugins << "Request for preview, cancelling any previous possible on-canvas preview";
+    qDebug() << "Request for preview, cancelling any previous possible on-canvas preview";
     cancel();
 
     KisImageSignalVector emitSignals;
@@ -59,12 +61,20 @@ void KisQmicApplicator::preview()
     m_applicator = new KisProcessingApplicator(m_image, m_node,
             KisProcessingApplicator::RECURSIVE | KisProcessingApplicator::NO_UI_UPDATES,
             emitSignals, m_actionName);
-    dbgPlugins << "Created applicator " << m_applicator;
+    qDebug() << "Created applicator " << m_applicator;
+
+    m_gmicData = KisQmicDataSP(new KisQmicData());
 
     QRect layerSize;
     KisSelectionSP selection = m_image->globalSelection();
+    if (selection) {
+        layerSize = selection->selectedExactRect();
+    }
+    else {
+        layerSize = QRect(0, 0, m_image->width(), m_image->height());
+    }
 
-    if (!selection) {
+   if (!selection) {
         // synchronize Krita image size with biggest gmic layer size
         m_applicator->applyCommand(new KisQmicSynchronizeImageSizeCommand(m_images, m_image));
     }
@@ -75,10 +85,12 @@ void KisQmicApplicator::preview()
     KisProcessingVisitorSP  importVisitor = new KisImportQmicProcessingVisitor(m_kritaNodes, m_images, layerSize, selection);
     m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     m_applicator->explicitlyEmitFinalSignals();
+    emit gmicFinished(true, 0, "done!");
 }
 
 void KisQmicApplicator::cancel()
 {
+    qDebug() << "KisQmicApplicator::cancel";
     if (m_applicator) {
 
         if (!m_applicatorStrokeEnded)
@@ -107,12 +119,21 @@ void KisQmicApplicator::cancel()
 
 void KisQmicApplicator::finish()
 {
-    dbgPlugins << "Applicator " << m_applicator << " finished";
+    qDebug() << "Applicator " << m_applicator << " finished";
     if (m_applicator)
     {
         m_applicator->end();
         m_applicatorStrokeEnded = true;
     }
-    dbgPlugins << ppVar(m_applicatorStrokeEnded);
+    qDebug() << ppVar(m_applicatorStrokeEnded);
 }
 
+float KisQmicApplicator::getProgress() const
+{
+    qDebug() << "KisQmicApplicator::getProgress";
+
+    if (m_gmicData) {
+        m_gmicData->progress();
+    }
+    return KisQmicData::INVALID_PROGRESS_VALUE;
+}

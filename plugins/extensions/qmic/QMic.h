@@ -25,12 +25,14 @@
 #include <kis_view_plugin.h>
 #include <kis_types.h>
 
+#include "gmic.h"
+
 class KisAction;
 class QLocalServer;
 class QSharedMemory;
 
-class KisGmicApplicator;
-class KisGmicProgressManager;
+class KisQmicApplicator;
+class KisQmicProgressManager;
 
 class QMic : public KisViewPlugin
 {
@@ -40,14 +42,16 @@ public:
     virtual ~QMic();
 
 private Q_SLOTS:
+
     void slotQMicAgain();
     void slotQMic(bool again = false);
     void connected();
     void pluginStateChanged(QProcess::ProcessState);
     void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void slotUpdateProgress();
-    // miliseconds - time gmic spent filtering images
-    void slotGmicFinished(bool successfully, int miliseconds = -1, const QString& msg = QString());
+    void slotStartProgressReporting();
+    void slotGmicFinished(bool successfully, int milliseconds = -1, const QString& msg = QString());
+    void slotStartApplicator(QStringList gmicImages);
 
 private:
 
@@ -60,8 +64,11 @@ private:
     KisAction *m_againAction {0};
     QVector<QSharedMemory *> m_sharedMemorySegments;
 
-    KisGmicApplicator *m_gmicApplicator;
-    KisGmicProgressManager *m_progressManager;
+    KisQmicApplicator *m_gmicApplicator {0};
+    KisQmicProgressManager *m_progressManager {0};
+
+    InputLayerMode m_inputMode {ACTIVE_LAYER};
+    OutputMode m_outputMode {IN_PLACE};
 
 };
 

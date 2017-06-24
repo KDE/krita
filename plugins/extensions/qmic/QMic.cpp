@@ -33,6 +33,7 @@
 #include <QSharedPointer>
 #include <QMultiMap>
 #include <QSharedMemory>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
@@ -60,6 +61,9 @@
 #include "kis_import_qmic_processing_visitor.h"
 #include <PluginSettings.h>
 
+#include "kis_qmic_applicator.h"
+#include "kis_qmic_progress_manager.h"
+
 static const char ack[] = "ack";
 
 K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>();)
@@ -83,12 +87,8 @@ QMic::QMic(QObject *parent, const QVariantList &)
     m_againAction->setEnabled(false);
     connect(m_againAction,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
 
-//    m_progressManager = new KisGmicProgressManager(m_view);
-//    connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
-
-//    m_gmicApplicator = new KisGmicApplicator();
-//    connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
-
+    m_gmicApplicator = new KisQmicApplicator();
+    connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
 
 }
 
@@ -105,6 +105,8 @@ QMic::~QMic()
         m_pluginProcess->close();
     }
 
+    delete m_gmicApplicator;
+    delete m_progressManager;
     delete m_localServer;
 }
 
@@ -122,6 +124,10 @@ void QMic::slotQMic(bool again)
         qDebug() << "Plugin is already started" << m_pluginProcess->state();
         return;
     }
+
+    delete m_progressManager;
+    m_progressManager = new KisQmicProgressManager(m_view);
+    connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
 
     // find the krita-gmic-qt plugin
     KisConfig cfg;
@@ -247,7 +253,12 @@ void QMic::connected()
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
         qDebug() << "gmic_qt_output_images";
         QStringList layers = messageMap.values("layer");
-        qDebug() << layers;
+        m_outputMode = (OutputMode)mode;
+        if (m_outputMode != IN_PLACE) {
+            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented yet."));
+            m_outputMode = IN_PLACE;
+        }
+        slotStartApplicator(layers);
     }
     else if (messageMap.values("command").first() == "gmic_qt_detach") {
         Q_FOREACH(QSharedMemory *memorySegment, m_sharedMemorySegments) {
@@ -289,27 +300,121 @@ void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
     m_pluginProcess = 0;
     delete m_localServer;
     m_localServer = 0;
+    delete m_progressManager;
+    m_progressManager = 0;
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);
 }
 
 void QMic::slotUpdateProgress()
 {
+    if (!m_gmicApplicator) {
+        qWarning() << "G'Mic applicator already deleted!";
+        return;
+    }
+    qDebug() << "slotUpdateProgress" << m_gmicApplicator->getProgress();
+    m_progressManager->updateProgress(m_gmicApplicator->getProgress());
 }
 
-void QMic::slotGmicFinished(bool successfully, int miliseconds, const QString &msg)
+void QMic::slotStartProgressReporting()
 {
+    qDebug() << "slotStartProgressReporting();";
+    if (m_progressManager->inProgress()) {
+        m_progressManager->finishProgress();
+    }
+    m_progressManager->initProgress();
+}
 
+void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &msg)
+{
+    qDebug() << "slotGmicFinished();" << successfully << milliseconds << msg;
+    if (successfully) {
+        m_gmicApplicator->finish();
+    }
+    else {
+        m_gmicApplicator->cancel();
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("G'Mic failed, reason:") + msg);
+    }
+}
+
+void QMic::slotStartApplicator(QStringList gmicImages)
+{
+    qDebug() << "slotStartApplicator();" << gmicImages;
+
+    // Create a vector of gmic images
+
+    QVector<gmic_image<float> *> images;
+
+    Q_FOREACH(const QString &image, gmicImages) {
+        QStringList parts = image.split(',', QString::SkipEmptyParts);
+        Q_ASSERT(parts.size() == 4);
+        QString key = parts[0];
+        QString layerName = QByteArray::fromHex(parts[1].toLatin1());
+        int spectrum = parts[2].toInt();
+        int width = parts[3].toInt();
+        int height = parts[4].toInt();
+
+        qDebug() << key << layerName << width << height;
+
+        QSharedMemory m(key);
+        if (!m.attach(QSharedMemory::ReadOnly)) {
+            qWarning() << "Could not attach to shared memory area." << m.error() << m.errorString();
+        }
+        if (m.isAttached()) {
+            if (!m.lock()) {
+                qDebug() << "Could not lock memeory segment"  << m.error() << m.errorString();
+            }
+            qDebug() << "Memory segment" << key << m.size() << m.constData() << m.data();
+            gmic_image<float> *gimg = new gmic_image<float>();
+            gimg->assign(width, height, 1, spectrum);
+            gimg->name = layerName;
+
+            gimg->_data = new float[width * height * spectrum * sizeof(float)];
+            qDebug() << "width" << width << "height" << height << "size" << width * height * spectrum * sizeof(float) << "shared memory size" << m.size();
+            memcpy(gimg->_data, m.constData(), width * height * spectrum * sizeof(float));
+
+
+            QFile f("/home/boud/imagedata.txt");
+            f.open(QFile::WriteOnly);
+            f.write((const char*)m.constData(), m.size());
+            f.close();
+
+            qDebug() << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
+
+            if (!m.unlock()) {
+                qDebug() << "Could not unlock memeory segment"  << m.error() << m.errorString();
+            }
+            if (!m.detach()) {
+                qDebug() << "Could not detach from memeory segment"  << m.error() << m.errorString();
+            }
+            images.append(gimg);
+        }
+    }
+
+    qDebug() << "Got" << images.size() << "gmic images";
+
+    // Start the applicator
+    KUndo2MagicString actionName = kundo2_i18n("Gmic filter");
+    KisNodeSP rootNode = m_view->image()->root();
+    KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
+    KisNodeListSP layers = mapper.inputNodes(m_inputMode);
+
+    m_gmicApplicator->setProperties(m_view->image(), rootNode, images, actionName, layers);
+    slotStartProgressReporting();
+    m_gmicApplicator->preview();
+    m_gmicApplicator->finish();
 }
 
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 {
     m_view->image()->lock();
 
+    m_inputMode = (InputLayerMode)inputMode;
+
     qDebug() << "prepareCroppedImages()" << QString::fromUtf8(*message) << rc << inputMode;
 
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
-    KisNodeListSP nodes = mapper.inputNodes((InputLayerMode)inputMode);
+    KisNodeListSP nodes = mapper.inputNodes(m_inputMode);
     if (nodes->isEmpty()) {
         m_view->image()->unlock();
         return false;
@@ -348,7 +453,7 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             qDebug() << "size" << m->size();
 
             message->append(",");
-            message->append(node->name().toUtf8());
+            message->append(node->name().toUtf8().toHex());
             message->append(",");
             message->append(QByteArray::number(iw));
             message->append(",");

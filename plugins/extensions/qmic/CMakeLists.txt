@@ -1,5 +1,6 @@
 set(kritaqmic_SOURCES 
     QMic.cpp
+    kis_qmic_data.cpp
     kis_qmic_applicator.cpp
     kis_qmic_progress_manager.cpp
     kis_qmic_synchronize_image_size_command.cpp

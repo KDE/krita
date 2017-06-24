@@ -1,6 +1,8 @@
 #ifndef KIS_TIMING_INFORMATION_H
 #define KIS_TIMING_INFORMATION_H
 
+#include "kritaimage_export.h"
+
 /**
  * A time in milliseconds that is assumed to be longer than any stroke (or other paint operation)
  * will ever last. This is used instead of infinity to avoid potential errors. The value is
@@ -14,7 +16,7 @@ const qreal LONG_TIME = 320000000000.0;
  * linked to pressure; a KisTimingInformation represents the effective timing at a single specific
  * part of a stroke.
  */
-class KisTimingInformation
+class KRITAIMAGE_EXPORT KisTimingInformation
 {
 public:
 

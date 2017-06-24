@@ -1,12 +1,14 @@
 #ifndef KIS_SPACING_INFORMATION_H
 #define KIS_SPACING_INFORMATION_H
 
+#include "kritaimage_export.h"
+
 /**
  * Contains information about distance-based spacing settings in a stroke. The spacing settings may
  * be different at different parts of a stroke, e.g. if spacing is linked to pressure; a
  * KisSpacingInformation represents the effective spacing at a single specific part of the stroke.
  */
-class KisSpacingInformation {
+class KRITAIMAGE_EXPORT KisSpacingInformation {
 public:
     explicit KisSpacingInformation()
         : m_distanceSpacingEnabled(true)

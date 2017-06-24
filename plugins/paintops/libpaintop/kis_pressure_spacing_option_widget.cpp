@@ -37,13 +37,16 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
     QCheckBox *isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
     QCheckBox *useSpacingUpdates = new QCheckBox(i18n("Update Between Dabs"));
 
-    QVBoxLayout* vl = new QVBoxLayout;
+    QHBoxLayout *hl = new QHBoxLayout;
+    hl->addWidget(isotropicSpacing);
+    hl->addWidget(useSpacingUpdates);
+
+    QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
-    vl->addWidget(isotropicSpacing);
-    vl->addWidget(useSpacingUpdates);
+    vl->addLayout(hl);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 
-    QWidget* w = new QWidget;
+    QWidget *w = new QWidget;
     w->setLayout(vl);
 
     KisCurveOptionWidget::setConfigurationPage(w);

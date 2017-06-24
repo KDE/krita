@@ -19,10 +19,10 @@
 #include "kis_qmic_synchronize_image_size_command.h"
 #include <commands_new/kis_image_resize_command.h>
 
-KisQmicSynchronizeImageSizeCommand::KisQmicSynchronizeImageSizeCommand(QSharedPointer< QVector<gmic_image<float> > > images, KisImageWSP image)
-    :    m_images(images),
-         m_image(image),
-         m_resizeCommand(0)
+KisQmicSynchronizeImageSizeCommand::KisQmicSynchronizeImageSizeCommand(QVector<gmic_image<float> *> images, KisImageWSP image)
+    : m_images(images)
+    , m_image(image)
+    , m_resizeCommand(0)
 {
 }
 
@@ -58,17 +58,17 @@ void KisQmicSynchronizeImageSizeCommand::undo()
 }
 
 
-QSize KisQmicSynchronizeImageSizeCommand::findMaxLayerSize(QSharedPointer< QVector<gmic_image<float> > > images)
+QSize KisQmicSynchronizeImageSizeCommand::findMaxLayerSize(QVector<gmic_image<float> *> images)
 {
     // synchronize image size
     int maxWidth = 0;
     int maxHeight = 0;
-    for (unsigned int i = 0; i < images->size(); i++)
-    {
-        int width = images->at[i].width();
+    for (int i = 0; i < images.size(); i++) {
+        gmic_image<float> *gimg = images[i];
+        int width = gimg->_width;
         maxWidth = qMax(width, maxWidth);
 
-        int height = images->at[i].height();
+        int height = gimg->_height;
         maxHeight = qMax(height, maxHeight);
     }
 

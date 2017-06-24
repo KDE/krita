@@ -22,9 +22,10 @@
 #include <kundo2magicstring.h>
 
 #include <kis_types.h>
-#include <kis_qmic_data.h>
 
 #include <QThread>
+
+#include "gmic.h"
 
 class KisProcessingApplicator;
 
@@ -35,30 +36,23 @@ class KisQmicApplicator : public QObject
 public:
     KisQmicApplicator();
     ~KisQmicApplicator();
-    void setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands = QByteArray());
+    void setProperties(KisImageWSP image, KisNodeSP node, QVector<gmic_image<float> *> images, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes);
 
     void preview();
     void cancel();
     void finish();
 
-    float getProgress() const;
-
 Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
-    KisProcessingApplicator * m_applicator;
+    KisProcessingApplicator *m_applicator;
     KisImageWSP m_image;
     KisNodeSP m_node;
     KUndo2MagicString m_actionName;
     KisNodeListSP m_kritaNodes;
-    QString m_gmicCommand;
-    QByteArray m_customCommands;
     bool m_applicatorStrokeEnded;
-    KisQmicDataSP m_gmicData;
-
-
-
+    QVector<gmic_image<float> *> m_images;
 };
 
 #endif

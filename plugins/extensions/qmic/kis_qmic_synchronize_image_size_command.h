@@ -27,26 +27,26 @@
 #include <kis_image.h>
 #include <kis_types.h>
 
-#include <gmic.h>
+#include "gmic.h"
 
 class KisImageResizeCommand;
 
 class KisQmicSynchronizeImageSizeCommand : public KUndo2Command
 {
 public:
-    KisQmicSynchronizeImageSizeCommand(QSharedPointer< QVector<gmic_image<float> > > images, KisImageWSP image);
+    KisQmicSynchronizeImageSizeCommand(QVector<gmic_image<float> *> images, KisImageWSP image);
     ~KisQmicSynchronizeImageSizeCommand();
 
     void redo();
     void undo();
 
 private:
-    QSize findMaxLayerSize(QSharedPointer< QVector<gmic_image<float> > > images);
+    QSize findMaxLayerSize(QVector<gmic_image<float> *> images);
 
 private:
-    QSharedPointer< QVector<gmic_image<float> > > m_images;
+    QVector<gmic_image<float> *> m_images;
     KisImageWSP m_image;
-    KisImageResizeCommand * m_resizeCommand;
+    KisImageResizeCommand *m_resizeCommand;
 
 };
 

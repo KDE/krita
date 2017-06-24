@@ -23,10 +23,14 @@
 #include <QVariant>
 #include <QVector>
 #include <kis_view_plugin.h>
+#include <kis_types.h>
 
 class KisAction;
 class QLocalServer;
 class QSharedMemory;
+
+class KisGmicApplicator;
+class KisGmicProgressManager;
 
 class QMic : public KisViewPlugin
 {
@@ -41,6 +45,10 @@ private Q_SLOTS:
     void connected();
     void pluginStateChanged(QProcess::ProcessState);
     void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void slotUpdateProgress();
+    // miliseconds - time gmic spent filtering images
+    void slotGmicFinished(bool successfully, int miliseconds = -1, const QString& msg = QString());
+
 private:
 
     bool prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode);
@@ -51,6 +59,9 @@ private:
     KisAction *m_qmicAction {0};
     KisAction *m_againAction {0};
     QVector<QSharedMemory *> m_sharedMemorySegments;
+
+    KisGmicApplicator *m_gmicApplicator;
+    KisGmicProgressManager *m_progressManager;
 
 };
 

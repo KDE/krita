@@ -15,20 +15,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_qmic_applicator.h"
 
-#include <kis_qmic_applicator.h>
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
-#include <kis_qmic_data.h>
 
-#include "kis_qmic_command.h"
-#include "kis_import_gmic_processing_visitor.h"
-#include "kis_image.h"
+#include <kis_image.h>
 #include <kis_selection.h>
 
-#include <gmic.h>
+#include "kis_import_qmic_processing_visitor.h"
 #include "kis_qmic_synchronize_layers_command.h"
-#include "kis_export_qmic_processing_visitor.h"
 #include "kis_qmic_synchronize_image_size_command.h"
 
 KisQmicApplicator::KisQmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false)
@@ -41,14 +37,13 @@ KisQmicApplicator::~KisQmicApplicator()
     delete m_applicator;
 }
 
-void KisQmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands)
+void KisQmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, QVector<gmic_image<float> *> images, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes)
 {
     m_image = image;
     m_node = node;
     m_actionName = actionName;
     m_kritaNodes = kritaNodes;
-    m_gmicCommand = gmicCommand;
-    m_customCommands = customCommands;
+    m_images = images;
 }
 
 
@@ -66,57 +61,25 @@ void KisQmicApplicator::preview()
             emitSignals, m_actionName);
     dbgPlugins << "Created applicator " << m_applicator;
 
-    QSharedPointer< QVector<gmic_image<float> > > gmicLayers(new QVector<gmic_image<float> >);
-    gmicLayers->assign(m_kritaNodes->size());
-
-    m_gmicData = KisQmicDataSP(new KisQmicData());
-
     QRect layerSize;
     KisSelectionSP selection = m_image->globalSelection();
-    if (selection)
-    {
-        layerSize = selection->selectedExactRect();
-    }
-    else
-    {
-        layerSize = QRect(0, 0, m_image->width(), m_image->height());
-    }
 
-    // convert krita layers to gmic layers
-    KisProcessingVisitorSP exportVisitor = new KisExportQmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize);
-    m_applicator->applyVisitor(exportVisitor, KisStrokeJobData::CONCURRENT);
-
-    // apply gmic filters to provided layers
-    KisQmicCommand * gmicCommand = new KisQmicCommand(m_gmicCommand, gmicLayers, m_gmicData, m_customCommands);
-    connect(gmicCommand, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
-
-    m_applicator->applyCommand(gmicCommand);
-
-
-    if (!selection)
-    {
+    if (!selection) {
         // synchronize Krita image size with biggest gmic layer size
-        m_applicator->applyCommand(new KisQmicSynchronizeImageSizeCommand(gmicLayers, m_image));
+        m_applicator->applyCommand(new KisQmicSynchronizeImageSizeCommand(m_images, m_image));
     }
 
     // synchronize layer count
-    m_applicator->applyCommand(new KisQmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    m_applicator->applyCommand(new KisQmicSynchronizeLayersCommand(m_kritaNodes, m_images, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
-    KisProcessingVisitorSP  importVisitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
+    KisProcessingVisitorSP  importVisitor = new KisImportQmicProcessingVisitor(m_kritaNodes, m_images, layerSize, selection);
     m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     m_applicator->explicitlyEmitFinalSignals();
 }
 
 void KisQmicApplicator::cancel()
 {
-    if (m_gmicData)
-    {
-        dbgPlugins << "Cancel gmic script";
-        m_gmicData->setCancel(true);
-    }
-
-    if (m_applicator)
-    {
+    if (m_applicator) {
 
         if (!m_applicatorStrokeEnded)
         {
@@ -137,8 +100,7 @@ void KisQmicApplicator::cancel()
         m_applicatorStrokeEnded = false;
         dbgPlugins << ppVar(m_applicatorStrokeEnded);
     }
-    else
-    {
+    else  {
         dbgPlugins << "Cancelling applicator: No! Reason: Null applicator!";
     }
 }
@@ -154,11 +116,3 @@ void KisQmicApplicator::finish()
     dbgPlugins << ppVar(m_applicatorStrokeEnded);
 }
 
-float KisQmicApplicator::getProgress() const
-{
-    if (m_gmicData)
-    {
-        m_gmicData->progress();
-    }
-    return KisQmicData::INVALID_PROGRESS_VALUE;
-}

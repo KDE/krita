@@ -31,6 +31,7 @@
 #include <QUuid>
 #include <QList>
 #include <QSharedPointer>
+#include <QMultiMap>
 #include <QSharedMemory>
 
 #include <klocalizedstring.h>
@@ -54,8 +55,9 @@
 #include <kis_selection.h>
 #include <kis_paint_layer.h>
 
-#include <kis_input_output_mapper.h>
-#include <kis_qmic_simple_convertor.h>
+#include "kis_input_output_mapper.h"
+#include "kis_qmic_simple_convertor.h"
+#include "kis_import_qmic_processing_visitor.h"
 #include <PluginSettings.h>
 
 static const char ack[] = "ack";
@@ -64,6 +66,8 @@ K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>()
 
 QMic::QMic(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
+    , m_gmicApplicator(0)
+    , m_progressManager(0)
 {
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
@@ -78,6 +82,14 @@ QMic::QMic(QObject *parent, const QVariantList &)
     m_againAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_againAction->setEnabled(false);
     connect(m_againAction,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
+
+//    m_progressManager = new KisGmicProgressManager(m_view);
+//    connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
+
+//    m_gmicApplicator = new KisGmicApplicator();
+//    connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
+
+
 }
 
 QMic::~QMic()
@@ -188,11 +200,11 @@ void QMic::connected()
     qDebug() << "Received" << message;
 
     // Check the message: we can get three different ones
-    QMap<QString, QString> messageMap;
+    QMultiMap<QString, QString> messageMap;
     Q_FOREACH(QString line, message.split('\n', QString::SkipEmptyParts)) {
         QList<QString> kv = line.split('=', QString::SkipEmptyParts);
         if (kv.size() == 2) {
-            messageMap[kv[0]] = kv[1];
+            messageMap.insert(kv[0], kv[1]);
         }
         else {
             qWarning() << "line" << line << "is invalid.";
@@ -206,22 +218,22 @@ void QMic::connected()
 
     int mode = 0;
     if (messageMap.contains("mode")) {
-        mode = messageMap["mode"].toInt();
+        mode = messageMap.values("mode").first().toInt();
     }
 
     QByteArray ba;
 
-    if (messageMap["command"] == "gmic_qt_get_image_size") {
+    if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
         ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
     }
-    else if (messageMap["command"] == "gmic_qt_get_cropped_images") {
+    else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
         QRectF cropRect = m_view->image()->bounds();
-        if (!messageMap.contains("croprect") || !messageMap["croprect"].split(',', QString::SkipEmptyParts).size() == 4) {
+        if (!messageMap.contains("croprect") || !messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() == 4) {
             qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
         }
         else {
-            QStringList cr = messageMap["croprect"].split(',', QString::SkipEmptyParts);
+            QStringList cr = messageMap.values("croprect").first().split(',', QString::SkipEmptyParts);
             cropRect.setX(cr[0].toFloat());
             cropRect.setY(cr[1].toFloat());
             cropRect.setWidth(cr[2].toFloat());
@@ -231,12 +243,13 @@ void QMic::connected()
             qWarning() << "Failed to prepare images for gmic-qt";
         }
     }
-    else if (messageMap["command"] == "gmic_qt_output_images") {
+    else if (messageMap.values("command").first() == "gmic_qt_output_images") {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
         qDebug() << "gmic_qt_output_images";
-
+        QStringList layers = messageMap.values("layer");
+        qDebug() << layers;
     }
-    else if (messageMap["command"] == "gmic_qt_detach") {
+    else if (messageMap.values("command").first() == "gmic_qt_detach") {
         Q_FOREACH(QSharedMemory *memorySegment, m_sharedMemorySegments) {
             qDebug() << "detaching" << memorySegment->key() << memorySegment->isAttached();
             if (memorySegment->isAttached()) {
@@ -249,7 +262,7 @@ void QMic::connected()
         m_sharedMemorySegments.clear();
     }
     else {
-        qWarning() << "Received unknown command" << messageMap["command"];
+        qWarning() << "Received unknown command" << messageMap.values("command");
     }
 
     qDebug() << "Sending" << QString::fromUtf8(ba);
@@ -280,6 +293,15 @@ void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
     m_againAction->setEnabled(true);
 }
 
+void QMic::slotUpdateProgress()
+{
+}
+
+void QMic::slotGmicFinished(bool successfully, int miliseconds, const QString &msg)
+{
+
+}
+
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 {
     m_view->image()->lock();
@@ -305,42 +327,19 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             const int iw = std::min(cropRect.width() - ix, static_cast<int>(1 + std::ceil(rc.width() * cropRect.width())));
             const int ih = std::min(cropRect.height() - iy, static_cast<int>(1 + std::ceil(rc.height() * cropRect.height())));
 
-            qDebug() << "crop rect from" << cropRect << QRect(ix, iy, iw, ih);
-
-
-//            QImage img = node->projection()->convertToQImage(0);
-//            QBuffer buf;
-//            buf.open(QBuffer::ReadWrite);
-//            QDataStream out(&buf);
-//            out << img;
-
             QSharedMemory *m = new QSharedMemory(QString("key_%1").arg(QUuid::createUuid().toString()));
             m_sharedMemorySegments.append(m);
             if (!m->create(iw * ih * 4 * sizeof(float))) {  //buf.size())) {
-                qDebug() << "Could not create shared memory segment" << m->error() << m->errorString();
+                qWarning() << "Could not create shared memory segment" << m->error() << m->errorString();
                 return false;
             }
             m->lock();
-
-//            char *to = (char*)m->data();
-//            const char *from = buf.data().data();
-//            Q_ASSERT(m->size() == buf.size());
-//            memcpy(to, from, m->size());
 
             gmic_image<float> img;
             img.assign(iw, ih, 1, 4);
             img._data = reinterpret_cast<float*>(m->data());
 
             KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, QRect(ix, iy, iw, ih));
-
-//            KisPaintDeviceSP dev2 = new KisPaintDevice(node->colorSpace());
-//            KisQmicSimpleConvertor::convertFromGmicFast(img, dev2, 1.0);
-//            qDebug() << "Dev:" << dev2->exactBounds();
-//            QImage qimg = dev2->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
-//            qDebug() << "going to save test image";
-//            if (!qimg.save("test2.png", "PNG")) {
-//                qDebug() << "Could not save image!" << qimg.size();
-//            }
 
             message->append(m->key().toUtf8());
 

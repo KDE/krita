@@ -19,7 +19,6 @@
 #ifndef _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 #define _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 
-
 #include <kundo2command.h>
 
 #include <QSharedPointer>
@@ -30,7 +29,7 @@
 #include <kis_node.h>
 #include <kis_types.h>
 
-#include <gmic.h>
+#include "gmic.h"
 
 class KisImageCommand;
 
@@ -38,7 +37,7 @@ class KisQmicSynchronizeLayersCommand : public KUndo2Command
 {
 public:
     KisQmicSynchronizeLayersCommand(KisNodeListSP nodes,
-                                    QSharedPointer< QVector<gmic_image<float> > > images,
+                                    QVector<gmic_image<float> *> images,
                                     KisImageWSP image,
                                     const QRect &dstRect = QRect(),
                                     const KisSelectionSP selection = 0
@@ -51,7 +50,7 @@ public:
 
 private:
     KisNodeListSP m_nodes;
-    QSharedPointer< QVector<gmic_image<float> > > m_images;
+    QVector<gmic_image<float> *> m_images;
     KisImageWSP m_image;
     QRect m_dstRect;
     KisSelectionSP m_selection;

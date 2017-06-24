@@ -27,6 +27,16 @@
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     : KisPaintOpPresetSaveDialog(parent)
 {
+    // this is setting the area we will "capture" for saving the brush preset. It can potentially be a different
+    // area that the entire scratchpad
+    this->brushPresetThumbnailWidget->setCutoutOverlayRect(QRect(0, 0, brushPresetThumbnailWidget->height(), brushPresetThumbnailWidget->width()));
+
+
+    // we will default to reusing the previous preset thumbnail
+    // have that checked by default, hide the other elements, and load the last preset image
+    connect(clearBrushPresetThumbnailButton, SIGNAL(clicked(bool)), brushPresetThumbnailWidget, SLOT(fillDefault()));
+    connect(useExistingThumbnailCheckbox, SIGNAL(clicked(bool)), this, SLOT(usePreviousThumbnail(bool)));
+    connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
 }
 
 KisPresetSaveWidget::~KisPresetSaveWidget()
@@ -43,7 +53,6 @@ void KisPresetSaveWidget::scratchPadSetup(KisCanvasResourceProvider* resourcePro
 
 void KisPresetSaveWidget::showDialog()
 {
-
     setModal(true);
 
     // set the name of the current brush preset area.
@@ -55,28 +64,8 @@ void KisPresetSaveWidget::showDialog()
 
     show();
 
-    // this is setting the area we will "capture" for saving the brush preset. It can potentially be a different
-    // area that the entire scratchpad
-    this->brushPresetThumbnailWidget->setCutoutOverlayRect(QRect(0, 0, brushPresetThumbnailWidget->height(), brushPresetThumbnailWidget->width()));
-
-
-
-    // we will default to reusing the previous preset thumbnail
-    // have that checked by default, hide the other elements, and load the last preset image
-    connect(clearBrushPresetThumbnailButton, SIGNAL(clicked(bool)), brushPresetThumbnailWidget, SLOT(fillDefault()));
-    connect(useExistingThumbnailCheckbox, SIGNAL(clicked(bool)), this, SLOT(usePreviousThumbnail(bool)));
-
-    connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
-
-
     this->useExistingThumbnailCheckbox->setChecked(true);
     usePreviousThumbnail(true);
-
-    QDialog::DialogCode result = (QDialog::DialogCode)this->exec();
-
-    if(result) {
-        qDebug() << "stuff ran in the dialog";
-    }
 }
 
 void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious)

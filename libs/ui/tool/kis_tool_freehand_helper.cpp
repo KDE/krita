@@ -54,7 +54,7 @@ const qreal AIRBRUSH_INTERVAL_FACTOR = 0.5;
 // used when spacing updates between dabs are enabled.
 const qreal SPACING_UPDATE_INTERVAL = 50.0;
 
-// The amount of time, in milliseconds, to allow between updates of the spacing information. Only
+// The amount of time, in milliseconds, to allow between updates of the timing information. Only
 // used when airbrushing.
 const qreal TIMING_UPDATE_INTERVAL = 50.0;
 

@@ -452,15 +452,14 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
     // nextPointDistance can sometimes be negative if the spacing info has been modified since the
     // last interpolation attempt. In that case, have a point painted immediately.
     if (nextPointDistance <= 0.0) {
-        t = 0.0;
         resetAccumulators();
+        t = 0.0;
     }
     else if (nextPointDistance <= dragVecLength) {
         t = nextPointDistance / dragVecLength;
         resetAccumulators();
     } else {
         t = -1;
-
         m_d->accumDistance.rx() += dragVecLength;
     }
 

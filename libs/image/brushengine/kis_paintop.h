@@ -64,9 +64,9 @@ public:
         const;
 
     /**
-     * Updates the timing in currentDistance based on the provided information. Note that the timing
-     * is updated automatically in the paintAt method, so there is no need to call this method if
-     * paintAt has just been called.
+     * Updates the timing settings in currentDistance based on the provided information. Note that
+     * the timing is updated automatically in the paintAt method, so there is no need to call this
+     * method if paintAt has just been called.
      */
     void updateTiming(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
         const;

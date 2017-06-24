@@ -96,7 +96,7 @@ void paintLine(PaintOp &op,
      * Perform spacing and/or timing updates between dabs if appropriate. Typically, this will not
      * happen if the above loop actually painted anything. This is because the
      * getNextPointPosition() call before the paint operation will reset the accumulators in
-     * currentDistance and therefore make needsSpacingUpdate() needsTimingUpdate() false. The
+     * currentDistance and therefore make needsSpacingUpdate() and needsTimingUpdate() false. The
      * temporal distance between pi1 and pi2 is typically too small for the accumulators to build
      * back up enough to require a spacing or timing update after that. (The accumulated time values
      * are updated not during the paint operation, but during the call to getNextPointPosition(),

@@ -263,8 +263,6 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
                                           KisNodeSP overrideNode,
                                           KisDefaultBoundsBaseSP bounds)
 {
-    Q_UNUSED(overrideNode);
-
     m_d->strokesFacade = strokesFacade;
 
     m_d->haveTangent = false;
@@ -278,6 +276,9 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
                                               currentNode,
                                               resourceManager,
                                               bounds);
+    if(overrideNode) {
+        m_d->resources->setCurrentNode(overrideNode);
+    }
 
     const bool airbrushing = m_d->resources->needsAirbrushing();
     const bool useSpacingUpdates = m_d->resources->needsSpacingUpdates();
@@ -291,10 +292,6 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     createPainters(m_d->painterInfos,
                    startDist);
-
-    if(overrideNode) {
-        m_d->resources->setCurrentNode(overrideNode);
-    }
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->startStroke(image, m_d->resources, startDistInfo);

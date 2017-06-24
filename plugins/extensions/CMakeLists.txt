@@ -17,14 +17,5 @@ add_subdirectory( layersplit )
 add_subdirectory( animationrenderer )
 add_subdirectory( waveletdecompose )
 add_subdirectory( qmic )
-
-# Allow to skip building GMIC plugin
-option(WITH_GMIC "Build the G'Mic plugin" ON)
-if(WITH_GMIC)
-if (CMAKE_COMPILER_IS_GNUCC)
-    add_subdirectory( gmic )
-endif()
-endif()
-
 add_subdirectory( pykrita )
 add_subdirectory( buginfo )

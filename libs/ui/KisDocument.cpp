@@ -116,6 +116,7 @@
 #include "kis_image_barrier_lock_adapter.h"
 #include <mutex>
 #include "kis_config_notifier.h"
+#include "kis_async_action_feedback.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -460,6 +461,9 @@ KisDocument::KisDocument(const KisDocument &rhs)
 
 KisDocument::~KisDocument()
 {
+    // wait until all the pending operations are in progress
+    waitForSavingToComplete();
+
     /**
      * Push a timebomb, which will try to release the memory after
      * the document has been deleted
@@ -1542,6 +1546,21 @@ bool KisDocument::newImage(const QString& name,
     QApplication::restoreOverrideCursor();
 
     return true;
+}
+
+bool KisDocument::isSaving() const
+{
+    const bool result = d->savingMutex.tryLock();
+    if (result) {
+        d->savingMutex.unlock();
+    }
+    return !result;
+}
+
+void KisDocument::waitForSavingToComplete()
+{
+    KisAsyncActionFeedback f(i18nc("progress dialog message when the user closes the document that is being saved", "Waiting for saving to complete..."), 0);
+    f.waitForMutex(&d->savingMutex);
 }
 
 KoShapeBasedDocumentBase *KisDocument::shapeController() const

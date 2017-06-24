@@ -55,6 +55,7 @@ public:
 public Q_SLOTS:
     void usePreviousThumbnail(bool usePrevious);
     void loadImageFromFile();
+    void savePreset();
 };
 
 

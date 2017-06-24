@@ -37,6 +37,10 @@ KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     connect(clearBrushPresetThumbnailButton, SIGNAL(clicked(bool)), brushPresetThumbnailWidget, SLOT(fillDefault()));
     connect(useExistingThumbnailCheckbox, SIGNAL(clicked(bool)), this, SLOT(usePreviousThumbnail(bool)));
     connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
+
+    connect(savePresetButton, SIGNAL(clicked(bool)), this, SLOT(savePreset()));
+    connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()) );
+
 }
 
 KisPresetSaveWidget::~KisPresetSaveWidget()
@@ -102,6 +106,11 @@ void KisPresetSaveWidget::loadImageFromFile()
         brushPresetThumbnailWidget->paintCustomImage(imageToLoad);
     }
 
+}
+
+void KisPresetSaveWidget::savePreset()
+{
+    qDebug() << "do some saving stuff";
 }
 
 #include "moc_kis_paintop_presets_save.cpp"

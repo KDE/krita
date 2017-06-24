@@ -46,19 +46,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="QDialogButtonBox" name="saveCancelButtonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-     </property>
-     <property name="centerButtons">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" rowspan="4">
     <widget class="KisScratchPad" name="brushPresetThumbnailWidget" native="true">
      <property name="sizePolicy">
@@ -73,12 +60,32 @@
        <height>200</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>200</height>
+      </size>
+     </property>
     </widget>
    </item>
    <item row="3" column="1">
     <widget class="QPushButton" name="loadImageIntoThumbnailButton">
      <property name="text">
       <string>Load Image</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="savePresetButton">
+     <property name="text">
+      <string>Save</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QPushButton" name="cancelButton">
+     <property name="text">
+      <string>Cancel</string>
      </property>
     </widget>
    </item>

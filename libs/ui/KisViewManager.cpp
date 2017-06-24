@@ -871,6 +871,7 @@ void KisViewManager::slotSaveIncremental()
         }
         version.remove(0, 1);            //  Trim "_"
     } else {
+        // TODO: this will not work with files extensions like jp2
         // ...else, simply add a version to it so the next loop works
         QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
         regex2.indexIn(fileName);
@@ -917,7 +918,7 @@ void KisViewManager::slotSaveIncremental()
         return;
     }
     document()->setFileBatchMode(true);
-    document()->saveAs(QUrl::fromUserInput(fileName), true);
+    document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
     document()->setFileBatchMode(false);
 
     if (mainWindow()) {
@@ -988,7 +989,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             return;
         }
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName), true);
+        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1026,7 +1027,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Save both as backup and on current file for interapplication workflow
         document()->setFileBatchMode(true);
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName), true);
+        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
         document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();

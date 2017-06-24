@@ -697,17 +697,23 @@ void KisMainWindow::updateCaption()
         updateCaption(QString(), false);
     }
     else if (d->activeView && d->activeView->document()){
-        QString caption( d->activeView->document()->caption() );
+        KisDocument *doc = d->activeView->document();
+
+        QString caption(doc->caption());
         if (d->readOnly) {
             caption += ' ' + i18n("(write protected)");
         }
 
+        if (doc->isRecovered()) {
+            caption += ' ' + i18n("[RECOVERED]");
+        }
+
         d->activeView->setWindowTitle(caption);
 
-        updateCaption(caption, d->activeView->document()->isModified());
+        updateCaption(caption, doc->isModified());
 
-        if (!d->activeView->document()->url().fileName().isEmpty())
-            d->saveAction->setToolTip(i18n("Save as %1", d->activeView->document()->url().fileName()));
+        if (!doc->url().fileName().isEmpty())
+            d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
         else
             d->saveAction->setToolTip(i18n("Save"));
     }
@@ -926,8 +932,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
     QUrl oldURL = document->url();
     QString oldFile = document->localFilePath();
 
-    QByteArray _native_format = document->nativeFormatMimeType();
-    QByteArray oldOutputFormat = document->outputMimeType();
+    QByteArray nativeFormat = document->nativeFormatMimeType();
+    QByteArray oldMimeFormat = document->mimeType();
 
     QUrl suggestedURL = document->url();
 
@@ -935,8 +941,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
     mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
-    if (!mimeFilter.contains(oldOutputFormat) && !isExporting) {
-        dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
+    if (!mimeFilter.contains(oldMimeFormat) && !isExporting) {
+        dbgUI << "KisMainWindow::saveDocument no export filter for" << oldMimeFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
@@ -947,7 +953,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
+            const QString ext = KisMimeDatabase::suffixesForMimeType(nativeFormat).first();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename = suggestedFilename + "." + ext;
@@ -984,13 +990,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             dialog.setDefaultDir(suggestedURL.toLocalFile());
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
+        dialog.setMimeTypeFilters(mimeFilter, QString(nativeFormat));
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
-                fn.append(KisMimeDatabase::suffixesForMimeType(_native_format).first());
+                fn.append(KisMimeDatabase::suffixesForMimeType(nativeFormat).first());
                 newURL = QUrl::fromLocalFile(fn);
             }
         }
@@ -1001,7 +1007,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             document->documentInfo()->setAboutInfo("title", info.baseName());
         }
 
-        QByteArray outputFormat = _native_format;
+        QByteArray outputFormat = nativeFormat;
 
         QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
         outputFormat = outputFormatString.toLatin1();
@@ -1052,9 +1058,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                 //
                 // - Clarence
                 //
-                document->setOutputMimeType(outputFormat);
                 if (!isExporting) {  // Save As
-                    ret = document->saveAs(newURL, true);
+                    ret = document->saveAs(newURL, outputFormat, true);
 
                     if (ret) {
                         dbgUI << "Successful Save As!";
@@ -1064,19 +1069,15 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         dbgUI << "Failed Save As!";
                         document->setUrl(oldURL);
                         document->setLocalFilePath(oldFile);
-                        document->setOutputMimeType(oldOutputFormat);
                     }
                 } else { // Export
-                    ret = document->exportDocument(newURL);
+                    ret = document->exportDocument(newURL, outputFormat);
 
                     if (ret) {
                         // a few file dialog convenience things
                         d->lastExportUrl = newURL;
                         d->lastExportedFormat = outputFormat;
                     }
-
-                    // always restore output format
-                    document->setOutputMimeType(oldOutputFormat);
                 }
 
             }   // if (wantToSave)  {
@@ -2220,12 +2221,8 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 
     QString title = d->activeView->document()->documentInfo()->aboutInfo("title");
     if (title.isEmpty()) {
-        title = d->activeView->document()->url().fileName();
-        // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-        QString extension = KisMimeDatabase::suffixesForMimeType(d->activeView->document()->outputMimeType()).first();
-        if (title.endsWith(extension)) {
-            title.chop(extension.length());
-        }
+        QFileInfo info(d->activeView->document()->url().fileName());
+        title = info.baseName();
     }
 
     if (title.isEmpty()) {

@@ -990,8 +990,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     dst->initialRefreshGraph();
 
-    doc->setOutputMimeType(mimefilter.toLatin1());
-    doc->exportDocument(url);
+    doc->exportDocument(url, mimefilter.toLatin1());
 }
 
 void KisNodeManager::saveNodeAsImage()

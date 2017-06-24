@@ -267,6 +267,7 @@ struct KisAnimationExportSaver::Private
     QScopedPointer<KisDocument> tmpDoc;
     KisImageSP tmpImage;
     KisPaintDeviceSP tmpDevice;
+    QByteArray outputMimeType;
 
     KisAnimationExporter exporter;
 
@@ -285,8 +286,7 @@ KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QS
         m_d->filenamePrefix = baseFilename;
     }
 
-    QString mimefilter = KisMimeDatabase::mimeTypeForFile(baseFilename);
-    m_d->tmpDoc->setOutputMimeType(mimefilter.toLatin1());
+    m_d->outputMimeType = KisMimeDatabase::mimeTypeForFile(baseFilename).toLatin1();
     m_d->tmpDoc->setFileBatchMode(true);
 
     using namespace std::placeholders; // For _1 placeholder
@@ -365,7 +365,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);
-    if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration)) {
+    if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename), m_d->outputMimeType, exportConfiguration)) {
         status = KisImportExportFilter::InternalError;
     }
 

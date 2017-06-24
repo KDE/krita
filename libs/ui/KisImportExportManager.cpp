@@ -314,7 +314,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         // async importing is not yet supported!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
 
-        if (!batchMode()) {
+        if (0 && !batchMode()) {
             KisAsyncActionFeedback f(i18n("Opening document..."), 0);
             result = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
         } else {

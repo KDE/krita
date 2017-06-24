@@ -445,7 +445,6 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 void CSVSaver::createTempImage(KisDocument* exportDoc)
 {
     exportDoc->setAutoSaveDelay(0);
-    exportDoc->setOutputMimeType("image/png");
     exportDoc->setFileBatchMode(true);
 
     KisImageSP exportImage = new KisImage(exportDoc->createUndoStore(),

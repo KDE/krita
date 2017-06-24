@@ -36,6 +36,7 @@
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
 #include <kis_debug.h>
+#include <KisImportExportUtils.h>
 
 #include "kritaui_export.h"
 
@@ -138,7 +139,9 @@ public:
      * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
      * File --> Export feature.
      */
-    bool exportDocument(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
+
+    bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration);
 
     /**
      * @brief Sets whether the document can be edited or is read only.
@@ -176,17 +179,6 @@ public:
      * selected by default.
      */
     void setMimeType(const QByteArray & mimeType);
-
-    /**
-     * @brief Set the format in which the document should be saved.
-     *
-     * This is called on loading, and in "save as", so you shouldn't
-     * have to call it.
-     *
-     * @param mimeType the mime type (format) to use.
-     */
-    void setOutputMimeType(const QByteArray & mimeType);
-    QByteArray outputMimeType() const;
 
     /**
      * @return true if file operations should inhibit the option dialog
@@ -451,18 +443,31 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
-    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status);
+    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
 private Q_SLOTS:
     void finishExportInBackground();
-    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status);
+    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 private:
 
     friend class KisPart;
     friend class SafeSavingLocker;
 
-    bool startExportInBackground(const QUrl &url,
-                                 const QByteArray &mimeType);
+    bool initiateSavingInBackground(const QString statusMessage,
+                                    const QObject *receiverObject, const char *receiverMethod,
+                                    const KritaUtils::ExportFileJob &job,
+                                    KisPropertiesConfigurationSP exportConfiguration);
+
+    bool startExportInBackground(const QString &location,
+                                 const QString &realLocation,
+                                 const QByteArray &mimeType,
+                                 bool showWarnings,
+                                 KisPropertiesConfigurationSP exportConfiguration);
 
     /**
      * Generate a name for the document.
@@ -482,15 +487,6 @@ private:
      * This method is called from the KReadOnlyPart::openUrl method.
      */
     bool openFile();
-
-    /**
-     *  Saves a document
-     *
-     *  Applies a filter if necessary, and calls exportDocument in any case
-     *  You should not have to reimplement, except for very special cases.
-     */
-    bool saveFile(const QString &filePath, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration = 0);
-
 
     /** @internal */
     void setModified();
@@ -513,7 +509,7 @@ public:
 
     bool closeUrl(bool promptToSave = true);
 
-    bool saveAs(const QUrl &url, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
+    bool saveAs(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
 
     /**
      * Create a new image that has this document as a parent and
@@ -600,17 +596,16 @@ private Q_SLOTS:
 
     void slotAutoSave();
 
-    /// Called by the undo stack when undo or redo is called
-    void slotUndoStackIndexChanged(int idx);
+    void slotUndoStackCleanChanged(bool value);
 
     void slotConfigChanged();
 
 
 private:
 
-    bool prepareLocksForSaving();
+    KisDocument *safeCreateClone();
 
-    void unlockAfterSaving();
+    QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
     QString prettyPathOrUrl() const;
 

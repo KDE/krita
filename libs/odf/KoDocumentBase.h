@@ -94,17 +94,6 @@ public:
     virtual void setMimeType(const QByteArray & mimeType) = 0;
 
     virtual QString localFilePath() const = 0;
-    /**
-     * @brief Set the format in which the document should be saved.
-     *
-     * This is called on loading, and in "save as", so you shouldn't
-     * have to call it.
-     *
-     * @param mimeType the mime type (format) to use.
-     */
-    virtual void setOutputMimeType(const QByteArray & mimeType) = 0;
-
-    virtual QByteArray outputMimeType() const = 0;
 
 private:
     class Private;

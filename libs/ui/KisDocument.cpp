@@ -355,6 +355,7 @@ public:
 
     QScopedPointer<KisDocument> backgroundSaveDocument;
     QFuture<KisImportExportFilter::ConversionStatus> childSavingFuture;
+    KritaUtils::ExportFileJob backgroundSaveJob;
 
     bool isRecovered = false;
 
@@ -371,72 +372,7 @@ public:
         }
     }
 
-    class SafeSavingLocker;
     class StrippedSafeSavingLocker;
-};
-
-class KisDocument::Private::SafeSavingLocker {
-public:
-    SafeSavingLocker(KisDocument::Private *_d, KisDocument *document)
-        : d(_d)
-        , m_document(document)
-        , m_locked(false)
-        , m_imageLock(d->image, true)
-    {
-        const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-        const int emergencyAutoSaveInterval = 10; // sec
-
-        /**
-         * Initial try to lock both objects. Locking the image guards
-         * us from any image composition threads running in the
-         * background, while savingMutex guards us from entering the
-         * saving code twice by autosave and main threads.
-         *
-         * Since we are trying to lock multiple objects, so we should
-         * do it in a safe manner.
-         */
-        m_locked = std::try_lock(m_imageLock, d->savingLock) < 0;
-
-        if (!m_locked) {
-            if (d->isAutosaving) {
-                d->disregardAutosaveFailure = true;
-                if (realAutoSaveInterval) {
-                    m_document->setAutoSaveDelay(emergencyAutoSaveInterval);
-                }
-            } else {
-                d->image->requestStrokeEnd();
-                QApplication::processEvents();
-
-                // one more try...
-                m_locked = std::try_lock(m_imageLock, d->savingLock) < 0;
-            }
-        }
-
-        if (m_locked) {
-            d->disregardAutosaveFailure = false;
-        }
-    }
-
-    ~SafeSavingLocker() {
-         if (m_locked) {
-             m_imageLock.unlock();
-             d->savingLock.unlock();
-
-             const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-             m_document->setAutoSaveDelay(realAutoSaveInterval);
-         }
-     }
-
-    bool successfullyLocked() const {
-        return m_locked;
-    }
-
-private:
-    KisDocument::Private *d;
-    KisDocument *m_document;
-    bool m_locked;
-
-    KisImageBarrierLockAdapter m_imageLock;
 };
 
 class KisDocument::Private::StrippedSafeSavingLocker {
@@ -490,7 +426,7 @@ KisDocument::KisDocument()
     : d(new Private(this))
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
+    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
@@ -508,7 +444,7 @@ KisDocument::KisDocument(const KisDocument &rhs)
       d(new Private(*rhs.d, this))
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
+    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(rhs.objectName());
 
@@ -581,101 +517,71 @@ bool KisDocument::reload()
     return false;
 }
 
-bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration)
 {
-    //qDebug() << "exportDocument" << _url.toDisplayString() << "is autosaving" << d->isAutosaving;
-    bool ret;
+    QFileInfo filePathInfo(job.filePath);
 
-    //
-    // Preserve a lot of state here because we need to restore it in order to
-    // be able to fake a File --> Export.  Can't do this in saveFile() because,
-    // for a start, KParts has already set url and m_file and because we need
-    // to restore the modified flag etc. and don't want to put a load on anyone
-    // reimplementing saveFile() (Note: importDocument() and exportDocument()
-    // will remain non-virtual).
-    //
-    QUrl oldURL = url();
-    QString oldFile = localFilePath();
-
-    //qDebug() << "\toldUrl" << oldURL << "oldFile" << oldFile << "export url" << _url;
-
-    bool wasModified = isModified();
-
-    // save...
-    ret = saveAs(_url, true, exportConfiguration);
-
-    //
-    // This is sooooo hacky :(
-    // Hopefully we will restore enough state.
-    //
-    dbgUI << "Restoring KisDocument state to before export";
-
-    // always restore url & m_file regardless of failure or success
-    //qDebug() << "\tafter saveAs: url" << url() << "local file path" << localFilePath();
-    setUrl(oldURL);
-    setLocalFilePath(oldFile);
-    //qDebug() << "\tafter restoring: url" << url() << "local file path" << localFilePath();
-
-
-    // on successful export we need to restore modified etc. too
-    // on failed export, mimetype/modified hasn't changed anyway
-    if (ret) {
-        setModified(wasModified);
-   }
-
-    return ret;
-}
-
-bool KisDocument::saveAs(const QUrl &url, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
-{
-    //qDebug() << "saveAs" << url;
-    if (!url.isValid() || !url.isLocalFile()) {
-        errKrita << "saveAs: Malformed URL " << url.url() << endl;
+    if (filePathInfo.exists() && !filePathInfo.isWritable()) {
+        slotCompleteSavingDocument(job,
+                                   KisImportExportFilter::CreationError,
+                                   i18n("%1 cannot be written to. Please save under a different name.", job.filePath));
         return false;
     }
 
-    QUrl originalURL = d->m_url;
-    QString originalFilePath = d->m_file;
-
-    d->m_url = url; // Store where to upload in saveToURL
-    d->m_file = d->m_url.toLocalFile();
-
-    bool result = save(showWarnings, exportConfiguration); // Save local file and upload local file
-
-    if (!result) {
-        d->m_url = originalURL;
-        d->m_file = originalFilePath;
+    KisConfig cfg;
+    if (cfg.backupFile() && filePathInfo.exists()) {
+        KBackup::backupFile(job.filePath);
     }
 
-    return result;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!job.mimeType.isEmpty(), false);
+
+    const QString actionName =
+        job.flags & KritaUtils::SaveIsExporting ?
+        i18n("Exporting Document...") :
+        i18n("Saving Document...");
+
+    bool started =
+        initiateSavingInBackground(actionName,
+                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus,QString)),
+                                   job, exportConfiguration);
+
+    if (!started) {
+        emit canceled(QString());
+    }
+
+    return started;
+}
+
+bool KisDocument::exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+{
+    using namespace KritaUtils;
+
+    SaveFlags flags = SaveIsExporting;
+    if (showWarnings) {
+        flags |= SaveShowWarnings;
+    }
+
+    return exportDocumentImpl(KritaUtils::ExportFileJob(url.toLocalFile(),
+                                                        mimeType,
+                                                        flags),
+                              exportConfiguration);
+
+}
+
+
+bool KisDocument::saveAs(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+{
+    using namespace KritaUtils;
+
+    return exportDocumentImpl(ExportFileJob(url.toLocalFile(),
+                                            mimeType,
+                                            showWarnings ? SaveShowWarnings : SaveNone),
+                              exportConfiguration);
 }
 
 bool KisDocument::save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
-    //qDebug() << "save" << d->m_file << d->m_url << url() << localFilePath();
-
-    if (d->m_file.isEmpty()) { // document was created empty
-        d->m_file = d->m_url.toLocalFile();
-    }
-
-    updateEditingTime(true);
-
-    setFileProgressProxy();
-    setUrl(url());
-
-    bool ok = saveFile(localFilePath(), showWarnings, exportConfiguration);
-
-    clearFileProgressProxy();
-
-    if (ok) {
-        setModified( false );
-        emit completed();
-        return true; // Nothing to do
-    }
-    else {
-        emit canceled(QString());
-    }
-    return false;
+    return saveAs(url(), mimeType(), showWarnings, exportConfiguration);
 }
 
 QByteArray KisDocument::serializeToNativeByteArray()
@@ -687,136 +593,46 @@ QByteArray KisDocument::serializeToNativeByteArray()
     filter->setBatchMode(true);
     filter->setMimeType(nativeFormatMimeType());
 
-    if (!prepareLocksForSaving()) {
+    Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+    if (!locker.successfullyLocked()) {
         return byteArray;
     }
+
+    d->savingImage = d->image;
 
     if (filter->convert(this, &buffer) != KisImportExportFilter::OK) {
         qWarning() << "serializeToByteArray():: Could not export to our native format";
     }
 
-    unlockAfterSaving();
-
     return byteArray;
 }
 
-bool KisDocument::saveFile(const QString &filePath, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
-    if (!prepareLocksForSaving()) {
-        return false;
-    }
+    if (status != KisImportExportFilter::OK) {
+        emit statusBarMessage(i18n("Error during saving! %1", exportErrorToUserMessage(status, errorMessage)));
 
-    // Unset the error message
-    setErrorMessage("");
+        if (!fileBatchMode()) {
+            const QString filePath = job.filePath;
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, errorMessage));
+        }
+    } else {
+        if (!(job.flags & KritaUtils::SaveIsExporting)) {
+            setUrl(QUrl::fromLocalFile(job.filePath));
+            setLocalFilePath(job.filePath);
+            setMimeType(job.mimeType);
+            updateEditingTime(true);
 
-    // Save it to be able to restore it after a failed save
-    const bool wasModified = isModified();
-    bool ret = false;
-    bool suppressErrorDialog = fileBatchMode();
-    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-
-    //qDebug() << "saveFile" << localFilePath() << QFileInfo(localFilePath()).exists() << !QFileInfo(localFilePath()).isWritable();
-
-    if (QFileInfo(localFilePath()).exists() && !QFileInfo(localFilePath()).isWritable()) {
-        setErrorMessage(i18n("%1 cannot be written to. Please save under a different name.", localFilePath()));
-    }
-    else {
-
-        // The output format is set by KisMainWindow, and by openFile
-        QByteArray outputMimeType = d->outputMimeType;
-
-        if (outputMimeType.isEmpty()) {
-            outputMimeType = d->outputMimeType = nativeFormatMimeType();
+            d->undoStack->setClean();
+            setRecovered(false);
+            removeAutoSaveFiles();
         }
 
-        //qDebug() << "saveFile. Is Autosaving?" << isAutosaving() << "url" << filePath << d->outputMimeType;
-
-        KisConfig cfg;
-
-        if (cfg.backupFile()) {
-            Q_ASSERT(url().isLocalFile());
-            KBackup::backupFile(url().toLocalFile());
-        }
-
-        qApp->processEvents();
-
-        setFileProgressUpdater(i18n("Saving Document"));
-
-        //qDebug() << "saving to tempory file" << tempororaryFileName;
-        status = d->importExportManager->exportDocument(localFilePath(), filePath, outputMimeType, showWarnings , exportConfiguration);
-
-        ret = (status == KisImportExportFilter::OK);
-        suppressErrorDialog = (fileBatchMode() || isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
-        //qDebug() << "Export status was" << status;
-
-        if (ret) {
-
-            if (!d->isAutosaving && !d->suppressProgress) {
-                QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-                updater->setProgress(0);
-                d->undoStack->setClean();
-                updater->setProgress(100);
-            } else {
-                d->undoStack->setClean();
-            }
-
-            if (errorMessage().isEmpty()) {
-                if (!isAutosaving()) {
-                    removeAutoSaveFiles();
-                }
-            }
-            else {
-                ret = false;
-                qWarning() << "Error while saving:" << errorMessage();
-            }
-            // Restart the autosave timer
-            // (we don't want to autosave again 2 seconds after a real save)
-            if (!isAutosaving()) {
-                setAutoSaveDelay(d->autoSaveDelay);
-            }
-
-            d->mimeType = outputMimeType;
-        }
+        emit clearStatusBarMessage();
+        emit completed();
+        emit sigSavingFinished();
     }
-
-    if (!ret) {
-        if (!suppressErrorDialog) {
-
-            if (errorMessage().isEmpty()) {
-                setErrorMessage(KisImportExportFilter::conversionStatusString(status));
-            }
-
-            if (errorMessage().isEmpty()) {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", filePath));
-            } else {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, errorMessage()));
-            }
-
-        }
-
-        // couldn't save file so this new URL is invalid
-        // FIXME: we should restore the current document's true URL instead of
-        // setting it to nothing otherwise anything that depends on the URL
-        // being correct will not work (i.e. the document will be called
-        // "Untitled" which may not be true)
-        //
-        // Update: now the URL is restored in KisMainWindow but really, this
-        // should still be fixed in KisDocument/KParts (ditto for file).
-        // We still resetURL() here since we may or may not have been called
-        // by KisMainWindow - Clarence
-        resetURL();
-
-        // As we did not save, restore the "was modified" status
-        setModified(wasModified);
-    }
-
-    emit sigSavingFinished();
-    clearFileProgressUpdater();
-
-    unlockAfterSaving();
-    return ret;
 }
-
 
 QByteArray KisDocument::mimeType() const
 {
@@ -826,16 +642,6 @@ QByteArray KisDocument::mimeType() const
 void KisDocument::setMimeType(const QByteArray & mimeType)
 {
     d->mimeType = mimeType;
-}
-
-void KisDocument::setOutputMimeType(const QByteArray & mimeType)
-{
-    d->outputMimeType = mimeType;
-}
-
-QByteArray KisDocument::outputMimeType() const
-{
-    return d->outputMimeType;
 }
 
 bool KisDocument::fileBatchMode() const
@@ -848,44 +654,58 @@ void KisDocument::setFileBatchMode(const bool batchMode)
     d->importExportManager->setBatchMode(batchMode);
 }
 
-void KisDocument::slotAutoSave()
+KisDocument* KisDocument::safeCreateClone()
 {
-    if (!d->modified || !d->modifiedAfterAutosave) return;
-
-    QScopedPointer<KisDocument> clonedDocument;
-
-    {
-        Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
-        if (!locker.successfullyLocked()) {
-            const int emergencyAutoSaveInterval = 10; // sec
-            setAutoSaveDelay(emergencyAutoSaveInterval);
-            return;
-        }
-        clonedDocument.reset(new KisDocument(*this));
+    Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+    if (!locker.successfullyLocked()) {
+        return 0;
     }
-    KIS_SAFE_ASSERT_RECOVER_RETURN(clonedDocument);
-
-    // we block saving until the current saving is finished!
-    if (!d->savingMutex.tryLock()) return;
-
-    KIS_ASSERT_RECOVER_RETURN(!d->backgroundSaveDocument);
-    d->backgroundSaveDocument.reset(clonedDocument.take());
-
-    emit statusBarMessage(i18n("Autosaving..."));
-    connect(d->backgroundSaveDocument.data(), SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus)), SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus)));
-
-    const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
-    bool started =
-        d->backgroundSaveDocument->startExportInBackground(QUrl::fromLocalFile(autoSaveFileName),
-                                                           nativeFormatMimeType());
-
-    if (!started) {
-        const int emergencyAutoSaveInterval = 10; // sec
-        setAutoSaveDelay(emergencyAutoSaveInterval);
-    }
+    return new KisDocument(*this);
 }
 
-void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status)
+
+bool KisDocument::initiateSavingInBackground(const QString statusMessage,
+                                             const QObject *receiverObject, const char *receiverMethod,
+                                             const KritaUtils::ExportFileJob &job,
+                                             KisPropertiesConfigurationSP exportConfiguration)
+{
+    KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), false);
+
+    QScopedPointer<KisDocument> clonedDocument(safeCreateClone());
+
+    // we block saving until the current saving is finished!
+    if (!clonedDocument || !d->savingMutex.tryLock()) {
+        return false;
+    }
+
+    KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), false);
+    d->backgroundSaveDocument.reset(clonedDocument.take());
+    d->backgroundSaveJob = job;
+
+    emit statusBarMessage(statusMessage);
+
+    connect(d->backgroundSaveDocument.data(),
+            SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus, const QString&)),
+            this,
+            SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus, const QString&)));
+
+
+    connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
+            receiverObject, receiverMethod, Qt::UniqueConnection);
+
+    bool started =
+        d->backgroundSaveDocument->startExportInBackground(job.filePath,
+                                                           job.filePath,
+                                                           job.mimeType,
+                                                           job.flags & KritaUtils::SaveShowWarnings,
+                                                           exportConfiguration);
+
+    return started;
+}
+
+
+void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
     KIS_SAFE_ASSERT_RECOVER(!d->savingMutex.tryLock()) {
         d->savingMutex.unlock();
@@ -896,30 +716,65 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::Co
     d->backgroundSaveDocument.take()->deleteLater();
     d->savingMutex.unlock();
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->backgroundSaveJob.isValid());
+    const KritaUtils::ExportFileJob job = d->backgroundSaveJob;
+    d->backgroundSaveJob = KritaUtils::ExportFileJob();
+
+    emit sigCompleteBackgroundSaving(job, status, errorMessage);
+}
+
+void KisDocument::slotAutoSave()
+{
+    if (!d->modified || !d->modifiedAfterAutosave) return;
+    const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
+
+    bool started =
+        initiateSavingInBackground(i18n("Autosaving..."),
+                                   this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
+                                   KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting),
+                                   0);
+
+    if (!started) {
+        const int emergencyAutoSaveInterval = 10; // sec
+        setAutoSaveDelay(emergencyAutoSaveInterval);
+    } else {
+        d->modifiedAfterAutosave = false;
+    }
+}
+
+void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
+{
+    Q_UNUSED(job);
+
     if (status != KisImportExportFilter::OK) {
         const int emergencyAutoSaveInterval = 10; // sec
         setAutoSaveDelay(emergencyAutoSaveInterval);
-        emit statusBarMessage(i18n("Error during autosave! Partition full?"));
+        emit statusBarMessage(i18n("Error during autosave! %1", exportErrorToUserMessage(status, errorMessage)));
     } else {
-        d->modifiedAfterAutosave = false;
         KisConfig cfg;
         d->autoSaveDelay = cfg.autoSaveInterval();
-        d->autoSaveTimer.stop(); // until the next change
+
+        if (!d->modifiedAfterAutosave) {
+            d->autoSaveTimer.stop(); // until the next change
+        }
+
         emit clearStatusBarMessage();
     }
 }
 
-bool KisDocument::startExportInBackground(const QUrl &url,
-                                          const QByteArray &mimeType)
+bool KisDocument::startExportInBackground(const QString &location,
+                                          const QString &realLocation,
+                                          const QByteArray &mimeType,
+                                          bool showWarnings,
+                                          KisPropertiesConfigurationSP exportConfiguration)
 {
-    const QString filePath = url.toLocalFile();
-
     d->savingImage = d->image;
     d->childSavingFuture =
-        d->importExportManager->exportDocumentAsyc(filePath,
-                                                   filePath,
+        d->importExportManager->exportDocumentAsyc(location,
+                                                   realLocation,
                                                    mimeType,
-                                                   false, 0);
+                                                   showWarnings,
+                                                   exportConfiguration);
 
     if (d->childSavingFuture.isCanceled()) return false;
 
@@ -936,16 +791,18 @@ bool KisDocument::startExportInBackground(const QUrl &url,
 void KisDocument::finishExportInBackground()
 {
     KIS_SAFE_ASSERT_RECOVER(d->childSavingFuture.isFinished()) {
-        emit sigBackgroundSavingFinished(KisImportExportFilter::InternalError);
+        emit sigBackgroundSavingFinished(KisImportExportFilter::InternalError, "");
         return;
     }
 
     KisImportExportFilter::ConversionStatus status =
         d->childSavingFuture.result();
+    const QString errorMessage = this->errorMessage();
 
     d->savingImage.clear();
     d->childSavingFuture = QFuture<KisImportExportFilter::ConversionStatus>();
-    emit sigBackgroundSavingFinished(status);
+    d->lastErrorMessage.clear();
+    emit sigBackgroundSavingFinished(status, errorMessage);
 }
 
 void KisDocument::setReadWrite(bool readwrite)
@@ -1264,6 +1121,7 @@ bool KisDocument::loadNativeFormat(const QString & file_)
 void KisDocument::setModified()
 {
     d->modified = true;
+
 }
 
 void KisDocument::setModified(bool mod)
@@ -1468,10 +1326,9 @@ void KisDocument::endMacro()
     d->undoStack->endMacro();
 }
 
-void KisDocument::slotUndoStackIndexChanged(int idx)
+void KisDocument::slotUndoStackCleanChanged(bool value)
 {
-    // even if the document was already modified, call setModified to re-start autosave timer
-    setModified(idx != d->undoStack->cleanIndex());
+    setModified(!value);
 }
 
 void KisDocument::slotConfigChanged()
@@ -1826,50 +1683,7 @@ bool KisDocument::isAutosaving() const
     return d->isAutosaving;
 }
 
-bool KisDocument::prepareLocksForSaving()
+QString KisDocument::exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
-    KisImageSP copiedImage;
-    // XXX: Restore this when
-    // a) cloning works correctly and
-    // b) doesn't take ages because it needs to refresh its entire graph and finally,
-    // c) we do use the saving image to save in the background.
-    {
-        Private::SafeSavingLocker locker(d, this);
-        if (locker.successfullyLocked()) {
-
-            copiedImage = d->image; //->clone(true);
-        }
-        else if (!isAutosaving()) {
-            // even though it is a recovery operation, we should ensure we do not enter saving twice!
-            std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
-
-            if (l.owns_lock()) {
-                d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
-                d->image->lock();
-                copiedImage = d->image; //->clone(true);
-                //copiedImage->initialRefreshGraph();
-                d->image->unlock();
-            }
-        }
-    }
-
-    bool result = false;
-
-    // ensure we do not enter saving twice
-    if (copiedImage && d->savingMutex.tryLock()) {
-        d->savingImage = copiedImage;
-        result = true;
-    } else {
-        qWarning() << "Could not lock the document for saving!";
-        d->lastErrorMessage = i18n("Could not lock the image for saving.");
-    }
-
-    return result;
+    return errorMessage.isEmpty() ? KisImportExportFilter::conversionStatusString(status) : errorMessage;
 }
-
-void KisDocument::unlockAfterSaving()
-{
-    d->savingImage = 0;
-    d->savingMutex.unlock();
-}
-

@@ -713,7 +713,7 @@ bool KisView::queryClose()
 
         switch (res) {
         case QMessageBox::Yes : {
-            bool isNative = (document()->outputMimeType() == document()->nativeFormatMimeType());
+            bool isNative = (document()->mimeType() == document()->nativeFormatMimeType());
             if (!viewManager()->mainWindow()->saveDocument(document(), !isNative, false))
                 return false;
             break;

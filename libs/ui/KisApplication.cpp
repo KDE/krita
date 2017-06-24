@@ -467,8 +467,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     qApp->processEvents(); // For vector layers to be updated
 
                     doc->setFileBatchMode(true);
-                    doc->setOutputMimeType(outputMimetype.toLatin1());
-                    if (!doc->exportDocument(QUrl::fromLocalFile(exportFileName))) {
+                    if (!doc->exportDocument(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
                         dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     nPrinted++;

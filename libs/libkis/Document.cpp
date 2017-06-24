@@ -46,6 +46,7 @@
 #include <kis_shape_layer.h>
 #include <kis_filter_configuration.h>
 #include <kis_selection.h>
+#include <KisMimeDatabase.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -382,7 +383,11 @@ void Document::crop(int x, int y, int w, int h)
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
 {
     if (!d->document) return false;
-    return d->document->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration.configuration());
+
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QByteArray outputFormat = outputFormatString.toLatin1();
+
+    return d->document->exportDocument(QUrl::fromLocalFile(filename), outputFormat, exportConfiguration.configuration());
 }
 
 void Document::flatten()
@@ -412,7 +417,11 @@ bool Document::save()
 bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
-    return d->document->saveAs(QUrl::fromLocalFile(filename), true);
+
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QByteArray outputFormat = outputFormatString.toLatin1();
+
+    return d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);
 }
 
 Node* Document::createNode(const QString &name, const QString &nodeType)

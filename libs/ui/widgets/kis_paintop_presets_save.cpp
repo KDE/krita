@@ -20,19 +20,19 @@
 #include "widgets/kis_paintop_presets_save.h"
 #include <QDebug>
 
+#include <KoFileDialog.h>
+#include "KisImportExportManager.h"
+#include "QDesktopServices"
 
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     : KisPaintOpPresetSaveDialog(parent)
 {
 }
 
-
-
 KisPresetSaveWidget::~KisPresetSaveWidget()
 {
 
 }
-
 
 void KisPresetSaveWidget::scratchPadSetup(KisCanvasResourceProvider* resourceProvider)
 {
@@ -66,6 +66,8 @@ void KisPresetSaveWidget::showDialog()
     connect(clearBrushPresetThumbnailButton, SIGNAL(clicked(bool)), brushPresetThumbnailWidget, SLOT(fillDefault()));
     connect(useExistingThumbnailCheckbox, SIGNAL(clicked(bool)), this, SLOT(usePreviousThumbnail(bool)));
 
+    connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
+
 
     this->useExistingThumbnailCheckbox->setChecked(true);
     usePreviousThumbnail(true);
@@ -77,14 +79,12 @@ void KisPresetSaveWidget::showDialog()
     }
 }
 
-
 void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious)
 {
 
     // hide other elements if we are using the previous thumbnail
-    this->loadThumbnailGroupBox->setVisible(!usePrevious);
     this->clearBrushPresetThumbnailButton->setVisible(!usePrevious);
-
+    this->loadImageIntoThumbnailButton->setVisible(!usePrevious);
 
     // load the previous thumbnail if we are using the existing one
     if (usePrevious) {
@@ -96,6 +96,23 @@ void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious)
     this->brushPresetThumbnailWidget->allowPainting(!usePrevious); // don't allow drawing if we are using the existing preset
 }
 
+void KisPresetSaveWidget::loadImageFromFile()
+{
+    // create a dialog to retrieve an image file.
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    QString filename = dialog.filename(); // the filename() returns the entire path & file name, not just the file name
 
+
+    if (filename != "") { // empty if "cancel" is pressed
+        // take that file and load it into the thumbnail are
+        const QImage imageToLoad(filename);
+
+        brushPresetThumbnailWidget->fillTransparent(); // clear the background in case our new image has transparency
+        brushPresetThumbnailWidget->paintCustomImage(imageToLoad);
+    }
+
+}
 
 #include "moc_kis_paintop_presets_save.cpp"

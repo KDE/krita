@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>614</width>
-    <height>268</height>
+    <width>594</width>
+    <height>251</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,65 +20,21 @@
    <string>Save Brush Preset</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="5">
-    <widget class="QFrame" name="thumbnailFrame">
-     <property name="minimumSize">
-      <size>
-       <width>220</width>
-       <height>250</height>
-      </size>
+   <item row="1" column="1">
+    <widget class="QCheckBox" name="useExistingThumbnailCheckbox">
+     <property name="text">
+      <string>Use Existing Thumbnail</string>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="clearBrushPresetThumbnailButton">
+     <property name="text">
+      <string>Clear thumbnail area</string>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="KisScratchPad" name="brushPresetThumbnailWidget" native="true">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>200</width>
-        <height>200</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>200</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="clearBrushPresetThumbnailButton">
-      <property name="geometry">
-       <rect>
-        <x>154</x>
-        <y>220</y>
-        <width>51</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Clear</string>
-      </property>
-     </widget>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLabel" name="brushPresetNameLabel">
-     <property name="text">
-      <string>Brush Preset Name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
     <widget class="QLabel" name="currentBrushNameLabel">
      <property name="font">
       <font>
@@ -88,68 +44,6 @@
      <property name="text">
       <string>BrushName</string>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QCheckBox" name="useExistingThumbnailCheckbox">
-     <property name="text">
-      <string>Use Existing Thumbnail</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QGroupBox" name="loadThumbnailGroupBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>120</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Load Thumbnail</string>
-     </property>
-     <widget class="QRadioButton" name="loadFromImageRadioButton">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>30</y>
-        <width>109</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>from image</string>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="fromTemplateRadioButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>129</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>from template</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="placeholderOptionsLabel">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>60</y>
-        <width>140</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Options to go here...</string>
-      </property>
-     </widget>
     </widget>
    </item>
    <item row="4" column="2">
@@ -162,6 +56,29 @@
      </property>
      <property name="centerButtons">
       <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="4">
+    <widget class="KisScratchPad" name="brushPresetThumbnailWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>200</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="loadImageIntoThumbnailButton">
+     <property name="text">
+      <string>Load Image</string>
      </property>
     </widget>
    </item>

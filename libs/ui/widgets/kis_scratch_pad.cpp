@@ -401,6 +401,30 @@ void KisScratchPad::setPresetImage(const QImage& image)
     m_presetImage = image;
 }
 
+
+void KisScratchPad::paintCustomImage(const QImage& loadedImage)
+{
+    // this is 99% copied from the normal paintPresetImage()
+    // we dont' want to save over the preset image, so we don't
+    // want to store it in the m_presetImage
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
+
+    QRect overlayRect = widgetToDocument().mapRect(m_cutoutOverlay);
+    QRect imageRect(QPoint(), overlayRect.size());
+
+    QImage scaledImage = loadedImage.scaled(overlayRect.size(),
+                                              Qt::IgnoreAspectRatio,
+                                              Qt::SmoothTransformation);
+    KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
+    device->convertFromQImage(scaledImage, 0);
+
+    KisPainter painter(paintDevice);
+    painter.bitBlt(overlayRect.topLeft(), device, imageRect);
+    update();
+}
+
 void KisScratchPad::paintPresetImage()
 {
     if(!m_paintLayer) return;
@@ -448,6 +472,19 @@ void KisScratchPad::fillDefault()
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
     paintDevice->setDefaultPixel(m_defaultColor);
+    paintDevice->clear();
+    update();
+}
+
+void KisScratchPad::fillTransparent() {
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
+    QColor transQColor(0,0,0,0);
+    KoColor transparentColor(transQColor, KoColorSpaceRegistry::instance()->rgb8());
+    transparentColor.setOpacity(0.0);
+
+    paintDevice->setDefaultPixel(transparentColor);
     paintDevice->clear();
     update();
 }

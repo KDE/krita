@@ -92,6 +92,11 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisChalkPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, 1.0, false, 1.0, 1.0,
                                                    &m_airbrushOption, nullptr, &m_rateOption, info);
 }

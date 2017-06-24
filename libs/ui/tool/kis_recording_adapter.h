@@ -24,6 +24,7 @@
 
 class KisRecordedPathPaintAction;
 class KisPaintInformation;
+class KisDistanceInitInfo;
 
 
 class KisRecordingAdapter
@@ -32,7 +33,8 @@ public:
     KisRecordingAdapter();
     ~KisRecordingAdapter();
 
-    void startStroke(KisImageWSP image, KisResourcesSnapshotSP resources);
+    void startStroke(KisImageWSP image, KisResourcesSnapshotSP resources,
+                     const KisDistanceInitInfo &startDist);
     void endStroke();
 
     void addPoint(const KisPaintInformation &pi);

@@ -105,6 +105,13 @@ void KisPanAction::begin(int shortcut, QEvent *event)
             inputManager()->canvas()->canvasController()->pan(QPoint(0, -d->panDistance));
             break;
     }
+    QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+}
+
+void KisPanAction::end(QEvent *event)
+{
+    QApplication::restoreOverrideCursor();
+    KisAbstractInputAction::end(event);
 }
 
 void KisPanAction::inputEvent(QEvent *event)

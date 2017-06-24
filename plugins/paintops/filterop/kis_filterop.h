@@ -40,7 +40,11 @@ public:
     KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisFilterOp() override;
 
+protected:
+
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
 

@@ -40,8 +40,12 @@ class KisHairyPaintOp : public KisPaintOp
 public:
     KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     KisHairyProperties m_properties;

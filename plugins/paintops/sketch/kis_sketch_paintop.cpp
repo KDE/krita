@@ -309,6 +309,11 @@ void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPain
 KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
     doPaintLine(info, info);
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisSketchPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
                                                    &m_airbrushOption, nullptr, &m_rateOption, info);

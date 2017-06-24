@@ -140,3 +140,10 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 
     return effectiveSpacing(scale, rotation, info);
 }
+
+KisSpacingInformation KisFilterOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    const qreal rotation = m_rotationOption.apply(info);
+    return effectiveSpacing(scale, rotation, info);
+}

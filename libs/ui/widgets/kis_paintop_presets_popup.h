@@ -115,6 +115,7 @@ private Q_SLOTS:
     void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);
     void slotSaveBrushPreset();
+    void slotSaveNewBrushPreset();
 
 
 

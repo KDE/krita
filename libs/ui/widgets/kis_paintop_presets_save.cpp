@@ -39,8 +39,7 @@ KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
 
     connect(savePresetButton, SIGNAL(clicked(bool)), this, SLOT(savePreset()));
-    connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()) );
-
+    connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 }
 
 KisPresetSaveWidget::~KisPresetSaveWidget()
@@ -62,14 +61,39 @@ void KisPresetSaveWidget::showDialog()
     // set the name of the current brush preset area.
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
-    if (preset) {
-        this->currentBrushNameLabel->setText(preset->name());
+    // UI will look a bit different if we are saving a new brush
+    if (m_isSavingNewBrush) {
+           this->setWindowTitle(i18n("Save New Brush Preset"));
+           this->newBrushNameLabel->setVisible(true);
+           this->newBrushNameTexField->setVisible(true);
+           this->useExistingThumbnailCheckbox->setVisible(false);
+           this->clearBrushPresetThumbnailButton->setVisible(true);
+           this->loadImageIntoThumbnailButton->setVisible(true);
+           this->currentBrushNameLabel->setVisible(false);
+
+           if (preset) {
+               this->newBrushNameTexField->setText(preset->name().append(" ").append(i18n("Copy")));
+           }
+
+           this->brushPresetThumbnailWidget->allowPainting(true); // in case it was disabled with normal saving last time
+
+    } else {
+        this->setWindowTitle(i18n("Save Brush Preset"));
+
+        if (preset) {
+            this->currentBrushNameLabel->setText(preset->name());
+        }
+
+        this->newBrushNameLabel->setVisible(false);
+        this->newBrushNameTexField->setVisible(false);
+        this->useExistingThumbnailCheckbox->setVisible(true);
+        this->currentBrushNameLabel->setVisible(true);
+
+        this->useExistingThumbnailCheckbox->setChecked(true);
+        usePreviousThumbnail(true);
     }
 
     show();
-
-    this->useExistingThumbnailCheckbox->setChecked(true);
-    usePreviousThumbnail(true);
 }
 
 void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious)
@@ -110,7 +134,17 @@ void KisPresetSaveWidget::loadImageFromFile()
 
 void KisPresetSaveWidget::savePreset()
 {
-    qDebug() << "do some saving stuff";
+    if (m_isSavingNewBrush) {
+        qDebug() << "save the brush as a new preset";
+    } else {
+        qDebug() << "save over the existing brush (and create a backup)";
+    }
 }
+
+void KisPresetSaveWidget::isSavingNewBrush(bool newBrush)
+{
+    m_isSavingNewBrush = newBrush;
+}
+
 
 #include "moc_kis_paintop_presets_save.cpp"

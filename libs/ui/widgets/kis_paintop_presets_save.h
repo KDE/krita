@@ -48,6 +48,7 @@ public:
 
     void showDialog();
 
+    void isSavingNewBrush(bool newBrush);
 
     void scratchPadSetup(KisCanvasResourceProvider* resourceProvider);
     KisCanvasResourceProvider* m_resourceProvider;
@@ -56,6 +57,12 @@ public Q_SLOTS:
     void usePreviousThumbnail(bool usePrevious);
     void loadImageFromFile();
     void savePreset();
+
+
+
+private:
+    bool m_isSavingNewBrush;
+
 };
 
 

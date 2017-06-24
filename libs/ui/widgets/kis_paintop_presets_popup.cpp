@@ -107,9 +107,12 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize"));
 
 
+    // overwrite existing preset and saving a new preset use the same dialog
     saveDialog = new KisPresetSaveWidget(this->parentWidget());
     saveDialog->scratchPadSetup(resourceProvider);
     saveDialog->hide();
+
+
 
     // DETAIL and THUMBNAIL view changer
     QMenu* menu = new QMenu(this);
@@ -213,6 +216,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton, SIGNAL(clicked()),
             this, SLOT(slotSaveBrushPreset()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.saveNewBrushPresetButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveNewBrushPreset()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             this, SIGNAL(reloadPresetClicked()));
@@ -577,9 +583,16 @@ void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
 }
 
 void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
+    saveDialog->isSavingNewBrush(false); // This changes the UI a bit for updating an existing brush preset
     saveDialog->showDialog();
 }
 
+void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
+    saveDialog->isSavingNewBrush(true);
+    saveDialog->showDialog();
+}
+
+\
 void KisPaintOpPresetsPopup::updateViewSettings()
 {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();

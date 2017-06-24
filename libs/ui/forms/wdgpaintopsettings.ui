@@ -216,7 +216,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>300</width>
+            <width>100</width>
             <height>0</height>
            </size>
           </property>
@@ -248,6 +248,13 @@
          <widget class="QPushButton" name="saveBrushPresetButton">
           <property name="text">
            <string>Save Brush Preset</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="saveNewBrushPresetButton">
+          <property name="text">
+           <string>Save New Brush Preset</string>
           </property>
          </widget>
         </item>

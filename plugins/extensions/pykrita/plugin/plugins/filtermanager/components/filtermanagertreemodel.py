@@ -13,7 +13,7 @@ class FilterManagerTreeModel(QAbstractItemModel):
 
         self.rootItem = filtermanagertreeitem.FilterManagerTreeItem(("Name", "Type", "Thumbnail"))
         self.uiFilterManager = uiFilterManager
-        self._loadAllTreeModel(self.rootItem)
+        self._loadTreeModel(self.rootItem)
 
     def index(self, row, column, parent):
         if not self.hasIndex(row, column, parent):
@@ -85,14 +85,31 @@ class FilterManagerTreeModel(QAbstractItemModel):
 
         return None
 
-    def _loadAllTreeModel(self, parent):
-        self._loadFirstLevelTreeModel(parent)
-
-    def _loadFirstLevelTreeModel(self, parent):
+    def _loadTreeModel(self, parent):
         for document in self.uiFilterManager.documents:
+            rootNode = document.rootNode()
             columnData = (document.fileName(),
                           "Document",
                           QPixmap.fromImage(document.thumbnail(30, 30)),
-                          document.rootNode())
+                          rootNode)
             item = filtermanagertreeitem.FilterManagerTreeItem(columnData, parent)
             parent.appendChild(item)
+
+            childNodes = rootNode.childNodes()
+            if len(childNodes):
+                self._addSubNodes(childNodes[::-1], item)
+
+    def _addSubNodes(self, nodes, parent):
+        for node in nodes:
+            nodeName = node.name()
+            nodeType = node.type()
+            columnData = ("Unnamed" if nodeName == '' else nodeName,
+                          "Untyped" if nodeType == '' else nodeType,
+                          QPixmap.fromImage(node.thumbnail(30, 30)),
+                          node)
+            item = filtermanagertreeitem.FilterManagerTreeItem(columnData, parent)
+            parent.appendChild(item)
+
+            childNodes = node.childNodes()
+            if len(childNodes):
+                self._addSubNodes(childNodes[::-1], item)

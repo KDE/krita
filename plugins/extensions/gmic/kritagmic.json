@@ -1,9 +1,0 @@
-{
-    "Id": "Gmic",
-    "Type": "Service",
-    "X-KDE-Library": "kritagmic",
-    "X-KDE-ServiceTypes": [
-        "Krita/ViewPlugin"
-    ],
-    "X-Krita-Version": "28"
-}

@@ -104,6 +104,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize"));
+
 
     saveDialog = new KisPresetSaveWidget(this->parentWidget());
     saveDialog->scratchPadSetup(resourceProvider);
@@ -212,7 +214,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton, SIGNAL(clicked()),
             this, SLOT(slotSaveBrushPreset()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             this, SIGNAL(reloadPresetClicked()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
@@ -241,7 +243,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
 
 
@@ -365,8 +367,8 @@ void KisPaintOpPresetsPopup::slotWatchPresetNameLineEdit()
     m_d->uiWdgPaintOpPresetSettings.bnSave->setText(btnText);
     m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(btnSaveAvailable);
 
-    m_d->uiWdgPaintOpPresetSettings.reload->setVisible(true);
-    m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(btnSaveAvailable && overwrite);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(true);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setEnabled(btnSaveAvailable && overwrite);
 
     QFont font = m_d->uiWdgPaintOpPresetSettings.txtPreset->font();
     font.setItalic(btnSaveAvailable);
@@ -446,6 +448,12 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     QString selectedBrush = resource->name().append(" (").append(currentBrushEngineName).append(" ").append("Engine").append(")");
 
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
+
+    // get the preset image and pop it into the thumbnail area on the top of the brush editor
+    QGraphicsScene * thumbScene = new QGraphicsScene(this);
+    thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(30, 30)));
+    thumbScene->setSceneRect(0, 0, 30, 30); // 30 x 30 image for thumb. this is also set in the UI
+    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setScene(thumbScene);
 }
 
 bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)

@@ -56,14 +56,13 @@ class UIFilterManager(object):
     def confirmButton(self):
         selectionModel = self.documentsTreeView.selectionModel()
         for index in selectionModel.selectedRows():
-            self.applyFilterOverNode(self.treeModel.data(index, Qt.UserRole + 1))
+            node = self.treeModel.data(index, Qt.UserRole + 1)
+            documentIndex = self.treeModel.data(index, Qt.UserRole + 2)
+            self.applyFilterOverNode(node, self.documents[documentIndex])
 
-    def applyFilterOverNode(self, node):
+    def applyFilterOverNode(self, node, document):
         _filter = self.kritaInstance.filter(self.filterComboBox.currentText())
-        #_filter.apply(node, 0, 0, document.width(), document.height())
-
-    def verifySelectedNodes(self, nodes):
-        pass
+        _filter.apply(node, 0, 0, document.width(), document.height())
 
     @property
     def filters(self):

@@ -6,7 +6,8 @@ from PyQt5.QtGui import QPixmap
 
 class FilterManagerTreeModel(QAbstractItemModel):
 
-    DATA_COLUMN = 3
+    NODE_COLUMN = 3
+    DOCUMENT_COLUMN = 4
 
     def __init__(self, uiFilterManager, parent=None):
         super(FilterManagerTreeModel, self).__init__(parent)
@@ -66,7 +67,10 @@ class FilterManagerTreeModel(QAbstractItemModel):
         item = index.internalPointer()
 
         if role == Qt.UserRole + 1:
-            return item.data(self.DATA_COLUMN)
+            return item.data(self.NODE_COLUMN)
+
+        if role == Qt.UserRole + 2:
+            return item.data(self.DOCUMENT_COLUMN)
 
         if role != Qt.DisplayRole and role != Qt.DecorationRole:
             return None
@@ -86,30 +90,30 @@ class FilterManagerTreeModel(QAbstractItemModel):
         return None
 
     def _loadTreeModel(self, parent):
-        for document in self.uiFilterManager.documents:
+        for index, document in enumerate(self.uiFilterManager.documents):
             rootNode = document.rootNode()
             columnData = (document.fileName(),
                           "Document",
                           QPixmap.fromImage(document.thumbnail(30, 30)),
-                          rootNode)
+                          rootNode, index)
             item = filtermanagertreeitem.FilterManagerTreeItem(columnData, parent)
             parent.appendChild(item)
 
             childNodes = rootNode.childNodes()
             if len(childNodes):
-                self._addSubNodes(childNodes[::-1], item)
+                self._addSubNodes(childNodes[::-1], item, index)
 
-    def _addSubNodes(self, nodes, parent):
+    def _addSubNodes(self, nodes, parent, documentIndex):
         for node in nodes:
             nodeName = node.name()
             nodeType = node.type()
             columnData = ("Unnamed" if nodeName == '' else nodeName,
                           "Untyped" if nodeType == '' else nodeType,
                           QPixmap.fromImage(node.thumbnail(30, 30)),
-                          node)
+                          node, documentIndex)
             item = filtermanagertreeitem.FilterManagerTreeItem(columnData, parent)
             parent.appendChild(item)
 
             childNodes = node.childNodes()
             if len(childNodes):
-                self._addSubNodes(childNodes[::-1], item)
+                self._addSubNodes(childNodes[::-1], item, documentIndex)

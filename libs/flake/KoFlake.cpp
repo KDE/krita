@@ -323,14 +323,25 @@ QPointF KoFlake::anchorToPoint(AnchorPosition anchor, const QRectF rect, bool *v
         anchorTable << QPointF(1.0,1.0);
     }
 
-    if (anchor == NoAnchor) {
-        if (valid) {
-            *valid = false;
-        }
-        return rect.topLeft();
-    } else if (valid) {
-        *valid = true;
-    }
+    if (valid)
+        *valid = false;
 
-    return KisAlgebra2D::relativeToAbsolute(anchorTable[int(anchor)], rect);
+    switch(anchor)
+    {
+        case AnchorPosition::TopLeft:
+        case AnchorPosition::Top:
+        case AnchorPosition::TopRight:
+        case AnchorPosition::Left:
+        case AnchorPosition::Center:
+        case AnchorPosition::Right:
+        case AnchorPosition::BottomLeft:
+        case AnchorPosition::Bottom:
+        case AnchorPosition::BottomRight:
+            if (valid)
+                *valid = true;
+            return KisAlgebra2D::relativeToAbsolute(anchorTable[int(anchor)], rect);
+        default:
+            KIS_SAFE_ASSERT_RECOVER_NOOP(anchor >= AnchorPosition::TopLeft && anchor < AnchorPosition::NumAnchorPositions);
+            return rect.topLeft();
+    }
 }

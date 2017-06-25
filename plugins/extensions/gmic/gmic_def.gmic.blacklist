@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<blacklist>
+    <category name="About">
+        <filter name="Gmicky / Roddy" />
+    </category>
+
+    <category name="Colors">
+       <filter name="User-defined" />
+    </category>
+
+    <category name="Various">
+        <filter name="Custom code (local)" />
+        <filter name="Custom code (global)" />
+        <filter name="GREYC Poker Tour" />
+    </category>
+</blacklist>

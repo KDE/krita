@@ -107,7 +107,6 @@ public:
 
 public Q_SLOTS:
     void stopIgnoringEvents();
-    void slotFocusOnEnter(bool value);
 
 private Q_SLOTS:
     void slotAboutToChangeTool();

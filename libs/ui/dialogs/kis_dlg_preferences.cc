@@ -139,7 +139,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
-    m_chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground());
 
@@ -179,7 +179,7 @@ void GeneralTab::setDefault()
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
-    m_chkEnableTouch->setChecked(cfg.disableTouchOnCanvas(true));
+    chkEnableTouch->setChecked(cfg.disableTouchOnCanvas(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground(true));
 

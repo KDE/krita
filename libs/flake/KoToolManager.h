@@ -247,11 +247,6 @@ public Q_SLOTS:
     void switchInputDeviceRequested(const KoInputDevice &id);
 
     /**
-     * a new tool has become known to mankind
-     */
-    void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
-
-    /**
      * Request for temporary switching the tools.
      * This switch can be later reverted with switchBackRequested().
      * @param id the id of the tool

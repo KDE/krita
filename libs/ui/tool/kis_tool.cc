@@ -525,11 +525,6 @@ void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
     Q_UNUSED(event);
 }
 
-void KisTool::mouseTripleClickEvent(KoPointerEvent *event)
-{
-    mouseDoubleClickEvent(event);
-}
-
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);

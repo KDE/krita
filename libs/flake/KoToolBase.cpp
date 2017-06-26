@@ -102,18 +102,6 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Calligra Sheets
-void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
-{
-    if (shapeController) {
-        KoDocumentResourceManager *scrm = shapeController->resourceManager();
-        if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(documentResourceChanged(int, const QVariant &)));
-        }
-    }
-}
-
 
 bool KoToolBase::isActivated() const
 {

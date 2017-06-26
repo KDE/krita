@@ -391,7 +391,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
     cursorOutlineUpdateRequested(mousePos);
 
-    if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+    if (mode() != KisTool::PAINT_MODE) {
         currentStrategy()->hoverActionCommon(event);
         setFunctionalCursor();
         KisTool::mouseMoveEvent(event);

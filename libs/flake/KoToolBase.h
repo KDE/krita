@@ -180,13 +180,6 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /**
-     * Called when the scrollwheel is used
-     * Implementors should call event->ignore() if they do not actually use the event
-     * @param event state of this wheel event
-     */
-    virtual void wheelEvent(KoPointerEvent *event);
-
-    /**
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
      * text and reconversions.

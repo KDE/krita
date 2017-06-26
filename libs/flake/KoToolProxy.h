@@ -99,10 +99,6 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
 
     /// Forwarded to the current KoToolBase
-    void wheelEvent(QWheelEvent * event, const QPointF &point);
-    void wheelEvent(KoPointerEvent *event);
-
-    /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// Forwarded to the current KoToolBase

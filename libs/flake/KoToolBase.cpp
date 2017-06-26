@@ -155,11 +155,6 @@ void KoToolBase::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoToolBase::wheelEvent(KoPointerEvent * e)
-{
-    e->ignore();
-}
-
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);

@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPixmap
 
 class FilterManagerTreeModel(QAbstractItemModel):
 
+    TYPE_COLUMN = 1
     NODE_COLUMN = 3
     DOCUMENT_COLUMN = 4
 
@@ -71,6 +72,9 @@ class FilterManagerTreeModel(QAbstractItemModel):
 
         if role == Qt.UserRole + 2:
             return item.data(self.DOCUMENT_COLUMN)
+
+        if role == Qt.UserRole + 3:
+            return item.data(self.TYPE_COLUMN)
 
         if role != Qt.DisplayRole and role != Qt.DecorationRole:
             return None

@@ -186,8 +186,6 @@ public:
      */
     virtual void wheelEvent(KoPointerEvent *event);
 
-    virtual void touchEvent(QTouchEvent *event);
-
     /**
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
@@ -229,8 +227,6 @@ public:
      */
     virtual void customMoveEvent(KoPointerEvent *event);
 
-
-
     /**
      * @return true if synthetic mouse events on the canvas should be eaten.
      *
@@ -240,12 +236,6 @@ public:
      * These events are sent by the OS in Windows
      */
     bool maskSyntheticEvents() const;
-
-
-    /**
-     * @return true if the tool will accept raw QTouchEvents.
-     */
-    virtual bool wantsTouch() const;
 
     /**
      * Set the identifier code from the KoToolFactoryBase that created this tool.

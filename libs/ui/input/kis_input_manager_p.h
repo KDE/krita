@@ -60,7 +60,6 @@ public:
     bool forwardAllEventsToTool = false;
     bool ignoringQtCursorEvents();
 
-    bool disableTouchOnCanvas = false;
     bool touchHasBlockedPressEvents = false;
 
     KisShortcutMatcher matcher;

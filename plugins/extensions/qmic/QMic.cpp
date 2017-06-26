@@ -235,7 +235,7 @@ void QMic::connected()
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
         QRectF cropRect = m_view->image()->bounds();
-        if (!messageMap.contains("croprect") || !messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() == 4) {
+        if (!messageMap.contains("croprect") || messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() != 4) {
             qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
         }
         else {
@@ -281,7 +281,7 @@ void QMic::connected()
     ds.writeBytes(ba.constData(), ba.length());
 
     // Wait for the ack
-    bool r;
+    bool r = true;
     r &= socket->waitForReadyRead(); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
     socket->waitForDisconnected(-1);

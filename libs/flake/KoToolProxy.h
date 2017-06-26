@@ -100,6 +100,7 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
 
     /// Forwarded to the current KoToolBase
+<<<<<<< HEAD
     void wheelEvent(QWheelEvent * event, const QPointF &point);
     void wheelEvent(KoPointerEvent *event);
 
@@ -107,6 +108,8 @@ public:
     void explicitUserStrokeEndRequest();
 
     /// Forwarded to the current KoToolBase
+=======
+>>>>>>> 5d77b752e9... Remove WheelEvent from the KoTool system
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// Forwarded to the current KoToolBase

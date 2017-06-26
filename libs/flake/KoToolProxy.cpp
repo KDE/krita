@@ -323,23 +323,6 @@ void KoToolProxy::keyReleaseEvent(QKeyEvent *event)
         event->ignore();
 }
 
-void KoToolProxy::wheelEvent(QWheelEvent *event, const QPointF &point)
-{
-    KoPointerEvent ev(event, point);
-    if (d->activeTool)
-        d->activeTool->wheelEvent(&ev);
-    else
-        event->ignore();
-}
-
-void KoToolProxy::wheelEvent(KoPointerEvent *event)
-{
-    if (d->activeTool)
-        d->activeTool->wheelEvent(event);
-    else
-        event->ignore();
-}
-
 void KoToolProxy::explicitUserStrokeEndRequest()
 {
     if (d->activeTool) {

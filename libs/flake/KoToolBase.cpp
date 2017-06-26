@@ -174,10 +174,6 @@ void KoToolBase::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoToolBase::wheelEvent(KoPointerEvent * e)
-{
-    e->ignore();
-}
 
 void KoToolBase::explicitUserStrokeEndRequest()
 {

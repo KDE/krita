@@ -181,13 +181,6 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /**
-     * Called when the scrollwheel is used
-     * Implementors should call event->ignore() if they do not actually use the event
-     * @param event state of this wheel event
-     */
-    virtual void wheelEvent(KoPointerEvent *event);
-
-    /**
      * @brief explicitUserStrokeEndRequest is called by the input manager
      *        when the user presses Enter key or any equivalent. This callback
      *        comes before requestStrokeEnd(), which comes from a different source.

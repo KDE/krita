@@ -293,19 +293,6 @@ void KoToolManager::attemptCanvasControllerRemoval(QObject* controller)
     }
 }
 
-void KoToolManager::updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController)
-{
-    if (!d->canvasses.contains(canvasController))
-        return;
-
-    QList<CanvasData *> canvasses = d->canvasses[canvasController];
-    Q_FOREACH (CanvasData *canvas, canvasses) {
-        Q_FOREACH (KoToolBase *tool, canvas->allTools.values()) {
-            tool->updateShapeController(shapeController);
-        }
-    }
-}
-
 void KoToolManager::switchToolRequested(const QString & id)
 {
     Q_ASSERT(d->canvasData);

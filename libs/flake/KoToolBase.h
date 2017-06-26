@@ -78,13 +78,6 @@ public:
     ~KoToolBase() override;
 
     /**
-     * connect the tool to the new shapecontroller. Old connections are removed.
-     *
-     * @param shapeController the new shape controller
-     */
-    void updateShapeController(KoShapeBasedDocumentBase *shapeController);
-
-    /**
      * request a repaint of the decorations to be made. This triggers
      * an update call on the canvas, but does not paint directly.
      */

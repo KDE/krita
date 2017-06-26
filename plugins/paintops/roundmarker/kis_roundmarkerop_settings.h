@@ -35,6 +35,16 @@ public:
     qreal paintOpSize() const override;
     void setPaintOpSize(qreal value) override;
 
+    bool isAirbrushing() const override
+    {
+        return false;
+    }
+
+    qreal airbrushInterval() const override
+    {
+        return 1000.0;
+    }
+
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;

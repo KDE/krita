@@ -367,7 +367,7 @@ bool Document::close()
         }
     }
 
-    d->document->deleteLater();
+    KisPart::instance()->removeDocument(d->document);
     d->document = 0;
     return retval;
 }

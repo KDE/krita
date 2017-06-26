@@ -50,6 +50,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
 #include <KoResourceServerProvider.h>
+#include <kis_action_registry.h>
 
 #include "View.h"
 #include "Document.h"
@@ -314,9 +315,19 @@ Window* Krita::openWindow()
 }
 
 
-Action *Krita::createAction(const QString &text)
+Action *Krita::createAction(const QString &id, const QString &text)
 {
     KisAction *action = new KisAction(text, this);
+    action->setObjectName(id);
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    actionRegistry->propertizeAction(action->objectName(), action);
+    bool ok; // We will skip this check
+    int activationFlags = actionRegistry->getActionProperty(id, "activationFlags").toInt(&ok, 2);
+    int activationConditions = actionRegistry->getActionProperty(id, "activationConditions").toInt(&ok, 2);
+    action->setActivationFlags((KisAction::ActivationFlags) activationFlags);
+    action->setActivationConditions((KisAction::ActivationConditions) activationConditions);
+
     KisPart::instance()->addScriptAction(action);
     return new Action(action->objectName(), action);
 }

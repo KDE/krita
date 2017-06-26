@@ -23,6 +23,7 @@ set(kritadefaulttools_SOURCES
     kis_tool_multihand.cpp
     kis_tool_multihand_config.cpp
     kis_tool_pencil.cc
+    kis_tool_pan.cpp
     )
 
 ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorpicker.ui wdgmovetool.ui wdgmultihandtool.ui)

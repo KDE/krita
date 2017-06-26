@@ -57,7 +57,13 @@ public:
     KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisGridPaintOp() override;
 
+protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+private:
+    KisSpacingInformation computeSpacing(qreal lodScale) const;
 
 private:
     KisGridPaintOpSettingsSP m_settings;

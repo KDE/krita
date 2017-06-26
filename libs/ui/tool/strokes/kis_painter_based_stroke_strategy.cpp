@@ -38,9 +38,9 @@ KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo()
 {
 }
 
-KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const QPointF &lastPosition, int lastTime)
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const KisDistanceInformation &startDist)
     : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation(lastPosition, lastTime)),
+      dragDistance(new KisDistanceInformation(startDist)),
       m_parentPainterInfo(0),
       m_childPainterInfo(0)
 {

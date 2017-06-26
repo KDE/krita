@@ -52,10 +52,14 @@ KisCurvePaintOp::~KisCurvePaintOp()
 
 KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 {
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisCurvePaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
     Q_UNUSED(info);
     return KisSpacingInformation(1.0);
 }
-
 
 void KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {

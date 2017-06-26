@@ -184,6 +184,12 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     return effectiveSpacing(scale);
 }
 
+KisSpacingInformation KisHatchingPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = KisLodTransform::lodToScale(painter()->device()) * m_sizeOption.apply(info);
+    return effectiveSpacing(scale);
+}
+
 double KisHatchingPaintOp::spinAngle(double spin)
 {
     double tempangle = m_settings->angle + spin;

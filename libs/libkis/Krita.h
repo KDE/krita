@@ -150,7 +150,7 @@ public Q_SLOTS:
      * closed, the configuration changes, views are opened and closed or windows are opened.
      * @return the notifier object
      */
-    Notifier* notifier() const;
+    Notifier *notifier() const;
 
     /**
      * @brief version Determine the version of Krita
@@ -236,11 +236,13 @@ public Q_SLOTS:
 
     /**
      * @brief createAction creates an action with the given text and passes it to Krita. Every newly created
-     *     mainwindow will create an instance of this action.
+     *     mainwindow will create an instance of this action. This means that actions need to be created in the
+     *     setup phase of the plugin, not on the fly.
+     * @param id the unique id for this action
      * @param text the user-visible text
      * @return the Action you can connect a slot to.
      */
-    Action *createAction(const QString &text);
+    Action *createAction(const QString &name, const QString &text);
 
     /**
      * @brief addExtension add the given plugin to Krita. There will be a single instance of each Extension in the Krita process.

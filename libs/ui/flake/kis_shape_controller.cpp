@@ -190,9 +190,14 @@ void KisShapeController::addShapes(const QList<KoShape*> shapes)
                 image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
             }
 
+            QRectF updateRect;
+
             Q_FOREACH(KoShape *shape, shapes) {
                 shapeLayer->addShape(shape);
+                updateRect |= shape->boundingRect();
             }
+
+            canvas->shapeManager()->update(updateRect);
         }
     }
 
@@ -208,7 +213,14 @@ void KisShapeController::removeShape(KoShape* shape)
     Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
              shape->shapeId() != KIS_SHAPE_LAYER_ID);
 
+
+    QRectF updateRect = shape->boundingRect();
     shape->setParent(0);
+
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+    canvas->shapeManager()->update(updateRect);
+
     m_d->doc->setModified(true);
 }
 

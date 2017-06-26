@@ -755,8 +755,8 @@ struct SvgRenderTester : public SvgTester
         writeBuf.open(QIODevice::WriteOnly);
 
         {
-            SvgWriter writer(shapes, sizeInPt);
-            writer.save(writeBuf);
+            SvgWriter writer(shapes);
+            writer.save(writeBuf, sizeInPt);
         }
 
         QDomDocument prettyDoc;

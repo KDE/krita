@@ -59,9 +59,9 @@ void KoShapeTransformCommand::redo()
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setTransformation(d->newState[i]);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 
@@ -72,9 +72,9 @@ void KoShapeTransformCommand::undo()
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setTransformation(d->oldState[i]);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 

@@ -64,6 +64,12 @@ public Q_SLOTS:
      */
     void showView(View *view);
 
+
+    /**
+     * @return the currently active view or 0 if no view is active
+     */
+    View *activeView() const;
+
     /**
      * @brief activate activates this Window.
      */

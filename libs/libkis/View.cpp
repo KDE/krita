@@ -34,6 +34,7 @@
 #include "Canvas.h"
 #include "Window.h"
 #include "Resource.h"
+#include "ManagedColor.h"
 
 struct View::Private {
     Private() {}
@@ -128,5 +129,132 @@ void View::activateResource(Resource *resource)
 
 }
 
+ManagedColor *View::foreGroundColor() const
+{
+    if (!d->view) return 0;
+    return new ManagedColor(d->view->resourceProvider()->fgColor());
+}
 
+void View::setForeGroundColor(ManagedColor *color)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setFGColor(color->color());
+}
+
+ManagedColor *View::backGroundColor() const
+{
+    if (!d->view) return 0;
+    return new ManagedColor(d->view->resourceProvider()->bgColor());
+}
+
+void View::setBackGroundColor(ManagedColor *color)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setBGColor(color->color());
+}
+
+Resource *View::currentBrushPreset() const
+{
+    if (!d->view) return 0;
+    return new Resource(d->view->resourceProvider()->currentPreset().data());
+}
+
+void View::setCurrentBrushPreset(Resource *resource)
+{
+    activateResource(resource);
+}
+
+Resource *View::currentPattern() const
+{
+    if (!d->view) return 0;
+    return new Resource(d->view->resourceProvider()->currentPattern());
+}
+
+void View::setCurrentPattern(Resource *resource)
+{
+    activateResource(resource);
+}
+
+Resource *View::currentGradient() const
+{
+    if (!d->view) return 0;
+    return new Resource(d->view->resourceProvider()->currentGradient());
+}
+
+void View::setCurrentGradient(Resource *resource)
+{
+    activateResource(resource);
+}
+
+QString View::currentBlendingMode() const
+{
+    if (!d->view) return "";
+    return d->view->resourceProvider()->currentCompositeOp();
+}
+
+void View::setCurrentBlendingMode(const QString &blendingMode)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setCurrentCompositeOp(blendingMode);
+}
+
+float View::HDRExposure() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->HDRExposure();
+}
+
+void View::setHDRExposure(float exposure)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setHDRExposure(exposure);
+}
+
+float View::HDRGamma() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->HDRGamma();
+}
+
+void View::setHDRGamma(float gamma)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setHDRGamma(gamma);
+}
+
+qreal View::paintingOpacity() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->opacity();
+}
+
+void View::setPaintingOpacity(qreal opacity)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setOpacity(opacity);
+}
+
+qreal View::brushSize() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->size();
+}
+
+void View::setBrushSize(qreal brushSize)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setSize(brushSize);
+}
+
+qreal View::paintingFlow() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->flow();
+}
+
+void View::setPaintingFlow(qreal flow)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setFlow(flow);
+}
 

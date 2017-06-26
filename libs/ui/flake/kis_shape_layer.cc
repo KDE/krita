@@ -89,9 +89,25 @@ public:
 
     void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
+
+        /**
+         * The shape is always added with the absolute transformation set appropiately.
+         * Here we should just squeeze it into the layer's transformation.
+         */
+        KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
+        if (inheritsTransform(child)) {
+            QTransform parentTransform = q->absoluteTransformation(0);
+            child->applyAbsoluteTransformation(parentTransform.inverted());
+        }
     }
 
     void remove(KoShape *child) override {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
+        if (inheritsTransform(child)) {
+            QTransform parentTransform = q->absoluteTransformation(0);
+            child->applyAbsoluteTransformation(parentTransform);
+        }
+
         SimpleShapeContainerModel::remove(child);
     }
 
@@ -396,8 +412,8 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    SvgWriter writer(shapes, sizeInPt);
-    writer.save(storeDev);
+    SvgWriter writer(shapes);
+    writer.save(storeDev, sizeInPt);
 
     if (!store->close()) {
         return false;

@@ -24,6 +24,7 @@
 class KisLiquifyTransformWorker;
 class KisPaintInformation;
 class KisSpacingInformation;
+class KisDistanceInformation;
 class KisLiquifyProperties;
 class QPainterPath;
 
@@ -37,7 +38,19 @@ public:
 
     KisSpacingInformation paintAt(const KisPaintInformation &pi);
 
+    /**
+     * Updates the spacing in currentDistance based on the provided information.
+     */
+    void updateSpacing(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
+        const;
+
     static QPainterPath brushOutline(const KisLiquifyProperties &props, const KisPaintInformation &info);
+
+protected:
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &pi) const;
+
+private:
+    qreal computeSize(const KisPaintInformation &pi) const;
 
 private:
     struct Private;

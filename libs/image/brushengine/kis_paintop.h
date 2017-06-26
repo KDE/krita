@@ -58,6 +58,14 @@ public:
     void paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance);
 
     /**
+     * Updates the spacing in currentDistance based on the provided information. Note that the
+     * spacing is updated automatically in the paintAt method, so there is no need to call this
+     * method if paintAt has just been called.
+     */
+    void updateSpacing(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
+        const;
+
+    /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.
      * If savedDist is less than zero, the brush is painted at pos1 before being
      * painted along the line using the spacing setting.
@@ -100,9 +108,14 @@ public:
 protected:
     friend class KisPaintInformation;
     /**
-     * The implementation of painting of a dab
+     * The implementation of painting of a dab and updating spacing
      */
     virtual KisSpacingInformation paintAt(const KisPaintInformation& info) = 0;
+
+    /**
+     * Implementation of a spacing update
+     */
+    virtual KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const = 0;
 
     KisFixedPaintDeviceSP cachedDab();
     KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);

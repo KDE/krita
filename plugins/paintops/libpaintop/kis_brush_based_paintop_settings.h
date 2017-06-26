@@ -36,12 +36,6 @@ public:
     ///Reimplemented
     bool paintIncremental() override;
 
-    ///Reimplemented
-    bool isAirbrushing() const override;
-
-    ///Reimplemented
-    int rate() const override;
-
     using KisPaintOpSettings::brushOutline;
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 

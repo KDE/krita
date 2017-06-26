@@ -119,6 +119,11 @@ public:
 
     void pan(const QPoint &distance) override;
 
+    virtual void panUp() override;
+    virtual void panDown() override;
+    virtual void panLeft() override;
+    virtual void panRight() override;
+
     void setMargin(int margin) override;
 
     QPoint scrollBarValue() const override;

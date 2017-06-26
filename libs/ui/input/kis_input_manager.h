@@ -80,7 +80,17 @@ public:
      */
     bool eventFilter(QObject* object, QEvent* event ) override;
 
+    /**
+     * @brief attachPriorityEventFilter
+     * @param filter
+     * @param priority
+     */
     void attachPriorityEventFilter(QObject *filter, int priority = 0);
+
+    /**
+     * @brief detachPriorityEventFilter
+     * @param filter
+     */
     void detachPriorityEventFilter(QObject *filter);
 
     /**
@@ -93,12 +103,6 @@ public:
      */
     KisToolProxy *toolProxy() const;
 
-    /**
-     * Touch events are special, too.
-     *
-     * \return a touch event if there was one, otherwise 0
-     */
-    QTouchEvent *lastTouchEvent() const;
 
     /**
      * Convert a widget position to a document position.

@@ -515,8 +515,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             touch_stop_block_press_events();
             d->saveTouchEvent(tevent);
             retval = d->matcher.touchEndEvent(tevent);
-            delete d->lastTouchEvent;
-            d->lastTouchEvent = 0;
         } else {
 #endif
             touch_start_block_press_events();
@@ -531,11 +529,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchEnd:
         touch_stop_block_press_events();
-        d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        delete d->lastTouchEvent;
-        d->lastTouchEvent = 0;
         break;
     default:
         break;
@@ -543,7 +538,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     return !retval ? d->processUnhandledEvent(event) : true;
 }
-
 
 void KisInputManager::slotCompressedMoveEvent()
 {
@@ -566,11 +560,6 @@ KisCanvas2* KisInputManager::canvas() const
 KisToolProxy* KisInputManager::toolProxy() const
 {
     return d->toolProxy;
-}
-
-QTouchEvent *KisInputManager::lastTouchEvent() const
-{
-    return d->lastTouchEvent;
 }
 
 void KisInputManager::slotAboutToChangeTool()

@@ -195,13 +195,6 @@ public:
     bool maskSyntheticEvents() const;
 
     /**
-     * Set the identifier code from the KoToolFactoryBase that created this tool.
-     * @param id the identifier code
-     * @see KoToolFactoryBase::id()
-     */
-    void setToolId(const QString &id);
-
-    /**
      * get the identifier code from the KoToolFactoryBase that created this tool.
      * @return the toolId.
      * @see KoToolFactoryBase::id()
@@ -474,6 +467,18 @@ protected:
 
 
 private:
+
+    friend class ToolHelper;
+
+    /**
+     * Set the identifier code from the KoToolFactoryBase that created this tool.
+     * @param id the identifier code
+     * @see KoToolFactoryBase::id()
+     */
+    void setToolId(const QString &id);
+
+
+
     KoToolBase();
     KoToolBase(const KoToolBase&);
     KoToolBase& operator=(const KoToolBase&);

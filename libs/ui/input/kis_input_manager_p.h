@@ -49,7 +49,6 @@ public:
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
-    void saveTouchEvent( QTouchEvent* event );
     bool handleCompressedTabletEvent(QEvent *event);
 
     KisInputManager *q;
@@ -63,7 +62,6 @@ public:
     bool touchHasBlockedPressEvents = false;
 
     KisShortcutMatcher matcher;
-    QTouchEvent *lastTouchEvent = 0;
 
     KisToolInvocationAction *defaultInputAction = 0;
 

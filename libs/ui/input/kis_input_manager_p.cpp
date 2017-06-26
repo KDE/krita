@@ -492,13 +492,6 @@ inline QPointF multiplyPoints(const QPointF &pt1, const QPointF &pt2) {
 }
 #endif
 
-void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
-{
-    delete lastTouchEvent;
-    lastTouchEvent = new QTouchEvent(event->type(), event->device(), event->modifiers(), event->touchPointStates(), event->touchPoints());
-}
-
-
 void KisInputManager::Private::blockMouseEvents()
 {
     eventEater.activate();

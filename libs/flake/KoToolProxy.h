@@ -74,13 +74,6 @@ public:
     /// Forwarded to the current KoToolBase
     void repaintDecorations();
 
-    /**
-     * Forward the given touch event to the current KoToolBase.
-     * The viewconverter and document offset are necessary to convert all
-     * the QTouchPoints to KoTouchPoints that work in document coordinates.
-     */
-    void touchEvent(QTouchEvent *event);
-
     /// Forwarded to the current KoToolBase
     void tabletEvent(QTabletEvent *event, const QPointF &point);
 
@@ -155,7 +148,7 @@ public:
 
     /// Forwarded to the current KoToolBase
     void dropEvent(QDropEvent *event, const QPointF &point);
- 
+
     /// Set the new active tool.
     virtual void setActiveTool(KoToolBase *tool);
 

@@ -513,7 +513,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         if (count < 2 && tevent->touchPoints().length() > count) {
             touch_stop_block_press_events();
-            d->saveTouchEvent(tevent);
             retval = d->matcher.touchEndEvent(tevent);
         } else {
 #endif

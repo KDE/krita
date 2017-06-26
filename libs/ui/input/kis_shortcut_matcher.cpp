@@ -297,7 +297,7 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     m_d->usingTouch = false; // we need to say we are done because qt will not send further event
 
     // we should try and end the shortcut too (it might be that there is none? (sketch))
-    if( tryEndTouchShortcut( event ) ) {
+    if (tryEndTouchShortcut(event)) {
         return true;
     }
 

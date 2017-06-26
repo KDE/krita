@@ -179,11 +179,6 @@ void KoToolBase::wheelEvent(KoPointerEvent * e)
     e->ignore();
 }
 
-void KoToolBase::touchEvent(QTouchEvent *event)
-{
-    event->ignore();
-}
-
 void KoToolBase::explicitUserStrokeEndRequest()
 {
 }
@@ -213,9 +208,19 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
-bool KoToolBase::wantsTouch() const
+void KoToolBase::customPressEvent(KoPointerEvent * event)
 {
-    return false;
+    event->ignore();
+}
+
+void KoToolBase::customReleaseEvent(KoPointerEvent * event)
+{
+    event->ignore();
+}
+
+void KoToolBase::customMoveEvent(KoPointerEvent * event)
+{
+    event->ignore();
 }
 
 void KoToolBase::useCursor(const QCursor &cursor)

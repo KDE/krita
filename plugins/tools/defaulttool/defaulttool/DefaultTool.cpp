@@ -117,7 +117,6 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     , m_mouseWasInsideHandles(false)
     , m_moveCommand(0)
     , m_selectionHandler(new SelectionHandler(this))
-    , m_customEventStrategy(0)
 {
     setupActions();
 
@@ -645,58 +644,6 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
             return;
         }
     }
-}
-
-void DefaultTool::customMoveEvent(KoPointerEvent *event)
-{
-    if (koSelection() && koSelection()->count() <= 0) {
-        event->ignore();
-        return;
-    }
-
-    int move = qMax(qAbs(event->x()), qAbs(event->y()));
-    int zoom = qAbs(event->z());
-    int rotate = qAbs(event->rotationZ());
-    const int threshold = 2;
-
-    if (move < threshold && zoom < threshold && rotate < threshold) {
-        if (m_customEventStrategy) {
-            m_customEventStrategy->finishInteraction(event->modifiers());
-            KUndo2Command *command = m_customEventStrategy->createCommand();
-            if (command) {
-                canvas()->addCommand(command);
-            }
-            delete m_customEventStrategy;
-            m_customEventStrategy = 0;
-            repaintDecorations();
-        }
-        event->accept();
-        return;
-    }
-
-    // check if the z-movement is dominant
-    if (zoom > move && zoom > rotate) {
-        // zoom
-        if (!m_customEventStrategy) {
-            m_customEventStrategy = new ShapeResizeStrategy(this, event->point, KoFlake::TopLeftHandle);
-        }
-    } else if (move > zoom && move > rotate) { // check if x-/y-movement is dominant
-        // move
-        if (!m_customEventStrategy) {
-            m_customEventStrategy = new ShapeMoveStrategy(this, event->point);
-        }
-    } else if (rotate > zoom && rotate > move) { // rotation is dominant
-        // rotate
-        if (!m_customEventStrategy) {
-            m_customEventStrategy = new ShapeRotateStrategy(this, event->point, event->buttons());
-        }
-    }
-
-    if (m_customEventStrategy) {
-        m_customEventStrategy->handleCustomEvent(event);
-    }
-
-    event->accept();
 }
 
 void DefaultTool::repaintDecorations()

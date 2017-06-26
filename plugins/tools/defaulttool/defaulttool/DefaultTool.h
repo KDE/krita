@@ -119,8 +119,6 @@ public: // Events
 
     void keyPressEvent(QKeyEvent *event) override;
 
-    void customMoveEvent(KoPointerEvent *event) override;
-
 protected:
     QList<QPointer<QWidget> > createOptionWidgets() override;
 
@@ -167,7 +165,6 @@ private:
     qreal m_angle;
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
-    KoInteractionStrategy *m_customEventStrategy;
     QPointer<QAction> m_separatorAction;
 };
 

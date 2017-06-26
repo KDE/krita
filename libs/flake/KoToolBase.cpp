@@ -163,21 +163,6 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
-void KoToolBase::customPressEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
-void KoToolBase::customReleaseEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
-void KoToolBase::customMoveEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
 void KoToolBase::useCursor(const QCursor &cursor)
 {
     Q_D(KoToolBase);

@@ -171,14 +171,14 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 {
     if (currentPaintOpPreset()) emit statusTextChanged(currentPaintOpPreset()->name());
     KisTool::activate(toolActivation, shapes);
-    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
-    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
+    connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
+    connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
 }
 
 void KisToolPaint::deactivate()
 {
-    disconnect(actions().value("increase_brush_size"), 0, this, 0);
-    disconnect(actions().value("decrease_brush_size"), 0, this, 0);
+    disconnect(action("increase_brush_size"), 0, this, 0);
+    disconnect(action("decrease_brush_size"), 0, this, 0);
     KisTool::deactivate();
 }
 

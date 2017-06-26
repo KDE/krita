@@ -162,12 +162,6 @@ void KisInputManager::stopIgnoringEvents()
     stop_ignore_cursor_events();
 }
 
-void KisInputManager::slotFocusOnEnter(bool value)
-{
-    Q_UNUSED(value);
-    // not used anymore
-}
-
 #if defined (__clang__)
 #pragma GCC diagnostic ignored "-Wswitch"
 #endif

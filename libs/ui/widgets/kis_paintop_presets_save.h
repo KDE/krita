@@ -24,6 +24,7 @@
 
 #include "ui_wdgsavebrushpreset.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_favorite_resource_manager.h"
 
 class KisPaintOpPresetSaveDialog : public QDialog , public Ui::WdgSaveBrushPreset
 {
@@ -53,6 +54,9 @@ public:
     void scratchPadSetup(KisCanvasResourceProvider* resourceProvider);
     KisCanvasResourceProvider* m_resourceProvider;
 
+    void setFavoriteResourceManager(KisFavoriteResourceManager * favManager);
+
+
 public Q_SLOTS:
     void usePreviousThumbnail(bool usePrevious);
     void loadImageFromFile();
@@ -62,7 +66,7 @@ public Q_SLOTS:
 
 private:
     bool m_isSavingNewBrush;
-
+    KisFavoriteResourceManager * m_favoriteResourceManager;
 };
 
 

@@ -72,6 +72,7 @@ public:
     KisPaintOpConfigWidget *settingsWidget;
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
+
     bool detached;
     bool ignoreHideEvents;
     QSize minimumSettingsWidgetSize;
@@ -80,7 +81,9 @@ public:
     KisSignalAutoConnectionsStore widgetConnections;
 };
 
-KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
+KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
+                                               KisFavoriteResourceManager* favoriteResourceManager,
+                                               QWidget * parent)
     : QWidget(parent)
     , m_d(new Private())
 {
@@ -110,6 +113,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     // overwrite existing preset and saving a new preset use the same dialog
     saveDialog = new KisPresetSaveWidget(this->parentWidget());
     saveDialog->scratchPadSetup(resourceProvider);
+    saveDialog->setFavoriteResourceManager(favoriteResourceManager); // this is needed when saving the preset
     saveDialog->hide();
 
 

@@ -28,6 +28,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include <widgets/kis_paintop_presets_save.h>
+#include "kis_favorite_resource_manager.h"
 
 class QString;
 class KisCanvasResourceProvider;
@@ -43,7 +44,9 @@ class KisPaintOpPresetsPopup : public QWidget
 
 public:
 
-    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent = 0);
+    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
+                           KisFavoriteResourceManager* favoriteResourceManager,
+                           QWidget * parent = 0);
 
     ~KisPaintOpPresetsPopup() override;
 
@@ -125,7 +128,6 @@ private:
     Private * const m_d;
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
-
 
 };
 

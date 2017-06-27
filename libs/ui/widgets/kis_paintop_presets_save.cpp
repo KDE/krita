@@ -19,10 +19,15 @@
 
 #include "widgets/kis_paintop_presets_save.h"
 #include <QDebug>
+#include <QDate>
+#include <QTime>
+
 
 #include <KoFileDialog.h>
 #include "KisImportExportManager.h"
 #include "QDesktopServices"
+#include "kis_resource_server_provider.h"
+
 
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     : KisPaintOpPresetSaveDialog(parent)
@@ -132,13 +137,86 @@ void KisPresetSaveWidget::loadImageFromFile()
 
 }
 
+void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager * favManager)
+{
+    m_favoriteResourceManager = favManager;
+}
+
+
 void KisPresetSaveWidget::savePreset()
 {
-    if (m_isSavingNewBrush) {
-        qDebug() << "save the brush as a new preset";
-    } else {
-        qDebug() << "save over the existing brush (and create a backup)";
+    KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
+    if (!curPreset)
+        return;
+
+    m_favoriteResourceManager->setBlockUpdates(true);
+
+    KisPaintOpPresetSP oldPreset = curPreset->clone();
+    oldPreset->load();
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QString saveLocation = rServer->saveLocation();
+
+    // if we are saving a new brush, use what we type in for the input
+    QString presetName = m_isSavingNewBrush ? newBrushNameTexField->text() : curPreset->name();
+
+    QString currentPresetFileName = saveLocation + presetName + curPreset->defaultFileExtension();
+    if (rServer->resourceByName(presetName)) {
+        QString currentDate = QDate::currentDate().toString(Qt::ISODate);
+        QString currentTime = QTime::currentTime().toString(Qt::ISODate);
+        QString presetFilename = saveLocation + presetName + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
+        oldPreset->setFilename(presetFilename);
+        oldPreset->setName(presetName);
+        oldPreset->setPresetDirty(false);
+        oldPreset->setValid(true);
+        rServer->addResource(oldPreset);
+        QStringList tags;
+        tags = rServer->assignedTagsList(curPreset.data());
+        rServer->removeResourceAndBlacklist(oldPreset.data());
+        Q_FOREACH (const QString & tag, tags) {
+            rServer->addTag(oldPreset.data(), tag);
+        }
     }
+
+    if (m_isSavingNewBrush) {
+
+        KisPaintOpPresetSP newPreset = curPreset->clone();
+        newPreset->setFilename(currentPresetFileName);
+        newPreset->setName(presetName);
+        newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
+        newPreset->setPresetDirty(false);
+        newPreset->setValid(true);
+        rServer->addResource(newPreset);
+        curPreset = newPreset; //to load the new preset
+
+    } else {
+
+        if (curPreset->filename().contains(saveLocation)==false || curPreset->filename().contains(presetName)==false) {
+            rServer->removeResourceAndBlacklist(curPreset.data());
+            curPreset->setFilename(currentPresetFileName);
+            curPreset->setName(presetName);
+        }
+
+        if (!rServer->resourceByFilename(curPreset->filename())){
+            //this is necessary so that we can get the preset afterwards.
+            rServer->addResource(curPreset, false, false);
+            rServer->removeFromBlacklist(curPreset.data());
+        }
+
+        curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
+        curPreset->save();
+        curPreset->load();
+    }
+
+
+    // HACK ALERT! the server does not notify the observers
+    // automatically, so we need to call theupdate manually!
+    rServer->tagCategoryMembersChanged();
+
+    m_favoriteResourceManager->setBlockUpdates(false);
+
+
+    close(); // we are done... so close the save brush dialog
+
 }
 
 void KisPresetSaveWidget::isSavingNewBrush(bool newBrush)

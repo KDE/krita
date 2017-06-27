@@ -117,6 +117,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
+    m_favoriteResourceManager = new KisFavoriteResourceManager(this);
+
+
     KConfigGroup grp =  KSharedConfig::openConfig()->group("krita").group("Toolbar BrushesAndStuff");
     int iconsize = grp.readEntry("IconSize", 32);
 
@@ -429,9 +432,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_toolOptionsPopup->switchDetached(false);
     }
 
-    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
+
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->parentWidget()->setWindowTitle(i18n("Brush Editor"));
+
 
     connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
@@ -488,7 +493,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     //Needed to connect canvas to favorite resource manager
     connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 
-    m_favoriteResourceManager = new KisFavoriteResourceManager(this);
+
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
 
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotChangeFGColorSelector(KoColor)));
@@ -532,6 +537,7 @@ KisPaintopBox::~KisPaintopBox()
 
 void KisPaintopBox::restoreResource(KoResource* resource)
 {
+
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     //qDebug() << "restoreResource" << resource << preset;
     if (preset) {
@@ -850,6 +856,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 
 void KisPaintopBox::slotSaveActivePreset()
 {
+
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
     if (!curPreset)
         return;
@@ -910,6 +917,7 @@ void KisPaintopBox::slotSaveActivePreset()
     restoreResource(curPreset.data());
 
     m_favoriteResourceManager->setBlockUpdates(false);
+
 }
 
 void KisPaintopBox::slotUpdatePreset()

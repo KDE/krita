@@ -65,18 +65,6 @@ uint qHash(QPointer<T> value) {
     return reinterpret_cast<quintptr>(value.data());
 }
 
-
-#define start_ignore_cursor_events() d->blockMouseEvents()
-#define stop_ignore_cursor_events() d->allowMouseEvents()
-#define break_if_should_ignore_cursor_events() if (d->ignoringQtCursorEvents()) break;
-#define break_if_tablet_active() if (d->tabletActive) break;
-
-// Touch rejection: if touch is disabled on canvas, no need to block mouse press events
-#define touch_start_block_press_events()  d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
-#define touch_stop_block_press_events()  d->touchHasBlockedPressEvents = false;
-#define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
-#define touch_eat_one_mouse_press() if (KisConfig().disableTouchOnCanvas()) d->eatOneMousePress();
-
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
 {
@@ -159,7 +147,7 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
 
 void KisInputManager::stopIgnoringEvents()
 {
-    stop_ignore_cursor_events();
+    d->allowMouseEvents();
 }
 
 #if defined (__clang__)
@@ -264,9 +252,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
         //Block mouse press events on Genius tablets
-        break_if_tablet_active();
-        break_if_should_ignore_cursor_events();
-        break_if_touch_blocked_press_events();
+        if (d->tabletActive) break;
+        if (d->ignoringQtCursorEvents()) break;
+        if (d->touchHasBlockedPressEvents) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
@@ -284,8 +272,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
-        break_if_should_ignore_cursor_events();
-        break_if_touch_blocked_press_events();
+        if (d->ignoringQtCursorEvents()) break;
+        if (d->touchHasBlockedPressEvents) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
@@ -327,7 +315,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseMove: {
         d->debugEvent<QMouseEvent, true>(event);
-        break_if_should_ignore_cursor_events();
+        if (d->ignoringQtCursorEvents()) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = compressMoveEventCommon(mouseEvent);
@@ -378,8 +366,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
 
-        stop_ignore_cursor_events();
-        touch_stop_block_press_events();
+        d->allowMouseEvents();
+        d->touchHasBlockedPressEvents = false;
 
         d->matcher.enterEvent();
         break;
@@ -391,8 +379,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * is hovering above some other widget, so restore cursor
          * events processing right now.
          */
-        stop_ignore_cursor_events();
-        touch_stop_block_press_events();
+        d->allowMouseEvents();
+        d->touchHasBlockedPressEvents = false;
 
         d->matcher.leaveEvent();
         break;
@@ -413,7 +401,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             }
         }
 
-        stop_ignore_cursor_events();
+        d->allowMouseEvents();
         break;
 
     case QEvent::FocusOut: {
@@ -429,9 +417,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TabletRelease: {
 #ifdef Q_OS_MAC
-        stop_ignore_cursor_events();
+        d->allowMouseEvents();
 #endif
-        // break_if_touch_blocked_press_events();
+        // if (d->touchHasBlockedPressEvents) break;
         d->debugEvent<QTabletEvent, false>(event);
 
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
@@ -455,7 +443,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * changing focus of the window with tablet in the proximity
          * area)
          */
-        start_ignore_cursor_events();
+        d->blockMouseEvents();
 
         break;
     }
@@ -472,7 +460,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
         event->setAccepted(true);
         retval = true;
-        start_ignore_cursor_events();
+        d->blockMouseEvents();
         //Reset signal compressor to prevent processing events before press late
         d->resetCompressor();
         d->eatOneMousePress();
@@ -480,8 +468,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
 
     case QEvent::TouchBegin:
-        touch_start_block_press_events();
-        touch_eat_one_mouse_press();
+        d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
+        // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
+        if (KisConfig().disableTouchOnCanvas()) d->eatOneMousePress();
         if (d->tryHidePopupPalette()) {
             retval = true;
         } else {
@@ -502,11 +491,11 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 
         if (count < 2 && tevent->touchPoints().length() > count) {
-            touch_stop_block_press_events();
+            d->touchHasBlockedPressEvents = false;
             retval = d->matcher.touchEndEvent(tevent);
         } else {
 #endif
-            touch_start_block_press_events();
+            d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
 #ifdef Q_OS_MAC
@@ -518,7 +507,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         break;
     }
     case QEvent::TouchEnd:
-        touch_stop_block_press_events();
+        d->touchHasBlockedPressEvents = false;
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
         // d->resetSavedTabletEvent(event->type());
@@ -533,7 +522,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 void KisInputManager::slotCompressedMoveEvent()
 {
     if (d->compressedMoveEvent) {
-        // touch_stop_block_press_events();
+        // d->touchHasBlockedPressEvents = false;
 
         (void) d->handleCompressedTabletEvent(d->compressedMoveEvent.data());
         d->compressedMoveEvent.reset();

@@ -104,7 +104,8 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(resourceManager,
             SIGNAL(canvasResourceChanged(int,QVariant)),
             SLOT(resourceChanged(int,QVariant)));
-    resourceManager->setResource(DefaultTool::HotPosition, int(KoFlake::Center));
+    resourceManager->setResource(DefaultTool::HotPosition, int(KoFlake::AnchorPosition::Center));
+    positionSelector->setValue(KoFlake::AnchorPosition(resourceManager->resource(DefaultTool::HotPosition).toInt()));
 
     // Connect anchor point selector
     connect(positionSelector, SIGNAL(valueChanged(KoFlake::AnchorPosition)), SLOT(slotAnchorPointChanged()));

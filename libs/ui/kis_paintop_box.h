@@ -135,7 +135,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotSaveActivePreset();
     void slotUpdatePreset();
     void slotSetupDefaultPreset();
     void slotNodeChanged(const KisNodeSP node);

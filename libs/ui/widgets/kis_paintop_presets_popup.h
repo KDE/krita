@@ -52,10 +52,6 @@ public:
 
     void setPaintOpSettingsWidget(QWidget * widget);
 
-    /**
-     * @return the name entered in the preset name lineedit
-     */
-    QString getPresetName() const;
 
     ///Image for preset preview
     ///@return image cut out from the scratchpad
@@ -88,7 +84,6 @@ protected:
     void showEvent(QShowEvent *) override;
 
 public Q_SLOTS:
-    void slotWatchPresetNameLineEdit();
     void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();

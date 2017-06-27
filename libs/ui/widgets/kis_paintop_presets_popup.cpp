@@ -100,13 +100,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
 
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setupScratchPad(resourceProvider, Qt::white);
-    m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlayRect(QRect(25, 25, 200, 200));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KisIconUtils::loadIcon("document-new"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KisIconUtils::loadIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize"));
 
 
@@ -209,14 +207,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.fillSolid, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillBackground()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
-            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
 
     m_d->settingsWidget = 0;
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
-            this, SIGNAL(savePresetClicked()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton, SIGNAL(clicked()),
             this, SLOT(slotSaveBrushPreset()));
@@ -239,19 +232,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox, SIGNAL(toggled(bool)),
             this, SIGNAL(eraserBrushOpacityToggled(bool)));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
-            m_d->uiWdgPaintOpPresetSettings.txtPreset, SLOT(clear()));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
-            SLOT(slotWatchPresetNameLineEdit()));
-
 
     // preset widget connections
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
-            m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
@@ -360,36 +344,6 @@ void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
 
-void KisPaintOpPresetsPopup::slotWatchPresetNameLineEdit()
-{
-    QString text = m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
-
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    bool overwrite = rServer->resourceByName(text) != 0;
-
-    KisPaintOpPresetSP preset = m_d->resourceProvider->currentPreset();
-
-    bool btnSaveAvailable = preset->valid() &&
-        (preset->isPresetDirty() | !overwrite);
-
-    QString btnText = overwrite ? i18n("Overwrite Preset") : i18n("Save to Presets");
-
-    m_d->uiWdgPaintOpPresetSettings.bnSave->setText(btnText);
-    m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(btnSaveAvailable);
-
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(true);
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setEnabled(btnSaveAvailable && overwrite);
-
-    QFont font = m_d->uiWdgPaintOpPresetSettings.txtPreset->font();
-    font.setItalic(btnSaveAvailable);
-    m_d->uiWdgPaintOpPresetSettings.txtPreset->setFont(font);
-}
-
-QString KisPaintOpPresetsPopup::getPresetName() const
-{
-    return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
-}
-
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
 {
     return m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay();
@@ -444,8 +398,6 @@ void KisPaintOpPresetsPopup::showScratchPad()
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
-    m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
-    slotWatchPresetNameLineEdit();
 
     // find the display name of the brush engine and append it to the selected preset display
     QString currentBrushEngineName;
@@ -615,6 +567,5 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KisIconUtils::loadIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 }

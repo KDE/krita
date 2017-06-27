@@ -27,18 +27,22 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include "kis_toolsinfosource.h"
 #include <KoToolRegistry.h>
 #include <iostream>
 #include <kis_global.h>
 #include <kis_types.h>
-#include "Vc/cpuid.h"
+#include <tuple>
 
 KisTelemetryRegularProvider::KisTelemetryRegularProvider()
 {
     m_provider.reset(new KUserFeedback::Provider);
     m_provider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
 
-    for (auto &source : m_sources) {
+    std::unique_ptr<KUserFeedback::AbstractDataSource> tools(new KisUserFeedback::ToolsInfoSource);
+    m_sources.push_back(std::move(tools));
+
+    for (auto& source : m_sources) {
         m_provider.data()->addDataSource(source.get());
     }
 }
@@ -59,4 +63,23 @@ KisTelemetryRegularProvider::~KisTelemetryRegularProvider()
 {
 }
 
-\
+void KisTelemetryRegularProvider::storeData(QVector<QString>& args)
+{
+    QString whatIsIt = args[0];
+    QString toolName = args[1];
+
+    KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
+    KisUserFeedback::ToolsInfoSource* tools = nullptr;
+
+    try {
+        tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
+    } catch (...) {
+        return;
+    }
+
+    if (whatIsIt == QString("Activate")) {
+        tools->activateTool(toolName);
+    } else {
+        tools->deactivateTool(toolName);
+    }
+}

@@ -27,12 +27,14 @@
 #include <KUserFeedback/provider.h>
 #include <QString>
 #include <QVector>
+#include <tuple>
 
 class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
 public:
     virtual KUserFeedback::Provider* provider() = 0;
     virtual void sendData() = 0;
-    virtual ~KisTelemetryAbstruct(){};
+    virtual void storeData(QVector<QString>& args) = 0;
+    virtual ~KisTelemetryAbstruct(){}
 
 protected:
     QString m_adress = "http://localhost:8080/";
@@ -40,3 +42,4 @@ protected:
 };
 
 #endif
+

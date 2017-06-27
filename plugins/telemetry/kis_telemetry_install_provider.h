@@ -45,6 +45,7 @@ public:
     KUserFeedback::Provider* provider() override;
     void sendData() override;
     virtual ~KisTelemetryInstallProvider();
+    void storeData(QVector<QString>&  args);
 
 private:
     QScopedPointer<KUserFeedback::Provider> m_provider;

@@ -105,7 +105,8 @@ public:
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    QScopedPointer<KisTelemetryAbstruct> provider;
+    QScopedPointer<KisTelemetryAbstruct> installProvider;
+    QScopedPointer<KisTelemetryAbstruct> regularProvider;
 };
 
 KisPart* KisPart::instance()
@@ -361,18 +362,41 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
     return &d->animationCachePopulator;
 }
 
-void KisPart::setProvider(KisTelemetryAbstruct *provider)
+void KisPart::setProvider(KisTelemetryAbstruct *provider, Providers kind)
 {
-    if(!d->provider.isNull())
-        Q_ASSERT(d->provider);
-   d->provider.reset(provider);
+    if(!d->installProvider.isNull())
+        Q_ASSERT(d->installProvider);
+    switch (kind) {
+    case  InstallProvider: {
+        d->installProvider.reset(provider);
+        break;
+    }
+    case  RegularProvider: {
+        d->regularProvider.reset(provider);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
-KisTelemetryAbstruct* KisPart::provider()
+KisTelemetryAbstruct* KisPart::provider(KisPart::Providers kind)
 {
-    if (d->provider.isNull())
+    switch (kind) {
+    case  InstallProvider: {
+        if (d->installProvider.isNull())
+            return nullptr;
+        return d->installProvider.data();
+    }
+    case  RegularProvider: {
+        if (d->regularProvider.isNull())
+            return nullptr;
+        return d->regularProvider.data();
+    }
+    default:
         return nullptr;
-    return d->provider.data();
+    }
+
 }
 
 void KisPart::openExistingFile(const QUrl& url)

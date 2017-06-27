@@ -36,7 +36,7 @@
 
 #include <kis_telemetry_abstruct.h>
 #include <memory>
-#include <vector>
+#include <QVector>
 
 
 class KisTelemetryRegularProvider : public KisTelemetryAbstruct {
@@ -45,6 +45,7 @@ public:
     KUserFeedback::Provider* provider() override;
     void sendData() override;
     virtual ~KisTelemetryRegularProvider();
+    void storeData(QVector<QString>& args) override;
 
 private:
     QScopedPointer<KUserFeedback::Provider> m_provider;

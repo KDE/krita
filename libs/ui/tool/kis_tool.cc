@@ -68,6 +68,9 @@
 #include <KisView.h>
 #include "kis_action_registry.h"
 #include "kis_tool_utils.h"
+#include "KisPart.h"
+#include "tuple"
+
 
 
 struct Q_DECL_HIDDEN KisTool::Private {
@@ -120,6 +123,16 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
 
+    qDebug()<<KisPart::instance()->provider(KisPart::RegularProvider);
+    if(KisPart::instance()->provider(KisPart::RegularProvider)){
+        KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
+        QVector<QString> temp;
+        temp.push_back("Deactivate");
+        temp.push_back(toolId());
+
+        provider->storeData(temp);
+    }
+
     resetCursorStyle();
 
     if (!canvas()) return;
@@ -161,6 +174,15 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 void KisTool::deactivate()
 {
     bool result = true;
+
+    if(KisPart::instance()->provider(KisPart::RegularProvider)){
+        KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
+        QVector<QString> temp;
+        temp.push_back("Deactivate");
+        temp.push_back(toolId());
+
+        provider->storeData(temp);
+    }
 
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);

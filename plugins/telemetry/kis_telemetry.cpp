@@ -27,6 +27,7 @@
 #include <KoToolRegistry.h>
 #include "kis_telemetry_install_provider.h"
 #include "KisPart.h"
+#include "kis_telemetry_regular_provider.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerPlugin<KisTelemetry>();)
@@ -34,7 +35,9 @@ K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerP
 KisTelemetry::KisTelemetry(QObject* parent, const QVariantList&)
     : QObject(parent)
 {
-    KisPart::instance()->setProvider(new KisTelemetryInstallProvider);
+    KisPart::instance()->setProvider(new KisTelemetryInstallProvider,KisPart::InstallProvider);
+    KisPart::instance()->setProvider(new KisTelemetryRegularProvider, KisPart::RegularProvider);
+
 }
 
 KisTelemetry::~KisTelemetry()

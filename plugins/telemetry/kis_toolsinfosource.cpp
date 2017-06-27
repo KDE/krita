@@ -24,6 +24,7 @@
 #include <QSysInfo>
 #include <QThread>
 #include <QVariant>
+#include <iostream>
 
 using namespace KisUserFeedback;
 using namespace KUserFeedback;
@@ -46,8 +47,8 @@ QVariant ToolsInfoSource::data()
 void ToolsInfoSource::activateTool(QString toolName)
 {
     QMutexLocker locker(&m_mutex);
-    QPair<QString, QTime> pair(toolName, QTime::currentTime());
     m_currentTools.insert(toolName, QTime::currentTime());
+    std::cout<<"ACTIVATE TOOL "<<toolName.toStdString()<<std::endl;
 }
 
 void ToolsInfoSource::deactivateTool(QString toolName)
@@ -62,4 +63,6 @@ void ToolsInfoSource::deactivateTool(QString toolName)
     m.insert(QStringLiteral("timeUse"), timeUse);
 
     m_tools.push_back(m);
+    std::cout<<"DE_ACTIVATE TOOL "<<toolName.toStdString()<<std::endl;
+
 }

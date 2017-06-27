@@ -1411,6 +1411,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
   </Actions>
 
   <Actions category="Tools">

@@ -222,9 +222,6 @@ void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point
 
 void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    if (!event->isAccepted() && d->activeTool) {
-        d->activeTool->canvas()->shapeManager()->suggestChangeTool(event);
-    }
     d->activeTool->mouseDoubleClickEvent(event);
 }
 

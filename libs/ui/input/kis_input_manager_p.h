@@ -80,7 +80,7 @@ public:
     void blockMouseEvents();
     void allowMouseEvents();
     void eatOneMousePress();
-    void maskSyntheticEvents(bool value);
+    void setMaskSyntheticEvents(bool value);
     void setTabletActive(bool value);
     void resetCompressor();
 
@@ -88,6 +88,7 @@ public:
     void debugEvent(QEvent *event)
     {
       if (!KisTabletDebugger::instance()->debugEnabled()) return;
+
       QString msg1 = useBlocking && ignoringQtCursorEvents() ? "[BLOCKED] " : "[       ]";
       Event *specificEvent = static_cast<Event*>(event);
       dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
@@ -136,7 +137,7 @@ public:
 
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event
-        bool eatSyntheticEvents{true}; // Mask all synthetic events
+        bool eatSyntheticEvents{false}; // Mask all synthetic events
     };
     EventEater eventEater;
 

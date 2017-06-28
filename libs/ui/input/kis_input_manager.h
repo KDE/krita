@@ -58,8 +58,6 @@ public:
      */
     ~KisInputManager() override;
 
-
-
     void addTrackedCanvas(KisCanvas2 *canvas);
     void removeTrackedCanvas(KisCanvas2 *canvas);
 

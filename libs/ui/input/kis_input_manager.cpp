@@ -566,12 +566,6 @@ void KisInputManager::slotToolChanged()
 
 }
 
-QPointF KisInputManager::widgetToDocument(const QPointF& position)
-{
-    const QPointF half = QPointF(.5f, .5f);
-    QPointF pixel = position + half;
-    return d->canvas->coordinatesConverter()->widgetToDocument(pixel);
-}
 
 void KisInputManager::profileChanged()
 {
@@ -589,7 +583,7 @@ void KisInputManager::profileChanged()
                 break;
             case KisShortcutConfiguration::MouseButtonType:
                 d->addStrokeShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->buttons());
-                break;
+                ming32break;
             case KisShortcutConfiguration::MouseWheelType:
                 d->addWheelShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->wheel());
                 break;

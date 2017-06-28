@@ -45,6 +45,11 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     Q_UNUSED(hl);
 
     connect(this, SIGNAL(okClicked()), SLOT(save()));
+    connect(widget.bnUndo, SIGNAL(clicked()), widget.textEdit, SLOT(undo()));
+    connect(widget.bnRedo, SIGNAL(clicked()), widget.textEdit, SLOT(redo()));
+    connect(widget.bnCopy, SIGNAL(clicked()), widget.textEdit, SLOT(copy()));
+    connect(widget.bnCut, SIGNAL(clicked()), widget.textEdit, SLOT(cut()));
+    connect(widget.bnPaste, SIGNAL(clicked()), widget.textEdit, SLOT(paste()));
 }
 
 SvgTextEditor::~SvgTextEditor()

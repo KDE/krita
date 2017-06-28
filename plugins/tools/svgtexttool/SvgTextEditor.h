@@ -26,6 +26,7 @@
 #include "ui_WdgSvgTextEditor.h"
 
 #include <KoDialog.h>
+#include <KoColor.h>
 
 class KoSvgTextShape;
 class KisFileNameRequester;
@@ -42,6 +43,17 @@ public:
 private Q_SLOTS:
 
     void save();
+
+    void setTextBold();
+    void setTextItalic();
+    void setTextUnderline();
+    void setTextStrikeThrough();
+    void setTextFill();
+    void setTextStroke();
+    void setFont();
+    void setSize();
+    void setSuperscript();
+    void setSubscript();
 
 Q_SIGNALS:
 

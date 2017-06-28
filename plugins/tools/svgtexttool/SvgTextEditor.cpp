@@ -50,6 +50,17 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     connect(widget.bnCopy, SIGNAL(clicked()), widget.textEdit, SLOT(copy()));
     connect(widget.bnCut, SIGNAL(clicked()), widget.textEdit, SLOT(cut()));
     connect(widget.bnPaste, SIGNAL(clicked()), widget.textEdit, SLOT(paste()));
+
+    connect(widget.bnBold, SIGNAL(clicked()), this, SLOT(setTextBold()));
+    connect(widget.bnItalic, SIGNAL(clicked()), this, SLOT(setTextItalic()));
+    connect(widget.bnUnderline, SIGNAL(clicked()), this, SLOT(setTextUnderline()));
+    connect(widget.bnStrikethrough, SIGNAL(clicked()), this, SLOT(setTextStrikeThrough()));
+    connect(widget.bnTextFgColor, SIGNAL(changed(KoColor)), this, SLOT(setTextFill()));
+    connect(widget.bnTextBgColor, SIGNAL(changed(KoColor)), this, SLOT(setTextStroke()));
+    connect(widget.bnSuperscript, SIGNAL(clicked()), this, SLOT(setSuperscript()));
+    connect(widget.bnSubscript, SIGNAL(clicked()), this, SLOT(setSubscript()));
+    connect(widget.fontComboBox, SIGNAL(currentFontChanged(const QFont)), this, SLOT(setFont()));
+    connect(widget.fontSize, SIGNAL(editingFinished()), this, SLOT(setSize()));
 }
 
 SvgTextEditor::~SvgTextEditor()
@@ -79,4 +90,112 @@ void SvgTextEditor::save()
     // We don't do defs or styles yet...
     emit textUpdated(widget.textEdit->document()->toPlainText(), "");
     hide();
+}
+
+void SvgTextEditor::setTextBold()
+{
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='font-weight:700;'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setTextItalic()
+{
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='font-style:italic;'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setTextUnderline()
+{
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='text-decoration:underline;'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setTextStrikeThrough()
+{
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='text-decoration:line-through;'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setTextFill()
+{
+    KoColor c = widget.bnTextFgColor->color();
+    QColor color = c.toQColor();
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan fill='"+color.name()+"'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setTextStroke()
+{
+    KoColor c = widget.bnTextBgColor->color();
+    QColor color = c.toQColor();
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan stroke='"+color.name()+"'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setFont()
+{
+    QString fontName = widget.fontComboBox->currentFont().family();
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='font-family:"+fontName+";'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setSize()
+{
+    QString fontSize = QString::number(widget.fontSize->value());
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='font-size:"+fontSize+";'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setSubscript()
+{
+    QString fontSize = QString::number(widget.fontSize->value());
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='font-size:50%;baseline-shift:sub;'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setSuperscript()
+{
+    QString fontSize = QString::number(widget.fontSize->value());
+    QTextCursor cursor = widget.textEdit->textCursor();
+    if (cursor.hasSelection()) {
+        QString selectionModified = "<tspan style='font-size:50%;baseline-shift:super;'>" + cursor.selectedText() + "</tspan>";
+        cursor.removeSelectedText();
+        cursor.insertText(selectionModified);
+    }
 }

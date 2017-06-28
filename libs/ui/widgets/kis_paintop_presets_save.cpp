@@ -159,6 +159,8 @@ void KisPresetSaveWidget::savePreset()
     QString presetName = m_isSavingNewBrush ? newBrushNameTexField->text() : curPreset->name();
 
     QString currentPresetFileName = saveLocation + presetName + curPreset->defaultFileExtension();
+
+    // if the preset already exists, make a back up of it
     if (rServer->resourceByName(presetName)) {
         QString currentDate = QDate::currentDate().toString(Qt::ISODate);
         QString currentTime = QTime::currentTime().toString(Qt::ISODate);
@@ -167,10 +169,13 @@ void KisPresetSaveWidget::savePreset()
         oldPreset->setName(presetName);
         oldPreset->setPresetDirty(false);
         oldPreset->setValid(true);
+
+        // add resource to the blacklist
         rServer->addResource(oldPreset);
+        rServer->removeResourceAndBlacklist(oldPreset.data());
+
         QStringList tags;
         tags = rServer->assignedTagsList(curPreset.data());
-        rServer->removeResourceAndBlacklist(oldPreset.data());
         Q_FOREACH (const QString & tag, tags) {
             rServer->addTag(oldPreset.data(), tag);
         }

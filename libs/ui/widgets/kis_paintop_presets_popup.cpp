@@ -72,6 +72,7 @@ public:
     KisPaintOpConfigWidget *settingsWidget;
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
+    KisFavoriteResourceManager *favoriteResManager;
 
     bool detached;
     bool ignoreHideEvents;
@@ -93,6 +94,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     current_paintOpId = "";
 
     m_d->resourceProvider = resourceProvider;
+    m_d->favoriteResManager = favoriteResourceManager;
 
     m_d->uiWdgPaintOpPresetSettings.setupUi(this);
 
@@ -112,7 +114,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     // overwrite existing preset and saving a new preset use the same dialog
     saveDialog = new KisPresetSaveWidget(this->parentWidget());
     saveDialog->scratchPadSetup(resourceProvider);
-    saveDialog->setFavoriteResourceManager(favoriteResourceManager); // this is needed when saving the preset
+    saveDialog->setFavoriteResourceManager(m_d->favoriteResManager); // this is needed when saving the preset
     saveDialog->hide();
 
 
@@ -323,10 +325,43 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
 
 void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 {
-    //TODO: what do we need to do to actually rename the brush and save it with what we have
+     m_d->favoriteResManager->setBlockUpdates(true);
 
-    // this returns the UI to its original state after saving
-    toggleBrushRenameUIActive(false);
+    // get a reference to the existing (and new) file name and path that we are working with
+    KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
+
+    if (!curPreset)
+        return;
+
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QString saveLocation = rServer->saveLocation();
+
+    QString originalPresetName = curPreset->name();
+    QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
+    QString originalPresetPathAndFile = saveLocation + originalPresetName + curPreset->defaultFileExtension();
+    QString renamedPresetPathAndFile = saveLocation + renamedPresetName + curPreset->defaultFileExtension();
+
+
+    // create a new brush preset with the name specified and add to resource provider
+    KisPaintOpPresetSP newPreset = curPreset->clone();
+    newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
+    newPreset->setName(renamedPresetName);
+    newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
+    newPreset->setPresetDirty(false);
+    newPreset->setValid(true);
+    rServer->addResource(newPreset);
+
+    resourceSelected(newPreset.data()); // refresh and select our freshly renamed resource
+
+
+    // Now blacklist the original file
+    if (rServer->resourceByName(originalPresetName)) {
+         rServer->removeResourceAndBlacklist(curPreset);
+     }
+
+    m_d->favoriteResManager->setBlockUpdates(false);
+
+    toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
 }
 
 

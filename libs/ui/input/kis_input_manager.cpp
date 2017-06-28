@@ -24,6 +24,8 @@
 #include <QQueue>
 #include <klocalizedstring.h>
 #include <QApplication>
+#include <QTouchEvent>
+#include <QTouchEvent>
 
 #include <KoToolManager.h>
 
@@ -70,15 +72,13 @@ KisInputManager::KisInputManager(QObject *parent)
 {
     d->setupActions();
 
-    connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)),
-            SLOT(slotAboutToChangeTool()));
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            SLOT(slotToolChanged()));
+    connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)), SLOT(slotToolChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 
     QApplication::instance()->
-        installEventFilter(new Private::ProximityNotifier(d, this));
+            installEventFilter(new Private::ProximityNotifier(d, this));
 }
 
 KisInputManager::~KisInputManager()
@@ -217,8 +217,8 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      */
     if ((event->type() == QEvent::MouseMove ||
          event->type() == QEvent::TabletMove) &&
-        (!d->matcher.supportsHiResInputEvents() ||
-         d->testingCompressBrushEvents)) {
+            (!d->matcher.supportsHiResInputEvents() ||
+             d->testingCompressBrushEvents)) {
 
         d->compressedMoveEvent.reset(new Event(*event));
         d->moveEventCompressor.start();
@@ -244,7 +244,6 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
 
 bool KisInputManager::eventFilterImpl(QEvent * event)
 {
-    // TODO: Handle touch events correctly.
     bool retval = false;
 
     switch (event->type()) {
@@ -338,7 +337,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
 
-        if(wheelEvent->orientation() == Qt::Horizontal) {
+        if (wheelEvent->orientation() == Qt::Horizontal) {
             if(wheelEvent->delta() < 0) {
                 action = KisSingleActionShortcut::WheelRight;
             }
@@ -391,15 +390,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->matcher.reinitialize();
 
-        { // Emulate pressing of the key that are already pressed
-            KisExtendedModifiersMapper mapper;
+    { // Emulate pressing of the key that are already pressed
+        KisExtendedModifiersMapper mapper;
 
-            Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
-            Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
-                QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
-                eventFilterImpl(&kevent);
-            }
+        Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
+        Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
+            QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+            eventFilterImpl(&kevent);
         }
+    }
 
         d->allowMouseEvents();
         break;
@@ -409,45 +408,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         KisAbstractInputAction::setInputManager(this);
 
         QPointF currentLocalPos =
-            canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+                canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
 
         d->matcher.lostFocusEvent(currentLocalPos);
 
         break;
     }
-    case QEvent::TabletRelease: {
-#ifdef Q_OS_MAC
-        d->allowMouseEvents();
-#endif
-        // if (d->touchHasBlockedPressEvents) break;
-        d->debugEvent<QTabletEvent, false>(event);
-
-        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-        retval = d->matcher.buttonReleased(tabletEvent->button(), tabletEvent);
-        retval = true;
-        event->setAccepted(true);
-        break;
-    }
-
-
-    case QEvent::TabletMove: {
-        d->debugEvent<QTabletEvent, false>(event);
-
-        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-        retval = compressMoveEventCommon(tabletEvent);
-
-        /**
-         * The flow of tablet events means the tablet is in the
-         * proximity area, so activate it even when the
-         * TabletEnterProximity event was missed (may happen when
-         * changing focus of the window with tablet in the proximity
-         * area)
-         */
-        d->blockMouseEvents();
-
-        break;
-    }
-
     case QEvent::TabletPress: {
         d->debugEvent<QTabletEvent, false>(event);
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
@@ -466,8 +432,41 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->eatOneMousePress();
         break;
     }
+    case QEvent::TabletMove: {
+        d->debugEvent<QTabletEvent, false>(event);
+
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        retval = compressMoveEventCommon(tabletEvent);
+
+        /**
+         * The flow of tablet events means the tablet is in the
+         * proximity area, so activate it even when the
+         * TabletEnterProximity event was missed (may happen when
+         * changing focus of the window with tablet in the proximity
+         * area)
+         */
+        d->blockMouseEvents();
+
+        break;
+    }
+    case QEvent::TabletRelease: {
+#ifdef Q_OS_MAC
+        d->allowMouseEvents();
+#endif
+        if (d->touchHasBlockedPressEvents) break;
+        d->debugEvent<QTabletEvent, false>(event);
+
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        retval = d->matcher.buttonReleased(tabletEvent->button(), tabletEvent);
+        retval = true;
+        event->setAccepted(true);
+        break;
+    }
 
     case QEvent::TouchBegin:
+    {
+        QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+        qDebug() << "QEvent::TouchBegin" << KisConfig().disableTouchOnCanvas() << "touch points" << tevent->touchPoints().count() << "pressure" << tevent->touchPoints().first().pressure() << "tablet active" << d->tabletActive;
         d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
         // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
         if (KisConfig().disableTouchOnCanvas()) d->eatOneMousePress();
@@ -478,10 +477,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
             event->accept();
         }
-        // d->resetSavedTabletEvent(event->type());
         break;
-    case QEvent::TouchUpdate: {
+    }
+    case QEvent::TouchUpdate:
+    {
         QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+        qDebug() << "QEvent::TouchUpdate" << KisConfig().disableTouchOnCanvas() << "touch points" << tevent->touchPoints().count()<< "pressure" << tevent->touchPoints().first().pressure();
 #ifdef Q_OS_MAC
         int count = 0;
         Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
@@ -502,16 +503,17 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
         event->accept();
-
-        // d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::TouchEnd:
+    {
+        QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+        qDebug() << "QEvent::TouchEnd" << KisConfig().disableTouchOnCanvas() << "touch points" << tevent->touchPoints().count()<< "pressure" << tevent->touchPoints().first().pressure();
         d->touchHasBlockedPressEvents = false;
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        // d->resetSavedTabletEvent(event->type());
         break;
+    }
     default:
         break;
     }
@@ -545,7 +547,7 @@ KisToolProxy* KisInputManager::toolProxy() const
 void KisInputManager::slotAboutToChangeTool()
 {
     QPointF currentLocalPos =
-        canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+            canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
 
     d->matcher.lostFocusEvent(currentLocalPos);
 }
@@ -554,10 +556,10 @@ void KisInputManager::slotToolChanged()
 {
     KoToolManager *toolManager = KoToolManager::instance();
     KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    d->setMaskSyntheticEvents(tool->maskSyntheticEvents());
     if (tool && tool->isInTextMode()) {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
-        d->maskSyntheticEvents(tool->maskSyntheticEvents());
     } else {
         d->forwardAllEventsToTool = false;
         d->matcher.suppressAllActions(false);
@@ -583,7 +585,7 @@ void KisInputManager::profileChanged()
                 break;
             case KisShortcutConfiguration::MouseButtonType:
                 d->addStrokeShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->buttons());
-                ming32break;
+                break;
             case KisShortcutConfiguration::MouseWheelType:
                 d->addWheelShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->wheel());
                 break;

@@ -58,8 +58,6 @@ public:
      */
     ~KisInputManager() override;
 
-
-
     void addTrackedCanvas(KisCanvas2 *canvas);
     void removeTrackedCanvas(KisCanvas2 *canvas);
 
@@ -79,7 +77,6 @@ public:
      * Event filter method. Overridden from QObject.
      */
     bool eventFilter(QObject* object, QEvent* event ) override;
-    bool eventFilterImpl(QEvent * event);
 
     /**
      * @brief attachPriorityEventFilter
@@ -114,6 +111,8 @@ private Q_SLOTS:
     void slotCompressedMoveEvent();
 
 private:
+
+    bool eventFilterImpl(QEvent * event);
     template <class Event>
         bool compressMoveEventCommon(Event *event);
 

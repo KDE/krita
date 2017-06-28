@@ -52,6 +52,7 @@ public:
     void isSavingNewBrush(bool newBrush);
 
     void scratchPadSetup(KisCanvasResourceProvider* resourceProvider);
+    void saveScratchPadThumbnailArea(const QImage image);
     KisCanvasResourceProvider* m_resourceProvider;
 
     void setFavoriteResourceManager(KisFavoriteResourceManager * favManager);
@@ -61,14 +62,17 @@ Q_SIGNALS:
 
 
 public Q_SLOTS:
-    void usePreviousThumbnail(bool usePrevious);
+
     void loadImageFromFile();
     void savePreset();
+    void loadScratchpadThumbnail();
+    void loadExistingThumbnail();
 
 
 private:
     bool m_isSavingNewBrush;
     KisFavoriteResourceManager * m_favoriteResourceManager;
+    QImage scratchPadThumbnailArea;
 };
 
 

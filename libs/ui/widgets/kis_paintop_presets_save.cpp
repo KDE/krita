@@ -40,8 +40,10 @@ KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     // we will default to reusing the previous preset thumbnail
     // have that checked by default, hide the other elements, and load the last preset image
     connect(clearBrushPresetThumbnailButton, SIGNAL(clicked(bool)), brushPresetThumbnailWidget, SLOT(fillDefault()));
-    connect(useExistingThumbnailCheckbox, SIGNAL(clicked(bool)), this, SLOT(usePreviousThumbnail(bool)));
     connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
+
+    connect(loadScratchPadThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadScratchpadThumbnail()));
+    connect(loadExistingThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadExistingThumbnail()));
 
     connect(savePresetButton, SIGNAL(clicked(bool)), this, SLOT(savePreset()));
     connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
@@ -71,7 +73,6 @@ void KisPresetSaveWidget::showDialog()
            this->setWindowTitle(i18n("Save New Brush Preset"));
            this->newBrushNameLabel->setVisible(true);
            this->newBrushNameTexField->setVisible(true);
-           this->useExistingThumbnailCheckbox->setVisible(false);
            this->clearBrushPresetThumbnailButton->setVisible(true);
            this->loadImageIntoThumbnailButton->setVisible(true);
            this->currentBrushNameLabel->setVisible(false);
@@ -91,31 +92,12 @@ void KisPresetSaveWidget::showDialog()
 
         this->newBrushNameLabel->setVisible(false);
         this->newBrushNameTexField->setVisible(false);
-        this->useExistingThumbnailCheckbox->setVisible(true);
         this->currentBrushNameLabel->setVisible(true);
-
-        this->useExistingThumbnailCheckbox->setChecked(true);
-        usePreviousThumbnail(true);
     }
+
+     this->brushPresetThumbnailWidget->paintPresetImage();
 
     show();
-}
-
-void KisPresetSaveWidget::usePreviousThumbnail(bool usePrevious)
-{
-
-    // hide other elements if we are using the previous thumbnail
-    this->clearBrushPresetThumbnailButton->setVisible(!usePrevious);
-    this->loadImageIntoThumbnailButton->setVisible(!usePrevious);
-
-    // load the previous thumbnail if we are using the existing one
-    if (usePrevious) {
-        this->brushPresetThumbnailWidget->paintPresetImage();
-    } else {
-        brushPresetThumbnailWidget->fillDefault(); // fill with white if we want a new preview area
-    }
-
-    this->brushPresetThumbnailWidget->allowPainting(!usePrevious); // don't allow drawing if we are using the existing preset
 }
 
 void KisPresetSaveWidget::loadImageFromFile()
@@ -136,6 +118,19 @@ void KisPresetSaveWidget::loadImageFromFile()
     }
 
 }
+
+void KisPresetSaveWidget::loadScratchpadThumbnail()
+{
+    brushPresetThumbnailWidget->paintCustomImage(scratchPadThumbnailArea);
+}
+
+void KisPresetSaveWidget::loadExistingThumbnail()
+{
+    brushPresetThumbnailWidget->paintPresetImage();
+}
+
+
+
 
 void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager * favManager)
 {
@@ -220,11 +215,15 @@ void KisPresetSaveWidget::savePreset()
 
     m_favoriteResourceManager->setBlockUpdates(false);
 
-
-
     close(); // we are done... so close the save brush dialog
 
 }
+
+void KisPresetSaveWidget::saveScratchPadThumbnailArea(QImage image)
+{
+    scratchPadThumbnailArea = image;
+}
+
 
 void KisPresetSaveWidget::isSavingNewBrush(bool newBrush)
 {

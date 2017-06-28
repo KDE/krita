@@ -56,12 +56,14 @@ public:
 
     void setFavoriteResourceManager(KisFavoriteResourceManager * favManager);
 
+Q_SIGNALS:
+    void resourceSelected(KoResource* resource);
+
 
 public Q_SLOTS:
     void usePreviousThumbnail(bool usePrevious);
     void loadImageFromFile();
     void savePreset();
-
 
 
 private:

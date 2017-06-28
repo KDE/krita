@@ -182,15 +182,17 @@ void KisPresetSaveWidget::savePreset()
     }
 
     if (m_isSavingNewBrush) {
-
         KisPaintOpPresetSP newPreset = curPreset->clone();
         newPreset->setFilename(currentPresetFileName);
         newPreset->setName(presetName);
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setPresetDirty(false);
         newPreset->setValid(true);
+
         rServer->addResource(newPreset);
-        curPreset = newPreset; //to load the new preset
+
+        // trying to get brush preset to load after it is created
+        emit resourceSelected(newPreset.data());
 
     } else {
 
@@ -217,6 +219,7 @@ void KisPresetSaveWidget::savePreset()
     rServer->tagCategoryMembersChanged();
 
     m_favoriteResourceManager->setBlockUpdates(false);
+
 
 
     close(); // we are done... so close the save brush dialog

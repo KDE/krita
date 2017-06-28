@@ -189,6 +189,16 @@ void SvgTextEditor::setSubscript()
     }
 }
 
+void SvgTextEditor::wheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier) {
+        int numDegrees = event->delta() / 8;
+        int numSteps = numDegrees / 7;
+        widget.textEdit->zoomOut(numSteps);
+        event->accept();
+    }
+}
+
 void SvgTextEditor::setSuperscript()
 {
     QString fontSize = QString::number(widget.fontSize->value());

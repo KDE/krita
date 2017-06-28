@@ -58,7 +58,8 @@ private Q_SLOTS:
 Q_SIGNALS:
 
     void textUpdated(const QString &svg, const QString &defs);
-
+protected:
+    void wheelEvent(QWheelEvent *event) override;
 private:
     Ui_WdgSvgTextEditor widget;
     QWidget *m_page;

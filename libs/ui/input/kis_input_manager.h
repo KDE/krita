@@ -103,12 +103,6 @@ public:
      */
     KisToolProxy *toolProxy() const;
 
-
-    /**
-     * Convert a widget position to a document position.
-     */
-    QPointF widgetToDocument(const QPointF &position);
-
 public Q_SLOTS:
     void stopIgnoringEvents();
 

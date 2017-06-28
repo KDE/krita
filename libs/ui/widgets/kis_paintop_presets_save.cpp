@@ -142,7 +142,6 @@ void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager 
     m_favoriteResourceManager = favManager;
 }
 
-
 void KisPresetSaveWidget::savePreset()
 {
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();

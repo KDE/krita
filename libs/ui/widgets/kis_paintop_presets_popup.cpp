@@ -105,7 +105,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KisIconUtils::loadIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize"));
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize")); // refresh icon
+    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("dirty-preset")); // edit icon
 
 
     // overwrite existing preset and saving a new preset use the same dialog
@@ -114,6 +115,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     saveDialog->setFavoriteResourceManager(favoriteResourceManager); // this is needed when saving the preset
     saveDialog->hide();
 
+
+    // the area on the brush editor for renaming the brush. make sure edit fields are hidden by default
+    toggleBrushRenameUIActive(false);
 
 
     // DETAIL and THUMBNAIL view changer
@@ -179,6 +183,14 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // Connections
 
+    connect (m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotRenameBrushActivated()));
+
+    connect (m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotRenameBrushDeactivated()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotSaveRenameCurrentBrush()));
 
     connect(iconSizeSlider, SIGNAL(sliderMoved(int)),
             m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSetIconSize(int)));
@@ -268,6 +280,53 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
+}
+
+
+void KisPaintOpPresetsPopup::slotRenameBrushActivated()
+{
+   toggleBrushRenameUIActive(true);
+}
+
+void KisPaintOpPresetsPopup::slotRenameBrushDeactivated()
+{
+   toggleBrushRenameUIActive(false);
+}
+
+void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
+{
+    // This function doesn't really do anything except get the UI in a state to rename a brush preset
+
+    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(!isRenaming);
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(!isRenaming);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(!isRenaming);
+
+
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(isRenaming);
+    m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton->setVisible(isRenaming);
+    m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton->setVisible(isRenaming);
+
+    if (isRenaming) // preset name probably won't exist in memory when we deactivate the UI at the start
+    {
+        // populate the text field with the currently selected brush name for editing
+        QString presetName = m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->currentResource()->name();
+        m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(presetName);
+    }
+
+
+
+
+
+    m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(!isRenaming);
+    m_d->uiWdgPaintOpPresetSettings.saveNewBrushPresetButton->setEnabled(!isRenaming);
+}
+
+void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
+{
+    //TODO: what do we need to do to actually rename the brush and save it with what we have
+
+    // this returns the UI to its original state after saving
+    toggleBrushRenameUIActive(false);
 }
 
 
@@ -416,6 +475,8 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(30, 30)));
     thumbScene->setSceneRect(0, 0, 30, 30); // 30 x 30 image for thumb. this is also set in the UI
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setScene(thumbScene);
+
+    toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
 }
 
 bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)

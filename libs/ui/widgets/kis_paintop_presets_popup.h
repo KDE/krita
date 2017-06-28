@@ -91,6 +91,9 @@ public Q_SLOTS:
     void updateThemedIcons();
 
     void slotUpdateLodAvailability();
+    void slotRenameBrushActivated();
+    void slotRenameBrushDeactivated();
+    void slotSaveRenameCurrentBrush();
 
 Q_SIGNALS:
     void savePresetClicked();
@@ -123,6 +126,7 @@ private:
     Private * const m_d;
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
+    void toggleBrushRenameUIActive(bool isRenaming);
 
 };
 

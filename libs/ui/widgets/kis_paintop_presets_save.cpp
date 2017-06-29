@@ -34,7 +34,7 @@ KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
 {
     // this is setting the area we will "capture" for saving the brush preset. It can potentially be a different
     // area that the entire scratchpad
-    this->brushPresetThumbnailWidget->setCutoutOverlayRect(QRect(0, 0, brushPresetThumbnailWidget->height(), brushPresetThumbnailWidget->width()));
+    brushPresetThumbnailWidget->setCutoutOverlayRect(QRect(0, 0, brushPresetThumbnailWidget->height(), brushPresetThumbnailWidget->width()));
 
 
     // we will default to reusing the previous preset thumbnail
@@ -58,7 +58,7 @@ void KisPresetSaveWidget::scratchPadSetup(KisCanvasResourceProvider* resourcePro
 {
     m_resourceProvider = resourceProvider;
 
-    this->brushPresetThumbnailWidget->setupScratchPad(m_resourceProvider, Qt::white);
+    brushPresetThumbnailWidget->setupScratchPad(m_resourceProvider, Qt::white);
 }
 
 void KisPresetSaveWidget::showDialog()
@@ -70,32 +70,30 @@ void KisPresetSaveWidget::showDialog()
 
     // UI will look a bit different if we are saving a new brush
     if (m_isSavingNewBrush) {
-           this->setWindowTitle(i18n("Save New Brush Preset"));
-           this->newBrushNameLabel->setVisible(true);
-           this->newBrushNameTexField->setVisible(true);
-           this->clearBrushPresetThumbnailButton->setVisible(true);
-           this->loadImageIntoThumbnailButton->setVisible(true);
-           this->currentBrushNameLabel->setVisible(false);
+           setWindowTitle(i18n("Save New Brush Preset"));
+           newBrushNameTexField->setVisible(true);
+           clearBrushPresetThumbnailButton->setVisible(true);
+           loadImageIntoThumbnailButton->setVisible(true);
+           currentBrushNameLabel->setVisible(false);
 
            if (preset) {
-               this->newBrushNameTexField->setText(preset->name().append(" ").append(i18n("Copy")));
+               newBrushNameTexField->setText(preset->name().append(" ").append(i18n("Copy")));
            }
 
-           this->brushPresetThumbnailWidget->allowPainting(true); // in case it was disabled with normal saving last time
+           brushPresetThumbnailWidget->allowPainting(true); // in case it was disabled with normal saving last time
 
     } else {
-        this->setWindowTitle(i18n("Save Brush Preset"));
+        setWindowTitle(i18n("Save Brush Preset"));
 
         if (preset) {
-            this->currentBrushNameLabel->setText(preset->name());
+            currentBrushNameLabel->setText(preset->name());
         }
 
-        this->newBrushNameLabel->setVisible(false);
-        this->newBrushNameTexField->setVisible(false);
-        this->currentBrushNameLabel->setVisible(true);
+        newBrushNameTexField->setVisible(false);
+        currentBrushNameLabel->setVisible(true);
     }
 
-     this->brushPresetThumbnailWidget->paintPresetImage();
+     brushPresetThumbnailWidget->paintPresetImage();
 
     show();
 }
@@ -128,9 +126,6 @@ void KisPresetSaveWidget::loadExistingThumbnail()
 {
     brushPresetThumbnailWidget->paintPresetImage();
 }
-
-
-
 
 void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager * favManager)
 {

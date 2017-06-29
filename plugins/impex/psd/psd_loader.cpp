@@ -146,7 +146,9 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
     if (resourceSection.resources.contains(PSDImageResourceSection::RESN_INFO)) {
         RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDImageResourceSection::RESN_INFO]->resource);
         if (resInfo) {
-            m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
+            // check resolution size is not zero
+            if (resInfo->hRes * resInfo->vRes > 0)
+                m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
             // let's skip the unit for now; we can only set that on the KisDocument, and krita doesn't use it.
             delete resourceSection.resources.take(PSDImageResourceSection::RESN_INFO);
         }

@@ -326,7 +326,7 @@ quint32 KoColorSet::getIndexClosestColor(const KoColor color, bool useGivenColor
 QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpace)
 {
     int i = getIndexClosestColor(color, useGivenColorSpace);
-    QString name = d->colors.at(i).name;
+    QString name = getColorGlobal(i).name;
     return name;
 }
 

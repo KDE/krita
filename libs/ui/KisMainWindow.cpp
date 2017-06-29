@@ -30,8 +30,10 @@
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDesktopWidget>
+#include <QDialog>
 #include <QDockWidget>
 #include <QIcon>
+#include <QInputDialog>
 #include <QLabel>
 #include <QLayout>
 #include <QMdiArea>
@@ -64,6 +66,7 @@
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
+#include <kis_workspace_resource.h>
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -94,6 +97,7 @@
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
+#include <KoResourceModel.h>
 
 #include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
@@ -169,6 +173,7 @@ public:
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
+        , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
@@ -225,10 +230,12 @@ public:
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
     KActionMenu *documentMenu;
+    KActionMenu *workspaceMenu;
 
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
+    KoResourceModel *workspacemodel {0};
 
     QUrl lastExportUrl;
 
@@ -271,6 +278,11 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
+    auto rserver = KisResourceServerProvider::instance()->workspaceServer(false);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
+    d->workspacemodel = new KoResourceModel(adapter, this);
+    connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
+
     KisConfig cfg;
 
     d->viewManager = new KisViewManager(this, actionCollection());
@@ -2069,6 +2081,73 @@ void KisMainWindow::updateWindowMenu()
             d->documentMapper->setMapping(action, doc);
         }
     }
+
+    menu->addAction(d->workspaceMenu);
+    QMenu *workspaceMenu = d->workspaceMenu->menu();
+    workspaceMenu->clear();
+
+    auto workspaces = KisResourceServerProvider::instance()->workspaceServer(false)->resources();
+    auto m_this = this;
+    for (auto &w : workspaces) {
+        auto action = workspaceMenu->addAction(w->name());
+        auto ds = w->dockerState();
+        connect(action, &QAction::triggered, this, [=]() { m_this->restoreWorkspace(ds); });
+    }
+    workspaceMenu->addSeparator();
+    connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
+            &QAction::triggered,
+            this,
+            [&]() {
+        QString extensions = d->workspacemodel->extensions();
+        QStringList mimeTypes;
+        for(const QString &suffix : extensions.split(":")) {
+            mimeTypes << KisMimeDatabase::mimeTypeForSuffix(suffix);
+        }
+
+        KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+        dialog.setMimeTypeFilters(mimeTypes);
+        dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
+        QString filename = dialog.filename();
+
+        d->workspacemodel->importResourceFile(filename);
+    });
+
+    connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
+            &QAction::triggered,
+            [=]() {
+        QString name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
+                                             i18nc("@label:textbox", "Name:"));
+        if (name.isEmpty()) return;
+        auto rserver = KisResourceServerProvider::instance()->workspaceServer();
+
+        KisWorkspaceResource* workspace = new KisWorkspaceResource("");
+        workspace->setDockerState(m_this->saveState());
+        d->viewManager->resourceProvider()->notifySavingWorkspace(workspace);
+        workspace->setValid(true);
+        QString saveLocation = rserver->saveLocation();
+
+        bool newName = false;
+        if(name.isEmpty()) {
+            newName = true;
+            name = i18n("Workspace");
+        }
+        QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
+
+        int i = 1;
+        while (fileInfo.exists()) {
+            fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + workspace->defaultFileExtension());
+            i++;
+        }
+        workspace->setFilename(fileInfo.filePath());
+        if(newName) {
+            name = i18n("Workspace %1", i);
+        }
+        workspace->setName(name);
+        rserver->addResource(workspace);
+    });
+
+    // TODO: What to do about delete?
+//    workspaceMenu->addAction(i18nc("@action:inmenu", "&Delete Workspace..."));
 
     menu->addSeparator();
     menu->addAction(d->close);

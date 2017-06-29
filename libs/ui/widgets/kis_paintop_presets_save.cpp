@@ -80,7 +80,6 @@ void KisPresetSaveWidget::showDialog()
                newBrushNameTexField->setText(preset->name().append(" ").append(i18n("Copy")));
            }
 
-           brushPresetThumbnailWidget->allowPainting(true); // in case it was disabled with normal saving last time
 
     } else {
         setWindowTitle(i18n("Save Brush Preset"));

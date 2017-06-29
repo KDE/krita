@@ -127,8 +127,6 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_infoBuilder = new KisPaintingInformationBuilder();
     m_helper = new KisToolFreehandHelper(m_infoBuilder);
 
-    m_allowPainting = true;
-
     m_scaleBorderWidth = 1;
 }
 
@@ -153,8 +151,6 @@ KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
 
 void KisScratchPad::pointerPress(KoPointerEvent *event)
 {
-    if (!m_allowPainting) return;
-
     if (m_toolMode != HOVERING) return;
 
     m_toolMode = modeFromButton(event->button());
@@ -175,7 +171,6 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
 
 void KisScratchPad::pointerRelease(KoPointerEvent *event)
 {
-    if (!m_allowPainting) return;
     if (modeFromButton(event->button()) != m_toolMode) return;
 
     if (m_toolMode == PAINTING) {
@@ -196,8 +191,6 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
 
 void KisScratchPad::pointerMove(KoPointerEvent *event)
 {
-    if (!m_allowPainting) return;
-
     m_helper->cursorMoved(documentToWidget().map(event->point));
     if (m_toolMode == PAINTING) {
         doStroke(event);
@@ -443,19 +436,6 @@ void KisScratchPad::paintPresetImage()
     KisPainter painter(paintDevice);
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);
     update();
-}
-
-void KisScratchPad::allowPainting(bool allowEditing)
-{
-    m_allowPainting = allowEditing;
-
-    // update the cursor so it doesn't look like we can paint
-    if (m_allowPainting) {
-        this->setCursor(m_cursor);
-    }
-    else {
-        this->setCursor(Qt::ArrowCursor);
-    }
 }
 
 void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile)

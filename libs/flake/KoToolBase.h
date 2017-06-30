@@ -316,6 +316,8 @@ public:
       */
     bool isInTextMode() const;
 
+public Q_SLOTS:
+
     /**
      * Called when the user requested undo while the stroke is
      * active. If you tool supports undo of the part of its actions,
@@ -341,7 +343,6 @@ public:
      */
     virtual void requestStrokeEnd();
 
-public Q_SLOTS:
 
     /**
      * This method is called when this tool instance is activated.

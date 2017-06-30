@@ -235,7 +235,7 @@ void QMic::connected()
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
         QRectF cropRect = m_view->image()->bounds();
-        if (!messageMap.contains("croprect") || !messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() == 4) {
+        if (!messageMap.contains("croprect") || messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() != 4) {
             qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
         }
         else {
@@ -281,7 +281,7 @@ void QMic::connected()
     ds.writeBytes(ba.constData(), ba.length());
 
     // Wait for the ack
-    bool r;
+    bool r = true;
     r &= socket->waitForReadyRead(); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
     socket->waitForDisconnected(-1);
@@ -372,12 +372,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
             gimg->_data = new float[width * height * spectrum * sizeof(float)];
             qDebug() << "width" << width << "height" << height << "size" << width * height * spectrum * sizeof(float) << "shared memory size" << m.size();
             memcpy(gimg->_data, m.constData(), width * height * spectrum * sizeof(float));
-
-
-            QFile f("/home/boud/imagedata.txt");
-            f.open(QFile::WriteOnly);
-            f.write((const char*)m.constData(), m.size());
-            f.close();
 
             qDebug() << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
 

@@ -133,5 +133,10 @@ KisSpacingInformation KisDynaPaintOp::updateSpacingImpl(const KisPaintInformatio
 {
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisDynaPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

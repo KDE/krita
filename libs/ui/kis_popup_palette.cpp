@@ -230,7 +230,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
 
     zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
-    zoomCanvasSlider->setRange(10, 200); // 10% to 200 %
+    zoomSliderMinValue = 10; // set in %
+    zoomSliderMaxValue = 200; // set in %
+
+    zoomCanvasSlider->setRange(zoomSliderMinValue, zoomSliderMaxValue);
     zoomCanvasSlider->setFixedHeight(35);
     zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent());
 
@@ -364,7 +367,14 @@ void KisPopupPalette::showPopupPalette(const QPoint &p)
 void KisPopupPalette::showPopupPalette(bool show)
 {
     if (show) {
-        zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
+
+        // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
+        // the bounds and cause the canvas to jump between the slider's min and max
+        if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
+            m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue  ){
+            zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
+        }
+
         emit sigEnableChangeFGColor(!show);
     } else {
         emit sigTriggerTimer();
@@ -905,4 +915,3 @@ int KisPopupPalette::numSlots()
     KisConfig config;
     return qMax(config.favoritePresets(), 10);
 }
-

@@ -44,10 +44,11 @@ void KisQmicSynchronizeImageSizeCommand::redo()
 
         qDebug() << "\tkrita image" << kritaSize << "gmic size" << gmicBoundingLayerSize;
 
-        if (kritaSize != gmicBoundingLayerSize)
+        if (gmicBoundingLayerSize.width() > kritaSize.width() || gmicBoundingLayerSize.height() > kritaSize.height())
         {
-            dbgPlugins << "G'Mic resizes Krita canvas from " << kritaSize << " to " << gmicBoundingLayerSize;
-            m_resizeCommand = new KisImageResizeCommand(m_image, gmicBoundingLayerSize);
+            QSize newSize = kritaSize.expandedTo(gmicBoundingLayerSize);
+            dbgPlugins << "G'Mic expands Krita canvas from " << kritaSize << " to " << newSize;
+            m_resizeCommand = new KisImageResizeCommand(m_image, newSize);
             m_resizeCommand->redo();
         }
     }

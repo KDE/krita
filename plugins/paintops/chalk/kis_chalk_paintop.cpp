@@ -98,5 +98,10 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 KisSpacingInformation KisChalkPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, 1.0, false, 1.0, 1.0,
-                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisChalkPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

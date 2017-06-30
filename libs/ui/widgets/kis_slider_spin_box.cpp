@@ -142,7 +142,6 @@ void KisAbstractSliderSpinBox::showEdit()
     d->edit->show();
     d->edit->setFocus(Qt::OtherFocusReason);
     update();
-    KisPart::currentInputManager()->slotFocusOnEnter(false);
 }
 
 void KisAbstractSliderSpinBox::hideEdit()
@@ -150,7 +149,6 @@ void KisAbstractSliderSpinBox::hideEdit()
     Q_D(KisAbstractSliderSpinBox);
     d->edit->hide();
     update();
-    KisPart::currentInputManager()->slotFocusOnEnter(true);
 }
 
 void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)

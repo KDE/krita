@@ -53,12 +53,12 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
 void KisToolPolylineBase::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
 {
     KisToolShape::activate(activation, shapes);
-    connect(actions().value("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
+    connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
 }
 
 void KisToolPolylineBase::deactivate()
 {
-    disconnect(actions().value("undo_polygon_selection"), 0, this, 0);
+    disconnect(action("undo_polygon_selection"), 0, this, 0);
     cancelStroke();
     KisToolShape::deactivate();
 }

@@ -78,13 +78,6 @@ public:
     ~KoToolBase() override;
 
     /**
-     * connect the tool to the new shapecontroller. Old connections are removed.
-     *
-     * @param shapeController the new shape controller
-     */
-    void updateShapeController(KoShapeBasedDocumentBase *shapeController);
-
-    /**
      * request a repaint of the decorations to be made. This triggers
      * an update call on the canvas, but does not paint directly.
      */
@@ -142,14 +135,6 @@ public:
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
     /**
-     * Called when (one of) the mouse or stylus buttons is triple clicked.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * Default implementation ignores this event.
-     * @param event state and reason of this mouse or stylus press
-     */
-    virtual void mouseTripleClickEvent(KoPointerEvent *event);
-
-    /**
      * Called when the mouse or stylus moved over the canvas.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this mouse or stylus move
@@ -180,15 +165,6 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /**
-     * Called when the scrollwheel is used
-     * Implementors should call event->ignore() if they do not actually use the event
-     * @param event state of this wheel event
-     */
-    virtual void wheelEvent(KoPointerEvent *event);
-
-    virtual void touchEvent(QTouchEvent *event);
-
-    /**
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
      * text and reconversions.
@@ -209,29 +185,6 @@ public:
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /**
-     * Called when (one of) a custom device buttons is pressed.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this custom device press
-     */
-    virtual void customPressEvent(KoPointerEvent *event);
-
-    /**
-     * Called when (one of) a custom device buttons is released.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this custom device release
-     */
-    virtual void customReleaseEvent(KoPointerEvent *event);
-
-    /**
-     * Called when a custom device moved over the canvas.
-     * Implementors should call event->ignore() if they do not actually use the event.
-     * @param event state and reason of this custom device move
-     */
-    virtual void customMoveEvent(KoPointerEvent *event);
-
-
-
-    /**
      * @return true if synthetic mouse events on the canvas should be eaten.
      *
      * For example, the guides tool should allow click and drag with touch,
@@ -240,19 +193,6 @@ public:
      * These events are sent by the OS in Windows
      */
     bool maskSyntheticEvents() const;
-
-
-    /**
-     * @return true if the tool will accept raw QTouchEvents.
-     */
-    virtual bool wantsTouch() const;
-
-    /**
-     * Set the identifier code from the KoToolFactoryBase that created this tool.
-     * @param id the identifier code
-     * @see KoToolFactoryBase::id()
-     */
-    void setToolId(const QString &id);
 
     /**
      * get the identifier code from the KoToolFactoryBase that created this tool.
@@ -527,6 +467,18 @@ protected:
 
 
 private:
+
+    friend class ToolHelper;
+
+    /**
+     * Set the identifier code from the KoToolFactoryBase that created this tool.
+     * @param id the identifier code
+     * @see KoToolFactoryBase::id()
+     */
+    void setToolId(const QString &id);
+
+
+
     KoToolBase();
     KoToolBase(const KoToolBase&);
     KoToolBase& operator=(const KoToolBase&);

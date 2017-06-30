@@ -21,8 +21,7 @@
 #define KOTOOLPROXYPRIVATE_P
 
 #include <QTimer>
-#include <QTime>
-#include <QPointF>
+#include <QPoint>
 
 class KoPointerEvent;
 class KoToolBase;
@@ -59,10 +58,6 @@ public:
     // up until at least 4.3.0 we get a mouse move event when the tablet leaves the canvas.
     bool mouseLeaveWorkaround;
 
-    // for multi clicking (double click or triple click) we need the following
-    int multiClickCount;
-    QPointF multiClickGlobalPoint;
-    QTime multiClickTimeStamp;
 };
 
 #endif

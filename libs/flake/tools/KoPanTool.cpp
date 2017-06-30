@@ -106,12 +106,6 @@ void KoPanTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
     useCursor(QCursor(Qt::OpenHandCursor));
 }
 
-void KoPanTool::customMoveEvent(KoPointerEvent * event)
-{
-    m_controller->pan(QPoint(-event->x(), -event->y()));
-    event->accept();
-}
-
 QPointF KoPanTool::documentToViewport(const QPointF &p)
 {
     Q_D(KoToolBase);

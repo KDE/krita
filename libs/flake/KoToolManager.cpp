@@ -293,19 +293,6 @@ void KoToolManager::attemptCanvasControllerRemoval(QObject* controller)
     }
 }
 
-void KoToolManager::updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController)
-{
-    if (!d->canvasses.contains(canvasController))
-        return;
-
-    QList<CanvasData *> canvasses = d->canvasses[canvasController];
-    Q_FOREACH (CanvasData *canvas, canvasses) {
-        Q_FOREACH (KoToolBase *tool, canvas->allTools.values()) {
-            tool->updateShapeController(shapeController);
-        }
-    }
-}
-
 void KoToolManager::switchToolRequested(const QString & id)
 {
     Q_ASSERT(d->canvasData);
@@ -400,52 +387,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     return toolType;
 }
 
-void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
-{
-    if (d->canvasData && d->canvasData->canvas->canvas()) {
-        if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) == KoInputDeviceHandlerEvent::ButtonPressed)
-            d->canvasData->activeTool->customPressEvent(event->pointerEvent());
-        else if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) == KoInputDeviceHandlerEvent::ButtonReleased)
-            d->canvasData->activeTool->customReleaseEvent(event->pointerEvent());
-        else if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) ==  KoInputDeviceHandlerEvent::PositionChanged)
-            d->canvasData->activeTool->customMoveEvent(event->pointerEvent());
-    }
-}
-
-void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
-{
-    ToolHelper *tool = new ToolHelper(toolFactory);
-    // make sure all plugins are loaded as otherwise we will not load them
-    d->setup();
-    d->tools.append(tool);
-
-    // connect to all tools so we can hear their button-clicks
-    connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
-
-    // now create tools for all existing canvases
-    Q_FOREACH (KoCanvasController *controller, d->canvasses.keys()) {
-
-        // this canvascontroller is unknown, which is weird
-        if (!d->canvasses.contains(controller)) {
-            continue;
-        }
-
-        // create a tool for all canvasdata objects (i.e., all input devices on this canvas)
-        foreach (CanvasData *cd, d->canvasses[controller]) {
-            QPair<QString, KoToolBase*> toolPair = createTools(controller, tool);
-            if (toolPair.second) {
-                cd->allTools.insert(toolPair.first, toolPair.second);
-            }
-        }
-
-        // Then create a button for the toolbox for this canvas
-        if (tool->id() == KoCreateShapesTool_ID) {
-            continue;
-        }
-
-        emit addedTool(tool->toolAction(), controller);
-    }
-}
 
 QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *controller, ToolHelper *tool)
 {

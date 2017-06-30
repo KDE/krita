@@ -64,19 +64,12 @@ public:
     void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, bool controlPressed, const QModelIndex &index);
 };
 
-void KisNodeDelegate::slotOnCloseEditor()
-{
-    KisPart::currentInputManager()->slotFocusOnEnter(true);
-}
-
 KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
     , d(new Private)
 {
     d->view = view;
     QApplication::instance()->installEventFilter(this);
-
-    connect(this, SIGNAL(closeEditor(QWidget*)), this, SLOT(slotOnCloseEditor()));
 }
 
 KisNodeDelegate::~KisNodeDelegate()
@@ -475,7 +468,7 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
             const qreal oldOpacity = p->opacity(); // remember previous opacity
 
 
-            if (fullColor) {              
+            if (fullColor) {
                  p->setOpacity(1.0);
             }
             else {
@@ -733,7 +726,6 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
 
 QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
-    KisPart::currentInputManager()->slotFocusOnEnter(false);
     d->edit = new QLineEdit(parent);
     d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
     return d->edit;

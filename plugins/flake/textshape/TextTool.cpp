@@ -1277,28 +1277,6 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
     updateSelectionHandler();
 }
 
-void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
-{
-    if (canvas()->shapeManager()->shapeAt(event->point) != m_textShape) {
-        event->ignore(); // allow the event to be used by another
-        return;
-    }
-
-    if (event->modifiers() & Qt::ShiftModifier) {
-        // When whift is pressed we behave as a single press
-        return mousePressEvent(event);
-    }
-
-    m_textEditor.data()->clearSelection();
-    m_textEditor.data()->movePosition(QTextCursor::StartOfBlock);
-    m_textEditor.data()->movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-    m_clickWithinSelection = false;
-
-    repaintSelection();
-    updateSelectionHandler();
-}
-
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_editTipPos = event->globalPos();

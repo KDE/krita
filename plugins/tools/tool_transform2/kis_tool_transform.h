@@ -132,8 +132,6 @@ public:
     void mousePressEvent(KoPointerEvent *e) override;
     void mouseMoveEvent(KoPointerEvent *e) override;
     void mouseReleaseEvent(KoPointerEvent *e) override;
-    void touchEvent(QTouchEvent *event) override;
-
     void beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
@@ -170,8 +168,6 @@ public:
     WarpType warpType() const;
     double warpFlexibility() const;
     int warpPointDensity() const;
-
-    bool wantsTouch() const override { return true; }
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;

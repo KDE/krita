@@ -151,8 +151,8 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
         d->currentGenerator = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
     }
 
-    connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
-    connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
+    connect(action("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
+    connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
@@ -168,8 +168,8 @@ void KisTool::deactivate()
     result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
-    result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
-    result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+    result &= disconnect(action("toggle_fg_bg"), 0, this, 0);
+    result &= disconnect(action("reset_fg_bg"), 0, this, 0);
 
     if (!result) {
         warnKrita << "WARNING: KisTool::deactivate() failed to disconnect"
@@ -523,11 +523,6 @@ void KisTool::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-}
-
-void KisTool::mouseTripleClickEvent(KoPointerEvent *event)
-{
-    mouseDoubleClickEvent(event);
 }
 
 void KisTool::mousePressEvent(KoPointerEvent *event)

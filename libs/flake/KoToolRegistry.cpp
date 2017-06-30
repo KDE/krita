@@ -80,9 +80,3 @@ KoToolRegistry* KoToolRegistry::instance()
     }
     return s_instance;
 }
-
-void KoToolRegistry::addDeferred(KoToolFactoryBase *toolFactory)
-{
-    add(toolFactory);
-    KoToolManager::instance()->addDeferredToolFactory(toolFactory);
-}

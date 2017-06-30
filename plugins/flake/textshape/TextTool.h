@@ -80,29 +80,16 @@ public:
 #endif
     ~TextTool() override;
 
-    /// reimplemented from superclass
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    /// reimplemented from superclass
     void mousePressEvent(KoPointerEvent *event) override;
-    /// reimplemented from superclass
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
-    /// reimplemented from superclass
-    void mouseTripleClickEvent(KoPointerEvent *event) override;
-    /// reimplemented from superclass
     void mouseMoveEvent(KoPointerEvent *event) override;
-    /// reimplemented from superclass
     void mouseReleaseEvent(KoPointerEvent *event) override;
-    /// reimplemented from superclass
     void keyPressEvent(QKeyEvent *event) override;
-    /// reimplemented from superclass
     void keyReleaseEvent(QKeyEvent *event) override;
-
-    /// reimplemented from superclass
     void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
-    /// reimplemented from superclass
     void deactivate() override;
-    /// reimplemented from superclass
     void copy() const override;
 
     /// reimplemented from KoUndoableTool

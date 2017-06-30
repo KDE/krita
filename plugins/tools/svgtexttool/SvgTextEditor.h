@@ -27,6 +27,7 @@
 
 #include <KoDialog.h>
 #include <KoColor.h>
+#include <KoSvgText.h>//for the enums
 
 class KoSvgTextShape;
 class KisFileNameRequester;
@@ -38,22 +39,43 @@ public:
     SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~SvgTextEditor();
 
+    //tiny enum to keep track of the tab on which editor something happens while keeping the code readable.
+    enum Editor {
+        Richtext, // 0
+        SVGsource // 1
+    };
+
     void setShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
 
     void save();
+    /**
+     * switch the text editor tab.
+     */
+    void switchTextEditorTab();
+    /**
+     * in rich text, check the current format, and toggle the given buttons.
+     */
+    void checkFormat();
 
-    void setTextBold();
-    void setTextItalic();
+    void setTextBold(QFont::Weight weight = QFont::Bold);
+    void setTextWeightLight();
+    void setTextWeightNormal();
+    void setTextWeightDemi();
+    void setTextWeightBlack();
+
+    void setTextItalic(QFont::Style style = QFont::StyleOblique);
+    void setTextDecoration(KoSvgText::TextDecoration decor = KoSvgText::DecorationUnderline);
     void setTextUnderline();
-    void setTextStrikeThrough();
+    void setTextOverline();
+    void setTextStrikethrough();
+
     void setTextFill();
     void setTextStroke();
     void setFont();
     void setSize();
-    void setSuperscript();
-    void setSubscript();
+    void setBaseline(KoSvgText::BaselineShiftMode baseline);
 
 Q_SIGNALS:
 

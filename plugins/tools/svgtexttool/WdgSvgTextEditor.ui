@@ -61,6 +61,9 @@
             <iconset theme="format-text-bold">
              <normaloff>.</normaloff>.</iconset>
            </property>
+           <property name="popupMode">
+            <enum>QToolButton::MenuButtonPopup</enum>
+           </property>
           </widget>
          </item>
          <item>
@@ -88,6 +91,9 @@
            <property name="icon">
             <iconset theme="format-text-underline">
              <normaloff>.</normaloff>.</iconset>
+           </property>
+           <property name="popupMode">
+            <enum>QToolButton::MenuButtonPopup</enum>
            </property>
           </widget>
          </item>
@@ -188,85 +194,167 @@
       <attribute name="title">
        <string>Paragraph</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QToolButton" name="bnJustifyLeft">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset theme="format-justify-left">
-           <normaloff>.</normaloff>.</iconset>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QToolButton" name="bnJustifyLeft">
+           <property name="toolTip">
+            <string>Align text to the left.</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="format-justify-left">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnJustifyCenter">
+           <property name="toolTip">
+            <string>Align text to the center.</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="format-justify-center">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnJustifyRight">
+           <property name="toolTip">
+            <string>Align text to the right.</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="format-justify-right">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnJustifyFill">
+           <property name="toolTip">
+            <string>Align text justified.</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="format-justify-fill">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnIndentLess">
+           <property name="toolTip">
+            <string>Indent less</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="format-indent-less"/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnIndentMore">
+           <property name="toolTip">
+            <string>Indent more.</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="format-indent-more"/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QToolButton" name="bnJustifyCenter">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset theme="format-justify-center">
-           <normaloff>.</normaloff>.</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="bnJustifyRight">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset theme="format-justify-right">
-           <normaloff>.</normaloff>.</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="bnJustifyFill">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset theme="format-justify-fill">
-           <normaloff>.</normaloff>.</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="bnIndentLess">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset theme="format-text-indent-less">
-           <normaloff>.</normaloff>.</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="bnIndentMore">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset theme="format-indent-mode">
-           <normaloff>.</normaloff>.</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Line-height</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="spbLineHeight">
+           <property name="toolTip">
+            <string>The difference at which a new line is started.</string>
+           </property>
+           <property name="prefix">
+            <string/>
+           </property>
+           <property name="suffix">
+            <string>x</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Letter-spacing</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="snbLetterSpacing">
+           <property name="toolTip">
+            <string>Spacing between</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QCheckBox" name="chkKerning">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Whether on not to use the internal kerning tables of a font.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Use Kerning tables if possible.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="spbWordSpacing">
+           <property name="toolTip">
+            <string>Adjust the spacing between words.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Word-spacing</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -298,7 +386,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-undo"/>
+        <iconset theme="edit-undo">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -311,7 +400,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-redo"/>
+        <iconset theme="edit-redo">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -324,7 +414,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-copy"/>
+        <iconset theme="edit-copy">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -337,7 +428,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-cut"/>
+        <iconset theme="edit-cut">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -350,7 +442,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-paste"/>
+        <iconset theme="edit-paste">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -370,16 +463,42 @@
     </layout>
    </item>
    <item>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QTabWidget" name="textTab">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="acceptRichText">
-      <bool>false</bool>
-     </property>
+     <widget class="QWidget" name="richTab">
+      <attribute name="title">
+       <string>Rich text</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QTextEdit" name="richTextEdit"/>
+       </item>
+      </layout>
+      <zorder>svgTextEdit</zorder>
+      <zorder>richTextEdit</zorder>
+     </widget>
+     <widget class="QWidget" name="svgTab">
+      <attribute name="title">
+       <string>SVG source</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QTextEdit" name="svgTextEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="acceptRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

@@ -22,6 +22,8 @@
 #include "kis_global.h"
 #include "kis_paint_information.h"
 #include "kis_distance_information.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 namespace KisPaintOpUtils {
 
@@ -91,16 +93,20 @@ void paintLine(PaintOp &op,
     }
 
     /*
-     * Perform a spacing update between dabs if appropriate. Typically, this will not happen if the
-     * above loop actually painted anything. This is because the getNextPointPosition() call before
-     * the paint operation will reset the accumulators in currentDistance and therefore make
-     * needsSpacingUpdate() false. The temporal distance between pi1 and pi2 is typically too small
-     * for the accumulators to build back up enough to require a spacing update after that.
-     * (The accumulated time value is updated not during the paint operation, but during the call to
-     * getNextPointPosition(), that is, updated during every paintLine() call.)
+     * Perform spacing and/or timing updates between dabs if appropriate. Typically, this will not
+     * happen if the above loop actually painted anything. This is because the
+     * getNextPointPosition() call before the paint operation will reset the accumulators in
+     * currentDistance and therefore make needsSpacingUpdate() and needsTimingUpdate() false. The
+     * temporal distance between pi1 and pi2 is typically too small for the accumulators to build
+     * back up enough to require a spacing or timing update after that. (The accumulated time values
+     * are updated not during the paint operation, but during the call to getNextPointPosition(),
+     * that is, updated during every paintLine() call.)
      */
     if (currentDistance->needsSpacingUpdate()) {
         op.updateSpacing(pi2, *currentDistance);
+    }
+    if (currentDistance->needsTimingUpdate()) {
+        op.updateTiming(pi2, *currentDistance);
     }
 }
 
@@ -167,7 +173,6 @@ QPointF calcAutoSpacing(const QPointF &pt, qreal coeff, qreal lodScale)
 KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal dabHeight,
                                        qreal extraScale,
-                                       qreal rateExtraScale,
                                        bool distanceSpacingEnabled,
                                        bool isotropicSpacing,
                                        qreal rotation,
@@ -175,8 +180,6 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal spacingVal,
                                        bool autoSpacingActive,
                                        qreal autoSpacingCoeff,
-                                       bool timedSpacingEnabled,
-                                       qreal timedSpacingInterval,
                                        qreal lodScale)
 {
     QPointF spacing;
@@ -203,11 +206,21 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
 
     spacing *= extraScale;
 
-    qreal scaledInterval = rateExtraScale <= 0.0 ? LONG_TIME :
-                                                   timedSpacingInterval / rateExtraScale;
+    return KisSpacingInformation(distanceSpacingEnabled, spacing, rotation, axesFlipped);
+}
 
-    return KisSpacingInformation(distanceSpacingEnabled, spacing, rotation, axesFlipped,
-                                 timedSpacingEnabled, scaledInterval);
+KisTimingInformation effectiveTiming(bool timingEnabled,
+                                     qreal timingInterval,
+                                     qreal rateExtraScale)
+{
+
+    if (!timingEnabled) {
+        return KisTimingInformation();
+    }
+    else {
+        qreal scaledInterval = rateExtraScale <= 0.0 ? LONG_TIME : timingInterval / rateExtraScale;
+        return KisTimingInformation(scaledInterval);
+    }
 }
 
 }

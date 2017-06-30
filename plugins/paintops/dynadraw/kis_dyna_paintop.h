@@ -50,6 +50,8 @@ protected:
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
 private:
     void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 

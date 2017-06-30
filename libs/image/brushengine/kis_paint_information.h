@@ -106,13 +106,14 @@ public:
     template <class PaintOp>
     void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo) {
         KisSpacingInformation spacingInfo;
-
+        KisTimingInformation timingInfo;
         {
             DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
             spacingInfo = op.paintAt(*this);
+            timingInfo = op.updateTimingImpl(*this);
         }
 
-        distanceInfo->registerPaintedDab(*this, spacingInfo);
+        distanceInfo->registerPaintedDab(*this, spacingInfo, timingInfo);
     }
 
     const QPointF& pos() const;

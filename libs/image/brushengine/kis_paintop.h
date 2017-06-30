@@ -48,21 +48,27 @@ public:
     virtual ~KisPaintOp();
 
     /**
-     * Paint at the subpixel point pos using the specified paint
-     * information..
+     * Paint at the subpixel point pos using the specified paint information..
      *
-     * The distance between two calls of the paintAt is always
-     * specified by spacing, which is automatically saved into the
-     * current distance information object
+     * The distance/time between two calls of the paintAt is always specified by spacing and timing,
+     * which are automatically saved into the current distance information object.
      */
     void paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance);
 
     /**
-     * Updates the spacing in currentDistance based on the provided information. Note that the
-     * spacing is updated automatically in the paintAt method, so there is no need to call this
+     * Updates the spacing settings in currentDistance based on the provided information. Note that
+     * the spacing is updated automatically in the paintAt method, so there is no need to call this
      * method if paintAt has just been called.
      */
     void updateSpacing(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
+        const;
+
+    /**
+     * Updates the timing settings in currentDistance based on the provided information. Note that
+     * the timing is updated automatically in the paintAt method, so there is no need to call this
+     * method if paintAt has just been called.
+     */
+    void updateTiming(const KisPaintInformation &info, KisDistanceInformation &currentDistance)
         const;
 
     /**
@@ -108,7 +114,8 @@ public:
 protected:
     friend class KisPaintInformation;
     /**
-     * The implementation of painting of a dab and updating spacing
+     * The implementation of painting of a dab and updating spacing. This does NOT need to update
+     * the timing information.
      */
     virtual KisSpacingInformation paintAt(const KisPaintInformation& info) = 0;
 
@@ -116,6 +123,12 @@ protected:
      * Implementation of a spacing update
      */
     virtual KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const = 0;
+
+    /**
+     * Implementation of a timing update. The default implementation always disables timing. This is
+     * suitable for paintops that do not support airbrushing.
+     */
+    virtual KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const;
 
     KisFixedPaintDeviceSP cachedDab();
     KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);

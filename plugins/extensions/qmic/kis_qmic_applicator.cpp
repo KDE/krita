@@ -33,7 +33,6 @@ KisQmicApplicator::KisQmicApplicator():m_applicator(0),m_applicatorStrokeEnded(f
 
 KisQmicApplicator::~KisQmicApplicator()
 {
-    qDebug() << "Destructor: " << m_applicator;
     delete m_applicator;
 }
 

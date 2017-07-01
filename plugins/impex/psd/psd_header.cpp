@@ -91,7 +91,7 @@ bool PSDHeader::valid()
         error = "Not a PhotoShop document. Signature is: " + signature;
         return false;
     }
-    if (version < 1 || version > 2) {
+    if (version != 1) {
         error = QString("Wrong version: %1").arg(version);
         return false;
     }

@@ -4,6 +4,7 @@ set(kritatelemetry_SOURCES
     kis_telemetry.cpp
     kis_cpuinfosource.cpp
     kis_toolsinfosource.cpp
+    kis_tickets.cpp
 )
 
 add_library(kritatelemetry MODULE ${kritatelemetry_SOURCES})

@@ -37,7 +37,6 @@ KisTelemetry::KisTelemetry(QObject* parent, const QVariantList&)
 {
     KisPart::instance()->setProvider(new KisTelemetryInstallProvider,KisPart::InstallProvider);
     KisPart::instance()->setProvider(new KisTelemetryRegularProvider, KisPart::RegularProvider);
-
 }
 
 KisTelemetry::~KisTelemetry()

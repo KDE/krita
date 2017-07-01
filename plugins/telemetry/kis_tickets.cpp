@@ -18,30 +18,40 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_ABSTRUCT_H
-#define KIS_TELEMETRY_ABSTRUCT_H
-#include "QScopedPointer"
-#include "kritaflake_export.h"
-#include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/cpuinfosource.h>
-#include <KUserFeedback/provider.h>
-#include <QString>
-#include <QVector>
+#include "kis_tickets.h"
+#include <QTime>
 
-class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
-public:
-    virtual KUserFeedback::Provider* provider() = 0;
-    virtual void sendData() = 0;
-    virtual void getTimeTicket(QString id) = 0;
-    virtual void putTimeTicket(QString id) = 0;
-    QString getToolId(QString id);
-    virtual ~KisTelemetryAbstruct() {}
+KisTimeTicket::KisTimeTicket(QString id)
+    : KisTicket(id)
+{
+    m_start = QTime::currentTime();
+}
 
-protected:
-    QString m_adress = "http://localhost:8080/";
-    // QString m_adress = "http://akapustin.me:8080/";
-};
+void KisTimeTicket::setStartTime(QTime& time)
+{
+    m_start = time;
+}
 
+void KisTimeTicket::setEndTime(QTime &time)
+{
+    m_end = time;
+}
 
+QTime KisTimeTicket::startTime() const
+{
+    return m_end;
+}
 
-#endif
+QTime KisTimeTicket::endTime() const
+{
+    return m_end;
+}
+
+KisTicket::KisTicket(QString id)
+    : m_id(id)
+{
+}
+
+QString KisTicket::ticketId() const { return m_id; }
+
+void KisTicket::setTickedId(QString id) { m_id = id; }

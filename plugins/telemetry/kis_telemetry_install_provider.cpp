@@ -73,8 +73,3 @@ void KisTelemetryInstallProvider::sendData()
 KisTelemetryInstallProvider::~KisTelemetryInstallProvider()
 {
 }
-
-void KisTelemetryInstallProvider::storeData(QVector<QString> &args)
-{
-
-}

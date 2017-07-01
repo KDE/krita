@@ -17,31 +17,33 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#ifndef KIS_TICKETS_H
+#define KIS_TICKETS_H
 
-#ifndef KIS_TELEMETRY_ABSTRUCT_H
-#define KIS_TELEMETRY_ABSTRUCT_H
-#include "QScopedPointer"
-#include "kritaflake_export.h"
-#include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/cpuinfosource.h>
-#include <KUserFeedback/provider.h>
-#include <QString>
-#include <QVector>
+#include <QTime>
 
-class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
+class KisTicket {
 public:
-    virtual KUserFeedback::Provider* provider() = 0;
-    virtual void sendData() = 0;
-    virtual void getTimeTicket(QString id) = 0;
-    virtual void putTimeTicket(QString id) = 0;
-    QString getToolId(QString id);
-    virtual ~KisTelemetryAbstruct() {}
-
+    KisTicket(){}
+    KisTicket(QString id);
+    QString ticketId() const;
+    void setTickedId(QString id);
+    virtual ~KisTicket(){}
 protected:
-    QString m_adress = "http://localhost:8080/";
-    // QString m_adress = "http://akapustin.me:8080/";
+    QString m_id;
 };
 
-
+class KisTimeTicket: public KisTicket{
+public:
+    KisTimeTicket(QString id);
+    void setStartTime(QTime &time);
+    void setEndTime(QTime &time);
+    QTime startTime() const;
+    QTime endTime() const;
+private:
+    QTime m_start;
+    QTime m_end;
+};
 
 #endif
+

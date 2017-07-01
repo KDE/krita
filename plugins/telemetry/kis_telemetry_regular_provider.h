@@ -37,6 +37,9 @@
 #include <kis_telemetry_abstruct.h>
 #include <memory>
 #include <QVector>
+#include <QMultiMap>
+#include <QWeakPointer>
+#include "kis_tickets.h"
 
 
 class KisTelemetryRegularProvider : public KisTelemetryAbstruct {
@@ -44,12 +47,15 @@ public:
     KisTelemetryRegularProvider();
     KUserFeedback::Provider* provider() override;
     void sendData() override;
+    void getTimeTicket(QString id) override;
+    void putTimeTicket(QString id) override;
+
     virtual ~KisTelemetryRegularProvider();
-    void storeData(QVector<QString>& args) override;
 
 private:
     QScopedPointer<KUserFeedback::Provider> m_provider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_sources;
+    QMultiMap<QString, QWeakPointer<KisTicket>> m_tickets;
 };
 
 #endif

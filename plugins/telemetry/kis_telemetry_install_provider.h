@@ -21,16 +21,16 @@
 #ifndef KIS_TELEMETRY_INSTALL_PROVIDER_H
 #define KIS_TELEMETRY_INSTALL_PROVIDER_H
 #include "QScopedPointer"
-#include <QVariant>
 #include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/CompilerInfoSource>
 #include <KUserFeedback/LocaleInfoSource>
 #include <KUserFeedback/OpenGLInfoSource>
 #include <KUserFeedback/PlatformInfoSource>
 #include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/ScreenInfoSource>
 #include <KUserFeedback/provider.h>
+#include <QVariant>
 
 #include "kis_cpuinfosource.h"
 
@@ -38,14 +38,14 @@
 #include <memory>
 #include <vector>
 
-
 class KisTelemetryInstallProvider : public KisTelemetryAbstruct {
 public:
     KisTelemetryInstallProvider();
     KUserFeedback::Provider* provider() override;
     void sendData() override;
+    void getTimeTicket(QString id) override {}
+    void putTimeTicket(QString id) override {}
     virtual ~KisTelemetryInstallProvider();
-    void storeData(QVector<QString>&  args);
 
 private:
     QScopedPointer<KUserFeedback::Provider> m_provider;

@@ -26,9 +26,13 @@
 #include <QMap>
 #include <QMutex>
 #include <QPair>
+#include <QSharedPointer>
 #include <QTime>
 #include <QVariantMap>
 #include <QVector>
+#include "kis_telemetry_abstruct.h"
+#include "kis_tickets.h"
+
 
 namespace KisUserFeedback {
 
@@ -41,12 +45,12 @@ public:
     ToolsInfoSource();
     QString description() const override;
     QVariant data() override;
-    void activateTool(QString toolName);
-    void deactivateTool(QString toolName);
+    void activateTool(QSharedPointer<KisTicket> ticket);
+    void deactivateTool(QString id);
 
 private:
     QVariantList m_tools;
-    QMap<QString, QTime> m_currentTools;
+    QMap<QString, QSharedPointer<KisTicket> > m_currentTools;
     QMutex m_mutex;
 };
 }

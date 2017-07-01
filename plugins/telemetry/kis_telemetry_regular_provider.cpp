@@ -27,12 +27,12 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include "kis_tickets.h"
 #include "kis_toolsinfosource.h"
 #include <KoToolRegistry.h>
 #include <iostream>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <tuple>
 
 KisTelemetryRegularProvider::KisTelemetryRegularProvider()
 {
@@ -59,27 +59,54 @@ void KisTelemetryRegularProvider::sendData()
     m_provider.data()->submit();
 }
 
-KisTelemetryRegularProvider::~KisTelemetryRegularProvider()
+void KisTelemetryRegularProvider::getTimeTicket(QString id)
 {
-}
-
-void KisTelemetryRegularProvider::storeData(QVector<QString>& args)
-{
-    QString whatIsIt = args[0];
-    QString toolName = args[1];
-
+    id = getToolId(id);
+    KisTicket* ticket = m_tickets.value(id).lock().data();
+    KisTimeTicket* timeTicket;
     KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
     KisUserFeedback::ToolsInfoSource* tools = nullptr;
 
-    try {
-        tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
-    } catch (...) {
+    timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
+    if (!ticket) {
+        Q_ASSERT_X(1 != 0, "timeTicket is lost", id.);
         return;
     }
-
-    if (whatIsIt == QString("Activate")) {
-        tools->activateTool(toolName);
-    } else {
-        tools->deactivateTool(toolName);
+    tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
+    if (!timeTicket || !tools) {
+        Q_ASSERT_X(1 != 0, "get tool's timeTicket ", id.toStdString().c_str());
+        return;
     }
+    tools->deactivateTool(id);
+    m_tickets.remove(id);
+}
+
+void KisTelemetryRegularProvider::putTimeTicket(QString id)
+{
+    id = getToolId(id);
+    KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
+    KisUserFeedback::ToolsInfoSource* tools = nullptr;
+
+    QSharedPointer<KisTicket> timeTicket;
+    timeTicket.reset(new KisTimeTicket(id));
+
+    qDebug() << "TOOL_ID" << id;
+
+    tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
+
+    if (!tools) {
+        Q_ASSERT_X(1 != 0, "create tool's timeTicket ", id);
+        return;
+    }
+    QWeakPointer<KisTicket> weakTimeTicket(timeTicket);
+    if(m_tickets.count(id)){
+        Q_ASSERT_X(1 != 0, "tools duplicate ", id);
+        m_tickets.remove(id);
+    }
+    m_tickets.insert(id, weakTimeTicket);
+    tools->activateTool(timeTicket);
+}
+
+KisTelemetryRegularProvider::~KisTelemetryRegularProvider()
+{
 }

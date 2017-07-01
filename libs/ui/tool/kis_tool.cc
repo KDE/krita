@@ -69,7 +69,7 @@
 #include "kis_action_registry.h"
 #include "kis_tool_utils.h"
 #include "KisPart.h"
-#include "tuple"
+#include <QSharedPointer>
 
 
 
@@ -126,11 +126,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     qDebug()<<KisPart::instance()->provider(KisPart::RegularProvider);
     if(KisPart::instance()->provider(KisPart::RegularProvider)){
         KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
-        QVector<QString> temp;
-        temp.push_back("Deactivate");
-        temp.push_back(toolId());
-
-        provider->storeData(temp);
+        provider->putTimeTicket(toolId());
     }
 
     resetCursorStyle();
@@ -177,11 +173,7 @@ void KisTool::deactivate()
 
     if(KisPart::instance()->provider(KisPart::RegularProvider)){
         KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
-        QVector<QString> temp;
-        temp.push_back("Deactivate");
-        temp.push_back(toolId());
-
-        provider->storeData(temp);
+        provider->getTimeTicket(toolId());
     }
 
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);

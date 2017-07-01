@@ -260,7 +260,10 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "*.exr";
         s_mimeDatabase << mimeType;
 
-
+        mimeType.mimeType = "image/x-psb";
+        mimeType.description = i18nc("description of a file type", "Photoshop Image (Large)");
+        mimeType.suffixes = QStringList() << "*.psb";
+        s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }

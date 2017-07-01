@@ -106,15 +106,17 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 void KisInputManager::Private::EventEater::activate()
 {
     if (!hungry && (KisTabletDebugger::instance()->debugEnabled())) {
-        hungry = true;
+        dbgTablet << "Start blocking mouse events";
     }
+    hungry = true;
 }
 
 void KisInputManager::Private::EventEater::deactivate()
 {
     if (hungry && (KisTabletDebugger::instance()->debugEnabled())) {
-        hungry = false;
+        dbgTablet << "Stop blocking mouse events";
     }
+    hungry = false;
 }
 
 void KisInputManager::Private::EventEater::eatOneMousePress()

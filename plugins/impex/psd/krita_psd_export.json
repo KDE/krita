@@ -10,5 +10,5 @@
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "psd,psb"
+    "X-KDE-Extensions" : "psd"
 }

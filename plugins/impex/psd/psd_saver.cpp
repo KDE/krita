@@ -106,6 +106,10 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
 
+    if (m_image->width() > 30000 || m_image->height() > 30000) {
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
     const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
         KisPainter::checkDeviceHasTransparency(
                 m_image->rootLayer()->firstChild()->projection());

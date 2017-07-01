@@ -230,6 +230,8 @@ bool PSDLayerMaskSection::readImpl(QIODevice* io)
         return true;
     }
 
+    KIS_ASSERT_RECOVER(m_header.version == 1) { return false; }
+
     if (!readLayerInfoImpl(io)) {
         return false;
     }

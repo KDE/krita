@@ -18,40 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_tickets.h"
-#include <QTime>
+#ifndef KIS_TELEMETRY_POINTER_H
+#define KIS_TELEMETRY_POINTER_H
+#include "kis_telemetry_abstruct.h"
+#include "KisPart.h"
 
-KisTimeTicket::KisTimeTicket(QString id)
-    : KisTicket(id)
+class KRITAUI_EXPORT KisTelemetrySensor
 {
-    m_start = QTime::currentTime();
-}
-
-void KisTimeTicket::setStartTime(QTime& time)
-{
-    m_start = time;
-}
-
-void KisTimeTicket::setEndTime(QTime &time)
-{
-    m_end = time;
-}
-
-QTime KisTimeTicket::startTime() const
-{
-    return m_start;
-}
-
-QTime KisTimeTicket::endTime() const
-{
-    return m_end;
-}
-
-KisTicket::KisTicket(QString id)
-    : m_id(id)
-{
-}
-
-QString KisTicket::ticketId() const { return m_id; }
-
-void KisTicket::setTickedId(QString id) { m_id = id; }
+public:
+    KisTelemetrySensor(QString id, KisTelemetryAbstruct::Action action,  KisTelemetryAbstruct::UseMode mode = KisTelemetryAbstruct::Activate);
+    ~KisTelemetrySensor();
+private:
+    KisTelemetryAbstruct::Action m_action;
+    KisTelemetryAbstruct::UseMode m_useMode;
+    QString m_id;
+};
+#endif

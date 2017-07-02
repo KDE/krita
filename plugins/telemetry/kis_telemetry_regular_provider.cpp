@@ -59,9 +59,13 @@ void KisTelemetryRegularProvider::sendData()
     m_provider.data()->submit();
 }
 
-void KisTelemetryRegularProvider::getTimeTicket(QString id)
+void KisTelemetryRegularProvider::getTimeTicket(QString id,UseMode mode)
 {
-    id = getToolId(id);
+    qDebug()<<"get TIme ticket call";
+
+    id = getToolId(id, mode);
+    qDebug()<<ppVar(m_tickets.count(id));
+
     KisTicket* ticket = m_tickets.value(id).lock().data();
     KisTimeTicket* timeTicket;
     KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
@@ -69,40 +73,40 @@ void KisTelemetryRegularProvider::getTimeTicket(QString id)
 
     timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
     if (!ticket) {
-        Q_ASSERT_X(1 != 0, "timeTicket is lost", id.);
+        Q_ASSERT_X(1 == 0, "timeTicket is lost", id.);
         return;
     }
+    qDebug()<<"timeTicket is not lost";
     tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
     if (!timeTicket || !tools) {
-        Q_ASSERT_X(1 != 0, "get tool's timeTicket ", id.toStdString().c_str());
+        Q_ASSERT_X(1 == 0, "get tool's timeTicket ", id.toStdString().c_str());
         return;
     }
+    qDebug()<<"Before deactivate";
     tools->deactivateTool(id);
     m_tickets.remove(id);
 }
 
-void KisTelemetryRegularProvider::putTimeTicket(QString id)
+void KisTelemetryRegularProvider::putTimeTicket(QString id, UseMode mode)
 {
-    id = getToolId(id);
+    id = getToolId(id, mode);
+    if(m_tickets.count(id)){
+        return;
+    }
     KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
     KisUserFeedback::ToolsInfoSource* tools = nullptr;
 
     QSharedPointer<KisTicket> timeTicket;
     timeTicket.reset(new KisTimeTicket(id));
 
-    qDebug() << "TOOL_ID" << id;
-
     tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
 
     if (!tools) {
-        Q_ASSERT_X(1 != 0, "create tool's timeTicket ", id);
+        Q_ASSERT_X(1 == 0, "create tool's timeTicket ", id);
         return;
     }
     QWeakPointer<KisTicket> weakTimeTicket(timeTicket);
-    if(m_tickets.count(id)){
-        Q_ASSERT_X(1 != 0, "tools duplicate ", id);
-        m_tickets.remove(id);
-    }
+
     m_tickets.insert(id, weakTimeTicket);
     tools->activateTool(timeTicket);
 }

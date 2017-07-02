@@ -18,40 +18,32 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_tickets.h"
-#include <QTime>
+#include "kis_telemetry_sensor.h"
+#include "QDebug"
 
-KisTimeTicket::KisTimeTicket(QString id)
-    : KisTicket(id)
-{
-    m_start = QTime::currentTime();
-}
-
-void KisTimeTicket::setStartTime(QTime& time)
-{
-    m_start = time;
-}
-
-void KisTimeTicket::setEndTime(QTime &time)
-{
-    m_end = time;
-}
-
-QTime KisTimeTicket::startTime() const
-{
-    return m_start;
-}
-
-QTime KisTimeTicket::endTime() const
-{
-    return m_end;
-}
-
-KisTicket::KisTicket(QString id)
+KisTelemetrySensor::KisTelemetrySensor(QString id, KisTelemetryAbstruct::Action action, KisTelemetryAbstruct::UseMode mode)
     : m_id(id)
+    , m_action(action)
+    , m_useMode(mode)
 {
 }
 
-QString KisTicket::ticketId() const { return m_id; }
-
-void KisTicket::setTickedId(QString id) { m_id = id; }
+KisTelemetrySensor::~KisTelemetrySensor()
+{
+    if (!KisPart::instance()->provider(KisPart::RegularProvider)) {
+       return;
+    }
+    if(m_action==KisTelemetryAbstruct::getTimeTicket_)
+        qDebug()<<"GET TIME TICKET";
+    KisTelemetryAbstruct* provider = KisPart::instance()->provider(KisPart::RegularProvider);
+    switch (m_action) {
+    case KisTelemetryAbstruct::getTimeTicket_:
+        provider->getTimeTicket(m_id, m_useMode);
+        break;
+    case KisTelemetryAbstruct::putTimeTicket_:
+        provider->putTimeTicket(m_id, m_useMode);
+        break;
+    default:
+        break;
+    }
+}

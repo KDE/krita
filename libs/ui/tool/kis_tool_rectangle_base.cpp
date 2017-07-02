@@ -79,6 +79,7 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolRectangleBase::deactivate()
 {
     updateArea();
+    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Activate);
     KisToolShape::deactivate();
 }
 
@@ -100,6 +101,8 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
     setMode(KisTool::PAINT_MODE);
+    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Use);
+
 
     QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
     m_dragStart = m_dragCenter = pos;
@@ -145,6 +148,7 @@ void KisToolRectangleBase::applyConstraints(QSizeF &area, bool overrideRatio) {
 void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::putTimeTicket_, KisTelemetryAbstruct::Use);
 
     bool constraintToggle = (event->modifiers() & Qt::ShiftModifier) && m_listenToModifiers;
     bool translateMode = (event->modifiers() & Qt::AltModifier) && m_listenToModifiers;
@@ -194,6 +198,8 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
+    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Use);
+
 
     updateArea();
 

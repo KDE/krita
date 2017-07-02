@@ -47,8 +47,8 @@ public:
     KisTelemetryRegularProvider();
     KUserFeedback::Provider* provider() override;
     void sendData() override;
-    void getTimeTicket(QString id) override;
-    void putTimeTicket(QString id) override;
+    void getTimeTicket(QString id, UseMode mode = Activate) override;
+    void putTimeTicket(QString id,  UseMode mode = Activate) override;
 
     virtual ~KisTelemetryRegularProvider();
 

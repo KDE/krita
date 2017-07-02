@@ -123,7 +123,6 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
 
-    qDebug()<<KisPart::instance()->provider(KisPart::RegularProvider);
     if(KisPart::instance()->provider(KisPart::RegularProvider)){
         KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
         provider->putTimeTicket(toolId());

@@ -30,18 +30,28 @@
 
 class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
 public:
+    enum UseMode{
+        Activate,
+        Use
+    };
+    enum Action{
+        getTimeTicket_,
+        putTimeTicket_
+    };
+
+public:
     virtual KUserFeedback::Provider* provider() = 0;
     virtual void sendData() = 0;
-    virtual void getTimeTicket(QString id) = 0;
-    virtual void putTimeTicket(QString id) = 0;
-    QString getToolId(QString id);
+    virtual void getTimeTicket(QString id, UseMode mode = Activate) = 0;
+    virtual void putTimeTicket(QString id, UseMode mode = Activate) = 0;
+    QString getToolId(QString id, UseMode mode = Activate );
     virtual ~KisTelemetryAbstruct() {}
 
 protected:
     QString m_adress = "http://localhost:8080/";
     // QString m_adress = "http://akapustin.me:8080/";
+private:
+    QString getUseMode(UseMode mode);
 };
-
-
 
 #endif

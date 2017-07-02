@@ -96,6 +96,7 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
     }
 
     setMode(KisTool::PAINT_MODE);
+    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::putTimeTicket_, KisTelemetryAbstruct::Use);
 
     m_startPos = convertToIntPixelCoord(event);
 }
@@ -106,6 +107,8 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     setMode(KisTool::HOVER_MODE);
+    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Use);
+
 
     if (!currentNode() ||
         (!image()->wrapAroundModePermitted() &&

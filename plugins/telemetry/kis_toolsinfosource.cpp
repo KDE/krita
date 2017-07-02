@@ -48,9 +48,7 @@ void ToolsInfoSource::activateTool(QSharedPointer<KisTicket> ticket)
 {
     QMutexLocker locker(&m_mutex);
 
- //   m_currentTools.insert(ticket->ticketId(), QSharedPointer<KisTicket>::create(ticket));
     m_currentTools.insert(ticket->ticketId(), ticket);
-
     std::cout << "ACTIVATE TOOL " << ticket->ticketId().toStdString()<< std::endl;
 }
 
@@ -74,6 +72,11 @@ void ToolsInfoSource::deactivateTool(QString id)
     QVariantMap m;
     m.insert(QStringLiteral("toolname"), ticket->ticketId());
     m.insert(QStringLiteral("timeUseSeconds"), timeUse);
+    std::cout<<"Time use"<<timeUse<<std::endl;
+    std::cout<<"Time start"<<timeTicket->startTime().second()<<std::endl;
+    std::cout<<"Time end"<<timeTicket->endTime().second()<<std::endl;
+
+
 
     m_tools.push_back(m);
     m_currentTools.remove(id);

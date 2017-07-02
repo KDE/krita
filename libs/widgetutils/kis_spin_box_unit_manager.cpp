@@ -72,6 +72,7 @@ public:
         conversionConstantIsFixed(true),
         constrains(0),
         unitListCached(false),
+        unitListWithNameCached(false),
         hasHundredPercent(false),
         canAccessDocument(false)
     {
@@ -186,7 +187,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         if (d->canAccessDocument) {
             // ad document relative units
             if (withName) {
-                list << i18n("view width (vw)") << i18n("view height (vh)");
+                list << i18n("percent of view width (vw)") << i18n("percent of view height (vh)");
             } else {
                 list << "vw" << "vh";
             }
@@ -272,7 +273,13 @@ int KisSpinBoxUnitManager::rowCount(const QModelIndex &parent) const {
 QVariant KisSpinBoxUnitManager::data(const QModelIndex &index, int role) const {
 
     if (role == Qt::DisplayRole) {
+
         return getsUnitSymbolList(false).at(index.row());
+
+    } else if (role == Qt::ToolTipRole) {
+
+        return getsUnitSymbolList(true).at(index.row());
+
     }
 
     return QVariant();

@@ -72,6 +72,8 @@ public:
     bool needsAirbrushing() const;
     qreal airbrushingInterval() const;
 
+    bool needsSpacingUpdates() const;
+
     void setOpacity(qreal opacity);
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;

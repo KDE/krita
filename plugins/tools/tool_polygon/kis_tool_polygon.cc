@@ -59,7 +59,9 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
     if (!blockUntilOperationsFinished()) return;
 
     if (image()) {
-        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()),
+                                                   currentPaintOpPreset(),
+                                                   KisDistanceInitInfo());
         setupPaintAction(&linePaintAction);
         linePaintAction.addPolyLine(points.toList());
         linePaintAction.addLine(KisPaintInformation(points.last()), KisPaintInformation(points.first()));

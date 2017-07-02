@@ -124,7 +124,7 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     case OK: break;
 
     case FilterCreationError:
-        msg = i18n("Could not create the filter plugin"); break;
+        msg = i18n("Krita does not support this file format"); break;
 
     case CreationError:
         msg = i18n("Could not create the output document"); break;

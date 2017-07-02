@@ -498,6 +498,11 @@ bool KRITAGLOBAL_EXPORT fuzzyMatrixCompare(const QTransform &t1, const QTransfor
 bool KRITAGLOBAL_EXPORT fuzzyPointCompare(const QPointF &p1, const QPointF &p2);
 
 /**
+ * Returns true if the two points are equal within the specified tolerance
+ */
+bool KRITAGLOBAL_EXPORT fuzzyPointCompare(const QPointF &p1, const QPointF &p2, qreal delta);
+
+/**
  * Compare two rectangles with tolerance \p tolerance. The tolerance means that the
  * coordinates of top left and bottom right corners should not differ more than \p tolerance
  * pixels.

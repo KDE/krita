@@ -412,8 +412,8 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    SvgWriter writer(shapes, sizeInPt);
-    writer.save(storeDev);
+    SvgWriter writer(shapes);
+    writer.save(storeDev, sizeInPt);
 
     if (!store->close()) {
         return false;

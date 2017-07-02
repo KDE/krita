@@ -23,6 +23,10 @@
 #include "kritaglobal_export.h"
 #include <mutex>
 
+class KisAcyclicSignalConnector;
+
+#include <QVector>
+#include <QPointer>
 
 /**
  * A special class for connecting UI elements to manager classes.
@@ -42,6 +46,18 @@
  * will go into an infinite loop.
  *
  * See an example in KisToolCropConfigWidget.
+ *
+ * NOTE (coordinated connectors):
+ *
+ * Please make sure that you don't convert more than one forward and one backward
+ * connection to the connector! If you do so, they will become connected to the
+ * same forwarding slot and, therefore, both output signals will be emitted on
+ * every incoming signal.
+ *
+ * To connect multiple connections that block recursive calls, please use
+ * "coordinated connectors". Each such connector will have two more connection
+ * slots that you can reuse.
+ *
  */
 
 class KRITAGLOBAL_EXPORT KisAcyclicSignalConnector : public QObject
@@ -53,6 +69,7 @@ public:
 public:
 
     KisAcyclicSignalConnector(QObject *parent = 0);
+    ~KisAcyclicSignalConnector();
 
     void connectForwardDouble(QObject *sender, const char *signal,
                               QObject *receiver, const char *method);
@@ -90,8 +107,40 @@ public:
     void connectBackwardResourcePair(QObject *sender, const char *signal,
                                      QObject *receiver, const char *method);
 
+    /**
+     * Lock the connector and all its coordinated child connectors
+     */
     void lock();
+
+    /**
+     * Unlock the connector and all its coordinated child connectors
+     */
     void unlock();
+
+    /**
+     * @brief create a coordinated connector that can be used for extending
+     *        the number of self-locking connection.
+     *
+     * The coordinated connector can be used to extend the number of self-locking
+     * connections. Each coordinated connector adds two more connection slots (forward
+     * and backward).  Lock of any connector in a coordinated group will lock the whole
+     * group.
+     *
+     * The created connector is owned by *this, don't delete it!
+     */
+    KisAcyclicSignalConnector *createCoordinatedConnector();
+
+private:
+
+    /**
+     * Lock this connector only.
+     */
+    void coordinatedLock();
+
+    /**
+     * Unlock this connector only.
+     */
+    void coordinatedUnlock();
 
 private Q_SLOTS:
     void forwardSlotDouble(double value);
@@ -133,6 +182,8 @@ Q_SIGNALS:
 
 private:
     int m_signalsBlocked;
+    QVector<QPointer<KisAcyclicSignalConnector>> m_coordinatedConnectors;
+    QPointer<KisAcyclicSignalConnector> m_parentConnector;
 };
 
 #endif /* __KIS_ACYCLIC_SIGNAL_CONNECTOR_H */

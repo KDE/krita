@@ -72,10 +72,10 @@ uint qHash(QPointer<T> value) {
 #define break_if_tablet_active() if (d->tabletActive) break;
 
 // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
-#define touch_start_block_press_events()  d->touchHasBlockedPressEvents = d->disableTouchOnCanvas;
+#define touch_start_block_press_events()  d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
 #define touch_stop_block_press_events()  d->touchHasBlockedPressEvents = false;
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
-#define touch_eat_one_mouse_press() if (d->disableTouchOnCanvas) d->eatOneMousePress();
+#define touch_eat_one_mouse_press() if (KisConfig().disableTouchOnCanvas()) d->eatOneMousePress();
 
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))

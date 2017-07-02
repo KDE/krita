@@ -29,6 +29,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_image.h>
+#include <kis_spacing_information.h>
 #include <krita_utils.h>
 
 
@@ -244,6 +245,11 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
 
 KisSpacingInformation KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
+{
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisExperimentPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
     Q_UNUSED(info);
     return KisSpacingInformation(1.0);

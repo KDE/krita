@@ -150,12 +150,14 @@ QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP fil
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
     QRect result = sourcePlane->recalculate(rect, filthyNode);
 
-    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-        plane->recalculate(rect, filthyNode);
-    }
+    if (m_d->style->isEnabled()) {
+        Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+            plane->recalculate(rect, filthyNode);
+        }
 
-    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-        plane->recalculate(rect, filthyNode);
+        Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+            plane->recalculate(rect, filthyNode);
+        }
     }
 
     return result;

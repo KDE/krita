@@ -98,9 +98,10 @@ void ShapeMoveStrategy::moveSelection(const QPointF &diff)
         tool()->canvas()->clipToDocument(shape, delta);
         QPointF newPos(shape->absolutePosition(KoFlake::Center) + delta);
         m_newPositions[i] = newPos;
-        shape->update();
+
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setAbsolutePosition(newPos, KoFlake::Center);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | oldDirtyRect.translated(delta));
         i++;
     }
 }

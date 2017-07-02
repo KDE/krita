@@ -497,6 +497,26 @@ void KoCanvasControllerWidget::pan(const QPoint &distance)
     setScrollBarValue(sourcePoint + distance);
 }
 
+void KoCanvasControllerWidget::panUp()
+{
+    pan(QPoint(0, verticalScrollBar()->singleStep()));
+}
+
+void KoCanvasControllerWidget::panDown()
+{
+    pan(QPoint(0, -verticalScrollBar()->singleStep()));
+}
+
+void KoCanvasControllerWidget::panLeft()
+{
+    pan(QPoint(horizontalScrollBar()->singleStep(), 0));
+}
+
+void KoCanvasControllerWidget::panRight()
+{
+    pan(QPoint(-horizontalScrollBar()->singleStep(), 0));
+}
+
 void KoCanvasControllerWidget::setPreferredCenter(const QPointF &viewPoint)
 {
     setPreferredCenterFractionX(viewPoint.x() / documentSize().width());

@@ -142,7 +142,7 @@ KisInputManager::Private::Private(KisInputManager *qq)
     , canvasSwitcher(this, qq)
 {
     KisConfig cfg;
-    disableTouchOnCanvas = cfg.disableTouchOnCanvas();
+
 
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();

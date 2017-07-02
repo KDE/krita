@@ -47,17 +47,20 @@ public:
     ~KisHatchingPaintOp() override;
 
     /**
-     *  Paint a hatched dab around the mouse cursor according to
-     *  sensor settings and user preferences.
-     */
-    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
-
-    /**
      *  Returns a number between -90 and 90, and corresponds to the
      *  angle that results from adding angle 'spin' to 'm_settings->angle',
      *  corrected to coincide with the way the GUI operates.
      */
     double spinAngle(double spin);
+
+protected:
+    /**
+     *  Paint a hatched dab around the mouse cursor according to
+     *  sensor settings and user preferences.
+     */
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     KisHatchingPaintOpSettingsSP m_settings;

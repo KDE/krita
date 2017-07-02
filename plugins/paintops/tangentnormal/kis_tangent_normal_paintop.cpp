@@ -31,6 +31,7 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_image.h>
 #include <kis_lod_transform.h>
+#include <kis_paintop_plugin_utils.h>
 
 
 KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
@@ -167,8 +168,25 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldCompositeOpId);
 
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, &m_rateOption,
-                            info);
+    return computeSpacing(info, scale, rotation);
+}
+
+KisSpacingInformation KisTangentNormalPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    qreal rotation = m_rotationOption.apply(info);
+    return computeSpacing(info, scale, rotation);
+}
+
+KisTimingInformation KisTangentNormalPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+}
+
+KisSpacingInformation KisTangentNormalPaintOp::computeSpacing(const KisPaintInformation &info,
+                                                              qreal scale, qreal rotation) const
+{
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 }
 
 void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

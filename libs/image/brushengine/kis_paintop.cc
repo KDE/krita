@@ -160,6 +160,40 @@ void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation
     pi.paintAt(*this, currentDistance);
 }
 
+void KisPaintOp::updateSpacing(const KisPaintInformation &info,
+                               KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisSpacingInformation spacingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        spacingInfo = updateSpacingImpl(pi);
+    }
+
+    currentDistance.updateSpacing(spacingInfo);
+}
+
+void KisPaintOp::updateTiming(const KisPaintInformation &info,
+                              KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisTimingInformation timingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        timingInfo = updateTimingImpl(pi);
+    }
+
+    currentDistance.updateTiming(timingInfo);
+}
+
+KisTimingInformation KisPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    Q_UNUSED(info);
+    return KisTimingInformation();
+}
+
 KisPainter* KisPaintOp::painter() const
 {
     return d->painter;

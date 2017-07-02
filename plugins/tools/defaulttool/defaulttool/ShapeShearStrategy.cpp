@@ -146,9 +146,9 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
     QTransform applyMatrix = matrix * m_shearMatrix.inverted();
 
     Q_FOREACH (KoShape *shape, m_selectedShapes) {
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
     m_shearMatrix = matrix;
 }

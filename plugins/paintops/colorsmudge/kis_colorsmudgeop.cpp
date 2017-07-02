@@ -37,6 +37,7 @@
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
@@ -284,4 +285,11 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     painter()->setCompositeOp(oldCompositeOpId);
 
     return spacingInfo;
+}
+
+KisSpacingInformation KisColorSmudgeOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    const qreal rotation = m_rotationOption.apply(info);
+    return effectiveSpacing(scale, rotation, m_spacingOption, info);
 }

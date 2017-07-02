@@ -25,6 +25,7 @@
 
 class KisPaintInformation;
 class KisPainter;
+class KisDistanceInitInfo;
 
 #include <kritaimage_export.h>
 
@@ -36,12 +37,21 @@ class KRITAIMAGE_EXPORT KisRecordedPathPaintAction : public KisRecordedPaintActi
 
 public:
 
+    /**
+     * @param startDist - Provides initial information related to distance and spacing, which can
+     * have an effect on how the path is painted.
+     */
     KisRecordedPathPaintAction(const KisNodeQueryPath& path,
-                               const KisPaintOpPresetSP paintOpPreset);
+                               const KisPaintOpPresetSP paintOpPreset,
+                               const KisDistanceInitInfo& startDistInfo);
 
     KisRecordedPathPaintAction(const KisRecordedPathPaintAction&);
 
     ~KisRecordedPathPaintAction() override;
+
+    KisDistanceInitInfo getInitDistInfo() const;
+
+    void setInitDistInfo(const KisDistanceInitInfo &startDistInfo);
 
     void addPoint(const KisPaintInformation& info);
     void addLine(const KisPaintInformation& point1, const KisPaintInformation& point2);

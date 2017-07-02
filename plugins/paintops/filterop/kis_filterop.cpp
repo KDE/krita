@@ -46,6 +46,7 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -138,5 +139,12 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
+    return effectiveSpacing(scale, rotation, info);
+}
+
+KisSpacingInformation KisFilterOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    const qreal rotation = m_rotationOption.apply(info);
     return effectiveSpacing(scale, rotation, info);
 }

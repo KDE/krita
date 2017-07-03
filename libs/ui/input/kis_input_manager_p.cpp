@@ -72,31 +72,31 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 {
     Q_UNUSED(target)
 
-    auto debugEvent = [&]() {
+    auto debugEvent = [&](int i) {
         if (KisTabletDebugger::instance()->debugEnabled()) {
-            QString pre = QString("[BLOCKED]");
+            QString pre = QString("[BLOCKED %1:]").arg(i);
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-            dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
+            dbgTablet << KisTabletDebugger::instance()->eventToString(*ev, pre);
         }
     };
-
 
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
         peckish = false;
-        debugEvent();
+        debugEvent(1);
         return true;
-    } else if (isMouseEventType(event->type()) &&
+    }
+    else if (isMouseEventType(event->type()) &&
                (hungry
             // On Mac, we need mouse events when the tablet is in proximity, but not pressed down
             // since tablet move events are not generated until after tablet press.
-            #ifndef Q_OS_OSX
-                || (eatSyntheticEvents &&  static_cast<QMouseEvent*>(event)->source() != Qt::MouseEventNotSynthesized)
+            #ifndef Q_OS_MAC
+                || (eatSyntheticEvents && static_cast<QMouseEvent*>(event)->source() != Qt::MouseEventNotSynthesized)
             #endif
                 )) {
         // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
-        debugEvent();
+        debugEvent(2);
         return true;
     }
     return false; // All clear - let this one through!
@@ -105,24 +105,24 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 
 void KisInputManager::Private::EventEater::activate()
 {
-    if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        qDebug() << "Start ignoring mouse events.";
+    if (!hungry && (KisTabletDebugger::instance()->debugEnabled())) {
+        dbgTablet << "Start blocking mouse events";
+    }
     hungry = true;
 }
 
 void KisInputManager::Private::EventEater::deactivate()
 {
-    if (hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgTablet << "Stop ignoring mouse events.";
+    if (hungry && (KisTabletDebugger::instance()->debugEnabled())) {
+        dbgTablet << "Stop blocking mouse events";
+    }
     hungry = false;
 }
 
 void KisInputManager::Private::EventEater::eatOneMousePress()
 {
-// #if defined(Q_OS_WIN)
     // Enable on other platforms if getting full-pressure splotches
     peckish = true;
-// #endif
 }
 
 bool KisInputManager::Private::ignoringQtCursorEvents()
@@ -130,7 +130,7 @@ bool KisInputManager::Private::ignoringQtCursorEvents()
     return eventEater.hungry;
 }
 
-void KisInputManager::Private::maskSyntheticEvents(bool value)
+void KisInputManager::Private::setMaskSyntheticEvents(bool value)
 {
     eventEater.eatSyntheticEvents = value;
 }
@@ -422,7 +422,7 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut);
 }
 
-void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
+void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
 {
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
     switch(gesture) {
@@ -492,13 +492,6 @@ inline QPointF multiplyPoints(const QPointF &pt1, const QPointF &pt2) {
 }
 #endif
 
-void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
-{
-    delete lastTouchEvent;
-    lastTouchEvent = new QTouchEvent(event->type(), event->device(), event->modifiers(), event->touchPointStates(), event->touchPoints());
-}
-
-
 void KisInputManager::Private::blockMouseEvents()
 {
     eventEater.activate();
@@ -512,10 +505,6 @@ void KisInputManager::Private::allowMouseEvents()
 void KisInputManager::Private::eatOneMousePress()
 {
     eventEater.eatOneMousePress();
-}
-
-void KisInputManager::Private::setTabletActive(bool value) {
-    tabletActive = value;
 }
 
 void KisInputManager::Private::resetCompressor() {

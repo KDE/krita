@@ -9,10 +9,8 @@ class KisWatercolorBaseItems
 {
 public:
     static KisWatercolorBaseItems* instance() {
-        if(!p_instance)
-            p_instance = new KisWatercolorBaseItems();
-
-        return p_instance;
+        static KisWatercolorBaseItems instance;
+        return &instance;
     }
 
     void paint(QPointF pos, qreal radius, KoColor &color);

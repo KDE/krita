@@ -44,4 +44,9 @@ WatercolorPaintOpPlugin::WatercolorPaintOpPlugin(QObject *parent, const QVariant
                                                QString(), QStringList(), 5));
 }
 
+WatercolorPaintOpPlugin::~WatercolorPaintOpPlugin()
+{
+
+}
+
 #include "watercolor_paintop_plugin.moc"

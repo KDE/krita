@@ -365,7 +365,40 @@ public Q_SLOTS:
     /**
      * @brief exportImage export the image, without changing its URL to the given path.
      * @param filename the full path to which the image is to be saved
-     * @param exportConfiguration a configuration object appropriate to the file format
+     * @param exportConfiguration a configuration object appropriate to the file format.
+     * An InfoObject will used to that configuration.
+     *
+     * The supported formats have specific configurations that must be used when in
+     * batchmode. They are described below:
+     *
+     *\b png
+     * <ul>
+     * <li>alpha: bool (True or False)
+     * <li>compression: int (1 to 9)
+     * <li>forceSRGB: bool (True or False)
+     * <li>indexed: bool (True or False)
+     * <li>interlaced: bool (True or False)
+     * <li>saveSRGBProfile: bool (True or False)
+     * <li>transparencyFillcolor: rgb (Ex:[255,255,255])
+     * </ul>
+     *
+     *\b jpeg
+     * <ul>
+     * <li>baseline: bool (True or False)
+     * <li>exif: bool (True or False)
+     * <li>filters: bool (['ToolInfo', 'Anonymizer'])
+     * <li>forceSRGB: bool (True or False)
+     * <li>iptc: bool (True or False)
+     * <li>is_sRGB: bool (True or False)
+     * <li>optimize: bool (True or False)
+     * <li>progressive: bool (True or False)
+     * <li>quality: int (0 to 100)
+     * <li>saveProfile: bool (True or False)
+     * <li>smoothing: int (0 to 100)
+     * <li>subsampling: int (0 to 3)
+     * <li>transparencyFillcolor: rgb (Ex:[255,255,255])
+     * <li>xmp: bool (True or False)
+     * </ul>
      * @return true if the export succeeded, false if it failed.
      */
     bool exportImage(const QString &filename, const InfoObject &exportConfiguration);

@@ -2,8 +2,14 @@ set(kritawatercolorpaintop_SOURCES
     kis_splat.cpp
     kis_wetmap.cpp
     kis_splat_generator.cpp
+    watercolor_paintop_plugin.cpp
+    kis_watercolor_paintop.cpp
+    kis_watercolor_paintop_settings.cpp
+    kis_watercolor_paintop_settings_widget.cpp
+    kis_watercolorop_option.cpp
+    kis_watercolor_base_items.cpp
     )
-
+ki18n_wrap_ui(kritawatercolorpaintop_SOURCES wdgwatercoloroptions.ui )
 add_subdirectory(tests)
 
 add_library(kritawatercolorpaintop MODULE ${kritawatercolorpaintop_SOURCES})

@@ -4,7 +4,7 @@
     "NoDisplay": "true",
     "Type": "Service",
     "X-KDE-Export": "application/x-krita",
-    "X-KDE-Import": "image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/x-psb",
+    "X-KDE-Import": "image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop,image/x-psb",
     "X-KDE-Library": "kritapsdimport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"

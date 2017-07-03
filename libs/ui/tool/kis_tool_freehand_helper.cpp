@@ -574,7 +574,11 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             m_d->previousTangent = newTangent;
         }
         m_d->olderPaintInformation = m_d->previousPaintInformation;
-        m_d->strokeTimeoutTimer.start(100);
+
+        // Enable stroke timeout only when not airbrushing.
+        if (!m_d->airbrushingTimer.isActive()) {
+            m_d->strokeTimeoutTimer.start(100);
+        }
     }
     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
         paintLine(m_d->previousPaintInformation, info);

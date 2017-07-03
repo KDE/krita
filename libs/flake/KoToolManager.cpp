@@ -40,7 +40,6 @@
 #include "KoPointerEvent.h"
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoZoomTool.h"
-#include "tools/KoPanTool.h"
 #include "kis_action_registry.h"
 #include "KoToolFactoryBase.h"
 
@@ -470,11 +469,6 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
     KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);
     if (zoomTool) {
         zoomTool->setCanvasController(controller);
-    }
-
-    KoPanTool *panTool = dynamic_cast<KoPanTool*>(tl);
-    if (panTool) {
-        panTool->setCanvasController(controller);
     }
 
     return QPair<QString, KoToolBase*>(tool->id(), tl);

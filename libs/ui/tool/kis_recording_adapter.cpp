@@ -36,14 +36,15 @@ KisRecordingAdapter::~KisRecordingAdapter()
 {
 }
 
-void KisRecordingAdapter::startStroke(KisImageWSP image, KisResourcesSnapshotSP resources)
+void KisRecordingAdapter::startStroke(KisImageWSP image, KisResourcesSnapshotSP resources,
+                                      const KisDistanceInitInfo &startDistInfo)
 {
     Q_ASSERT(!m_pathPaintAction);
     Q_ASSERT(!m_image);
 
     m_image = image;
     m_pathPaintAction = new KisRecordedPathPaintAction(
-        KisNodeQueryPath::absolutePath(resources->currentNode()), 0);
+        KisNodeQueryPath::absolutePath(resources->currentNode()), 0, startDistInfo);
 
     resources->setupPaintAction(m_pathPaintAction);
 }

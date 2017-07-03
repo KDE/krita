@@ -482,6 +482,12 @@ bool fuzzyPointCompare(const QPointF &p1, const QPointF &p2)
 }
 
 
+bool fuzzyPointCompare(const QPointF &p1, const QPointF &p2, qreal delta)
+{
+    return qAbs(p1.x() - p2.x()) < delta && qAbs(p1.y() - p2.y()) < delta;
+}
+
+
 /********************************************************/
 /*             DecomposedMatix                          */
 /********************************************************/

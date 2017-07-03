@@ -48,9 +48,20 @@ public:
     KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     ~KisTangentNormalPaintOp() override;
 
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
     /*paint the dabs*/
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
+private:
+    KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal scale,
+                                         qreal rotation) const;
+
 private:
     //private functions//
     KisPressureSizeOption m_sizeOption;

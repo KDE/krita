@@ -554,10 +554,11 @@ bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
     if(m_d->touchShortcut) {
         // first reset running shortcut to avoid infinite recursion via end()
         KisTouchShortcut *touchShortcut = m_d->touchShortcut;
-        m_d->touchShortcut = 0;
 
         touchShortcut->action()->end(event);
         touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
+
+        m_d->touchShortcut = 0; // empty it out now that we are done with it
 
         return true;
     }

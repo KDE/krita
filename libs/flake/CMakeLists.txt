@@ -178,8 +178,6 @@ set(kritaflake_SRCS
     tools/KoZoomToolFactory.cpp
     tools/KoZoomToolWidget.cpp
     tools/KoZoomStrategy.cpp
-    tools/KoPanTool.cpp
-    tools/KoPanToolFactory.cpp
     tools/KoInteractionTool.cpp
     tools/KoInteractionStrategy.cpp
     tools/KoInteractionStrategyFactory.cpp

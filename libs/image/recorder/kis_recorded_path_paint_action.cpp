@@ -53,14 +53,22 @@ struct Q_DECL_HIDDEN KisRecordedPathPaintAction::Private {
         QPointF control2;
         KisPaintInformation point2;
     };
+
+    Private(const KisDistanceInitInfo &startDistInfo) :
+        startDistInfo(startDistInfo) {}
+
     QList<BezierCurveSlice> curveSlices;
+
+    // Information about distance and spacing at the start of the action.
+    KisDistanceInitInfo startDistInfo;
 };
 
 KisRecordedPathPaintAction::KisRecordedPathPaintAction(
     const KisNodeQueryPath& path,
-    const KisPaintOpPresetSP preset)
+    const KisPaintOpPresetSP preset,
+    const KisDistanceInitInfo& startDistInfo)
         : KisRecordedPaintAction("PathPaintAction", i18n("Path"), path, preset)
-        , d(new Private)
+        , d(new Private(startDistInfo))
 {
 }
 
@@ -72,6 +80,16 @@ KisRecordedPathPaintAction::KisRecordedPathPaintAction(const KisRecordedPathPain
 KisRecordedPathPaintAction::~KisRecordedPathPaintAction()
 {
     delete d;
+}
+
+KisDistanceInitInfo KisRecordedPathPaintAction::getInitDistInfo() const
+{
+    return d->startDistInfo;
+}
+
+void KisRecordedPathPaintAction::setInitDistInfo(const KisDistanceInitInfo &startDistInfo)
+{
+    d->startDistInfo = startDistInfo;
 }
 
 void KisRecordedPathPaintAction::addPoint(const KisPaintInformation& info)
@@ -120,7 +138,8 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
 {
     dbgImage << "play path paint action with " << d->curveSlices.size() << " slices";
     if (d->curveSlices.size() <= 0) return;
-    KisDistanceInformation savedDist;
+
+    KisDistanceInformation savedDist = d->startDistInfo.makeDistInfo();
 
     Q_FOREACH (const Private::BezierCurveSlice &slice, d->curveSlices)
     {
@@ -196,6 +215,10 @@ void KisRecordedPathPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisR
         }
     }
     elt.appendChild(waypointsElt);
+
+    QDomElement initDistElt = doc.createElement("StartDistInfo");
+    d->startDistInfo.toXML(doc, initDistElt);
+    elt.appendChild(initDistElt);
 }
 
 KisRecordedAction* KisRecordedPathPaintAction::clone() const
@@ -221,7 +244,8 @@ KisRecordedAction* KisRecordedPathPaintActionFactory::fromXML(const QDomElement&
     // Decode pressets
     KisPaintOpPresetSP paintOpPreset = paintOpPresetFromXML(elt);
 
-    KisRecordedPathPaintAction* rplpa = new KisRecordedPathPaintAction(pathnode, paintOpPreset);
+    KisRecordedPathPaintAction* rplpa = new KisRecordedPathPaintAction(pathnode, paintOpPreset,
+                                                                       KisDistanceInitInfo());
 
     setupPaintAction(rplpa, elt, context);
 
@@ -254,6 +278,14 @@ KisRecordedAction* KisRecordedPathPaintActionFactory::fromXML(const QDomElement&
     } else {
         dbgImage << "Warning: no <Waypoints /> found";
     }
+
+    QDomElement initDistInfoElt = elt.firstChildElement("StartDistInfo");
+    if (!initDistInfoElt.isNull()) {
+        rplpa->setInitDistInfo(KisDistanceInitInfo::fromXML(initDistInfoElt));
+    } else {
+        dbgImage << "Warning: no <StartDistInfo /> found";
+    }
+
     return rplpa;
 }
 

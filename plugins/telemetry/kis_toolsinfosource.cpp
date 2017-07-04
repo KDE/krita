@@ -24,6 +24,7 @@
 #include <QSysInfo>
 #include <QThread>
 #include <QVariant>
+#include <cmath>
 #include <iostream>
 
 using namespace KisUserFeedback;
@@ -41,14 +42,21 @@ QString ToolsInfoSource::description() const
 
 QVariant ToolsInfoSource::data()
 {
+    static int countCalls = 0;
+    countCalls++;
+    if (!countCalls % 2) { //kuserfeedback feature
+        m_tools.clear();
+    }
+    foreach (QString id, m_currentTools.keys()) {
+        deactivateTool(id);
+    }
     foreach (QSharedPointer<KisTicket> tool, m_toolsMap) {
-
         KisTicket* ticket = tool.data();
         KisTimeTicket* timeTicket = nullptr;
 
         timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
         if (timeTicket) {
-            int timeUse = timeTicket->useTimeSeconds();
+            int timeUse = timeTicket->useTimeMSeconds();
             QVariantMap m;
             m.insert(QStringLiteral("toolname"), ticket->ticketId());
             m.insert(QStringLiteral("timeUseSeconds"), timeUse);
@@ -56,6 +64,9 @@ QVariant ToolsInfoSource::data()
             m_tools.push_back(m);
         }
     }
+    m_toolsMap.clear();
+    m_currentTools.clear();
+
     return m_tools;
 }
 
@@ -74,6 +85,7 @@ void ToolsInfoSource::deactivateTool(QString id)
     QMutexLocker locker(&m_mutex);
     KisTicket* ticket = m_currentTools.value(id).data();
     KisTimeTicket* timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
+    std::cout << "SIZES current:" << m_currentTools.size() << " all" << m_toolsMap.size() << std::endl;
     if (timeTicket) {
         QDateTime deactivateTime = QDateTime::currentDateTime();
         timeTicket->setEndTime(deactivateTime);
@@ -81,10 +93,11 @@ void ToolsInfoSource::deactivateTool(QString id)
         KisTicket* mainTicket = m_toolsMap[id].data();
         KisTimeTicket* mainTimeTicket = dynamic_cast<KisTimeTicket*>(mainTicket);
 
-        if (mainTicket) {
-            mainTimeTicket->addSecs(timeTicket->useTimeSeconds());
+        if (mainTimeTicket) {
+            std::cout << "AdditionalTIme " << timeTicket->useTimeMSeconds() << std::endl;
+            mainTimeTicket->addMSecs(timeTicket->useTimeMSeconds());
         }
-        m_currentTools.remove(id);
         std::cout << "DE_ACTIVATE TOOL " << ticket->ticketId().toStdString() << std::endl;
     }
+    m_currentTools.remove(id);
 }

@@ -40,8 +40,8 @@ public:
     void setEndTime(QDateTime &time);
     QDateTime startTime() const;
     QDateTime endTime() const;
-    int useTimeSeconds() const;
-    void addSecs(int seconds);
+    int useTimeMSeconds() const;
+    void addMSecs(int seconds);
 private:
     QDateTime m_start;
     QDateTime m_end;

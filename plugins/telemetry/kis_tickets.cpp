@@ -20,6 +20,7 @@
 
 #include "kis_tickets.h"
 #include <QTime>
+#include <limits>
 
 KisTimeTicket::KisTimeTicket(QString id)
     : KisTicket(id)
@@ -32,7 +33,7 @@ void KisTimeTicket::setStartTime(QDateTime& time)
     m_start = time;
 }
 
-void KisTimeTicket::setEndTime(QDateTime &time)
+void KisTimeTicket::setEndTime(QDateTime& time)
 {
     m_end = time;
 }
@@ -47,15 +48,18 @@ QDateTime KisTimeTicket::endTime() const
     return m_end;
 }
 
-int KisTimeTicket::useTimeSeconds() const
+int KisTimeTicket::useTimeMSeconds() const
 {
-    int timeUse = m_end.toSecsSinceEpoch()- m_start.toSecsSinceEpoch();
+    int timeUse =  static_cast<int>(m_end.toMSecsSinceEpoch() - m_start.toMSecsSinceEpoch());
     return timeUse;
 }
 
-void KisTimeTicket::addSecs(int seconds)
+void KisTimeTicket::addMSecs(int seconds)
 {
-    m_end.addSecs(seconds);
+    if(seconds<0){
+        seconds = std::numeric_limits<int>::max();
+    }
+    m_end.addMSecs(seconds);
 }
 
 KisTicket::KisTicket(QString id)
@@ -63,6 +67,12 @@ KisTicket::KisTicket(QString id)
 {
 }
 
-QString KisTicket::ticketId() const { return m_id; }
+QString KisTicket::ticketId() const
+{
+    return m_id;
+}
 
-void KisTicket::setTickedId(QString id) { m_id = id; }
+void KisTicket::setTickedId(QString id)
+{
+    m_id = id;
+}

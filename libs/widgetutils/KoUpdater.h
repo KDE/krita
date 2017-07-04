@@ -50,6 +50,7 @@ class KRITAWIDGETUTILS_EXPORT KoUpdater : public QObject, public KoProgressProxy
     Q_OBJECT
 
 public:
+    virtual ~KoUpdater();
 
     /**
      * Call this when this subtask wants to abort all the actions.
@@ -83,10 +84,11 @@ public:
 
 public: // KoProgressProxy implementation
 
-    int maximum() const;
-    void setValue( int value );
-    void setRange( int minimum, int maximum );
-    void setFormat( const QString & format );
+    int maximum() const override;
+    void setValue( int value ) override;
+    void setRange( int minimum, int maximum ) override;
+    void setFormat( const QString & format ) override;
+    void setAutoNestedName(const QString &name) override;
 
 Q_SIGNALS:
 
@@ -96,10 +98,13 @@ Q_SIGNALS:
     /// emitted whenever the subtask has called setProgress on us
     void sigProgress( int percent );
 
+    void sigNestedNameChanged(const QString &value);
+    void sigHasValidRangeChanged(bool value);
+
 protected:
 
-    friend class KoProgressUpdater;
-    KoUpdater(KoUpdaterPrivate *p);
+    friend class KoUpdaterPrivate;
+    KoUpdater(KoUpdaterPrivate *_d);
 
 public:
 
@@ -110,7 +115,7 @@ public:
 
 private Q_SLOTS:
 
-    void interrupt();
+    void setInterrupted(bool value);
 
 private:
 

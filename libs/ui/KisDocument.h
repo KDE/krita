@@ -52,8 +52,6 @@ class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
 class KoDocumentInfo;
-class KoProgressUpdater;
-class KoProgressProxy;
 class KoDocumentInfoDlg;
 class KisImportExportManager;
 class KisUndoStore;
@@ -114,6 +112,13 @@ public:
     bool reload();
 
     /**
+     * @brief try to clone the image. This method handles all the locking for you. If locking
+     *        has failed, no cloning happens
+     * @return cloned document on success, null otherwise
+     */
+    KisDocument *safeCreateClone();
+
+    /**
      * @brief openUrl Open an URL
      * @param url The URL to open
      * @param flags Control specific behavior
@@ -140,6 +145,8 @@ public:
      * File --> Export feature.
      */
     bool exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
+
+    bool exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration);
 
@@ -276,23 +283,6 @@ public:
      * @see KoDocumentInfo
      */
     KoDocumentInfo *documentInfo() const;
-
-    /**
-     * @return the object to report progress to.
-     *
-     * This is only not zero if loading or saving is in progress.
-     *
-     * One can add more KoUpdaters to it to make the progress reporting more
-     * accurate. If no active progress reporter is present, 0 is returned.
-     **/
-    KoProgressUpdater *progressUpdater() const;
-
-    /**
-     * Set a custom progress proxy to use to report loading
-     * progress to.
-     */
-    void setProgressProxy(KoProgressProxy *progressProxy);
-    KoProgressProxy* progressProxy() const;
 
     /**
      * Performs a cleanup of unneeded backup files
@@ -458,12 +448,12 @@ private:
     friend class KisPart;
     friend class SafeSavingLocker;
 
-    bool initiateSavingInBackground(const QString statusMessage,
+    bool initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
                                     KisPropertiesConfigurationSP exportConfiguration);
 
-    bool startExportInBackground(const QString &location,
+    bool startExportInBackground(const QString &actionName, const QString &location,
                                  const QString &realLocation,
                                  const QByteArray &mimeType,
                                  bool showWarnings,
@@ -534,26 +524,6 @@ public:
     KisImageSP savingImage() const;
 
     /**
-     * Adds progressproxy for file operations
-     */
-    void setFileProgressProxy();
-
-    /**
-     * Clears progressproxy for file operations
-     */
-    void clearFileProgressProxy();
-
-    /**
-     * Adds progressupdater for file operations
-     */
-    void setFileProgressUpdater(const QString &text);
-
-    /**
-     * Clears progressupdater for file operations
-     */
-    void clearFileProgressUpdater();
-
-    /**
      * Set the current image to the specified image and turn undo on.
      */
     void setCurrentImage(KisImageSP image);
@@ -605,8 +575,6 @@ private Q_SLOTS:
 
 
 private:
-
-    KisDocument *safeCreateClone();
 
     QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 

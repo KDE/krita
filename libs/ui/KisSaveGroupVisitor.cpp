@@ -121,7 +121,7 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
         QUrl url = QUrl::fromLocalFile(path);
 
         exportDocument->setFileBatchMode(true);
-        exportDocument->exportDocument(url, m_mimeFilter.toLatin1());
+        exportDocument->exportDocumentSync(url, m_mimeFilter.toLatin1());
 
         if (!m_saveTopLevelOnly) {
             KisGroupLayerSP child = dynamic_cast<KisGroupLayer*>(layer->firstChild().data());

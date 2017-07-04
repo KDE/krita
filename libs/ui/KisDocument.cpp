@@ -138,41 +138,6 @@ using namespace std;
  *
  **********************************************************/
 
-namespace {
-
-class DocumentProgressProxy : public KoProgressProxy {
-public:
-    KisMainWindow *m_mainWindow;
-    DocumentProgressProxy(KisMainWindow *mainWindow)
-        : m_mainWindow(mainWindow)
-    {
-    }
-
-    ~DocumentProgressProxy() override {
-        // signal that the job is done
-        setValue(-1);
-    }
-
-    int maximum() const override {
-        return 100;
-    }
-
-    void setValue(int value) override {
-        if (m_mainWindow) {
-            m_mainWindow->slotProgress(value);
-        }
-    }
-
-    void setRange(int /*minimum*/, int /*maximum*/) override {
-
-    }
-
-    void setFormat(const QString &/*format*/) override {
-
-    }
-};
-}
-
 //static
 QString KisDocument::newObjectName()
 {
@@ -301,9 +266,6 @@ public:
 
     KoDocumentInfo *docInfo = 0;
 
-    KoProgressUpdater *progressUpdater = 0;
-    KoProgressProxy *progressProxy = 0;
-
     KoUnit unit;
 
     KisImportExportManager *importExportManager = 0; // The filter-manager to use when loading/saving [for the options]
@@ -346,15 +308,13 @@ public:
     KisIdleWatcher imageIdleWatcher;
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
-    bool suppressProgress = false;
-    KoProgressProxy* fileProgressProxy = 0;
-
     QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
 
     QScopedPointer<KisDocument> backgroundSaveDocument;
+    QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportFilter::ConversionStatus> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
 
@@ -572,7 +532,6 @@ bool KisDocument::exportDocument(const QUrl &url, const QByteArray &mimeType, bo
 
 }
 
-
 bool KisDocument::saveAs(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     using namespace KritaUtils;
@@ -632,7 +591,6 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
             removeAutoSaveFiles();
         }
 
-        emit clearStatusBarMessage();
         emit completed();
         emit sigSavingFinished();
     }
@@ -667,8 +625,27 @@ KisDocument* KisDocument::safeCreateClone()
     return new KisDocument(*this);
 }
 
+bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
+{
+    Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+    if (!locker.successfullyLocked()) {
+        return false;
+    }
 
-bool KisDocument::initiateSavingInBackground(const QString statusMessage,
+    d->savingImage = d->image;
+
+    const QString fileName = url.toLocalFile();
+
+    KisImportExportFilter::ConversionStatus status =
+        d->importExportManager->
+            exportDocument(fileName, fileName, mimeType, false, exportConfiguration);
+
+    d->savingImage = 0;
+
+    return status == KisImportExportFilter::OK;
+}
+
+bool KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,
                                              const KritaUtils::ExportFileJob &job,
                                              KisPropertiesConfigurationSP exportConfiguration)
@@ -687,8 +664,6 @@ bool KisDocument::initiateSavingInBackground(const QString statusMessage,
     d->backgroundSaveDocument.reset(clonedDocument.take());
     d->backgroundSaveJob = job;
 
-    emit statusBarMessage(statusMessage);
-
     connect(d->backgroundSaveDocument.data(),
             SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus, const QString&)),
             this,
@@ -699,7 +674,8 @@ bool KisDocument::initiateSavingInBackground(const QString statusMessage,
             receiverObject, receiverMethod, Qt::UniqueConnection);
 
     bool started =
-        d->backgroundSaveDocument->startExportInBackground(job.filePath,
+        d->backgroundSaveDocument->startExportInBackground(actionName,
+                                                           job.filePath,
                                                            job.filePath,
                                                            job.mimeType,
                                                            job.flags & KritaUtils::SaveShowWarnings,
@@ -761,18 +737,22 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
         if (!d->modifiedAfterAutosave) {
             d->autoSaveTimer.stop(); // until the next change
         }
-
-        emit clearStatusBarMessage();
     }
 }
 
-bool KisDocument::startExportInBackground(const QString &location,
+bool KisDocument::startExportInBackground(const QString &actionName,
+                                          const QString &location,
                                           const QString &realLocation,
                                           const QByteArray &mimeType,
                                           bool showWarnings,
                                           KisPropertiesConfigurationSP exportConfiguration)
 {
     d->savingImage = d->image;
+
+    KisMainWindow *window = KisPart::instance()->currentMainwindow();
+    d->savingUpdater = window->viewManager()->createUpdater(actionName, false);
+    d->importExportManager->setUpdater(d->savingUpdater);
+
     d->childSavingFuture =
         d->importExportManager->exportDocumentAsyc(location,
                                                    realLocation,
@@ -806,6 +786,11 @@ void KisDocument::finishExportInBackground()
     d->savingImage.clear();
     d->childSavingFuture = QFuture<KisImportExportFilter::ConversionStatus>();
     d->lastErrorMessage.clear();
+
+    if (d->savingUpdater) {
+        d->savingUpdater->setProgress(100);
+    }
+
     emit sigBackgroundSavingFinished(status, errorMessage);
 }
 
@@ -1046,7 +1031,9 @@ bool KisDocument::openFile()
     }
     dbgUI << localFilePath() << "type:" << typeName;
 
-    setFileProgressUpdater(i18n("Opening Document"));
+    KisMainWindow *window = KisPart::instance()->currentMainwindow();
+    KoUpdaterPtr updater = window->viewManager()->createUpdater(i18n("Opening document"), false);
+    d->importExportManager->setUpdater(updater);
 
     KisImportExportFilter::ConversionStatus status;
 
@@ -1059,7 +1046,6 @@ bool KisDocument::openFile()
                                 errorMessage().split("\n") + warningMessage().split("\n"));
             dlg.exec();
         }
-        clearFileProgressUpdater();
         return false;
     }
     else if (!warningMessage().isEmpty()) {
@@ -1073,40 +1059,9 @@ bool KisDocument::openFile()
     setMimeTypeAfterLoading(typeName);
     emit sigLoadingFinished();
 
-    if (!d->suppressProgress && d->progressUpdater) {
-        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-        updater->setProgress(0);
-        undoStack()->clear();
-        updater->setProgress(100);
-
-        clearFileProgressUpdater();
-    } else {
-        undoStack()->clear();
-    }
+    undoStack()->clear();
 
     return true;
-}
-
-KoProgressUpdater *KisDocument::progressUpdater() const
-{
-    return d->progressUpdater;
-}
-
-void KisDocument::setProgressProxy(KoProgressProxy *progressProxy)
-{
-    d->progressProxy = progressProxy;
-}
-
-KoProgressProxy* KisDocument::progressProxy() const
-{
-    if (!d->progressProxy) {
-        KisMainWindow *mainWindow = 0;
-        if (KisPart::instance()->mainwindowCount() > 0) {
-            mainWindow = KisPart::instance()->mainWindows()[0];
-        }
-        d->progressProxy = new DocumentProgressProxy(mainWindow);
-    }
-    return d->progressProxy;
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
@@ -1461,10 +1416,9 @@ bool KisDocument::openUrlInternal(const QUrl &url)
             d->mimeType = mime.toLocal8Bit();
             d->m_bAutoDetectedMime = true;
         }
-        setFileProgressProxy();
+
         setUrl(d->m_url);
         ret = openFile();
-        clearFileProgressProxy();
 
         if (ret) {
             emit completed();
@@ -1608,52 +1562,6 @@ void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)
 KisNodeSP KisDocument::preActivatedNode() const
 {
     return d->preActivatedNode;
-}
-
-void KisDocument::setFileProgressUpdater(const QString &text)
-{
-    d->suppressProgress = d->importExportManager->batchMode();
-
-    if (!d->suppressProgress) {
-        d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
-        d->progressUpdater->start(100, text);
-        d->importExportManager->setProgresUpdater(d->progressUpdater);
-        if (KisPart::instance()->currentMainwindow()) {
-            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-            connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
-        }
-    }
-}
-
-void KisDocument::clearFileProgressUpdater()
-{
-    if (!d->suppressProgress && d->progressUpdater) {
-        if (KisPart::instance()->currentMainwindow()) {
-            disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
-            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-        }
-        delete d->progressUpdater;
-        d->importExportManager->setProgresUpdater(0);
-        d->progressUpdater = 0;
-    }
-}
-
-void KisDocument::setFileProgressProxy()
-{
-    if (!d->progressProxy && !d->importExportManager->batchMode()) {
-        d->fileProgressProxy = progressProxy();
-    } else {
-        d->fileProgressProxy = 0;
-    }
-}
-
-void KisDocument::clearFileProgressProxy()
-{
-    if (d->fileProgressProxy) {
-        setProgressProxy(0);
-        delete d->fileProgressProxy;
-        d->fileProgressProxy = 0;
-    }
 }
 
 KisImageWSP KisDocument::image() const

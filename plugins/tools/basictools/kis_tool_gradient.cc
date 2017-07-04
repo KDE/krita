@@ -174,10 +174,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         painter.beginTransaction();
 
         KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-        KoProgressUpdater * updater = canvas->viewManager()->createProgressUpdater(KoProgressUpdater::Unthreaded);
-
-        updater->start(100, i18nc("@info:progress", "Gradient..."));
-        painter.setProgress(updater->startSubtask());
+        KoUpdaterPtr updater = canvas->viewManager()->createUpdater(i18nc("@info:progress", "Gradient..."), false);
+        painter.setProgress(updater);
 
         painter.setGradientShape(m_shape);
         painter.paintGradient(m_startPos, m_endPos, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());

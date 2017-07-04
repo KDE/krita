@@ -81,10 +81,8 @@
 #include "KisUndoStackAction.h"
 #include "KisViewManager.h"
 #include "kis_zoom_manager.h"
-#include "kis_composite_progress_proxy.h"
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
-#include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
 #include "kis_file_layer.h"
@@ -261,10 +259,6 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 KisView::~KisView()
 {
     if (d->viewManager) {
-        KoProgressProxy *proxy = d->viewManager->statusBar()->progress()->progressProxy();
-        KIS_ASSERT_RECOVER_NOOP(proxy);
-        image()->compositeProgressProxy()->removeProxy(proxy);
-
         if (d->viewManager->filterManager()->isStrokeRunning()) {
             d->viewManager->filterManager()->cancel();
         }
@@ -357,15 +351,6 @@ void KisView::setViewManager(KisViewManager *view)
     connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
             SLOT(slotContinueRemoveNode(KisNodeSP)),
             Qt::AutoConnection);
-
-    /*
-     * WARNING: Currently we access the global progress bar in two ways:
-     * connecting to composite progress proxy (strokes) and creating
-     * progress updaters. The latter way should be deprecated in favour
-     * of displaying the status of the global strokes queue
-     */
-    image()->compositeProgressProxy()->addProxy(d->viewManager->statusBar()->progress()->progressProxy());
-    connect(d->viewManager->statusBar()->progress(), SIGNAL(sigCancellationRequested()), image(), SLOT(requestStrokeCancellation()));
 
     d->viewManager->updateGUI();
 
@@ -681,7 +666,7 @@ void KisView::closeEvent(QCloseEvent *event)
     }
 
     if (queryClose()) {
-        d->viewManager->removeStatusBarItem(zoomManager()->zoomActionWidget());
+        d->viewManager->statusBar()->setView(0);
         event->accept();
         return;
     }

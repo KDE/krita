@@ -103,16 +103,24 @@ public:
         m_format = format;
     }
 
+    void setAutoNestedName(const QString &name) {
+        m_autoNestedName = name;
+        KoProgressProxy::setAutoNestedName(name);
+    }
+
     int min() { return m_min; }
     int max() { return m_max; }
     int value() { return m_value; }
     QString format() { return m_format; }
+    QString autoNestedName() { return m_autoNestedName; }
+
 
 private:
     int m_min;
     int m_max;
     int m_value;
     QString m_format;
+    QString m_autoNestedName;
 };
 
 inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)

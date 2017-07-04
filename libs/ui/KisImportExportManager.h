@@ -122,7 +122,7 @@ public:
      */
     bool batchMode(void) const;
 
-    void setProgresUpdater(KoProgressUpdater *updater);
+    void setUpdater(KoUpdaterPtr updater);
 
     static QString askForAudioFileName(const QString &defaultDir, QWidget *parent);
 

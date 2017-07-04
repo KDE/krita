@@ -460,7 +460,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
     dst->initialRefreshGraph();
 
-    bool r = doc->exportDocument(QUrl::fromLocalFile(filename), mimeType.toLatin1());
+    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());
     if (!r) {
         qWarning() << doc->errorMessage();
     }

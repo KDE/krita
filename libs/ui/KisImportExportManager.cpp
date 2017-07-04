@@ -71,7 +71,7 @@ class Q_DECL_HIDDEN KisImportExportManager::Private
 {
 public:
     bool batchMode {false};
-    QPointer<KoProgressUpdater> progressUpdater {0};
+    KoUpdaterPtr updater;
 };
 
 struct KisImportExportManager::ConversionResult {
@@ -242,9 +242,9 @@ bool KisImportExportManager::batchMode(void) const
     return d->batchMode;
 }
 
-void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
+void KisImportExportManager::setUpdater(KoUpdaterPtr updater)
 {
-    d->progressUpdater = updater;
+    d->updater = updater;
 }
 
 QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, QWidget *parent)
@@ -289,8 +289,11 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     filter->setBatchMode(batchMode());
     filter->setMimeType(typeName);
 
-    if (d->progressUpdater) {
-        filter->setUpdater(d->progressUpdater->startSubtask());
+    if (!d->updater.isNull()) {
+        // WARNING: The updater is not guaranteed to be persistent! If you ever want
+        // to add progress reporting to "Save also as .kra", make sure you create
+        // a separate KoProgressUpdater for that!
+        filter->setUpdater(d->updater);
     }
 
     QByteArray from, to;

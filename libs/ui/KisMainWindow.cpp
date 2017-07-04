@@ -94,6 +94,7 @@
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
+#include <KoUpdater.h>
 
 #include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
@@ -1659,12 +1660,10 @@ void KisMainWindow::importAnimation()
         int firstFrame = dlg.firstFrame();
         int step = dlg.step();
 
-        document->setFileProgressProxy();
-        document->setFileProgressUpdater(i18n("Import frames"));
-        KisAnimationImporter importer(document);
+        KoUpdaterPtr updater =
+            !document->fileBatchMode() ? viewManager()->createUpdater(i18n("Import frames"), false) : 0;
+        KisAnimationImporter importer(document->image(), updater);
         KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
-        document->clearFileProgressUpdater();
-        document->clearFileProgressProxy();
 
         if (status != KisImportExportFilter::OK && status != KisImportExportFilter::InternalError) {
             QString msg = KisImportExportFilter::conversionStatusString(status);

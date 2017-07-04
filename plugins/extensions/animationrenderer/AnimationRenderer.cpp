@@ -25,6 +25,7 @@
 
 #include <kis_image.h>
 #include <KisViewManager.h>
+#include <KoUpdater.h>
 #include <kis_node_manager.h>
 #include <kis_image_manager.h>
 #include <kis_action.h>
@@ -68,8 +69,7 @@ void AnimaterionRenderer::slotRenderAnimation()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    doc->setFileProgressProxy();
-    doc->setFileProgressUpdater(i18n("Export frames"));
+    KoUpdaterPtr updater = m_view->createUpdater(i18n("Export frames"), false);
 
     DlgAnimationRenderer dlgAnimationRenderer(doc, m_view->mainWindow());
 
@@ -101,7 +101,12 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(sequenceConfig->getString("basename"))
                 .arg(extension);
 
-        KisAnimationExportSaver exporter(doc, baseFileName, sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame"), sequenceConfig->getInt("sequence_start"));
+        KisAnimationExportSaver exporter(doc, baseFileName,
+                                         sequenceConfig->getInt("first_frame"),
+                                         sequenceConfig->getInt("last_frame"),
+                                         sequenceConfig->getInt("sequence_start"),
+                                         updater);
+
         bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration()) == KisImportExportFilter::OK;
 
         // the folder could have been read-only or something else could happen
@@ -144,10 +149,6 @@ void AnimaterionRenderer::slotRenderAnimation()
             }
         }
     }
-
-    doc->clearFileProgressUpdater();
-    doc->clearFileProgressProxy();
-
 }
 
 void AnimaterionRenderer::slotRenderSequenceAgain()
@@ -158,7 +159,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    doc->setFileProgressProxy();    doc->setFileProgressUpdater(i18n("Export frames"));
+    KoUpdaterPtr updater = m_view->createUpdater(i18n("Export frames"), false);
 
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
@@ -168,13 +169,15 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     QString baseFileName = QString("%1/%2.%3").arg(cfg->getString("directory"))
             .arg(cfg->getString("basename"))
             .arg(extension);
-    KisAnimationExportSaver exporter(doc, baseFileName, cfg->getInt("first_frame"), cfg->getInt("last_frame"), cfg->getInt("sequence_start"));
+
+    KisAnimationExportSaver exporter(doc, baseFileName,
+                                     cfg->getInt("first_frame"),
+                                     cfg->getInt("last_frame"),
+                                     cfg->getInt("sequence_start"),
+                                     updater);
+
     bool success = exporter.exportAnimation();
     Q_ASSERT(success);
-
-    doc->clearFileProgressUpdater();
-    doc->clearFileProgressProxy();
-
 }
 
 #include "AnimationRenderer.moc"

@@ -44,15 +44,7 @@ class KoUpdaterPrivate : public QObject
 
 public:
 
-    KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString& name)
-        : QObject(0)
-        , m_progress(0)
-        , m_weight(weight)
-        , m_interrupted(false)
-        , m_parent(parent)
-    {
-        setObjectName(name);
-    }
+    KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString& name, bool isPersistent = false);
 
     /// when deleting an updater, make sure the accompanying thread is
     /// interrupted, too.
@@ -64,17 +56,29 @@ public:
 
     int weight() const { return m_weight; }
 
+    QString autoNestedName() const;
+    QString subTaskName() const;
+    QString mergedSubTaskName() const;
+
+    bool hasValidRange() const;
+    bool isPersistent() const;
+    bool isCompleted() const;
+
+    QPointer<KoUpdater> connectedUpdater() const;
+
 public Q_SLOTS:
 
     /// Cancel comes from KoUpdater
     void cancel();
 
-    /// Interrupt comes from the gui, through KoProgressUpdater, goes
-    /// to KoUpdater to signal running tasks they might as well quit.
-    void interrupt();
+    void setInterrupted(bool value = true);
 
     /// progress comes from KoUpdater
     void setProgress( int percent );
+
+    void setAutoNestedName(const QString &name);
+    void setHasValidRange(bool value);
+
 
 Q_SIGNALS:
 
@@ -83,14 +87,20 @@ Q_SIGNALS:
 
     /// Emitted whenever the parent KoProgressUpdater is interrupted,
     /// for instance through a press on a cancel button
-    void sigInterrupted();
+    void sigInterrupted(bool value);
 
 private:
     int m_progress; // always in percent
     int m_weight;
     bool m_interrupted;
+    QString m_subTaskName;
+    QString m_autoNestedName;
+    bool m_hasValidRange;
+    bool m_isPersistent;
+
 
     KoProgressUpdater *m_parent;
+    QPointer<KoUpdater> m_connectedUpdater;
 };
 
 #endif

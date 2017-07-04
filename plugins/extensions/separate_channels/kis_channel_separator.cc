@@ -254,7 +254,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 d->setCurrentImage(dst);
                 dst->addNode(l->clone().data(), dst->rootLayer());
 
-                d->exportDocument(url, mimeType.toLatin1());
+                d->exportDocumentSync(url, mimeType.toLatin1());
 
                 delete d;
 

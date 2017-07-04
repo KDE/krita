@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_IMPORTER_H
-#define KIS_ANIMATION_IMPORTER_H
+#ifndef TESTKOPROGRESSUPDATER_H
+#define TESTKOPROGRESSUPDATER_H
 
-#include "kis_types.h"
-#include "kritaui_export.h"
-#include <KisImportExportFilter.h>
+#include <QObject>
 
-class KisDocument;
-class KisMainWindow;
-
-class KRITAUI_EXPORT KisAnimationImporter : public QObject
+class TestKoProgressUpdater : public QObject
 {
     Q_OBJECT
 
-public:
-    KisAnimationImporter(KisImageSP image, KoUpdaterPtr updater = 0);
-    KisAnimationImporter(KisDocument* document);
-    ~KisAnimationImporter();
-
-    KisImportExportFilter::ConversionStatus import(QStringList files, int firstFrame, int step);
-
 private Q_SLOTS:
-    void cancel();
+    void test();
+    void testNamedSubtasks();
+    void testNamedSubtasksUnnamedParent();
+    void testPersistentSubtask();
 
-private:
-    struct Private;
-    QScopedPointer<Private> m_d;
+    void testDestructionNonpersistentSubtasks();
+    void testUndefinedStateTasks();
+
+    void testNonStandardRange();
 };
 
-#endif
+#endif // TESTKOPROGRESSUPDATER_H

@@ -83,6 +83,7 @@
 #include "kis_canvas_controls_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_composite_progress_proxy.h"
+#include <KoProgressUpdater.h>
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
@@ -107,7 +108,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include "KisPrintJob.h"
-#include "kis_progress_widget.h"
+#include <KoUpdater.h>
 #include "kis_resource_server_provider.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
@@ -128,6 +129,7 @@
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
+#include <kis_image.h>
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -221,6 +223,7 @@ public:
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
     KisStatusBar statusBar;
+    QPointer<KoUpdater> persistentImageProgressUpdater;
 
     KisControlFrame controlFrame;
     KisNodeManager nodeManager;
@@ -264,6 +267,13 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     // These initialization functions must wait until KisViewManager ctor is complete.
     d->statusBar.setup();
+    d->persistentImageProgressUpdater =
+        d->statusBar.progressUpdater()->startSubtask(1, "", true);
+    // reset state to nil
+    d->persistentImageProgressUpdater->setRange(0,100);
+    d->persistentImageProgressUpdater->setValue(100);
+
+
     d->controlFrame.setup(parent);
 
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
@@ -347,6 +357,7 @@ void KisViewManager::setCurrentView(KisView *view)
         first = false;
         KisDocument* doc = d->currentImageView->document();
         if (doc) {
+            doc->image()->compositeProgressProxy()->removeProxy(d->persistentImageProgressUpdater);
             doc->disconnect(this);
         }
         d->currentImageView->canvasController()->proxyObject->disconnect(&d->statusBar);
@@ -412,6 +423,10 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
+
+        // set up progrress reporting
+        doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
+        d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -521,9 +536,14 @@ KisPaintopBox* KisViewManager::paintOpBox() const
     return d->controlFrame.paintopBox();
 }
 
-KoProgressUpdater* KisViewManager::createProgressUpdater(KoProgressUpdater::Mode mode)
+QPointer<KoUpdater> KisViewManager::createUpdater(const QString &name, bool isPersistent)
 {
-    return new KisProgressUpdater(d->statusBar.progress(), document()->progressProxy(), mode);
+    return d->statusBar.progressUpdater()->startSubtask(1, name, isPersistent);
+}
+
+void KisViewManager::removePersistentUpdater(QPointer<KoUpdater> updater)
+{
+    return d->statusBar.progressUpdater()->removePersistentSubtask(updater);
 }
 
 KisSelectionManager * KisViewManager::selectionManager()
@@ -787,19 +807,19 @@ void KisViewManager::slotCreateTemplate()
 
 void KisViewManager::slotCreateCopy()
 {
-    if (!document()) return;
-    KisDocument *doc = KisPart::instance()->createDocument();
+    KisDocument *srcDoc = document();
+    if (!srcDoc) return;
 
-    QString name = document()->documentInfo()->aboutInfo("name");
+    KisDocument *doc = srcDoc->safeCreateClone();
+    if (!doc) return;
+
+    QString name = srcDoc->documentInfo()->aboutInfo("name");
     if (name.isEmpty()) {
         name = document()->url().toLocalFile();
     }
     name = i18n("%1 (Copy)", name);
     doc->documentInfo()->setAboutInfo("title", name);
-    KisImageWSP image = document()->image();
-    KisImageSP newImage = new KisImage(doc->createUndoStore(), image->width(), image->height(), image->colorSpace(), name);
-    newImage->setRootLayer(dynamic_cast<KisGroupLayer*>(image->rootLayer()->clone().data()));
-    doc->setCurrentImage(newImage);
+
     KisPart::instance()->addDocument(doc);
     KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
     mw->addViewAndNotifyLoadingCompleted(doc);

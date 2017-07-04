@@ -533,6 +533,11 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         m_d->stabilizedSampler.addEvent(info);
+        if (m_d->stabilizerDelayedPaintHelper.running()) {
+            // Paint here so we don't have to rely on the timer
+            // This is just a tricky source for a relatively stable 7ms "timer"
+            m_d->stabilizerDelayedPaintHelper.paintSome();
+        }
     } else {
         m_d->previousPaintInformation = info;
     }
@@ -628,9 +633,9 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     m_d->stabilizerPollTimer.setInterval(stabilizerSampleSize);
     m_d->stabilizerPollTimer.start();
 
-    int delayedPaintInterval = cfg.stabilizerDelayedPaintInterval();
-    if (delayedPaintInterval < stabilizerSampleSize) {
-        m_d->stabilizerDelayedPaintHelper.start(delayedPaintInterval, firstPaintInfo);
+    bool delayedPaintEnabled = cfg.stabilizerDelayedPaint();
+    if (delayedPaintEnabled) {
+        m_d->stabilizerDelayedPaintHelper.start(firstPaintInfo);
     }
 
     m_d->stabilizedSampler.clear();
@@ -889,4 +894,3 @@ void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
 {
    m_d->canvasMirroredH = mirrored;
 }
-

@@ -18,6 +18,8 @@
 
 #include "KisStabilizerDelayedPaintHelper.h"
 
+constexpr int fixedPaintTimerInterval = 20;
+
 KisStabilizerDelayedPaintHelper::TimedPaintInfo::TimedPaintInfo(int elapsedTime, KisPaintInformation paintInfo)
     : elapsedTime(elapsedTime)
     , paintInfo(paintInfo)
@@ -26,17 +28,18 @@ KisStabilizerDelayedPaintHelper::TimedPaintInfo::TimedPaintInfo(int elapsedTime,
 
 KisStabilizerDelayedPaintHelper::KisStabilizerDelayedPaintHelper()
 {
-    connect(&m_paintTimer, SIGNAL(timeout()), SLOT(stabilizerDelayedPaint()));
+    connect(&m_paintTimer, SIGNAL(timeout()), SLOT(stabilizerDelayedPaintTimer()));
 }
 
-void KisStabilizerDelayedPaintHelper::start(int paintInterval, const KisPaintInformation &firstPaintInfo) {
+void KisStabilizerDelayedPaintHelper::start(const KisPaintInformation &firstPaintInfo) {
     if (running()) {
         cancel();
     }
-    m_paintTimer.setInterval(paintInterval);
+    m_paintTimer.setInterval(fixedPaintTimerInterval);
     m_paintTimer.start();
     m_elapsedTimer.start();
     m_lastPendingTime = m_elapsedTimer.elapsed();
+    m_lastPaintTime = m_lastPendingTime;
     m_paintQueue.enqueue(TimedPaintInfo(m_lastPendingTime, firstPaintInfo));
 }
 
@@ -51,9 +54,32 @@ void KisStabilizerDelayedPaintHelper::update(const QVector<KisPaintInformation> 
     m_lastPendingTime = now;
 }
 
+void KisStabilizerDelayedPaintHelper::paintSome() {
+    // This function is also called from KisToolFreehandHelper::paint
+    m_lastPaintTime = m_elapsedTimer.elapsed();
+    if (m_paintQueue.isEmpty()) {
+        return;
+    }
+    int now = m_lastPaintTime;
+    // Always keep one in the queue since painting requires two points
+    while (m_paintQueue.size() > 1 && m_paintQueue.head().elapsedTime <= now) {
+        const TimedPaintInfo dequeued = m_paintQueue.dequeue();
+        m_paintLine(dequeued.paintInfo, m_paintQueue.head().paintInfo);
+    }
+}
+
 void KisStabilizerDelayedPaintHelper::end() {
-    stabilizerDelayedPaint(true);
     m_paintTimer.stop();
+    m_elapsedTimer.invalidate();
+    if (m_paintQueue.isEmpty()) {
+        return;
+    }
+    TimedPaintInfo dequeued = m_paintQueue.dequeue();
+    while (!m_paintQueue.isEmpty()) {
+        const TimedPaintInfo dequeued2 = m_paintQueue.dequeue();
+        m_paintLine(dequeued.paintInfo, dequeued2.paintInfo);
+        dequeued = dequeued2;
+    }
 }
 
 void KisStabilizerDelayedPaintHelper::cancel() {
@@ -61,25 +87,11 @@ void KisStabilizerDelayedPaintHelper::cancel() {
     m_paintQueue.clear();
 }
 
-void KisStabilizerDelayedPaintHelper::stabilizerDelayedPaint(bool isEndStroke) {
-    if (m_paintQueue.isEmpty()) {
+void KisStabilizerDelayedPaintHelper::stabilizerDelayedPaintTimer() {
+    if (m_elapsedTimer.elapsed() - m_lastPaintTime < fixedPaintTimerInterval) {
         return;
     }
-    if (isEndStroke) {
-        TimedPaintInfo dequeued = m_paintQueue.dequeue();
-        while (!m_paintQueue.isEmpty()) {
-            const TimedPaintInfo dequeued2 = m_paintQueue.dequeue();
-            m_paintLine(dequeued.paintInfo, dequeued2.paintInfo);
-            dequeued = dequeued2;
-        }
-        m_requestUpdateOutline();
-        return;
-    }
-    int now = m_elapsedTimer.elapsed();
-    // Always keep one in the queue since painting requires two points
-    while (m_paintQueue.size() > 1 && m_paintQueue.head().elapsedTime <= now) {
-        const TimedPaintInfo dequeued = m_paintQueue.dequeue();
-        m_paintLine(dequeued.paintInfo, m_paintQueue.head().paintInfo);
-    }
+    paintSome();
+    // Explicitly update the outline because this is outside the pointer event
     m_requestUpdateOutline();
 }

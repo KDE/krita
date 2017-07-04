@@ -494,8 +494,8 @@ public:
     int stabilizerSampleSize(bool defaultValue = false) const;
     void setStabilizerSampleSize(int value);
 
-    int stabilizerDelayedPaintInterval(bool defaultValue = false) const;
-    void setStabilizerDelayedPaintInterval(int value);
+    bool stabilizerDelayedPaint(bool defaultValue = false) const;
+    void setStabilizerDelayedPaint(bool value);
 
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;

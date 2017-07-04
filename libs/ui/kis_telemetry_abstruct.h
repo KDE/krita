@@ -40,8 +40,7 @@ public:
     };
 
 public:
-    virtual KUserFeedback::Provider* provider() = 0;
-    virtual void sendData() = 0;
+    virtual void sendData(QString path) = 0;
     virtual void getTimeTicket(QString id, UseMode mode = Activate) = 0;
     virtual void putTimeTicket(QString id, UseMode mode = Activate) = 0;
     QString getToolId(QString id, UseMode mode = Activate );

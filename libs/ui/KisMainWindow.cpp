@@ -638,7 +638,9 @@ void KisMainWindow::sendInfo()
     d->telemetry.reset(new KisDlgSendTelemtry(this->viewManager()));
     if(d->telemetry->exec()== QDialog::Accepted){
         KisTelemetryAbstruct* provider = KisPart::instance()->provider();
-        provider->sendData();
+        provider->sendData("install");
+        KisTelemetryAbstruct* providerRegular = KisPart::instance()->provider(KisPart::RegularProvider);
+        providerRegular->sendData("tools");
     };
 }
 

@@ -27,7 +27,7 @@
 #include <QMutex>
 #include <QPair>
 #include <QSharedPointer>
-#include <QTime>
+#include <QDateTime>
 #include <QVariantMap>
 #include <QVector>
 #include "kis_telemetry_abstruct.h"
@@ -50,6 +50,7 @@ public:
 
 private:
     QVariantList m_tools;
+    QMap<QString,QSharedPointer<KisTicket>> m_toolsMap;
     QMap<QString, QSharedPointer<KisTicket> > m_currentTools;
     QMutex m_mutex;
 };

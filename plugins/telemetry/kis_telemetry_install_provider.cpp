@@ -58,15 +58,12 @@ KisTelemetryInstallProvider::KisTelemetryInstallProvider()
     }
 }
 
-KUserFeedback::Provider* KisTelemetryInstallProvider::provider()
-{
-    return m_provider.data();
-}
-
-void KisTelemetryInstallProvider::sendData()
+void KisTelemetryInstallProvider::sendData(QString path)
 {
     // m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me:8080/"));
-    m_provider.data()->setFeedbackServer(QUrl(m_adress));
+    if (!path.endsWith(QLatin1Char('/')))
+        path += QLatin1Char('/');
+    m_provider.data()->setFeedbackServer(QUrl(m_adress+path));
     m_provider.data()->submit();
 }
 

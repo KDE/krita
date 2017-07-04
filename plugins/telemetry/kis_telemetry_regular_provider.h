@@ -45,17 +45,22 @@
 class KisTelemetryRegularProvider : public KisTelemetryAbstruct {
 public:
     KisTelemetryRegularProvider();
-    KUserFeedback::Provider* provider() override;
-    void sendData() override;
+    void sendData(QString path) override;
     void getTimeTicket(QString id, UseMode mode = Activate) override;
     void putTimeTicket(QString id,  UseMode mode = Activate) override;
 
     virtual ~KisTelemetryRegularProvider();
 
 private:
-    QScopedPointer<KUserFeedback::Provider> m_provider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_sources;
+    enum TelemetryCategory{
+        tools
+    };
+private:
+    QScopedPointer<KUserFeedback::Provider> m_toolsProvider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_toolSources;
     QMultiMap<QString, QWeakPointer<KisTicket>> m_tickets;
+    TelemetryCategory pathToKind(QString path);
+
 };
 
 #endif

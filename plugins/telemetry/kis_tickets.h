@@ -20,7 +20,7 @@
 #ifndef KIS_TICKETS_H
 #define KIS_TICKETS_H
 
-#include <QTime>
+#include <QDateTime>
 
 class KisTicket {
 public:
@@ -36,13 +36,15 @@ protected:
 class KisTimeTicket: public KisTicket{
 public:
     KisTimeTicket(QString id);
-    void setStartTime(QTime &time);
-    void setEndTime(QTime &time);
-    QTime startTime() const;
-    QTime endTime() const;
+    void setStartTime(QDateTime &time);
+    void setEndTime(QDateTime &time);
+    QDateTime startTime() const;
+    QDateTime endTime() const;
+    int useTimeSeconds() const;
+    void addSecs(int seconds);
 private:
-    QTime m_start;
-    QTime m_end;
+    QDateTime m_start;
+    QDateTime m_end;
 };
 
 #endif

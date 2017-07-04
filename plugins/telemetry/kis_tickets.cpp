@@ -24,27 +24,38 @@
 KisTimeTicket::KisTimeTicket(QString id)
     : KisTicket(id)
 {
-    m_start = QTime::currentTime();
+    m_start = QDateTime::currentDateTime();
 }
 
-void KisTimeTicket::setStartTime(QTime& time)
+void KisTimeTicket::setStartTime(QDateTime& time)
 {
     m_start = time;
 }
 
-void KisTimeTicket::setEndTime(QTime &time)
+void KisTimeTicket::setEndTime(QDateTime &time)
 {
     m_end = time;
 }
 
-QTime KisTimeTicket::startTime() const
+QDateTime KisTimeTicket::startTime() const
 {
     return m_start;
 }
 
-QTime KisTimeTicket::endTime() const
+QDateTime KisTimeTicket::endTime() const
 {
     return m_end;
+}
+
+int KisTimeTicket::useTimeSeconds() const
+{
+    int timeUse = m_end.toSecsSinceEpoch()- m_start.toSecsSinceEpoch();
+    return timeUse;
+}
+
+void KisTimeTicket::addSecs(int seconds)
+{
+    m_end.addSecs(seconds);
 }
 
 KisTicket::KisTicket(QString id)

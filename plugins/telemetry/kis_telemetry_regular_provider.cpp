@@ -36,39 +36,43 @@
 
 KisTelemetryRegularProvider::KisTelemetryRegularProvider()
 {
-    m_provider.reset(new KUserFeedback::Provider);
-    m_provider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+    m_toolsProvider.reset(new KUserFeedback::Provider);
+    m_toolsProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
 
     std::unique_ptr<KUserFeedback::AbstractDataSource> tools(new KisUserFeedback::ToolsInfoSource);
-    m_sources.push_back(std::move(tools));
+    m_toolSources.push_back(std::move(tools));
 
-    for (auto& source : m_sources) {
-        m_provider.data()->addDataSource(source.get());
+    for (auto& source : m_toolSources) {
+        m_toolsProvider.data()->addDataSource(source.get());
     }
 }
 
-KUserFeedback::Provider* KisTelemetryRegularProvider::provider()
+void KisTelemetryRegularProvider::sendData(QString path)
 {
-    return m_provider.data();
+    if (!path.endsWith(QLatin1Char('/')))
+        path += QLatin1Char('/');
+    TelemetryCategory enumPath = pathToKind(path);
+    switch (enumPath) {
+    case tools: {
+        m_toolsProvider.data()->setFeedbackServer(QUrl(m_adress + path));
+        m_toolsProvider.data()->submit();
+        break;
+    }
+    default:
+        break;
+    }
 }
 
-void KisTelemetryRegularProvider::sendData()
+void KisTelemetryRegularProvider::getTimeTicket(QString id, UseMode mode)
 {
-    // m_provider.data()->setFeedbackServer(QUrl("http://akapustin.me:8080/"));
-    m_provider.data()->setFeedbackServer(QUrl(m_adress));
-    m_provider.data()->submit();
-}
-
-void KisTelemetryRegularProvider::getTimeTicket(QString id,UseMode mode)
-{
-    qDebug()<<"get TIme ticket call";
+    qDebug() << "get TIme ticket call";
 
     id = getToolId(id, mode);
-    qDebug()<<ppVar(m_tickets.count(id));
+    qDebug() << ppVar(m_tickets.count(id));
 
     KisTicket* ticket = m_tickets.value(id).lock().data();
     KisTimeTicket* timeTicket;
-    KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
+    KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
     KisUserFeedback::ToolsInfoSource* tools = nullptr;
 
     timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
@@ -76,13 +80,13 @@ void KisTelemetryRegularProvider::getTimeTicket(QString id,UseMode mode)
         Q_ASSERT_X(1 == 0, "timeTicket is lost", id.);
         return;
     }
-    qDebug()<<"timeTicket is not lost";
+    qDebug() << "timeTicket is not lost";
     tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
     if (!timeTicket || !tools) {
         Q_ASSERT_X(1 == 0, "get tool's timeTicket ", id.toStdString().c_str());
         return;
     }
-    qDebug()<<"Before deactivate";
+    qDebug() << "Before deactivate";
     tools->deactivateTool(id);
     m_tickets.remove(id);
 }
@@ -90,10 +94,10 @@ void KisTelemetryRegularProvider::getTimeTicket(QString id,UseMode mode)
 void KisTelemetryRegularProvider::putTimeTicket(QString id, UseMode mode)
 {
     id = getToolId(id, mode);
-    if(m_tickets.count(id)){
+    if (m_tickets.count(id)) {
         return;
     }
-    KUserFeedback::AbstractDataSource* m_tools = m_sources[0].get();
+    KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
     KisUserFeedback::ToolsInfoSource* tools = nullptr;
 
     QSharedPointer<KisTicket> timeTicket;
@@ -113,4 +117,11 @@ void KisTelemetryRegularProvider::putTimeTicket(QString id, UseMode mode)
 
 KisTelemetryRegularProvider::~KisTelemetryRegularProvider()
 {
+}
+
+KisTelemetryRegularProvider::TelemetryCategory KisTelemetryRegularProvider::pathToKind(QString path)
+{
+    if (path == "tools/")
+        return tools;
+    return tools;
 }

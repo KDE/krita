@@ -41,6 +41,21 @@ QString ToolsInfoSource::description() const
 
 QVariant ToolsInfoSource::data()
 {
+    foreach (QSharedPointer<KisTicket> tool, m_toolsMap) {
+
+        KisTicket* ticket = tool.data();
+        KisTimeTicket* timeTicket = nullptr;
+
+        timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
+        if (timeTicket) {
+            int timeUse = timeTicket->useTimeSeconds();
+            QVariantMap m;
+            m.insert(QStringLiteral("toolname"), ticket->ticketId());
+            m.insert(QStringLiteral("timeUseSeconds"), timeUse);
+            std::cout << "Time use" << timeUse << std::endl;
+            m_tools.push_back(m);
+        }
+    }
     return m_tools;
 }
 
@@ -49,36 +64,27 @@ void ToolsInfoSource::activateTool(QSharedPointer<KisTicket> ticket)
     QMutexLocker locker(&m_mutex);
 
     m_currentTools.insert(ticket->ticketId(), ticket);
-    std::cout << "ACTIVATE TOOL " << ticket->ticketId().toStdString()<< std::endl;
+    if (!m_toolsMap.count(ticket->ticketId()))
+        m_toolsMap.insert(ticket->ticketId(), ticket);
+    std::cout << "ACTIVATE TOOL " << ticket->ticketId().toStdString() << std::endl;
 }
 
 void ToolsInfoSource::deactivateTool(QString id)
 {
     QMutexLocker locker(&m_mutex);
     KisTicket* ticket = m_currentTools.value(id).data();
-    KisTimeTicket *timeTicket = nullptr;
+    KisTimeTicket* timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
+    if (timeTicket) {
+        QDateTime deactivateTime = QDateTime::currentDateTime();
+        timeTicket->setEndTime(deactivateTime);
 
-    try {
-        timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
+        KisTicket* mainTicket = m_toolsMap[id].data();
+        KisTimeTicket* mainTimeTicket = dynamic_cast<KisTimeTicket*>(mainTicket);
 
-    } catch (...) {
-         Q_ASSERT_X(1!=0,"deactivate tool","");
-         return;
+        if (mainTicket) {
+            mainTimeTicket->addSecs(timeTicket->useTimeSeconds());
+        }
+        m_currentTools.remove(id);
+        std::cout << "DE_ACTIVATE TOOL " << ticket->ticketId().toStdString() << std::endl;
     }
-    QTime deactivateTime = QTime::currentTime();
-
-    timeTicket->setEndTime(deactivateTime);
-    int timeUse = timeTicket->endTime().second() - timeTicket->startTime().second();
-    QVariantMap m;
-    m.insert(QStringLiteral("toolname"), ticket->ticketId());
-    m.insert(QStringLiteral("timeUseSeconds"), timeUse);
-    std::cout<<"Time use"<<timeUse<<std::endl;
-    std::cout<<"Time start"<<timeTicket->startTime().second()<<std::endl;
-    std::cout<<"Time end"<<timeTicket->endTime().second()<<std::endl;
-
-
-
-    m_tools.push_back(m);
-    m_currentTools.remove(id);
-    std::cout<< "DE_ACTIVATE TOOL " << ticket->ticketId().toStdString() << std::endl;
 }

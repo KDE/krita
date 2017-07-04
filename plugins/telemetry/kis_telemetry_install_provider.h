@@ -41,8 +41,7 @@
 class KisTelemetryInstallProvider : public KisTelemetryAbstruct {
 public:
     KisTelemetryInstallProvider();
-    KUserFeedback::Provider* provider() override;
-    void sendData() override;
+    void sendData(QString path) override;
     void getTimeTicket(QString id, UseMode mode = Activate) override {}
     void putTimeTicket(QString id, UseMode mode = Activate) override {}
     virtual ~KisTelemetryInstallProvider();

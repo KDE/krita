@@ -275,8 +275,6 @@ void DlgContentDownloaderPrivate::init(const QString &configFile)
                     }
                 }
             });
-    ui.detailsStack->widget(0)->layout()->setMargin(0);
-    ui.detailsStack->widget(1)->layout()->setMargin(0);
 
     q->connect(ui.m_categoryCombo, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
                this, &DlgContentDownloaderPrivate::slotCategoryChanged);
@@ -376,12 +374,8 @@ void DlgContentDownloaderPrivate::slotShowDetails(const KNSCore::EntryInternal &
     titleText = ui.m_titleWidget->text();
 
     ui.backButton->setVisible(true);
-    ui.detailsStack->setCurrentIndex(1);
-    ui.descriptionScrollArea->verticalScrollBar()->setValue(0);
+//    ui.descriptionScrollArea->verticalScrollBar()->setValue(0);
     ui.preview1->setImage(QImage());
-    ui.preview2->setImage(QImage());
-    ui.preview3->setImage(QImage());
-    ui.previewBig->setImage(QImage());
     details->setEntry(entry);
 }
 
@@ -393,7 +387,6 @@ void DlgContentDownloaderPrivate::slotShowOverview()
     ui.installButton->setVisible(false);
     ui.uninstallButton->setVisible(false);
 
-    ui.detailsStack->setCurrentIndex(0);
     ui.m_titleWidget->setText(titleText);
 }
 

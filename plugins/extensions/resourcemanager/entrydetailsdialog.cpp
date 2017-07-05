@@ -39,8 +39,6 @@ EntryDetails::~EntryDetails()
 void EntryDetails::init()
 {
     connect(ui->preview1, &ImagePreviewWidget::clicked, this, &EntryDetails::preview1Selected);
-    connect(ui->preview2, &ImagePreviewWidget::clicked, this, &EntryDetails::preview2Selected);
-    connect(ui->preview3, &ImagePreviewWidget::clicked, this, &EntryDetails::preview3Selected);
 
     ui->ratingWidget->setMaxRating(10);
     ui->ratingWidget->setHalfStepsEnabled(true);
@@ -75,15 +73,7 @@ void EntryDetails::setEntry(const KNSCore::EntryInternal &entry)
 
 void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
 {
-    if (ui->detailsStack->currentIndex() == 0) {
-        return;
-    }
     m_entry = entry;
-
-//    if (!m_engine->userCanBecomeFan(m_entry)) {
-//        ui->becomeFanButton->setEnabled(false);
-//    }
-
     ui->m_titleWidget->setText(i18n("Details for %1", m_entry.name()));
     if (!m_entry.author().homepage().isEmpty()) {
         ui->authorLabel->setText("<a href=\"" + m_entry.author().homepage() + "\">" + m_entry.author().name() + "</a>");
@@ -101,7 +91,7 @@ void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
         description += "<br/><p><b>" + i18n("Changelog:") + "</b><br/>" + changelog + "</p>";
     }
     description += QLatin1String("</body></html>");
-    ui->descriptionLabel->setText(description);
+//    ui->descriptionLabel->setText(description);
 
     QString homepageText("<a href=\"" + m_entry.homepage().url() + "\">" +
                          i18nc("A link to the description of this Get Hot New Stuff item", "Homepage") + "</a>");
@@ -113,8 +103,8 @@ void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
 //        homepageText += "<br><a href=\"" + m_entry.knowledgebaseLink() + "\">"
 //                        + i18ncp("A link to the knowledgebase (like a forum) (opens a web browser)", "Knowledgebase (no entries)", "Knowledgebase (%1 entries)", m_entry.numberKnowledgebaseEntries()) + "</a>";
 //    }
-//    ui->homepageLabel->setText(homepageText);
-//    ui->homepageLabel->setToolTip(i18nc("Tooltip for a link in a dialog", "Opens in a browser window"));
+   ui->homepageLabel->setText(homepageText);
+   ui->homepageLabel->setToolTip(i18nc("Tooltip for a link in a dialog", "Opens in a browser window"));
 
     if (m_entry.rating() > 0) {
         ui->ratingWidget->setVisible(true);
@@ -133,8 +123,6 @@ void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
                              && m_entry.previewUrl(KNSCore::EntryInternal::PreviewSmall3).isEmpty();
 
     ui->preview1->setVisible(!hideSmallPreviews);
-    ui->preview2->setVisible(!hideSmallPreviews);
-    ui->preview3->setVisible(!hideSmallPreviews);
 
     // in static xml we often only get a small preview, use that in details
     if (m_entry.previewUrl(KNSCore::EntryInternal::PreviewBig1).isEmpty() && !m_entry.previewUrl(KNSCore::EntryInternal::PreviewSmall1).isEmpty()) {
@@ -143,9 +131,6 @@ void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
     }
 
     for (int type = KNSCore::EntryInternal::PreviewSmall1; type <= KNSCore::EntryInternal::PreviewBig3; ++type) {
-        if (m_entry.previewUrl(KNSCore::EntryInternal::PreviewSmall1).isEmpty()) {
-            ui->previewBig->setVisible(false);
-        } else
 
             if (!m_entry.previewUrl((KNSCore::EntryInternal::PreviewType)type).isEmpty()) {
                 if (m_entry.previewImage((KNSCore::EntryInternal::PreviewType)type).isNull()) {
@@ -167,9 +152,6 @@ void EntryDetails::entryStatusChanged(const KNSCore::EntryInternal &entry)
 
 void EntryDetails::updateButtons()
 {
-    if (ui->detailsStack->currentIndex() == 0) {
-        return;
-    }
     ui->installButton->setVisible(false);
     ui->uninstallButton->setVisible(false);
     ui->updateButton->setVisible(false);
@@ -248,16 +230,6 @@ void EntryDetails::slotEntryPreviewLoaded(const KNSCore::EntryInternal &entry, K
     case KNSCore::EntryInternal::PreviewSmall1:
         ui->preview1->setImage(entry.previewImage(KNSCore::EntryInternal::PreviewSmall1));
         break;
-    case KNSCore::EntryInternal::PreviewSmall2:
-        ui->preview2->setImage(entry.previewImage(KNSCore::EntryInternal::PreviewSmall2));
-        break;
-    case KNSCore::EntryInternal::PreviewSmall3:
-        ui->preview3->setImage(entry.previewImage(KNSCore::EntryInternal::PreviewSmall3));
-        break;
-    case KNSCore::EntryInternal::PreviewBig1:
-        m_currentPreview = entry.previewImage(KNSCore::EntryInternal::PreviewBig1);
-        ui->previewBig->setImage(m_currentPreview);
-        break;
     default:
         break;
     }
@@ -282,7 +254,6 @@ void EntryDetails::previewSelected(int current)
 {
     KNSCore::EntryInternal::PreviewType type = static_cast<KNSCore::EntryInternal::PreviewType>(KNSCore::EntryInternal::PreviewBig1 + current);
     m_currentPreview = m_entry.previewImage(type);
-    ui->previewBig->setImage(m_currentPreview);
 }
 
 void EntryDetails::ratingChanged(uint rating)

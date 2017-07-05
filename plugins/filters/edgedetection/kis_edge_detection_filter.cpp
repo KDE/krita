@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #include "kis_edge_detection_filter.h"
 #include <kis_edge_detection_kernel.h>
 #include <kis_convolution_kernel.h>
@@ -8,6 +25,23 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include "kis_lod_transform.h"
+
+#include <kpluginfactory.h>
+
+#include <klocalizedstring.h>
+#include <filter/kis_filter_registry.h>
+
+K_PLUGIN_FACTORY_WITH_JSON(KritaEdgeDetectionFilterFactory, "kritaedgedetection.json", registerPlugin<KritaEdgeDetectionFilter>();)
+
+KritaEdgeDetectionFilter::KritaEdgeDetectionFilter(QObject *parent, const QVariantList &)
+    : QObject(parent)
+{
+    KisFilterRegistry::instance()->add(KisFilterSP(new KisEdgeDetectionFilter()));
+}
+
+KritaEdgeDetectionFilter::~KritaEdgeDetectionFilter()
+{
+}
 
 KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), categoryEdgeDetection(), i18n("&Edge Detection..."))
 {
@@ -37,7 +71,9 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
         channelFlags = configuration->channelFlags();
     }
     if (channelFlags.isEmpty() || !configuration) {
-        channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
+        channelFlags = device->colorSpace()->channelFlags();
+        //channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
+        //channelFlags.at())
     }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::Prewit;
@@ -85,3 +121,5 @@ QRect KisEdgeDetectionFilter::changedRect(const QRect &rect, const KisFilterConf
 
     return rect.adjusted( -halfWidth, -halfHeight, halfWidth, halfHeight);
 }
+
+#include "kis_edge_detection_filter.moc"

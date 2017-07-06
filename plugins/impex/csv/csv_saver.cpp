@@ -170,9 +170,10 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
 
     if (!m_batchMode) {
-        emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
-        emit m_doc->sigProgress(0);
-        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        // TODO: use other systems of progress reporting (KisViewManager::createUnthreadedUpdater()
+        //emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
+        //emit m_doc->sigProgress(0);
+        //connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
     }
     int frame = start;
     int step = 0;
@@ -314,8 +315,8 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
                 if ( !keyframe.isNull() || (frame == start) ) {
 
                     if (!m_batchMode) {
-                        emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
-                                                ((end - start) * layers.size()));
+                        //emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
+                        //                        ((end - start) * layers.size()));
                     }
                     retval = getLayer(layer, exportDoc.data(), keyframe, path, frame, idx);
 
@@ -341,9 +342,9 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     io->close();
 
     if (!m_batchMode) {
-        disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
-        emit m_doc->sigProgress(100);
-        emit m_doc->clearStatusBarMessage();
+        //disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        //emit m_doc->sigProgress(100);
+        //emit m_doc->clearStatusBarMessage();
     }
     QApplication::restoreOverrideCursor();
     return retval;

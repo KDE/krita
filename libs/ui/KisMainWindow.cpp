@@ -42,7 +42,6 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QPrintPreviewDialog>
-#include <QProgressBar>
 #include <QToolButton>
 #include <QSignalMapper>
 #include <QTabBar>
@@ -183,10 +182,6 @@ public:
     KisViewManager *viewManager {0};
 
     QPointer<KisView> activeView;
-
-    QPointer<QProgressBar> progress;
-    QPointer<QToolButton> progressCancel;
-    QMutex progressMutex;
 
     QList<QAction *> toolbarList;
 
@@ -775,7 +770,6 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     }
 
     d->firstTime = true;
-    connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 
@@ -826,7 +820,6 @@ void KisMainWindow::slotLoadCompleted()
     if (newdoc && newdoc->image()) {
         addViewAndNotifyLoadingCompleted(newdoc);
 
-        disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
         disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
         disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 
@@ -843,7 +836,6 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
-    disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 }
@@ -861,7 +853,6 @@ void KisMainWindow::slotSaveCompleted()
     dbgUI << "KisMainWindow::slotSaveCompleted";
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
-    disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
@@ -926,7 +917,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         reset_url = false;
     }
 
-    connect(document, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
@@ -1731,77 +1721,6 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
-}
-
-void KisMainWindow::slotProgress(int value)
-{
-    qApp->processEvents();
-
-    StdLockableWrapper<QMutex> wrapper(&d->progressMutex);
-    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
-    if (!l.owns_lock()) return;
-
-
-    dbgUI << "KisMainWindow::slotProgress" << value;
-    if (value <= -1 || value >= 100) {
-        if (d->progress) {
-            statusBar()->removeWidget(d->progress);
-            delete d->progress;
-            d->progress = 0;
-
-            disconnect(d->progressCancel, SIGNAL(clicked()), this, SLOT(slotProgressCanceled()));
-            statusBar()->removeWidget(d->progressCancel);
-            delete d->progressCancel;
-            d->progressCancel = 0;
-        }
-        d->firstTime = true;
-        return;
-    }
-    if (d->firstTime || !d->progress) {
-        // The statusbar might not even be created yet.
-        // So check for that first, and create it if necessary
-        QStatusBar *bar = findChild<QStatusBar *>();
-        if (!bar) {
-            statusBar()->show();
-            QApplication::sendPostedEvents(this, QEvent::ChildAdded);
-        }
-
-        if (d->progress) {
-            statusBar()->removeWidget(d->progress);
-            delete d->progress;
-            d->progress = 0;
-
-            disconnect(d->progressCancel, SIGNAL(clicked()), this, SLOT(slotProgressCanceled()));
-            statusBar()->removeWidget(d->progressCancel);
-            delete d->progressCancel;
-            d->progress = 0;
-        }
-
-        d->progressCancel = new QToolButton(statusBar());
-        d->progressCancel->setMaximumHeight(statusBar()->fontMetrics().height());
-        d->progressCancel->setIcon(KisIconUtils::loadIcon("process-stop"));
-        statusBar()->addPermanentWidget(d->progressCancel);
-
-        d->progress = new QProgressBar(statusBar());
-        d->progress->setMaximumHeight(statusBar()->fontMetrics().height());
-        d->progress->setRange(0, 100);
-        statusBar()->addPermanentWidget(d->progress);
-
-        connect(d->progressCancel, SIGNAL(clicked()), this, SLOT(slotProgressCanceled()));
-
-        d->progress->show();
-        d->progressCancel->show();
-        d->firstTime = false;
-    }
-    if (!d->progress.isNull()) {
-        d->progress->setValue(value);
-    }
-    qApp->processEvents();
-}
-
-void KisMainWindow::slotProgressCanceled()
-{
-    emit sigProgressCanceled();
 }
 
 void KisMainWindow::setMaxRecentItems(uint _number)

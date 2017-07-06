@@ -396,19 +396,6 @@ Q_SIGNALS:
     void unitChanged(const KoUnit &unit);
 
     /**
-     * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)
-     * Your KisDocument-derived class should emit the signal now and then during load/save.
-     * KisMainWindow will take care of displaying a progress bar automatically.
-     */
-    void sigProgress(int value);
-
-    /**
-     * Progress cancel button pressed
-     * This is emitted by KisDocument
-     */
-    void sigProgressCanceled();
-
-    /**
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KisDocument and used by KisView to display a statusbar message
      */

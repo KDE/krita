@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_edge_detection_filter.h"
+#include "kis_wdg_edge_detection.h"
 #include <kis_edge_detection_kernel.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
@@ -49,7 +50,7 @@ KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), categoryEdgeDe
     setSupportsAdjustmentLayers(true);
     setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
-    setShowConfigurationWidget(false);
+    setShowConfigurationWidget(true);
 }
 
 void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
@@ -76,7 +77,7 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
         //channelFlags.at())
     }
 
-    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::Prewit;
+    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobolVector;
 
     KisEdgeDetectionKernel::applyEdgeDetection(device, rect,
                                      horizontalRadius, verticalRadius,
@@ -87,12 +88,17 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
 KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("horizRadius", 5);
-    config->setProperty("vertRadius", 5);
+    config->setProperty("horizRadius", 1);
+    config->setProperty("vertRadius", 1);
     config->setProperty("type", "prewit");
     config->setProperty("lockAspect", true);
 
     return config;
+}
+
+KisConfigWidget *KisEdgeDetectionFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+{
+    return new KisWdgEdgeDetection(parent);
 }
 
 QRect KisEdgeDetectionFilter::neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const

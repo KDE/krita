@@ -64,6 +64,7 @@ public:
     bool autoNestNames = false;
     QString taskName;
     int taskMax = -1;
+    bool isStarted = false;
 
     void updateParentText();
     void clearState();
@@ -113,6 +114,7 @@ void KoProgressUpdater::start(int range, const QString &text)
     d->clearState();
     d->taskName = text;
     d->taskMax = range - 1;
+    d->isStarted = true;
 
     if (d->progressProxy()) {
         d->progressProxy()->setRange(0, d->taskMax);
@@ -127,6 +129,11 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
                                                     const QString &name,
                                                     bool isPersistent)
 {
+    if (!d->isStarted) {
+        // lazy initialization for intermediate proxies
+        start();
+    }
+
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name, isPersistent);
     d->subtasks.append(p);
     connect(p, SIGNAL(sigUpdated()), SLOT(update()));

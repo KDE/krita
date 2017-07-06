@@ -69,7 +69,7 @@ void AnimaterionRenderer::slotRenderAnimation()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    KoUpdaterPtr updater = m_view->createUpdater(i18n("Export frames"), false);
+    KoUpdaterPtr updater = m_view->createThreadedUpdater(i18n("Export frames"));
 
     DlgAnimationRenderer dlgAnimationRenderer(doc, m_view->mainWindow());
 
@@ -159,7 +159,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    KoUpdaterPtr updater = m_view->createUpdater(i18n("Export frames"), false);
+    KoUpdaterPtr updater = m_view->createThreadedUpdater(i18n("Export frames"));
 
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();

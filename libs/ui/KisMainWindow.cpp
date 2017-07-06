@@ -1661,7 +1661,7 @@ void KisMainWindow::importAnimation()
         int step = dlg.step();
 
         KoUpdaterPtr updater =
-            !document->fileBatchMode() ? viewManager()->createUpdater(i18n("Import frames"), false) : 0;
+            !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
         KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
 

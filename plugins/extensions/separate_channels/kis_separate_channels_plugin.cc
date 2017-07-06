@@ -83,7 +83,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
         QApplication::setOverrideCursor(Qt::BusyCursor);
 
         KisChannelSeparator separator(m_view);
-        separator.separate(m_view->createUpdater(i18n("Separate Image"), false),
+        separator.separate(m_view->createUnthreadedUpdater(i18n("Separate Image")),
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),

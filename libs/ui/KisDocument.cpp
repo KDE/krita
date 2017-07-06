@@ -750,7 +750,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
     d->savingImage = d->image;
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
-    d->savingUpdater = window->viewManager()->createUpdater(actionName, false);
+    d->savingUpdater = window->viewManager()->createThreadedUpdater(actionName);
     d->importExportManager->setUpdater(d->savingUpdater);
 
     d->childSavingFuture =
@@ -1032,7 +1032,7 @@ bool KisDocument::openFile()
     dbgUI << localFilePath() << "type:" << typeName;
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
-    KoUpdaterPtr updater = window->viewManager()->createUpdater(i18n("Opening document"), false);
+    KoUpdaterPtr updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
     d->importExportManager->setUpdater(updater);
 
     KisImportExportFilter::ConversionStatus status;

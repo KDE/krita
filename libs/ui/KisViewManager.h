@@ -119,8 +119,8 @@ public:  // Krita specific interfaces
     KisPaintopBox* paintOpBox() const;
 
     /// create a new progress updater
-    QPointer<KoUpdater> createUpdater(const QString &name, bool isPersistent);
-    void removePersistentUpdater(QPointer<KoUpdater> updater);
+    QPointer<KoUpdater> createUnthreadedUpdater(const QString &name);
+    QPointer<KoUpdater> createThreadedUpdater(const QString &name);
 
     /// The selection manager handles everything action related to
     /// selections.

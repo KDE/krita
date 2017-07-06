@@ -86,7 +86,7 @@ void LayerSplit::slotLayerSplit()
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        QPointer<KoUpdater> updater = m_view->createUpdater(i18n("Split into Layers"), false);
+        QPointer<KoUpdater> updater = m_view->createUnthreadedUpdater(i18n("Split into Layers"));
 
         KisImageSP image = m_view->image();
         if (!image) return;

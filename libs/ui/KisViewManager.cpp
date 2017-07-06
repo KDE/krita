@@ -225,6 +225,9 @@ public:
     KisStatusBar statusBar;
     QPointer<KoUpdater> persistentImageProgressUpdater;
 
+    QScopedPointer<KoProgressUpdater> persistentUnthreadedProgressUpdaterRouter;
+    QPointer<KoUpdater> persistentUnthreadedProgressUpdater;
+
     KisControlFrame controlFrame;
     KisNodeManager nodeManager;
     KisImageManager imageManager;
@@ -269,10 +272,20 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     d->statusBar.setup();
     d->persistentImageProgressUpdater =
         d->statusBar.progressUpdater()->startSubtask(1, "", true);
-    // reset state to nil
+    // reset state to "completed"
     d->persistentImageProgressUpdater->setRange(0,100);
     d->persistentImageProgressUpdater->setValue(100);
 
+    d->persistentUnthreadedProgressUpdater =
+        d->statusBar.progressUpdater()->startSubtask(1, "", true);
+        // reset state to "completed"
+    d->persistentUnthreadedProgressUpdater->setRange(0,100);
+    d->persistentUnthreadedProgressUpdater->setValue(100);
+
+    d->persistentUnthreadedProgressUpdaterRouter.reset(
+        new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
+                              KoProgressUpdater::Unthreaded));
+    d->persistentUnthreadedProgressUpdaterRouter->setAutoNestNames(true);
 
     d->controlFrame.setup(parent);
 
@@ -536,14 +549,14 @@ KisPaintopBox* KisViewManager::paintOpBox() const
     return d->controlFrame.paintopBox();
 }
 
-QPointer<KoUpdater> KisViewManager::createUpdater(const QString &name, bool isPersistent)
+QPointer<KoUpdater> KisViewManager::createUnthreadedUpdater(const QString &name)
 {
-    return d->statusBar.progressUpdater()->startSubtask(1, name, isPersistent);
+    return d->persistentUnthreadedProgressUpdaterRouter->startSubtask(1, name, false);
 }
 
-void KisViewManager::removePersistentUpdater(QPointer<KoUpdater> updater)
+QPointer<KoUpdater> KisViewManager::createThreadedUpdater(const QString &name)
 {
-    return d->statusBar.progressUpdater()->removePersistentSubtask(updater);
+    return d->statusBar.progressUpdater()->startSubtask(1, name, false);
 }
 
 KisSelectionManager * KisViewManager::selectionManager()

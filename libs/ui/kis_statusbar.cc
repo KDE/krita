@@ -101,7 +101,6 @@ void KisStatusBar::setup()
 
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
-    m_progressUpdater->start(100, "");
 
     m_memoryReportBox = new QPushButton();
     m_memoryReportBox->setFlat(true);

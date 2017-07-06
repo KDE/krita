@@ -114,7 +114,7 @@ void BigBrotherPlugin::slotOpenPlay()
     dbgKrita << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
-    KoUpdaterPtr updater = m_view->createUpdater(i18n("Playing back macro"), false);
+    KoUpdaterPtr updater = m_view->createUnthreadedUpdater(i18n("Playing back macro"));
     KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater);
     player.start();
     while(player.isRunning())

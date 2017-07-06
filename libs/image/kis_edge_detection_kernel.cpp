@@ -47,11 +47,16 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
             }
         }
     } else {
+        int multiplier = (center*center*2);
         for (int x = 0; x < kernelSize; x++) {
             for (int y=0; y<kernelSize; y++) {
-                qreal xD = center - x;
-                qreal yD = center - y;
-                matrix(x, y) = xD / (xD*xD + yD*yD);
+                if (x==center && y==center) {
+                    matrix(x, y) = 0;
+                } else {
+                    qreal xD = center - x;
+                    qreal yD = center - y;
+                    matrix(x, y) = xD / (xD*xD + yD*yD) * multiplier;
+                }
             }
         }
     }
@@ -73,11 +78,16 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
             }
         }
     } else {
+        int multiplier = (center*center*2);
         for (int y = 0; y < kernelSize; y++) {
             for (int x=0; x<kernelSize; x++) {
-                qreal xD = center - x;
-                qreal yD = center - y;
-                matrix(x, y) = yD / (xD*xD + yD*yD);
+                if (x==center && y==center) {
+                    matrix(x, y) = 0;
+                } else {
+                    qreal xD = center - x;
+                    qreal yD = center - y;
+                    matrix(x, y) = yD / (xD*xD + yD*yD) * multiplier;
+                }
             }
         }
     }
@@ -98,7 +108,7 @@ KisConvolutionKernelSP KisEdgeDetectionKernel::createVerticalKernel(qreal radius
 
 int KisEdgeDetectionKernel::kernelSizeFromRadius(qreal radius)
 {
-    return 6 * ceil(sigmaFromRadius(radius)) + 1;
+    return qMax((int)(2 * ceil(sigmaFromRadius(radius)) + 1), 3);
 }
 
 qreal KisEdgeDetectionKernel::sigmaFromRadius(qreal radius)

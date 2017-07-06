@@ -95,13 +95,11 @@ void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shap
 {
    KisToolPaint::activate(activation, shapes);
    configGroup =  KSharedConfig::openConfig()->group(toolId());
-   KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::putTimeTicket_, KisTelemetryAbstruct::Activate);
 }
 
 void KisToolLine::deactivate()
 {
     KisToolPaint::deactivate();
-    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Activate);
 
     cancelStroke();
 }
@@ -191,7 +189,6 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
         event->ignore();
         return;
     }
-    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::putTimeTicket_, KisTelemetryAbstruct::Use);
     setMode(KisTool::PAINT_MODE);
 
     // Always show guideline on vector layers
@@ -206,6 +203,7 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     m_lastUpdatedPoint = m_startPoint;
 
     m_strokeIsRunning = true;
+
 }
 
 void KisToolLine::updateStroke()
@@ -225,7 +223,6 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 
     // First ensure the old guideline is deleted
     updateGuideline();
-    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::putTimeTicket_, KisTelemetryAbstruct::Use);
 
     QPointF pos = convertToPixelCoordAndSnap(event);
 
@@ -265,9 +262,9 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
+
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
-    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Use);
 
     updateGuideline();
     endStroke();

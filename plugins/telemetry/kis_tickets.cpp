@@ -26,6 +26,7 @@ KisTimeTicket::KisTimeTicket(QString id)
     : KisTicket(id)
 {
     m_start = QDateTime::currentDateTime();
+    m_end = m_start;
 }
 
 void KisTimeTicket::setStartTime(QDateTime& time)

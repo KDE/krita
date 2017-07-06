@@ -66,11 +66,6 @@ class KRITAUI_EXPORT KisPart : public QObject
 
 public:
 
-    enum Providers {
-        InstallProvider,
-        RegularProvider
-    };
-
     static KisPart *instance();
 
     /**
@@ -169,11 +164,11 @@ public:
     /**
      * @return the telemetry provider.
      */
-    void setProvider(KisTelemetryAbstruct *provider, KisPart::Providers kind= InstallProvider);
+    void setProvider(KisTelemetryAbstruct *provider);
     /**
      * @return the telemetry provider.
      */
-    KisTelemetryAbstruct *provider(KisPart::Providers kind = InstallProvider);
+    KisTelemetryAbstruct *provider();
 
 
 public Q_SLOTS:

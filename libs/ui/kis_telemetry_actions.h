@@ -18,19 +18,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_POINTER_H
-#define KIS_TELEMETRY_POINTER_H
-#include "kis_telemetry_abstruct.h"
-#include "KisPart.h"
+#ifndef KIS_TELEMETRY_ACTIONS_H
+#define KIS_TELEMETRY_ACTIONS_H
+#include <QString>
 
-class KRITAUI_EXPORT KisTelemetrySensor
-{
+class KisTelemetryAbstruct;
+class KisTelemetryAction{
 public:
-    KisTelemetrySensor(QString id, KisTelemetryAbstruct::Action action,  KisTelemetryAbstruct::UseMode mode = KisTelemetryAbstruct::Activate);
-    ~KisTelemetrySensor();
-private:
-    KisTelemetryAbstruct::Action m_action;
-    KisTelemetryAbstruct::UseMode m_useMode;
-    QString m_id;
+    virtual void doAction(KisTelemetryAbstruct *provider, QString id) = 0;
+    virtual ~KisTelemetryAction() = default;
 };
+
+class KisToolsActivate: public KisTelemetryAction{
+public:
+      void doAction(KisTelemetryAbstruct *provider, QString id) override;
+};
+class KisToolsDeactivate: public KisTelemetryAction{
+public:
+      void doAction(KisTelemetryAbstruct *provider, QString id) override;
+};
+
+class KisToolsStartUse: public KisTelemetryAction{
+public:
+      void doAction(KisTelemetryAbstruct *provider, QString id) override;
+};
+class KisToolsStopUse: public KisTelemetryAction{
+public:
+      void doAction(KisTelemetryAbstruct *provider, QString id) override;
+};
+
+
 #endif

@@ -18,37 +18,56 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_TELEMETRY_INSTALL_PROVIDER_H
-#define KIS_TELEMETRY_INSTALL_PROVIDER_H
+#ifndef KIS_TELEMETRY_REGULAR_PROVIDER_H
+#define KIS_TELEMETRY_REGULAR_PROVIDER_H
 #include "QScopedPointer"
+#include <QVariant>
 #include <KUserFeedback/AbstractDataSource>
+#include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/CompilerInfoSource>
 #include <KUserFeedback/LocaleInfoSource>
 #include <KUserFeedback/OpenGLInfoSource>
 #include <KUserFeedback/PlatformInfoSource>
 #include <KUserFeedback/QtVersionSource>
-#include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/ScreenInfoSource>
 #include <KUserFeedback/provider.h>
-#include <QVariant>
 
 #include "kis_cpuinfosource.h"
 
 #include <kis_telemetry_abstruct.h>
 #include <memory>
-#include <vector>
+#include <QVector>
+#include <QMultiMap>
+#include <QWeakPointer>
+#include "kis_tickets.h"
+#include "kis_telemetry_actions.h"
 
-class KisTelemetryInstallProvider : public KisTelemetryAbstruct {
+
+class KisTelemetryProvider : public KisTelemetryAbstruct {
 public:
-    KisTelemetryInstallProvider();
+    KisTelemetryProvider();
     void sendData(QString path) override;
-    void getTimeTicket(QString id, UseMode mode = Activate) override {}
-    void putTimeTicket(QString id, UseMode mode = Activate) override {}
-    virtual ~KisTelemetryInstallProvider();
+
+
+    virtual ~KisTelemetryProvider();
+protected:
+    void getTimeTicket(QString id) override;
+    void putTimeTicket(QString id) override;
 
 private:
-    QScopedPointer<KUserFeedback::Provider> m_provider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_sources;
+    enum TelemetryCategory{
+        tools,
+        install
+    };
+private:
+    QScopedPointer<KUserFeedback::Provider> m_toolsProvider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_toolSources;
+    QScopedPointer<KUserFeedback::Provider> m_installProvider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_installSources;
+    QMultiMap<QString, QWeakPointer<KisTicket>> m_tickets;
+    TelemetryCategory pathToKind(QString path);
+
 };
 
 #endif
+

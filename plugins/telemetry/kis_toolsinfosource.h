@@ -49,8 +49,14 @@ public:
     void deactivateTool(QString id);
 
 private:
+    struct toolInfo{
+        QSharedPointer<KisTicket> ticket;
+        int countUse ;
+    };
+
+private:
     QVariantList m_tools;
-    QMap<QString,QSharedPointer<KisTicket>> m_toolsMap;
+    QMap<QString, toolInfo> m_toolsMap;
     QMap<QString, QSharedPointer<KisTicket> > m_currentTools;
     QMutex m_mutex;
 };

@@ -47,25 +47,26 @@ QVariant ToolsInfoSource::data()
     if (!countCalls % 2) { //kuserfeedback feature
         m_tools.clear();
     }
-    foreach (QString id, m_currentTools.keys()) {
-        deactivateTool(id);
-    }
-    foreach (QSharedPointer<KisTicket> tool, m_toolsMap) {
-        KisTicket* ticket = tool.data();
+
+    foreach (toolInfo tool, m_toolsMap) {
+        KisTicket* ticket = tool.ticket.data();
         KisTimeTicket* timeTicket = nullptr;
 
         timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
         if (timeTicket) {
             int timeUse = timeTicket->useTimeMSeconds();
+            if (!timeUse) {
+                continue;
+            }
             QVariantMap m;
-            m.insert(QStringLiteral("toolname"), ticket->ticketId());
-            m.insert(QStringLiteral("timeUseSeconds"), timeUse);
+            m.insert(QStringLiteral("toolName"), ticket->ticketId());
+            m.insert(QStringLiteral("timeUseMSeconds"), timeUse);
+            m.insert(QStringLiteral("countUse"), timeUse);
             std::cout << "Time use" << timeUse << std::endl;
             m_tools.push_back(m);
         }
     }
     m_toolsMap.clear();
-    m_currentTools.clear();
 
     return m_tools;
 }
@@ -75,8 +76,9 @@ void ToolsInfoSource::activateTool(QSharedPointer<KisTicket> ticket)
     QMutexLocker locker(&m_mutex);
 
     m_currentTools.insert(ticket->ticketId(), ticket);
-    if (!m_toolsMap.count(ticket->ticketId()))
-        m_toolsMap.insert(ticket->ticketId(), ticket);
+    if (!m_toolsMap.count(ticket->ticketId())){
+        m_toolsMap.insert(ticket->ticketId(), {ticket, 1});
+    }
     std::cout << "ACTIVATE TOOL " << ticket->ticketId().toStdString() << std::endl;
 }
 
@@ -90,10 +92,11 @@ void ToolsInfoSource::deactivateTool(QString id)
         QDateTime deactivateTime = QDateTime::currentDateTime();
         timeTicket->setEndTime(deactivateTime);
 
-        KisTicket* mainTicket = m_toolsMap[id].data();
+        KisTicket* mainTicket = m_toolsMap[id].ticket.data();
         KisTimeTicket* mainTimeTicket = dynamic_cast<KisTimeTicket*>(mainTicket);
 
         if (mainTimeTicket) {
+            m_toolsMap[id].countUse++;
             std::cout << "AdditionalTIme " << timeTicket->useTimeMSeconds() << std::endl;
             mainTimeTicket->addMSecs(timeTicket->useTimeMSeconds());
         }

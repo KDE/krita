@@ -106,7 +106,6 @@ void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
         event->ignore();
         return;
     }
-    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::putTimeTicket_, KisTelemetryAbstruct::Use);
 
     setMode(KisTool::PAINT_MODE);
 
@@ -155,7 +154,6 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
 
     KisPaintDeviceSP device;
     KisImageSP image = this->image();
-    KisTelemetrySensor sensor(toolId(), KisTelemetryAbstruct::getTimeTicket_, KisTelemetryAbstruct::Use);
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());

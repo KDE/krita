@@ -28,7 +28,6 @@
 #include <kritaui_export.h>
 #include <kis_types.h>
 #include <KisPart.h>
-#include "kis_telemetry_sensor.h"
 
 
 #define PRESS_CONDITION(_event, _mode, _button, _modifier)              \

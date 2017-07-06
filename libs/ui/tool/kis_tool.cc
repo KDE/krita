@@ -70,6 +70,7 @@
 #include "kis_tool_utils.h"
 #include "KisPart.h"
 #include <QSharedPointer>
+#include "kis_telemetry_actions.h"
 
 
 
@@ -122,11 +123,8 @@ KisTool::~KisTool()
 void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
-
-    if(KisPart::instance()->provider(KisPart::RegularProvider)){
-        KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
-        provider->putTimeTicket(toolId());
-    }
+    KisToolsActivate kisToolsActivate;
+    kisToolsActivate.doAction(KisPart::instance()->provider(),toolId());
 
     resetCursorStyle();
 
@@ -169,11 +167,8 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 void KisTool::deactivate()
 {
     bool result = true;
-
-    if(KisPart::instance()->provider(KisPart::RegularProvider)){
-        KisTelemetryAbstruct * provider = KisPart::instance()->provider(KisPart::RegularProvider);
-        provider->getTimeTicket(toolId());
-    }
+    KisToolsDeactivate kisToolsDeactivate;
+    kisToolsDeactivate.doAction(KisPart::instance()->provider(),toolId());
 
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
@@ -187,6 +182,7 @@ void KisTool::deactivate()
     emit isActiveChanged();
 
     KoToolBase::deactivate();
+
 }
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)

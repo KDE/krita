@@ -373,7 +373,7 @@ set(kritaui_LIB_SRCS
     KisSaveGroupVisitor.cpp
 
     kis_telemetry_abstruct.cpp
-    kis_telemetry_sensor.cpp
+    kis_telemetry_actions.cpp
 )
 
 if(WIN32)

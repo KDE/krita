@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_telemetry_regular_provider.h"
+#include "kis_telemetry_provider.h"
 #include "KPluginFactory"
 #include "KisPart.h"
 #include <klocalizedstring.h>
@@ -27,6 +27,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include "Vc/cpuid.h"
 #include "kis_tickets.h"
 #include "kis_toolsinfosource.h"
 #include <KoToolRegistry.h>
@@ -34,11 +35,32 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
-KisTelemetryRegularProvider::KisTelemetryRegularProvider()
+KisTelemetryProvider::KisTelemetryProvider()
 {
+    m_installProvider.reset(new KUserFeedback::Provider);
+    m_installProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+
+    std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new KisUserFeedback::CpuInfoSource());
+    m_installSources.push_back(std::move(cpu));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
+    m_installSources.push_back(std::move(qt));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
+    m_installSources.push_back(std::move(compiler));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
+    m_installSources.push_back(std::move(locale));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
+    m_installSources.push_back(std::move(opengl));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
+    m_installSources.push_back(std::move(platform));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
+    m_installSources.push_back(std::move(screen));
+
+    for (auto& source : m_installSources) {
+        m_installProvider.data()->addDataSource(source.get());
+    }
+
     m_toolsProvider.reset(new KUserFeedback::Provider);
     m_toolsProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-
     std::unique_ptr<KUserFeedback::AbstractDataSource> tools(new KisUserFeedback::ToolsInfoSource);
     m_toolSources.push_back(std::move(tools));
 
@@ -47,7 +69,7 @@ KisTelemetryRegularProvider::KisTelemetryRegularProvider()
     }
 }
 
-void KisTelemetryRegularProvider::sendData(QString path)
+void KisTelemetryProvider::sendData(QString path)
 {
     if (!path.endsWith(QLatin1Char('/')))
         path += QLatin1Char('/');
@@ -58,42 +80,44 @@ void KisTelemetryRegularProvider::sendData(QString path)
         m_toolsProvider.data()->submit();
         break;
     }
+    case install: {
+        m_installProvider.data()->setFeedbackServer(QUrl(m_adress + path));
+        m_installProvider.data()->submit();
+        break;
+    }
     default:
         break;
     }
 }
 
-void KisTelemetryRegularProvider::getTimeTicket(QString id, UseMode mode)
+void KisTelemetryProvider::getTimeTicket(QString id)
 {
-    qDebug() << "get TIme ticket call";
+    //    qDebug() << "get TIme ticket call";
 
-    id = getToolId(id, mode);
-    qDebug() << ppVar(m_tickets.count(id));
+    //    qDebug() << ppVar(m_tickets.count(id));
 
     KisTicket* ticket = m_tickets.value(id).lock().data();
-    KisTimeTicket* timeTicket;
+    if (!ticket) {
+        return;
+    }
+    KisTimeTicket* timeTicket = nullptr;
     KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
     KisUserFeedback::ToolsInfoSource* tools = nullptr;
 
     timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
-    if (!ticket) {
-        Q_ASSERT_X(1 == 0, "timeTicket is lost", id.);
-        return;
-    }
-    qDebug() << "timeTicket is not lost";
     tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
-    if (!timeTicket || !tools) {
-        Q_ASSERT_X(1 == 0, "get tool's timeTicket ", id.toStdString().c_str());
-        return;
-    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(timeTicket);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(ticket);
+
     qDebug() << "Before deactivate";
     tools->deactivateTool(id);
     m_tickets.remove(id);
 }
 
-void KisTelemetryRegularProvider::putTimeTicket(QString id, UseMode mode)
+void KisTelemetryProvider::putTimeTicket(QString id)
 {
-    id = getToolId(id, mode);
     if (m_tickets.count(id)) {
         return;
     }
@@ -105,23 +129,23 @@ void KisTelemetryRegularProvider::putTimeTicket(QString id, UseMode mode)
 
     tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
 
-    if (!tools) {
-        Q_ASSERT_X(1 == 0, "create tool's timeTicket ", id);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
+
     QWeakPointer<KisTicket> weakTimeTicket(timeTicket);
 
     m_tickets.insert(id, weakTimeTicket);
     tools->activateTool(timeTicket);
 }
 
-KisTelemetryRegularProvider::~KisTelemetryRegularProvider()
+KisTelemetryProvider::~KisTelemetryProvider()
 {
 }
 
-KisTelemetryRegularProvider::TelemetryCategory KisTelemetryRegularProvider::pathToKind(QString path)
+KisTelemetryProvider::TelemetryCategory KisTelemetryProvider::pathToKind(QString path)
 {
     if (path == "tools/")
         return tools;
+    else if (path == "install/")
+        return install;
     return tools;
 }

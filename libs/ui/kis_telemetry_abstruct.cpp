@@ -1,5 +1,33 @@
 #include "kis_telemetry_abstruct.h"
 
+void KisTelemetryAbstruct::doTicket(KisToolsActivate &action, QString id)
+{
+    Q_UNUSED(action);
+    id = getToolId(id, UseMode::Activate);
+    getTimeTicket(id);
+}
+
+void KisTelemetryAbstruct::doTicket(KisToolsDeactivate &action, QString id)
+{
+    Q_UNUSED(action);
+    id = getToolId(id, UseMode::Activate);
+    putTimeTicket(id);
+}
+
+void KisTelemetryAbstruct::doTicket(KisToolsStartUse &action, QString id)
+{
+    Q_UNUSED(action);
+    id = getToolId(id, UseMode::Use);
+    getTimeTicket(id);
+}
+
+void KisTelemetryAbstruct::doTicket(KisToolsStopUse &action, QString id)
+{
+    Q_UNUSED(action);
+    id = getToolId(id, UseMode::Use);
+    putTimeTicket(id);
+}
+
 QString KisTelemetryAbstruct::getToolId(QString id, KisTelemetryAbstruct::UseMode mode)
 {
     QString toolId = "Tool" + getUseMode(mode);

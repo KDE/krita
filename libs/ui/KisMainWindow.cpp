@@ -678,8 +678,20 @@ void KisMainWindow::saveRecentFiles()
 
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
-    Q_FOREACH (KMainWindow* window, KMainWindow::memberList())
-        static_cast<KisMainWindow *>(window)->reloadRecentFileList();
+    Q_FOREACH (KMainWindow* window, KMainWindow::memberList()) {
+        /**
+         * FIXME: this is a hacking approach of reloading the updated recent files list.
+         * Sometimes, the result of reading from KConfig right after doing 'sync()' still
+         * returns old values of the recent files. Reading the same files a bit later
+         * returns correct "updated" files. I couldn't find the cause of it (DK).
+         */
+
+        KisMainWindow *mw = static_cast<KisMainWindow *>(window);
+
+        if (mw != this) {
+            mw->reloadRecentFileList();
+        }
+    }
 }
 
 void KisMainWindow::reloadRecentFileList()
@@ -1054,7 +1066,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
                     if (ret) {
                         dbgUI << "Successful Save As!";
-                        addRecentURL(newURL);
+                        KisPart::instance()->addRecentURLToAllMainWindows(newURL);
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";

@@ -135,6 +135,11 @@ void KisInputManager::Private::setMaskSyntheticEvents(bool value)
     eventEater.eatSyntheticEvents = value;
 }
 
+void KisInputManager::Private::setTabletActive(bool value)
+{
+    tabletActive = value;
+}
+
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
     , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)

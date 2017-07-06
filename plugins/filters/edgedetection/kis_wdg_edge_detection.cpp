@@ -1,6 +1,7 @@
 #include "kis_wdg_edge_detection.h"
 
 #include <filter/kis_filter_configuration.h>
+#include <QComboBox>
 
 KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
     KisConfigWidget(parent),
@@ -19,7 +20,13 @@ KisPropertiesConfigurationSP KisWdgEdgeDetection::configuration() const
     KisFilterConfigurationSP config = new KisFilterConfiguration("edge detection", 1);
     config->setProperty("horizRadius", ui->spnHorizontalRadius->value());
     config->setProperty("vertRadius", ui->spnVerticalRadius->value());
-    config->setProperty("type", "prewit");
+    if (ui->cmbType->currentIndex() == 0) {
+        config->setProperty("type", "prewit");
+    } else if (ui->cmbType->currentIndex() == 1) {
+        config->setProperty("type", "sobolvector");
+    } else if (ui->cmbType->currentIndex() == 2) {
+        config->setProperty("type", "simple");
+    }
     config->setProperty("lockAspect", true);
 
     return config;

@@ -21,6 +21,9 @@
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -73,11 +76,14 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
     }
     if (channelFlags.isEmpty() || !configuration) {
         channelFlags = device->colorSpace()->channelFlags();
-        //channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
-        //channelFlags.at())
     }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobolVector;
+    if (config->getString("type") == "prewit") {
+        type = KisEdgeDetectionKernel::Prewit;
+    } else if (config->getString("type") == "simple") {
+        type = KisEdgeDetectionKernel::Simple;
+    }
 
     KisEdgeDetectionKernel::applyEdgeDetection(device, rect,
                                      horizontalRadius, verticalRadius,

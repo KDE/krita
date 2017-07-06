@@ -46,6 +46,16 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
                 matrix(x, y) = xDistance;
             }
         }
+    } else if(type==Simple) {
+        matrix.resize(kernelSize, 1);
+        for (int x = 0; x < kernelSize; x++) {
+            qreal xDistance = center - x;
+            if (x==center) {
+                matrix(x, 0) = 0;
+            } else {
+                matrix(x, 0) = (1/xDistance)*center;
+            }
+        }
     } else {
         int multiplier = (center*center*2);
         for (int x = 0; x < kernelSize; x++) {
@@ -66,6 +76,7 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
 Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::createVerticalMatrix(qreal radius, FilterType type)
 {
     int kernelSize = kernelSizeFromRadius(radius);
+
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, kernelSize);
     KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
     const int center = kernelSize / 2;
@@ -75,6 +86,16 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
             for (int x=0; x<kernelSize; x++) {
                 qreal yDistance = center - y;
                 matrix(x, y) = yDistance;
+            }
+        }
+    } else if(type==Simple) {
+        matrix.resize(1, kernelSize);
+        for (int y = 0; y < kernelSize; y++) {
+            qreal yDistance = center - y;
+            if (y==center) {
+                matrix(0, y) = 0;
+            } else {
+                matrix(0, y) = (1/yDistance)*center;
             }
         }
     } else {

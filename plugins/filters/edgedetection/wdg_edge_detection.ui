@@ -15,7 +15,26 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QComboBox" name="cmbType"/>
+    <widget class="QComboBox" name="cmbType">
+     <property name="currentText">
+      <string>Prewit</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Prewit</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sobol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Simple</string>
+      </property>
+     </item>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="label">

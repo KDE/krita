@@ -26,6 +26,8 @@
 #include "kritaimage_export.h"
 #include <kis_distance_information.h>
 #include "kis_random_source.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 
 class QDomDocument;

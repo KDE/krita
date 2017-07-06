@@ -59,7 +59,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 2. run cmake:
 
     * Linux:
-    export PATH=$BUILDROOT/i/bin
+    export PATH=$BUILDROOT/i/bin:$PATH
     export PYTHONHOME=$BUILDROOT/i (only if you want to build your own python)
     cmake ../krita/3rdparty \
         -DINSTALL_ROOT=$BUILDROOT/i \
@@ -68,7 +68,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
     * OSX:
     
-    export PATH=$BUILDROOT/i/bin
+    export PATH=$BUILDROOT/i/bin:$PATH
     export PYTHONHOME=$BUILDROOT/i (only if you want to build your own python)
     cmake ../krita/3rdparty/  \
         -DCMAKE_INSTALL_PREFIX=$BUILDROOT/i \

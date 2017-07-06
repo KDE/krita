@@ -56,6 +56,8 @@ protected:
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
 private:
     KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal scale,
                                          qreal rotation) const;

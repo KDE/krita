@@ -27,160 +27,9 @@
 #include "kritaimage_export.h"
 
 class KisPaintInformation;
+class KisSpacingInformation;
+class KisTimingInformation;
 class KisDistanceInformation;
-
-/**
- * A time in milliseconds that is assumed to be longer than any stroke (or other paint operation)
- * will ever last. This is used instead of infinity to avoid potential errors. The value is
- * approximately ten years.
- */
-const qreal LONG_TIME = 320000000000.0;
-
-/**
- * This structure contains information about the desired spacing
- * requested by the paintAt call
- */
-class KisSpacingInformation {
-public:
-    explicit KisSpacingInformation()
-        : m_distanceSpacingEnabled(true)
-        , m_distanceSpacing(0.0, 0.0)
-        , m_timedSpacingEnabled(false)
-        , m_timedSpacingInterval(0.0)
-        , m_rotation(0.0)
-        , m_coordinateSystemFlipped(false)
-    {
-    }
-
-    explicit KisSpacingInformation(qreal isotropicSpacing)
-        : m_distanceSpacingEnabled(true)
-        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
-        , m_timedSpacingEnabled(false)
-        , m_timedSpacingInterval(0.0)
-        , m_rotation(0.0)
-        , m_coordinateSystemFlipped(false)
-    {
-    }
-
-    explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation, bool coordinateSystemFlipped)
-        : m_distanceSpacingEnabled(true)
-        , m_distanceSpacing(anisotropicSpacing)
-        , m_timedSpacingEnabled(false)
-        , m_timedSpacingInterval(0.0)
-        , m_rotation(rotation)
-        , m_coordinateSystemFlipped(coordinateSystemFlipped)
-    {
-    }
-
-    explicit KisSpacingInformation(qreal isotropicSpacing,
-                                   qreal timedSpacingInterval)
-        : m_distanceSpacingEnabled(true)
-        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
-        , m_timedSpacingEnabled(true)
-        , m_timedSpacingInterval(timedSpacingInterval)
-        , m_rotation(0.0)
-        , m_coordinateSystemFlipped(false)
-    {
-    }
-
-    explicit KisSpacingInformation(const QPointF &anisotropicSpacing,
-                                   qreal rotation,
-                                   bool coordinateSystemFlipped,
-                                   qreal timedSpacingInterval)
-        : m_distanceSpacingEnabled(true)
-        , m_distanceSpacing(anisotropicSpacing)
-        , m_timedSpacingEnabled(true)
-        , m_timedSpacingInterval(timedSpacingInterval)
-        , m_rotation(rotation)
-        , m_coordinateSystemFlipped(coordinateSystemFlipped)
-    {
-    }
-
-    explicit KisSpacingInformation(bool distanceSpacingEnabled,
-                                   qreal isotropicSpacing,
-                                   bool timedSpacingEnabled,
-                                   qreal timedSpacingInterval)
-        : m_distanceSpacingEnabled(distanceSpacingEnabled)
-        , m_distanceSpacing(isotropicSpacing, isotropicSpacing)
-        , m_timedSpacingEnabled(timedSpacingEnabled)
-        , m_timedSpacingInterval(timedSpacingInterval)
-        , m_rotation(0.0)
-        , m_coordinateSystemFlipped(false)
-    {
-    }
-
-    explicit KisSpacingInformation(bool distanceSpacingEnabled,
-                                   const QPointF &anisotropicSpacing,
-                                   qreal rotation,
-                                   bool coordinateSystemFlipped,
-                                   bool timedSpacingEnabled,
-                                   qreal timedSpacingInterval)
-        : m_distanceSpacingEnabled(distanceSpacingEnabled)
-        , m_distanceSpacing(anisotropicSpacing)
-        , m_timedSpacingEnabled(timedSpacingEnabled)
-        , m_timedSpacingInterval(timedSpacingInterval)
-        , m_rotation(rotation)
-        , m_coordinateSystemFlipped(coordinateSystemFlipped)
-    {
-    }
-
-    /**
-     * @return True if and only if distance-based spacing is enabled.
-     */
-    inline bool isDistanceSpacingEnabled() const {
-        return m_distanceSpacingEnabled;
-    }
-
-    inline QPointF distanceSpacing() const {
-        return m_distanceSpacing;
-    }
-
-    /**
-     * @return True if and only if time-based spacing is enabled.
-     */
-    inline bool isTimedSpacingEnabled() const {
-        return m_timedSpacingEnabled;
-    }
-
-    /**
-     * @return The desired maximum amount of time between dabs, in milliseconds. Returns LONG_TIME
-     * if time-based spacing is disabled.
-     */
-    inline qreal timedSpacingInterval() const {
-        return isTimedSpacingEnabled() ?
-                    m_timedSpacingInterval :
-                    LONG_TIME;
-    }
-
-    inline bool isIsotropic() const {
-        return m_distanceSpacing.x() == m_distanceSpacing.y();
-    }
-
-    inline qreal scalarApprox() const {
-        return isIsotropic() ? m_distanceSpacing.x() : QVector2D(m_distanceSpacing).length();
-    }
-
-    inline qreal rotation() const {
-        return m_rotation;
-    }
-
-    bool coordinateSystemFlipped() const {
-        return m_coordinateSystemFlipped;
-    }
-
-private:
-
-    // Distance-based spacing
-    bool m_distanceSpacingEnabled;
-    QPointF m_distanceSpacing;
-
-    // Time-based spacing (interval is in milliseconds)
-    bool m_timedSpacingEnabled;
-    qreal m_timedSpacingInterval;
-
-    qreal m_rotation;
-    bool m_coordinateSystemFlipped;
-};
 
 /**
  * Represents some information that can be used to initialize a KisDistanceInformation object. The
@@ -192,33 +41,39 @@ class KRITAIMAGE_EXPORT KisDistanceInitInfo {
 public:
 
     /**
-     * Creates a KisDistanceInitInfo with no initial last dab information, and spacing update
-     * interval set to LONG_TIME.
+     * Creates a KisDistanceInitInfo with no initial last dab information, and spacing and timing
+     * update intervals set to LONG_TIME.
      */
     explicit KisDistanceInitInfo();
 
     /**
      * Creates a KisDistanceInitInfo with no initial last dab information, and the specified spacing
-     * update interval.
+     * and timing update intervals.
      */
-    explicit KisDistanceInitInfo(qreal spacingUpdateInterval);
+    explicit KisDistanceInitInfo(qreal spacingUpdateInterval, qreal timingUpdateInterval);
 
     /**
-     * Creates a KisDistanceInitInfo with the specified last dab information, and spacing update
-     * interval set to LONG_TIME.
+     * Creates a KisDistanceInitInfo with the specified last dab information, and spacing and timing
+     * update intervals set to LONG_TIME.
      */
     explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
 
     /**
-     * Creates a KisDistanceInitInfo with the specified last dab information and spacing update
-     * interval.
+     * Creates a KisDistanceInitInfo with the specified last dab information and spacing and timing
+     * update intervals.
      */
     explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
-                        qreal spacingUpdateInterval);
+                                 qreal spacingUpdateInterval, qreal timingUpdateInterval);
+
+    KisDistanceInitInfo(const KisDistanceInitInfo &rhs);
+
+    ~KisDistanceInitInfo();
 
     bool operator==(const KisDistanceInitInfo &other) const;
 
     bool operator!=(const KisDistanceInitInfo &other) const;
+
+    KisDistanceInitInfo &operator=(const KisDistanceInitInfo &rhs);
 
     /**
      * Constructs a KisDistanceInformation with initial settings based on this object.
@@ -230,31 +85,29 @@ public:
     static KisDistanceInitInfo fromXML(const QDomElement &elt);
 
 private:
-    // Indicates whether lastPosition, lastTime, and lastAngle are valid or not.
-    bool m_hasLastInfo;
-
-    QPointF m_lastPosition;
-    qreal m_lastTime;
-    qreal m_lastAngle;
-
-    qreal m_spacingUpdateInterval;
+    struct Private;
+    Private * const m_d;
 };
 
 /**
- * This structure is used as return value of paintLine to contain
- * information that is needed to be passed for the next call.
+ * This structure keeps track of distance and timing information during a stroke, e.g. the time or
+ * distance moved since the last dab.
  */
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(qreal spacingUpdateInterval);
+    KisDistanceInformation(qreal spacingUpdateInterval, qreal timingUpdateInterval);
     KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
     /**
      * @param spacingUpdateInterval The amount of time allowed between spacing updates, in
-     *                              milliseconds. Only used when timed spacing is enabled.
+     *                              milliseconds. Use LONG_TIME to only allow spacing updates when a
+     *                              dab is painted.
+     * @param timingUpdateInterval The amount of time allowed between time-based spacing updates, in
+     *                             milliseconds. Use LONG_TIME to only allow timing updates when a
+     *                             dab is painted.
      */
     KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
-                           qreal spacingUpdateInterval);
+                           qreal spacingUpdateInterval, qreal timingUpdateInterval);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
@@ -262,12 +115,20 @@ public:
     ~KisDistanceInformation();
 
     const KisSpacingInformation& currentSpacing() const;
-    void setSpacing(const KisSpacingInformation &spacing);
+    void updateSpacing(const KisSpacingInformation &spacing);
     /**
      * Returns true if this KisDistanceInformation should have its spacing information updated
      * immediately (regardless of whether a dab is ready to be painted).
      */
     bool needsSpacingUpdate() const;
+
+    const KisTimingInformation &currentTiming() const;
+    void updateTiming(const KisTimingInformation &timing);
+    /**
+     * Returns true if this KisDistanceInformation should have its timing information updated
+     * immediately (regardless of whether a dab is ready to be painted).
+     */
+    bool needsTimingUpdate() const;
 
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
@@ -277,8 +138,15 @@ public:
     bool hasLastPaintInformation() const;
     const KisPaintInformation& lastPaintInformation() const;
 
+    /**
+     * @param spacing The new effective spacing after the dab. (Painting a dab is always supposed to
+     *                cause a spacing update.)
+     * @param timing The new effective timing after the dab. (Painting a dab is always supposed to
+     *               cause a timing update.)
+     */
     void registerPaintedDab(const KisPaintInformation &info,
-                            const KisSpacingInformation &spacing);
+                            const KisSpacingInformation &spacing,
+                            const KisTimingInformation &timing);
 
     qreal getNextPointPosition(const QPointF &start,
                                const QPointF &end,

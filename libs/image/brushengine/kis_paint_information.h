@@ -26,6 +26,8 @@
 #include "kritaimage_export.h"
 #include <kis_distance_information.h>
 #include "kis_random_source.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 
 class QDomDocument;
@@ -106,13 +108,14 @@ public:
     template <class PaintOp>
     void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo) {
         KisSpacingInformation spacingInfo;
-
+        KisTimingInformation timingInfo;
         {
             DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
             spacingInfo = op.paintAt(*this);
+            timingInfo = op.updateTimingImpl(*this);
         }
 
-        distanceInfo->registerPaintedDab(*this, spacingInfo);
+        distanceInfo->registerPaintedDab(*this, spacingInfo, timingInfo);
     }
 
     const QPointF& pos() const;

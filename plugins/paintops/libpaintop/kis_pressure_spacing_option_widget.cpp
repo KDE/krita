@@ -34,26 +34,49 @@
 KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
     KisCurveOptionWidget(new KisPressureSpacingOption(), i18n("0%"), i18n("100%"))
 {
-    QCheckBox *isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
+    m_isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
+    m_useSpacingUpdates = new QCheckBox(i18n("Update Between Dabs"));
 
-    QVBoxLayout* vl = new QVBoxLayout;
+    QHBoxLayout *hl = new QHBoxLayout;
+    hl->addWidget(m_isotropicSpacing);
+    hl->addWidget(m_useSpacingUpdates);
+
+    QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
-    vl->addWidget(isotropicSpacing);
+    vl->addLayout(hl);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 
-    QWidget* w = new QWidget;
+    QWidget *w = new QWidget;
     w->setLayout(vl);
 
     KisCurveOptionWidget::setConfigurationPage(w);
 
-    connect(isotropicSpacing, SIGNAL(stateChanged(int)),
+    connect(m_isotropicSpacing, SIGNAL(stateChanged(int)),
             this, SLOT(setIsotropicSpacing(int)));
+    connect(m_useSpacingUpdates, SIGNAL(stateChanged(int)),
+            this, SLOT(setUseSpacingUpdates(int)));
 
     setIsotropicSpacing(false);
+}
+
+void KisPressureSpacingOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    // First invoke superclass behavior.
+    KisCurveOptionWidget::readOptionSetting(setting);
+
+    KisPressureSpacingOption *option = dynamic_cast<KisPressureSpacingOption*>(curveOption());
+    m_isotropicSpacing->setChecked(option->isotropicSpacing());
+    m_useSpacingUpdates->setChecked(option->usingSpacingUpdates());
 }
 
 void KisPressureSpacingOptionWidget::setIsotropicSpacing(int isotropic)
 {
     dynamic_cast<KisPressureSpacingOption*>(KisCurveOptionWidget::curveOption())->setIsotropicSpacing(isotropic);
+    emitSettingChanged();
+}
+
+void KisPressureSpacingOptionWidget::setUseSpacingUpdates(int useSpacingUpdates)
+{
+    dynamic_cast<KisPressureSpacingOption*>(KisCurveOptionWidget::curveOption())->setUsingSpacingUpdates(useSpacingUpdates);
     emitSettingChanged();
 }

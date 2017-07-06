@@ -26,6 +26,8 @@
 #include "kis_liquify_transform_worker.h"
 #include "kis_algebra_2d.h"
 #include "kis_liquify_properties.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 
 struct KisLiquifyPaintop::Private
@@ -118,7 +120,21 @@ void KisLiquifyPaintop::updateSpacing(const KisPaintInformation &info,
         spacingInfo = updateSpacingImpl(pi);
     }
 
-    currentDistance.setSpacing(spacingInfo);
+    currentDistance.updateSpacing(spacingInfo);
+}
+
+void KisLiquifyPaintop::updateTiming(const KisPaintInformation &info,
+                                     KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisTimingInformation timingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        timingInfo = updateTimingImpl(pi);
+    }
+
+    currentDistance.updateTiming(timingInfo);
 }
 
 KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
@@ -180,6 +196,13 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 KisSpacingInformation KisLiquifyPaintop::updateSpacingImpl(const KisPaintInformation &pi) const
 {
     return KisSpacingInformation(m_d->props.spacing() * computeSize(pi));
+}
+
+KisTimingInformation KisLiquifyPaintop::updateTimingImpl(const KisPaintInformation &pi) const
+{
+    Q_UNUSED(pi);
+    // Don't use airbrushing.
+    return KisTimingInformation();
 }
 
 qreal KisLiquifyPaintop::computeSize(const KisPaintInformation &pi) const

@@ -78,7 +78,12 @@ KisSpacingInformation KisParticlePaintOp::updateSpacingImpl(const KisPaintInform
 {
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisParticlePaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }
 
 void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,

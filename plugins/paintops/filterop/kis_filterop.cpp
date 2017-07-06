@@ -46,6 +46,7 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)

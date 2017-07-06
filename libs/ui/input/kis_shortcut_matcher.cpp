@@ -278,13 +278,14 @@ bool KisShortcutMatcher::touchUpdateEvent( QTouchEvent* event )
 {
     bool retval = false;
 
-    if( m_d->touchShortcut && !m_d->touchShortcut->match( event ) ) {
+    if (m_d->touchShortcut && !m_d->touchShortcut->match( event ) ) {
         retval = tryEndTouchShortcut( event );
     }
 
-    if( !m_d->touchShortcut ) {
+    if (!m_d->touchShortcut ) {
         retval = tryRunTouchShortcut( event );
-    } else {
+    }
+    else {
         m_d->touchShortcut->action()->inputEvent( event );
         retval = true;
     }
@@ -297,7 +298,7 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     m_d->usingTouch = false; // we need to say we are done because qt will not send further event
 
     // we should try and end the shortcut too (it might be that there is none? (sketch))
-    if( tryEndTouchShortcut( event ) ) {
+    if (tryEndTouchShortcut(event)) {
         return true;
     }
 
@@ -554,10 +555,11 @@ bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
     if(m_d->touchShortcut) {
         // first reset running shortcut to avoid infinite recursion via end()
         KisTouchShortcut *touchShortcut = m_d->touchShortcut;
-        m_d->touchShortcut = 0;
 
         touchShortcut->action()->end(event);
         touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
+
+        m_d->touchShortcut = 0; // empty it out now that we are done with it
 
         return true;
     }

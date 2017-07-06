@@ -32,6 +32,7 @@
 #include <QWidgetAction>
 #include <QApplication>
 #include <QMenu>
+#include <QTime>
 
 #include <kis_debug.h>
 
@@ -850,42 +851,63 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 void KisPaintopBox::slotSaveActivePreset()
 {
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
-
     if (!curPreset)
         return;
-
     m_favoriteResourceManager->setBlockUpdates(true);
 
-    KisPaintOpPresetSP newPreset = curPreset->clone();
+    KisPaintOpPresetSP oldPreset = curPreset->clone();
+    oldPreset->load();
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
     QString presetName = m_presetsPopup->getPresetName();
-    QString presetFilename = saveLocation + presetName + newPreset->defaultFileExtension();
-
-    QStringList tags;
-    KisPaintOpPresetSP resource = rServer->resourceByName(presetName);
-    if (resource) {
-
-        tags = rServer->assignedTagsList(resource.data());
-        rServer->removeResourceAndBlacklist(resource);
-
+    QString currentPresetFileName = saveLocation + presetName + curPreset->defaultFileExtension();
+    if (rServer->resourceByName(presetName)) {
+        QString currentDate = QDate::currentDate().toString(Qt::ISODate);
+        QString currentTime = QTime::currentTime().toString(Qt::ISODate);
+        QString presetFilename = saveLocation + presetName + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
+        oldPreset->setFilename(presetFilename);
+        oldPreset->setName(presetName);
+        oldPreset->setPresetDirty(false);
+        oldPreset->setValid(true);
+        rServer->addResource(oldPreset);
+        QStringList tags;
+        tags = rServer->assignedTagsList(curPreset.data());
+        rServer->removeResourceAndBlacklist(oldPreset.data());
+        Q_FOREACH (const QString & tag, tags) {
+            rServer->addTag(oldPreset.data(), tag);
+        }
     }
 
-    newPreset->setImage(m_presetsPopup->cutOutOverlay());
-    newPreset->setFilename(presetFilename);
-    newPreset->setName(presetName);
-    newPreset->setPresetDirty(false);
-
-    rServer->addResource(newPreset);
-    Q_FOREACH (const QString & tag, tags) {
-        rServer->addTag(newPreset.data(), tag);
+    if (curPreset->name()==presetName) {
+    if (curPreset->filename().contains(saveLocation)==false || curPreset->filename().contains(presetName)==false) {
+        rServer->removeResourceAndBlacklist(curPreset.data());
+        curPreset->setFilename(currentPresetFileName);
+        curPreset->setName(presetName);
+    }
+    if (!rServer->resourceByFilename(curPreset->filename())){
+        //this is necessary so that we can get the preset afterwards.
+        rServer->addResource(curPreset, false, false);
+        rServer->removeFromBlacklist(curPreset.data());
+    }
+    curPreset->setImage(m_presetsPopup->cutOutOverlay());
+    curPreset->save();
+    curPreset->load();
+    } else {
+        KisPaintOpPresetSP newPreset = curPreset->clone();
+        newPreset->setFilename(currentPresetFileName);
+        newPreset->setName(presetName);
+        newPreset->setImage(m_presetsPopup->cutOutOverlay());
+        newPreset->setPresetDirty(false);
+        newPreset->setValid(true);
+        rServer->addResource(newPreset);
+        curPreset = newPreset; //to load the new preset
     }
 
     // HACK ALERT! the server does not notify the observers
     // automatically, so we need to call theupdate manually!
     rServer->tagCategoryMembersChanged();
 
-    restoreResource(newPreset.data());
+    restoreResource(curPreset.data());
 
     m_favoriteResourceManager->setBlockUpdates(false);
 }

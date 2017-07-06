@@ -481,6 +481,11 @@ bool KisDocument::reload()
     return false;
 }
 
+KisDocument *KisDocument::clone()
+{
+    return new KisDocument(*this);
+}
+
 bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration)
 {
     QFileInfo filePathInfo(job.filePath);
@@ -616,7 +621,7 @@ void KisDocument::setFileBatchMode(const bool batchMode)
     d->importExportManager->setBatchMode(batchMode);
 }
 
-KisDocument* KisDocument::safeCreateClone()
+KisDocument* KisDocument::lockAndCloneForSaving()
 {
     Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
     if (!locker.successfullyLocked()) {
@@ -652,7 +657,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 {
     KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), false);
 
-    QScopedPointer<KisDocument> clonedDocument(safeCreateClone());
+    QScopedPointer<KisDocument> clonedDocument(lockAndCloneForSaving());
 
     // we block saving until the current saving is finished!
     if (!clonedDocument || !d->savingMutex.tryLock()) {

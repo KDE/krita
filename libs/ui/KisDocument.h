@@ -111,12 +111,12 @@ public:
      */
     bool reload();
 
+
     /**
-     * @brief try to clone the image. This method handles all the locking for you. If locking
-     *        has failed, no cloning happens
-     * @return cloned document on success, null otherwise
+     * @brief creates a clone of the document and returns it. Please make sure that you
+     * hold all the necessary locks on the image before asking for a clone!
      */
-    KisDocument *safeCreateClone();
+    KisDocument* clone();
 
     /**
      * @brief openUrl Open an URL
@@ -562,6 +562,12 @@ private Q_SLOTS:
 
 
 private:
+    /**
+     * @brief try to clone the image. This method handles all the locking for you. If locking
+     *        has failed, no cloning happens
+     * @return cloned document on success, null otherwise
+     */
+    KisDocument *lockAndCloneForSaving();
 
     QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 

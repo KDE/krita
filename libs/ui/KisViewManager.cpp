@@ -93,6 +93,7 @@
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
 #include <kis_image.h>
+#include <kis_image_barrier_locker.h>
 #include "kis_image_manager.h"
 #include <kis_layer.h>
 #include "kis_mainwindow_observer.h"
@@ -823,8 +824,14 @@ void KisViewManager::slotCreateCopy()
     KisDocument *srcDoc = document();
     if (!srcDoc) return;
 
-    KisDocument *doc = srcDoc->safeCreateClone();
-    if (!doc) return;
+    if (!this->blockUntilOperationsFinished(srcDoc->image())) return;
+
+    KisDocument *doc = 0;
+    {
+        KisImageBarrierLocker l(srcDoc->image());
+        doc = srcDoc->clone();
+    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(doc);
 
     QString name = srcDoc->documentInfo()->aboutInfo("name");
     if (name.isEmpty()) {

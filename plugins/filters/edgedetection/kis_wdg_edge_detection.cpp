@@ -8,6 +8,10 @@ KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
     ui(new Ui_WidgetEdgeDetection)
 {
     ui->setupUi(this);
+
+    connect(ui->cmbType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnHorizontalRadius, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnVerticalRadius, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisWdgEdgeDetection::~KisWdgEdgeDetection()

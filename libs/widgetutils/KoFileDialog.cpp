@@ -84,14 +84,16 @@ void KoFileDialog::setCaption(const QString &caption)
     d->caption = caption;
 }
 
-void KoFileDialog::setDefaultDir(const QString &defaultDir)
+void KoFileDialog::setDefaultDir(const QString &defaultDir, bool force)
 {
-    if (d->defaultDirectory.isEmpty()) {
-        QFileInfo f(defaultDir);
-        d->defaultDirectory = f.absoluteFilePath();
-    }
-    if (!QFileInfo(defaultDir).isDir()) {
-        d->proposedFileName = QFileInfo(defaultDir).fileName();
+    if (!defaultDir.isEmpty()) {
+        if (d->defaultDirectory.isEmpty() || force) {
+            QFileInfo f(defaultDir);
+            d->defaultDirectory = f.absolutePath();
+        }
+        if (!QFileInfo(defaultDir).isDir()) {
+            d->proposedFileName = QFileInfo(defaultDir).fileName();
+        }
     }
 }
 
@@ -109,12 +111,19 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &filterList, QString def
 {
     d->filterList = getFilterStringListFromMime(filterList, true);
 
-    if (!defaultFilter.isEmpty()) {
+    if (defaultFilter.isEmpty()) {
         QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);
         if (defaultFilters.size() > 0) {
             defaultFilter = defaultFilters.first();
         }
     }
+
+    QString suffix = KisMimeDatabase::suffixesForMimeType(defaultFilter).first().remove("*.");
+
+    if (!d->proposedFileName.isEmpty()) {
+        d->proposedFileName = QFileInfo(d->proposedFileName).baseName() + "." + suffix;
+    }
+
     d->defaultFilter = defaultFilter;
 }
 
@@ -141,11 +150,6 @@ void KoFileDialog::createFileDialog()
 #endif
 
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
-
-//    qDebug() << "DontUseNativeDialog" << d->fileDialog->testOption(QFileDialog::DontUseNativeDialog)
-//             << dontUseNative
-//             << group.readEntry("DontUseNativeFileDialog", dontUseNative);
-
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 
@@ -232,7 +236,6 @@ QString KoFileDialog::filename()
                 extension = "." + extension;
             }
             url = url + extension;
-
         }
 
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url);
@@ -397,7 +400,6 @@ QString KoFileDialog::getUsedDir(const QString &dialogName)
 
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString dir = group.readEntry(dialogName, "");
-
     return dir;
 }
 
@@ -406,7 +408,6 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 {
 
     if (dialogName.isEmpty()) return;
-    if (d->type == SaveFile) return;
 
     QFileInfo fileInfo(fileName);
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");

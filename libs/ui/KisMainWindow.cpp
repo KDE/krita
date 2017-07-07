@@ -235,7 +235,7 @@ public:
     KRecentFilesAction *recentFiles {0};
     KoResourceModel *workspacemodel {0};
 
-    QUrl lastExportUrl;
+    QString lastExportLocation;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
@@ -769,7 +769,7 @@ bool KisMainWindow::openDocument(const QUrl &url)
 bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
 {
     if (!url.isLocalFile()) {
-        qDebug() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
+        qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
         return false;
     }
 
@@ -895,7 +895,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
     if (dlg.result() == KisDelayedSaveDialog::Rejected) {
         return false;
-    } else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
+    }
+    else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
         QMessageBox::critical(0,
                               i18nc("@title:window", "Krita"),
                               i18n("You are saving a file while the image is "
@@ -913,7 +914,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     if (document->url().isEmpty()) {
         reset_url = true;
         saveas = true;
-    } else {
+    }
+    else {
         reset_url = false;
     }
 
@@ -929,35 +931,19 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
     QUrl suggestedURL = document->url();
 
-    QStringList mimeFilter;
+    QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
-    mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
-
-    if (!mimeFilter.contains(oldOutputFormat) && !d->isExporting) {
+    if (!mimeFilter.contains(oldOutputFormat)) {
         dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
-        QString suggestedFilename = suggestedURL.fileName();
+        QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            int c = suggestedFilename.lastIndexOf('.');
-
-            const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
-            if (!ext.isEmpty()) {
-                if (c < 0)
-                    suggestedFilename = suggestedFilename + "." + ext;
-                else
-                    suggestedFilename = suggestedFilename.left(c) + "." + ext;
-            } else { // current filename extension wrong anyway
-                if (c > 0) {
-                    // this assumes that a . signifies an extension, not just a .
-                    suggestedFilename = suggestedFilename.left(c);
-                }
-            }
-
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(_native_format).first().remove("*.");
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
@@ -968,21 +954,31 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
     bool ret = false;
 
-    if (document->url().isEmpty() || saveas) {
+    if (document->url().isEmpty() || d->isExporting || saveas) {
         // if you're just File/Save As'ing to change filter options you
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveAs");
-        dialog.setCaption(i18n("untitled"));
-        if (d->isExporting && !d->lastExportUrl.isEmpty()) {
-            dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
+        dialog.setCaption(d->isExporting ? i18n("Exporting") : i18n("Saving As"));
+
+        /*qDebug() << ">>>>>" << d->isExporting << d->lastExportLocation << d->lastExportedFormat << QString::fromLatin1(document->outputMimeType())*/;
+
+        if (d->isExporting && !d->lastExportLocation.isEmpty()) {
+
+            QString proposedPath = QFileInfo(d->lastExportLocation).absolutePath();
+            QString proposedFileName = document->url().isEmpty() ? document->documentInfo()->aboutInfo("title") :  QFileInfo(document->url().toLocalFile()).baseName();
+            QString proposedMimeType =  d->lastExportedFormat.isEmpty() ? "" : d->lastExportedFormat;
+            QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
+            dialog.setDefaultDir(proposedPath + "/" + proposedFileName + "." + proposedExtension, true);
+            dialog.setMimeTypeFilters(mimeFilter, proposedMimeType);
         }
         else {
-            dialog.setDefaultDir(suggestedURL.toLocalFile());
+            dialog.setDefaultDir(suggestedURL.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : suggestedURL.toLocalFile());
+            // Default to all supported file types if user is exporting, otherwise use Krita default
+            dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(document->outputMimeType()));
         }
-        // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
+
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
@@ -1009,7 +1005,11 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
             justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
         }
         else {
-            justChangingFilterOptions = (newURL == d->lastExportUrl) && (outputFormat == d->lastExportedFormat);
+            QString path = QFileInfo(d->lastExportLocation).absolutePath();
+            QString filename = QFileInfo(document->url().toLocalFile()).baseName();
+            justChangingFilterOptions = (QFileInfo(newURL.toLocalFile()).absolutePath() == path)
+                    && (QFileInfo(newURL.toLocalFile()).baseName() == filename)
+                    && (outputFormat == d->lastExportedFormat);
         }
 
         bool bOk = true;
@@ -1051,7 +1051,22 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                 // - Clarence
                 //
                 document->setOutputMimeType(outputFormat);
-                if (!d->isExporting) {  // Save As
+                if (d->isExporting) {
+                    // Export
+                    ret = document->exportDocument(newURL);
+
+                    if (ret) {
+                        // a few file dialog convenience things
+                        d->lastExportLocation = newURL.toLocalFile();
+                        d->lastExportedFormat = outputFormat;
+                    }
+
+                    // always restore output format
+                    document->setOutputMimeType(oldOutputFormat);
+
+                }
+                else {
+                    // Save As
                     ret = document->saveAs(newURL);
 
                     if (ret) {
@@ -1064,17 +1079,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                         document->setLocalFilePath(oldFile);
                         document->setOutputMimeType(oldOutputFormat);
                     }
-                } else { // Export
-                    ret = document->exportDocument(newURL);
-
-                    if (ret) {
-                        // a few file dialog convenience things
-                        d->lastExportUrl = newURL;
-                        d->lastExportedFormat = outputFormat;
-                    }
-
-                    // always restore output format
-                    document->setOutputMimeType(oldOutputFormat);
                 }
 
             }   // if (wantToSave)  {

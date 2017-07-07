@@ -72,6 +72,7 @@ Layout_oval.kpp
 Layout_pen.kpp
 Move_tool.kpp
 Oils_bristle.kpp
+Oils_knife.kpp
 Pastel_texture_large.kpp
 Pastel_texture_thin.kpp
 Pencil_2B.kpp

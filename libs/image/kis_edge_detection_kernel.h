@@ -37,17 +37,35 @@ public:
         SobolVector //Sobol does smooth. The creation of bigger kernels is based on an approach regarding vectors.
     };
 
-    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
-        createHorizontalMatrix(qreal radius, FilterType type);
+    /**
+     * @brief createHorizontalMatrix
+     * @param radius the radius. 1 makes a 3x3 kernel.
+     * @param type One of the entries in the enum Filtertype
+     * @param reverse which direction the gradient goes.
+     * The horizontal gradient by default detects the rightmost edges.
+     * Reversed it selects the leftmost edges.
+     * @return
+     */
 
     static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
-        createVerticalMatrix(qreal radius, FilterType type);
+        createHorizontalMatrix(qreal radius, FilterType type, bool reverse = false);
+    /**
+     * @brief createVerticalMatrix
+     * @param radius the radius. 1 makes a 3x3 kernel.
+     * @param type One of the entries in the enum Filtertype
+     * @param reverse which direction the gradient goes.
+     * The vertical gradient by default detects the topmost edges.
+     * Reversed it selects the bottommost edges.
+     * @return
+     */
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
+        createVerticalMatrix(qreal radius, FilterType type, bool reverse = false);
 
     static KisConvolutionKernelSP
-        createHorizontalKernel(qreal radius, FilterType type);
+        createHorizontalKernel(qreal radius, FilterType type, bool reverse = false);
 
     static KisConvolutionKernelSP
-        createVerticalKernel(qreal radius, FilterType type);
+        createVerticalKernel(qreal radius, FilterType type, bool reverse = false);
 
     static int kernelSizeFromRadius(qreal radius);
     static qreal sigmaFromRadius(qreal radius);

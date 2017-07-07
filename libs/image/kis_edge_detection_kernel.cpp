@@ -20,6 +20,7 @@
 #include "kis_global.h"
 #include "kis_convolution_kernel.h"
 #include <kis_convolution_painter.h>
+#include <KoCompositeOpRegistry.h>
 #include <QRect>
 
 KisEdgeDetectionKernel::KisEdgeDetectionKernel()
@@ -29,9 +30,13 @@ KisEdgeDetectionKernel::KisEdgeDetectionKernel()
 /*
  * This code is very similar to the gaussian kernel code, except unlike the gaussian code,
  * edge-detection kernels DO use the diagonals.
+ * Except for the simple mode. We implement the simple mode because it is an analogue to
+ * the old sobel filter.
  */
 
-Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::createHorizontalMatrix(qreal radius, FilterType type)
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::createHorizontalMatrix(qreal radius,
+                                                                                                    FilterType type,
+                                                                                                    bool reverse)
 {
     int kernelSize = kernelSizeFromRadius(radius);
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, kernelSize);
@@ -42,14 +47,24 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
     if (type==Prewit) {
         for (int x = 0; x < kernelSize; x++) {
             for (int y=0; y<kernelSize; y++) {
-                qreal xDistance = center - x;
+                qreal xDistance;
+                if (reverse) {
+                    xDistance = x - center;
+                } else {
+                    xDistance = center - x;
+                }
                 matrix(x, y) = xDistance;
             }
         }
     } else if(type==Simple) {
         matrix.resize(kernelSize, 1);
         for (int x = 0; x < kernelSize; x++) {
-            qreal xDistance = center - x;
+            qreal xDistance;
+            if (reverse) {
+                xDistance = x - center;
+            } else {
+                xDistance = center - x;
+            }
             if (x==center) {
                 matrix(x, 0) = 0;
             } else {
@@ -63,8 +78,14 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
                 if (x==center && y==center) {
                     matrix(x, y) = 0;
                 } else {
-                    qreal xD = center - x;
-                    qreal yD = center - y;
+                    qreal xD, yD;
+                    if (reverse) {
+                        xD = x - center;
+                        yD = y - center;
+                    } else {
+                        xD = center - x;
+                        yD = center - y;
+                    }
                     matrix(x, y) = xD / (xD*xD + yD*yD) * multiplier;
                 }
             }
@@ -73,7 +94,9 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
     return matrix;
 }
 
-Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::createVerticalMatrix(qreal radius, FilterType type)
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::createVerticalMatrix(qreal radius,
+                                                                                                  FilterType type,
+                                                                                                  bool reverse)
 {
     int kernelSize = kernelSizeFromRadius(radius);
 
@@ -84,14 +107,24 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
     if (type==Prewit) {
         for (int y = 0; y < kernelSize; y++) {
             for (int x=0; x<kernelSize; x++) {
-                qreal yDistance = center - y;
+                qreal yDistance;
+                if (reverse) {
+                    yDistance = y - center;
+                } else {
+                    yDistance = center - y;
+                }
                 matrix(x, y) = yDistance;
             }
         }
     } else if(type==Simple) {
         matrix.resize(1, kernelSize);
         for (int y = 0; y < kernelSize; y++) {
-            qreal yDistance = center - y;
+            qreal yDistance;
+            if (reverse) {
+                yDistance = y - center;
+            } else {
+                yDistance = center - y;
+            }
             if (y==center) {
                 matrix(0, y) = 0;
             } else {
@@ -105,8 +138,14 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
                 if (x==center && y==center) {
                     matrix(x, y) = 0;
                 } else {
-                    qreal xD = center - x;
-                    qreal yD = center - y;
+                    qreal xD, yD;
+                    if (reverse) {
+                        xD = x - center;
+                        yD = y - center;
+                    } else {
+                        xD = center - x;
+                        yD = center - y;
+                    }
                     matrix(x, y) = yD / (xD*xD + yD*yD) * multiplier;
                 }
             }
@@ -115,15 +154,19 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
     return matrix;
 }
 
-KisConvolutionKernelSP KisEdgeDetectionKernel::createHorizontalKernel(qreal radius, KisEdgeDetectionKernel::FilterType type)
+KisConvolutionKernelSP KisEdgeDetectionKernel::createHorizontalKernel(qreal radius,
+                                                                      KisEdgeDetectionKernel::FilterType type,
+                                                                      bool reverse)
 {
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createHorizontalMatrix(radius, type);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createHorizontalMatrix(radius, type, reverse);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
-KisConvolutionKernelSP KisEdgeDetectionKernel::createVerticalKernel(qreal radius, KisEdgeDetectionKernel::FilterType type)
+KisConvolutionKernelSP KisEdgeDetectionKernel::createVerticalKernel(qreal radius,
+                                                                    KisEdgeDetectionKernel::FilterType type,
+                                                                    bool reverse)
 {
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createVerticalMatrix(radius, type);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createVerticalMatrix(radius, type, reverse);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
@@ -146,43 +189,63 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                                 KoUpdater *progressUpdater)
 {
     QPoint srcTopLeft = rect.topLeft();
+    KoColor black(Qt::black, device->colorSpace());
+    device->fill(rect, black);
+    KisPainter finalPainter(device);
+    finalPainter.setChannelFlags(channelFlags);
+    finalPainter.setProgress(progressUpdater);
+    finalPainter.setCompositeOp(COMPOSITE_ADD);
 
-    if (xRadius > 0.0 && yRadius > 0.0) {
-        KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
+    if (xRadius > 0.0) {
+        KisPaintDeviceSP leftRight = new KisPaintDevice(device->colorSpace());
+        KisPaintDeviceSP rightLeft = new KisPaintDevice(device->colorSpace());
 
-        KisConvolutionKernelSP kernelHoriz = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
-        KisConvolutionKernelSP kernelVertical = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
 
-        qreal verticalCenter = qreal(kernelVertical->height()) / 2.0;
+        KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
+        KisConvolutionKernelSP kernelHorizRightLeft = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type, true);
 
-        KisConvolutionPainter horizPainter(interm);
-        horizPainter.setChannelFlags(channelFlags);
-        horizPainter.setProgress(progressUpdater);
-        horizPainter.applyMatrix(kernelHoriz, device,
+        qreal verticalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
+
+        KisConvolutionPainter horizPainterLR(leftRight);
+        horizPainterLR.setChannelFlags(channelFlags);
+        horizPainterLR.setProgress(progressUpdater);
+        horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+        KisConvolutionPainter horizPainterRL(rightLeft);
+        horizPainterRL.setChannelFlags(channelFlags);
+        horizPainterRL.setProgress(progressUpdater);
+        horizPainterRL.applyMatrix(kernelHorizRightLeft, device,
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
 
+        finalPainter.bitBlt(srcTopLeft, leftRight, rect);
+        finalPainter.bitBlt(srcTopLeft, rightLeft, rect);
+    }
+    if (yRadius > 0.0) {
+        KisPaintDeviceSP topBottom = new KisPaintDevice(device->colorSpace());
+        KisPaintDeviceSP bottomTop = new KisPaintDevice(device->colorSpace());
+        KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
+        KisConvolutionKernelSP kernelVerticalBottomTop = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type, true);
+        qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
 
-        KisConvolutionPainter verticalPainter(device);
-        verticalPainter.setChannelFlags(channelFlags);
-        verticalPainter.setProgress(progressUpdater);
-        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
-
-    } else if (xRadius > 0.0) {
-        KisConvolutionPainter painter(device);
-        painter.setChannelFlags(channelFlags);
-        painter.setProgress(progressUpdater);
-
-        KisConvolutionKernelSP kernelHoriz = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
-        painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
-
-    } else if (yRadius > 0.0) {
-        KisConvolutionPainter painter(device);
-        painter.setChannelFlags(channelFlags);
-        painter.setProgress(progressUpdater);
-
-        KisConvolutionKernelSP kernelVertical = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
-        painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+        KisConvolutionPainter verticalPainterTB(topBottom);
+        verticalPainterTB.setChannelFlags(channelFlags);
+        verticalPainterTB.setProgress(progressUpdater);
+        verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+        KisConvolutionPainter verticalPainterBT(bottomTop);
+        verticalPainterBT.setChannelFlags(channelFlags);
+        verticalPainterBT.setProgress(progressUpdater);
+        verticalPainterBT.applyMatrix(kernelVerticalBottomTop, device,
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+        finalPainter.bitBlt(srcTopLeft, topBottom, rect);
+        finalPainter.bitBlt(srcTopLeft, bottomTop, rect);
     }
 }

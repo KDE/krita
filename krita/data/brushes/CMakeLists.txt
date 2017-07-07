@@ -108,6 +108,7 @@ O_Oils_1_GP.gbr
 O_Oil_Soft.gbr
 O_Oils_Softer.gbr
 oil_bristle.gbr
+oil_knife.gbr
 P_2B_Pencil_Angled.gih
 P_6B_Pencil_Angled.gih
 P_Graphite_Black_Grass.gih

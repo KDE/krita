@@ -34,6 +34,8 @@
 
 #include "kis_painter.h"
 
+double get_random(qreal min, qreal max);
+
 class WATERCOLORPAINT_EXPORT KisSplat
 {
 public:

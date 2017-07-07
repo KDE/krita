@@ -8,6 +8,7 @@ set(kritawatercolorpaintop_SOURCES
     kis_watercolor_paintop_settings_widget.cpp
     kis_watercolorop_option.cpp
     kis_watercolor_base_items.cpp
+    kis_splat_generator_strategy.cpp
     )
 ki18n_wrap_ui(kritawatercolorpaintop_SOURCES wdgwatercoloroptions.ui )
 add_subdirectory(tests)

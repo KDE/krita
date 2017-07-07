@@ -23,13 +23,11 @@
 
 #include <krita_utils.h>
 #include <kis_paintop_settings.h>
+#include "kis_image.h"
 
 KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
-    Q_UNUSED(image);
-    Q_UNUSED(node);
-
     m_watercolorOption.readOptionSetting(settings);
 }
 
@@ -40,9 +38,7 @@ KisWatercolorPaintOp::~KisWatercolorPaintOp()
 
 KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &info)
 {
-    KoColor clr;
-    clr.fromQColor(QColor(Qt::red));
-    KisWatercolorBaseItems::instance()->paint(info.pos(), 25, clr);
+    KisWatercolorBaseItems::instance()->paint(info.pos(), 25, painter()->paintColor(), m_watercolorOption.type);
 
     return KisSpacingInformation(1.0);
 }

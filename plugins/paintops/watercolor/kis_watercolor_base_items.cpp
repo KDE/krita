@@ -1,10 +1,31 @@
 #include "kis_watercolor_base_items.h"
 
-void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, KoColor &color)
+#include "kis_splat_generator_strategy.h"
+
+void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, KoColor color, int brushType)
 {
-    m_wetMap->addWater(pos.toPoint(), radius);
-    KisSplat *splat = new KisSplat(pos, radius / 2, color);
-    m_flowing.insert(splat->boundingRect(), splat);
+    KisSplatGeneratorStrategy *strategy;
+    switch (brushType) {
+    case 0:
+        strategy = new KisSimpleBrushGenerator();
+        break;
+    case 1:
+        strategy = new KisWetOnDryGenerator();
+        break;
+    case 2:
+        strategy = new KisWetOnWetGenerator();
+        break;
+    case 3:
+        strategy = new KisBlobbyGenerator();
+        break;
+    case 4:
+        strategy = new KisCrunchyGenerator();
+        break;
+    default:
+        break;
+    }
+
+    strategy->generate(m_flowing, m_wetMap, pos, radius, color);
 }
 
 void KisWatercolorBaseItems::update()
@@ -31,4 +52,6 @@ void KisWatercolorBaseItems::update()
 KisWatercolorBaseItems::KisWatercolorBaseItems() : m_flowing(4, 2), m_fixed(4, 2), m_dried(4, 2)
 {
     m_wetMap = new KisWetMap();
+    m_updater.start(33);
+    connect(&m_updater, SIGNAL(timeout()), SLOT(update()));
 }

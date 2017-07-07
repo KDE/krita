@@ -76,7 +76,7 @@ public:
      *
      * @param defaultDir a path to a file or directory
      */
-    void setDefaultDir(const QString &defaultDir);
+    void setDefaultDir(const QString &defaultDir, bool force = false);
 
     /**
      * @brief setImageFilters sets the name filters for the file dialog to all

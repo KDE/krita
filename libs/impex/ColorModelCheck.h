@@ -41,7 +41,7 @@ public:
 
         if (customWarning.isEmpty()) {
             m_warning = i18nc("image conversion warning",
-                              "XXX The color model <b>%1</b> or channel depth <b>%2</b> cannot be saved to this format. Your image will be converted.",
+                              "The color model <b>%1</b> or channel depth <b>%2</b> cannot be saved to this format. Your image will be converted.",
                               m_colorModelID.name(),
                               m_colorDepthID.name());
         }

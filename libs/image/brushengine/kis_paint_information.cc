@@ -21,8 +21,6 @@
 #include <QDomElement>
 #include <QScopedPointer>
 
-#include <Eigen/Core>
-
 #include "kis_paintop.h"
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"
@@ -31,8 +29,6 @@
 #include <kis_dom_utils.h>
 
 struct KisPaintInformation::Private {
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
     Private(const QPointF & pos_,
             qreal pressure_,
             qreal xTilt_, qreal yTilt_,
@@ -587,4 +583,3 @@ qreal KisPaintInformation::tiltElevation(const KisPaintInformation& info, qreal 
     // mapping to 0.0..1.0 if normalize is true
     return normalize ? (tiltElevation / (M_PI * qreal(0.5))) : tiltElevation;
 }
-

@@ -76,6 +76,19 @@
      </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Paint in this area</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="KisScratchPad" name="brushPresetThumbnailWidget" native="true">
          <property name="sizePolicy">
@@ -120,16 +133,6 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Paint directly on the thumbnail or use the tools to create your icon.</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QPushButton" name="loadExistingThumbnailButton">
            <property name="text">

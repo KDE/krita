@@ -21,53 +21,53 @@
 #ifndef KIS_TELEMETRY_REGULAR_PROVIDER_H
 #define KIS_TELEMETRY_REGULAR_PROVIDER_H
 #include "QScopedPointer"
-#include <QVariant>
 #include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/CompilerInfoSource>
 #include <KUserFeedback/LocaleInfoSource>
 #include <KUserFeedback/OpenGLInfoSource>
 #include <KUserFeedback/PlatformInfoSource>
 #include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/ScreenInfoSource>
 #include <KUserFeedback/provider.h>
+#include <QVariant>
 
 #include "kis_cpuinfosource.h"
 
+#include "kis_telemetry_actions.h"
+#include "kis_tickets.h"
+#include <QMultiMap>
+#include <QVector>
+#include <QWeakPointer>
 #include <kis_telemetry_abstruct.h>
 #include <memory>
-#include <QVector>
-#include <QMultiMap>
-#include <QWeakPointer>
-#include "kis_tickets.h"
-#include "kis_telemetry_actions.h"
 
-
-class KisTelemetryProvider : public KisTelemetryAbstruct {
+class KRITAFLAKE_EXPORT KisTelemetryProvider : public KisTelemetryAbstruct {
 public:
     KisTelemetryProvider();
-    void sendData(QString path) override;
-
+    void sendData(QString path, QString adress = QString()) override;
 
     virtual ~KisTelemetryProvider();
+
 protected:
     void getTimeTicket(QString id) override;
     void putTimeTicket(QString id) override;
 
 private:
-    enum TelemetryCategory{
+    enum TelemetryCategory {
         tools,
         install
     };
+
 private:
     QScopedPointer<KUserFeedback::Provider> m_toolsProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_toolSources;
     QScopedPointer<KUserFeedback::Provider> m_installProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_installSources;
-    QMultiMap<QString, QWeakPointer<KisTicket>> m_tickets;
-    TelemetryCategory pathToKind(QString path);
+    QMultiMap<QString, QWeakPointer<KisTicket> > m_tickets;
 
+private:
+    TelemetryCategory pathToKind(QString path);
 };
 
 #endif
-

@@ -31,7 +31,7 @@
 
 class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
 public:
-    virtual void sendData(QString path) = 0;
+    virtual void sendData(QString path, QString adress = QString()) = 0;
     virtual ~KisTelemetryAbstruct() {}
     void doTicket(KisToolsActivate &action, QString id);
     void doTicket(KisToolsDeactivate &action, QString id);

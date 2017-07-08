@@ -69,19 +69,22 @@ KisTelemetryProvider::KisTelemetryProvider()
     }
 }
 
-void KisTelemetryProvider::sendData(QString path)
+void KisTelemetryProvider::sendData(QString path, QString adress)
 {
     if (!path.endsWith(QLatin1Char('/')))
         path += QLatin1Char('/');
     TelemetryCategory enumPath = pathToKind(path);
+    QString finalAdress = adress.isNull() ? m_adress : adress;
     switch (enumPath) {
     case tools: {
-        m_toolsProvider.data()->setFeedbackServer(QUrl(m_adress + path));
+        qDebug()<<path;
+        qDebug()<<(finalAdress+path);
+        m_toolsProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
         m_toolsProvider.data()->submit();
         break;
     }
     case install: {
-        m_installProvider.data()->setFeedbackServer(QUrl(m_adress + path));
+        m_installProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
         m_installProvider.data()->submit();
         break;
     }

@@ -4,28 +4,28 @@ void KisTelemetryAbstruct::doTicket(KisToolsActivate &action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Activate);
-    getTimeTicket(id);
+    putTimeTicket(id);
 }
 
 void KisTelemetryAbstruct::doTicket(KisToolsDeactivate &action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Activate);
-    putTimeTicket(id);
+    getTimeTicket(id);
 }
 
 void KisTelemetryAbstruct::doTicket(KisToolsStartUse &action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Use);
-    getTimeTicket(id);
+    putTimeTicket(id);
 }
 
 void KisTelemetryAbstruct::doTicket(KisToolsStopUse &action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Use);
-    putTimeTicket(id);
+    getTimeTicket(id);
 }
 
 QString KisTelemetryAbstruct::getToolId(QString id, KisTelemetryAbstruct::UseMode mode)

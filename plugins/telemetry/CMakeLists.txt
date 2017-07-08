@@ -1,8 +1,3 @@
-add_subdirectory( tests )
-
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
 
 set(kritatelemetry_SOURCES
     kis_telemetry_provider.cpp
@@ -11,6 +6,7 @@ set(kritatelemetry_SOURCES
     kis_toolsinfosource.cpp
     kis_tickets.cpp
 )
+add_subdirectory( tests )
 
 add_library(kritatelemetry MODULE ${kritatelemetry_SOURCES})
 generate_export_header(kritatelemetry EXPORT_MACRO_NAME TELEMETRY_EXPORT)

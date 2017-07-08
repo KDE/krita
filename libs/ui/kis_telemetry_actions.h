@@ -21,6 +21,8 @@
 #ifndef KIS_TELEMETRY_ACTIONS_H
 #define KIS_TELEMETRY_ACTIONS_H
 #include <QString>
+#include "kritaflake_export.h"
+
 
 class KisTelemetryAbstruct;
 class KisTelemetryAction{
@@ -29,20 +31,20 @@ public:
     virtual ~KisTelemetryAction() = default;
 };
 
-class KisToolsActivate: public KisTelemetryAction{
+class KRITAFLAKE_EXPORT KisToolsActivate: public KisTelemetryAction{
 public:
       void doAction(KisTelemetryAbstruct *provider, QString id) override;
 };
-class KisToolsDeactivate: public KisTelemetryAction{
+class KRITAFLAKE_EXPORT KisToolsDeactivate: public KisTelemetryAction{
 public:
       void doAction(KisTelemetryAbstruct *provider, QString id) override;
 };
 
-class KisToolsStartUse: public KisTelemetryAction{
+class KRITAFLAKE_EXPORT KisToolsStartUse: public KisTelemetryAction{
 public:
       void doAction(KisTelemetryAbstruct *provider, QString id) override;
 };
-class KisToolsStopUse: public KisTelemetryAction{
+class KRITAFLAKE_EXPORT KisToolsStopUse: public KisTelemetryAction{
 public:
       void doAction(KisTelemetryAbstruct *provider, QString id) override;
 };

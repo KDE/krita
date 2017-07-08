@@ -455,7 +455,7 @@ void KisPaintInformation::setRandomSource(KisRandomSourceSP value)
     d->randomSource = value;
 }
 
-void KisPaintInformation::setLevelOfDetail(int levelOfDetail) const
+void KisPaintInformation::setLevelOfDetail(int levelOfDetail)
 {
     d->levelOfDetail = levelOfDetail;
 }

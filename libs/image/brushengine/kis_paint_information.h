@@ -207,7 +207,7 @@ public:
     void setRandomSource(KisRandomSourceSP value);
 
     // set level of detail which info object has been generated for
-    void setLevelOfDetail(int levelOfDetail) const;
+    void setLevelOfDetail(int levelOfDetail);
 
     /**
      * The paint information may be generated not only during real
@@ -247,17 +247,17 @@ public:
      *set the canvas rotation.
      */
     void setCanvasRotation(int rotation);
-    
+
     /*
      *Whether the canvas is mirrored for the paint-operation.
      */
     bool canvasMirroredH() const;
-    
+
     /*
      *Set whether the canvas is mirrored for the paint-operation.
      */
     void setCanvasHorizontalMirrorState(bool mir);
-    
+
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

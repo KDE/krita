@@ -68,11 +68,10 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
             if (x==center) {
                 matrix(x, 0) = 0;
             } else {
-                matrix(x, 0) = (1/xDistance)*center;
+                matrix(x, 0) = (1/xDistance);
             }
         }
     } else {
-        int multiplier = (center*center*2);
         for (int x = 0; x < kernelSize; x++) {
             for (int y=0; y<kernelSize; y++) {
                 if (x==center && y==center) {
@@ -86,7 +85,7 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
                         xD = center - x;
                         yD = center - y;
                     }
-                    matrix(x, y) = xD / (xD*xD + yD*yD) * multiplier;
+                    matrix(x, y) = xD / (xD*xD + yD*yD);
                 }
             }
         }
@@ -128,11 +127,10 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
             if (y==center) {
                 matrix(0, y) = 0;
             } else {
-                matrix(0, y) = (1/yDistance)*center;
+                matrix(0, y) = (1/yDistance);
             }
         }
     } else {
-        int multiplier = (center*center*2);
         for (int y = 0; y < kernelSize; y++) {
             for (int x=0; x<kernelSize; x++) {
                 if (x==center && y==center) {
@@ -146,7 +144,7 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
                         xD = center - x;
                         yD = center - y;
                     }
-                    matrix(x, y) = yD / (xD*xD + yD*yD) * multiplier;
+                    matrix(x, y) = yD / (xD*xD + yD*yD);
                 }
             }
         }

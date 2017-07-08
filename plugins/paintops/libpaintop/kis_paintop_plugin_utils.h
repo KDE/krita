@@ -31,17 +31,13 @@ namespace KisPaintOpPluginUtils {
 /**
  * Similar to KisPaintOpUtils::effectiveSpacing, but some of the required parameters are obtained
  * from the provided configuration options. This function assumes a common configuration where
- * curve-based spacing and rate options provide pressure sensitivity, and airbrush settings are
- * configured through a KisAirbrushOption. This type of configuration is used by several different
- * paintops.
+ * spacing and airbrush settings are configured through a KisPressureSpacingOption and
+ * KisAirbrushOption. This type of configuration is used by several different paintops.
  * @param airbrushOption - The airbrushing option. Can be null for paintops that don't support
  *                         airbrushing.
  * @param spacingOption - The pressure-curve spacing option. Can be null for paintops that don't
  *                        support pressure-based spacing.
- * @param rateOption - The pressure-curve airbrush rate option. Can be null for paintops that don't
- *                     support a pressure-based airbrush rate.
  */
-
 KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal dabHeight,
                                        bool isotropicSpacing,
@@ -53,33 +49,51 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal lodScale,
                                        const KisAirbrushOption *airbrushOption,
                                        const KisPressureSpacingOption *spacingOption,
-                                       const KisPressureRateOption *rateOption,
                                        const KisPaintInformation &pi)
 {
     // Extract required parameters.
     bool distanceSpacingEnabled = true;
-    bool timedSpacingEnabled = false;
-    qreal timedSpacingInterval = 0.0;
-    if (airbrushOption) {
-        timedSpacingEnabled = airbrushOption->isChecked();
-        distanceSpacingEnabled
-                = !(timedSpacingEnabled && airbrushOption->ignoreSpacing());
-        timedSpacingInterval = airbrushOption->airbrushInterval();
+    if (airbrushOption && airbrushOption->isChecked()) {
+        distanceSpacingEnabled = !airbrushOption->ignoreSpacing();
     }
     qreal extraScale = 1.0;
     if (spacingOption && spacingOption->isChecked()) {
         extraScale = spacingOption->apply(pi);
+    }
+
+    return KisPaintOpUtils::effectiveSpacing(dabWidth, dabHeight, extraScale,
+                                             distanceSpacingEnabled, isotropicSpacing, rotation,
+                                             axesFlipped, spacingVal, autoSpacingActive,
+                                             autoSpacingCoeff, lodScale);
+}
+
+/**
+ * Similar to KisPaintOpUtils::effectiveTiming, but some of the required parameters are obtained
+ * from the provided configuration options. This function assumes a common configuration where
+ * airbrush settings are configured through a KisAirbrushOption and KisPressureRateOption. This type
+ * of configuration is used by several different paintops.
+ * @param airbrushOption - The airbrushing option. Can be null for paintops that don't support
+ *                         airbrushing.
+ * @param rateOption - The pressure-curve airbrush rate option. Can be null for paintops that don't
+ *                     support a pressure-based airbrush rate.
+ */
+KisTimingInformation effectiveTiming(const KisAirbrushOption *airbrushOption,
+                                     const KisPressureRateOption *rateOption,
+                                     const KisPaintInformation &pi)
+{
+    // Extract required parameters.
+    bool timingEnabled = false;
+    qreal timingInterval = LONG_TIME;
+    if (airbrushOption) {
+        timingEnabled = airbrushOption->isChecked();
+        timingInterval = airbrushOption->airbrushInterval();
     }
     qreal rateExtraScale = 1.0;
     if (rateOption && rateOption->isChecked()) {
         rateExtraScale = rateOption->apply(pi);
     }
 
-    return KisPaintOpUtils::effectiveSpacing(dabWidth, dabHeight, extraScale, rateExtraScale,
-                                             distanceSpacingEnabled, isotropicSpacing, rotation,
-                                             axesFlipped, spacingVal, autoSpacingActive,
-                                             autoSpacingCoeff, timedSpacingEnabled,
-                                             timedSpacingInterval, lodScale);
+    return KisPaintOpUtils::effectiveTiming(timingEnabled, timingInterval, rateExtraScale);
 }
 
 }

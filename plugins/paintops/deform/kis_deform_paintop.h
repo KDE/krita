@@ -47,6 +47,8 @@ protected:
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
 private:
 
     KisPaintDeviceSP m_dab;

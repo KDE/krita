@@ -42,12 +42,6 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     m_outCursor = QCursor(outPixmap, 4, 4);
 }
 
-void KoZoomTool::wheelEvent(KoPointerEvent *event)
-{
-    // Let KoCanvasController handle this
-    event->ignore();
-}
-
 void KoZoomTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);

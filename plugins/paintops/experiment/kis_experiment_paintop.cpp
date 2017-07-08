@@ -29,6 +29,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_image.h>
+#include <kis_spacing_information.h>
 #include <krita_utils.h>
 
 

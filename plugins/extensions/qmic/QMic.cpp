@@ -373,12 +373,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
             qDebug() << "width" << width << "height" << height << "size" << width * height * spectrum * sizeof(float) << "shared memory size" << m.size();
             memcpy(gimg->_data, m.constData(), width * height * spectrum * sizeof(float));
 
-
-            QFile f("/home/boud/imagedata.txt");
-            f.open(QFile::WriteOnly);
-            f.write((const char*)m.constData(), m.size());
-            f.close();
-
             qDebug() << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
 
             if (!m.unlock()) {

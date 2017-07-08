@@ -127,18 +127,17 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale) const
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const
 {
-    return effectiveSpacing(scale, rotation, nullptr, nullptr, nullptr, pi);
+    return effectiveSpacing(scale, rotation, nullptr, nullptr, pi);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
 {
-    return effectiveSpacing(scale, rotation, nullptr, &spacingOption, nullptr, pi);
+    return effectiveSpacing(scale, rotation, nullptr, &spacingOption, pi);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
                                                              const KisAirbrushOption *airbrushOption,
                                                              const KisPressureSpacingOption *spacingOption,
-                                                             const KisPressureRateOption *rateOption,
                                                              const KisPaintInformation &pi) const
 {
     bool isotropicSpacing = spacingOption && spacingOption->isotropicSpacing();
@@ -155,7 +154,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
                                                    m_brush->autoSpacingActive(),
                                                    m_brush->autoSpacingCoeff(),
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   airbrushOption, spacingOption, rateOption,
+                                                   airbrushOption, spacingOption,
                                                    pi);
 }
 
@@ -165,7 +164,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qre
                                                              bool axesFlipped) const
 {
     return KisPaintOpUtils::effectiveSpacing(dabWidth, dabHeight,
-                                             extraScale, 1.0,
+                                             extraScale,
                                              true,
                                              isotropicSpacing,
                                              rotation,
@@ -173,7 +172,6 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qre
                                              m_brush->spacing(),
                                              m_brush->autoSpacingActive(),
                                              m_brush->autoSpacingCoeff(),
-                                             false, 1000.0,
                                              KisLodTransform::lodToScale(painter()->device()));
 }
 

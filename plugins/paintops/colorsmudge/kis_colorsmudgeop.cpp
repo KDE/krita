@@ -37,6 +37,7 @@
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)

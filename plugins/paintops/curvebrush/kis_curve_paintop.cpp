@@ -28,6 +28,7 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_types.h"
+#include "kis_spacing_information.h"
 #include <kis_lod_transform.h>
 
 

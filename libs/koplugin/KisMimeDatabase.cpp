@@ -121,6 +121,9 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
         if (mimeType == "image/x-tga") {
             preferredSuffix = "tga";
         }
+        if (mimeType == "image/jpeg") {
+            preferredSuffix = "jpg";
+        }
         QStringList suffixes = mime.suffixes();
         if (preferredSuffix != suffixes.first()) {
             suffixes.removeAll(preferredSuffix);
@@ -260,7 +263,10 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "*.exr";
         s_mimeDatabase << mimeType;
 
-
+        mimeType.mimeType = "image/x-psb";
+        mimeType.description = i18nc("description of a file type", "Photoshop Image (Large)");
+        mimeType.suffixes = QStringList() << "*.psb";
+        s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }

@@ -28,6 +28,10 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_delegated_tool_policies.h"
 
+#define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
+    (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
+     ((_event)->modifiers() & (_modifier) ||                            \
+      (_event)->modifiers() == Qt::NoModifier))
 
 template <class BaseClass, class DelegateTool, class ActivationPolicy = NoopActivationPolicy>
     class KisDelegatedTool : public BaseClass
@@ -108,9 +112,7 @@ public:
 
     void mouseReleaseEvent(KoPointerEvent *event) override
     {
-        if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-            this->setMode(KisTool::HOVER_MODE);
-
+        if (this->mode() == KisTool::PAINT_MODE && event->button() == Qt::LeftButton) {
             Q_ASSERT(m_localTool);
             m_localTool->mouseReleaseEvent(event);
         }

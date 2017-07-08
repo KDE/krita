@@ -26,6 +26,8 @@
 #include "kritaimage_export.h"
 #include <kis_distance_information.h>
 #include "kis_random_source.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 
 class QDomDocument;
@@ -106,13 +108,14 @@ public:
     template <class PaintOp>
     void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo) {
         KisSpacingInformation spacingInfo;
-
+        KisTimingInformation timingInfo;
         {
             DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
             spacingInfo = op.paintAt(*this);
+            timingInfo = op.updateTimingImpl(*this);
         }
 
-        distanceInfo->registerPaintedDab(*this, spacingInfo);
+        distanceInfo->registerPaintedDab(*this, spacingInfo, timingInfo);
     }
 
     const QPointF& pos() const;
@@ -204,7 +207,7 @@ public:
     void setRandomSource(KisRandomSourceSP value);
 
     // set level of detail which info object has been generated for
-    void setLevelOfDetail(int levelOfDetail) const;
+    void setLevelOfDetail(int levelOfDetail);
 
     /**
      * The paint information may be generated not only during real
@@ -244,17 +247,17 @@ public:
      *set the canvas rotation.
      */
     void setCanvasRotation(int rotation);
-    
+
     /*
      *Whether the canvas is mirrored for the paint-operation.
      */
     bool canvasMirroredH() const;
-    
+
     /*
      *Set whether the canvas is mirrored for the paint-operation.
      */
     void setCanvasHorizontalMirrorState(bool mir);
-    
+
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

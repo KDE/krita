@@ -35,6 +35,7 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 #include "kis_brush.h"

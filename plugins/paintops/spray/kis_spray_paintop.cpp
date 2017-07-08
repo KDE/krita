@@ -139,10 +139,15 @@ KisSpacingInformation KisSprayPaintOp::updateSpacingImpl(const KisPaintInformati
     return computeSpacing(info, KisLodTransform::lodToScale(painter()->device()));
 }
 
+KisTimingInformation KisSprayPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+}
+
 KisSpacingInformation KisSprayPaintOp::computeSpacing(const KisPaintInformation &info,
                                                       qreal lodScale) const
 {
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false,
                                                    m_spacing * lodScale, false, 1.0, lodScale,
-                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, info);
 }

@@ -68,29 +68,11 @@ public:
      */
     KoPointerEvent(QTabletEvent *event, const QPointF &point);
 
-    /**
-     * Constructor.
-     *
-     * @param event the touch event that is the base of this event.
-     * @param point the zoomed point of the primary touch event in the normal coordinate system.
-     * @param touchpoints the zoomed points of the touch event in the normal coordinate system.
-     */
-    KoPointerEvent(QTouchEvent *event, const QPointF &point, QList<KoTouchPoint> _touchPoints);
-
-    /**
-     * Constructor.
-     *
-     * @param event the tablet event that is the base of this event.
-     * @param point the zoomed point in the normal coordinate system.
-     */
-    KoPointerEvent(QWheelEvent *event, const QPointF &point);
-
     KoPointerEvent(KoInputDeviceHandlerEvent *event, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
 
     KoPointerEvent(KoPointerEvent *event, const QPointF& point);
 
     KoPointerEvent(const KoPointerEvent &rhs);
-
 
     ~KoPointerEvent();
 
@@ -193,14 +175,6 @@ public:
      * this value is always zero. This is <em>not</em> the same as pressure.
      */
     int z() const;
-
-    /**
-     * Returns the distance that the wheel is rotated, in eights of a degree, or 0 otherwise.
-     * @return the distance of rotation.
-     * @see orientation()
-     */
-    int delta() const;
-
     /**
      * Returns the rotation around the X-axis. If the device does not support
      * this, the value is always zero.
@@ -219,10 +193,6 @@ public:
      */
     int rotationZ() const;
 
-    /**
-     * Returns the orientation of the delta.
-     */
-    Qt::Orientation orientation() const;
 
     /// The point in document coordinates.
     const QPointF point;

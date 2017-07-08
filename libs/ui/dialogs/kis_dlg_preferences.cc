@@ -179,7 +179,7 @@ void GeneralTab::setDefault()
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
-    chkEnableTouch->setChecked(cfg.disableTouchOnCanvas(true));
+    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground(true));
 

@@ -626,14 +626,41 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(visible);
     KisConfig cfg;
     cfg.setScratchpadVisible(visible);
+    calculateShowingTopArea();
 }
+
+void KisPaintOpPresetsPopup::calculateShowingTopArea() {
+    // if the scratchpad is the only area visible, we should hide the currently selected brush and settings
+    // so the top area doesn't
+
+    bool shouldDisplayTopBar = true;
+
+    if (m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->isChecked() && !m_d->uiWdgPaintOpPresetSettings.showPresetsButton->isChecked() &&
+            !m_d->uiWdgPaintOpPresetSettings.showEditorButton->isChecked() ) {
+        shouldDisplayTopBar = false;
+    }
+
+    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setVisible(shouldDisplayTopBar);
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(shouldDisplayTopBar);
+    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(shouldDisplayTopBar);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(shouldDisplayTopBar);
+
+    // always hide these since they are part of the brush renaming field and can make things get in a weird state
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(false);
+    m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton->setVisible(false);
+    m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton->setVisible(false);
+
+}
+
 
 void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
    m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
+   calculateShowingTopArea();
 }
 
 void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.presetsContainer->setVisible(visible);
+    calculateShowingTopArea() ;
 }
 
 void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {

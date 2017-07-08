@@ -127,6 +127,7 @@ private:
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
     void toggleBrushRenameUIActive(bool isRenaming);
+    void calculateShowingTopArea();
 
 };
 

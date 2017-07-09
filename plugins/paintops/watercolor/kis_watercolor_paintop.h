@@ -28,6 +28,8 @@
 
 #include "kis_watercolorop_option.h"
 
+#include <QElapsedTimer>
+
 class KisPainter;
 
 class KisWatercolorPaintOp : public KisPaintOp
@@ -42,6 +44,8 @@ public:
 
 private:
     WatercolorOption m_watercolorOption;
+    QElapsedTimer m_timer;
+    qint16 m_lastTime;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

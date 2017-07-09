@@ -1,8 +1,30 @@
+/* This file is part of the KDE project
+ *
+ * Copyright (C) 2017 Grigory Tantsevov <tantsevov@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #include "kis_watercolor_base_items.h"
 
 #include "kis_splat_generator_strategy.h"
 
-void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, KoColor color, int brushType)
+#include <KoCompositeOps.h>
+
+void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, int brushType)
 {
     KisSplatGeneratorStrategy *strategy;
     switch (brushType) {
@@ -25,7 +47,23 @@ void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, KoColor color, int
         break;
     }
 
-    strategy->generate(m_flowing, m_wetMap, pos, radius, color);
+    strategy->generate(&m_flowing, m_wetMap, pos, radius);
+}
+
+void KisWatercolorBaseItems::repaint(KisPainter *painter)
+{
+
+    foreach (KisSplat *splat, m_flowing.values()) {
+        splat->doPaint(painter);
+    }
+
+    foreach (KisSplat *splat, m_fixed.values()) {
+        splat->doPaint(painter);
+    }
+
+    foreach (KisSplat *splat, m_dried.values()) {
+        splat->doPaint(painter);
+    }
 }
 
 void KisWatercolorBaseItems::update()
@@ -52,6 +90,4 @@ void KisWatercolorBaseItems::update()
 KisWatercolorBaseItems::KisWatercolorBaseItems() : m_flowing(4, 2), m_fixed(4, 2), m_dried(4, 2)
 {
     m_wetMap = new KisWetMap();
-    m_updater.start(33);
-    connect(&m_updater, SIGNAL(timeout()), SLOT(update()));
 }

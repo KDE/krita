@@ -23,12 +23,17 @@
 
 #include <krita_utils.h>
 #include <kis_paintop_settings.h>
-#include "kis_image.h"
+
+#include "KoCompositeOps.h"
 
 KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
+    Q_UNUSED(image);
+    Q_UNUSED(node);
     m_watercolorOption.readOptionSetting(settings);
+    m_lastTime = 0;
+    m_timer.start();
 }
 
 KisWatercolorPaintOp::~KisWatercolorPaintOp()
@@ -38,7 +43,18 @@ KisWatercolorPaintOp::~KisWatercolorPaintOp()
 
 KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &info)
 {
-    KisWatercolorBaseItems::instance()->paint(info.pos(), 25, painter()->paintColor(), m_watercolorOption.type);
+    qint16 time = m_timer.elapsed();
+    qint16 timeGone = time - m_lastTime;
+    KisWatercolorBaseItems::instance()->paint(info.pos(), m_watercolorOption.radius, m_watercolorOption.type);
+    for (int i = 0; i < timeGone / 33; i++) {
+        KisWatercolorBaseItems::instance()->update();
+    }
 
-    return KisSpacingInformation(1.0);
+    m_lastTime = time - time % 33;
+
+
+    painter()->device()->clear();
+    KisWatercolorBaseItems::instance()->repaint(painter());
+
+    return KisSpacingInformation(m_watercolorOption.radius / 3);
 }

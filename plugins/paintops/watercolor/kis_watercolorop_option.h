@@ -26,6 +26,7 @@
 const QString WATERCOLOR_TYPE = "Watercolor/type";
 const QString WATERCOLOR_GRAVITY_X = "Watercolor/gravityX";
 const QString WATERCOLOR_GRAVITY_Y = "Watercolor/gravityY";
+const QString WATERCOLOR_RADIUS = "Watercolor/radius";
 
 class KisWatercolorOpOptionsWidget;
 
@@ -42,22 +43,25 @@ private:
     KisWatercolorOpOptionsWidget *m_options;
 };
 
-class WatercolorOption
+class WatercolorOption : public KisBaseOption
 {
 public:
     int type;
     qreal gravityX, gravityY;
+    qreal radius;
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
         type = setting->getInt(WATERCOLOR_TYPE);
         gravityX = setting->getDouble(WATERCOLOR_GRAVITY_X);
         gravityY = setting->getDouble(WATERCOLOR_GRAVITY_Y);
+        radius = setting->getDouble(WATERCOLOR_RADIUS);
     }
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
         setting->setProperty(WATERCOLOR_TYPE, type);
         setting->setProperty(WATERCOLOR_GRAVITY_X, gravityX);
         setting->setProperty(WATERCOLOR_GRAVITY_Y, gravityY);
+        setting->setProperty(WATERCOLOR_RADIUS, radius);
     }
 };
 

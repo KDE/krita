@@ -123,6 +123,7 @@ pixel1.kpp
 Pixelart_dither.kpp
 Pixelart_round.kpp
 Pixelart_square.kpp
+Simple-watercolor.kpp
 
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
 

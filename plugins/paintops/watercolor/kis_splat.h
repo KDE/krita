@@ -45,9 +45,9 @@ public:
         Dried
     };
 
-    KisSplat(QPointF offset, int width, KoColor splatColor);
+    KisSplat(QPointF offset, int width);
     KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
-          qreal roughness, qreal flow, qreal radialSpeed, KoColor splatColor);
+          qreal roughness, qreal flow, qreal radialSpeed);
 
     void doPaint(KisPainter *painter);
 
@@ -72,7 +72,7 @@ private:
     QTime m_startTime;
 
     qreal m_initSize;
-    KoColor m_initColor;
+//    KoColor m_initColor;
 
     int m_fix;
 };

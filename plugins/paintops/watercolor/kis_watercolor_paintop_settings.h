@@ -21,16 +21,19 @@
 #ifndef KIS_WATERCOLOR_PAINTOP_SETTINGS_H_
 #define KIS_WATERCOLOR_PAINTOP_SETTINGS_H_
 
-#include <brushengine/kis_no_size_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <QScopedPointer>
 
-class KisWatercolorPaintOpSettings : public KisNoSizePaintOpSettings
+class KisWatercolorPaintOpSettings : public KisPaintOpSettings
 {
 public:
     KisWatercolorPaintOpSettings();
     virtual ~KisWatercolorPaintOpSettings();
 
     bool paintIncremental();
+
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 

@@ -41,6 +41,11 @@ public:
         gravityY->setRange(-10.0, 10.0);
         gravityY->setValue(0);
         gravityY->setSingleStep(1.0);
+
+        radius->setRange(0.0, 1000.0);
+        radius->setPrefix("px");
+        radius->setValue(25);
+        radius->setSingleStep(1.0);
     }
 };
 
@@ -55,6 +60,7 @@ KisWatercolorOpOption::KisWatercolorOpOption()
     connect(m_options->gravityX, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gravityY, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->brushType, SIGNAL(currentIndexChanged(QString)), SLOT(emitSettingChanged()));
+    connect(m_options->radius, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     setConfigurationPage(m_options);
 }
 
@@ -65,22 +71,29 @@ KisWatercolorOpOption::~KisWatercolorOpOption()
 
 void KisWatercolorOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    WatercolorOption op;
+    setting->setProperty(WATERCOLOR_GRAVITY_X, m_options->gravityX->value());
+    setting->setProperty(WATERCOLOR_GRAVITY_Y, m_options->gravityY->value());
+    setting->setProperty(WATERCOLOR_TYPE, m_options->brushType->currentIndex());
+    setting->setProperty(WATERCOLOR_RADIUS, m_options->radius->value());
+//    WatercolorOption op;
 
-    op.gravityX = m_options->gravityX->value();
-    op.gravityY = m_options->gravityY->value();
+//    op.gravityX = m_options->gravityX->value();
+//    op.gravityY = m_options->gravityY->value();
 
-    op.type = m_options->brushType->currentIndex();
+//    op.type = m_options->brushType->currentIndex();
 
-    op.writeOptionSetting(setting);
+//    op.radius = m_options->radius->value();
+
+//    op.writeOptionSettingImpl(setting);
 }
 
 void KisWatercolorOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    WatercolorOption op;
-    op.readOptionSetting(setting);
+//    WatercolorOption op;
+//    op.readOptionSettingImpl(setting);
 
-    m_options->gravityX->setValue(op.gravityX);
-    m_options->gravityY->setValue(op.gravityY);
-    m_options->brushType->setCurrentIndex(op.type);
+    m_options->gravityX->setValue(setting->getDouble(WATERCOLOR_GRAVITY_X));
+    m_options->gravityY->setValue(setting->getDouble(WATERCOLOR_GRAVITY_Y));
+    m_options->brushType->setCurrentIndex(setting->getInt(WATERCOLOR_TYPE));
+    m_options->radius->setValue(setting->getDouble(WATERCOLOR_RADIUS));
 }

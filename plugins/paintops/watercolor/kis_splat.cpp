@@ -33,12 +33,11 @@ double get_random(qreal min, qreal max)
 }
 
 
-KisSplat::KisSplat(QPointF offset, int width, KoColor splatColor)
+KisSplat::KisSplat(QPointF offset, int width)
     : m_life(STANDART_LIFETIME), m_roughness(1.f), m_flow(1.f),
-      m_motionBias(QPointF(0.f, 0.f)), m_initColor(splatColor)
+      m_motionBias(QPointF(0.f, 0.f))
 {
     m_fix = 8*STANDART_LIFETIME;
-    m_initColor.setOpacity(quint8(START_OPACITY));
 
     int r = width / 2;
     int n = 128;
@@ -60,12 +59,11 @@ KisSplat::KisSplat(QPointF offset, int width, KoColor splatColor)
 }
 
 KisSplat::KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
-                   qreal roughness, qreal flow, qreal radialSpeed, KoColor splatColor)
+                   qreal roughness, qreal flow, qreal radialSpeed)
     : m_life(life), m_roughness(roughness), m_flow(flow),
-      m_motionBias(velocityBias), m_initColor(splatColor)
+      m_motionBias(velocityBias)
 {
     m_fix = 8*STANDART_LIFETIME;
-    m_initColor.setOpacity(quint8(START_OPACITY));
     int r = width / 2;
     int n = 128;
 
@@ -112,13 +110,11 @@ qreal KisSplat::CalcSize()
 
 void KisSplat::doPaint(KisPainter *painter)
 {
-    painter->setPaintColor(m_initColor);
-
     qreal multiply = m_initSize / CalcSize();
     if (multiply < 0.f || multiply > 1.f)
         multiply = 1;
 
-    painter->setOpacity(m_initColor.opacityU8() * multiply);
+    painter->setOpacity(START_OPACITY * multiply);
     painter->setFillStyle(KisPainter::FillStyleForegroundColor);
     painter->fillPainterPath(this->shape());
 }

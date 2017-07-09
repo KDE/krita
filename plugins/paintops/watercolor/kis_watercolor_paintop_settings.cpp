@@ -19,6 +19,7 @@
  */
 
 #include "kis_watercolor_paintop_settings.h"
+#include "kis_watercolorop_option.h"
 
 struct KisWatercolorPaintOpSettings::Private
 {
@@ -40,7 +41,23 @@ bool KisWatercolorPaintOpSettings::paintIncremental()
      * The watercolor brush supports working in the
      * WASH mode only!
      */
-    return false;
+    return true;
+}
+
+void KisWatercolorPaintOpSettings::setPaintOpSize(qreal value)
+{
+    WatercolorOption op;
+    op.readOptionSettingImpl(this);
+    op.radius = qRound(0.5 * value);
+    op.writeOptionSettingImpl(this);
+}
+
+qreal KisWatercolorPaintOpSettings::paintOpSize() const
+{
+    WatercolorOption op;
+    op.readOptionSettingImpl(this);
+    return op.radius;
+
 }
 
 #include <brushengine/kis_slider_based_paintop_property.h>
@@ -67,14 +84,14 @@ QList<KisUniformPaintOpPropertySP> KisWatercolorPaintOpSettings::uniformProperti
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
                 WatercolorOption option;
-                option.readOptionSetting(prop->settings().data());
+                option.readOptionSettingImpl(prop->settings().data());
 
                 prop->setValue(qreal(option.gravityX));
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
                 WatercolorOption option;
-                option.readOptionSetting(prop->settings().data());
+                option.readOptionSettingImpl(prop->settings().data());
                 option.gravityX = prop->value().toDouble();
                 option.writeOptionSetting(prop->settings().data());
             });
@@ -96,16 +113,16 @@ QList<KisUniformPaintOpPropertySP> KisWatercolorPaintOpSettings::uniformProperti
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
                 WatercolorOption option;
-                option.readOptionSetting(prop->settings().data());
+                option.readOptionSettingImpl(prop->settings().data());
 
                 prop->setValue(qreal(option.gravityY));
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
                 WatercolorOption option;
-                option.readOptionSetting(prop->settings().data());
+                option.readOptionSettingImpl(prop->settings().data());
                 option.gravityY = prop->value().toDouble();
-                option.writeOptionSetting(prop->settings().data());
+                option.writeOptionSettingImpl(prop->settings().data());
             });
 
             QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -123,16 +140,45 @@ QList<KisUniformPaintOpPropertySP> KisWatercolorPaintOpSettings::uniformProperti
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
                 WatercolorOption option;
-                option.readOptionSetting(prop->settings().data());
+                option.readOptionSettingImpl(prop->settings().data());
 
                 prop->setValue(int(option.type));
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
                 WatercolorOption option;
-                option.readOptionSetting(prop->settings().data());
+                option.readOptionSettingImpl(prop->settings().data());
                 option.type = prop->value().toInt();
-                option.writeOptionSetting(prop->settings().data());
+                option.writeOptionSettingImpl(prop->settings().data());
+            });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                    new KisDoubleSliderBasedPaintOpPropertyCallback(
+                        KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                        "watercolor_radius",
+                        i18n("Radius"),
+                        settings, 0);
+            prop->setRange(0, 1000.0);
+            prop->setSingleStep(1.0);
+            prop->setReadCallback(
+                        [](KisUniformPaintOpProperty *prop) {
+                WatercolorOption option;
+                option.readOptionSettingImpl(prop->settings().data());
+
+                prop->setValue(qreal(option.radius));
+            });
+            prop->setWriteCallback(
+                        [](KisUniformPaintOpProperty *prop) {
+                WatercolorOption option;
+                option.readOptionSettingImpl(prop->settings().data());
+                option.radius = prop->value().toDouble();
+                option.writeOptionSettingImpl(prop->settings().data());
             });
 
             QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

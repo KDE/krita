@@ -36,7 +36,7 @@ SplatGenerator::SplatGenerator(int width, KoColor clr,
 void SplatGenerator::generateFromPoints(QVector<QPointF> points, int msec)
 {
     foreach (QPointF pnt, points) {
-        m_flowing->push_back(new KisSplat(pnt, 2*m_width, m_color));
+        m_flowing->push_back(new KisSplat(pnt, 2*m_width));
         m_wetMap->addWater(pnt.toPoint(), m_width);
     }
 

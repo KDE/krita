@@ -223,5 +223,8 @@
  <resource identifier="pixel1.kpp" >
   <tag>PixelArt</tag>
  </resource>
+ <resource identifier="Simple-watercolor.kpp" >
+  <tag>Watercolor</tag>
+ </resource>
 
 </tags>

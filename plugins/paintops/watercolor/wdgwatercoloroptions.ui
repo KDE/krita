@@ -24,6 +24,20 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="labelRadius">
+       <property name="text">
+        <string>Radius</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisDoubleSliderSpinBox" name="radius" native="true"/>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QLabel" name="labelGravity">
      <property name="text">
       <string>Gravity vector:</string>

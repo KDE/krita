@@ -47,6 +47,14 @@ class DlgImageSize: public KoDialog
     Q_OBJECT
 
 public:
+
+    static const QString PARAM_PREFIX;
+    static const QString PARAM_IMSIZE_UNIT;
+    static const QString PARAM_SIZE_UNIT;
+    static const QString PARAM_RES_UNIT;
+    static const QString PARAM_RATIO_LOCK;
+    static const QString PARAM_PRINT_SIZE_SEPARATE;
+
     DlgImageSize(QWidget * parent, int width, int height, double resolution);
     ~DlgImageSize() override;
 

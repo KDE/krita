@@ -23,6 +23,7 @@
 #include "dlg_imagesize.h"
 
 #include <QLocale>
+#include <kis_config.h>
 
 #include <KoUnit.h>
 #include <kis_size_group.h>
@@ -44,6 +45,13 @@ static const QString percentStr(i18n("Percent (%)"));
 static const QString pixelsInchStr(i18n("Pixels/Inch"));
 static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 
+const QString DlgImageSize::PARAM_PREFIX = "imagesizedlg";
+const QString DlgImageSize::PARAM_IMSIZE_UNIT = DlgImageSize::PARAM_PREFIX + "_imsizeunit";
+const QString DlgImageSize::PARAM_SIZE_UNIT = DlgImageSize::PARAM_PREFIX + "_sizeunit";
+const QString DlgImageSize::PARAM_RES_UNIT = DlgImageSize::PARAM_PREFIX + "_resunit";
+const QString DlgImageSize::PARAM_RATIO_LOCK = DlgImageSize::PARAM_PREFIX + "_ratioLock";
+const QString DlgImageSize::PARAM_PRINT_SIZE_SEPARATE = DlgImageSize::PARAM_PREFIX + "_printSizeSeparatly";
+
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
     : KoDialog(parent)
 {
@@ -61,13 +69,14 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
     m_page->pixelFilterCmb->setCurrent("Bicubic");
 
-
     /**
      * Initialize Pixel Width and Height fields
      */
 
     m_widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
     m_heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
+
+    KisConfig cfg;
 
     /// configure the unit to image length, default unit is pixel and printing units are forbiden.
     m_widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
@@ -100,6 +109,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
                                           m_widthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
     pixelUnitConnector->connectBackwardInt(m_widthUnitManager, SIGNAL(unitChanged(int)),
                                            m_page->pixelSizeUnit, SLOT(setCurrentIndex(int)));
+
+    QString imSizeUnit = cfg.readEntry<QString>(PARAM_IMSIZE_UNIT, "px");
+
+    m_widthUnitManager->setApparentUnitFromSymbol(imSizeUnit);
 
     /**
      * Initialize Print Width, Height and Resolution fields
@@ -199,7 +212,6 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     connect(m_page->printResolutionUnit, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotPrintResolutionUnitChanged()));
 
-
     /**
      * Create syncing connections between Pixel and Print values
      */
@@ -220,27 +232,46 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     /**
      * Initialize printing values from the predefined image values
      */
+    QString printSizeUnit;
+
     if (QLocale().measurementSystem() == QLocale::MetricSystem) {
-        m_page->printWidthUnit->setCurrentText("cm");
+        printSizeUnit = "cm";
     } else { // Imperial
-        m_page->printWidthUnit->setCurrentText("in");
+        printSizeUnit = "in";
     }
+
+    printSizeUnit = cfg.readEntry<QString>(PARAM_SIZE_UNIT, printSizeUnit);
+
+    m_printSizeUnitManager->setApparentUnitFromSymbol(printSizeUnit);
 
     setCurrentResilutionPPI(resolution);
     slotSyncPixelToPrintSize();
 
     /**
      * Initialize aspect ratio lockers with the current proportion.
-     * Print locker gets the values only after the first call to slotSyncPixelToPrintSize().
      */
     m_pixelSizeLocker->updateAspect();
     m_printSizeLocker->updateAspect();
+
+    QString printResUnit = cfg.readEntry<QString>(PARAM_RES_UNIT, "");
+    m_page->printResolutionUnit->setCurrentText(printResUnit);
+
+    m_page->constrainProportionsCkb->setChecked(cfg.readEntry<bool>(PARAM_RATIO_LOCK, true));
+    m_page->adjustPrintSizeSeparatelyCkb->setChecked(cfg.readEntry<bool>(PARAM_PRINT_SIZE_SEPARATE, false));
 
     setMainWidget(m_page);
 }
 
 DlgImageSize::~DlgImageSize()
 {
+    KisConfig cfg;
+    cfg.writeEntry<bool>(PARAM_PRINT_SIZE_SEPARATE, m_page->adjustPrintSizeSeparatelyCkb->isChecked());
+    cfg.writeEntry<bool>(PARAM_RATIO_LOCK, m_page->constrainProportionsCkb->isChecked());
+
+    cfg.writeEntry<QString>(PARAM_IMSIZE_UNIT, m_widthUnitManager->getApparentUnitSymbol());
+    cfg.writeEntry<QString>(PARAM_SIZE_UNIT, m_printSizeUnitManager->getApparentUnitSymbol());
+    cfg.writeEntry<QString>(PARAM_RES_UNIT, m_page->printResolutionUnit->currentText());
+
     delete m_page;
 }
 

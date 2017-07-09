@@ -112,6 +112,9 @@ public:
     //! \brief get the position of the apparent unit in the list of units. It is usefull if we want to build a model for combo-box based unit management.
     int getApparentUnitId() const;
 
+    //! \brief get a hint of how many decimals the spinbox need to display.
+    int getApparentUnitRecommandedDecimals() const;
+
     virtual QStringList getsUnitSymbolList(bool withName = false) const;
 
     qreal getReferenceValue(double apparentValue) const;

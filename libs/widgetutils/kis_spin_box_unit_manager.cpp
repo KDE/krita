@@ -136,6 +136,30 @@ int KisSpinBoxUnitManager::getApparentUnitId() const
     return list.indexOf(d->unitSymbol);
 }
 
+int KisSpinBoxUnitManager::getApparentUnitRecommandedDecimals() const {
+
+    switch (d->dim) {
+
+    case LENGTH:
+        if (d->unitSymbol == "px") {
+            return 0;
+        } else {
+            return 2;
+        }
+    case IMLENGTH:
+        if (d->unitSymbol == "px") {
+            return 0;
+        } else {
+            return 2;
+        }
+    default: //by default return 2.
+        break;
+    }
+
+    return 2;
+
+}
+
 QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
 
     QStringList list;

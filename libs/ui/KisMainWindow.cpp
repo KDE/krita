@@ -976,7 +976,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         else {
             dialog.setDefaultDir(suggestedURL.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : suggestedURL.toLocalFile());
             // Default to all supported file types if user is exporting, otherwise use Krita default
-            dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(document->outputMimeType()));
+            QByteArray default_mime_type = document->outputMimeType().isEmpty() ? _native_format : document->outputMimeType();
+            dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));
         }
 
         QUrl newURL = QUrl::fromUserInput(dialog.filename());

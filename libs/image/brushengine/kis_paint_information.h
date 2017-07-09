@@ -254,12 +254,19 @@ public:
 
     static KisPaintInformation fromXML(const QDomElement&);
 
+    // NOTE: Please check this file on `master` for the latest chnages
+
     /// (1-t) * p1 + t * p2
     static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
+    void mixOther(qreal t, const KisPaintInformation& other);
+    void mixOtherOnlyPosition(qreal t, const KisPaintInformation& other);
     static qreal tiltDirection(const KisPaintInformation& info, bool normalize = true);
     static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
+
+private:
+    void mixOtherImpl(const QPointF &p, qreal t, const KisPaintInformation &other, bool posOnly, bool mixTime);
 
 private:
     struct Private;

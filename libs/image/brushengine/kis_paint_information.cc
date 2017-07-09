@@ -539,6 +539,56 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     return result;
 }
 
+void KisPaintInformation::mixOther(qreal t, const KisPaintInformation& other)
+{
+    QPointF pt = (1 - t) * other.pos() + t * this->pos();
+    this->mixOtherImpl(pt, t, pi1, pi2, false, true);
+}
+
+void KisPaintInformation::mixOtherOnlyPosition(qreal t, const KisPaintInformation& other)
+{
+    QPointF pt = (1 - t) * other.pos() + t * this->pos();
+    this->mixOtherImpl(pt, t, other, true, false);
+}
+
+void KisPaintInformation::mixOtherImpl(const QPointF &p, qreal t, const KisPaintInformation &other, bool posOnly, bool mixTime)
+{
+    if (posOnly) {
+        this->d->pos = p;
+        this->d->isHoveringMode = false;
+        this->d->currentDistanceInfo = 0;
+        this->d->levelOfDetail = 0;
+        return;
+    }
+    else {
+        qreal pressure = (1 - t) * other.pressure() + t * this->pressure();
+        qreal xTilt = (1 - t) * other.xTilt() + t * this->xTilt();
+        qreal yTilt = (1 - t) * other.yTilt() + t * this->yTilt();
+
+        qreal rotation = other.rotation();
+
+        if (other.rotation() != this->rotation()) {
+            qreal a1 = kisDegreesToRadians(other.rotation());
+            qreal a2 = kisDegreesToRadians(this->rotation());
+            qreal distance = shortestAngularDistance(a2, a1);
+
+            rotation = kisRadiansToDegrees(incrementInDirection(a1, t * distance, a2));
+        }
+
+        qreal tangentialPressure = (1 - t) * other.tangentialPressure() + t * this->tangentialPressure();
+        qreal perspective = (1 - t) * other.perspective() + t * this->perspective();
+        qreal time = mixTime ? ((1 - t) * other.currentTime() + t * this->currentTime()) : this->currentTime();
+        qreal speed = (1 - t) * other.drawingSpeed() + t * this->drawingSpeed();
+
+        KIS_ASSERT_RECOVER_NOOP(other.isHoveringMode() == this->isHoveringMode());
+        *(this->d) = Private(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed, other.isHoveringMode());
+        this->d->randomSource = other.d->randomSource;
+        // this->d->isHoveringMode = other.isHoveringMode();
+        this->d->currentDistanceInfo = 0;
+        this->d->levelOfDetail = other.d->levelOfDetail;
+    }
+}
+
 qreal KisPaintInformation::tiltDirection(const KisPaintInformation& info, bool normalize)
 {
     qreal xTilt = info.xTilt();

@@ -89,8 +89,6 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     int unitId = m_widthUnitManager->getApparentUnitId();
 
     m_page->pixelSizeUnit->setModel(m_widthUnitManager);
-    //m_page->pixelSizeUnit->addItem(pixelStr);
-    //m_page->pixelSizeUnit->addItem(percentStr);
     m_page->pixelSizeUnit->setCurrentIndex(unitId);
 
     /**
@@ -230,7 +228,6 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     setCurrentResilutionPPI(resolution);
     slotSyncPixelToPrintSize();
-    slotPixelUnitBoxChanged();
 
     /**
      * Initialize aspect ratio lockers with the current proportion.
@@ -352,43 +349,6 @@ void DlgImageSize::slotAdjustSeparatelySwitched(bool value)
 {
     m_page->printAspectRatioBtn->setEnabled(!value);
     m_page->printAspectRatioBtn->setKeepAspectRatio(!value ? m_page->constrainProportionsCkb->isChecked() : true);
-}
-
-void DlgImageSize::slotPixelUnitBoxChanged()
-{
-    {
-        KisSignalsBlocker b(m_page->pixelWidthDouble, m_page->pixelHeightDouble);
-
-        if (m_page->pixelSizeUnit->currentText() == pixelStr) {
-            // TODO: adjust single step as well
-
-            m_page->pixelWidthDouble->setDecimals(0);
-            m_page->pixelHeightDouble->setDecimals(0);
-            m_page->pixelWidthDouble->setSingleStep(1);
-            m_page->pixelHeightDouble->setSingleStep(1);
-            m_widthUnitManager->setApparentUnitFromSymbol("px");
-            m_heightUnitManager->setApparentUnitFromSymbol("px");
-        } else {
-            m_page->pixelWidthDouble->setDecimals(2);
-            m_page->pixelHeightDouble->setDecimals(2);
-            m_page->pixelWidthDouble->setSingleStep(0.01);
-            m_page->pixelHeightDouble->setSingleStep(0.01);
-            m_widthUnitManager->setApparentUnitFromSymbol("vw");
-            m_heightUnitManager->setApparentUnitFromSymbol("vh");
-        }
-    }
-}
-
-void DlgImageSize::slotPixelWidthUnitSuffixChanged()
-{
-    m_page->pixelSizeUnit->setCurrentIndex(m_widthUnitManager->getApparentUnitSymbol() != "px");
-    slotPixelUnitBoxChanged();
-}
-
-void DlgImageSize::slotPixelHeightUnitSuffixChanged()
-{
-    m_page->pixelSizeUnit->setCurrentIndex(m_heightUnitManager->getApparentUnitSymbol() != "px");
-    slotPixelUnitBoxChanged();
 }
 
 qreal DlgImageSize::currentResolutionPPI() const

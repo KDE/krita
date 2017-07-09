@@ -152,6 +152,9 @@ protected:
     //! \brief convert a unitChanged signal with a QString to one with an index.
     void newUnitSymbolToUnitIndex(QString symbol);
 
+    //! \brief indicate if the unit manager has some kind of way of using a percent unit, used by the main class to add percent when necessary.
+    virtual bool hasPercent(int unitDim) const;
+
     //unit's that may be used only if acess to the document informations exists.
     static const QStringList documentRelativeLengthUnitSymbols;
     static const QStringList documentRelativeTimeUnitSymbols;

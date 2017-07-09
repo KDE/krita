@@ -67,10 +67,6 @@ private Q_SLOTS:
     void slotLockAllRatioSwitched(bool value);
     void slotAdjustSeparatelySwitched(bool value);
 
-    void slotPixelUnitBoxChanged();
-    void slotPixelWidthUnitSuffixChanged();
-    void slotPixelHeightUnitSuffixChanged();
-
 private:
     qreal currentResolutionPPI() const;
     void setCurrentResilutionPPI(qreal value);

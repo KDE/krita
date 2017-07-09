@@ -167,6 +167,16 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
             }
         }
 
+        if (hasPercent(LENGTH)) {
+
+            if (withName) {
+                list << i18n("percent (%)");
+            } else {
+                list << "%";
+            }
+
+        }
+
         if (d->canAccessDocument) {
             // ad document relative units
             if (withName) {
@@ -184,6 +194,16 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
             list << KoUnit::unitDescription(KoUnit::Pixel);
         } else {
             list << "px";
+        }
+
+        if (hasPercent(IMLENGTH)) {
+
+            if (withName) {
+                list << i18n("percent (%)");
+            } else {
+                list << "%";
+            }
+
         }
 
         if (d->canAccessDocument) {
@@ -530,6 +550,23 @@ void KisSpinBoxUnitManager::newUnitSymbolToUnitIndex(QString symbol) {
     if (id >= 0) {
         emit unitChanged(id);
     }
+}
+
+bool KisSpinBoxUnitManager::hasPercent(int unitDim) const {
+
+    if (unitDim == IMLENGTH || unitDim == LENGTH) {
+        return false;
+    }
+
+    if (unitDim == TIME) {
+        return d->canAccessDocument;
+    }
+
+    if (unitDim == ANGLE) {
+        return true; //percent is fixed when considering angles.
+    }
+
+    return false;
 }
 
 void KisSpinBoxUnitManager::recomputeConversionFactor() const

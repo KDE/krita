@@ -73,6 +73,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
     m_heightUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
 
+    m_widthUnitManager->syncWithOtherUnitManager(m_heightUnitManager); //sync the two managers, so that the units will be the same, but each manager will know a different reference for percents.
+
+    m_widthUnitManager->setApparentUnitFromSymbol("px"); //set unit to pixel.
+
     m_page->pixelWidthDouble->setUnitManager(m_widthUnitManager);
     m_page->pixelHeightDouble->setUnitManager(m_heightUnitManager);
     m_page->pixelWidthDouble->changeValue(width);
@@ -81,9 +85,23 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelHeightDouble->setDisplayUnit(false);
 
     /// add custom units
-    m_page->pixelSizeUnit->addItem(pixelStr);
-    m_page->pixelSizeUnit->addItem(percentStr);
-    m_page->pixelSizeUnit->setCurrentText(pixelStr);
+
+    int unitId = m_widthUnitManager->getApparentUnitId();
+
+    m_page->pixelSizeUnit->setModel(m_widthUnitManager);
+    //m_page->pixelSizeUnit->addItem(pixelStr);
+    //m_page->pixelSizeUnit->addItem(percentStr);
+    m_page->pixelSizeUnit->setCurrentIndex(unitId);
+
+    /**
+     * Connect Pixel Unit switching controls
+     */
+
+    KisAcyclicSignalConnector *pixelUnitConnector = new KisAcyclicSignalConnector(this);
+    pixelUnitConnector->connectForwardInt(m_page->pixelSizeUnit, SIGNAL(currentIndexChanged(int)),
+                                          m_widthUnitManager, SLOT(selectApparentUnitFromIndex(int)));
+    pixelUnitConnector->connectBackwardInt(m_widthUnitManager, SIGNAL(unitChanged(int)),
+                                           m_page->pixelSizeUnit, SLOT(setCurrentIndex(int)));
 
     /**
      * Initialize Print Width, Height and Resolution fields
@@ -165,23 +183,6 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     constrainsConnector->createCoordinatedConnector()->connectBackwardBool(
         m_page->adjustPrintSizeSeparatelyCkb, SIGNAL(toggled(bool)),
         this, SLOT(slotAdjustSeparatelySwitched(bool)));
-
-    /**
-     * Connect Pixel Unit switching controls
-     */
-
-    KisAcyclicSignalConnector *pixelUnitConnector = new KisAcyclicSignalConnector(this);
-    pixelUnitConnector->connectForwardInt(
-        m_page->pixelSizeUnit, SIGNAL(currentIndexChanged(int)),
-        this, SLOT(slotPixelUnitBoxChanged()));
-
-    pixelUnitConnector->connectBackwardInt(
-        m_widthUnitManager, SIGNAL(unitChanged(int)),
-        this, SLOT(slotPixelWidthUnitSuffixChanged()));
-
-    pixelUnitConnector->createCoordinatedConnector()->connectBackwardInt(
-        m_heightUnitManager, SIGNAL(unitChanged(int)),
-        this, SLOT(slotPixelHeightUnitSuffixChanged()));
 
     /**
      * Connect Print Unit switching controls

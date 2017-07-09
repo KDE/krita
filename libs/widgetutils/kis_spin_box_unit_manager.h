@@ -141,6 +141,9 @@ public Q_SLOTS:
     void setApparentUnitFromSymbol(QString pSymbol);
     void selectApparentUnitFromIndex(int index);
 
+    void syncWithOtherUnitManager(KisSpinBoxUnitManager* other);
+    void clearSyncWithOtherUnitManager(KisSpinBoxUnitManager* other);
+
 protected:
 
     class Private;

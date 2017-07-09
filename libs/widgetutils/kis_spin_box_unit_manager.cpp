@@ -100,6 +100,8 @@ public:
     qreal hundredPercent;
 
     bool canAccessDocument;
+
+    QVector<KisSpinBoxUnitManager*> connectedUnitManagers;
 };
 
 KisSpinBoxUnitManager::KisSpinBoxUnitManager(QObject *parent) : QAbstractListModel(parent)
@@ -168,7 +170,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         if (d->canAccessDocument) {
             // ad document relative units
             if (withName) {
-                list << KoUnit::unitDescription(KoUnit::Pixel) << i18n("view width (vw)") << i18n("view height (vh)");
+                list << KoUnit::unitDescription(KoUnit::Pixel) << i18n("percent of view width (vw)") << i18n("percent of view height (vh)");
             } else {
                 list << documentRelativeLengthUnitSymbols;
             }
@@ -484,6 +486,41 @@ void KisSpinBoxUnitManager::selectApparentUnitFromIndex(int index) {
     if (index >= 0 && index < rowCount()) {
         setApparentUnitFromSymbol(getsUnitSymbolList().at(index));
     }
+
+}
+
+
+void KisSpinBoxUnitManager::syncWithOtherUnitManager(KisSpinBoxUnitManager* other) {
+
+    if (d->connectedUnitManagers.indexOf(other) >= 0) {
+        return;
+    }
+
+    if (other->getUnitDimensionType() == getUnitDimensionType()) { //sync only unitmanager of the same type.
+        if (other->getsUnitSymbolList() == getsUnitSymbolList()) { //and if we have identical units available.
+
+            connect(this, SIGNAL(unitChanged(int)), other, SLOT(selectApparentUnitFromIndex(int))); //sync units.
+            connect(other, SIGNAL(unitChanged(int)), this, SLOT(selectApparentUnitFromIndex(int))); //sync units.
+
+            d->connectedUnitManagers.append(other);
+
+        }
+    }
+
+}
+
+void KisSpinBoxUnitManager::clearSyncWithOtherUnitManager(KisSpinBoxUnitManager* other) {
+
+    int id = d->connectedUnitManagers.indexOf(other);
+
+    if (id < 0) {
+        return;
+    }
+
+    disconnect(this, SIGNAL(unitChanged(int)), other, SLOT(selectApparentUnitFromIndex(int))); //unsync units.
+    disconnect(other, SIGNAL(unitChanged(int)), this, SLOT(selectApparentUnitFromIndex(int))); //unsync units.
+
+    d->connectedUnitManagers.removeAt(id);
 
 }
 

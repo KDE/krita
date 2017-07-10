@@ -26,7 +26,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Sobol</string>
+       <string>Sobel</string>
       </property>
      </item>
      <item>
@@ -49,7 +49,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Vertical Redius</string>
+      <string>Vertical Radius</string>
      </property>
     </widget>
    </item>

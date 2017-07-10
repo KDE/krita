@@ -78,6 +78,7 @@ install_pykrita_plugin(scripter)
 install_pykrita_plugin(colorspace)
 install_pykrita_plugin(canvassize)
 install_pykrita_plugin(filtermanager)
+install_pykrita_plugin(exportlayers)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
 install( FILES

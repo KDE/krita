@@ -25,6 +25,7 @@ set(kritaresourcemanager_SOURCES
     imagepreviewwidget.cpp
     dlg_content_downloader.cpp
     content_dowloader_dialog.cpp
+    progressindicator.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

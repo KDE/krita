@@ -19,7 +19,7 @@
 #include <brushengine/kis_paint_information.h>
 
 #include <QDomElement>
-#include <QScopedPointer>
+#include <boost/optional.hpp>
 
 #include "kis_paintop.h"
 #include "kis_algebra_2d.h"
@@ -84,7 +84,7 @@ struct KisPaintInformation::Private {
         canvasRotation = rhs.canvasRotation;
         canvasMirroredH = rhs.canvasMirroredH;
         if (rhs.drawingAngleOverride) {
-            drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
+            drawingAngleOverride = *rhs.drawingAngleOverride;
         }
 
         levelOfDetail = rhs.levelOfDetail;
@@ -105,7 +105,7 @@ struct KisPaintInformation::Private {
     int canvasRotation;
     bool canvasMirroredH;
 
-    QScopedPointer<qreal> drawingAngleOverride;
+    boost::optional<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
 
     int levelOfDetail;
@@ -321,7 +321,7 @@ qreal KisPaintInformation::yTilt() const
 
 void KisPaintInformation::overrideDrawingAngle(qreal angle)
 {
-    d->drawingAngleOverride.reset(new qreal(angle));
+    d->drawingAngleOverride = angle;
 }
 
 qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distance) const

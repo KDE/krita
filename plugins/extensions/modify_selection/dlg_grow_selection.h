@@ -32,7 +32,7 @@ class WdgGrowSelection : public KisOperationUIWidget, public Ui::WdgGrowSelectio
 public:
     WdgGrowSelection(QWidget *parent, KisViewManager* view);
 
-    virtual void getConfiguration(KisOperationConfigurationSP config);
+    void getConfiguration(KisOperationConfigurationSP config) override;
 
 private Q_SLOTS:
     void slotGrowValueChanged(int value);

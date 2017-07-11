@@ -208,7 +208,7 @@ void KisPart::removeDocument(KisDocument *document)
 KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
-    Q_FOREACH(QAction *action, d->scriptActions) {
+    Q_FOREACH(KisAction *action, d->scriptActions) {
         mw->viewManager()->scriptManager()->addAction(action);
     }
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
@@ -256,8 +256,6 @@ void KisPart::addView(KisView *view)
         d->views.append(view);
     }
 
-    connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-
     emit sigViewAdded(view);
 }
 
@@ -271,9 +269,7 @@ void KisPart::removeView(KisView *view)
      *             document *before* the saving is completed, a crash
      *             will happen.
      */
-    if (view->mainWindow()->hackIsSaving()) {
-        return;
-    }
+    KIS_ASSERT_RECOVER_RETURN(!view->mainWindow()->hackIsSaving());
 
     emit sigViewRemoved(view);
 
@@ -450,14 +446,6 @@ void KisPart::openTemplate(const QUrl &url)
     }
 
     qApp->restoreOverrideCursor();
-}
-
-void KisPart::viewDestroyed()
-{
-    KisView *view = qobject_cast<KisView*>(sender());
-    if (view) {
-        removeView(view);
-    }
 }
 
 void KisPart::addRecentURLToAllMainWindows(QUrl url)

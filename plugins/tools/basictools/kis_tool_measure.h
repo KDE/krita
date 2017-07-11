@@ -66,15 +66,15 @@ class KisToolMeasure : public KisTool
 
 public:
     KisToolMeasure(KoCanvasBase * canvas);
-    virtual ~KisToolMeasure();
+    ~KisToolMeasure() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
 Q_SIGNALS:
     void sigDistanceChanged(double distance);
@@ -114,9 +114,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolMeasureFactory() {}
+    ~KisToolMeasureFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolMeasure(canvas);
     }
 

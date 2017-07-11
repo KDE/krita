@@ -62,7 +62,7 @@ class KRITAWIDGETUTILS_EXPORT KColorSchemeManager : public QObject
     Q_OBJECT
 public:
     explicit KColorSchemeManager(QObject *parent = 0);
-    virtual ~KColorSchemeManager();
+    ~KColorSchemeManager() override;
 
     /**
      * A QAbstractItemModel of all available color schemes.

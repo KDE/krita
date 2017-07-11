@@ -80,7 +80,7 @@ public:
     explicit KoTextTableTemplate(QObject *parent = 0);
 
     /// Destructor
-    ~KoTextTableTemplate();
+    ~KoTextTableTemplate() override;
 
     /// return the name of the style.
     QString name() const;

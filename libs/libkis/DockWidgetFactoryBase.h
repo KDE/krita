@@ -49,11 +49,11 @@ class KRITALIBKIS_EXPORT DockWidgetFactoryBase : public KoDockFactoryBase
 {
 public:
     DockWidgetFactoryBase(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);
-    virtual ~DockWidgetFactoryBase();
-    virtual QString id() const;
-    virtual DockPosition defaultDockPosition() const;
-    virtual bool isCollapsable() const;
-    virtual bool defaultCollapsed() const;
+    ~DockWidgetFactoryBase() override;
+    QString id() const override;
+    DockPosition defaultDockPosition() const override;
+    bool isCollapsable() const override;
+    bool defaultCollapsed() const override;
 private:
     QString m_id;
     DockPosition m_dockPosition;

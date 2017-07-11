@@ -54,7 +54,7 @@ KoTableCellStyle::RotationAlignment rotationAlignmentFromString(const QString& a
         return KoTableCellStyle::RAlignCenter;
     if (align == "top")
         return KoTableCellStyle::RAlignTop;
-    
+
     return KoTableCellStyle::RAlignNone;
 }
 
@@ -608,12 +608,6 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     }
 
     paragraphStyle()->loadOdf(element, scontext, true); // load the par and char properties
-
-    // Borders - we don't handle inheritance unfortunately - hope it's not a big problem
-    KoBorder borders = this->borders();
-    borders.loadOdf(element->namedItemNS(KoXmlNS::style, "table-cell-properties").toElement());
-    setBorders(borders);
-
     context.styleStack().save();
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-cell");
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
@@ -673,54 +667,54 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
     if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit")) {
         setShrinkToFit(styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "print-content")) {
         setPrintContent(styleStack.property(KoXmlNS::style, "print-content") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
         setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
         setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "decimal-places")) {
         bool ok;
         int value = styleStack.property(KoXmlNS::style, "decimal-places").toInt(&ok);
         if (ok)
             setDecimalPlaces(value);
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
         setRotationAngle(KoUnit::parseAngle(styleStack.property(KoXmlNS::style, "rotation-angle")));
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "glyph-orientation-vertical"))
     {
         setVerticalGlyphOrientation(styleStack.property(KoXmlNS::style, "glyph-orientation-vertical") == "auto");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "direction")) {
         if (styleStack.property(KoXmlNS::style, "direction") == "ltr")
             setDirection(KoTableCellStyle::LeftToRight);
         else
             setDirection(KoTableCellStyle::TopToBottom);
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "rotation-align")) {
         setRotationAlignment(rotationAlignmentFromString(styleStack.property(KoXmlNS::style, "rotation-align")));
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "text-align-source")) {
         setAlignFromType(styleStack.property(KoXmlNS::style, "text-align-source") == "value-type");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "wrap-option")) {
         setWrap(styleStack.property(KoXmlNS::fo, "wrap-option") == "wrap");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "cell-protect")) {
         QString protection = styleStack.property(KoXmlNS::style, "cell-protect");
         if (protection == "none")
@@ -742,7 +736,7 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
         else
             setAlignment(KoText::valignmentFromString(verticalAlign));
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode"))
         setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
 }
@@ -785,10 +779,10 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
     Q_D(KoTableCellStyle);
     QList<int> keys = d->stylesPrivate.keys();
     bool donePadding = false;
-    if (hasProperty(QTextFormat::TableCellLeftPadding) && 
-            hasProperty(QTextFormat::TableCellRightPadding) && 
-            hasProperty(QTextFormat::TableCellTopPadding) && 
-            hasProperty(QTextFormat::TableCellBottomPadding) && 
+    if (hasProperty(QTextFormat::TableCellLeftPadding) &&
+            hasProperty(QTextFormat::TableCellRightPadding) &&
+            hasProperty(QTextFormat::TableCellTopPadding) &&
+            hasProperty(QTextFormat::TableCellBottomPadding) &&
             leftPadding() == rightPadding() &&
             topPadding() == bottomPadding() &&
             topPadding() == leftPadding()) {

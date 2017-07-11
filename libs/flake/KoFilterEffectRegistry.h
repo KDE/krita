@@ -25,7 +25,7 @@
 
 #include "kritaflake_export.h"
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoFilterEffectLoadingContext;
 class KoFilterEffect;
 
@@ -33,7 +33,7 @@ class KRITAFLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilt
 {
 public:
     KoFilterEffectRegistry();
-    virtual ~KoFilterEffectRegistry();
+    ~KoFilterEffectRegistry() override;
 
     /**
     * Return the only instance of KoFilterEffectRegistry.

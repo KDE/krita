@@ -34,10 +34,10 @@ class InsertNoteCommand : public KUndo2Command
 public:
 
     InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document);
-    virtual ~InsertNoteCommand();
+    ~InsertNoteCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
     KoInlineNote *m_inlineNote;
 private:

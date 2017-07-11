@@ -41,24 +41,24 @@ public:
 
     KisTransparencyMask();
     KisTransparencyMask(const KisTransparencyMask& rhs);
-    virtual ~KisTransparencyMask();
+    ~KisTransparencyMask() override;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisTransparencyMask(*this));
     }
 
     QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy maskPos) const;
-    QIcon icon() const;
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+                       PositionToFilthy maskPos) const override;
+    QIcon icon() const override;
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
-    QRect extent() const;
-    QRect exactBounds() const;
+    QRect extent() const override;
+    QRect exactBounds() const override;
 
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

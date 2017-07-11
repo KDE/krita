@@ -195,6 +195,7 @@ public:
     KisSignalCompressor colorChangedCompressor;
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
+    KoFillConfigWidget::StyleButton selectedFillIndex;
 
     QSharedPointer<KoStopGradient> activeGradient;
     KisSignalCompressor gradientChangedCompressor;
@@ -267,9 +268,12 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->btnChooseSolidColor, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
     connect(d->group, SIGNAL(buttonClicked(int)), SLOT(styleButtonPressed(int)));
-    connect(d->ui->stackWidget, SIGNAL(currentChanged(int)), SLOT(slotUpdateFillTitle()));
+
+    connect(d->group, SIGNAL(buttonClicked(int)), SLOT(slotUpdateFillTitle()));
+
     slotUpdateFillTitle();
     styleButtonPressed(d->group->checkedId());
+
 
     // Gradient selector
     d->ui->wdgGradientEditor->setCompactMode(true);
@@ -336,7 +340,6 @@ void KoFillConfigWidget::deactivate()
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
 
-
 void KoFillConfigWidget::setNoSelectionTrackingMode(bool value)
 {
     d->noSelectionTrackingMode = value;
@@ -367,7 +370,8 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
             !(checkedId == Solid && d->colorAction->currentKoColor() == color)) {
 
             d->group->button(Solid)->setChecked(true);
-            d->ui->stackWidget->setCurrentIndex(Solid);
+            d->selectedFillIndex = Solid;
+
             d->colorAction->setCurrentColor(color);
             d->colorChangedCompressor.start();
         } else if (checkedId == Gradient && key == KoCanvasResourceManager::ForegroundColor) {
@@ -387,6 +391,10 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
 QList<KoShape*> KoFillConfigWidget::currentShapes()
 {
     return d->canvas->selectedShapesProxy()->selection()->selectedEditableShapes();
+}
+
+int KoFillConfigWidget::selectedFillIndex() {
+    return d->selectedFillIndex;
 }
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
@@ -413,7 +421,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
     }
 
     if (buttonId >= None && buttonId <= Pattern) {
-        d->ui->stackWidget->setCurrentIndex(buttonId);
+        d->selectedFillIndex = static_cast<KoFillConfigWidget::StyleButton>(buttonId);
     }
 }
 
@@ -704,7 +712,7 @@ void KoFillConfigWidget::shapeChanged()
         }
 
         d->group->button(None)->setChecked(true);
-        d->ui->stackWidget->setCurrentIndex(None);
+        d->selectedFillIndex = None;
 
     } else {
         Q_FOREACH (QAbstractButton *button, d->group->buttons()) {
@@ -745,5 +753,52 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     }
 
     d->group->button(newActiveButton)->setChecked(true);
-    d->ui->stackWidget->setCurrentIndex(newActiveButton);
+
+    d->selectedFillIndex = newActiveButton;
+    updateWidgetComponentVisbility();
+}
+
+
+void KoFillConfigWidget::updateWidgetComponentVisbility()
+{
+    // The UI is showing/hiding things like this because the 'stacked widget' isn't very flexible
+    // and makes it difficult to put anything underneath it without a lot empty space
+
+    // hide everything first
+    d->ui->wdgGradientEditor->setVisible(false);
+    d->ui->btnChoosePredefinedGradient->setVisible(false);
+    d->ui->btnChooseSolidColor->setVisible(false);
+    d->ui->typeLabel->setVisible(false);
+    d->ui->repeatLabel->setVisible(false);
+    d->ui->cmbGradientRepeat->setVisible(false);
+    d->ui->cmbGradientType->setVisible(false);
+    d->ui->btnSolidColorPick->setVisible(false);
+    d->ui->btnSaveGradient->setVisible(false);
+    d->ui->gradientTypeLine->setVisible(false);
+    d->ui->soldStrokeColorLabel->setVisible(false);
+    d->ui->presetLabel->setVisible(false);
+
+    switch (d->selectedFillIndex) {
+        case KoFillConfigWidget::None:
+            break;
+        case KoFillConfigWidget::Solid:
+            d->ui->btnChooseSolidColor->setVisible(true);
+            d->ui->btnSolidColorPick->setVisible(true);
+            d->ui->soldStrokeColorLabel->setVisible(true);
+            break;
+        case KoFillConfigWidget::Gradient:
+            d->ui->wdgGradientEditor->setVisible(true);
+            d->ui->btnChoosePredefinedGradient->setVisible(true);
+            d->ui->typeLabel->setVisible(true);
+            d->ui->repeatLabel->setVisible(true);
+            d->ui->cmbGradientRepeat->setVisible(true);
+            d->ui->cmbGradientType->setVisible(true);
+            d->ui->btnSaveGradient->setVisible(true);
+            d->ui->gradientTypeLine->setVisible(true);
+            d->ui->presetLabel->setVisible(true);
+            break;
+        case KoFillConfigWidget::Pattern:
+            break;
+    }
+
 }

@@ -35,7 +35,7 @@ class KRITATEXTLAYOUT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
 public:
     /// constructor
     explicit KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout);
-    virtual ~KoTextLayoutRootArea();
+    ~KoTextLayoutRootArea() override;
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame
@@ -66,7 +66,7 @@ public:
     /// Returns the cursor position of the following root frame
     FrameIterator *nextStartOfArea() const;
 
-    virtual KoText::Direction parentTextDirection() const;
+    KoText::Direction parentTextDirection() const override;
 
     void setBottom(qreal b);
 

@@ -192,20 +192,16 @@ void KisLayerManager::setup(KisActionManager* actionManager)
 
 void KisLayerManager::updateGUI()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
+    KisLayerSP layer = activeLayer();
 
-    KisLayerSP layer;
-    qint32 nlayers = 0;
+    const bool isGroupLayer = layer && layer->inherits("KisGroupLayer");
 
-    if (image) {
-        layer = activeLayer();
-        nlayers = image->nlayers();
-    }
-
-    // XXX these should be named layer instead of image
-    m_imageFlatten->setEnabled(nlayers > 1);
-    m_imageMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
-    m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
+    m_imageMergeLayer->setText(
+        isGroupLayer ?
+            i18nc("@action:inmenu", "Merge Group") :
+            i18nc("@action:inmenu", "Merge with Layer Below"));
+    m_flattenLayer->setVisible(!isGroupLayer);
 
     if (m_view->statusBar())
         m_view->statusBar()->setProfile(image);
@@ -614,6 +610,21 @@ bool tryMergeSelectionMasks(KisNodeSP currentNode, KisImageSP image)
     return result;
 }
 
+bool tryFlattenGroupLayer(KisNodeSP currentNode, KisImageSP image)
+{
+    bool result = false;
+
+    if (currentNode->inherits("KisGroupLayer")) {
+        KisGroupLayer *layer = qobject_cast<KisGroupLayer*>(currentNode.data());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(layer, false);
+
+        image->flattenLayer(layer);
+        result = true;
+    }
+
+    return result;
+}
+
 void KisLayerManager::mergeLayer()
 {
     KisImageSP image = m_view->image();
@@ -628,7 +639,11 @@ void KisLayerManager::mergeLayer()
     if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
 
-    } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
+    } else if (tryMergeSelectionMasks(m_view->activeNode(), image)) {
+        // already done!
+    } else if (tryFlattenGroupLayer(m_view->activeNode(), image)) {
+        // already done!
+    } else {
 
         if (!layer->prevSibling()) return;
         KisLayer *prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
@@ -657,7 +672,7 @@ void KisLayerManager::flattenLayer()
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
 
-    image->flattenLayer(layer);
+    convertNodeToPaintLayer(layer);
     m_view->updateGUI();
 }
 

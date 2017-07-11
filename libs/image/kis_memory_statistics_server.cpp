@@ -19,6 +19,7 @@
 #include "kis_memory_statistics_server.h"
 
 #include <QGlobalStatic>
+#include <QApplication>
 
 #include "kis_image.h"
 #include "kis_image_config.h"
@@ -30,8 +31,8 @@ Q_GLOBAL_STATIC(KisMemoryStatisticsServer, s_instance)
 
 struct Q_DECL_HIDDEN KisMemoryStatisticsServer::Private
 {
-    Private()
-        : updateCompressor(1000 /* ms */, KisSignalCompressor::POSTPONE)
+    Private(KisMemoryStatisticsServer *q)
+        : updateCompressor(1000 /* ms */, KisSignalCompressor::POSTPONE, q)
     {
     }
 
@@ -40,8 +41,14 @@ struct Q_DECL_HIDDEN KisMemoryStatisticsServer::Private
 
 
 KisMemoryStatisticsServer::KisMemoryStatisticsServer()
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
+    /**
+     * The first instance() call may happen from non-gui thread,
+     * so we should ensure the signals and timers are running in the
+     * correct (GUI) thread.
+     */
+    moveToThread(qApp->thread());
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SIGNAL(sigUpdateMemoryStatistics()));
 }
 

@@ -29,7 +29,7 @@ class KisSafeDocumentLoader : public QObject
     Q_OBJECT
 public:
     KisSafeDocumentLoader(const QString &path = "", QObject *parent = 0);
-    ~KisSafeDocumentLoader();
+    ~KisSafeDocumentLoader() override;
 
 public:
     void setPath(const QString &path);

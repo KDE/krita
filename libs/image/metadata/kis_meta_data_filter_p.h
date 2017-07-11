@@ -28,12 +28,12 @@ namespace KisMetaData
 class AnonymizerFilter : public Filter
 {
 public:
-    virtual ~AnonymizerFilter();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual bool defaultEnabled() const;
-    virtual void filter(KisMetaData::Store*) const;
+    ~AnonymizerFilter() override;
+    QString id() const override;
+    QString name() const override;
+    QString description() const override;
+    bool defaultEnabled() const override;
+    void filter(KisMetaData::Store*) const override;
 };
 /**
  * Filter that add the name of the creation program and the date
@@ -42,12 +42,12 @@ public:
 class ToolInfoFilter : public Filter
 {
 public:
-    virtual ~ToolInfoFilter();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual bool defaultEnabled() const;
-    virtual void filter(KisMetaData::Store*) const;
+    ~ToolInfoFilter() override;
+    QString id() const override;
+    QString name() const override;
+    QString description() const override;
+    bool defaultEnabled() const override;
+    void filter(KisMetaData::Store*) const override;
 };
 }
 #endif

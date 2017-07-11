@@ -36,7 +36,6 @@
 #include <lazybrush/kis_colorize_mask.h>
 #include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
-#include <kis_inpaint_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_effect_mask.h>
 #include "dialogs/kis_dlg_adjustment_layer.h"

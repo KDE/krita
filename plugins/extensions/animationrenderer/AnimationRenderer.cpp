@@ -123,9 +123,24 @@ void AnimaterionRenderer::slotRenderAnimation()
                     encoderConfig->setProperty("savedFilesMask", savedFilesMask);
                 }
 
+                const QString fileName = videoConfig->getString("filename");
+                QString resultFile = fileName;
+                KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute())
+
+                {
+                    const QFileInfo info(resultFile);
+                    QDir dir(info.absolutePath());
+
+                    if (!dir.exists()) {
+                        dir.mkpath(info.absolutePath());
+                    }
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+                }
+
                 QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
                 encoder->setMimeType(mimetype.toLatin1());
-                QFile fi(videoConfig->getString("filename"));
+                QFile fi(resultFile);
+
                 KisImportExportFilter::ConversionStatus res;
                 if (!fi.open(QIODevice::WriteOnly)) {
                     qWarning() << "Could not open" << fi.fileName() << "for writing!";

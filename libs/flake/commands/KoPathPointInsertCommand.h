@@ -45,12 +45,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, KUndo2Command *parent = 0);
-    virtual ~KoPathPointInsertCommand();
+    ~KoPathPointInsertCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
     /// Returns list of inserted points
     QList<KoPathPoint*> insertedPoints() const;

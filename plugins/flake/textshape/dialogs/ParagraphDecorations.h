@@ -31,7 +31,7 @@ class ParagraphDecorations : public QWidget
 
 public:
     explicit ParagraphDecorations(QWidget *parent = 0);
-    ~ParagraphDecorations() {}
+    ~ParagraphDecorations() override {}
 
     void setDisplay(KoParagraphStyle *style);
     void save(KoParagraphStyle *style) const;

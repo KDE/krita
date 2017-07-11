@@ -23,7 +23,7 @@
 
 KisLegacyUndoAdapter::KisLegacyUndoAdapter(KisUndoStore *undoStore,
                                            KisImageWSP image)
-    : KisUndoAdapter(undoStore),
+    : KisUndoAdapter(undoStore, image.data()),
       m_image(image),
       m_macroCounter(0)
 {

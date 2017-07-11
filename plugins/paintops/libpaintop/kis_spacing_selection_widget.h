@@ -29,7 +29,7 @@ class PAINTOP_EXPORT KisSpacingSelectionWidget : public QWidget
     Q_OBJECT
 public:
     KisSpacingSelectionWidget(QWidget *parent);
-    ~KisSpacingSelectionWidget();
+    ~KisSpacingSelectionWidget() override;
 
     void setSpacing(bool isAuto, qreal spacing);
 

@@ -54,7 +54,7 @@ public:
                           const QString & caption,
                           KisViewManager *view,
                           QWidget *parent = 0);
-    ~KisDlgAdjustmentLayer();
+    ~KisDlgAdjustmentLayer() override;
     KisFilterConfigurationSP  filterConfiguration() const;
     QString layerName() const;
 

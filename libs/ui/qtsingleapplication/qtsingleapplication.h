@@ -46,13 +46,13 @@ class KRITAUI_EXPORT QtSingleApplication : public QApplication
 
 public:
     QtSingleApplication(const QString &id, int &argc, char **argv);
-    ~QtSingleApplication();
+    ~QtSingleApplication() override;
 
     bool isRunning(qint64 pid = -1);
 
     void setActivationWindow(QWidget* aw, bool activateOnMessage = true);
     QWidget* activationWindow() const;
-    bool event(QEvent *event);
+    bool event(QEvent *event) override;
 
     QString applicationId() const;
     void setBlock(bool value);

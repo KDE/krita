@@ -35,10 +35,14 @@ class KisCurvePaintOp : public KisPaintOp
 
 public:
     KisCurvePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    virtual ~KisCurvePaintOp();
+    ~KisCurvePaintOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     void paintLine(KisPaintDeviceSP dab, const KisPaintInformation &pi1, const KisPaintInformation &pi2);

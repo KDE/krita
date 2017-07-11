@@ -33,9 +33,9 @@ class KisDetailsPane : public QWidget, public Ui_KisDetailsPaneBase
 
 public:
     KisDetailsPane(QWidget* parent, const QString& header);
-    virtual ~KisDetailsPane();
+    ~KisDetailsPane() override;
 
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+    bool eventFilter(QObject* watched, QEvent* e) override;
 
     /// @return the model used in the document list
     QStandardItemModel* model() const;

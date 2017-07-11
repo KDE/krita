@@ -83,7 +83,7 @@ public:
      * Destructor for the shape container.
      * All children will be orphaned by calling a KoShape::setParent(0)
      */
-    virtual ~KoShapeContainer();
+    ~KoShapeContainer() override;
 
     /**
      * Add a child to this container.
@@ -176,7 +176,7 @@ public:
 
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     /**
      * @brief Paint the component
@@ -191,7 +191,7 @@ public:
 
     using KoShape::update;
     /// reimplemented
-    virtual void update() const;
+    void update() const override;
 
     /**
      * Return the list of all child shapes.
@@ -247,7 +247,7 @@ protected:
      */
     virtual void shapeCountChanged() { }
 
-    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
     /// constructor
     KoShapeContainer(KoShapeContainerPrivate *);

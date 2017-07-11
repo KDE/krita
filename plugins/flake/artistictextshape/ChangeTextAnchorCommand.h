@@ -28,8 +28,8 @@ class ChangeTextAnchorCommand : public KUndo2Command
 {
 public:
     ChangeTextAnchorCommand(ArtisticTextShape *shape, ArtisticTextShape::TextAnchor anchor);
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 private:
     ArtisticTextShape *m_shape;
     ArtisticTextShape::TextAnchor m_anchor;

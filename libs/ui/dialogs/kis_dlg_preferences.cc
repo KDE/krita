@@ -139,6 +139,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
+    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground());
 
@@ -178,6 +179,7 @@ void GeneralTab::setDefault()
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
+    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground(true));
 
@@ -522,19 +524,14 @@ void ColorSettingsTab::setDefault()
 }
 
 
-void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
+void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
 {
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
-
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         m_monitorProfileWidgets[i]->clear();
     }
 
-    if (!csf)
-        return;
-
     QMap<QString, const KoColorProfile *>  profileList;
-    Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(csf)) {
+    Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId.id())) {
         profileList[profile->name()] = profile;
     }
 
@@ -549,7 +546,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen %1:", i + 1));
-        m_monitorProfileWidgets[i]->setCurrent(csf->defaultProfile());
+        m_monitorProfileWidgets[i]->setCurrent(KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId.id()));
     }
 }
 
@@ -1044,6 +1041,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
+        cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());

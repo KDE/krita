@@ -69,7 +69,7 @@ public:
 
 public:
     KisMemoryStatisticsServer();
-    ~KisMemoryStatisticsServer();
+    ~KisMemoryStatisticsServer() override;
     static KisMemoryStatisticsServer* instance();
 
     Statistics fetchMemoryStatistics(KisImageSP image) const;

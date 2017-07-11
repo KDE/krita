@@ -18,31 +18,28 @@
 #ifndef _KIS_DYNAMIC_SENSOR_TIME_H_
 #define _KIS_DYNAMIC_SENSOR_TIME_H_
 
-#include "kis_vec.h"
-
 #include "kis_dynamic_sensor.h"
 //
 class KisDynamicSensorTime : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
 
     KisDynamicSensorTime();
-    virtual ~KisDynamicSensorTime() { }
-    virtual qreal value(const KisPaintInformation&);
-    virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    ~KisDynamicSensorTime() override { }
+    qreal value(const KisPaintInformation&) override;
+    void reset() override;
+    QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
     virtual void setLength(qreal length);
 
 
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual void fromXML(const QDomElement&);
+    void toXML(QDomDocument&, QDomElement&) const override;
+    void fromXML(const QDomElement&) override;
 private:
     int m_time;
     bool m_periodic;

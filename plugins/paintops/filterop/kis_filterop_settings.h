@@ -37,16 +37,16 @@ class KisFilterOpSettings : public KisBrushBasedPaintOpSettings
 public:
     KisFilterOpSettings();
 
-    virtual ~KisFilterOpSettings();
-    bool paintIncremental();
+    ~KisFilterOpSettings() override;
+    bool paintIncremental() override;
 
     KisFilterConfigurationSP filterConfig() const;
 
     using KisPaintOpSettings::toXML;
-    void toXML(QDomDocument& doc, QDomElement& root) const;
+    void toXML(QDomDocument& doc, QDomElement& root) const override;
 
     using KisPaintOpSettings::fromXML;
-    void fromXML(const QDomElement& e);
+    void fromXML(const QDomElement& e) override;
 
 };
 

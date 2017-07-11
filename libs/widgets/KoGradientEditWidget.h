@@ -56,7 +56,7 @@ public:
     explicit KoGradientEditWidget(QWidget* parent = 0L);
 
     /// Destroys the widget
-    virtual ~KoGradientEditWidget();
+    ~KoGradientEditWidget() override;
 
     /**
      * Sets a new gradient to edit.

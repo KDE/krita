@@ -32,7 +32,7 @@ class KisChalkPaintOpSettings : public KisPaintOpSettings
 
 public:
     KisChalkPaintOpSettings();
-    virtual ~KisChalkPaintOpSettings() {}
+    ~KisChalkPaintOpSettings() override {}
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
@@ -40,9 +40,6 @@ public:
     qreal paintOpSize() const override;
 
     bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    int rate() const override;
-
 };
 
 #endif

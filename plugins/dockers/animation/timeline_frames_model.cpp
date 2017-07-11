@@ -102,10 +102,7 @@ struct TimelineFramesModel::Private
     bool specialKeyframeExists(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
-
-        QList<KisKeyframeChannel *> channels = dummy->node()->keyframeChannels();
-
-        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+        Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
             if (channel->id() != KisKeyframeChannel::Content.id() && channel->keyframeAt(column)) {
                 return true;
             }
@@ -168,7 +165,8 @@ struct TimelineFramesModel::Private
         KisNodeSP node = dummy->node();
         if (!KisAnimationUtils::supportsContentFrames(node)) return false;
 
-        return KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
+        KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
+        return true;
     }
 
     bool addNewLayer(int row) {
@@ -225,7 +223,7 @@ KisNodeSP TimelineFramesModel::nodeAt(QModelIndex index) const
     return dummy ? dummy->node() : 0;
 }
 
-QList<KisKeyframeChannel *> TimelineFramesModel::channelsAt(QModelIndex index) const
+QMap<QString, KisKeyframeChannel*> TimelineFramesModel::channelsAt(QModelIndex index) const
 {
     KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
     return srcDummy->node()->keyframeChannels();
@@ -675,24 +673,14 @@ bool TimelineFramesModel::createFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
 
-    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
-    if (result) {
-        emit dataChanged(dstIndex, dstIndex);
-    }
-
-    return result;
+    return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
 }
 
 bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
 
-    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
-    if (result) {
-        emit dataChanged(dstIndex, dstIndex);
-    }
-
-    return result;
+    return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
 }
 
 QString TimelineFramesModel::audioChannelFileName() const

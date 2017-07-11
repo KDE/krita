@@ -77,7 +77,7 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 public:
 
     KisStatusBar(KisViewManager *view);
-    ~KisStatusBar();
+    ~KisStatusBar() override;
 
     void setup();
     void setView(QPointer<KisView> imageView);

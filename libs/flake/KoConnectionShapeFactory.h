@@ -30,11 +30,11 @@ class KoConnectionShapeFactory : public KoShapeFactoryBase
 {
 public:
     KoConnectionShapeFactory();
-    ~KoConnectionShapeFactory() {}
+    ~KoConnectionShapeFactory() override {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
 };
 
 #endif

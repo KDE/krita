@@ -61,9 +61,6 @@ public:
     // Loads the border style.
     KoBorder *loadOdfBorder(KoShapeLoadingContext &context) const;
 
-    /// calls update on the shape where the stroke is.
-    void updateStroke();
-
 public:
     // Members
 

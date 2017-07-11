@@ -30,13 +30,13 @@ public:
     KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers);
 
 private:
-    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
+    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) override;
 
 public:
 
-    void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
-    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter) override;
+    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) override;
     using KisSimpleProcessingVisitor::visit;
 
 private:

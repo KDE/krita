@@ -43,7 +43,7 @@ class SimpleParagraphWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleParagraphWidget(TextTool *tool, QWidget *parent = 0);
-    virtual ~SimpleParagraphWidget();
+    ~SimpleParagraphWidget() override;
 
     void setInitialUsedStyles(QVector<int> list);
 

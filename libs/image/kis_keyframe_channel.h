@@ -55,7 +55,7 @@ public:
 public:
     KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);
-    ~KisKeyframeChannel();
+    ~KisKeyframeChannel() override;
 
     QString id() const;
     QString name() const;

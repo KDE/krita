@@ -40,13 +40,13 @@ public:
     };
 
     explicit KoTableView(QWidget *parent = 0);
-    virtual ~KoTableView() {}
+    ~KoTableView() override {}
 
     /** reimplemented
     * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
     * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
     */
-    virtual void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 
     void setViewMode(ViewMode mode);

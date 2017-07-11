@@ -25,6 +25,7 @@
 
 class KisPaintInformation;
 class KisPainter;
+class KisDistanceInitInfo;
 
 #include <kritaimage_export.h>
 
@@ -36,12 +37,21 @@ class KRITAIMAGE_EXPORT KisRecordedPathPaintAction : public KisRecordedPaintActi
 
 public:
 
+    /**
+     * @param startDist - Provides initial information related to distance and spacing, which can
+     * have an effect on how the path is painted.
+     */
     KisRecordedPathPaintAction(const KisNodeQueryPath& path,
-                               const KisPaintOpPresetSP paintOpPreset);
+                               const KisPaintOpPresetSP paintOpPreset,
+                               const KisDistanceInitInfo& startDistInfo);
 
     KisRecordedPathPaintAction(const KisRecordedPathPaintAction&);
 
-    ~KisRecordedPathPaintAction();
+    ~KisRecordedPathPaintAction() override;
+
+    KisDistanceInitInfo getInitDistInfo() const;
+
+    void setInitDistInfo(const KisDistanceInitInfo &startDistInfo);
 
     void addPoint(const KisPaintInformation& info);
     void addLine(const KisPaintInformation& point1, const KisPaintInformation& point2);
@@ -51,13 +61,13 @@ public:
                   const QPointF& control2,
                   const KisPaintInformation& point2);
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const override;
 
-    virtual KisRecordedAction* clone() const;
+    KisRecordedAction* clone() const override;
 
 protected:
 
-    virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
+    void playPaint(const KisPlayInfo& info, KisPainter* painter) const override;
 
 private:
 
@@ -70,8 +80,8 @@ class KisRecordedPathPaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
     KisRecordedPathPaintActionFactory();
-    virtual ~KisRecordedPathPaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    ~KisRecordedPathPaintActionFactory() override;
+    KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*) override;
 };
 
 #endif

@@ -42,3 +42,7 @@ class RunAction(QAction):
             self.scripter.uicontroller.showException(str(e))
         sys.stdout = stdout
         sys.stderr = stderr
+
+        # scroll to bottom of output
+        max = self.output.verticalScrollBar().maximum()
+        self.output.verticalScrollBar().setValue(max)

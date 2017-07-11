@@ -160,6 +160,8 @@ private:
 
     void writePixelDataImpl(QIODevice *io);
 
+    KisPaintDeviceSP convertMaskDeviceIfNeeded(KisPaintDeviceSP dev);
+
 private:
 
     KisPaintDeviceSP m_layerContentDevice;

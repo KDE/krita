@@ -33,7 +33,7 @@ class KisWorkspaceChooser : public QWidget
     Q_OBJECT
 public:
     KisWorkspaceChooser(KisViewManager * view, QWidget* parent = 0);
-    virtual ~KisWorkspaceChooser();
+    ~KisWorkspaceChooser() override;
 
 private Q_SLOTS:
     void slotSave();

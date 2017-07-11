@@ -38,7 +38,7 @@ public:
     {
     }
 
-    ~SectionLayout()
+    ~SectionLayout() override
     {
         qDeleteAll( m_items );
         m_items.clear();
@@ -61,26 +61,26 @@ public:
         m_items.insert(index-1, new QWidgetItem(button));
     }
 
-    QSize sizeHint() const
+    QSize sizeHint() const override
     {
         Q_ASSERT(0);
         return QSize();
     }
 
-    void addItem(QLayoutItem*) { Q_ASSERT(0); }
+    void addItem(QLayoutItem*) override { Q_ASSERT(0); }
 
-    QLayoutItem* itemAt(int i) const
+    QLayoutItem* itemAt(int i) const override
     {
         if (m_items.count() <= i)
             return 0;
         return m_items.at(i);
     }
 
-    QLayoutItem* takeAt(int i) { return m_items.takeAt(i); }
+    QLayoutItem* takeAt(int i) override { return m_items.takeAt(i); }
 
-    int count() const { return m_items.count(); }
+    int count() const override { return m_items.count(); }
 
-    void setGeometry (const QRect &rect)
+    void setGeometry (const QRect &rect) override
     {
         int x = 0;
         int y = 0; const QSize &size = buttonSize();
@@ -252,13 +252,13 @@ public:
         setSpacing(6);
     }
 
-    ~KoToolBoxLayout()
+    ~KoToolBoxLayout() override
     {
         qDeleteAll( m_sections );
         m_sections.clear();
     }
 
-    QSize sizeHint() const
+    QSize sizeHint() const override
     {
         if (m_sections.isEmpty())
             return QSize();
@@ -266,7 +266,7 @@ public:
         return oneIcon;
     }
 
-    QSize minimumSize() const
+    QSize minimumSize() const override
     {
         QSize s = sizeHint();
         if (m_orientation == Qt::Vertical) {
@@ -291,23 +291,23 @@ public:
         m_sections.insert(iterator, new QWidgetItem(section));
     }
 
-    void addItem(QLayoutItem*)
+    void addItem(QLayoutItem*) override
     {
         Q_ASSERT(0); // don't let anything else be added. (code depends on this!)
     }
 
-    QLayoutItem* itemAt(int i) const
+    QLayoutItem* itemAt(int i) const override
     {
         if (m_sections.count() >= i)
             return 0;
         return m_sections.at(i);
     }
 
-    QLayoutItem* takeAt(int i) { return m_sections.takeAt(i); }
+    QLayoutItem* takeAt(int i) override { return m_sections.takeAt(i); }
 
-    int count() const { return m_sections.count(); }
+    int count() const override { return m_sections.count(); }
 
-    void setGeometry (const QRect &rect)
+    void setGeometry (const QRect &rect) override
     {
         // nothing to do?
         if (m_sections.isEmpty())

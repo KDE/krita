@@ -710,7 +710,7 @@ bool KisView::queryClose()
         case QMessageBox::No : {
             KisImageSP image = document()->image();
             image->requestStrokeCancellation();
-            viewManager()->blockUntillOperationsFinishedForced(image);
+            viewManager()->blockUntilOperationsFinishedForced(image);
 
             document()->removeAutoSaveFiles();
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.

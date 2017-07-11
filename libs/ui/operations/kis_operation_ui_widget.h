@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisOperationUIWidget : public QWidget
 
 public:
     explicit KisOperationUIWidget(const QString& caption, QWidget* parent = 0);
-    virtual ~KisOperationUIWidget();
+    ~KisOperationUIWidget() override;
 
    /**
     * Caption of the operation widget, used in dialog caption

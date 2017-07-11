@@ -28,7 +28,7 @@ class RootNode : public TestUtil::DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new RootNode(*this);
     }
 };
@@ -38,7 +38,7 @@ class TestNodeA : public TestUtil::DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestNodeA(*this);
     }
 };
@@ -47,7 +47,7 @@ class TestNodeB : public TestUtil::DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestNodeB(*this);
     }
 };
@@ -56,7 +56,7 @@ class TestNodeC : public TestUtil::DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestNodeC(*this);
     }
 };

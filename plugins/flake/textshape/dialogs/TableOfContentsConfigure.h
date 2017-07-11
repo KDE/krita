@@ -46,7 +46,7 @@ class TableOfContentsConfigure : public QDialog
 public:
     explicit TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent = 0);
     TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent = 0);
-    ~TableOfContentsConfigure();
+    ~TableOfContentsConfigure() override;
     KoTableOfContentsGeneratorInfo *currentToCData();
 
 public Q_SLOTS:

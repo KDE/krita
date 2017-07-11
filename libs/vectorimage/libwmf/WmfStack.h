@@ -49,21 +49,21 @@ public:
 class KoWmfBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfDeviceContext *);
+    void apply(WmfDeviceContext *) override;
     QBrush brush;
 };
 
 class KoWmfPenHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfDeviceContext *);
+    void apply(WmfDeviceContext *) override;
     QPen pen;
 };
 
 class KoWmfPatternBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfDeviceContext *);
+    void apply(WmfDeviceContext *) override;
     QBrush brush;
     QImage image;
 };
@@ -71,7 +71,7 @@ public:
 class KoWmfFontHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfDeviceContext *);
+    void apply(WmfDeviceContext *) override;
     QFont font;
     int escapement;
     int orientation;

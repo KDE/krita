@@ -31,7 +31,7 @@ class KisDummiesFacadeBaseTest : public QObject, public TestUtil::EmptyNodesTest
     Q_OBJECT
 
 public:
-    virtual ~KisDummiesFacadeBaseTest();
+    ~KisDummiesFacadeBaseTest() override;
 
 protected:
     virtual KisDummiesFacadeBase* dummiesFacadeFactory() = 0;

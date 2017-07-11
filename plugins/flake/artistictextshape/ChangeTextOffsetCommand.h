@@ -29,9 +29,9 @@ class ChangeTextOffsetCommand : public KUndo2Command
 public:
     ChangeTextOffsetCommand(ArtisticTextShape *textShape, qreal oldOffset, qreal newOffset, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     /// reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 private:
     ArtisticTextShape *m_textShape;
     qreal m_oldOffset;

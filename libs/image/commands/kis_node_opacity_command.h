@@ -35,8 +35,8 @@ public:
      */
     KisNodeOpacityCommand(KisNodeSP node, quint8 oldOpacity, quint8 newOpacity);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     quint8 m_oldOpacity;

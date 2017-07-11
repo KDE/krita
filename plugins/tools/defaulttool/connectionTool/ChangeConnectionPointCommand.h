@@ -32,11 +32,11 @@ class ChangeConnectionPointCommand : public KUndo2Command
 public:
     /// Creates new comand to change connection point of shape
     ChangeConnectionPointCommand(KoShape *shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, KUndo2Command *parent = 0);
-    virtual ~ChangeConnectionPointCommand();
+    ~ChangeConnectionPointCommand() override;
     /// reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     /// reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 
 private:
     void updateRoi(const QPointF &position);

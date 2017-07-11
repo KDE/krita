@@ -48,7 +48,7 @@ class KRITAFLAKE_EXPORT KoPathTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KoPathTool(KoCanvasBase *canvas);
-    ~KoPathTool();
+    ~KoPathTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
     void repaintDecorations() override;
@@ -62,7 +62,7 @@ public:
     void deactivate() override;
     void deleteSelection() override;
     KoToolSelection* selection() override;
-    void requestUndoDuringStroke();
+    void requestUndoDuringStroke() override;
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
@@ -73,7 +73,7 @@ public:
     QMenu* popupActionsMenu() override;
 
 public Q_SLOTS:
-    void documentResourceChanged(int key, const QVariant & res);
+    void documentResourceChanged(int key, const QVariant & res) override;
 
 Q_SIGNALS:
     void typeChanged(int types);
@@ -81,7 +81,7 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual QList<QPointer<QWidget> >  createOptionWidgets();
+    QList<QPointer<QWidget> >  createOptionWidgets() override;
 
 private:
     struct PathSegment;

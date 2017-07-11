@@ -40,8 +40,8 @@ public:
 
     virtual QString  categoryToString(const KoID& val) const { return val.name(); }
     virtual QString  entryToString   (const KoID& val) const { return val.name(); }
-    virtual bool     setData         (const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
-    virtual QVariant data            (const QModelIndex& idx, int role=Qt::DisplayRole) const;
+    bool     setData         (const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole) override;
+    QVariant data            (const QModelIndex& idx, int role=Qt::DisplayRole) const override;
 
     void validate(const KoColorSpace *cs);
     void readFavoriteCompositeOpsFromConfig();
@@ -68,7 +68,7 @@ public:
     }
 
 protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override {
         return lessThanPriority(left, right, KisCompositeOpListModel::favoriteCategory().name());
     }
 };

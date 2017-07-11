@@ -57,7 +57,7 @@ public:
     KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
 
         if (canvas) {
-            if (showDialog) {
+            if (showDialog && !shape->shapeId().isEmpty()) {
                 KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
                 Q_ASSERT(factory);
                 int z = 0;

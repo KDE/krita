@@ -41,7 +41,7 @@ class KRITATEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlin
 {
 public:
     KoInlineObjectRegistry();
-    ~KoInlineObjectRegistry();
+    ~KoInlineObjectRegistry() override;
 
     /**
      * Return an instance of the KoInlineObjectRegistry

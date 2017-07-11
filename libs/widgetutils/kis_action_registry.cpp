@@ -140,7 +140,6 @@ KisActionRegistry *KisActionRegistry::instance()
 KisActionRegistry::KisActionRegistry()
     : d(new KisActionRegistry::Private(this))
 {
-    d->loadActionFiles();
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
     loadShortcutScheme(schemeName);
@@ -226,7 +225,6 @@ void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
 void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
     const ActionInfoItem &info = d->actionInfo(name);
-
     action->setShortcuts(info.effectiveShortcuts());
     action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts()));
 
@@ -246,7 +244,7 @@ QList<QString> KisActionRegistry::registeredShortcutIds() const
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {
-        dbgAction << "No XML data found for action" << name;
+        qDebug() << "No XML data found for action" << name;
         return false;
     }
 
@@ -302,7 +300,6 @@ void KisActionRegistry::Private::loadActionFiles()
     QStringList actionDefinitions =
         KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
 
-
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
@@ -342,7 +339,7 @@ void KisActionRegistry::Private::loadActionFiles()
                     }
 
                     else if (actionInfoList.contains(name)) {
-                        // errAction << "NOT COOL: Duplicated action name from xml data: " << name;
+                        errAction << "NOT COOL: Duplicated action name from xml data: " << name;
                     }
 
                     else {
@@ -358,7 +355,6 @@ void KisActionRegistry::Private::loadActionFiles()
                         info.categoryName    = categoryName;
                         info.collectionName  = collectionName;
 
-                        // dbgAction << "default shortcut for" << name << " - " << info.defaultShortcut;
                         actionInfoList.insert(name,info);
                     }
                 }

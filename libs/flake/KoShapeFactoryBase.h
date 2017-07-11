@@ -96,7 +96,7 @@ public:
      * @param name the user visible name of the shape this factory creates.
      */
     KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString());
-    virtual ~KoShapeFactoryBase();
+    ~KoShapeFactoryBase() override;
 
     /**
      * Create a list of option panels to show on creating a new shape.

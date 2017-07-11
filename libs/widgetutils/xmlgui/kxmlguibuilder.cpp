@@ -158,12 +158,16 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
         // use it as parent widget (to get kaction to plug itself into the
         // mainwindow). Don't use a popupmenu as parent widget, otherwise
         // the popup won't be hidden if it is used as a standalone menu as well.
-        // And we don't want to set the parent for a standalone popupmenu,
-        // otherwise its shortcuts appear.
         //
         // Note: menus with a parent of 0, coming from child clients, can be
         // leaked if the child client is deleted without a proper removeClient call, though.
+
         QWidget *p = parent;
+
+        if (!p && qobject_cast<QMainWindow *>(d->m_widget)) {
+                    p = d->m_widget;
+        }
+
         while (p && !qobject_cast<QMainWindow *>(p)) {
             p = p->parentWidget();
         }

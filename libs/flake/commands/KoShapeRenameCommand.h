@@ -31,12 +31,12 @@ class KRITAFLAKE_EXPORT KoShapeRenameCommand : public KUndo2Command
 {
 public:
     KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent = 0);
-    virtual ~KoShapeRenameCommand();
+    ~KoShapeRenameCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

@@ -35,10 +35,10 @@ class KisGuiContextCommand : public QObject, public KUndo2Command
     Q_OBJECT
 public:
     KisGuiContextCommand(KUndo2Command *command, QObject *guiObject);
-    ~KisGuiContextCommand();
+    ~KisGuiContextCommand() override;
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 Q_SIGNALS:
     void sigExecuteCommand(KUndo2Command *command, bool undo);

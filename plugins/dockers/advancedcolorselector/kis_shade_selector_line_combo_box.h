@@ -29,14 +29,14 @@ class KisShadeSelectorLineComboBox : public QComboBox
     Q_OBJECT
 public:
     explicit KisShadeSelectorLineComboBox(QWidget *parent = 0);
-    ~KisShadeSelectorLineComboBox();
-    void hidePopup();
-    void showPopup();
+    ~KisShadeSelectorLineComboBox() override;
+    void hidePopup() override;
+    void showPopup() override;
     QString configuration() const;
     void setLineNumber(int n);
 
 protected:
-    void resizeEvent(QResizeEvent *e);
+    void resizeEvent(QResizeEvent *e) override;
 
 public Q_SLOTS:
     void setConfiguration(const QString& stri);

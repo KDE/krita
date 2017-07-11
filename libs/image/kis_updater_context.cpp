@@ -24,8 +24,10 @@
 #include "kis_update_job_item.h"
 #include "kis_stroke_job.h"
 
+const int KisUpdaterContext::useIdealThreadCountTag = -1;
 
-KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
+KisUpdaterContext::KisUpdaterContext(qint32 threadCount, QObject *parent)
+    : QObject(parent)
 {
     if(threadCount <= 0) {
         threadCount = QThread::idealThreadCount();

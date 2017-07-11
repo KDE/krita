@@ -51,7 +51,7 @@ class KoToolBox : public QWidget {
 public:
     /// constructor
     explicit KoToolBox();
-    ~KoToolBox();
+    ~KoToolBox() override;
 
 public Q_SLOTS:
     /**
@@ -105,9 +105,9 @@ private Q_SLOTS:
     void slotContextIconSize();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent* event);
-    void contextMenuEvent(QContextMenuEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
     class Private;

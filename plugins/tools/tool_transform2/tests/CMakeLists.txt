@@ -10,10 +10,10 @@ macro_add_unittest_definitions()
 
 ########### next target ###############
 
-krita_add_broken_unit_test(test_save_load_transform_args.cpp
+add_test(test_save_load_transform_args.cpp
     TEST_NAME krita-ui-TestSaveLoadTransformArgs
     LINK_LIBRARIES kritatooltransform kritaui kritaimage Qt5::Test)
 
-krita_add_broken_unit_test(test_animated_transform_parameters.cpp
+add_test(test_animated_transform_parameters.cpp
     TEST_NAME krita-ui-TestAnimatedTransformParameters
     LINK_LIBRARIES kritatooltransform kritaui kritaimage Qt5::Test)

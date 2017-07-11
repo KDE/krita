@@ -38,7 +38,7 @@ class KisHairyBristleOption : public KisPaintOpOption
 {
 public:
     KisHairyBristleOption();
-    ~KisHairyBristleOption();
+    ~KisHairyBristleOption() override;
 
     void setScaleFactor(qreal scale) const;
 
@@ -48,9 +48,9 @@ public:
     double shearFactor() const;
     double randomFactor() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP config) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP config);
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP config) override;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private:
     KisBristleOptionsWidget * m_options;

@@ -38,9 +38,9 @@ class KisFavoriteResourceManager : public QObject, public KoResourceServerObserv
 public:
 
     KisFavoriteResourceManager(KisPaintopBox *paintopBox);
-    ~KisFavoriteResourceManager();
+    ~KisFavoriteResourceManager() override;
 
-    virtual void unsetResourceServer();
+    void unsetResourceServer() override;
 
     QList<QImage> favoritePresetImages();
 
@@ -54,12 +54,12 @@ public:
     const KoColor& recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
-    virtual void removingResource(PointerType resource);
-    virtual void resourceAdded(PointerType resource);
-    virtual void resourceChanged(PointerType resource);
-    virtual void syncTaggedResourceView();
-    virtual void syncTagAddition(const QString& tag);
-    virtual void syncTagRemoval(const QString& tag);
+    void removingResource(PointerType resource) override;
+    void resourceAdded(PointerType resource) override;
+    void resourceChanged(PointerType resource) override;
+    void syncTaggedResourceView() override;
+    void syncTagAddition(const QString& tag) override;
+    void syncTagRemoval(const QString& tag) override;
 
     //BgColor;
     KoColor bgColor() const;

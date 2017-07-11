@@ -73,7 +73,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_only_one_assistant = true;
 
     setSupportOutline(true);
-    setMaskSyntheticEvents(true); // Disallow mouse events from finger presses.
+    setMaskSyntheticEvents(KisConfig().disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
@@ -88,6 +88,12 @@ KisToolFreehand::~KisToolFreehand()
     delete m_helper;
     delete m_recordingAdapter;
     delete m_infoBuilder;
+}
+
+void KisToolFreehand::mouseMoveEvent(KoPointerEvent *event)
+{
+    KisToolPaint::mouseMoveEvent(event);
+    m_helper->cursorMoved(convertToPixelCoord(event));
 }
 
 KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
@@ -149,7 +155,8 @@ void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
 
 int KisToolFreehand::flags() const
 {
-    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET
+           |KisTool::FLAG_USES_CUSTOM_SIZE;
 }
 
 void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
@@ -168,9 +175,9 @@ void KisToolFreehand::deactivate()
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
-    setCurrentNodeLocked(true);
-
-    m_helper->initPaint(event, canvas()->resourceManager(),
+    m_helper->initPaint(event,
+                        convertToPixelCoord(event),
+                        canvas()->resourceManager(),
                         image(),
                         currentNode(),
                         image().data());
@@ -184,13 +191,12 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
         m_helper->setCanvasHorizontalMirrorState(canvas2->xAxisMirrored());
         m_helper->setCanvasRotation(canvas2->rotationAngle());
     }
-    m_helper->paint(event);
+    m_helper->paintEvent(event);
 }
 
 void KisToolFreehand::endStroke()
 {
     m_helper->endPaint();
-    setCurrentNodeLocked(false);
 }
 
 bool KisToolFreehand::primaryActionSupportsHiResEvents() const
@@ -446,7 +452,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
-    QPointF imagePos = currentImage()->documentToPixel(documentPos);
+    QPointF imagePos = convertToPixelCoord(documentPos);
 
     if (currentPaintOpPreset())
         return m_helper->paintOpOutline(imagePos,

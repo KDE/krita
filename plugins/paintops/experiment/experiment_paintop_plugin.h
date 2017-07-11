@@ -30,7 +30,7 @@ class ExperimentPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     ExperimentPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~ExperimentPaintOpPlugin();
+    ~ExperimentPaintOpPlugin() override;
 };
 
 #endif // EXPERIMENT_PAINTOP_PLUGIN_H_

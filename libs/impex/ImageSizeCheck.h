@@ -40,12 +40,12 @@ public:
         }
     }
 
-    bool checkNeeded(KisImageSP image) const
+    bool checkNeeded(KisImageSP image) const override
     {
         return image->width() >= m_maxW && image->height() >= m_maxH;
     }
 
-    Level check(KisImageSP /*image*/) const
+    Level check(KisImageSP /*image*/) const override
     {
         return m_level;
     }
@@ -60,9 +60,9 @@ public:
 
     ImageSizeCheckFactory() {}
 
-    virtual ~ImageSizeCheckFactory() {}
+    ~ImageSizeCheckFactory() override {}
 
-    KisExportCheckBase *create( KisExportCheckBase::Level level, const QString &customWarning = QString())
+    KisExportCheckBase *create( KisExportCheckBase::Level level, const QString &customWarning = QString()) override
     {
         return new ImageSizeCheck(100000000, 100000000, id(), level, customWarning);
     }
@@ -72,7 +72,7 @@ public:
         return new ImageSizeCheck(maxWidth, maxHeight, id(), level, customWarning);
     }
 
-    QString id() const {
+    QString id() const override {
         return "ImageSizeCheck";
     }
 };

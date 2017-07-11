@@ -32,7 +32,7 @@ class KRITAWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
 public:
     /// constructor
     explicit KoAspectButton(QWidget *parent);
-    virtual ~KoAspectButton();
+    ~KoAspectButton() override;
 
     /// Returns of keeping aspect ratio is on or off
     bool keepAspectRatio() const;
@@ -54,10 +54,10 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void paintEvent (QPaintEvent *);
-    virtual QSize sizeHint () const;
-    void keyReleaseEvent (QKeyEvent *e);
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void paintEvent (QPaintEvent *) override;
+    QSize sizeHint () const override;
+    void keyReleaseEvent (QKeyEvent *e) override;
 
 private:
     class Private;

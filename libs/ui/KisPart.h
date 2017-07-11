@@ -77,7 +77,7 @@ public:
      * The destructor does not delete any attached KisView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    ~KisPart();
+    ~KisPart() override;
 
     // ----------------- Document management -----------------
 
@@ -178,8 +178,6 @@ public Q_SLOTS:
     void startCustomDocument(KisDocument *doc);
 
 private Q_SLOTS:
-
-    void viewDestroyed();
 
     void updateIdleWatcherConnections();
 

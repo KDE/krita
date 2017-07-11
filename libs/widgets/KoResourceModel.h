@@ -35,16 +35,16 @@ class KRITAWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
     Q_OBJECT
 public:
     explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
-    virtual ~KoResourceModel();
+    ~KoResourceModel() override;
 
     /// reimplemented
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     /// reimplemented
-    virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
+    int columnCount ( const QModelIndex & parent = QModelIndex() ) const override;
     /// reimplemented
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     /// reimplemented
-    virtual QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
+    QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const override;
     /// Sets the number of columns to display
     void setColumnCount( int columnCount );
 
@@ -55,29 +55,29 @@ public:
         LargeThumbnailRole = 33
     };
 
-    QModelIndex indexFromResource(KoResource* resource) const;
+    QModelIndex indexFromResource(KoResource* resource) const override;
 
     /// facade for KoAbstractResourceServerAdapter
     QString extensions() const;
     void importResourceFile(const QString &filename);
     void importResourceFile(const QString &filename, bool fileCreation);
-    bool removeResource(KoResource* resource);
+    bool removeResource(KoResource* resource) override;
     void removeResourceFile(const QString & filename);
-    QStringList assignedTagsList(KoResource *resource) const;
-    void addTag(KoResource* resource, const QString& tag);
-    void deleteTag( KoResource* resource, const QString& tag);
-    QStringList tagNamesList() const;
+    QStringList assignedTagsList(KoResource *resource) const override;
+    void addTag(KoResource* resource, const QString& tag) override;
+    void deleteTag( KoResource* resource, const QString& tag) override;
+    QStringList tagNamesList() const override;
     QStringList searchTag(const QString& lineEditText);
-    void enableResourceFiltering(bool enable);
-    void setCurrentTag(const QString& currentTag);
-    void searchTextChanged(const QString& searchString);
-    void updateServer();
-    int resourcesCount() const;
-    QList<KoResource *> currentlyVisibleResources() const;
-    QList<KoResource *> serverResources() const;
-    void tagCategoryMembersChanged();
-    void tagCategoryAdded(const QString& tag);
-    void tagCategoryRemoved(const QString& tag);
+    void enableResourceFiltering(bool enable) override;
+    void setCurrentTag(const QString& currentTag) override;
+    void searchTextChanged(const QString& searchString) override;
+    void updateServer() override;
+    int resourcesCount() const override;
+    QList<KoResource *> currentlyVisibleResources() const override;
+    QList<KoResource *> serverResources() const override;
+    void tagCategoryMembersChanged() override;
+    void tagCategoryAdded(const QString& tag) override;
+    void tagCategoryRemoved(const QString& tag) override;
 
     QString serverType() const;
 
@@ -94,12 +94,12 @@ private:
     void doSafeLayoutReset(KoResource *activateAfterReformat);
 
 private Q_SLOTS:
-    void resourceAdded(KoResource *resource);
-    void resourceRemoved(KoResource *resource);
-    void resourceChanged(KoResource *resource);
-    void tagBoxEntryWasModified();
-    void tagBoxEntryWasAdded(const QString& tag);
-    void tagBoxEntryWasRemoved(const QString& tag);
+    void resourceAdded(KoResource *resource) override;
+    void resourceRemoved(KoResource *resource) override;
+    void resourceChanged(KoResource *resource) override;
+    void tagBoxEntryWasModified() override;
+    void tagBoxEntryWasAdded(const QString& tag) override;
+    void tagBoxEntryWasRemoved(const QString& tag) override;
 
 private:
     QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;

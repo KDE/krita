@@ -50,11 +50,11 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent = 0);
-    virtual ~KoShapeAlignCommand();
+    ~KoShapeAlignCommand() override;
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

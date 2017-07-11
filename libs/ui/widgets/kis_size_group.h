@@ -74,7 +74,7 @@ public:
                          KisSizeGroup::mode mode = KisSizeGroup::KIS_SIZE_GROUP_HORIZONTAL,
                          bool ignoreHidden = false);
 
-    ~KisSizeGroup();
+    ~KisSizeGroup() override;
 
     /// Changes the group size mode.
     void setMode(KisSizeGroup::mode mode);

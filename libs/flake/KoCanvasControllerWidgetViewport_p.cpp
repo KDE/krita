@@ -46,16 +46,16 @@
 #include "KoToolProxy.h"
 #include "KoCanvasControllerWidget.h"
 #include "KoViewConverter.h"
-
+#include "KoSvgPaste.h"
 
 // ********** Viewport **********
 Viewport::Viewport(KoCanvasControllerWidget *parent)
-        : QWidget(parent)
-        , m_draggedShape(0)
-        , m_drawShadow(false)
-        , m_canvas(0)
-        , m_documentOffset(QPoint(0, 0))
-        , m_margin(0)
+    : QWidget(parent)
+    , m_draggedShape(0)
+    , m_drawShadow(false)
+    , m_canvas(0)
+    , m_documentOffset(QPoint(0, 0))
+    , m_margin(0)
 {
     setAutoFillBackground(true);
     setAcceptDrops(true);
@@ -105,6 +105,9 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         return;
     }
 
+    delete m_draggedShape;
+    m_draggedShape = 0;
+
     // only allow dropping when active layer is editable
     KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
     KoShapeLayer *activeLayer = selection->activeLayer();
@@ -114,51 +117,77 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
     }
 
     const QMimeData *data = event->mimeData();
+
     if (data->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
-            data->hasFormat(SHAPEID_MIMETYPE)) {
-        QByteArray itemData;
-        bool isTemplate = true;
-        if (data->hasFormat(SHAPETEMPLATE_MIMETYPE))
-            itemData = data->data(SHAPETEMPLATE_MIMETYPE);
+            data->hasFormat(SHAPEID_MIMETYPE) ||
+            data->hasFormat("image/svg+xml"))
+    {
+        if (data->hasFormat("image/svg+xml")) {
+            KoCanvasBase *canvas = m_parent->canvas();
+            QSizeF fragmentSize;
+
+            QList<KoShape*> shapes = KoSvgPaste::fetchShapesFromData(data->data("image/svg+xml"),
+                                                                     canvas->shapeController()->documentRectInPixels(),
+                                                                     canvas->shapeController()->pixelsPerInch(),
+                                                                     &fragmentSize);
+
+            if (!shapes.isEmpty()) {
+                m_draggedShape = shapes[0];
+            }
+        }
         else {
-            isTemplate = false;
-            itemData = data->data(SHAPEID_MIMETYPE);
-        }
-        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-        QString id;
-        dataStream >> id;
-        QString properties;
-        if (isTemplate)
-            dataStream >> properties;
+            QByteArray itemData;
+            bool isTemplate = true;
 
-        // and finally, there is a point.
-        QPointF offset;
-        dataStream >> offset;
+            if (data->hasFormat(SHAPETEMPLATE_MIMETYPE)) {
+                itemData = data->data(SHAPETEMPLATE_MIMETYPE);
+            }
+            else if (data->hasFormat(SHAPEID_MIMETYPE)) {
+                isTemplate = false;
+                itemData = data->data(SHAPEID_MIMETYPE);
+            }
 
-        // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
-        // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
-        if (! factory) {
-            warnFlake << "Application requested a shape that is not registered '" <<
-            id << "', Ignoring";
-            event->ignore();
-            return;
+
+            QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+            QString id;
+            dataStream >> id;
+            QString properties;
+            if (isTemplate)
+                dataStream >> properties;
+
+            // and finally, there is a point.
+            QPointF offset;
+            dataStream >> offset;
+
+            // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
+            // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
+            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
+            if (! factory) {
+                warnFlake << "Application requested a shape that is not registered '" <<
+                             id << "', Ignoring";
+                event->ignore();
+                return;
+            }
+            if (isTemplate) {
+                KoProperties props;
+                props.load(properties);
+                m_draggedShape = factory->createShape(&props, m_parent->canvas()->shapeController()->resourceManager());
+            }
+            else {
+                m_draggedShape = factory->createDefaultShape(m_parent->canvas()->shapeController()->resourceManager());
+            }
+
+            if (m_draggedShape->shapeId().isEmpty()) {
+                m_draggedShape->setShapeId(factory->id());
+            }
         }
+
         event->setDropAction(Qt::CopyAction);
         event->accept();
-
-        if (isTemplate) {
-            KoProperties props;
-            props.load(properties);
-            m_draggedShape = factory->createShape(&props, m_parent->canvas()->shapeController()->resourceManager());
-        } else
-            m_draggedShape = factory->createDefaultShape(m_parent->canvas()->shapeController()->resourceManager());
 
         Q_ASSERT(m_draggedShape);
         if (!m_draggedShape) return;
 
-        if (m_draggedShape->shapeId().isEmpty())
-            m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
         m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
 
@@ -182,19 +211,25 @@ void Viewport::handleDropEvent(QDropEvent *event)
     QPointF newPos = correctPosition(event->pos());
     m_parent->canvas()->clipToDocument(m_draggedShape, newPos); // ensure the shape is dropped inside the document.
     m_draggedShape->setAbsolutePosition(newPos);
+
+
     KUndo2Command * cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape);
+
     if (cmd) {
         m_parent->canvas()->addCommand(cmd);
         KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
 
         // repaint selection before selecting newly create shape
-        Q_FOREACH (KoShape * shape, selection->selectedShapes())
+        Q_FOREACH (KoShape * shape, selection->selectedShapes()) {
             shape->update();
+        }
 
         selection->deselectAll();
         selection->select(m_draggedShape);
-    } else
+    } else {
+
         delete m_draggedShape;
+    }
 
     m_draggedShape = 0;
 }
@@ -265,7 +300,7 @@ void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
         QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
         Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
         painter.translate(canvasWidget->x() - m_documentOffset.x(),
-                canvasWidget->y() - m_documentOffset.y());
+                          canvasWidget->y() - m_documentOffset.y());
         QPointF offset = vc->documentToView(m_draggedShape->position());
         painter.setOpacity(0.6);
         painter.translate(offset.x(), offset.y());
@@ -293,10 +328,10 @@ void Viewport::resetLayout()
     int resizeW = viewW;
     int resizeH = viewH;
 
-//     debugFlake <<"viewH:" << viewH << endl
-//              << "docH: " << docH << endl
-//              << "viewW: " << viewW << endl
-//              << "docW: " << docW << endl;
+    //     debugFlake <<"viewH:" << viewH << endl
+    //              << "docH: " << docH << endl
+    //              << "viewW: " << viewW << endl
+    //              << "docW: " << docW << endl;
 
     if (viewH == docH && viewW == docW) {
         // Do nothing
@@ -366,8 +401,8 @@ void Viewport::resetLayout()
 
     emit sizeChanged();
 #if 0
-     debugFlake <<"View port geom:" << geometry();
-     if (m_canvas)
+    debugFlake <<"View port geom:" << geometry();
+    if (m_canvas)
         debugFlake <<"Canvas widget geom:" << m_canvas->geometry();
 #endif
 }

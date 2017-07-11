@@ -37,7 +37,7 @@ public:
     KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WFlags f = 0);
 
 public:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
     void setGradientResource(KoSegmentGradient* agr);
     KoGradientSegment* selectedSegment() {
         return m_selectedSegment;
@@ -48,10 +48,10 @@ Q_SIGNALS:
     void sigChangedSegment(KoGradientSegment*);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent * e);
-    virtual void mouseReleaseEvent(QMouseEvent * e);
-    virtual void mouseMoveEvent(QMouseEvent * e);
-    virtual void contextMenuEvent(QContextMenuEvent * e);
+    void mousePressEvent(QMouseEvent * e) override;
+    void mouseReleaseEvent(QMouseEvent * e) override;
+    void mouseMoveEvent(QMouseEvent * e) override;
+    void contextMenuEvent(QContextMenuEvent * e) override;
 
 private Q_SLOTS:
     void slotSplitSegment();

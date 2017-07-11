@@ -31,13 +31,13 @@ class KRITAUI_EXPORT KisColorFilterCombo : public QComboBox
     Q_OBJECT
 public:
     KisColorFilterCombo(QWidget *parent);
-    ~KisColorFilterCombo();
+    ~KisColorFilterCombo() override;
 
     void updateAvailableLabels(KisNodeSP rootNode);
     void updateAvailableLabels(const QSet<int> &labels);
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
 
     QList<int> selectedColors() const;
 
@@ -45,7 +45,7 @@ Q_SIGNALS:
     void selectedColorsChanged();
 
 private:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     struct Private;

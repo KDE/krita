@@ -33,12 +33,13 @@
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_paintop_registry.h"
+#include "kis_timing_information.h"
 #include <brushengine/kis_paint_information.h>
 #include "kis_paintop_config_widget.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "kis_paintop_settings_update_proxy.h"
 #include <time.h>
-#include<kis_types.h>
+#include <kis_types.h>
 #include <kis_signals_blocker.h>
 
 #include <brushengine/kis_locked_properties_server.h>
@@ -308,6 +309,27 @@ bool KisPaintOpSettings::isLoadable()
 QString KisPaintOpSettings::indirectPaintingCompositeOp() const
 {
     return COMPOSITE_ALPHA_DARKEN;
+}
+
+bool KisPaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED, false);
+}
+
+qreal KisPaintOpSettings::airbrushInterval() const
+{
+    qreal rate = getDouble(AIRBRUSH_RATE, 1.0);
+    if (rate == 0.0) {
+        return LONG_TIME;
+    }
+    else {
+        return 1000.0 / rate;
+    }
+}
+
+bool KisPaintOpSettings::useSpacingUpdates() const
+{
+    return getBool(SPACING_USE_UPDATES, false);
 }
 
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)

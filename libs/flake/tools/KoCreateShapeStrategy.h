@@ -40,12 +40,12 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked);
-    virtual ~KoCreateShapeStrategy() {}
+    ~KoCreateShapeStrategy() override {}
 
-    void finishInteraction(Qt::KeyboardModifiers modifiers);
-    KUndo2Command* createCommand();
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
 
 private:
     QPainterPath m_outline;

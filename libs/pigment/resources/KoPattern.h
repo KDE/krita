@@ -37,14 +37,14 @@ public:
      */
     explicit KoPattern(const QString &filename);
     KoPattern(const QImage &image, const QString &name, const QString &folderName);
-    virtual ~KoPattern();
+    ~KoPattern() override;
 
 public:
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
     bool loadPatFromDevice(QIODevice *dev);
     bool savePatToDevice(QIODevice* dev) const;
@@ -52,7 +52,7 @@ public:
     qint32 width() const;
     qint32 height() const;
 
-    QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     KoPattern& operator=(const KoPattern& pattern);
 

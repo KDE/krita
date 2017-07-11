@@ -25,13 +25,13 @@ class RulerTabChooser : public QWidget
 {
 public:
     RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab), m_showTabs(false) {}
-    virtual ~RulerTabChooser() {}
+    ~RulerTabChooser() override {}
 
     inline QTextOption::TabType type() {return m_type;}
     void setShowTabs(bool showTabs) { if (m_showTabs == showTabs) return; m_showTabs = showTabs; update(); }
-    void mousePressEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
 private:
     QTextOption::TabType m_type;
@@ -86,11 +86,11 @@ class HorizontalPaintingStrategy : public PaintingStrategy
 public:
     HorizontalPaintingStrategy() : lengthInPixel(1) {}
 
-    virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual void drawTabs(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
-    virtual void drawIndents(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual QSize sizeHint();
+    QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) override;
+    void drawTabs(const KoRulerPrivate *ruler, QPainter &painter) override;
+    void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) override;
+    void drawIndents(const KoRulerPrivate *ruler, QPainter &painter) override;
+    QSize sizeHint() override;
 
 private:
     qreal lengthInPixel;
@@ -101,11 +101,11 @@ class VerticalPaintingStrategy : public PaintingStrategy
 public:
     VerticalPaintingStrategy() : lengthInPixel(1) {}
 
-    virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual void drawTabs(const KoRulerPrivate *, QPainter &) {}
-    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
-    virtual void drawIndents(const KoRulerPrivate *, QPainter &) { }
-    virtual QSize sizeHint();
+    QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) override;
+    void drawTabs(const KoRulerPrivate *, QPainter &) override {}
+    void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) override;
+    void drawIndents(const KoRulerPrivate *, QPainter &) override { }
+    QSize sizeHint() override;
 
 private:
     qreal lengthInPixel;
@@ -116,7 +116,7 @@ class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy
 public:
     HorizontalDistancesPaintingStrategy() {}
 
-    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
+    void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) override;
 
 private:
     void drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const qreal start, const qreal end);

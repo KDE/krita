@@ -51,12 +51,12 @@ public:
     KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
 
     /// Destroys the command
-    virtual ~KoShapeClipCommand();
+    ~KoShapeClipCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

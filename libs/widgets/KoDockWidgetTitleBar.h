@@ -34,10 +34,10 @@ class KRITAWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
     Q_OBJECT
 public:
     explicit KoDockWidgetTitleBar(QDockWidget *dockWidget);
-    virtual ~KoDockWidgetTitleBar();
+    ~KoDockWidgetTitleBar() override;
 
-    virtual QSize minimumSizeHint() const; ///< reimplemented from QWidget
-    virtual QSize sizeHint() const;  ///< reimplemented from QWidget
+    QSize minimumSizeHint() const override; ///< reimplemented from QWidget
+    QSize sizeHint() const override;  ///< reimplemented from QWidget
 
     enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
     /// Define whether the minimal width should ensure that the full text is visible.
@@ -52,8 +52,8 @@ public Q_SLOTS:
     void setCollapsable(bool collapsable);
 
 protected:
-    virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget
-    virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
+    void paintEvent(QPaintEvent* event) override; ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())

@@ -49,7 +49,7 @@ public:
      * be applied.
      */
     explicit Filter();
-    virtual ~Filter();
+    ~Filter() override;
 
     bool operator==(const Filter &other) const;
     bool operator!=(const Filter &other) const;

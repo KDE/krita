@@ -66,7 +66,7 @@ public:
     };
 
     KoOdfNotesConfiguration(NoteClass noteClass);
-    ~KoOdfNotesConfiguration();
+    ~KoOdfNotesConfiguration() override;
     KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other);
     KoOdfNotesConfiguration &operator=(const KoOdfNotesConfiguration &other);
 

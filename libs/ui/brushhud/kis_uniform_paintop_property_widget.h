@@ -30,7 +30,7 @@ class KisUniformPaintOpPropertyWidget : public QWidget
     Q_OBJECT
 public:
     KisUniformPaintOpPropertyWidget(KisUniformPaintOpPropertySP property, QWidget *parent);
-    ~KisUniformPaintOpPropertyWidget();
+    ~KisUniformPaintOpPropertyWidget() override;
 
 protected:
     KisUniformPaintOpPropertySP property() const;
@@ -60,7 +60,7 @@ class KisUniformPaintOpPropertyIntSlider : public KisUniformPaintOpPropertyWidge
 public:
     KisUniformPaintOpPropertyIntSlider(KisUniformPaintOpPropertySP property, QWidget *parent);
 
-    virtual void setValue(const QVariant &value);
+    void setValue(const QVariant &value) override;
 
 private Q_SLOTS:
     void slotSliderChanged(int value);
@@ -75,7 +75,7 @@ class KisUniformPaintOpPropertyDoubleSlider : public KisUniformPaintOpPropertyWi
 public:
     KisUniformPaintOpPropertyDoubleSlider(KisUniformPaintOpPropertySP property, QWidget *parent);
 
-    virtual void setValue(const QVariant &value);
+    void setValue(const QVariant &value) override;
 
 private Q_SLOTS:
     void slotSliderChanged(qreal value);
@@ -90,7 +90,7 @@ class KisUniformPaintOpPropertyCheckBox : public KisUniformPaintOpPropertyWidget
 public:
     KisUniformPaintOpPropertyCheckBox(KisUniformPaintOpPropertySP property, QWidget *parent);
 
-    virtual void setValue(const QVariant &value);
+    void setValue(const QVariant &value) override;
 
 private Q_SLOTS:
     void slotCheckBoxChanged(bool value);
@@ -107,7 +107,7 @@ class KisUniformPaintOpPropertyComboBox : public KisUniformPaintOpPropertyWidget
 public:
     KisUniformPaintOpPropertyComboBox(KisUniformPaintOpPropertySP property, QWidget *parent);
 
-    virtual void setValue(const QVariant &value);
+    void setValue(const QVariant &value) override;
 
 private Q_SLOTS:
     void slotComboBoxChanged(int value);

@@ -82,7 +82,7 @@ public:
     explicit KisAction(QObject* parent = 0);
     KisAction(const QString& text, QObject* parent = 0);
     KisAction(const QIcon& icon, const QString& text, QObject* parent = 0);
-    virtual ~KisAction();
+    ~KisAction() override;
 
     void setDefaultShortcut(const QKeySequence & shortcut);
     QKeySequence defaultShortcut() const;

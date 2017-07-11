@@ -30,12 +30,12 @@ class KisWdgMotionBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgMotionBlur(QWidget * parent);
-    virtual ~KisWdgMotionBlur();
+    ~KisWdgMotionBlur() override;
     inline const Ui_WdgMotionBlur* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 public Q_SLOTS:
     void angleSliderChanged(int);
     void angleDialChanged(int);

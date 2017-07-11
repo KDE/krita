@@ -43,7 +43,7 @@ class KRITAPIGMENT_EXPORT KoColorDisplayRendererInterface : public QObject
 
 public:
     KoColorDisplayRendererInterface();
-    virtual ~KoColorDisplayRendererInterface();
+    ~KoColorDisplayRendererInterface() override;
 
     /**
      * @brief KoColorSpace::convertToQImage converts a whole row of colors in one go
@@ -112,16 +112,16 @@ private:
 class KRITAPIGMENT_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface
 {
 public:
-    QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const;
-    QColor toQColor(const KoColor &c) const;
-    KoColor approximateFromRenderedQColor(const QColor &c) const;
-    KoColor fromHsv(int h, int s, int v, int a = 255) const;
-    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
+    QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const override;
+    QColor toQColor(const KoColor &c) const override;
+    KoColor approximateFromRenderedQColor(const QColor &c) const override;
+    KoColor fromHsv(int h, int s, int v, int a = 255) const override;
+    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const override;
 
-    virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const;
-    virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const;
+    qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
+    qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
 
-    virtual const KoColorSpace* getPaintingColorSpace() const;
+    const KoColorSpace* getPaintingColorSpace() const override;
 
     static KoColorDisplayRendererInterface* instance();
 };

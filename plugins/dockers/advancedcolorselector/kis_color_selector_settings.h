@@ -32,17 +32,17 @@ class KisColorSelectorSettings : public KisPreferenceSet {
     Q_OBJECT
 public:
     KisColorSelectorSettings(QWidget *parent = 0);
-    ~KisColorSelectorSettings();
+    ~KisColorSelectorSettings() override;
 
-    virtual QString id();
-    virtual QString name();
-    virtual QString header();
-    virtual QIcon icon();
+    QString id() override;
+    QString name() override;
+    QString header() override;
+    QIcon icon() override;
 
 public Q_SLOTS:
-    void savePreferences() const;
-    void loadPreferences();
-    void loadDefaultPreferences();
+    void savePreferences() const override;
+    void loadPreferences() override;
+    void loadDefaultPreferences() override;
 
     void changedColorDocker(int);
     void useDifferentColorSpaceChecked(bool);
@@ -74,12 +74,12 @@ public Q_SLOTS:
 
 class KisColorSelectorSettingsFactory : public KisAbstractPreferenceSetFactory {
 public:
-    KisPreferenceSet* createPreferenceSet() {
+    KisPreferenceSet* createPreferenceSet() override {
         KisColorSelectorSettings* ps = new KisColorSelectorSettings();
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
-    virtual QString id() const { return "ColorSelectorSettings"; }
+    QString id() const override { return "ColorSelectorSettings"; }
     KisColorSelectorSettingsUpdateRepeater repeater;
 };
 

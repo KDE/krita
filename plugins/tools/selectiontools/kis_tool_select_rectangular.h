@@ -43,7 +43,7 @@ protected:
     virtual SelectionAction selectionAction() const = 0;
 
 private:
-    void finishRect(const QRectF& rect);
+    void finishRect(const QRectF& rect) override;
 };
 
 
@@ -71,9 +71,9 @@ public:
         setPriority(0);
     }
 
-    virtual ~KisToolSelectRectangularFactory() {}
+    ~KisToolSelectRectangularFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectRectangular(canvas);
     }
 };

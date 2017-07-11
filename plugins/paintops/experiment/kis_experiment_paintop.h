@@ -35,10 +35,14 @@ class KisExperimentPaintOp : public KisPaintOp
 public:
 
     KisExperimentPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
-    ~KisExperimentPaintOp();
+    ~KisExperimentPaintOp() override;
 
-    void paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance);
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    void paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     void paintRegion(const QRegion &changedRegion);

@@ -28,7 +28,7 @@ class KisSmallTilesFilterPlugin : public QObject
     Q_OBJECT
 public:
     KisSmallTilesFilterPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisSmallTilesFilterPlugin();
+    ~KisSmallTilesFilterPlugin() override;
 };
 
 #endif

@@ -41,7 +41,7 @@ protected:
     virtual SelectionAction selectionAction() const = 0;
     virtual bool antiAliasSelection() const = 0;
 private:
-    void finishPolyline(const QVector<QPointF> &points);
+    void finishPolyline(const QVector<QPointF> &points) override;
 private:
 };
 
@@ -69,9 +69,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolSelectPolygonalFactory() {}
+    ~KisToolSelectPolygonalFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectPolygonal(canvas);
     }
 };

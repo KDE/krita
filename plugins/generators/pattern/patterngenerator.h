@@ -32,7 +32,7 @@ class KritaPatternGenerator : public QObject
     Q_OBJECT
 public:
     KritaPatternGenerator(QObject *parent, const QVariantList &);
-    virtual ~KritaPatternGenerator();
+    ~KritaPatternGenerator() override;
 };
 
 class KoPatternGenerator : public KisGenerator
@@ -47,13 +47,13 @@ public:
                   const QSize& size,
                   const KisFilterConfigurationSP config,
                   KoUpdater* progressUpdater
-                 ) const;
+                 ) const override;
 
     static inline KoID id() {
         return KoID("pattern", i18n("Pattern"));
     }
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 };
 
 #endif

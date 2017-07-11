@@ -56,7 +56,7 @@ class  RActiveLabel : public QLabel
 public:
 
     explicit RActiveLabel(const QUrl& url=QUrl(), const QString& imgPath=QString(), QWidget* const parent=0);
-    virtual ~RActiveLabel();
+    ~RActiveLabel() override;
 
     void updateData(const QUrl& url, const QImage& img);
 };
@@ -73,7 +73,7 @@ class  RLineWidget : public QFrame
 public:
 
     explicit RLineWidget(Qt::Orientation orientation, QWidget* const parent=0);
-    virtual ~RLineWidget();
+    ~RLineWidget() override;
 };
 
 // ------------------------------------------------------------------------------------
@@ -88,20 +88,20 @@ class  RHBox : public QFrame
 public:
 
     explicit RHBox(QWidget* const parent=0);
-    virtual ~RHBox();
+    ~RHBox() override;
 
     void setMargin(int margin);
     void setSpacing(int space);
     void setStretchFactor(QWidget* const widget, int stretch);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 protected:
 
     RHBox(bool vertical, QWidget* const parent);
 
-    virtual void childEvent(QChildEvent* e);
+    void childEvent(QChildEvent* e) override;
 };
 
 // ------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class  RVBox : public RHBox
   public:
 
     explicit RVBox(QWidget* const parent=0);
-    virtual ~RVBox();
+    ~RVBox() override;
 };
 
 // ------------------------------------------------------------------------------------
@@ -130,10 +130,10 @@ class  RAdjustableLabel : public QLabel
 public:
 
     explicit RAdjustableLabel(QWidget* const parent=0);
-    virtual ~RAdjustableLabel();
+    ~RAdjustableLabel() override;
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint()        const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint()        const override;
 
     void setAlignment(Qt::Alignment align);
     void setElideMode(Qt::TextElideMode mode);
@@ -146,7 +146,7 @@ public Q_SLOTS:
 
 private:
 
-    void resizeEvent(QResizeEvent*);
+    void resizeEvent(QResizeEvent*) override;
     void adjustTextToLabel();
 
     // Disabled methods from QLabel
@@ -172,7 +172,7 @@ class  RFileSelector : public RHBox
 public:
 
     explicit RFileSelector(QWidget* const parent=0);
-    virtual ~RFileSelector();
+    ~RFileSelector() override;
 
     QLineEdit* lineEdit()   const;
     
@@ -228,7 +228,7 @@ class  RColorSelector : public QPushButton
 public:
 
     explicit RColorSelector(QWidget* const parent=0);
-    virtual ~RColorSelector();
+    ~RColorSelector() override;
     
     void setColor(const QColor& color);
     QColor color() const;
@@ -243,7 +243,7 @@ private Q_SLOTS:
 
 private:
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
     
 private:
 

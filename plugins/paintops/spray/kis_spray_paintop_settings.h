@@ -32,7 +32,7 @@ class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSett
 {
 public:
     KisSprayPaintOpSettings();
-    virtual ~KisSprayPaintOpSettings();
+    ~KisSprayPaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
@@ -44,8 +44,6 @@ public:
     }
 
     bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    int rate() const override;
 
 protected:
 

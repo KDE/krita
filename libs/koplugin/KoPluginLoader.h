@@ -89,7 +89,7 @@ public:
         QStringList defaults;
     };
 
-    ~KoPluginLoader();
+    ~KoPluginLoader() override;
 
     /**
      * Return an instance of the KoPluginLoader

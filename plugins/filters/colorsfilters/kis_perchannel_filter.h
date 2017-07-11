@@ -48,23 +48,23 @@ class KisPerChannelFilterConfiguration
 {
 public:
     KisPerChannelFilterConfiguration(int n);
-    ~KisPerChannelFilterConfiguration();
+    ~KisPerChannelFilterConfiguration() override;
 
     using KisFilterConfiguration::fromXML;
     using KisFilterConfiguration::toXML;
     using KisFilterConfiguration::fromLegacyXML;
 
-    virtual void fromLegacyXML(const QDomElement& root);
+    void fromLegacyXML(const QDomElement& root) override;
 
-    virtual void fromXML(const QDomElement& e);
-    virtual void toXML(QDomDocument& doc, QDomElement& root) const;
+    void fromXML(const QDomElement& e) override;
+    void toXML(QDomDocument& doc, QDomElement& root) const override;
 
-    virtual void setCurves(QList<KisCubicCurve> &curves);
+    void setCurves(QList<KisCubicCurve> &curves) override;
     static inline void initDefaultCurves(QList<KisCubicCurve> &curves, int nCh);
-    bool isCompatible(const KisPaintDeviceSP) const;
+    bool isCompatible(const KisPaintDeviceSP) const override;
 
     const QVector<QVector<quint16> >& transfers() const;
-    virtual const QList<KisCubicCurve>& curves() const;
+    const QList<KisCubicCurve>& curves() const override;
 private:
     QList<KisCubicCurve> m_curves;
 
@@ -84,12 +84,12 @@ class KisPerChannelFilter
 public:
     KisPerChannelFilter();
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP  factoryConfiguration() const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisFilterConfigurationSP  factoryConfiguration() const override;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
+    KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 
-    virtual bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const;
+    bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
 
     static inline KoID id() {
         return KoID("perchannel", i18n("Color Adjustment"));
@@ -103,10 +103,10 @@ class KisPerChannelConfigWidget : public KisConfigWidget
 
 public:
     KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
-    virtual ~KisPerChannelConfigWidget();
+    ~KisPerChannelConfigWidget() override;
 
-    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
-    virtual KisPropertiesConfigurationSP  configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
+    KisPropertiesConfigurationSP  configuration() const override;
 
 private Q_SLOTS:
     virtual void setActiveChannel(int ch);

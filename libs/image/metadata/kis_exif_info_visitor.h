@@ -35,38 +35,38 @@ public:
 public:
 
 
-    bool visit(KisNode*) {
+    bool visit(KisNode*) override {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer*) override {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask*) override {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask*) override {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask*) override {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask*) override {
         return true;
     }
-    bool visit(KisColorizeMask*) {
+    bool visit(KisColorizeMask*) override {
         return true;
     }
-    bool visit(KisExternalLayer*) {
+    bool visit(KisExternalLayer*) override {
         return true;
     }
-    bool visit(KisGeneratorLayer*) {
+    bool visit(KisGeneratorLayer*) override {
         return true;
     }
-    bool visit(KisAdjustmentLayer*) {
+    bool visit(KisAdjustmentLayer*) override {
         return true;
     }
 
-    bool visit(KisPaintLayer* layer) {
+    bool visit(KisPaintLayer* layer) override {
         m_countPaintLayer++;
         if (!layer->metaData()->empty()) {
             m_exifInfo = layer->metaData();
@@ -74,7 +74,7 @@ public:
         return true;
     }
 
-    bool visit(KisGroupLayer* layer) {
+    bool visit(KisGroupLayer* layer) override {
         dbgFile << "Visiting on grouplayer" << layer->name() << "";
         return visitAll(layer, true);
     }

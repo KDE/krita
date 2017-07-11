@@ -52,21 +52,27 @@ public:
                           const KUndo2MagicString &transactionText = KUndo2MagicString(),
                           KisRecordingAdapter *recordingAdapter = 0,
                           KisSmoothingOptions *smoothingOptions = 0);
-    ~KisToolFreehandHelper();
+    ~KisToolFreehandHelper() override;
 
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
     KisSmoothingOptionsSP smoothingOptions() const;
 
     bool isRunning() const;
 
+    void cursorMoved(const QPointF &cursorPos);
+
+    /**
+     * @param pixelCoords - The position of the KoPointerEvent, in pixel coordinates.
+     */
     void initPaint(KoPointerEvent *event,
+                   const QPointF &pixelCoords,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
                    KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
                    KisNodeSP overrideNode = 0,
                    KisDefaultBoundsBaseSP bounds = 0);
-    void paint(KoPointerEvent *event);
+    void paintEvent(KoPointerEvent *event);
     void endPaint();
 
     const KisPaintOp* currentPaintOp() const;
@@ -91,7 +97,8 @@ protected:
     void cancelPaint();
     int elapsedStrokeTime() const;
 
-    void initPaintImpl(const KisPaintInformation &previousPaintInformation,
+    void initPaintImpl(qreal startAngle,
+                       const KisPaintInformation &pi,
                        KoCanvasResourceManager *resourceManager,
                        KisImageWSP image,
                        KisNodeSP node,
@@ -102,8 +109,7 @@ protected:
 protected:
 
     virtual void createPainters(QVector<PainterInfo*> &painterInfos,
-                                const QPointF &lastPosition,
-                                int lastTime);
+                                const KisDistanceInformation &startDist);
 
     // lo-level methods for painting primitives
 
@@ -132,11 +138,15 @@ protected:
                                   const KisPaintInformation &pi2);
 
 private:
+    void paint(KisPaintInformation &info);
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                    QPointF tangent1, QPointF tangent2);
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
+    KisPaintInformation getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
+                                               const KisPaintInformation &lastPaintInfo);
+    int computeAirbrushTimerInterval() const;
 
 private Q_SLOTS:
 

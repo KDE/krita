@@ -41,12 +41,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     explicit KoPathBreakAtPointCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = 0);
-    ~KoPathBreakAtPointCommand();
+    ~KoPathBreakAtPointCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     QList<KoPathPointData> m_pointDataList;

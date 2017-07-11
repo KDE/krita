@@ -268,6 +268,8 @@ QWidget* KisToolMultihand::createOptionWidget()
     customUI->moveOriginButton->setCheckable(true);
     connect(customUI->moveOriginButton, SIGNAL(clicked(bool)),this, SLOT(activateAxesPointModeSetup()));
 
+    connect(customUI->resetOriginButton, SIGNAL(released()), this, SLOT(resetAxes()));
+
     customUI->multihandTypeCombobox->addItem(i18n("Symmetry"),int(SYMMETRY));  // axis mode
     customUI->multihandTypeCombobox->addItem(i18n("Mirror"),int(MIRROR));
     customUI->multihandTypeCombobox->addItem(i18n("Translate"),int(TRANSLATE));
@@ -321,6 +323,13 @@ void KisToolMultihand::activateAxesPointModeSetup()
         finishAxesSetup();
     }
 }
+
+void KisToolMultihand::resetAxes()
+{
+    m_axesPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
+    finishAxesSetup();
+}
+
 
 void KisToolMultihand::finishAxesSetup()
 {

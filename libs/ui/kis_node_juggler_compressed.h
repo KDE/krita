@@ -33,7 +33,7 @@ class KRITAUI_EXPORT KisNodeJugglerCompressed : public QObject
     Q_OBJECT
 public:
     KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout);
-    ~KisNodeJugglerCompressed();
+    ~KisNodeJugglerCompressed() override;
 
     void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP above);
     void setAutoDelete(bool value);

@@ -44,13 +44,7 @@ class KisHatchingPaintOp : public KisBrushBasedPaintOp
 public:
 
     KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    virtual ~KisHatchingPaintOp();
-
-    /**
-     *  Paint a hatched dab around the mouse cursor according to
-     *  sensor settings and user preferences.
-     */
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    ~KisHatchingPaintOp() override;
 
     /**
      *  Returns a number between -90 and 90, and corresponds to the
@@ -58,6 +52,15 @@ public:
      *  corrected to coincide with the way the GUI operates.
      */
     double spinAngle(double spin);
+
+protected:
+    /**
+     *  Paint a hatched dab around the mouse cursor according to
+     *  sensor settings and user preferences.
+     */
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
     KisHatchingPaintOpSettingsSP m_settings;

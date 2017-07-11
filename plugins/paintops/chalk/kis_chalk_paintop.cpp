@@ -37,6 +37,7 @@
 
 #include <kis_pressure_opacity_option.h>
 #include <kis_lod_transform.h>
+#include <kis_paintop_plugin_utils.h>
 
 
 KisChalkPaintOp::KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
@@ -44,8 +45,11 @@ KisChalkPaintOp::KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
+    m_airbrushOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_opacityOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
 
     m_properties.readOptionSetting(settings);
 
@@ -87,5 +91,17 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-    return KisSpacingInformation(1.0);
+
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisChalkPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, 1.0, false, 1.0, 1.0,
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisChalkPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

@@ -83,7 +83,7 @@ public:
 
 
     KisCanvasResourceProvider(KisViewManager * view);
-    ~KisCanvasResourceProvider();
+    ~KisCanvasResourceProvider() override;
 
     void setResourceManager(KoCanvasResourceManager *resourceManager);
     KoCanvasResourceManager* resourceManager();

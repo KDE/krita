@@ -323,7 +323,8 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         } else {
             result = doImport(location, filter);
         }
-    } else /* if (direction == Export) */ {
+    } 
+    else /* if (direction == Export) */ {
         if (!exportConfiguration) {
             exportConfiguration = filter->lastSavedConfiguration(from, to);
         }

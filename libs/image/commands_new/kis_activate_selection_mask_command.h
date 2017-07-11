@@ -29,8 +29,8 @@ class KRITAIMAGE_EXPORT KisActivateSelectionMaskCommand : public KUndo2Command
 public:
     KisActivateSelectionMaskCommand(KisSelectionMaskSP selectionMask, bool value);
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     KisSelectionMaskSP m_selectionMask;

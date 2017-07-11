@@ -56,7 +56,7 @@ class KRITAUI_EXPORT KisIntegerColorInput : public KisColorInput
 public:
     KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
-    virtual QWidget* createInput();
+    QWidget* createInput() override;
 public Q_SLOTS:
     void setValue(int);
     void update();
@@ -71,7 +71,7 @@ class KRITAUI_EXPORT KisFloatColorInput : public KisColorInput
 public:
     KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
-    virtual QWidget* createInput();
+    QWidget* createInput() override;
 public Q_SLOTS:
     void setValue(double);
     void sliderChanged(int);
@@ -88,7 +88,7 @@ class KRITAUI_EXPORT KisHexColorInput : public KisColorInput
 public:
     KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
-    virtual QWidget* createInput();
+    QWidget* createInput() override;
 public Q_SLOTS:
     void setValue();
     void update();

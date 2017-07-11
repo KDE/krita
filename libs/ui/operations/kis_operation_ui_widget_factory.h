@@ -40,7 +40,7 @@ public:
     {
     }
     
-    virtual ~KisOperationUIWidgetFactory()
+    ~KisOperationUIWidgetFactory() override
     {
     }
 
@@ -50,7 +50,7 @@ public:
     *  @param configuration the configuration to the operation
     *  @returns true if the configuration could be constructed (not canceled)
     */
-    virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfigurationSP configuration) {
+    bool fetchConfiguration(KisViewManager* view, KisOperationConfigurationSP configuration) override {
         KoDialog * dialog = new KoDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 

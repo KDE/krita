@@ -31,7 +31,7 @@ public:
     explicit ListsSpinBox(QWidget *parent = 0);
 
     void setCounterType(KoListStyle::Style type);
-    virtual QString textFromValue(int value) const;
+    QString textFromValue(int value) const override;
 
 public Q_SLOTS:
     void setLetterSynchronization(bool on)
@@ -40,7 +40,7 @@ public Q_SLOTS:
     }
 
 private:
-    virtual int valueFromText(const QString &text) const;
+    int valueFromText(const QString &text) const override;
 
     KoListStyle::Style m_type;
     bool m_letterSynchronization;

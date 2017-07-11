@@ -19,8 +19,6 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
-#include <Eigen/Core>
-
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_distance_information.h>
@@ -48,41 +46,40 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
     Q_OBJECT
 
 public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText);
-    virtual ~KisToolFreehand();
-    virtual int flags() const;
+    ~KisToolFreehand() override;
+    int flags() const override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 protected:
     bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
 
-    bool primaryActionSupportsHiResEvents() const;
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    bool primaryActionSupportsHiResEvents() const override;
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    void activateAlternateAction(AlternateAction action);
-    void deactivateAlternateAction(AlternateAction action);
+    void activateAlternateAction(AlternateAction action) override;
+    void deactivateAlternateAction(AlternateAction action) override;
 
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
-    virtual bool wantsAutoScroll() const;
+    bool wantsAutoScroll() const override;
 
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
 
-    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+    QPainterPath getOutlinePath(const QPointF &documentPos,
                                         const KoPointerEvent *event,
-                                        KisPaintOpSettings::OutlineMode outlineMode);
+                                        KisPaintOpSettings::OutlineMode outlineMode) override;
 
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
@@ -92,7 +89,7 @@ protected:
 protected Q_SLOTS:
 
     void explicitUpdateOutline();
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
     void setAssistant(bool assistant);
     void setOnlyOneAssistantSnap(bool assistant);
     void slotDoResizeBrush(qreal newSize);
@@ -138,4 +135,3 @@ private:
 
 
 #endif // KIS_TOOL_FREEHAND_H_
-

@@ -32,7 +32,6 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_shape_tool_helper.h"
 
-#include "kis_system_locker.h"
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 

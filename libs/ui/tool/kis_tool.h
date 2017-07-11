@@ -29,27 +29,6 @@
 #include <kis_types.h>
 
 
-#define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
-    (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
-     (_event)->modifiers() == (_modifier))
-
-#define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
-    (this->mode() == (_mode) && (_event)->button() & (_button) &&            \
-     (_event)->modifiers() == (_modifier))
-
-#define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
-    (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
-     ((_event)->modifiers() & (_modifier) ||                            \
-      (_event)->modifiers() == Qt::NoModifier))
-
-#define RELEASE_CONDITION(_event, _mode, _button)               \
-    (this->mode() == (_mode) && (_event)->button() == (_button))
-
-#define RELEASE_CONDITION_WB(_event, _mode, _button)               \
-    (this->mode() == (_mode) && (_event)->button() & (_button))
-
-#define MOVE_CONDITION(_event, _mode) (this->mode() == (_mode))
-
 #ifdef __GNUC__
 #define WARN_WRONG_MODE(_mode) warnKrita << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
 #else
@@ -85,14 +64,14 @@ class  KRITAUI_EXPORT KisTool
     Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
 
 public:
-    enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02 };
+    enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02, FLAG_USES_CUSTOM_SIZE=0x04 };
 
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
-    virtual ~KisTool();
+    ~KisTool() override;
 
     virtual int flags() const { return 0; }
 
-    void deleteSelection();
+    void deleteSelection() override;
 // KoToolBase Implementation.
 
 public:
@@ -195,18 +174,17 @@ public:
     virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
 
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseTripleClickEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
     bool isActive() const;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
-    virtual void canvasResourceChanged(int key, const QVariant & res);
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
+    void canvasResourceChanged(int key, const QVariant & res) override;
     // Implement this slot in case there are any widgets or properties which need
     // to be updated after certain operations, to reflect the inner state correctly.
     // At the moment this is used for smoothing options in the freehand brush, but
@@ -263,7 +241,7 @@ protected:
     /// Update the canvas for the given rectangle in view coordinates.
     void updateCanvasViewRect(const QRectF &viewRect);
 
-    virtual QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
     /**
      * To determine whether this tool will change its behavior when
@@ -299,9 +277,6 @@ protected:
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
     void paintToolOutline(QPainter * painter, const QPainterPath &path);
 
-    /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
-    void setCurrentNodeLocked(bool locked);
-
     /// Checks checks if the current node is editable
     bool nodeEditable();
 
@@ -310,6 +285,9 @@ protected:
 
     /// Override the cursor appropriately if current node is not editable
     bool overrideCursorIfNotEditable();
+
+    bool blockUntilOperationsFinished();
+    void blockUntilOperationsFinishedForced();
 
 protected:
     enum ToolMode {

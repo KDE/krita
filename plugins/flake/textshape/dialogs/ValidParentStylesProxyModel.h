@@ -50,7 +50,7 @@ public:
     void setCurrentChildStyleId(int styleId);
 
 protected:
-    virtual void createMapping();
+    void createMapping() override;
 
 private:
     KoStyleManager *m_styleManager;

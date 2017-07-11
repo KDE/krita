@@ -33,17 +33,17 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
 
     static inline KoID id() {
         return KoID("unsharp", i18n("Unsharp Mask"));
     }
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
-    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
-    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
 
 private:
     void processLightnessOnly(KisPaintDeviceSP device,

@@ -13,7 +13,7 @@ class HelloExtension(Extension):
 
   def setup(self):
       qDebug("Hello Setup")
-      action = Krita.instance().createAction("hello")
+      action = Krita.instance().createAction("hello_python", "hello")
       action.triggered.connect(hello)
 
 Scripter.addExtension(HelloExtension(Krita.instance()))

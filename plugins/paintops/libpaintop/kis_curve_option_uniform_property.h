@@ -33,12 +33,12 @@ public:
                                   KisCurveOption *option,
                                   KisPaintOpSettingsRestrictedSP settings,
                                   QObject *parent);
-    ~KisCurveOptionUniformProperty();
+    ~KisCurveOptionUniformProperty() override;
 
-    virtual void readValueImpl();
-    virtual void writeValueImpl();
+    void readValueImpl() override;
+    void writeValueImpl() override;
 
-    virtual bool isVisible() const;
+    bool isVisible() const override;
 
 private:
     QScopedPointer<KisCurveOption> m_option;

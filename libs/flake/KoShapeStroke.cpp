@@ -224,26 +224,25 @@ void KoShapeStroke::fillStyle(KoGenStyle &style, KoShapeSavingContext &context) 
 void KoShapeStroke::strokeInsets(const KoShape *shape, KoInsets &insets) const
 {
     Q_UNUSED(shape);
-    qreal lineWidth = d->pen.widthF();
-    if (lineWidth < 0) {
-        lineWidth = 1;
-    }
-    lineWidth *= 0.5; // since we draw a line half inside, and half outside the object.
+
+    // '0.5' --- since we draw a line half inside, and half outside the object.
+    qreal extent = 0.5 * (d->pen.widthF() >= 0 ? d->pen.widthF() : 1.0);
 
     // if we have square cap, we need a little more space
     // -> sqrt((0.5*penWidth)^2 + (0.5*penWidth)^2)
     if (capStyle() == Qt::SquareCap) {
-        lineWidth *= M_SQRT2;
+        extent *= M_SQRT2;
     }
 
     if (joinStyle() == Qt::MiterJoin) {
-        lineWidth = qMax(lineWidth, miterLimit());
+        // miter limit in Qt is normalized by the line width (and not half-width)
+        extent = qMax(extent, d->pen.widthF() * miterLimit());
     }
 
-    insets.top = lineWidth;
-    insets.bottom = lineWidth;
-    insets.left = lineWidth;
-    insets.right = lineWidth;
+    insets.top = extent;
+    insets.bottom = extent;
+    insets.left = extent;
+    insets.right = extent;
 }
 
 qreal KoShapeStroke::strokeMaxMarkersInset(const KoShape *shape) const

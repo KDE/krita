@@ -56,6 +56,7 @@ set(kritapigment_SRCS
     KoColorSpaceFactory.cpp
     KoColorSpaceMaths.cpp
     KoColorSpaceRegistry.cpp
+    KoColorProfileStorage.cpp
     KoColorTransformation.cpp
     KoColorTransformationFactory.cpp
     KoColorTransformationFactoryRegistry.cpp
@@ -68,9 +69,6 @@ set(kritapigment_SRCS
     KoMultipleColorConversionTransformation.cpp
     KoUniqueNumberForIdServer.cpp
     colorspaces/KoAlphaColorSpace.cpp
-    colorspaces/KoAlphaU16ColorSpace.cpp
-    colorspaces/KoAlphaF16ColorSpace.cpp
-    colorspaces/KoAlphaF32ColorSpace.cpp
     colorspaces/KoLabColorSpace.cpp
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cpp
@@ -88,13 +86,6 @@ set(kritapigment_SRCS
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
 )
-
-if (HAVE_LCMS24 AND OPENEXR_FOUND)
-    set (kritapigment_SRCS 
-        ${kritapigment_SRCS}
-        colorspaces/KoAlphaF16ColorSpace.cpp
-    )
-endif()
 
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 
@@ -116,6 +107,7 @@ target_link_libraries( kritapigment
     PUBLIC
         kritaplugin
         kritastore
+        kritaglobal
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         KF5::ConfigCore

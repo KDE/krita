@@ -26,20 +26,20 @@ class KoZoomInput : public QStackedWidget
     Q_OBJECT
     public:
         explicit KoZoomInput(QWidget* parent = 0);
-        ~KoZoomInput();
+        ~KoZoomInput() override;
 
         void setZoomLevels(const QStringList& levels);
         void setCurrentZoomLevel(const QString& level);
 
-        virtual bool eventFilter(QObject* watched, QEvent* event);
+        bool eventFilter(QObject* watched, QEvent* event) override;
 
     Q_SIGNALS:
         void zoomLevelChanged(const QString& level);
 
     protected:
-        void enterEvent(QEvent* event);
-        void leaveEvent(QEvent* event);
-        void keyPressEvent(QKeyEvent* event);
+        void enterEvent(QEvent* event) override;
+        void leaveEvent(QEvent* event) override;
+        void keyPressEvent(QKeyEvent* event) override;
 
     private:
         class Private;

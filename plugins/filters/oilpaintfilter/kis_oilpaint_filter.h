@@ -33,14 +33,14 @@ public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater ) const;
+                     KoUpdater* progressUpdater ) const override;
     static inline KoID id() {
         return KoID("oilpaint", i18n("Oilpaint"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
 private:
     void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h,

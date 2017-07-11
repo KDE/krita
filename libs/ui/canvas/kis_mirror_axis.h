@@ -32,18 +32,18 @@ class KisMirrorAxis : public KisCanvasDecoration
 
 public:
     KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisView> parent);
-    ~KisMirrorAxis();
+    ~KisMirrorAxis() override;
 
     float handleSize() const;
     void setHandleSize(float newSize);
-    void setVisible(bool v);
+    void setVisible(bool v) override;
 
 Q_SIGNALS:
     void handleSizeChanged();
 
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
-    virtual bool eventFilter(QObject* target, QEvent* event);
+    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas) override;
+    bool eventFilter(QObject* target, QEvent* event) override;
 
 private:
     class Private;

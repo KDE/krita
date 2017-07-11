@@ -33,7 +33,7 @@ class FilterResourceServerProvider : public QObject
     Q_OBJECT
 
 public:
-    virtual ~FilterResourceServerProvider();
+    ~FilterResourceServerProvider() override;
 
     static FilterResourceServerProvider *instance();
 

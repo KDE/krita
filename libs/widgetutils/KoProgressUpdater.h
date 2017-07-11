@@ -89,7 +89,7 @@ public:
     explicit KoProgressUpdater(QPointer<KoUpdater> updater);
 
     /// destructor
-    virtual ~KoProgressUpdater();
+    ~KoProgressUpdater() override;
 
     /**
      * Start a new task.

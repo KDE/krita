@@ -89,7 +89,7 @@ public:
     KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b);
     KoTextInlineRdf(const QTextDocument *doc, KoSection *s);
 
-    virtual ~KoTextInlineRdf();
+    ~KoTextInlineRdf() override;
 
     /**
      * The attach() and tryToGetInlineRdf() are used by the ODF load and

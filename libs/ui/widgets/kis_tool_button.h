@@ -37,8 +37,8 @@ public:
     explicit KisToolButton(QWidget *parent = 0);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
     bool m_tabletContact;

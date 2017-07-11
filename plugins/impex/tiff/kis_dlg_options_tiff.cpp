@@ -76,17 +76,16 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
 
 KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
 {
-    KisTIFFOptions opts = options();
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
     cfg->setProperty("compressiontype", kComboBoxCompressionType->currentIndex());
-    cfg->setProperty("predictor", opts.predictor - 1);
-    cfg->setProperty("alpha", opts.alpha);
-    cfg->setProperty("flatten", opts.flatten);
-    cfg->setProperty("quality", opts.jpegQuality);
-    cfg->setProperty("deflate", opts.deflateCompress);
-    cfg->setProperty("faxmode", opts.faxMode - 1);
-    cfg->setProperty("pixarlog", opts.pixarLogCompress);
-    cfg->setProperty("saveProfile", opts.saveProfile);
+    cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
+    cfg->setProperty("alpha", alpha->isChecked());
+    cfg->setProperty("flatten", flatten->isChecked());
+    cfg->setProperty("quality", qualityLevel->value());
+    cfg->setProperty("deflate", compressionLevelDeflate->value());
+    cfg->setProperty("faxmode", kComboBoxFaxMode->currentIndex());
+    cfg->setProperty("pixarlog", compressionLevelPixarLog->value());
+    cfg->setProperty("saveProfile", chkSaveProfile->isChecked());
 
     return cfg;
 }
@@ -117,51 +116,5 @@ void KisTIFFOptionsWidget::flattenToggled(bool t)
     if (!t) {
         alpha->setChecked(true);
     }
-}
-
-KisTIFFOptions KisTIFFOptionsWidget::options() const
-{
-    KisTIFFOptions options;
-    switch (kComboBoxCompressionType->currentIndex()) {
-    case 0:
-        options.compressionType = COMPRESSION_NONE;
-        break;
-    case 1:
-        options.compressionType = COMPRESSION_JPEG;
-        break;
-    case 2:
-        options.compressionType = COMPRESSION_DEFLATE;
-        break;
-    case 3:
-        options.compressionType = COMPRESSION_LZW;
-        break;
-    case 4:
-        options.compressionType = COMPRESSION_JP2000;
-        break;
-    case 5:
-        options.compressionType = COMPRESSION_CCITTRLE;
-        break;
-    case 6:
-        options.compressionType = COMPRESSION_CCITTFAX3;
-        break;
-    case 7:
-        options.compressionType = COMPRESSION_CCITTFAX4;
-        break;
-    case 8:
-        options.compressionType = COMPRESSION_PIXARLOG;
-        break;
-    default:
-        options.compressionType = COMPRESSION_NONE;
-    }
-    options.predictor = kComboBoxPredictor->currentIndex() + 1;
-    options.alpha = alpha->isChecked();
-    options.flatten = flatten->isChecked();
-    options.jpegQuality = qualityLevel->value();
-    options.deflateCompress = compressionLevelDeflate->value();
-    options.faxMode = kComboBoxFaxMode->currentIndex() + 1;
-    options.pixarLogCompress = compressionLevelPixarLog->value();
-    options.saveProfile = chkSaveProfile->isChecked();
-
-    return options;
 }
 

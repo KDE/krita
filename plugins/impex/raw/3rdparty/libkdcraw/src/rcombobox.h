@@ -47,7 +47,7 @@ class  RComboBox : public QWidget
 public:
 
     RComboBox(QWidget* const parent=0);
-    ~RComboBox();
+    ~RComboBox() override;
 
     void setCurrentIndex(int d);
     int  currentIndex() const;

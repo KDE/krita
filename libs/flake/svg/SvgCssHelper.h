@@ -22,7 +22,7 @@
 
 #include <QStringList>
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 
 class SvgCssHelper
 {

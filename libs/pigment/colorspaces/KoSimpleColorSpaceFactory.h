@@ -37,78 +37,81 @@ public:
                               bool userVisible,
                               const KoID& colorModelId,
                               const KoID& colorDepthId,
-                              int referenceDepth = -1)
+                              int referenceDepth = -1,
+                              int crossingCost = 1)
         : m_id(id)
         , m_name(name)
         , m_userVisible(userVisible)
         , m_colorModelId(colorModelId)
         , m_colorDepthId(colorDepthId)
         , m_referenceDepth(referenceDepth)
+        , m_crossingCost(crossingCost)
     {
-        if (colorDepthId == Integer8BitsColorDepthID) {
+        if (m_referenceDepth >= 0) {
+            // noop, already initialized!
+        } else if (colorDepthId == Integer8BitsColorDepthID) {
             m_referenceDepth = 1 * 8;
-        }
-        else if (colorDepthId == Integer16BitsColorDepthID) {
+        } else if (colorDepthId == Integer16BitsColorDepthID) {
             m_referenceDepth = 2 * 8;
-        }
-        if (colorDepthId == Float16BitsColorDepthID) {
+        } else if (colorDepthId == Float16BitsColorDepthID) {
             m_referenceDepth = 2 * 8;
-        }
-        if (colorDepthId == Float32BitsColorDepthID) {
+        } else if (colorDepthId == Float32BitsColorDepthID) {
             m_referenceDepth = 4 * 8;
-        }
-        if (colorDepthId == Float64BitsColorDepthID) {
+        } else if (colorDepthId == Float64BitsColorDepthID) {
             m_referenceDepth = 8 * 8;
         }
     }
 
 
-    virtual QString id() const {
+    QString id() const override {
         return m_id;
     }
 
-    virtual QString name() const {
+    QString name() const override {
         return m_name;
     }
 
-    virtual bool userVisible() const {
+    bool userVisible() const override {
         return m_userVisible;
     }
 
-    virtual KoID colorModelId() const {
+    KoID colorModelId() const override {
         return m_colorModelId;
     }
 
-    virtual KoID colorDepthId() const {
+    KoID colorDepthId() const override {
         return m_colorDepthId;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
+    bool profileIsCompatible(const KoColorProfile* profile) const override {
         return dynamic_cast<const KoDummyColorProfile*>(profile);
     }
 
-    virtual QString colorSpaceEngine() const {
+    QString colorSpaceEngine() const override {
         return "simple";
     }
 
-    virtual bool isHdr() const {
+    bool isHdr() const override {
         return false;
     }
 
-    virtual int referenceDepth() const {
+    int referenceDepth() const override {
         return m_referenceDepth;
     }
 
+    int crossingCost() const override {
+        return m_crossingCost;
+    }
 
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const {
+    QList<KoColorConversionTransformationFactory*> colorConversionLinks() const override {
         return QList<KoColorConversionTransformationFactory*>();
     }
 
-    virtual QString defaultProfile() const {
+    QString defaultProfile() const override {
         return QString("default");
     }
 protected:
-    virtual KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {
+    KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const override {
         return 0;
     }
 private:
@@ -119,6 +122,7 @@ private:
     KoID    m_colorModelId;
     KoID    m_colorDepthId;
     int     m_referenceDepth;
+    int m_crossingCost;
 
 };
 

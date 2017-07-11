@@ -62,7 +62,7 @@ public:
         return m_data[item].image;
     }
 
-    virtual void run();
+    void run() override;
 
 public Q_SLOTS:
 
@@ -85,8 +85,8 @@ public:
     
     const QString& path() const { return m_path; }
     
-    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint=QSizeF()) const;
-    virtual void   paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint=QSizeF()) const override;
+    void   paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0) override;
     
 private:
     float m_size;
@@ -100,14 +100,14 @@ class ImageStripScene: public QGraphicsScene
     
 public:
     ImageStripScene();
-    ~ImageStripScene();
+    ~ImageStripScene() override;
     bool setCurrentDirectory(const QString& path);
     QString currentPath() { return m_path; }
 Q_SIGNALS:
     void sigImageActivated(const QString& path);
     
 private:
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
     
 private Q_SLOTS:
     void slotItemContentChanged(ImageItem* item);

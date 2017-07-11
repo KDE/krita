@@ -30,7 +30,7 @@ class ChalkPaintOpPlugin : public QObject
     Q_OBJECT
 public:
     ChalkPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~ChalkPaintOpPlugin();
+    ~ChalkPaintOpPlugin() override;
 };
 
 #endif // CHALK_PAINTOP_PLUGIN_H_

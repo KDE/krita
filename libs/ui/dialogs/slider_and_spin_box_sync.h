@@ -47,7 +47,7 @@ public:
                          QSpinBox *spinBox,
                          IntFunction parentValueOp);
 
-    ~SliderAndSpinBoxSync();
+    ~SliderAndSpinBoxSync() override;
 
 public Q_SLOTS:
     void slotParentValueChanged();

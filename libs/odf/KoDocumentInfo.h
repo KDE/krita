@@ -60,7 +60,7 @@ public:
     explicit KoDocumentInfo(const KoDocumentInfo &rhs, QObject *parent = 0);
 
     /** The destructor */
-    ~KoDocumentInfo();
+    ~KoDocumentInfo() override;
     /**
      * Load the KoDocumentInfo from an Calligra-1.3 DomDocument
      * @param doc the QDomDocument to load from

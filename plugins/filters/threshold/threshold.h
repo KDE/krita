@@ -40,7 +40,7 @@ class KritaThreshold : public QObject
     Q_OBJECT
 public:
     KritaThreshold(QObject *parent, const QVariantList &);
-    virtual ~KritaThreshold();
+    ~KritaThreshold() override;
 };
 
 class KisFilterThreshold : public KisFilter
@@ -53,14 +53,14 @@ public:
         return KoID("threshold", i18n("Threshold"));
     }
 
-    virtual void processImpl(KisPaintDeviceSP device,
+    void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater *progressUpdater) const;
+                     KoUpdater *progressUpdater) const override;
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
-    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const override;
 
 };
 
@@ -69,10 +69,10 @@ class KisThresholdConfigWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KisThresholdConfigWidget(QWidget *parent, KisPaintDeviceSP dev);
-    virtual ~KisThresholdConfigWidget();
+    ~KisThresholdConfigWidget() override;
 
-    virtual KisPropertiesConfigurationSP configuration() const;
-    void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
     Ui::WdgThreshold m_page;
 
 private Q_SLOTS:

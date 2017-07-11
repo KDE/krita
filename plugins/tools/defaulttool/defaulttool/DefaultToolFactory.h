@@ -29,8 +29,8 @@ class DefaultToolFactory : public KoToolFactoryBase
 public:
     /// constructor
     DefaultToolFactory();
-    ~DefaultToolFactory();
+    ~DefaultToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 #endif

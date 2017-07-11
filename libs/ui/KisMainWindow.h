@@ -81,7 +81,7 @@ public:
     /**
      *  Destructor.
      */
-    virtual ~KisMainWindow();
+    ~KisMainWindow() override;
 
     /**
      * Update caption from document info - call when document info
@@ -145,7 +145,7 @@ public:
 
     QDockWidget* dockWidget(const QString &id);
 
-    QList<KoCanvasObserverBase*> canvasObservers() const;
+    QList<KoCanvasObserverBase*> canvasObservers() const override;
 
     KoCanvasResourceManager *resourceManager() const;
 
@@ -364,14 +364,14 @@ private Q_SLOTS:
 
 protected:
 
-    void closeEvent(QCloseEvent * e);
-    void resizeEvent(QResizeEvent * e);
+    void closeEvent(QCloseEvent * e) override;
+    void resizeEvent(QResizeEvent * e) override;
 
     // QWidget overrides
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void dropEvent(QDropEvent * event);
-    virtual void dragMoveEvent(QDragMoveEvent * event);
-    virtual void dragLeaveEvent(QDragLeaveEvent * event);
+    void dragEnterEvent(QDragEnterEvent * event) override;
+    void dropEvent(QDropEvent * event) override;
+    void dragMoveEvent(QDragMoveEvent * event) override;
+    void dragLeaveEvent(QDragLeaveEvent * event) override;
 
     void setToolbarList(QList<QAction*> toolbarList);
 
@@ -429,7 +429,7 @@ private:
 
 protected:
 
-    void moveEvent(QMoveEvent *e);
+    void moveEvent(QMoveEvent *e) override;
 
 private Q_SLOTS:
     void initializeGeometry();

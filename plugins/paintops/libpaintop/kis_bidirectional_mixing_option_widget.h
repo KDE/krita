@@ -42,13 +42,13 @@ class PAINTOP_EXPORT KisBidirectionalMixingOptionWidget : public KisPaintOpOptio
 {
 public:
     KisBidirectionalMixingOptionWidget();
-    ~KisBidirectionalMixingOptionWidget();
+    ~KisBidirectionalMixingOptionWidget() override;
 
     ///Reimplemented
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
     ///Reimplemented
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     QLabel * m_optionWidget;

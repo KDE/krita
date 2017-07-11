@@ -32,12 +32,12 @@ class KisColorSelectorTriangle : public KisColorSelectorComponent
     Q_OBJECT
 public:
     explicit KisColorSelectorTriangle(KisColorSelector* parent);
-    void setColor(const KoColor &color);
+    void setColor(const KoColor &color) override;
 
 protected:
-    void paint(QPainter*);
-    KoColor selectColor(int x, int y);
-    bool containsPointInComponentCoords(int x, int y) const;
+    void paint(QPainter*) override;
+    KoColor selectColor(int x, int y) override;
+    bool containsPointInComponentCoords(int x, int y) const override;
 
 private:
     friend class Acs::PixelCacheRenderer;

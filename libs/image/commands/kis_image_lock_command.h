@@ -40,8 +40,8 @@ public:
      */
     KisImageLockCommand(KisImageWSP image, bool lockImage);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 };
 
 

@@ -31,7 +31,7 @@ class DigitalMixerPlugin : public QObject
     Q_OBJECT
     public:
         DigitalMixerPlugin(QObject *parent, const QVariantList &);
-        virtual ~DigitalMixerPlugin();
+        ~DigitalMixerPlugin() override;
     private:
         KisViewManager* m_view;
 };

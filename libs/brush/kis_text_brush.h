@@ -34,7 +34,7 @@ class BRUSH_EXPORT KisTextBrush : public KisScalingSizeBrush
 public:
     KisTextBrush();
     KisTextBrush(const KisTextBrush &rhs);
-    virtual ~KisTextBrush();
+    ~KisTextBrush() override;
 
     void notifyStrokeStarted() override;
     void notifyCachedDabPainted(const KisPaintInformation& info) override;
@@ -51,7 +51,7 @@ public:
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) override {
+    bool loadFromDevice(QIODevice *) override {
         return false;
     }
 

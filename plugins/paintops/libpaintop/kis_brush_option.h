@@ -33,8 +33,8 @@ class PAINTOP_EXPORT KisBrushOption : public KisBaseOption
 {
 public:
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const;
-    void readOptionSettingImpl(const KisPropertiesConfiguration *setting);
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override;
     void readOptionSettingForceCopy(KisPropertiesConfigurationSP setting);
     void readOptionSettingForceCopy(const KisPropertiesConfiguration *setting);
 

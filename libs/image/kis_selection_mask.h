@@ -41,25 +41,25 @@ public:
      */
     KisSelectionMask(KisImageWSP image);
 
-    virtual ~KisSelectionMask();
+    ~KisSelectionMask() override;
     KisSelectionMask(const KisSelectionMask& rhs);
 
-    QIcon icon() const;
+    QIcon icon() const override;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisSelectionMask(*this));
     }
 
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
-    virtual KisBaseNode::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
+    KisBaseNode::PropertyList sectionModelProperties() const override;
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
 
-    void setVisible(bool visible, bool isLoading = false);
+    void setVisible(bool visible, bool isLoading = false) override;
     bool active() const;
     void setActive(bool active);
 

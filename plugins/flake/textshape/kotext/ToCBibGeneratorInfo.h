@@ -46,7 +46,7 @@ class IndexEntryLinkStart : public IndexEntry
 {
 public:
     explicit IndexEntryLinkStart(const QString &_styleName);
-    IndexEntry *clone();
+    IndexEntry *clone() override;
 };
 
 
@@ -54,8 +54,8 @@ class IndexEntryChapter : public IndexEntry
 {
 public:
     explicit IndexEntryChapter(const QString &_styleName);
-    IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    IndexEntry *clone() override;
+    void addAttributes(KoXmlWriter* writer) const override;
 
     QString display;
     int outlineLevel;
@@ -66,8 +66,8 @@ class  KRITATEXT_EXPORT IndexEntrySpan : public IndexEntry
 {
 public:
     explicit IndexEntrySpan(const QString &_styleName);
-    IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    IndexEntry *clone() override;
+    void addAttributes(KoXmlWriter* writer) const override;
 
     QString text;
 };
@@ -77,7 +77,7 @@ class IndexEntryText : public IndexEntry
 {
 public:
     explicit IndexEntryText(const QString &_styleName);
-    IndexEntry *clone();
+    IndexEntry *clone() override;
 };
 
 
@@ -85,8 +85,8 @@ class KRITATEXT_EXPORT IndexEntryTabStop : public IndexEntry
 {
 public:
     explicit IndexEntryTabStop(const QString &_styleName);
-    IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    IndexEntry *clone() override;
+    void addAttributes(KoXmlWriter* writer) const override;
     // for saving let's save the original unit,
     // for KoText::Tab we need to convert to PostScript points
     void setPosition(const QString &position);
@@ -100,7 +100,7 @@ class IndexEntryPageNumber : public IndexEntry
 {
 public:
     explicit IndexEntryPageNumber(const QString &_styleName);
-    IndexEntry *clone();
+    IndexEntry *clone() override;
 };
 
 
@@ -108,7 +108,7 @@ class IndexEntryLinkEnd : public IndexEntry
 {
 public:
     explicit IndexEntryLinkEnd(const QString &_styleName);
-    IndexEntry *clone();
+    IndexEntry *clone() override;
 };
 
 class KRITATEXT_EXPORT TocEntryTemplate
@@ -163,8 +163,8 @@ class KRITATEXT_EXPORT IndexEntryBibliography : public IndexEntry
 {
 public:
     explicit IndexEntryBibliography(const QString &_styleName);
-    IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    IndexEntry *clone() override;
+    void addAttributes(KoXmlWriter* writer) const override;
 
     QString dataField;
 };

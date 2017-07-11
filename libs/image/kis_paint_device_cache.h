@@ -131,7 +131,7 @@ private:
     struct ExactBoundsCache : KisLockFreeCache<QRect> {
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
-        QRect calculateNewValue() const {
+        QRect calculateNewValue() const override {
             return m_paintDevice->calculateExactBounds(false);
         }
     private:
@@ -141,7 +141,7 @@ private:
     struct NonDefaultPixelCache : KisLockFreeCache<QRect> {
         NonDefaultPixelCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
-        QRect calculateNewValue() const {
+        QRect calculateNewValue() const override {
             return m_paintDevice->calculateExactBounds(true);
         }
     private:
@@ -151,7 +151,7 @@ private:
     struct RegionCache : KisLockFreeCache<QRegion> {
         RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
-        QRegion calculateNewValue() const {
+        QRegion calculateNewValue() const override {
             return m_paintDevice->dataManager()->region();
         }
     private:

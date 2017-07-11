@@ -29,7 +29,7 @@ class ImageSize : public KisViewPlugin
     Q_OBJECT
 public:
     ImageSize(QObject *parent, const QVariantList &);
-    virtual ~ImageSize();
+    ~ImageSize() override;
 
 private Q_SLOTS:
 

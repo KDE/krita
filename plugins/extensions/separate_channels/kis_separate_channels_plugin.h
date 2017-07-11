@@ -29,7 +29,7 @@ class KisSeparateChannelsPlugin : public KisViewPlugin
     Q_OBJECT
 public:
     KisSeparateChannelsPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisSeparateChannelsPlugin();
+    ~KisSeparateChannelsPlugin() override;
 
 private Q_SLOTS:
 

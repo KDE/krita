@@ -50,7 +50,7 @@ public:
     /**
      * Destroys the tool bar handler.
      */
-    virtual ~ToolBarHandler();
+    ~ToolBarHandler() override;
 
     /**
      * Returns the action which is responsible for the tool bar menu.

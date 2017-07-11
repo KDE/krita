@@ -74,7 +74,7 @@ public:
     const KoColorSpace * colorSpace() const;
 
     /// return the current profile
-    const KoColorProfile *  profile() const;
+    const KoColorProfile *profile() const;
 
     /// Convert this KoColor to the specified colorspace. If the specified colorspace is the
     /// same as the original colorspace, do nothing. Returns the converted KoColor.
@@ -157,6 +157,11 @@ public:
      */
     static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId);
 
+    /**
+     * @brief toQString create a user-visible string of the channel names and the channel values
+     * @param color the color to create the string from
+     * @return a string that can be used to display the values of this color to the user.
+     */
     static QString toQString(const KoColor &color);
 
 #ifndef NODEBUG

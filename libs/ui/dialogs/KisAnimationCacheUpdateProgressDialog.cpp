@@ -97,7 +97,7 @@ void KisAnimationCacheUpdateProgressDialog::regenerateRange(KisAnimationFrameCac
     }
 
     KisImageSP image = cache->image();
-    viewManager->blockUntillOperationsFinishedForced(image);
+    viewManager->blockUntilOperationsFinishedForced(image);
 }
 
 void KisAnimationCacheUpdateProgressDialog::slotFrameFinished()

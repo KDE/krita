@@ -59,9 +59,9 @@ private:
     struct Private;
 public:
     KisMetaDataEditor(QWidget* parent, KisMetaData::Store* store);
-    ~KisMetaDataEditor();
+    ~KisMetaDataEditor() override;
 public Q_SLOTS:
-    virtual void accept();
+    void accept() override;
 private:
     Private* const d;
 };

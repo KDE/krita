@@ -52,7 +52,7 @@ public:
      */
     KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry = false);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
-    virtual ~KisSelectionBasedLayer();
+    ~KisSelectionBasedLayer() override;
 
 
     /**

@@ -33,7 +33,7 @@ class KRITAIMAGE_EXPORT KisColorTransformationConfiguration : public KisFilterCo
 public:
     KisColorTransformationConfiguration(const QString & name, qint32 version);
     KisColorTransformationConfiguration(const KisColorTransformationConfiguration &rhs);
-    virtual ~KisColorTransformationConfiguration();
+    ~KisColorTransformationConfiguration() override;
 
     KoColorTransformation *colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter *filter) const;
 

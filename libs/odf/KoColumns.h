@@ -29,8 +29,9 @@
 #include <QtGlobal>
 #include <QColor>
 
+#include <KoXmlReaderForward.h>
+
 class KoGenStyle;
-class KoXmlElement;
 
 
 /** structure for columns */

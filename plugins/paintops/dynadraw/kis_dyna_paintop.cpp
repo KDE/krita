@@ -35,6 +35,8 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_selection.h>
 #include <kis_random_accessor_ng.h>
+#include <kis_paintop_plugin_utils.h>
+#include <kis_lod_transform.h>
 
 #include "kis_dynaop_option.h"
 
@@ -71,15 +73,32 @@ KisDynaPaintOp::KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter *
     m_properties.useFixedAngle = settings->getBool(DYNA_USE_FIXED_ANGLE);
 
     m_dynaBrush.setProperties(&m_properties);
+
+    m_airbrushOption.readOptionSetting(settings);
+
+    m_rateOption.readOptionSetting(settings);
+    m_rateOption.resetAllSensors();
 }
 
 KisDynaPaintOp::~KisDynaPaintOp()
 {
 }
 
-void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,
+                                 KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(currentDistance);
+    // Use superclass behavior for lines of zero length. Otherwise, airbrushing can happen faster
+    // than it is supposed to.
+    if (pi1.pos() == pi2.pos()) {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    }
+    else {
+        doPaintLine(pi1, pi2);
+    }
+}
+
+void KisDynaPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+{
     Q_UNUSED(pi2);
     if (!painter()) return;
 
@@ -106,7 +125,18 @@ void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInf
 
 KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di;
-    paintLine(info, info, &di);
-    return di.currentSpacing();
+    doPaintLine(info, info);
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisDynaPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisDynaPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

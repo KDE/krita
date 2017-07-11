@@ -59,6 +59,7 @@
 #include <kis_random_sub_accessor.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_iterator_ng.h>
+#include <kis_spacing_information.h>
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
@@ -73,6 +74,12 @@ KisDuplicateOp::KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     m_sizeOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_sizeOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
+    m_opacityOption.resetAllSensors();
+
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
@@ -122,9 +129,14 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         realSourceDevice = externalSourceNode->projection();
     }
 
+    qreal rotation = m_rotationOption.apply(info);
+
+    qreal opacity = m_opacityOption.apply(painter(),info);
+
     qreal scale = m_sizeOption.apply(info);
+
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
-    KisDabShape shape(scale, 1.0, 0.0);
+    KisDabShape shape(scale, 1.0, rotation);
 
 
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
@@ -279,5 +291,12 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
+    painter()->setOpacity(opacity);
+
     return effectiveSpacing(scale);
+}
+
+KisSpacingInformation KisDuplicateOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    return effectiveSpacing(m_sizeOption.apply(info));
 }

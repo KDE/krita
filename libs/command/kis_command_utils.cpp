@@ -20,8 +20,13 @@
 
 namespace KisCommandUtils
 {
-    AggregateCommand::AggregateCommand()
-        : m_firstRedo(true) {}
+    AggregateCommand::AggregateCommand(KUndo2Command *parent)
+        : KUndo2Command(parent),
+          m_firstRedo(true) {}
+
+    AggregateCommand::AggregateCommand(const KUndo2MagicString &text, KUndo2Command *parent)
+        : KUndo2Command(text, parent),
+          m_firstRedo(true) {}
 
     void AggregateCommand::redo()
     {
@@ -41,7 +46,44 @@ namespace KisCommandUtils
 
     void AggregateCommand::addCommand(KUndo2Command *cmd)
     {
+        if (!cmd) return;
         m_store.addCommand(cmd);
+    }
+
+    LambdaCommand::LambdaCommand(std::function<KUndo2Command*()> createCommandFunc)
+        : m_createCommandFunc(createCommandFunc)
+    {
+
+    }
+
+    LambdaCommand::LambdaCommand(const KUndo2MagicString &text,
+                                 std::function<KUndo2Command*()> createCommandFunc)
+        : AggregateCommand(text),
+          m_createCommandFunc(createCommandFunc)
+    {
+
+    }
+
+    LambdaCommand::LambdaCommand(const KUndo2MagicString &text,
+                                 KUndo2Command *parent,
+                                 std::function<KUndo2Command*()> createCommandFunc)
+        : AggregateCommand(text, parent),
+          m_createCommandFunc(createCommandFunc)
+    {
+    }
+
+    LambdaCommand::LambdaCommand(KUndo2Command *parent,
+                                 std::function<KUndo2Command*()> createCommandFunc)
+        : AggregateCommand(parent),
+          m_createCommandFunc(createCommandFunc)
+    {
+    }
+
+    void LambdaCommand::populateChildCommands()
+    {
+        if (m_createCommandFunc) {
+            addCommand(m_createCommandFunc());
+        }
     }
 
     SkipFirstRedoWrapper::SkipFirstRedoWrapper(KUndo2Command *child, KUndo2Command *parent)
@@ -97,7 +139,7 @@ namespace KisCommandUtils
 
     void SkipFirstRedoBase::setSkipOneRedo(bool value)
     {
-        m_firstRedo = true;
+        m_firstRedo = value;
     }
 
     FlipFlopCommand::FlipFlopCommand(bool finalize, KUndo2Command *parent)
@@ -154,4 +196,5 @@ namespace KisCommandUtils
             cmd->undo();
         }
     }
+
 }

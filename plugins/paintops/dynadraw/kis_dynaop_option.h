@@ -42,7 +42,7 @@ class KisDynaOpOption : public KisPaintOpOption
 
 public:
     KisDynaOpOption();
-    ~KisDynaOpOption();
+    ~KisDynaOpOption() override;
 
     qreal initWidth() const;
     qreal mass() const;
@@ -57,9 +57,9 @@ public:
     int lineCount() const;
     qreal lineSpacing() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private:
     KisDynaOpOptionsWidget * m_options;
@@ -83,7 +83,7 @@ struct DynaOption : public KisBaseOption
     bool dyna_use_two_circles;
     bool dyna_use_fixed_angle;
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
         setting->setProperty(DYNA_WIDTH, dyna_width);
         setting->setProperty(DYNA_MASS, dyna_mass);
         setting->setProperty(DYNA_DRAG, dyna_drag);
@@ -99,7 +99,7 @@ struct DynaOption : public KisBaseOption
 
     }
 
-    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override {
         dyna_action = setting->getInt(DYNA_ACTION);
         dyna_width = setting->getDouble(DYNA_WIDTH);
         dyna_mass = setting->getDouble(DYNA_MASS);

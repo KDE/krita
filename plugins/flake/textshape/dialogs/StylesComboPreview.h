@@ -37,7 +37,7 @@ class StylesComboPreview : public QLineEdit
 
 public:
     explicit StylesComboPreview(QWidget *parent = 0);
-    ~StylesComboPreview();
+    ~StylesComboPreview() override;
 
     QSize availableSize() const;
     void setAddButtonShown(bool show);
@@ -51,11 +51,11 @@ Q_SIGNALS:
     void clicked();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void focusOutEvent(QFocusEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void focusOutEvent(QFocusEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private Q_SLOTS:
     void addNewStyle();

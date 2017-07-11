@@ -45,35 +45,35 @@ public:
             , m_profile(new KoDummyColorProfile) {
     }
 
-    virtual ~KoSimpleColorSpace() {
+    ~KoSimpleColorSpace() override {
         delete m_profile;
     }
 
-    virtual KoID colorModelId() const {
+    KoID colorModelId() const override {
         return m_colorModelId;
     }
 
-    virtual KoID colorDepthId() const {
+    KoID colorDepthId() const override {
         return m_colorDepthId;
     }
 
-    virtual bool willDegrade(ColorSpaceIndependence independence) const {
+    bool willDegrade(ColorSpaceIndependence independence) const override {
         Q_UNUSED(independence);
         return false;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const {
+    bool profileIsCompatible(const KoColorProfile* /*profile*/) const override {
         return true;
     }
 
-    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const {
+    quint8 difference(const quint8 *src1, const quint8 *src2) const override {
         Q_UNUSED(src1);
         Q_UNUSED(src2);
         warnPigment << i18n("Undefined operation in the %1 space", m_name);
         return 0;
     }
 
-    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const {
+    quint8 differenceA(const quint8 *src1, const quint8 *src2) const override {
         Q_UNUSED(src1);
         Q_UNUSED(src2);
         warnPigment << i18n("Undefined operation in the %1 space", m_name);
@@ -84,15 +84,15 @@ public:
         return 0;
     }
 
-    virtual bool hasHighDynamicRange() const {
+    bool hasHighDynamicRange() const override {
         return false;
     }
 
-    virtual const KoColorProfile* profile() const {
+    const KoColorProfile* profile() const override {
         return m_profile;
     }
 
-    virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const {
+    KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
@@ -102,12 +102,12 @@ public:
         return 0;
     }
 
-    virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const {
+    KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
 
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
+    KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
@@ -116,33 +116,33 @@ public:
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
 
-    virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
+    void colorToXML(const quint8* , QDomDocument& , QDomElement&) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
 
-    virtual void colorFromXML(quint8* , const QDomElement&) const {
+    void colorFromXML(quint8* , const QDomElement&) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
-    virtual void toHSY(const QVector<double> &, qreal *, qreal *, qreal *) const {
+    void toHSY(const QVector<double> &, qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
-    virtual QVector <double> fromHSY(qreal *, qreal *, qreal *) const {
+    QVector <double> fromHSY(qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         QVector <double> channelValues (2);
         channelValues.fill(0.0);
         return channelValues;
     }
-    virtual void toYUV(const QVector<double> &, qreal *, qreal *, qreal *) const {
+    void toYUV(const QVector<double> &, qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
-    virtual QVector <double> fromYUV(qreal *, qreal *, qreal *) const {
+    QVector <double> fromYUV(qreal *, qreal *, qreal *) const override {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         QVector <double> channelValues (2);
         channelValues.fill(0.0);
         return channelValues;
     }
 
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
+    void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const override {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == LABAColorModelID) {
             memcpy(dst, src, nPixels * 2);
         } else {
@@ -153,7 +153,7 @@ public:
         }
     }
 
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
+    void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const override {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == LABAColorModelID) {
             memcpy(dst, src, nPixels * 2);
         } else {
@@ -164,7 +164,7 @@ public:
         }
     }
 
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
+    void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const override {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == RGBAColorModelID) {
             memcpy(dst, src, nPixels * 2);
         } else {
@@ -175,7 +175,7 @@ public:
         }
     }
 
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
+    void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const override {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == RGBAColorModelID) {
             memcpy(dst, src, nPixels * 2);
         } else {
@@ -186,11 +186,11 @@ public:
         }
     }
 
-    virtual bool convertPixelsTo(const quint8 *src,
+    bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const override
     {
         Q_UNUSED(renderingIntent);
         Q_UNUSED(conversionFlags);

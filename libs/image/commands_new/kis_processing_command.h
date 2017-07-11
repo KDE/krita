@@ -30,8 +30,8 @@ class KRITAIMAGE_EXPORT KisProcessingCommand : public KUndo2Command
 public:
     KisProcessingCommand(KisProcessingVisitorSP visitor, KisNodeSP node, KUndo2Command *parent = 0);
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     KisProcessingVisitorSP m_visitor;

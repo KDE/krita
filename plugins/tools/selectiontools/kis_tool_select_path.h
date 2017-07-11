@@ -34,8 +34,8 @@ class KisToolSelectPath;
 class __KisToolSelectPathLocalTool : public KoCreatePathTool {
 public:
     __KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool);
-    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-    virtual void addPathShape(KoPathShape* pathShape);
+    void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter) override;
+    void addPathShape(KoPathShape* pathShape) override;
 
     using KoCreatePathTool::createOptionWidgets;
     using KoCreatePathTool::endPathWithoutLastPoint;
@@ -57,13 +57,13 @@ struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
         : DelegatedSelectPathTool(canvas, cursor, (__KisToolSelectPathLocalTool*) delegateTool)
     {
     }
-    bool listeningToModifiers();
+    bool listeningToModifiers() override;
 
     // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")
     // we will receive a primary action but no mousePressEvent.  Thus these events must be explicitly forwarded.
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 };
 
 
@@ -72,15 +72,15 @@ class KisToolSelectPath : public KisToolSelectBase<KisDelegatedSelectPathWrapper
     Q_OBJECT
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent* event);
-    bool eventFilter(QObject *obj, QEvent *event);
+    void mousePressEvent(KoPointerEvent* event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 protected:
-    void requestStrokeCancellation();
-    void requestStrokeEnd();
-    void setAlternateSelectionAction(SelectionAction action);
+    void requestStrokeCancellation() override;
+    void requestStrokeEnd() override;
+    void setAlternateSelectionAction(SelectionAction action) override;
     friend class __KisToolSelectPathLocalTool;
-    QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 };
 
 class KisToolSelectPathFactory : public KoToolFactoryBase
@@ -95,9 +95,9 @@ public:
         setPriority(6);
     }
 
-    virtual ~KisToolSelectPathFactory() {}
+    ~KisToolSelectPathFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectPath(canvas);
     }
 };

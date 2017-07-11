@@ -176,8 +176,6 @@ set(kritaflake_SRCS
     tools/KoZoomToolFactory.cpp
     tools/KoZoomToolWidget.cpp
     tools/KoZoomStrategy.cpp
-    tools/KoPanTool.cpp
-    tools/KoPanToolFactory.cpp
     tools/KoInteractionTool.cpp
     tools/KoInteractionStrategy.cpp
     tools/KoInteractionStrategyFactory.cpp
@@ -201,6 +199,8 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+
+    resources/KoSvgSymbolCollectionResource.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp
@@ -229,3 +229,4 @@ set_target_properties(kritaflake PROPERTIES
 )
 
 install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})
+

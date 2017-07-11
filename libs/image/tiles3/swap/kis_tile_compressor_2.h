@@ -27,16 +27,16 @@ class KRITAIMAGE_EXPORT KisTileCompressor2 : public KisAbstractTileCompressor
 {
 public:
     KisTileCompressor2();
-    virtual ~KisTileCompressor2();
+    ~KisTileCompressor2() override;
 
-    bool writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
-    bool readTile(QIODevice *io, KisTiledDataManager *dm);
+    bool writeTile(KisTileSP tile, KisPaintDeviceWriter &store) override;
+    bool readTile(QIODevice *io, KisTiledDataManager *dm) override;
 
 
     void compressTileData(KisTileData *tileData,quint8 *buffer,
-                          qint32 bufferSize, qint32 &bytesWritten);
-    bool decompressTileData(quint8 *buffer, qint32 bufferSize, KisTileData *tileData);
-    qint32 tileDataBufferSize(KisTileData *tileData);
+                          qint32 bufferSize, qint32 &bytesWritten) override;
+    bool decompressTileData(quint8 *buffer, qint32 bufferSize, KisTileData *tileData) override;
+    qint32 tileDataBufferSize(KisTileData *tileData) override;
 
 private:
     /**

@@ -55,21 +55,21 @@
 
 struct Q_DECL_HIDDEN KisTransformMask::Private
 {
-    Private()
+    Private(KisTransformMask *q)
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
-          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
+          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE, q),
           offBoundsReadArea(0.5)
     {
     }
 
-    Private(const Private &rhs)
+    Private(const Private &rhs, KisTransformMask *q)
         : worker(rhs.worker),
           params(rhs.params),
           staticCacheValid(false),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
-          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE)
+          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE, q)
     {
     }
 
@@ -99,7 +99,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 
 KisTransformMask::KisTransformMask()
     : KisEffectMask(),
-      m_d(new Private)
+      m_d(new Private(this))
 {
     setTransformParams(
         KisTransformMaskParamsInterfaceSP(
@@ -119,7 +119,7 @@ KisTransformMask::~KisTransformMask()
 
 KisTransformMask::KisTransformMask(const KisTransformMask& rhs)
     : KisEffectMask(rhs),
-      m_d(new Private(*rhs.m_d))
+      m_d(new Private(*rhs.m_d, this))
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
 }

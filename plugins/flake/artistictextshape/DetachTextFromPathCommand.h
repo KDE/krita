@@ -31,9 +31,9 @@ class DetachTextFromPathCommand : public KUndo2Command
 public:
     explicit DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     /// reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 private:
     ArtisticTextShape *m_textShape;
     KoPathShape *m_pathShape;

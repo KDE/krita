@@ -46,7 +46,7 @@ class DlgClonesArray: public KoDialog
 
 public:
     DlgClonesArray(KisViewManager *view, QWidget * parent = 0);
-    ~DlgClonesArray();
+    ~DlgClonesArray() override;
 
 private Q_SLOTS:
     void okClicked();

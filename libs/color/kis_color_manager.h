@@ -36,7 +36,7 @@ class KRITACOLOR_EXPORT KisColorManager : public QObject
 
 public:
     explicit KisColorManager();
-    virtual ~KisColorManager();
+    ~KisColorManager() override;
 
     enum DeviceType {
         screen,

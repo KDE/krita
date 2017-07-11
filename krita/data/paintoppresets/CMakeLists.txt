@@ -11,10 +11,13 @@ Basic_tip_gaussian.kpp
 Basic_tip_soft.kpp
 Basic_wet.kpp
 Basic_wet_soft.kpp
+Blender_Blur.kpp
 Block_basic.kpp
 Block_bristles.kpp
 Block_fuzzy.kpp
 Block_mix_tilt.kpp
+Block_textured_1.kpp
+Block_textured_2.kpp
 Block_tilt.kpp
 Block_wet_tilt.kpp
 Bristle_frottis.kpp
@@ -22,6 +25,8 @@ Bristles_hairy.kpp
 Bristles_mix.kpp
 Bristles_textured.kpp
 Bristles_wet.kpp
+Brush_dotted.kpp
+Brush_textured.kpp
 Chalk_brush.kpp
 Clone_tool.kpp
 Curve_curvy.kpp
@@ -66,6 +71,8 @@ Layout_circle_soft.kpp
 Layout_oval.kpp
 Layout_pen.kpp
 Move_tool.kpp
+Oils_bristle.kpp
+Oils_knife.kpp
 Pastel_texture_large.kpp
 Pastel_texture_thin.kpp
 Pencil_2B.kpp
@@ -118,6 +125,7 @@ Tangent_normal_y_inverted.kpp
 Texture_fuzzy.kpp
 Texture_hair.kpp
 Texture_leaves_fuzzy.kpp
+Textured_tilt.kpp
 ink_precision_03.kpp
 pixel1.kpp
 Pixelart_dither.kpp

@@ -46,12 +46,12 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked);
-    virtual ~ShapeMoveStrategy() {}
+    ~ShapeMoveStrategy() override {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 private:
     void moveSelection(const QPointF &diff);
     QList<QPointF> m_previousPositions;

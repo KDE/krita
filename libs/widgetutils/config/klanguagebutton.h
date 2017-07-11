@@ -66,7 +66,7 @@ public:
     /**
      * Deconstructor
      */
-    virtual ~KLanguageButton();
+    ~KLanguageButton() override;
 
     /**
      * Sets the locale to display language names. By default, QLocale::system().name() is used.

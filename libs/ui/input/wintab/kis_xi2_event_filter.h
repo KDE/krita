@@ -28,11 +28,11 @@ class KRITAUI_EXPORT KisXi2EventFilter : public QAbstractNativeEventFilter
 {
 public:
     KisXi2EventFilter();
-    ~KisXi2EventFilter();
+    ~KisXi2EventFilter() override;
 
     static KisXi2EventFilter* instance();
 
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
 
 private:
     struct Private;

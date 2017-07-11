@@ -57,17 +57,17 @@ public:
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisGbrBrush(const QImage& image, const QString& name = QString());
 
-    virtual ~KisGbrBrush();
+    ~KisGbrBrush() override;
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
     /**
      * @return a preview of the brush
      */
-    virtual QImage brushTipImage() const;
+    QImage brushTipImage() const override;
     /**
      * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
      * and you want to paint with it as with masks, set to true.
@@ -83,17 +83,17 @@ public:
      */
     virtual void makeMaskImage();
 
-    virtual enumBrushType brushType() const;
+    enumBrushType brushType() const override;
 
     /**
      * Makes a copy of this brush.
      */
-    virtual KisBrush* clone() const;
+    KisBrush* clone() const override;
 
     /**
      * @return default file extension for saving the brush
      */
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
 protected:
     /**
@@ -104,10 +104,10 @@ protected:
 
     KisGbrBrush(const KisGbrBrush& rhs);
 
-    void setBrushType(enumBrushType type);
-    virtual void setBrushTipImage(const QImage& image);
+    void setBrushType(enumBrushType type) override;
+    void setBrushTipImage(const QImage& image) override;
 
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument& d, QDomElement& e) const override;
 
 private:
 

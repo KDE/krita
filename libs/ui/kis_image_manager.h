@@ -38,7 +38,7 @@ public:
 
 
     KisImageManager(KisViewManager * view);
-    ~KisImageManager() {}
+    ~KisImageManager() override {}
 
     void setView(QPointer<KisView>imageView);
     void setup(KisActionManager *actionManager);

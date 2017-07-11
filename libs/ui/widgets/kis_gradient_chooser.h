@@ -54,7 +54,7 @@ class KRITAUI_EXPORT KisGradientChooser : public QFrame
 
 public:
     KisGradientChooser(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisGradientChooser();
+    ~KisGradientChooser() override;
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected

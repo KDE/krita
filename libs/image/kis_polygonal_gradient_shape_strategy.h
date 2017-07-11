@@ -32,9 +32,9 @@ class KRITAIMAGE_EXPORT KisPolygonalGradientShapeStrategy : public KisGradientSh
 public:
     KisPolygonalGradientShapeStrategy(const QPainterPath &selectionPath,
                                       qreal exponent);
-    ~KisPolygonalGradientShapeStrategy();
+    ~KisPolygonalGradientShapeStrategy() override;
 
-    double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
     static QPointF testingCalculatePathCenter(int numSamples, const QPainterPath &path, qreal exponent, bool searchForMax);
 

@@ -68,45 +68,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
     cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
     KisTIFFOptions options;
-    switch (configuration->getInt("compressiontype")) {
-    case 0:
-        options.compressionType = COMPRESSION_NONE;
-        break;
-    case 1:
-        options.compressionType = COMPRESSION_JPEG;
-        break;
-    case 2:
-        options.compressionType = COMPRESSION_DEFLATE;
-        break;
-    case 3:
-        options.compressionType = COMPRESSION_LZW;
-        break;
-    case 4:
-        options.compressionType = COMPRESSION_JP2000;
-        break;
-    case 5:
-        options.compressionType = COMPRESSION_CCITTRLE;
-        break;
-    case 6:
-        options.compressionType = COMPRESSION_CCITTFAX3;
-        break;
-    case 7:
-        options.compressionType = COMPRESSION_CCITTFAX4;
-        break;
-    case 8:
-        options.compressionType = COMPRESSION_PIXARLOG;
-        break;
-    default:
-        options.compressionType = COMPRESSION_NONE;
-    }
-    options.predictor = configuration->getInt("predictor");
-    options.alpha = configuration->getBool("alpha");
-    options.flatten = configuration->getBool("flatten");
-    options.jpegQuality = configuration->getInt("quality");
-    options.deflateCompress = configuration->getInt("deflate");
-    options.faxMode = configuration->getInt("faxmode");
-    options.pixarLogCompress = configuration->getInt("pixarlog");
-    options.saveProfile = configuration->getBool("saveProfile");
+    options.fromProperties(configuration);
 
     if ((cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT16
          || cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT32) && options.predictor == 2) {
@@ -139,18 +101,8 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
 
 KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("compressiontype", 0);
-    cfg->setProperty("predictor", 0);
-    cfg->setProperty("alpha", true);
-    cfg->setProperty("flatten", true);
-    cfg->setProperty("quality", 80);
-    cfg->setProperty("deflate", 6);
-    cfg->setProperty("faxmode", 0);
-    cfg->setProperty("pixarlog", 6);
-    cfg->setProperty("saveProfile", true);
-
-    return cfg;
+    KisTIFFOptions options;
+    return options.toProperties();
 }
 
 KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const

@@ -47,21 +47,21 @@ class KRITAPSD_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
 {
 public:
     KisAslCallbackObjectCatcher();
-    ~KisAslCallbackObjectCatcher();
+    ~KisAslCallbackObjectCatcher() override;
 
-    void addDouble(const QString &path, double value);
-    void addInteger(const QString &path, int value);
-    void addEnum(const QString &path, const QString &typeId, const QString &value);
-    void addUnitFloat(const QString &path, const QString &unit, double value);
-    void addText(const QString &path, const QString &value);
-    void addBoolean(const QString &path, bool value);
-    void addColor(const QString &path, const QColor &value);
-    void addPoint(const QString &path, const QPointF &value);
-    void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
-    void addPattern(const QString &path, const KoPattern *pattern);
-    void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
-    void addGradient(const QString &path, KoAbstractGradientSP gradient);
-    void newStyleStarted();
+    void addDouble(const QString &path, double value) override;
+    void addInteger(const QString &path, int value) override;
+    void addEnum(const QString &path, const QString &typeId, const QString &value) override;
+    void addUnitFloat(const QString &path, const QString &unit, double value) override;
+    void addText(const QString &path, const QString &value) override;
+    void addBoolean(const QString &path, bool value) override;
+    void addColor(const QString &path, const QColor &value) override;
+    void addPoint(const QString &path, const QPointF &value) override;
+    void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points) override;
+    void addPattern(const QString &path, const KoPattern *pattern) override;
+    void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName) override;
+    void addGradient(const QString &path, KoAbstractGradientSP gradient) override;
+    void newStyleStarted() override;
 
     void subscribeDouble(const QString &path, ASLCallbackDouble callback);
     void subscribeInteger(const QString &path, ASLCallbackInteger callback);

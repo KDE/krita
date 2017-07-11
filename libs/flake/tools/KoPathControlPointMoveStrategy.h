@@ -37,10 +37,10 @@ class KoPathControlPointMoveStrategy : public KoInteractionStrategy
 public:
     KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &point,
                                    KoPathPoint::PointType type, const QPointF &pos);
-    virtual ~KoPathControlPointMoveStrategy();
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    ~KoPathControlPointMoveStrategy() override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
 
 private:
     /// the last mouse position

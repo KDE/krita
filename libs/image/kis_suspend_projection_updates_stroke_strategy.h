@@ -27,14 +27,14 @@ class KisSuspendProjectionUpdatesStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
     KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend);
-    ~KisSuspendProjectionUpdatesStrokeStrategy();
+    ~KisSuspendProjectionUpdatesStrokeStrategy() override;
 
     static QList<KisStrokeJobData*> createSuspendJobsData(KisImageWSP image);
     static QList<KisStrokeJobData*> createResumeJobsData(KisImageWSP image);
 
 private:
-    void doStrokeCallback(KisStrokeJobData *data);
-    void cancelStrokeCallback();
+    void doStrokeCallback(KisStrokeJobData *data) override;
+    void cancelStrokeCallback() override;
 
     void resumeAndIssueUpdates(bool dropUpdates);
 

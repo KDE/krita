@@ -37,20 +37,20 @@ public:
 
     KoGenericRegistryModel(KoGenericRegistry<T>* registry);
 
-    virtual ~KoGenericRegistryModel();
+    ~KoGenericRegistryModel() override;
 
 public:
 
     /**
      * @return the number of elements in the registry
      */
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     /**
      * When role == Qt::DisplayRole, this function will return the name of the
      * element.
      */
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     /**
      * @return the element at the given index

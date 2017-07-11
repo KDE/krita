@@ -34,7 +34,6 @@
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
-#include <kis_system_locker.h>
 
 
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
@@ -62,14 +61,17 @@ QWidget* KisToolPolyline::createOptionWidget()
 
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 {
+    if (!blockUntilOperationsFinished()) return;
+
     if (image()) {
-        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()),
+                                                   currentPaintOpPreset(),
+                                                   KisDistanceInitInfo());
         setupPaintAction(&linePaintAction);
         linePaintAction.addPolyLine(points.toList());
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                            image(),
                                            currentNode(),

@@ -44,7 +44,7 @@ public:
      * Constructor.
      */
     explicit KoVariable(bool propertyChangeListener = false);
-    virtual ~KoVariable();
+    ~KoVariable() override;
 
     /**
      * The new value this variable will show.
@@ -93,12 +93,12 @@ protected:
 
     /// reimplemented
     void resize(const QTextDocument *document, QTextInlineObject &object,
-                int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+                int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 private:
     void updatePosition(const QTextDocument *document,
-                        int posInDocument, const QTextCharFormat &format);
+                        int posInDocument, const QTextCharFormat &format) override;
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-               const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
+               const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
 
 private Q_SLOTS:
     void documentDestroyed();

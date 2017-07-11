@@ -32,7 +32,7 @@
 #include <QTimer>
 #include <QtDebug>
 #include <QDoubleSpinBox>
-
+#include "kis_cursor.h"
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
 
@@ -111,6 +111,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->parseInt = false;
 
     setExponentRatio(1.0);
+    setCursor(KisCursor::splitHCursor());
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);
@@ -142,11 +143,6 @@ void KisAbstractSliderSpinBox::showEdit()
     d->edit->show();
     d->edit->setFocus(Qt::OtherFocusReason);
     update();
-
-    KisInputManager *inputManager = KisPart::instance()->currentInputManager();
-    if (inputManager) {
-        inputManager->slotFocusOnEnter(false);
-    }
 }
 
 void KisAbstractSliderSpinBox::hideEdit()
@@ -154,11 +150,6 @@ void KisAbstractSliderSpinBox::hideEdit()
     Q_D(KisAbstractSliderSpinBox);
     d->edit->hide();
     update();
-
-    KisInputManager *inputManager = KisPart::instance()->currentInputManager();
-    if (inputManager) {
-        inputManager->slotFocusOnEnter(true);
-    }
 }
 
 void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)

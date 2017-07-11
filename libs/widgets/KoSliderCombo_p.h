@@ -46,7 +46,7 @@ public:
     KoSliderComboContainer(KoSliderCombo *parent) : QMenu(parent ), m_parent(parent) {}
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
 private:
     KoSliderCombo *m_parent;
 };

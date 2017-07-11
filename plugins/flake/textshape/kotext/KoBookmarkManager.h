@@ -44,7 +44,7 @@ class KRITATEXT_EXPORT KoBookmarkManager : public QObject
 public:
     /// constructor
     KoBookmarkManager();
-    ~KoBookmarkManager();
+    ~KoBookmarkManager() override;
 
     /// @return a bookmark with the specified name, or 0 if there is none
     KoBookmark *bookmark(const QString &name) const;

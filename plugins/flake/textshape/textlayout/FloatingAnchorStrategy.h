@@ -34,14 +34,14 @@ class FloatingAnchorStrategy  : public AnchorStrategy
 {
 public:
     FloatingAnchorStrategy(KoAnchorTextRange *anchor, KoTextLayoutRootArea *rootArea);
-    ~FloatingAnchorStrategy();
+    ~FloatingAnchorStrategy() override;
 
     /**
      * This moves the subject (i.e. shape when used with flake) of the anchor.
      *
      * @return true if subject was moved
      */
-    virtual bool moveSubject();
+    bool moveSubject() override;
 
 private:
 

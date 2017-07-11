@@ -32,7 +32,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -586,6 +586,13 @@
             <widget class="QCheckBox" name="chkLockGuides">
              <property name="text">
               <string>Lock guides</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QCheckBox" name="chkShowRulers">
+             <property name="text">
+              <string>Show rulers</string>
              </property>
             </widget>
            </item>

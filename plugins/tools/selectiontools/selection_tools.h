@@ -37,7 +37,7 @@ class SelectionTools : public QObject
     Q_OBJECT
 public:
     SelectionTools(QObject *parent, const QVariantList &);
-    virtual ~SelectionTools();
+    ~SelectionTools() override;
 
 };
 

@@ -33,7 +33,7 @@ public:
     KisColorSelectorInterface(QWidget *parent = 0)
         : QWidget(parent)
     {}
-    virtual ~KisColorSelectorInterface() {}
+    ~KisColorSelectorInterface() override {}
     virtual void setConfig(bool forceCircular, bool forceSelfUpdate)
     {
         Q_UNUSED(forceCircular);

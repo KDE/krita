@@ -45,7 +45,7 @@ class KRITALIBKIS_EXPORT Resource : public QObject
 
 public:
     explicit Resource(KoResource *resource, QObject *parent = 0);
-    virtual ~Resource();
+    ~Resource() override;
     bool operator==(const Resource &other) const;
     bool operator!=(const Resource &other) const;
 
@@ -110,6 +110,7 @@ private:
 
     friend class PresetChooser;
     friend class View;
+    friend class Palette;
     KoResource *resource() const;
 
     struct Private;

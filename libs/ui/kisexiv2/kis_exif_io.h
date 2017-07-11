@@ -27,25 +27,25 @@ class KisExifIO : public KisMetaData::IOBackend
     struct Private;
 public:
     KisExifIO();
-    virtual ~KisExifIO();
-    virtual QString id() const {
+    ~KisExifIO() override;
+    QString id() const override {
         return "exif";
     }
-    virtual QString name() const {
+    QString name() const override {
         return i18n("Exif");
     }
-    virtual BackendType type() const {
+    BackendType type() const override {
         return Binary;
     }
-    virtual bool supportSaving() const {
+    bool supportSaving() const override {
         return true;
     }
-    virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
-    virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
-    virtual bool supportLoading() const {
+    bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const override;
+    bool canSaveAllEntries(KisMetaData::Store* store) const override;
+    bool supportLoading() const override {
         return true;
     }
-    virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
+    bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const override;
 private:
     Private* const d;
 };

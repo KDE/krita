@@ -40,17 +40,17 @@ class KRITAUI_EXPORT KisNodeShape : public QObject, public KoShapeLayer
     Q_OBJECT
 public:
     KisNodeShape(KisNodeSP node);
-    virtual ~KisNodeShape();
+    ~KisNodeShape() override;
 
     KisNodeSP node();
 
     // Empty implementations as the node is not painted anywhere
-    QSizeF size() const;
-    QRectF boundingRect() const;
-    void setPosition(const QPointF &);
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    void saveOdf(KoShapeSavingContext & context) const;
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    QSizeF size() const override;
+    QRectF boundingRect() const override;
+    void setPosition(const QPointF &) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void saveOdf(KoShapeSavingContext & context) const override;
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 
 private Q_SLOTS:
     void setNodeVisible(bool);

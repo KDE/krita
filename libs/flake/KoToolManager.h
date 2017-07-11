@@ -57,7 +57,7 @@ class KRITAFLAKE_EXPORT KoToolAction : public QObject
 public:
     // toolHelper takes over ownership, and those live till the end of KoToolManager.
     explicit KoToolAction(ToolHelper *toolHelper);
-    ~KoToolAction();
+    ~KoToolAction() override;
 
 public:
     QString id() const;             ///< The id of the tool
@@ -146,7 +146,7 @@ public:
     KoToolManager();
     /// Return the toolmanager singleton
     static KoToolManager* instance();
-    ~KoToolManager();
+    ~KoToolManager() override;
 
     /**
      * Register actions for switching to tools at the actionCollection parameter.
@@ -182,14 +182,6 @@ public:
 
     /// @return the active canvas controller
     KoCanvasController *activeCanvasController() const;
-
-    /**
-     * Connect all the tools for the given canvas to the new shape controller.
-     *
-     * @param shapecontroller the new shape controller
-     * @param canvasController the canvas
-     */
-    void updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController);
 
     /**
      * Return the tool that is able to create shapes for this param canvas.
@@ -253,11 +245,6 @@ public Q_SLOTS:
      * @param id the id of the input device
      */
     void switchInputDeviceRequested(const KoInputDevice &id);
-
-    /**
-     * a new tool has become known to mankind
-     */
-    void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
 
     /**
      * Request for temporary switching the tools.

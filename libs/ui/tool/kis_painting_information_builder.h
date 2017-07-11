@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 
 public:
     KisPaintingInformationBuilder();
-    ~KisPaintingInformationBuilder();
+    ~KisPaintingInformationBuilder() override;
 
     KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, const KoCanvasResourceManager *manager);
 
@@ -84,8 +84,8 @@ public:
     KisConverterPaintingInformationBuilder(const KisCoordinatesConverter *converter);
 
 protected:
-    virtual QPointF documentToImage(const QPointF &point);
-    virtual QPointF imageToView(const QPointF &point);
+    QPointF documentToImage(const QPointF &point) override;
+    QPointF imageToView(const QPointF &point) override;
 
 private:
     const KisCoordinatesConverter *m_converter;
@@ -99,10 +99,10 @@ public:
     KisToolFreehandPaintingInformationBuilder(KisToolFreehand *tool);
 
 protected:
-    virtual QPointF documentToImage(const QPointF &point);
-    virtual QPointF imageToView(const QPointF &point);
-    virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
-    virtual qreal calculatePerspective(const QPointF &documentPoint);
+    QPointF documentToImage(const QPointF &point) override;
+    QPointF imageToView(const QPointF &point) override;
+    QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint) override;
+    qreal calculatePerspective(const QPointF &documentPoint) override;
 
 private:
     KisToolFreehand *m_tool;

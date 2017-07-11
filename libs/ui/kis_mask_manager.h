@@ -43,7 +43,7 @@ public:
 
 
     KisMaskManager(KisViewManager * view);
-    ~KisMaskManager() {}
+    ~KisMaskManager() override {}
     void setView(QPointer<KisView>view);
 
 private:

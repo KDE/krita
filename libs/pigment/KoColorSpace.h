@@ -632,7 +632,11 @@ protected:
 
 inline QDebug operator<<(QDebug dbg, const KoColorSpace *cs)
 {
-    dbg.nospace() << cs->name() << " (" << cs->colorModelId().id() << "," << cs->colorDepthId().id() << " )";
+    if (cs) {
+        dbg.nospace() << cs->name() << " (" << cs->colorModelId().id() << "," << cs->colorDepthId().id() << " )";
+    } else {
+        dbg.nospace() << "0x0";
+    }
 
     return dbg.space();
 }

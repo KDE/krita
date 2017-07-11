@@ -58,7 +58,7 @@ public:
      * @param doc the document that wants to be altered
      */
     KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
-    virtual ~KisCustomImageWidget();
+    ~KisCustomImageWidget() override;
     
 private Q_SLOTS:
     void widthUnitChanged(int index);
@@ -90,7 +90,7 @@ private:
     void setBackgroundOpacity(quint8 value);
 
     void fillPredefined();
-    void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *) override;
     
     KoUnit m_widthUnit, m_heightUnit;
     QList<KisPropertiesConfigurationSP> m_predefined;

@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
      * will be deleted when @p _node is deleted.
      */
     explicit KisNodeProgressProxy(KisNode* _node);
-    ~KisNodeProgressProxy();
+    ~KisNodeProgressProxy() override;
 
 public:
     int maximum() const override;

@@ -31,6 +31,7 @@
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 #include <kis_cross_device_color_picker.h>
+#include <kis_spacing_information.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -237,7 +238,18 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
-    return KisSpacingInformation(m_spacing * additionalScale);
+    return computeSpacing(additionalScale);
+}
+
+KisSpacingInformation KisGridPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    Q_UNUSED(info);
+    return computeSpacing(KisLodTransform::lodToScale(painter()->device()));
+}
+
+KisSpacingInformation KisGridPaintOp::computeSpacing(qreal lodScale) const
+{
+    return KisSpacingInformation(m_spacing * lodScale);
 }
 
 void KisGridProperties::readOptionSetting(const KisPropertiesConfigurationSP setting)

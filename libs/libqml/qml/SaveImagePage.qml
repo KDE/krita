@@ -1,0 +1,244 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Boudewijn Rempt <boud@kogmbh.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+import QtQuick 2.3
+import org.krita.sketch 1.0
+import org.krita.sketch.components 1.0
+
+Page {
+    id: base;
+
+    property Item view;
+    property bool updateCurrentFile: true;
+
+    signal finished(string file, string type);
+
+    Rectangle {
+        anchors.fill: parent;
+        color: Settings.theme.color("pages/save/background");
+    }
+
+    Header {
+        id: header;
+
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+        }
+
+        text: "Save Image";
+        background: "images/header_krita_sketch.png";
+
+        leftArea: Button {
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
+            image: Settings.theme.icon("back");
+            onClicked: pageStack.pop();
+        }
+
+        rightArea: Button {
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
+            image: Settings.theme.icon("up");
+            onClicked: view.model.path = view.model.parentFolder;
+        }
+
+        Label {
+            id: location;
+
+            anchors.bottom: parent.bottom;
+            anchors.horizontalCenter: parent.horizontalCenter;
+
+            color: Settings.theme.color("pages/save/location");
+            text: view.model.path;
+        }
+    }
+
+    Shadow {
+        anchors {
+            top: header.bottom;
+            left: parent.left;
+            right: parent.right;
+        }
+        z: 5;
+    }
+
+    GridView {
+        id: view;
+        anchors {
+            top: header.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: footer.top;
+        }
+
+        model: FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.psd *.ora *.tif *.tiff *.exr" }
+        delegate: delegate;
+
+        cellWidth: Constants.GridWidth * 4;
+        cellHeight: Constants.GridHeight * 1.75;
+
+        clip: true;
+
+        MouseArea {
+            anchors.fill: parent;
+            onPressed: { parent.focus = true; mouse.accepted = false; }
+        }
+
+        ScrollDecorator { }
+    }
+
+    Rectangle {
+        id: footer;
+
+        anchors {
+            bottom: parent.bottom;
+            left: parent.left;
+            right: parent.right;
+        }
+
+        height: Constants.GridHeight;
+        color: Settings.theme.color("pages/save/footer")
+
+        Row {
+            anchors {
+                fill: parent;
+                leftMargin: Constants.GridWidth * 0.25;
+                rightMargin: Constants.GridWidth * 0.25;
+            }
+
+            PanelTextField {
+                id: fileNameField;
+
+                anchors.verticalCenter: parent.verticalCenter;
+
+                height: Constants.GridHeight * 0.75;
+                width: Constants.GridWidth * 7.75;
+
+                placeholder: "File Name";
+            }
+
+            Rectangle {
+                anchors.bottom: parent.bottom;
+                anchors.bottomMargin: 1;
+
+                width: childrenRect.width;
+                height: childrenRect.height + Constants.GridHeight * 0.5 - 1;
+
+                radius: Constants.GridHeight * 0.25;
+
+                color: Settings.theme.color("pages/save/footer");
+
+                ExpandingListView {
+                    id: fileType;
+
+                    anchors.bottom: parent.bottom;
+                    anchors.bottomMargin: Constants.GridHeight * 0.25;
+
+                    height: Constants.GridHeight * 0.5;
+                    width: Constants.GridWidth * 3.25;
+
+                    expandedHeight: Constants.GridHeight * 3;
+                    expandToTop: true;
+
+                    model: ListModel {
+                        ListElement { text: "Krita Image"; type: "kra"; mime: "application/x-krita"; }
+                        ListElement { text: "OpenRaster Image"; type: "ora"; mime: "image/openraster"; }
+                        ListElement { text: "PhotoShop Image"; type: "psd"; mime: "image/vnd.adobe.photoshop"; }
+                        ListElement { text: "PNG Image"; type: "png"; mime: "image/png"; }
+                        ListElement { text: "BMP Image"; type: "bmp"; mime: "image/bmp"; }
+                        ListElement { text: "JPEG Image"; type: "jpg"; mime: "image/jpeg"; }
+                    }
+                }
+            }
+
+            Button {
+                anchors.verticalCenter: parent.verticalCenter;
+                height: Constants.GridHeight * 0.75;
+                width: Constants.GridWidth * 0.5;
+
+                image: Settings.theme.icon("filesave");
+
+                onClicked: {
+                    if ( fileNameField.text != "" ) {
+                        var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+                        if(Krita.fileExists(filePath)) {
+                            confirmOverwrite.show();
+                        }
+                        else {
+                            base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: delegate;
+
+        ListItem {
+            id: delegateBase;
+
+            width: GridView.view.cellWidth;
+            z: 10;
+
+            property bool directory: model.fileType === "inode/directory";
+
+            imageShadow: directory ? false : true;
+            image.source: directory ? Settings.theme.icon("fileopen-black") : model.icon;
+            image.fillMode: directory ? Image.PreserveAspectFit : Image.PreserveAspectCrop;
+            image.smooth: true;
+
+            title: model.fileName;
+            description: model.fileType != "inode/directory" ? model.date : "";
+
+            onClicked: {
+                if ( model.fileType == "inode/directory" ) {
+                    GridView.view.model.path = model.path;
+                } else {
+                    fileNameField.text = model.fileName.substring(0, model.fileName.lastIndexOf('.'));
+                }
+            }
+        }
+    }
+
+    Dialog {
+        id: confirmOverwrite;
+        title: "File already exists";
+        message: "A file with the name %1.%2 already exists in this folder. Do you wish to overwrite?".arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+        buttons: [ "Overwrite", "Cancel" ];
+        onButtonClicked: {
+            switch(button) {
+                case 0:
+                    var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+                    base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                    break;
+                case 1:
+                    // do nothing, just dismiss dialog
+                    break;
+                default:
+                    console.debug("Nope, shouldn't be here. How did you press a button that doesn't exist?");
+                    break;
+            }
+            confirmOverwrite.hide();
+            pageStack.pop();
+        }
+    }
+}

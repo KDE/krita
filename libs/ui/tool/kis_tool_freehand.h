@@ -112,7 +112,6 @@ private:
 protected:
     friend class KisViewManager;
     friend class KisView;
-    friend class KisSketchView;
     KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;
     double m_magnetism;

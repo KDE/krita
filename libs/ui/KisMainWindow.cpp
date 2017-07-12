@@ -177,7 +177,6 @@ public:
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
-        , lastExportSpecialOutputFlag(0)
     {
     }
 
@@ -237,7 +236,7 @@ public:
     KRecentFilesAction *recentFiles {0};
     KoResourceModel *workspacemodel {0};
 
-    QUrl lastExportUrl;
+    QUrl lastExportLocation;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
@@ -254,7 +253,6 @@ public:
     QSignalMapper *documentMapper;
 
     QByteArray lastExportedFormat;
-    int lastExportSpecialOutputFlag  {0};
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
     QMutex savingEntryMutex;
 
@@ -918,8 +916,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     if (document->url().isEmpty()) {
         reset_url = true;
         saveas = true;
-    } else {
-        reset_url = false;
+    }
+    else { reset_url = false;
     }
 
     connect(document, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -932,45 +930,21 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     QByteArray _native_format = document->nativeFormatMimeType();
     QByteArray oldOutputFormat = document->outputMimeType();
 
-    int oldSpecialOutputFlag = document->specialOutputFlag();
-
     QUrl suggestedURL = document->url();
 
-    QStringList mimeFilter;
+    QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
-    if (specialOutputFlag) {
-        mimeFilter = KisMimeDatabase::suffixesForMimeType(_native_format);
-    }
-    else {
-        mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
-    }
-
-
-    if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
+    if (!mimeFilter.contains(oldOutputFormat)) {
         dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
-        QString suggestedFilename = suggestedURL.fileName();
+        QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            int c = suggestedFilename.lastIndexOf('.');
-
-            const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
-            if (!ext.isEmpty()) {
-                if (c < 0)
-                    suggestedFilename = suggestedFilename + "." + ext;
-                else
-                    suggestedFilename = suggestedFilename.left(c) + "." + ext;
-            } else { // current filename extension wrong anyway
-                if (c > 0) {
-                    // this assumes that a . signifies an extension, not just a .
-                    suggestedFilename = suggestedFilename.left(c);
-                }
-            }
-
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(_native_format).first().remove("*.");
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
@@ -981,21 +955,53 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
     bool ret = false;
 
-    if (document->url().isEmpty() || saveas) {
+    if (document->url().isEmpty() || d->isExporting || saveas) {
         // if you're just File/Save As'ing to change filter options you
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveAs");
-        dialog.setCaption(i18n("untitled"));
-        if (isExporting() && !d->lastExportUrl.isEmpty()) {
-            dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
+        dialog.setCaption(d->isExporting ? i18n("Exporting") : i18n("Saving As"));
+
+        if (d->isExporting && !d->lastExportLocation.isEmpty()) {
+
+            // Use the location where we last exported to, if it's set, as the opening location for the file dialog
+            QString proposedPath = QFileInfo(d->lastExportLocation.toLocalFile()).absolutePath();
+            // If the document doesn't have a filename yet, use the title
+            QString proposedFileName = suggestedURL.isEmpty() ? document->documentInfo()->aboutInfo("title") :  QFileInfo(suggestedURL.toLocalFile()).baseName();
+            // Use the last mimetype we exported to by default
+            QString proposedMimeType =  d->lastExportedFormat.isEmpty() ? "" : d->lastExportedFormat;
+            QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
+
+            // Set the default dir: this overrides the one loaded from the config file, since we're exporting and the lastExportLocation is not empty
+            dialog.setDefaultDir(proposedPath + "/" + proposedFileName + "." + proposedExtension, true);
+            dialog.setMimeTypeFilters(mimeFilter, proposedMimeType);
         }
         else {
-            dialog.setDefaultDir(suggestedURL.toLocalFile());
+            // Get the last used location for saving
+            KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+            QString proposedPath = group.readEntry("SaveAs", "");
+            // if that is empty, get the last used location for loading
+            if (proposedPath.isEmpty()) {
+                proposedPath = group.readEntry("OpenDocument", "");
+            }
+            // If that is empty, too, use the Pictures location.
+            if (proposedPath.isEmpty()) {
+                proposedPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+            }
+            // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
+            // open the location where the document currently is.
+            dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : suggestedURL.toLocalFile(), true);
+
+            // If exporting, default to all supported file types if user is exporting
+            QByteArray default_mime_type = "";
+            if (!d->isExporting) {
+                // otherwise use the document's mimetype, or if that is empty, kra, which is the savest.
+                default_mime_type = document->outputMimeType().isEmpty() ? _native_format : document->outputMimeType();
+            }
+            dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));
         }
-        // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
+
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
@@ -1014,32 +1020,22 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         QByteArray outputFormat = _native_format;
 
-        if (!specialOutputFlag) {
-            QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
-            outputFormat = outputFormatString.toLatin1();
-        }
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
+        outputFormat = outputFormatString.toLatin1();
 
-        if (!isExporting())
+        if (!isExporting()) {
             justChangingFilterOptions = (newURL == document->url()) &&
-                    (outputFormat == document->mimeType()) &&
-                    (specialOutputFlag == oldSpecialOutputFlag);
-        else
-            justChangingFilterOptions = (newURL == d->lastExportUrl) &&
-                    (outputFormat == d->lastExportedFormat) &&
-                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
+                    (outputFormat == document->mimeType());
+        }
+        else {
+            justChangingFilterOptions = (newURL == d->lastExportLocation) &&
+                    (outputFormat == d->lastExportedFormat);
+        }
 
 
         bool bOk = true;
         if (newURL.isEmpty()) {
             bOk = false;
-        }
-
-        // adjust URL before doing checks on whether the file exists.
-        if (specialOutputFlag) {
-            QString fileName = newURL.fileName();
-            if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                //dbgKrita << "save to directory: " << newURL.url();
-            }
         }
 
         if (bOk) {
@@ -1075,7 +1071,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 //
                 // - Clarence
                 //
-                document->setOutputMimeType(outputFormat, specialOutputFlag);
+                document->setOutputMimeType(outputFormat);
                 if (!isExporting()) {  // Save As
                     ret = document->saveAs(newURL);
 
@@ -1087,20 +1083,19 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                         dbgUI << "Failed Save As!";
                         document->setUrl(oldURL);
                         document->setLocalFilePath(oldFile);
-                        document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                        document->setOutputMimeType(oldOutputFormat);
                     }
                 } else { // Export
                     ret = document->exportDocument(newURL);
 
                     if (ret) {
                         // a few file dialog convenience things
-                        d->lastExportUrl = newURL;
+                        d->lastExportLocation = newURL;
                         d->lastExportedFormat = outputFormat;
-                        d->lastExportSpecialOutputFlag = specialOutputFlag;
                     }
 
                     // always restore output format
-                    document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                    document->setOutputMimeType(oldOutputFormat);
                 }
 
                 if (silent) // don't let the document change the window caption

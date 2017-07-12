@@ -24,7 +24,7 @@
 
 #include <KoCompositeOps.h>
 
-void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, int brushType)
+void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, int brushType, const KoColor &color)
 {
     KisSplatGeneratorStrategy *strategy;
     switch (brushType) {
@@ -47,7 +47,7 @@ void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, int brushType)
         break;
     }
 
-    strategy->generate(&m_flowing, m_wetMap, pos, radius);
+    strategy->generate(&m_flowing, m_wetMap, pos, radius, color);
 }
 
 void KisWatercolorBaseItems::repaint(KisPainter *painter)

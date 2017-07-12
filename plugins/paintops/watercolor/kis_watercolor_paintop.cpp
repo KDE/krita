@@ -45,7 +45,8 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
 {
     qint16 time = m_timer.elapsed();
     qint16 timeGone = time - m_lastTime;
-    KisWatercolorBaseItems::instance()->paint(info.pos(), m_watercolorOption.radius, m_watercolorOption.type);
+    KisWatercolorBaseItems::instance()->paint(info.pos(), m_watercolorOption.radius,
+                                              m_watercolorOption.type, painter()->paintColor());
     for (int i = 0; i < timeGone / 33; i++) {
         KisWatercolorBaseItems::instance()->update();
     }
@@ -56,5 +57,5 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
     painter()->device()->clear();
     KisWatercolorBaseItems::instance()->repaint(painter());
 
-    return KisSpacingInformation(m_watercolorOption.radius / 3);
+    return KisSpacingInformation(m_watercolorOption.radius / 5);
 }

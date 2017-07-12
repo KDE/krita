@@ -22,16 +22,17 @@
 
 #include <QVector2D>
 
-void KisSimpleBrushGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius)
+void KisSimpleBrushGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
 {
-    KisSplat *newSplat = new KisSplat(pos, radius);
-    wetMap->addWater(pos.toPoint(), radius);
+    KisSplat *newSplat = new KisSplat(pos, radius,
+                                      color);
+    wetMap->addWater(pos.toPoint(), radius / 2);
     flowing->insert(newSplat->boundingRect(), newSplat);
 }
 
-void KisWetOnDryGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius)
+void KisWetOnDryGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
 {
-    wetMap->addWater(pos.toPoint(), radius);
+    wetMap->addWater(pos.toPoint(), radius / 2);
 
     /// 1 splat in center, 6 around
     qreal radialSpeed = 2.f;
@@ -39,7 +40,8 @@ void KisWetOnDryGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wet
     int r = d / 2;
     QVector2D offset;
 
-    KisSplat *splat = new KisSplat(pos, radius);
+    KisSplat *splat = new KisSplat(pos, radius,
+                                   color);
     flowing->insert(splat->boundingRect(), splat);
 
     for (int i = 0; i < 6; i++) {
@@ -53,25 +55,27 @@ void KisWetOnDryGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wet
                              30,
                              0.5f * radialSpeed,
                              1.f,
-                             radialSpeed);
+                             radialSpeed,
+                             color);
         flowing->insert(splat->boundingRect(), splat);
     }
 }
 
-void KisCrunchyGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius)
+void KisCrunchyGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
 {
-    wetMap->addWater(pos.toPoint(), radius);
+    wetMap->addWater(pos.toPoint(), radius / 2);
 
     KisSplat *splat = new KisSplat(pos,
                                       QPointF(0, 0),
                                       radius,
-                                      15, 5, 0.25f, 2.f);
+                                      15, 5, 0.25f, 2.f,
+                                   color);
     flowing->insert(splat->boundingRect(), splat);
 }
 
-void KisWetOnWetGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius)
+void KisWetOnWetGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
 {
-    wetMap->addWater(pos.toPoint(), radius);
+    wetMap->addWater(pos.toPoint(), radius / 2);
 
     int smallD = radius / 2;
     int bigD = 3 * radius / 2;
@@ -79,19 +83,21 @@ void KisWetOnWetGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wet
     KisSplat *splat = new KisSplat(pos,
                                    QPointF(0, 0),
                                    bigD,
-                                   15, 5, 1.f, 2.f);
+                                   15, 5, 1.f, 2.f,
+                                   color);
     flowing->insert(splat->boundingRect(), splat);
 
     splat = new KisSplat(pos,
                          QPointF(0, 0),
                          smallD,
-                         15, 5, 1.f, 2.f);
+                         15, 5, 1.f, 2.f,
+                         color);
     flowing->insert(splat->boundingRect(), splat);
 }
 
-void KisBlobbyGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius)
+void KisBlobbyGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
 {
-    wetMap->addWater(pos.toPoint(), radius);
+    wetMap->addWater(pos.toPoint(), radius / 2);
 
     qreal firstD = (qreal) radius / 3;
     qreal lastD = (qreal) radius;
@@ -118,7 +124,8 @@ void KisBlobbyGenerator::generate(KoRTree<KisSplat *> *flowing, KisWetMap *wetMa
         splat = new KisSplat(posN,
                              QPointF(0, 0),
                              size,
-                             15, 5, 1.f, 2.f);
+                             15, 5, 1.f, 2.f,
+                             color);
         flowing->insert(splat->boundingRect(), splat);
     }
 }

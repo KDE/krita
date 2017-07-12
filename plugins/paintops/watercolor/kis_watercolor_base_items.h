@@ -41,7 +41,7 @@ public:
         return &instance;
     }
 
-    void paint(QPointF pos, qreal radius, int brushType);
+    void paint(QPointF pos, qreal radius, int brushType, const KoColor &color);
 
     void repaint(KisPainter *painter);
 

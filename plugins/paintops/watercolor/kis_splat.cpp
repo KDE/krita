@@ -25,7 +25,7 @@
 #include <QVector2D>
 
 #define START_OPACITY 100
-#define STANDART_LIFETIME 30
+#define STANDART_LIFETIME 60
 
 double get_random(qreal min, qreal max)
 {
@@ -33,10 +33,11 @@ double get_random(qreal min, qreal max)
 }
 
 
-KisSplat::KisSplat(QPointF offset, int width)
+KisSplat::KisSplat(QPointF offset, int width, const KoColor &color)
     : m_life(STANDART_LIFETIME), m_roughness(1.f), m_flow(1.f),
       m_motionBias(QPointF(0.f, 0.f))
 {
+    m_initColor.fromKoColor(color);
     m_fix = 8*STANDART_LIFETIME;
 
     int r = width / 2;
@@ -59,10 +60,11 @@ KisSplat::KisSplat(QPointF offset, int width)
 }
 
 KisSplat::KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
-                   qreal roughness, qreal flow, qreal radialSpeed)
+                   qreal roughness, qreal flow, qreal radialSpeed, const KoColor &color)
     : m_life(life), m_roughness(roughness), m_flow(flow),
       m_motionBias(velocityBias)
 {
+    m_initColor.fromKoColor(color);
     m_fix = 8*STANDART_LIFETIME;
     int r = width / 2;
     int n = 128;
@@ -114,6 +116,7 @@ void KisSplat::doPaint(KisPainter *painter)
     if (multiply < 0.f || multiply > 1.f)
         multiply = 1;
 
+    painter->setPaintColor(m_initColor);
     painter->setOpacity(START_OPACITY * multiply);
     painter->setFillStyle(KisPainter::FillStyleForegroundColor);
     painter->fillPainterPath(this->shape());

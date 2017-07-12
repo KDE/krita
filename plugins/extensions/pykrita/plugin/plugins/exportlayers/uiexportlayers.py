@@ -144,10 +144,10 @@ class UIExportLayers(object):
             if node.type() == 'grouplayer':
                 newDir = parentDir + '/' + node.name()
                 self.mkdir(newDir)
-            elif not self.exportFilterLayersCheckBox.isChecked() and node.type() == 'filterlayer':
-                return
+            elif not self.exportFilterLayersCheckBox.isChecked() and  'filter' in node.type():
+                continue
             elif self.ignoreInvisibleLayersCheckBox.isChecked() and not node.visible():
-                return
+                continue
             else:
                 nodeName = node.name()
                 _fileFormat = self.formatsComboBox.currentText()
@@ -156,9 +156,8 @@ class UIExportLayers(object):
                 elif '[png]' in nodeName:
                     _fileFormat = 'png'
 
-                print(parentDir)
                 layerFileName = '{0}{1}/{2}.{3}'.format(self.directoryTextField.text(), parentDir, node.name(), _fileFormat)
-                node.save(layerFileName, self.xResSpinBox.value(), self.yResSpinBox.value())
+                teste = node.save(layerFileName, self.xResSpinBox.value(), self.yResSpinBox.value())
 
             if node.childNodes():
                 self._exportLayers(node, fileFormat, newDir)

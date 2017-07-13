@@ -325,14 +325,14 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
         d->blockMouseEvents();
 #else
         // Notify input manager that tablet proximity is entered for Genius tablets.
-        d->setTabletActive(true);
+        d->tabletActive = true;
 #endif
         break;
     case QEvent::TabletLeaveProximity:
         d->debugEvent<QEvent, false>(event);
         d->allowMouseEvents();
 #ifdef Q_OS_MAC
-        d->setTabletActive(false);
+        d->tabletActive = false;
 #endif
         break;
     default:

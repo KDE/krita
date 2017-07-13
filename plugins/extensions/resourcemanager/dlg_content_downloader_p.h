@@ -67,8 +67,6 @@ public:
     QString m_configFile;
     bool dialogMode;
 
-    QLabel *m_statusLabel;
-
     explicit DlgContentDownloaderPrivate(DlgContentDownloader *q);
     ~DlgContentDownloaderPrivate();
 

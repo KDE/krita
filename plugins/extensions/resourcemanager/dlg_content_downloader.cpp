@@ -291,8 +291,6 @@ void DlgContentDownloaderPrivate::init(const QString &configFile)
 
     slotShowOverview();
 
-    m_statusLabel = new QLabel();
-
     ui.m_statusLabel->setVisible(false);
     ui.progressBar->setVisible(false);
 
@@ -341,7 +339,7 @@ void DlgContentDownloaderPrivate::setListViewMode(QListView::ViewMode mode)
 void DlgContentDownloaderPrivate::progressBarBusy(const QString &message)
 {
     ui.m_statusLabel->setVisible(true);
-    m_statusLabel->setText(message);
+    ui.m_statusLabel->setText(message);
 
     ui.progressBar->setVisible(true);
     ui.progressBar->setRange(0, 0);
@@ -350,14 +348,16 @@ void DlgContentDownloaderPrivate::progressBarBusy(const QString &message)
 void DlgContentDownloaderPrivate::progressBarIdle(const QString &message)
 {
     ui.m_statusLabel->setVisible(true);
-    m_statusLabel->setText(message);
+    ui.m_statusLabel->setText(message);
+
     ui.progressBar->setVisible(false);
 }
 
 void DlgContentDownloaderPrivate::progressBarError(const QString &message)
 {
     ui.m_statusLabel->setVisible(true);
-    m_statusLabel->setText(message);
+    ui.m_statusLabel->setText(message);
+
     ui.progressBar->setVisible(false);
 }
 

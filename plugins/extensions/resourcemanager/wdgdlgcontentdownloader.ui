@@ -331,6 +331,13 @@
       <widget class="QPushButton" name="backButton"/>
      </item>
      <item>
+      <widget class="QLabel" name="m_statusLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QProgressBar" name="progressBar">
        <property name="value">
         <number>0</number>
@@ -371,13 +378,6 @@
       <widget class="QPushButton" name="closeButton"/>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QLabel" name="m_statusLabel">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

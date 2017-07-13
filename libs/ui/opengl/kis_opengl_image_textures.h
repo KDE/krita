@@ -20,6 +20,7 @@
 
 #include <QVector>
 #include <QMap>
+#include <QOpenGLFunctions>
 
 #include "kritaui_export.h"
 
@@ -31,7 +32,7 @@
 #include <KoColorProofingConversionTransformation.h>
 
 class KisOpenGLImageTextures;
-class QOpenGLFunctions;
+
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorProfile;

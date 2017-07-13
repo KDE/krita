@@ -29,6 +29,7 @@
 #include <QKeyEvent>
 #include <QCoreApplication>
 #include <QCheckBox>
+#include <QProgressBar>
 
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
@@ -289,6 +290,16 @@ void DlgContentDownloaderPrivate::init(const QString &configFile)
     q->connect(delegate, &ItemsViewBaseDelegate::signalShowDetails, this, &DlgContentDownloaderPrivate::slotShowDetails);
 
     slotShowOverview();
+
+    m_statusLabel = new QLabel();
+
+    ui.m_statusLabel->setVisible(false);
+    ui.progressBar->setVisible(false);
+
+    q->connect(engine, SIGNAL(signalBusy(QString)), this, SLOT(progressBarBusy(QString)));
+    q->connect(engine, SIGNAL(signalIdle(QString)), this, SLOT(progressBarIdle(QString)));
+    q->connect(engine, SIGNAL(signalError(QString)), this, SLOT(progressBarError(QString)));
+
 }
 
 void DlgContentDownloaderPrivate::slotListViewListMode()
@@ -325,6 +336,29 @@ void DlgContentDownloaderPrivate::setListViewMode(QListView::ViewMode mode)
     delete oldDelegate;
     q->connect(ui.m_listView, SIGNAL(doubleClicked(QModelIndex)), delegate, SLOT(slotDetailsClicked(QModelIndex)));
     q->connect(delegate, &ItemsViewBaseDelegate::signalShowDetails, this, &DlgContentDownloaderPrivate::slotShowDetails);
+}
+
+void DlgContentDownloaderPrivate::progressBarBusy(const QString &message)
+{
+    ui.m_statusLabel->setVisible(true);
+    m_statusLabel->setText(message);
+
+    ui.progressBar->setVisible(true);
+    ui.progressBar->setRange(0, 0);
+}
+
+void DlgContentDownloaderPrivate::progressBarIdle(const QString &message)
+{
+    ui.m_statusLabel->setVisible(true);
+    m_statusLabel->setText(message);
+    ui.progressBar->setVisible(false);
+}
+
+void DlgContentDownloaderPrivate::progressBarError(const QString &message)
+{
+    ui.m_statusLabel->setVisible(true);
+    m_statusLabel->setText(message);
+    ui.progressBar->setVisible(false);
 }
 
 void DlgContentDownloaderPrivate::slotProvidersLoaded()

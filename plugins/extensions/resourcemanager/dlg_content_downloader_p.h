@@ -67,6 +67,8 @@ public:
     QString m_configFile;
     bool dialogMode;
 
+    QLabel *m_statusLabel;
+
     explicit DlgContentDownloaderPrivate(DlgContentDownloader *q);
     ~DlgContentDownloaderPrivate();
 
@@ -96,6 +98,12 @@ public:
     void slotListViewListMode();
     void slotListViewIconMode();
     void setListViewMode(QListView::ViewMode mode);
+
+public Q_SLOTS:
+
+    void progressBarBusy(const QString &message);
+    void progressBarIdle(const QString &message);
+    void progressBarError(const QString &message);
 
 };
 

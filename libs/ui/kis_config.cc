@@ -1209,7 +1209,17 @@ void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesCon
 {
     QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
+}
 
+QString KisConfig::importConfiguration(const QString &filterId, bool defaultValue) const
+{
+    return (defaultValue ? QString() : m_cfg.readEntry("ImportConfiguration-" + filterId, QString()));
+}
+
+void KisConfig::setImportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
+{
+    QString importConfig = properties->toXML();
+    m_cfg.writeEntry("ImportConfiguration-" + filterId, importConfig);
 }
 
 bool KisConfig::useOcio(bool defaultValue) const

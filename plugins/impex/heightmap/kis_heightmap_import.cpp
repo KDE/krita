@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +26,8 @@
 #include <QFile>
 #include <qendian.h>
 #include <QCursor>
+#include <QToolTip>
+#include <QShowEvent>
 
 #include <kpluginfactory.h>
 #include <QFileInfo>
@@ -47,9 +50,25 @@
 #include <kis_random_accessor_ng.h>
 #include <kis_config.h>
 
-#include "ui_kis_wdg_options_heightmap.h"
+#include "kis_wdg_options_heightmap.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(HeightMapImportFactory, "krita_heightmap_import.json", registerPlugin<KisHeightMapImport>();)
+
+template<typename T>
+void fillData(KisPaintDeviceSP pd, int w, int h, QDataStream &stream) {
+    KIS_ASSERT_RECOVER_RETURN(pd);
+
+    T pixel;
+
+    for (int i = 0; i < h; ++i) {
+        KisHLineIteratorSP it = pd->createHLineIteratorNG(0, i, w);
+        do {
+            stream >> pixel;
+            KoGrayTraits<T>::setGray(it->rawData(), pixel);
+            KoGrayTraits<T>::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
+        } while(it->nextPixel());
+    }
+}
 
 KisHeightMapImport::KisHeightMapImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
@@ -59,7 +78,7 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     KoID depthId;
@@ -80,28 +99,37 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));
     kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
-    Ui::WdgOptionsHeightMap optionsHeightMap;
-
-    QWidget* wdg = new QWidget(kdb);
-    optionsHeightMap.setupUi(wdg);
+    KisWdgOptionsHeightmap* wdg = new KisWdgOptionsHeightmap(kdb);
 
     kdb->setMainWidget(wdg);
 
-    QString filterConfig = KisConfig().exportConfiguration("HeightMap");
+    connect(wdg, SIGNAL(statusUpdated(bool)), kdb, SLOT(enableButtonOk(bool)));
+
+    KisConfig config;
+
+    QString filterConfig = config.importConfiguration(mimeType());
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration);
     cfg->fromXML(filterConfig);
 
     int w = 0;
     int h = 0;
 
-    optionsHeightMap.intSize->setValue(0);
-    int endianness = cfg->getInt("endianness", 0);
+    int endianness = cfg->getInt("endianness", 1);
     if (endianness == 0) {
-        optionsHeightMap.radioMac->setChecked(true);
+        wdg->radioBig->setChecked(true);
     }
     else {
-        optionsHeightMap.radioPC->setChecked(true);
+        wdg->radioLittle->setChecked(true);
     }
+
+    KIS_ASSERT(io->isOpen());
+    quint64 size = io->size();
+
+    wdg->fileSizeLabel->setText(QString::number(size));
+
+    int bpp = mimeType() == "image/x-r16" ? 16 : 8;
+
+    wdg->bppLabel->setText(QString::number(bpp));
 
     if (!batchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
@@ -109,16 +137,16 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
         }
     }
 
-    w = h = optionsHeightMap.intSize->value();
+    cfg->setProperty("endianness", wdg->radioBig->isChecked() ? 0 : 1);
 
-//    if ((w * h * (mimeType() == "image/x-r16" ? 2 : 1)) != f.size()) {
-//        document->setErrorMessage(i18n("Source file is not the right size for the specified width and height."));
-//        return KisImportExportFilter::WrongFormat;
-//    }
+    config.setImportConfiguration(mimeType(), cfg);
+
+    w = wdg->widthInput->value();
+    h = wdg->heightInput->value();
 
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
     cfg->setProperty("endianness", 1);
-    if (optionsHeightMap.radioMac->isChecked()) {
+    if (wdg->radioBig->isChecked()) {
         bo = QDataStream::BigEndian;
         cfg->setProperty("endianness", 0);
     }
@@ -131,25 +159,12 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
     KisImageSP image = new KisImage(document->createUndoStore(), w, h, colorSpace, "imported heightmap");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    KisRandomAccessorSP it = layer->paintDevice()->createRandomAccessorNG(0, 0);
     bool r16 = (depthId == Integer16BitsColorDepthID);
-    for (int i = 0; i < h; ++i) {
-        for (int j = 0; j < w; ++j) {
-            it->moveTo(i, j);
-
-            if (r16) {
-                quint16 pixel;
-                s >> pixel;
-                KoGrayU16Traits::setGray(it->rawData(), pixel);
-                KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
-            }
-            else {
-                quint8 pixel;
-                s >> pixel;
-                KoGrayU8Traits::setGray(it->rawData(), pixel);
-                KoGrayU8Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
-            }
-        }
+    if (r16) {
+        fillData<quint16>(layer->paintDevice(), w, h, s);
+    }
+    else {
+        fillData<quint8>(layer->paintDevice(), w, h, s);
     }
 
     image->addNode(layer.data(), image->rootLayer().data());

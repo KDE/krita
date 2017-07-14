@@ -189,19 +189,6 @@
          <property name="verticalSpacing">
           <number>3</number>
          </property>
-         <item row="6" column="2">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
@@ -235,7 +222,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1" colspan="2">
+         <item row="3" column="1" colspan="4">
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <widget class="KRatingWidget" name="ratingWidget" native="true">
@@ -265,7 +252,7 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="1" colspan="2">
+         <item row="2" column="1" colspan="4">
           <widget class="QLabel" name="homepageLabel">
            <property name="text">
             <string>&lt;a href=&quot;http://opendesktop.org&quot;&gt;Homepage&lt;/a&gt;</string>
@@ -275,7 +262,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1" colspan="2">
+         <item row="0" column="1" colspan="4">
           <widget class="QLabel" name="authorLabel">
            <property name="text">
             <string/>
@@ -294,6 +281,16 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="descriptionLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

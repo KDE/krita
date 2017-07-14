@@ -91,18 +91,18 @@ void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
         description += "<br/><p><b>" + i18n("Changelog:") + "</b><br/>" + changelog + "</p>";
     }
     description += QLatin1String("</body></html>");
-//    ui->descriptionLabel->setText(description);
+    ui->descriptionLabel->setText(description);
 
     QString homepageText("<a href=\"" + m_entry.homepage().url() + "\">" +
                          i18nc("A link to the description of this Get Hot New Stuff item", "Homepage") + "</a>");
 
-//    if (!m_entry.donationLink().isEmpty()) {
-//        homepageText += "<br><a href=\"" + m_entry.donationLink() + "\">" + i18nc("A link to make a donation for a Get Hot New Stuff item (opens a web browser)", "Make a donation") + "</a>";
-//    }
-//    if (!m_entry.knowledgebaseLink().isEmpty()) {
-//        homepageText += "<br><a href=\"" + m_entry.knowledgebaseLink() + "\">"
-//                        + i18ncp("A link to the knowledgebase (like a forum) (opens a web browser)", "Knowledgebase (no entries)", "Knowledgebase (%1 entries)", m_entry.numberKnowledgebaseEntries()) + "</a>";
-//    }
+    if (!m_entry.donationLink().isEmpty()) {
+        homepageText += "<br><a href=\"" + m_entry.donationLink() + "\">" + i18nc("A link to make a donation for a Get Hot New Stuff item (opens a web browser)", "Make a donation") + "</a>";
+    }
+    if (!m_entry.knowledgebaseLink().isEmpty()) {
+        homepageText += "<br><a href=\"" + m_entry.knowledgebaseLink() + "\">"
+                        + i18ncp("A link to the knowledgebase (like a forum) (opens a web browser)", "Knowledgebase (no entries)", "Knowledgebase (%1 entries)", m_entry.numberKnowledgebaseEntries()) + "</a>";
+    }
    ui->homepageLabel->setText(homepageText);
    ui->homepageLabel->setToolTip(i18nc("Tooltip for a link in a dialog", "Opens in a browser window"));
 

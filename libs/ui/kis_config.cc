@@ -279,6 +279,18 @@ void KisConfig::setNewCursorStyle(CursorStyle style)
     m_cfg.writeEntry("newCursorStyle", (int)style);
 }
 
+QColor KisConfig::getCursorMainColor(bool defaultValue) const
+{
+    QColor col;
+    col.setRgbF(0.501961, 1.0, 0.501961);
+    return (defaultValue ? col : m_cfg.readEntry("cursormaincolor", col));
+}
+
+void KisConfig::setCursorMainColor(const QColor &v) const
+{
+    m_cfg.writeEntry("cursormaincolor", v);
+}
+
 OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
 {
     if (defaultValue) {
@@ -719,6 +731,28 @@ QColor KisConfig::getGridSubdivisionColor(bool defaultValue) const
 void KisConfig::setGridSubdivisionColor(const QColor & v) const
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
+}
+
+QColor KisConfig::getOpenGLGridColor(bool defaultValue) const
+{
+    QColor col(255, 255, 255);
+    return (defaultValue ? col : m_cfg.readEntry("openglgridcolor", col));
+}
+
+void KisConfig::setOpenGLGridColor(const QColor & v) const
+{
+    m_cfg.writeEntry("openglgridcolor", v);
+}
+
+qreal KisConfig::getOpenGLGridDrawingThreshold(bool defaultValue) const
+{
+    qreal border = 8.0f;
+    return (defaultValue ? border : m_cfg.readEntry("griddrawingborder", border));
+}
+
+void KisConfig::setOpenGLGridDrawingThreshold(qreal v) const
+{
+    m_cfg.writeEntry("griddrawingborder", v);
 }
 
 quint32 KisConfig::guidesLineStyle(bool defaultValue) const

@@ -329,15 +329,17 @@ bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
     QModelIndex i = getLastEntryIndex();
     if (col+1>columnCount()) {
         beginInsertRows(QModelIndex(), i.row(), i.row()+1);
-        beginInsertColumns(QModelIndex(), 0, 0+1);
-    } else {
-        beginInsertColumns(QModelIndex(), col, col+1);
+    }
+    if (m_colorSet->nColors()<columnCount()) {
+        beginInsertColumns(QModelIndex(), m_colorSet->nColors(), m_colorSet->nColors()+1);
     }
     m_colorSet->add(entry, groupName);
     if (col+1>columnCount()) {
         endInsertRows();
     }
-    endInsertColumns();
+    if (m_colorSet->nColors()<columnCount()) {
+        endInsertColumns();
+    }
     return true;
 }
 
@@ -349,13 +351,26 @@ bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
     }
     QString groupName = entryList.at(0);
     quint32 indexInGroup = entryList.at(1).toUInt();
-    beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
+
     if (qVariantValue<bool>(index.data(IsHeaderRole))==false) {
+        if (index.column()-1<0
+                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
+                && index.row()-1>0
+                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+            beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
+        }
         m_colorSet->removeAt(indexInGroup, groupName);
+        if (index.column()-1<0
+                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
+                && index.row()-1>0
+                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+            endRemoveRows();
+        }
     } else {
+        beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
         m_colorSet->removeGroup(groupName, keepColors);
+        endRemoveRows();
     }
-    endRemoveRows();
     return true;
 }
 

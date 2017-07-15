@@ -83,7 +83,7 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
     KoDialog *window = new KoDialog();
-    window->setWindowTitle(i18nc("@windowTitle", "Add a new Colorset Entry"));
+    window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
     QFormLayout *editableItems = new QFormLayout();
     window->mainWidget()->setLayout(editableItems);
     QComboBox *cmbGroups = new QComboBox();
@@ -94,7 +94,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     QLineEdit *lnName = new QLineEdit();
     KisColorButton *bnColor = new KisColorButton();
     QCheckBox *chkSpot = new QCheckBox();
-    chkSpot->setToolTip(i18nc("@toolTip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
+    chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
     editableItems->addRow(i18n("Group"), cmbGroups);
     editableItems->addRow(i18n("ID"), lnIDName);
     editableItems->addRow(i18n("Name"), lnName);
@@ -127,7 +127,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
 bool KisPaletteView::addGroupWithDialog()
 {
     KoDialog *window = new KoDialog();
-    window->setWindowTitle(i18nc("@windowTitle","Add a new group"));
+    window->setWindowTitle(i18nc("@title:window","Add a new group"));
     QFormLayout *editableItems = new QFormLayout();
     window->mainWidget()->setLayout(editableItems);
     QLineEdit *lnName = new QLineEdit();
@@ -147,7 +147,7 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
     bool keepColors = true;
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         KoDialog *window = new KoDialog();
-        window->setWindowTitle(i18nc("@windowTitle","Removing Group"));
+        window->setWindowTitle(i18nc("@title:window","Removing Group"));
         QFormLayout *editableItems = new QFormLayout();
         QCheckBox *chkKeep = new QCheckBox();
         window->mainWidget()->setLayout(editableItems);
@@ -266,7 +266,7 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
         } else {
             KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
             QStringList entryList = qVariantValue<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
-            chkSpot->setToolTip(i18nc("@toolTip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
+            chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
             editableItems->addRow(i18n("ID"), lnIDName);
             editableItems->addRow(i18n("Name"), lnGroupName);
             editableItems->addRow(i18n("Color"), bnColor);

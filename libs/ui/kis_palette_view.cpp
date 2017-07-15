@@ -132,7 +132,7 @@ bool KisPaletteView::addGroupWithDialog()
     window->mainWidget()->setLayout(editableItems);
     QLineEdit *lnName = new QLineEdit();
     editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
-    lnName->setText(i18n("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
+    lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
     if (window->exec() == KoDialog::Accepted) {
         QString groupName = lnName->text();
         m_d->model->addGroup(groupName);

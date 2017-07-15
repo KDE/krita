@@ -151,7 +151,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     const bool isThereAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag);
 
-    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha) && isThereAlpha);
+    alpha->setEnabled(isThereAlpha);
+
+    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == RGBAColorModelID.id()) {
         tryToSaveAsIndexed->setVisible(true);
@@ -169,10 +172,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     compressionLevel->setValue(cfg->getInt("compression", 3));
     compressionLevel->setRange(1, 9 , 0);
 
-    alpha->setEnabled(isThereAlpha);
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
-
-    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 

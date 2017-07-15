@@ -471,10 +471,10 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
                 QModelIndex indexOld = indexFromId(i);
                 if (action == Qt::MoveAction){
-                    if (indexOld.row()!=endRow && indexOld.row()!=qMax(endRow+1,1)) {
+                    if (indexOld.row()!=qMax(endRow, 0) && indexOld.row()!=qMax(endRow+1,1)) {
                     beginMoveRows(QModelIndex(), indexOld.row(), indexOld.row(), QModelIndex(), qMax(endRow+1,1));
                     }
-                    if (indexOld.column()!=endColumn && indexOld.column()!=qMax(endColumn+1,1)) {
+                    if (indexOld.column()!=qMax(endColumn, 0) && indexOld.column()!=qMax(endColumn+1,1)) {
                     beginMoveColumns(QModelIndex(), indexOld.column(), indexOld.column(), QModelIndex(), qMax(endColumn+1,1));
                     }
                 } else {
@@ -503,10 +503,10 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
                 m_colorSet->save();
                 if (action == Qt::MoveAction){
-                    if (indexOld.row()!=endRow && indexOld.row()!=qMax(endRow+1,1)) {
+                    if (indexOld.row()!=qMax(endRow, 0) && indexOld.row()!=qMax(endRow+1,1)) {
                         endMoveRows();
                     }
-                    if (indexOld.column()!=endColumn && indexOld.column()!=qMax(endColumn+1,1)) {
+                    if (indexOld.column()!=qMax(endColumn, 0) && indexOld.column()!=qMax(endColumn+1,1)) {
                         endMoveColumns();
                     }
 

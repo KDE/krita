@@ -79,7 +79,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     options.interlace = configuration->getBool("interlaced", false);
     options.compression = configuration->getInt("compression", 3);
     options.tryToSaveAsIndexed = configuration->getBool("indexed", false);
-    options.transparencyFillColor = configuration->getColor("transparencyFillColor").toQColor();
+    QStringList rgb = configuration->getString("transparencyFillcolor", "0,0,0").split(',');
+    options.transparencyFillColor = QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt());
     options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
     options.forceSRGB = configuration->getBool("forceSRGB", true);
 

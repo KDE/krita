@@ -325,10 +325,19 @@ KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index
 
 bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
 {
+    int col = m_colorSet->nColorsGroup(groupName)%columnCount();
     QModelIndex i = getLastEntryIndex();
-    beginInsertRows(QModelIndex(), i.row(), i.row()+1);
+    if (col+1>columnCount()) {
+        beginInsertRows(QModelIndex(), i.row(), i.row()+1);
+        beginInsertColumns(QModelIndex(), 0, 0+1);
+    } else {
+        beginInsertColumns(QModelIndex(), col, col+1);
+    }
     m_colorSet->add(entry, groupName);
-    endInsertRows();
+    if (col+1>columnCount()) {
+        endInsertRows();
+    }
+    endInsertColumns();
     return true;
 }
 

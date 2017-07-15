@@ -79,7 +79,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     options.interlace = configuration->getBool("interlaced", false);
     options.compression = configuration->getInt("compression", 3);
     options.tryToSaveAsIndexed = configuration->getBool("indexed", false);
-    QStringList rgb = configuration->getString("transparencyFillcolor", "0,0,0").split(',');
+    QStringList rgb = configuration->getString("transparencyFillcolor", "255,255,255").split(',');
     options.transparencyFillColor = QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt());
     options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
     options.forceSRGB = configuration->getBool("forceSRGB", true);
@@ -183,7 +183,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
-    QStringList rgb = cfg->getString("transparencyFillcolor", "0,0,0").split(',');
+    QStringList rgb = cfg->getString("transparencyFillcolor", "255,255,255").split(',');
     KoColor c(KoColorSpaceRegistry::instance()->rgb8());
     c.fromQColor(Qt::white);
     bnTransparencyFillColor->setDefaultColor(c);

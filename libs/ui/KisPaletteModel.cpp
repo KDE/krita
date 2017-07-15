@@ -66,16 +66,19 @@ QModelIndex KisPaletteModel::getLastEntryIndex()
 {
     int endRow = rowCount();
     int endColumn = columnCount();
-    QModelIndex i = this->index(endRow, endColumn, QModelIndex());
-    while (qVariantValue<QStringList>(i.data(RetrieveEntryRole)).isEmpty()) {
-        i = this->index(endRow, endColumn);
-        endColumn -=1;
-        if (endColumn<0) {
-            endColumn = columnCount();
-            endRow-=1;
+    if (m_colorSet->nColors()>0) {
+        QModelIndex i = this->index(endRow, endColumn, QModelIndex());
+        while (qVariantValue<QStringList>(i.data(RetrieveEntryRole)).isEmpty()) {
+            i = this->index(endRow, endColumn);
+            endColumn -=1;
+            if (endColumn<0) {
+                endColumn = columnCount();
+                endRow-=1;
+            }
         }
+        return i;
     }
-    return i;
+    return QModelIndex();
 }
 
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const

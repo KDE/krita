@@ -1390,7 +1390,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-  <Action name="QMicAgain">
+    <Action name="QMicAgain">
       <icon>gmic</icon>
       <text>Re-apply the last G'MIC filter</text>
       <whatsThis></whatsThis>
@@ -1399,6 +1399,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
   </Actions>
   <Actions category="Settings">
     <text>Settings</text>

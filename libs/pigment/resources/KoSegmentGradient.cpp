@@ -29,12 +29,15 @@
 #include <QTextStream>
 #include <QFile>
 #include <QByteArray>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QBuffer>
 
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
 #include "KoMixColorsOp.h"
+#include <KoColorModelStandardIds.h>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -269,6 +272,52 @@ QGradient* KoSegmentGradient::toQGradient() const
 QString KoSegmentGradient::defaultFileExtension() const
 {
     return QString(".ggr");
+}
+
+void KoSegmentGradient::toXML(QDomDocument &doc, QDomElement &gradientElt) const
+{
+    gradientElt.setAttribute("type", "segment");
+    Q_FOREACH(KoGradientSegment *segment, this->segments()) {
+        QDomElement segmentElt = doc.createElement("segment");
+        QDomElement start = doc.createElement("start");
+        QDomElement end = doc.createElement("end");
+        segmentElt.setAttribute("start-offset", segment->startOffset());
+        const KoColor startColor = segment->startColor();
+        segmentElt.setAttribute("start-bitdepth", startColor.colorSpace()->colorDepthId().id());
+        startColor.toXML(doc, start);
+        segmentElt.setAttribute("middle-offset", segment->middleOffset());
+        segmentElt.setAttribute("end-offset", segment->endOffset());
+        const KoColor endColor = segment->endColor();
+        segmentElt.setAttribute("end-bitdepth", endColor.colorSpace()->colorDepthId().id());
+        endColor.toXML(doc, end);
+        segmentElt.setAttribute("interpolation", segment->interpolation());
+        segmentElt.setAttribute("color-interpolation", segment->colorInterpolation());
+        segmentElt.appendChild(start);
+        segmentElt.appendChild(end);
+        gradientElt.appendChild(segmentElt);
+    }
+}
+
+KoSegmentGradient KoSegmentGradient::fromXML(const QDomElement &elt)
+{
+    KoSegmentGradient gradient;
+    QDomElement segmentElt = elt.firstChildElement("segment");
+    while (!segmentElt.isNull()) {
+        int interpolation = segmentElt.attribute("interpolation", "0.0").toInt();
+        int colorInterpolation = segmentElt.attribute("color-interpolation", "0.0").toInt();
+        double startOffset = segmentElt.attribute("start-offset", "0.0").toDouble();
+        qreal middleOffset = segmentElt.attribute("middle-offset", "0.0").toDouble();
+        qreal endOffset = segmentElt.attribute("end-offset", "0.0").toDouble();
+        QDomElement start = segmentElt.firstChildElement("start");
+        QString startBitdepth = segmentElt.attribute("start-bitdepth", Integer8BitsColorDepthID.id());
+        QColor left = KoColor::fromXML(start.firstChildElement(), startBitdepth).toQColor();
+        QString endBitdepth = segmentElt.attribute("end-bitdepth", Integer8BitsColorDepthID.id());
+        QDomElement end = segmentElt.firstChildElement("end");
+        QColor right = KoColor::fromXML(end.firstChildElement(), endBitdepth).toQColor();
+        gradient.createSegment(interpolation, colorInterpolation, startOffset, endOffset, middleOffset, left, right);
+        segmentElt = segmentElt.nextSiblingElement("segment");
+    }
+    return gradient;
 }
 
 KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor)

@@ -32,7 +32,7 @@
  * An enum for storing all uniform names used in shaders
  */
 enum Uniform { ModelViewProjection, TextureMatrix, ViewportScale,
-               TexelSize, Texture0, Texture1, FixedLodLevel };
+               TexelSize, Texture0, Texture1, FixedLodLevel, FragmentColor };
 
 /**
  * A wrapper class over Qt's QOpenGLShaderProgram to
@@ -84,7 +84,7 @@ class KisOpenGLShaderLoader {
 public:
     KisShaderProgram *loadDisplayShader(QSharedPointer<KisDisplayFilter> displayFilter, bool useHiQualityFiltering);
     KisShaderProgram *loadCheckerShader();
-    KisShaderProgram *loadCursorShader();
+    KisShaderProgram *loadSolidColorShader();
 
 private:
     KisShaderProgram *loadShader(QString vertPath, QString fragPath, QByteArray vertHeader, QByteArray fragHeader);

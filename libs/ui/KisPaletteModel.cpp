@@ -66,16 +66,19 @@ QModelIndex KisPaletteModel::getLastEntryIndex()
 {
     int endRow = rowCount();
     int endColumn = columnCount();
-    QModelIndex i = this->index(endRow, endColumn, QModelIndex());
-    while (qVariantValue<QStringList>(i.data(RetrieveEntryRole)).isEmpty()) {
-        i = this->index(endRow, endColumn);
-        endColumn -=1;
-        if (endColumn<0) {
-            endColumn = columnCount();
-            endRow-=1;
+    if (m_colorSet->nColors()>0) {
+        QModelIndex i = this->index(endRow, endColumn, QModelIndex());
+        while (qVariantValue<QStringList>(i.data(RetrieveEntryRole)).isEmpty()) {
+            i = this->index(endRow, endColumn);
+            endColumn -=1;
+            if (endColumn<0) {
+                endColumn = columnCount();
+                endRow-=1;
+            }
         }
+        return i;
     }
-    return i;
+    return QModelIndex();
 }
 
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
@@ -322,10 +325,21 @@ KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index
 
 bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
 {
+    int col = m_colorSet->nColorsGroup(groupName)%columnCount();
     QModelIndex i = getLastEntryIndex();
-    beginInsertRows(QModelIndex(), i.row(), i.row()+1);
+    if (col+1>columnCount()) {
+        beginInsertRows(QModelIndex(), i.row(), i.row()+1);
+    }
+    if (m_colorSet->nColors()<columnCount()) {
+        beginInsertColumns(QModelIndex(), m_colorSet->nColors(), m_colorSet->nColors()+1);
+    }
     m_colorSet->add(entry, groupName);
-    endInsertRows();
+    if (col+1>columnCount()) {
+        endInsertRows();
+    }
+    if (m_colorSet->nColors()<columnCount()) {
+        endInsertColumns();
+    }
     return true;
 }
 
@@ -337,13 +351,26 @@ bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
     }
     QString groupName = entryList.at(0);
     quint32 indexInGroup = entryList.at(1).toUInt();
-    beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
+
     if (qVariantValue<bool>(index.data(IsHeaderRole))==false) {
+        if (index.column()-1<0
+                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
+                && index.row()-1>0
+                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+            beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
+        }
         m_colorSet->removeAt(indexInGroup, groupName);
+        if (index.column()-1<0
+                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
+                && index.row()-1>0
+                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+            endRemoveRows();
+        }
     } else {
+        beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
         m_colorSet->removeGroup(groupName, keepColors);
+        endRemoveRows();
     }
-    endRemoveRows();
     return true;
 }
 
@@ -468,10 +495,10 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
                 QModelIndex indexOld = indexFromId(i);
                 if (action == Qt::MoveAction){
-                    if (indexOld.row()!=endRow && indexOld.row()!=qMax(endRow+1,1)) {
+                    if (indexOld.row()!=qMax(endRow, 0) && indexOld.row()!=qMax(endRow+1,1)) {
                     beginMoveRows(QModelIndex(), indexOld.row(), indexOld.row(), QModelIndex(), qMax(endRow+1,1));
                     }
-                    if (indexOld.column()!=endColumn && indexOld.column()!=qMax(endColumn+1,1)) {
+                    if (indexOld.column()!=qMax(endColumn, 0) && indexOld.column()!=qMax(endColumn+1,1)) {
                     beginMoveColumns(QModelIndex(), indexOld.column(), indexOld.column(), QModelIndex(), qMax(endColumn+1,1));
                     }
                 } else {
@@ -500,10 +527,10 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
                 m_colorSet->save();
                 if (action == Qt::MoveAction){
-                    if (indexOld.row()!=endRow && indexOld.row()!=qMax(endRow+1,1)) {
+                    if (indexOld.row()!=qMax(endRow, 0) && indexOld.row()!=qMax(endRow+1,1)) {
                         endMoveRows();
                     }
-                    if (indexOld.column()!=endColumn && indexOld.column()!=qMax(endColumn+1,1)) {
+                    if (indexOld.column()!=qMax(endColumn, 0) && indexOld.column()!=qMax(endColumn+1,1)) {
                         endMoveColumns();
                     }
 

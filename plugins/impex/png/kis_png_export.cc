@@ -79,7 +79,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     options.interlace = configuration->getBool("interlaced", false);
     options.compression = configuration->getInt("compression", 3);
     options.tryToSaveAsIndexed = configuration->getBool("indexed", false);
-    options.transparencyFillColor = configuration->getColor("transparencyFillColor").toQColor();
+    QStringList rgb = configuration->getString("transparencyFillcolor", "255,255,255").split(',');
+    options.transparencyFillColor = QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt());
     options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
     options.forceSRGB = configuration->getBool("forceSRGB", true);
 
@@ -151,7 +152,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     const bool isThereAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag);
 
-    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha) && isThereAlpha);
+    alpha->setEnabled(isThereAlpha);
+
+    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == RGBAColorModelID.id()) {
         tryToSaveAsIndexed->setVisible(true);
@@ -169,10 +173,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     compressionLevel->setValue(cfg->getInt("compression", 3));
     compressionLevel->setRange(1, 9 , 0);
 
-    alpha->setEnabled(isThereAlpha);
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
-
-    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
@@ -182,7 +183,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
-    QStringList rgb = cfg->getString("transparencyFillcolor", "0,0,0").split(',');
+    QStringList rgb = cfg->getString("transparencyFillcolor", "255,255,255").split(',');
     KoColor c(KoColorSpaceRegistry::instance()->rgb8());
     c.fromQColor(Qt::white);
     bnTransparencyFillColor->setDefaultColor(c);

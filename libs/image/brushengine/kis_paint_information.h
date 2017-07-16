@@ -262,17 +262,27 @@ public:
 
     static KisPaintInformation fromXML(const QDomElement&);
 
+    // TODO: Refactor the static mix functions to non-static in-place mutation
+    //       versions like mixOtherOnlyPosition and mixOtherWithoutTime.
+    // Heap allocation on Windows is awfully slow and will fragment the memory
+    // badly. Since KisPaintInformation allocates on the heap, we should re-use
+    // existing instance whenever possible, especially in loops.
+    // Ref: https://phabricator.kde.org/D6578
+
     /// (1-t) * p1 + t * p2
     static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
     static KisPaintInformation mixWithoutTime(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2);
     static KisPaintInformation mixWithoutTime(qreal t, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void mixOtherOnlyPosition(qreal t, const KisPaintInformation& other);
+    void mixOtherWithoutTime(qreal t, const KisPaintInformation& other);
     static qreal tiltDirection(const KisPaintInformation& info, bool normalize = true);
     static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
 
 private:
     static KisPaintInformation mixImpl(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2, bool posOnly, bool mixTime);
+    void mixOtherImpl(const QPointF &p, qreal t, const KisPaintInformation &other, bool posOnly, bool mixTime);
 
 private:
     struct Private;

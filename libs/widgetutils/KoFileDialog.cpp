@@ -89,7 +89,12 @@ void KoFileDialog::setDefaultDir(const QString &defaultDir, bool force)
     if (!defaultDir.isEmpty()) {
         if (d->defaultDirectory.isEmpty() || force) {
             QFileInfo f(defaultDir);
-            d->defaultDirectory = f.absolutePath();
+            if (f.isDir()) {
+                d->defaultDirectory = defaultDir;
+            }
+            else {
+                d->defaultDirectory = f.absolutePath();
+            }
         }
         if (!QFileInfo(defaultDir).isDir()) {
             d->proposedFileName = QFileInfo(defaultDir).fileName();
@@ -107,21 +112,23 @@ void KoFileDialog::setImageFilters()
     setMimeTypeFilters(imageFilters);
 }
 
-void KoFileDialog::setMimeTypeFilters(const QStringList &filterList, QString defaultFilter)
+void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
 {
-    d->filterList = getFilterStringListFromMime(filterList, true);
+    d->filterList = getFilterStringListFromMime(mimeTypeList, true);
 
-    if (defaultFilter.isEmpty()) {
-        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);
+    QString defaultFilter;
+
+    if (!defaultMimeType.isEmpty()) {
+        QString suffix = KisMimeDatabase::suffixesForMimeType(defaultMimeType).first().remove("*.");
+
+        if (!d->proposedFileName.isEmpty()) {
+            d->proposedFileName = QFileInfo(d->proposedFileName).baseName() + "." + suffix;
+        }
+
+        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultMimeType, false);
         if (defaultFilters.size() > 0) {
             defaultFilter = defaultFilters.first();
         }
-    }
-
-    QString suffix = KisMimeDatabase::suffixesForMimeType(defaultFilter).first().remove("*.");
-
-    if (!d->proposedFileName.isEmpty()) {
-        d->proposedFileName = QFileInfo(d->proposedFileName).baseName() + "." + suffix;
     }
 
     d->defaultFilter = defaultFilter;

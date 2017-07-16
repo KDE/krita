@@ -19,7 +19,7 @@
 #include <brushengine/kis_paint_information.h>
 
 #include <QDomElement>
-#include <QScopedPointer>
+#include <boost/optional.hpp>
 
 #include "kis_paintop.h"
 #include "kis_algebra_2d.h"
@@ -84,7 +84,7 @@ struct KisPaintInformation::Private {
         canvasRotation = rhs.canvasRotation;
         canvasMirroredH = rhs.canvasMirroredH;
         if (rhs.drawingAngleOverride) {
-            drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
+            drawingAngleOverride = *rhs.drawingAngleOverride;
         }
 
         levelOfDetail = rhs.levelOfDetail;
@@ -105,7 +105,7 @@ struct KisPaintInformation::Private {
     int canvasRotation;
     bool canvasMirroredH;
 
-    QScopedPointer<qreal> drawingAngleOverride;
+    boost::optional<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
 
     int levelOfDetail;
@@ -321,7 +321,7 @@ qreal KisPaintInformation::yTilt() const
 
 void KisPaintInformation::overrideDrawingAngle(qreal angle)
 {
-    d->drawingAngleOverride.reset(new qreal(angle));
+    d->drawingAngleOverride = angle;
 }
 
 qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distance) const
@@ -508,50 +508,60 @@ KisPaintInformation KisPaintInformation::mixWithoutTime(const QPointF& p, qreal 
     return mixImpl(p, t, pi1, pi2, false, false);
 }
 
+void KisPaintInformation::mixOtherOnlyPosition(qreal t, const KisPaintInformation& other)
+{
+    QPointF pt = (1 - t) * other.pos() + t * this->pos();
+    this->mixOtherImpl(pt, t, other, true, false);
+}
+
+void KisPaintInformation::mixOtherWithoutTime(qreal t, const KisPaintInformation& other)
+{
+    QPointF pt = (1 - t) * other.pos() + t * this->pos();
+    this->mixOtherImpl(pt, t, other, false, false);
+}
+
 KisPaintInformation KisPaintInformation::mixImpl(const QPointF &p, qreal t, const KisPaintInformation &pi1, const KisPaintInformation &pi2, bool posOnly, bool mixTime)
 {
+    KisPaintInformation result(pi2);
+    result.mixOtherImpl(p, t, pi1, posOnly, mixTime);
+    return result;
+}
+
+void KisPaintInformation::mixOtherImpl(const QPointF &p, qreal t, const KisPaintInformation &other, bool posOnly, bool mixTime)
+{
     if (posOnly) {
-        KisPaintInformation result(p,
-                                   pi2.pressure(),
-                                   pi2.xTilt(),
-                                   pi2.yTilt(),
-                                   pi2.rotation(),
-                                   pi2.tangentialPressure(),
-                                   pi2.perspective(),
-                                   pi2.currentTime(),
-                                   pi2.drawingSpeed());
-        result.setRandomSource(pi2.randomSource());
-        return result;
+        this->d->pos = p;
+        this->d->isHoveringMode = false;
+        this->d->currentDistanceInfo = 0;
+        this->d->levelOfDetail = 0;
+        return;
     }
     else {
-        qreal pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
-        qreal xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
-        qreal yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
+        qreal pressure = (1 - t) * other.pressure() + t * this->pressure();
+        qreal xTilt = (1 - t) * other.xTilt() + t * this->xTilt();
+        qreal yTilt = (1 - t) * other.yTilt() + t * this->yTilt();
 
-        qreal rotation = pi1.rotation();
+        qreal rotation = other.rotation();
 
-        if (pi1.rotation() != pi2.rotation()) {
-            qreal a1 = kisDegreesToRadians(pi1.rotation());
-            qreal a2 = kisDegreesToRadians(pi2.rotation());
+        if (other.rotation() != this->rotation()) {
+            qreal a1 = kisDegreesToRadians(other.rotation());
+            qreal a2 = kisDegreesToRadians(this->rotation());
             qreal distance = shortestAngularDistance(a2, a1);
 
             rotation = kisRadiansToDegrees(incrementInDirection(a1, t * distance, a2));
         }
 
-        qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
-        qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
-        qreal time = mixTime ? ((1 - t) * pi1.currentTime() + t * pi2.currentTime()) : pi2.currentTime();
-        qreal speed = (1 - t) * pi1.drawingSpeed() + t * pi2.drawingSpeed();
+        qreal tangentialPressure = (1 - t) * other.tangentialPressure() + t * this->tangentialPressure();
+        qreal perspective = (1 - t) * other.perspective() + t * this->perspective();
+        qreal time = mixTime ? ((1 - t) * other.currentTime() + t * this->currentTime()) : this->currentTime();
+        qreal speed = (1 - t) * other.drawingSpeed() + t * this->drawingSpeed();
 
-        KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed);
-        KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
-        result.d->isHoveringMode = pi1.isHoveringMode();
-        result.d->levelOfDetail = pi1.d->levelOfDetail;
-        result.d->randomSource = pi1.d->randomSource;
-        result.d->canvasRotation = pi2.canvasRotation();
-        result.d->canvasMirroredH = pi2.canvasMirroredH();
-
-        return result;
+        KIS_ASSERT_RECOVER_NOOP(other.isHoveringMode() == this->isHoveringMode());
+        *(this->d) = Private(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed, other.isHoveringMode());
+        this->d->randomSource = other.d->randomSource;
+        // this->d->isHoveringMode = other.isHoveringMode();
+        this->d->currentDistanceInfo = 0;
+        this->d->levelOfDetail = other.d->levelOfDetail;
     }
 }
 

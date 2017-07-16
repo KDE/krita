@@ -60,6 +60,7 @@ class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
 class KisAction;
+class KisPresetSaveWidget;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -178,6 +179,8 @@ private:
     QWidget*                            m_paintopWidget;
     KisPaintOpConfigWidget*             m_optionWidget;
     KisPopupButton*                     m_toolOptionsPopupButton;
+
+    KisPresetSaveWidget*                m_savePresetWidget;
     KisPopupButton*                     m_brushEditorPopupButton;
     KisPopupButton*                     m_presetSelectorPopupButton;
     KisCompositeOpComboBox*             m_cmbCompositeOp;

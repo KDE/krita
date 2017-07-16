@@ -35,7 +35,7 @@ class KisPaintOpPresetSaveDialog : public QDialog , public Ui::WdgSaveBrushPrese
 public:
     KisPaintOpPresetSaveDialog(QWidget* parent) : QDialog(parent) {
         setupUi(this);
-    }
+    }       
 };
 
 

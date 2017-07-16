@@ -28,6 +28,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include <widgets/kis_paintop_presets_save.h>
+#include "widgets/kis_paintop_presets_popup.h"
 #include "kis_favorite_resource_manager.h"
 
 class QString;
@@ -46,6 +47,7 @@ public:
 
     KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
                            KisFavoriteResourceManager* favoriteResourceManager,
+                           KisPresetSaveWidget* savePresetWidget,
                            QWidget * parent = 0);
 
     ~KisPaintOpPresetsPopup() override;

@@ -84,6 +84,7 @@ public:
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
                                                KisFavoriteResourceManager* favoriteResourceManager,
+                                               KisPresetSaveWidget* savePresetWidget,
                                                QWidget * parent)
     : QWidget(parent)
     , m_d(new Private())
@@ -118,11 +119,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     // overwrite existing preset and saving a new preset use the same dialog
-    saveDialog = new KisPresetSaveWidget(this->parentWidget());
+    saveDialog = savePresetWidget;
     saveDialog->scratchPadSetup(resourceProvider);
     saveDialog->setFavoriteResourceManager(m_d->favoriteResManager); // this is needed when saving the preset
     saveDialog->hide();
-
 
     // the area on the brush editor for renaming the brush. make sure edit fields are hidden by default
     toggleBrushRenameUIActive(false);

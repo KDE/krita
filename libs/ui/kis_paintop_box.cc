@@ -433,7 +433,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
 
-    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager);
+    m_savePresetWidget = new KisPresetSaveWidget(this);
+
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager, m_savePresetWidget);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->parentWidget()->setWindowTitle(i18n("Brush Editor"));
 

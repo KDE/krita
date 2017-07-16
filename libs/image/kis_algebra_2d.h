@@ -28,6 +28,7 @@
 #include <kritaimage_export.h>
 
 class QPainterPath;
+class QTransform;
 
 namespace KisAlgebra2D {
 
@@ -406,6 +407,8 @@ KRITAIMAGE_EXPORT
 QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
                                      const QPointF &c2, qreal r2);
 
+KRITAGLOBAL_EXPORT
+QTransform mapToRect(const QRectF &rect);
 
 /**
  * Scale the relative point \pt into the bounds of \p rc. The point might be

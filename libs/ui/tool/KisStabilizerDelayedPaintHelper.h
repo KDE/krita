@@ -43,6 +43,7 @@ class KRITAUI_EXPORT KisStabilizerDelayedPaintHelper : public QObject
     QTimer m_paintTimer;
     QQueue<TimedPaintInfo> m_paintQueue;
     int m_lastPendingTime;
+    int m_lastPaintTime;
     QElapsedTimer m_elapsedTimer;
 
     // Callbacks
@@ -74,13 +75,14 @@ public:
         m_requestUpdateOutline = requestUpdateOutline;
     }
 
-    void start(int paintInterval, const KisPaintInformation &firstPaintInfo);
+    void start(const KisPaintInformation &firstPaintInfo);
     void update(const QVector<KisPaintInformation> &newPaintInfos);
+    void paintSome();
     void end();
     void cancel();
 
 private Q_SLOTS:
-    void stabilizerDelayedPaint(bool isEndStroke = false);
+    void stabilizerDelayedPaintTimer();
 };
 
 #endif // KIS_STABILIZER_DELAYED_PAINT_HELPER_H

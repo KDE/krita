@@ -586,6 +586,11 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         m_d->stabilizedSampler.addEvent(info);
+        if (m_d->stabilizerDelayedPaintHelper.running()) {
+            // Paint here so we don't have to rely on the timer
+            // This is just a tricky source for a relatively stable 7ms "timer"
+            m_d->stabilizerDelayedPaintHelper.paintSome();
+        }
     } else {
         m_d->previousPaintInformation = info;
     }
@@ -681,9 +686,9 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     m_d->stabilizerPollTimer.setInterval(stabilizerSampleSize);
     m_d->stabilizerPollTimer.start();
 
-    int delayedPaintInterval = cfg.stabilizerDelayedPaintInterval();
-    if (delayedPaintInterval < stabilizerSampleSize) {
-        m_d->stabilizerDelayedPaintHelper.start(delayedPaintInterval, firstPaintInfo);
+    bool delayedPaintEnabled = cfg.stabilizerDelayedPaint();
+    if (delayedPaintEnabled) {
+        m_d->stabilizerDelayedPaintHelper.start(firstPaintInfo);
     }
 
     m_d->stabilizedSampler.clear();
@@ -717,14 +722,14 @@ KisToolFreehandHelper::getStabilizedPaintInfo(const QQueue<KisPaintInformation> 
         if (m_d->smoothingOptions->stabilizeSensors()) {
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mixWithoutTime(k, *it, result);
+                result.KisPaintInformation::mixOtherWithoutTime(k, *it);
                 it++;
                 i++;
             }
         } else{
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mixOnlyPosition(k, *it, result);
+                result.KisPaintInformation::mixOtherOnlyPosition(k, *it);
                 it++;
                 i++;
             }
@@ -975,4 +980,3 @@ void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
 {
    m_d->canvasMirroredH = mirrored;
 }
-

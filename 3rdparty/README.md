@@ -102,6 +102,10 @@ On Windows:
     cmake --build . --config RelWithDebInfo --target ext_patch
     cmake --build . --config RelWithDebInfo --target ext_png2ico
     cmake --build . --config RelWithDebInfo --target ext_gettext
+
+On OSX:
+
+    cmake --build . --config RelWithDebInfo --target ext_gettext
     
 On all operating systems:
 

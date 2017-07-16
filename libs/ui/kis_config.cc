@@ -279,6 +279,18 @@ void KisConfig::setNewCursorStyle(CursorStyle style)
     m_cfg.writeEntry("newCursorStyle", (int)style);
 }
 
+QColor KisConfig::getCursorMainColor(bool defaultValue) const
+{
+    QColor col;
+    col.setRgbF(0.501961, 1.0, 0.501961);
+    return (defaultValue ? col : m_cfg.readEntry("cursormaincolor", col));
+}
+
+void KisConfig::setCursorMainColor(const QColor &v) const
+{
+    m_cfg.writeEntry("cursormaincolor", v);
+}
+
 OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
 {
     if (defaultValue) {
@@ -719,6 +731,28 @@ QColor KisConfig::getGridSubdivisionColor(bool defaultValue) const
 void KisConfig::setGridSubdivisionColor(const QColor & v) const
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
+}
+
+QColor KisConfig::getOpenGLGridColor(bool defaultValue) const
+{
+    QColor col(255, 255, 255);
+    return (defaultValue ? col : m_cfg.readEntry("openglgridcolor", col));
+}
+
+void KisConfig::setOpenGLGridColor(const QColor & v) const
+{
+    m_cfg.writeEntry("openglgridcolor", v);
+}
+
+qreal KisConfig::getOpenGLGridDrawingThreshold(bool defaultValue) const
+{
+    qreal border = 8.0f;
+    return (defaultValue ? border : m_cfg.readEntry("griddrawingborder", border));
+}
+
+void KisConfig::setOpenGLGridDrawingThreshold(qreal v) const
+{
+    m_cfg.writeEntry("griddrawingborder", v);
 }
 
 quint32 KisConfig::guidesLineStyle(bool defaultValue) const
@@ -1209,7 +1243,17 @@ void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesCon
 {
     QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
+}
 
+QString KisConfig::importConfiguration(const QString &filterId, bool defaultValue) const
+{
+    return (defaultValue ? QString() : m_cfg.readEntry("ImportConfiguration-" + filterId, QString()));
+}
+
+void KisConfig::setImportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
+{
+    QString importConfig = properties->toXML();
+    m_cfg.writeEntry("ImportConfiguration-" + filterId, importConfig);
 }
 
 bool KisConfig::useOcio(bool defaultValue) const
@@ -1747,17 +1791,17 @@ void KisConfig::setStabilizerSampleSize(int value)
     m_cfg.writeEntry("stabilizerSampleSize", value);
 }
 
-int KisConfig::stabilizerDelayedPaintInterval(bool defaultValue) const
+bool KisConfig::stabilizerDelayedPaint(bool defaultValue) const
 {
-    const int defaultInterval = 20;
+    const bool defaultEnabled = true;
 
     return defaultValue ?
-        defaultInterval : m_cfg.readEntry("stabilizerDelayedPaintInterval", defaultInterval);
+        defaultEnabled : m_cfg.readEntry("stabilizerDelayedPaint", defaultEnabled);
 }
 
-void KisConfig::setStabilizerDelayedPaintInterval(int value)
+void KisConfig::setStabilizerDelayedPaint(bool value)
 {
-    m_cfg.writeEntry("stabilizerDelayedPaintInterval", value);
+    m_cfg.writeEntry("stabilizerDelayedPaint", value);
 }
 
 QString KisConfig::customFFMpegPath(bool defaultValue) const

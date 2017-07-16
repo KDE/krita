@@ -286,6 +286,9 @@ public:
     /// reimplemented
     QString defaultFileExtension() const override;
 
+    void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
+    static KoSegmentGradient fromXML(const QDomElement& elt);
+
         /**
      * a gradient colour picker can consist of one or more segments.
      * A segment has two end points - each colour in the gradient

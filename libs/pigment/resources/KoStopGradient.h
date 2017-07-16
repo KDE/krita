@@ -61,6 +61,9 @@ public:
     /// reimplemented
     QString defaultFileExtension() const override;
 
+    void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
+    static KoStopGradient fromXML(const QDomElement& elt);
+
 protected:
 
     QList<KoGradientStop> m_stops;

@@ -36,7 +36,8 @@ std::map<Uniform, const char *> KisShaderProgram::names = {
    {TexelSize, "texelSize"},
    {Texture0, "texture0"},
    {Texture1, "texture1"},
-   {FixedLodLevel, "fixedLodLevel"}
+   {FixedLodLevel, "fixedLodLevel"},
+   {FragmentColor, "fragColor"}
 };
 
 /**
@@ -168,19 +169,19 @@ KisShaderProgram *KisOpenGLShaderLoader::loadCheckerShader()
 }
 
 /**
- * Specific cursor shader loading function. It picks the appropriate shader
+ * Specific uniform shader loading function. It picks the appropriate shader
  * files depending on the availability of OpenGL3 on the target machine.
  */
-KisShaderProgram *KisOpenGLShaderLoader::loadCursorShader()
+KisShaderProgram *KisOpenGLShaderLoader::loadSolidColorShader()
 {
     QString vertPath, fragPath;
     // Select appropriate shader files
     if (KisOpenGL::supportsLoD()) {
-        vertPath = "cursor.vert";
-        fragPath = "cursor.frag";
+        vertPath = "matrix_transform.vert";
+        fragPath = "solid_color.frag";
     } else {
-        vertPath = "cursor_legacy.vert";
-        fragPath = "cursor_legacy.frag";
+        vertPath = "matrix_transform_legacy.vert";
+        fragPath = "solid_color_legacy.frag";
     }
 
     KisShaderProgram *shader = loadShader(vertPath, fragPath, QByteArray(), QByteArray());

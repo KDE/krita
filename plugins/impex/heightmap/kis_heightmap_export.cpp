@@ -44,6 +44,7 @@
 #include <kis_config_widget.h>
 
 #include "kis_wdg_options_heightmap.h"
+#include "kis_heightmap_utils.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KisHeightMapExportFactory, "krita_heightmap_export.json", registerPlugin<KisHeightMapExport>();)
 
@@ -98,36 +99,49 @@ void KisHeightMapExport::initializeCapabilities()
                 << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
         addSupportedColorModels(supportedColorModels, "R16 Heightmap");
     }
+    else if (mimeType() == "image/x-r32") {
+        QList<QPair<KoID, KoID> > supportedColorModels;
+        supportedColorModels << QPair<KoID, KoID>()
+                << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID);
+        addSupportedColorModels(supportedColorModels, "R32 Heightmap");
+    }
 }
 
 KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KIS_ASSERT_RECOVER_RETURN_VALUE(mimeType() == "image/x-r16" || mimeType() == "image/x-r8", KisImportExportFilter::WrongFormat);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(mimeType() == "image/x-r16" || mimeType() == "image/x-r8" || mimeType() == "image/x-r32", KisImportExportFilter::WrongFormat);
 
     KisImageSP image = document->savingImage();
     QDataStream::ByteOrder bo = configuration->getInt("endianness", 1) == 0 ? QDataStream::BigEndian : QDataStream::LittleEndian;
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
-    bool r16 = mimeType() == "image/x-r16";
-
     QDataStream s(io);
     s.setByteOrder(bo);
+    // needed for 32bit float data
+    s.setFloatingPointPrecision(QDataStream::SinglePrecision);
 
-    KoID target_comodel = GrayAColorModelID;
-    KoID target_codepth = r16 ? Integer16BitsColorDepthID : Integer8BitsColorDepthID;
+    KoID target_co_model = GrayAColorModelID;
+    KoID target_co_depth = KisHeightmapUtils::mimeTypeToKoID(mimeType());
+    KIS_ASSERT(!target_co_depth.id().isNull());
 
-    if (pd->colorSpace()->colorModelId() != target_comodel || pd->colorSpace()->colorDepthId() != target_codepth) {
+    if (pd->colorSpace()->colorModelId() != target_co_model || pd->colorSpace()->colorDepthId() != target_co_depth) {
         pd = new KisPaintDevice(*pd.data());
-        KUndo2Command *cmd = pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(target_comodel.id(), target_codepth.id()));
+        KUndo2Command *cmd = pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(target_co_model.id(), target_co_depth.id()));
         delete cmd;
     }
 
-    if (r16) {
+    if (target_co_depth == Float32BitsColorDepthID) {
+        writeData<float>(pd, image->bounds(), s);
+    }
+    else if (target_co_depth == Integer16BitsColorDepthID) {
         writeData<quint16>(pd, image->bounds(), s);
     }
-    else {
+    else if (target_co_depth == Integer8BitsColorDepthID) {
         writeData<quint8>(pd, image->bounds(), s);
+    }
+    else {
+        return KisImportExportFilter::InternalError;
     }
     return KisImportExportFilter::OK;
 }

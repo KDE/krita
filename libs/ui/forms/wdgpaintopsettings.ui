@@ -14,8 +14,29 @@
    <string>Brush Editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
+   <property name="horizontalSpacing">
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>5</number>
+   </property>
    <item row="1" column="1">
     <widget class="QGroupBox" name="brushEditorSettingsControls">
+     <property name="title">
+      <string/>
+     </property>
      <property name="flat">
       <bool>false</bool>
      </property>
@@ -23,8 +44,17 @@
       <property name="spacing">
        <number>0</number>
       </property>
+      <property name="leftMargin">
+       <number>3</number>
+      </property>
       <property name="topMargin">
        <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <property name="bottomMargin">
+       <number>3</number>
       </property>
       <item>
        <widget class="QFrame" name="frmOptionWidgetContainer">
@@ -54,7 +84,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
         <property name="spacing">
-         <number>20</number>
+         <number>5</number>
         </property>
         <property name="leftMargin">
          <number>5</number>
@@ -150,7 +180,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="spacing">
-         <number>10</number>
+         <number>5</number>
         </property>
         <property name="leftMargin">
          <number>5</number>
@@ -215,23 +245,23 @@
       <string/>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
       <property name="spacing">
-       <number>6</number>
+       <number>5</number>
       </property>
       <property name="leftMargin">
-       <number>0</number>
+       <number>5</number>
       </property>
       <property name="topMargin">
-       <number>0</number>
+       <number>5</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>5</number>
       </property>
       <property name="bottomMargin">
-       <number>0</number>
+       <number>5</number>
       </property>
       <item>
        <widget class="QFrame" name="frame">
@@ -332,6 +362,9 @@
    </item>
    <item row="0" column="0" colspan="3">
     <layout class="QHBoxLayout" name="brushEditorDashboard">
+     <property name="spacing">
+      <number>10</number>
+     </property>
      <property name="leftMargin">
       <number>10</number>
      </property>
@@ -561,14 +594,25 @@
    </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="presetsContainer">
+     <property name="title">
+      <string/>
+     </property>
      <layout class="QVBoxLayout" name="paintEngineOpContainer">
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Available Brush Presets</string>
-        </property>
-       </widget>
-      </item>
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>

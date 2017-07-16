@@ -126,6 +126,7 @@ void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),m_wdgPaletteDock->paletteView, SLOT(trySelectClosestColor(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
 

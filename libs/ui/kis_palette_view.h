@@ -74,6 +74,10 @@ public Q_SLOTS:
      * remove entry with a dialog window.(Necessary for groups.
      */
     bool removeEntryWithDialog(QModelIndex index);
+    /**
+     *  This tries to select the closest color in the palette.
+     */
+    void trySelectClosestColor(KoColor color);
 Q_SIGNALS:
     /**
      * @brief entrySelected

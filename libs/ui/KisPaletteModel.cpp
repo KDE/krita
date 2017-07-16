@@ -279,6 +279,9 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
         return index;
     } else {
         int rowstotal = 1+m_colorSet->nColorsGroup()/columnCount();
+        if (m_colorSet->nColorsGroup()==0) {
+            rowstotal +=1;
+        }
         int totalIndexes = colorSet()->nColorsGroup();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
             if (i+1<=totalIndexes+colorSet()->nColorsGroup(groupName) && i+1>totalIndexes) {

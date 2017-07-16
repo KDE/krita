@@ -61,7 +61,16 @@ public:
     /// reimplemented
     QString defaultFileExtension() const override;
 
+    /**
+     * @brief toXML
+     * Covert the gradient to an XML string.
+     */
     void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
+    /**
+     * @brief fromXML
+     * convert a gradient from xml.
+     * @return a gradient.
+     */
     static KoStopGradient fromXML(const QDomElement& elt);
 
 protected:

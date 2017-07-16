@@ -400,6 +400,28 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="dirtyPresetIndicatorButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="renameBrushPresetButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -490,7 +512,7 @@
         </size>
        </property>
        <property name="text" stdset="0">
-        <string/>
+        <string>Presets</string>
        </property>
       </widget>
      </item>
@@ -581,7 +603,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>View</string>
+           <string/>
           </property>
          </widget>
         </item>

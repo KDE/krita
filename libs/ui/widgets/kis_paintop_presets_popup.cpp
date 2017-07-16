@@ -54,7 +54,7 @@
 #include "kis_lod_availability_widget.h"
 
 #include "kis_signal_auto_connection.h"
-
+#include <kis_paintop_settings_update_proxy.h>
 
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
@@ -113,6 +113,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize")); // refresh icon
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("dirty-preset")); // edit icon
+
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setIcon(KisIconUtils::loadIcon("dialog-warning")); // TODO: make this a "!" icon
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setToolTip(i18n("The settings for this preset have changed from their default."));
+
 
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setToolTip(i18n("Reload the brush preset"));
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setToolTip(i18n("Rename the brush preset"));
@@ -266,6 +270,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+
+
+
+    connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
 
 
 
@@ -435,6 +443,15 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->setMinimumSize(m_d->minimumSettingsWidgetSize);
         m_d->layout->addWidget(widget);
 
+        // hook up connections that will monitor if our preset is dirty or not. Show a notification if it is
+        if (m_d->resourceProvider && m_d->resourceProvider->currentPreset() ) {
+
+            KisPaintOpPresetSP preset = m_d->resourceProvider->currentPreset();
+            m_d->widgetConnections.addConnection(preset->updateProxy(), SIGNAL(sigSettingsChanged()),
+                                      this, SLOT(slotUpdatePresetSettings()));
+
+        }
+
         m_d->layout->update();
         widget->show();
 
@@ -450,6 +467,19 @@ void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
     KisPaintopLodLimitations l = m_d->settingsWidget->lodLimitations();
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
+
+
+void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
+{
+    if (!m_d->resourceProvider && !m_d->resourceProvider->currentPreset()) {
+        return;
+    }
+
+    bool showdirtyNotification = m_d->resourceProvider->currentPreset()->isPresetDirty();
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(showdirtyNotification);
+
+}
+
 
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
 {
@@ -504,6 +534,10 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
+    // this gets called every time the brush editor window is opened
+    // TODO: this gets called multiple times whenever the preset is changed in the presets area
+    // the connections probably need to be thought about with this a bit more to keep things in sync
+
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
 
     // find the display name of the brush engine and append it to the selected preset display
@@ -525,6 +559,7 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setScene(thumbScene);
 
     toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
+    slotUpdatePresetSettings(); // check to see if the dirty preset icon needs to be shown
 }
 
 bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)

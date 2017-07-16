@@ -92,6 +92,8 @@ public Q_SLOTS:
     void resourceSelected(KoResource* resource);
     void updateThemedIcons();
 
+
+    void slotUpdatePresetSettings();
     void slotUpdateLodAvailability();
     void slotRenameBrushActivated();
     void slotRenameBrushDeactivated();

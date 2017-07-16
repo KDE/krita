@@ -1,0 +1,1 @@
+ToolClasses = ['canvassizetool.canvassizetool.CanvasSizeTool',]

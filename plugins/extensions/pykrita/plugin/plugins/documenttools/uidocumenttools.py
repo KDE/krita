@@ -1,26 +1,22 @@
-from canvassize import canvassizedialog
+from documenttools import documenttoolsdialog
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QFormLayout, QListWidget,QAbstractItemView,
-                             QDialogButtonBox, QVBoxLayout, QFrame,
-                             QPushButton, QAbstractScrollArea, QSpinBox,
-                             QHBoxLayout, QMessageBox)
+from PyQt5.QtWidgets import (QFormLayout, QListWidget, QAbstractItemView,
+                             QDialogButtonBox, QVBoxLayout, QFrame, QTabWidget,
+                             QPushButton, QAbstractScrollArea, QMessageBox)
 import krita
+import importlib
 
 
-class UICanvasSize(object):
+class UIDocumentTools(object):
 
     def __init__(self):
-        self.mainDialog = canvassizedialog.CanvasSizeDialog()
+        self.mainDialog = documenttoolsdialog.DocumentToolsDialog()
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
-        self.offsetLayout = QHBoxLayout()
         self.refreshButton = QPushButton("Refresh")
         self.widgetDocuments = QListWidget()
-        self.widthSpinBox = QSpinBox()
-        self.heightSpinBox = QSpinBox()
-        self.xOffsetSpinBox = QSpinBox()
-        self.yOffsetSpinBox = QSpinBox()
+        self.tabTools = QTabWidget()
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
@@ -36,22 +32,13 @@ class UICanvasSize(object):
 
     def initialize(self):
         self.loadDocuments()
-
-        self.widthSpinBox.setRange(1, 10000)
-        self.heightSpinBox.setRange(1, 10000)
-        self.xOffsetSpinBox.setRange(-10000, 10000)
-        self.yOffsetSpinBox.setRange(-10000, 10000)
+        self.loadTools()
 
         self.documentLayout.addWidget(self.widgetDocuments)
         self.documentLayout.addWidget(self.refreshButton)
 
-        self.offsetLayout.addWidget(self.xOffsetSpinBox)
-        self.offsetLayout.addWidget(self.yOffsetSpinBox)
-
         self.formLayout.addRow('Documents', self.documentLayout)
-        self.formLayout.addRow('Width', self.widthSpinBox)
-        self.formLayout.addRow('Height', self.heightSpinBox)
-        self.formLayout.addRow('Offset', self.offsetLayout)
+        self.formLayout.addRow(self.tabTools)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)
@@ -62,10 +49,26 @@ class UICanvasSize(object):
         self.mainLayout.addWidget(self.buttonBox)
 
         self.mainDialog.resize(500, 300)
-        self.mainDialog.setWindowTitle("Canvas Size")
+        self.mainDialog.setWindowTitle("Document Tools")
         self.mainDialog.setSizeGripEnabled(True)
         self.mainDialog.show()
         self.mainDialog.activateWindow()
+
+    def loadTools(self):
+        modulePath = 'documenttools.tools'
+        toolsModule = importlib.import_module(modulePath)
+        modules = []
+
+        for classPath in toolsModule.ToolClasses:
+            _module, _klass =  classPath.rsplit('.', maxsplit=1)
+            modules.append(dict(module='{0}.{1}'.format(modulePath, _module),
+                                klass=_klass))
+
+        for module in modules:
+            m = importlib.import_module(module['module'])
+            toolClass = getattr(m, module['klass'])
+            obj = toolClass(self.mainDialog)
+            self.tabTools.addTab(obj, obj.objectName())
 
     def loadDocuments(self):
         self.widgetDocuments.clear()
@@ -84,15 +87,7 @@ class UICanvasSize(object):
 
         self.msgBox  = QMessageBox(self.mainDialog)
         if selectedDocuments:
-            self._resizeAllDocuments(selectedDocuments)
-            self.msgBox.setText("The selected documents has been resized.")
+            self.msgBox.setText("The selected documents has been modified.")
         else:
             self.msgBox.setText("Select at least one document.")
         self.msgBox.exec_()
-
-    def _resizeAllDocuments(self, documents):
-        for document in documents:
-            document.resizeImage(self.xOffsetSpinBox.value(),
-                                 self.yOffsetSpinBox.value(),
-                                 self.widthSpinBox.value(),
-                                 self.heightSpinBox.value())

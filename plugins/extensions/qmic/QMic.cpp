@@ -54,6 +54,7 @@
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_paint_layer.h>
+#include <kis_algebra_2d.h>
 
 #include "kis_input_output_mapper.h"
 #include "kis_qmic_simple_convertor.h"
@@ -229,7 +230,15 @@ void QMic::connected()
     QByteArray ba;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
-        ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+        KisSelectionSP selection = m_view->image()->globalSelection();
+
+        if (selection) {
+            QRect selectionRect = selection->selectedExactRect();
+            ba = QByteArray::number(selectionRect.width()) + "," + QByteArray::number(selectionRect.height());
+        }
+        else {
+            ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+        }
     }
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
@@ -415,29 +424,36 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     for (int i = 0; i < nodes->size(); ++i) {
         KisNodeSP node = nodes->at(i);
-        qDebug() << "Converting node" << node->name() << node->exactBounds();
         if (node->paintDevice()) {
+            QRect cropRect;
 
-            QRect cropRect = node->exactBounds();
+            KisSelectionSP selection = m_view->image()->globalSelection();
 
-            const int ix = static_cast<int>(std::floor(rc.x() * cropRect.width()));
-            const int iy = static_cast<int>(std::floor(rc.y() * cropRect.height()));
-            const int iw = std::min(cropRect.width() - ix, static_cast<int>(1 + std::ceil(rc.width() * cropRect.width())));
-            const int ih = std::min(cropRect.height() - iy, static_cast<int>(1 + std::ceil(rc.height() * cropRect.height())));
+            if (selection) {
+                cropRect = selection->selectedExactRect();
+            }
+            else {
+                cropRect = m_view->image()->bounds();
+            }
+
+            qDebug() << "Converting node" << node->name() << cropRect;
+
+            const QRectF mappedRect = KisAlgebra2D::mapToRect(cropRect).mapRect(rc);
+            const QRect resultRect = mappedRect.toAlignedRect();
 
             QSharedMemory *m = new QSharedMemory(QString("key_%1").arg(QUuid::createUuid().toString()));
             m_sharedMemorySegments.append(m);
-            if (!m->create(iw * ih * 4 * sizeof(float))) {  //buf.size())) {
+            if (!m->create(resultRect.width() * resultRect.height() * 4 * sizeof(float))) {  //buf.size())) {
                 qWarning() << "Could not create shared memory segment" << m->error() << m->errorString();
                 return false;
             }
             m->lock();
 
             gmic_image<float> img;
-            img.assign(iw, ih, 1, 4);
+            img.assign(resultRect.width(), resultRect.height(), 1, 4);
             img._data = reinterpret_cast<float*>(m->data());
 
-            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, QRect(ix, iy, iw, ih));
+            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, resultRect);
 
             message->append(m->key().toUtf8());
 
@@ -448,9 +464,9 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             message->append(",");
             message->append(node->name().toUtf8().toHex());
             message->append(",");
-            message->append(QByteArray::number(iw));
+            message->append(QByteArray::number(resultRect.width()));
             message->append(",");
-            message->append(QByteArray::number(ih));
+            message->append(QByteArray::number(resultRect.height()));
 
             message->append("\n");
         }

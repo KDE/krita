@@ -22,6 +22,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
+#include <KoChannelInfo.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -121,6 +122,17 @@ QVector<float> ManagedColor::components() const
 {
     QVector<float> values(d->color.colorSpace()->channelCount());
     d->color.colorSpace()->normalisedChannelsValue(d->color.data(), values);
+    return values;
+}
+
+QVector<float> ManagedColor::componentsOrdered() const
+{
+    QVector<float> valuesUnsorted = components();
+    QVector<float> values(d->color.colorSpace()->channelCount());
+    for (int i=0; i<values.size();i++) {
+        int location = KoChannelInfo::displayPositionToChannelIndex(i, d->color.colorSpace()->channels());
+        values[location] = valuesUnsorted[i];
+    }
     return values;
 }
 

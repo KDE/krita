@@ -166,7 +166,10 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 
 void KisPaletteView::trySelectClosestColor(KoColor color)
 {
-    quint32 i = m_d->model->colorSet()->getIndexClosestColor(color);
+    KoColorSet* color_set = m_d->model->colorSet();
+    if (!color_set)
+        return;
+    quint32 i = color_set->getIndexClosestColor(color);
     QModelIndex index = m_d->model->indexFromId(i);
     this->selectionModel()->clearSelection();
     this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);

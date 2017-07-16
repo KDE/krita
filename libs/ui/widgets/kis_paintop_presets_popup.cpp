@@ -710,9 +710,16 @@ void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
 }
 
 void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
-    saveDialog->isSavingNewBrush(false); // This changes the UI a bit for updating an existing brush preset
-    saveDialog->saveScratchPadThumbnailArea(m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay());
-    saveDialog->showDialog();
+    // here we are assuming that people want to keep their existing preset icon. We will just update the
+    // settings and save a new copy with the same name.
+    // there is a dialog with save options, but we don't need to show it in this situation
+
+    saveDialog->isSavingNewBrush(false); // this mostly just makes sure we keep the existing brush preset name when saving
+    saveDialog->loadExistingThumbnail(); // This makes sure we use the existing preset icon when updating the existing brush preset
+    saveDialog->savePreset();
+
+    // refresh the view settings so the brush doesn't appear dirty
+    slotUpdatePresetSettings();
 }
 
 void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
@@ -721,7 +728,7 @@ void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
     saveDialog->showDialog();
 }
 
-\
+
 void KisPaintOpPresetsPopup::updateViewSettings()
 {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();

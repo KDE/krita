@@ -223,7 +223,7 @@
         <item>
          <widget class="QPushButton" name="saveBrushPresetButton">
           <property name="text">
-           <string>Save Brush Preset...</string>
+           <string>Overwrite Brush</string>
           </property>
          </widget>
         </item>

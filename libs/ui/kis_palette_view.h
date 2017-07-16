@@ -87,7 +87,9 @@ Q_SIGNALS:
      * @param entry the selected entry.
      */
     void entrySelected(KoColorSetEntry entry);
+    void entrySelectedBackGround(KoColorSetEntry entry);
 protected:
+    void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event) override;
 
 private:
@@ -98,7 +100,7 @@ private Q_SLOTS:
      * @brief entrySelection
      * the function that will emit entrySelected when the entry changes.
      */
-    void entrySelection();
+    void entrySelection(bool foreground = true);
     /**
      * @brief modifyEntry
      * function for changing the entry at the given index.

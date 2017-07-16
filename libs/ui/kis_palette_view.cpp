@@ -63,7 +63,6 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
     verticalHeader()->setDefaultSectionSize(defaultSectionSize);
-    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelection()) );
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
 }
 
@@ -173,6 +172,15 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
     this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
 }
 
+void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
+{
+    bool foreground = false;
+    if (event->button()== Qt::LeftButton) {
+        foreground = true;
+    }
+    entrySelection(foreground);
+}
+
 void KisPaletteView::paletteModelChanged()
 {
     updateView();
@@ -237,17 +245,25 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
     }
 }
 
-void KisPaletteView::entrySelection() {
-    QModelIndex index = selectedIndexes().last();
-    if (!index.isValid()) {
-        index = selectedIndexes().first();
+void KisPaletteView::entrySelection(bool foreground) {
+    QModelIndex index;
+    if (selectedIndexes().size()<=0) {
+        return;
     }
-    if (!index.isValid()) {
+    if (selectedIndexes().last().isValid()) {
+        index = selectedIndexes().last();
+    } else if (selectedIndexes().first().isValid()) {
+        index = selectedIndexes().first();
+    } else {
         return;
     }
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-        emit(entrySelected(entry));
+        if (foreground) {
+            emit(entrySelected(entry));
+        } else {
+            emit(entrySelectedBackGround(entry));
+        }
     }
 }
 

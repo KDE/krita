@@ -86,6 +86,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->bnAddGroup, SIGNAL(clicked(bool)), m_wdgPaletteDock->paletteView, SLOT(addGroupWithDialog()));
 
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
@@ -233,6 +234,23 @@ void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
     m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
     if (m_resourceProvider) {
         m_resourceProvider->setFGColor(entry.color);
+    }
+    if (m_currentColorSet->removable()) {
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
+    }
+}
+
+void PaletteDockerDock::entrySelectedBack(KoColorSetEntry entry)
+{
+    quint32 index = 0;
+    QString groupName = m_currentColorSet->findGroupByColorName(entry.name, &index);
+    QString seperator;
+    if (groupName != QString()) {
+        seperator = " - ";
+    }
+    m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
+    if (m_resourceProvider) {
+        m_resourceProvider->setBGColor(entry.color);
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);

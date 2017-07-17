@@ -87,6 +87,8 @@ class UIDocumentTools(object):
 
         self.msgBox  = QMessageBox(self.mainDialog)
         if selectedDocuments:
+            widget = self.tabTools.currentWidget()
+            widget.adjust(selectedDocuments)
             self.msgBox.setText("The selected documents has been modified.")
         else:
             self.msgBox.setText("Select at least one document.")

@@ -1,8 +1,41 @@
 project(krita)
+cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
+#
+# Define the current version
+#
+
+# define common versions of Krita applications, used to generate kritaversion.h
+# update these version for every release:
+set(KRITA_VERSION_STRING "3.2.0-beta.1")
+set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
+set(KRITA_STABLE_VERSION_MINOR 2) # 0 for 3.0, 1 for 3.1, etc.
+set(KRITA_VERSION_RELEASE 0)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(KRITA_ALPHA 1) # uncomment only for Alpha
+set(KRITA_BETA 1) # uncomment only for Beta
+#set(KRITA_RC 1) # uncomment only for RC
+set(KRITA_YEAR 2017) # update every year
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
+    set(KRITA_STABLE 1) # do not edit
+endif()
+
+message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
+
+# Define the generic version of the Krita libraries here
+# This makes it easy to advance it when the next Krita release comes.
+# 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
+# (2.x) so we're starting with 15 in 3.x series.
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 3)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 15")
+else()
+    # let's make sure we won't forget to update the "15"
+    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
+endif()
+set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
+set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
+
 
 set(MIN_QT_VERSION 5.6.0)
 option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
@@ -67,35 +100,6 @@ endif()
 #######################
 ######################
 
-# define common versions of Krita applications, used to generate kritaversion.h
-# update these version for every release:
-set(KRITA_VERSION_STRING "3.2.0")
-set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MINOR 2) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 0)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(KRITA_ALPHA 1) # uncomment only for Alpha
-#set(KRITA_BETA 1) # uncomment only for Beta
-#set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2017) # update every year
-
-if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
-    set(KRITA_STABLE 1) # do not edit
-endif()
-
-message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
-
-# Define the generic version of the Krita libraries here
-# This makes it easy to advance it when the next Krita release comes.
-# 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
-# (2.x) so we're starting with 15 in 3.x series.
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 3)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 15")
-else()
-    # let's make sure we won't forget to update the "15"
-    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
-endif()
-set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
-set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
 
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")

@@ -57,6 +57,33 @@ class KisExternalLayer;
 
 K_PLUGIN_FACTORY_WITH_JSON(KisJPEGExportFactory, "krita_jpeg_export.json", registerPlugin<KisJPEGExport>();)
 
+// TODO: duplicated in kis_png_export.cc, move to KisPropertiesConfiguration?
+static QColor getConfigurationStringAsQColor(const KisPropertiesConfigurationSP cfg, const QString& property, const QColor& default_color)
+{
+    QStringList components = cfg->getString(property, "").split(',');
+
+    int num_components = components.size();
+    if (num_components < 3 || num_components > 4)
+        return default_color;
+
+    bool ok;
+    int rgba[4] = {0, 0, 0, 255};
+    for( int i = 0; i < num_components; ++i) {
+        rgba[i] = components[i].toInt(&ok);
+        if(!ok)
+            return default_color;
+    }
+
+    switch (num_components) {
+        case 3:
+            return QColor(rgba[0], rgba[1], rgba[2]);
+        case 4:
+            return QColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+        default:
+            return default_color;
+    }
+}
+
 KisJPEGExport::KisJPEGExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
@@ -126,7 +153,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     options.exif = cfg->getBool("exif", true);
     options.iptc = cfg->getBool("iptc", true);
     options.xmp = cfg->getBool("xmp", true);
-    options.transparencyFillColor = cfg->getColor("transparencyFillcolor").toQColor();
+    options.transparencyFillColor = getConfigurationStringAsQColor(cfg, "transparencyFillcolor", Qt::white);
     KisMetaData::FilterRegistryModel m;
     m.setEnabledFilters(cfg->getString("filters").split(","));
     options.filters = m.enabledFilters();
@@ -224,11 +251,10 @@ void KisWdgOptionsJPEG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setVisible(cfg->getBool("is_sRGB"));
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
     chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
-    QStringList rgb = cfg->getString("transparencyFillcolor", "255,255,255").split(',');
     KoColor background(KoColorSpaceRegistry::instance()->rgb8());
     background.fromQColor(Qt::white);
     bnTransparencyFillColor->setDefaultColor(background);
-    background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    background.fromQColor(getConfigurationStringAsQColor(cfg, "transparencyFillcolor", Qt::white));
     bnTransparencyFillColor->setColor(background);
 
     m_filterRegistryModel.setEnabledFilters(cfg->getString("filters").split(','));

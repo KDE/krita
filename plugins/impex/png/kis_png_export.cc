@@ -50,6 +50,32 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(KisPNGExportFactory, "krita_png_export.json", registerPlugin<KisPNGExport>();)
 
+static QColor getConfigurationStringAsQColor(const KisPropertiesConfigurationSP cfg, const QString& property, const QColor& default_color)
+{
+    QStringList components = cfg->getString(property, "").split(',');
+
+    int num_components = components.size();
+    if (num_components < 3 || num_components > 4)
+        return default_color;
+
+    bool ok;
+    int rgba[4] = {0, 0, 0, 255};
+    for( int i = 0; i < num_components; ++i) {
+        rgba[i] = components[i].toInt(&ok);
+        if(!ok)
+            return default_color;
+    }
+
+    switch (num_components) {
+        case 3:
+            return QColor(rgba[0], rgba[1], rgba[2]);
+        case 4:
+            return QColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+        default:
+            return default_color;
+    }
+}
+
 KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
@@ -155,7 +181,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     options.interlace = cfg->getBool("interlaced", false);
     options.compression = cfg->getInt("compression", 0);
     options.tryToSaveAsIndexed = cfg->getBool("indexed", false);
-    options.transparencyFillColor = cfg->getColor("transparencyFillColor").toQColor();
+    options.transparencyFillColor = getConfigurationStringAsQColor(cfg, "transparencyFillcolor", Qt::white);
     options.saveSRGBProfile = cfg->getBool("saveSRGBProfile", false);
     options.forceSRGB = cfg->getBool("forceSRGB", true);
 
@@ -216,7 +242,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     bool isThereAlpha = cfg->getBool("isThereAlpha");
 
-    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha) && isThereAlpha);
+    alpha->setEnabled(isThereAlpha);
+
+    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     if (cfg->getString("ColorModelID") == RGBAColorModelID.id()) {
         tryToSaveAsIndexed->setVisible(true);
@@ -234,10 +263,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     compressionLevel->setValue(cfg->getInt("compression", 3));
     compressionLevel->setRange(1, 9 , 0);
 
-    alpha->setEnabled(isThereAlpha);
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
-
-    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     bool sRGB = cfg->getBool("sRGB", false);
 
@@ -247,11 +273,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
-    QStringList rgb = cfg->getString("transparencyFillcolor", "0,0,0").split(',');
     KoColor c(KoColorSpaceRegistry::instance()->rgb8());
     c.fromQColor(Qt::white);
     bnTransparencyFillColor->setDefaultColor(c);
-    c.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    c.fromQColor(getConfigurationStringAsQColor(cfg, "transparencyFillcolor", Qt::white));
     bnTransparencyFillColor->setColor(c);
 
 }

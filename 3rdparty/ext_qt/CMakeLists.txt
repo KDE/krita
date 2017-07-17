@@ -43,8 +43,8 @@ if (WIN32)
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
 
-      BUILD_COMMAND mingw32-make
-      INSTALL_COMMAND mingw32-make install
+      BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS}
+      INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
       UPDATE_COMMAND ""
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s

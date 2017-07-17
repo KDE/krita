@@ -11,6 +11,10 @@ project (krita-and-all-its-deps)
 
 cmake_minimum_required(VERSION 2.8.6)
 
+if(NOT SUBMAKE_JOBS)
+	set(SUBMAKE_JOBS 1)
+endif(NOT SUBMAKE_JOBS)
+
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 	message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
 endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)

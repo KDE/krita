@@ -26,6 +26,7 @@
 #include "kis_wetmap.h"
 #include <QTime>
 #include <QObject>
+#include <QList>
 #include "kis_painter.h"
 
 class KisWatercolorBaseItems : public QObject
@@ -52,9 +53,9 @@ private:
     KisWatercolorBaseItems& operator=( KisWatercolorBaseItems& );
 
     KisWetMap *m_wetMap;
-    KoRTree<KisSplat *> m_flowing;
+    QList<KisSplat *> m_flowing;
     KoRTree<KisSplat *> m_fixed;
-    KoRTree<KisSplat *> m_dried;
+    QList<KisSplat *> m_dried;
 };
 
 #endif // KIS_WATERCOLOR_BASE_ITEMS_H

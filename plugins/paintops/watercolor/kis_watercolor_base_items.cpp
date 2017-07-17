@@ -53,7 +53,7 @@ void KisWatercolorBaseItems::paint(QPointF pos, qreal radius, int brushType, con
 void KisWatercolorBaseItems::repaint(KisPainter *painter)
 {
 
-    foreach (KisSplat *splat, m_flowing.values()) {
+    foreach (KisSplat *splat, m_dried) {
         splat->doPaint(painter);
     }
 
@@ -61,25 +61,23 @@ void KisWatercolorBaseItems::repaint(KisPainter *painter)
         splat->doPaint(painter);
     }
 
-    foreach (KisSplat *splat, m_dried.values()) {
+    foreach (KisSplat *splat, m_flowing) {
         splat->doPaint(painter);
     }
 }
 
 void KisWatercolorBaseItems::update()
 {
-    QList<KisSplat *> list = m_flowing.values();
-
-    foreach (KisSplat *splat, list) {
+    foreach (KisSplat *splat, m_flowing) {
         if (splat->update(m_wetMap) == KisSplat::Fixed) {
             m_fixed.insert(splat->boundingRect(), splat);
-            m_flowing.remove(splat);
+            m_flowing.removeOne(splat);
         }
     }
-    list = m_fixed.values();
+    QList<KisSplat *> list = m_fixed.values();
     foreach (KisSplat *splat, list) {
         if (splat->update(m_wetMap) == KisSplat::Dried) {
-            m_dried.insert(splat->boundingRect(), splat);
+            m_dried.push_back(splat);
             m_fixed.remove(splat);
         }
     }
@@ -87,7 +85,7 @@ void KisWatercolorBaseItems::update()
     m_wetMap->update();
 }
 
-KisWatercolorBaseItems::KisWatercolorBaseItems() : m_flowing(4, 2), m_fixed(4, 2), m_dried(4, 2)
+KisWatercolorBaseItems::KisWatercolorBaseItems() : m_fixed(4, 2)
 {
     m_wetMap = new KisWetMap();
 }

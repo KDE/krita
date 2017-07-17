@@ -116,10 +116,18 @@ void KisSplat::doPaint(KisPainter *painter)
     if (multiply < 0.f || multiply > 1.f)
         multiply = 1;
 
-    painter->setPaintColor(m_initColor);
+    qint8 oldOpacity = painter->opacity();
+    KisPainter::FillStyle oldFillStyle = painter->fillStyle();
+    KoColor oldColor = painter->paintColor();
+
     painter->setOpacity(START_OPACITY * multiply);
     painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter->setPaintColor(m_initColor);
     painter->fillPainterPath(this->shape());
+
+    painter->setOpacity(oldOpacity);
+    painter->setFillStyle(oldFillStyle);
+    painter->setPaintColor(oldColor);
 }
 
 QPainterPath KisSplat::shape() const

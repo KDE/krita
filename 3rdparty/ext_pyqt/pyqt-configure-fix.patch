@@ -1,0 +1,15 @@
+--- a/configure.py	2017-07-03 18:25:14.000000000 +0800
++++ b/configure.py	2017-07-15 01:19:44.622435500 +0800
+@@ -2168,10 +2168,8 @@
+     if source is None:
+         for disabled in run_test_program(mname, test, verbose):
+             if disabled:
+-                inform("Disabled %s features: %s" % (mname,
+-                        ', '.join(disabled)))
+-
+-            target_config.pyqt_disabled_features.extend(disabled)
++                inform("Disabled %s features: %s" % (mname, disabled))
++                target_config.pyqt_disabled_features.append(disabled)
+ 
+     # Include the module in the build.
+     target_config.pyqt_modules.append(mname)

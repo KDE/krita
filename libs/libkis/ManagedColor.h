@@ -199,6 +199,7 @@ public:
 private:
 
     friend class View;
+    friend class PaletteView;
     KoColor color() const;
 
     struct Private;

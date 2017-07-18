@@ -115,8 +115,15 @@ public:
     //Insert
 
 private:
+    friend class PaletteView;
     struct Private;
     Private *const d;
+
+    /**
+     * @brief colorSet
+     * @return gives qa KoColorSet object back
+     */
+    KoColorSet *colorSet();
 
 };
 

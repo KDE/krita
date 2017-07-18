@@ -29,7 +29,7 @@ struct PaletteView::Private
 PaletteView::PaletteView(QWidget *parent)
     : QWidget(parent), d(new Private)
 {
-    d->widget = new KisPaletteView(parent);
+    d->widget = new KisPaletteView(this);
     d->model = new KisPaletteModel();
     d->widget->setPaletteModel(d->model);
     this->setLayout(new QVBoxLayout());

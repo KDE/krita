@@ -16,9 +16,11 @@ if (WIN32)
         -opensource -confirm-license
         #
         -release -platform win32-g++ -prefix ${EXTPREFIX_qt}
-        # Uncomment this line for building Qt with debugging info enabled
-        #-force-debug-info
     )
+    if (QT_ENABLE_DEBUG_INFO)
+        # Set the option to build Qt with debugging info enabled
+        list(APPEND _QT_conf -force-debug-info)
+    endif(QT_ENABLE_DEBUG_INFO)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

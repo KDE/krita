@@ -51,6 +51,10 @@ message( STATUS "CMAKE_CL_64: ${CMAKE_CL_64}")
 set(GLOBAL_BUILD_TYPE RelWithDebInfo)
 set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 
+if (MINGW)
+	option(QT_ENABLE_DEBUG_INFO "Build Qt with debug info included" OFF)
+endif (MINGW)
+
 if (DEFINED EP_PREFIX)
 	set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX})
 endif (DEFINED EP_PREFIX)

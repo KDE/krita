@@ -56,7 +56,8 @@ protected:
 private:
     enum TelemetryCategory {
         tools,
-        install
+        install,
+        asserts
     };
 
 private:
@@ -64,6 +65,8 @@ private:
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_toolSources;
     QScopedPointer<KUserFeedback::Provider> m_installProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_installSources;
+    QScopedPointer<KUserFeedback::Provider> m_assertsProvider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_assertsSources;
     QMultiMap<QString, QWeakPointer<KisTicket> > m_tickets;
 
 private:

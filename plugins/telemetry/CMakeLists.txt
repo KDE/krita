@@ -5,6 +5,7 @@ set(kritatelemetry_SOURCES
     kis_cpuinfosource.cpp
     kis_toolsinfosource.cpp
     kis_tickets.cpp
+    kis_assertinfosource.cpp
 )
 add_subdirectory( tests )
 

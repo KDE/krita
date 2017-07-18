@@ -34,6 +34,7 @@
 #include <iostream>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_assertinfosource.h>
 
 KisTelemetryProvider::KisTelemetryProvider()
 {
@@ -67,6 +68,16 @@ KisTelemetryProvider::KisTelemetryProvider()
     for (auto& source : m_toolSources) {
         m_toolsProvider.data()->addDataSource(source.get());
     }
+
+    m_assertsProvider.reset(new KUserFeedback::Provider);
+    m_toolsProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> asserts(new KisUserFeedback::AssertInfoSource);
+    m_assertsSources.push_back(std::move(asserts));
+    for (auto& source : m_assertsSources) {
+        m_assertsProvider.data()->addDataSource(source.get());
+    }
+
+
 }
 
 void KisTelemetryProvider::sendData(QString path, QString adress)
@@ -77,8 +88,6 @@ void KisTelemetryProvider::sendData(QString path, QString adress)
     QString finalAdress = adress.isNull() ? m_adress : adress;
     switch (enumPath) {
     case tools: {
-        qDebug()<<path;
-        qDebug()<<(finalAdress+path);
         m_toolsProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
         m_toolsProvider.data()->submit();
         break;
@@ -88,6 +97,12 @@ void KisTelemetryProvider::sendData(QString path, QString adress)
         m_installProvider.data()->submit();
         break;
     }
+    case asserts:{
+        m_assertsProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
+        m_assertsProvider.data()->submit();
+        break;
+
+    }
     default:
         break;
     }
@@ -95,10 +110,6 @@ void KisTelemetryProvider::sendData(QString path, QString adress)
 
 void KisTelemetryProvider::getTimeTicket(QString id)
 {
-    //    qDebug() << "get TIme ticket call";
-
-    //    qDebug() << ppVar(m_tickets.count(id));
-
     KisTicket* ticket = m_tickets.value(id).lock().data();
     if (!ticket) {
         return;
@@ -114,7 +125,6 @@ void KisTelemetryProvider::getTimeTicket(QString id)
     KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
     KIS_SAFE_ASSERT_RECOVER_RETURN(ticket);
 
-    qDebug() << "Before deactivate";
     tools->deactivateTool(id);
     m_tickets.remove(id);
 }
@@ -150,5 +160,7 @@ KisTelemetryProvider::TelemetryCategory KisTelemetryProvider::pathToKind(QString
         return tools;
     else if (path == "install/")
         return install;
+    else if (path=="asserts/")
+        return asserts;
     return tools;
 }

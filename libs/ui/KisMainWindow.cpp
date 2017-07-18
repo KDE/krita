@@ -474,6 +474,14 @@ KisMainWindow::KisMainWindow()
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
 
+    //check fatal asserts
+    try {
+        KisTelemetryAbstruct* provider = KisPart::instance()->provider();
+        provider->sendData("asserts");
+    }
+    catch (std::exception e){
+        Q_UNUSED(e);
+    }
 
 
 }

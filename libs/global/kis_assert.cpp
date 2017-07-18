@@ -27,6 +27,9 @@
 #include <kis_assert_exception.h>
 #include <string>
 #include "config-hide-safe-asserts.h"
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 /**
  * TODO: Add automatic saving of the documents
@@ -74,6 +77,12 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 #endif
 
     disableAssertMsg |= shouldIgnoreAsserts;
+     if(!disableAssertMsg) {
+         KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisAsserts");
+         configGroup.writeEntry("FatalAssertion", assertion);
+         configGroup.writeEntry("FatalFile", file);
+         configGroup.writeEntry("FatalLine", line);
+     }
 
     QMessageBox::StandardButton button =
         isIgnorable ? QMessageBox::Ignore : QMessageBox::Abort;

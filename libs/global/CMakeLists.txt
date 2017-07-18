@@ -33,6 +33,7 @@ target_link_libraries(kritaglobal
         Qt5::Widgets 
         Qt5::Xml 
         KF5::I18n
+        KF5::ConfigCore
 )
 
 set_target_properties(kritaglobal PROPERTIES

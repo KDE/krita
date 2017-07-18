@@ -41,17 +41,20 @@ namespace {
 class ShortcutOverriderBase
 {
 public:
-    enum class decisionOnShortcutOverride{overrideShortcut,
-                                          askNext,
-                                          dontOverrideShortcut};
+    enum class DecisionOnShortcutOverride {
+        overrideShortcut,
+        askNext,
+        dontOverrideShortcut
+    };
+
     constexpr ShortcutOverriderBase() = default;
     virtual ~ShortcutOverriderBase()
     {}
     virtual bool interestedInEvent(QKeyEvent *event) = 0;
-    virtual decisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event) = 0;
-    virtual decisionOnShortcutOverride FinishedPhysicalKeyPressHandling()
+    virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event) = 0;
+    virtual DecisionOnShortcutOverride finishedPhysicalKeyPressHandling()
     {
-        return decisionOnShortcutOverride::askNext;
+        return DecisionOnShortcutOverride::askNext;
     }
 };
 
@@ -88,7 +91,7 @@ public:
             ,QKeySequence::Undo
             ,QKeySequence::Redo
         };
-        for(QKeySequence::StandardKey sk : actionsForQLineEdit) {
+        for (QKeySequence::StandardKey sk : actionsForQLineEdit) {
             if (event->matches(sk)) {
                 event->accept();
                 return true;
@@ -96,15 +99,15 @@ public:
         }
         return false;
     }
-    virtual decisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
+    virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
-        if( (qobject_cast<QLineEdit*>     (receiver) != nullptr)||
+        if ((qobject_cast<QLineEdit*>     (receiver) != nullptr)||
             (qobject_cast<QSpinBox*>      (receiver) != nullptr)||
             (qobject_cast<QDoubleSpinBox*>(receiver) != nullptr)) {
 
-            return decisionOnShortcutOverride::overrideShortcut;
-        }else{
-            return decisionOnShortcutOverride::askNext;
+            return DecisionOnShortcutOverride::overrideShortcut;
+        } else {
+            return DecisionOnShortcutOverride::askNext;
         }
     }
 };
@@ -116,10 +119,10 @@ public:
 
     virtual bool interestedInEvent(QKeyEvent *event) override
     {
-        if(event->modifiers() != Qt::NoModifier) {
+        if (event->modifiers() != Qt::NoModifier) {
             return false;
         }
-        switch(event->key()) {
+        switch (event->key()) {
         case Qt::Key_Down:
         case Qt::Key_Up:
         case Qt::Key_PageDown:
@@ -130,14 +133,14 @@ public:
             return false;
         }
     }
-    virtual decisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
+    virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
         if (qobject_cast<QSpinBox*>      (receiver) != nullptr||
             qobject_cast<QDoubleSpinBox*>(receiver) != nullptr) {
 
-            return decisionOnShortcutOverride::overrideShortcut;
-        }else{
-            return decisionOnShortcutOverride::askNext;
+            return DecisionOnShortcutOverride::overrideShortcut;
+        } else {
+            return DecisionOnShortcutOverride::askNext;
         }
 
     }
@@ -161,23 +164,24 @@ public:
             return false;
         }
     }
-    virtual decisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
+    virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
-        if(qobject_cast<KisQPainterCanvas*>(receiver) != nullptr||
-           qobject_cast<KisOpenGLCanvas2*> (receiver) != nullptr) {
-            return decisionOnShortcutOverride::dontOverrideShortcut;
-        }else{
+        if (qobject_cast<KisQPainterCanvas*>(receiver) != nullptr||
+            qobject_cast<KisOpenGLCanvas2*> (receiver) != nullptr) {
+
+            return DecisionOnShortcutOverride::dontOverrideShortcut;
+        } else {
             m_nooverride = true;
-            return decisionOnShortcutOverride::askNext;
+            return DecisionOnShortcutOverride::askNext;
         }
     }
-    virtual decisionOnShortcutOverride FinishedPhysicalKeyPressHandling() override
+    virtual DecisionOnShortcutOverride finishedPhysicalKeyPressHandling() override
     {
         if (m_nooverride){
             m_nooverride = false;
-            return decisionOnShortcutOverride::overrideShortcut;
+            return DecisionOnShortcutOverride::overrideShortcut;
         }
-        return decisionOnShortcutOverride::askNext;
+        return DecisionOnShortcutOverride::askNext;
     }
 private:
     bool m_nooverride = false;
@@ -206,30 +210,32 @@ struct KisQtWidgetsTweaker::Private
 {
 public:
     Private(KisQtWidgetsTweaker *parent)
-        :q(parent)
-        ,lastKeyPressProcessingComplete(true)
-        ,decision(ShortcutOverriderBase::decisionOnShortcutOverride::askNext)
-        ,interestedHandlers(numOfShortcutOverriders)
-    {    }
+        : q(parent)
+        , lastKeyPressProcessingComplete(true)
+        , decision(ShortcutOverriderBase::DecisionOnShortcutOverride::askNext)
+        , interestedHandlers(numOfShortcutOverriders)
+    {
+    }
+
     const KisQtWidgetsTweaker *q;
 
     QBitArray interestedHandlers = QBitArray(numOfShortcutOverriders);
 
-    ShortcutOverriderBase::decisionOnShortcutOverride decision =
-            ShortcutOverriderBase::decisionOnShortcutOverride::askNext;
+    ShortcutOverriderBase::DecisionOnShortcutOverride decision =
+            ShortcutOverriderBase::DecisionOnShortcutOverride::askNext;
     //unsigned long lastEventTimestamp=0;
 
     bool lastKeyPressProcessingComplete = true;
     void newPhysicalKeyPressed(QKeyEvent *event)
     {
-        for(int i=0; i < numOfShortcutOverriders;++i) {
+        for (int i=0; i < numOfShortcutOverriders; ++i) {
             if (allShortcutOverriders[i]->interestedInEvent(event)) {
                 interestedHandlers.setBit(i);
             }else{
                 interestedHandlers.clearBit(i);
             }
         }
-        decision = ShortcutOverriderBase::decisionOnShortcutOverride::askNext;
+        decision = ShortcutOverriderBase::DecisionOnShortcutOverride::askNext;
         lastKeyPressProcessingComplete = false;
     }
 };
@@ -262,8 +268,8 @@ bool KisQtWidgetsTweaker::eventFilter(QObject *receiver, QEvent *event)
         if (d->lastKeyPressProcessingComplete) {
             d->newPhysicalKeyPressed(key);
         }
-        for(int i=0; i < numOfShortcutOverriders;++i) {
-            if (d->decision != ShortcutOverriderBase::decisionOnShortcutOverride::askNext) {
+        for(int i = 0; i < numOfShortcutOverriders; ++i) {
+            if (d->decision != ShortcutOverriderBase::DecisionOnShortcutOverride::askNext) {
                 break;
             }
             if (d->interestedHandlers.at(i)) {
@@ -272,30 +278,30 @@ bool KisQtWidgetsTweaker::eventFilter(QObject *receiver, QEvent *event)
         }
         //if nothing said wether shortcutoverride to be accepted
         //last widget that qt will ask will be kismainwindow or docker
-        if(qobject_cast<KisMainWindow*>(receiver)!=nullptr||
-           receiver->inherits(QDockWidget::staticMetaObject.className())) {
-            for(int i=0; i < numOfShortcutOverriders;++i) {
-                if (d->decision != ShortcutOverriderBase::decisionOnShortcutOverride::askNext) {
+        if (qobject_cast<KisMainWindow*>(receiver)!=nullptr||
+            receiver->inherits(QDockWidget::staticMetaObject.className())) {
+            for (int i = 0; i < numOfShortcutOverriders; ++i) {
+                if (d->decision != ShortcutOverriderBase::DecisionOnShortcutOverride::askNext) {
                     break;
                 }
                 if (d->interestedHandlers.at(i)) {
-                    d->decision = allShortcutOverriders[i]->FinishedPhysicalKeyPressHandling();
+                    d->decision = allShortcutOverriders[i]->finishedPhysicalKeyPressHandling();
                 }
             }
 
             d->lastKeyPressProcessingComplete = true;
         }
         bool retval = false;
-        switch(d->decision) {
-        case ShortcutOverriderBase::decisionOnShortcutOverride::askNext:
+        switch (d->decision) {
+        case ShortcutOverriderBase::DecisionOnShortcutOverride::askNext:
             event->ignore();
             retval = false;
             break;
-        case ShortcutOverriderBase::decisionOnShortcutOverride::dontOverrideShortcut:
+        case ShortcutOverriderBase::DecisionOnShortcutOverride::dontOverrideShortcut:
             event->ignore();
             retval = true;
             break;
-        case ShortcutOverriderBase::decisionOnShortcutOverride::overrideShortcut:
+        case ShortcutOverriderBase::DecisionOnShortcutOverride::overrideShortcut:
             event->accept();
             //once shortcutoverride acepted, qt stop asking everyone
             //about it and proceed to handling next event

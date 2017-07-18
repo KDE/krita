@@ -31,7 +31,7 @@ PaletteView::PaletteView(QWidget *parent)
 {
     d->widget = new KisPaletteView(parent);
     d->model = new KisPaletteModel();
-    d->widget->setModel(d->model);
+    d->widget->setPaletteModel(d->model);
     this->setLayout(new QVBoxLayout());
     this->layout()->addWidget(d->widget);
 
@@ -44,7 +44,7 @@ PaletteView::PaletteView(QWidget *parent)
 
 PaletteView::~PaletteView()
 {
-
+    delete d->model;
 }
 
 void PaletteView::setPalette(Palette *palette)

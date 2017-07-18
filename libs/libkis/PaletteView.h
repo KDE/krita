@@ -31,7 +31,8 @@
 
 /**
  * @brief The PaletteView class is a wrapper around a MVC method for handling
- * palettes. This class shows a nice widget.
+ * palettes. This class shows a nice widget that can drag and drop, edit colors in a colorset
+ * and will handle adding and removing entries if you'd like it to.
  */
 
 class KRITALIBKIS_EXPORT PaletteView : public QWidget
@@ -41,13 +42,52 @@ public:
     PaletteView(QWidget *parent = 0);
     ~PaletteView();
 public Q_SLOTS:
+    /**
+     * @brief setPalette
+     * Set a new palette.
+     * @param palette
+     */
     void setPalette(Palette *palette);
+    /**
+     * @brief addEntryWithDialog
+     * This gives a simple dialog for adding colors, with options like
+     * adding name, id, and to which group the color should be added.
+     * @param color the default color to add
+     * @return whether it was succesful.
+     */
     bool addEntryWithDialog(ManagedColor *color);
+    /**
+     * @brief addGroupWithDialog
+     * gives a little dialog to ask for the desired groupname.
+     * @return whether this was succesful.
+     */
     bool addGroupWithDialog();
+    /**
+     * @brief removeSelectedEntryWithDialog
+     * removes the selected entry. If it is a group, it pop up a dialog
+     * asking whether the colors should also be removed.
+     * @return whether this was succesful
+     */
     bool removeSelectedEntryWithDialog();
+    /**
+     * @brief trySelectClosestColor
+     * tries to select the closest color to the one given.
+     * It does not force a change on the active color.
+     * @param color the color to compare to.
+     */
     void trySelectClosestColor(ManagedColor *color);
 Q_SIGNALS:
+    /**
+     * @brief entrySelectedForeGround
+     * fires when a swatch is selected with leftclick.
+     * @param entry
+     */
     void entrySelectedForeGround(KoColorSetEntry entry);
+    /**
+     * @brief entrySelectedBackGround
+     * fires when a swatch is selected with rightclick.
+     * @param entry
+     */
     void entrySelectedBackGround(KoColorSetEntry entry);
 private:
     struct Private;

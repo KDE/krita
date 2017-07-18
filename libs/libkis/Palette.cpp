@@ -100,3 +100,8 @@ ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
     ManagedColor *color = new ManagedColor(entry.color);
     return color;
 }
+
+KoColorSet *Palette::colorSet()
+{
+    return d->palette;
+}

@@ -440,21 +440,20 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
 {
     // Find the module:
     // 0) try to locate directory based plugin first
-    QString rel_path = QString(Python::PYKRITA_ENGINE);
-    dbgScript << rel_path;
-    rel_path = rel_path + "/" + plugin.moduleFilePathPart();
-    dbgScript << rel_path;
+    QString rel_path = plugin.moduleFilePathPart();
     rel_path = rel_path + "/" + "__init__.py";
-    dbgScript << rel_path;
+    dbgScript << "Finding Pyrhon module with rel_path:" << rel_path;
 
-    QString module_path = KoResourcePaths::findResource("appdata", rel_path);
+    QString module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
 
-    dbgScript << module_path;
+    dbgScript << "module_path:" << module_path;
 
     if (module_path.isEmpty()) {
         // 1) Nothing found, then try file based plugin
-        rel_path = QString(Python::PYKRITA_ENGINE) + "/" + plugin.moduleFilePathPart() + ".py";
-        module_path = KoResourcePaths::findResource("appdata", rel_path);
+        rel_path = plugin.moduleFilePathPart() + ".py";
+        dbgScript << "Finding Pyrhon module with rel_path:" << rel_path;
+        module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
+        dbgScript << "module_path:" << module_path;
     } else {
         plugin.m_isDir = true;
     }
@@ -467,7 +466,7 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
                                    , "Unable to find the module specified <application>%1</application>"
                                    , plugin.m_pythonPlugin.library()
                                );
-        dbgScript << "Plugin is " << plugin.m_errorReason;
+        dbgScript << "Cannot load module:" << plugin.m_errorReason;
         return false;
     }
     dbgScript << "Found module path:" << module_path;

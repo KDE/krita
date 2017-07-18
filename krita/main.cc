@@ -45,6 +45,7 @@
 #include "KisPart.h"
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
+#include "input/KisQtWidgetsTweaker.h"
 
 #if defined Q_OS_WIN
 #include <windows.h>
@@ -229,6 +230,8 @@ extern "C" int main(int argc, char **argv)
 #if defined HAVE_X11
     app.installNativeEventFilter(KisXi2EventFilter::instance());
 #endif
+    app.installEventFilter(KisQtWidgetsTweaker::instance());
+
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

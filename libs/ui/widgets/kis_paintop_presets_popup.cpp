@@ -208,6 +208,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect (m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRenameBrushDeactivated()));
 
+
     connect(m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSaveRenameCurrentBrush()));
 
@@ -274,6 +275,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
+
 
 
 
@@ -475,8 +477,11 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
         return;
     }
 
-    bool showdirtyNotification = m_d->resourceProvider->currentPreset()->isPresetDirty();
-    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(showdirtyNotification);
+    bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
+
+    m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
+
 
 }
 

@@ -113,6 +113,8 @@
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include <mutex>
+#include <KisPart.h>
+#include <kis_telemetry_actions.h>
 
 
 // Define the protocol used here for embedded documents' URL
@@ -737,6 +739,9 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             }
 
             d->mimeType = outputMimeType;
+             KisSaveImageProperties kisSaveImageProperties(d->image);
+             QString fileName = localFilePath();
+            kisSaveImageProperties.doAction(KisPart::instance()->provider(), fileName);
         }
     }
 

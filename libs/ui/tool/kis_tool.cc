@@ -127,7 +127,6 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     kisToolsActivate.doAction(KisPart::instance()->provider(),toolId());
 
     resetCursorStyle();
-    KIS_ASSERT(1==0);
     if (!canvas()) return;
     if (!canvas()->resourceManager()) return;
 

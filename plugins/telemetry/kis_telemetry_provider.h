@@ -52,12 +52,14 @@ public:
 protected:
     void getTimeTicket(QString id) override;
     void putTimeTicket(QString id) override;
+    void saveImageProperites(QString fileName, KisImageSP &image) override;
 
 private:
     enum TelemetryCategory {
         tools,
         install,
-        asserts
+        asserts,
+        imageProperties
     };
 
 private:
@@ -67,7 +69,10 @@ private:
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_installSources;
     QScopedPointer<KUserFeedback::Provider> m_assertsProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_assertsSources;
+    QScopedPointer<KUserFeedback::Provider> m_imagePropertiesProvider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_imagePropertiesSources;
     QMultiMap<QString, QWeakPointer<KisTicket> > m_tickets;
+ ;
 
 private:
     TelemetryCategory pathToKind(QString path);

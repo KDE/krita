@@ -21,31 +21,53 @@
 #define KIS_TICKETS_H
 
 #include <QDateTime>
+#include <QSize>
+#include <kis_types.h>
 
 class KisTicket {
 public:
-    KisTicket(){}
+    KisTicket() {}
     KisTicket(QString id);
     QString ticketId() const;
     void setTickedId(QString id);
-    virtual ~KisTicket(){}
+    virtual ~KisTicket() {}
 protected:
     QString m_id;
 };
 
-class KisTimeTicket: public KisTicket{
+class KisTimeTicket : public KisTicket {
 public:
     KisTimeTicket(QString id);
-    void setStartTime(QDateTime &time);
-    void setEndTime(QDateTime &time);
+    void setStartTime(QDateTime& time);
+    void setEndTime(QDateTime& time);
     QDateTime startTime() const;
     QDateTime endTime() const;
     int useTimeMSeconds() const;
     void addMSecs(int seconds);
+
 private:
     QDateTime m_start;
     QDateTime m_end;
 };
 
-#endif
+class KisImagePropertiesTicket : public KisTicket {
+public:
+    KisImagePropertiesTicket(KisImageSP& image,QString id);
 
+    QSize size() const;
+    int getNumLayers() const;
+    QString getFileFormat() const;
+    QString getColorSpace() const;
+    int getImageSize() const;
+    QString getColorProfile() const;
+
+private:
+    QSize m_size;
+    int numLayers;
+    QString fileFormat;
+    QString colorSpace;
+    QString colorProfile;
+    qint64 imageSize;
+};
+
+#endif

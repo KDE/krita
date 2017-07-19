@@ -32,9 +32,10 @@
 #include "kis_toolsinfosource.h"
 #include <KoToolRegistry.h>
 #include <iostream>
-#include <kis_global.h>
-#include <kis_types.h>
 #include <kis_assertinfosource.h>
+#include <kis_global.h>
+#include <kis_imagepropertiessource.h>
+#include <kis_types.h>
 
 KisTelemetryProvider::KisTelemetryProvider()
 {
@@ -77,7 +78,13 @@ KisTelemetryProvider::KisTelemetryProvider()
         m_assertsProvider.data()->addDataSource(source.get());
     }
 
-
+    m_imagePropertiesProvider.reset(new KUserFeedback::Provider);
+    m_imagePropertiesProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> imageProperties(new KisUserFeedback::ImagePropertiesSource);
+    m_imagePropertiesSources.push_back(std::move(imageProperties));
+    for (auto& source : m_imagePropertiesSources) {
+        m_imagePropertiesProvider.data()->addDataSource(source.get());
+    }
 }
 
 void KisTelemetryProvider::sendData(QString path, QString adress)
@@ -97,11 +104,15 @@ void KisTelemetryProvider::sendData(QString path, QString adress)
         m_installProvider.data()->submit();
         break;
     }
-    case asserts:{
+    case asserts: {
         m_assertsProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
         m_assertsProvider.data()->submit();
         break;
-
+    }
+    case imageProperties: {
+        m_imagePropertiesProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
+        m_imagePropertiesProvider.data()->submit();
+        break;
     }
     default:
         break;
@@ -150,6 +161,29 @@ void KisTelemetryProvider::putTimeTicket(QString id)
     tools->activateTool(timeTicket);
 }
 
+void KisTelemetryProvider::saveImageProperites(QString fileName, KisImageSP& image)
+{
+    KUserFeedback::AbstractDataSource* m_imageProperties = m_imagePropertiesSources[0].get();
+    KisUserFeedback::ImagePropertiesSource* imageProperties = nullptr;
+
+    QSharedPointer<KisTicket> imagePropertiesTicket;
+    imagePropertiesTicket.reset(new KisImagePropertiesTicket(image, fileName));
+
+    imageProperties = dynamic_cast<KisUserFeedback::ImagePropertiesSource*>(m_imageProperties);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(imageProperties);
+
+    if (m_tickets.count(fileName)) {
+        imageProperties->removeDumpProperties(fileName);
+        return;
+    }
+
+    QWeakPointer<KisTicket> weakimagePropertiesTicket(imagePropertiesTicket);
+
+    m_tickets.insert(fileName, weakimagePropertiesTicket);
+    imageProperties->createNewImageProperties(imagePropertiesTicket);
+}
+
 KisTelemetryProvider::~KisTelemetryProvider()
 {
 }
@@ -160,7 +194,9 @@ KisTelemetryProvider::TelemetryCategory KisTelemetryProvider::pathToKind(QString
         return tools;
     else if (path == "install/")
         return install;
-    else if (path=="asserts/")
+    else if (path == "asserts/")
         return asserts;
+    else if (path == "imageProperties/")
+        return imageProperties;
     return tools;
 }

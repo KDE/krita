@@ -648,6 +648,7 @@ void KisMainWindow::sendInfo()
         KisTelemetryAbstruct* provider = KisPart::instance()->provider();
         provider->sendData("install");
         provider->sendData("tools");
+        provider->sendData("imageProperties");
     };
 }
 

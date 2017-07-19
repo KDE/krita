@@ -28,6 +28,11 @@ void KisTelemetryAbstruct::doTicket(KisToolsStopUse &action, QString id)
     getTimeTicket(id);
 }
 
+void KisTelemetryAbstruct::doTicket(KisSaveImageProperties &action, QString id)
+{
+    saveImageProperites(id, action.image());
+}
+
 QString KisTelemetryAbstruct::getToolId(QString id, KisTelemetryAbstruct::UseMode mode)
 {
     QString toolId = "Tool" + getUseMode(mode);

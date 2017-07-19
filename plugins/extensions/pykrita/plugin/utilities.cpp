@@ -35,6 +35,7 @@
 #include <QLibrary>
 #include <QString>
 #include <QStringList>
+#include <QVector>
 
 #include <kconfigbase.h>
 #include <kconfiggroup.h>
@@ -48,9 +49,6 @@ namespace PyKrita
 {
 namespace
 {
-#ifndef Q_OS_WIN
-QLibrary* s_pythonLibrary = 0;
-#endif
 PyThreadState* s_pythonThreadState = 0;
 }                                                           // anonymous namespace
 
@@ -165,32 +163,38 @@ QString Python::lastTraceback() const
     return result;
 }
 
-void Python::libraryLoad()
+void Python::setPath(const QStringList& paths)
 {
-#ifdef Q_OS_WIN
     if (Py_IsInitialized()) {
-        dbgScript << "Python interpreter is already initialized";
+        warnScript << "Setting paths when Python interpreter is already initialized";
+    }
+#ifdef Q_OS_WIN
+    constexpr char pathSeparator = ';';
+#else
+    constexpr char pathSeparator = ':';
+#endif
+    QString joinedPaths = paths.join(pathSeparator);
+    // Append the default search path
+    // TODO: Properly handle embedded Python
+    QString currentPaths = QString::fromWCharArray(Py_GetPath());
+    if (!currentPaths.isEmpty()) {
+        joinedPaths = joinedPaths + pathSeparator + currentPaths;
+    }
+    dbgScript << "Setting paths:" << joinedPaths;
+    QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
+    joinedPaths.toWCharArray(joinedPathsWChars.data());
+    Py_SetPath(joinedPathsWChars.data());
+}
+
+void Python::ensureInitialized()
+{
+    if (Py_IsInitialized()) {
+        warnScript << "Python interpreter is already initialized, not initializing again";
     } else {
         dbgScript << "Initializing Python interpreter";
-#else
-    if (!s_pythonLibrary) {
-        dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
-        s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
-        if (!s_pythonLibrary)
-            errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
-
-        s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
-        if (!s_pythonLibrary->load())
-            errScript << "Could not load" << PYKRITA_PYTHON_LIBRARY;
-#endif
-
         Py_InitializeEx(0);
         if (!Py_IsInitialized()) {
-#ifdef Q_OS_WIN
             errScript << "Could not initialise Python interpreter";
-#else
-            errScript << "Could not initialise" << PYKRITA_PYTHON_LIBRARY;
-#endif
         }
 #if THREADED
         PyEval_InitThreads();
@@ -200,30 +204,6 @@ void Python::libraryLoad()
     }
 }
 
-void Python::libraryUnload()
-{
-#ifdef Q_OS_WIN
-    warnScript << "Explicitly unloading Python interpreter isn't supported for Windows";
-    {
-#else
-    if (s_pythonLibrary) {
-#endif
-        // Shut the interpreter down if it has been started.
-        if (Py_IsInitialized()) {
-#if THREADED
-            PyEval_AcquireThread(s_pythonThreadState);
-#endif
-            //Py_Finalize();
-        }
-#ifndef Q_OS_WIN
-        if (s_pythonLibrary->isLoaded()) {
-            s_pythonLibrary->unload();
-        }
-        delete s_pythonLibrary;
-        s_pythonLibrary = 0;
-#endif
-    }
-}
 
 PyObject* Python::moduleActions(const char* moduleName)
 {

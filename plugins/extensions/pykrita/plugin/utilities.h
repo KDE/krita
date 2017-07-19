@@ -59,14 +59,16 @@ public:
     ~Python();
 
     /**
-     * Load the Python interpreter.
+     * Set the Python paths by calling Py_SetPath. This should be called before
+     * initialization to ensure the proper libraries get loaded.
      */
-    static void libraryLoad();
+    static void setPath(const QStringList& paths);
 
     /**
-     * Unload the Python interpreter.
+     * Make sure the Python interpreter is initialized. Ideally should be only
+     * called once.
      */
-    static void libraryUnload();
+    static void ensureInitialized();
 
     /// Convert a QString to a Python unicode object.
     static PyObject* unicode(const QString& string);

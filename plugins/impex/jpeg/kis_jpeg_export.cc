@@ -85,7 +85,8 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     options.exif = configuration->getBool("exif", true);
     options.iptc = configuration->getBool("iptc", true);
     options.xmp = configuration->getBool("xmp", true);
-    options.transparencyFillColor = configuration->getColor("transparencyFillcolor").toQColor();
+    QStringList rgb = configuration->getString("transparencyFillcolor", "255,255,255").split(',');
+    options.transparencyFillColor = QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt());
     KisMetaData::FilterRegistryModel m;
     m.setEnabledFilters(configuration->getString("filters").split(","));
     options.filters = m.enabledFilters();

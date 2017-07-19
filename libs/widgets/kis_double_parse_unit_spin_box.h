@@ -109,6 +109,8 @@ public:
     //! \brief display the unit symbol in the spinbox or not. For example if the unit is displayed in a combobox connected to the unit manager.
     void setDisplayUnit(bool toggle);
 
+    void preventDecimalsChangeFromUnitManager(bool prevent);
+
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value, or converted to another reference unit.
     void valueChangedPt( qreal );

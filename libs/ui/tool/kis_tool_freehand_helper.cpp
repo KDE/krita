@@ -722,14 +722,14 @@ KisToolFreehandHelper::getStabilizedPaintInfo(const QQueue<KisPaintInformation> 
         if (m_d->smoothingOptions->stabilizeSensors()) {
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mixWithoutTime(k, *it, result);
+                result.KisPaintInformation::mixOtherWithoutTime(k, *it);
                 it++;
                 i++;
             }
         } else{
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mixOnlyPosition(k, *it, result);
+                result.KisPaintInformation::mixOtherOnlyPosition(k, *it);
                 it++;
                 i++;
             }

@@ -1,14 +1,14 @@
 {
     "Icon": "",
-    "Id": "Krita HeightMap Export Filter",
+    "Id": "Krita Heightmap Export Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Export": "image/x-r16,image/x-r8",
-    
+
+    "X-KDE-Export": "image/x-r32,image/x-r16,image/x-r8",
     "X-KDE-Library": "kritaheightmapexport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "r16,r8"
+    "X-KDE-Extensions" : "r32,r16,r8"
 }

@@ -55,6 +55,7 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, src, 255.0f);
 
         KisPainter painter(dst, selection);
+        painter.setCompositeOp(COMPOSITE_COPY);
         painter.bitBlt(dstRect.topLeft(), src, QRect(QPoint(0,0),dstRect.size()));
     }
     else {

@@ -110,6 +110,7 @@ private:
     void reportFailedShaderCompilation(const QString &context);
     void drawImage();
     void drawCheckers();
+    void drawGrid();
 
 private:
 

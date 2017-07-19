@@ -6,90 +6,215 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>191</width>
-    <height>145</height>
+    <width>355</width>
+    <height>319</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="fileSizeDescLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string>Size:</string>
+      <string>File size:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KisIntParseSpinBox" name="intSize">
-     <property name="maximum">
-      <number>1000000</number>
+    <widget class="QLabel" name="fileSizeLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>File size (bytes)</string>
+     </property>
+     <property name="text">
+      <string>0</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
+   <item row="3" column="0">
+    <widget class="QLabel" name="endiannessLabel">
      <property name="text">
       <string>Endianness:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="3" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string/>
+      <widget class="QRadioButton" name="radioLittle">
+       <property name="toolTip">
+        <string>Little Endian</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="radioMac">
-          <property name="toolTip">
-           <string>Big Endian</string>
-          </property>
-          <property name="text">
-           <string>&amp;Mac</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioPC">
-          <property name="toolTip">
-           <string>Little Endian</string>
-          </property>
-          <property name="text">
-           <string>PC</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <property name="text">
+        <string>&amp;Little</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">endiannessButtonGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioBig">
+       <property name="toolTip">
+        <string>Big Endian</string>
+       </property>
+       <property name="text">
+        <string>&amp;Big</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">endiannessButtonGroup</string>
+       </attribute>
       </widget>
      </item>
     </layout>
    </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QGroupBox" name="dimensionsGroupBox">
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="4" column="0" colspan="3">
+       <widget class="QPushButton" name="guessButton">
+        <property name="toolTip">
+         <string>Guess width and height based on file size and bits per pixel. Only values set to 0 will be updated.</string>
+        </property>
+        <property name="text">
+         <string>Guess dimensions</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="heightLabel">
+        <property name="text">
+         <string>Height:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="pxLabel">
+        <property name="text">
+         <string>px</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="heightInput">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Height of image in pixels.</string>
+        </property>
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="pxLabel2">
+        <property name="text">
+         <string>px</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="widthInput">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Width of image in pixels.</string>
+        </property>
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="widthLabel">
+        <property name="text">
+         <string>Width:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="statusLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="bppDescLabel">
+     <property name="text">
+      <string>Bits per pixel:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="bppLabel">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="typeDescLabel">
+     <property name="text">
+      <string>Type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLabel" name="typeLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
- </customwidgets>
+ <tabstops>
+  <tabstop>radioLittle</tabstop>
+  <tabstop>radioBig</tabstop>
+  <tabstop>widthInput</tabstop>
+  <tabstop>heightInput</tabstop>
+  <tabstop>guessButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="endiannessButtonGroup"/>
+ </buttongroups>
 </ui>

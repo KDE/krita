@@ -52,18 +52,22 @@ class Palette_Docker(DockWidget):
         self.currentPalette = Palette(allPalettes["Default"])
         self.cmb_palettes.currentTextChanged.connect(self.slot_paletteChanged)
         layout.addWidget(self.cmb_palettes) # add combobox to the layout
-        self.palette_frame = QScrollArea()
-        self.palette_frame.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.palette_container = QWidget()
-        self.palette_frame.setContentsMargins(0,0,0,0)
-        self.palette_layout = QVBoxLayout()
-        self.palette_layout.setSpacing(0)
-        self.palette_layout.setContentsMargins(0,0,0,0)
-        self.palette_container.setLayout(self.palette_layout)
-        self.palette_frame.setWidget(self.palette_container)
-        layout.addWidget(self.palette_frame)
-        print("palette")
-        self.fill_palette_frame()
+        self.paletteView = PaletteView()
+        self.paletteView.setPalette(self.currentPalette)
+        layout.addWidget(self.paletteView)
+        self.paletteView.entrySelectedForeGround.connect(self.slot_swatchSelected)
+        #self.palette_frame = QScrollArea()
+        #self.palette_frame.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        #self.palette_container = QWidget()
+        #self.palette_frame.setContentsMargins(0,0,0,0)
+        #self.palette_layout = QVBoxLayout()
+        #self.palette_layout.setSpacing(0)
+        #self.palette_layout.setContentsMargins(0,0,0,0)
+        #self.palette_container.setLayout(self.palette_layout)
+        #self.palette_frame.setWidget(self.palette_container)
+        #layout.addWidget(self.palette_frame)
+        #print("palette")
+        #self.fill_palette_frame()
         self.setWidget(widget)        # add widget to the docker
     
     
@@ -122,7 +126,7 @@ class Palette_Docker(DockWidget):
             
             for i in range(colorCount):
                 entry = self.currentPalette.colorSetEntryFromGroup(i, groupName)
-                color = self.currentPalette.colorForEntry(entry);
+                color = self.currentPalette.colorForEntry(entry)
                 swatch = palette_swatch_widget(self, color.colorForCanvas(self.canvas()), color)
                 swatch.setToolTip(entry.name)
                 swatch.setFixedHeight(swatchSize)
@@ -130,7 +134,7 @@ class Palette_Docker(DockWidget):
                 row = math.floor(i/columnCount)
                 gb_groupBox.layout().addWidget(swatch, row, column)
                 #print("palette swatch added "+entry.name+" "+str(column)+", "+str(row))
-                swatch.colorSelected.connect(self.slot_swatchSelected)
+                #swatch.colorSelected.connect(self.slot_swatchSelected)
             
             self.palette_layout.addWidget(gb_groupBox)
             gb_groupBox.adjustSize()
@@ -139,17 +143,19 @@ class Palette_Docker(DockWidget):
         
     def slot_paletteChanged(self, name):
         self.currentPalette = Palette(Application.resources("palette")[name])
-        self.fill_palette_frame()
+        self.paletteView.setPalette(self.currentPalette)
+        #self.fill_palette_frame()
 
-    @pyqtSlot('ManagedColor')
-    def slot_swatchSelected(self, color):
-        print("color "+color.toQString())
+    @pyqtSlot('KoColorSetEntry')
+    def slot_swatchSelected(self, entry):
+        print("entry "+entry.name)
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
+                color = self.currentPalette.colorForEntry(entry)
                 self.canvas().view().setForeGroundColor(color)
 
     def canvasChanged(self, canvas):
-        self.fill_palette_frame()
+        #self.fill_palette_frame()
         pass
 
 #Add docker to the application :)

@@ -20,8 +20,13 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+#include <kis_config.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
+
+const QString DlgOffsetImage::PARAM_PREFIX = "imageoffsetdlg";
+const QString DlgOffsetImage::PARAM_XOFFSET_UNIT = DlgOffsetImage::PARAM_PREFIX + "_xoffsetunit";
+const QString DlgOffsetImage::PARAM_YOFFSET_UNIT = DlgOffsetImage::PARAM_PREFIX + "_yoffsetunit";
 
 DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize imageSize)
     :   KoDialog(parent),
@@ -61,9 +66,19 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
     m_page->unitXComboBox->setModel(_widthUnitManager);
     m_page->unitYComboBox->setModel(_heightUnitManager);
 
-    const int pixelUnitIndex = _widthUnitManager->getsUnitSymbolList().indexOf("px"); //TODO: have a better way to identify units.
-    m_page->unitXComboBox->setCurrentIndex(pixelUnitIndex);
-    m_page->unitYComboBox->setCurrentIndex(pixelUnitIndex);
+    KisConfig cfg;
+
+    QString unitx = cfg.readEntry<QString>(PARAM_XOFFSET_UNIT, "px");
+    QString unity = cfg.readEntry<QString>(PARAM_YOFFSET_UNIT, "px");
+
+    _widthUnitManager->setApparentUnitFromSymbol(unitx);
+    _heightUnitManager->setApparentUnitFromSymbol(unity);
+
+    const int xUnitIndex = _widthUnitManager->getsUnitSymbolList().indexOf(unitx);
+    const int yUnitIndex = _heightUnitManager->getsUnitSymbolList().indexOf(unity);
+
+    m_page->unitXComboBox->setCurrentIndex(xUnitIndex);
+    m_page->unitYComboBox->setCurrentIndex(yUnitIndex);
 
     connect(this, SIGNAL(okClicked()),this, SLOT(okClicked()));
     connect(m_page->middleOffsetBtn, SIGNAL(clicked()), this, SLOT(slotMiddleOffset()));
@@ -80,6 +95,11 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
 
 DlgOffsetImage::~DlgOffsetImage()
 {
+    KisConfig cfg;
+
+    cfg.writeEntry<QString>(PARAM_XOFFSET_UNIT, _widthUnitManager->getApparentUnitSymbol());
+    cfg.writeEntry<QString>(PARAM_YOFFSET_UNIT, _heightUnitManager->getApparentUnitSymbol());
+
     delete m_page;
 }
 

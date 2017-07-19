@@ -28,7 +28,7 @@ elseif (MINGW)
         URL_MD5 1098da9ee1915354fedf38fd6fbe22ce
 
         CONFIGURE_COMMAND python.exe <SOURCE_DIR>/configure.py ${_SIP_conf}
-        BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS}
+        BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
         INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
         
         BUILD_IN_SOURCE 1

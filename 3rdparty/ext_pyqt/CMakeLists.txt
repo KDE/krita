@@ -35,7 +35,7 @@ elseif(MINGW)
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch
 
         CONFIGURE_COMMAND python.exe <SOURCE_DIR>/configure.py ${_PYQT_conf}
-        BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} CXXFLAGS=-D_hypot=hypot
+        BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} CXXFLAGS=-D_hypot=hypot LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
         INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
         
         BUILD_IN_SOURCE 1

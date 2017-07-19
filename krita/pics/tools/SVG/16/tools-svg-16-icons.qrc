@@ -75,6 +75,7 @@
         <file>light_shape_handling.svg</file>
         <file>dark_krita_tool_lazybrush.svg</file>
         <file>light_krita_tool_lazybrush.svg</file>
-
+        <file>dark_krita_tool_smart_patch.svg</file>
+        <file>light_krita_tool_smart_patch.svg</file>
     </qresource>
 </RCC>

@@ -326,21 +326,9 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(!isRenaming);
 
-
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(isRenaming);
     m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton->setVisible(isRenaming);
     m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton->setVisible(isRenaming);
-
-    if (isRenaming) // preset name probably won't exist in memory when we deactivate the UI at the start
-    {
-        // populate the text field with the currently selected brush name for editing
-        QString presetName = m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->currentResource()->name();
-        m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(presetName);
-    }
-
-
-
-
 
     m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.saveNewBrushPresetButton->setEnabled(!isRenaming);
@@ -556,6 +544,8 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     QString selectedBrush = resource->name().append(" (").append(currentBrushEngineName).append(" ").append("Engine").append(")");
 
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name());
+
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QGraphicsScene * thumbScene = new QGraphicsScene(this);

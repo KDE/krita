@@ -176,6 +176,7 @@ public:
 
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void mouseTripleClickEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
 

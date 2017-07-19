@@ -23,8 +23,9 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QTimer>
-#include <QClipboard>
 #include <QApplication>
+#include <QTouchEvent>
+#include <QClipboard>
 
 #include <kundo2command.h>
 #include <KoProperties.h>
@@ -58,6 +59,7 @@ KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
 {
     scrollTimer.setInterval(100);
     mouseLeaveWorkaround = false;
+    multiClickCount = 0;
 }
 
 void KoToolProxyPrivate::timeout() // Auto scroll the canvas
@@ -203,8 +205,43 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
     KoToolManager::instance()->priv()->switchInputDevice(id);
     d->mouseDownPoint = ev->pos();
 
-    if (d->tabletPressed) { // refuse to send a press unless there was a release first.
+    if (d->tabletPressed) // refuse to send a press unless there was a release first.
         return;
+
+    QPointF globalPoint = ev->globalPos();
+    if (d->multiClickGlobalPoint != globalPoint) {
+        if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
+                qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
+            d->multiClickCount = 0;
+        }
+        d->multiClickGlobalPoint = globalPoint;
+    }
+
+    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
+        // One more multiclick;
+        d->multiClickCount++;
+    } else {
+        d->multiClickTimeStamp.start();
+        d->multiClickCount = 1;
+    }
+
+    if (d->activeTool) {
+        switch (d->multiClickCount) {
+        case 0:
+        case 1:
+            d->activeTool->mousePressEvent(ev);
+            break;
+        case 2:
+            d->activeTool->mouseDoubleClickEvent(ev);
+            break;
+        case 3:
+        default:
+            d->activeTool->mouseTripleClickEvent(ev);
+            break;
+        }
+    } else {
+        d->multiClickCount = 0;
+        ev->ignore();
     }
 }
 
@@ -222,7 +259,8 @@ void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point
 
 void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    d->activeTool->mouseDoubleClickEvent(event);
+    // let us handle it as any other mousepress (where we then detect multi clicks
+    mousePressEvent(event);
 }
 
 void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)

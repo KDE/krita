@@ -190,17 +190,15 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setText(i18n("Presets"));
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(false);  // use a config to load/save this state
-   slotSwitchShowPresets(false); // hide presets by default
+    slotSwitchShowPresets(false); // hide presets by default
 
 
     // Connections
-
 
     connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
                m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
 
     connect(saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
-
 
     connect (m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRenameBrushActivated()));
@@ -208,9 +206,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect (m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRenameBrushDeactivated()));
 
-
     connect(m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSaveRenameCurrentBrush()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField, SIGNAL(returnPressed()),
+            SLOT(slotSaveRenameCurrentBrush()));
 
     connect(iconSizeSlider, SIGNAL(sliderMoved(int)),
             m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSetIconSize(int)));

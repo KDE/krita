@@ -166,7 +166,10 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 
 void KisPaletteView::trySelectClosestColor(KoColor color)
 {
-    quint32 i = m_d->model->colorSet()->getIndexClosestColor(color);
+    KoColorSet* color_set = m_d->model->colorSet();
+    if (!color_set)
+        return;
+    quint32 i = color_set->getIndexClosestColor(color);
     QModelIndex index = m_d->model->indexFromId(i);
     this->selectionModel()->clearSelection();
     this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
@@ -194,10 +197,12 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     }
     m_d->model = model;
     setModel(model);
+    paletteModelChanged();
     connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
+    connect(m_d->model, SIGNAL(modelReset()), this, SLOT(paletteModelChanged()));
 
 }
 
@@ -209,11 +214,15 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 void KisPaletteView::updateRows()
 {
     this->clearSpans();
-    for (int r=0; r<=m_d->model->rowCount(); r++) {
-        QModelIndex index = m_d->model->index(r, 0);
-        if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
-            setSpan(r, 0, 1, m_d->model->columnCount());
-            setRowHeight(r, this->fontMetrics().lineSpacing()+6);
+    if (m_d->model) {
+        for (int r=0; r<=m_d->model->rowCount(); r++) {
+            QModelIndex index = m_d->model->index(r, 0);
+            if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+                setSpan(r, 0, 1, m_d->model->columnCount());
+                setRowHeight(r, this->fontMetrics().lineSpacing()+6);
+            } else {
+                this->setRowHeight(r, this->columnWidth(0));
+            }
         }
     }
 }

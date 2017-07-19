@@ -267,6 +267,10 @@ KoColorSet* KisPaletteModel::colorSet() const
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
     QModelIndex index = QModelIndex();
+    if (i > colorSet()->nColors()) {
+        qWarning()<<"index is too big"<<i;
+        index = this->index(0,0);
+    }
     if (i < (int)colorSet()->nColorsGroup(0)) {
         index = QAbstractTableModel::index(i/columnCount(), i%columnCount());
         if (!index.isValid()) {
@@ -275,17 +279,25 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
         return index;
     } else {
         int rowstotal = 1+m_colorSet->nColorsGroup()/columnCount();
+        if (m_colorSet->nColorsGroup()==0) {
+            rowstotal +=1;
+        }
         int totalIndexes = colorSet()->nColorsGroup();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
-            totalIndexes += colorSet()->nColorsGroup(groupName);
-            if (totalIndexes<i) {
+            if (i+1<=totalIndexes+colorSet()->nColorsGroup(groupName) && i+1>totalIndexes) {
+                int col = (i-totalIndexes)%columnCount();
+                int row = rowstotal+1+((i-totalIndexes)/columnCount());
+                index = this->index(row, col);
+                return index;
+            } else {
                 rowstotal += 1+m_colorSet->nColorsGroup(groupName)/columnCount();
+                totalIndexes += colorSet()->nColorsGroup(groupName);
                 if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
                     rowstotal+=1;
                 }
-                rowstotal+=1;
-            } else {
-                index = QAbstractTableModel::index(rowstotal, i-(rowstotal*columnCount()));
+                if (m_colorSet->nColorsGroup(groupName)==0) {
+                    rowstotal+=1; //always add one for the group when considering groups.
+                }
             }
         }
     }

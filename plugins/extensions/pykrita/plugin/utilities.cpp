@@ -200,7 +200,7 @@ bool Python::setPath(const QStringList& paths)
 # endif
     }
 #else
-    QString currentPaths = QString.fromLocal8Bit(qgetenv("PYTHONPATH"));
+    QString currentPaths = QString::fromLocal8Bit(qgetenv("PYTHONPATH"));
 #endif
     if (!currentPaths.isEmpty()) {
         joinedPaths = joinedPaths + pathSeparator + currentPaths;

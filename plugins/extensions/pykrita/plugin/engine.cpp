@@ -227,7 +227,9 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
     // 1) shipped krita module's dir
     QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
     dbgScript << "Plugin Directories: " << pluginDirectories;
-    Python::setPath(pluginDirectories);
+    if (!Python::setPath(pluginDirectories)) {
+        return i18nc("@info:tooltip ", "Cannot set Python paths");
+    }
 
     if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
         return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");

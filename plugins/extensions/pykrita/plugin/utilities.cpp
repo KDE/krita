@@ -32,6 +32,7 @@
 #include <Python.h>
 
 
+#include <QDir>
 #include <QLibrary>
 #include <QString>
 #include <QStringList>
@@ -40,6 +41,7 @@
 #include <kconfigbase.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
+#include <KoResourcePaths.h>
 
 #include <kis_debug.h>
 
@@ -163,7 +165,7 @@ QString Python::lastTraceback() const
     return result;
 }
 
-void Python::setPath(const QStringList& paths)
+bool Python::setPath(const QStringList& paths)
 {
     if (Py_IsInitialized()) {
         warnScript << "Setting paths when Python interpreter is already initialized";
@@ -176,14 +178,42 @@ void Python::setPath(const QStringList& paths)
     QString joinedPaths = paths.join(pathSeparator);
     // Append the default search path
     // TODO: Properly handle embedded Python
-    QString currentPaths = QString::fromWCharArray(Py_GetPath());
+#ifdef Q_OS_WIN
+    QString currentPaths;
+    // Find embeddable Python
+    // TODO: Don't hard-code the paths
+    QDir pythonDir(KoResourcePaths::getApplicationRoot());
+    if (pythonDir.cd("python")) {
+        dbgScript << "Found embeddable Python at" << pythonDir.absolutePath();
+        currentPaths = pythonDir.absolutePath() + pathSeparator
+                     + pythonDir.absoluteFilePath("python36.zip");
+    } else {
+# if 1
+        // Use local Python???
+        currentPaths = QString::fromWCharArray(Py_GetPath());
+        warnScript << "Embeddable Python not found.";
+        warnScript << "Default paths:" << currentPaths;
+# else
+        // Or should we fail?
+        errScript << "Embeddable Python not found, not setting Python paths";
+        return false;
+# endif
+    }
+#else
+    QString currentPaths = QString.fromLocal8Bit(qgetenv("PYTHONPATH"));
+#endif
     if (!currentPaths.isEmpty()) {
         joinedPaths = joinedPaths + pathSeparator + currentPaths;
     }
     dbgScript << "Setting paths:" << joinedPaths;
+#ifdef Q_OS_WIN
     QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
     joinedPaths.toWCharArray(joinedPathsWChars.data());
     Py_SetPath(joinedPathsWChars.data());
+#else
+    qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
+#endif
+    return true;
 }
 
 void Python::ensureInitialized()

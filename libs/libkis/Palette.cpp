@@ -75,6 +75,12 @@ bool Palette::removeGroup(QString name, bool keepColors)
     return d->palette->removeGroup(name, keepColors);
 }
 
+int Palette::colorsCountTotal()
+{
+    if (!d->palette) return 0;
+    return d->palette->nColors();
+}
+
 int Palette::colorsCountGroup(QString name)
 {
     if (!d->palette) return 0;

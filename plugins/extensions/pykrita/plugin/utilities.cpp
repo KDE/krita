@@ -51,6 +51,9 @@ namespace PyKrita
 {
 namespace
 {
+#ifndef Q_OS_WIN
+QLibrary* s_pythonLibrary = 0;
+#endif
 PyThreadState* s_pythonThreadState = 0;
 }                                                           // anonymous namespace
 
@@ -165,6 +168,28 @@ QString Python::lastTraceback() const
     return result;
 }
 
+bool Python::libraryLoad()
+{
+    // no-op on Windows
+#ifndef Q_OS_WIN
+    if (!s_pythonLibrary) {
+        dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
+        s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
+        if (!s_pythonLibrary) {
+            errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
+            return false;
+        }
+
+        s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
+        if (!s_pythonLibrary->load()) {
+            errScript << "Could not load" << PYKRITA_PYTHON_LIBRARY;
+            return false;
+        }
+    }
+#endif
+    return true;
+}
+
 bool Python::setPath(const QStringList& paths)
 {
     if (Py_IsInitialized()) {
@@ -234,6 +259,32 @@ void Python::ensureInitialized()
     }
 }
 
+void Python::maybeFinalize()
+{
+    if (!Py_IsInitialized()) {
+        warnScript << "Python interpreter not initialized, no need to finalize";
+    } else {
+#if THREADED
+        PyEval_AcquireThread(s_pythonThreadState);
+#endif
+        Py_Finalize();
+    }
+}
+
+void Python::libraryUnload()
+{
+    // no-op on Windows
+#ifndef Q_OS_WIN
+    if (s_pythonLibrary) {
+        // Shut the interpreter down if it has been started.
+        if (s_pythonLibrary->isLoaded()) {
+            s_pythonLibrary->unload();
+        }
+        delete s_pythonLibrary;
+        s_pythonLibrary = 0;
+    }
+#endif
+}
 
 PyObject* Python::moduleActions(const char* moduleName)
 {

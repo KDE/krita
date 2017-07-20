@@ -59,6 +59,11 @@ public:
     ~Python();
 
     /**
+     * Load the Python shared library. This does nothing on Windows.
+     */
+    static bool libraryLoad();
+
+    /**
      * Set the Python paths by calling Py_SetPath. This should be called before
      * initialization to ensure the proper libraries get loaded.
      */
@@ -69,6 +74,16 @@ public:
      * called once.
      */
     static void ensureInitialized();
+
+    /**
+     * Finalize the Python interpreter. Not gauranteed to work.
+     */
+    static void maybeFinalize();
+
+    /**
+     * Unload the Python shared library. This does nothing on Windows.
+     */
+    static void libraryUnload();
 
     /// Convert a QString to a Python unicode object.
     static PyObject* unicode(const QString& string);

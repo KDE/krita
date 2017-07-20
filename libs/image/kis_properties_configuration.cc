@@ -264,11 +264,14 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
             QDomDocument doc;
             doc.setContent(v.toString());
             QDomElement e = doc.documentElement().firstChild().toElement();
-            return KoColor::fromXML(e, Integer16BitsColorDepthID.id());
+            bool ok;
+            KoColor c = KoColor::fromXML(e, Integer16BitsColorDepthID.id(), &ok);
+            if (ok) {
+                return c;
+            }
         }
-    } else {
-        return color;
     }
+    return color;
 }
 
 void KisPropertiesConfiguration::dump() const

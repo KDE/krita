@@ -466,9 +466,12 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
     }
 
     bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
-    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
 
+    // don't need to reload or overwrite a clean preset
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
     m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
+
 
 
 }

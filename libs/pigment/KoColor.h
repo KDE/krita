@@ -87,7 +87,6 @@ public:
     /// assign new profile without converting pixel data
     void setProfile(const KoColorProfile *profile);
 
-
     /// Replace the existing color data, and colorspace with the specified data.
     /// The data is copied.
     void setColor(const quint8 * data, const KoColorSpace * colorSpace = 0);
@@ -156,6 +155,21 @@ public:
      *         to unserialize the color
      */
     static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId);
+
+    /**
+     * Unserialize a color following Create's swatch color specification available
+     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     *
+     * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
+     * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
+     *                   a preferred bit depth for creating the KoColor object (if that
+     *                   bit depth isn't available, this function will randomly select
+     *                   an other bit depth)
+     * @param ok If a an error occurs, *ok is set to false; otherwise it's set to true
+     * @return the unserialize color, or an empty color object if the function failed
+     *         to unserialize the color
+     */
+    static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId, bool* ok);
 
     /**
      * @brief toQString create a user-visible string of the channel names and the channel values

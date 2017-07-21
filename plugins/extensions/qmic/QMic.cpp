@@ -243,7 +243,7 @@ void QMic::connected()
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
         QRectF cropRect(0.0, 0.0, 1.0, 1.0);
-        if (!messageMap.contains("croprect") || !messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() == 4) {
+        if (!messageMap.contains("croprect") || messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() != 4) {
             qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
         }
         else {
@@ -288,13 +288,22 @@ void QMic::connected()
 
     ds.writeBytes(ba.constData(), ba.length());
     // Flush the socket because we might not return to the event loop!
-    socket->waitForBytesWritten();
+    if (!socket->waitForBytesWritten(2000)) {
+        qWarning() << "Failed to write response:" << socket->error();
+    }
 
     // Wait for the ack
-    bool r;
-    r &= socket->waitForReadyRead(); // wait for ack
+    bool r = true;
+    r &= socket->waitForReadyRead(2000); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
-    socket->waitForDisconnected(-1);
+    if (!socket->waitForDisconnected(2000)) {
+        qWarning() << "Remote not disconnected:" << socket->error();
+        // Wait again
+        socket->disconnectFromServer();
+        if (socket->waitForDisconnected(2000)) {
+            qWarning() << "Disconnect timed out:" << socket->error();
+        }
+    }
 
 }
 

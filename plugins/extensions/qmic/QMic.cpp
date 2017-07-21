@@ -287,6 +287,8 @@ void QMic::connected()
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
     ds.writeBytes(ba.constData(), ba.length());
+    // Flush the socket because we might not return to the event loop!
+    socket->waitForBytesWritten();
 
     // Wait for the ack
     bool r;

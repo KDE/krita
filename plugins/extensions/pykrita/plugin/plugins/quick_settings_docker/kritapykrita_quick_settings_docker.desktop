@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=quick_settings_docker
+X-Python-2-Compatible=false
+Name=Quick Settings Docker
+Comment=A Python-based docker for quickly changing brush size and opacity.

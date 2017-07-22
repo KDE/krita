@@ -30,12 +30,14 @@ public:
     KisWatercolorPaintOpSettings();
     virtual ~KisWatercolorPaintOpSettings();
 
-    bool paintIncremental();
+    bool paintIncremental() override;
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+
+    bool needsContinuedStroke() override;
 
 private:
     struct Private;

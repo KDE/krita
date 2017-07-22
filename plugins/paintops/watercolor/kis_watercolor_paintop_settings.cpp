@@ -199,3 +199,8 @@ QList<KisUniformPaintOpPropertySP> KisWatercolorPaintOpSettings::uniformProperti
 
     return props;
 }
+
+bool KisWatercolorPaintOpSettings::needsContinuedStroke()
+{
+    return true;
+}

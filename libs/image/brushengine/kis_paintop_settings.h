@@ -264,6 +264,14 @@ public:
      */
     virtual void setRandomOffset(const KisPaintInformation &paintInformation);
 
+    /**
+     * @brief needsContinuedStroke
+     * @return information about the need of continue stroke (for watercolor)
+     */
+    virtual bool needsContinuedStroke() {
+        return false;
+    }
+
 protected:
 
     /**

@@ -79,6 +79,9 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     connect(m_helper, SIGNAL(requestExplicitUpdateOutline()),
             SLOT(explicitUpdateOutline()));
+
+    m_strokeNotStoped = false;
+    m_needEndContinuedStroke = false;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -157,6 +160,7 @@ void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &
 
 void KisToolFreehand::deactivate()
 {
+    m_needEndContinuedStroke = true;
     if (mode() == PAINT_MODE) {
         endStroke();
         setMode(KisTool::HOVER_MODE);
@@ -168,10 +172,18 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     setCurrentNodeLocked(true);
 
-    m_helper->initPaint(event, canvas()->resourceManager(),
-                        image(),
-                        currentNode(),
-                        image().data());
+    if (m_strokeNotStoped) {
+        qDebug() << "Inited part of continued stroke\n";
+        m_helper->initPaintInContinuedStroke(event, canvas()->resourceManager(),
+                                             image(), currentNode());
+        m_strokeNotStoped = false;
+    } else {
+        qDebug() << "Inited new stroke\n";
+        m_helper->initPaint(event, canvas()->resourceManager(),
+                            image(),
+                            currentNode(),
+                            image().data());
+    }
 }
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
@@ -187,7 +199,15 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
 
 void KisToolFreehand::endStroke()
 {
-    m_helper->endPaint();
+    if (currentPaintOpPreset()->settings()->needsContinuedStroke() && !m_needEndContinuedStroke) {
+        qDebug() << "Finished part of continued stroke\n";
+        m_helper->endPaintInContinuedStroke();
+        m_strokeNotStoped = true;
+    } else {
+        qDebug() << "All stroke finished";
+        m_needEndContinuedStroke = false;
+        m_helper->endPaint();
+    }
     setCurrentNodeLocked(false);
 }
 
@@ -312,6 +332,10 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
+    if (m_strokeNotStoped) {
+        m_needEndContinuedStroke = true;
+        endStroke();
+    }
     if (tryPickByPaintOp(event, action)) {
         m_paintopBasedPickingInAction = true;
         return;

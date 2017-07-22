@@ -131,6 +131,9 @@ private:
 
     bool m_paintopBasedPickingInAction;
     KisSignalCompressorWithParam<qreal> m_brushResizeCompressor;
+
+    bool m_strokeNotStoped;
+    bool m_needEndContinuedStroke;
 };
 
 

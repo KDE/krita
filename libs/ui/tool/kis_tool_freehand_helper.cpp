@@ -567,11 +567,45 @@ void KisToolFreehandHelper::endPaint()
      */
     m_d->painterInfos.clear();
 
+
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->endStroke();
+    }
+}
+
+void KisToolFreehandHelper::initPaintInContinuedStroke(KoPointerEvent *event,
+                                                       KoCanvasResourceManager *resourceManager,
+                                                       KisImageWSP image, KisNodeSP currentNode,
+                                                       KisDefaultBoundsBaseSP bounds)
+{
+    m_d->resources = new KisResourcesSnapshot(image,
+                                              currentNode,
+                                              resourceManager,
+                                              bounds);
+
+    KisPaintInformation info =
+            m_d->infoBuilder->continueStroke(event,
+                                             elapsedStrokeTime());
+    m_d->previousPaintInformation = info;
+
+    info.setCanvasRotation( m_d->canvasRotation );
+    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
+
+    KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
+
+    m_d->history.clear();
+    m_d->distanceHistory.clear();
+
+    paintAt(info);
+}
+
+void KisToolFreehandHelper::endPaintInContinuedStroke()
+{
+    if (!m_d->hasPaintAtLeastOnce) {
+        paintAt(m_d->previousPaintInformation);
     }
 }
 

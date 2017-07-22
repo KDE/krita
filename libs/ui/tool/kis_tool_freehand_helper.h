@@ -69,6 +69,11 @@ public:
     void paint(KoPointerEvent *event);
     void endPaint();
 
+    void initPaintInContinuedStroke(KoPointerEvent *event,
+                                    KoCanvasResourceManager *resourceManager,
+                                    KisImageWSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds = 0);
+    void endPaintInContinuedStroke();
+
     const KisPaintOp* currentPaintOp() const;
     QPainterPath paintOpOutline(const QPointF &savedCursorPos,
                                 const KoPointerEvent *event,

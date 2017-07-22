@@ -228,7 +228,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     int begin = cursor.position();
                     int end = cursor.anchor();
                     if (begin > end)
-                        qSwap(begin, end);
+                        std::swap(begin, end);
 
                     if (end < block.position() || begin > block.position() + block.length())
                         continue; // selection does not intersect this block.

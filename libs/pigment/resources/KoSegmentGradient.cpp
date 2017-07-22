@@ -826,7 +826,7 @@ const QList<double> KoSegmentGradient::getMiddleHandlePositions() const
 
 void KoSegmentGradient::moveSegmentStartOffset(KoGradientSegment* segment, double t)
 {
-    QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         if (it == m_segments.begin()) {
             segment->setStartOffset(0.0);
@@ -847,7 +847,7 @@ void KoSegmentGradient::moveSegmentStartOffset(KoGradientSegment* segment, doubl
 
 void KoSegmentGradient::moveSegmentEndOffset(KoGradientSegment* segment, double t)
 {
-    QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         if (it + 1 == m_segments.end()) {
             segment->setEndOffset(1.0);
@@ -881,7 +881,7 @@ void KoSegmentGradient::moveSegmentMiddleOffset(KoGradientSegment* segment, doub
 void KoSegmentGradient::splitSegment(KoGradientSegment* segment)
 {
     Q_ASSERT(segment != 0);
-    QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         KoColor midleoffsetColor(segment->endColor().colorSpace());
         segment->colorAt(midleoffsetColor, segment->middleOffset());
@@ -902,7 +902,7 @@ void KoSegmentGradient::splitSegment(KoGradientSegment* segment)
 void KoSegmentGradient::duplicateSegment(KoGradientSegment* segment)
 {
     Q_ASSERT(segment != 0);
-    QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         double middlePostionPercentage = (segment->middleOffset() - segment->startOffset()) / segment->length();
         double center = segment->startOffset() + segment->length() / 2;
@@ -942,7 +942,7 @@ KoGradientSegment* KoSegmentGradient::removeSegment(KoGradientSegment* segment)
     Q_ASSERT(segment != 0);
     if (m_segments.count() < 2)
         return 0;
-    QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         double middlePostionPercentage;
         KoGradientSegment* nextSegment;

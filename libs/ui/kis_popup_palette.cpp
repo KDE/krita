@@ -762,7 +762,7 @@ void KisPopupPalette::slotShowTagsPopup()
 {
     KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QStringList tags = rServer->tagNamesList();
-    qSort(tags);
+    std::sort(tags.begin(), tags.end());
 
     if (!tags.isEmpty()) {
         QMenu menu;

@@ -70,7 +70,7 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
         shapes.append(shape->cloneShape());
     }
 
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     QBuffer buffer;
     QLatin1String mimeType("image/svg+xml");

@@ -33,13 +33,13 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
                                                            false)), parent)
 {
     QList<KoShape*> orderdShapes(shapes);
-    qSort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
     d->shapes = orderdShapes;
 
     QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->shapes(): topLevelShapes;
     if (ancestors.count()) {
-        qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
-        QList<KoShape*>::const_iterator it(qFind(ancestors, d->container));
+        std::sort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
+        QList<KoShape*>::const_iterator it(std::find(ancestors.constBegin(), ancestors.constEnd(), d->container));
 
         Q_ASSERT(it != ancestors.constEnd());
         for (; it != ancestors.constEnd(); ++it) {

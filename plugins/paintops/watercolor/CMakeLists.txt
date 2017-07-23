@@ -11,7 +11,7 @@ set(kritawatercolorpaintop_SOURCES
     kis_splat_generator_strategy.cpp
     )
 ki18n_wrap_ui(kritawatercolorpaintop_SOURCES wdgwatercoloroptions.ui )
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 add_library(kritawatercolorpaintop MODULE ${kritawatercolorpaintop_SOURCES})
 generate_export_header(kritawatercolorpaintop EXPORT_MACRO_NAME WATERCOLORPAINT_EXPORT)

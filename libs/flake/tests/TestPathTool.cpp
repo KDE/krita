@@ -81,7 +81,7 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
     pd2.append(KoPathPointData(&path3, path3.pathPointIndex(point32)));
     pd2.append(KoPathPointData(&path3, path3.pathPointIndex(point33)));
 
-    qSort(pd2);
+    std::sort(pd2.begin(), pd2.end());
 
     QList<KoPathPointData> pd1(pps.selectedSegmentsData());
     QVERIFY(pd1 == pd2);

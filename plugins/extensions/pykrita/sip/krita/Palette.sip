@@ -28,6 +28,7 @@ public:
     QStringList groupNames();
     bool addGroup(QString name);
     bool removeGroup(QString name, bool keepColors);
+    int colorsCountTotal();
     int colorsCountGroup(QString name);
     KoColorSetEntry colorSetEntryByIndex(int index);
     KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);

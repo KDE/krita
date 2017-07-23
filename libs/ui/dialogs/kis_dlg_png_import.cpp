@@ -46,7 +46,7 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
     Q_FOREACH (const KoColorProfile *profile, profileList) {
         profileNames.append(profile->name());
     }
-    qSort(profileNames);
+    std::sort(profileNames.begin(), profileNames.end());
     Q_FOREACH (QString stringName, profileNames) {
         dlgWidget.cmbProfile->addSqueezedItem(stringName);
     }

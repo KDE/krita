@@ -184,8 +184,8 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     if (point.y() > d->rowPositions[firstRow] - 3.0 && point.y() < d->rowPositions[lastRow + 1] + 3.0) {
         QVector<qreal>::const_iterator start = d->rowPositions.constBegin() + firstRow;
         QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + lastRow + 1;
-        int row = qLowerBound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
-        int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.constBegin() - 1;
+        int row = std::lower_bound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
+        int column = std::lower_bound(d->columnPositions.begin(), d->columnPositions.end(), point.x()) - d->columnPositions.constBegin() - 1;
         if (point.y() < d->rowPositions[firstRow]) {
             ++row;
         }
@@ -237,8 +237,8 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     if (headerPoint.y() > d->headerRowPositions.first() && headerPoint.y() < d->headerRowPositions[d->headerRows]) {
         QVector<qreal>::const_iterator start = d->headerRowPositions.constBegin();
         QVector<qreal>::const_iterator end = d->headerRowPositions.constBegin() + d->headerRows;
-        int row = qLowerBound(start, end, headerPoint.y()) - d->headerRowPositions.constBegin() - 1;
-        int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
+        int row = std::lower_bound(start, end, headerPoint.y()) - d->headerRowPositions.constBegin() - 1;
+        int column = std::lower_bound(d->columnPositions.begin(), d->columnPositions.end(), headerPoint.x()) - d->columnPositions.constBegin() - 1;
         column = qBound(0, column, d->table->columns() - 1);
         KoPointedAt pointedAt;
         if (qAbs(d->columnPositions[column] - headerPoint.x()) < 3.0) {

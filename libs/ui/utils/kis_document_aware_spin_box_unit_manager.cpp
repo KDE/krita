@@ -61,8 +61,18 @@ KisDocumentAwareSpinBoxUnitManager::KisDocumentAwareSpinBoxUnitManager(QObject *
 }
 
 
-qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
+qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString psymbol) const
 {
+    QString symbol = psymbol;
+
+    if (symbol == "%") { //percent can be seen as vw or vh depending of the reference side in the image.
+        if (pixDir == PIX_DIR_X) {
+            symbol = "vw";
+        } else {
+            symbol = "vh";
+        }
+    }
+
     qreal factor = KisSpinBoxUnitManager::getConversionFactor(dim, symbol);
 
     if (factor > 0) {
@@ -160,4 +170,14 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionConstant(int dim, QString
     }
 
     return KisSpinBoxUnitManager::getConversionConstant(dim, symbol);
+}
+
+
+bool KisDocumentAwareSpinBoxUnitManager::hasPercent(int unitDim) const {
+
+    if (unitDim == IMLENGTH || unitDim == LENGTH) {
+        return true;
+    }
+
+    return KisSpinBoxUnitManager::hasPercent(unitDim);
 }

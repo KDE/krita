@@ -42,6 +42,11 @@ class DlgOffsetImage: public KoDialog
     Q_OBJECT
 
 public:
+
+    static const QString PARAM_PREFIX;
+    static const QString PARAM_XOFFSET_UNIT;
+    static const QString PARAM_YOFFSET_UNIT;
+
     DlgOffsetImage(QWidget * parent = 0, const char* name = 0, QSize imageSize = QSize());
     ~DlgOffsetImage() override;
 

@@ -160,7 +160,7 @@ QList<Document *> Krita::documents() const
 QStringList Krita::filters() const
 {
     QStringList ls = KisFilterRegistry::instance()->keys();
-    qSort(ls);
+    std::sort(ls.begin(), ls.end());
     return ls;
 }
 

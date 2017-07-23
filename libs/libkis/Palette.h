@@ -97,6 +97,12 @@ public:
      * @return
      */
     bool removeGroup(QString name, bool keepColors = true);
+
+    /**
+     * @brief colorsCountTotal
+     * @return the total amount of entries in the whole group
+     */
+    int colorsCountTotal();
     /**
      * @brief colorsCountGroup
      * @param name of the group to check. Empty is the default group.
@@ -115,8 +121,15 @@ public:
     //Insert
 
 private:
+    friend class PaletteView;
     struct Private;
     Private *const d;
+
+    /**
+     * @brief colorSet
+     * @return gives qa KoColorSet object back
+     */
+    KoColorSet *colorSet();
 
 };
 

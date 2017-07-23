@@ -36,7 +36,7 @@ KisBookmarkedConfigurationsModel::KisBookmarkedConfigurationsModel(KisBookmarked
 {
     d->bookmarkManager = bm;
     d->configsKey = d->bookmarkManager->configurations();
-    qSort(d->configsKey);
+    std::sort(d->configsKey.begin(), d->configsKey.end());
 }
 
 KisBookmarkedConfigurationsModel::~KisBookmarkedConfigurationsModel()

@@ -46,7 +46,7 @@ QWidget *KisInputModeDelegate::createEditor(QWidget *parent, const QStyleOptionV
 {
     KComboBox *combo = new KComboBox(parent);
     QStringList sorted = d->action->shortcutIndexes().keys();
-    qSort(sorted);
+    std::sort(sorted.begin(), sorted.end());
     combo->addItems(sorted);
     return combo;
 }

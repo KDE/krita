@@ -930,14 +930,14 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
         KoShape *s = koSelection()->firstSelectedShape();
 
         if (s->scaleX() < 0) { // vertically mirrored: swap left / right
-            qSwap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::TopRightHandle]);
-            qSwap(m_selectionBox[KoFlake::LeftMiddleHandle], m_selectionBox[KoFlake::RightMiddleHandle]);
-            qSwap(m_selectionBox[KoFlake::BottomLeftHandle], m_selectionBox[KoFlake::BottomRightHandle]);
+            std::swap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::TopRightHandle]);
+            std::swap(m_selectionBox[KoFlake::LeftMiddleHandle], m_selectionBox[KoFlake::RightMiddleHandle]);
+            std::swap(m_selectionBox[KoFlake::BottomLeftHandle], m_selectionBox[KoFlake::BottomRightHandle]);
         }
         if (s->scaleY() < 0) { // vertically mirrored: swap top / bottom
-            qSwap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::BottomLeftHandle]);
-            qSwap(m_selectionBox[KoFlake::TopMiddleHandle], m_selectionBox[KoFlake::BottomMiddleHandle]);
-            qSwap(m_selectionBox[KoFlake::TopRightHandle], m_selectionBox[KoFlake::BottomRightHandle]);
+            std::swap(m_selectionBox[KoFlake::TopLeftHandle], m_selectionBox[KoFlake::BottomLeftHandle]);
+            std::swap(m_selectionBox[KoFlake::TopMiddleHandle], m_selectionBox[KoFlake::BottomMiddleHandle]);
+            std::swap(m_selectionBox[KoFlake::TopRightHandle], m_selectionBox[KoFlake::BottomRightHandle]);
         }
 #endif
     }
@@ -973,7 +973,7 @@ void DefaultTool::selectionGroup()
     if (!selection) return;
 
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
-    qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
@@ -993,7 +993,7 @@ void DefaultTool::selectionUngroup()
     if (!selection) return;
 
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
-    qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
     KUndo2Command *cmd = 0;
 

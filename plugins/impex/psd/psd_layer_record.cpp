@@ -206,28 +206,10 @@ bool PSDLayerRecord::read(QIODevice* io)
     Q_ASSERT(left <= right);
     Q_ASSERT(nChannels > 0);
 
-
-    switch(m_header.colormode) {
-    case(Bitmap):
-    case(Indexed):
-    case(DuoTone):
-    case(Grayscale):
-    case(MultiChannel):
-        if (nChannels < 1) {
-            error = QString("Not enough channels. Got: %1").arg(nChannels);
-            return false;
-        }
-        break;
-    case(RGB):
-    case(CMYK):
-    case(Lab):
-    default:
-        if (nChannels < 3) {
-            error = QString("Not enough channels. Got: %1").arg(nChannels);
-            return false;
-        }
-        break;
-    };
+    if (nChannels < 1) {
+        error = QString("Not enough channels. Got: %1").arg(nChannels);
+        return false;
+    }
 
     if (nChannels > MAX_CHANNELS) {
         error = QString("Too many channels. Got: %1").arg(nChannels);

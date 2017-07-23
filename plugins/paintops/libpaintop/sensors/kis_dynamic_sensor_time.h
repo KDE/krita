@@ -18,15 +18,12 @@
 #ifndef _KIS_DYNAMIC_SENSOR_TIME_H_
 #define _KIS_DYNAMIC_SENSOR_TIME_H_
 
-#include "kis_vec.h"
-
 #include "kis_dynamic_sensor.h"
 //
 class KisDynamicSensorTime : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 

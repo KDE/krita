@@ -42,7 +42,7 @@ void KisCmbIDList::setIDList(const QList<KoID>  & list)
 {
     clear();
     m_list = list;
-    qSort(m_list.begin(), m_list.end(), KoID::compareNames);
+    std::sort(m_list.begin(), m_list.end(), KoID::compareNames);
     for (qint32 i = 0; i < m_list.count(); ++i) {
         addItem(m_list.at(i).name());
     }

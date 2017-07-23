@@ -38,19 +38,11 @@ public:
      * @param canvas the canvas this tool works for.
      */
     explicit KoZoomTool(KoCanvasBase *canvas);
-    /// reimplemented method
-    void wheelEvent(KoPointerEvent *event) override;
-    /// reimplemented method
     void mouseReleaseEvent(KoPointerEvent *event) override;
-    /// reimplemented method
     void mouseMoveEvent(KoPointerEvent *event) override;
-    /// reimplemented method
     void keyPressEvent(QKeyEvent *event) override;
-    /// reimplemented method
     void keyReleaseEvent(QKeyEvent *event) override;
-    /// reimplemented method
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
-    /// reimplemented method
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     void setCanvasController(KoCanvasController *controller) {

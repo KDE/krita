@@ -98,7 +98,6 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented from superclass
     void keyReleaseEvent(QKeyEvent *event) override;
-
     /// reimplemented from superclass
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     /// reimplemented from superclass

@@ -2,18 +2,7 @@ import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from krita import *
-
-class DropButton(QPushButton):
-
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setFixedSize(64, 64)
-        self.setIconSize(QSize(64, 64))
-        self.preset = None
-
-    def selectPreset(self):
-        self.preset = self.presetChooser.currentPreset().name()
-        self.setIcon(QIcon(QPixmap.fromImage(self.presetChooser.currentPreset().image())))
+from tenbrushes import dropbutton
 
 
 class TenBrushesExtension(Extension):
@@ -23,12 +12,23 @@ class TenBrushesExtension(Extension):
         self.buttons = []
         self.actions = []
 
+    # def setup(self):
+    #     action = Application.createAction("ten_brushes", "Ten Brushes")
+    #     action.setToolTip("Assign ten brush presets to ten shortcuts.")
+    #     action.triggered.connect(self.initialize)
+    #
+    # def initialize(self):
+    #     self.uitenbrushes = uitenbrushes.UITenBrushes()
+    #     self.uitenbrushes.initialize()
+
     def setup(self):
+        print('setup tenbrushes')
         action = Application.createAction("ten_brushes", "Ten Brushes")
         action.setToolTip("Assign ten brush presets to ten shortcuts.")
         action.triggered.connect(self.showDialog)
 
         # Read the ten selected brush presets from the settings
+        # That part can be a loadPresets method 43 - 58, but it really needs a refactoring
         selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
         allPresets = Application.resources("preset")
         # Setup up to ten actions and give them default shortcuts
@@ -46,14 +46,14 @@ class TenBrushesExtension(Extension):
             self.actions.append(action)
             j = j + 1
 
-
     def activatePreset(self):
-        print("activatePreset", self.sender().preset)
         allPresets = Application.resources("preset")
+        print("activatePreset", self.sender().preset)
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
             Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
 
     def showDialog(self):
+        #it can be in an initialize method 68 - 111, but isolating loadButtons part
         self.dialog = QDialog(Application.activeWindow().qwindow())
 
         self.buttonBox = QDialogButtonBox(self.dialog)
@@ -67,12 +67,13 @@ class TenBrushesExtension(Extension):
 
         self.presetChooser = PresetChooser(self.dialog)
 
+        # loadButtons method 82 - 103
         allPresets = Application.resources("preset")
         j = 0
         self.buttons = []
         for i in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             buttonBox = QVBoxLayout()
-            button = DropButton(self.dialog)
+            button = dropbutton.DropButton(self.dialog)
             button.setObjectName(i)
             button.clicked.connect(button.selectPreset)
             button.presetChooser = self.presetChooser
@@ -101,6 +102,7 @@ class TenBrushesExtension(Extension):
 
 
     def accept(self):
+        # we can be a writeSettings and readSettings
         i = 0
         presets = []
         for button in self.buttons:

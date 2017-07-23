@@ -181,7 +181,7 @@ void LayerSplit::slotLayerSplit()
 //        }
 
         if (dlg.sortLayers()) {
-            qSort(colorMap);
+            std::sort(colorMap.begin(), colorMap.end());
         }
 
         KisUndoAdapter *undo = image->undoAdapter();

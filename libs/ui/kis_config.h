@@ -103,6 +103,9 @@ public:
     CursorStyle newCursorStyle(bool defaultValue = false) const;
     void setNewCursorStyle(CursorStyle style);
 
+    QColor getCursorMainColor(bool defaultValue = false) const;
+    void setCursorMainColor(const QColor& v) const;
+
     OutlineStyle newOutlineStyle(bool defaultValue = false) const;
     void setNewOutlineStyle(OutlineStyle style);
 
@@ -188,6 +191,12 @@ public:
 
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
+
+    QColor getOpenGLGridColor(bool defaultValue = false) const;
+    void setOpenGLGridColor(const QColor & v) const;
+
+    qreal getOpenGLGridDrawingThreshold(bool defaultValue = false) const;
+    void setOpenGLGridDrawingThreshold(qreal v) const;
 
     quint32 guidesLineStyle(bool defaultValue = false) const;
     void setGuidesLineStyle(quint32 v) const;
@@ -324,6 +333,9 @@ public:
 
     QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
     void setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
+
+    QString importConfiguration(const QString &filterId, bool defaultValue = false) const;
+    void setImportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
 
     bool useOcio(bool defaultValue = false) const;
     void setUseOcio(bool useOCIO) const;

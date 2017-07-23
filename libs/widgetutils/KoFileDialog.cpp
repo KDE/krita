@@ -89,7 +89,12 @@ void KoFileDialog::setDefaultDir(const QString &defaultDir, bool force)
     if (!defaultDir.isEmpty()) {
         if (d->defaultDirectory.isEmpty() || force) {
             QFileInfo f(defaultDir);
-            d->defaultDirectory = f.absolutePath();
+            if (f.isDir()) {
+                d->defaultDirectory = defaultDir;
+            }
+            else {
+                d->defaultDirectory = f.absolutePath();
+            }
         }
         if (!QFileInfo(defaultDir).isDir()) {
             d->proposedFileName = QFileInfo(defaultDir).fileName();

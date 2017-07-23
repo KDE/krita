@@ -50,11 +50,11 @@
 #include <kis_config.h>
 #include <kis_preference_set_registry.h>
 #include <kis_image.h>
-#include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_paint_layer.h>
+#include <kis_algebra_2d.h>
 
 #include "kis_input_output_mapper.h"
 #include "kis_qmic_simple_convertor.h"
@@ -230,11 +230,19 @@ void QMic::connected()
     QByteArray ba;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
-        ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+        KisSelectionSP selection = m_view->image()->globalSelection();
+
+        if (selection) {
+            QRect selectionRect = selection->selectedExactRect();
+            ba = QByteArray::number(selectionRect.width()) + "," + QByteArray::number(selectionRect.height());
+        }
+        else {
+            ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+        }
     }
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
-        QRectF cropRect = m_view->image()->bounds();
+        QRectF cropRect(0.0, 0.0, 1.0, 1.0);
         if (!messageMap.contains("croprect") || messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() != 4) {
             qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
         }
@@ -279,12 +287,23 @@ void QMic::connected()
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
     ds.writeBytes(ba.constData(), ba.length());
+    // Flush the socket because we might not return to the event loop!
+    if (!socket->waitForBytesWritten(2000)) {
+        qWarning() << "Failed to write response:" << socket->error();
+    }
 
     // Wait for the ack
     bool r = true;
-    r &= socket->waitForReadyRead(); // wait for ack
+    r &= socket->waitForReadyRead(2000); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
-    socket->waitForDisconnected(-1);
+    if (!socket->waitForDisconnected(2000)) {
+        qWarning() << "Remote not disconnected:" << socket->error();
+        // Wait again
+        socket->disconnectFromServer();
+        if (socket->waitForDisconnected(2000)) {
+            qWarning() << "Disconnect timed out:" << socket->error();
+        }
+    }
 
 }
 
@@ -416,29 +435,36 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     for (int i = 0; i < nodes->size(); ++i) {
         KisNodeSP node = nodes->at(i);
-        qDebug() << "Converting node" << node->name() << node->exactBounds();
         if (node->paintDevice()) {
+            QRect cropRect;
 
-            QRect cropRect = node->exactBounds();
+            KisSelectionSP selection = m_view->image()->globalSelection();
 
-            const int ix = static_cast<int>(std::floor(rc.x() * cropRect.width()));
-            const int iy = static_cast<int>(std::floor(rc.y() * cropRect.height()));
-            const int iw = std::min(cropRect.width() - ix, static_cast<int>(1 + std::ceil(rc.width() * cropRect.width())));
-            const int ih = std::min(cropRect.height() - iy, static_cast<int>(1 + std::ceil(rc.height() * cropRect.height())));
+            if (selection) {
+                cropRect = selection->selectedExactRect();
+            }
+            else {
+                cropRect = m_view->image()->bounds();
+            }
+
+            qDebug() << "Converting node" << node->name() << cropRect;
+
+            const QRectF mappedRect = KisAlgebra2D::mapToRect(cropRect).mapRect(rc);
+            const QRect resultRect = mappedRect.toAlignedRect();
 
             QSharedMemory *m = new QSharedMemory(QString("key_%1").arg(QUuid::createUuid().toString()));
             m_sharedMemorySegments.append(m);
-            if (!m->create(iw * ih * 4 * sizeof(float))) {  //buf.size())) {
+            if (!m->create(resultRect.width() * resultRect.height() * 4 * sizeof(float))) {  //buf.size())) {
                 qWarning() << "Could not create shared memory segment" << m->error() << m->errorString();
                 return false;
             }
             m->lock();
 
             gmic_image<float> img;
-            img.assign(iw, ih, 1, 4);
+            img.assign(resultRect.width(), resultRect.height(), 1, 4);
             img._data = reinterpret_cast<float*>(m->data());
 
-            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, QRect(ix, iy, iw, ih));
+            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, resultRect);
 
             message->append(m->key().toUtf8());
 
@@ -449,9 +475,9 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             message->append(",");
             message->append(node->name().toUtf8().toHex());
             message->append(",");
-            message->append(QByteArray::number(iw));
+            message->append(QByteArray::number(resultRect.width()));
             message->append(",");
-            message->append(QByteArray::number(ih));
+            message->append(QByteArray::number(resultRect.height()));
 
             message->append("\n");
         }

@@ -990,19 +990,43 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         if (isExporting && !d->lastExportLocation.isEmpty()) {
 
+            // Use the location where we last exported to, if it's set, as the opening location for the file dialog
             QString proposedPath = QFileInfo(d->lastExportLocation).absolutePath();
-            QString proposedFileName = document->url().isEmpty() ? document->documentInfo()->aboutInfo("title") :  QFileInfo(document->url().toLocalFile()).baseName();
+            // If the document doesn't have a filename yet, use the title
+            QString proposedFileName = suggestedURL.isEmpty() ? document->documentInfo()->aboutInfo("title") :  QFileInfo(suggestedURL.toLocalFile()).baseName();
+            // Use the last mimetype we exported to by default
             QString proposedMimeType =  d->lastExportedFormat.isEmpty() ? "" : d->lastExportedFormat;
             QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
+
+            // Set the default dir: this overrides the one loaded from the config file, since we're exporting and the lastExportLocation is not empty
             dialog.setDefaultDir(proposedPath + "/" + proposedFileName + "." + proposedExtension, true);
             dialog.setMimeTypeFilters(mimeFilter, proposedMimeType);
         }
         else {
-            dialog.setDefaultDir(suggestedURL.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : suggestedURL.toLocalFile());
-            // Default to all supported file types if user is exporting, otherwise use Krita default
-            QByteArray default_mime_type = document->mimeType().isEmpty() ? KIS_MIME_TYPE : document->mimeType();
+            // Get the last used location for saving
+            KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+            QString proposedPath = group.readEntry("SaveAs", "");
+            // if that is empty, get the last used location for loading
+            if (proposedPath.isEmpty()) {
+                proposedPath = group.readEntry("OpenDocument", "");
+            }
+            // If that is empty, too, use the Pictures location.
+            if (proposedPath.isEmpty()) {
+                proposedPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+            }
+            // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
+            // open the location where the document currently is.
+            dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : suggestedURL.toLocalFile(), true);
+
+            // If exporting, default to all supported file types if user is exporting
+            QByteArray default_mime_type = "";
+            if (!isExporting) {
+                // otherwise use the document's mimetype, or if that is empty, kra, which is the savest.
+                default_mime_type = document->outputMimeType().isEmpty() ? _native_format : document->mimeType();
+            }
             dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));
         }
+
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {

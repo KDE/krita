@@ -110,6 +110,7 @@ public:
 
 private Q_SLOTS:
     virtual void setActiveChannel(int ch);
+    void logHistView();
 
 private:
 

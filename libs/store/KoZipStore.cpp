@@ -98,11 +98,10 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
 KoZipStore::~KoZipStore()
 {
     Q_D(KoStore);
-    bool sf = false;
-    if (m_pZip && m_pZip->device()) {
-        sf = true;
-    }
-
+//    bool sf = false;
+//    if (m_pZip && m_pZip->device()) {
+//        sf = true;
+//    }
 //    qDebug() << "KoZipStore::~KoZipStore" << d->localFileName << m_pZip << m_pZip->device() << "savefile" << sf;
     if (m_pZip->device() && m_pZip->device()->inherits("QSaveFile")) {
         m_pZip->resetDevice(); // otherwise, kzip's destructor will call close(), which aborts on a qsavefile

@@ -8,6 +8,7 @@
  *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *                2011 José Luis Vergara <pentalis@gmail.com>
+ *                2017 L. E. Segovia <leo.segovia@siggraph.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -253,6 +254,9 @@ public:
     KSelectAction *actionAuthor; // Select action for author profile.
 
     QByteArray canvasState;
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    QFlags<Qt::WindowState> windowFlags;
+#endif
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
@@ -1111,6 +1115,9 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     if (toggled) {
         d->canvasState = qtMainWindow()->saveState();
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+        d->windowFlags = main->windowState();
+#endif
     }
 
     if (cfg.hideStatusbarFullscreen()) {
@@ -1146,11 +1153,19 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
+    // QT in windows does not return to maximized upon 4th tab in a row
+    // https://bugreports.qt.io/browse/QTBUG-57882, https://bugreports.qt.io/browse/QTBUG-52555, https://codereview.qt-project.org/#/c/185016/
     if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {
             main->setWindowState( main->windowState() & ~Qt::WindowFullScreen);
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+            // If window was maximized prior to fullscreen, restore that
+            if (d->windowFlags & Qt::WindowMaximized) {
+                main->setWindowState( main->windowState() | Qt::WindowMaximized);
+            }
+#endif
         }
     }
 

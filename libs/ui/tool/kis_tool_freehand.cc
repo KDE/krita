@@ -160,10 +160,12 @@ void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &
 
 void KisToolFreehand::deactivate()
 {
-    m_needEndContinuedStroke = true;
     if (mode() == PAINT_MODE) {
         endStroke();
         setMode(KisTool::HOVER_MODE);
+    } else if (m_strokeNotStoped) {
+        m_needEndContinuedStroke = true;
+        endStroke();
     }
     KisToolPaint::deactivate();
 }
@@ -206,6 +208,7 @@ void KisToolFreehand::endStroke()
     } else {
         qDebug() << "All stroke finished";
         m_needEndContinuedStroke = false;
+        m_strokeNotStoped = false;
         m_helper->endPaint();
     }
     setCurrentNodeLocked(false);

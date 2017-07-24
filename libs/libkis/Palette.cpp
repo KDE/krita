@@ -57,6 +57,12 @@ QString Palette::comment()
     return d->palette->comment();
 }
 
+void Palette::setComment(QString comment)
+{
+    if (!d->palette) return;
+    return d->palette->setComment(comment);
+}
+
 QStringList Palette::groupNames()
 {
     if (!d->palette) return QStringList();

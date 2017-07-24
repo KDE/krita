@@ -9,6 +9,10 @@ from PyQt5.Qt import *
 import math
 from krita import * 
 
+#import the exporters
+#from palette_exporter_gimppalette import *
+#from palette_exporter_inkscapeSVG import *
+
 class Palette_Docker(DockWidget):
 #Init the docker
     def __init__(self):
@@ -53,6 +57,19 @@ class Palette_Docker(DockWidget):
         self.removeEntry.clicked.connect(self.slot_remove_entry)
         buttonLayout.addWidget(self.removeEntry)
         
+        #QActions
+        self.extra = QToolButton()
+        self.editPaletteData = QAction()
+        self.editPaletteData.setText("Edit Palette Settings")
+        self.editPaletteData.triggered.connect(self.slot_edit_palette_data)
+        self.extra.setDefaultAction(self.editPaletteData)
+        buttonLayout.addWidget(self.extra)
+        
+        self.actionMenu = QMenu()
+        self.actionMenu.addAction(self.editPaletteData)
+        
+        self.extra.setMenu(self.actionMenu)
+        
         layout.addLayout(buttonLayout)
         self.slot_fill_combobox()
         self.setWidget(widget)        # add widget to the docker
@@ -61,7 +78,6 @@ class Palette_Docker(DockWidget):
         self.currentPalette = Palette(Application.resources("palette")[name])
         self.paletteView.setPalette(self.currentPalette)
         self.slot_fill_combobox()
-        #self.fill_palette_frame()
 
     @pyqtSlot('KoColorSetEntry')
     def slot_swatchSelected(self, entry):
@@ -76,7 +92,11 @@ class Palette_Docker(DockWidget):
                         self.colorComboBox.setCurrentIndex(self.colorList.index(name))
                 color = self.currentPalette.colorForEntry(entry)
                 self.canvas().view().setForeGroundColor(color)
-    
+    '''
+    A function for making a combobox with the available colors. We use QCompleter on the colorComboBox so that people
+    can type in the name of a color to select it. This is useful for people with carefully made palettes where the colors
+    are named properly, which makes it easier for them to find colors.
+    '''
     def slot_fill_combobox(self):
         if self.currentPalette is None:
             pass
@@ -134,6 +154,43 @@ class Palette_Docker(DockWidget):
         succes = self.paletteView.removeSelectedEntryWithDialog()
         if succes is True:
             self.slot_fill_combobox()
+            
+    '''
+    A function for giving a gui to edit palette metadata... I also want this to be the way to edit the settings of the
+    palette docker.
+    '''
+    def slot_edit_palette_data(self):
+        dialog = QDialog(self)
+        tabWidget = QTabWidget()
+        dialog.setWindowTitle("Edit Palette Data")
+        dialog.setLayout(QVBoxLayout())
+        dialog.layout().addWidget(tabWidget)
+        paletteWidget = QWidget()
+        paletteWidget.setLayout(QVBoxLayout())
+        tabWidget.addTab(paletteWidget, "Palette Data")
+        paletteName = QLineEdit()
+        paletteName.setText(self.cmb_palettes.currentText())
+        paletteWidget.layout().addWidget(paletteName)
+        paletteColumns = QSpinBox()
+        paletteColumns.setValue(self.currentPalette.columnCount())
+        paletteWidget.layout().addWidget(paletteColumns)
+        paletteComment = QPlainTextEdit()
+        paletteComment.appendPlainText(self.currentPalette.comment())
+        paletteWidget.layout().addWidget(paletteComment)
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok)
+        dialog.layout().addWidget(buttons)
+        buttons.accepted.connect(dialog.accept)
+        #buttons.rejected.connect(dialog.reject())
+        
+        if dialog.exec_()==QDialog.Accepted:
+            Resource = Application.resources("palette")[self.cmb_palettes.currentText()]
+            Resource.setName(paletteName.text());
+            self.currentPalette = Palette(Resource)
+            print(paletteColumns.value())
+            self.currentPalette.setColumnCount(paletteColumns.value())
+            self.paletteView.setPalette(self.currentPalette)
+            self.slot_fill_combobox()
+            self.currentPalette.setComment(paletteComment.toPlainText())
                 
     def canvasChanged(self, canvas):
         pass

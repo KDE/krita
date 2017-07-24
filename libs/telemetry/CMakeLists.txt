@@ -3,7 +3,7 @@ include_directories(SYSTEM
 )
 
 set(kritalibtelemetry_LIB_SRCS
-    kis_telemetry_abstruct.cpp
+    kis_telemetry_abstract.cpp
     kis_telemetry_instance.cpp
     kis_telemetry_actions.cpp
 )
@@ -12,7 +12,7 @@ add_library(kritalibtelemetry SHARED ${kritalibtelemetry_LIB_SRCS} )
 generate_export_header(kritalibtelemetry BASE_NAME kritalibtelemetry)
 
 
-target_link_libraries(kritalibtelemetry  KUserFeedbackCore ) #kritaimage
+target_link_libraries(kritalibtelemetry  KUserFeedbackCore kritaimage) #kritaimage
 
 set_target_properties(kritalibtelemetry PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

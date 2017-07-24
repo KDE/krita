@@ -135,7 +135,7 @@
 #include "kis_animation_exporter.h"
 #include "dialogs/kis_dlg_send_telemetry.h"
 #include "kis_telemetry_instance.h"
-#include "kis_telemetry_abstruct.h"
+#include "kis_telemetry_abstract.h"
 
 #include <mutex>
 
@@ -478,7 +478,7 @@ KisMainWindow::KisMainWindow()
 
     //check fatal asserts
     try {
-        KisTelemetryAbstruct* provider = KisTelemetryInstance::instance()->provider();
+        KisTelemetryAbstract* provider = KisTelemetryInstance::instance()->provider();
         provider->sendData("asserts");
     }
     catch (std::exception e){
@@ -647,7 +647,7 @@ void KisMainWindow::sendInfo()
     qDebug()<<"send_enfo"<<"\n";
     d->telemetry.reset(new KisDlgSendTelemtry(this->viewManager()));
     if(d->telemetry->exec()== QDialog::Accepted){
-        KisTelemetryAbstruct* provider = KisTelemetryInstance::instance()->provider();
+        KisTelemetryAbstract* provider = KisTelemetryInstance::instance()->provider();
         provider->sendData("install");
         provider->sendData("tools");
         provider->sendData("imageProperties");

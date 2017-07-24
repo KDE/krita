@@ -20,21 +20,22 @@
 #ifndef KIS_TELEMETRY_INSTANCE_H
 #define KIS_TELEMETRY_INSTANCE_H
 
-#include "kis_telemetry_abstruct.h"
+#include "kis_telemetry_abstract.h"
 #include <QScopedPointer>
+#include "kritatelemetry_export.h"
 
-class KisTelemetryInstance {
+class KRITATELEMETRY_EXPORT KisTelemetryInstance {
 public:
     KisTelemetryInstance() = default;
     ~KisTelemetryInstance() = default;
     static KisTelemetryInstance* instance();
 
-    void setProvider(KisTelemetryAbstruct *provider);
-    KisTelemetryAbstruct *provider();
+    void setProvider(KisTelemetryAbstract *provider);
+    KisTelemetryAbstract *provider();
 private:
 
     KisTelemetryInstance(KisTelemetryInstance const&) = delete;
     KisTelemetryInstance& operator=(KisTelemetryInstance const&) = delete;
-    QScopedPointer<KisTelemetryAbstruct> telemetryProvider;
+    QScopedPointer<KisTelemetryAbstract> telemetryProvider;
 };
 #endif

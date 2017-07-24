@@ -1,5 +1,5 @@
 
-set(kritatelemetry_SOURCES
+set(kritaplugintelemetry_SOURCES
     kis_telemetry_provider.cpp
     kis_telemetry.cpp
     kis_cpuinfosource.cpp

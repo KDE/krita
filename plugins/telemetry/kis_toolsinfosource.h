@@ -30,7 +30,7 @@
 #include <QDateTime>
 #include <QVariantMap>
 #include <QVector>
-#include "kis_telemetry_abstruct.h"
+#include "kis_telemetry_abstract.h"
 #include "kis_tickets.h"
 
 

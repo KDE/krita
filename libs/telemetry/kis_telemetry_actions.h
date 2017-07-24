@@ -23,44 +23,45 @@
 #include "kritatelemetry_export.h"
 #include <QSize>
 #include <QString>
-//#include <kis_types.h>
+#include <kis_types.h>
 
-class KisTelemetryAbstruct;
+
+class KisTelemetryAbstract;
 class KisTelemetryAction {
 public:
-    virtual void doAction(KisTelemetryAbstruct* provider, QString id) = 0;
+    virtual void doAction(KisTelemetryAbstract* provider, QString id) = 0;
     virtual ~KisTelemetryAction() = default;
 };
 
 class KRITATELEMETRY_EXPORT KisToolsActivate : public KisTelemetryAction {
 public:
-    void doAction(KisTelemetryAbstruct* provider, QString id) override;
+    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 class KRITATELEMETRY_EXPORT KisToolsDeactivate : public KisTelemetryAction {
 public:
-    void doAction(KisTelemetryAbstruct* provider, QString id) override;
+    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 
 class KRITATELEMETRY_EXPORT KisToolsStartUse : public KisTelemetryAction {
 public:
-    void doAction(KisTelemetryAbstruct* provider, QString id) override;
+    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 class KRITATELEMETRY_EXPORT KisToolsStopUse : public KisTelemetryAction {
 public:
-    void doAction(KisTelemetryAbstruct* provider, QString id) override;
+    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 
-//class KRITATELEMETRY_EXPORT KisSaveImageProperties : public KisTelemetryAction {
-//public:
-//  KisSaveImageProperties(KisImageSP& image);
+class KRITATELEMETRY_EXPORT KisSaveImageProperties : public KisTelemetryAction {
+public:
+  KisSaveImageProperties(KisImageSP& image);
 
-//    void doAction(KisTelemetryAbstruct* provider, QString id) override;
-//     QString fileName() const;
-//   KisImageSP& image();
+    void doAction(KisTelemetryAbstract* provider, QString id) override;
+     QString fileName() const;
+   KisImageSP& image();
 
-//private:
-//   KisImageSP &m_image;
-//    QString m_fileName;
-//};
+private:
+   KisImageSP &m_image;
+    QString m_fileName;
+};
 
 #endif

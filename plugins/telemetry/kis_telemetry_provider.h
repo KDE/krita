@@ -36,13 +36,14 @@
 
 #include "kis_telemetry_actions.h"
 #include "kis_tickets.h"
+#include "kritatelemetry_export.h"
 #include <QMultiMap>
 #include <QVector>
 #include <QWeakPointer>
-#include <kis_telemetry_abstruct.h>
+#include <kis_telemetry_abstract.h>
 #include <memory>
 
-class KRITAFLAKE_EXPORT KisTelemetryProvider : public KisTelemetryAbstruct {
+class KRITATELEMETRY_EXPORT KisTelemetryProvider : public KisTelemetryAbstract {
 public:
     KisTelemetryProvider();
     void sendData(QString path, QString adress = QString()) override;
@@ -52,7 +53,7 @@ public:
 protected:
     void getTimeTicket(QString id) override;
     void putTimeTicket(QString id) override;
-  //  void saveImageProperites(QString fileName, KisImageSP &image) override;
+    void saveImageProperites(QString fileName, KisImageSP& image) override;
 
 private:
     enum TelemetryCategory {
@@ -72,7 +73,7 @@ private:
     QScopedPointer<KUserFeedback::Provider> m_imagePropertiesProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_imagePropertiesSources;
     QMultiMap<QString, QWeakPointer<KisTicket> > m_tickets;
- ;
+    ;
 
 private:
     TelemetryCategory pathToKind(QString path);

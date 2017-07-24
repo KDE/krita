@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kis_telemetry_instance.h"
-//#include <kis_assert.h>
+#include <kis_assert.h>
 
 
 Q_GLOBAL_STATIC(KisTelemetryInstance, s_instance)
@@ -28,15 +28,15 @@ KisTelemetryInstance *KisTelemetryInstance::instance()
     return  s_instance;
 }
 
-void KisTelemetryInstance::setProvider(KisTelemetryAbstruct *provider)
+void KisTelemetryInstance::setProvider(KisTelemetryAbstract *provider)
 {
     if(!telemetryProvider.isNull()){
-     //   KIS_SAFE_ASSERT_RECOVER_RETURN(false);
+       KIS_SAFE_ASSERT_RECOVER_RETURN(false);
     }
    telemetryProvider.reset(provider);
 }
 
-KisTelemetryAbstruct *KisTelemetryInstance::provider()
+KisTelemetryAbstract *KisTelemetryInstance::provider()
 {
     if (telemetryProvider.isNull())
         return nullptr;

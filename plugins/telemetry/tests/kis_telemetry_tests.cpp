@@ -194,7 +194,7 @@ private:
     }
 
 private:
-    KisTelemetryAbstruct* m_provider;
+    KisTelemetryAbstract* m_provider;
     QVector<int> m_time;
     const static int m_countUse = 4;
 };

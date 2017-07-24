@@ -200,3 +200,4 @@ KisTelemetryProvider::TelemetryCategory KisTelemetryProvider::pathToKind(QString
         return imageProperties;
     return tools;
 }
+

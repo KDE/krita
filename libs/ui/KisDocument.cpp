@@ -738,9 +738,9 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             }
 
             d->mimeType = outputMimeType;
-//            KisSaveImageProperties kisSaveImageProperties(d->image);
-//            QString fileName = localFilePath();
-//            kisSaveImageProperties.doAction(KisTelemetryInstance::instance()->provider(), fileName);
+            KisSaveImageProperties kisSaveImageProperties(d->image);
+            QString fileName = localFilePath();
+            kisSaveImageProperties.doAction(KisTelemetryInstance::instance()->provider(), fileName);
         }
     }
 

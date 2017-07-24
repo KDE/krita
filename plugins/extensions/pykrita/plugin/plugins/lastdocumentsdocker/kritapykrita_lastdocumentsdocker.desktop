@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=lastdocumentsdocker
+X-Python-2-Compatible=false
+Name=Last Documents Docker
+Comment=A Python-based docker for show thumbnails to last ten documents 

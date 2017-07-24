@@ -26,7 +26,7 @@ class Palette_Docker(DockWidget):
         for palette_name in allPalettes:
             self.cmb_palettes.addItem(palette_name)
 
-        self.currentPalette = Palette(allPalettes["Default"])
+        self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
         self.cmb_palettes.currentTextChanged.connect(self.slot_paletteChanged)
         layout.addWidget(self.cmb_palettes) # add combobox to the layout
         self.paletteView = PaletteView()

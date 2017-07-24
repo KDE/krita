@@ -25,9 +25,9 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: mingw-w64 5.4 (by mingw-builds)
-               - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/5.4.0/threads-posix/dwarf/
-               - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.4.0/threads-posix/seh/
+    * Windows: mingw-w64 7.1 (by mingw-builds)
+               - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.1.0/threads-posix/dwarf/
+               - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-posix/seh/
                
                Make sure mingw's bin folder is in your path. It might be a good
                idea to create a batch file which sets the path and start cmd.
@@ -76,11 +76,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
         -DINSTALL_ROOT=$BUILDROOT/i 
 
 
-    * Windows 32 bits:
-    
-    TODO
-
-    * Windows 64 bits:
+    * Windows 32-bit / 64-bit:
 
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
@@ -88,6 +84,10 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
     set PYTHONHOME=%BUILDROOT%/i (only if you want to build your own python)
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
+
+- If you want to build Qt and some other dependencies with parallel jobs, add
+  `-DSUBMAKE_JOBS=<n>` to the cmake command where <n> is the number of jobs to
+  run (if your PC has 4 CPU cores, you might want to set it to 5).
 
 3. build the packages:
 
@@ -118,13 +118,6 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
-    
-On Windows:
-
-    set FFTW_LIB_DIR=%BUILDROOT%\i\lib
-    dlltool.exe -k --output-lib %FFTW_LIB_DIR%\libfftw3-3.a --input-def %FFTW_LIB_DIR%\libfftw3-3.def
-    dlltool.exe -k --output-lib %FFTW_LIB_DIR%\libfftw3f-3.a --input-def %FFTW_LIB_DIR%\libfftw3f-3.def
-    dlltool.exe -k --output-lib %FFTW_LIB_DIR%\libfftw3l-3.a --input-def %FFTW_LIB_DIR%\libfftw3l-3.def
 
 On all operating systems
     

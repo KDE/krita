@@ -10,8 +10,7 @@ import math
 from krita import * 
 
 #import the exporters
-#from palette_exporter_gimppalette import *
-#from palette_exporter_inkscapeSVG import *
+from . import palette_exporter_gimppalette, palette_exporter_inkscapeSVG
 
 class Palette_Docker(DockWidget):
 #Init the docker
@@ -66,7 +65,15 @@ class Palette_Docker(DockWidget):
         buttonLayout.addWidget(self.extra)
         
         self.actionMenu = QMenu()
+        self.exportToGimp = QAction()
+        self.exportToGimp.setText("Export as GIMP palette file.")
+        self.exportToGimp.triggered.connect(self.slot_export_to_gimp_palette)
+        self.exportToInkscape = QAction()
+        self.exportToInkscape.setText("Export as Inkscape SVG with swatches.")
+        self.exportToInkscape.triggered.connect(self.slot_export_to_inkscape_svg)
         self.actionMenu.addAction(self.editPaletteData)
+        self.actionMenu.addAction(self.exportToGimp)
+        self.actionMenu.addAction(self.exportToInkscape)
         
         self.extra.setMenu(self.actionMenu)
         
@@ -191,6 +198,12 @@ class Palette_Docker(DockWidget):
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()
             self.currentPalette.setComment(paletteComment.toPlainText())
+            
+    def slot_export_to_gimp_palette(self):
+        palette_exporter_gimppalette.gimpPaletteExporter(self.cmb_palettes.currentText())
+        
+    def slot_export_to_inkscape_svg(self):
+        palette_exporter_inkscapeSVG.inkscapeSVGExporter(self.cmb_palettes.currentText())
                 
     def canvasChanged(self, canvas):
         pass

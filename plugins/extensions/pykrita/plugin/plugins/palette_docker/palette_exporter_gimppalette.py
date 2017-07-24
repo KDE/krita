@@ -1,6 +1,5 @@
 '''
-A script that converts the palette named "Default" to a Gimp palette.
-This ideally needs some gui and the like to select the palette to export..
+A script that converts the palette with the given name to a gimp palette at the location asked for.
 By Wolthera.
 '''
 
@@ -14,18 +13,22 @@ from krita import *
 
 class gimpPaletteExporter:
 
-    def __init__(self):
+    def __init__(self, name):
         #We want people to select a palette and a location to save to...
-        self.fileName = ""
+        self.fileName = QFileDialog.getExistingDirectory()
         allPalettes = Application.resources("palette")
-        paletteName = list(allPalettes.keys())[0]
-        self.currentPalette = Palette(allPalettes["paletteName"])
+        self.paletteName = name
+        self.currentPalette = Palette(allPalettes[self.paletteName])
         self.export()
+        done = QMessageBox()
+        done.setWindowTitle("Export succesful")
+        done.setText(self.paletteName+" has been exported to "+self.fileName+"!")
+        done.exec_()
         pass
         
     def export(self):
         # open the appropriate file...
-        gplFile = open(self.fileName+self.paletteName+".gpl", "w")
+        gplFile = open(self.fileName+"/"+self.paletteName+".gpl", "w")
         gplFile.write("GIMP Palette\n")
         gplFile.write("Name: "+self.paletteName+"\n")
         gplFile.write("Columns: "+str(self.currentPalette.columnCount())+"\n")

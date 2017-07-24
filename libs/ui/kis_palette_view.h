@@ -88,6 +88,7 @@ Q_SIGNALS:
      */
     void entrySelected(KoColorSetEntry entry);
     void entrySelectedBackGround(KoColorSetEntry entry);
+    void indexEntrySelected(QModelIndex index);
 protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event) override;

@@ -93,7 +93,7 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
     qreal oldVal = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());
     QString oldSymbol = d->unitManager->getApparentUnitSymbol();
 
-    qreal newVal;
+    qreal newVal = 0.0;
 
     double newMin;
     double newMax;
@@ -154,8 +154,8 @@ connect_signals:
 void KisDoubleParseUnitSpinBox::changeValue( double newValue )
 {
     double apparentValue;
-    double fact;
-    double cons;
+    double fact = 0.0;
+    double cons = 0.0;
 
     if (d->outPutSymbol.isEmpty()) {
         apparentValue = d->unitManager->getApparentValue(newValue);

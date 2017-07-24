@@ -161,7 +161,7 @@ void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", context.getID(layer));
 
     QList<KoShape*> sortedShapes = layer->shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
@@ -183,7 +183,7 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(group, context);
 
     QList<KoShape*> sortedShapes = group->shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);

@@ -107,7 +107,7 @@ private:
 //        for(int i=0;i<m_colors.size(); i++) {
 //            values.append(m_colors.at(i)[axis]);
 //        }
-//        qSort(values);
+//        std::sort(values.begin(), values.end());
 //        return values.at(values.size()*4/5);
 //    }
     unsigned char divPos(ColorAxis axis) const

@@ -55,10 +55,10 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     setDropIndicatorShown(true);
 
     KisConfig cfg;
-    QPalette pal(palette());
-    pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
-    setAutoFillBackground(true);
-    setPalette(pal);
+    //QPalette pal(palette());
+    //pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
+    //setAutoFillBackground(true);
+    //setPalette(pal);
 
     int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
@@ -169,6 +169,21 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
     KoColorSet* color_set = m_d->model->colorSet();
     if (!color_set)
         return;
+    //also don't select if the color is the same as the current selection
+    if (selectedIndexes().size()>0) {
+        QModelIndex currentI = currentIndex();
+        if (!currentI.isValid()) {
+            currentI = selectedIndexes().last();
+        }
+        if (!currentI.isValid()) {
+            currentI = selectedIndexes().first();
+        }
+        if (currentI.isValid()) {
+            if (m_d->model->colorSetEntryFromIndex(currentI).color==color) {
+                return;
+            }
+        }
+    }
     quint32 i = color_set->getIndexClosestColor(color);
     QModelIndex index = m_d->model->indexFromId(i);
     this->selectionModel()->clearSelection();
@@ -270,8 +285,10 @@ void KisPaletteView::entrySelection(bool foreground) {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
         if (foreground) {
             emit(entrySelected(entry));
+            emit(indexEntrySelected(index));
         } else {
             emit(entrySelectedBackGround(entry));
+            emit(indexEntrySelected(index));
         }
     }
 }

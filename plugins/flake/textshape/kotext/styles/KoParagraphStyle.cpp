@@ -54,10 +54,12 @@
 
 //already defined in KoRulerController.cpp
 #ifndef KDE_USE_FINAL
-static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
-{
-    return tab1.position < tab2.position;
-}
+struct {
+    bool operator()(KoText::Tab tab1, KoText::Tab tab2) const
+    {
+        return tab1.position < tab2.position;
+    }
+} compareTabs;
 #endif
 class Q_DECL_HIDDEN KoParagraphStyle::Private
 {
@@ -1895,7 +1897,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
 {
     QList<KoText::Tab> newTabs = tabs;
-    qSort(newTabs.begin(), newTabs.end(), compareTabs);
+    std::sort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
     Q_FOREACH (const KoText::Tab &tab, tabs) {
         QVariant v;

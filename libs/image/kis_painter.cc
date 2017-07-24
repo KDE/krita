@@ -1605,8 +1605,8 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     int X2_ = x2;
     int Y2_ = y2;
 
-    if (x2<x1) qSwap(x1,x2);
-    if (y2<y1) qSwap(y1,y2);
+    if (x2<x1) std::swap(x1,x2);
+    if (y2<y1) std::swap(y1,y2);
 
     qreal denominator = sqrt(pow((double)dstY,2) + pow((double)dstX,2));
     if (denominator == 0.0) {

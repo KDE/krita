@@ -267,8 +267,11 @@ KoColorSet* KisPaletteModel::colorSet() const
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
     QModelIndex index = QModelIndex();
+    if (colorSet()->nColors()==0) {
+        return index;
+    }
     if (i > colorSet()->nColors()) {
-        qWarning()<<"index is too big"<<i;
+        qWarning()<<"index is too big"<<i<<"/"<<colorSet()->nColors();
         index = this->index(0,0);
     }
     if (i < (int)colorSet()->nColorsGroup(0)) {
@@ -306,11 +309,16 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
 
 int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 {
-    if (index.isValid()==false || qVariantValue<bool>(index.data(IsHeaderRole))) {
+    if (index.isValid()==false) {
         return -1;
+        qWarning()<<"invalid index";
     }
     int i=0;
     QStringList entryList = qVariantValue<QStringList>(data(index, RetrieveEntryRole));
+    if (entryList.isEmpty()) {
+        return -1;
+        qWarning()<<"invalid index, there's no data to retreive here";
+    }
     if (entryList.at(0)==QString()) {
         return entryList.at(1).toUInt();
     }

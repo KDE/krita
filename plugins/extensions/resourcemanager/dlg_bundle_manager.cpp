@@ -33,6 +33,7 @@
 #include "kis_action.h"
 #include <kis_resource_server_provider.h>
 #include "KoResourceModel.h"
+#include "KoResourceServer.h"
 
 #include "content_dowloader_dialog.h"
 
@@ -63,25 +64,20 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     resize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+    m_ui->bnDeleteBundle->setVisible(false);
 
     QString knsrcFile = "kritaresourcebundles.knsrc";
     setKnsrcFile(knsrcFile);
+
+    m_ui->searchLineEdit->setClearButtonEnabled(true);
+    m_ui->searchLineEdit->addAction(QIcon::fromTheme(QStringLiteral("system-search")), QLineEdit::LeadingPosition);
+    m_ui->searchLineEdit->setPlaceholderText("Search for the bundle name..");
+    searchTerm = m_ui->searchLineEdit->text();
 
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(m_ui->listActive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->listActive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
-
-    m_ui->listInactive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->listInactive->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
-    connect(m_ui->listInactive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
-
-    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
-    connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
-
-    m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
-    connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
     m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
@@ -105,6 +101,9 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
     connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
 
+    connect(m_ui->bnDeleteBundle, SIGNAL(clicked()), SLOT(deleteBundle()));
+    connect(m_ui->searchLineEdit, SIGNAL(returnPressed()), SLOT(searchTextChanged()));
+
 }
 
 
@@ -112,7 +111,6 @@ void DlgBundleManager::refreshListData()
 {
     KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
 
-    m_ui->listInactive->clear();
     m_ui->listActive->clear();
 
     Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
@@ -123,7 +121,6 @@ void DlgBundleManager::refreshListData()
             m_blacklistedBundles[f] = bundle;
         }
     }
-    fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
     Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
         if (bundle->valid()) {
@@ -184,36 +181,7 @@ void DlgBundleManager::accept()
         }
     }
 
-    for (int i = 0; i < m_ui->listInactive->count(); ++i) {
-        QListWidgetItem *item = m_ui->listInactive->item(i);
-        QByteArray ba = item->data(Qt::UserRole).toByteArray();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-
-
-        if (bundle && bundle->isInstalled()) {
-            bundle->uninstall();
-            bundleServer->removeResourceAndBlacklist(bundle);
-        }
-    }
-
-
     KoDialog::accept();
-}
-
-void DlgBundleManager::addSelected()
-{
-
-    Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
-        m_ui->listInactive->addItem(m_ui->listActive->takeItem(m_ui->listActive->row(item)));
-    }
-
-}
-
-void DlgBundleManager::removeSelected()
-{
-    Q_FOREACH (QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
-        m_ui->listActive->addItem(m_ui->listInactive->takeItem(m_ui->listInactive->row(item)));
-    }
 }
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
@@ -303,6 +271,8 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_currentBundle = 0;
         }
     }
+
+    m_ui->bnDeleteBundle->setVisible(true);
 }
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current)
@@ -344,6 +314,7 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
         QListWidgetItem *item = new QListWidgetItem(pixmap, bundle->name());
         item->setData(Qt::UserRole, bundle->md5());
         w->addItem(item);
+
     }
 }
 
@@ -434,3 +405,40 @@ void DlgBundleManager::setKnsrcFile(const QString &knsrcFileArg)
     d->knsrcFile = knsrcFileArg;
 }
 
+void DlgBundleManager::deleteBundle()
+{
+    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
+
+    Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
+
+            QByteArray ba = item->data(Qt::UserRole).toByteArray();
+            KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+
+            m_activeBundles.remove(m_currentBundle->filename());
+            m_ui->listActive->takeItem(m_ui->listActive->row(item));
+            bundleServer->removeResourceAndBlacklist(bundle);
+    }
+}
+
+void DlgBundleManager::searchTextChanged()
+{
+    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
+
+    m_ui->listActive->clear();
+
+    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
+        KisResourceBundle *bundle = new KisResourceBundle(f);
+        bundle->load();
+        if (bundle->valid()) {
+            bundle->setInstalled(false);
+            m_blacklistedBundles[f] = bundle;
+        }
+    }
+
+    Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
+        if(bundle->name().contains(searchTerm)) {
+            m_activeBundles[bundle->filename()] = bundle;
+        }
+        fillListWidget(m_activeBundles.values(), m_ui->listActive);
+    }
+}

@@ -62,5 +62,8 @@ void KisDlgBlacklistCleanup::accept()
     if (cbRemovePattern->isChecked()) {
         KoResourceServerProvider::instance()->patternServer()->removeBlackListedFiles();
     }
+    if (cbRemoveBundles->isChecked()) {
+        KisResourceServerProvider::instance()->resourceBundleServer()->removeBlackListedFiles();
+    }
 }
 

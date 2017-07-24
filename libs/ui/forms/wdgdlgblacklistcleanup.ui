@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>200</height>
+    <height>312</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -111,6 +111,16 @@ p, li { white-space: pre-wrap; }
     <widget class="QCheckBox" name="cbRemoveBrushes">
      <property name="text">
       <string>Brushes</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QCheckBox" name="cbRemoveBundles">
+     <property name="text">
+      <string>Bundles</string>
      </property>
      <property name="checked">
       <bool>true</bool>

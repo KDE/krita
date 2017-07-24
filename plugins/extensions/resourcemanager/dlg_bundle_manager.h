@@ -44,8 +44,6 @@ public:
 private Q_SLOTS:
 
     void accept() override;
-    void addSelected();
-    void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
     void itemSelected(QListWidgetItem *current);
     void editBundle();
@@ -55,6 +53,9 @@ private Q_SLOTS:
     void slotOpenResourceFolder();
     void slotShareResources();
     void setKnsrcFile(const QString& knsrcFileArg);
+
+    void deleteBundle();
+    void searchTextChanged();
 
 private:
 
@@ -70,6 +71,8 @@ private:
     KisResourceBundle *m_currentBundle;
     KisActionManager *m_actionManager;
     ResourceManager *m_resourceManager;
+
+    QString searchTerm;
 
     class Private;
     Private *const d;

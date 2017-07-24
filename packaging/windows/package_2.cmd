@@ -245,6 +245,9 @@ copy %BUILDDIR_SRC%\packaging\windows\krita.lnk %pkg_root%
 :: windeployqt
 %BUILDDIR_INSTALL%\bin\windeployqt.exe --release -concurrent -network -printsupport -svg -xml -multimedia %pkg_root%\bin\krita.exe
 
+:: Copy embedded Python
+xcopy /Y /S /I %BUILDDIR_INSTALL%\python %pkg_root%\python
+
 :: For chopping relative path
 :: 512 should be enough
 :: n+2 to also account for a trailing backslash

@@ -14,8 +14,6 @@ class UITenBrushes(object):
         self.buttonBox = QDialogButtonBox(self.mainDialog)
         self.vbox = QVBoxLayout(self.mainDialog)
         self.hbox = QHBoxLayout(self.mainDialog)
-        self.actions = []
-        self.buttons = []
 
         self.buttonBox.accepted.connect(self.mainDialog.accept)
         self.buttonBox.rejected.connect(self.mainDialog.reject)
@@ -25,30 +23,10 @@ class UITenBrushes(object):
 
         self.presetChooser = krita.PresetChooser(self.mainDialog)
 
-    def initialize(self):
-        self.readSettings()
+    def initialize(self, tentbrushes):
+        self.tentbrushes = tentbrushes
 
-        allPresets = Application.resources("preset")
-
-        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
-            buttonLayout = QVBoxLayout()
-            button = dropbutton.DropButton(self.mainDialog)
-            button.setObjectName(item)
-            button.clicked.connect(button.selectPreset)
-            button.presetChooser = self.presetChooser
-
-            if self.actions[index] and self.actions[index].preset and self.actions[index].preset in allPresets:
-                p = allPresets[self.actions[index].preset];
-                button.preset = p.name()
-                button.setIcon(QIcon(QPixmap.fromImage(p.image())))
-
-            buttonLayout.addWidget(button)
-            label = QLabel("Ctrl+Alt+" + item)
-            label.setAlignment(Qt.AlignHCenter)
-            buttonLayout.addWidget(label)
-
-            self.hbox.addLayout(buttonLayout)
-            self.buttons.append(button)
+        self.loadButtons()
 
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(self.presetChooser)
@@ -59,35 +37,27 @@ class UITenBrushes(object):
         self.mainDialog.activateWindow()
         self.mainDialog.exec_()
 
-    def activatePreset(self):
-        allPresets = self.kritaInstance.resources("preset")
-        print("activatePreset", self.sender().preset)
-        if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
-            Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
+    def loadButtons(self):
+        self.tentbrushes.buttons = []
 
-    def readSettings(self):
-        # Read the ten selected brush presets from the settings
-        # That part can be a loadPresets method 43 - 58, but it really needs a refactoring
-        selectedPresets = self.kritaInstance.readSetting("", "tenbrushes", "").split(',')
-        allPresets = self.kritaInstance.resources("preset")
+        allPresets = Application.resources("preset")
 
-        # Setup up to ten actions and give them default shortcuts
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
-            action = self.kritaInstance.createAction("activate_preset_" + item, "Activate Preset " + item)
-            #action.setVisible(False)
-            action.setMenu("None")
-            action.triggered.connect(self.activatePreset)
-            if index < len(selectedPresets) and selectedPresets[index] in allPresets:
-                action.preset = selectedPresets[index]
-            else:
-                action.preset = None
-            self.actions.append(action)
+            buttonLayout = QVBoxLayout()
+            button = dropbutton.DropButton(self.mainDialog)
+            button.setObjectName(item)
+            button.clicked.connect(button.selectPreset)
+            button.presetChooser = self.presetChooser
 
-    def writeSettings(self):
-        i = 0
-        presets = []
-        for button in self.buttons:
-            self.actions[i].preset = button.preset
-            presets.append(button.preset)
-            i = i + 1
-        self.kritaInstance.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
+            if self.tentbrushes.actions[index] and self.tentbrushes.actions[index].preset and self.tentbrushes.actions[index].preset in allPresets:
+                p = allPresets[self.tentbrushes.actions[index].preset];
+                button.preset = p.name()
+                button.setIcon(QIcon(QPixmap.fromImage(p.image())))
+
+            buttonLayout.addWidget(button)
+            label = QLabel("Ctrl+Alt+" + item)
+            label.setAlignment(Qt.AlignHCenter)
+            buttonLayout.addWidget(label)
+
+            self.hbox.addLayout(buttonLayout)
+            self.tentbrushes.buttons.append(button)

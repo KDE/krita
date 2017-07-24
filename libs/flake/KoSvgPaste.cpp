@@ -28,17 +28,13 @@
 #include <FlakeDebug.h>
 #include <QRectF>
 
-KoSvgPaste::KoSvgPaste()
-{
-}
-
-bool KoSvgPaste::hasShapes() const
+bool KoSvgPaste::hasShapes()
 {
     const QMimeData *mimeData = QApplication::clipboard()->mimeData();
     return mimeData && mimeData->hasFormat("image/svg+xml");
 }
 
-QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize) const
+QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize)
 {
     QList<KoShape*> shapes;
 
@@ -46,7 +42,21 @@ QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolut
     if (!mimeData) return shapes;
 
     QByteArray data = mimeData->data("image/svg+xml");
-    if (data.isEmpty()) return shapes;
+    if (data.isEmpty()) {
+        return shapes;
+    }
+
+    return fetchShapesFromData(data, viewportInPx, resolutionPPI, fragmentSize);
+
+}
+
+QList<KoShape*> KoSvgPaste::fetchShapesFromData(const QByteArray &data, const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize)
+{
+    QList<KoShape*> shapes;
+
+    if (data.isEmpty()) {
+        return shapes;
+    }
 
     KoXmlDocument doc;
 
@@ -57,7 +67,7 @@ QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolut
     const bool documentValid = doc.setContent(data, false, &errorMsg, &errorLine, &errorColumn);
 
     if (!documentValid) {
-        errorFlake << "Failed to process an SVG file at"
+        qWarning() << "Failed to process an SVG file at"
                    << errorLine << ":" << errorColumn << "->" << errorMsg;
         return shapes;
     }

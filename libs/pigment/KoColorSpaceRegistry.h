@@ -33,6 +33,7 @@
 class KoColorProfile;
 class KoColorConversionSystem;
 class KoColorConversionCache;
+class KoColorConversionTransformation;
 
 /**
  * The registry for colorspaces and profiles.
@@ -40,6 +41,23 @@ class KoColorConversionCache;
  *      - a registry of colorspace instantiated with specific profiles.
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
+ *
+ * Locking policy details:
+ *
+ * Basically, we have two levels of locks in the registry:
+ * 1) (outer level) is Private::registrylock, which controls the structures
+ *     of the color space registry itself
+ * 2) (inner level) is KoColorProfileStorage::Private::lock controls
+ *    the structures related to profiles.
+ *
+ * The locks can be taken individually, but if you are going to take both
+ * of them, you should always follow the order 1) registry; 2) profiles.
+ * Otherwise you'll get a deadlock.
+ *
+ * To avoid recursive deadlocks, all the dependent classes
+ * (KoColorConversionSystem and KoColorSpaceFactory) now do not use the direct
+ * links to the registry. Instead, they use special private interfaces that
+ * skip recursive locking and ensure we take a lock twice.
  */
 class KRITAPIGMENT_EXPORT KoColorSpaceRegistry
 {
@@ -128,30 +146,7 @@ public:
      */
     const KoColorProfile *profileByUniqueId(const QByteArray &id) const;
 
-    /**
-     * Return the list of profiles for the argument colorspacefactory.
-     * Profiles will not work with any color space, you can query which profiles
-     * that are registered with this registry can be used in combination with the
-     * argument factory.
-     * @param factory the factory with which all the returned profiles will work.
-     * @return a list of profiles for the factory
-     */
-    QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * factory) const;
-
-    /**
-     * Return the list of profiles for a colorspace with the argument id.
-     * Profiles will not work with any color space, you can query which profiles
-     * that are registered with this registry can be used in combination with the
-     * argument factory.
-     * @param id the colorspace-id with which all the returned profiles will work.
-     * @return a list of profiles for the factory
-     */
-    QList<const KoColorProfile *>  profilesFor(const KoID& id) const;
-
-    /**
-     * @return a list of color spaces compatible with this profile
-     */
-    QList<const KoColorSpaceFactory*> colorSpacesFor(const KoColorProfile* _profile) const;
+    bool profileIsCompatible(const KoColorProfile* profile, const QString &colorSpaceId);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.
@@ -161,33 +156,35 @@ public:
      * @param colorSpaceId the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<const KoColorProfile *>  profilesFor(const QString& id) const;
-    const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const;
-
-private:
-    /**
-     * Return a colorspace that works with the parameter profile.
-     * @param csID the ID of the colorspace that you want to have returned
-     * @param profileName the name of the KoColorProfile to be combined with the colorspace
-     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
-     */
-    const KoColorSpace *  colorSpace(const KoID &csID, const QString & profileName);
+    QList<const KoColorProfile *>  profilesFor(const QString& csID) const;
+    QString defaultProfileForColorSpace(const QString &colorSpaceId) const;
 
     /**
-     * Return a colorspace that works with the parameter profile.
-     * @param colorSpaceId the ID string of the colorspace that you want to have returned
-     * @param profile the profile be combined with the colorspace
-     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     * This function is called by the color space to create a color conversion
+     * between two color space. This function search in the graph of transformations
+     * the best possible path between the two color space.
      */
-    const KoColorSpace * colorSpace(const QString &colorSpaceId, const KoColorProfile *profile);
+    KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
-     * Return a colorspace that works with the parameter profile.
-     * @param profileName the name of the KoColorProfile to be combined with the colorspace
-     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     * This function creates two transformations, one from the color space and one to the
+     * color space. The destination color space is picked from a list of color space, such
+     * as the conversion between the two color space is of the best quality.
+     *
+     * The typical use case of this function is for KoColorTransformationFactory which
+     * doesn't support all color spaces, so unsupported color space have to find an
+     * acceptable conversion in order to use that KoColorTransformationFactory.
+     *
+     * @param colorSpace the source color space
+     * @param possibilities a list of color space among which we need to find the best
+     *                      conversion
+     * @param fromCS the conversion from the source color space will be affected to this
+     *               variable
+     * @param toCS the revert conversion to the source color space will be affected to this
+     *             variable
      */
-    const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName = QString());
-public:
+    void createColorConverters(const KoColorSpace* colorSpace, const QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
+
     /**
      * Return a colorspace that works with the parameter profile.
      * @param colorSpaceId the ID string of the colorspace that you want to have returned
@@ -202,6 +199,8 @@ public:
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
     const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName);
+
+    const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId);
 
     /**
      * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
@@ -307,12 +306,6 @@ public:
     QList<KoID> colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option) const;
 
     /**
-     * @return the color conversion system use by the registry and the color
-     * spaces to create color conversion transformation
-     */
-    const KoColorConversionSystem* colorConversionSystem() const;
-
-    /**
      * @return the cache of color conversion transformation to be use by KoColorSpace
      */
     KoColorConversionCache* colorConversionCache() const;
@@ -338,25 +331,22 @@ private:
     friend class KoColorSpacesBenchmark;
     friend class TestKoColorSpaceSanity;
     friend class KisActionRecorderTest;
+    friend class TestColorConversionSystem;
+    friend class FriendOfColorSpaceRegistry;
+
     /**
      * @return a list with an instance of all color space with their default profile.
      */
     QList<const KoColorSpace*> allColorSpaces(ColorSpaceListVisibility visibility, ColorSpaceListProfilesSelection pSelection);
 
-private:
-
     /**
-     * The function checks if a colorspace with a certain id and profile name can be found in the cache
-     * NOTE: the function doesn't take any lock but it needs to be called inside a d->registryLock
-     * locked either in read or write.
-     * @param csId The colorspace id
-     * @param profileName The colorspace profile name
-     * @retval KoColorSpace The matching colorspace
-     * @retval 0 Null pointer if not match
+     * @return the color conversion system use by the registry and the color
+     * spaces to create color conversion transformation.
+     *
+     * WARNING: conversion system is guared by the registry locks, don't
+     *          use it anywhere other than unttests!
      */
-    const KoColorSpace* getCachedColorSpace(const QString & csId, const QString & profileName) const;
-
-    QString idsToCacheName(const QString & csId, const QString & profileName) const;
+    const KoColorConversionSystem* colorConversionSystem() const;
 
 private:
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);

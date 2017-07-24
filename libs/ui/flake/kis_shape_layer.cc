@@ -89,9 +89,25 @@ public:
 
     void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
+
+        /**
+         * The shape is always added with the absolute transformation set appropiately.
+         * Here we should just squeeze it into the layer's transformation.
+         */
+        KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
+        if (inheritsTransform(child)) {
+            QTransform parentTransform = q->absoluteTransformation(0);
+            child->applyAbsoluteTransformation(parentTransform.inverted());
+        }
     }
 
     void remove(KoShape *child) override {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
+        if (inheritsTransform(child)) {
+            QTransform parentTransform = q->absoluteTransformation(0);
+            child->applyAbsoluteTransformation(parentTransform);
+        }
+
         SimpleShapeContainerModel::remove(child);
     }
 
@@ -408,15 +424,13 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
 
 QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, QSizeF *fragmentSize)
 {
-    QXmlStreamReader reader(device);
-    reader.setNamespaceProcessing(false);
 
     QString errorMsg;
     int errorLine = 0;
     int errorColumn;
 
     KoXmlDocument doc;
-    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    bool ok = doc.setContent(device, false, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

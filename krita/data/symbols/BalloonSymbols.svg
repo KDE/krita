@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:cc="http://creativecommons.org/ns#"
+    width="1200"
+    height="900"
+    viewBox="0,0,1200,900"
+    version="1.1"
+    style="fill:black;stroke:black">
+  <title>Word Balloons</title>
+  <desc>Ballons for holding text.</desc>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+	<dc:format>image/svg+xml</dc:format>
+	<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+	<dc:title>Word Balloons</dc:title>
+	<dc:date>2013-04-22</dc:date>
+	<dc:creator>
+	  <cc:Agent>
+	    <dc:title>Martin Owens, Tavmjong Bah</dc:title>
+	  </cc:Agent>
+	</dc:creator>
+	<dc:rights>
+	  <cc:Agent>
+	    <dc:title>Public Domain</dc:title>
+	  </cc:Agent>
+	</dc:rights>
+	<dc:language>English</dc:language>
+	<dc:subject>
+	  <rdf:Bag>
+	    <rdf:li>word</rdf:li>
+	    <rdf:li>balloon</rdf:li>
+	    <rdf:li>comic</rdf:li>
+	    <rdf:li>cartoon</rdf:li>
+	    <rdf:li>speach</rdf:li>
+	    <rdf:li>exclaim</rdf:li>
+	  </rdf:Bag>
+	</dc:subject>
+	<cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+	<cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+	<cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+	<cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+
+    <symbol id="ThoughtBalloon">
+      <title>Thought Balloon</title>
+      <path d="m 170,60 c -18,-14 -51,-11 -62,7 -32,-19 -57,36 -22,56 -30,10 -30,50 3,57 -2,30 53,29 59,8 10,23 47,29 60,9 14,10 36,5 43,-9 11,25 41,21 50,1 35,4 40,-31 29,-50 24,-9 22,-39 3,-48 16,-26 -17,-58 -39,-29 -13,-14.3 -47,-14 -56,1 -16,-19 -53,-21 -68,-3 z" style="stroke:none"/>
+      <path d="m 165,55 c -18,-14 -51,-11 -62,7 -32,-19 -57,36 -22,56 -30,10 -30,50 3,57 -2,30 53,29 59,8 10,23 47,29 60,9 14,10 36,5 43,-9 11,25 41,21 50,1 35,4 40,-31 29,-50 24,-9 22,-39 3,-48 16,-26 -17,-58 -39,-29 -13,-14.3 -47,-14 -56,1 -16,-19 -53,-21 -68,-3 z" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 163,58 c -17,-12 -48,-11 -58,6 -37,-14 -46,42 -17,53 -33,14 -20,48 2,50 -5,29 47,29 53,7 10,25 43,24 58,8 13,9 34,4 40,-8 10,22 41,19 48,1 31,7 37,-28 27,-43 23,-7 21,-38 3,-46 14,-26 -15,-52 -30,-22 -19,-15.6 -43,-23 -59,-1 -15,-20 -51,-23 -67,-5 z" style="fill:white;stroke:none"/>
+      <ellipse cx="117" cy="239" rx="30" ry="21" style="stroke:none"/>
+      <ellipse cx="113" cy="235" rx="30" ry="21" style="fill:#eeeeee;stroke-width:3.5"/>
+      <ellipse cx="110" cy="233" rx="23" ry="17" style="fill:white;stroke:none"/>
+      <ellipse cx="74"  cy="275" rx="15" ry="11" style="stroke:none"/>
+      <ellipse cx="70"  cy="271" rx="15" ry="11" style="fill:#eeeeee;stroke-width:3.5"/>
+      <ellipse cx="67"  cy="269" rx=" 8" ry="7"  style="fill:white;stroke:none"/>
+    </symbol>
+
+    <symbol id="DreamSpeaking">
+      <title>Dream Speaking</title>
+      <path d="m 170,60 c -18,-14 -51,-11 -62,7 -32,-19 -57,36 -22,56 -30,10 -30,50 3,57 -2,30 53,29 59,8 10,23 47,29 60,9 14,10 36,5 43,-9 11,25 41,21 50,1 35,4 40,-31 29,-50 24,-9 22,-39 3,-48 16,-26 -17,-58 -39,-29 -13,-14.3 -47,-14 -56,1 -16,-19 -53,-21 -68,-3 z" style="stroke:none"/>
+      <path d="m 160,180 c -33,35 58,-6 -53,96 57.1,-21 93,-56 111,-102" style="stroke:none"/>
+      <path d="m 165,55 c -18,-14 -51,-11 -62,7 -32,-19 -57,36 -22,56 -30,10 -30,50 3,57 -2,30 53,29 59,8 10,23 47,29 60,9 14,10 36,5 43,-9 11,25 41,21 50,1 35,4 40,-31 29,-50 24,-9 22,-39 3,-48 16,-26 -17,-58 -39,-29 -13,-14.3 -47,-14 -56,1 -16,-19 -53,-21 -68,-3 z" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 155,176 c -33,35 58,-6 -53,96 57.1,-21 93,-56 111,-102" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 163,58 c -17,-12 -48,-11 -58,6 -37,-14 -46,42 -17,53 -33,14 -20,48 2,50 -5,29 47,29 53,7 10,25 43,24 58,8 13,9 34,4 40,-8 10,22 41,19 48,1 31,7 37,-28 27,-43 23,-7 21,-38 3,-46 14,-26 -15,-52 -30,-22 -19,-15.6 -43,-23 -59,-1 -15,-20 -51,-23 -67,-5 z" style="fill:white;stroke:none"/>
+      <path d="m 150,168 c -31,33 67,1 -38,97 56,-37 78,-67 93,-102" style="fill:white;stroke:none"/>
+    </symbol>
+
+    <symbol id="RoundedBalloon" style="stroke-linejoin:miter;stroke-miterlimit:10">
+      <title>Rounded Balloon</title>
+      <rect x="80" y="65" width="250" height="120" rx="32" style="stroke:none" />
+      <path d="m 124,179 -30,53 78,-53"                    style="stroke:none" />
+      <rect x="75" y="60" width="250" height="120" rx="30" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 120,175 -30,53 78,-53"                    style="fill:#eeeeee;stroke-width:3.5" />
+      <rect x="80" y="65" width="235" height="105" rx="25" style="fill:white;stroke:none" />
+      <path d="m 132,160 -30,53 78,-53"                    style="fill:white;stroke:none" />
+    </symbol>
+
+    <symbol id="SquaredBalloon" style="stroke-linejoin:miter;stroke-miterlimit:10">
+      <title>Squared Balloon</title>
+      <rect x="80" y="65" width="250" height="140" rx="17" style="stroke:none" />
+      <path d="m 126,199  25,43 30,-43"                    style="stroke:none" />
+      <rect x="75" y="60" width="250" height="140" rx="15" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 120,195  25,43 30,-43"                    style="fill:#eeeeee;stroke-width:3.5" />
+      <rect x="80" y="65" width="235" height="125" rx="10" style="fill:white;stroke:none" />
+      <path d="m 118,180  25,43 30,-43"                    style="fill:white;stroke:none" />
+    </symbol>
+
+    <symbol id="OverThePhone" style="stroke-linejoin:miter;stroke-miterlimit:10">
+      <title>Over the Phone</title>
+      <rect x="80" y="65" width="250" height="120"                  style="stroke:none" />
+      <path d="m 124,179 -15,41 -21,-16 -35,76 40,-49 32,17 53,-70" style="stroke:none" />
+      <rect x="75" y="60" width="250" height="120"                  style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 120,175 -15,41 -21,-16 -35,76 40,-49 32,17 53,-70" style="fill:#eeeeee;stroke-width:3.5" />
+      <rect x="80" y="65" width="235" height="105"                  style="fill:white;stroke:none" />
+      <path d="m 125,166 -18,53 -22,-15 -26,56 29,-40 28,12 55,-68" style="fill:white;stroke:none" />
+    </symbol>
+
+    <symbol id="HipBalloon" style="stroke-linejoin:miter;stroke-miterlimit:10">
+      <title>Hip Balloon</title>
+      <path d="m 97,65 216,0 c 9,0 17,7.6 17,17 0,0 -14,35 -14,53 0,18 14,53 14,53 0,9 -8,17 -17,17 l -216,0 c -9.4,0 -17,-8 -17,-17 0,0 14,-35 14,-53 0,-18 -14,-53 -14,-53 0,-9.4 7.6,-17 17,-17 z" style="stroke:none"/>
+      <path d="m 126,199 -5,43 60,-43" style="stroke:none"/>
+      <path d="m 90,60 216,0 c 9,0 17,7.6 17,17 0,0 -14,35 -14,53 0,18 14,53 14,53 0,9 -8,17 -17,17 l -216,0 c -9.4,0 -17,-8 -17,-17 0,0 14,-35 14,-53 0,-18 -14,-53 -14,-53 0,-9.4 7.6,-17 17,-17 z" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 120,195 -5,43 60,-43" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 90,65 215,0 c 6,0 10,4.5 10,10 0,0 -14,36 -14,53 0,18 14,52 14,52 0,6 -4,10 -10,10 l -215,0 c -5.5,0 -10,-4 -10,-10 0,0 14,-34 14,-52 0,-17 -14,-53 -14,-53 0,-5.5 4.5,-10 10,-10 z" style="fill:white;stroke:none"/>
+      <path d="m 124,180 -5,43 60,-43" style="fill:white;stroke:none"/>
+    </symbol>
+
+    <symbol id="CircleBalloon" style="stroke-linejoin:miter;stroke-miterlimit:10">
+      <title>Circle Balloon</title>
+      <ellipse cx="205" cy="125" rx="125" ry="70"                   style="stroke:none" />
+      <path d="m 110,166 c 11,21 -10,30 -22,43 32,-3 59,-7 70,-26"  style="stroke:none" />
+      <ellipse cx="200" cy="120" rx="125" ry="70"                   style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 106,162 c 11,21 -10,30 -22,43 32,-3 59,-7 70,-26"  style="fill:#eeeeee;stroke-width:3.5" />
+      <ellipse cx="197" cy="117" rx="117" ry="63"                   style="fill:white;stroke:none" />
+      <path d="m 103,149 c 14,25 9,34 -6,47 30,-3 50,-10 58,-31"    style="fill:white;stroke:none" />
+    </symbol>
+
+    <symbol id="ExclaimBalloon" style="stroke-linejoin:miter;stroke-miterlimit:10">
+      <title>Exclaim Balloon</title>
+      <path d="m 117,183 -88,110 146,-98 10,31 53,-46 39,49 0,-46 69,28 -29,-57 66,-33 -68,-23.9 29,-58 -58,29 -15,-46 -48,46 -18,-42 -35,42 -20,-42 -33,40 -36.2,-42 0,50 -55,-2 42,42 -42,29 48,9 -24,46 z" style="stroke:none"/>
+      <path d="m 110,177 -88,110 146,-98 10,31 53,-46 39,49 0,-46 69,28 -29,-57 66,-33 -68,-23.9 29,-58 -58,29 -15,-46 -48,46 -18,-42 -35,42 -20,-42 -33,40 -36.2,-42 0,50 -55,-2 42,42 -42,29 48,9 -24,46 z" style="fill:#eeeeee;stroke-width:3.5"/>
+      <path d="m 122,166 -82,102 129,-89 9,28 52,-45 30,39 0,-38 58,23 -24,-45 57,-28 -56,-20 23,-47 -47,23 -14,-42 -47,44 -17,-40 -33,40 -21,-44 -31,38 -32.9,-38 0,43 -46,-2 38,38 -36,25 43,8 -21,41 z" style="fill:white;stroke:none"/>
+    </symbol>
+
+  </defs>
+
+  <use x="0"   y="0"   xlink:href="#RoundedBalloon" style="fill:blue;stroke:blue"/>
+  <use x="0"   y="300" xlink:href="#SquaredBalloon" style="fill:blue;stroke:blue"/>
+  <use x="0"   y="600" xlink:href="#CircleBalloon"  style="fill:blue;stroke:blue"/>
+  <use x="400" y="0"   xlink:href="#OverThePhone"   style="fill:blue;stroke:blue"/>
+  <use x="400" y="300" xlink:href="#HipBalloon"     style="fill:blue;stroke:blue"/>
+  <use x="400" y="600" xlink:href="#ExclaimBalloon" style="fill:blue;stroke:blue"/>
+  <use x="800" y="0"   xlink:href="#DreamSpeaking"  style="fill:blue;stroke:blue"/>
+  <use x="800" y="300" xlink:href="#ThoughtBalloon" style="fill:blue;stroke:blue"/>
+
+</svg>

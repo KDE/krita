@@ -122,6 +122,7 @@ struct AddGeneralOps<Traits, true>
          add<&cfGeometricMean<Arg> >(cs, COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean"), KoCompositeOp::categoryMix());
          add<&cfParallel<Arg>      >(cs, COMPOSITE_PARALLEL      , i18n("Parallel")      , KoCompositeOp::categoryMix());
          add<&cfAllanon<Arg>       >(cs, COMPOSITE_ALLANON       , i18n("Allanon")       , KoCompositeOp::categoryMix());
+         add<&cfHardOverlay<Arg>   >(cs, COMPOSITE_HARD_OVERLAY  , i18n("Hard Overlay")  , KoCompositeOp::categoryMix());
 
          add<&cfScreen<Arg>      >(cs, COMPOSITE_SCREEN      , i18n("Screen")      , KoCompositeOp::categoryLight());
          add<&cfColorDodge<Arg>  >(cs, COMPOSITE_DODGE       , i18n("Color Dodge") , KoCompositeOp::categoryLight());

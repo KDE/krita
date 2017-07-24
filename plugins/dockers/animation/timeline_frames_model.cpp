@@ -102,10 +102,7 @@ struct TimelineFramesModel::Private
     bool specialKeyframeExists(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
-
-        QList<KisKeyframeChannel *> channels = dummy->node()->keyframeChannels();
-
-        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+        Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
             if (channel->id() != KisKeyframeChannel::Content.id() && channel->keyframeAt(column)) {
                 return true;
             }
@@ -226,7 +223,7 @@ KisNodeSP TimelineFramesModel::nodeAt(QModelIndex index) const
     return dummy ? dummy->node() : 0;
 }
 
-QList<KisKeyframeChannel *> TimelineFramesModel::channelsAt(QModelIndex index) const
+QMap<QString, KisKeyframeChannel*> TimelineFramesModel::channelsAt(QModelIndex index) const
 {
     KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
     return srcDummy->node()->keyframeChannels();

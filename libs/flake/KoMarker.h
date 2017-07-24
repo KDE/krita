@@ -26,7 +26,8 @@
 #include "kritaflake_export.h"
 #include <KoFlake.h>
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
+
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class QString;

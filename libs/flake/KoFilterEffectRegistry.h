@@ -25,7 +25,7 @@
 
 #include "kritaflake_export.h"
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoFilterEffectLoadingContext;
 class KoFilterEffect;
 

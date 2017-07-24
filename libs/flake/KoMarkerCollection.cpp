@@ -70,15 +70,12 @@ void KoMarkerCollection::loadMarkersFromFile(const QString &svgFile)
 
     if (!file.open(QIODevice::ReadOnly)) return;
 
-    QXmlStreamReader reader(&file);
-    reader.setNamespaceProcessing(false);
-
     QString errorMsg;
     int errorLine = 0;
     int errorColumn;
 
     KoXmlDocument doc;
-    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    bool ok = doc.setContent(&file, false, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         errKrita << "Parsing error in " << svgFile << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

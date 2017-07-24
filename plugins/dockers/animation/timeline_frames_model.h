@@ -109,7 +109,7 @@ public:
 
 protected:
     KisNodeSP nodeAt(QModelIndex index) const override;
-    QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const override;
+    QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
@@ -123,7 +123,7 @@ Q_SIGNALS:
     void sigInfiniteTimelineUpdateNeeded();
     void sigAudioChannelChanged();
     void sigEnsureRowVisible(int row);
-    
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

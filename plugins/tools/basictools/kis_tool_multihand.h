@@ -55,6 +55,7 @@ private:
 
 private Q_SLOTS:
     void activateAxesPointModeSetup();
+    void resetAxes();
     void slotSetHandsCount(int count);
     void slotSetAxesAngle(int angle);
     void slotSetTransformMode(int qcomboboxIndex);

@@ -211,7 +211,7 @@ public:
     KoAlphaColorSpaceFactoryImpl()
             : KoSimpleColorSpaceFactory(alphaIdFromChannelType<channels_type>().id(),
                                         alphaIdFromChannelType<channels_type>().name(),
-                                        true,
+                                        false,
                                         AlphaColorModelID,
                                         colorDepthIdForChannelType<channels_type>(),
                                         qMin(16, int(sizeof(channels_type) * 8)), // DIRTY HACK ALERT: see a comment below!

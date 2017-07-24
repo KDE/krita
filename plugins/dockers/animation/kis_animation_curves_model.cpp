@@ -397,10 +397,11 @@ KisNodeSP KisAnimationCurvesModel::nodeAt(QModelIndex index) const
     return 0;
 }
 
-QList<KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex index) const
+QMap<QString, KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex index) const
 {
     KisKeyframeChannel *channel = m_d->getCurveAt(index)->channel();
-    QList<KisKeyframeChannel*> list({channel});
+    QMap<QString, KisKeyframeChannel*> list;
+    list[""] = channel;
     return list;
 }
 

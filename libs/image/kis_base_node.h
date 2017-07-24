@@ -465,7 +465,7 @@ public:
      * Return the keyframe channels associated with this node
      * @return list of keyframe channels
      */
-    QList<KisKeyframeChannel *> keyframeChannels() const;
+    QMap<QString, KisKeyframeChannel*> keyframeChannels() const;
 
     /**
      * Get the keyframe channel with given id.

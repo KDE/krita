@@ -202,6 +202,8 @@ set(kritaflake_SRCS
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
 
+    resources/KoSvgSymbolCollectionResource.cpp
+
     FlakeDebug.cpp
     tests/MockShapes.cpp
 )
@@ -229,3 +231,4 @@ set_target_properties(kritaflake PROPERTIES
 )
 
 install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})
+

@@ -28,7 +28,7 @@
 
 #include <QSharedPointer>
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShape;
 class KoShapeLoadingContext;
 class QPen;
@@ -103,7 +103,7 @@ namespace KoOdfWorkaround
     KRITAFLAKE_EXPORT void fixMissingFillRule(Qt::FillRule &fillRule, KoShapeLoadingContext &context);
 
     /**
-     * OpenOffice resizes text shapes with autogrow in both directions. If the text box is saved to 
+     * OpenOffice resizes text shapes with autogrow in both directions. If the text box is saved to
      * small the text will not fit and it needs to be adjusted during the first layout.
      * This methods returns true if we need to adjust the layout. The adjusting is handled at a different place.
      */

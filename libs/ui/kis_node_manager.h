@@ -200,6 +200,11 @@ public Q_SLOTS:
     void slotSplitAlphaWrite();
     void slotSplitAlphaSaveMerged();
 
+    void toggleLock();
+    void toggleVisibility();
+    void toggleAlphaLock();
+    void toggleInheritAlpha();
+
     /**
      * @brief slotSetSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.
      * @param nodes the selected nodes

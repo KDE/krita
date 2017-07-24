@@ -107,6 +107,14 @@ public Q_SLOTS:
     Filter *filter(const QString &name) const;
 
     /**
+     * @brief filterStrategies Retrieves all installed filter strategies. A filter
+     * strategy is used when transforming (scaling, shearing, rotating) an image to
+     * calculate the value of the new pixels. You can use th
+     * @return the id's of all available filters.
+     */
+    QStringList filterStrategies() const;
+
+    /**
      * @brief profiles creates a list with the names of all color profiles compatible
      * with the given color model and color depth.
      * @param colorModel A string describing the color model of the image:

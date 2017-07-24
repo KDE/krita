@@ -74,7 +74,7 @@ public:
 
 protected:
     virtual KisNodeSP nodeAt(QModelIndex index) const = 0;
-    virtual QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const = 0;
+    virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
     KisImageWSP image() const;
 
     KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0);

@@ -28,7 +28,7 @@
 class KoColorSpace;
 
 /**
- * This layer is of a type that can be d on. A paint layer can
+ * This layer is of a type that can be drawn on. A paint layer can
  * have any number of effect masks, a transparency mask, a local
  * selection and a protection mask.
  *

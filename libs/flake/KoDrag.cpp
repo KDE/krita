@@ -82,6 +82,7 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
     writer.save(buffer);
 
     buffer.close();
+
     qDeleteAll(shapes);
 
     setData(mimeType, buffer.data());

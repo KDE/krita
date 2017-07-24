@@ -21,7 +21,8 @@ Otherwise you risk major confusion.
 Note: on all operating systems the entire procedure is done in a terminal window.
 
 1. git: https://git-scm.com/downloads. Make sure git is in your path
-2. cmake 3.3.2 or later: https://cmake.org/download/. Make sure cmake is in your path.
+2. CMake 3.3.2 or later: https://cmake.org/download/. Make sure cmake is in your path.
+    * CMake 3.9 does not build Krita properly at the moment, please use 3.8 instead.
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
@@ -33,7 +34,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.
 
-4. On Windows, you will also need Python 3.6: https://www.python.org. Make sure to have python.exe in your path. This version of python will be used for two things: to configure Qt and to build the python scripting module. Make sure the version you download is exactly python-3.6.1. Make sure Python is in your path.
+4. On Windows, you will also need Python 3.6.2 (technically any versions of 3.6 is fine, but it's not tested): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module. Make sure the version you download is exactly python-3.6.2. Make sure that specific version of Python comes first in your path.
 
 == Setup your environment ==
 
@@ -92,10 +93,6 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
 3. build the packages:
 
 With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
-
-If you want to use the included version of Python (can be used on Windows to build Qt instead of installing Python separately):
-    
-    cmake --build . --config RelWithDebInfo --target ext_python
 
 On Windows:
 
@@ -158,6 +155,12 @@ Everywhere else:
 On Windows, if you want to include DrMingw for dumping backtrace on crash:
 
     cmake --build . --config RelWithDebInfo --target ext_drmingw
+
+On Windows, if you want to include Python scripting:
+
+    cmake --build . --config RelWithDebInfo --target ext_python
+    cmake --build . --config RelWithDebInfo --target ext_sip
+    cmake --build . --config RelWithDebInfo --target ext_pyqt
 
 Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on

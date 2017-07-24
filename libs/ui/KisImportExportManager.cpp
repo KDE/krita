@@ -293,6 +293,10 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         // WARNING: The updater is not guaranteed to be persistent! If you ever want
         // to add progress reporting to "Save also as .kra", make sure you create
         // a separate KoProgressUpdater for that!
+
+        // WARNING2: the failsafe completion of the updater happens in the destructor
+        // the filter.
+
         filter->setUpdater(d->updater);
     }
 

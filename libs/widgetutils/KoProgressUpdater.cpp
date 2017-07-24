@@ -197,7 +197,13 @@ void KoProgressUpdater::updateUi()
     // won't happen until we return from this function (which is
     // triggered by a timer)
 
-    if (d->updated && !d->subtasks.isEmpty()) {
+    /**
+     * We shouldn't let progress updater to interfere the progress
+     * reporting when it is not initialized.
+     */
+    if (d->subtasks.isEmpty()) return;
+
+    if (d->updated) {
         int totalProgress = 0;
         int totalWeight = 0;
         d->isUndefinedState = false;

@@ -41,7 +41,7 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
     //TODO check that points are not the same
 
     if (m_pointData2 < m_pointData1)
-        qSwap(m_pointData1, m_pointData2);
+        std::swap(m_pointData1, m_pointData2);
 
     if (m_pointData1.pointIndex.first != m_pointData2.pointIndex.first) {
         if (m_pointData1.pointIndex.second == 0 && pathShape->subpathPointCount(m_pointData1.pointIndex.first) > 1)

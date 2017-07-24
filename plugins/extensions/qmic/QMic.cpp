@@ -287,12 +287,23 @@ void QMic::connected()
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
     ds.writeBytes(ba.constData(), ba.length());
+    // Flush the socket because we might not return to the event loop!
+    if (!socket->waitForBytesWritten(2000)) {
+        qWarning() << "Failed to write response:" << socket->error();
+    }
 
     // Wait for the ack
     bool r = true;
-    r &= socket->waitForReadyRead(); // wait for ack
+    r &= socket->waitForReadyRead(2000); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
-    socket->waitForDisconnected(-1);
+    if (!socket->waitForDisconnected(2000)) {
+        qWarning() << "Remote not disconnected:" << socket->error();
+        // Wait again
+        socket->disconnectFromServer();
+        if (socket->waitForDisconnected(2000)) {
+            qWarning() << "Disconnect timed out:" << socket->error();
+        }
+    }
 
 }
 

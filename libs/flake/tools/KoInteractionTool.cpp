@@ -166,7 +166,7 @@ void KoInteractionTool::addInteractionFactory(KoInteractionStrategyFactory *fact
     }
 
     d->interactionFactories.append(toQShared(factory));
-    qSort(d->interactionFactories.begin(),
+    std::sort(d->interactionFactories.begin(),
           d->interactionFactories.end(),
           KoInteractionStrategyFactory::compareLess);
 }

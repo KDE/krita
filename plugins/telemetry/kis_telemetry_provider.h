@@ -52,7 +52,7 @@ public:
 protected:
     void getTimeTicket(QString id) override;
     void putTimeTicket(QString id) override;
-    void saveImageProperites(QString fileName, KisImageSP &image) override;
+  //  void saveImageProperites(QString fileName, KisImageSP &image) override;
 
 private:
     enum TelemetryCategory {

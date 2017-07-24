@@ -371,9 +371,6 @@ set(kritaui_LIB_SRCS
     kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
-
-    kis_telemetry_abstruct.cpp
-    kis_telemetry_actions.cpp
 )
 
 if(WIN32)
@@ -501,7 +498,7 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisNodePropertyAction_p.h)
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
+target_link_libraries(kritaui  kritalibtelemetry KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
                       kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
 )
 

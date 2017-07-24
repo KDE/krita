@@ -67,6 +67,7 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/kxmlguifactory_p.cpp
     xmlgui/kxmlguiversionhandler.cpp
     xmlgui/kxmlguiwindow.cpp
+    xmlgui/kactionproxy.cpp
 )
 
 if (HAVE_DBUS)

@@ -22,6 +22,7 @@
 
 #include <KoToolProxy_p.h>
 #include "kis_telemetry_actions.h"
+#include "kis_telemetry_instance.h"
 
 
 KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
@@ -179,7 +180,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
             } else {
                 activeTool->beginPrimaryAction(&ev);
                 KisToolsStartUse kisToolsUse;
-                kisToolsUse.doAction(KisPart::instance()->provider(), activeTool->toolId());
+                kisToolsUse.doAction(KisTelemetryInstance::instance()->provider(), activeTool->toolId());
             }
         } else {
             if (event->type() == QEvent::MouseButtonDblClick) {
@@ -200,7 +201,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
         if (action == KisTool::Primary) {
             activeTool->endPrimaryAction(&ev);
             KisToolsStopUse kisToolsUse;
-            kisToolsUse.doAction(KisPart::instance()->provider(), activeTool->toolId());
+            kisToolsUse.doAction(KisTelemetryInstance::instance()->provider(), activeTool->toolId());
         } else {
             activeTool->endAlternateAction(&ev, KisTool::actionToAlternateAction(action));
         }

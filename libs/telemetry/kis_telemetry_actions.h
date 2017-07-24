@@ -20,10 +20,10 @@
 
 #ifndef KIS_TELEMETRY_ACTIONS_H
 #define KIS_TELEMETRY_ACTIONS_H
-#include "kritaflake_export.h"
+#include "kritatelemetry_export.h"
 #include <QSize>
 #include <QString>
-#include "kis_types.h"
+//#include <kis_types.h>
 
 class KisTelemetryAbstruct;
 class KisTelemetryAction {
@@ -32,35 +32,35 @@ public:
     virtual ~KisTelemetryAction() = default;
 };
 
-class KRITAFLAKE_EXPORT KisToolsActivate : public KisTelemetryAction {
+class KRITATELEMETRY_EXPORT KisToolsActivate : public KisTelemetryAction {
 public:
     void doAction(KisTelemetryAbstruct* provider, QString id) override;
 };
-class KRITAFLAKE_EXPORT KisToolsDeactivate : public KisTelemetryAction {
-public:
-    void doAction(KisTelemetryAbstruct* provider, QString id) override;
-};
-
-class KRITAFLAKE_EXPORT KisToolsStartUse : public KisTelemetryAction {
-public:
-    void doAction(KisTelemetryAbstruct* provider, QString id) override;
-};
-class KRITAFLAKE_EXPORT KisToolsStopUse : public KisTelemetryAction {
+class KRITATELEMETRY_EXPORT KisToolsDeactivate : public KisTelemetryAction {
 public:
     void doAction(KisTelemetryAbstruct* provider, QString id) override;
 };
 
-class KRITAFLAKE_EXPORT KisSaveImageProperties : public KisTelemetryAction {
+class KRITATELEMETRY_EXPORT KisToolsStartUse : public KisTelemetryAction {
 public:
-    KisSaveImageProperties(KisImageSP& image);
-
     void doAction(KisTelemetryAbstruct* provider, QString id) override;
-    QString fileName() const;
-    KisImageSP& image();
-
-private:
-    KisImageSP &m_image;
-    QString m_fileName;
 };
+class KRITATELEMETRY_EXPORT KisToolsStopUse : public KisTelemetryAction {
+public:
+    void doAction(KisTelemetryAbstruct* provider, QString id) override;
+};
+
+//class KRITATELEMETRY_EXPORT KisSaveImageProperties : public KisTelemetryAction {
+//public:
+//  KisSaveImageProperties(KisImageSP& image);
+
+//    void doAction(KisTelemetryAbstruct* provider, QString id) override;
+//     QString fileName() const;
+//   KisImageSP& image();
+
+//private:
+//   KisImageSP &m_image;
+//    QString m_fileName;
+//};
 
 #endif

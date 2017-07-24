@@ -21,17 +21,17 @@
 #ifndef KIS_TELEMETRY_ABSTRUCT_H
 #define KIS_TELEMETRY_ABSTRUCT_H
 #include "QScopedPointer"
-#include "kritaflake_export.h"
+#include "kritatelemetry_export.h"
 #include <KUserFeedback/AbstractDataSource>
 #include <KUserFeedback/cpuinfosource.h>
 #include <KUserFeedback/provider.h>
 #include <QString>
 #include <QVector>
 #include "kis_telemetry_actions.h"
-#include <kis_types.h>
+//#include <kis_types.h>
 
 
-class KRITAFLAKE_EXPORT KisTelemetryAbstruct {
+class KRITATELEMETRY_EXPORT KisTelemetryAbstruct {
 public:
     virtual void sendData(QString path, QString adress = QString()) = 0;
     virtual ~KisTelemetryAbstruct() {}
@@ -39,13 +39,13 @@ public:
     void doTicket(KisToolsDeactivate &action, QString id);
     void doTicket(KisToolsStartUse &action, QString id);
     void doTicket(KisToolsStopUse &action, QString id);
-    void doTicket(KisSaveImageProperties &action, QString id);
+   // void doTicket(KisSaveImageProperties &action, QString id);
 
 
 protected:
     virtual void getTimeTicket(QString id) = 0;
     virtual void putTimeTicket(QString id) = 0;
-    virtual void saveImageProperites(QString fileName, KisImageSP &image) = 0;
+ //   virtual void saveImageProperites(QString fileName, KisImageSP &image) = 0;
 
 protected:
     QString m_adress = "http://localhost:8080/";

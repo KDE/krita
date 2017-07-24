@@ -33,7 +33,6 @@
 #include "kritaui_export.h"
 #include <KoConfig.h>
 #include <KisMainWindow.h>
-#include "kis_telemetry_abstruct.h"
 #include <memory>
 
 namespace KIO {
@@ -159,16 +158,6 @@ public:
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
-
-    // ----------------- Telemetry management -----------------
-    /**
-     * @return the telemetry provider.
-     */
-    void setProvider(KisTelemetryAbstruct *provider);
-    /**
-     * @return the telemetry provider.
-     */
-    KisTelemetryAbstruct *provider();
 
 
 public Q_SLOTS:

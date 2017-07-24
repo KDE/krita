@@ -10,10 +10,10 @@ set(kritatelemetry_SOURCES
 )
 add_subdirectory( tests )
 
-add_library(kritatelemetry MODULE ${kritatelemetry_SOURCES})
-generate_export_header(kritatelemetry EXPORT_MACRO_NAME TELEMETRY_EXPORT)
+add_library(kritaplugintelemetry MODULE ${kritaplugintelemetry_SOURCES})
+generate_export_header(kritaplugintelemetry EXPORT_MACRO_NAME TELEMETRY_PLUGIN_EXPORT)
 
-target_link_libraries(kritatelemetry KUserFeedbackCore kritaui)
-install(TARGETS kritatelemetry  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+target_link_libraries(kritaplugintelemetry kritalibtelemetry  KUserFeedbackCore kritaui)
+install(TARGETS kritaplugintelemetry  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 

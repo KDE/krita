@@ -105,7 +105,6 @@ public:
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    QScopedPointer<KisTelemetryAbstruct> telemetryProvider;
 };
 
 KisPart* KisPart::instance()
@@ -359,21 +358,6 @@ KisIdleWatcher* KisPart::idleWatcher() const
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
     return &d->animationCachePopulator;
-}
-
-void KisPart::setProvider(KisTelemetryAbstruct *provider)
-{
-    if(!d->telemetryProvider.isNull()){
-        KIS_SAFE_ASSERT_RECOVER_RETURN(false);
-    }
-    d->telemetryProvider.reset(provider);
-}
-
-KisTelemetryAbstruct* KisPart::provider()
-{
-    if (d->telemetryProvider.isNull())
-        return nullptr;
-    return d->telemetryProvider.data();
 }
 
 void KisPart::openExistingFile(const QUrl& url)

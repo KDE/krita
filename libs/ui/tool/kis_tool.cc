@@ -71,6 +71,7 @@
 #include "KisPart.h"
 #include <QSharedPointer>
 #include "kis_telemetry_actions.h"
+#include "kis_telemetry_instance.h"
 
 
 
@@ -124,7 +125,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
     KisToolsActivate kisToolsActivate;
-    kisToolsActivate.doAction(KisPart::instance()->provider(),toolId());
+    kisToolsActivate.doAction(KisTelemetryInstance::instance()->provider(),toolId());
 
     resetCursorStyle();
     if (!canvas()) return;
@@ -167,7 +168,7 @@ void KisTool::deactivate()
 {
     bool result = true;
     KisToolsDeactivate kisToolsDeactivate;
-    kisToolsDeactivate.doAction(KisPart::instance()->provider(),toolId());
+    kisToolsDeactivate.doAction(KisTelemetryInstance::instance()->provider(),toolId());
 
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);

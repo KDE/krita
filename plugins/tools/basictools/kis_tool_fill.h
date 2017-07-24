@@ -44,15 +44,15 @@ class KisToolFill : public KisToolPaint
 public:
 
     KisToolFill(KoCanvasBase * canvas);
-    virtual ~KisToolFill();
+    ~KisToolFill() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
-    virtual QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
     void slotSetUsePattern(bool);
@@ -62,9 +62,9 @@ public Q_SLOTS:
     void slotSetFeather(int);
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 protected:
-    virtual bool wantsAutoScroll() const { return false; }
+    bool wantsAutoScroll() const override { return false; }
 private:
     void updateGUI();
 
@@ -106,9 +106,9 @@ public:
         setPriority(14);
     }
 
-    virtual ~KisToolFillFactory() {}
+    ~KisToolFillFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolFill(canvas);
     }
 

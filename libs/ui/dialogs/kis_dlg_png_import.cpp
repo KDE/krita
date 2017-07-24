@@ -39,23 +39,20 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
 
     dlgWidget.lblFilename->setText(path);
 
-    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(colorModelID, colorDepthID);
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModelID, colorDepthID);
     dlgWidget.cmbProfile->clear();
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-    if (csf) {
-        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-        QStringList profileNames;
-        Q_FOREACH (const KoColorProfile *profile, profileList) {
-            profileNames.append(profile->name());
-        }
-        qSort(profileNames);
-        Q_FOREACH (QString stringName, profileNames) {
-            dlgWidget.cmbProfile->addSqueezedItem(stringName);
-        }
-        KisConfig cfg;
-        QString profile = cfg.readEntry<QString>("pngImportProfile", csf->defaultProfile());
-        dlgWidget.cmbProfile->setCurrent(profile);
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId);
+    QStringList profileNames;
+    Q_FOREACH (const KoColorProfile *profile, profileList) {
+        profileNames.append(profile->name());
     }
+    std::sort(profileNames.begin(), profileNames.end());
+    Q_FOREACH (QString stringName, profileNames) {
+        dlgWidget.cmbProfile->addSqueezedItem(stringName);
+    }
+    KisConfig cfg;
+    QString profile = cfg.readEntry<QString>("pngImportProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
+    dlgWidget.cmbProfile->setCurrent(profile);
 }
 
 QString KisDlgPngImport::profile() const

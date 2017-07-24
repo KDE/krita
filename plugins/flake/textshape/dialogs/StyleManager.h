@@ -39,7 +39,7 @@ class StyleManager : public QWidget
     Q_OBJECT
 public:
     explicit StyleManager(QWidget *parent = 0);
-    ~StyleManager();
+    ~StyleManager() override;
 
     void setStyleManager(KoStyleManager *sm);
 

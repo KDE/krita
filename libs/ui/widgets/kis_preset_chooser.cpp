@@ -194,6 +194,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 
     m_chooser = new KoResourceItemChooser(m_adapter, this);
+    m_chooser->setObjectName("ResourceChooser");
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
@@ -240,7 +241,7 @@ void KisPresetChooser::notifyConfigChanged()
 {
     KisConfig cfg;
     m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
-    setIconSize(cfg.presetIconSize() );
+    setIconSize(cfg.presetIconSize());
 
     updateViewSettings();
 }
@@ -292,7 +293,7 @@ void KisPresetChooser::setCurrentResource(KoResource *resource)
     m_chooser->setCurrentResource(resource);
 }
 
-KoResource* KisPresetChooser::currentResource()
+KoResource* KisPresetChooser::currentResource() const
 {
     return m_chooser->currentResource();
 }

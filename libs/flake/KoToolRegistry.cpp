@@ -29,8 +29,6 @@
 #include "tools/KoPathToolFactory.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoZoomToolFactory.h"
-#include "tools/KoPanTool.h"
-#include "tools/KoPanToolFactory.h"
 #include "KoToolManager.h"
 #include <KoPluginLoader.h>
 
@@ -57,7 +55,6 @@ void KoToolRegistry::init()
     add(new KoCreateShapesToolFactory());
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());
-    add(new KoPanToolFactory());
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
@@ -79,10 +76,4 @@ KoToolRegistry* KoToolRegistry::instance()
         s_instance->init();
     }
     return s_instance;
-}
-
-void KoToolRegistry::addDeferred(KoToolFactoryBase *toolFactory)
-{
-    add(toolFactory);
-    KoToolManager::instance()->addDeferredToolFactory(toolFactory);
 }

@@ -50,6 +50,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QMenu;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -75,14 +76,7 @@ public:
      * @param canvas the canvas interface this tool will work for.
      */
     explicit KoToolBase(KoCanvasBase *canvas);
-    virtual ~KoToolBase();
-
-    /**
-     * connect the tool to the new shapecontroller. Old connections are removed.
-     *
-     * @param shapeController the new shape controller
-     */
-    void updateShapeController(KoShapeBasedDocumentBase *shapeController);
+    ~KoToolBase() override;
 
     /**
      * request a repaint of the decorations to be made. This triggers
@@ -180,13 +174,11 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /**
-     * Called when the scrollwheel is used
-     * Implementors should call event->ignore() if they do not actually use the event
-     * @param event state of this wheel event
+     * @brief explicitUserStrokeEndRequest is called by the input manager
+     *        when the user presses Enter key or any equivalent. This callback
+     *        comes before requestStrokeEnd(), which comes from a different source.
      */
-    virtual void wheelEvent(KoPointerEvent *event);
-
-    virtual void touchEvent(QTouchEvent *event);
+    virtual void explicitUserStrokeEndRequest();
 
     /**
      * This method is used to query a set of properties of the tool to be
@@ -229,8 +221,6 @@ public:
      */
     virtual void customMoveEvent(KoPointerEvent *event);
 
-
-
     /**
      * @return true if synthetic mouse events on the canvas should be eaten.
      *
@@ -240,19 +230,6 @@ public:
      * These events are sent by the OS in Windows
      */
     bool maskSyntheticEvents() const;
-
-
-    /**
-     * @return true if the tool will accept raw QTouchEvents.
-     */
-    virtual bool wantsTouch() const;
-
-    /**
-     * Set the identifier code from the KoToolFactoryBase that created this tool.
-     * @param id the identifier code
-     * @see KoToolFactoryBase::id()
-     */
-    void setToolId(const QString &id);
 
     /**
      * get the identifier code from the KoToolFactoryBase that created this tool.
@@ -302,16 +279,9 @@ public:
      * Paste the clipboard selection.
      * A tool typically has one or more shapes selected and pasting should do something meaningful
      * for this specific shape and tool combination.  Inserting text in a text tool, for example.
-     * If you reimplement this function make sure to also reimplement supportedPasteMimeTypes().
      * @return will return true if pasting succeeded. False if nothing happened.
      */
     virtual bool paste();
-
-    /**
-     * Returns the mimetypes that this tool's paste() function can handle
-     * @return QStringList containing the mimetypes that's supported by paste()
-     */
-    virtual QStringList supportedPasteMimeTypes() const;
 
     /**
      * Handle the dragMoveEvent
@@ -339,9 +309,10 @@ public:
     virtual void dropEvent(QDropEvent *event, const QPointF &point);
 
     /**
-     * @return A list of actions to be used for a popup.
+     * @return a menu with context-aware actions for the currect selection. If
+     *         the returned value is null, no context menu is shown.
      */
-    QList<QAction*> popupActionList() const;
+    virtual QMenu* popupActionsMenu();
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
@@ -354,6 +325,32 @@ public:
     bool isInTextMode() const;
 
 public Q_SLOTS:
+
+    /**
+     * Called when the user requested undo while the stroke is
+     * active. If you tool supports undo of the part of its actions,
+     * override this method and do the needed work there.
+     *
+     * NOTE: Default implementation forwards this request to
+     *       requestStrokeCancellation() method, so that the stroke
+     *       would be cancelled.
+     */
+    virtual void requestUndoDuringStroke();
+
+    /**
+     * Called when the user requested the cancellation of the current
+     * stroke. If you tool supports cancelling, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeCancellation();
+
+    /**
+     * Called when the image decided that the stroke should better be
+     * ended. If you tool supports long strokes, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeEnd();
+
 
     /**
      * This method is called when this tool instance is activated.
@@ -375,7 +372,7 @@ public Q_SLOTS:
      *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
     /**
      * This method is called whenever this tool is no longer the
@@ -476,13 +473,6 @@ protected:
      */
     void addAction(const QString &name, QAction *action);
 
-    /**
-     * Set the list of actions to be used as popup menu.
-     * @param list the list of actions.
-     * @see popupActionList
-     */
-    void setPopupActionList(const QList<QAction*> &list);
-
     /// Convenience function to get the current handle radius
     uint handleRadius() const;
 
@@ -520,6 +510,11 @@ protected:
      */
     void setMaskSyntheticEvents(bool value);
 
+    /**
+     * Returns true if activate() has been called (more times than deactivate :) )
+     */
+    bool isActivated() const;
+
 protected:
     KoToolBase(KoToolBasePrivate &dd);
 
@@ -527,6 +522,18 @@ protected:
 
 
 private:
+
+    friend class ToolHelper;
+
+    /**
+     * Set the identifier code from the KoToolFactoryBase that created this tool.
+     * @param id the identifier code
+     * @see KoToolFactoryBase::id()
+     */
+    void setToolId(const QString &id);
+
+
+
     KoToolBase();
     KoToolBase(const KoToolBase&);
     KoToolBase& operator=(const KoToolBase&);

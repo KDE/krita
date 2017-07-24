@@ -52,16 +52,18 @@ public:
     };
 
     KoConnectionShape();
-    virtual ~KoConnectionShape();
+    ~KoConnectionShape() override;
+
+    KoShape* cloneShape() const override;
 
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     // reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
     /**
      * Sets the first shape this connector is connected to
@@ -124,14 +126,17 @@ public:
     void updateConnections();
 
 protected:
-    /// reimplemented
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    KoConnectionShape(const KoConnectionShape &rhs);
+
 
     /// reimplemented
-    void updatePath(const QSizeF &size);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
 
     /// reimplemented
-    virtual void shapeChanged(ChangeType type, KoShape *shape);
+    void updatePath(const QSizeF &size) override;
+
+    /// reimplemented
+    void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
     Q_DECLARE_PRIVATE(KoConnectionShape)

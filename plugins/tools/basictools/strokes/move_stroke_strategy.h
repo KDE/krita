@@ -41,7 +41,7 @@ public:
         {
         }
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) {
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
             return new Data(*this, levelOfDetail);
         }
 
@@ -60,12 +60,12 @@ public:
     MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
                        KisStrokeUndoFacade *undoFacade);
 
-    void initStrokeCallback();
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
+    void initStrokeCallback() override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
 private:
     MoveStrokeStrategy(const MoveStrokeStrategy &rhs);

@@ -21,6 +21,9 @@
 
 #include "kis_abstract_shortcut.h"
 
+class QMouseEvent;
+class QPointF;
+
 /**
  * This class represents a shortcut that starts an action that can
  * involve pressing the mouse button and, probably, moving the cursor.
@@ -41,9 +44,9 @@ class KRITAUI_EXPORT KisStrokeShortcut : public KisAbstractShortcut
 {
 public:
     KisStrokeShortcut(KisAbstractInputAction *action, int index);
-    ~KisStrokeShortcut();
+    ~KisStrokeShortcut() override;
 
-    int priority() const;
+    int priority() const override;
 
     /**
      * Sets the configuration for this shortcut
@@ -71,6 +74,8 @@ public:
      * is pressed.
      */
     bool matchBegin(Qt::MouseButton button);
+
+    QMouseEvent fakeEndEvent(const QPointF &localPos) const;
 
 private:
     class Private;

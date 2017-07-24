@@ -45,7 +45,7 @@ struct KisBrushMaskScalarApplicator : public KisBrushMaskApplicatorBase
     {
     }
 
-    void process(const QRect &rect) {
+    void process(const QRect &rect) override {
         processScalar(rect);
     }
 

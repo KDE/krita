@@ -20,10 +20,19 @@
 #include "KoTextShapeDataBase.h"
 #include "KoTextShapeDataBase_p.h"
 
+#include <QTextDocument>
+
 KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate()
-        : document(0)
-        , textAlignment(Qt::AlignLeft | Qt::AlignTop)
+        : textAlignment(Qt::AlignLeft | Qt::AlignTop)
         , resizeMethod(KoTextShapeDataBase::NoResize)
+{
+}
+
+KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate(const KoTextShapeDataBasePrivate &rhs)
+    : document(rhs.document->clone()),
+      margins(rhs.margins),
+      textAlignment(rhs.textAlignment),
+      resizeMethod(rhs.resizeMethod)
 {
 }
 
@@ -31,8 +40,8 @@ KoTextShapeDataBasePrivate::~KoTextShapeDataBasePrivate()
 {
 }
 
-KoTextShapeDataBase::KoTextShapeDataBase(KoTextShapeDataBasePrivate &dd)
-    : d_ptr(&dd)
+KoTextShapeDataBase::KoTextShapeDataBase(KoTextShapeDataBasePrivate *dd)
+    : d_ptr(dd)
 {
 }
 
@@ -44,7 +53,7 @@ KoTextShapeDataBase::~KoTextShapeDataBase()
 QTextDocument *KoTextShapeDataBase::document() const
 {
     Q_D(const KoTextShapeDataBase);
-    return d->document;
+    return d->document.data();
 }
 
 void KoTextShapeDataBase::setShapeMargins(const KoInsets &margins)

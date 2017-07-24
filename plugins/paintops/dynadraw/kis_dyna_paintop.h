@@ -23,6 +23,8 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
+#include "kis_airbrush_option.h"
+#include "kis_pressure_rate_option.h"
 #include "dyna_brush.h"
 
 
@@ -35,19 +37,30 @@ class KisDynaPaintOp : public KisPaintOp
 public:
 
     KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    ~KisDynaPaintOp();
+    ~KisDynaPaintOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
     virtual bool incremental() const {
         return true;
     }
 
+protected:
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
+private:
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+
 private:
     KisDynaProperties m_properties;
     KisPaintDeviceSP m_dab;
     DynaBrush m_dynaBrush;
+    KisAirbrushOption m_airbrushOption;
+    KisPressureRateOption m_rateOption;
 };
 
 #endif // KIS_DYNA_PAINTOP_H_

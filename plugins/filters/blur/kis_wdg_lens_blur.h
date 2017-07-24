@@ -30,12 +30,12 @@ class KisWdgLensBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgLensBlur(QWidget * parent);
-    virtual ~KisWdgLensBlur();
+    ~KisWdgLensBlur() override;
     inline const Ui_WdgLensBlur* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 private:
     Ui_WdgLensBlur* m_widget;
 };

@@ -76,26 +76,26 @@ public:
      */
     KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc);
 
-    virtual ~KisCanvas2();
+    ~KisCanvas2() override;
 
     void notifyZoomChanged();
 
-    virtual void disconnectCanvasObserver(QObject *object);
+    void disconnectCanvasObserver(QObject *object) override;
 
 public: // KoCanvasBase implementation
 
-    bool canvasIsOpenGL() const;
+    bool canvasIsOpenGL() const override;
 
     KisOpenGL::FilterMode openGLFilterMode() const;
 
-    void gridSize(QPointF *offset, QSizeF *spacing) const;
+    void gridSize(QPointF *offset, QSizeF *spacing) const override;
 
-    bool snapToGrid() const;
+    bool snapToGrid() const override;
 
-    // XXX: Why?
-    void addCommand(KUndo2Command *command);
+    // This method only exists to support flake-related operations
+    void addCommand(KUndo2Command *command) override;
 
-    virtual QPoint documentOrigin() const;
+    QPoint documentOrigin() const override;
     QPoint documentOffset() const;
 
     /**
@@ -104,35 +104,35 @@ public: // KoCanvasBase implementation
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
-    KoShapeManager * shapeManager() const;
+    KoShapeManager * shapeManager() const override;
+
+    /**
+     * Since shapeManager() may change, we need a persistent object where we can
+     * connect to and thack the selection. See more comments in KoCanvasBase.
+     */
+    KoSelectedShapesProxy *selectedShapesProxy() const override;
 
     /**
      * Return the shape manager associated with this canvas
      */
-    KoShapeManager * globalShapeManager() const;
+    KoShapeManager *globalShapeManager() const;
 
-    void updateCanvas(const QRectF& rc);
+    void updateCanvas(const QRectF& rc) override;
 
-    virtual void updateInputMethodInfo();
+    void updateInputMethodInfo() override;
 
     const KisCoordinatesConverter* coordinatesConverter() const;
-    virtual KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const override;
 
-    virtual QWidget* canvasWidget();
+    QWidget* canvasWidget() override;
 
-    virtual const QWidget* canvasWidget() const;
+    const QWidget* canvasWidget() const override;
 
-    virtual KoUnit unit() const;
+    KoUnit unit() const override;
 
-    virtual KoToolProxy* toolProxy() const;
+    KoToolProxy* toolProxy() const override;
 
     const KoColorProfile* monitorProfile();
-
-    /**
-     * Prescale the canvas represention of the image (if necessary, it
-     * is for QPainter, not for OpenGL).
-     */
-    void preScale();
 
     // FIXME:
     // Temporary! Either get the current layer and image from the
@@ -166,25 +166,29 @@ public: // KisCanvas2 methods
 
     KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+
     /**
      * @brief setProofingOptions
      * set the options for softproofing, without affecting the proofing options as stored inside the image.
      */
     void setProofingOptions(bool softProof, bool gamutCheck);
     KisProofingConfigurationSP proofingConfiguration() const;
+
     /**
      * @brief setProofingConfigUpdated This function is to set whether the proofing config is updated,
      * this is needed for determining whether or not to generate a new proofing transform.
      * @param updated whether it's updated. Just set it to false in normal usage.
      */
     void setProofingConfigUpdated(bool updated);
+
     /**
      * @brief proofingConfigUpdated ask the canvas whether or not it updated the proofing config.
      * @return whether or not the proofing config is updated, if so, a new proofing transform needs to be made
      * in KisOpenGL canvas.
-     */bool proofingConfigUpdated();
+     */
+    bool proofingConfigUpdated();
 
-    void setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor) override;
     KisAnimationFrameCacheSP frameCache() const;
     KisAnimationPlayer *animationPlayer() const;
     void refetchDataFromImage();
@@ -225,6 +229,8 @@ public Q_SLOTS:
      */
     void slotSetDisplayProfile(const KoColorProfile *profile);
     void startUpdateInPatches(const QRect &imageRect);
+
+    void slotTrySwitchShapeManager();
 
 private Q_SLOTS:
 

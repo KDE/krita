@@ -51,9 +51,9 @@ public:
     explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape = 0, KUndo2Command *parent = 0);
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
     QList<InputChangeData> m_data;
     KoShape *m_shape;

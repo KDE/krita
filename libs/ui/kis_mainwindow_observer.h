@@ -10,7 +10,7 @@ class KRITAUI_EXPORT KisMainwindowObserver : public KoCanvasObserverBase
 {   
 public:
     KisMainwindowObserver();
-    virtual ~KisMainwindowObserver();
+    ~KisMainwindowObserver() override;
 
     virtual void setMainWindow(KisViewManager* kisview) = 0;
 

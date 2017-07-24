@@ -33,7 +33,7 @@ class OffsetImage : public KisViewPlugin
     Q_OBJECT
 public:
     OffsetImage(QObject *parent, const QVariantList &);
-    virtual ~OffsetImage();
+    ~OffsetImage() override;
 
 public Q_SLOTS:
 

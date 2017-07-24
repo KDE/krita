@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisInputProfileManager : public QObject
     Q_OBJECT
 public:
     KisInputProfileManager(QObject *parent = 0);
-    ~KisInputProfileManager();
+    ~KisInputProfileManager() override;
     Q_DISABLE_COPY(KisInputProfileManager)
 
     /**

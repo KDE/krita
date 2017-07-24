@@ -62,7 +62,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KoStyleManager();
+    ~KoStyleManager() override;
 
     /**
      * Mark the beginning of a sequence of style changes, additions, and deletions

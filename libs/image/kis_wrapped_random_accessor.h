@@ -29,15 +29,16 @@ public:
                              qint32 x, qint32 y,
                              qint32 offsetX, qint32 offsetY,
                              bool writable,
+                             KisIteratorCompleteListener *completeListener,
                              const QRect &wrapRect);
 
-    void moveTo(qint32 x, qint32 y);
-    qint32 numContiguousColumns(qint32 x) const;
-    qint32 numContiguousRows(qint32 y) const;
-    qint32 rowStride(qint32 x, qint32 y) const;
+    void moveTo(qint32 x, qint32 y) override;
+    qint32 numContiguousColumns(qint32 x) const override;
+    qint32 numContiguousRows(qint32 y) const override;
+    qint32 rowStride(qint32 x, qint32 y) const override;
 
-    qint32 x() const;
-    qint32 y() const;
+    qint32 x() const override;
+    qint32 y() const override;
 
 private:
     QRect m_wrapRect;

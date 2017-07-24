@@ -23,13 +23,15 @@ if(OPENEXR_FOUND)
     add_subdirectory(exr)
 endif()
 
-if(POPPLER_FOUND)
+if(Poppler_Qt5_FOUND)
     add_subdirectory(pdf)
 endif()
 
 if(LIBRAW_FOUND)
     add_subdirectory(raw)
 endif()
+
+add_subdirectory(svg)
 
 add_subdirectory(bmp)
 add_subdirectory(ora)

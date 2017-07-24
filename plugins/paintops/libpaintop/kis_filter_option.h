@@ -48,7 +48,7 @@ class PAINTOP_EXPORT KisFilterOption : public KisPaintOpOption
 public:
 
     KisFilterOption();
-    virtual ~KisFilterOption();
+    ~KisFilterOption() override;
 
     /**
      * Return the currently selected filter
@@ -65,18 +65,18 @@ public:
     /**
      * XXX
      */
-    void setNode(KisNodeWSP node);
+    void setNode(KisNodeWSP node) override;
 
     /**
      * XXX
      */
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private Q_SLOTS:
 

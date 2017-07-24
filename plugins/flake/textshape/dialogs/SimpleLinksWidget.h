@@ -34,7 +34,7 @@ class SimpleLinksWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleLinksWidget(ReferencesTool *tool, QWidget *parent = 0);
-    virtual ~SimpleLinksWidget();
+    ~SimpleLinksWidget() override;
 
 Q_SIGNALS:
     void doneWithFocus();

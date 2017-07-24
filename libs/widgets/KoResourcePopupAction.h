@@ -24,12 +24,15 @@
 #include <QAction>
 
 #include <QSharedPointer>
+#include "kritawidgets_export.h"
+
 
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
+class KoResource;
 
-class KoResourcePopupAction : public QAction
+class KRITAWIDGETS_EXPORT KoResourcePopupAction : public QAction
 {
     Q_OBJECT
 
@@ -44,10 +47,13 @@ public:
     /**
      * Destructor
      */
-    virtual ~KoResourcePopupAction();
+    ~KoResourcePopupAction() override;
 
     QSharedPointer<KoShapeBackground> currentBackground() const;
     void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
+
+    void setCurrentResource(KoResource *resource);
+    KoResource *currentResource() const;
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

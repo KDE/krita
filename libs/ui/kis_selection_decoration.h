@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
     Q_OBJECT
 public:
     KisSelectionDecoration(QPointer<KisView> view);
-    ~KisSelectionDecoration();
+    ~KisSelectionDecoration() override;
 
     enum Mode {
         Ants,
@@ -41,10 +41,10 @@ public:
 
     Mode mode() const;
     void setMode(Mode mode);
-    void setVisible(bool v);
+    void setVisible(bool v) override;
 
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 
 private Q_SLOTS:
     void slotStartUpdateSelection();

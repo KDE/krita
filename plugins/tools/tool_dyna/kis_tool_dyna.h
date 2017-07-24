@@ -81,18 +81,18 @@ class KisToolDyna : public KisToolFreehand
 
 public:
     KisToolDyna(KoCanvasBase * canvas);
-    virtual ~KisToolDyna();
+    ~KisToolDyna() override;
 
-    QWidget * createOptionWidget();
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
+    QWidget * createOptionWidget() override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
 
 protected:
-    virtual void initStroke(KoPointerEvent *event);
+    void initStroke(KoPointerEvent *event) override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 
 private Q_SLOTS:
 
@@ -167,9 +167,9 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolDynaFactory() {}
+    ~KisToolDynaFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolDyna(canvas);
     }
 

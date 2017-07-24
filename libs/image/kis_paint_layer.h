@@ -28,7 +28,7 @@
 class KoColorSpace;
 
 /**
- * This layer is of a type that can be d on. A paint layer can
+ * This layer is of a type that can be drawn on. A paint layer can
  * have any number of effect masks, a transparency mask, a local
  * selection and a protection mask.
  *
@@ -71,7 +71,7 @@ public:
      * Copy Constructor
      */
     KisPaintLayer(const KisPaintLayer& rhs);
-    virtual ~KisPaintLayer();
+    ~KisPaintLayer() override;
 
     KisNodeSP clone() const override {
         return KisNodeSP(new KisPaintLayer(*this));
@@ -82,9 +82,6 @@ public:
     const KoColorSpace * colorSpace() const override;
 
     bool needProjection() const override;
-
-    using KisLayer::setDirty;
-    void setDirty(const QRect & rect) override;
 
     QIcon icon() const override;
     void setImage(KisImageWSP image) override;

@@ -23,3 +23,8 @@ ecm_add_tests(
     kis_parse_spin_boxes_test.cpp
     NAME_PREFIX "krita-ui-"
     LINK_LIBRARIES kritaui Qt5::Test)
+
+ecm_add_tests(
+    KoAnchorSelectionWidgetTest.cpp
+    NAME_PREFIX "libs-widgets-"
+    LINK_LIBRARIES kritaui Qt5::Test)

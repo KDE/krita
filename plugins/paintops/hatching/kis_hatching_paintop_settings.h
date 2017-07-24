@@ -33,7 +33,7 @@ class KisHatchingPaintOpSettings : public KisBrushBasedPaintOpSettings
 
 public:
     KisHatchingPaintOpSettings();
-    ~KisHatchingPaintOpSettings();
+    ~KisHatchingPaintOpSettings() override;
 
     //Dialogs enabled
     bool enabledcurvecrosshatching;
@@ -70,9 +70,9 @@ public:
 
     void initializeTwin(KisPaintOpSettingsSP convenienttwin) const;
     using KisPropertiesConfiguration::fromXML;
-    virtual void fromXML(const QDomElement&);
+    void fromXML(const QDomElement&) override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
     Q_DISABLE_COPY(KisHatchingPaintOpSettings)

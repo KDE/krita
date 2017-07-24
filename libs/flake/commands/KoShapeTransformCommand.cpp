@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "kis_command_ids.h"
+
 #include "KoShapeTransformCommand.h"
 #include "KoShape.h"
 
@@ -57,9 +59,9 @@ void KoShapeTransformCommand::redo()
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setTransformation(d->newState[i]);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 
@@ -70,8 +72,28 @@ void KoShapeTransformCommand::undo()
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setTransformation(d->oldState[i]);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+}
+
+int KoShapeTransformCommand::id() const
+{
+    return KisCommandUtils::TransformShapeId;
+}
+
+bool KoShapeTransformCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoShapeTransformCommand *other = dynamic_cast<const KoShapeTransformCommand*>(command);
+
+    if (!other ||
+        other->d->shapes != d->shapes ||
+        other->text() != text()) {
+
+        return false;
+    }
+
+    d->newState = other->d->newState;
+    return true;
 }

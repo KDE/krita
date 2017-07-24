@@ -31,10 +31,10 @@ class KisCropSelectionsProcessingVisitor : public KisDoNothingProcessingVisitor
 {
 public:
     KisCropSelectionsProcessingVisitor(const QRect &rect);
-    ~KisCropSelectionsProcessingVisitor();
+    ~KisCropSelectionsProcessingVisitor() override;
 
     using KisDoNothingProcessingVisitor::visit;
-    void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) override;
 
 private:
     QScopedPointer<KisCropProcessingVisitor> m_cropVisitor;

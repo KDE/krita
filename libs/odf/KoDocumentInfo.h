@@ -59,22 +59,7 @@ public:
     explicit KoDocumentInfo(QObject *parent = 0);
 
     /** The destructor */
-    ~KoDocumentInfo();
-
-    /**
-     * Load the KoDocumentInfo from an OASIS document
-     * @param metaDoc the QDomDocument with the metaInformation
-     * @return true if success
-     */
-    bool loadOasis(const KoXmlDocument& metaDoc);
-
-    /**
-     * Save the KoDocumentInfo to an OASIS document
-     * @param store a pointer to a KoStore to save in
-     * @return true if success
-     */
-    bool saveOasis(KoStore* store);
-
+    ~KoDocumentInfo() override;
     /**
      * Load the KoDocumentInfo from an Calligra-1.3 DomDocument
      * @param doc the QDomDocument to load from

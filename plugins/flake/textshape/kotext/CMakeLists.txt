@@ -8,7 +8,6 @@ set(kritatext_LIB_SRCS
     KoTextBlockBorderData.cpp
     KoTextBlockPaintStrategyBase.cpp
     KoTextOdfSaveHelper.cpp
-    KoTextPaste.cpp
     KoTextDocument.cpp
     KoTextEditor.cpp
     KoTextEditor_undo.cpp

@@ -27,27 +27,27 @@ class KisXMPIO : public KisMetaData::IOBackend
     struct Private;
 public:
     KisXMPIO();
-    virtual ~KisXMPIO();
-    virtual QString id() const {
+    ~KisXMPIO() override;
+    QString id() const override {
         return "xmp";
     }
-    virtual QString name() const {
+    QString name() const override {
         return i18n("XMP");
     }
-    virtual BackendType type() const {
+    BackendType type() const override {
         return Text;
     }
-    virtual bool supportSaving() const {
+    bool supportSaving() const override {
         return true;
     }
-    virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
-    virtual bool canSaveAllEntries(KisMetaData::Store*) const {
+    bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const override;
+    bool canSaveAllEntries(KisMetaData::Store*) const override {
         return true;
     }
-    virtual bool supportLoading() const {
+    bool supportLoading() const override {
         return true;
     }
-    virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
+    bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const override;
 };
 
 #endif

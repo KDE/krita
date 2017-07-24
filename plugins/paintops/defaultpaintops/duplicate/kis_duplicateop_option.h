@@ -32,7 +32,7 @@ class KisDuplicateOpOption : public KisPaintOpOption
 public:
     KisDuplicateOpOption();
 
-    ~KisDuplicateOpOption();
+    ~KisDuplicateOpOption() override;
 private:
     bool healing() const;
     void setHealing(bool healing);
@@ -46,11 +46,11 @@ private:
     bool cloneFromProjection() const;
     void setCloneFromProjection(bool cloneFromProjection);
 public:
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
 private:
 
@@ -65,14 +65,14 @@ struct DuplicateOption : public KisBaseOption
     bool duplicate_move_source_point;
     bool duplicate_clone_from_projection;
 
-    void readOptionSettingImpl(const KisPropertiesConfiguration* setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration* setting) override {
         duplicate_healing = setting->getBool(DUPLICATE_HEALING, false);
         duplicate_correct_perspective = setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false);
         duplicate_move_source_point = setting->getBool(DUPLICATE_MOVE_SOURCE_POINT, true);
         duplicate_clone_from_projection = setting->getBool(DUPLICATE_CLONE_FROM_PROJECTION, false);
     }
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
         setting->setProperty(DUPLICATE_HEALING, duplicate_healing);
         setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, duplicate_correct_perspective);
         setting->setProperty(DUPLICATE_MOVE_SOURCE_POINT, duplicate_move_source_point);

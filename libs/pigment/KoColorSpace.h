@@ -125,7 +125,7 @@ public:
     /// Return a list describing all the channels this color model has. The order
     /// of the channels in the list is the order of channels in the pixel. To find
     /// out the preferred display position, use KoChannelInfo::displayPosition.
-    virtual QList<KoChannelInfo *> channels() const;
+    QList<KoChannelInfo *> channels() const;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -632,7 +632,11 @@ protected:
 
 inline QDebug operator<<(QDebug dbg, const KoColorSpace *cs)
 {
-    dbg.nospace() << cs->name() << " (" << cs->colorModelId().id() << "," << cs->colorDepthId().id() << " )";
+    if (cs) {
+        dbg.nospace() << cs->name() << " (" << cs->colorModelId().id() << "," << cs->colorDepthId().id() << " )";
+    } else {
+        dbg.nospace() << "0x0";
+    }
 
     return dbg.space();
 }

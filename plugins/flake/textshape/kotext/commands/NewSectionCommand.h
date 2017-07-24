@@ -33,10 +33,10 @@ class NewSectionCommand : public KUndo2Command
 public:
 
     explicit NewSectionCommand(QTextDocument *document);
-    virtual ~NewSectionCommand();
+    ~NewSectionCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     bool m_first; ///< Checks first call of redo

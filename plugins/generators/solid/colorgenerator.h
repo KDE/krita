@@ -32,7 +32,7 @@ class KritaColorGenerator : public QObject
     Q_OBJECT
 public:
     KritaColorGenerator(QObject *parent, const QVariantList &);
-    virtual ~KritaColorGenerator();
+    ~KritaColorGenerator() override;
 };
 
 class KisColorGenerator : public KisGenerator
@@ -47,13 +47,13 @@ public:
                   const QSize& size,
                   const KisFilterConfigurationSP config,
                   KoUpdater* progressUpdater
-                 ) const;
+                 ) const override;
 
     static inline KoID id() {
         return KoID("color", i18n("Color"));
     }
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 };
 
 #endif

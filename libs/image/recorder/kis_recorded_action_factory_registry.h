@@ -29,7 +29,7 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactoryRegistry : public KoGenericRegis
 {
 public:
     KisRecordedActionFactoryRegistry();
-    ~KisRecordedActionFactoryRegistry();
+    ~KisRecordedActionFactoryRegistry() override;
     static KisRecordedActionFactoryRegistry* instance();
 };
 

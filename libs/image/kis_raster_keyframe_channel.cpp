@@ -40,7 +40,7 @@ struct KisRasterKeyframe : public KisKeyframe
 
     int frameId;
 
-    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const override
     {
         return toQShared(new KisRasterKeyframe(this, channel));
     }

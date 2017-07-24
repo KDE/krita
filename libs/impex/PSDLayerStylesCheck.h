@@ -49,44 +49,44 @@ public:
         return m_count;
     }
 
-    bool visit(KisNode* node) {
+    bool visit(KisNode* node) override {
         return check(node);
     }
 
-    bool visit(KisPaintLayer *layer) {
+    bool visit(KisPaintLayer *layer) override {
         return check(layer);
     }
 
-    bool visit(KisGroupLayer *layer) {
+    bool visit(KisGroupLayer *layer) override {
         return check(layer);
     }
 
 
-    bool visit(KisAdjustmentLayer *layer) {
+    bool visit(KisAdjustmentLayer *layer) override {
         return check(layer);
     }
 
-    bool visit(KisExternalLayer *layer) {
+    bool visit(KisExternalLayer *layer) override {
         return check(layer);
     }
 
-    bool visit(KisCloneLayer *layer) {
+    bool visit(KisCloneLayer *layer) override {
         return check(layer);
     }
 
-    bool visit(KisGeneratorLayer * layer) {
+    bool visit(KisGeneratorLayer * layer) override {
         return check(layer);
     }
 
-    virtual bool visit(KisFilterMask *) {return true;}
+    bool visit(KisFilterMask *) override {return true;}
 
-    virtual bool visit(KisTransformMask *) {return true;}
+    bool visit(KisTransformMask *) override {return true;}
 
-    virtual bool visit(KisTransparencyMask *) {return true;}
+    bool visit(KisTransparencyMask *) override {return true;}
 
-    virtual bool visit(KisSelectionMask *) {return true;}
+    bool visit(KisSelectionMask *) override {return true;}
 
-    virtual bool visit(KisColorizeMask *) {return true;}
+    bool visit(KisColorizeMask *) override {return true;}
 
 
 private:
@@ -118,14 +118,14 @@ public:
         }
     }
 
-    bool checkNeeded(KisImageSP image) const
+    bool checkNeeded(KisImageSP image) const override
     {
         KisLayerStyleVisitor  v;
         image->rootLayer()->accept(v);
         return (v.count() > 0);
     }
 
-    Level check(KisImageSP /*image*/) const
+    Level check(KisImageSP /*image*/) const override
     {
         return m_level;
     }
@@ -137,14 +137,14 @@ public:
 
     PSDLayerStyleCheckFactory() {}
 
-    virtual ~PSDLayerStyleCheckFactory() {}
+    ~PSDLayerStyleCheckFactory() override {}
 
-    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning)
+    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning) override
     {
         return new PSDLayerStyleCheck(id(), level, customWarning);
     }
 
-    QString id() const {
+    QString id() const override {
         return "PSDLayerStyleCheck";
     }
 };

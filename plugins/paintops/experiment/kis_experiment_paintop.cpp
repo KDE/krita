@@ -29,6 +29,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_image.h>
+#include <kis_spacing_information.h>
 #include <krita_utils.h>
 
 
@@ -180,7 +181,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
                 bounds |= m_path.boundingRect();
 
                 qreal threshold = simplifyThreshold(bounds);
-                m_path = trySimplifyPath(m_path, threshold);
+                m_path = KritaUtils::trySimplifyPath(m_path, threshold);
             }
             else {
                 m_path = applyDisplace(m_path, m_displaceCoeff - length);
@@ -245,6 +246,11 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
 KisSpacingInformation KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 {
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisExperimentPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
     Q_UNUSED(info);
     return KisSpacingInformation(1.0);
 }
@@ -280,54 +286,6 @@ qreal KisExperimentPaintOp::simplifyThreshold(const QRectF &bounds)
 {
     qreal maxDimension = qMax(bounds.width(), bounds.height());
     return qMax(0.01 * maxDimension, 1.0);
-}
-
-QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
-{
-    QPainterPath newPath;
-    QPointF startPoint;
-    qreal distance = 0;
-
-    int count = path.elementCount();
-    for (int i = 0; i < count; i++) {
-        QPainterPath::Element e = path.elementAt(i);
-        QPointF endPoint = QPointF(e.x, e.y);
-
-        switch (e.type) {
-        case QPainterPath::MoveToElement:
-            newPath.moveTo(endPoint);
-            break;
-        case QPainterPath::LineToElement:
-            if (!tryMergePoints(newPath, startPoint, endPoint,
-                                distance, lengthThreshold, i == count - 1)) {
-
-                newPath.lineTo(endPoint);
-            }
-            break;
-        case QPainterPath::CurveToElement: {
-            Q_ASSERT(i + 2 < count);
-
-            if (!tryMergePoints(newPath, startPoint, endPoint,
-                                distance, lengthThreshold, i == count - 1)) {
-
-                e = path.elementAt(i + 1);
-                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
-                QPointF ctrl1 = QPointF(e.x, e.y);
-                e = path.elementAt(i + 2);
-                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
-                QPointF ctrl2 = QPointF(e.x, e.y);
-                newPath.cubicTo(ctrl1, ctrl2, endPoint);
-            }
-
-            i += 2;
-        }
-        default:
-            ;
-        }
-        startPoint = endPoint;
-    }
-
-    return newPath;
 }
 
 QPointF KisExperimentPaintOp::getAngle(const QPointF& p1, const QPointF& p2, qreal distance)

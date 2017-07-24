@@ -33,23 +33,23 @@ struct TestingTimedDefaultBounds : public KisDefaultBoundsBase {
     {
     }
 
-    QRect bounds() const {
+    QRect bounds() const override {
         return m_bounds;
     }
 
-    bool wrapAroundMode() const {
+    bool wrapAroundMode() const override {
         return false;
     }
 
-    int currentLevelOfDetail() const {
+    int currentLevelOfDetail() const override {
         return m_lod;
     }
 
-    int currentTime() const {
+    int currentTime() const override {
         return m_time;
     }
 
-    bool externalFrameActive() const {
+    bool externalFrameActive() const override {
         return false;
     }
 

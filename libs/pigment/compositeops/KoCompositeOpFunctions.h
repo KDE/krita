@@ -417,6 +417,19 @@ template<class T>
 inline T cfMultiply(T src, T dst) { return Arithmetic::mul(src, dst); }
 
 template<class T>
+inline T cfHardOverlay(T src, T dst) {
+    using namespace Arithmetic;
+
+    qreal fsrc = scale<qreal>(src);
+    qreal fdst = scale<qreal>(dst);
+
+    if(fsrc > 0.5f) {
+        return scale<T>(cfDivide(inv(2.0 * fsrc - 1.0f), fdst));
+    }
+    return scale<T>(mul(2.0 * fsrc, fdst));
+}
+
+template<class T>
 inline T cfDifference(T src, T dst) { return qMax(src,dst) - qMin(src,dst); }
 
 template<class T>

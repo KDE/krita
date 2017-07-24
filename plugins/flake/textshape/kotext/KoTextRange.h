@@ -50,7 +50,7 @@ public:
      * constructor
      */
     explicit KoTextRange(const QTextCursor &cursor);
-    virtual ~KoTextRange();
+    ~KoTextRange() override;
 
     /**
      * Will be called by the manager when this variable is added.

@@ -35,7 +35,7 @@ class CharacterHighlighting : public QWidget
 
 public:
     explicit CharacterHighlighting(bool uniqueFormat, QWidget *parent = 0);
-    ~CharacterHighlighting() {}
+    ~CharacterHighlighting() override {}
 
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style);

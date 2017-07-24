@@ -40,12 +40,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent = 0);
-    ~KoSubpathJoinCommand();
+    ~KoSubpathJoinCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     KoPathPointData m_pointData1;
     KoPathPointData m_pointData2;

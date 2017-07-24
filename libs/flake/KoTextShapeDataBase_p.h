@@ -31,7 +31,9 @@ public:
     KoTextShapeDataBasePrivate();
     virtual ~KoTextShapeDataBasePrivate();
 
-    QTextDocument *document;
+    KoTextShapeDataBasePrivate(const KoTextShapeDataBasePrivate &rhs);
+
+    QScopedPointer<QTextDocument> document;
     KoInsets margins;
     Qt::Alignment textAlignment;
     KoTextShapeDataBase::ResizeMethod resizeMethod;

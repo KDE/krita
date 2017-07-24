@@ -51,6 +51,8 @@ public:
     /// Returns if the background has some transparency.
     virtual bool hasTransparency() const;
 
+    virtual bool compareTo(const KoShapeBackground *other) const = 0;
+
     /**
      * Fills the style object
      * @param style object

@@ -43,6 +43,7 @@ class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
     KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
+    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds = 0);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
@@ -69,7 +70,9 @@ public:
     KisSelectionSP activeSelection() const;
 
     bool needsAirbrushing() const;
-    int airbrushingRate() const;
+    qreal airbrushingInterval() const;
+
+    bool needsSpacingUpdates() const;
 
     void setOpacity(qreal opacity);
     quint8 opacity() const;

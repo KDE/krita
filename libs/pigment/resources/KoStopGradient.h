@@ -26,7 +26,6 @@
 #include <resources/KoResource.h>
 #include <kritapigment_export.h>
 
-
 typedef QPair<qreal, KoColor> KoGradientStop;
 
 /**
@@ -37,30 +36,42 @@ class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient
 
 public:
     explicit KoStopGradient(const QString &filename = QString());
-    virtual ~KoStopGradient();
+    ~KoStopGradient() override;
 
-    KoAbstractGradient* clone() const;
+    KoAbstractGradient* clone() const override;
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
-
-    /// reimplemented
-    virtual QGradient* toQGradient() const;
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
     /// reimplemented
-    void colorAt(KoColor&, qreal t) const;
+    QGradient* toQGradient() const override;
+
+    /// reimplemented
+    void colorAt(KoColor&, qreal t) const override;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(QGradient * gradient);
+    static KoStopGradient * fromQGradient(const QGradient * gradient);
 
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
     QList<KoGradientStop> stops() const;
 
     /// reimplemented
-    QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
+
+    /**
+     * @brief toXML
+     * Covert the gradient to an XML string.
+     */
+    void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
+    /**
+     * @brief fromXML
+     * convert a gradient from xml.
+     * @return a gradient.
+     */
+    static KoStopGradient fromXML(const QDomElement& elt);
 
 protected:
 

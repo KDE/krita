@@ -384,26 +384,8 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
     return generatedName;
 }
 
-void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
+void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* , TagInformation* )
 {
-    QBuffer rdfXmlData;
-    KoXmlWriter rdfXmlWriter(&rdfXmlData);
-    rdfXmlWriter.startDocument("rdf");
-    rdfXmlWriter.startElement("rdf");
-    rdf->saveOdf(context, &rdfXmlWriter);
-    rdfXmlWriter.endElement();
-    rdfXmlWriter.endDocument();
-
-    KoXmlDocument xmlReader;
-    xmlReader.setContent(rdfXmlData.data(), true);
-    KoXmlElement mainElement = xmlReader.documentElement();
-    foreach (const Attribute &attributeNameNS, mainElement.attributeFullNames()) {
-        QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
-                                                .arg(attributeNameNS.second);
-        if (attributeName.startsWith(':'))
-            attributeName.prepend("xml");
-        tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
-    }
 }
 
 /*
@@ -636,7 +618,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     } else {
                         // split the fragment into subspans at the points of range starts/ends
                         QList<int> subSpanTos = textRanges.uniqueKeys();
-                        qSort(subSpanTos);
+                        std::sort(subSpanTos.begin(), subSpanTos.end());
                         // ensure last subSpanTo to be at the end
                         if (subSpanTos.last() != spanTo) {
                             subSpanTos.append(spanTo);
@@ -1093,18 +1075,9 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
 }
 
 
-void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element)
+void KoTextWriter::Private::writeAttributes(QTextStream &, KoXmlElement &)
 {
-    QList<QPair<QString, QString> > attributes = element.attributeFullNames();
 
-    foreach (const Attribute &attributeNamePair, attributes) {
-        if (attributeNamePair.first == KoXmlNS::text) {
-            outputXmlStream << " text:" << attributeNamePair.second << "=";
-            outputXmlStream << "\"" << element.attributeNS(KoXmlNS::text, attributeNamePair.second) << "\"";
-        } else {
-            //To Be Added when needed
-        }
-    }
 }
 
 void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren)
@@ -1113,7 +1086,7 @@ void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &n
         outputXmlStream  << node.toText().data();
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
-        if ((element.localName() == "removed-content") && !element.childNodesCount()) {
+        if ((element.localName() == "removed-content") && !KoXml::childNodesCount(element)) {
             return;
         }
 

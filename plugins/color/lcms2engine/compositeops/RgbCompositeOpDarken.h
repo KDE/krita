@@ -41,7 +41,7 @@ public:
                    const quint8 *maskRowStart, qint32 maskRowStride,
                    qint32 rows, qint32 numColumns,
                    quint8 opacity,
-                   const QBitArray &channelFlags) const
+                   const QBitArray &channelFlags) const override
     {
         while (rows > 0) {
             const quint8 *mask = maskRowStart;

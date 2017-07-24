@@ -23,25 +23,18 @@
 #include "KoShapeContainer.h"
 #include "KoPathShape.h"
 #include "KoShapeBasedDocumentBase.h"
-#include "KoShapeRegistry.h"
-#include "KoShapeLoadingContext.h"
-#include "KoShapeOdfSaveHelper.h"
-#include "KoDrag.h"
-#include <KoOdfPaste.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
-#include <KoXmlReader.h>
+#include <kis_assert.h>
 
 #include <klocalizedstring.h>
 
-class KoShapeUnclipCommand::Private : public KoOdfPaste
+class KoShapeUnclipCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c)
             : controller(c), executed(false) {
     }
 
-    ~Private() override {
+    ~Private() {
         if (executed) {
             qDeleteAll(oldClipPaths);
         } else {
@@ -58,53 +51,35 @@ public:
             KoClipPath *clipPath = shape->clipPath();
             if (!clipPath)
                 continue;
-            QList<KoShape*> shapes;
+
             Q_FOREACH (KoShape *clipShape, clipPath->clipPathShapes()) {
-                shapes.append(clipShape);
+                KoShape *clone = clipShape->cloneShape();
+
+                KoPathShape *pathShape = dynamic_cast<KoPathShape*>(clone);
+                KIS_SAFE_ASSERT_RECOVER(pathShape) {
+                    delete clone;
+                    continue;
+                }
+
+                clipPathShapes.append(pathShape);
             }
-            KoShapeOdfSaveHelper saveHelper(shapes);
-            KoDrag drag;
-            drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-
-            const int pathShapeCount = clipPathShapes.count();
-
-            paste(KoOdf::Text, drag.mimeData());
 
             // apply transformations
-            for (int i = pathShapeCount; i < clipPathShapes.count(); ++i) {
-                KoPathShape *pathShape = clipPathShapes[i];
+            Q_FOREACH (KoPathShape *pathShape, clipPathShapes) {
                 // apply transformation so that it matches the current clipped shapes clip path
                 pathShape->applyAbsoluteTransformation(clipPath->clipDataTransformation(shape));
-                pathShape->setZIndex(shape->zIndex()+1);
+                pathShape->setZIndex(shape->zIndex() + 1);
                 clipPathParents.append(shape->parent());
             }
         }
-    }
-
-    /// reimplemented from KoOdfPaste
-    bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override {
-        KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, controller->resourceManager());
-
-        KoXmlElement element;
-        forEachElement(element, body) {
-            KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
-            if (!shape)
-                continue;
-            KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
-            if (!pathShape) {
-                delete shape;
-                continue;
-            }
-            clipPathShapes.append(pathShape);
-        }
-        return true;
     }
 
     QList<KoShape*> shapesToUnclip;
     QList<KoClipPath*> oldClipPaths;
     QList<KoPathShape*> clipPathShapes;
     QList<KoShapeContainer*> clipPathParents;
+
+    // TODO: damn! this is not a controller, this is a document! Needs refactoring!
     KoShapeBasedDocumentBase *controller;
 
     bool executed;

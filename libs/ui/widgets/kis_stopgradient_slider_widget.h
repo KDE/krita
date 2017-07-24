@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QScopedPointer>
 
 #include <resources/KoStopGradient.h>
 
@@ -34,30 +35,48 @@ public:
     KisStopGradientSliderWidget(QWidget *parent = 0, Qt::WFlags f = 0);
 
 public:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
     void setGradientResource(KoStopGradient* gradient);
 
     int selectedStop();
 
-    void setSeletectStop(int selected);
+    void setSelectedStop(int selected);
+
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 Q_SIGNALS:
      void sigSelectedStop(int stop);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent * e);
-    virtual void mouseReleaseEvent(QMouseEvent * e);
-    virtual void mouseMoveEvent(QMouseEvent * e);
+    void mousePressEvent(QMouseEvent * e) override;
+    void mouseReleaseEvent(QMouseEvent * e) override;
+    void mouseMoveEvent(QMouseEvent * e) override;
 
 private Q_SLOTS:
+     void updateHandleSize();
 
 private:
     void insertStop(double t);
 
+    QRect sliderRect() const;
+    QRect gradientStripeRect() const;
+    QRect handlesStipeRect() const;
+    QRegion allowedClickRegion(int tolerance) const;
+
+    void updateCursor(const QPoint &pos);
+    void paintHandle(qreal position, const QColor &color, bool isSelected, QPainter *painter);
+    int handleClickTolerance() const;
+    int minimalHeight() const;
+
 private:
+    QScopedPointer<KoStopGradient> m_defaultGradient;
     KoStopGradient* m_gradient;
     int m_selectedStop;
+    KoGradientStop m_removedStop;
     bool m_drag;
+    QSize m_handleSize;
+
 };
 
 #endif

@@ -19,6 +19,7 @@
 
 #include "EllipseShapeConfigCommand.h"
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
 
 EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal endAngle, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -72,4 +73,23 @@ void EllipseShapeConfigCommand::undo()
     }
 
     m_ellipse->update();
+}
+
+int EllipseShapeConfigCommand::id() const
+{
+    return KisCommandUtils::ChangeEllipseShapeId;
+}
+bool EllipseShapeConfigCommand::mergeWith(const KUndo2Command *command)
+{
+    const EllipseShapeConfigCommand *other = dynamic_cast<const EllipseShapeConfigCommand*>(command);
+
+    if (!other || other->m_ellipse != m_ellipse) {
+        return false;
+    }
+
+    m_newType = other->m_newType;
+    m_newStartAngle = other->m_newStartAngle;
+    m_newEndAngle = other->m_newEndAngle;
+
+    return true;
 }

@@ -34,8 +34,8 @@ public:
 
     DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent = 0);
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     bool m_first;

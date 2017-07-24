@@ -67,10 +67,10 @@ class KRITAUI_EXPORT KisMultiIntegerFilterWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KisMultiIntegerFilterWidget(const QString& filterid, QWidget* parent, const QString& caption, vKisIntegerWidgetParam iwparam);
-    ~KisMultiIntegerFilterWidget();
+    ~KisMultiIntegerFilterWidget() override;
 
-    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
+    KisPropertiesConfigurationSP configuration() const override;
 
 private:
 

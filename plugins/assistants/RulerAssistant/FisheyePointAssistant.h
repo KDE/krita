@@ -32,14 +32,14 @@ class FisheyePointAssistant : public KisPaintingAssistant
 {
 public:
     FisheyePointAssistant();
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     //virtual void endStroke();
-    virtual QPointF buttonPosition() const;
-    virtual int numHandles() const { return 3; }
+    QPointF buttonPosition() const override;
+    int numHandles() const override { return 3; }
 protected:
-    virtual QRect boundingRect() const;
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true);
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true);
+    QRect boundingRect() const override;
+    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
+    void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     mutable Ellipse e;
@@ -50,10 +50,10 @@ class FisheyePointAssistantFactory : public KisPaintingAssistantFactory
 {
 public:
     FisheyePointAssistantFactory();
-    virtual ~FisheyePointAssistantFactory();
-    virtual QString id() const;
-    virtual QString name() const;
-    virtual KisPaintingAssistant* createPaintingAssistant() const;
+    ~FisheyePointAssistantFactory() override;
+    QString id() const override;
+    QString name() const override;
+    KisPaintingAssistant* createPaintingAssistant() const override;
 };
 
 #endif

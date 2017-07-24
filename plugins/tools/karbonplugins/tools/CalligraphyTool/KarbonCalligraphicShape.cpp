@@ -21,6 +21,7 @@
 
 #include <KoPathPoint.h>
 
+#include <KoParameterShape_p.h>
 #include "KarbonSimplifyPath.h"
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
@@ -41,11 +42,24 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
     setShapeId(KoPathShapeId);
     setFillRule(Qt::WindingFill);
     setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(Qt::black))));
-    setStroke(0);
+    setStroke(KoShapeStrokeModelSP());
+}
+
+KarbonCalligraphicShape::KarbonCalligraphicShape(const KarbonCalligraphicShape &rhs)
+    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+      m_points(rhs.m_points),
+      m_lastWasFlip(rhs.m_lastWasFlip),
+      m_caps(rhs.m_caps)
+{
 }
 
 KarbonCalligraphicShape::~KarbonCalligraphicShape()
 {
+}
+
+KoShape *KarbonCalligraphicShape::cloneShape() const
+{
+    return new KarbonCalligraphicShape(*this);
 }
 
 void KarbonCalligraphicShape::appendPoint(const QPointF &point, qreal angle, qreal width)

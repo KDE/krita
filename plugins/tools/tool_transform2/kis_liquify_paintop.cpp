@@ -26,6 +26,8 @@
 #include "kis_liquify_transform_worker.h"
 #include "kis_algebra_2d.h"
 #include "kis_liquify_properties.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 
 struct KisLiquifyPaintop::Private
@@ -105,13 +107,39 @@ QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
     return outline;
 }
 
+// TODO: Reduce code duplication between KisLiquifyPaintop and KisPaintOp. It might be possible to
+// make them both subclasses of some more general base class.
+void KisLiquifyPaintop::updateSpacing(const KisPaintInformation &info,
+                               KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisSpacingInformation spacingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        spacingInfo = updateSpacingImpl(pi);
+    }
+
+    currentDistance.updateSpacing(spacingInfo);
+}
+
+void KisLiquifyPaintop::updateTiming(const KisPaintInformation &info,
+                                     KisDistanceInformation &currentDistance) const
+{
+    KisPaintInformation pi(info);
+    KisTimingInformation timingInfo;
+    {
+        KisPaintInformation::DistanceInformationRegistrar r
+            = pi.registerDistanceInformation(&currentDistance);
+        timingInfo = updateTimingImpl(pi);
+    }
+
+    currentDistance.updateTiming(timingInfo);
+}
+
 KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 {
-    static const qreal sizeToSigmaCoeff = 1.0 / 3.0;
-    const qreal size = sizeToSigmaCoeff *
-        (m_d->props.sizeHasPressure() ?
-         pi.pressure() * m_d->props.size():
-         m_d->props.size());
+    const qreal size = computeSize(pi);
 
     const qreal spacing = m_d->props.spacing() * size;
 
@@ -163,4 +191,25 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
     }
 
     return KisSpacingInformation(spacing);
+}
+
+KisSpacingInformation KisLiquifyPaintop::updateSpacingImpl(const KisPaintInformation &pi) const
+{
+    return KisSpacingInformation(m_d->props.spacing() * computeSize(pi));
+}
+
+KisTimingInformation KisLiquifyPaintop::updateTimingImpl(const KisPaintInformation &pi) const
+{
+    Q_UNUSED(pi);
+    // Don't use airbrushing.
+    return KisTimingInformation();
+}
+
+qreal KisLiquifyPaintop::computeSize(const KisPaintInformation &pi) const
+{
+    static const qreal sizeToSigmaCoeff = 1.0 / 3.0;
+    return sizeToSigmaCoeff *
+        (m_d->props.sizeHasPressure() ?
+         pi.pressure() * m_d->props.size():
+         m_d->props.size());
 }

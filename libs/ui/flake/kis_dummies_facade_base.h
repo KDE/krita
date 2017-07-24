@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisDummiesFacadeBase : public QObject
 
 public:
     KisDummiesFacadeBase(QObject *parent = 0);
-    virtual ~KisDummiesFacadeBase();
+    ~KisDummiesFacadeBase() override;
 
     void setImage(KisImageWSP image);
 

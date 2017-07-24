@@ -8,6 +8,7 @@
  *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *                2011 José Luis Vergara <pentalis@gmail.com>
+ *                2017 L. E. Segovia <leo.segovia@siggraph.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -123,6 +124,7 @@
 #include "kis_zoom_manager.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_script_manager.h"
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
@@ -184,6 +186,7 @@ public:
         , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
+        , scriptManager(_q)
         , actionAuthor(0)
     {
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
@@ -240,9 +243,13 @@ public:
     KisInputManager inputManager;
 
     KisSignalAutoConnectionsStore viewConnections;
+    KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
 
     QByteArray canvasState;
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    QFlags<Qt::WindowState> windowFlags;
+#endif
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
@@ -695,6 +702,7 @@ void KisViewManager::setupManagers()
 
     d->mirrorManager.setup(actionCollection());
 
+    d->scriptManager.setup(actionCollection(), actionManager());
 }
 
 void KisViewManager::updateGUI()
@@ -728,17 +736,17 @@ KisGuidesManager * KisViewManager::guidesManager() const
     return &d->guidesManager;
 }
 
-KisPaintingAssistantsManager* KisViewManager::paintingAssistantsManager() const
-{
-    return &d->paintingAssistantsManager;
-}
-
 KisDocument *KisViewManager::document() const
 {
     if (d->currentImageView && d->currentImageView->document()) {
         return d->currentImageView->document();
     }
     return 0;
+}
+
+KisScriptManager *KisViewManager::scriptManager() const
+{
+  return &d->scriptManager;
 }
 
 int KisViewManager::viewCount() const
@@ -765,7 +773,7 @@ bool KisViewManager::blockUntilOperationsFinished(KisImageSP image)
     return d->blockUntilOperationsFinishedImpl(image, false);
 }
 
-void KisViewManager::blockUntillOperationsFinishedForced(KisImageSP image)
+void KisViewManager::blockUntilOperationsFinishedForced(KisImageSP image)
 {
     d->blockUntilOperationsFinishedImpl(image, true);
 }
@@ -1066,6 +1074,9 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     if (toggled) {
         d->canvasState = qtMainWindow()->saveState();
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+        d->windowFlags = main->windowState();
+#endif
     }
 
     if (cfg.hideStatusbarFullscreen()) {
@@ -1101,11 +1112,19 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
+    // QT in windows does not return to maximized upon 4th tab in a row
+    // https://bugreports.qt.io/browse/QTBUG-57882, https://bugreports.qt.io/browse/QTBUG-52555, https://codereview.qt-project.org/#/c/185016/
     if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {
             main->setWindowState( main->windowState() & ~Qt::WindowFullScreen);
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+            // If window was maximized prior to fullscreen, restore that
+            if (d->windowFlags & Qt::WindowMaximized) {
+                main->setWindowState( main->windowState() | Qt::WindowMaximized);
+            }
+#endif
         }
     }
 

@@ -42,12 +42,12 @@ public:
                                    KoShape *newConnectedShape, int newConnectionPointId, KUndo2Command *parent = 0);
 
     /// Destroys the command
-    virtual ~KoShapeConnectionChangeCommand();
+    ~KoShapeConnectionChangeCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

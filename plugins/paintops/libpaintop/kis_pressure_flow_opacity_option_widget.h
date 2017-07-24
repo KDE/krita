@@ -33,7 +33,7 @@ class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
 public:
     KisFlowOpacityOptionWidget();
 
-    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private Q_SLOTS:
     void slotSliderValueChanged();

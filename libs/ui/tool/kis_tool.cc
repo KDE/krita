@@ -116,10 +116,9 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(toolActivation);
-    Q_UNUSED(shapes);
+    KoToolBase::activate(activation, shapes);
 
     resetCursorStyle();
 
@@ -151,8 +150,9 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
         d->currentGenerator = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
     }
 
-    connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
-    connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
+    connect(action("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
+    connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
+
     connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
@@ -168,8 +168,8 @@ void KisTool::deactivate()
     result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
-    result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
-    result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+    result &= disconnect(action("toggle_fg_bg"), 0, this, 0);
+    result &= disconnect(action("reset_fg_bg"), 0, this, 0);
 
     if (!result) {
         warnKrita << "WARNING: KisTool::deactivate() failed to disconnect"
@@ -178,22 +178,8 @@ void KisTool::deactivate()
 
     d->m_isActive = false;
     emit isActiveChanged();
-}
 
-void KisTool::requestUndoDuringStroke()
-{
-    /**
-     * Default implementation just cancells the stroke
-     */
-    requestStrokeCancellation();
-}
-
-void KisTool::requestStrokeCancellation()
-{
-}
-
-void KisTool::requestStrokeEnd()
-{
+    KoToolBase::deactivate();
 }
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
@@ -447,6 +433,11 @@ KisTool::ToolMode KisTool::mode() const {
     return d->m_mode;
 }
 
+void KisTool::setCursor(const QCursor &cursor)
+{
+    d->cursor = cursor;
+}
+
 KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
     KIS_ASSERT_RECOVER_RETURN_VALUE(action != Primary, Secondary);
     return (AlternateAction)action;
@@ -550,9 +541,9 @@ void KisTool::deleteSelection()
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager* viewManager = kiscanvas->viewManager();
-    viewManager->blockUntilOperationsFinished(image());
+    if (!blockUntilOperationsFinished()) {
+        return;
+    }
 
     if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
@@ -610,6 +601,20 @@ bool KisTool::overrideCursorIfNotEditable()
     return false;
 }
 
+bool KisTool::blockUntilOperationsFinished()
+{
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    return viewManager->blockUntilOperationsFinished(image());
+}
+
+void KisTool::blockUntilOperationsFinishedForced()
+{
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    viewManager->blockUntilOperationsFinishedForced(image());
+}
+
 bool KisTool::isActive() const
 {
     return d->m_isActive;
@@ -638,14 +643,6 @@ void KisTool::slotResetFgBg()
     // see a comment in slotToggleFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
     resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
-}
-
-
-void KisTool::setCurrentNodeLocked(bool locked)
-{
-    if (currentNode()) {
-        currentNode()->setSystemLocked(locked, false);
-    }
 }
 
 bool KisTool::nodeEditable()

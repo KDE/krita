@@ -42,9 +42,9 @@ VectorTool::VectorTool(KoCanvasBase *canvas)
 {
 }
 
-void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void VectorTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KoToolBase::activate(activation, shapes);
 
     foreach (KoShape *shape, shapes) {
         m_shape = dynamic_cast<VectorShape *>(shape);
@@ -62,6 +62,7 @@ void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &
 void VectorTool::deactivate()
 {
     m_shape = 0;
+    KoToolBase::deactivate();
 }
 
 QWidget *VectorTool::createOptionWidget()

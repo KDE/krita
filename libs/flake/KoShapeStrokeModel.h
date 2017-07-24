@@ -25,6 +25,8 @@
 
 #include "kritaflake_export.h"
 
+#include <QtGlobal>
+
 class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
@@ -62,6 +64,13 @@ public:
      * @param insets the insets object that will be filled and returned.
      */
     virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const = 0;
+
+    /**
+     * Return a maximum distance that the markers of the shape can take outside the
+     * shape itself
+     */
+    virtual qreal strokeMaxMarkersInset(const KoShape *shape) const = 0;
+
     /**
      * Returns true if there is some transparency, false if the stroke is fully opaque.
      * @return if the stroke is transparent.
@@ -77,18 +86,9 @@ public:
      */
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
 
-    /**
-     * Paint the stroke in the given color
-     *
-     * This method should paint the stroke around the shape in the given color.
-     *
-     * @param shape the shape to paint around
-     * @param painter the painter to paint to, the painter will have the topleft of the
-     *       shape as its start coordinate.
-     * @param converter to convert between internal and view coordinates.
-     * @param color to use to paint the stroke.
-     */
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color) = 0;
+    virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
+    virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;
+    virtual bool isVisible() const = 0;
 
     /**
      * Increments the use-value.

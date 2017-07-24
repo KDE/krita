@@ -51,6 +51,7 @@ class KisUndoAdapter;
 class KisZoomManager;
 class KisPaintopBox;
 class KisActionManager;
+class KisScriptManager;
 class KisInputManager;
 
 /**
@@ -71,7 +72,7 @@ public:
      * @param parent   a parent widget we show ourselves in.
      */
     KisViewManager(QWidget *parent, KActionCollection *actionCollection);
-    virtual ~KisViewManager();
+    ~KisViewManager() override;
 
     /**
      * Retrieves the entire action collection.
@@ -163,10 +164,12 @@ public:  // Krita specific interfaces
 
     KisDocument *document() const;
 
+    KisScriptManager *scriptManager() const;
+
     int viewCount() const;
 
     /**
-     * @brief blockUntillOperationsFinished blocks the GUI of the application until execution
+     * @brief blockUntilOperationsFinished blocks the GUI of the application until execution
      *        of actions on \p image is finished
      * @param image the image which we should wait for
      * @return true if the image has finished execution of the actions, false if
@@ -176,18 +179,17 @@ public:  // Krita specific interfaces
 
 
     /**
-     * @brief blockUntillOperationsFinished blocks the GUI of the application until execution
+     * @brief blockUntilOperationsFinished blocks the GUI of the application until execution
      *        of actions on \p image is finished. Does *not* provide a "Cancel" button. So the
      *        user is forced to wait.
      * @param image the image which we should wait for
      */
-    void blockUntillOperationsFinishedForced(KisImageSP image);
+    void blockUntilOperationsFinishedForced(KisImageSP image);
 
 public:
 
     KisGridManager * gridManager() const;
     KisGuidesManager * guidesManager() const;
-    KisPaintingAssistantsManager* paintingAssistantsManager() const;
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();

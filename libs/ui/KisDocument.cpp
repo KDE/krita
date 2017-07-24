@@ -634,6 +634,34 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     return false;
 }
 
+QByteArray KisDocument::serializeToNativeByteArray()
+{
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+
+    QScopedPointer<KisImportExportFilter> filter(KisImportExportManager::filterForMimeType(nativeFormatMimeType(), KisImportExportManager::Export));
+    filter->setBatchMode(true);
+    filter->setMimeType(nativeFormatMimeType());
+
+    if (!prepareLocksForSaving()) {
+        return byteArray;
+    }
+
+    if (filter->convert(this, &buffer) != KisImportExportFilter::OK) {
+        qWarning() << "serializeToByteArray():: Could not export to our native format";
+    }
+
+    unlockAfterSaving();
+
+    return byteArray;
+}
+
+bool KisDocument::isInSaving() const
+{
+    std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
+    return !l.owns_lock();
+}
+
 bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!prepareLocksForSaving()) {
@@ -797,6 +825,9 @@ void KisDocument::slotAutoSave()
 
     if (!d->isAutosaving && d->modified && d->modifiedAfterAutosave) {
 
+        bool batchmode = d->importExportManager->batchMode();
+        d->importExportManager->setBatchMode(true);
+        qApp->setOverrideCursor(Qt::BusyCursor);
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         emit statusBarMessage(i18n("Autosaving..."));
         d->isAutosaving = true;
@@ -811,6 +842,8 @@ void KisDocument::slotAutoSave()
             d->modifiedAfterAutosave = false;
             d->autoSaveTimer.stop(); // until the next change
         }
+        qApp->restoreOverrideCursor();
+        d->importExportManager->setBatchMode(batchmode);
         d->isAutosaving = false;
 
         emit clearStatusBarMessage();
@@ -953,7 +986,7 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
-                                           i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
+                                           i18n("An autosaved file exists for this document.\nDo you want to open the autosaved file instead?"),
                                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
             switch (res) {
             case QMessageBox::Yes :
@@ -1604,17 +1637,20 @@ void KisDocument::setFileProgressUpdater(const QString &text)
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
         d->progressUpdater->start(100, text);
         d->importExportManager->setProgresUpdater(d->progressUpdater);
-
-        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-        connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        if (KisPart::instance()->currentMainwindow()) {
+            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        }
     }
 }
 
 void KisDocument::clearFileProgressUpdater()
 {
     if (!d->suppressProgress && d->progressUpdater) {
-        disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
-        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        if (KisPart::instance()->currentMainwindow()) {
+            disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        }
         delete d->progressUpdater;
         d->importExportManager->setProgresUpdater(0);
         d->progressUpdater = 0;
@@ -1666,7 +1702,6 @@ void KisDocument::setCurrentImage(KisImageSP image)
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
     d->image->initialRefreshGraph();
-    setAutoSaveDelay(KisConfig().autoSaveInterval());
 }
 
 void KisDocument::setImageModified()

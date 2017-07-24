@@ -30,7 +30,7 @@ class BigBrotherPlugin : public KisViewPlugin
     Q_OBJECT
 public:
     BigBrotherPlugin(QObject *parent, const QVariantList &);
-    virtual ~BigBrotherPlugin();
+    ~BigBrotherPlugin() override;
 
 private Q_SLOTS:
 

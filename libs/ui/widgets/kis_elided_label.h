@@ -36,12 +36,12 @@ class KRITAUI_EXPORT KisElidedLabel : public QLabel
 {
 public:
     KisElidedLabel(const QString &text, Qt::TextElideMode mode, QWidget *parent = 0);
-    ~KisElidedLabel();
+    ~KisElidedLabel() override;
 
     void setLongText(const QString &text);
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void updateText();

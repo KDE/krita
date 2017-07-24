@@ -54,7 +54,7 @@ class KRITAUI_EXPORT KisActionManager : public QObject
     Q_OBJECT
 public:
     KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection);
-    virtual ~KisActionManager();
+    ~KisActionManager() override;
 
     void setView(QPointer<KisView> imageView);
 
@@ -78,15 +78,10 @@ public:
      */
     KisAction *actionByName(const QString &name) const;
 
-
-
-
-
     void registerOperationUIFactory(KisOperationUIFactory* factory);
     void registerOperation(KisOperation* operation);
     void runOperation(const QString &id);
     void runOperationFromConfiguration(KisOperationConfigurationSP config);
-
 
     /**
      * Update actions handled by kis_action_manager to set enabled.

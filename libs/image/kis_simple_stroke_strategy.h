@@ -41,18 +41,18 @@ public:
 public:
     KisSimpleStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
 
-    KisStrokeJobStrategy* createInitStrategy();
-    KisStrokeJobStrategy* createFinishStrategy();
-    KisStrokeJobStrategy* createCancelStrategy();
-    KisStrokeJobStrategy* createDabStrategy();
-    KisStrokeJobStrategy* createSuspendStrategy();
-    KisStrokeJobStrategy* createResumeStrategy();
+    KisStrokeJobStrategy* createInitStrategy() override;
+    KisStrokeJobStrategy* createFinishStrategy() override;
+    KisStrokeJobStrategy* createCancelStrategy() override;
+    KisStrokeJobStrategy* createDabStrategy() override;
+    KisStrokeJobStrategy* createSuspendStrategy() override;
+    KisStrokeJobStrategy* createResumeStrategy() override;
 
-    KisStrokeJobData* createInitData();
-    KisStrokeJobData* createFinishData();
-    KisStrokeJobData* createCancelData();
-    KisStrokeJobData* createSuspendData();
-    KisStrokeJobData* createResumeData();
+    KisStrokeJobData* createInitData() override;
+    KisStrokeJobData* createFinishData() override;
+    KisStrokeJobData* createCancelData() override;
+    KisStrokeJobData* createSuspendData() override;
+    KisStrokeJobData* createResumeData() override;
 
     virtual void initStrokeCallback();
     virtual void finishStrokeCallback();

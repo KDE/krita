@@ -35,9 +35,14 @@
 class KisToolInvocationAction::Private
 {
 public:
-    Private() : active(false) { }
+    Private()
+        : active(false),
+          lineToolActivated(false)
+    {
+    }
 
     bool active;
+    bool lineToolActivated;
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
@@ -67,6 +72,7 @@ void KisToolInvocationAction::activate(int shortcut)
 
     if (shortcut == LineToolShortcut) {
         KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolLine");
+        d->lineToolActivated = true;
     }
 
     inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
@@ -79,8 +85,9 @@ void KisToolInvocationAction::deactivate(int shortcut)
 
     inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
 
-    if (shortcut == LineToolShortcut) {
-            KoToolManager::instance()->switchBackRequested();
+    if (shortcut == LineToolShortcut && d->lineToolActivated) {
+        d->lineToolActivated = false;
+        KoToolManager::instance()->switchBackRequested();
     }
 }
 
@@ -113,6 +120,18 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
          * key event and the method call
          */
         inputManager()->canvas()->image()->requestStrokeEnd();
+
+        /**
+         * Some tools would like to distinguish automated requestStrokeEnd()
+         * calls from explicit user actions. Just let them do it!
+         *
+         * Please note that this call should happen **after**
+         * requestStrokeEnd(). Some of the tools will switch to another
+         * tool on this request, and this (next) tool does not expect to
+         * get requestStrokeEnd() right after switching in.
+         */
+        inputManager()->toolProxy()->explicitUserStrokeEndRequest();
+
     } else if (shortcut == CancelShortcut) {
         /**
          * The tools now have a KisTool::requestStrokeCancellation() method,

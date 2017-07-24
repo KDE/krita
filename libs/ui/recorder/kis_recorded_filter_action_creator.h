@@ -28,8 +28,8 @@ class QTreeView;
 class KisRecordedFilterActionCreator : public KisRecordedActionCreator {
 public:
     explicit KisRecordedFilterActionCreator(QWidget* parent = 0, Qt::WindowFlags f = 0);
-    ~KisRecordedFilterActionCreator();
-    virtual KisRecordedAction* createAction() const;
+    ~KisRecordedFilterActionCreator() override;
+    KisRecordedAction* createAction() const override;
 private:
     KisFiltersModel* m_filterModel;
     QTreeView* m_filterTree;
@@ -42,9 +42,9 @@ class KisRecordedFilterActionCreatorFactory : public KisRecordedActionCreatorFac
 {
 public:
     KisRecordedFilterActionCreatorFactory();
-    virtual ~KisRecordedFilterActionCreatorFactory();
-    virtual bool requireCreator() const;
-    virtual KisRecordedActionCreator* createCreator(QWidget* parent) const;
+    ~KisRecordedFilterActionCreatorFactory() override;
+    bool requireCreator() const override;
+    KisRecordedActionCreator* createCreator(QWidget* parent) const override;
 };
 
 #endif

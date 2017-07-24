@@ -107,7 +107,7 @@ protected:
 
 public:
 
-    virtual ~KisDynamicSensor();
+    ~KisDynamicSensor() override;
 
     /**
      * @return the value of this sensor for the given KisPaintInformation
@@ -163,8 +163,8 @@ public:
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual void fromXML(const QDomElement&);
+    void toXML(QDomDocument&, QDomElement&) const override;
+    void fromXML(const QDomElement&) override;
 
     void setCurve(const KisCubicCurve& curve);
     const KisCubicCurve& curve() const;

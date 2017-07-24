@@ -50,17 +50,17 @@ public:
     /// Construct brush to load filename later as brush
     KisAbrBrushCollection(const QString& filename);
 
-    KisBrush* clone() const;
+    KisBrush* clone() const override;
 
-    virtual ~KisAbrBrushCollection() {}
+    ~KisAbrBrushCollection() override {}
 
-    virtual bool load();
+    bool load() override;
 
-    virtual bool loadFromDevice(QIODevice *dev);
+    bool loadFromDevice(QIODevice *dev) override;
 
-    virtual bool save();
+    bool save() override;
 
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool saveToDevice(QIODevice* dev) const override;
 
     /**
      * @return a preview of the brush
@@ -70,7 +70,7 @@ public:
     /**
      * @return default file extension for saving the brush
      */
-    virtual QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     QList<KisAbrBrush*> brushes() {
         return m_abrBrushes.values();
@@ -79,7 +79,7 @@ public:
 protected:
     KisAbrBrushCollection(const KisAbrBrushCollection& rhs);
 
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument& d, QDomElement& e) const override;
 
 private:
 

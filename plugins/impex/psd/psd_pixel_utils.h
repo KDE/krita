@@ -49,6 +49,12 @@ namespace PsdPixelUtils
                       const QRect &layerRect,
                       QVector<ChannelInfo*> infoRecords);
 
+    void readAlphaMaskChannels(QIODevice *io,
+                               KisPaintDeviceSP device,
+                               int channelSize,
+                               const QRect &layerRect,
+                               QVector<ChannelInfo*> infoRecords);
+
     void writeChannelDataRLE(QIODevice *io,
                              const quint8 *plane,
                              const int channelSize,

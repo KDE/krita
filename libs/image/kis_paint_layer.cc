@@ -181,11 +181,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     }
 }
 
-void KisPaintLayer::setDirty(const QRect & rect)
-{
-    KisLayer::setDirty(rect);
-}
-
 QIcon KisPaintLayer::icon() const
 {
     return KisIconUtils::loadIcon("paintLayer");
@@ -335,6 +330,7 @@ KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
     if (id == KisKeyframeChannel::Content.id()) {
         m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content);
         m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
+        enableAnimation();
         return m_d->contentChannel;
     }
 

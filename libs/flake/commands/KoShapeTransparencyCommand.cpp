@@ -21,6 +21,7 @@
 #include "KoShape.h"
 
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
 
 class Q_DECL_HIDDEN KoShapeTransparencyCommand::Private
 {
@@ -97,4 +98,21 @@ void KoShapeTransparencyCommand::undo()
         shape->update();
         ++transparencyIt;
     }
+}
+
+int KoShapeTransparencyCommand::id() const
+{
+    return KisCommandUtils::ChangeShapeTransparencyId;
+}
+
+bool KoShapeTransparencyCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoShapeTransparencyCommand *other = dynamic_cast<const KoShapeTransparencyCommand*>(command);
+
+    if (!other || other->d->shapes != d->shapes) {
+        return false;
+    }
+
+    d->newTransparencies = other->d->newTransparencies;
+    return true;
 }

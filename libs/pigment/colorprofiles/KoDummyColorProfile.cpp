@@ -134,3 +134,8 @@ bool KoDummyColorProfile::operator==(const KoColorProfile& rhs) const
     return dynamic_cast<const KoDummyColorProfile*>(&rhs);
 }
 
+QByteArray KoDummyColorProfile::uniqueId() const
+{
+    return QByteArray();
+}
+

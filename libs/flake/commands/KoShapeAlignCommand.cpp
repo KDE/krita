@@ -52,9 +52,9 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
 //       debugFlake <<"Found Container";
 //   else
 //       debugFlake <<"Found shape";
-        position = shape->position();
+        position = shape->absolutePosition();
         previousPositions  << position;
-        bRect = shape->boundingRect();
+        bRect = shape->absoluteOutlineRect();
         switch (align) {
         case HorizontalLeftAlignment:
             delta = QPointF(boundingRect.left(), bRect.y()) - bRect.topLeft();

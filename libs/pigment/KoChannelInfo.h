@@ -68,7 +68,7 @@ public:
         INT16, ///< use this for an integer 16bits channel
         OTHER ///< Use this if the channel is neither an integer or a float
     };
-    
+
 public:
     KoChannelInfo() { }
     /**
@@ -80,12 +80,12 @@ public:
      * @param size number of bytes (not bits) of the channel (if -1, it is deduced from the channelType)
      * @param color a color to represent that channel (for instance in an histogram)
      */
-    KoChannelInfo(const QString & name, 
+    KoChannelInfo(const QString & name,
                   qint32 npos,
-                  qint32 displayPosition, 
-                  enumChannelType channelType, 
+                  qint32 displayPosition,
+                  enumChannelType channelType,
                   enumChannelValueType channelValueType,
-                  qint32 size = -1, 
+                  qint32 size = -1,
                   const QColor &color = QColor(0, 0, 0),
                   const DoubleRange &uiMinMax = DoubleRange())
         : m_name(name)
@@ -160,7 +160,7 @@ public:
         Q_ASSERT(m_uiMinMax.isValid());
     }
 public:
-    
+
     /**
      * converts the display position to the pixel-order index in the channels vector.
      */
@@ -173,7 +173,7 @@ public:
         }
         return -1;
     }
-    
+
     static QList<KoChannelInfo*> displayOrderSorted(const QList<KoChannelInfo*> &channels)
     {
         QList <KoChannelInfo*> sortedChannels;
@@ -188,43 +188,43 @@ public:
         Q_ASSERT(channels.size() == sortedChannels.size());
         return sortedChannels;
     }
-    
+
     /**
      * User-friendly name for this channel for presentation purposes in the gui
      */
     inline QString name() const {
         return m_name;
     }
-    
+
     /**
-     * returns the position of the first byte of the channel in the pixel
+     * @return the position of the first byte of the channel in the pixel
      */
     inline qint32 pos() const {
         return m_pos;
     }
-    
+
     /**
-     * @return the displayPosition of the channel in pixel
+     * @return the displayPosition of the channel in the pixel
      */
     inline qint32 displayPosition() const {
         return m_displayPosition;
     }
-    
+
     /**
-     * returns the number of bytes this channel takes
+     * @return the number of bytes this channel takes
      */
     inline qint32 size() const {
         return m_size;
     }
-    
+
     /**
-     * returns the type of the channel
+     * @return the type of the channel
      */
     inline enumChannelType channelType() const {
         return m_channelType;
     }
     /**
-     * return the type of the value of the channel (float, uint8 or uint16)
+     * @return the type of the value of the channel (float, uint8 or uint16)
      */
     inline enumChannelValueType channelValueType() const {
         return m_channelValueType;
@@ -236,7 +236,7 @@ public:
     inline QColor color() const {
         return m_color;
     }
-    
+
     /**
      * A channel is less than another channel if its pos is smaller.
      */
@@ -259,9 +259,9 @@ public:
     inline double getUIMax(void) const {
         return m_uiMinMax.maxVal;
     }
-    
+
 private:
-    
+
     QString m_name;
     qint32 m_pos;
     qint32 m_displayPosition;
@@ -270,7 +270,7 @@ private:
     qint32 m_size;
     QColor m_color;
     DoubleRange m_uiMinMax;
-    
+
 };
 
 #endif // KOCHANNELINFO_H_

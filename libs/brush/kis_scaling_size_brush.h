@@ -30,8 +30,8 @@ public:
     KisScalingSizeBrush();
     KisScalingSizeBrush(const QString& filename);
 
-    qreal userEffectiveSize() const;
-    void setUserEffectiveSize(qreal value);
+    qreal userEffectiveSize() const override;
+    void setUserEffectiveSize(qreal value) override;
 };
 
 #endif // KISSCALINGSIZEBRUSH_H

@@ -61,6 +61,12 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.9 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
+if (LINUX)
+    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
+        add_definitions(-Werror=delete-incomplete)
+    endif()
+endif()
+
  ######################
 #######################
 ## Constants defines ##
@@ -69,10 +75,10 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.1.88")
-set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MINOR 1) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 88)     # 88 for pre-alpha, 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(KRITA_VERSION_STRING "4.0.0-pre-alpha")
+set(KRITA_STABLE_VERSION_MAJOR 4) # 3 for 3.x, 4 for 4.x, etc.
+set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
+set(KRITA_VERSION_RELEASE 0)     # 88 for pre-alpha, 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
@@ -87,12 +93,12 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 # Define the generic version of the Krita libraries here
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
-# (2.x) so we're starting with 15 in 3.x series.
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 3)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 15")
+# (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 4)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 16")
 else()
-    # let's make sure we won't forget to update the "15"
-    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
+    # let's make sure we won't forget to update the "16"
+    message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
 endif()
 set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
@@ -179,13 +185,22 @@ add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken te
 
 include(MacroJPEG)
 
+###########################################################
+## Look for Python3. It is also searched by KF5,         ##
+## so we should request the correct  version in advance  ##
+###########################################################
+
+find_package(PythonInterp 3.0)
+find_package(PythonLibrary 3.0)
+
+
  ########################
 #########################
 ## Look for KDE and Qt ##
 #########################
 ########################
 
-find_package(ECM 1.7.0 REQUIRED NOMODULE)
+find_package(ECM 5.19 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
@@ -574,7 +589,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test for qt-poppler
 ##
-find_package(Poppler)
+find_package(Poppler COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"

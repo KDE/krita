@@ -159,10 +159,12 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
     KoResourceServer<KoPattern>* patternServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoColorSet>* paletteServer;
+    KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
 
     KoResourceLoaderThread *paletteThread;
     KoResourceLoaderThread *gradientThread;
     KoResourceLoaderThread *patternThread;
+    KoResourceLoaderThread *svgSymbolCollectionThread;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -200,6 +202,14 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 //    if (qApp->applicationName().contains(QLatin1String("test"), Qt::CaseInsensitive)) {
 //        d->paletteThread->barrier();
 //    }
+
+
+    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>("symbols", "*.svg");
+    if (!QFileInfo(d->svgSymbolCollectionServer->saveLocation()).exists()) {
+        QDir().mkpath(d->svgSymbolCollectionServer->saveLocation());
+    }
+    d->svgSymbolCollectionThread = new KoResourceLoaderThread(d->svgSymbolCollectionServer);
+    d->svgSymbolCollectionThread ->loadSynchronously();
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -207,10 +217,12 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->patternThread;
     delete d->gradientThread;
     delete d->paletteThread;
+    delete d->svgSymbolCollectionThread;
 
     delete d->patternServer;
     delete d->gradientServer;
     delete d->paletteServer;
+    delete d->svgSymbolCollectionServer;
 
     delete d;
 }
@@ -238,5 +250,11 @@ KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer(bool block
 {
     if (block) d->paletteThread->barrier();
     return d->paletteServer;
+}
+
+KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSymbolCollectionServer(bool block)
+{
+    if (block) d->svgSymbolCollectionThread->barrier();
+    return d->svgSymbolCollectionServer;
 }
 

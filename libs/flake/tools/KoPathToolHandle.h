@@ -35,17 +35,21 @@ class KoViewConverter;
 class KoPointerEvent;
 class QPainter;
 class KoPathShape;
+class KisHandlePainterHelper;
+
 
 class KoPathToolHandle
 {
 public:
     explicit KoPathToolHandle(KoPathTool *tool);
     virtual ~KoPathToolHandle();
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) = 0;
     virtual void repaint() const = 0;
     virtual KoInteractionStrategy * handleMousePress(KoPointerEvent *event) = 0;
     // test if handle is still valid
     virtual bool check(const QList<KoPathShape*> &selectedShapes) = 0;
+
+    virtual void trySelectHandle() {};
 
 protected:
     uint handleRadius() const;
@@ -56,12 +60,13 @@ class PointHandle : public KoPathToolHandle
 {
 public:
     PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType);
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    void repaint() const;
-    KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
-    virtual bool check(const QList<KoPathShape*> &selectedShapes);
+    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) override;
+    void repaint() const override;
+    KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
+    bool check(const QList<KoPathShape*> &selectedShapes) override;
     KoPathPoint *activePoint() const;
     KoPathPoint::PointType activePointType() const;
+    void trySelectHandle() override;
 private:
     KoPathPoint *m_activePoint;
     KoPathPoint::PointType m_activePointType;
@@ -72,10 +77,10 @@ class ParameterHandle : public KoPathToolHandle
 {
 public:
     ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId);
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    void repaint() const;
-    KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
-    virtual bool check(const QList<KoPathShape*> &selectedShapes);
+    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) override;
+    void repaint() const override;
+    KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
+    bool check(const QList<KoPathShape*> &selectedShapes) override;
 protected:
     KoParameterShape *m_parameterShape;
     int m_handleId;
@@ -88,7 +93,7 @@ public:
 
     // XXX: Later: create a paint even to distinguish a connection
     // handle  from another handle type
-    KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
+    KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
 };
 
 #endif // KOPATHTOOLHANDLE_H

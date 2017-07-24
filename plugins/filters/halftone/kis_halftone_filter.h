@@ -37,7 +37,7 @@ class KritaHalftone : public QObject
     Q_OBJECT
 public:
     KritaHalftone(QObject *parent, const QVariantList &);
-    virtual ~KritaHalftone();
+    ~KritaHalftone() override;
 };
 
 /**
@@ -72,14 +72,14 @@ public:
         return KoID("halftone", i18n("Halftone"));
     }
 
-    virtual void processImpl(KisPaintDeviceSP device,
+    void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
-                     KoUpdater *progressUpdater) const;
+                     KoUpdater *progressUpdater) const override;
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
-    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const override;
 
 private:
     QPolygonF m_gridPoints;
@@ -90,10 +90,10 @@ class KisHalftoneConfigWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KisHalftoneConfigWidget(QWidget *parent, KisPaintDeviceSP dev);
-    virtual ~KisHalftoneConfigWidget();
+    ~KisHalftoneConfigWidget() override;
 
-    virtual KisPropertiesConfigurationSP configuration() const;
-    void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
     Ui::WdgHalftone m_page;
 
 };

@@ -68,7 +68,7 @@ class DlgColorRange: public KoDialog
 public:
 
     DlgColorRange(KisViewManager *view, QWidget *parent = 0);
-    ~DlgColorRange();
+    ~DlgColorRange() override;
 
 private Q_SLOTS:
 

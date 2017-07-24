@@ -43,7 +43,6 @@
 #include <resources/KoPattern.h>
 #include <kis_fill_painter.h>
 #include <kis_selection.h>
-#include <kis_system_locker.h>
 
 #include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>

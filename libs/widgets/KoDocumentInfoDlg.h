@@ -60,7 +60,7 @@ public:
     KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
 
     /** The destructor */
-    virtual ~KoDocumentInfoDlg();
+    ~KoDocumentInfoDlg() override;
 
     QList<KPageWidgetItem*> pages() const;
 
@@ -73,10 +73,10 @@ public:
     void addPageItem(KoPageWidgetItem *item);
 
 public Q_SLOTS:  // QDialog API
-    void accept();
+    void accept() override;
 
 protected:  // QWidget API
-    void hideEvent(QHideEvent * event);
+    void hideEvent(QHideEvent * event) override;
 
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */

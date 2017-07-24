@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+       <file>pin.png</file>
+       <file>arrow-right.png</file>	
+       <file>arrow-down.png</file>	
+</qresource>
+</RCC>

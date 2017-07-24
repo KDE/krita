@@ -34,10 +34,10 @@ class ArtisticTextToolSelection : public KoToolSelection
 {
 public:
     explicit ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = 0);
-    virtual ~ArtisticTextToolSelection();
+    ~ArtisticTextToolSelection() override;
 
     // reimplemented from KoToolSelection
-    virtual bool hasSelection();
+    bool hasSelection() override;
 
     /// Sets the currently selected text shape
     void setSelectedShape(ArtisticTextShape *textShape);

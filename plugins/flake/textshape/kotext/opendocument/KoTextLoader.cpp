@@ -1479,7 +1479,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
 
     KoShapeAnchor *anchor = new KoShapeAnchor(shape);
     anchor->loadOdf(element, d->context);
-    shape->setAnchor(anchor);
+    // shape->setAnchor(anchor); // undefined in Krita!
     d->textSharedData->shapeInserted(shape, element, d->context);
 
     // page anchored shapes are handled differently

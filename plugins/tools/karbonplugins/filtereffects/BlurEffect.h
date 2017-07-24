@@ -35,11 +35,11 @@ public:
     void setDeviation(const QPointF &deviation);
 
     /// reimplemented from KoFilterEffect
-    virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;
+    QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const override;
     /// reimplemented from KoFilterEffect
-    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
+    bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context) override;
     /// reimplemented from KoFilterEffect
-    virtual void save(KoXmlWriter &writer);
+    void save(KoXmlWriter &writer) override;
 
 private:
     QPointF m_deviation;

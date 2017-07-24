@@ -30,22 +30,22 @@ class TimelineRulerHeader : public QHeaderView
     Q_OBJECT
 public:
     TimelineRulerHeader(QWidget *parent = 0);
-    ~TimelineRulerHeader();
+    ~TimelineRulerHeader() override;
 
     void setFramePerSecond(int fps);
     bool setZoom(qreal zoomLevel);
 
-    void setModel(QAbstractItemModel *model);
+    void setModel(QAbstractItemModel *model) override;
 
 protected:
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
-    void paintEvent(QPaintEvent *e);
-    void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const;
+    void paintEvent(QPaintEvent *e) override;
+    void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const override;
     void paintSection1(QPainter *painter, const QRect &rect, int logicalIndex) const;
-    void changeEvent(QEvent *event);
+    void changeEvent(QEvent *event) override;
 
 private:
     void updateMinimumSize();

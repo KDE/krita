@@ -27,7 +27,7 @@ class TestShapeReorderCommand : public QObject
     Q_OBJECT
 public:
     TestShapeReorderCommand();
-    ~TestShapeReorderCommand();
+    ~TestShapeReorderCommand() override;
 private Q_SLOTS:
     void testZIndexSorting();
     void testRunThroughSorting();
@@ -41,6 +41,8 @@ private Q_SLOTS:
     void testMoveDownOverlapping();
     void testSendToBackChildren();
     void testNoCommand();
+    void testMergeInShape();
+    void testMergeInShapeDistant();
 };
 
 #endif // TESTSHAPEREORDERCOMMAND_H

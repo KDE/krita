@@ -71,21 +71,21 @@ public:
                             KisSelectionSP selection,
                             KisStrokeUndoFacade *undoFacade);
 
-    ~TransformStrokeStrategy();
+    ~TransformStrokeStrategy() override;
 
     KisPaintDeviceSP previewDevice() const;
     KisSelectionSP realSelection() const;
 
 
-    void initStrokeCallback();
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
+    void initStrokeCallback() override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
 
     static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode);
 
 protected:
-    void postProcessToplevelCommand(KUndo2Command *command);
+    void postProcessToplevelCommand(KUndo2Command *command) override;
 
 private:
     KoUpdaterPtr fetchUpdater(KisNodeSP node);

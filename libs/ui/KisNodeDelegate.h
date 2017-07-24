@@ -27,9 +27,9 @@ class KisNodeModel;
 
 /**
  * See KisNodeModel and KisNodeView.
- * 
+ *
  * A delegate provides the gui machinery, using Qt's model/view terminology.
- * This class is owned by KisNodeView to do the work of generating the 
+ * This class is owned by KisNodeView to do the work of generating the
  * graphical representation of each item.
  */
 class KisNodeDelegate: public QAbstractItemDelegate
@@ -38,19 +38,19 @@ class KisNodeDelegate: public QAbstractItemDelegate
 
 public:
     explicit KisNodeDelegate(KisNodeView *view, QObject *parent = 0);
-    virtual ~KisNodeDelegate();
+    ~KisNodeDelegate() override;
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
-    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const override;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index) const override;
 
 protected:
-    virtual bool eventFilter(QObject *object, QEvent *event);
+    bool eventFilter(QObject *object, QEvent *event) override;
 
 
 private:
@@ -77,9 +77,6 @@ private:
     void drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private Q_SLOTS:
-    void slotOnCloseEditor();
 };
 
 #endif

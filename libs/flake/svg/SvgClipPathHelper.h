@@ -20,29 +20,30 @@
 #ifndef SVGCLIPPATHHELPER_H
 #define SVGCLIPPATHHELPER_H
 
-#include <KoXmlReader.h>
+#include <KoFlakeCoordinateSystem.h>
+#include <QList>
+
+class KoShape;
 
 class SvgClipPathHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
-
     SvgClipPathHelper();
     ~SvgClipPathHelper();
 
     /// Set the clip path units type
-    void setClipPathUnits(Units clipPathUnits);
+    void setClipPathUnits(KoFlake::CoordinateSystem clipPathUnits);
     /// Returns the clip path units type
-    Units clipPathUnits() const;
+    KoFlake::CoordinateSystem clipPathUnits() const;
 
-    /// Sets the dom element containing the clip path
-    void setContent(const KoXmlElement &content);
-    /// Return the clip path element
-    KoXmlElement content() const;
+    QList<KoShape *> shapes() const;
+    void setShapes(const QList<KoShape *> &shapes);
+
+    bool isEmpty() const;
 
 private:
-    Units m_clipPathUnits;
-    KoXmlElement m_content;
+    KoFlake::CoordinateSystem m_clipPathUnits;
+    QList<KoShape*> m_shapes;
 };
 
 #endif // SVGCLIPPATHHELPER_H

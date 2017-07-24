@@ -29,7 +29,7 @@ class KarbonPatternOptionsWidget : public QWidget
     Q_OBJECT
 public:
     explicit KarbonPatternOptionsWidget(QWidget *parent = 0);
-    virtual ~KarbonPatternOptionsWidget();
+    ~KarbonPatternOptionsWidget() override;
 
     /// Sets the pattern repeat
     void setRepeat(KoPatternBackground::PatternRepeat repeat);

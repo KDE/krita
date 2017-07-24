@@ -39,20 +39,20 @@ public:
     KisCageTransformStrategy(const KisCoordinatesConverter *converter,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
-    ~KisCageTransformStrategy();
+    ~KisCageTransformStrategy() override;
 
 protected:
     void drawConnectionLines(QPainter &gc,
                              const QVector<QPointF> &origPoints,
                              const QVector<QPointF> &transfPoints,
-                             bool isEditingPoints);
+                             bool isEditingPoints) override;
 
     QImage calculateTransformedImage(ToolTransformArgs &currentArgs,
                                      const QImage &srcImage,
                                      const QVector<QPointF> &origPoints,
                                      const QVector<QPointF> &transfPoints,
                                      const QPointF &srcOffset,
-                                     QPointF *dstOffset);
+                                     QPointF *dstOffset) override;
 
 private:
     struct Private;

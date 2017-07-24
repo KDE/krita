@@ -239,4 +239,6 @@ private:
     QColor m_colorSubdivision;
 };
 
+Q_DECLARE_METATYPE(KisGridConfig)
+
 #endif /* __KIS_GRID_CONFIG_H */

@@ -44,6 +44,7 @@ class QDropEvent;
 class QTouchEvent;
 class QPainter;
 class QPointF;
+class QMenu;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -65,20 +66,13 @@ public:
      * @param parent a parent QObject for memory management purposes.
      */
     explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
-    virtual ~KoToolProxy();
+    ~KoToolProxy() override;
 
     /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// Forwarded to the current KoToolBase
     void repaintDecorations();
-
-    /**
-     * Forward the given touch event to the current KoToolBase.
-     * The viewconverter and document offset are necessary to convert all
-     * the QTouchPoints to KoTouchPoints that work in document coordinates.
-     */
-    void touchEvent(QTouchEvent *event);
 
     /// Forwarded to the current KoToolBase
     void tabletEvent(QTabletEvent *event, const QPointF &point);
@@ -106,8 +100,7 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
 
     /// Forwarded to the current KoToolBase
-    void wheelEvent(QWheelEvent * event, const QPointF &point);
-    void wheelEvent(KoPointerEvent *event);
+    void explicitUserStrokeEndRequest();
 
     /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
@@ -116,7 +109,7 @@ public:
     void inputMethodEvent(QInputMethodEvent *event);
 
     /// Forwarded to the current KoToolBase
-    QList<QAction*> popupActionList() const;
+    QMenu* popupActionsMenu();
 
     /// Forwarded to the current KoToolBase
     void deleteSelection();
@@ -144,9 +137,6 @@ public:
     bool paste();
 
     /// Forwarded to the current KoToolBase
-    QStringList supportedPasteMimeTypes() const;
-
-    /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
 
     /// Forwarded to the current KoToolBase
@@ -154,12 +144,22 @@ public:
 
     /// Forwarded to the current KoToolBase
     void dropEvent(QDropEvent *event, const QPointF &point);
- 
+
     /// Set the new active tool.
     virtual void setActiveTool(KoToolBase *tool);
 
     /// \internal
     KoToolProxyPrivate *priv();
+
+protected Q_SLOTS:
+    /// Forwarded to the current KoToolBase
+    void requestUndoDuringStroke();
+
+    /// Forwarded to the current KoToolBase
+    void requestStrokeCancellation();
+
+    /// Forwarded to the current KoToolBase
+    void requestStrokeEnd();
 
 Q_SIGNALS:
     /**

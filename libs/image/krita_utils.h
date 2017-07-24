@@ -31,6 +31,7 @@ class QPainter;
 #include <QVector>
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include "krita_container_utils.h"
 #include <functional>
 
 
@@ -41,20 +42,9 @@ namespace KritaUtils
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
     QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const QRegion &region, const QSize &patchSize);
 
-    QVector<QPoint> KRITAIMAGE_EXPORT sampleRectWithPoints(const QRect &rect);
-    QVector<QPointF> KRITAIMAGE_EXPORT sampleRectWithPoints(const QRectF &rect);
-
-    QRect KRITAIMAGE_EXPORT approximateRectFromPoints(const QVector<QPoint> &points);
-    QRectF KRITAIMAGE_EXPORT approximateRectFromPoints(const QVector<QPointF> &points);
-
-    QRect KRITAIMAGE_EXPORT approximateRectWithPointTransform(const QRect &rect, std::function<QPointF(QPointF)> func);
-
     QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
                                              const QVector<QPointF> &points);
     QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
-
-    void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
-                                       int antLength = 4, int antSpace = 4);
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 
@@ -81,38 +71,6 @@ namespace KritaUtils
     QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value);
 
     KisNodeSP KRITAIMAGE_EXPORT nearestNodeAfterRemoval(KisNodeSP node);
-
-    template <class T>
-        bool compareListsUnordered(const QList<T> &a, const QList<T> &b) {
-        if (a.size() != b.size()) return false;
-
-        Q_FOREACH(const T &t, a) {
-            if (!b.contains(t)) return false;
-        }
-
-        return true;
-    }
-
-    template <class C>
-        void makeContainerUnique(C &container) {
-        std::sort(container.begin(), container.end());
-        auto newEnd = std::unique(container.begin(), container.end());
-
-        while (newEnd != container.end()) {
-            newEnd = container.erase(newEnd);
-        }
-    }
-
-
-    template <class C>
-        void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
-
-            auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
-            while (newEnd != container.end()) {
-               newEnd = container.erase(newEnd);
-            }
-    }
-
 
     /**
      * When drawing a rect Qt uses quite a weird algorithm. It

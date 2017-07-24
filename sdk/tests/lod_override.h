@@ -36,23 +36,23 @@ private:
         {
         }
 
-        QRect bounds() const {
+        QRect bounds() const override {
             return m_parent->bounds();
         }
 
-        bool wrapAroundMode() const {
+        bool wrapAroundMode() const override {
             return m_parent->wrapAroundMode();
         }
 
-        int currentLevelOfDetail() const {
+        int currentLevelOfDetail() const override {
             return m_lod;
         }
 
-        int currentTime() const {
+        int currentTime() const override {
             return m_parent->currentTime();
         }
 
-        bool externalFrameActive() const {
+        bool externalFrameActive() const override {
             return m_parent->externalFrameActive();
         }
 

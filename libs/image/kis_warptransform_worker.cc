@@ -269,7 +269,7 @@ QRect KisWarpTransformWorker::approxChangeRect(const QRect &rc)
     const qreal margin = 0.05;
 
     FunctionTransformOp functionOp(m_warpMathFunction, m_origPoint, m_transfPoint, m_alpha);
-    QRect resultRect = KritaUtils::approximateRectWithPointTransform(rc, functionOp);
+    QRect resultRect = KisAlgebra2D::approximateRectWithPointTransform(rc, functionOp);
 
     return KisAlgebra2D::blowRect(resultRect, margin);
 }

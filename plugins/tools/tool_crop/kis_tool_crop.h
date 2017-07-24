@@ -71,19 +71,19 @@ public:
         ImageCropType
     };
     KisToolCrop(KoCanvasBase * canvas);
-    virtual ~KisToolCrop();
+    ~KisToolCrop() override;
 
-    virtual QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
-    void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
 
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void canvasResourceChanged(int key, const QVariant &res);
+    void mouseMoveEvent(KoPointerEvent *e) override;
+    void canvasResourceChanged(int key, const QVariant &res) override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     CropToolType cropType() const;
     bool cropTypeSelectable() const;
@@ -121,11 +121,11 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
-    void requestStrokeEnd();
-    void requestStrokeCancellation();
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
 
     void crop();
 
@@ -218,9 +218,9 @@ public:
         setShortcut(QKeySequence("C"));
     }
 
-    virtual ~KisToolCropFactory() {}
+    ~KisToolCropFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolCrop(canvas);
     }
 

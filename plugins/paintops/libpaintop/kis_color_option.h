@@ -41,7 +41,7 @@ class PAINTOP_EXPORT KisColorOption : public KisPaintOpOption
     Q_OBJECT
 public:
     KisColorOption();
-    ~KisColorOption();
+    ~KisColorOption() override;
 
     bool useRandomHSV() const;
     bool useRandomOpacity() const;
@@ -56,8 +56,8 @@ public:
     int saturation() const;
     int value() const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private Q_SLOTS:
 

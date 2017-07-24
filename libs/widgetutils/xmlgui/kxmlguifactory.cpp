@@ -45,6 +45,7 @@
 #include <kconfiggroup.h>
 
 #include <kis_icon_utils.h>
+#include <WidgetUtilsDebug.h>
 
 Q_DECLARE_METATYPE(QList<QKeySequence>)
 
@@ -229,7 +230,7 @@ KXMLGUIFactory::~KXMLGUIFactory()
 
 void KXMLGUIFactory::addClient(KXMLGUIClient *client)
 {
-    //qDebug(260) << client;
+    debugWidgetUtils << client;
     if (client->factory()) {
         if (client->factory() == this) {
             return;
@@ -251,9 +252,9 @@ void KXMLGUIFactory::addClient(KXMLGUIClient *client)
     if (!d->m_clients.contains(client)) {
         d->m_clients.append(client);
     }
-    //else
-    //qDebug(260) << "XMLGUI client already added " << client;
-
+    else {
+        debugWidgetUtils << "XMLGUI client already added " << client;
+    }
     // Tell the client that plugging in is process and
     //  let it know what builder widget its mainwindow shortcuts
     //  should be attached to.

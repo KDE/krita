@@ -88,3 +88,4 @@ endif()
 target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisThumbnailBenchmark  kritaimage  Qt5::Test)
 
+

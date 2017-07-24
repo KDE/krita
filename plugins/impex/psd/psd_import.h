@@ -26,9 +26,9 @@ class psdImport : public KisImportExportFilter {
     Q_OBJECT
     public:
         psdImport(QObject *parent, const QVariantList &);
-        virtual ~psdImport();
+        ~psdImport() override;
     public:
-        virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+        KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

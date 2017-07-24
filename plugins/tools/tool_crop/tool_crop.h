@@ -30,7 +30,7 @@ class ToolCrop : public QObject
     Q_OBJECT
 public:
     ToolCrop(QObject *parent, const QVariantList &);
-    virtual ~ToolCrop();
+    ~ToolCrop() override;
 
 };
 

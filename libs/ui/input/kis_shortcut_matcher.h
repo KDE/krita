@@ -27,6 +27,7 @@ class QEvent;
 class QWheelEvent;
 class QTouchEvent;
 class QString;
+class QPointF;
 
 class KisStrokeShortcut;
 class KisTouchShortcut;
@@ -191,6 +192,12 @@ public:
     void reinitialize();
 
     /**
+     * Kirta lost focus, it means that all the running actions should be ended
+     * forcefully.
+     */
+    void lostFocusEvent(const QPointF &localPos);
+
+    /**
      * Disables the start of any actions.
      *
      * WARNING: the actions that has been started before this call
@@ -218,6 +225,7 @@ private:
     bool tryRunReadyShortcut( Qt::MouseButton button, QEvent* event );
     void tryActivateReadyShortcut();
     bool tryEndRunningShortcut( Qt::MouseButton button, QEvent* event );
+    void forceEndRunningShortcut(const QPointF &localPos);
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);

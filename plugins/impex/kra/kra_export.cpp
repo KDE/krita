@@ -56,7 +56,7 @@ KraExport::~KraExport()
 KisImportExportFilter::ConversionStatus KraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
-    Q_CHECK_PTR(image);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(image, CreationError);
 
     KraConverter kraConverter(document);
     KisImageBuilder_Result res = kraConverter.buildFile(io);

@@ -19,13 +19,15 @@
 #ifndef KOPATHSHAPEPRIVATE_H
 #define KOPATHSHAPEPRIVATE_H
 
+#include "KoPathShape.h"
 #include "KoTosContainer_p.h"
-#include "KoMarkerData.h"
+#include "KoMarker.h"
 
 class KoPathShapePrivate : public KoTosContainerPrivate
 {
 public:
     explicit KoPathShapePrivate(KoPathShape *q);
+    explicit KoPathShapePrivate(const KoPathShapePrivate &rhs, KoPathShape *q);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
     /// Applies the viewbox transformation defined in the given element
@@ -89,8 +91,10 @@ public:
 
     Q_DECLARE_PUBLIC(KoPathShape)
 
-    KoMarkerData startMarker;
-    KoMarkerData endMarker;
+    KoSubpathList subpaths;
+
+    QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
+    bool autoFillMarkers;
 };
 
 #endif

@@ -34,12 +34,12 @@ class PAINTOP_EXPORT KisColorSourceOptionWidget : public KisPaintOpOption
     Q_OBJECT
 public:
     KisColorSourceOptionWidget();
-    ~KisColorSourceOptionWidget();
+    ~KisColorSourceOptionWidget() override;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const;
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
 private Q_SLOTS:
     void sourceChanged();

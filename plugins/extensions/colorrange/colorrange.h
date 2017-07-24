@@ -30,7 +30,7 @@ class ColorRange : public KisViewPlugin
     Q_OBJECT
 public:
     ColorRange(QObject *parent, const QVariantList &);
-    virtual ~ColorRange();
+    ~ColorRange() override;
 
 private Q_SLOTS:
     void slotActivated();

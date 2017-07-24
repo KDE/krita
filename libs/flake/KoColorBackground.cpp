@@ -52,6 +52,14 @@ KoColorBackground::~KoColorBackground()
 {
 }
 
+bool KoColorBackground::compareTo(const KoShapeBackground *other) const
+{
+    Q_D(const KoColorBackground);
+
+    const KoColorBackground *bg = dynamic_cast<const KoColorBackground*>(other);
+    return bg && bg->color() == d->color;
+}
+
 QColor KoColorBackground::color() const
 {
     Q_D(const KoColorBackground);

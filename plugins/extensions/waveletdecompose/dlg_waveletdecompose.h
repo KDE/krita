@@ -42,7 +42,7 @@ public:
 
     DlgWaveletDecompose(QWidget * parent = 0,
                                const char* name = 0);
-    ~DlgWaveletDecompose();
+    ~DlgWaveletDecompose() override;
 
     void setScales(quint32 scales);
     qint32 scales();

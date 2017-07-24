@@ -56,7 +56,7 @@ public:
      */
     KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument);
     /// destructor
-    ~KoShapeController();
+    ~KoShapeController() override;
 
     /**
      * @brief reset sets the canvas and shapebased document to 0.
@@ -84,6 +84,16 @@ public:
      * @return command which will insert the shape into the document. The command is not yet executed.
      */
     KUndo2Command* addShapeDirect(KoShape *shape, KUndo2Command *parent = 0);
+
+    /**
+     * @brief Add shapes to the document, skipping any dialogs or other user interaction.
+     *
+     * @param shapes to add to the document
+     * @param parent the parent command if the resulting command is a compound undo command.
+     *
+     * @return command which will insert the shapes into the document. The command is not yet executed.
+     */
+    KUndo2Command* addShapesDirect(const QList<KoShape*> shape, KUndo2Command *parent = 0);
 
     /**
      * @brief Remove a shape from the document.
@@ -117,6 +127,22 @@ public:
      * @param shapeBasedDocument the new shapeBasedDocument.
      */
     void setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument);
+
+    /**
+     * The size of the document measured in rasterized pixels. This information is needed for loading
+     * SVG documents that use 'px' as the default unit.
+     */
+    QRectF documentRectInPixels() const;
+
+    /**
+     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     */
+    qreal pixelsPerInch() const;
+
+    /**
+     * Document rect measured in 'pt'
+     */
+    QRectF documentRect() const;
 
     /**
      * Return a pointer to the resource manager associated with the

@@ -11,7 +11,6 @@ set(kritaodf_LIB_SRCS
     KoOasisSettings.cpp
     KoOdfStylesReader.cpp
     KoOdfNumberStyles.cpp
-    KoOdfPaste.cpp
     KoOdfReadStore.cpp
     KoOdfWriteStore.cpp
     KoStyleStack.cpp

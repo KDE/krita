@@ -124,8 +124,7 @@ QPolygonF KoColorSpace::gamutXYY() const
 
         }
         int samples = 5;//amount of samples in our color space.
-        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF32")->defaultProfile();
-        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32", name);
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32");
         quint8 *data = new quint8[pixelSize()];
         quint8 data2[16]; // xyza f32 is 4 floats, that is 16 bytes per pixel.
         //QVector <qreal> sampleCoordinates(pow(colorChannelCount(),samples));
@@ -196,10 +195,9 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
             max = this->channels()[0]->getUIMax();
         }
-        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
-        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32");
         quint8 *data = new quint8[pixelSize()];
-        quint8 data2[8]; // xyza is 8 bytes per pixel.
+        quint8 data2[xyzColorSpace->pixelSize()];
 
         // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
         QVector <float> channelValuesF(5);//for getting the coordinates.
@@ -363,7 +361,7 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
     if (!d->transfoToLABA16) {
-        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
+        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
     }
     return d->transfoToLABA16;
 }
@@ -371,21 +369,21 @@ const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
     if (!d->transfoFromLABA16) {
-        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->lab16(), this, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
+        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->createColorConverter(KoColorSpaceRegistry::instance()->lab16(), this, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
     }
     return d->transfoFromLABA16;
 }
 const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
     if (!d->transfoToRGBA16) {
-        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
+        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
     }
     return d->transfoToRGBA16;
 }
 const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
     if (!d->transfoFromRGBA16) {
-        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16() , this, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
+        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16() , this, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()) ;
     }
     return d->transfoFromRGBA16;
 }
@@ -415,7 +413,7 @@ KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColo
     if (*this == *dstColorSpace) {
         return new KoCopyColorConversionTransformation(this);
     } else {
-        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, dstColorSpace, renderingIntent, conversionFlags);
+        return KoColorSpaceRegistry::instance()->createColorConverter(this, dstColorSpace, renderingIntent, conversionFlags);
     }
 }
 
@@ -545,7 +543,7 @@ KoColorTransformation* KoColorSpace::createColorTransformation(const QString & i
         // TODO use the color conversion cache
         KoColorConversionTransformation* csToFallBack = 0;
         KoColorConversionTransformation* fallBackToCs = 0;
-        KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverters(this, models, csToFallBack, fallBackToCs);
+        KoColorSpaceRegistry::instance()->createColorConverters(this, models, csToFallBack, fallBackToCs);
         Q_ASSERT(csToFallBack);
         Q_ASSERT(fallBackToCs);
         KoColorTransformation* transfo = factory->createTransformation(fallBackToCs->srcColorSpace(), parameters);

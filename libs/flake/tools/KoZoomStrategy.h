@@ -44,8 +44,11 @@ public:
     void forceZoomIn();
 
     /// Execute the zoom
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual void cancelInteraction();
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    void cancelInteraction() override;
+
+protected:
+    SelectionMode currentMode() const override;
 private:
     KoCanvasController *m_controller;
 

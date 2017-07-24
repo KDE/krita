@@ -113,6 +113,8 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     connect(spacingLocker, SIGNAL(sliderValueChanged()), SLOT(slotGridGuiChanged()));
     connect(spacingLocker, SIGNAL(aspectButtonChanged()), SLOT(slotGridGuiChanged()));
+
+    connect(ui->chkShowRulers,SIGNAL(toggled(bool)),SIGNAL(showRulersChanged(bool)));
 }
 
 GridConfigWidget::~GridConfigWidget()
@@ -322,7 +324,13 @@ void GridConfigWidget::slotGridTypeChanged() {
     slotGridGuiChanged();
 }
 
+bool GridConfigWidget::showRulers() const
+{
+    return ui->chkShowRulers->isChecked();
+}
 
-
-
+void GridConfigWidget::setShowRulers(bool value)
+{
+    ui->chkShowRulers->setChecked(value);
+}
 

@@ -18,7 +18,7 @@ public:
         , m_commonColors(parentObj)
     {}
 
-    void run();
+    void run() override;
     QList<KoColor> extractColors();
     QList<QRgb> getColors();
 

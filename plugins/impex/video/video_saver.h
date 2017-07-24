@@ -39,7 +39,7 @@ class KRITAVIDEOEXPORT_EXPORT VideoSaver : public QObject {
     Q_OBJECT
 public:
     VideoSaver(KisDocument* doc, const QString &ffmpegPath, bool batchMode);
-    virtual ~VideoSaver();
+    ~VideoSaver() override;
 
     KisImageSP image();
     KisImageBuilder_Result encode(const QString &filename, KisPropertiesConfigurationSP configuration);

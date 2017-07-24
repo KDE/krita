@@ -79,9 +79,10 @@ void KisPSDTest::testTransparencyMask()
     QVERIFY(doc->image());
 
     QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
-    QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+    QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single", 1, 1));
 
     doc->setBackupFile(false);
+    doc->setFileBatchMode(true);
     doc->setOutputMimeType("image/vnd.adobe.photoshop");
     QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_tmask.psd");
     bool retval = doc->saveAs(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()));
@@ -92,7 +93,7 @@ void KisPSDTest::testTransparencyMask()
         QVERIFY(doc->image());
 
         QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
-        QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+        QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single", 1, 1));
 
         QVERIFY(doc->image()->root()->lastChild());
         QVERIFY(doc->image()->root()->lastChild()->firstChild());
@@ -250,6 +251,8 @@ void KisPSDTest::testOpeningAllFormats()
     QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
     QDir dirSources(path);
 
+    bool shouldFailTheTest = false;
+
     Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         Q_ASSERT(sourceFileInfo.exists());
 
@@ -266,6 +269,13 @@ void KisPSDTest::testOpeningAllFormats()
         QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
 
         if (!doc->image()) {
+            /**
+             * 32bit images are expected to fail atm, their loading is not implemented
+             */
+            if (!sourceFileInfo.fileName().contains("_32b")) {
+                shouldFailTheTest = true;
+            }
+
             errKrita << "FAILED to open" << sourceFileInfo.fileName();
             continue;
         }
@@ -273,6 +283,8 @@ void KisPSDTest::testOpeningAllFormats()
         // just check visually if the file loads fine
         KIS_DUMP_DEVICE_2(doc->image()->projection(), QRect(0,0,100,100), sourceFileInfo.fileName(), "dd");
     }
+
+    QVERIFY(!shouldFailTheTest);
 }
 
 void KisPSDTest::testSavingAllFormats()
@@ -312,6 +324,7 @@ void KisPSDTest::testSavingAllFormats()
         // KIS_DUMP_DEVICE_2(doc->image()->projection(), QRect(0,0,100,100), originalName, "dd");
 
         doc->setBackupFile(false);
+        doc->setFileBatchMode(true);
         doc->setOutputMimeType("image/vnd.adobe.photoshop");
         QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + tempPsdName);
 

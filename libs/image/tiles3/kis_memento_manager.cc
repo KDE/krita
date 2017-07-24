@@ -304,6 +304,9 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 
     m_cancelledRevisions.prepend(changeList);
     DEBUG_DUMP_MESSAGE("UNDONE");
+
+    // Waking up pooler to prepare copies for us
+    KisTileDataStore::instance()->kickPooler();
 }
 
 void KisMementoManager::rollforward(KisTileHashTable *ht)

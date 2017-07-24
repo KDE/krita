@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QTransform>
 #include <QPointer>
 
 #include "KoShapeBasedDocumentBase.h"
@@ -43,17 +44,11 @@ public:
         }
         // read persistent application wide resources
         KSharedConfigPtr config =  KSharedConfig::openConfig();
-        if (config->hasGroup("Misc")) {
-            KConfigGroup miscGroup = config->group("Misc");
-            const qreal pasteOffset = miscGroup.readEntry("CopyOffset", 10.0);
-            resourceManager->setPasteOffset(pasteOffset);
-            const bool pasteAtCursor = miscGroup.readEntry("PasteAtCursor", true);
-            resourceManager->enablePasteAtCursor(pasteAtCursor);
-            const uint grabSensitivity = miscGroup.readEntry("GrabSensitivity", 3);
-            resourceManager->setGrabSensitivity(grabSensitivity);
-            const uint handleRadius = miscGroup.readEntry("HandleRadius", 3);
-            resourceManager->setHandleRadius(handleRadius);
-        }
+        KConfigGroup miscGroup = config->group("Misc");
+        const uint grabSensitivity = miscGroup.readEntry("GrabSensitivity", 3);
+        resourceManager->setGrabSensitivity(grabSensitivity);
+        const uint handleRadius = miscGroup.readEntry("HandleRadius", 3);
+        resourceManager->setHandleRadius(handleRadius);
     }
 
     ~KoShapeBasedDocumentBasePrivate()
@@ -74,6 +69,11 @@ KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
     delete d;
 }
 
+void KoShapeBasedDocumentBase::addShape(KoShape *shape)
+{
+    addShapes({shape});
+}
+
 void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
 {
 }
@@ -81,4 +81,12 @@ void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape*> & /*shapes*/,
 KoDocumentResourceManager *KoShapeBasedDocumentBase::resourceManager() const
 {
     return d->resourceManager;
+}
+
+QRectF KoShapeBasedDocumentBase::documentRect() const
+{
+    const qreal pxToPt = 72.0 / pixelsPerInch();
+
+    QTransform t = QTransform::fromScale(pxToPt, pxToPt);
+    return t.mapRect(documentRectInPixels());
 }

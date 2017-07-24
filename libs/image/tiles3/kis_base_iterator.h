@@ -24,14 +24,22 @@
 #include "kis_tile.h"
 #include "kis_types.h"
 #include "kis_shared.h"
+#include "kis_iterator_complete_listener.h"
 
 class KisBaseIterator {
 protected:
-    KisBaseIterator(KisTiledDataManager * _dataManager, bool _writable) {
+    KisBaseIterator(KisTiledDataManager * _dataManager, bool _writable, KisIteratorCompleteListener *listener) {
         m_dataManager = _dataManager;
         m_pixelSize = m_dataManager->pixelSize();
         m_writable = _writable;
+        m_completeListener = listener;
     }
+    ~KisBaseIterator() {
+        if (m_writable && m_completeListener) {
+            m_completeListener->notifyWritableIteratorCompleted();
+        }
+    }
+
     KisTiledDataManager *m_dataManager;
     qint32 m_pixelSize;        // bytes per pixel
     bool m_writable;
@@ -64,6 +72,8 @@ protected:
         return y - row * KisTileData::HEIGHT;
     }
     
+private:
+    KisIteratorCompleteListener *m_completeListener;
 };
 
 #endif

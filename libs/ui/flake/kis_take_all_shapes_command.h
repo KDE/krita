@@ -34,10 +34,10 @@ class KisTakeAllShapesCommand : public KUndo2Command
 {
 public:
     KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently);
-    ~KisTakeAllShapesCommand();
+    ~KisTakeAllShapesCommand() override;
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     KisShapeSelection *m_shapeSelection;

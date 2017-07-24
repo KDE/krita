@@ -30,8 +30,10 @@
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDesktopWidget>
+#include <QDialog>
 #include <QDockWidget>
 #include <QIcon>
+#include <QInputDialog>
 #include <QLabel>
 #include <QLayout>
 #include <QMdiArea>
@@ -64,6 +66,7 @@
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
+#include <kis_workspace_resource.h>
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -94,6 +97,7 @@
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
+#include <KoResourceModel.h>
 
 #include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
@@ -108,7 +112,6 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_clipboard.h"
 #include "kis_config.h"
-#include "kis_config_notifier.h"
 #include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
@@ -169,6 +172,7 @@ public:
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
+        , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
@@ -224,12 +228,14 @@ public:
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
     KActionMenu *documentMenu;
+    KActionMenu *workspaceMenu;
 
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
+    KoResourceModel *workspacemodel {0};
 
-    QUrl lastExportUrl;
+    QString lastExportLocation;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
@@ -269,6 +275,11 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
+    auto rserver = KisResourceServerProvider::instance()->workspaceServer(false);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
+    d->workspacemodel = new KoResourceModel(adapter, this);
+    connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
+
     KisConfig cfg;
 
     d->viewManager = new KisViewManager(this, actionCollection());
@@ -293,6 +304,8 @@ KisMainWindow::KisMainWindow()
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 
     actionCollection()->addAssociatedWidget(this);
+
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
 
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
@@ -351,11 +364,6 @@ KisMainWindow::KisMainWindow()
 
     setAutoSaveSettings("krita", false);
 
-    KoPluginLoader::instance()->load("Krita/ViewPlugin",
-                                     "Type == 'Service' and ([X-Krita-Version] == 28)",
-                                     KoPluginLoader::PluginsConfig(),
-                                     viewManager(),
-                                     false);
 
     subWindowActivated();
     updateWindowMenu();
@@ -761,7 +769,7 @@ bool KisMainWindow::openDocument(const QUrl &url)
 bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
 {
     if (!url.isLocalFile()) {
-        qDebug() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
+        qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
         return false;
     }
 
@@ -885,8 +893,20 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     KisDelayedSaveDialog dlg(document->image(), KisDelayedSaveDialog::SaveDialog, 0, this);
     dlg.blockIfImageIsBusy();
 
-    if (dlg.result() != QDialog::Accepted) {
+    if (dlg.result() == KisDelayedSaveDialog::Rejected) {
         return false;
+    }
+    else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
+        QMessageBox::critical(0,
+                              i18nc("@title:window", "Krita"),
+                              i18n("You are saving a file while the image is "
+                                   "still rendering. The saved file may be "
+                                   "incomplete or corrupted.\n\n"
+                                   "Please select a location where the original "
+                                   "file will not be overridden!"));
+
+
+        saveas = true;
     }
 
     bool reset_url;
@@ -894,7 +914,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     if (document->url().isEmpty()) {
         reset_url = true;
         saveas = true;
-    } else {
+    }
+    else {
         reset_url = false;
     }
 
@@ -910,35 +931,19 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
     QUrl suggestedURL = document->url();
 
-    QStringList mimeFilter;
+    QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
-    mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
-
-    if (!mimeFilter.contains(oldOutputFormat) && !d->isExporting) {
+    if (!mimeFilter.contains(oldOutputFormat)) {
         dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
-        QString suggestedFilename = suggestedURL.fileName();
+        QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            int c = suggestedFilename.lastIndexOf('.');
-
-            const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
-            if (!ext.isEmpty()) {
-                if (c < 0)
-                    suggestedFilename = suggestedFilename + "." + ext;
-                else
-                    suggestedFilename = suggestedFilename.left(c) + "." + ext;
-            } else { // current filename extension wrong anyway
-                if (c > 0) {
-                    // this assumes that a . signifies an extension, not just a .
-                    suggestedFilename = suggestedFilename.left(c);
-                }
-            }
-
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(_native_format).first().remove("*.");
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
@@ -949,21 +954,56 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
     bool ret = false;
 
-    if (document->url().isEmpty() || saveas) {
+    if (document->url().isEmpty() || d->isExporting || saveas) {
         // if you're just File/Save As'ing to change filter options you
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveAs");
-        dialog.setCaption(i18n("untitled"));
-        if (d->isExporting && !d->lastExportUrl.isEmpty()) {
-            dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
+        dialog.setCaption(d->isExporting ? i18n("Exporting") : i18n("Saving As"));
+
+        /*qDebug() << ">>>>>" << d->isExporting << d->lastExportLocation << d->lastExportedFormat << QString::fromLatin1(document->outputMimeType())*/;
+
+        if (d->isExporting && !d->lastExportLocation.isEmpty()) {
+
+            // Use the location where we last exported to, if it's set, as the opening location for the file dialog
+            QString proposedPath = QFileInfo(d->lastExportLocation).absolutePath();
+            // If the document doesn't have a filename yet, use the title
+            QString proposedFileName = suggestedURL.isEmpty() ? document->documentInfo()->aboutInfo("title") :  QFileInfo(suggestedURL.toLocalFile()).baseName();
+            // Use the last mimetype we exported to by default
+            QString proposedMimeType =  d->lastExportedFormat.isEmpty() ? "" : d->lastExportedFormat;
+            QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
+
+            // Set the default dir: this overrides the one loaded from the config file, since we're exporting and the lastExportLocation is not empty
+            dialog.setDefaultDir(proposedPath + "/" + proposedFileName + "." + proposedExtension, true);
+            dialog.setMimeTypeFilters(mimeFilter, proposedMimeType);
         }
         else {
-            dialog.setDefaultDir(suggestedURL.toLocalFile());
+            // Get the last used location for saving
+            KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+            QString proposedPath = group.readEntry("SaveAs", "");
+            // if that is empty, get the last used location for loading
+            if (proposedPath.isEmpty()) {
+                proposedPath = group.readEntry("OpenDocument", "");
+            }
+            // If that is empty, too, use the Pictures location.
+            if (proposedPath.isEmpty()) {
+                proposedPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+            }
+            // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
+            // open the location where the document currently is.
+            dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : suggestedURL.toLocalFile(), true);
+
+            // If exporting, default to all supported file types if user is exporting
+            QByteArray default_mime_type = "";
+            if (!d->isExporting) {
+                // otherwise use the document's mimetype, or if that is empty, kra, which is the savest.
+                default_mime_type = document->outputMimeType().isEmpty() ? _native_format : document->outputMimeType();
+            }
+            dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));
         }
-        // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
+
+
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
@@ -990,7 +1030,11 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
             justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
         }
         else {
-            justChangingFilterOptions = (newURL == d->lastExportUrl) && (outputFormat == d->lastExportedFormat);
+            QString path = QFileInfo(d->lastExportLocation).absolutePath();
+            QString filename = QFileInfo(document->url().toLocalFile()).baseName();
+            justChangingFilterOptions = (QFileInfo(newURL.toLocalFile()).absolutePath() == path)
+                    && (QFileInfo(newURL.toLocalFile()).baseName() == filename)
+                    && (outputFormat == d->lastExportedFormat);
         }
 
         bool bOk = true;
@@ -1032,7 +1076,22 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                 // - Clarence
                 //
                 document->setOutputMimeType(outputFormat);
-                if (!d->isExporting) {  // Save As
+                if (d->isExporting) {
+                    // Export
+                    ret = document->exportDocument(newURL);
+
+                    if (ret) {
+                        // a few file dialog convenience things
+                        d->lastExportLocation = newURL.toLocalFile();
+                        d->lastExportedFormat = outputFormat;
+                    }
+
+                    // always restore output format
+                    document->setOutputMimeType(oldOutputFormat);
+
+                }
+                else {
+                    // Save As
                     ret = document->saveAs(newURL);
 
                     if (ret) {
@@ -1045,17 +1104,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                         document->setLocalFilePath(oldFile);
                         document->setOutputMimeType(oldOutputFormat);
                     }
-                } else { // Export
-                    ret = document->exportDocument(newURL);
-
-                    if (ret) {
-                        // a few file dialog convenience things
-                        d->lastExportUrl = newURL;
-                        d->lastExportedFormat = outputFormat;
-                    }
-
-                    // always restore output format
-                    document->setOutputMimeType(oldOutputFormat);
                 }
 
             }   // if (wantToSave)  {
@@ -1137,13 +1185,6 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
         if (d->noCleanup)
             return;
-
-        Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
-            KisView *view = dynamic_cast<KisView*>(subwin);
-            if (view) {
-                KisPart::instance()->removeView(view);
-            }
-        }
 
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             Q_FOREACH (QDockWidget* dockWidget, d->dockWidgetsMap)
@@ -2009,13 +2050,82 @@ void KisMainWindow::updateWindowMenu()
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = doc->url().toDisplayString();
-            if (title.isEmpty()) title = doc->image()->objectName();
+            if (title.isEmpty() && doc->image()) {
+                title = doc->image()->objectName();
+            }
             QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));
             d->documentMapper->setMapping(action, doc);
         }
     }
+
+    menu->addAction(d->workspaceMenu);
+    QMenu *workspaceMenu = d->workspaceMenu->menu();
+    workspaceMenu->clear();
+
+    auto workspaces = KisResourceServerProvider::instance()->workspaceServer(false)->resources();
+    auto m_this = this;
+    for (auto &w : workspaces) {
+        auto action = workspaceMenu->addAction(w->name());
+        auto ds = w->dockerState();
+        connect(action, &QAction::triggered, this, [=]() { m_this->restoreWorkspace(ds); });
+    }
+    workspaceMenu->addSeparator();
+    connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
+            &QAction::triggered,
+            this,
+            [&]() {
+        QString extensions = d->workspacemodel->extensions();
+        QStringList mimeTypes;
+        for(const QString &suffix : extensions.split(":")) {
+            mimeTypes << KisMimeDatabase::mimeTypeForSuffix(suffix);
+        }
+
+        KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+        dialog.setMimeTypeFilters(mimeTypes);
+        dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
+        QString filename = dialog.filename();
+
+        d->workspacemodel->importResourceFile(filename);
+    });
+
+    connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
+            &QAction::triggered,
+            [=]() {
+        QString name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
+                                             i18nc("@label:textbox", "Name:"));
+        if (name.isEmpty()) return;
+        auto rserver = KisResourceServerProvider::instance()->workspaceServer();
+
+        KisWorkspaceResource* workspace = new KisWorkspaceResource("");
+        workspace->setDockerState(m_this->saveState());
+        d->viewManager->resourceProvider()->notifySavingWorkspace(workspace);
+        workspace->setValid(true);
+        QString saveLocation = rserver->saveLocation();
+
+        bool newName = false;
+        if(name.isEmpty()) {
+            newName = true;
+            name = i18n("Workspace");
+        }
+        QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
+
+        int i = 1;
+        while (fileInfo.exists()) {
+            fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + workspace->defaultFileExtension());
+            i++;
+        }
+        workspace->setFilename(fileInfo.filePath());
+        if(newName) {
+            name = i18n("Workspace %1", i);
+        }
+        workspace->setName(name);
+        rserver->addResource(workspace);
+    });
+
+    // TODO: What to do about delete?
+//    workspaceMenu->addAction(i18nc("@action:inmenu", "&Delete Workspace..."));
 
     menu->addSeparator();
     menu->addAction(d->close);
@@ -2123,7 +2233,7 @@ void KisMainWindow::checkSanity()
     // print error if the lcms engine is not available
     if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
         // need to wait 1 event since exiting here would not work.
-        m_errorMessage = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
+        m_errorMessage = i18n("The Krita LittleCMS color management plugin is not installed. Krita will quit now.");
         m_dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         return;

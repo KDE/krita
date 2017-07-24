@@ -42,14 +42,14 @@ public:
         RotateResetShortcut ///< Reset the rotation to 0.
     };
     explicit KisRotateCanvasAction();
-    virtual ~KisRotateCanvasAction();
+    ~KisRotateCanvasAction() override;
 
-    virtual int priority() const;
+    int priority() const override;
 
-    void activate(int shortcut);
-    void deactivate(int shortcut);
-    void begin(int shortcut, QEvent *event);
-    void cursorMoved(const QPointF &lastPos, const QPointF &pos);
+    void activate(int shortcut) override;
+    void deactivate(int shortcut) override;
+    void begin(int shortcut, QEvent *event) override;
+    void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
 
 private:
     class Private;

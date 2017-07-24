@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisPaintOpListWidget: public KisCategorizedListView
     Q_OBJECT
 public:
      KisPaintOpListWidget(QWidget* parent=0, const char* name=0);
-    ~KisPaintOpListWidget();
+    ~KisPaintOpListWidget() override;
     
     QString currentItem() const;
     

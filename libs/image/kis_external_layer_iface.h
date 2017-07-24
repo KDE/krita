@@ -41,7 +41,7 @@ public:
     KisExternalLayer(KisImageWSP image, const QString &name, quint8 opacity)
             : KisLayer(image, name, opacity) {}
 
-    virtual QIcon icon() const {
+    QIcon icon() const override {
         return KisIconUtils::loadIcon("view-refresh");
     }
 
@@ -56,6 +56,10 @@ public:
     virtual KUndo2Command* transform(const QTransform &transform) {
         Q_UNUSED(transform);
         return 0;
+    }
+
+    virtual bool supportsPerspectiveTransform() const {
+        return false;
     }
 
 };

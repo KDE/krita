@@ -53,7 +53,7 @@ public:
      * @param parent
      */
     explicit ThemeManager(const QString &theme = "", QObject *parent = 0);
-    ~ThemeManager();
+    ~ThemeManager() override;
 
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);

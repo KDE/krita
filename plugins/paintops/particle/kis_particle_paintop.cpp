@@ -31,7 +31,9 @@
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_lod_transform.h>
 #include <kis_types.h>
+#include <kis_paintop_plugin_utils.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 
@@ -54,6 +56,11 @@ KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisP
     m_particleBrush.setProperties(&m_properties);
     m_particleBrush.initParticles();
 
+    m_airbrushOption.readOptionSetting(settings);
+
+    m_rateOption.readOptionSetting(settings);
+    m_rateOption.resetAllSensors();
+
     m_first = true;
 }
 
@@ -63,14 +70,36 @@ KisParticlePaintOp::~KisParticlePaintOp()
 
 KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di;
-    paintLine(info, info, &di);
-    return di.currentSpacing();
+    doPaintLine(info, info);
+    return updateSpacingImpl(info);
 }
 
-void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+KisSpacingInformation KisParticlePaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
-    Q_UNUSED(currentDistance);
+    return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisParticlePaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+}
+
+void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,
+                                   KisDistanceInformation *currentDistance)
+{
+    // Use superclass behavior for lines of zero length. Otherwise, airbrushing can happen faster
+    // than it is supposed to.
+    if (pi1.pos() == pi2.pos()) {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    } else {
+        doPaintLine(pi1, pi2);
+    }
+}
+
+void KisParticlePaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+{
     if (!painter()) return;
 
     if (!m_dab) {

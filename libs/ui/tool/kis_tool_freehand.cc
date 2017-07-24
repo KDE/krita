@@ -29,6 +29,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+#include <Eigen/Core>
+
 #include <kis_icon.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
@@ -71,7 +73,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_only_one_assistant = true;
 
     setSupportOutline(true);
-    setMaskSyntheticEvents(true); // Disallow mouse events from finger presses.
+    setMaskSyntheticEvents(KisConfig().disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
@@ -79,9 +81,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     connect(m_helper, SIGNAL(requestExplicitUpdateOutline()),
             SLOT(explicitUpdateOutline()));
-
-    m_strokeNotStoped = false;
-    m_needEndContinuedStroke = false;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -89,6 +88,12 @@ KisToolFreehand::~KisToolFreehand()
     delete m_helper;
     delete m_recordingAdapter;
     delete m_infoBuilder;
+}
+
+void KisToolFreehand::mouseMoveEvent(KoPointerEvent *event)
+{
+    KisToolPaint::mouseMoveEvent(event);
+    m_helper->cursorMoved(convertToPixelCoord(event));
 }
 
 KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
@@ -150,7 +155,8 @@ void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
 
 int KisToolFreehand::flags() const
 {
-    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET
+           |KisTool::FLAG_USES_CUSTOM_SIZE;
 }
 
 void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
@@ -163,29 +169,18 @@ void KisToolFreehand::deactivate()
     if (mode() == PAINT_MODE) {
         endStroke();
         setMode(KisTool::HOVER_MODE);
-    } else if (m_strokeNotStoped) {
-        m_needEndContinuedStroke = true;
-        endStroke();
     }
     KisToolPaint::deactivate();
 }
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
-    setCurrentNodeLocked(true);
-
-    if (m_strokeNotStoped) {
-        qDebug() << "Inited part of continued stroke\n";
-        m_helper->initPaintInContinuedStroke(event, canvas()->resourceManager(),
-                                             image(), currentNode());
-        m_strokeNotStoped = false;
-    } else {
-        qDebug() << "Inited new stroke\n";
-        m_helper->initPaint(event, canvas()->resourceManager(),
-                            image(),
-                            currentNode(),
-                            image().data());
-    }
+    m_helper->initPaint(event,
+                        convertToPixelCoord(event),
+                        canvas()->resourceManager(),
+                        image(),
+                        currentNode(),
+                        image().data());
 }
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
@@ -196,22 +191,12 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
         m_helper->setCanvasHorizontalMirrorState(canvas2->xAxisMirrored());
         m_helper->setCanvasRotation(canvas2->rotationAngle());
     }
-    m_helper->paint(event);
+    m_helper->paintEvent(event);
 }
 
 void KisToolFreehand::endStroke()
 {
-    if (currentPaintOpPreset()->settings()->needsContinuedStroke() && !m_needEndContinuedStroke) {
-        qDebug() << "Finished part of continued stroke\n";
-        m_helper->endPaintInContinuedStroke();
-        m_strokeNotStoped = true;
-    } else {
-        qDebug() << "All stroke finished";
-        m_needEndContinuedStroke = false;
-        m_strokeNotStoped = false;
-        m_helper->endPaint();
-    }
-    setCurrentNodeLocked(false);
+    m_helper->endPaint();
 }
 
 bool KisToolFreehand::primaryActionSupportsHiResEvents() const
@@ -335,10 +320,6 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (m_strokeNotStoped) {
-        m_needEndContinuedStroke = true;
-        endStroke();
-    }
     if (tryPickByPaintOp(event, action)) {
         m_paintopBasedPickingInAction = true;
         return;
@@ -471,7 +452,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
-    QPointF imagePos = currentImage()->documentToPixel(documentPos);
+    QPointF imagePos = convertToPixelCoord(documentPos);
 
     if (currentPaintOpPreset())
         return m_helper->paintOpOutline(imagePos,

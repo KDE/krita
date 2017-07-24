@@ -23,6 +23,7 @@
 #include "dlg_layersize.h"
 
 #include <KoUnit.h>
+#include <kis_config.h>
 
 #include <klocalizedstring.h>
 
@@ -30,6 +31,14 @@
 
 #include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
+
+const QString DlgLayerSize::PARAM_PREFIX = "layersizedlg";
+
+const QString DlgLayerSize::PARAM_WIDTH_UNIT = DlgLayerSize::PARAM_PREFIX + "_widthunit";
+const QString DlgLayerSize::PARAM_HEIGTH_UNIT = DlgLayerSize::PARAM_PREFIX + "_heightunit";
+
+const QString DlgLayerSize::PARAM_KEEP_AR = DlgLayerSize::PARAM_PREFIX + "_keepar";
+const QString DlgLayerSize::PARAM_KEEP_PROP = DlgLayerSize::PARAM_PREFIX + "_keepprop";
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
@@ -55,6 +64,8 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->layout()->setMargin(0);
     m_page->setObjectName(name);
 
+    KisConfig cfg;
+
     _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
     _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
 
@@ -73,18 +84,27 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->newHeightDouble->setValue(height);
 
     m_page->filterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formatedDescriptions());
+    m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
     m_page->filterCmb->setCurrent("Bicubic");
 
     m_page->newWidthUnit->setModel(_widthUnitManager);
     m_page->newHeightUnit->setModel(_heightUnitManager);
 
-    const int pixelUnitIndex = _widthUnitManager->getsUnitSymbolList().indexOf("px"); //TODO: have a better way to identify units.
-    m_page->newWidthUnit->setCurrentIndex(pixelUnitIndex);
-    m_page->newHeightUnit->setCurrentIndex(pixelUnitIndex);
+    QString unitw = cfg.readEntry<QString>(PARAM_WIDTH_UNIT, "px");
+    QString unith = cfg.readEntry<QString>(PARAM_HEIGTH_UNIT, "px");
 
-    m_page->aspectRatioBtn->setKeepAspectRatio(true);
-    m_page->constrainProportionsCkb->setChecked(true);
+    _widthUnitManager->setApparentUnitFromSymbol(unitw);
+    _heightUnitManager->setApparentUnitFromSymbol(unith);
+
+    const int wUnitIndex = _widthUnitManager->getsUnitSymbolList().indexOf(unitw);
+    const int hUnitIndex = _widthUnitManager->getsUnitSymbolList().indexOf(unith);
+
+    m_page->newWidthUnit->setCurrentIndex(wUnitIndex);
+    m_page->newHeightUnit->setCurrentIndex(hUnitIndex);
+
+    m_keepAspect = cfg.readEntry(PARAM_KEEP_AR,true);
+    m_page->aspectRatioBtn->setKeepAspectRatio(m_keepAspect);
+    m_page->constrainProportionsCkb->setChecked(cfg.readEntry(PARAM_KEEP_PROP,true));
 
     setMainWidget(m_page);
     connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
@@ -103,6 +123,15 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
 
 DlgLayerSize::~DlgLayerSize()
 {
+
+    KisConfig cfg;
+
+    cfg.writeEntry<bool>(PARAM_KEEP_AR, m_page->aspectRatioBtn->keepAspectRatio());
+    cfg.writeEntry<bool>(PARAM_KEEP_PROP, m_page->constrainProportionsCkb->isChecked());
+
+    cfg.writeEntry<QString>(PARAM_WIDTH_UNIT, _widthUnitManager->getApparentUnitSymbol());
+    cfg.writeEntry<QString>(PARAM_HEIGTH_UNIT, _heightUnitManager->getApparentUnitSymbol());
+
     delete m_page;
 }
 

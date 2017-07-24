@@ -29,7 +29,6 @@
 #include <QTransform>
 
 #include "KoTosContainer.h"
-#include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -37,6 +36,7 @@ class KoPathSegment;
 class KoPathPoint;
 class KoPathShapePrivate;
 class KoMarker;
+class KisHandlePainterHelper;
 
 typedef QPair<int, int> KoPathPointIndex;
 
@@ -83,17 +83,22 @@ public:
     /**
      * @brief
      */
-    virtual ~KoPathShape();
+    ~KoPathShape() override;
+
+    KoShape *cloneShape() const override;
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
-    virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    virtual void paintPoints(KisHandlePainterHelper &handlesHelper);
+
     /// reimplemented
-    virtual QPainterPath outline() const;
+    QRectF outlineRect() const override;
     /// reimplemented
-    virtual QRectF boundingRect() const;
+    QPainterPath outline() const override;
     /// reimplemented
-    virtual QSizeF size() const;
+    QRectF boundingRect() const override;
+    /// reimplemented
+    QSizeF size() const override;
 
     QPainterPath pathStroke(const QPen &pen) const;
     /**
@@ -107,14 +112,14 @@ public:
      *
      * @see resizeMatrix()
      */
-    virtual void setSize(const QSizeF &size);
+    void setSize(const QSizeF &size) override;
     /// reimplemented
-    virtual bool hitTest(const QPointF &position) const;
+    bool hitTest(const QPointF &position) const override;
 
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     // basically the same as loadOdf but adapted to the contour cases
     // tag needs to be either contour-polygon or contour-path from another shape
@@ -409,9 +414,9 @@ public:
     /**
      * @brief Combines two path shapes by appending the data of the specified path.
      * @param path the path to combine with
-     * @return true if combining was successful, else false
+     * @return index of the first segment inserted or -1 on failure
      */
-    bool combine(KoPathShape *path);
+    int combine(KoPathShape *path);
 
     /**
      * @brief Creates separate path shapes, one for each existing subpath.
@@ -450,25 +455,27 @@ public:
     /// Returns the viewbox from the given xml element.
     static QRect loadOdfViewbox(const KoXmlElement &element);
 
-    /// Marker setter
-    void setMarker(const KoMarkerData &markerData);
+    void setMarker(KoMarker *marker, KoFlake::MarkerPosition pos);
+    KoMarker* marker(KoFlake::MarkerPosition pos) const;
+    bool hasMarkers() const;
 
-    /// Marker setter
-    void setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position);
+    bool autoFillMarkers() const;
+    void setAutoFillMarkers(bool value);
 
-    /// returns the list of all the markers of the path
-    KoMarker *marker(KoMarkerData::MarkerPosition position) const;
-
-    KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
+private:
+    /// constructor: to be used in cloneShape(), not in descendants!
+    /// \internal
+    KoPathShape(const KoPathShape &rhs);
 
 protected:
-    /// constructor \internal
-    KoPathShape(KoPathShapePrivate &);
+    /// constructor:to be used in descendant shapes
+    /// \internal
+    KoPathShape(KoPathShapePrivate *);
 
     /// reimplemented
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
     /// reimplemented
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * @brief Add an arc.
@@ -493,8 +500,6 @@ protected:
      * very small size of 0.000001 pixels
      */
     QTransform resizeMatrix( const QSizeF &newSize ) const;
-
-    KoSubpathList m_subpaths;
 
 private:
     Q_DECLARE_PRIVATE(KoPathShape)

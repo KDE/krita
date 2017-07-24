@@ -59,7 +59,7 @@ class KRITATEXT_EXPORT KoTextSharedLoadingData : public KoSharedLoadingData
     friend class KoTextLoader;
 public:
     KoTextSharedLoadingData();
-    virtual ~KoTextSharedLoadingData();
+    ~KoTextSharedLoadingData() override;
 
     /**
      * Load the styles

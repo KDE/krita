@@ -17,8 +17,8 @@ if (WIN32)
       # use this line for building Qt with debugging info enabled
       #CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat -release -force-debug-info -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-angle -no-ssl -no-openssl -no-wmf-backend -no-qml-debug -no-libproxy -no-system-proxies -no-nis -no-icu -no-mtdev -opensource -confirm-license -release -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -prefix ${EXTPREFIX_qt} -platform win32-g++
 
-      BUILD_COMMAND mingw32-make
-      INSTALL_COMMAND mingw32-make install
+      BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS}
+      INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
       DEPENDS ext_patch
@@ -130,7 +130,7 @@ else( APPLE )
         # Fix Xcode xcrun related issue.
         # NOTE: This should be fixed by Qt 5.7.1 see here: http://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=77a71c32c9d19b87f79b208929e71282e8d8b5d9
         # NOTE: but no one's holding their breath.
-        set(ext_qt_PATCH_COMMAND $${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
+        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
                 COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
                 COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/qtbase-configure.patch
                 COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch)
@@ -149,7 +149,7 @@ else( APPLE )
       if(NOT NUM_CORES EQUAL 0)
         if (NUM_CORES GREATER 2)
           # be nice...
-          MATH( EXPR NUM_CORES "${NUM_CORES} - 2" ) 
+          MATH( EXPR NUM_CORES "${NUM_CORES} - 2" )
         endif()
         set(PARALLEL_MAKE "make;-j${NUM_CORES}")
         message(STATUS "${EXTPREFIX_qt}:Parallelized make: ${PARALLEL_MAKE}")

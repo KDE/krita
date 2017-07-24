@@ -54,7 +54,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KBugReport();
+    ~KBugReport() override;
 
 
     /**

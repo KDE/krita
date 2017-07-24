@@ -92,7 +92,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         }
 
         // this is needed so the shape can reinitialize itself with the stylemanager
-        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
+        text->textShapeData()->setDocument(text->textShapeData()->document());
 
         document.setUndoStack(documentResources->undoStack());
 

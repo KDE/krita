@@ -33,9 +33,9 @@ class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     PresetHistoryDock();
-    QString observerName() { return "PresetHistoryDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() override { return "PresetHistoryDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);

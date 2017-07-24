@@ -30,7 +30,7 @@ class DefaultPaintOpsPlugin : public QObject
     Q_OBJECT
 public:
     DefaultPaintOpsPlugin(QObject *parent, const QVariantList &);
-    virtual ~DefaultPaintOpsPlugin();
+    ~DefaultPaintOpsPlugin() override;
 };
 
 #endif // DEFAULT_PAINTOPSGRAY_PLUGIN_H_

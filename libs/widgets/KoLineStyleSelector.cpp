@@ -59,10 +59,12 @@ void KoLineStyleSelector::paintEvent(QPaintEvent *pe)
         r.adjust(-14, 0, 14, 1);
 
     QPen pen = itemData(currentIndex(), Qt::DecorationRole).value<QPen>();
-    pen.setBrush(option.palette.text()); // use the view-specific palette; the model hardcodes this to black
 
     QPainter painter(this);
     painter.setPen(pen);
+    if (!(option.state & QStyle::State_Enabled)) {
+        painter.setOpacity(0.5);
+    }
     painter.drawLine(r.left(), r.center().y(), r.right(), r.center().y());
 }
 

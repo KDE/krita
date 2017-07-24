@@ -193,7 +193,7 @@ public:
     /// Copy constructor
     explicit KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
     /// Destructor
-    ~KoCharacterStyle();
+    ~KoCharacterStyle() override;
 
     /// returns the type of style
     virtual Type styleType() const;

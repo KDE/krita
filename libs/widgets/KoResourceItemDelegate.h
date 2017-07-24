@@ -28,11 +28,11 @@ class KoResourceItemDelegate : public QAbstractItemDelegate
 {
 public:
     explicit KoResourceItemDelegate(QObject *parent = 0);
-    virtual ~KoResourceItemDelegate() {}
+    ~KoResourceItemDelegate() override {}
     /// reimplemented
-    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const override;
     /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const;
+    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const override;
 private:
     KoCheckerBoardPainter m_checkerPainter;
 };

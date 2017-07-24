@@ -30,6 +30,13 @@ KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
 {
 }
 
+void KisToolProxy::initializeImage(KisImageSP image)
+{
+    connect(image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
+    connect(image, SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
+    connect(image, SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
+}
+
 QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos)
 {
     const QPointF pos = globalPos - QPointF(canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
@@ -107,7 +114,6 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
     bool retval = true;
 
     QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
-    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent*>(event);
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     if (tabletEvent) {
@@ -116,17 +122,6 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         this->tabletEvent(tabletEvent, docPoint);
         forwardToTool(state, action, tabletEvent, docPoint);
         retval = tabletEvent->isAccepted();
-    }
-    else if (touchEvent) {
-        if (state == END && touchEvent->type() != QEvent::TouchEnd) {
-            //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
-            QTouchEvent fakeEvent(QEvent::TouchEnd, touchEvent->device(),
-                                  touchEvent->modifiers(), touchEvent->touchPointStates(),
-                                  touchEvent->touchPoints());
-            this->touchEvent(&fakeEvent);
-        } else {
-            this->touchEvent(touchEvent);
-        }
     }
     else if (mouseEvent) {
         QPointF docPoint = widgetToDocument(mouseEvent->posF());

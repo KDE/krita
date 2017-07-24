@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -23,36 +24,18 @@
 
 #include <KisImportExportFilter.h>
 #include <kis_config_widget.h>
-#include "ui_kis_wdg_options_heightmap.h"
-
-class KisWdgOptionsHeightmap : public KisConfigWidget, public Ui::WdgOptionsHeightMap
-{
-    Q_OBJECT
-
-public:
-    KisWdgOptionsHeightmap(QWidget *parent)
-        : KisConfigWidget(parent)
-    {
-        setupUi(this);
-    }
-
-    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
-    KisPropertiesConfigurationSP configuration() const;
-};
-
 
 class KisHeightMapExport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
     KisHeightMapExport(QObject *parent, const QVariantList &);
-    virtual ~KisHeightMapExport();
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
-    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
-    void initializeCapabilities();
+    ~KisHeightMapExport() override;
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
+    void initializeCapabilities() override;
     
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

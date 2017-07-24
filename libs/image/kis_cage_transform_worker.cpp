@@ -332,7 +332,7 @@ QRect KisCageTransformWorker::approxChangeRect(const QRect &rc)
     }
 
     QRect resultRect =
-        KritaUtils::approximateRectFromPoints(transformedPoints).toAlignedRect();
+        KisAlgebra2D::approximateRectFromPoints(transformedPoints).toAlignedRect();
 
     return KisAlgebra2D::blowRect(resultRect | rc, margin);
 }

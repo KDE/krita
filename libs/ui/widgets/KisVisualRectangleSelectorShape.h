@@ -46,28 +46,28 @@ public:
                                              const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
                                              KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
             );
-    ~KisVisualRectangleSelectorShape();
+    ~KisVisualRectangleSelectorShape() override;
 
-    void setBorderWidth(int width);
+    void setBorderWidth(int width) override;
 
     /**
      * @brief getSpaceForSquare
      * @param geom the full widget rectangle
      * @return rectangle with enough space for second widget
      */
-    virtual QRect getSpaceForSquare(QRect geom);
-    virtual QRect getSpaceForCircle(QRect geom);
-    virtual QRect getSpaceForTriangle(QRect geom);
+    QRect getSpaceForSquare(QRect geom) override;
+    QRect getSpaceForCircle(QRect geom) override;
+    QRect getSpaceForTriangle(QRect geom) override;
 protected:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 private:
-    virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
-    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
+    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) override;
 
     singelDTypes m_type;
     int m_barWidth;
-    virtual QRegion getMaskMap();
-    virtual void drawCursor();
+    QRegion getMaskMap() override;
+    void drawCursor() override;
 };
 
 #endif 

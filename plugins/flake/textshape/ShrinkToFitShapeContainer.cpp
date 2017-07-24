@@ -24,7 +24,7 @@
 #include <KoTextLayoutRootArea.h>
 
 ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources)
-    : KoShapeContainer(*(new ShrinkToFitShapeContainerPrivate(this, childShape)))
+    : KoShapeContainer(new ShrinkToFitShapeContainerPrivate(this, childShape))
 {
     Q_UNUSED(documentResources);
     Q_D(ShrinkToFitShapeContainer);

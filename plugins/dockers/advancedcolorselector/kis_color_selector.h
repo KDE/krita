@@ -36,25 +36,25 @@ public:
 
     KisColorSelector(KisColorSelectorConfiguration conf, QWidget* parent = 0);
     KisColorSelector(QWidget* parent=0);
-    KisColorSelectorBase* createPopup() const;
+    KisColorSelectorBase* createPopup() const override;
 
     void setConfiguration(KisColorSelectorConfiguration conf);
     KisColorSelectorConfiguration configuration() const;
-    void setColor(const KoColor &color);
+    void setColor(const KoColor &color) override;
 
 public Q_SLOTS:
-    void reset();
-    void updateSettings();
+    void reset() override;
+    void updateSettings() override;
 
 Q_SIGNALS:
     void settingsButtonClicked();
 
 protected:
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
     bool displaySettingsButton();
 
 

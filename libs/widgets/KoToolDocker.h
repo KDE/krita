@@ -37,17 +37,17 @@ class KRITAWIDGETS_EXPORT KoToolDocker : public QDockWidget, public KoCanvasObse
     Q_OBJECT
 public:
     explicit KoToolDocker(QWidget *parent = 0);
-    ~KoToolDocker();
+    ~KoToolDocker() override;
 
     void resetWidgets();
 
     /// reimplemented
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 
 protected:
-    virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.

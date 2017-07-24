@@ -34,12 +34,13 @@ class KRITAUI_EXPORT KisAspectRatioLocker : public QObject
     Q_OBJECT
 public:
     KisAspectRatioLocker(QObject *parent = 0);
-    ~KisAspectRatioLocker();
+    ~KisAspectRatioLocker() override;
 
     template <class SpinBoxType>
         void connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *spinTwo, KoAspectButton *aspectButton);
 
     void setBlockUpdateSignalOnDrag(bool block);
+    void updateAspect();
 
 private Q_SLOTS:
     void slotSpinOneChanged();
@@ -49,6 +50,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void sliderValueChanged();
     void aspectButtonChanged();
+    void aspectButtonToggled(bool value);
 
 private:
     struct Private;

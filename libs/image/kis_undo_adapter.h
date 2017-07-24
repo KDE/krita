@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include <kritaimage_export.h>
-#include "kis_undo_store.h"
+#include <kis_undo_store.h>
 
 
 class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
@@ -30,8 +30,8 @@ class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
     Q_OBJECT
 
 public:
-    KisUndoAdapter(KisUndoStore *undoStore);
-    virtual ~KisUndoAdapter();
+    KisUndoAdapter(KisUndoStore *undoStore, QObject *parent = 0);
+    ~KisUndoAdapter() override;
 
 public:
     void emitSelectionChanged();

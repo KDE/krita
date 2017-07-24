@@ -22,14 +22,15 @@
 #include "KoPathPointMoveCommand.h"
 #include "KoPathPoint.h"
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
+#include "krita_container_utils.h"
 
 class KoPathPointMoveCommandPrivate
 {
 public:
-    KoPathPointMoveCommandPrivate() : undoCalled(true) { }
+    KoPathPointMoveCommandPrivate() { }
     void applyOffset(qreal factor);
 
-    bool undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
     QMap<KoPathPointData, QPointF > points;
     QSet<KoPathShape*> paths;
 };
@@ -75,21 +76,38 @@ KoPathPointMoveCommand::~KoPathPointMoveCommand()
 void KoPathPointMoveCommand::redo()
 {
     KUndo2Command::redo();
-    if (! d->undoCalled)
-        return;
-
     d->applyOffset(1.0);
-    d->undoCalled = false;
 }
 
 void KoPathPointMoveCommand::undo()
 {
     KUndo2Command::undo();
-    if (d->undoCalled)
-        return;
-
     d->applyOffset(-1.0);
-    d->undoCalled = true;
+}
+
+int KoPathPointMoveCommand::id() const
+{
+    return KisCommandUtils::ChangePathShapePointId;
+}
+
+bool KoPathPointMoveCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoPathPointMoveCommand *other = dynamic_cast<const KoPathPointMoveCommand*>(command);
+
+    if (!other ||
+        other->d->paths != d->paths ||
+        !KritaUtils::compareListsUnordered(other->d->points.keys(), d->points.keys())) {
+
+        return false;
+    }
+
+    auto it = d->points.begin();
+    while (it != d->points.end()) {
+        it.value() += other->d->points[it.key()];
+        ++it;
+    }
+
+    return true;
 }
 
 void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)

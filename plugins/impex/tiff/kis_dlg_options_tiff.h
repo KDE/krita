@@ -41,7 +41,6 @@ public:
 private Q_SLOTS:
     void activated(int index);
     void flattenToggled(bool);
-    KisTIFFOptions options() const;
 };
 
 #endif

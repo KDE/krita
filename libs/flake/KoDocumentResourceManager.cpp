@@ -125,8 +125,8 @@ KUndo2Stack *KoDocumentResourceManager::undoStack() const
 void KoDocumentResourceManager::setHandleRadius(int handleRadius)
 {
     // do not allow arbitrary small handles
-    if (handleRadius < 3)
-        handleRadius = 3;
+    if (handleRadius < 5)
+        handleRadius = 5;
     setResource(HandleRadius, QVariant(handleRadius));
 }
 
@@ -134,13 +134,13 @@ int KoDocumentResourceManager::handleRadius() const
 {
     if (hasResource(HandleRadius))
         return intResource(HandleRadius);
-    return 3; // default value.
+    return 5; // default value (and is used just about everywhere)
 }
 void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 {
     // do not allow arbitrary small grab sensitivity
-    if (grabSensitivity < 3)
-        grabSensitivity = 3;
+    if (grabSensitivity < 5)
+        grabSensitivity = 5;
     setResource(GrabSensitivity, QVariant(grabSensitivity));
 }
 
@@ -148,29 +148,8 @@ int KoDocumentResourceManager::grabSensitivity() const
 {
     if (hasResource(GrabSensitivity))
         return intResource(GrabSensitivity);
-    return 3; // default value
+    return 5; // default value (and is used just about everywhere)
 }
-
-void KoDocumentResourceManager::setPasteOffset(qreal pasteOffset)
-{
-    setResource(PasteOffset, QVariant(pasteOffset));
-}
-
-qreal KoDocumentResourceManager::pasteOffset() const
-{
-    return resource(PasteOffset).toDouble();
-}
-
-void KoDocumentResourceManager::enablePasteAtCursor(bool enable)
-{
-    setResource(PasteAtCursor, QVariant(enable));
-}
-
-bool KoDocumentResourceManager::pasteAtCursor() const
-{
-    return resource(PasteAtCursor).toBool();
-}
-
 
 void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
 {

@@ -33,7 +33,7 @@ class KRITAUI_EXPORT KisAnimationPlayer : public QObject
 
 public:
     KisAnimationPlayer(KisCanvas2 *canvas);
-    ~KisAnimationPlayer();
+    ~KisAnimationPlayer() override;
 
     void play();
     void stop();

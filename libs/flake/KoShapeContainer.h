@@ -83,7 +83,7 @@ public:
      * Destructor for the shape container.
      * All children will be orphaned by calling a KoShape::setParent(0)
      */
-    virtual ~KoShapeContainer();
+    ~KoShapeContainer() override;
 
     /**
      * Add a child to this container.
@@ -103,13 +103,6 @@ public:
      * @param shape the child to be removed.
      */
     void removeShape(KoShape *shape);
-
-    /**
-     * Remove all children to be completely separated from the container.
-     *
-     * All the shapes will only be removed from the container but not be deleted.
-     */
-    void removeAllShapes();
 
     /**
      * Return the current number of children registered.
@@ -183,7 +176,7 @@ public:
 
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     /**
      * @brief Paint the component
@@ -198,7 +191,7 @@ public:
 
     using KoShape::update;
     /// reimplemented
-    virtual void update() const;
+    void update() const override;
 
     /**
      * Return the list of all child shapes.
@@ -211,6 +204,40 @@ public:
      */
     KoShapeContainerModel *model() const;
 
+
+    /**
+     * A special interface for KoShape to use during setParent call. Don't use
+     * these method directly for managing shapes hierarchy! Use shape->setParent()
+     * instead.
+     */
+    struct ShapeInterface {
+        ShapeInterface(KoShapeContainer *_q);
+
+        /**
+         * Add a child to this container.
+         *
+         * This container will NOT take over ownership of the shape. The caller or those creating
+         * the shape is responsible to delete it if not needed any longer.
+         *
+         * @param shape the child to be managed in the container.
+         */
+        void addShape(KoShape *shape);
+
+        /**
+         * Remove a child to be completely separated from the container.
+         *
+         * The shape will only be removed from this container but not be deleted.
+         *
+         * @param shape the child to be removed.
+         */
+        void removeShape(KoShape *shape);
+
+    protected:
+        KoShapeContainer *q;
+    };
+
+    ShapeInterface* shapeInterface();
+
 protected:
     /**
      * This hook is for inheriting classes that need to do something on adding/removing
@@ -220,10 +247,10 @@ protected:
      */
     virtual void shapeCountChanged() { }
 
-    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
     /// constructor
-    KoShapeContainer(KoShapeContainerPrivate &);
+    KoShapeContainer(KoShapeContainerPrivate *);
 
 private:
     Q_DECLARE_PRIVATE(KoShapeContainer)

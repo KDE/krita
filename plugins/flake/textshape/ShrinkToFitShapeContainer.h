@@ -45,7 +45,7 @@ class ShrinkToFitShapeContainerPrivate : public KoShapeContainerPrivate
 {
 public:
     explicit ShrinkToFitShapeContainerPrivate(KoShapeContainer *q, KoShape *childShape) : KoShapeContainerPrivate(q), childShape(childShape) {}
-    virtual ~ShrinkToFitShapeContainerPrivate() {}
+    ~ShrinkToFitShapeContainerPrivate() override {}
     KoShape *childShape; // the original shape not owned by us
 };
 
@@ -56,14 +56,14 @@ class ShrinkToFitShapeContainer : public KoShapeContainer
 {
 public:
     explicit ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources = 0);
-    virtual ~ShrinkToFitShapeContainer();
+    ~ShrinkToFitShapeContainer() override;
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     /**
      * Factory function to create and return a ShrinkToFitShapeContainer instance that wraps the \a shape with it.
@@ -96,13 +96,13 @@ public:
     ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d);
 
     // reimplemented
-    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
     // reimplemented
-    virtual bool inheritsTransform(const KoShape *child) const;
+    bool inheritsTransform(const KoShape *child) const override;
     // reimplemented
-    virtual bool isChildLocked(const KoShape *child) const;
+    bool isChildLocked(const KoShape *child) const override;
     // reimplemented
-    virtual bool isClipped(const KoShape *child) const;
+    bool isClipped(const KoShape *child) const override;
 
 private Q_SLOTS:
     void finishedLayout();

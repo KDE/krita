@@ -101,7 +101,7 @@ public:
             pen(_pen), customColor(_customColor)
         {}
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) {
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
             return new Data(*this, levelOfDetail);
         }
 
@@ -184,11 +184,11 @@ public:
                            QVector<PainterInfo*> painterInfos,
                            const KUndo2MagicString &name);
 
-    ~FreehandStrokeStrategy();
+    ~FreehandStrokeStrategy() override;
 
-    void doStrokeCallback(KisStrokeJobData *data);
+    void doStrokeCallback(KisStrokeJobData *data) override;
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
 protected:
     FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);

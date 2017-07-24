@@ -63,6 +63,7 @@ class KUndo2Command;
 
 class QDrag;
 class QMimeData;
+class QMenu;
 
 class MockCanvas;
 class TextToolSelection;
@@ -78,66 +79,63 @@ public:
 #ifndef NDEBUG
     explicit TextTool(MockCanvas *canvas);
 #endif
-    virtual ~TextTool();
+    ~TextTool() override;
 
     /// reimplemented from superclass
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseTripleClickEvent(KoPointerEvent *event);
+    void mouseTripleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented from superclass
-    virtual void keyReleaseEvent(QKeyEvent *event);
-
+    void keyReleaseEvent(QKeyEvent *event) override;
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     /// reimplemented from superclass
-    virtual void deactivate();
+    void deactivate() override;
     /// reimplemented from superclass
-    virtual void copy() const;
+    void copy() const override;
 
     /// reimplemented from KoUndoableTool
-    virtual void setAddUndoCommandAllowed(bool allowed)
+    void setAddUndoCommandAllowed(bool allowed) override
     {
         m_allowAddUndoCommand = allowed;
     }
 
     ///reimplemented
-    virtual void deleteSelection();
+    void deleteSelection() override;
     /// reimplemented from superclass
-    virtual void cut();
+    void cut() override;
     /// reimplemented from superclass
-    virtual bool paste();
+    bool paste() override;
     /// reimplemented from superclass
-    virtual QStringList supportedPasteMimeTypes() const;
+    void dragMoveEvent(QDragMoveEvent *event, const QPointF &point) override;
     /// reimplemented from superclass
-    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
     /// reimplemented from superclass
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    /// reimplemented from superclass
-    virtual void dropEvent(QDropEvent *event, const QPointF &point);
+    void dropEvent(QDropEvent *event, const QPointF &point) override;
 
     /// reimplemented from superclass
-    virtual void repaintDecorations();
+    void repaintDecorations() override;
 
     /// reimplemented from superclass
-    virtual KoToolSelection *selection();
+    KoToolSelection *selection() override;
     /// reimplemented from superclass
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
     /// reimplemented from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const override;
     /// reimplemented from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    void inputMethodEvent(QInputMethodEvent *event) override;
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
@@ -172,7 +170,7 @@ public Q_SLOTS:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
-    virtual void canvasResourceChanged(int key, const QVariant &res);
+    void canvasResourceChanged(int key, const QVariant &res) override;
 
 Q_SIGNALS:
     /// emitted every time a different styleManager is set.
@@ -324,6 +322,8 @@ private Q_SLOTS:
 
     void updateActions();
 
+    QMenu* popupActionsMenu() override;
+
 private:
     void repaintCaret();
     void repaintSelection();
@@ -420,6 +420,8 @@ private:
     bool m_clickWithinSelection;
     QDrag *m_drag;
     QAbstractTextDocumentLayout::Selection m_preDragSelection;
+
+    QScopedPointer<QMenu> m_contextMenu;
 };
 
 #endif

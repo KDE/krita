@@ -315,6 +315,21 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     poly.append(QPointF(x, wHeight - d->m_curve.value(1.0) * wHeight));
     p.drawPolyline(poly);
 
+    QPainterPath fillCurvePath;
+    QPolygonF fillPoly = poly;
+    fillPoly.append(QPoint(rect().width(), rect().height()));
+    fillPoly.append(QPointF(0,rect().height()));
+
+    // add a couple points to the edges so it fills in below always
+
+    QColor fillColor = appPalette.color(QPalette::Text);
+    fillColor.setAlphaF(0.2);
+
+    fillCurvePath.addPolygon(fillPoly);
+    p.fillPath(fillCurvePath, fillColor);
+
+
+
     // Drawing curve handles.
     double curveX;
     double curveY;
@@ -334,6 +349,11 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             }
         }
     }
+
+    // add border around widget to help contain everything
+    QPainterPath widgetBoundsPath;
+    widgetBoundsPath.addRect(rect());
+    p.strokePath(widgetBoundsPath, appPalette.color(QPalette::Text));
 }
 
 void KisCurveWidget::mousePressEvent(QMouseEvent * e)

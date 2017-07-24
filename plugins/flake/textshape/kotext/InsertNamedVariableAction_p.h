@@ -33,7 +33,7 @@ public:
     InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name);
 
 private:
-    virtual KoInlineObject *createInlineObject();
+    KoInlineObject *createInlineObject() override;
 
     const KoInlineTextObjectManager *m_manager;
     QString m_name;

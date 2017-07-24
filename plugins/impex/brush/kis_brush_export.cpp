@@ -173,14 +173,6 @@ KisPropertiesConfigurationSP KisBrushExport::defaultConfiguration(const QByteArr
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisBrushExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
-{
-    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration(mimeType());
-    cfg->fromXML(filterConfig, false);
-    return cfg;
-}
-
 KisConfigWidget *KisBrushExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &to) const
 {
     KisWdgOptionsBrush *wdg = new KisWdgOptionsBrush(parent);

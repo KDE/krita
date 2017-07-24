@@ -109,7 +109,7 @@ struct KisDisplayColorConverter::Private
                             this, SIGNAL(displayConfigurationChanged()));
         }
 
-        QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const {
+        QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const override {
             KisPaintDeviceSP dev = new KisPaintDevice(srcColorSpace);
             dev->writeBytes(data, 0, 0, width, height);
             return m_displayColorConverter->toQImage(dev);

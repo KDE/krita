@@ -20,6 +20,9 @@
 
 #include "kis_abstract_input_action.h"
 
+#include <QMouseEvent>
+
+
 class Q_DECL_HIDDEN KisStrokeShortcut::Private
 {
 public:
@@ -79,4 +82,10 @@ bool KisStrokeShortcut::matchReady(const QSet<Qt::Key> &modifiers,
 bool KisStrokeShortcut::matchBegin(Qt::MouseButton button)
 {
     return m_d->buttons.contains(button);
+}
+
+QMouseEvent KisStrokeShortcut::fakeEndEvent(const QPointF &localPos) const
+{
+    Qt::MouseButton button = !m_d->buttons.isEmpty() ? *m_d->buttons.begin() : Qt::NoButton;
+    return QMouseEvent(QEvent::MouseButtonRelease, localPos, button, Qt::NoButton, Qt::NoModifier);
 }

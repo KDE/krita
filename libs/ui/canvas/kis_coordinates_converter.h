@@ -57,7 +57,7 @@ class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
 {
 public:
     KisCoordinatesConverter();
-    ~KisCoordinatesConverter();
+    ~KisCoordinatesConverter() override;
 
     void setCanvasWidgetSize(QSize size);
     void setImage(KisImageWSP image);
@@ -72,7 +72,7 @@ public:
     bool yAxisMirrored() const;
     QPoint resetRotation(QPointF center);
 
-    virtual void setZoom(qreal zoom);
+    void setZoom(qreal zoom) override;
 
     /**
      * A composition of to scale methods: zoom level + image resolution

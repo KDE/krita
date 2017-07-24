@@ -43,6 +43,9 @@ private Q_SLOTS:
 
     void testRoundTripColorizeMask();
 
+    void testRoundTripShapeLayer();
+    void testRoundTripShapeSelection();
+
 };
 
 #endif

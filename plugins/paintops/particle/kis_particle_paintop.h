@@ -21,6 +21,8 @@
 
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
+#include <kis_airbrush_option.h>
+#include <kis_pressure_rate_option.h>
 
 #include "kis_particle_paintop_settings.h"
 #include "particle_brush.h"
@@ -34,15 +36,26 @@ class KisParticlePaintOp : public KisPaintOp
 public:
 
     KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    ~KisParticlePaintOp();
+    ~KisParticlePaintOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
+private:
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
 private:
     KisParticleBrushProperties m_properties;
     KisPaintDeviceSP m_dab;
     ParticleBrush m_particleBrush;
+    KisAirbrushOption m_airbrushOption;
+    KisPressureRateOption m_rateOption;
     bool m_first;
 };
 

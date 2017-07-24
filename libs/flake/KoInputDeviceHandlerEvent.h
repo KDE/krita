@@ -41,7 +41,7 @@ public:
     /// Constructs a new device event of the given type
     explicit KoInputDeviceHandlerEvent(Type type);
 
-    virtual ~KoInputDeviceHandlerEvent();
+    ~KoInputDeviceHandlerEvent() override;
 
     /// Creates and returns a KoPointerEvent for tools to consume
     virtual KoPointerEvent * pointerEvent() = 0;

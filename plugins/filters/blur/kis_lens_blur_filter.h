@@ -37,20 +37,20 @@ public:
                      const QRect& size,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
-                     ) const;
+                     ) const override;
     static inline KoID id() {
         return KoID("lens blur", i18n("Lens Blur"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    KisFilterConfigurationSP factoryConfiguration() const override;
 
     static QSize getKernelHalfSize(const KisFilterConfigurationSP config, int lod);
 
-    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
 
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
 
 private:
     static QPolygonF getIrisPolygon(const KisFilterConfigurationSP config, int lod);

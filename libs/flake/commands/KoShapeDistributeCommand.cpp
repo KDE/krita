@@ -50,7 +50,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     qreal extent = 0.0;
     // sort by position and calculate sum of objects widht/height
     Q_FOREACH (KoShape *shape, shapes) {
-        bRect = shape->boundingRect();
+        bRect = shape->absoluteOutlineRect();
         switch (d->distribute) {
         case HorizontalCenterDistribution:
             sortedPos[bRect.center().x()] = shape;
@@ -90,13 +90,13 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     QMapIterator<qreal, KoShape*> it(sortedPos);
     while (it.hasNext()) {
         it.next();
-        position = it.value()->position();
+        position = it.value()->absolutePosition();
         previousPositions  << position;
 
-        bRect = it.value()->boundingRect();
+        bRect = it.value()->absoluteOutlineRect();
         switch (d->distribute)        {
         case HorizontalCenterDistribution:
-            delta = QPointF(boundingRect.x() + first->boundingRect().width() / 2 + pos - bRect.width() / 2, bRect.y()) - bRect.topLeft();
+            delta = QPointF(boundingRect.x() + first->absoluteOutlineRect().width() / 2 + pos - bRect.width() / 2, bRect.y()) - bRect.topLeft();
             break;
         case HorizontalGapsDistribution:
             delta = QPointF(boundingRect.left() + pos, bRect.y()) - bRect.topLeft();
@@ -106,17 +106,17 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
             delta = QPointF(boundingRect.left() + pos, bRect.y()) - bRect.topLeft();
             break;
         case HorizontalRightDistribution:
-            delta = QPointF(boundingRect.left() + first->boundingRect().width() + pos - bRect.width(), bRect.y()) - bRect.topLeft();
+            delta = QPointF(boundingRect.left() + first->absoluteOutlineRect().width() + pos - bRect.width(), bRect.y()) - bRect.topLeft();
             break;
         case VerticalCenterDistribution:
-            delta = QPointF(bRect.x(), boundingRect.y() + first->boundingRect().height() / 2 + pos - bRect.height() / 2) - bRect.topLeft();
+            delta = QPointF(bRect.x(), boundingRect.y() + first->absoluteOutlineRect().height() / 2 + pos - bRect.height() / 2) - bRect.topLeft();
             break;
         case VerticalGapsDistribution:
             delta = QPointF(bRect.x(), boundingRect.top() + pos) - bRect.topLeft();
             pos += bRect.height();
             break;
         case VerticalBottomDistribution:
-            delta = QPointF(bRect.x(), boundingRect.top() + first->boundingRect().height() + pos - bRect.height()) - bRect.topLeft();
+            delta = QPointF(bRect.x(), boundingRect.top() + first->absoluteOutlineRect().height() + pos - bRect.height()) - bRect.topLeft();
             break;
         case VerticalTopDistribution:
             delta = QPointF(bRect.x(), boundingRect.top() + pos) - bRect.topLeft();
@@ -151,28 +151,28 @@ qreal KoShapeDistributeCommand::Private::getAvailableSpace(KoShape *first, KoSha
 {
     switch (distribute) {
     case HorizontalCenterDistribution:
-        return boundingRect.width() - last->boundingRect().width() / 2 - first->boundingRect().width() / 2;
+        return boundingRect.width() - last->absoluteOutlineRect().width() / 2 - first->absoluteOutlineRect().width() / 2;
         break;
     case HorizontalGapsDistribution:
         return boundingRect.width() - extent;
         break;
     case HorizontalLeftDistribution:
-        return boundingRect.width() - last->boundingRect().width();
+        return boundingRect.width() - last->absoluteOutlineRect().width();
         break;
     case HorizontalRightDistribution:
-        return boundingRect.width() - first->boundingRect().width();
+        return boundingRect.width() - first->absoluteOutlineRect().width();
         break;
     case VerticalCenterDistribution:
-        return boundingRect.height() - last->boundingRect().height() / 2 - first->boundingRect().height() / 2;
+        return boundingRect.height() - last->absoluteOutlineRect().height() / 2 - first->absoluteOutlineRect().height() / 2;
         break;
     case VerticalGapsDistribution:
         return boundingRect.height() - extent;
         break;
     case VerticalBottomDistribution:
-        return boundingRect.height() - first->boundingRect().height();
+        return boundingRect.height() - first->absoluteOutlineRect().height();
         break;
     case VerticalTopDistribution:
-        return boundingRect.height() - last->boundingRect().height();
+        return boundingRect.height() - last->absoluteOutlineRect().height();
         break;
     }
     return 0.0;

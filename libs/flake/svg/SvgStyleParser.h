@@ -24,14 +24,16 @@
 
 #include "kritaflake_export.h"
 #include <QMap>
+#include <QGradient>
 
 typedef QMap<QString, QString> SvgStyles;
 
 class SvgLoadingContext;
 class SvgGraphicsContext;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class QColor;
 class QGradient;
+
 
 class KRITAFLAKE_EXPORT SvgStyleParser
 {
@@ -49,7 +51,7 @@ public:
     bool parseColor(QColor &, const QString &);
 
     /// Parses gradient color stops
-    void parseColorStops(QGradient *, const KoXmlElement &);
+    void parseColorStops(QGradient *, const KoXmlElement &, SvgGraphicsContext *context, const QGradientStops &defaultStops);
 
     /// Creates style map from given xml element
     SvgStyles collectStyles(const KoXmlElement &);
@@ -60,6 +62,7 @@ public:
     /// Merges two style elements, returning the merged style
     SvgStyles mergeStyles(const KoXmlElement &, const KoXmlElement &);
 
+    SvgStyles parseOneCssStyle(const QString &style, const QStringList &interestingAttributes);
 private:
 
     /// Parses a single style attribute

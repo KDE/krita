@@ -34,15 +34,15 @@ public:
                                 KisUpdatesFacade *updatesFacade,
                                 KisStrokeUndoFacade *undoFacade);
 
-    void initStrokeCallback();
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
+    void initStrokeCallback() override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
 
 private:
     MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs);
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
 private:
     KisPaintLayerSP m_paintLayer;

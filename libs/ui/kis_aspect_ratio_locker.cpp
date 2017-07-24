@@ -29,6 +29,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 #include "kis_double_parse_spin_box.h"
+#include "kis_double_parse_unit_spin_box.h"
 
 
 struct SliderWrapper
@@ -40,46 +41,53 @@ struct SliderWrapper
 
     void setValue(qreal value) {
 
-        if (m_slider.canConvert<QSpinBox*>()) {
-            m_slider.value<QSpinBox*>()->setValue(qRound(value));
+        if (m_slider.canConvert<KisDoubleParseUnitSpinBox*>()) {
+            m_slider.value<KisDoubleParseUnitSpinBox*>()->changeValue(value);
 
-        } else if (m_slider.canConvert<QDoubleSpinBox*>()) {
-            m_slider.value<QDoubleSpinBox*>()->setValue(value);
-
-        } else if (m_slider.canConvert<KisSliderSpinBox*>()) {
-            m_slider.value<KisSliderSpinBox*>()->setValue(qRound(value));
+        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
+            m_slider.value<KisDoubleParseSpinBox*>()->setValue(value);
 
         } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
             m_slider.value<KisDoubleSliderSpinBox*>()->setValue(value);
 
+        } else if (m_slider.canConvert<QDoubleSpinBox*>()) {
+            m_slider.value<QDoubleSpinBox*>()->setValue(value);
+
         } else if (m_slider.canConvert<KisIntParseSpinBox*>()) {
             m_slider.value<KisIntParseSpinBox*>()->setValue(qRound(value));
 
-        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
-            m_slider.value<KisDoubleParseSpinBox*>()->setValue(value);
+        } else if (m_slider.canConvert<KisSliderSpinBox*>()) {
+            m_slider.value<KisSliderSpinBox*>()->setValue(qRound(value));
+
+        } else if (m_slider.canConvert<QSpinBox*>()) {
+            m_slider.value<QSpinBox*>()->setValue(qRound(value));
         }
     }
 
     qreal value() const {
         qreal result = 0.0;
 
-        if (m_slider.canConvert<QSpinBox*>()) {
-            result = m_slider.value<QSpinBox*>()->value();
+        if (m_slider.canConvert<KisDoubleParseUnitSpinBox*>()) {
+            result = m_slider.value<KisDoubleParseUnitSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<QDoubleSpinBox*>()) {
-            result = m_slider.value<QDoubleSpinBox*>()->value();
-
-        } else if (m_slider.canConvert<KisSliderSpinBox*>()) {
-            result = m_slider.value<KisSliderSpinBox*>()->value();
+        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
+            result = m_slider.value<KisDoubleParseSpinBox*>()->value();
 
         } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
             result = m_slider.value<KisDoubleSliderSpinBox*>()->value();
 
+        } else if (m_slider.canConvert<QDoubleSpinBox*>()) {
+            result = m_slider.value<QDoubleSpinBox*>()->value();
+
         } else if (m_slider.canConvert<KisIntParseSpinBox*>()) {
             result = m_slider.value<KisIntParseSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
-            result = m_slider.value<KisDoubleParseSpinBox*>()->value();
+        } else if (m_slider.canConvert<KisSliderSpinBox*>()) {
+            result = m_slider.value<KisSliderSpinBox*>()->value();
+
+        } else if (m_slider.canConvert<QSpinBox*>()) {
+            result = m_slider.value<QSpinBox*>()->value();
+
         }
 
         return result;
@@ -153,6 +161,7 @@ template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisSliderSpi
 template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleSliderSpinBox *spinOne, KisDoubleSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
 template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisIntParseSpinBox *spinOne, KisIntParseSpinBox *spinTwo, KoAspectButton *aspectButton);
 template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseSpinBox *spinOne, KisDoubleParseSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseUnitSpinBox *spinOne, KisDoubleParseUnitSpinBox *spinTwo, KoAspectButton *aspectButton);
 
 void KisAspectRatioLocker::slotSpinOneChanged()
 {
@@ -191,10 +200,17 @@ void KisAspectRatioLocker::slotAspectButtonChanged()
 
     if (!m_d->spinTwo->isDragging()) {
         emit aspectButtonChanged();
+        emit aspectButtonToggled(m_d->aspectButton->keepAspectRatio());
     }
 }
 
 void KisAspectRatioLocker::setBlockUpdateSignalOnDrag(bool value)
 {
     m_d->blockUpdatesOnDrag = value;
+}
+
+void KisAspectRatioLocker::updateAspect()
+{
+    KisSignalsBlocker b(this);
+    slotAspectButtonChanged();
 }

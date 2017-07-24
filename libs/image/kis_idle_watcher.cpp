@@ -29,9 +29,9 @@ struct KisIdleWatcher::Private
     static const int IDLE_CHECK_PERIOD = 200; /* ms */
     static const int IDLE_CHECK_COUNT = 4; /* ticks */
 
-    Private(int delay)
+    Private(int delay, KisIdleWatcher *q)
         : imageModifiedCompressor(delay,
-                                  KisSignalCompressor::POSTPONE),
+                                  KisSignalCompressor::POSTPONE, q),
           idleCheckCounter(0)
     {
         idleCheckTimer.setSingleShot(true);
@@ -47,9 +47,8 @@ struct KisIdleWatcher::Private
     int idleCheckCounter;
 };
 
-
 KisIdleWatcher::KisIdleWatcher(int delay, QObject *parent)
-    : QObject(parent), m_d(new Private(delay))
+    : QObject(parent), m_d(new Private(delay, this))
 {
     connect(&m_d->imageModifiedCompressor, SIGNAL(timeout()), SLOT(startIdleCheck()));
     connect(&m_d->idleCheckTimer, SIGNAL(timeout()), SLOT(slotIdleCheckTick()));
@@ -81,9 +80,11 @@ void KisIdleWatcher::setTrackedImages(const QVector<KisImageSP> &images)
     m_d->trackedImages.clear();
 
     Q_FOREACH (KisImageSP image, images) {
-        m_d->trackedImages << image;
-        m_d->connectionsStore.addConnection(image, SIGNAL(sigImageModified()),
-                                            this, SLOT(slotImageModified()));
+        if (image) {
+            m_d->trackedImages << image;
+            m_d->connectionsStore.addConnection(image, SIGNAL(sigImageModified()),
+                                                this, SLOT(slotImageModified()));
+        }
     }
 }
 

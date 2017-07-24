@@ -30,6 +30,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeController.h>
 #include <QPainter>
+#include <KisHandlePainterHelper.h>
 
 KoPathToolSelection::KoPathToolSelection(KoPathTool * tool)
         : m_tool(tool)
@@ -40,21 +41,17 @@ KoPathToolSelection::~KoPathToolSelection()
 {
 }
 
-void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &converter)
+void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
-    int handleRadius = m_tool->canvas()->shapeController()->resourceManager()->handleRadius();
-
     PathShapePointMap::iterator it(m_shapePointMap.begin());
     for (; it != m_shapePointMap.end(); ++it) {
-        painter.save();
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, it.key(), converter, handleRadius);
+        helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
 
-        painter.setTransform(it.key()->absoluteTransformation(&converter) * painter.transform());
-        KoShape::applyConversion(painter, converter);
-
-        Q_FOREACH (KoPathPoint *p, it.value())
-            p->paint(painter, handleRadius, KoPathPoint::All);
-
-        painter.restore();
+        Q_FOREACH (KoPathPoint *p, it.value()) {
+            p->paint(helper, KoPathPoint::All);
+        }
     }
 }
 
@@ -161,7 +158,7 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
     QList<KoPathPointData> pointData;
 
     QList<KoPathPointData> pd(selectedPointsData());
-    qSort(pd);
+    std::sort(pd.begin(), pd.end());
 
     KoPathPointData last(0, KoPathPointIndex(-1, -1));
     KoPathPointData lastSubpathStart(0, KoPathPointIndex(-1, -1));

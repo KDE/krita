@@ -42,13 +42,13 @@ class KisToolRectangle : public KisToolRectangleBase
 
 public:
     KisToolRectangle(KoCanvasBase * canvas);
-    virtual ~KisToolRectangle();
+    ~KisToolRectangle() override;
 
 protected:
-    virtual void finishRect(const QRectF& rect);
+    void finishRect(const QRectF& rect) override;
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
 class KisToolRectangleFactory : public KoToolFactoryBase
@@ -66,9 +66,9 @@ public:
         setPriority(2);
     }
 
-    virtual ~KisToolRectangleFactory() {}
+    ~KisToolRectangleFactory() override {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    KoToolBase * createTool(KoCanvasBase *canvas) override {
         return  new KisToolRectangle(canvas);
     }
 

@@ -29,7 +29,7 @@ class KisToolMultiHandConfigWidget : public QWidget, public Ui::WdgMultiHandTool
 
 public:
     KisToolMultiHandConfigWidget(QWidget *parent=0);
-    ~KisToolMultiHandConfigWidget();
+    ~KisToolMultiHandConfigWidget() override;
 
 //Q_SIGNALS:
 

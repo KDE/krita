@@ -23,6 +23,7 @@
 
 #include "kritabasicflakes_export.h"
 
+#include <KoFlakeTypes.h>
 #include <KoToolBase.h>
 
 #include <QList>
@@ -46,21 +47,21 @@ public:
      * @param canvas the canvas this tool will be working for.
      */
     explicit KoCreatePathTool(KoCanvasBase * canvas);
-    virtual ~KoCreatePathTool();
+    ~KoCreatePathTool() override;
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     /// reimplemented
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
 
     /// For behavior as selection tool and with initial shift-key
     virtual bool listeningToModifiers();
@@ -72,11 +73,11 @@ public:
 
 public Q_SLOTS:
     /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
     /// reimplemented
-    virtual void deactivate();
+    void deactivate() override;
     /// reimplemented
-    virtual void documentResourceChanged(int key, const QVariant & res);
+    void documentResourceChanged(int key, const QVariant & res) override;
 
 protected:
     /**
@@ -98,11 +99,9 @@ protected:
     void removeLastPoint();
 
     /// reimplemented
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private:
-    KoShapeStroke *createStroke();
-
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
     Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))

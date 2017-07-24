@@ -12,6 +12,7 @@ add_subdirectory( input )
 add_subdirectory( shortcuts )
 add_subdirectory( paintoppresets )
 add_subdirectory( palettes )
+add_subdirectory( symbols )
 
 ########### install files ###############
 

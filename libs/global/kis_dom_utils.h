@@ -19,6 +19,8 @@
 #ifndef __KIS_DOM_UTILS_H
 #define __KIS_DOM_UTILS_H
 
+#include <float.h>
+
 #include <QPointF>
 #include <QVector3D>
 #include <QVector>
@@ -39,6 +41,24 @@ namespace KisDomUtils {
     template<typename T>
         inline QString toString(T value) {
         return QString::number(value);
+    }
+
+    inline QString toString(float value) {
+        QString str;
+        QTextStream stream;
+        stream.setString(&str, QIODevice::WriteOnly);
+        stream.setRealNumberPrecision(FLT_DIG);
+        stream << value;
+        return str;
+    }
+
+    inline QString toString(double value) {
+        QString str;
+        QTextStream stream;
+        stream.setString(&str, QIODevice::WriteOnly);
+        stream.setRealNumberPrecision(11);
+        stream << value;
+        return str;
     }
 
     inline int toInt(const QString &str) {

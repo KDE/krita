@@ -39,7 +39,7 @@ class Q_DECL_HIDDEN KoSnapGuide::Private
 {
 public:
     Private(KoCanvasBase *parentCanvas)
-        : canvas(parentCanvas), editedShape(0), currentStrategy(0),
+        : canvas(parentCanvas), additionalEditedShape(0), currentStrategy(0),
         active(true),
         snapDistance(10)
     {
@@ -51,7 +51,7 @@ public:
     }
 
     KoCanvasBase *canvas;
-    KoShape *editedShape;
+    KoShape *additionalEditedShape;
 
     typedef QSharedPointer<KoSnapStrategy> KoSnapStrategySP;
     typedef QList<KoSnapStrategySP> StrategiesList;
@@ -80,14 +80,14 @@ KoSnapGuide::~KoSnapGuide()
 {
 }
 
-void KoSnapGuide::setEditedShape(KoShape *shape)
+void KoSnapGuide::setAdditionalEditedShape(KoShape *shape)
 {
-    d->editedShape = shape;
+    d->additionalEditedShape = shape;
 }
 
-KoShape *KoSnapGuide::editedShape() const
+KoShape *KoSnapGuide::additionalEditedShape() const
 {
-    return d->editedShape;
+    return d->additionalEditedShape;
 }
 
 void KoSnapGuide::enableSnapStrategy(Strategy type, bool value)
@@ -267,7 +267,7 @@ QList<KoShape*> KoSnapGuide::ignoredShapes() const
 void KoSnapGuide::reset()
 {
     d->currentStrategy.clear();
-    d->editedShape = 0;
+    d->additionalEditedShape = 0;
     d->ignoredPoints.clear();
     d->ignoredShapes.clear();
     // remove all custom strategies

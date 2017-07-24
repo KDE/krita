@@ -37,6 +37,7 @@
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 #include "kis_marker_painter.h"
 #include "kis_paintop_utils.h"
 
@@ -76,7 +77,6 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
     const qreal scale = m_sizeOption.apply(info) * lodScale;
     const qreal rotation = 0; // TODO
-    const bool axesFlipped = false; // TODO
 
     const qreal diameter = m_markerOption.diameter * scale;
     qreal radius = 0.5 * diameter;
@@ -126,18 +126,7 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
 
     //m_lastPaintPos = newCenterPos;
 
-    qreal extraSpacingScale = 1.0;
-    if (m_spacingOption.isChecked()) {
-        extraSpacingScale = m_spacingOption.apply(info);
-    }
-
-    KisSpacingInformation spacingInfo =
-        KisPaintOpUtils::effectiveSpacing(diameter, diameter,
-                                          extraSpacingScale, true, rotation, axesFlipped,
-                                          m_markerOption.spacing,
-                                          m_markerOption.use_auto_spacing,
-                                          m_markerOption.auto_spacing_coeff,
-                                          lodScale);
+    KisSpacingInformation spacingInfo = computeSpacing(info, diameter);
 
     if (m_firstRun) {
         m_firstRun = false;
@@ -146,4 +135,31 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
 
 
     return spacingInfo;
+}
+
+KisSpacingInformation KisRoundMarkerOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
+    const qreal diameter = m_markerOption.diameter * m_sizeOption.apply(info) * lodScale;
+
+    return computeSpacing(info, diameter);
+}
+
+KisSpacingInformation KisRoundMarkerOp::computeSpacing(const KisPaintInformation &info,
+                                                       qreal diameter) const
+{
+    const qreal rotation = 0; // TODO
+    const bool axesFlipped = false; // TODO
+
+    qreal extraSpacingScale = 1.0;
+    if (m_spacingOption.isChecked()) {
+        extraSpacingScale = m_spacingOption.apply(info);
+    }
+
+    return KisPaintOpUtils::effectiveSpacing(diameter, diameter,
+                                             extraSpacingScale, true, true, rotation, axesFlipped,
+                                             m_markerOption.spacing,
+                                             m_markerOption.use_auto_spacing,
+                                             m_markerOption.auto_spacing_coeff,
+                                             KisLodTransform::lodToScale(painter()->device()));
 }

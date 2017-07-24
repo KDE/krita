@@ -24,14 +24,15 @@
 
 const quint32 KisRandomAccessor2::CACHESIZE = 4; // Define the number of tiles we keep in cache
 
-KisRandomAccessor2::KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable) :
+KisRandomAccessor2::KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener) :
         m_ktm(ktm),
         m_tilesCache(new KisTileInfo*[CACHESIZE]),
         m_tilesCacheSize(0),
         m_pixelSize(m_ktm->pixelSize()),
         m_writable(writable),
         m_offsetX(offsetX),
-        m_offsetY(offsetY)
+        m_offsetY(offsetY),
+        m_completeListener(completeListener)
 {
     Q_ASSERT(ktm != 0);
     moveTo(x, y);
@@ -45,6 +46,10 @@ KisRandomAccessor2::~KisRandomAccessor2()
         delete m_tilesCache[i];
     }
     delete [] m_tilesCache;
+
+    if (m_writable && m_completeListener) {
+        m_completeListener->notifyWritableIteratorCompleted();
+    }
 }
 
 void KisRandomAccessor2::moveTo(qint32 x, qint32 y)

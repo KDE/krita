@@ -7,7 +7,7 @@ code repository is provided by KDE: https://phabricator.kde.org/source/krita/
 
 This repository contains the current, Qt5-based, development version of Krita 3. Krita 3.0 has been released and development on Krita 2.9 has stopped.  Krita 2.9 was part of Calligra: https://phabricator.kde.org/source/krita/
 
-![Picture] (https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
+![Picture](https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
 
 
 ### User Manual
@@ -17,6 +17,14 @@ https://docs.krita.org/Category:User_Manual
 If you're building on Windows or OSX you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. 
 
 If you're building on Linux, please follow David Revoy's Cat Guide: http://www.davidrevoy.com/article193/guide-building-krita-on-linux-for-cats
+
+Other developer guides, notes and wiki:
+
+https://community.kde.org/Krita
+
+Apidox:
+
+https://api.kde.org/bundled-apps-api/krita-apidocs/
 
 ### Bugs and Wishes
 
@@ -33,3 +41,7 @@ irc.freenode.net, #krita
 ### Project Website
 
   http://www.krita.org
+
+### License
+
+Krita as a whole is licensed under the GNU Public License, Version 3. Individual files may have a different, but compatible license.

@@ -27,7 +27,7 @@ class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
 public:
     KisRasterKeyframeChannel(const KoID& id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds);
     KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisNodeWSP newParentNode, const KisPaintDeviceWSP newPaintDevice);
-    ~KisRasterKeyframeChannel();
+    ~KisRasterKeyframeChannel() override;
 
 public:
     /**
@@ -61,23 +61,23 @@ public:
      */
     void setFilenameSuffix(const QString &suffix);
 
-    bool hasScalarValue() const;
+    bool hasScalarValue() const override;
 
-    QDomElement toXML(QDomDocument doc, const QString &layerFilename);
-    void loadXML(const QDomElement &channelNode);
+    QDomElement toXML(QDomDocument doc, const QString &layerFilename) override;
+    void loadXML(const QDomElement &channelNode) override;
 
     void setOnionSkinsEnabled(bool value);
     bool onionSkinsEnabled() const;
 
 protected:
-    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
-    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
-    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
+    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
+    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
+    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
 
-    QRect affectedRect(KisKeyframeSP key);
+    QRect affectedRect(KisKeyframeSP key) override;
 
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
-    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
+    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
 
 private:
     void setFrameFilename(int frameId, const QString &filename);

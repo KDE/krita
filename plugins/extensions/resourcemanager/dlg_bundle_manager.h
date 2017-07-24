@@ -42,7 +42,7 @@ public:
 
 private Q_SLOTS:
 
-    void accept();
+    void accept() override;
     void addSelected();
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);

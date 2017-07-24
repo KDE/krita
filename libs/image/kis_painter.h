@@ -105,6 +105,7 @@ public:
 
     static KisPaintDeviceSP convertToAlphaAsAlpha(KisPaintDeviceSP src);
     static KisPaintDeviceSP convertToAlphaAsGray(KisPaintDeviceSP src);
+    static bool checkDeviceHasTransparency(KisPaintDeviceSP dev);
 
     /**
      * Start painting on the specified device. Not undoable.

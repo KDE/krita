@@ -39,9 +39,9 @@ public:
      */
     StarShapeConfigCommand(StarShape *star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, KUndo2Command *parent = 0);
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
     StarShape *m_star;
     uint m_oldCornerCount;

@@ -21,8 +21,8 @@
 #include "SvgUtil.h"
 
 SvgFilterHelper::SvgFilterHelper()
-        : m_filterUnits(ObjectBoundingBox) // default as per svg spec
-        , m_primitiveUnits(UserSpaceOnUse) // default as per svg spec
+        : m_filterUnits(KoFlake::ObjectBoundingBox) // default as per svg spec
+        , m_primitiveUnits(KoFlake::UserSpaceOnUse) // default as per svg spec
         , m_position(-0.1, -0.1) // default as per svg spec
         , m_size(1.2, 1.2) // default as per svg spec
 {
@@ -32,22 +32,22 @@ SvgFilterHelper::~SvgFilterHelper()
 {
 }
 
-void SvgFilterHelper::setFilterUnits(Units filterUnits)
+void SvgFilterHelper::setFilterUnits(KoFlake::CoordinateSystem filterUnits)
 {
     m_filterUnits = filterUnits;
 }
 
-SvgFilterHelper::Units SvgFilterHelper::filterUnits() const
+KoFlake::CoordinateSystem SvgFilterHelper::filterUnits() const
 {
     return m_filterUnits;
 }
 
-void SvgFilterHelper::setPrimitiveUnits(Units primitiveUnits)
+void SvgFilterHelper::setPrimitiveUnits(KoFlake::CoordinateSystem primitiveUnits)
 {
     m_primitiveUnits = primitiveUnits;
 }
 
-SvgFilterHelper::Units SvgFilterHelper::primitiveUnits() const
+KoFlake::CoordinateSystem SvgFilterHelper::primitiveUnits() const
 {
     return m_primitiveUnits;
 }
@@ -59,7 +59,7 @@ void SvgFilterHelper::setPosition(const QPointF & position)
 
 QPointF SvgFilterHelper::position(const QRectF & objectBound) const
 {
-    if (m_filterUnits == UserSpaceOnUse) {
+    if (m_filterUnits == KoFlake::UserSpaceOnUse) {
         return m_position;
     } else {
         return SvgUtil::objectToUserSpace(m_position, objectBound);
@@ -73,7 +73,7 @@ void SvgFilterHelper::setSize(const QSizeF & size)
 
 QSizeF SvgFilterHelper::size(const QRectF & objectBound) const
 {
-    if (m_filterUnits == UserSpaceOnUse) {
+    if (m_filterUnits == KoFlake::UserSpaceOnUse) {
         return m_size;
     } else {
         return SvgUtil::objectToUserSpace(m_size, objectBound);

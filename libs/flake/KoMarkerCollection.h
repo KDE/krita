@@ -28,7 +28,7 @@
 #include <QMetaType>
 
 class KoMarker;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 
 class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject
@@ -36,11 +36,7 @@ class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject
     Q_OBJECT
 public:
     explicit KoMarkerCollection(QObject *parent = 0);
-    virtual ~KoMarkerCollection();
-
-    bool loadOdf(KoShapeLoadingContext &context);
-    // For now we only save the used markers and that is done with a KoSharedSavingData when a marker usage is encountered.
-    //void saveOdf(KoShapeSavingContext &context) const;
+    ~KoMarkerCollection() override;
 
     QList<KoMarker*> markers() const;
 
@@ -57,10 +53,11 @@ public:
      */
     KoMarker * addMarker(KoMarker *marker);
 
+    void loadMarkersFromFile(const QString &svgFile);
+
 private:
     /// load the markers that are available per default.
     void loadDefaultMarkers();
-    void loadOdfMarkers(const QHash<QString, KoXmlElement*> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker*> &lookupTable);
 
     class Private;
     Private * const d;

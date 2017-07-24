@@ -36,7 +36,11 @@
 #include <QIcon>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | f),
+    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
+#ifdef Q_OS_LINUX
+              | Qt::WindowStaysOnTopHint
+#endif
+              | f),
       m_themed(themed)
 {
 
@@ -45,6 +49,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     // Maintain the aspect ratio on high DPI screens when scaling
     lblSplash->setPixmap(pixmap);
+    setFixedWidth(pixmap.width());
 
     QString color = colorString();
     lblVersion->setText(i18n("Version: %1", version));
@@ -66,8 +71,6 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblLinks->setVisible(false);
     lblRecent->setVisible(false);
     line->setVisible(false);
-
-
 
     m_timer.setSingleShot(true);
     m_timer.start(10);

@@ -36,15 +36,15 @@ public:
     QVector<qreal> matrix() const;
 
     // reimplemented
-    int rowCount(const QModelIndex &/*parent*/) const;
+    int rowCount(const QModelIndex &/*parent*/) const override;
     // reimplemented
-    int columnCount(const QModelIndex &/*parent*/) const;
+    int columnCount(const QModelIndex &/*parent*/) const override;
     // reimplemented
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     // reimplemented
-    bool setData(const QModelIndex &index, const QVariant &value, int /*role*/);
+    bool setData(const QModelIndex &index, const QVariant &value, int /*role*/) override;
     // reimplemented
-    Qt::ItemFlags flags(const QModelIndex &/*index*/) const;
+    Qt::ItemFlags flags(const QModelIndex &/*index*/) const override;
 
 private:
     QVector<qreal> m_matrix; ///< the matrix data to handle

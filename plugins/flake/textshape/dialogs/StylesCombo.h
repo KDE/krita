@@ -39,7 +39,7 @@ class StylesCombo : public QComboBox
     Q_OBJECT
 public:
     explicit StylesCombo(QWidget *parent);
-    ~StylesCombo();
+    ~StylesCombo() override;
 
     /** Use this method to set the @param model of the combo. */
     void setStylesModel(AbstractStylesModel *model);
@@ -52,7 +52,7 @@ public:
     /** This method is used to specify if the currently selected style is in its original state or is considered modified. In the later case, the + button will appear (see the class description) */
     void setStyleIsOriginal(bool original);
 
-    bool eventFilter(QObject *, QEvent *);
+    bool eventFilter(QObject *, QEvent *) override;
 
     /** When we don't want edit icon for our items in combo */
     void showEditIcon(bool show);

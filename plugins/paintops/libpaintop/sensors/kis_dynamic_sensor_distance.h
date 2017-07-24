@@ -18,30 +18,27 @@
 #ifndef _KIS_DYNAMIC_SENSOR_DISTANCE_H_
 #define _KIS_DYNAMIC_SENSOR_DISTANCE_H_
 
-#include "kis_vec.h"
-
 #include "kis_dynamic_sensor.h"
 //
 class KisDynamicSensorDistance : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
 
     KisDynamicSensorDistance();
-    virtual ~KisDynamicSensorDistance() { }
-    virtual qreal value(const KisPaintInformation&);
-    virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    ~KisDynamicSensorDistance() override { }
+    qreal value(const KisPaintInformation&) override;
+    void reset() override;
+    QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
     virtual void setLength(int length);
 
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual void fromXML(const QDomElement&);
+    void toXML(QDomDocument&, QDomElement&) const override;
+    void fromXML(const QDomElement&) override;
 private:
     qreal m_measuredDistance;
     bool m_periodic;

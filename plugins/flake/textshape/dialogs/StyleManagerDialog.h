@@ -34,7 +34,7 @@ class StyleManagerDialog : public KoDialog
     Q_OBJECT
 public:
     explicit StyleManagerDialog(QWidget *parent);
-    ~StyleManagerDialog();
+    ~StyleManagerDialog() override;
 
     void setStyleManager(KoStyleManager *sm);
 
@@ -48,11 +48,11 @@ private Q_SLOTS:
     void applyClicked();
 
 protected:
-    void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent *e) override;
 
 private:
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
     StyleManager *m_styleManagerWidget;
 };

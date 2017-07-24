@@ -37,23 +37,23 @@ public:
         LineToolShortcut
     };
     explicit KisToolInvocationAction();
-    virtual ~KisToolInvocationAction();
+    ~KisToolInvocationAction() override;
 
-    void activate(int shortcut);
-    void deactivate(int shortcut);
+    void activate(int shortcut) override;
+    void deactivate(int shortcut) override;
 
-    virtual int priority() const;
-    virtual bool canIgnoreModifiers() const;
+    int priority() const override;
+    bool canIgnoreModifiers() const override;
 
-    void begin(int shortcut, QEvent *event);
-    void end(QEvent *event);
-    void inputEvent(QEvent* event);
+    void begin(int shortcut, QEvent *event) override;
+    void end(QEvent *event) override;
+    void inputEvent(QEvent* event) override;
 
     void processUnhandledEvent(QEvent* event);
 
-    bool supportsHiResInputEvents() const;
+    bool supportsHiResInputEvents() const override;
 
-    virtual bool isShortcutRequired(int shortcut) const;
+    bool isShortcutRequired(int shortcut) const override;
 
 private:
     class Private;

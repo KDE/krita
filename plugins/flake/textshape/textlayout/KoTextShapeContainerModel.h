@@ -36,32 +36,32 @@ class KRITATEXTLAYOUT_EXPORT KoTextShapeContainerModel : public KoShapeContainer
 public:
     /// constructor
     KoTextShapeContainerModel();
-    ~KoTextShapeContainerModel();
+    ~KoTextShapeContainerModel() override;
 
     /// reimplemented from KoShapeContainerModel
-    virtual void add(KoShape *child);
+    void add(KoShape *child) override;
     /// reimplemented from KoShapeContainerModel
-    virtual void remove(KoShape *child);
+    void remove(KoShape *child) override;
     /// reimplemented from KoShapeContainerModel
-    virtual void setClipped(const KoShape *child, bool clipping);
+    void setClipped(const KoShape *child, bool clipping) override;
     /// reimplemented from KoShapeContainerModel
-    virtual bool isClipped(const KoShape *child) const;
+    bool isClipped(const KoShape *child) const override;
     /// reimplemented from KoShapeContainerModel
-    virtual int count() const;
+    int count() const override;
     /// reimplemented from KoShapeContainerModel
-    virtual QList<KoShape*> shapes() const;
+    QList<KoShape*> shapes() const override;
     /// reimplemented from KoShapeContainerModel
-    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
     /// reimplemented from KoShapeContainerModel
-    virtual void proposeMove(KoShape *child, QPointF &move);
+    void proposeMove(KoShape *child, QPointF &move) override;
     /// reimplemented from KoShapeContainerModel
-    virtual void childChanged(KoShape *child, KoShape::ChangeType type);
+    void childChanged(KoShape *child, KoShape::ChangeType type) override;
     /// reimplemented from KoShapeContainerModel
-    virtual bool isChildLocked(const KoShape *child) const;
+    bool isChildLocked(const KoShape *child) const override;
     /// reimplemented from KoShapeContainerModel
-    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
+    void setInheritsTransform(const KoShape *shape, bool inherit) override;
     /// reimplemented from KoShapeContainerModel
-    virtual bool inheritsTransform(const KoShape *shape) const;
+    bool inheritsTransform(const KoShape *shape) const override;
 
     /// each child that is added due to being anchored in the text has an anchor; register it for rules based placement.
     void addAnchor(KoShapeAnchor *anchor);

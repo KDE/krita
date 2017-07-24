@@ -90,6 +90,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[4], KoID(COMPOSITE_GEOMETRIC_MEAN  , i18n("Geometric Mean")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_DESTINATION_ATOP, i18n("Destination Atop")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_DESTINATION_IN  , i18n("Destination In")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_OVERLAY    , i18n("Hard Overlay")));
 
     m_map.insert(m_categories[5], KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Map")));
@@ -149,7 +150,7 @@ KoID KoCompositeOpRegistry::getDefaultCompositeOp() const
 
 KoID KoCompositeOpRegistry::getKoID(const QString& compositeOpID) const
 {
-    KoIDMap::const_iterator itr = qFind(m_map.begin(), m_map.end(), KoID(compositeOpID));
+    KoIDMap::const_iterator itr = std::find(m_map.begin(), m_map.end(), KoID(compositeOpID));
     return (itr != m_map.end()) ? *itr : KoID();
 }
 

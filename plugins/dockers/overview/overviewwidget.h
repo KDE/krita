@@ -38,15 +38,15 @@ class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeSt
     Q_OBJECT
 public:
     OverviewThumbnailStrokeStrategy(KisImageWSP image);
-    ~OverviewThumbnailStrokeStrategy();
+    ~OverviewThumbnailStrokeStrategy() override;
 
     static QList<KisStrokeJobData*> createJobsData(KisPaintDeviceSP dev, const QRect& imageRect, KisPaintDeviceSP thumbDev, const QSize &thumbnailSize);
 
 private:
-    void initStrokeCallback();
-    void doStrokeCallback(KisStrokeJobData *data);
-    void finishStrokeCallback();
-    void cancelStrokeCallback();
+    void initStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
 
 Q_SIGNALS:
     //Emitted when thumbnail is updated and overviewImage is fully generated.
@@ -67,7 +67,7 @@ class OverviewWidget : public QWidget
 public:
     OverviewWidget(QWidget * parent = 0);
 
-    virtual ~OverviewWidget();
+    ~OverviewWidget() override;
 
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas()
@@ -81,14 +81,14 @@ public Q_SLOTS:
     void updateThumbnail(QImage pixmap);
 
 protected:
-    void resizeEvent(QResizeEvent *event);
-    void showEvent(QShowEvent *event);
-    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void wheelEvent(QWheelEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
 
 private:
     QSize calculatePreviewSize();

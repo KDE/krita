@@ -25,12 +25,12 @@ class KRITAIMAGE_EXPORT KisLzfCompression : public KisAbstractCompression
 {
 public:
     KisLzfCompression();
-    virtual ~KisLzfCompression();
+    ~KisLzfCompression() override;
 
-    qint32 compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength);
-    qint32 decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength);
+    qint32 compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) override;
+    qint32 decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) override;
 
-    qint32 outputBufferSize(qint32 dataSize);
+    qint32 outputBufferSize(qint32 dataSize) override;
 
     //void adjustForDataSize(qint32 dataSize);
 };

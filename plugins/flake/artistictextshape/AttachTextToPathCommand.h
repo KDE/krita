@@ -31,9 +31,9 @@ class AttachTextToPathCommand : public KUndo2Command
 public:
     AttachTextToPathCommand(ArtisticTextShape *textShape, KoPathShape *pathShape, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
-    virtual void redo();
+    void redo() override;
     /// reimplemented from KUndo2Command
-    virtual void undo();
+    void undo() override;
 private:
     ArtisticTextShape *m_textShape;
     KoPathShape *m_pathShape;

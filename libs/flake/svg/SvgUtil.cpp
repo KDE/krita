@@ -21,13 +21,19 @@
 #include "SvgGraphicContext.h"
 
 #include <KoUnit.h>
+#include <KoXmlReader.h>
 
 #include <QString>
 #include <QRectF>
 #include <QStringList>
 #include <QFontMetrics>
+#include <QRegExp>
 
 #include <math.h>
+#include "kis_debug.h"
+#include "kis_global.h"
+
+#include "kis_dom_utils.h"
 
 #define DPI 72.0
 
@@ -35,12 +41,17 @@
 
 double SvgUtil::fromUserSpace(double value)
 {
-    return (value * DPI) / 90.0;
+    return value;
 }
 
 double SvgUtil::toUserSpace(double value)
 {
-    return (value * 90.0) / DPI;
+    return value;
+}
+
+double SvgUtil::ptToPx(SvgGraphicsContext *gc, double value)
+{
+    return value * gc->pixelsPerInch / DPI;
 }
 
 QPointF SvgUtil::toUserSpace(const QPointF &point)
@@ -106,68 +117,6 @@ QSizeF SvgUtil::userSpaceToObject(const QSizeF &size, const QRectF &objectBound)
     return QSizeF(w, h);
 }
 
-QTransform SvgUtil::parseTransform(const QString &transform)
-{
-    QTransform result;
-
-    // Split string for handling 1 transform statement at a time
-    QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
-    QStringList::ConstIterator it = subtransforms.constBegin();
-    QStringList::ConstIterator end = subtransforms.constEnd();
-    for (; it != end; ++it) {
-        QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
-        if (subtransform.count() < 2)
-            continue;
-
-        subtransform[0] = subtransform[0].trimmed().toLower();
-        subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
-        QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
-
-        if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
-            subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
-
-        if (subtransform[0] == "rotate") {
-            if (params.count() == 3) {
-                double x = params[1].toDouble();
-                double y = params[2].toDouble();
-
-                result.translate(x, y);
-                result.rotate(params[0].toDouble());
-                result.translate(-x, -y);
-            } else {
-                result.rotate(params[0].toDouble());
-            }
-        } else if (subtransform[0] == "translate") {
-            if (params.count() == 2) {
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()),
-                                 SvgUtil::fromUserSpace(params[1].toDouble()));
-            } else {   // Spec : if only one param given, assume 2nd param to be 0
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()) , 0);
-            }
-        } else if (subtransform[0] == "scale") {
-            if (params.count() == 2) {
-                result.scale(params[0].toDouble(), params[1].toDouble());
-            } else {   // Spec : if only one param given, assume uniform scaling
-                result.scale(params[0].toDouble(), params[0].toDouble());
-            }
-        } else if (subtransform[0].toLower() == "skewx") {
-            result.shear(tan(DEG2RAD(params[0].toDouble())), 0.0F);
-        } else if (subtransform[0].toLower() == "skewy") {
-            result.shear(0.0F, tan(DEG2RAD(params[0].toDouble())));
-        } else if (subtransform[0] == "matrix") {
-            if (params.count() >= 6) {
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
-                                 params[2].toDouble(), params[3].toDouble(), 0,
-                                 SvgUtil::fromUserSpace(params[4].toDouble()),
-                                 SvgUtil::fromUserSpace(params[5].toDouble()), 1);
-            }
-        }
-    }
-
-    return result;
-}
-
 QString SvgUtil::transformToString(const QTransform &transform)
 {
     if (transform.isIdentity())
@@ -175,34 +124,97 @@ QString SvgUtil::transformToString(const QTransform &transform)
 
     if (transform.type() == QTransform::TxTranslate) {
         return QString("translate(%1, %2)")
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dx())))
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dy())));
     } else {
         return QString("matrix(%1 %2 %3 %4 %5 %6)")
-                     .arg(transform.m11()).arg(transform.m12())
-                     .arg(transform.m21()).arg(transform.m22())
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+                     .arg(KisDomUtils::toString(transform.m11()))
+                     .arg(KisDomUtils::toString(transform.m12()))
+                     .arg(KisDomUtils::toString(transform.m21()))
+                     .arg(KisDomUtils::toString(transform.m22()))
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dx())))
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dy())));
     }
 }
 
-QRectF SvgUtil::parseViewBox(QString viewbox)
+bool SvgUtil::parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e,
+                           const QRectF &elementBounds,
+                           QRectF *_viewRect, QTransform *_viewTransform)
 {
-    QRectF viewboxRect;
+    Q_UNUSED(gc)
+
+    KIS_ASSERT(_viewRect);
+    KIS_ASSERT(_viewTransform);
+
+    QString viewBoxStr = e.attribute("viewBox");
+    if (viewBoxStr.isEmpty()) return false;
+
+    bool result = false;
+
+    QRectF viewBoxRect;
     // this is a workaround for bug 260429 for a file generated by blender
     // who has px in the viewbox which is wrong.
     // reported as bug http://projects.blender.org/tracker/?group_id=9&atid=498&func=detail&aid=30971
-    viewbox.remove("px");
+    viewBoxStr.remove("px");
 
-    QStringList points = viewbox.replace(',', ' ').simplified().split(' ');
+    QStringList points = viewBoxStr.replace(',', ' ').simplified().split(' ');
     if (points.count() == 4) {
-        viewboxRect.setX(SvgUtil::fromUserSpace(points[0].toFloat()));
-        viewboxRect.setY(SvgUtil::fromUserSpace(points[1].toFloat()));
-        viewboxRect.setWidth(SvgUtil::fromUserSpace(points[2].toFloat()));
-        viewboxRect.setHeight(SvgUtil::fromUserSpace(points[3].toFloat()));
+        viewBoxRect.setX(SvgUtil::fromUserSpace(points[0].toFloat()));
+        viewBoxRect.setY(SvgUtil::fromUserSpace(points[1].toFloat()));
+        viewBoxRect.setWidth(SvgUtil::fromUserSpace(points[2].toFloat()));
+        viewBoxRect.setHeight(SvgUtil::fromUserSpace(points[3].toFloat()));
+
+        result = true;
+    } else {
+        // TODO: WARNING!
     }
 
-    return viewboxRect;
+    if (!result) return false;
+
+    QTransform viewBoxTransform =
+        QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
+        QTransform::fromScale(elementBounds.width() / viewBoxRect.width(),
+                                  elementBounds.height() / viewBoxRect.height()) *
+            QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
+
+    const QString aspectString = e.attribute("preserveAspectRatio");
+    if (!aspectString.isEmpty()) {
+        PreserveAspectRatioParser p(aspectString);
+        parseAspectRatio(p, elementBounds, viewBoxRect, &viewBoxTransform);
+    }
+
+    *_viewRect = viewBoxRect;
+    *_viewTransform = viewBoxTransform;
+
+    return result;
+}
+
+void SvgUtil::parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewBoxRect, QTransform *_viewTransform)
+{
+    if (p.mode != Qt::IgnoreAspectRatio) {
+        QTransform viewBoxTransform = *_viewTransform;
+
+        const qreal tan1 = viewBoxRect.height() / viewBoxRect.width();
+        const qreal tan2 = elementBounds.height() / elementBounds.width();
+
+        const qreal uniformScale =
+            (p.mode == Qt::KeepAspectRatioByExpanding) ^ (tan1 > tan2) ?
+                elementBounds.height() / viewBoxRect.height() :
+                elementBounds.width() / viewBoxRect.width();
+
+        viewBoxTransform =
+            QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
+            QTransform::fromScale(uniformScale, uniformScale) *
+            QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
+
+        const QPointF viewBoxAnchor = viewBoxTransform.map(p.rectAnchorPoint(viewBoxRect));
+        const QPointF elementAnchor = p.rectAnchorPoint(elementBounds);
+        const QPointF offset = elementAnchor - viewBoxAnchor;
+
+        viewBoxTransform = viewBoxTransform * QTransform::fromTranslate(offset.x(), offset.y());
+
+        *_viewTransform = viewBoxTransform;
+    }
 }
 
 qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
@@ -221,19 +233,21 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
     if (int(end - start) < unit.length()) {
         if (unit.right(2) == "px")
             value = SvgUtil::fromUserSpace(value);
+        else if (unit.right(2) == "pt")
+            value = ptToPx(gc, value);
         else if (unit.right(2) == "cm")
-            value = CM_TO_POINT(value);
+            value = ptToPx(gc, CM_TO_POINT(value));
         else if (unit.right(2) == "pc")
-            value = PI_TO_POINT(value);
+            value = ptToPx(gc, PI_TO_POINT(value));
         else if (unit.right(2) == "mm")
-            value = MM_TO_POINT(value);
+            value = ptToPx(gc, MM_TO_POINT(value));
         else if (unit.right(2) == "in")
-            value = INCH_TO_POINT(value);
+            value = ptToPx(gc, INCH_TO_POINT(value));
         else if (unit.right(2) == "em")
-            value = value * gc->font.pointSize();
+            value = ptToPx(gc, value * gc->font.pointSize());
         else if (unit.right(2) == "ex") {
             QFontMetrics metrics(gc->font);
-            value = value * metrics.xHeight();
+            value = ptToPx(gc, value * metrics.xHeight());
         } else if (unit.right(1) == "%") {
             if (horiz && vert)
                 value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
@@ -265,18 +279,18 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
 qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const QString &unit)
 {
     if (gc->forcePercentage) {
-        return SvgUtil::fromPercentage(unit) * gc->currentBoundbox.width();
+        return SvgUtil::fromPercentage(unit) * gc->currentBoundingBox.width();
     } else {
-        return SvgUtil::parseUnit(gc, unit, true, false, gc->currentBoundbox);
+        return SvgUtil::parseUnit(gc, unit, true, false, gc->currentBoundingBox);
     }
 }
 
 qreal SvgUtil::parseUnitY(SvgGraphicsContext *gc, const QString &unit)
 {
     if (gc->forcePercentage) {
-        return SvgUtil::fromPercentage(unit) * gc->currentBoundbox.height();
+        return SvgUtil::fromPercentage(unit) * gc->currentBoundingBox.height();
     } else {
-        return SvgUtil::parseUnit(gc, unit, false, true, gc->currentBoundbox);
+        return SvgUtil::parseUnit(gc, unit, false, true, gc->currentBoundingBox);
     }
 }
 
@@ -284,10 +298,56 @@ qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
 {
     if (gc->forcePercentage) {
         const qreal value = SvgUtil::fromPercentage(unit);
-        return value * sqrt(pow(gc->currentBoundbox.width(), 2) + pow(gc->currentBoundbox.height(), 2)) / sqrt(2.0);
+        return value * sqrt(pow(gc->currentBoundingBox.width(), 2) + pow(gc->currentBoundingBox.height(), 2)) / sqrt(2.0);
     } else {
-        return SvgUtil::parseUnit(gc, unit, true, true, gc->currentBoundbox);
+        return SvgUtil::parseUnit(gc, unit, true, true, gc->currentBoundingBox);
     }
+}
+
+qreal SvgUtil::parseUnitAngular(SvgGraphicsContext *gc, const QString &unit)
+{
+    Q_UNUSED(gc);
+
+    qreal value = 0.0;
+
+    if (unit.isEmpty()) return value;
+    QByteArray unitLatin1 = unit.toLower().toLatin1();
+
+    const char *start = unitLatin1.data();
+    if (!start) return value;
+
+    const char *end = parseNumber(start, value);
+
+    if (int(end - start) < unit.length()) {
+        if (unit.right(3) == "deg") {
+            value = kisDegreesToRadians(value);
+        } else if (unit.right(4) == "grad") {
+            value *= M_PI / 200;
+        } else if (unit.right(3) == "rad") {
+            // noop!
+        } else {
+            value = kisDegreesToRadians(value);
+        }
+    } else {
+        value = kisDegreesToRadians(value);
+    }
+
+    return value;
+}
+
+qreal SvgUtil::parseNumber(const QString &string)
+{
+    qreal value = 0.0;
+
+    if (string.isEmpty()) return value;
+    QByteArray unitLatin1 = string.toLatin1();
+
+    const char *start = unitLatin1.data();
+    if (!start) return value;
+
+    const char *end = parseNumber(start, value);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(int(end - start) == string.length());
+    return value;
 }
 
 const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
@@ -342,4 +402,112 @@ const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
     number *= sign * pow((double)10, double(expsign * exponent));
 
     return ptr;
+}
+
+QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element)
+{
+    QString result = tagName;
+
+    if (tagName == "path") {
+        QString kritaType = element.attribute("krita:type", "");
+        QString sodipodiType = element.attribute("sodipodi:type", "");
+
+        if (kritaType == "arc") {
+            result = "krita:arc";
+        } else if (sodipodiType == "arc") {
+            result = "sodipodi:arc";
+        }
+    }
+
+    return result;
+}
+
+SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)
+{
+    QRegExp rexp("(defer)?\\s*(none|(x(Min|Max|Mid)Y(Min|Max|Mid)))\\s*(meet|slice)?", Qt::CaseInsensitive);
+    int index = rexp.indexIn(str.toLower());
+
+    if (index >= 0) {
+        if (rexp.cap(1) == "defer") {
+            defer = true;
+        }
+
+        if (rexp.cap(2) != "none") {
+            xAlignment = alignmentFromString(rexp.cap(4));
+            yAlignment = alignmentFromString(rexp.cap(5));
+            mode = rexp.cap(6) == "slice" ?
+                Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio;
+        }
+    }
+}
+
+QPointF SvgUtil::PreserveAspectRatioParser::rectAnchorPoint(const QRectF &rc) const
+{
+    return QPointF(alignedValue(rc.x(), rc.x() + rc.width(), xAlignment),
+                   alignedValue(rc.y(), rc.y() + rc.height(), yAlignment));
+}
+
+QString SvgUtil::PreserveAspectRatioParser::toString() const
+{
+    QString result;
+
+    if (!defer &&
+        xAlignment == Middle &&
+        yAlignment == Middle &&
+        mode == Qt::KeepAspectRatio) {
+
+        return result;
+    }
+
+    if (defer) {
+        result += "defer ";
+    }
+
+    if (mode == Qt::IgnoreAspectRatio) {
+        result += "none";
+    } else {
+        result += QString("x%1Y%2")
+            .arg(alignmentToString(xAlignment))
+            .arg(alignmentToString(yAlignment));
+
+        if (mode == Qt::KeepAspectRatioByExpanding) {
+            result += " slice";
+        }
+    }
+
+    return result;
+}
+
+SvgUtil::PreserveAspectRatioParser::Alignment SvgUtil::PreserveAspectRatioParser::alignmentFromString(const QString &str) const {
+    return
+        str == "max" ? Max :
+        str == "mid" ? Middle : Min;
+}
+
+QString SvgUtil::PreserveAspectRatioParser::alignmentToString(SvgUtil::PreserveAspectRatioParser::Alignment alignment) const
+{
+    return
+        alignment == Max ? "Max" :
+        alignment == Min ? "Min" :
+        "Mid";
+
+}
+
+qreal SvgUtil::PreserveAspectRatioParser::alignedValue(qreal min, qreal max, SvgUtil::PreserveAspectRatioParser::Alignment alignment)
+{
+    qreal result = min;
+
+    switch (alignment) {
+    case Min:
+        result = min;
+        break;
+    case Middle:
+        result = 0.5 * (min + max);
+        break;
+    case Max:
+        result = max;
+        break;
+    }
+
+    return result;
 }

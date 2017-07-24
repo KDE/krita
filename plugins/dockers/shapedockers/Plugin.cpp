@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *
+ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "shapeproperties/ShapePropertiesDockerFactory.h"
-#include "shapecollection/ShapeCollectionDocker.h"
+#include "ShapeCollectionDocker.h"
+#include "SvgSymbolCollectionDocker.h"
 
 #include <KoDockRegistry.h>
 
@@ -30,8 +31,8 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     Q_UNUSED(parent);
-    KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
     KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
+    KoDockRegistry::instance()->add(new SvgSymbolCollectionDockerFactory());
 }
 
 #include <Plugin.moc>

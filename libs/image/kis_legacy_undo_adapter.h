@@ -32,11 +32,11 @@ class KRITAIMAGE_EXPORT KisLegacyUndoAdapter : public KisUndoAdapter
 public:
     KisLegacyUndoAdapter(KisUndoStore *undoStore, KisImageWSP image);
 
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
-    void endMacro();
+    const KUndo2Command* presentCommand() override;
+    void undoLastCommand() override;
+    void addCommand(KUndo2Command *cmd) override;
+    void beginMacro(const KUndo2MagicString& macroName) override;
+    void endMacro() override;
 private:
     KisImageWSP m_image;
     qint32 m_macroCounter;

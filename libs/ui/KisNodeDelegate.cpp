@@ -64,19 +64,12 @@ public:
     void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, bool controlPressed, const QModelIndex &index);
 };
 
-void KisNodeDelegate::slotOnCloseEditor()
-{
-    KisPart::currentInputManager()->slotFocusOnEnter(true);
-}
-
 KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
     , d(new Private)
 {
     d->view = view;
     QApplication::instance()->installEventFilter(this);
-
-    connect(this, SIGNAL(closeEditor(QWidget*)), this, SLOT(slotOnCloseEditor()));
 }
 
 KisNodeDelegate::~KisNodeDelegate()
@@ -475,7 +468,7 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
             const qreal oldOpacity = p->opacity(); // remember previous opacity
 
 
-            if (fullColor) {              
+            if (fullColor) {
                  p->setOpacity(1.0);
             }
             else {
@@ -733,7 +726,6 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
 
 QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
-    KisPart::currentInputManager()->slotFocusOnEnter(false);
     d->edit = new QLineEdit(parent);
     d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
     return d->edit;
@@ -801,6 +793,25 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
             default: break;
             }
         }
+    } break;
+    case QEvent::ShortcutOverride : {
+        QLineEdit *edit = qobject_cast<QLineEdit*>(object);
+        if (edit && edit == d->edit){
+            auto* key = static_cast<QKeyEvent*>(event);
+            if (key->modifiers() == Qt::NoModifier){
+                switch (key->key()){
+                case Qt::Key_Escape:
+                case Qt::Key_Tab:
+                case Qt::Key_Backtab:
+                case Qt::Key_Return:
+                case Qt::Key_Enter:
+                    event->accept();
+                    return true;
+                default: break;
+                }
+            }
+        }
+
     } break;
     case QEvent::FocusOut : {
         QLineEdit *edit = qobject_cast<QLineEdit*>(object);

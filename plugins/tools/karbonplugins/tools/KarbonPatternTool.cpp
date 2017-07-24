@@ -223,9 +223,10 @@ void KarbonPatternTool::initialize()
     }
 }
 
-void KarbonPatternTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void KarbonPatternTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KoToolBase::activate(activation, shapes);
+
     if (shapes.isEmpty()) {
         emit done();
         return;
@@ -258,6 +259,8 @@ void KarbonPatternTool::deactivate()
     }
 
     m_currentStrategy = 0;
+
+    KoToolBase::deactivate();
 }
 
 void KarbonPatternTool::documentResourceChanged(int key, const QVariant &res)

@@ -31,6 +31,8 @@
 class KisExternalLayer;
 // #include "kis_external_layer_iface.h"
 
+#include <kritaimage_export.h>
+
 /**
  * The Change Profile visitor walks over all layers and if the current
  * layer has the specified colorspace AND the specified old profile, sets
@@ -38,7 +40,7 @@ class KisExternalLayer;
  * conversions. This is essential if you have loaded an image that didn't
  * have an embedded profile to which you want to attach the right profile.
  */
-class KisChangeProfileVisitor : public KisNodeVisitor
+class KRITAIMAGE_EXPORT KisChangeProfileVisitor : public KisNodeVisitor
 {
 public:
 
@@ -51,14 +53,14 @@ public:
             , m_dstColorSpace(dstColorSpace) {
     }
 
-    ~KisChangeProfileVisitor() {
+    ~KisChangeProfileVisitor() override {
     }
 
-    bool visit(KisExternalLayer *) {
+    bool visit(KisExternalLayer *) override {
         return true;
     }
 
-    bool visit(KisGroupLayer * layer) {
+    bool visit(KisGroupLayer * layer) override {
         // Clear the projection, we will have to re-render everything.
         layer->resetCache();
 
@@ -71,39 +73,39 @@ public:
     }
 
 
-    bool visit(KisPaintLayer *layer) {
+    bool visit(KisPaintLayer *layer) override {
         return updatePaintDevice(layer);
     }
 
-    bool visit(KisGeneratorLayer *layer) {
+    bool visit(KisGeneratorLayer *layer) override {
         return updatePaintDevice(layer);
     }
 
-    bool visit(KisAdjustmentLayer * layer) {
+    bool visit(KisAdjustmentLayer * layer) override {
         layer->resetCache();
         return true;
     }
 
-    bool visit(KisNode*) {
+    bool visit(KisNode*) override {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer*) override {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask*) override {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask*) override {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask*) override {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask*) override {
         return true;
     }
 
-    bool visit(KisColorizeMask *mask) {
+    bool visit(KisColorizeMask *mask) override {
         if (mask->colorSpace()->colorModelId() == m_oldColorSpace->colorModelId()) {
             mask->setProfile(m_dstColorSpace->profile());
         }

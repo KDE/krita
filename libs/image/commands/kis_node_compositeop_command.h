@@ -35,8 +35,8 @@ public:
      */
     KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp, const QString& newCompositeOp);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     QString m_oldCompositeOp;

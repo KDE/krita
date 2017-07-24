@@ -21,6 +21,7 @@
 #include "KoPathControlPointMoveCommand.h"
 #include <klocalizedstring.h>
 #include <math.h>
+#include "kis_command_ids.h"
 
 KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
     const KoPathPointData &pointData,
@@ -94,3 +95,23 @@ void KoPathControlPointMoveCommand::undo()
     m_offset *= -1.0;
 }
 
+int KoPathControlPointMoveCommand::id() const
+{
+    return KisCommandUtils::ChangePathShapeControlPointId;
+}
+
+bool KoPathControlPointMoveCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoPathControlPointMoveCommand *other = dynamic_cast<const KoPathControlPointMoveCommand*>(command);
+
+    if (!other ||
+        other->m_pointData != m_pointData ||
+        other->m_pointType != m_pointType) {
+
+        return false;
+    }
+
+    m_offset += other->m_offset;
+
+    return true;
+}

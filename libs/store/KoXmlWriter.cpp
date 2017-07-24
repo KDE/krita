@@ -24,6 +24,7 @@
 #include <QByteArray>
 #include <QStack>
 #include <float.h>
+#include "../global/kis_dom_utils.h"
 
 static const int s_indentBufferLength = 100;
 static const int s_escapeBufferLen = 10000;
@@ -157,15 +158,18 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
         return;
     }
 
-    static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
+    QString indentString;
+    indentString.fill((' '), indentLevel());
+    QByteArray indentBuf(indentString.toUtf8());
+
     QByteArray buffer;
-    buffer.resize(MAX_CHUNK_SIZE);
     while (!indev->atEnd()) {
-        qint64 len = indev->read(buffer.data(), buffer.size());
-        if (len <= 0)   // e.g. on error
-            break;
-        d->dev->write(buffer.data(), len);
+        buffer = indev->readLine();
+
+        d->dev->write(indentBuf);
+        d->dev->write(buffer);
     }
+
     if (!wasOpen) {
         // Restore initial state
         indev->close();
@@ -248,32 +252,26 @@ void KoXmlWriter::addAttribute(const char* attrName, const char* value)
 
 void KoXmlWriter::addAttribute(const char* attrName, double value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', 11);
-    addAttribute(attrName, str.data());
+    addAttribute(attrName, KisDomUtils::toString(value));
 }
 
 void KoXmlWriter::addAttribute(const char* attrName, float value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', FLT_DIG);
-    addAttribute(attrName, str.data());
+    addAttribute(attrName, KisDomUtils::toString(value));
 }
 
 void KoXmlWriter::addAttributePt(const char* attrName, double value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', 11);
-    str += "pt";
-    addAttribute(attrName, str.data());
+    // WARNING: we don't write 'pt' into SVG anymore! We just use
+    //          viewBox to align coordinates system with 'pt'.
+    addAttribute(attrName, KisDomUtils::toString(value));
 }
 
 void KoXmlWriter::addAttributePt(const char* attrName, float value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', FLT_DIG);
-    str += "pt";
-    addAttribute(attrName, str.data());
+    // WARNING: we don't write 'pt' into SVG anymore! We just use
+    //          viewBox to align coordinates system with 'pt'.
+    addAttribute(attrName, KisDomUtils::toString(value));
 }
 
 void KoXmlWriter::writeIndent()

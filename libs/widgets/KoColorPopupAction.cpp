@@ -118,14 +118,17 @@ KoColorPopupAction::~KoColorPopupAction()
 
 void KoColorPopupAction::setCurrentColor( const KoColor &color )
 {
-    d->colorChooser->slotSetColor( color );
-
     KoColor minColor( color );
     d->currentColor = minColor;
+
+    d->colorChooser->blockSignals(true);
+    d->colorChooser->slotSetColor(color);
+    d->colorChooser->blockSignals(false);
 
     KoColor maxColor( color );
     minColor.setOpacity( OPACITY_TRANSPARENT_U8 );
     maxColor.setOpacity( OPACITY_OPAQUE_U8 );
+
     d->opacitySlider->blockSignals( true );
     d->opacitySlider->setColors( minColor, maxColor );
     d->opacitySlider->setValue( color.opacityU8() );

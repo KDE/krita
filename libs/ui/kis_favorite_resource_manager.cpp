@@ -330,7 +330,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
     for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
         KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
         m_favoritePresetsList.append(pr.data());
-        qSort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
+        std::sort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
     emit updatePalettes();
 }
@@ -354,7 +354,7 @@ void KisFavoriteResourceManager::init()
         m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", "Block");
 
         if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
-            m_currentTag = i18n("Favorite Presets");
+            m_currentTag = i18n("Number of popup palette presets shown");
             Q_FOREACH ( const QString& name, oldFavoritePresets) {
                 KisPaintOpPresetSP preset = rServer->resourceByName(name);
                 rServer->addTag(preset.data(), m_currentTag);

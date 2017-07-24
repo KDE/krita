@@ -29,10 +29,10 @@ class KisBMPExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisBMPExport(QObject *parent, const QVariantList &);
-    virtual ~KisBMPExport();
+    ~KisBMPExport() override;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
-    void initializeCapabilities();
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    void initializeCapabilities() override;
 };
 
 #endif

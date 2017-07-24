@@ -90,10 +90,10 @@ public:
     QRectF boundingRect();
 
     /// Adds an additional shape to snap to (useful when creating a path)
-    void setEditedShape(KoShape *shape);
+    void setAdditionalEditedShape(KoShape *shape);
 
     /// returns the extra shapes to use
-    KoShape *editedShape() const;
+    KoShape *additionalEditedShape() const;
 
     void enableSnapStrategy(Strategy type, bool value);
     bool isStrategyEnabled(Strategy type) const;

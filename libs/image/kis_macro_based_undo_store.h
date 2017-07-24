@@ -40,14 +40,14 @@ class KisMacroBasedUndoStore : public KisUndoStore
 {
 public:
     KisMacroBasedUndoStore(KisSavedMacroCommand *command);
-    ~KisMacroBasedUndoStore();
+    ~KisMacroBasedUndoStore() override;
 
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
-    void endMacro();
-    void purgeRedoState();
+    const KUndo2Command* presentCommand() override;
+    void undoLastCommand() override;
+    void addCommand(KUndo2Command *cmd) override;
+    void beginMacro(const KUndo2MagicString& macroName) override;
+    void endMacro() override;
+    void purgeRedoState() override;
 
 private:
     struct Private;

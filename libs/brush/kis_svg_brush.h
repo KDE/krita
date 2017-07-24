@@ -27,15 +27,15 @@ public:
     /// Construct brush to load filename later as brush
     KisSvgBrush(const QString& filename);
     KisSvgBrush(const KisSvgBrush& rhs);
-    KisBrush* clone() const;
+    KisBrush* clone() const override;
 
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice *dev) const;
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice *dev) const override;
 
-    virtual QString defaultFileExtension() const;
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    QString defaultFileExtension() const override;
+    void toXML(QDomDocument& d, QDomElement& e) const override;
 private:
     QByteArray m_svg;
 };

@@ -18,155 +18,305 @@
  */
 
 #include "widgets/kis_stopgradient_slider_widget.h"
+#include <QWindow>
 #include <QPainter>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QPaintEvent>
+#include <QFontMetrics>
+#include <QStyle>
+#include <QApplication>
+#include <QStyleOptionToolButton>
 
-#define MARGIN 10
-#define HANDLE_SIZE 20
+#include "kis_global.h"
+#include "kis_debug.h"
+#include "krita_utils.h"
 
 KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::WFlags f)
     : QWidget(parent, f)
     , m_selectedStop(0)
     , m_drag(0)
 {
-    setMinimumHeight(30);
+    QLinearGradient defaultGradient;
+    m_defaultGradient.reset(KoStopGradient::fromQGradient(&defaultGradient));
+
+    setGradientResource(0);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    setMouseTracking(true);
+
+    QWindow *window = this->window()->windowHandle();
+    if (window) {
+        connect(window, SIGNAL(screenChanged(QScreen*)), SLOT(updateHandleSize()));
+    }
+    updateHandleSize();
+}
+
+void KisStopGradientSliderWidget::updateHandleSize()
+{
+    QFontMetrics fm(font());
+    const int h = fm.height();
+    m_handleSize = QSize(0.34 * h, h);
+}
+
+int KisStopGradientSliderWidget::handleClickTolerance() const
+{
+    // the size of the default text!
+    return m_handleSize.height();
 }
 
 void KisStopGradientSliderWidget::setGradientResource(KoStopGradient* gradient)
 {
-    m_gradient = gradient;
+    m_gradient = gradient ? gradient : m_defaultGradient.data();
 
-    emit sigSelectedStop(m_selectedStop);
+    if (m_selectedStop >= 0) {
+        m_selectedStop = qBound(0, m_selectedStop, m_gradient->stops().size() - 1);
+        emit sigSelectedStop(m_selectedStop);
+    }
+}
+
+void KisStopGradientSliderWidget::paintHandle(qreal position, const QColor &color, bool isSelected, QPainter *painter)
+{
+    const QRect handlesRect = this->handlesStipeRect();
+
+    const int handleCenter = handlesRect.left() + position * handlesRect.width();
+    const int handlesHalfWidth = handlesRect.height() * 0.26; // = 1.0 / 0.66 * 0.34 / 2.0 <-- golden ratio
+
+    QPolygon triangle(3);
+    triangle[0] = QPoint(handleCenter, handlesRect.top());
+    triangle[1] = QPoint(handleCenter - handlesHalfWidth, handlesRect.bottom());
+    triangle[2] = QPoint(handleCenter + handlesHalfWidth, handlesRect.bottom());
+
+    const qreal lineWidth = 1.0;
+
+    if (!isSelected) {
+        painter->setPen(QPen(palette().text(), lineWidth));
+        painter->setBrush(QBrush(color));
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->drawPolygon(triangle);
+    } else {
+        painter->setPen(QPen(palette().highlight(), 1.5 * lineWidth));
+        painter->setBrush(QBrush(color));
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->drawPolygon(triangle);
+    }
 }
 
 void KisStopGradientSliderWidget::paintEvent(QPaintEvent* pe)
 {
     QWidget::paintEvent(pe);
     QPainter painter(this);
-    painter.fillRect(rect(), palette().background());
     painter.setPen(Qt::black);
-    painter.drawRect(MARGIN, MARGIN, width() - 2 * MARGIN, height() - 2 * MARGIN - HANDLE_SIZE);
+
+    const QRect previewRect = gradientStripeRect();
+    KritaUtils::renderExactRect(&painter, kisGrowRect(previewRect, 1));
+
+    painter.drawRect(previewRect);
     if (m_gradient) {
-        QImage image = m_gradient->generatePreview(width() - 2 * MARGIN - 2, height() - 2 * MARGIN - HANDLE_SIZE - 2);
-        QPixmap pixmap(image.width(), image.height());
+        QImage image = m_gradient->generatePreview(previewRect.width(), previewRect.height());
         if (!image.isNull()) {
-            painter.drawImage(MARGIN + 1, MARGIN + 1, image);
+            painter.drawImage(previewRect.topLeft(), image);
         }
 
-        QPolygon triangle(3);
         QList<KoGradientStop> handlePositions = m_gradient->stops();
-        int position;
         for (int i = 0; i < handlePositions.count(); i++) {
-            position = qRound(handlePositions[i].first * (double)(width() - 2*MARGIN)) + MARGIN;
-            triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
-            triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-            triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
+            if (i == m_selectedStop) continue;
+            paintHandle(handlePositions[i].first,
+                        handlePositions[i].second.toQColor(),
+                        false, &painter);
+        }
 
-            if(i != m_selectedStop)
-                painter.setPen(QPen(Qt::black, 2.0));
-            else
-                painter.setPen(QPen(palette().highlight(), 2.0));
-            painter.setBrush(QBrush(handlePositions[i].second.toQColor()));
-            painter.setRenderHint(QPainter::Antialiasing);
-            painter.drawPolygon(triangle);
+        if (m_selectedStop >= 0) {
+            paintHandle(handlePositions[m_selectedStop].first,
+                        handlePositions[m_selectedStop].second.toQColor(),
+                        true, &painter);
         }
     }
 }
 
+int findNearestHandle(qreal t, const qreal tolerance, const QList<KoGradientStop> &stops)
+{
+    int result = -1;
+    qreal minDistance = tolerance;
+
+    for (int i = 0; i < stops.size(); i++) {
+        const KoGradientStop &stop = stops[i];
+
+        const qreal distance = qAbs(t - stop.first);
+        if (distance < minDistance) {
+            minDistance = distance;
+            result = i;
+        }
+    }
+
+    return result;
+}
+
+
 void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
 {
-    if (e->x() < MARGIN || e->x() > width() - MARGIN) {
+    if (!allowedClickRegion(handleClickTolerance()).contains(e->pos())) {
         QWidget::mousePressEvent(e);
         return;
     }
 
-    double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
-    if(e->y() < height() - HANDLE_SIZE - MARGIN) {
-        if(e->button() == Qt::LeftButton)
-            insertStop(t);
-    }
-    else {
-        QPolygon triangle(3);
-        QList<KoGradientStop> stops = m_gradient->stops();
-        int position;
-        for (int i = 0; i < stops.count(); i++) {
-            position = qRound(stops[i].first * (double)(width() - 2*MARGIN)) + MARGIN;
-            triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
-            triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-            triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
+    const QRect handlesRect = this->handlesStipeRect();
+    const qreal t = (qreal(e->x()) - handlesRect.x()) / handlesRect.width();
+    const QList<KoGradientStop> stops = m_gradient->stops();
 
-            if(triangle.containsPoint(e->pos(), Qt::WindingFill))
-            {
-                if(e->button() == Qt::LeftButton) {
-                    m_selectedStop = i;
-                    emit sigSelectedStop(m_selectedStop);
-                    if(m_selectedStop > 0 && m_selectedStop < stops.size()-1)
-                        m_drag = true;
-                }
-                else if (e->button() == Qt::RightButton && (i > 0 && i < stops.size()-1)) {
-                    QList<KoGradientStop> stops = m_gradient->stops();
-                    stops.removeAt(i);
-                    m_gradient->setStops(stops);
-                    if(m_selectedStop == i)
-                        m_selectedStop = i-1;
-                    else if (m_selectedStop > i)
-                        m_selectedStop--;
-                }
-                break;
-            }
+    const int clickedStop = findNearestHandle(t, qreal(handleClickTolerance()) / handlesRect.width(), stops);
+
+    if (clickedStop >= 0) {
+        if (m_selectedStop != clickedStop) {
+            m_selectedStop = clickedStop;
+            emit sigSelectedStop(m_selectedStop);
         }
+        m_drag = true;
+    } else {
+        insertStop(qBound(0.0, t, 1.0));
+        m_drag = true;
     }
+
     update();
+    updateCursor(e->pos());
 }
 
 void KisStopGradientSliderWidget::mouseReleaseEvent(QMouseEvent * e)
 {
      Q_UNUSED(e);
      m_drag = false;
+     updateCursor(e->pos());
+}
+
+int getNewInsertPosition(const KoGradientStop &stop, const QList<KoGradientStop> &stops)
+{
+    int result = 0;
+
+    for (int i = 0; i < stops.size(); i++) {
+        if (stop.first <= stops[i].first) break;
+
+        result = i + 1;
+    }
+
+    return result;
 }
 
 void KisStopGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
 {
-    if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN)) {
-        QWidget::mouseMoveEvent(e);
-        return;
-    }
+    updateCursor(e->pos());
 
-    double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
     if (m_drag) {
+        const QRect handlesRect = this->handlesStipeRect();
+        double t = (qreal(e->x()) - handlesRect.x()) / handlesRect.width();
+
         QList<KoGradientStop> stops = m_gradient->stops();
 
-        KoGradientStop dragedStop = stops[m_selectedStop];
+        if (t < -0.1 || t > 1.1) {
+            if (stops.size() > 2 && m_selectedStop >= 0) {
+                m_removedStop = stops[m_selectedStop];
+                stops.removeAt(m_selectedStop);
+                m_selectedStop = -1;
+            }
+        } else {
+            if (m_selectedStop < 0) {
+                m_removedStop.first = qBound(0.0, t, 1.0);
+                const int newPos = getNewInsertPosition(m_removedStop, stops);
+                stops.insert(newPos, m_removedStop);
+                m_selectedStop = newPos;
+            } else {
+                KoGradientStop draggedStop = stops[m_selectedStop];
+                draggedStop.first = qBound(0.0, t, 1.0);
 
-        t = qBound(stops[m_selectedStop-1].first, t, stops[m_selectedStop+1].first);
-        dragedStop.first = t;
-
-        stops.removeAt(m_selectedStop);
-        stops.insert(m_selectedStop, dragedStop);
+                stops.removeAt(m_selectedStop);
+                const int newPos = getNewInsertPosition(draggedStop, stops);
+                stops.insert(newPos, draggedStop);
+                m_selectedStop = newPos;
+            }
+        }
 
         m_gradient->setStops(stops);
+        emit sigSelectedStop(m_selectedStop);
+
+        update();
+
+    } else {
+        QWidget::mouseMoveEvent(e);
     }
 
-    update();
+
+}
+
+void KisStopGradientSliderWidget::updateCursor(const QPoint &pos)
+{
+    const bool isInAllowedRegion =
+            allowedClickRegion(handleClickTolerance()).contains(pos);
+
+    QCursor currentCursor;
+
+    if (isInAllowedRegion) {
+        const QRect handlesRect = this->handlesStipeRect();
+        const qreal t = (qreal(pos.x()) - handlesRect.x()) / handlesRect.width();
+        const QList<KoGradientStop> stops = m_gradient->stops();
+
+        const int clickedStop = findNearestHandle(t, qreal(handleClickTolerance()) / handlesRect.width(), stops);
+
+        if (clickedStop >= 0) {
+            currentCursor = m_drag ? Qt::ClosedHandCursor : Qt::OpenHandCursor;
+        }
+    }
+
+    if (currentCursor.shape() != Qt::ArrowCursor) {
+        setCursor(currentCursor);
+    } else {
+        unsetCursor();
+    }
 }
 
 void KisStopGradientSliderWidget::insertStop(double t)
 {
-    QList<KoGradientStop> stopPositions = m_gradient->stops();
-    int i = 0;
-    while(stopPositions[i].first < t)
-        i++;
+    KIS_ASSERT_RECOVER(t >= 0 && t <= 1.0 ) {
+        t = qBound(0.0, t, 1.0);
+    }
+
+    QList<KoGradientStop> stops = m_gradient->stops();
 
     KoColor color;
     m_gradient->colorAt(color, t);
-    stopPositions.insert(i, KoGradientStop(t, color));
-    m_gradient->setStops(stopPositions);
 
-    m_selectedStop = i;
+    const KoGradientStop stop(t, color);
+    const int newPos = getNewInsertPosition(stop, stops);
+
+    stops.insert(newPos, stop);
+    m_gradient->setStops(stops);
+
+    m_selectedStop = newPos;
     emit sigSelectedStop(m_selectedStop);
+}
+
+QRect KisStopGradientSliderWidget::sliderRect() const
+{
+    return QRect(QPoint(), size()).adjusted(m_handleSize.width(), 1, -m_handleSize.width(), -1);
+}
+
+QRect KisStopGradientSliderWidget::gradientStripeRect() const
+{
+    const QRect rc = sliderRect();
+    return rc.adjusted(0, 0, 0, -m_handleSize.height());
+}
+
+QRect KisStopGradientSliderWidget::handlesStipeRect() const
+{
+    const QRect rc = sliderRect();
+    return rc.adjusted(0, rc.height() - m_handleSize.height(), 0, 0);
+}
+
+QRegion KisStopGradientSliderWidget::allowedClickRegion(int tolerance) const
+{
+    QRegion result;
+    result += sliderRect();
+    result += handlesStipeRect().adjusted(-tolerance, 0, tolerance, 0);
+    return result;
 }
 
 int KisStopGradientSliderWidget::selectedStop()
@@ -174,10 +324,36 @@ int KisStopGradientSliderWidget::selectedStop()
     return m_selectedStop;
 }
 
-void KisStopGradientSliderWidget::setSeletectStop(int selected)
+void KisStopGradientSliderWidget::setSelectedStop(int selected)
 {
     m_selectedStop = selected;
     emit sigSelectedStop(m_selectedStop);
+
+    update();
+}
+
+int KisStopGradientSliderWidget::minimalHeight() const
+{
+    QFontMetrics fm(font());
+    const int h = fm.height();
+
+    QStyleOptionToolButton opt;
+    QSize sz = (style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(h, h), this).
+                      expandedTo(QApplication::globalStrut()));
+
+    return sz.height() + m_handleSize.height();
+}
+
+QSize KisStopGradientSliderWidget::sizeHint() const
+{
+    const int h = minimalHeight();
+    return QSize(2 * h, h);
+}
+
+QSize KisStopGradientSliderWidget::minimumSizeHint() const
+{
+    const int h = minimalHeight();
+    return QSize(h, h);
 }
 
 

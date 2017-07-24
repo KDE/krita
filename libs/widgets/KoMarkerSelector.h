@@ -20,18 +20,20 @@
 #ifndef KOMARKERSELECTOR_H
 #define KOMARKERSELECTOR_H
 
+#include "kritawidgets_export.h"
+
+#include <KoFlake.h>
 #include <QComboBox>
-#include <KoMarkerData.h>
 
 class KoMarker;
 
 
-class KoMarkerSelector : public QComboBox
+class KRITAWIDGETS_EXPORT KoMarkerSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    explicit KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidget *parent = 0);
-    virtual ~KoMarkerSelector();
+    explicit KoMarkerSelector(KoFlake::MarkerPosition position, QWidget *parent = 0);
+    ~KoMarkerSelector() override;
 
     // set the current marker style
     void setMarker(KoMarker *marker);
@@ -47,7 +49,7 @@ public:
     void updateMarkers(const QList<KoMarker*> markers);
 
 protected:
-    void paintEvent(QPaintEvent *pe);
+    void paintEvent(QPaintEvent *pe) override;
 
 private:
     class Private;

@@ -189,6 +189,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDevice
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, avoidActiveNode);
 }
 
+
 void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode)
 {
     KisFilterMaskSP mask = new KisFilterMask();
@@ -229,6 +230,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     }
 }
 
+
 void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {
     KisColorizeMaskSP mask = new KisColorizeMask();
@@ -237,6 +239,7 @@ void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
     mask->initializeCompositeOp();
     delete mask->setColorSpace(mask->parent()->colorSpace());
 }
+
 
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)
 {

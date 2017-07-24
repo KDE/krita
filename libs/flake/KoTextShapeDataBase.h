@@ -25,7 +25,7 @@
 #include "KoShapeUserData.h"
 
 class KoTextShapeDataBasePrivate;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoGenStyle;
@@ -42,7 +42,7 @@ class KRITAFLAKE_EXPORT KoTextShapeDataBase : public KoShapeUserData
 public:
     /// constructor
     KoTextShapeDataBase();
-    virtual ~KoTextShapeDataBase();
+    ~KoTextShapeDataBase() override;
 
     /// return the document
     QTextDocument *document() const;
@@ -133,7 +133,7 @@ public:
 
 protected:
     /// constructor
-    KoTextShapeDataBase(KoTextShapeDataBasePrivate &);
+    KoTextShapeDataBase(KoTextShapeDataBasePrivate *);
 
     KoTextShapeDataBasePrivate *d_ptr;
 

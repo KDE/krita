@@ -24,6 +24,7 @@
 
 #include "kis_tiled_data_manager.h"
 #include "kis_random_accessor_ng.h"
+#include "kis_iterator_complete_listener.h"
 
 
 class KisRandomAccessor2 : public KisRandomAccessorNG
@@ -39,9 +40,9 @@ class KisRandomAccessor2 : public KisRandomAccessorNG
 
 public:
 
-    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable);
+    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener);
     KisRandomAccessor2(const KisTiledRandomAccessor& lhs);
-    ~KisRandomAccessor2();
+    ~KisRandomAccessor2() override;
 
 
 private:
@@ -72,15 +73,15 @@ private:
 
 public:
     /// Move to a given x,y position, fetch tiles and data
-    void moveTo(qint32 x, qint32 y);
-    quint8* rawData();
-    const quint8* oldRawData() const;
-    const quint8* rawDataConst() const;
-    qint32 numContiguousColumns(qint32 x) const;
-    qint32 numContiguousRows(qint32 y) const;
-    qint32 rowStride(qint32 x, qint32 y) const;
-    qint32 x() const;
-    qint32 y() const;
+    void moveTo(qint32 x, qint32 y) override;
+    quint8* rawData() override;
+    const quint8* oldRawData() const override;
+    const quint8* rawDataConst() const override;
+    qint32 numContiguousColumns(qint32 x) const override;
+    qint32 numContiguousRows(qint32 y) const override;
+    qint32 rowStride(qint32 x, qint32 y) const override;
+    qint32 x() const override;
+    qint32 y() const override;
 
 private:
     KisTiledDataManager *m_ktm;
@@ -92,6 +93,7 @@ private:
     bool m_writable;
     int m_lastX, m_lastY;
     qint32 m_offsetX, m_offsetY;
+    KisIteratorCompleteListener *m_completeListener;
     static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
 
 };

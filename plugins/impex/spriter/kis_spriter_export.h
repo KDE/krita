@@ -108,10 +108,10 @@ class KisSpriterExport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisSpriterExport(QObject *parent, const QVariantList &);
-    virtual ~KisSpriterExport();
-    virtual bool supportsIO() const { return false; }
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
-    void initializeCapabilities();
+    ~KisSpriterExport() override;
+    bool supportsIO() const override { return false; }
+    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    void initializeCapabilities() override;
 private:
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);

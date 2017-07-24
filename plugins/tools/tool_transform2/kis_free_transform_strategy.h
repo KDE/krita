@@ -39,21 +39,21 @@ public:
                              KoSnapGuide *snapGuide,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
-    ~KisFreeTransformStrategy();
+    ~KisFreeTransformStrategy() override;
 
-    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
-    void paint(QPainter &gc);
-    QCursor getCurrentCursor() const;
+    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) override;
+    void paint(QPainter &gc) override;
+    QCursor getCurrentCursor() const override;
 
-    void externalConfigChanged();
+    void externalConfigChanged() override;
 
     using KisTransformStrategyBase::beginPrimaryAction;
     using KisTransformStrategyBase::continuePrimaryAction;
     using KisTransformStrategyBase::endPrimaryAction;
 
-    bool beginPrimaryAction(const QPointF &pt);
-    void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive);
-    bool endPrimaryAction();
+    bool beginPrimaryAction(const QPointF &pt) override;
+    void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive) override;
+    bool endPrimaryAction() override;
 
 Q_SIGNALS:
     void requestCanvasUpdate();

@@ -23,6 +23,8 @@
 #include <KoColorConversionTransformationAbstractFactory.h>
 #include <KoGenericRegistry.h>
 
+class KoColorProfile;
+
 /**
  * A KoColorSpaceEngine is a class use to create color conversion
  * transformation between color spaces, for which all profiles can
@@ -40,10 +42,11 @@ class KRITAPIGMENT_EXPORT KoColorSpaceEngine : public KoColorConversionTransform
 {
 public:
     KoColorSpaceEngine(const QString& id, const QString& name);
-    virtual ~KoColorSpaceEngine();
+    ~KoColorSpaceEngine() override;
     const QString& id() const;
     const QString& name() const;
-    virtual void addProfile(const QString &filename) = 0;
+    virtual const KoColorProfile* addProfile(const QString &filename) = 0;
+    virtual const KoColorProfile* addProfile(const QByteArray &data) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 
 private:
@@ -55,7 +58,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry<
 {
 public:
     KoColorSpaceEngineRegistry();
-    ~KoColorSpaceEngineRegistry();
+    ~KoColorSpaceEngineRegistry() override;
     static KoColorSpaceEngineRegistry* instance();
 };
 

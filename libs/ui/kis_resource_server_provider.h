@@ -44,7 +44,7 @@ class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 
 public:
     KisResourceServerProvider();
-    virtual ~KisResourceServerProvider();
+    ~KisResourceServerProvider() override;
 
     static KisResourceServerProvider* instance();
 

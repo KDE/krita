@@ -97,7 +97,8 @@ private:
 
 
 KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
-    : m_d(new Private)
+    : QObject(image),
+      m_d(new Private)
 {
     m_d->image = image;
 

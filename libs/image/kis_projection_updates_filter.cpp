@@ -26,10 +26,11 @@ KisProjectionUpdatesFilter::~KisProjectionUpdatesFilter()
 {
 }
 
-bool KisDropAllProjectionUpdatesFilter::filter(KisImage *image, KisNode *node, const QRect& rect)
+bool KisDropAllProjectionUpdatesFilter::filter(KisImage *image, KisNode *node, const QRect& rect, bool resetAnimationCache)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
     Q_UNUSED(rect);
+    Q_UNUSED(resetAnimationCache);
     return true;
 }

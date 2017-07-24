@@ -37,15 +37,15 @@ class KRITAWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
 
 public:
     explicit KoDockWidgetTitleBarButton(QWidget *parent = 0);
-    ~KoDockWidgetTitleBarButton();
+    ~KoDockWidgetTitleBarButton() override;
 
-    QSize sizeHint() const; ///< reimplemented from QWidget
-    QSize minimumSizeHint() const; ///< reimplemented from QWidget
+    QSize sizeHint() const override; ///< reimplemented from QWidget
+    QSize minimumSizeHint() const override; ///< reimplemented from QWidget
 
 protected:
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
-    virtual void paintEvent(QPaintEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     class Private;

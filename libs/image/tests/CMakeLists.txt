@@ -94,6 +94,7 @@ ecm_add_tests(
     kis_node_graph_listener_test.cpp
     kis_node_visitor_test.cpp
     kis_paint_information_test.cpp
+    kis_distance_information_test.cpp
     kis_paintop_test.cpp
     kis_pattern_test.cpp
     kis_recorded_action_factory_registry_test.cpp
@@ -135,7 +136,7 @@ ecm_add_test(kis_layer_style_filter_environment_test.cpp
 
 ecm_add_test(kis_asl_parser_test.cpp
     TEST_NAME kritalibpsd-asl_parser_test
-    LINK_LIBRARIES kritapsd kritapigment kritawidgetutils  Qt5::Xml Qt5::Test)
+    LINK_LIBRARIES kritapsd kritapigment kritawidgetutils kritacommand Qt5::Xml Qt5::Test)
 
 # ecm_add_test(kis_dom_utils_test.cpp
 #    TEST_NAME krita-image-DomUtils-Test

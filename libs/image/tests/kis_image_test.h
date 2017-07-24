@@ -50,6 +50,12 @@ private Q_SLOTS:
     void testMergeSelectionMasks();
 
     void testFlattenImage();
+
+    void testFlattenPassThroughLayer();
+    void testMergeTwoPassThroughLayers();
+
+    void testMergePaintOverPassThroughLayer();
+    void testMergePassThroughOverPaintLayer();
 };
 
 #endif

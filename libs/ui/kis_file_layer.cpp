@@ -30,6 +30,12 @@
 #include "kis_default_bounds.h"
 
 
+KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacity)
+    : KisExternalLayer(image, name, opacity)
+{
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
+}
+
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)

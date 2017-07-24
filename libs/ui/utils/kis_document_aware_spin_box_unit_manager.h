@@ -28,7 +28,7 @@ class KisDocumentAwareSpinBoxUnitManagerBuilder : public KisSpinBoxUnitManagerBu
 
 public:
 
-    KisSpinBoxUnitManager* buildUnitManager(QObject* parent);
+    KisSpinBoxUnitManager* buildUnitManager(QObject* parent) override;
 };
 
 /*!
@@ -55,11 +55,14 @@ public:
     KisDocumentAwareSpinBoxUnitManager(QObject *parent = 0, int pPixDir = PIX_DIR_X);
 
     //! \reimp \see KisSpinBoxUnitManager
-    virtual qreal getConversionFactor(int dim, QString symbol) const;
+    qreal getConversionFactor(int dim, QString psymbol) const override;
     //! \reimp \see KisSpinBoxUnitManager
-    virtual qreal getConversionConstant(int dim, QString symbol) const;
+    qreal getConversionConstant(int dim, QString symbol) const override;
 
-private:
+protected:
+
+    //! \reimp \see KisSpinBoxUnitManager
+    virtual bool hasPercent(int unitDim) const;
 
     PixDir pixDir;
 };

@@ -29,15 +29,15 @@ class KRITAANIMATIONDOCKER_EXPORT KisEqualizerSlider : public QAbstractSlider
 {
 public:
     KisEqualizerSlider(QWidget *parent);
-    ~KisEqualizerSlider();
+    ~KisEqualizerSlider() override;
 
-    void mousePressEvent(QMouseEvent *ev);
-    void mouseMoveEvent(QMouseEvent *ev);
-    void mouseReleaseEvent(QMouseEvent *ev);
-    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *ev) override;
+    void mouseMoveEvent(QMouseEvent *ev) override;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
+    void paintEvent(QPaintEvent *event) override;
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void setRightmost(bool value);
     void setToggleState(bool value);

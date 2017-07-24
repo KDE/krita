@@ -35,20 +35,13 @@ class KRITAFLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryB
 {
 public:
     KoToolRegistry();
-    ~KoToolRegistry();
+    ~KoToolRegistry() override;
 
     /**
      * Return an instance of the KoToolRegistry
      * Create a new instance on first call and return the singleton.
      */
     static KoToolRegistry *instance();
-
-    /**
-     * Add a toolfactory from a deferred plugin. This will cause the toolFactoryAdded signal
-     * to be emitted, which is caught by the KoToolManager which then adds the tool to all
-     * canvases.
-     */
-    void addDeferred(KoToolFactoryBase *toolFactory);
 
 private:
     KoToolRegistry(const KoToolRegistry&);

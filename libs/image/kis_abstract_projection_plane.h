@@ -92,14 +92,14 @@ public:
 class KisDumbProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode);
-    void apply(KisPainter *painter, const QRect &rect);
+    QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
+    void apply(KisPainter *painter, const QRect &rect) override;
 
-    QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
-    QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
-    QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
+    QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
 
-    KisPaintDeviceList getLodCapableDevices() const;
+    KisPaintDeviceList getLodCapableDevices() const override;
 };
 
 #endif /* __KIS_ABSTRACT_PROJECTION_PLANE_H */

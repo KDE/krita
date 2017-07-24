@@ -9,10 +9,17 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${
 set(kritaglobal_LIB_SRCS
     kis_assert.cpp
     kis_debug.cpp
+    kis_algebra_2d.cpp
     kis_memory_leak_tracker.cpp
     kis_shared.cpp
     kis_dom_utils.cpp
     kis_painting_tweaks.cpp
+    KisHandlePainterHelper.cpp
+    KisHandleStyle.cpp
+    kis_signal_compressor.cpp
+    kis_signal_compressor_with_param.cpp
+    kis_acyclic_signal_connector.cpp
+    KisQPainterStateSaver.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

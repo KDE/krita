@@ -34,16 +34,6 @@ bool KisSketchPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-bool KisSketchPaintOpSettings::isAirbrushing() const
-{
-    return getBool(AIRBRUSH_ENABLED);
-}
-
-int KisSketchPaintOpSettings::rate() const
-{
-    return getInt(AIRBRUSH_RATE);
-}
-
 QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);

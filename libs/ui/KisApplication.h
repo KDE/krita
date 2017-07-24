@@ -59,7 +59,7 @@ public:
     /**
      *  Destructor.
      */
-    virtual ~KisApplication();
+    ~KisApplication() override;
 
     /**
      * Call this to start the application.
@@ -93,7 +93,12 @@ public:
     void hideSplashScreen();
 
     /// Overridden to handle exceptions from event handlers.
-    bool notify(QObject *receiver, QEvent *event);
+    bool notify(QObject *receiver, QEvent *event) override;
+
+    void addResourceTypes();
+    void loadResources();
+    void loadPlugins();
+    void initializeGlobals(const KisApplicationArguments &args);
 
 public Q_SLOTS:
 
@@ -105,8 +110,6 @@ private:
     void checkAutosaveFiles();
     bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *m_mainWindow);
     void clearConfig();
-    void loadResources();
-    void loadPlugins();
 
 private:
     KisApplicationPrivate * const d;

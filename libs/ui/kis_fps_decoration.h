@@ -25,9 +25,9 @@ class KisFpsDecoration : public KisCanvasDecoration
 {
 public:
     KisFpsDecoration(QPointer<KisView> view);
-    ~KisFpsDecoration();
+    ~KisFpsDecoration() override;
 
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas) override;
     static const QString idTag;
 };
 

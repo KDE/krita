@@ -232,8 +232,6 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
 void kis_x11_init_tablet()
 {
     KisConfig cfg;
-    bool disableTouchOnCanvas = cfg.disableTouchOnCanvas();
-
     // TODO: free this structure on exit
     KIS_X11 = new KisX11Data;
     KIS_X11->display = QX11Info::display();
@@ -323,7 +321,7 @@ void kis_x11_init_tablet()
                     deviceType = QTabletEvent::Stylus;
                     gotStylus = true;
                     needCheckIfItIsReallyATablet = true;
-                } else if (disableTouchOnCanvas &&
+                } else if (KisConfig().disableTouchOnCanvas() &&
                            devs->type == KIS_ATOM(WacomTouch) &&
                            QString(devs->name).contains("Wacom")) {
 

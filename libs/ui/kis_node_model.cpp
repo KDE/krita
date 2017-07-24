@@ -612,7 +612,7 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
         nodes << nodeFromIndex(idx);
     }
 
-    return KisMimeData::mimeForLayers(nodes, m_d->image->rootLayer());
+    return KisMimeData::mimeForLayers(nodes, m_d->image);
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)

@@ -106,7 +106,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KActionCategory();
+    ~KActionCategory() override;
 
     /**
      * \name Adding Actions

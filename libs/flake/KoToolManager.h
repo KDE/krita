@@ -57,7 +57,7 @@ class KRITAFLAKE_EXPORT KoToolAction : public QObject
 public:
     // toolHelper takes over ownership, and those live till the end of KoToolManager.
     explicit KoToolAction(ToolHelper *toolHelper);
-    ~KoToolAction();
+    ~KoToolAction() override;
 
 public:
     QString id() const;             ///< The id of the tool
@@ -146,7 +146,7 @@ public:
     KoToolManager();
     /// Return the toolmanager singleton
     static KoToolManager* instance();
-    ~KoToolManager();
+    ~KoToolManager() override;
 
     /**
      * Register actions for switching to tools at the actionCollection parameter.
@@ -182,14 +182,6 @@ public:
 
     /// @return the active canvas controller
     KoCanvasController *activeCanvasController() const;
-
-    /**
-     * Connect all the tools for the given canvas to the new shape controller.
-     *
-     * @param shapecontroller the new shape controller
-     * @param canvasController the canvas
-     */
-    void updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController);
 
     /**
      * Return the tool that is able to create shapes for this param canvas.
@@ -230,9 +222,6 @@ public:
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
 
-    /// Injects an input event from a plugin based input device
-    void injectDeviceEvent(KoInputDeviceHandlerEvent *event);
-
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;
 
@@ -258,11 +247,6 @@ public Q_SLOTS:
     void switchInputDeviceRequested(const KoInputDevice &id);
 
     /**
-     * a new tool has become known to mankind
-     */
-    void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
-
-    /**
      * Request for temporary switching the tools.
      * This switch can be later reverted with switchBackRequested().
      * @param id the id of the tool
@@ -279,6 +263,12 @@ public Q_SLOTS:
     void switchBackRequested();
 
 Q_SIGNALS:
+    /**
+     * Emitted when a new tool is going to override the current tool
+     * @param canvas the currently active canvas.
+     */
+    void aboutToChangeTool(KoCanvasController *canvas);
+
     /**
      * Emitted when a new tool was selected or became active.
      * @param canvas the currently active canvas.

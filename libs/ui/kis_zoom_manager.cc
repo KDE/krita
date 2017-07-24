@@ -215,6 +215,15 @@ KoRuler* KisZoomManager::verticalRuler() const
     return m_verticalRuler;
 }
 
+qreal KisZoomManager::zoom() const
+{
+    qreal zoomX;
+    qreal zoomY;
+    m_zoomHandler->zoom(&zoomX, &zoomY);
+    qDebug() << zoomX << zoomY;
+    return zoomX;
+}
+
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
 {
     QPoint pt = viewPos - m_rulersOffset;

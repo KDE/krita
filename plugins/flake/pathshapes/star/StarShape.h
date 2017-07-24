@@ -20,6 +20,7 @@
 #ifndef KOSTARSHAPE_H
 #define KOSTARSHAPE_H
 
+#include <array>
 #include <KoParameterShape.h>
 
 #define StarShapeId "StarShape"
@@ -35,7 +36,9 @@ class StarShape : public KoParameterShape
 {
 public:
     StarShape();
-    ~StarShape();
+    ~StarShape() override;
+
+    KoShape* cloneShape() const override;
 
     /**
      * Sets the number of corners.
@@ -107,17 +110,19 @@ public:
     QPointF starCenter() const;
 
     /// reimplemented
-    virtual void setSize(const QSizeF &newSize);
+    void setSize(const QSizeF &newSize) override;
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented
-    virtual QString pathShapeId() const;
+    QString pathShapeId() const override;
 
 protected:
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    void updatePath(const QSizeF &size);
+    StarShape(const StarShape &rhs);
+
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
+    void updatePath(const QSizeF &size) override;
     /// recreates the path points when the corner count or convexity changes
     void createPoints(int requiredPointCount);
 
@@ -132,11 +137,11 @@ private:
     enum Handles { tip = 0, base = 1 };
 
     uint m_cornerCount;    ///< number of corners
-    qreal m_radius[2];    ///< the different radii
-    qreal m_angles[2];    ///< the offset angles
+    std::array<qreal, 2> m_radius;    ///< the different radii
+    std::array<qreal, 2> m_angles;    ///< the offset angles
     qreal m_zoomX;        ///< scaling in x
     qreal m_zoomY;        ///< scaling in y
-    qreal m_roundness[2]; ///< the roundness at the handles
+    std::array<qreal, 2> m_roundness; ///< the roundness at the handles
     QPointF m_center;      ///< the star center point
     bool m_convex;         ///< controls if the star is convex
 };

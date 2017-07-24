@@ -388,18 +388,6 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="paste_at">
-      <icon></icon>
-      <text>Paste at cursor</text>
-      <whatsThis></whatsThis>
-      <toolTip>Paste at cursor</toolTip>
-      <iconText>Paste at cursor</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="invert">
       <icon></icon>
       <text>&amp;Invert Selection</text>
@@ -1532,6 +1520,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="ZoomTool">
+      <icon></icon>
+      <text>Zoom Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Zoom Tool</toolTip>
+      <iconText>Zoom Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="KisToolPolyline">
       <icon></icon>
       <text>Polyline Tool</text>
@@ -1762,6 +1760,18 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+O</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="Select Hard Overlay Blending Mode">
+      <icon></icon>
+      <text>Select Hard Overlay Blending Mode</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Hard Overlay Blending Mode</toolTip>
+      <iconText>Select Hard Overlay Blending Mode</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Alt+Shift+P</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2250,6 +2260,54 @@
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_lock">
+      <icon>layer-locked</icon>
+      <text>&amp;Lock/unlock layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock/unlock layer</toolTip>
+      <iconText>Lock/unlock layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_visibility">
+      <icon>visible</icon>
+      <text>Toggle layer &amp;visibility</text>
+      <whatsThis></whatsThis>
+      <toolTip>Toggle layer visibility</toolTip>
+      <iconText>Toggle layer visibility</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_alpha_lock">
+      <icon>transparency-locked</icon>
+      <text>Lock/unlock layer &amp;alpha</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock/unlock layer's alpha</toolTip>
+      <iconText>Lock/unlock layer's alpha</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_inherit_alpha">
+      <icon>transparency-enabled</icon>
+      <text>Toggle layer alpha &amp;inheritance</text>
+      <whatsThis></whatsThis>
+      <toolTip>Toggle layer alpha inheritance</toolTip>
+      <iconText>Toggle layer alpha inheritance</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_paint_layer">

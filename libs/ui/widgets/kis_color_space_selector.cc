@@ -88,26 +88,25 @@ KisColorSpaceSelector::~KisColorSpaceSelector()
 
 void KisColorSpaceSelector::fillCmbProfiles()
 {
-    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
+    const QString defaultProfileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
+
     d->colorSpaceSelector->cmbProfile->clear();
 
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-    if (csf == 0) return;
-
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId);
     QStringList profileNames;
     Q_FOREACH (const KoColorProfile *profile, profileList) {
         profileNames.append(profile->name());
     }
-    qSort(profileNames);
+    std::sort(profileNames.begin(), profileNames.end());
     Q_FOREACH (QString stringName, profileNames) {
-        if (stringName==csf->defaultProfile()) {
-            d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName+d->defaultsuffix);
+        if (stringName == defaultProfileName) {
+            d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName + d->defaultsuffix);
         } else {
             d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName);
         }
     }
-    d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile()+d->defaultsuffix);
+    d->colorSpaceSelector->cmbProfile->setCurrent(defaultProfileName + d->defaultsuffix);
     colorSpaceChanged();
 }
 
@@ -118,7 +117,7 @@ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
     QList<KoID> depths = KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible);
 
     // order the depth by name
-    qSort(depths.begin(), depths.end(), sortBitDepthsComparer);
+    std::sort(depths.begin(), depths.end(), sortBitDepthsComparer);
 
     d->colorSpaceSelector->cmbColorDepth->setIDList(depths);
     if (depths.contains(activeDepth)) {

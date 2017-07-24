@@ -28,7 +28,7 @@ class HistoryPlugin : public QObject
     Q_OBJECT
 public:
     HistoryPlugin(QObject *parent, const QVariantList &);
-    virtual ~HistoryPlugin();
+    ~HistoryPlugin() override;
 };
 
 #endif

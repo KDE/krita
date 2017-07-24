@@ -30,7 +30,7 @@ class CompositionDockerPlugin : public QObject
     Q_OBJECT
 public:
     CompositionDockerPlugin(QObject *parent, const QVariantList &);
-    virtual ~CompositionDockerPlugin();
+    ~CompositionDockerPlugin() override;
 };
 
 #endif

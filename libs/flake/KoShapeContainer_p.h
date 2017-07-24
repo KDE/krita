@@ -20,6 +20,7 @@
 #define KOSHAPECONTAINERPRIVATE_H
 
 #include "KoShape_p.h"
+#include "KoShapeContainer.h"
 #include "kritaflake_export.h"
 
 class KoShapeContainerModel;
@@ -31,8 +32,11 @@ class KRITAFLAKE_EXPORT KoShapeContainerPrivate : public KoShapePrivate
 {
 public:
     explicit KoShapeContainerPrivate(KoShapeContainer *q);
-    virtual ~KoShapeContainerPrivate();
+    ~KoShapeContainerPrivate() override;
 
+    KoShapeContainerPrivate(const KoShapeContainerPrivate &rhs, KoShapeContainer *q);
+
+    KoShapeContainer::ShapeInterface shapeInterface;
     KoShapeContainerModel *model;
 };
 

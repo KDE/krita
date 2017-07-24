@@ -37,6 +37,7 @@ public:
     };
 
     SvgGraphicsContext();
+    void workaroundClearInheritedFillProperties();
 
     StyleType     fillType;  ///< the current fill type
     Qt::FillRule  fillRule;  ///< the current fill rule
@@ -45,10 +46,11 @@ public:
 
     StyleType     strokeType;///< the current stroke type
     QString       strokeId;  ///< the current stroke id (used for gradient strokes)
-    KoShapeStroke stroke;    ///< the current stroke
+    KoShapeStrokeSP stroke;    ///< the current stroke
 
     QString filterId;       ///< the current filter id
     QString clipPathId;     ///< the current clip path id
+    QString clipMaskId;     ///< the current clip mask id
     Qt::FillRule clipRule;  ///< the current clip rule
     qreal opacity;          ///< the shapes opacity
 
@@ -58,7 +60,7 @@ public:
     QString xmlBaseDir;     ///< the current base directory (used for loading external content)
     bool preserveWhitespace;///< preserve whitespace in element text
 
-    QRectF currentBoundbox; ///< the current bound box used for bounding box units
+    QRectF currentBoundingBox; ///< the current bound box used for bounding box units
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
     QTransform viewboxTransform; ///< view box transformation
 
@@ -67,6 +69,14 @@ public:
     QString baselineShift;  ///< basline shift mode for text elements
 
     bool display;           ///< controls display of shape
+    bool visible;           ///< controls visibility of the shape (inherited)
+    qreal pixelsPerInch;    ///< controls the resolution of the image raster
+
+    QString markerStartId;
+    QString markerMidId;
+    QString markerEndId;
+
+    bool autoFillMarkers;
 };
 
 #endif // SVGGRAPHICCONTEXT_H

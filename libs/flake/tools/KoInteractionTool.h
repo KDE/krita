@@ -26,6 +26,7 @@
 #include "kritaflake_export.h"
 
 class KoInteractionStrategy;
+class KoInteractionStrategyFactory;
 class KoInteractionToolPrivate;
 
 #define KoInteractionTool_ID "InteractionTool"
@@ -62,17 +63,17 @@ public:
      * @param canvas the canvas this tool will be working for.
      */
     explicit KoInteractionTool(KoCanvasBase *canvas);
-    virtual ~KoInteractionTool();
+    ~KoInteractionTool() override;
 
 public:
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 protected:
     /// \internal
@@ -86,7 +87,14 @@ protected:
      * Reimplement this factory method to create your strategy to be used for mouse interaction.
      * @returns a new strategy, or 0 when there is nothing to do.
      */
+    KoInteractionStrategy *createStrategyBase(KoPointerEvent *event);
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event) = 0;
+
+    void addInteractionFactory(KoInteractionStrategyFactory *factory);
+    void removeInteractionFactory(const QString &id);
+    bool hasInteractioFactory(const QString &id);
+
+    bool tryUseCustomCursor();
 
 private:
     KoInteractionTool(const KoInteractionTool&);

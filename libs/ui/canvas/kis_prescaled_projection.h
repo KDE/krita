@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KisPrescaledProjection : public QObject, public KisShared
 public:
 
     KisPrescaledProjection();
-    virtual ~KisPrescaledProjection();
+    ~KisPrescaledProjection() override;
 
     void setImage(KisImageWSP image);
 

@@ -30,7 +30,7 @@ class RoundMarkerPaintOpPlugin: public QObject
     Q_OBJECT
 public:
     RoundMarkerPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~RoundMarkerPaintOpPlugin();
+    ~RoundMarkerPaintOpPlugin() override;
 };
 
 #endif // _ROUNDMARKER_PAINTOP_PLUGIN_H_

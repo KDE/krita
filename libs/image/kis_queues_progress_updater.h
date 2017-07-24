@@ -30,8 +30,8 @@ class KRITAIMAGE_EXPORT KisQueuesProgressUpdater : public QObject
     Q_OBJECT
 
 public:
-    KisQueuesProgressUpdater(KoProgressProxy *progressProxy);
-    ~KisQueuesProgressUpdater();
+    KisQueuesProgressUpdater(KoProgressProxy *progressProxy, QObject *parent = 0);
+    ~KisQueuesProgressUpdater() override;
 
     void updateProgress(int queueSizeMetric, const QString &jobName);
     void hide();

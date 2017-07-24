@@ -21,8 +21,22 @@
 #include "KoPathTool.h"
 #include <QAction>
 
+#include <KoPathShape.h>
+#include <KoParameterShape.h>
+#include <KoShapeConfigWidgetBase.h>
+#include <QVBoxLayout>
+#include <KoCanvasBase.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoUnit.h>
+#include "kis_assert.h"
+
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      m_currentShape(0),
+      m_currentPanel(0),
+      m_canvas(tool->canvas())
+
 {
     widget.setupUi(this);
     widget.corner->setDefaultAction(tool->action("pathpoint-corner"));
@@ -39,6 +53,9 @@ PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     widget.joinSegment->setDefaultAction(tool->action("pathpoint-join"));
     widget.mergePoints->setDefaultAction(tool->action("pathpoint-merge"));
 
+    widget.wdgShapeProperties->setVisible(false);
+    widget.lineShapeProperties->setVisible(false);
+
     connect(widget.convertToPath, SIGNAL(released()), tool->action("convert-to-path"), SLOT(trigger()));
 }
 
@@ -53,4 +70,85 @@ void PathToolOptionWidget::setSelectionType(int type)
         widget.stackedWidget->setCurrentIndex(0);
     else
         widget.stackedWidget->setCurrentIndex(1);
+}
+
+void PathToolOptionWidget::setCurrentShape(KoPathShape *pathShape)
+{
+    if (pathShape == m_currentShape) return;
+
+    if (m_currentShape) {
+        m_currentShape = 0;
+        if (m_currentPanel) {
+            m_currentPanel->deleteLater();
+            m_currentPanel = 0;
+        }
+    }
+
+    if (pathShape) {
+        m_currentShape = pathShape;
+        QString shapeId = m_currentShape->pathShapeId();
+
+        // check if we have an edited parametric shape, then we use the path shape id
+        KoParameterShape *paramShape = dynamic_cast<KoParameterShape *>(m_currentShape);
+        if (paramShape && !paramShape->isParametricShape()) {
+            shapeId = paramShape->shapeId();
+        }
+
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shapeId);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(factory);
+
+        QList<KoShapeConfigWidgetBase*> panels = factory->createShapeOptionPanels();
+        if (!panels.isEmpty()) {
+            KoShapeConfigWidgetBase *activePanel = 0;
+
+            Q_FOREACH (KoShapeConfigWidgetBase *panel, panels) {
+                if (!activePanel && panel->showOnShapeSelect()) {
+                    activePanel = panel;
+                } else {
+                    delete panel;
+                }
+            }
+
+            if (activePanel) {
+                KIS_ASSERT_RECOVER_RETURN(m_canvas);
+                m_currentPanel = activePanel;
+                m_currentPanel->setUnit(m_canvas->unit());
+
+                QLayout *baseLayout = widget.wdgShapeProperties->layout();
+                QVBoxLayout *layout = dynamic_cast<QVBoxLayout*>(widget.wdgShapeProperties->layout());
+
+                if (!layout) {
+                    KIS_SAFE_ASSERT_RECOVER(!baseLayout) {
+                        delete baseLayout;
+                    }
+                    widget.wdgShapeProperties->setLayout(new QVBoxLayout());
+                }
+
+
+                KIS_ASSERT_RECOVER_RETURN(widget.wdgShapeProperties->layout());
+                widget.wdgShapeProperties->layout()->addWidget(m_currentPanel);
+                connect(m_currentPanel, SIGNAL(propertyChanged()), SLOT(slotShapePropertyChanged()));
+                m_currentPanel->open(m_currentShape);
+            }
+        }
+    }
+
+    widget.wdgShapeProperties->setVisible(m_currentPanel);
+    widget.lineShapeProperties->setVisible(m_currentPanel);
+}
+
+void PathToolOptionWidget::slotShapePropertyChanged()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentPanel);
+
+    KUndo2Command *command = m_currentPanel->createCommand();
+    if (command) {
+        m_canvas->addCommand(command);
+    }
+}
+
+void PathToolOptionWidget::showEvent(QShowEvent *event)
+{
+    emit sigRequestUpdateActions();
+    QWidget::showEvent(event);
 }

@@ -39,7 +39,7 @@ public:
 
 public:
     __CategorizedListModelBase(QObject *parent);
-    virtual ~__CategorizedListModelBase();
+    ~__CategorizedListModelBase() override;
 
 private Q_SLOTS:
 
@@ -84,12 +84,12 @@ public:
         connect(&m_mapper, SIGNAL(endRemoveRow()), SLOT(slotEndRemoveRow()));
     }
 
-    int rowCount(const QModelIndex& parent) const {
+    int rowCount(const QModelIndex& parent) const override {
         Q_UNUSED(parent);
         return m_mapper.rowCount();
     }
 
-    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const {
+    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const override {
         if (!idx.isValid()) return QVariant();
 
         typename SpecificCategoriesMapper::DataItem *item =
@@ -120,7 +120,7 @@ public:
         return QVariant();
     }
 
-    bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::EditRole) {
+    bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::EditRole) override {
         if (!idx.isValid()) return false;
 
         typename SpecificCategoriesMapper::DataItem *item =
@@ -141,7 +141,7 @@ public:
         return true;
     }
 
-    Qt::ItemFlags flags(const QModelIndex& idx) const {
+    Qt::ItemFlags flags(const QModelIndex& idx) const override {
         if (!idx.isValid()) return Qt::NoItemFlags;
 
         typename SpecificCategoriesMapper::DataItem *item =

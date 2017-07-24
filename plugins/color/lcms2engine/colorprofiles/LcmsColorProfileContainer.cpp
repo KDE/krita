@@ -31,6 +31,8 @@
 
 #include <QDebug>
 
+#include "kis_debug.h"
+
 class LcmsColorProfileContainer::Private
 {
 public:
@@ -67,6 +69,8 @@ public:
     bool isAbsoluteCLUT;
     bool isSaturationCLUT;
     bool isMatrixShaper;
+
+    QByteArray uniqueId;
 };
 
 LcmsColorProfileContainer::LcmsColorProfileContainer()
@@ -528,4 +532,28 @@ QString LcmsColorProfileContainer::name() const
 QString LcmsColorProfileContainer::info() const
 {
     return d->productDescription;
+}
+
+QByteArray LcmsColorProfileContainer::getProfileUniqueId() const
+{
+    if (d->uniqueId.isEmpty() && d->profile) {
+        QByteArray id(sizeof(cmsProfileID), 0);
+        cmsGetHeaderProfileID(d->profile, (quint8*)id.data());
+
+        bool isNull = std::all_of(id.constBegin(),
+                                  id.constEnd(),
+                                  [](char c) {return c == 0;});
+        if (isNull) {
+            if (cmsMD5computeID(d->profile)) {
+                cmsGetHeaderProfileID(d->profile, (quint8*)id.data());
+                isNull = false;
+            }
+        }
+
+        if (!isNull) {
+            d->uniqueId = id;
+        }
+    }
+
+    return d->uniqueId;
 }

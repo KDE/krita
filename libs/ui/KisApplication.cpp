@@ -105,8 +105,9 @@ public:
 class KisApplication::ResetStarting
 {
 public:
-    ResetStarting(KisSplashScreen *splash = 0)
+    ResetStarting(KisSplashScreen *splash, int fileCount)
         : m_splash(splash)
+        , m_fileCount(fileCount)
     {
     }
 
@@ -115,8 +116,7 @@ public:
 
             KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
-
-            if (hideSplash) {
+            if (m_fileCount > 0 || hideSplash) {
                 m_splash->hide();
             }
             else {
@@ -138,8 +138,8 @@ public:
     }
 
     QPointer<KisSplashScreen> m_splash;
+    int m_fileCount;
 };
-
 
 
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
@@ -210,7 +210,7 @@ BOOL isWow64()
 }
 #endif
 
-void initializeGlobals(const KisApplicationArguments &args)
+void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 {
     int dpiX = args.dpiX();
     int dpiY = args.dpiY();
@@ -219,7 +219,7 @@ void initializeGlobals(const KisApplicationArguments &args)
     }
 }
 
-void addResourceTypes()
+void KisApplication::addResourceTypes()
 {
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
@@ -245,6 +245,8 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
+    KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
+    KoResourcePaths::addResourceType("symbols", "data", "/symbols");
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -268,6 +270,8 @@ void addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
 }
 
 void KisApplication::loadResources()
@@ -294,6 +298,11 @@ void KisApplication::loadResources()
     setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
     processEvents();
     KisResourceServerProvider::instance()->paintOpPresetServer(true);
+
+    // load symbols
+    setSplashScreenLoadingText(i18n("Loading SVG Symbol Collections..."));
+    processEvents();
+    KoResourceServerProvider::instance()->svgSymbolCollectionServer(true);
 
     setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
     processEvents();
@@ -391,7 +400,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
 
-    ResetStarting resetStarting(d->splashScreen); // remove the splash when done
+
+    ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
@@ -434,7 +444,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
-
         // Loop through arguments
         short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {

@@ -46,7 +46,7 @@ class  RIntNumInput : public QWidget
 public:
 
     RIntNumInput(QWidget* const parent=0);
-    ~RIntNumInput();
+    ~RIntNumInput() override;
 
     void setRange(int min, int max, int step);
 
@@ -85,7 +85,7 @@ class  RDoubleNumInput : public QWidget
 public:
 
     RDoubleNumInput(QWidget* const parent=0);
-    ~RDoubleNumInput();
+    ~RDoubleNumInput() override;
 
     void   setDecimals(int p);
     void   setRange(double min, double max, double step);

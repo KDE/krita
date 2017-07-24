@@ -33,7 +33,7 @@ class KRITAUI_EXPORT KisMultipliersDoubleSliderSpinBox : public QWidget {
     Q_OBJECT
 public:
     KisMultipliersDoubleSliderSpinBox(QWidget* _parent = 0);
-    ~KisMultipliersDoubleSliderSpinBox();
+    ~KisMultipliersDoubleSliderSpinBox() override;
     
     void addMultiplier(double v);
     /**

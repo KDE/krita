@@ -102,20 +102,27 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Calligra Sheets
-void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
+
+bool KoToolBase::isActivated() const
 {
-    if (shapeController) {
-        KoDocumentResourceManager *scrm = shapeController->resourceManager();
-        if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(documentResourceChanged(int, const QVariant &)));
-        }
-    }
+    Q_D(const KoToolBase);
+    return d->isActivated;
+}
+
+
+void KoToolBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+{
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
+
+    Q_D(KoToolBase);
+    d->isActivated = true;
 }
 
 void KoToolBase::deactivate()
 {
+    Q_D(KoToolBase);
+    d->isActivated = false;
 }
 
 void KoToolBase::canvasResourceChanged(int key, const QVariant & res)
@@ -155,14 +162,9 @@ void KoToolBase::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoToolBase::wheelEvent(KoPointerEvent * e)
-{
-    e->ignore();
-}
 
-void KoToolBase::touchEvent(QTouchEvent *event)
+void KoToolBase::explicitUserStrokeEndRequest()
 {
-    event->ignore();
 }
 
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
@@ -203,11 +205,6 @@ void KoToolBase::customReleaseEvent(KoPointerEvent * event)
 void KoToolBase::customMoveEvent(KoPointerEvent * event)
 {
     event->ignore();
-}
-
-bool KoToolBase::wantsTouch() const
-{
-    return false;
 }
 
 void KoToolBase::useCursor(const QCursor &cursor)
@@ -292,16 +289,9 @@ void KoToolBase::cut()
     deleteSelection();
 }
 
-QList<QAction*> KoToolBase::popupActionList() const
+QMenu *KoToolBase::popupActionsMenu()
 {
-    Q_D(const KoToolBase);
-    return d->popupActionList;
-}
-
-void KoToolBase::setPopupActionList(const QList<QAction*> &list)
-{
-    Q_D(KoToolBase);
-    d->popupActionList = list;
+    return 0;
 }
 
 KoCanvasBase * KoToolBase::canvas() const
@@ -363,11 +353,6 @@ void KoToolBase::setTextMode(bool value)
     d->isInTextMode=value;
 }
 
-QStringList KoToolBase::supportedPasteMimeTypes() const
-{
-    return QStringList();
-}
-
 bool KoToolBase::paste()
 {
     return false;
@@ -413,6 +398,22 @@ bool KoToolBase::isInTextMode() const
 {
     Q_D(const KoToolBase);
     return d->isInTextMode;
+}
+
+void KoToolBase::requestUndoDuringStroke()
+{
+    /**
+     * Default implementation just cancells the stroke
+     */
+    requestStrokeCancellation();
+}
+
+void KoToolBase::requestStrokeCancellation()
+{
+}
+
+void KoToolBase::requestStrokeEnd()
+{
 }
 
 bool KoToolBase::maskSyntheticEvents() const

@@ -40,13 +40,18 @@ void KisProjectionBenchmark::cleanupTestCase()
 
 void KisProjectionBenchmark::benchmarkProjection()
 {
-    QBENCHMARK{
-        KisDocument *doc = KisPart::instance()->createDocument();
-        doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
-        doc->image()->refreshGraph();
-        doc->exportDocument(QUrl::fromLocalFile(QString(FILES_OUTPUT_DIR) + QDir::separator() + "save_test.kra"));
-        delete doc;
+    KisDocument *doc = KisPart::instance()->createDocument();
+    doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+
+    qApp->processEvents();
+    QTest::qWait(100);
+
+    QBENCHMARK_ONCE {
+        doc->image()->refreshGraphAsync();
+        doc->image()->waitForDone();
     }
+
+    delete doc;
 }
 
 void KisProjectionBenchmark::benchmarkLoading()

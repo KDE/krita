@@ -32,13 +32,13 @@ class KisChangeGuidesCommand : public KUndo2Command
 public:
     KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &newGuides);
     KisChangeGuidesCommand(KisDocument *document);
-    ~KisChangeGuidesCommand();
+    ~KisChangeGuidesCommand() override;
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
-    int id() const;
-    bool mergeWith(const KUndo2Command *command);
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
 
 private:
     struct Private;

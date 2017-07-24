@@ -31,14 +31,25 @@ KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy(KoPathTool *too
 {
 }
 
+void KoPathPointRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers)
+{
+    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+    if (selection && !(modifiers & Qt::ShiftModifier)) {
+        selection->clear();
+    }
+
+    KoShapeRubberSelectStrategy::handleMouseMove(p, modifiers);
+}
+
 void KoPathPointRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_D(KoShapeRubberSelectStrategy);
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-    if (! selection)
+    if (!selection) {
         return;
+    }
 
-    selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ControlModifier));
+    selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ShiftModifier));
     m_tool->canvas()->updateCanvas(d->selectedRect().normalized());
     selection->repaint();
 }

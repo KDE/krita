@@ -35,7 +35,7 @@ class KRITAWIDGETS_EXPORT KoTagChooserWidget : public QWidget
 
 public:
     explicit KoTagChooserWidget(QWidget* parent);
-    virtual ~KoTagChooserWidget();
+    ~KoTagChooserWidget() override;
     void setCurrentIndex(int index);
     int findIndexOf(QString tagName);
     void insertItem(QString tagName);

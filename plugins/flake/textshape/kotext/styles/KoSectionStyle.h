@@ -67,7 +67,7 @@ public:
     /// Creates a KoSectionStyle with the given frame format and \a parent
     explicit KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = 0);
     /// Destructor
-    ~KoSectionStyle();
+    ~KoSectionStyle() override;
 
     /// creates a clone of this style with the specified parent
     KoSectionStyle *clone(QObject *parent = 0) const;

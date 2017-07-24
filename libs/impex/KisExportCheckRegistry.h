@@ -33,7 +33,7 @@ class KRITAIMPEX_EXPORT KisExportCheckRegistry : public QObject, public KoGeneri
 {
 public:
     KisExportCheckRegistry();
-    virtual ~KisExportCheckRegistry();
+    ~KisExportCheckRegistry() override;
     static KisExportCheckRegistry *instance();
 
 private:

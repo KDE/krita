@@ -26,9 +26,9 @@ class KarbonCalligraphyToolFactory : public KoToolFactoryBase
 {
 public:
     KarbonCalligraphyToolFactory();
-    ~KarbonCalligraphyToolFactory();
+    ~KarbonCalligraphyToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // _KARBONCALLIGRAPHYTOOLFACTORY_H_

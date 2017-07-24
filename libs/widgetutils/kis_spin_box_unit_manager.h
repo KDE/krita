@@ -103,7 +103,7 @@ public:
     Q_DECLARE_FLAGS(Constrains, Constrain)
 
     explicit KisSpinBoxUnitManager(QObject *parent = 0);
-    virtual ~KisSpinBoxUnitManager();
+    ~KisSpinBoxUnitManager() override;
 
     int getUnitDimensionType() const;
     QString getReferenceUnitSymbol() const;
@@ -111,6 +111,9 @@ public:
 
     //! \brief get the position of the apparent unit in the list of units. It is usefull if we want to build a model for combo-box based unit management.
     int getApparentUnitId() const;
+
+    //! \brief get a hint of how many decimals the spinbox need to display.
+    int getApparentUnitRecommandedDecimals() const;
 
     virtual QStringList getsUnitSymbolList(bool withName = false) const;
 
@@ -122,8 +125,8 @@ public:
     //! \brief some units conversions are done via an affine transform, not just a linear transform. This function gives the constant of this affine transform (usually 0).
     virtual qreal getConversionConstant(int dim, QString symbol) const;
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
 
@@ -141,6 +144,9 @@ public Q_SLOTS:
     void setApparentUnitFromSymbol(QString pSymbol);
     void selectApparentUnitFromIndex(int index);
 
+    void syncWithOtherUnitManager(KisSpinBoxUnitManager* other);
+    void clearSyncWithOtherUnitManager(KisSpinBoxUnitManager* other);
+
 protected:
 
     class Private;
@@ -148,6 +154,9 @@ protected:
 
     //! \brief convert a unitChanged signal with a QString to one with an index.
     void newUnitSymbolToUnitIndex(QString symbol);
+
+    //! \brief indicate if the unit manager has some kind of way of using a percent unit, used by the main class to add percent when necessary.
+    virtual bool hasPercent(int unitDim) const;
 
     //unit's that may be used only if acess to the document informations exists.
     static const QStringList documentRelativeLengthUnitSymbols;

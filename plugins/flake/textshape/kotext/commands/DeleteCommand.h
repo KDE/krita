@@ -47,13 +47,13 @@ public:
     };
 
     DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command* parent = 0);
-    virtual ~DeleteCommand();
+    ~DeleteCommand() override;
 
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
-    virtual int id() const;
-    virtual bool mergeWith(const KUndo2Command *command);
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
 
 private:
     friend class DeleteVisitor;

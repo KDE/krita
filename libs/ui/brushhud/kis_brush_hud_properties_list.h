@@ -28,12 +28,12 @@ class KisBrushHudPropertiesList : public QListWidget
 {
 public:
     KisBrushHudPropertiesList(QWidget *parent);
-    ~KisBrushHudPropertiesList();
+    ~KisBrushHudPropertiesList() override;
 
     void addProperties(const QList<KisUniformPaintOpPropertySP> &properties);
     QList<QString> selectedPropertiesIds() const;
 
-    Qt::DropActions supportedDropActions() const;
+    Qt::DropActions supportedDropActions() const override;
 
 private:
     struct Private;

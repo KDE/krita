@@ -32,13 +32,13 @@ class KisWdgColor : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgColor(QWidget* parent = 0, const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8());
-    ~KisWdgColor();
+    ~KisWdgColor() override;
 public:
     inline const Ui_WdgColorOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfigurationSP);
-    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
 private:
     Ui_WdgColorOptions* m_widget;
     const KoColorSpace *m_cs;

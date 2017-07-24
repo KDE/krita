@@ -47,9 +47,9 @@ public:
     /// constructor
     KoPostscriptPaintDevice();
     /// reimplemented from QPaintDevice
-    QPaintEngine *paintEngine() const;
+    QPaintEngine *paintEngine() const override;
     /// reimplemented from QPaintDevice
-    int metric(QPaintDevice::PaintDeviceMetric metric) const;
+    int metric(QPaintDevice::PaintDeviceMetric metric) const override;
 };
 
 #endif

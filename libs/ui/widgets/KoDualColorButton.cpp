@@ -328,15 +328,25 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     QRect backgroundRect;
     metrics( foregroundRect, backgroundRect );
 
-    if ( foregroundRect.contains( event->pos() )) {
-        if(d->tmpSelection == Foreground ) {
-            if( d->popDialog) {
+    if (foregroundRect.contains( event->pos())) {
+        if (d->tmpSelection == Foreground) {
+            if (d->popDialog) {
+#ifndef Q_OS_OSX
                 d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
                 //this should toggle, but I don't know how to implement that...
                 d->colorSelectorDialog->show();
+#else
+                QColor c = d->displayRenderer->toQColor(d->foregroundColor);
+                c = QColorDialog::getColor(c, this);
+                if (c.isValid()) {
+                    d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
+                    emit foregroundColorChanged(d->foregroundColor);
+                }
+#endif
             }
-            else
+            else {
                 emit pleasePopDialog( d->foregroundColor);
+            }
         }
         else {
             d->foregroundColor = d->backgroundColor;
@@ -345,16 +355,19 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     } else if ( backgroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
+#ifndef Q_OS_OSX
                 KoColor c = d->backgroundColor;
                 c = KisDlgInternalColorSelector::getModalColorDialog(c, this);
                 d->backgroundColor = c;
                 emit backgroundColorChanged(d->backgroundColor);
-                /*QColor c = d->displayRenderer->toQColor(d->backgroundColor);
+#else
+                QColor c = d->displayRenderer->toQColor(d->backgroundColor);
                 c = QColorDialog::getColor(c, this);
                 if (c.isValid()) {
                     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
                     emit backgroundColorChanged(d->backgroundColor);
-                }*/
+                }
+#endif
             }
             else
                 emit pleasePopDialog( d->backgroundColor);

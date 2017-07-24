@@ -34,6 +34,6 @@ KRITAFLAKE_EXPORT QGradient *convertGradient(const QGradient *gradient, QGradien
 
 /// Calculates color at given position from given gradient stops
 KRITAFLAKE_EXPORT QColor colorAt(qreal position, const QGradientStops &stops);
-};
+}
 
 #endif

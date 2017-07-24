@@ -41,6 +41,7 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_paintop_plugin_utils.h>
 
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -67,11 +68,14 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
         }
     }
 
+    m_airbrushOption.readOptionSetting(settings);
+
     m_opacityOption.readOptionSetting(settings);
     m_flowOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_ratioOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
@@ -83,6 +87,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_flowOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     m_ratioOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
     m_darkenOption.resetAllSensors();
@@ -163,8 +168,19 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(scale, rotation,
-                            m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+}
+
+KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
+    qreal rotation = m_rotationOption.apply(info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+}
+
+KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

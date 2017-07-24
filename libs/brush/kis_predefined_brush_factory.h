@@ -31,8 +31,8 @@ class KisPredefinedBrushFactory : public KisBrushFactory
 public:
     KisPredefinedBrushFactory(const QString &brushType);
 
-    QString id() const;
-    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy);
+    QString id() const override;
+    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy) override;
 
 private:
     const QString m_id;

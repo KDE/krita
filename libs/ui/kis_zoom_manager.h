@@ -38,12 +38,14 @@ class KoUnit;
 class KoCanvasController;
 class QPoint;
 
+#include "kritaui_export.h"
+
 /**
-   The zoom manager handles all user actions related to zooming
-   and unzooming. The actual computation of zoom levels and things
-   are the job of KoZoomHandler or its descendants
-*/
-class KisZoomManager : public QObject
+ *  The zoom manager handles all user actions related to zooming
+ *  and unzooming. The actual computation of zoom levels and things
+ *  are the job of KoZoomHandler or its descendants
+ */
+class KRITAUI_EXPORT KisZoomManager : public QObject
 {
 
     Q_OBJECT
@@ -51,7 +53,7 @@ class KisZoomManager : public QObject
 public:
 
     KisZoomManager(QPointer<KisView> view, KoZoomHandler*, KoCanvasController *);
-    ~KisZoomManager();
+    ~KisZoomManager() override;
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();
@@ -66,6 +68,8 @@ public:
     KoRuler *horizontalRuler() const;
     KoRuler *verticalRuler() const;
 
+    qreal zoom() const;
+
 public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
@@ -78,6 +82,7 @@ public Q_SLOTS:
     void zoomTo100();
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();
+
 
 private:
     void updateMouseTrackingConnections();

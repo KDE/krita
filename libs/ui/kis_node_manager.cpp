@@ -152,12 +152,15 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         previouslyActiveNode = q->activeNode();
 
         KoShape * shape = view->document()->shapeForNode(node);
-        KIS_ASSERT_RECOVER_RETURN_VALUE(shape, false);
+
+        //if (!shape) return false;
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, false);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
-        KIS_ASSERT_RECOVER_RETURN_VALUE(shapeLayer, false);
+        //if (!shapeLayer) return false;
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shapeLayer, false);
 
 //         shapeLayer->setGeometryProtected(node->userLocked());
 //         shapeLayer->setVisible(node->visible());
@@ -340,6 +343,18 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("isolate_layer");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
+    action = actionManager->createAction("toggle_layer_lock");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleLock()));
+
+    action = actionManager->createAction("toggle_layer_visibility");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+
+    action = actionManager->createAction("toggle_layer_alpha_lock");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleAlphaLock()));
+
+    action = actionManager->createAction("toggle_layer_inherit_alpha");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleInheritAlpha()));
+
     action  = actionManager->createAction("split_alpha_into_mask");
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaIntoMask()));
 
@@ -476,15 +491,16 @@ void KisNodeManager::slotTryFinishIsolatedMode()
 
 void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
 {
+    if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) {
+        return;
+    }
+
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) {
         activeNode = m_d->view->image()->root();
     }
 
     KIS_ASSERT_RECOVER_RETURN(activeNode);
-    if (activeNode->systemLocked()) {
-        return;
-    }
 
     // XXX: make factories for this kind of stuff,
     //      with a registry
@@ -514,7 +530,6 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
     } else if (nodeType == "KisFileLayer") {
         m_d->layerManager.addFileLayer(activeNode);
     }
-
 }
 
 void KisNodeManager::createFromVisible()
@@ -883,11 +898,6 @@ void KisNodeManager::switchToPreviouslyActiveNode()
     }
 }
 
-void KisNodeManager::mergeLayer()
-{
-    m_d->layerManager.mergeLayer();
-}
-
 void KisNodeManager::rotate(double radians)
 {
     if(!m_d->view->image()) return;
@@ -976,23 +986,23 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
-    QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
-    KisImageSP dst = new KisImage(d->createUndoStore(),
+    KisImageSP dst = new KisImage(doc->createUndoStore(),
                                   bounds.width(),
                                   bounds.height(),
                                   device->compositionSourceColorSpace(),
                                   defaultName);
     dst->setResolution(xRes, yRes);
-    d->setCurrentImage(dst);
+    doc->setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", opacity);
     paintLayer->paintDevice()->makeCloneFrom(device, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
     dst->initialRefreshGraph();
 
-    d->setOutputMimeType(mimefilter.toLatin1());
-    d->exportDocument(url);
+    doc->setOutputMimeType(mimefilter.toLatin1());
+    doc->exportDocument(url);
 }
 
 void KisNodeManager::saveNodeAsImage()
@@ -1136,13 +1146,80 @@ void KisNodeManager::slotSplitAlphaSaveMerged()
     m_d->mergeTransparencyMaskAsAlpha(false);
 }
 
+void KisNodeManager::toggleLock()
+{
+    KisNodeList nodes = this->selectedNodes();
+    KisNodeSP active = activeNode();
+    if (nodes.isEmpty() || !active) return;
+
+    bool isLocked = active->userLocked();
+
+    for (auto &node : nodes) {
+        node->setUserLocked(!isLocked);
+    }
+}
+
+void KisNodeManager::toggleVisibility()
+{
+    KisNodeList nodes = this->selectedNodes();
+    KisNodeSP active = activeNode();
+    if (nodes.isEmpty() || !active) return;
+
+    bool isVisible = active->visible();
+
+    for (auto &node : nodes) {
+        node->setVisible(!isVisible);
+        node->setDirty();
+    }
+}
+
+void KisNodeManager::toggleAlphaLock()
+{
+    KisNodeList nodes = this->selectedNodes();
+    KisNodeSP active = activeNode();
+    if (nodes.isEmpty() || !active) return;
+
+    auto layer = qobject_cast<KisPaintLayer*>(active.data());
+    if (!layer) {
+        return;
+    }
+
+    bool isAlphaLocked = layer->alphaLocked();
+    for (auto &node : nodes) {
+        auto layer = qobject_cast<KisPaintLayer*>(node.data());
+        if (layer) {
+            layer->setAlphaLocked(!isAlphaLocked);
+        }
+    }
+}
+
+void KisNodeManager::toggleInheritAlpha()
+{
+    KisNodeList nodes = this->selectedNodes();
+    KisNodeSP active = activeNode();
+    if (nodes.isEmpty() || !active) return;
+
+    auto layer = qobject_cast<KisLayer*>(active.data());
+    if (!layer) {
+        return;
+    }
+
+    bool isAlphaDisabled = layer->alphaChannelDisabled();
+    for (auto &node : nodes) {
+        auto layer = qobject_cast<KisLayer*>(node.data());
+        if (layer) {
+            layer->disableAlphaChannel(!isAlphaDisabled);
+            node->setDirty();
+        }
+    }
+}
+
 void KisNodeManager::cutLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisNodeSP root = m_d->view->image()->root();
     if (nodes.isEmpty()) return;
 
-    KisClipboard::instance()->setLayers(nodes, root, false);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), false);
 
     KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
     KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
@@ -1152,9 +1229,7 @@ void KisNodeManager::cutLayersToClipboard()
 void KisNodeManager::copyLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisNodeSP root = m_d->view->image()->root();
-
-    KisClipboard::instance()->setLayers(nodes, root, true);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), true);
 }
 
 void KisNodeManager::pasteLayersFromClipboard()

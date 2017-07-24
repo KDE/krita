@@ -33,18 +33,18 @@ public:
     enum Direction { Horizontal, Vertical };
 
 public Q_SLOTS:
-    void updateSettings();
+    void updateSettings() override;
 
 protected:
     void setColors(QList<KoColor> colors);
     QList<KoColor> colors() const {return m_colors;}
 
-    void paintEvent(QPaintEvent *);
-    void wheelEvent(QWheelEvent *);
-    void resizeEvent(QResizeEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void wheelEvent(QWheelEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
     int patchCount() const;
     bool colorAt(const QPoint &, KoColor *result) const;
 
@@ -74,7 +74,7 @@ private:
     int heightOfAllPatches();
 
     /// returns height, that is needed to display all patches with the given width
-    int heightForWidth(int width) const;
+    int heightForWidth(int width) const override;
     /// returns width, that is needed to display all patches with the given height
     int widthForHeight(int height) const;
 

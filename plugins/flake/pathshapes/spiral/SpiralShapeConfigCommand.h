@@ -36,9 +36,9 @@ public:
      */
     SpiralShapeConfigCommand(SpiralShape *spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, KUndo2Command *parent = 0);
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 private:
     SpiralShape *m_spiral;
     SpiralShape::SpiralType m_oldType;

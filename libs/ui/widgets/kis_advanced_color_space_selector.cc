@@ -94,22 +94,20 @@ KisAdvancedColorSpaceSelector::~KisAdvancedColorSpaceSelector()
 void KisAdvancedColorSpaceSelector::fillLstProfiles()
 {
     d->colorSpaceSelector->lstProfile->blockSignals(true);
-    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
+    const QString defaultProfileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
     d->colorSpaceSelector->lstProfile->clear();
 
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-    if (csf == 0) return;//TODO: make this give better feedback.
-
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId);
     QStringList profileNames;
     Q_FOREACH (const KoColorProfile *profile, profileList) {
         profileNames.append(profile->name());
     }
-    qSort(profileNames);
+    std::sort(profileNames.begin(), profileNames.end());
     QListWidgetItem *defaultProfile = new QListWidgetItem;
-    defaultProfile->setText(csf->defaultProfile() + " " + i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)"));
+    defaultProfile->setText(defaultProfileName + " " + i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)"));
     Q_FOREACH (QString stringName, profileNames) {
-        if (stringName==csf->defaultProfile()) {
+        if (stringName == defaultProfileName) {
             d->colorSpaceSelector->lstProfile->addItem(defaultProfile);
         } else {
             d->colorSpaceSelector->lstProfile->addItem(stringName);
@@ -155,11 +153,10 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     QString profileName = i18nc("Shows up instead of the name when there's no profile","No Profile Found");
     QString whatIsColorant = i18n("Colorant in d50-adapted xyY.");
     //set colorants
-    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-    if (csf == 0) return;
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-    if (profileList.isEmpty()==false) {
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId);
+
+    if (!profileList.isEmpty()) {
         profileName = currentColorSpace()->profile()->name();
         if (currentColorSpace()->profile()->hasColorants()){
             QVector <double> colorants = currentColorSpace()->profile()->getColorantsxyY();

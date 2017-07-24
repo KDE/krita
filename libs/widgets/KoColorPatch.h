@@ -33,7 +33,7 @@ class KRITAWIDGETS_EXPORT KoColorPatch : public QFrame
   Q_OBJECT
 public:
     explicit KoColorPatch( QWidget *parent );
-    virtual ~KoColorPatch();
+    ~KoColorPatch() override;
 
     /**
      * Set the color of this color patch
@@ -61,9 +61,9 @@ public:
     KoColor color() const;
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *e ); ///< reimplemented from QFrame
-    virtual void paintEvent(QPaintEvent *e); ///< reimplemented from QFrame
-    virtual QSize sizeHint() const; ///< reimplemented from QFrame
+    void mousePressEvent(QMouseEvent *e ) override; ///< reimplemented from QFrame
+    void paintEvent(QPaintEvent *e) override; ///< reimplemented from QFrame
+    QSize sizeHint() const override; ///< reimplemented from QFrame
 
 Q_SIGNALS:
 

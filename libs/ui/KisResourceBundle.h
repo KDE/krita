@@ -48,28 +48,28 @@ public:
     /**
      * @brief ~ResourceBundle : Dtor
      */
-    virtual ~KisResourceBundle();
+    ~KisResourceBundle() override;
 
     /**
      * @brief defaultFileExtension
      * @return the default file extension which should be when saving the resource
      */
-    QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
     /**
      * @brief load : Load this resource.
      * @return true if succeed, false otherwise.
      */
-    bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
 
     /**
      * @brief save : Save this resource.
      * @return true if succeed, false otherwise.
      */
-    bool save();
+    bool save() override;
 
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool saveToDevice(QIODevice* dev) const override;
 
     /**
      * @brief install : Install the contents of the resource bundle.

@@ -24,25 +24,33 @@
 #include <ui_EllipseShapeConfigWidget.h>
 
 #include <KoShapeConfigWidgetBase.h>
+#include <KoShape.h>
 
-class EllipseShapeConfigWidget : public KoShapeConfigWidgetBase
+class EllipseShapeConfigWidget : public KoShapeConfigWidgetBase, public KoShape::ShapeChangeListener
 {
     Q_OBJECT
 public:
     EllipseShapeConfigWidget();
     /// reimplemented
-    virtual void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented
-    virtual void save();
+    void save() override;
     /// reimplemented
-    virtual bool showOnShapeCreate()
+    bool showOnShapeCreate() override
     {
         return false;
     }
     /// reimplemented
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
+
+    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
+
 private Q_SLOTS:
     void closeEllipse();
+
+private:
+    void loadPropertiesFromShape(EllipseShape *shape);
+
 private:
     Ui::EllipseShapeConfigWidget widget;
     EllipseShape *m_ellipse;

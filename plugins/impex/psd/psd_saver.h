@@ -35,7 +35,7 @@ class PSDSaver : public QObject {
 public:
 
     PSDSaver(KisDocument *doc);
-    virtual ~PSDSaver();
+    ~PSDSaver() override;
 
 public:
 

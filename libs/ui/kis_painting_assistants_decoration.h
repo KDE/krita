@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoratio
     Q_OBJECT
 public:
     KisPaintingAssistantsDecoration(QPointer<KisView> parent);
-    ~KisPaintingAssistantsDecoration();
+    ~KisPaintingAssistantsDecoration() override;
     void addAssistant(KisPaintingAssistantSP assistant);
     void removeAssistant(KisPaintingAssistantSP assistant);
     void removeAll();
@@ -65,7 +65,7 @@ public Q_SLOTS:
     void toggleAssistantVisible();
     void toggleOutlineVisible();
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 
 private:
     struct Private;

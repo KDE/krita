@@ -20,6 +20,7 @@
 #ifndef _KOPENCILTOOL_H_
 #define _KOPENCILTOOL_H_
 
+#include "KoFlakeTypes.h"
 #include "KoToolBase.h"
 
 class KoPathShape;
@@ -34,21 +35,21 @@ class KRITABASICFLAKES_EXPORT KoPencilTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KoPencilTool(KoCanvasBase *canvas);
-    ~KoPencilTool();
+    ~KoPencilTool() override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    void repaintDecorations();
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void repaintDecorations() override;
 
-    void mousePressEvent(KoPointerEvent *event) ;
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-    void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override ;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 protected:
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
     /**
      * Add path shape to document.
@@ -57,7 +58,7 @@ protected:
      */
     virtual void addPathShape(KoPathShape* path, bool closePath);
 
-    KoShapeStroke* createStroke();
+    KoShapeStrokeSP createStroke();
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 
@@ -65,6 +66,10 @@ private Q_SLOTS:
     void selectMode(int mode);
     void setOptimize(int state);
     void setDelta(double delta);
+
+protected Q_SLOTS:
+    virtual void slotUpdatePencilCursor();
+
 private:
 
     qreal lineAngle(const QPointF &p1, const QPointF &p2);

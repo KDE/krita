@@ -27,7 +27,7 @@ class FilterOp : public QObject
     Q_OBJECT
 public:
     FilterOp(QObject *parent, const QVariantList &);
-    virtual ~FilterOp();
+    ~FilterOp() override;
 };
 
 #endif

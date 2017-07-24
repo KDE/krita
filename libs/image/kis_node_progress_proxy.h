@@ -39,13 +39,13 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
      * will be deleted when @p _node is deleted.
      */
     explicit KisNodeProgressProxy(KisNode* _node);
-    ~KisNodeProgressProxy();
+    ~KisNodeProgressProxy() override;
 
 public:
-    virtual int maximum() const ;
-    virtual void setValue(int value);
-    virtual void setRange(int minimum, int maximum);
-    virtual void setFormat(const QString & format);
+    int maximum() const override ;
+    void setValue(int value) override;
+    void setRange(int minimum, int maximum) override;
+    void setFormat(const QString & format) override;
     /**
      * @return the current percentage (return -1 if no progress)
      */

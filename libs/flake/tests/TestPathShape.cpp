@@ -742,7 +742,7 @@ void TestPathShape::koPathPointDataLess()
     l.push_back(v[3]);
     l.push_back(v[4]);
 
-    qSort(l.begin(), l.end());
+    std::sort(l.begin(), l.end());
     for (int i = 0; i < v.size(); ++i) {
         KoPathPointData ld = l.at(i);
         KoPathPointData vd = v[i];

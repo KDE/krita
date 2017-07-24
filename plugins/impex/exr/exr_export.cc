@@ -61,14 +61,6 @@ KisPropertiesConfigurationSP EXRExport::defaultConfiguration(const QByteArray &/
     return cfg;
 }
 
-KisPropertiesConfigurationSP EXRExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
-{
-    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration(mimeType());
-    cfg->fromXML(filterConfig, false);
-    return cfg;
-}
-
 KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsExr(parent);

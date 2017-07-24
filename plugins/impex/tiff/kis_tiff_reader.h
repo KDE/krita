@@ -55,20 +55,20 @@ class KisTIFFPostProcessorInvert : public KisTIFFPostProcessor
 {
 public:
     KisTIFFPostProcessorInvert(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
-    virtual ~KisTIFFPostProcessorInvert() {}
+    ~KisTIFFPostProcessorInvert() override {}
 public:
-    virtual void postProcess8bit(quint8* data) {
+    void postProcess8bit(quint8* data) override {
         for (int i = 0; i < nbColorsSamples(); i++) {
             data[i] = quint8_MAX - data[i];
         }
     }
-    virtual void postProcess16bit(quint16* data) {
+    void postProcess16bit(quint16* data) override {
         quint16* d = (quint16*) data;
         for (int i = 0; i < nbColorsSamples(); i++) {
             d[i] = quint16_MAX - d[i];
         }
     }
-    virtual void postProcess32bit(quint32* data) {
+    void postProcess32bit(quint32* data) override {
         quint32* d = (quint32*) data;
         for (int i = 0; i < nbColorsSamples(); i++) {
             d[i] = quint32_MAX - d[i];
@@ -80,22 +80,22 @@ class KisTIFFPostProcessorCIELABtoICCLAB : public KisTIFFPostProcessor
 {
 public:
     KisTIFFPostProcessorCIELABtoICCLAB(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
-    virtual ~KisTIFFPostProcessorCIELABtoICCLAB() {}
+    ~KisTIFFPostProcessorCIELABtoICCLAB() override {}
 public:
-    void postProcess8bit(quint8* data) {
+    void postProcess8bit(quint8* data) override {
         qint8* ds = (qint8*) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
             ds[i] = data[i] + quint8_MAX / 2;
         }
     }
-    void postProcess16bit(quint16* data) {
+    void postProcess16bit(quint16* data) override {
         quint16* d = (quint16*) data;
         qint16* ds = (qint16*) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
             ds[i] = d[i] + quint16_MAX / 2;
         }
     }
-    void postProcess32bit(quint32* data) {
+    void postProcess32bit(quint32* data) override {
         quint32* d = (quint32*) data;
         qint32* ds = (qint32*) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
@@ -196,7 +196,7 @@ public:
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
+    uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override;
 };
 
 
@@ -209,7 +209,7 @@ public:
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+    uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override ;
 private:
     uint16 m_alphaValue;
 };
@@ -223,7 +223,7 @@ public:
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+    uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override ;
 private:
     uint32 m_alphaValue;
 };
@@ -236,7 +236,7 @@ public:
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+    uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override ;
 private:
     uint16 *m_red, *m_green, *m_blue;
 };

@@ -27,6 +27,7 @@
 
 class QRect;
 class QMimeData;
+class KisBlockUntilOperationsFinishedMediator;
 
 enum enumPasteBehaviour {
     PASTE_ASSUME_WEB,
@@ -46,7 +47,7 @@ class KRITAUI_EXPORT KisClipboard : public QObject
 
 public:
     KisClipboard();
-    virtual ~KisClipboard();
+    ~KisClipboard() override;
 
     static KisClipboard* instance();
 
@@ -69,7 +70,7 @@ public:
 
     QSize clipSize() const;
 
-    void setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy = false);
+    void setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy = false);
     bool hasLayers() const;
     const QMimeData* layersMimeData() const;
 

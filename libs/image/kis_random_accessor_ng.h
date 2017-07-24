@@ -26,7 +26,7 @@ class KRITAIMAGE_EXPORT KisRandomConstAccessorNG : public KisBaseConstAccessor
     Q_DISABLE_COPY(KisRandomConstAccessorNG)
 public:
     KisRandomConstAccessorNG() {}
-    virtual ~KisRandomConstAccessorNG();
+    ~KisRandomConstAccessorNG() override;
     virtual void moveTo(qint32 x, qint32 y) = 0;
     virtual qint32 numContiguousColumns(qint32 x) const = 0;
     virtual qint32 numContiguousRows(qint32 y) const = 0;
@@ -38,7 +38,7 @@ class KRITAIMAGE_EXPORT KisRandomAccessorNG : public KisRandomConstAccessorNG, p
     Q_DISABLE_COPY(KisRandomAccessorNG)
 public:
     KisRandomAccessorNG() {}
-    virtual ~KisRandomAccessorNG();
+    ~KisRandomAccessorNG() override;
 };
 
 #endif

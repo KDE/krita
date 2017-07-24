@@ -38,7 +38,7 @@ class SimpleCitationBibliographyWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent = 0);
-    ~SimpleCitationBibliographyWidget();
+    ~SimpleCitationBibliographyWidget() override;
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);

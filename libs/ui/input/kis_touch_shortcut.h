@@ -28,9 +28,9 @@ class KisTouchShortcut : public KisAbstractShortcut
 {
     public:
         KisTouchShortcut( KisAbstractInputAction* action, int index );
-        ~KisTouchShortcut();
+        ~KisTouchShortcut() override;
 
-        virtual int priority() const;
+        int priority() const override;
 
         void setMinimumTouchPoints( int min );
         void setMaximumTouchPoints( int max );

@@ -73,8 +73,8 @@ void KisKraSaverTest::testCrashyShapeLayer()
      * mask was preset. This testcase just checks that.
      */
 
-    QScopedPointer<KisDocument> doc(createCompleteDocument(true));
-    Q_UNUSED(doc);
+    //QScopedPointer<KisDocument> doc(createCompleteDocument(true));
+    //Q_UNUSED(doc);
 }
 
 void KisKraSaverTest::testRoundTrip()
@@ -83,13 +83,15 @@ void KisKraSaverTest::testRoundTrip()
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
     doc->exportDocument(QUrl::fromLocalFile("roundtriptest.kra"));
+
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
     KisDocument *doc2 = KisPart::instance()->createDocument();
 
-    doc2->loadNativeFormat("roundtriptest.kra");
+    bool result = doc2->loadNativeFormat("roundtriptest.kra");
+    QVERIFY(result);
 
     KisCountVisitor cv2(list, KoProperties());
     doc2->image()->rootLayer()->accept(cv2);
@@ -112,9 +114,6 @@ void KisKraSaverTest::testRoundTrip()
 
     delete doc2;
     delete doc;
-
-
-
 }
 
 void KisKraSaverTest::testSaveEmpty()
@@ -424,6 +423,127 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     QCOMPARE(strokes[2].dev->exactBounds(), QRect(0,0,10,10));
     QCOMPARE(strokes[2].isTransparent, true);
     QCOMPARE(strokes[2].color.colorSpace(), weirdCS);
+}
+
+#include "kis_shape_layer.h"
+#include <KoPathShape.h>
+#include <KoColorBackground.h>
+
+void KisKraSaverTest::testRoundTripShapeLayer()
+{
+    TestUtil::ExternalImageChecker chk("kra_saver_test", "shape_layer");
+
+    QRect refRect(0,0,512,512);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    TestUtil::MaskParent p(refRect);
+
+    const qreal resolution = 144.0 / 72.0;
+    p.image->setResolution(resolution, resolution);
+
+    doc->setCurrentImage(p.image);
+    doc->documentInfo()->setAboutInfo("title", p.image->objectName());
+
+    KoPathShape* path = new KoPathShape();
+    path->setShapeId(KoPathShapeId);
+    path->moveTo(QPointF(10, 10));
+    path->lineTo(QPointF( 10, 110));
+    path->lineTo(QPointF(110, 110));
+    path->lineTo(QPointF(110,  10));
+    path->close();
+    path->normalize();
+    path->setBackground(toQShared(new KoColorBackground(Qt::red)));
+
+    path->setName("my_precious_shape");
+
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), p.image, "shapeLayer1", 75);
+    shapeLayer->addShape(path);
+    p.image->addNode(shapeLayer);
+    shapeLayer->setDirty();
+
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    chk.checkImage(p.image, "00_initial_layer_update");
+
+    doc->exportDocument(QUrl::fromLocalFile("roundtrip_shapelayer_test.kra"));
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_shapelayer_test.kra");
+
+    qApp->processEvents();
+    doc2->image()->waitForDone();
+    QCOMPARE(doc2->image()->xRes(), resolution);
+    QCOMPARE(doc2->image()->yRes(), resolution);
+    chk.checkImage(doc2->image(), "01_shape_layer_round_trip");
+
+    QVERIFY(chk.testPassed());
+}
+
+void KisKraSaverTest::testRoundTripShapeSelection()
+{
+    TestUtil::ExternalImageChecker chk("kra_saver_test", "shape_selection");
+
+    QRect refRect(0,0,512,512);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    TestUtil::MaskParent p(refRect);
+
+    const qreal resolution = 144.0 / 72.0;
+    p.image->setResolution(resolution, resolution);
+
+    doc->setCurrentImage(p.image);
+    doc->documentInfo()->setAboutInfo("title", p.image->objectName());
+
+    p.layer->paintDevice()->setDefaultPixel(KoColor(Qt::green, p.layer->colorSpace()));
+
+    KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
+
+    KisShapeSelection *shapeSelection = new KisShapeSelection(p.image, selection);
+    selection->setShapeSelection(shapeSelection);
+
+    KoPathShape* path = new KoPathShape();
+    path->setShapeId(KoPathShapeId);
+    path->moveTo(QPointF(10, 10));
+    path->lineTo(QPointF( 10, 110));
+    path->lineTo(QPointF(110, 110));
+    path->lineTo(QPointF(110,  10));
+    path->close();
+    path->normalize();
+    path->setBackground(toQShared(new KoColorBackground(Qt::red)));
+    path->setName("my_precious_shape");
+
+    shapeSelection->addShape(path);
+
+    KisTransparencyMaskSP tmask = new KisTransparencyMask();
+    tmask->setSelection(selection);
+    p.image->addNode(tmask, p.layer);
+
+    tmask->setDirty(p.image->bounds());
+
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    chk.checkImage(p.image, "00_initial_shape_selection");
+
+    doc->exportDocument(QUrl::fromLocalFile("roundtrip_shapeselection_test.kra"));
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_shapeselection_test.kra");
+
+    qApp->processEvents();
+    doc2->image()->waitForDone();
+    QCOMPARE(doc2->image()->xRes(), resolution);
+    QCOMPARE(doc2->image()->yRes(), resolution);
+    chk.checkImage(doc2->image(), "00_initial_shape_selection");
+
+    KisNodeSP node = doc2->image()->root()->firstChild()->firstChild();
+    KisTransparencyMask *newMask = dynamic_cast<KisTransparencyMask*>(node.data());
+    QVERIFY(newMask);
+
+    QVERIFY(newMask->selection()->hasShapeSelection());
+
+    QVERIFY(chk.testPassed());
 }
 
 QTEST_MAIN(KisKraSaverTest)

@@ -41,7 +41,7 @@ class TableOfContentsStyleConfigure : public QDialog
 
 public:
     explicit TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent = 0);
-    ~TableOfContentsStyleConfigure();
+    ~TableOfContentsStyleConfigure() override;
     void initializeUi(KoTableOfContentsGeneratorInfo *info);
 
 public Q_SLOTS:

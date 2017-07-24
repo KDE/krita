@@ -56,7 +56,7 @@ KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, Type type, int busy
     ui->setupUi(this);
 
     if (type == SaveDialog) {
-        connect(ui->bnDontWait, SIGNAL(clicked()), SLOT(accept()));
+        connect(ui->bnDontWait, SIGNAL(clicked()), SLOT(slotIgnoreRequested()));
         connect(ui->bnCancel, SIGNAL(clicked()), SLOT(slotCancelRequested()));
     } else {
         ui->bnDontSave->setText(i18n("Cancel"));
@@ -119,4 +119,9 @@ void KisDelayedSaveDialog::slotTimerTimeout()
 void KisDelayedSaveDialog::slotCancelRequested()
 {
     m_d->image->requestStrokeCancellation();
+}
+
+void KisDelayedSaveDialog::slotIgnoreRequested()
+{
+    done(Ignored);
 }

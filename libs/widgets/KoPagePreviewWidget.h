@@ -34,10 +34,10 @@ class KRITAWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
     Q_OBJECT
 public:
     explicit KoPagePreviewWidget(QWidget *parent = 0);
-    ~KoPagePreviewWidget();
+    ~KoPagePreviewWidget() override;
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);

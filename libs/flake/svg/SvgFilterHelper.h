@@ -23,6 +23,7 @@
 #include <QSizeF>
 #include <QPointF>
 
+#include <KoFlakeCoordinateSystem.h>
 #include <KoXmlReader.h>
 
 class QRectF;
@@ -30,20 +31,18 @@ class QRectF;
 class SvgFilterHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
-
     SvgFilterHelper();
     ~SvgFilterHelper();
 
     /// Set the filter units type
-    void setFilterUnits(Units filterUnits);
+    void setFilterUnits(KoFlake::CoordinateSystem filterUnits);
     /// Returns the filter units type
-    Units filterUnits() const;
+    KoFlake::CoordinateSystem filterUnits() const;
 
     /// Set the filter primitive units type
-    void setPrimitiveUnits(Units primitiveUnits);
+    void setPrimitiveUnits(KoFlake::CoordinateSystem primitiveUnits);
     /// Returns the filter primitive units type
-    Units primitiveUnits() const;
+    KoFlake::CoordinateSystem primitiveUnits() const;
 
     /// Sets filter position
     void setPosition(const QPointF & position);
@@ -63,8 +62,8 @@ public:
     static QPointF toUserSpace(const QPointF &position, const QRectF &objectBound);
     static QSizeF toUserSpace(const QSizeF &size, const QRectF &objectBound);
 private:
-    Units m_filterUnits;
-    Units m_primitiveUnits;
+    KoFlake::CoordinateSystem m_filterUnits;
+    KoFlake::CoordinateSystem m_primitiveUnits;
     QPointF m_position;
     QSizeF m_size;
     KoXmlElement m_filterContent;

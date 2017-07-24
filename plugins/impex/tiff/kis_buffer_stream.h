@@ -43,9 +43,9 @@ class KisBufferStreamContigBase : public KisBufferStreamBase
 {
 public:
     KisBufferStreamContigBase(uint8* src, uint16 depth, uint32 lineSize);
-    virtual void restart();
-    virtual void moveToLine(uint32 lineNumber);
-    virtual ~KisBufferStreamContigBase() {}
+    void restart() override;
+    void moveToLine(uint32 lineNumber) override;
+    ~KisBufferStreamContigBase() override {}
 protected:
     uint8* m_src;
     uint8* m_srcIt;
@@ -58,8 +58,8 @@ class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase
 public:
     KisBufferStreamContigBelow16(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
 public:
-    virtual ~KisBufferStreamContigBelow16() {}
-    virtual uint32 nextValue();
+    ~KisBufferStreamContigBelow16() override {}
+    uint32 nextValue() override;
 };
 
 class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase
@@ -67,8 +67,8 @@ class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase
 public:
     KisBufferStreamContigBelow32(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
 public:
-    virtual ~KisBufferStreamContigBelow32() {}
-    virtual uint32 nextValue();
+    ~KisBufferStreamContigBelow32() override {}
+    uint32 nextValue() override;
 };
 
 class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase
@@ -76,8 +76,8 @@ class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase
 public:
     KisBufferStreamContigAbove32(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
 public:
-    virtual ~KisBufferStreamContigAbove32() {}
-    virtual uint32 nextValue();
+    ~KisBufferStreamContigAbove32() override {}
+    uint32 nextValue() override;
 };
 
 
@@ -85,10 +85,10 @@ class KisBufferStreamSeperate : public KisBufferStreamBase
 {
 public:
     KisBufferStreamSeperate(uint8** srcs, uint8 nb_samples , uint16 depth, uint32* lineSize);
-    virtual ~KisBufferStreamSeperate();
-    virtual uint32 nextValue();
-    virtual void restart();
-    virtual void moveToLine(uint32 lineNumber);
+    ~KisBufferStreamSeperate() override;
+    uint32 nextValue() override;
+    void restart() override;
+    void moveToLine(uint32 lineNumber) override;
 private:
     KisBufferStreamContigBase** streams;
     uint8 m_current_sample, m_nb_samples;

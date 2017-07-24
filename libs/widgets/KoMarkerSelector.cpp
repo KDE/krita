@@ -30,14 +30,14 @@
 class KoMarkerSelector::Private
 {
 public:
-    Private(KoMarkerData::MarkerPosition position, QWidget *parent)
+    Private(KoFlake::MarkerPosition position, QWidget *parent)
     : model(new KoMarkerModel(QList<KoMarker*>(), position, parent))
     {}
 
     KoMarkerModel *model;
 };
 
-KoMarkerSelector::KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidget *parent)
+KoMarkerSelector::KoMarkerSelector(KoFlake::MarkerPosition position, QWidget *parent)
 : QComboBox(parent)
 , d(new Private(position, this))
 {
@@ -68,19 +68,12 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
         painter.setRenderHint(QPainter::Antialiasing, true);
     }
 
-    KoPathShape pathShape;
-    pathShape.moveTo(QPointF(rect.left(), rect.center().y()));
-    pathShape.lineTo(QPointF(rect.right(), rect.center().y()));
-
-    KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
-    if (marker != 0) {
-        pathShape.setMarker(marker, d->model->position());
+    if (!(option.state & QStyle::State_Enabled)) {
+        painter.setOpacity(0.5);
     }
-
-    // paint marker
-    QPen pen(option.palette.text(), 2);
-    QPainterPath path = pathShape.pathStroke(pen);
-    painter.fillPath(path, pen.brush());
+    QPen pen(Qt::black, 2);
+    KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
+    KoMarkerItemDelegate::drawMarkerPreview(&painter, rect, pen, marker, d->model->position());
 
     if (!antialiasing) {
         painter.setRenderHint(QPainter::Antialiasing, false);
@@ -92,6 +85,11 @@ void KoMarkerSelector::setMarker(KoMarker *marker)
     int index = d->model->markerIndex(marker);
     if (index >= 0) {
         setCurrentIndex(index);
+        if (index != d->model->temporaryMarkerPosition()) {
+            d->model->removeTemporaryMarker();
+        }
+    } else {
+        setCurrentIndex(d->model->addTemporaryMarker(marker));
     }
 }
 
@@ -102,7 +100,7 @@ KoMarker *KoMarkerSelector::marker() const
 
 void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
 {
-    KoMarkerModel *model = new KoMarkerModel(markers,d->model->position(), this);
+    KoMarkerModel *model = new KoMarkerModel(markers, d->model->position(), this);
     d->model = model;
     // this deletes the old model
     setModel(model);

@@ -26,13 +26,14 @@ class KoSimpleColorSpaceEngine : public KoColorSpaceEngine
 {
 public:
     KoSimpleColorSpaceEngine();
-    virtual ~KoSimpleColorSpaceEngine();
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+    ~KoSimpleColorSpaceEngine() override;
+    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
-                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-    virtual void addProfile(const QString &profile ) { Q_UNUSED(profile); }
-    virtual void removeProfile(const QString &profile ) { Q_UNUSED(profile); }
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
+    const KoColorProfile* addProfile(const QString &profile ) override { Q_UNUSED(profile); return 0; }
+    const KoColorProfile* addProfile(const QByteArray &data) override { Q_UNUSED(data); return 0; }
+    void removeProfile(const QString &profile ) override { Q_UNUSED(profile); }
 };
 
 #endif

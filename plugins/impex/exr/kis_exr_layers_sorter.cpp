@@ -146,7 +146,7 @@ void KisExrLayersSorter::Private::sortLayers(KisNodeSP root)
     }
 
     // sort the list
-    qStableSort(childNodes.begin(), childNodes.end(), CompareNodesFunctor(nodeToOrderingMap));
+    std::stable_sort(childNodes.begin(), childNodes.end(), CompareNodesFunctor(nodeToOrderingMap));
 
     // put the children back
     Q_FOREACH (KisNodeSP node, childNodes) {

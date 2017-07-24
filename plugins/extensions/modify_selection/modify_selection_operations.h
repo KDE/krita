@@ -28,27 +28,27 @@ class KisViewManager;
 
 struct GrowSelectionOperation : public KisFilterSelectionOperation {
     GrowSelectionOperation() : KisFilterSelectionOperation("growselection") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 struct ShrinkSelectionOperation : public KisFilterSelectionOperation {
     ShrinkSelectionOperation() : KisFilterSelectionOperation("shrinkselection") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 struct BorderSelectionOperation : public KisFilterSelectionOperation {
     BorderSelectionOperation() : KisFilterSelectionOperation("borderselection") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 struct FeatherSelectionOperation : public KisFilterSelectionOperation {
     FeatherSelectionOperation() : KisFilterSelectionOperation("featherselection") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 struct SmoothSelectionOperation : public KisFilterSelectionOperation {
     SmoothSelectionOperation() : KisFilterSelectionOperation("smoothselection") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 #endif // MODIFY_SELECTION_OPERATIONS_H

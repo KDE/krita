@@ -45,6 +45,7 @@
 #include <KoPathShape.h>
 #include <KoXmlWriter.h>
 #include <KoShapePainter.h>
+#include <KoXmlNS.h>
 
 #include <QFile>
 #include <QString>
@@ -53,17 +54,15 @@
 #include <QPainter>
 #include <QSvgGenerator>
 
-SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
-    : m_pageSize(pageSize)
-    , m_writeInlineImages(true)
+SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers)
+    : m_writeInlineImages(true)
 {
     Q_FOREACH (KoShapeLayer *layer, layers)
         m_toplevelShapes.append(layer);
 }
 
-SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
+SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes)
     : m_toplevelShapes(toplevelShapes)
-    , m_pageSize(pageSize)
     , m_writeInlineImages(true)
 {
 }
@@ -73,7 +72,7 @@ SvgWriter::~SvgWriter()
 
 }
 
-bool SvgWriter::save(const QString &filename, bool writeInlineImages)
+bool SvgWriter::save(const QString &filename, const QSizeF &pageSize, bool writeInlineImages)
 {
     QFile fileOut(filename);
     if (!fileOut.open(QIODevice::WriteOnly))
@@ -81,7 +80,7 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
 
     m_writeInlineImages = writeInlineImages;
 
-    const bool success = save(fileOut);
+    const bool success = save(fileOut, pageSize);
 
     m_writeInlineImages = true;
 
@@ -90,7 +89,7 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
     return success;
 }
 
-bool SvgWriter::save(QIODevice &outputDevice)
+bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
 {
     if (m_toplevelShapes.isEmpty())
         return false;
@@ -104,28 +103,22 @@ bool SvgWriter::save(QIODevice &outputDevice)
     svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
 
     // add some PR.  one line is more than enough.
-    svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->" << endl;
+    svgStream << "<!-- Created using Krita: http://krita.org -->" << endl;
 
-    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
-    svgStream << " width=\"" << m_pageSize.width() << "pt\"";
-    svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
+    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
+    svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
+    svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
+    svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
+    svgStream << "    width=\"" << pageSize.width() << "pt\"\n";
+    svgStream << "    height=\"" << pageSize.height() << "pt\"\n";
+    svgStream << "    viewBox=\"0 0 "
+              << pageSize.width() << " " << pageSize.height()
+              << "\"";
+    svgStream << ">" << endl;
 
     {
         SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
-
-        // top level shapes
-        Q_FOREACH (KoShape *shape, m_toplevelShapes) {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-            if(layer) {
-                saveLayer(layer, savingContext);
-            } else {
-                KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-                if (group)
-                    saveGroup(group, savingContext);
-                else
-                    saveShape(shape, savingContext);
-            }
-        }
+        saveShapes(m_toplevelShapes, savingContext);
     }
 
     // end tag:
@@ -134,13 +127,41 @@ bool SvgWriter::save(QIODevice &outputDevice)
     return true;
 }
 
+bool SvgWriter::saveDetached(QIODevice &outputDevice)
+{
+    if (m_toplevelShapes.isEmpty())
+        return false;
+
+    SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
+    saveShapes(m_toplevelShapes, savingContext);
+
+    return true;
+}
+
+void SvgWriter::saveShapes(const QList<KoShape *> shapes, SvgSavingContext &savingContext)
+{
+    // top level shapes
+    Q_FOREACH (KoShape *shape, shapes) {
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+        if(layer) {
+            saveLayer(layer, savingContext);
+        } else {
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+            if (group)
+                saveGroup(group, savingContext);
+            else
+                saveShape(shape, savingContext);
+        }
+    }
+}
+
 void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("g");
     context.shapeWriter().addAttribute("id", context.getID(layer));
 
     QList<KoShape*> sortedShapes = layer->shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
@@ -162,7 +183,7 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(group, context);
 
     QList<KoShape*> sortedShapes = group->shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);

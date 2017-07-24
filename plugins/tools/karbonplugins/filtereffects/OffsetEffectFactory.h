@@ -28,8 +28,8 @@ class OffsetEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     OffsetEffectFactory();
-    virtual KoFilterEffect *createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // OFFSETEFFECTFACTORY_H

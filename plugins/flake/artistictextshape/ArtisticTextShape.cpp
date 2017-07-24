@@ -76,14 +76,14 @@ void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converte
 
 void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    SvgWriter svgWriter(QList<KoShape *>() << const_cast<ArtisticTextShape *>(this), size());
+    SvgWriter svgWriter(QList<KoShape *>() << const_cast<ArtisticTextShape *>(this));
     QByteArray fileContent;
     QBuffer fileContentDevice(&fileContent);
     if (!fileContentDevice.open(QIODevice::WriteOnly)) {
         return;
     }
 
-    if (!svgWriter.save(fileContentDevice)) {
+    if (!svgWriter.save(fileContentDevice, size())) {
         qWarning() << "Could not write svg content";
         return;
     }
@@ -578,7 +578,7 @@ bool ArtisticTextShape::putOnPath(KoPathShape *path)
     setTransformation(QTransform());
     updateSizeAndPosition();
     // move to correct position
-    setAbsolutePosition(m_outlineOrigin, KoFlake::TopLeftCorner);
+    setAbsolutePosition(m_outlineOrigin, KoFlake::TopLeft);
     update();
 
     return true;
@@ -601,7 +601,7 @@ bool ArtisticTextShape::putOnPath(const QPainterPath &path)
     setTransformation(QTransform());
     updateSizeAndPosition();
     // move to correct position
-    setAbsolutePosition(m_outlineOrigin, KoFlake::TopLeftCorner);
+    setAbsolutePosition(m_outlineOrigin, KoFlake::TopLeft);
     update();
 
     return true;
@@ -1219,7 +1219,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
 
                 path->setSize(newSize);
                 path->setPosition(newPosition);
-                path->applyAbsoluteTransformation(SvgUtil::parseTransform(p.attribute("transform")));
+                path->applyAbsoluteTransformation(context.currentGC()->matrix);
             }
         } else {
             path = dynamic_cast<KoPathShape *>(context.shapeById(href));

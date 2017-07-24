@@ -31,9 +31,9 @@ class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     OverviewDockerDock();
-    QString observerName() { return "OverviewDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() override { return "OverviewDockerDock"; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private:
     QVBoxLayout *m_layout;

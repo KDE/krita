@@ -42,6 +42,12 @@
 #include <KisViewManager.h>
 #include <kis_display_color_converter.h>
 #include <kis_canvas2.h>
+#include <KoDialog.h>
+#include <QComboBox>
+#include <kis_color_button.h>
+#include <QCheckBox>
+#include <QFormLayout>
+#include <QLineEdit>
 
 #include "KisPaletteModel.h"
 #include "KisColorsetChooser.h"
@@ -67,16 +73,20 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
+    m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
+    m_wdgPaletteDock->bnAddGroup->setIconSize(QSize(16, 16));
 
-    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
-    connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
-    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
 
     m_model = new KisPaletteModel(this);
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
+    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
+    connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
+    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
+    connect(m_wdgPaletteDock->bnAddGroup, SIGNAL(clicked(bool)), m_wdgPaletteDock->paletteView, SLOT(addGroupWithDialog()));
 
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
@@ -117,6 +127,7 @@ void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),m_wdgPaletteDock->paletteView, SLOT(trySelectClosestColor(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
 
@@ -163,9 +174,11 @@ void PaletteDockerDock::resourceChanged(KoColorSet *resource)
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 {
     m_model->setColorSet(colorSet);
+    m_wdgPaletteDock->paletteView->updateView();
+    m_wdgPaletteDock->paletteView->updateRows();
     if (colorSet && colorSet->removable()) {
         m_wdgPaletteDock->bnAdd->setEnabled(true);
-        m_wdgPaletteDock->bnRemove->setEnabled(false);
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
     } else {
         m_wdgPaletteDock->bnAdd->setEnabled(false);
         m_wdgPaletteDock->bnRemove->setEnabled(false);
@@ -176,11 +189,8 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 void PaletteDockerDock::addColorForeground()
 {
     if (m_resourceProvider) {
-        KoColorSetEntry newEntry;
-        newEntry.color = m_resourceProvider->fgColor();
-        m_currentColorSet->add(newEntry);
-        m_currentColorSet->save();
-        setColorSet(m_currentColorSet); // update model
+        //setup dialog
+        m_wdgPaletteDock->paletteView->addEntryWithDialog(m_resourceProvider->fgColor());
     }
 }
 
@@ -210,34 +220,40 @@ void PaletteDockerDock::removeColor()
     if (!index.isValid()) {
         return;
     }
-    int i = index.row()*m_model->columnCount()+index.column();
-    m_currentColorSet->removeAt(i);
-    m_currentColorSet->save();
-    setColorSet(m_currentColorSet); // update model
+    m_wdgPaletteDock->paletteView->removeEntryWithDialog(index);
 }
 
-void PaletteDockerDock::entrySelected(QModelIndex index)
+void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
 {
-    if (!index.isValid()) {
-        return;
+    quint32 index = 0;
+    QString groupName = m_currentColorSet->findGroupByColorName(entry.name, &index);
+    QString seperator;
+    if (groupName != QString()) {
+        seperator = " - ";
     }
+    m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
+    if (m_resourceProvider) {
+        m_resourceProvider->setFGColor(entry.color);
+    }
+    if (m_currentColorSet->removable()) {
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
+    }
+}
 
-    quint32 i = (quint32)(index.row()*m_model->columnCount()+index.column());
-    if (i < m_currentColorSet->nColors()) {
-        KoColorSetEntry entry = m_currentColorSet->getColorGlobal(i);
-        quint32 li = 0;
-        QString groupName = m_currentColorSet->findGroupByGlobalIndex(i, &li);
-        if (groupName != QString()) {
-            groupName = groupName+" - ";
-        }
-        m_wdgPaletteDock->lblColorName->setText(groupName+entry.name);
-        qDebug()<<"The index of the currently selected color within its group is: "<<li;
-        if (m_resourceProvider) {
-            m_resourceProvider->setFGColor(entry.color);
-        }
-        if (m_currentColorSet->removable()) {
-            m_wdgPaletteDock->bnRemove->setEnabled(true);
-        }
+void PaletteDockerDock::entrySelectedBack(KoColorSetEntry entry)
+{
+    quint32 index = 0;
+    QString groupName = m_currentColorSet->findGroupByColorName(entry.name, &index);
+    QString seperator;
+    if (groupName != QString()) {
+        seperator = " - ";
+    }
+    m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
+    if (m_resourceProvider) {
+        m_resourceProvider->setBGColor(entry.color);
+    }
+    if (m_currentColorSet->removable()) {
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
     }
 }
 

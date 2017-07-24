@@ -43,13 +43,21 @@ KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
 {
 }
 
+KoTosContainerPrivate::KoTosContainerPrivate(const KoTosContainerPrivate &rhs, KoShapeContainer *q)
+    : KoShapeContainerPrivate(rhs, q),
+      resizeBehavior(rhs.resizeBehavior),
+      preferredTextRect(rhs.preferredTextRect),
+      alignment(rhs.alignment)
+{
+}
+
 KoTosContainerPrivate::~KoTosContainerPrivate()
 {
 }
 
 
 KoTosContainer::KoTosContainer()
-    : KoShapeContainer(*(new KoTosContainerPrivate(this)))
+    : KoShapeContainer(new KoTosContainerPrivate(this))
 {
 }
 
@@ -58,7 +66,7 @@ KoTosContainer::~KoTosContainer()
     delete textShape();
 }
 
-KoTosContainer::KoTosContainer(KoTosContainerPrivate &dd)
+KoTosContainer::KoTosContainer(KoTosContainerPrivate *dd)
     : KoShapeContainer(dd)
 {
 }

@@ -25,6 +25,7 @@
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
+        <file>dark_warning.svg</file>
         <file>delete.svgz</file>
         <file>layer-style-disabled.svg</file>
         <file>layer-style-enabled.svg</file>
@@ -52,6 +53,7 @@
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
+        <file>light_warning.svg</file>
         <file>paintop_presets_disabled.svgz</file>
         <file>paintop_settings_01.svgz</file>
         <file>selection-info.svg</file>

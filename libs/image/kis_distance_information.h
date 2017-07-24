@@ -22,72 +22,92 @@
 
 #include <QPointF>
 #include <QVector2D>
+#include <QDomDocument>
+#include <QDomElement>
 #include "kritaimage_export.h"
 
 class KisPaintInformation;
-
+class KisSpacingInformation;
+class KisTimingInformation;
+class KisDistanceInformation;
 
 /**
- * This structure contains information about the desired spacing
- * requested by the paintAt call
+ * Represents some information that can be used to initialize a KisDistanceInformation object. The
+ * main purpose of this class is to allow serialization of KisDistanceInformation initial settings
+ * to XML.
  */
-class KisSpacingInformation {
+class KRITAIMAGE_EXPORT KisDistanceInitInfo {
+
 public:
-    explicit KisSpacingInformation()
-        : m_spacing(0.0, 0.0)
-        , m_rotation(0.0)
-        , m_coordinateSystemFlipped(false)
-    {
-    }
 
-    explicit KisSpacingInformation(qreal isotropicSpacing)
-        : m_spacing(isotropicSpacing, isotropicSpacing)
-        , m_rotation(0.0)
-        , m_coordinateSystemFlipped(false)
-    {
-    }
+    /**
+     * Creates a KisDistanceInitInfo with no initial last dab information, and spacing and timing
+     * update intervals set to LONG_TIME.
+     */
+    explicit KisDistanceInitInfo();
 
-    explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation, bool coordinateSystemFlipped)
-        : m_spacing(anisotropicSpacing)
-        , m_rotation(rotation)
-        , m_coordinateSystemFlipped(coordinateSystemFlipped)
-    {
-    }
+    /**
+     * Creates a KisDistanceInitInfo with no initial last dab information, and the specified spacing
+     * and timing update intervals.
+     */
+    explicit KisDistanceInitInfo(qreal spacingUpdateInterval, qreal timingUpdateInterval);
 
-    inline QPointF spacing() const {
-        return m_spacing;
-    }
+    /**
+     * Creates a KisDistanceInitInfo with the specified last dab information, and spacing and timing
+     * update intervals set to LONG_TIME.
+     */
+    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
 
-    inline bool isIsotropic() const {
-        return m_spacing.x() == m_spacing.y();
-    }
+    /**
+     * Creates a KisDistanceInitInfo with the specified last dab information and spacing and timing
+     * update intervals.
+     */
+    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
+                                 qreal spacingUpdateInterval, qreal timingUpdateInterval);
 
-    inline qreal scalarApprox() const {
-        return isIsotropic() ? m_spacing.x() : QVector2D(m_spacing).length();
-    }
+    KisDistanceInitInfo(const KisDistanceInitInfo &rhs);
 
-    inline qreal rotation() const {
-        return m_rotation;
-    }
+    ~KisDistanceInitInfo();
 
-    bool coordinateSystemFlipped() const {
-        return m_coordinateSystemFlipped;
-    }
+    bool operator==(const KisDistanceInitInfo &other) const;
+
+    bool operator!=(const KisDistanceInitInfo &other) const;
+
+    KisDistanceInitInfo &operator=(const KisDistanceInitInfo &rhs);
+
+    /**
+     * Constructs a KisDistanceInformation with initial settings based on this object.
+     */
+    KisDistanceInformation makeDistInfo();
+
+    void toXML(QDomDocument &doc, QDomElement &elt) const;
+
+    static KisDistanceInitInfo fromXML(const QDomElement &elt);
 
 private:
-    QPointF m_spacing;
-    qreal m_rotation;
-    bool m_coordinateSystemFlipped;
+    struct Private;
+    Private * const m_d;
 };
 
 /**
- * This structure is used as return value of paintLine to contain
- * information that is needed to be passed for the next call.
+ * This structure keeps track of distance and timing information during a stroke, e.g. the time or
+ * distance moved since the last dab.
  */
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
+    KisDistanceInformation(qreal spacingUpdateInterval, qreal timingUpdateInterval);
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
+    /**
+     * @param spacingUpdateInterval The amount of time allowed between spacing updates, in
+     *                              milliseconds. Use LONG_TIME to only allow spacing updates when a
+     *                              dab is painted.
+     * @param timingUpdateInterval The amount of time allowed between time-based spacing updates, in
+     *                             milliseconds. Use LONG_TIME to only allow timing updates when a
+     *                             dab is painted.
+     */
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
+                           qreal spacingUpdateInterval, qreal timingUpdateInterval);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
@@ -95,6 +115,21 @@ public:
     ~KisDistanceInformation();
 
     const KisSpacingInformation& currentSpacing() const;
+    void updateSpacing(const KisSpacingInformation &spacing);
+    /**
+     * Returns true if this KisDistanceInformation should have its spacing information updated
+     * immediately (regardless of whether a dab is ready to be painted).
+     */
+    bool needsSpacingUpdate() const;
+
+    const KisTimingInformation &currentTiming() const;
+    void updateTiming(const KisTimingInformation &timing);
+    /**
+     * Returns true if this KisDistanceInformation should have its timing information updated
+     * immediately (regardless of whether a dab is ready to be painted).
+     */
+    bool needsTimingUpdate() const;
+
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
     qreal lastTime() const;
@@ -103,11 +138,20 @@ public:
     bool hasLastPaintInformation() const;
     const KisPaintInformation& lastPaintInformation() const;
 
+    /**
+     * @param spacing The new effective spacing after the dab. (Painting a dab is always supposed to
+     *                cause a spacing update.)
+     * @param timing The new effective timing after the dab. (Painting a dab is always supposed to
+     *               cause a timing update.)
+     */
     void registerPaintedDab(const KisPaintInformation &info,
-                            const KisSpacingInformation &spacing);
+                            const KisSpacingInformation &spacing,
+                            const KisTimingInformation &timing);
 
     qreal getNextPointPosition(const QPointF &start,
-                               const QPointF &end);
+                               const QPointF &end,
+                               qreal startTime,
+                               qreal endTime);
 
     /**
      * \return true if at least one dab has been painted with this
@@ -119,15 +163,38 @@ public:
     qreal lockedDrawingAngle() const;
     void setLockedDrawingAngle(qreal angle);
 
+    /**
+     * Computes the next drawing angle assuming that the next painting position will be nextPos.
+     * This method should not be called when hasLastDabInformation() is false.
+     */
+    qreal nextDrawingAngle(const QPointF &nextPos, bool considerLockedAngle = true) const;
+
+    /**
+     * Returns a unit vector pointing in the direction that would have been indicated by a call to
+     * nextDrawingAngle. This method should not be called when hasLastDabInformation() is false.
+     */
+    QPointF nextDrawingDirectionVector(const QPointF &nextPos,
+                                       bool considerLockedAngle = true) const;
+
     qreal scalarDistanceApprox() const;
 
-    void overrideLastValues(const QPointF &lastPosition, qreal lastTime);
+    void overrideLastValues(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
                                         const QPointF &end);
     qreal getNextPointPositionAnisotropic(const QPointF &start,
                                           const QPointF &end);
+    qreal getNextPointPositionTimed(qreal startTime,
+                                    qreal endTime);
+    void resetAccumulators();
+
+    qreal drawingAngleImpl(const QPointF &start, const QPointF &end,
+                           bool considerLockedAngle = true, qreal defaultAngle = 0.0) const;
+    QPointF drawingDirectionVectorImpl(const QPointF &start, const QPointF &end,
+                                       bool considerLockedAngle = true,
+                                       qreal defaultAngle = 0.0) const;
+
 private:
     struct Private;
     Private * const m_d;

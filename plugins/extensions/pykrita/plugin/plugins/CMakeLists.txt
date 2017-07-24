@@ -72,11 +72,17 @@ function(install_pykrita_plugin name)
     endif()
 endfunction()
 
-#install_pykrita_plugin(hello)
+install_pykrita_plugin(hello)
 install_pykrita_plugin(assignprofiledialog)
 install_pykrita_plugin(scripter)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
+install( FILES
+    tenbrushes/tenbrushes.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+
+install_pykrita_plugin(palette_docker)
+install_pykrita_plugin(quick_settings_docker)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

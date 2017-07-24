@@ -79,7 +79,9 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     options.interlace = configuration->getBool("interlaced", false);
     options.compression = configuration->getInt("compression", 3);
     options.tryToSaveAsIndexed = configuration->getBool("indexed", false);
-    options.transparencyFillColor = configuration->getColor("transparencyFillColor").toQColor();
+    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+    c.fromQColor(Qt::white);
+    options.transparencyFillColor = configuration->getColor("transparencyFillcolor", c).toQColor();
     options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
     options.forceSRGB = configuration->getBool("forceSRGB", true);
 
@@ -118,7 +120,14 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     cfg->setProperty("indexed", false);
     cfg->setProperty("compression", 3);
     cfg->setProperty("interlaced", false);
-    cfg->setProperty("transparencyFillcolor", QString("255,255,255"));
+
+    KoColor fill_color(KoColorSpaceRegistry::instance()->rgb8());
+    fill_color = KoColor();
+    fill_color.fromQColor(Qt::white);
+    QVariant v;
+    v.setValue(fill_color);
+
+    cfg->setProperty("transparencyFillcolor", v);
     cfg->setProperty("saveSRGBProfile", false);
     cfg->setProperty("forceSRGB", true);
 
@@ -151,7 +160,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     const bool isThereAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag);
 
-    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha) && isThereAlpha);
+    alpha->setEnabled(isThereAlpha);
+
+    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == RGBAColorModelID.id()) {
         tryToSaveAsIndexed->setVisible(true);
@@ -167,12 +179,9 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     }
     interlacing->setChecked(cfg->getBool("interlaced", false));
     compressionLevel->setValue(cfg->getInt("compression", 3));
-    compressionLevel->setRange(1, 9 , 0);
+    compressionLevel->setRange(1, 9, 0);
 
-    alpha->setEnabled(isThereAlpha);
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
-
-    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 
     const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
@@ -182,13 +191,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
-    QStringList rgb = cfg->getString("transparencyFillcolor", "0,0,0").split(',');
-    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
-    c.fromQColor(Qt::white);
-    bnTransparencyFillColor->setDefaultColor(c);
-    c.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
-    bnTransparencyFillColor->setColor(c);
-
+    KoColor background(KoColorSpaceRegistry::instance()->rgb8());
+    background.fromQColor(Qt::white);
+    bnTransparencyFillColor->setDefaultColor(background);
+    bnTransparencyFillColor->setColor(cfg->getColor("transparencyFillcolor", background));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
@@ -200,15 +206,17 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     bool interlace = interlacing->isChecked();
     int compression = (int)compressionLevel->value();
     bool tryToSaveAsIndexed = this->tryToSaveAsIndexed->isChecked();
-    QColor c = bnTransparencyFillColor->color().toQColor();
     bool saveSRGB = chkSRGB->isChecked();
     bool forceSRGB = chkForceSRGB->isChecked();
+
+    QVariant transparencyFillcolor;
+    transparencyFillcolor.setValue(bnTransparencyFillColor->color());
 
     cfg->setProperty("alpha", alpha);
     cfg->setProperty("indexed", tryToSaveAsIndexed);
     cfg->setProperty("compression", compression);
     cfg->setProperty("interlaced", interlace);
-    cfg->setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
+    cfg->setProperty("transparencyFillcolor", transparencyFillcolor);
     cfg->setProperty("saveSRGBProfile", saveSRGB);
     cfg->setProperty("forceSRGB", forceSRGB);
 

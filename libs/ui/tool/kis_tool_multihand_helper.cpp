@@ -47,11 +47,10 @@ void KisToolMultihandHelper::setupTransformations(const QVector<QTransform> &tra
 }
 
 void KisToolMultihandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
-                                            const QPointF &lastPosition,
-                                            int lastTime)
+                                            const KisDistanceInformation &startDist)
 {
     for (int i = 0; i < d->transformations.size(); i++) {
-        painterInfos << new PainterInfo(lastPosition, lastTime);
+        painterInfos << new PainterInfo(startDist);
     }
 }
 

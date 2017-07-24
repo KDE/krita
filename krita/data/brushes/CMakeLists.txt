@@ -71,6 +71,8 @@ D_Dust_1.gbr
 D_Dust_Particles.gih
 D_Normal_dust.gbr
 F_Furr_fast.gbr
+Flat_textured1.gih
+Flat_textured2.gih
 G_Sparks.gih
 L_Coroballs.gbr
 L_Foliage_1.gbr
@@ -105,6 +107,8 @@ O_Oils_1.gbr
 O_Oils_1_GP.gbr
 O_Oil_Soft.gbr
 O_Oils_Softer.gbr
+oil_bristle.gbr
+oil_knife.gbr
 P_2B_Pencil_Angled.gih
 P_6B_Pencil_Angled.gih
 P_Graphite_Black_Grass.gih
@@ -122,6 +126,9 @@ R_Rake2.gbr
 R_Rake3.gbr
 R_Rake4.gbr
 R_Rake_small.gbr
+Rect_textured1.gih
+Rect_textured2.gih
+Rect_textured3.gih
 Sc_Scratches_2.gbr
 Sc_Scratches_3.gbr
 Sc_Scratches.gbr

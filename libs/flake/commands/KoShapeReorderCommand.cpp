@@ -90,7 +90,7 @@ static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoSh
             // get all toplevel shapes
             children = manager->topLevelShapes();
         }
-        qSort(children.begin(), children.end(), KoShape::compareShapeZIndex);
+        std::sort(children.begin(), children.end(), KoShape::compareShapeZIndex);
         // the append and prepend are needed so that the raise/lower of all shapes works as expected.
         children.append(0);
         children.prepend(0);
@@ -129,7 +129,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
     QList<KoShape*> changedShapes;
     QMap<KoShape*, QList<KoShape*> > newOrder;
     QList<KoShape*> sortedShapes(shapes);
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     if (move == BringToFront || move == LowerShape) {
         for (int i = 0; i < sortedShapes.size(); ++i) {
             prepare(sortedShapes.at(i), newOrder, manager, move);
@@ -182,7 +182,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
 
 KoShapeReorderCommand *KoShapeReorderCommand::mergeInShape(QList<KoShape *> shapes, KoShape *newShape, KUndo2Command *parent)
 {
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     QList<KoShape*> reindexedShapes;
     QList<int> reindexedIndexes;

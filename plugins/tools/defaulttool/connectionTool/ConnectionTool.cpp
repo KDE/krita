@@ -548,7 +548,7 @@ KoShape *ConnectionTool::findShapeAtPosition(const QPointF &position) const
 {
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
     if (!shapes.isEmpty()) {
-        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
         // we want to priorize connection shape handles, even if the connection shape
         // is not at the top of the shape stack at the mouse position
         KoConnectionShape *connectionShape = nearestConnectionShape(shapes, position);
@@ -572,7 +572,7 @@ KoShape *ConnectionTool::findNonConnectionShapeAtPosition(const QPointF &positio
 {
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
     if (!shapes.isEmpty()) {
-        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
         for (QList<KoShape *>::const_iterator end = shapes.constEnd() - 1; end >= shapes.constBegin(); --end) {
             KoShape *shape = *end;
             if (!dynamic_cast<KoConnectionShape *>(shape) && shape->shapeId() != TextShape_SHAPEID) {

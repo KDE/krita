@@ -26,6 +26,8 @@
 #include "kritaimage_export.h"
 #include <kis_distance_information.h>
 #include "kis_random_source.h"
+#include "kis_spacing_information.h"
+#include "kis_timing_information.h"
 
 
 class QDomDocument;
@@ -106,13 +108,14 @@ public:
     template <class PaintOp>
     void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo) {
         KisSpacingInformation spacingInfo;
-
+        KisTimingInformation timingInfo;
         {
             DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
             spacingInfo = op.paintAt(*this);
+            timingInfo = op.updateTimingImpl(*this);
         }
 
-        distanceInfo->registerPaintedDab(*this, spacingInfo);
+        distanceInfo->registerPaintedDab(*this, spacingInfo, timingInfo);
     }
 
     const QPointF& pos() const;
@@ -136,7 +139,13 @@ public:
     /// XXX !!! :-| Please add dox!
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
 
-    /// XXX !!! :-| Please add dox!
+    /**
+     * Causes the specified distance information to be temporarily registered with this
+     * KisPaintInformation object, so that the KisPaintInformation can compute certain values that
+     * may be needed at painting time, such as the drawing direction. When the returned object is
+     * destroyed, the KisDistanceInformation will be unregistered. At most one
+     * KisDistanceInformation can be registered with a given KisPaintInformation at a time.
+     */
     DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**
@@ -198,7 +207,7 @@ public:
     void setRandomSource(KisRandomSourceSP value);
 
     // set level of detail which info object has been generated for
-    void setLevelOfDetail(int levelOfDetail) const;
+    void setLevelOfDetail(int levelOfDetail);
 
     /**
      * The paint information may be generated not only during real
@@ -238,27 +247,42 @@ public:
      *set the canvas rotation.
      */
     void setCanvasRotation(int rotation);
-    
+
     /*
      *Whether the canvas is mirrored for the paint-operation.
      */
     bool canvasMirroredH() const;
-    
+
     /*
      *Set whether the canvas is mirrored for the paint-operation.
      */
     void setCanvasHorizontalMirrorState(bool mir);
-    
+
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);
+
+    // TODO: Refactor the static mix functions to non-static in-place mutation
+    //       versions like mixOtherOnlyPosition and mixOtherWithoutTime.
+    // Heap allocation on Windows is awfully slow and will fragment the memory
+    // badly. Since KisPaintInformation allocates on the heap, we should re-use
+    // existing instance whenever possible, especially in loops.
+    // Ref: https://phabricator.kde.org/D6578
 
     /// (1-t) * p1 + t * p2
     static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
+    static KisPaintInformation mixWithoutTime(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2);
+    static KisPaintInformation mixWithoutTime(qreal t, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void mixOtherOnlyPosition(qreal t, const KisPaintInformation& other);
+    void mixOtherWithoutTime(qreal t, const KisPaintInformation& other);
     static qreal tiltDirection(const KisPaintInformation& info, bool normalize = true);
     static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
+
+private:
+    static KisPaintInformation mixImpl(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2, bool posOnly, bool mixTime);
+    void mixOtherImpl(const QPointF &p, qreal t, const KisPaintInformation &other, bool posOnly, bool mixTime);
 
 private:
     struct Private;

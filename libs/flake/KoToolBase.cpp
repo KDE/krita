@@ -102,18 +102,6 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Calligra Sheets
-void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
-{
-    if (shapeController) {
-        KoDocumentResourceManager *scrm = shapeController->resourceManager();
-        if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(documentResourceChanged(int, const QVariant &)));
-        }
-    }
-}
-
 
 bool KoToolBase::isActivated() const
 {
@@ -124,6 +112,9 @@ bool KoToolBase::isActivated() const
 
 void KoToolBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
+
     Q_D(KoToolBase);
     d->isActivated = true;
 }
@@ -171,15 +162,6 @@ void KoToolBase::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoToolBase::wheelEvent(KoPointerEvent * e)
-{
-    e->ignore();
-}
-
-void KoToolBase::touchEvent(QTouchEvent *event)
-{
-    event->ignore();
-}
 
 void KoToolBase::explicitUserStrokeEndRequest()
 {
@@ -210,9 +192,19 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
-bool KoToolBase::wantsTouch() const
+void KoToolBase::customPressEvent(KoPointerEvent * event)
 {
-    return false;
+    event->ignore();
+}
+
+void KoToolBase::customReleaseEvent(KoPointerEvent * event)
+{
+    event->ignore();
+}
+
+void KoToolBase::customMoveEvent(KoPointerEvent * event)
+{
+    event->ignore();
 }
 
 void KoToolBase::useCursor(const QCursor &cursor)

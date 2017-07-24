@@ -26,8 +26,10 @@
 
 #include <kis_pressure_size_option.h>
 #include <kis_tangent_tilt_option.h>
+#include <kis_airbrush_option.h>
 #include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_spacing_option.h>
+#include <kis_pressure_rate_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_flow_option.h>
@@ -46,17 +48,30 @@ public:
     KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     ~KisTangentNormalPaintOp() override;
 
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
     /*paint the dabs*/
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
+private:
+    KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal scale,
+                                         qreal rotation) const;
+
 private:
     //private functions//
     KisPressureSizeOption m_sizeOption;
     KisFlowOpacityOption m_opacityOption;
     KisPressureSpacingOption m_spacingOption;
+    KisPressureRateOption m_rateOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption m_scatterOption;
     KisTangentTiltOption m_tangentTiltOption;
+    KisAirbrushOption m_airbrushOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureFlowOption m_flowOption;

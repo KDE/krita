@@ -65,9 +65,10 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->colorModel = new KisPaletteModel(this);
     m_d->ui->colorView->setPaletteModel(m_d->colorModel);
+    m_d->ui->colorView->setAllowModification(false); //people proly shouldn't be able to edit the colorentries themselves.
     m_d->ui->colorView->setCrossedKeyword("transparent");
 
-    connect(m_d->ui->colorView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    connect(m_d->ui->colorView, SIGNAL(indexEntrySelected(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
     connect(m_d->ui->btnTransparent, SIGNAL(toggled(bool)), this, SLOT(slotMakeTransparent(bool)));
     connect(m_d->ui->btnRemove, SIGNAL(clicked()), this, SLOT(slotRemove()));
 
@@ -121,12 +122,15 @@ void KisToolLazyBrushOptionsWidget::hideEvent(QHideEvent *event)
 
 void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
 {
+    qDebug()<<"triggered";
     if (!index.isValid()) return;
 
+    qDebug()<<index;
     const int i = m_d->colorModel->idFromIndex(index);
+    qDebug()<<i;
 
     if (i >= 0 && i < (int)m_d->colorSet.nColors()) {
-        KoColorSetEntry entry = m_d->colorSet.getColorGlobal(i);
+        KoColorSetEntry entry = m_d->colorModel->colorSetEntryFromIndex(index);
         m_d->provider->setFGColor(entry.color);
     }
 

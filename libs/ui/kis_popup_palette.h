@@ -139,6 +139,8 @@ private:
     KisHighlightedToolButton* canvasOnlyButton;
     QPushButton* zoomToOneHundredPercentButton;
     QSlider* zoomCanvasSlider;
+    int zoomSliderMinValue;
+    int zoomSliderMaxValue;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

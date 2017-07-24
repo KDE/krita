@@ -155,3 +155,20 @@ KisLiquifyProperties KisLiquifyProperties::fromXML(const QDomElement &e)
 
     return props;
 }
+
+
+QDebug operator<<(QDebug dbg, const KisLiquifyProperties &props)
+{
+    dbg.nospace() << "\nKisLiquifyProperties(";
+    dbg.space() << "\n    " << ppVar(props.mode());
+    dbg.space() << "\n    " << ppVar(props.size());
+    dbg.space() << "\n    " << ppVar(props.amount());
+    dbg.space() << "\n    " << ppVar(props.spacing());
+    dbg.space() << "\n    " << ppVar(props.sizeHasPressure());
+    dbg.space() << "\n    " << ppVar(props.amountHasPressure());
+    dbg.space() << "\n    " << ppVar(props.reverseDirection());
+    dbg.space() << "\n    " << ppVar(props.useWashMode());
+    dbg.space() << "\n    " << ppVar(props.flow());
+    dbg.space() << "\n    );\n";
+    return dbg.nospace();
+}

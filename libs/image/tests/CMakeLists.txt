@@ -94,6 +94,7 @@ ecm_add_tests(
     kis_node_graph_listener_test.cpp
     kis_node_visitor_test.cpp
     kis_paint_information_test.cpp
+    kis_distance_information_test.cpp
     kis_paintop_test.cpp
     kis_pattern_test.cpp
     kis_recorded_action_factory_registry_test.cpp

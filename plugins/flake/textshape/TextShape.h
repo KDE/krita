@@ -109,7 +109,7 @@ public:
     void updateDocumentData();
 
     void update() const override;
-    void update(const QRectF &shape) const override;
+    void updateAbsolute(const QRectF &shape) const override;
 
     // required for kpresenter hack
     void setPageProvider(KoPageProvider *provider)

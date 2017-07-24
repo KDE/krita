@@ -70,7 +70,7 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
         shapes.append(shape->cloneShape());
     }
 
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     QBuffer buffer;
     QLatin1String mimeType("image/svg+xml");
@@ -78,8 +78,8 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
     buffer.open(QIODevice::WriteOnly);
 
     const QSizeF pageSize(boundingRect.right(), boundingRect.bottom());
-    SvgWriter writer(shapes, pageSize);
-    writer.save(buffer);
+    SvgWriter writer(shapes);
+    writer.save(buffer, pageSize);
 
     buffer.close();
 

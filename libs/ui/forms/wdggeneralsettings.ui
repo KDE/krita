@@ -380,6 +380,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="chkEnableTouch">
+           <property name="text">
+            <string>Enable Touch Painting</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>

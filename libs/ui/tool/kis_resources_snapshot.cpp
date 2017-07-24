@@ -294,9 +294,14 @@ bool KisResourcesSnapshot::needsAirbrushing() const
     return m_d->currentPaintOpPreset->settings()->isAirbrushing();
 }
 
-int KisResourcesSnapshot::airbrushingRate() const
+qreal KisResourcesSnapshot::airbrushingInterval() const
 {
-    return m_d->currentPaintOpPreset->settings()->rate();
+    return m_d->currentPaintOpPreset->settings()->airbrushInterval();
+}
+
+bool KisResourcesSnapshot::needsSpacingUpdates() const
+{
+    return m_d->currentPaintOpPreset->settings()->useSpacingUpdates();
 }
 
 void KisResourcesSnapshot::setOpacity(qreal opacity)

@@ -27,6 +27,7 @@ class KisFilterStrategy;
 class WdgImageSize;
 class KisDocumentAwareSpinBoxUnitManager;
 class KisSpinBoxUnitManager;
+class KisAspectRatioLocker;
 
 #include "ui_wdg_imagesize.h"
 
@@ -46,6 +47,14 @@ class DlgImageSize: public KoDialog
     Q_OBJECT
 
 public:
+
+    static const QString PARAM_PREFIX;
+    static const QString PARAM_IMSIZE_UNIT;
+    static const QString PARAM_SIZE_UNIT;
+    static const QString PARAM_RES_UNIT;
+    static const QString PARAM_RATIO_LOCK;
+    static const QString PARAM_PRINT_SIZE_SEPARATE;
+
     DlgImageSize(QWidget * parent, int width, int height, double resolution);
     ~DlgImageSize() override;
 
@@ -56,36 +65,30 @@ public:
     KisFilterStrategy *filterType();
 
 private Q_SLOTS:
-    void slotPixelWidthChanged(double w);
-    void slotPixelHeightChanged(double h);
-    void slotPrintWidthChanged(double w);
-    void slotPrintHeightChanged(double h);
-    void slotAspectChanged(bool keep);
-    void slotPrintResolutionChanged(double r);
-    void slotPrintResolutionEditFinished();
+    void slotSyncPrintToPixelSize();
+    void slotSyncPixelToPrintSize();
+    void slotPrintResolutionChanged();
     void slotPrintResolutionUnitChanged();
 
+    void slotLockPixelRatioSwitched(bool value);
+    void slotLockPrintRatioSwitched(bool value);
+    void slotLockAllRatioSwitched(bool value);
+    void slotAdjustSeparatelySwitched(bool value);
+
 private:
-    void updatePixelWidthUIValue(double value);
-    void updatePixelHeightUIValue(double value);
-    void updatePrintWidthUIValue(double value);
-    void updatePrintHeightUIValue(double value);
-    void updatePrintResolutionUIValue(double value);
+    qreal currentResolutionPPI() const;
+    void setCurrentResilutionPPI(qreal value);
+
+    void updatePrintSizeMaximum();
 
     WdgImageSize *m_page;
-    const double m_aspectRatio;
-    const int m_originalWidth, m_originalHeight;
-    int m_width, m_height;
-    double m_printWidth, m_printHeight; // in points
-    const double m_originalResolution;
-    double m_resolution;
-    bool m_keepAspect;
 
-    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisAspectRatioLocker *m_pixelSizeLocker;
+    KisAspectRatioLocker *m_printSizeLocker;
 
-    KisSpinBoxUnitManager* _printWidthUnitManager;
-    KisSpinBoxUnitManager* _printHeightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* m_widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* m_heightUnitManager;
+    KisSpinBoxUnitManager* m_printSizeUnitManager;
 };
 
 #endif // DLG_IMAGESIZE

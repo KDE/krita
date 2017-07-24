@@ -28,5 +28,8 @@
 %Include Selection.sip
 %Include Extension.sip
 %Include PresetChooser.sip
+%Include Palette.sip
+%Include PaletteView.sip
+%Include ManagedColor.sip
 
 %Include KisCubicCurve.sip

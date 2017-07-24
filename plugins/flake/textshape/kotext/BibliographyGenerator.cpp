@@ -74,7 +74,7 @@ static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair
 {
     sortKeys = keys;
     sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
-    qSort(cites.begin(), cites.end(), lessThan);
+    std::sort(cites.begin(), cites.end(), lessThan);
     return cites;
 }
 

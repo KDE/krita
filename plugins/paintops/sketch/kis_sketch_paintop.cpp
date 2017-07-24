@@ -33,6 +33,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
+#include <kis_paintop_plugin_utils.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
@@ -68,9 +69,11 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     Q_UNUSED(image);
     Q_UNUSED(node);
 
+    m_airbrushOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
     m_brushOption.readOptionSettingForceCopy(settings);
     m_densityOption.readOptionSetting(settings);
@@ -83,6 +86,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     m_opacityOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
 
     m_painter = 0;
     m_count = 0;
@@ -119,10 +123,20 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
                         0.5 * m_brushBoundingBox.height());
 }
 
-void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,
+                                 KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(currentDistance);
-
+    // Use superclass behavior for lines of zero length. Otherwise, airbrushing can happen faster
+    // than it is supposed to.
+    if (pi1.pos() == pi2.pos()) {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    }
+    else {
+        doPaintLine(pi1, pi2);
+    }
+} 
+void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+{
     if (!m_brush || !painter()) return;
 
     if (!m_dab) {
@@ -294,7 +308,18 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
 KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di;
-    paintLine(info, info, &di);
-    return di.currentSpacing();
+    doPaintLine(info, info);
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisSketchPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisSketchPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

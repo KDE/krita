@@ -111,6 +111,12 @@ View *Canvas::view() const
     return view;
 }
 
+KisDisplayColorConverter *Canvas::displayColorConverter() const
+{
+    if (!d->canvas) return 0;
+    return d->canvas->displayColorConverter();
+}
+
 bool Canvas::wrapAroundMode() const
 {
     if (!d->canvas) return false;

@@ -78,15 +78,10 @@ public:
      */
     KisAction *actionByName(const QString &name) const;
 
-
-
-
-
     void registerOperationUIFactory(KisOperationUIFactory* factory);
     void registerOperation(KisOperation* operation);
     void runOperation(const QString &id);
     void runOperationFromConfiguration(KisOperationConfigurationSP config);
-
 
     /**
      * Update actions handled by kis_action_manager to set enabled.

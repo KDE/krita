@@ -25,6 +25,8 @@
 
 #include "chalk_brush.h"
 #include "kis_chalk_paintop_settings.h"
+#include "kis_airbrush_option.h"
+#include "kis_pressure_rate_option.h"
 
 class KisPainter;
 
@@ -36,12 +38,20 @@ public:
     KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisChalkPaintOp() override;
 
+protected:
+
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
     KisPaintDeviceSP m_dab;
     ChalkBrush * m_chalkBrush;
+    KisAirbrushOption m_airbrushOption;
     KisPressureOpacityOption m_opacityOption;
+    KisPressureRateOption m_rateOption;
     ChalkProperties m_properties;
 };
 

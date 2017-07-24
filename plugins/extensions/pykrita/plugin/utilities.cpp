@@ -48,7 +48,9 @@ namespace PyKrita
 {
 namespace
 {
+#ifndef Q_OS_WIN
 QLibrary* s_pythonLibrary = 0;
+#endif
 PyThreadState* s_pythonThreadState = 0;
 }                                                           // anonymous namespace
 
@@ -165,6 +167,12 @@ QString Python::lastTraceback() const
 
 void Python::libraryLoad()
 {
+#ifdef Q_OS_WIN
+    if (Py_IsInitialized()) {
+        dbgScript << "Python interpreter is already initialized";
+    } else {
+        dbgScript << "Initializing Python interpreter";
+#else
     if (!s_pythonLibrary) {
         dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
         s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
@@ -174,10 +182,16 @@ void Python::libraryLoad()
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load())
             errScript << "Could not load" << PYKRITA_PYTHON_LIBRARY;
+#endif
 
         Py_InitializeEx(0);
-        if (!Py_IsInitialized())
+        if (!Py_IsInitialized()) {
+#ifdef Q_OS_WIN
+            errScript << "Could not initialise Python interpreter";
+#else
             errScript << "Could not initialise" << PYKRITA_PYTHON_LIBRARY;
+#endif
+        }
 #if THREADED
         PyEval_InitThreads();
         s_pythonThreadState = PyGILState_GetThisThreadState();
@@ -188,7 +202,12 @@ void Python::libraryLoad()
 
 void Python::libraryUnload()
 {
+#ifdef Q_OS_WIN
+    warnScript << "Explicitly unloading Python interpreter isn't supported for Windows";
+    {
+#else
     if (s_pythonLibrary) {
+#endif
         // Shut the interpreter down if it has been started.
         if (Py_IsInitialized()) {
 #if THREADED
@@ -196,11 +215,13 @@ void Python::libraryUnload()
 #endif
             //Py_Finalize();
         }
+#ifndef Q_OS_WIN
         if (s_pythonLibrary->isLoaded()) {
             s_pythonLibrary->unload();
         }
         delete s_pythonLibrary;
         s_pythonLibrary = 0;
+#endif
     }
 }
 

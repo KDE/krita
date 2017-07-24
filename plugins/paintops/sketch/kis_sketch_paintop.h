@@ -27,9 +27,11 @@
 #include "kis_sketch_paintop_settings.h"
 
 #include "kis_painter.h"
+#include <kis_airbrush_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_brush_option.h>
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_rate_option.h>
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
 
@@ -45,7 +47,13 @@ public:
     ~KisSketchPaintOp() override;
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
     // pixel buffer
@@ -62,9 +70,11 @@ private:
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
+    KisPressureRateOption m_rateOption;
     KisDensityOption m_densityOption;
     KisLineWidthOption m_lineWidthOption;
     KisOffsetScaleOption m_offsetScaleOption;
+    KisAirbrushOption m_airbrushOption;
 
     KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;
@@ -78,7 +88,7 @@ private:
 private:
     void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);
     void updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation);
-
+    void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 };
 
 #endif // KIS_SKETCH_PAINTOP_H_

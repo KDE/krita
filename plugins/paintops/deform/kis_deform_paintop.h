@@ -22,9 +22,11 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
+#include <kis_airbrush_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_rate_option.h>
 
 #include "deform_brush.h"
 
@@ -40,7 +42,12 @@ public:
     KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisDeformPaintOp() override;
 
+protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
 
@@ -51,9 +58,12 @@ private:
     DeformOption m_properties;
     BrushSizeOption m_sizeProperties;
 
+    KisAirbrushOption m_airbrushOption;
+
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;
+    KisPressureRateOption m_rateOption;
 
     qreal m_xSpacing;
     qreal m_ySpacing;

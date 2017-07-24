@@ -67,6 +67,7 @@
 #include <kis_distance_information.h>
 #include <KoColorSpaceMaths.h>
 #include "kis_lod_transform.h"
+#include "kis_algebra_2d.h"
 
 
 
@@ -1127,10 +1128,12 @@ void KisPainter::paintPolyline(const vQPointF &points,
     if (index + numPoints > (int) points.count())
         numPoints = points.count() - index;
 
-
-    KisDistanceInformation saveDist;
-    for (int i = index; i < index + numPoints - 1; i++) {
-        paintLine(points [i], points [i + 1], &saveDist);
+    if (numPoints > 1) {
+        KisDistanceInformation saveDist(points[0], 0.0,
+                                        KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
+        for (int i = index; i < index + numPoints - 1; i++) {
+            paintLine(points [i], points [i + 1], &saveDist);
+        }
     }
 }
 
@@ -1293,7 +1296,8 @@ void KisPainter::paintPolygon(const vQPointF& points)
 
     if (d->strokeStyle != StrokeStyleNone) {
         if (points.count() > 1) {
-            KisDistanceInformation distance;
+            KisDistanceInformation distance(points[0], 0.0,
+                                            KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
 
             for (int i = 0; i < points.count() - 1; i++) {
                 paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), &distance);
@@ -1601,8 +1605,8 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     int X2_ = x2;
     int Y2_ = y2;
 
-    if (x2<x1) qSwap(x1,x2);
-    if (y2<y1) qSwap(y1,y2);
+    if (x2<x1) std::swap(x1,x2);
+    if (y2<y1) std::swap(y1,y2);
 
     qreal denominator = sqrt(pow((double)dstY,2) + pow((double)dstX,2));
     if (denominator == 0.0) {

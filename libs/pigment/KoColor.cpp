@@ -241,7 +241,7 @@ void KoColor::fromKoColor(const KoColor& src)
     src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
-const KoColorProfile *  KoColor::profile() const
+const KoColorProfile *KoColor::profile() const
 {
     return d->colorSpace->profile();
 }
@@ -283,8 +283,15 @@ qreal KoColor::opacityF() const
     return d->colorSpace->opacityF(d->data);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId)
 {
+    bool ok;
+    return fromXML(elt, bitDepthId, &ok);
+}
+
+KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool* ok)
+{
+    *ok = true;
     QString modelId;
     if (elt.tagName() == "CMYK") {
         modelId = CMYKAColorModelID.id();
@@ -317,9 +324,11 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId)
     }
     if (cs) {
         KoColor c(cs);
+        // TODO: Provide a way for colorFromXML() to notify the caller if parsing failed. Currently it returns default values on failure.
         cs->colorFromXML(c.data(), elt);
         return c;
     } else {
+        *ok = false;
         return KoColor();
     }
 }

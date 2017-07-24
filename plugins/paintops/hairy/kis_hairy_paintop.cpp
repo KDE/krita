@@ -35,6 +35,7 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 #include "kis_brush.h"
@@ -102,6 +103,11 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)
 
 
 KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
+{
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisHairyPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
     Q_UNUSED(info);
     return KisSpacingInformation(0.5);

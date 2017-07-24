@@ -202,7 +202,8 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     // Recorde the paint action
     KisRecordedPathPaintAction bezierCurvePaintAction(
             KisNodeQueryPath::absolutePath(node),
-            preset );
+            preset,
+            KisDistanceInitInfo());
     bezierCurvePaintAction.setPaintColor(currentFgColor());
     QPointF lastPoint, nextPoint;
     int elementCount = mapedOutline.elementCount();

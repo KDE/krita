@@ -24,12 +24,14 @@
 #include "kis_brush.h"
 #include "kis_texture_option.h"
 #include "kis_precision_option.h"
+#include "kis_airbrush_option.h"
 #include "kis_pressure_mirror_option.h"
 #include <kis_threaded_text_rendering_workaround.h>
 
 
 class KisPropertiesConfiguration;
 class KisPressureSpacingOption;
+class KisPressureRateOption;
 class KisDabCache;
 
 /// Internal
@@ -69,6 +71,11 @@ public:
     KisSpacingInformation effectiveSpacing(qreal scale) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(qreal scale,
+                                           qreal rotation,
+                                           const KisAirbrushOption *airbrushOption,
+                                           const KisPressureSpacingOption *spacingOption,
+                                           const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
     bool canPaint() const override;
@@ -82,12 +89,13 @@ private:
     KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation, bool axesFlipped) const;
 
 protected: // XXX: make private!
-
+    KisDabCache *m_dabCache;
     KisBrushSP m_brush;
+
+private:
     KisTextureProperties m_textureProperties;
     KisPressureMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
-    KisDabCache *m_dabCache;
 };
 
 #endif

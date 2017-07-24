@@ -39,6 +39,7 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_lod_transform.h>
+#include <kis_spacing_information.h>
 
 
 
@@ -181,6 +182,12 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
+    return effectiveSpacing(scale);
+}
+
+KisSpacingInformation KisHatchingPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    const qreal scale = KisLodTransform::lodToScale(painter()->device()) * m_sizeOption.apply(info);
     return effectiveSpacing(scale);
 }
 

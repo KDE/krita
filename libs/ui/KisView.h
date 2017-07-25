@@ -208,6 +208,8 @@ public:
 
     bool canvasIsMirrored() const;
 
+    void syncLastActiveNodeToDocument();
+
 public Q_SLOTS:
 
     /**

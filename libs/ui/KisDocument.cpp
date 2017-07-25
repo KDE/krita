@@ -93,6 +93,7 @@
 #include <kis_signal_auto_connection.h>
 #include <kis_debug.h>
 #include <kis_canvas_widget_base.h>
+#include "kis_layer_utils.h"
 
 // Local
 #include "KisViewManager.h"
@@ -251,7 +252,7 @@ public:
         firstMod(rhs.firstMod),
         lastMod(rhs.lastMod),
         nserver(new KisNameServer(*rhs.nserver)),
-        preActivatedNode(rhs.preActivatedNode),
+        preActivatedNode(0), // the node is from another hierarchy!
         imageIdleWatcher(2000 /*ms*/),
         assistants(rhs.assistants), // WARNING: assistants should not store pointers to the document!
         gridConfig(rhs.gridConfig),
@@ -302,7 +303,7 @@ public:
     KisImageSP image;
     KisImageSP savingImage;
 
-    KisNodeSP preActivatedNode;
+    KisNodeWSP preActivatedNode;
     KisShapeController* shapeController = 0;
     KoShapeController* koShapeController = 0;
     KisIdleWatcher imageIdleWatcher;
@@ -417,6 +418,13 @@ KisDocument::KisDocument(const KisDocument &rhs)
     // clone the image with keeping the GUIDs of the layers intact
     // NOTE: we expect the image to be locked!
     setCurrentImage(rhs.image()->clone(true));
+
+    if (rhs.d->preActivatedNode) {
+        // since we clone uuid's, we can use them for lacating new
+        // nodes. Otherwise we would need to use findSymmetricClone()
+        d->preActivatedNode =
+                KisLayerUtils::findNodeByUuid(d->image->root(), rhs.d->preActivatedNode->uuid());
+    }
 }
 
 KisDocument::~KisDocument()
@@ -1530,23 +1538,6 @@ KoShapeBasedDocumentBase *KisDocument::shapeController() const
 KoShapeLayer* KisDocument::shapeForNode(KisNodeSP layer) const
 {
     return d->shapeController->shapeForNode(layer);
-}
-
-vKisNodeSP KisDocument::activeNodes() const
-{
-    vKisNodeSP nodes;
-    Q_FOREACH (KisView *v, KisPart::instance()->views()) {
-        if (v->document() == this && v->viewManager()) {
-            KisNodeSP activeNode = v->viewManager()->activeNode();
-            if (activeNode && !nodes.contains(activeNode)) {
-                if (activeNode->inherits("KisMask")) {
-                    activeNode = activeNode->parent();
-                }
-                nodes.append(activeNode);
-            }
-        }
-    }
-    return nodes;
 }
 
 QList<KisPaintingAssistantSP> KisDocument::assistants() const

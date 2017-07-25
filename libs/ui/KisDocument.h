@@ -533,17 +533,14 @@ public:
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
     /**
-     * @return a list of all layers that are active in all current views
-     */
-    vKisNodeSP activeNodes() const;
-
-    /**
-     * set the list of nodes that were marked as currently active
+     * Set the list of nodes that was marked as currently active. Used *only*
+     * for saving loading. Never use it for tools or processing.
      */
     void setPreActivatedNode(KisNodeSP activatedNode);
 
     /**
-     * @return the node that was set as active during loading
+     * @return the node that was set as active during loading. Used *only*
+     * for saving loading. Never use it for tools or processing.
      */
     KisNodeSP preActivatedNode() const;
 

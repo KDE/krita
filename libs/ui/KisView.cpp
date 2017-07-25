@@ -780,10 +780,20 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
     d->canvasController.setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
 }
 
+void KisView::syncLastActiveNodeToDocument()
+{
+    KisDocument *doc = document();
+    if (doc) {
+        doc->setPreActivatedNode(d->currentNode);
+    }
+}
+
 void KisView::setCurrentNode(KisNodeSP node)
 {
     d->currentNode = node;
     d->canvas.slotTrySwitchShapeManager();
+
+    syncLastActiveNodeToDocument();
 }
 
 KisNodeSP KisView::currentNode() const
@@ -904,7 +914,6 @@ void KisView::slotLoadingFinished()
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
 
     KisNodeSP activeNode = document()->preActivatedNode();
-    document()->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 
     if (!activeNode) {
         activeNode = image()->rootLayer()->lastChild();

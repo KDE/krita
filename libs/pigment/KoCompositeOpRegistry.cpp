@@ -150,7 +150,7 @@ KoID KoCompositeOpRegistry::getDefaultCompositeOp() const
 
 KoID KoCompositeOpRegistry::getKoID(const QString& compositeOpID) const
 {
-    KoIDMap::const_iterator itr = qFind(m_map.begin(), m_map.end(), KoID(compositeOpID));
+    KoIDMap::const_iterator itr = std::find(m_map.begin(), m_map.end(), KoID(compositeOpID));
     return (itr != m_map.end()) ? *itr : KoID();
 }
 

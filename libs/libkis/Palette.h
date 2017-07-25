@@ -78,7 +78,12 @@ public:
      * @return the comment or description associated with the palette.
      */
     QString comment();
-    //setcomment
+    /**
+     * @brief setComment
+     * set the comment or description associated with the palette.
+     * @param comment
+     */
+    void setComment(QString comment);
     /**
      * @brief groupNames
      * @return the list of group names. This is list is in the order these groups are in the file.

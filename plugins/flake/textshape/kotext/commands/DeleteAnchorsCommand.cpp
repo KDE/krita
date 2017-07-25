@@ -48,7 +48,7 @@ DeleteAnchorsCommand::DeleteAnchorsCommand(const QList<KoShapeAnchor*> &anchorOb
             m_anchorRanges.append(anchorRange);
         }
     }
-    qSort(m_anchorObjects.begin(), m_anchorObjects.end(), sortAnchor);
+    std::sort(m_anchorObjects.begin(), m_anchorObjects.end(), sortAnchor);
 }
 
 DeleteAnchorsCommand::~DeleteAnchorsCommand()

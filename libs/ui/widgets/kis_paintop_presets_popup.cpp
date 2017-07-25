@@ -592,7 +592,7 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
             sortedBrushEnginesList.append(paintOpInfo);
         }
 
-        qStableSort(sortedBrushEnginesList.begin(), sortedBrushEnginesList.end(), variantLessThan );
+        std::stable_sort(sortedBrushEnginesList.begin(), sortedBrushEnginesList.end(), variantLessThan );
 
         // add an "All" option at the front to show all presets
         QPixmap emptyPixmap = QPixmap(22,22);

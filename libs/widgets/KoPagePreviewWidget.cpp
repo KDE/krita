@@ -115,7 +115,7 @@ void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &d
             leftMargin = d->pageLayout.bindingSide;
             rightMargin = d->pageLayout.pageEdge;
             if(left)
-                qSwap(leftMargin, rightMargin);
+                std::swap(leftMargin, rightMargin);
         }
         textArea.setLeft(textArea.left() + qRound(zoom * leftMargin));
         textArea.setRight(textArea.right() - qRound(zoom * rightMargin));

@@ -38,24 +38,24 @@ class Debugger(bdb.Bdb):
         """Handler that executes with every line of code"""
         co = frame.f_code
 
-        if self.filePath!=co.co_filename:
+        if self.filePath != co.co_filename:
             return
 
         self.currentLine = frame.f_lineno
-        self.applicationq.put({ "code": { "file": co.co_filename,
-                                          "name": co.co_name,
-                                          "lineNumber": str(frame.f_lineno)
+        self.applicationq.put({"code": {"file": co.co_filename,
+                                        "name": co.co_name,
+                                        "lineNumber": str(frame.f_lineno)
                                         },
-                                "frame": { "firstLineNumber": co.co_firstlineno,
-                                           "locals": debuggerformatter.format_data(frame.f_locals),
-                                           "globals": debuggerformatter.format_data(frame.f_globals)
-                                          },
-                                "trace": "line"
-                              })
+                               "frame": {"firstLineNumber": co.co_firstlineno,
+                                         "locals": debuggerformatter.format_data(frame.f_locals),
+                                         "globals": debuggerformatter.format_data(frame.f_globals)
+                                         },
+                               "trace": "line"
+                               })
 
         if self.quit:
             return self.set_quit()
-        if self.currentLine==0:
+        if self.currentLine == 0:
             return
         else:
             cmd = self.debugq.get()
@@ -69,10 +69,10 @@ class Debugger(bdb.Bdb):
         name = frame.f_code.co_name or "<unknown>"
 
         if name == '<module>':
-            self.applicationq.put({ "quit": True})
+            self.applicationq.put({"quit": True})
 
     def user_exception(self, frame, exception):
-        self.applicationq.put({ "exception": str(exception[1])})
+        self.applicationq.put({"exception": str(exception[1])})
 
     async def display(self):
         """Coroutine for updating the UI"""
@@ -95,5 +95,5 @@ class Debugger(bdb.Bdb):
 
     async def stop(self):
         self.debugq.put("stop")
-        self.applicationq.put({ "quit": True})
+        self.applicationq.put({"quit": True})
         await self.display()

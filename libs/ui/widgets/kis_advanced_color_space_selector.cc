@@ -103,7 +103,7 @@ void KisAdvancedColorSpaceSelector::fillLstProfiles()
     Q_FOREACH (const KoColorProfile *profile, profileList) {
         profileNames.append(profile->name());
     }
-    qSort(profileNames);
+    std::sort(profileNames.begin(), profileNames.end());
     QListWidgetItem *defaultProfile = new QListWidgetItem;
     defaultProfile->setText(defaultProfileName + " " + i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)"));
     Q_FOREACH (QString stringName, profileNames) {

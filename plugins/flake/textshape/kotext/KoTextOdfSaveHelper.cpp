@@ -65,7 +65,7 @@ KoTextOdfSaveHelper::~KoTextOdfSaveHelper()
 bool KoTextOdfSaveHelper::writeBody()
 {
     if (d->to < d->from) {
-        qSwap(d->to, d->from);
+        std::swap(d->to, d->from);
     }
     Q_ASSERT(d->context);
     KoXmlWriter & bodyWriter = d->context->xmlWriter();

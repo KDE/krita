@@ -19,6 +19,8 @@ set(SIP_TAGS ALL WS_X11 ${PYQT5_VERSION_TAG})
 set(SIP_EXTRA_OPTIONS -g -x PyKDE_QVector)
 
 set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/pykrita/)
+file(GLOB PYKRITA_KRITA_sip_files ./krita/*.sip)
+set(SIP_EXTRA_FILES_DEPEND ${PYKRITA_KRITA_sip_files})
 add_sip_python_module(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)
 
 #install(FILES

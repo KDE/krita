@@ -170,8 +170,6 @@ Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on
 Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
-Note 2: libcurl still isn't available.
-
 Note 3: if you want to build a release, you need to get the binary gettext
 archives from files.kde.org/krita/build/dependencies:
 

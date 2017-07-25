@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QMessageBox>
+#include <QMenu>
 
 #include <kis_icon.h>
 #include "kis_action.h"
@@ -82,19 +83,45 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
     m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
 
+
     m_actionManager = actionMgr;
+
+    QMenu *importAll = new QMenu();
+
+    KisAction *importBundle = m_actionManager->actionByName("import_bundles");
+    importBundle->setText(i18n("Import Bundles"));
+    importAll->addAction(importBundle);
+
+    KisAction *importBrush = m_actionManager->actionByName("import_brushes");
+    importBrush->setText(i18n("Import Brushes"));
+    importAll->addAction(importBrush);
+
+    KisAction *importGradient = m_actionManager->actionByName("import_gradients");
+    importGradient->setText(i18n("Import Gradients"));
+    importAll->addAction(importGradient);
+
+    KisAction *importPalette = m_actionManager->actionByName("import_palettes");
+    importPalette->setText(i18n("Import Palettes"));
+    importAll->addAction(importPalette);
+
+    KisAction *importPattern = m_actionManager->actionByName("import_patterns");
+    importPattern->setText(i18n("Import Patterns"));
+    importAll->addAction(importPattern);
+
+    KisAction *importPreset = m_actionManager->actionByName("import_presets");
+    importPreset->setText(i18n("Import Presets"));
+    importAll->addAction(importPreset);
+
+    KisAction *importWorkSpace = m_actionManager->actionByName("import_workspaces");
+    importWorkSpace->setText(i18n("Import Workspace"));
+    importAll->addAction(importWorkSpace);
+
+    m_ui->m_importResources->setMenu(importAll);
+
 
     refreshListData();
 
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
-
-    connect(m_ui->bnImportBrushes, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportGradients, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportPalettes, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportPatterns, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportPresets, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportWorkspaces, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportBundles, SIGNAL(clicked()), SLOT(slotImportResource()));
     connect(m_ui->bnShareResources, SIGNAL(clicked()), SLOT(slotShareResources()));
 
     connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
@@ -315,44 +342,6 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
         item->setData(Qt::UserRole, bundle->md5());
         w->addItem(item);
 
-    }
-}
-
-
-void DlgBundleManager::slotImportResource()
-{
-    if (m_actionManager) {
-        QObject *button = sender();
-        QString buttonName = button->objectName();
-        KisAction *action = 0;
-        if (buttonName == "bnImportBundles") {
-            action = m_actionManager->actionByName("import_bundles");
-        }
-        else if (buttonName == "bnImportBrushes") {
-            action = m_actionManager->actionByName("import_brushes");
-        }
-        else if (buttonName == "bnImportGradients") {
-            action = m_actionManager->actionByName("import_gradients");
-        }
-        else if (buttonName == "bnImportPalettes") {
-            action = m_actionManager->actionByName("import_palettes");
-        }
-        else if (buttonName == "bnImportPatterns") {
-            action = m_actionManager->actionByName("import_patterns");
-        }
-        else if (buttonName == "bnImportPresets") {
-            action = m_actionManager->actionByName("import_presets");
-        }
-        else if (buttonName == "bnImportWorkspaces") {
-            action = m_actionManager->actionByName("import_workspaces");
-        }
-        else {
-            warnUI << "Unhandled bundle manager import button " << buttonName;
-            return;
-        }
-
-        action->trigger();
-        refreshListData();
     }
 }
 

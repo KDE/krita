@@ -47,7 +47,6 @@ private Q_SLOTS:
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
     void itemSelected(QListWidgetItem *current);
     void editBundle();
-    void slotImportResource();
     void slotCreateBundle();
     void slotDeleteBackupFiles();
     void slotOpenResourceFolder();

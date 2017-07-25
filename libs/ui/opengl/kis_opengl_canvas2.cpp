@@ -524,7 +524,7 @@ void KisOpenGLCanvas2::drawGrid()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     KisConfig cfg;
-    QColor gridColor = cfg.getOpenGLGridColor();
+    QColor gridColor = cfg.getPixelGridColor();
     d->solidColorShader->setUniformValue(
                 d->solidColorShader->location(Uniform::FragmentColor),
                 QVector4D(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.5f));
@@ -781,7 +781,7 @@ void KisOpenGLCanvas2::renderCanvasGL()
     drawCheckers();
     drawImage();
     KisConfig cfg;
-    if (coordinatesConverter()->effectiveZoom() > cfg.getOpenGLGridDrawingThreshold() - 0.00001) {
+    if ((coordinatesConverter()->effectiveZoom() > cfg.getPixelGridDrawingThreshold() - 0.00001) && cfg.pixelGridEnabled()) {
         drawGrid();
     }
     if (KisOpenGL::hasOpenGL3()) {

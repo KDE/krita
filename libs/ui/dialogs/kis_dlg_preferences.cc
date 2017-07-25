@@ -143,6 +143,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground());
 
+    KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
+    cursorColor.fromQColor(cfg.getCursorMainColor());
+    cursorColorBtutton->setColor(cursorColor);
+
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 }
@@ -183,6 +187,9 @@ void GeneralTab::setDefault()
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground(true));
 
+    KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
+    cursorColor.fromQColor(cfg.getCursorMainColor(true));
+    cursorColorBtutton->setColor(cursorColor);
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -781,6 +788,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     chkHidePopups->setChecked(cfg.hidePopups());
 
     connect(grpOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
+
+    KoColor gridColor(KoColorSpaceRegistry::instance()->rgb8());
+    gridColor.fromQColor(cfg.getPixelGridColor());
+    pixelGridColorButton->setColor(gridColor);
+    pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold() * 100);
+    grpPixelGrid->setEnabled(true);
+    grpPixelGrid->setChecked(cfg.pixelGridEnabled());
 }
 
 void DisplaySettingsTab::setDefault()
@@ -821,6 +835,12 @@ void DisplaySettingsTab::setDefault()
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor(true));
     chkHidePopups->setChecked(cfg.hidePopups(true));
 
+    KoColor gridColor(KoColorSpaceRegistry::instance()->rgb8());
+    gridColor.fromQColor(cfg.getPixelGridColor(true));
+    pixelGridColorButton->setColor(gridColor);
+    pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold(true) * 100);
+    grpPixelGrid->setEnabled(true);
+    grpPixelGrid->setChecked(cfg.pixelGridEnabled(true));
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
@@ -1116,6 +1136,11 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
+
+        cfg.setCursorMainColor(dialog->m_general->cursorColorBtutton->color().toQColor());
+        cfg.setPixelGridColor(dialog->m_displaySettings->pixelGridColorButton->color().toQColor());
+        cfg.setPixelGridDrawingThreshold(dialog->m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
+        cfg.enablePixelGrid(dialog->m_displaySettings->grpPixelGrid->isChecked());
 
         dialog->m_authorPage->apply();
 

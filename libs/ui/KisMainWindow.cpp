@@ -829,12 +829,14 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     return true;
 }
 
-void KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
+KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
     KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
     addView(view);
 
     emit guiLoadingFinished();
+
+    return view;
 }
 
 QStringList KisMainWindow::showOpenFileDialog(bool isImporting)
@@ -2139,11 +2141,13 @@ void KisMainWindow::configChanged()
     d->mdiArea->update();
 }
 
-void KisMainWindow::newView(QObject *document)
+KisView* KisMainWindow::newView(QObject *document)
 {
     KisDocument *doc = qobject_cast<KisDocument*>(document);
-    addViewAndNotifyLoadingCompleted(doc);
+    KisView *view = addViewAndNotifyLoadingCompleted(doc);
     d->actionManager()->updateGUI();
+
+    return view;
 }
 
 void KisMainWindow::newWindow()

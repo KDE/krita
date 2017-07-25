@@ -160,7 +160,7 @@ public:
 
     KisViewManager *viewManager() const;
 
-    void addViewAndNotifyLoadingCompleted(KisDocument *document);
+    KisView *addViewAndNotifyLoadingCompleted(KisDocument *document);
 
     QStringList showOpenFileDialog(bool isImporting);
 
@@ -243,6 +243,7 @@ public Q_SLOTS:
      */
     void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
+    KisView *newView(QObject *document);
 
     void notifyChildViewDestroyed(KisView *view);
 
@@ -357,7 +358,7 @@ private Q_SLOTS:
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
-    void newView(QObject *document);
+
     void newWindow();
     void closeCurrentWindow();
     void checkSanity();
@@ -377,8 +378,7 @@ protected:
 
     void setToolbarList(QList<QAction*> toolbarList);
 
-
-public Q_SLOTS:
+private:
 
     /**
      * Add a the given view to the list of views of this mainwindow.
@@ -386,6 +386,8 @@ public Q_SLOTS:
      * newView() and addViewAndNotifyLoadingCompleted().
      */
     void addView(KisView *view);
+
+public Q_SLOTS:
 
     /// Set the active view, this will update the undo/redo actions
     void setActiveView(KisView *view);

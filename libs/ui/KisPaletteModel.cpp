@@ -267,6 +267,13 @@ KoColorSet* KisPaletteModel::colorSet() const
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
     QModelIndex index = QModelIndex();
+    if (colorSet()->nColors()==0) {
+        return index;
+    }
+    if (i > colorSet()->nColors()) {
+        qWarning()<<"index is too big"<<i<<"/"<<colorSet()->nColors();
+        index = this->index(0,0);
+    }
     if (i < (int)colorSet()->nColorsGroup(0)) {
         index = QAbstractTableModel::index(i/columnCount(), i%columnCount());
         if (!index.isValid()) {
@@ -275,17 +282,25 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
         return index;
     } else {
         int rowstotal = 1+m_colorSet->nColorsGroup()/columnCount();
+        if (m_colorSet->nColorsGroup()==0) {
+            rowstotal +=1;
+        }
         int totalIndexes = colorSet()->nColorsGroup();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
-            totalIndexes += colorSet()->nColorsGroup(groupName);
-            if (totalIndexes<i) {
+            if (i+1<=totalIndexes+colorSet()->nColorsGroup(groupName) && i+1>totalIndexes) {
+                int col = (i-totalIndexes)%columnCount();
+                int row = rowstotal+1+((i-totalIndexes)/columnCount());
+                index = this->index(row, col);
+                return index;
+            } else {
                 rowstotal += 1+m_colorSet->nColorsGroup(groupName)/columnCount();
+                totalIndexes += colorSet()->nColorsGroup(groupName);
                 if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
                     rowstotal+=1;
                 }
-                rowstotal+=1;
-            } else {
-                index = QAbstractTableModel::index(rowstotal, i-(rowstotal*columnCount()));
+                if (m_colorSet->nColorsGroup(groupName)==0) {
+                    rowstotal+=1; //always add one for the group when considering groups.
+                }
             }
         }
     }
@@ -294,11 +309,16 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
 
 int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 {
-    if (index.isValid()==false || qVariantValue<bool>(index.data(IsHeaderRole))) {
+    if (index.isValid()==false) {
         return -1;
+        qWarning()<<"invalid index";
     }
     int i=0;
     QStringList entryList = qVariantValue<QStringList>(data(index, RetrieveEntryRole));
+    if (entryList.isEmpty()) {
+        return -1;
+        qWarning()<<"invalid index, there's no data to retreive here";
+    }
     if (entryList.at(0)==QString()) {
         return entryList.at(1).toUInt();
     }

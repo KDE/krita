@@ -22,12 +22,12 @@ class NewAction(QAction):
     def new(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)
 
-        msgBox.setText("The document has been modified.");
-        msgBox.setInformativeText("Do you want to save your changes?");
-        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel);
-        msgBox.setDefaultButton(QMessageBox.Save);
+        msgBox.setText("The document has been modified.")
+        msgBox.setInformativeText("Do you want to save your changes?")
+        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        msgBox.setDefaultButton(QMessageBox.Save)
 
-        ret = msgBox.exec();
+        ret = msgBox.exec()
 
         if ret == QMessageBox.Cancel:
             return

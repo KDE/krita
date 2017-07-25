@@ -4,6 +4,7 @@ from rope.base import codeanalyze
 
 
 class TextIndenter(object):
+
     """A class for formatting texts"""
 
     def __init__(self, editor, indents=4):
@@ -81,7 +82,7 @@ class PythonCodeIndenter(TextIndenter):
     def _last_non_blank(self, lineno):
         current_line = lineno - 1
         while current_line != 1 and \
-              self.line_editor.get_line(current_line).strip() == '':
+                self.line_editor.get_line(current_line).strip() == '':
             current_line -= 1
         return current_line
 
@@ -178,6 +179,7 @@ class PythonCodeIndenter(TextIndenter):
 
 
 class _StatementRangeFinder(object):
+
     """A method object for finding the range of a statement"""
 
     def __init__(self, lines, lineno):
@@ -198,8 +200,8 @@ class _StatementRangeFinder(object):
                     if char * 3 == current_line[i:i + 3]:
                         self.in_string = char * 3
                 elif self.in_string == current_line[i:i + len(self.in_string)] and \
-                     not (i > 0 and current_line[i - 1] == '\\' and
-                          not (i > 1 and current_line[i - 2:i] == '\\\\')):
+                    not (i > 0 and current_line[i - 1] == '\\' and
+                         not (i > 1 and current_line[i - 2:i] == '\\\\')):
                     self.in_string = ''
             if self.in_string != '':
                 continue

@@ -29,14 +29,15 @@ from PyKrita.krita import *
 
 import pykrita
 
+
 def objectIsAlive(obj):
     ''' Test whether an object is alive; that is, whether the pointer
     to the object still exists. '''
     import sip
     try:
-       sip.unwrapinstance(obj)
+        sip.unwrapinstance(obj)
     except RuntimeError:
-       return False
+        return False
     return True
 
 
@@ -47,4 +48,3 @@ def qDebug(text):
     '''
     plugin = sys._getframe(1).f_globals['__name__']
     pykrita.qDebug('{}: {}'.format(plugin, text))
-

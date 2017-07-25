@@ -495,6 +495,25 @@ void KisAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     e->accept();
 }
 
+bool KisAbstractSliderSpinBox::event(QEvent *event)
+{
+    if (event->type() == QEvent::ShortcutOverride){
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if (key->modifiers() == Qt::NoModifier){
+            switch(key->key()){
+            case Qt::Key_Up:
+            case Qt::Key_Right:
+            case Qt::Key_Down:
+            case Qt::Key_Left:
+                event->accept();
+                return true;
+            default: break;
+            }
+        }
+    }
+    return QWidget::event(event);
+}
+
 void KisAbstractSliderSpinBox::commitEnteredValue()
 {
     Q_D(KisAbstractSliderSpinBox);

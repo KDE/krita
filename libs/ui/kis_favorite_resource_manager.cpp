@@ -330,7 +330,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
     for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
         KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
         m_favoritePresetsList.append(pr.data());
-        qSort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
+        std::sort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
     emit updatePalettes();
 }

@@ -129,7 +129,7 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
     if (d->endPoint.first != d->startPoint.first) {
         // sort by point index
         if (d->startPoint < d->endPoint)
-            qSwap(d->endPoint, d->startPoint);
+            std::swap(d->endPoint, d->startPoint);
         // mark first subpath to be reversed if first point starts a subpath with more than one point
         if (d->endPoint.second == 0 && d->pathShape->subpathPointCount(d->endPoint.first) > 1)
             d->reverse |= Private::ReverseFirst;
@@ -139,7 +139,7 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
     } else {
         Q_ASSERT(d->endPoint.second != d->startPoint.second);
         if (d->endPoint < d->startPoint)
-            qSwap(d->endPoint, d->startPoint);
+            std::swap(d->endPoint, d->startPoint);
     }
 
     KoPathPoint * p1 = d->pathShape->pointByIndex(d->endPoint);

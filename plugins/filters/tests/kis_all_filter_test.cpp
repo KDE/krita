@@ -239,7 +239,7 @@ void KisAllFilterTest::testAllFilters()
     QStringList successes;
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
-    qSort(filterList);
+    std::sort(filterList.begin(), filterList.end());
     for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
         if (testFilter(KisFilterRegistry::instance()->value(*it)))
             successes << *it;
@@ -258,7 +258,7 @@ void KisAllFilterTest::testAllFiltersNoTransaction()
     QStringList successes;
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
-    qSort(filterList);
+    std::sort(filterList.begin(), filterList.end());
     for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
         if (testFilterNoTransaction(KisFilterRegistry::instance()->value(*it)))
             successes << *it;
@@ -278,7 +278,7 @@ void KisAllFilterTest::testAllFiltersSrcNotIsDev()
     QStringList successes;
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
-    qSort(filterList);
+    std::sort(filterList.begin(), filterList.end());
     for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
         if (testFilterSrcNotIsDev(KisFilterRegistry::instance()->value(*it)))
             successes << *it;
@@ -298,7 +298,7 @@ void KisAllFilterTest::testAllFiltersWithSelections()
     QStringList successes;
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
-    qSort(filterList);
+    std::sort(filterList.begin(), filterList.end());
     for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
         if (testFilterWithSelections(KisFilterRegistry::instance()->value(*it)))
             successes << *it;

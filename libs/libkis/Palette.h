@@ -78,7 +78,12 @@ public:
      * @return the comment or description associated with the palette.
      */
     QString comment();
-    //setcomment
+    /**
+     * @brief setComment
+     * set the comment or description associated with the palette.
+     * @param comment
+     */
+    void setComment(QString comment);
     /**
      * @brief groupNames
      * @return the list of group names. This is list is in the order these groups are in the file.
@@ -97,6 +102,12 @@ public:
      * @return
      */
     bool removeGroup(QString name, bool keepColors = true);
+
+    /**
+     * @brief colorsCountTotal
+     * @return the total amount of entries in the whole group
+     */
+    int colorsCountTotal();
     /**
      * @brief colorsCountGroup
      * @param name of the group to check. Empty is the default group.
@@ -115,8 +126,15 @@ public:
     //Insert
 
 private:
+    friend class PaletteView;
     struct Private;
     Private *const d;
+
+    /**
+     * @brief colorSet
+     * @return gives qa KoColorSet object back
+     */
+    KoColorSet *colorSet();
 
 };
 

@@ -14,6 +14,7 @@ public:
     bool setColorProfile(const QString &colorProfile);
     bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
     QVector<float> components() const;
+    QVector<float> componentsOrdered() const;
     void setComponents(const QVector<float> &values);
     QString toXML() const;
     void fromXML(const QString &xml);

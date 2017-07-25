@@ -130,7 +130,7 @@ void FontSizeAction::setFontSize(qreal size)
         clear();
 
         // Sort the list
-        qSort(lst);
+        std::sort(lst.begin(), lst.end());
         Q_FOREACH (qreal it, lst) {
             QAction *const action = addAction(format(it));
             if (it == size) {

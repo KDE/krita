@@ -794,6 +794,25 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
             }
         }
     } break;
+    case QEvent::ShortcutOverride : {
+        QLineEdit *edit = qobject_cast<QLineEdit*>(object);
+        if (edit && edit == d->edit){
+            auto* key = static_cast<QKeyEvent*>(event);
+            if (key->modifiers() == Qt::NoModifier){
+                switch (key->key()){
+                case Qt::Key_Escape:
+                case Qt::Key_Tab:
+                case Qt::Key_Backtab:
+                case Qt::Key_Return:
+                case Qt::Key_Enter:
+                    event->accept();
+                    return true;
+                default: break;
+                }
+            }
+        }
+
+    } break;
     case QEvent::FocusOut : {
         QLineEdit *edit = qobject_cast<QLineEdit*>(object);
         if (edit && edit == d->edit) {

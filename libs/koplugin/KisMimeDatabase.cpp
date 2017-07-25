@@ -177,6 +177,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "*.paintingassistant";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "image/x-r32";
+        mimeType.description = i18nc("description of a file type", "R32 Heightmap");
+        mimeType.suffixes = QStringList() <<  "*.r32";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "image/x-r16";
         mimeType.description = i18nc("description of a file type", "R16 Heightmap");
         mimeType.suffixes = QStringList() <<  "*.r16";

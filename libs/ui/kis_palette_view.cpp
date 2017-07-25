@@ -55,15 +55,14 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     setDropIndicatorShown(true);
 
     KisConfig cfg;
-    QPalette pal(palette());
-    pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
-    setAutoFillBackground(true);
-    setPalette(pal);
+    //QPalette pal(palette());
+    //pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
+    //setAutoFillBackground(true);
+    //setPalette(pal);
 
     int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
     verticalHeader()->setDefaultSectionSize(defaultSectionSize);
-    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelection()) );
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
 }
 
@@ -165,6 +164,41 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
     return true;
 }
 
+void KisPaletteView::trySelectClosestColor(KoColor color)
+{
+    KoColorSet* color_set = m_d->model->colorSet();
+    if (!color_set)
+        return;
+    //also don't select if the color is the same as the current selection
+    if (selectedIndexes().size()>0) {
+        QModelIndex currentI = currentIndex();
+        if (!currentI.isValid()) {
+            currentI = selectedIndexes().last();
+        }
+        if (!currentI.isValid()) {
+            currentI = selectedIndexes().first();
+        }
+        if (currentI.isValid()) {
+            if (m_d->model->colorSetEntryFromIndex(currentI).color==color) {
+                return;
+            }
+        }
+    }
+    quint32 i = color_set->getIndexClosestColor(color);
+    QModelIndex index = m_d->model->indexFromId(i);
+    this->selectionModel()->clearSelection();
+    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+}
+
+void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
+{
+    bool foreground = false;
+    if (event->button()== Qt::LeftButton) {
+        foreground = true;
+    }
+    entrySelection(foreground);
+}
+
 void KisPaletteView::paletteModelChanged()
 {
     updateView();
@@ -178,10 +212,12 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     }
     m_d->model = model;
     setModel(model);
+    paletteModelChanged();
     connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
+    connect(m_d->model, SIGNAL(modelReset()), this, SLOT(paletteModelChanged()));
 
 }
 
@@ -193,11 +229,15 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 void KisPaletteView::updateRows()
 {
     this->clearSpans();
-    for (int r=0; r<=m_d->model->rowCount(); r++) {
-        QModelIndex index = m_d->model->index(r, 0);
-        if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
-            setSpan(r, 0, 1, m_d->model->columnCount());
-            setRowHeight(r, this->fontMetrics().lineSpacing()+6);
+    if (m_d->model) {
+        for (int r=0; r<=m_d->model->rowCount(); r++) {
+            QModelIndex index = m_d->model->index(r, 0);
+            if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+                setSpan(r, 0, 1, m_d->model->columnCount());
+                setRowHeight(r, this->fontMetrics().lineSpacing()+6);
+            } else {
+                this->setRowHeight(r, this->columnWidth(0));
+            }
         }
     }
 }
@@ -229,17 +269,27 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
     }
 }
 
-void KisPaletteView::entrySelection() {
-    QModelIndex index = selectedIndexes().last();
-    if (!index.isValid()) {
-        index = selectedIndexes().first();
+void KisPaletteView::entrySelection(bool foreground) {
+    QModelIndex index;
+    if (selectedIndexes().size()<=0) {
+        return;
     }
-    if (!index.isValid()) {
+    if (selectedIndexes().last().isValid()) {
+        index = selectedIndexes().last();
+    } else if (selectedIndexes().first().isValid()) {
+        index = selectedIndexes().first();
+    } else {
         return;
     }
     if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-        emit(entrySelected(entry));
+        if (foreground) {
+            emit(entrySelected(entry));
+            emit(indexEntrySelected(index));
+        } else {
+            emit(entrySelectedBackGround(entry));
+            emit(indexEntrySelected(index));
+        }
     }
 }
 

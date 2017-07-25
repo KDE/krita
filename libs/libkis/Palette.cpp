@@ -57,6 +57,12 @@ QString Palette::comment()
     return d->palette->comment();
 }
 
+void Palette::setComment(QString comment)
+{
+    if (!d->palette) return;
+    return d->palette->setComment(comment);
+}
+
 QStringList Palette::groupNames()
 {
     if (!d->palette) return QStringList();
@@ -73,6 +79,12 @@ bool Palette::removeGroup(QString name, bool keepColors)
 {
     if (!d->palette) return false;
     return d->palette->removeGroup(name, keepColors);
+}
+
+int Palette::colorsCountTotal()
+{
+    if (!d->palette) return 0;
+    return d->palette->nColors();
 }
 
 int Palette::colorsCountGroup(QString name)
@@ -99,4 +111,9 @@ ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
     if (!d->palette) return 0;
     ManagedColor *color = new ManagedColor(entry.color);
     return color;
+}
+
+KoColorSet *Palette::colorSet()
+{
+    return d->palette;
 }

@@ -242,6 +242,8 @@ public Q_SLOTS:
     void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
 
+    void notifyChildViewDestroyed(KisView *view);
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.

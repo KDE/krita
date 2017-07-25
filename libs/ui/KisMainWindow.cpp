@@ -67,6 +67,7 @@
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
+#include <input/kis_input_manager.h>
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -540,6 +541,9 @@ void KisMainWindow::addView(KisView *view)
         d->activeView->disconnect(this);
     }
 
+    // register the newly created view in the input manager
+    viewManager()->inputManager()->addTrackedCanvas(view->canvasBase());
+
     showView(view);
     updateCaption();
     emit restoringDone();
@@ -548,6 +552,12 @@ void KisMainWindow::addView(KisView *view)
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 }
+
+void KisMainWindow::notifyChildViewDestroyed(KisView *view)
+{
+    viewManager()->inputManager()->removeTrackedCanvas(view->canvasBase());
+}
+
 
 void KisMainWindow::showView(KisView *imageView)
 {

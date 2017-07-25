@@ -267,6 +267,8 @@ KisView::~KisView()
         if (d->viewManager->filterManager()->isStrokeRunning()) {
             d->viewManager->filterManager()->cancel();
         }
+
+        d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
     }
 
     KisPart::instance()->removeView(this);

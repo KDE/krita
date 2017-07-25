@@ -21,13 +21,15 @@
 #define koStoreDevice_h
 
 #include "KoStore.h"
+#include <kritastore_export.h>
+
 
 /**
  * This class implements a QIODevice around KoStore, so that
  * it can be used to create a QDomDocument from it, to be written or read
  * using QDataStream or to be written using QTextStream
  */
-class KoStoreDevice : public QIODevice
+class KRITASTORE_EXPORT KoStoreDevice : public QIODevice
 {
     Q_OBJECT
 public:

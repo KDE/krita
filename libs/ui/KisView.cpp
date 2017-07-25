@@ -262,6 +262,8 @@ KisView::~KisView()
         if (d->viewManager->filterManager()->isStrokeRunning()) {
             d->viewManager->filterManager()->cancel();
         }
+
+        d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
     }
     KoToolManager::instance()->removeCanvasController(&d->canvasController);
     KisPart::instance()->removeView(this);

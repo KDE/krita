@@ -36,6 +36,7 @@ from .api import *
 # initialization related stuff
 #
 
+
 def pykritaEventHandler(event):
     def _decorator(func):
         setattr(pykrita, event, func)
@@ -96,6 +97,7 @@ def unload(func):
     '''
     plugin = sys._getframe(1).f_globals['__name__']
     qDebug('@unload: {}/{}'.format(plugin, func.__name__))
+
     def _module_cleaner():
         qDebug('@unload/cleaner: {}/{}'.format(plugin, func.__name__))
         if plugin in init.functions:
@@ -105,5 +107,3 @@ def unload(func):
         func()
 
     return _registerCallback(plugin, unload, _module_cleaner)
-
-

@@ -13,10 +13,11 @@ from PyQt5.QtWidgets import *
 import math
 from krita import *
 
+
 class inkscapeSVGExporter:
-    
+
     def __init__(self, name):
-        #We want people to select a palette and a location to save to...
+        # We want people to select a palette and a location to save to...
         self.fileName = QFileDialog.getExistingDirectory()
         allPalettes = Application.resources("palette")
         self.paletteName = name
@@ -24,24 +25,24 @@ class inkscapeSVGExporter:
         self.export()
         done = QMessageBox()
         done.setWindowTitle("Export succesful")
-        done.setText(self.paletteName+" has been exported to "+self.fileName+"!")
+        done.setText(self.paletteName + " has been exported to " + self.fileName + "!")
         done.exec_()
         pass
 
     def export(self):
         # open the appropriate file...
-        svgFile = open(self.fileName+"/"+self.paletteName+".svg", "w")
+        svgFile = open(self.fileName + "/" + self.paletteName + ".svg", "w")
         svgDoc = QDomDocument()
         svgBaseElement = svgDoc.createElement("svg")
         svgBaseElement.setAttribute("xmlns:osb", "http://www.openswatchbook.org/uri/2009/osb")
         svgBaseElement.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg")
         svgBaseElement.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/")
-        svgBaseElement.setAttribute("xmlns:cc", "http://creativecommons.org/ns#" )
-        svgBaseElement.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#" )
+        svgBaseElement.setAttribute("xmlns:cc", "http://creativecommons.org/ns#")
+        svgBaseElement.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
         svgDefs = svgDoc.createElement("defs")
         svgSwatches = svgDoc.createElement("g")
         svgSwatches.setAttribute("id", "Swatches")
-        
+
         svgMeta = svgDoc.createElement("metadata")
         svgBaseElement.appendChild(svgMeta)
         rdf = svgDoc.createElement("rdf:RDF")
@@ -59,25 +60,25 @@ class inkscapeSVGExporter:
         iccProfileList = []
 
         colorCount = self.currentPalette.colorsCountGroup("")
-        
+
         for i in range(colorCount):
             entry = self.currentPalette.colorSetEntryFromGroup(i, "")
             color = self.currentPalette.colorForEntry(entry)
 
-            iccColor = "icc-color("+color.colorProfile()
-            for c in range(len(color.componentsOrdered())-1):
-                iccColor = iccColor+","+str(color.componentsOrdered()[c])
-            iccColor = iccColor+")"
+            iccColor = "icc-color(" + color.colorProfile()
+            for c in range(len(color.componentsOrdered()) - 1):
+                iccColor = iccColor + "," + str(color.componentsOrdered()[c])
+            iccColor = iccColor + ")"
             if color.colorProfile() not in iccProfileList:
                 iccProfileList.append(color.colorProfile())
-            
-            #convert to sRGB
+
+            # convert to sRGB
             color.setColorSpace("RGBA", "U8", "sRGB built-in")
-            red   = max(min(int(color.componentsOrdered()[0]*255), 255), 0)
-            green = max(min(int(color.componentsOrdered()[1]*255), 255), 0)
-            blue  = max(min(int(color.componentsOrdered()[2]*255), 255), 0)
-            hexcode = "#"+str(format(red, '02x'))+str(format(green, '02x'))+str(format(blue, '02x'))
-            swatchName = str(i)+"-"+entry.name
+            red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
+            green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
+            blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
+            hexcode = "#" + str(format(red, '02x')) + str(format(green, '02x')) + str(format(blue, '02x'))
+            swatchName = str(i) + "-" + entry.name
             swatchName = swatchName.replace(" ", "-")
             swatchName = swatchName.replace("(", "-")
             swatchName = swatchName.replace(")", "-")
@@ -85,16 +86,16 @@ class inkscapeSVGExporter:
             swatchMain.setAttribute("osb:paint", "solid")
             swatchMain.setAttribute("id", swatchName)
             swatchSub = svgDoc.createElement("stop")
-            swatchSub.setAttribute("style", "stop-color: "+hexcode+" "+iccColor+";stop-opacity:1;")
+            swatchSub.setAttribute("style", "stop-color: " + hexcode + " " + iccColor + ";stop-opacity:1;")
             swatchMain.appendChild(swatchSub)
             svgDefs.appendChild(swatchMain)
             svgSingleSwatch = svgDoc.createElement("rect")
-            svgSingleSwatch.setAttribute("x", str(int(Column*20)))
-            svgSingleSwatch.setAttribute("y", str(int(Row*20)))
+            svgSingleSwatch.setAttribute("x", str(int(Column * 20)))
+            svgSingleSwatch.setAttribute("y", str(int(Row * 20)))
             svgSingleSwatch.setAttribute("width", str(int(20)))
             svgSingleSwatch.setAttribute("height", str(int(20)))
-            svgSingleSwatch.setAttribute("fill", "url(#"+swatchName+")")
-            svgSingleSwatch.setAttribute("id", "swatch"+swatchName)
+            svgSingleSwatch.setAttribute("fill", "url(#" + swatchName + ")")
+            svgSingleSwatch.setAttribute("id", "swatch" + swatchName)
             if entry.spotColor is True:
                 svgSingleSwatch.setAttribute("rx", str(10))
                 svgSingleSwatch.setAttribute("ry", str(10))
@@ -102,36 +103,36 @@ class inkscapeSVGExporter:
             Column += 1
             if (Column >= self.currentPalette.columnCount()):
                 Column = 0
-                Row +=1
-    
+                Row += 1
+
         groupNames = self.currentPalette.groupNames()
         for groupName in groupNames:
-            Column=0
-            Row+=1
+            Column = 0
+            Row += 1
             groupTitle = svgDoc.createElement("text")
-            groupTitle.setAttribute("x", str(int(Column*20)))
-            groupTitle.setAttribute("y", str(int(Row*20)+15))
+            groupTitle.setAttribute("x", str(int(Column * 20)))
+            groupTitle.setAttribute("y", str(int(Row * 20) + 15))
             groupTitle.appendChild(svgDoc.createTextNode(groupName))
             svgSwatches.appendChild(groupTitle)
-            Row+=1
+            Row += 1
             colorCount = self.currentPalette.colorsCountGroup(groupName)
             for i in range(colorCount):
                 entry = self.currentPalette.colorSetEntryFromGroup(i, groupName)
                 color = self.currentPalette.colorForEntry(entry)
-                iccColor = "icc-color("+color.colorProfile()
-                for c in range(len(color.componentsOrdered())-1):
-                    iccColor = iccColor+","+str(color.componentsOrdered()[c])
-                iccColor = iccColor+")"
+                iccColor = "icc-color(" + color.colorProfile()
+                for c in range(len(color.componentsOrdered()) - 1):
+                    iccColor = iccColor + "," + str(color.componentsOrdered()[c])
+                iccColor = iccColor + ")"
                 if color.colorProfile() not in iccProfileList:
                     iccProfileList.append(color.colorProfile())
-                #convert to sRGB
+                # convert to sRGB
                 color.setColorSpace("RGBA", "U8", "sRGB built-in")
-                red   = max(min(int(color.componentsOrdered()[0]*255), 255), 0)
-                green = max(min(int(color.componentsOrdered()[1]*255), 255), 0)
-                blue  = max(min(int(color.componentsOrdered()[2]*255), 255), 0)
-                hexcode = "#"+str(format(red, '02x'))+str(format(green, '02x'))+str(format(blue, '02x'))
-    
-                swatchName = groupName+str(i)+"-"+entry.name
+                red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
+                green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
+                blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
+                hexcode = "#" + str(format(red, '02x')) + str(format(green, '02x')) + str(format(blue, '02x'))
+
+                swatchName = groupName + str(i) + "-" + entry.name
                 swatchName = swatchName.replace(" ", "-")
                 swatchName = swatchName.replace("(", "-")
                 swatchName = swatchName.replace(")", "-")
@@ -139,16 +140,16 @@ class inkscapeSVGExporter:
                 swatchMain.setAttribute("osb:paint", "solid")
                 swatchMain.setAttribute("id", swatchName)
                 swatchSub = svgDoc.createElement("stop")
-                swatchSub.setAttribute("style", "stop-color: "+hexcode+" "+iccColor+";stop-opacity:1;")
+                swatchSub.setAttribute("style", "stop-color: " + hexcode + " " + iccColor + ";stop-opacity:1;")
                 swatchMain.appendChild(swatchSub)
                 svgDefs.appendChild(swatchMain)
                 svgSingleSwatch = svgDoc.createElement("rect")
-                svgSingleSwatch.setAttribute("x", str(int(Column*20)))
-                svgSingleSwatch.setAttribute("y", str(int(Row*20)))
+                svgSingleSwatch.setAttribute("x", str(int(Column * 20)))
+                svgSingleSwatch.setAttribute("y", str(int(Row * 20)))
                 svgSingleSwatch.setAttribute("width", str(int(20)))
                 svgSingleSwatch.setAttribute("height", str(int(20)))
-                svgSingleSwatch.setAttribute("fill", "url(#"+swatchName+")")
-                svgSingleSwatch.setAttribute("id", "swatch "+swatchName)
+                svgSingleSwatch.setAttribute("fill", "url(#" + swatchName + ")")
+                svgSingleSwatch.setAttribute("id", "swatch " + swatchName)
                 if entry.spotColor is True:
                     svgSingleSwatch.setAttribute("rx", str(10))
                     svgSingleSwatch.setAttribute("ry", str(10))
@@ -156,19 +157,19 @@ class inkscapeSVGExporter:
                 Column += 1
                 if (Column >= self.currentPalette.columnCount()):
                     Column = 0
-                    Row +=1
+                    Row += 1
 
         for profile in iccProfileList:
             svgProfileDesc = svgDoc.createElement("color-profile")
             svgProfileDesc.setAttribute("name", profile)
-            #This is incomplete because python api doesn't have any way to ask for this data yet.
-            #svgProfileDesc.setAttribute("local", "sRGB")
-            #svgProfileDesc.setAttribute("xlink:href", colorprofileurl)
+            # This is incomplete because python api doesn't have any way to ask for this data yet.
+            # svgProfileDesc.setAttribute("local", "sRGB")
+            # svgProfileDesc.setAttribute("xlink:href", colorprofileurl)
             svgProfileDesc.setAttribute("rendering-intent", "perceptual")
             svgDefs.appendChild(svgProfileDesc)
         svgBaseElement.appendChild(svgDefs)
         svgBaseElement.appendChild(svgSwatches)
-        svgBaseElement.setAttribute("viewBox", "0 0 "+str(self.currentPalette.columnCount()*20)+" "+str(int((Row+1)*20)))
+        svgBaseElement.setAttribute("viewBox", "0 0 " + str(self.currentPalette.columnCount() * 20) + " " + str(int((Row + 1) * 20)))
         svgDoc.appendChild(svgBaseElement)
         svgFile.write(svgDoc.toString())
         svgFile.close()

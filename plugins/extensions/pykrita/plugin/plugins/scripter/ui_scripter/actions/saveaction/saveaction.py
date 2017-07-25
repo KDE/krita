@@ -35,7 +35,7 @@ class SaveAction(QAction):
 
                 fileExtension = fileName.rsplit('.', maxsplit=1)[1]
             except:
-                if not fileExtension=='py':
+                if not fileExtension == 'py':
                     QMessageBox.information(self.scripter.uicontroller.mainWidget,
                                             'Invalid File',
                                             'Save files with .py extension')

@@ -299,6 +299,11 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
     return resources;
 }
 
+QStringList Krita::recentDocuments() const
+{
+    return QStringList();
+}
+
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)
 {
     KisDocument *document = KisPart::instance()->createDocument();

@@ -206,6 +206,13 @@ public Q_SLOTS:
      */
     QMap<QString, Resource*> resources(const QString &type) const;
 
+
+    /**
+     * @brief return all recent documents registered in the RecentFiles group of the kritarc
+     */
+    QStringList recentDocuments() const;
+
+
     /**
      * @brief createDocument creates a new document and image and registers the document with the Krita application.
      *

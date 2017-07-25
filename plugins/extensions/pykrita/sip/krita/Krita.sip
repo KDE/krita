@@ -28,6 +28,7 @@ public Q_SLOTS:
     Window * activeWindow() const /Factory/;
     QList<Window *> windows() const /Factory/;
     QMap<QString, Resource *> resources(const QString &type) const /Factory/;
+    QStringList recentDocuments() const;
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();

@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListView
 import krita
+from lastdocumentsdocker import lastdocumentslistmodel
 
 
 class LastDocumentsDocker(krita.DockWidget):
@@ -7,13 +8,22 @@ class LastDocumentsDocker(krita.DockWidget):
     def __init__(self):
        super(LastDocumentsDocker, self).__init__()
 
-       label = QLabel("Hello", self)
-       self.setWidget(label)
-       self.label = label
-       self.setWindowTitle("Hello Docker")
+       self.baseWidget = QWidget()
+       self.layout = QVBoxLayout()
+       self.listView = QListView()
+
+       self.listView.setFlow(QListView.LeftToRight)
+
+       self.layout.addWidget(self.listView)
+
+       self.baseWidget.setLayout(self.layout)
+       self.setWidget(self.baseWidget)
+
+       self.listView.setModel(lastdocumentslistmodel.LastDocumentsListModel())
+       self.setWindowTitle("Last Documents Docker")
 
     def canvasChanged(self, canvas):
-        self.label.setText("Hellodocker: canvas changed");
+        pass
 
 
 Application.addDockWidgetFactory(krita.DockWidgetFactory("lastdocumentsdocker", krita.DockWidgetFactoryBase.DockRight, LastDocumentsDocker))

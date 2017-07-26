@@ -301,7 +301,14 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
 
 QStringList Krita::recentDocuments() const
 {
-    return QStringList();
+    KConfigGroup grp = KSharedConfig::openConfig()->group(QString("RecentFiles"));
+    QStringList keys = grp.keyList();
+    QStringList recentDocuments;
+
+    for(int i = 0; i <= keys.filter("File").count(); i++)
+        recentDocuments << grp.readEntry(QString("File%1").arg(i), QString(""));
+
+    return recentDocuments;
 }
 
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)

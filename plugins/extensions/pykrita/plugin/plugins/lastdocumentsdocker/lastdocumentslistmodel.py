@@ -8,6 +8,7 @@ class LastDocumentsListModel(QAbstractListModel):
         super(LastDocumentsListModel, self).__init__(parent)
 
         self.rootItem = ('Path',)
+        self.kritaInstance = krita.Krita.instance()
         self.recentDocuments = []
 
         self._loadRecentDocuments()
@@ -19,8 +20,8 @@ class LastDocumentsListModel(QAbstractListModel):
         if index.row() >= len(self.recentDocuments):
             return None
 
-        if role == Qt.DisplayRole:
-            return self.recentDocuments[index.row()].fileName()
+        if role == Qt.DecorationRole:
+            return self.recentDocuments[index.row()]
         else:
             return None
 
@@ -34,4 +35,9 @@ class LastDocumentsListModel(QAbstractListModel):
         return None
 
     def _loadRecentDocuments(self):
-        pass
+        recentDocumentsPaths = self.kritaInstance.recentDocuments()
+
+        for path in recentDocumentsPaths:
+            document = self.kritaInstance.openDocument(path)
+            if document:
+                self.recentDocuments.append(document.thumbnail(70, 60))

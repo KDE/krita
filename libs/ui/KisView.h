@@ -216,7 +216,7 @@ public Q_SLOTS:
      * Display a message in the status bar (calls QStatusBar::message())
      * @todo rename to something more generic
      */
-    void slotActionStatusText(const QString &text);
+    void slotActionStatusText(const QString &text, int timeout);
 
     /**
      * End of the message in the status bar (calls QStatusBar::clear())

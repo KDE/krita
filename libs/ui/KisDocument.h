@@ -406,7 +406,7 @@ Q_SIGNALS:
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KisDocument and used by KisView to display a statusbar message
      */
-    void statusBarMessage(const QString& text);
+    void statusBarMessage(const QString& text, int timeout = 0);
 
     /**
      * Emitted e.g. at the end of a save operation

@@ -133,6 +133,12 @@
 
 using namespace std;
 
+namespace {
+constexpr int errorMessageTimeout = 5000;
+constexpr int successMessageTimeout = 1000;
+}
+
+
 /**********************************************************
  *
  * KisDocument
@@ -585,8 +591,13 @@ QByteArray KisDocument::serializeToNativeByteArray()
 
 void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
+    const QString fileName = QFileInfo(job.filePath).fileName();
+
     if (status != KisImportExportFilter::OK) {
-        emit statusBarMessage(i18n("Error during saving! %1", exportErrorToUserMessage(status, errorMessage)));
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+                                    "Error during saving %1: %2",
+                                    fileName,
+                                    exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
@@ -606,6 +617,8 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         emit completed();
         emit sigSavingFinished();
+
+        emit statusBarMessage(i18n("Finished saving %1", fileName), successMessageTimeout);
     }
 }
 
@@ -739,10 +752,15 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
 {
     Q_UNUSED(job);
 
+    const QString fileName = QFileInfo(job.filePath).fileName();
+
     if (status != KisImportExportFilter::OK) {
         const int emergencyAutoSaveInterval = 10; // sec
         setAutoSaveDelay(emergencyAutoSaveInterval);
-        emit statusBarMessage(i18n("Error during autosave! %1", exportErrorToUserMessage(status, errorMessage)));
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+                                    "Error during autosaving %1: %2",
+                                    fileName,
+                                    exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
     } else {
         KisConfig cfg;
         d->autoSaveDelay = cfg.autoSaveInterval();
@@ -750,6 +768,8 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
         if (!d->modifiedAfterAutosave) {
             d->autoSaveTimer.stop(); // until the next change
         }
+
+        emit statusBarMessage(i18n("Finished autosaving %1", fileName), successMessageTimeout);
     }
 }
 

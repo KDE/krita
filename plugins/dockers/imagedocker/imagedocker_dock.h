@@ -91,6 +91,10 @@ private:
     bool isImageLoaded() const { return m_currImageID != -1; }
     void setZoom(const ImageInfo& info);
     
+    void saveConfigState();
+    void loadConfigState();
+
+
 private:
     QFileSystemModel*      m_model;
     QButtonGroup*          m_zoomButtons;

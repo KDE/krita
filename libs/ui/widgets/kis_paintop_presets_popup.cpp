@@ -336,6 +336,12 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
 
 void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 {
+    // if you are renaming a brush, that is different than updating the settings
+    // make sure we are in a clean state before renaming. This logic might change,
+    // but that is what we are going with for now
+    emit reloadPresetClicked();
+
+
      m_d->favoriteResManager->setBlockUpdates(true);
 
     // get a reference to the existing (and new) file name and path that we are working with
@@ -373,6 +379,8 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     m_d->favoriteResManager->setBlockUpdates(false);
 
     toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
+
+    slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
 
 
@@ -461,9 +469,13 @@ void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
 
 void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
 {
-    if (!m_d->resourceProvider && !m_d->resourceProvider->currentPreset()) {
+    if (!m_d->resourceProvider) {
         return;
     }
+    if (!m_d->resourceProvider->currentPreset()) {
+        return;
+    }
+
 
     bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
 
@@ -676,12 +688,13 @@ void KisPaintOpPresetsPopup::calculateShowingTopArea() {
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setVisible(shouldDisplayTopBar);
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(shouldDisplayTopBar);
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(shouldDisplayTopBar);
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(shouldDisplayTopBar);
 
     // always hide these since they are part of the brush renaming field and can make things get in a weird state
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(false);
     m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton->setVisible(false);
     m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton->setVisible(false);
+
+    slotUpdatePresetSettings(); // find out if the preset is dirty or not and update visibility
 
 }
 

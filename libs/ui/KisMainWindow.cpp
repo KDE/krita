@@ -538,7 +538,7 @@ void KisMainWindow::addView(KisView *view)
     emit restoringDone();
 
     if (d->activeView) {
-        connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
+        connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
     }
 }
 
@@ -738,7 +738,10 @@ void KisMainWindow::updateCaption()
             caption += ' ' + i18n("[RECOVERED]");
         }
 
+        caption += "[*]";
+
         d->activeView->setWindowTitle(caption);
+        d->activeView->setWindowModified(doc->isModified());
 
         updateCaption(caption, doc->isModified());
 
@@ -1937,10 +1940,9 @@ void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
     d->toolbarList = toolbarList;
 }
 
-void KisMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
+void KisMainWindow::slotDocumentTitleModified()
 {
     updateCaption();
-    updateCaption(caption, mod);
     updateReloadFileAction(d->activeView ? d->activeView->document() : 0);
 }
 

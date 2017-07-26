@@ -262,7 +262,7 @@ private Q_SLOTS:
     /**
      * @internal
      */
-    void slotDocumentTitleModified(const QString &caption, bool mod);
+    void slotDocumentTitleModified();
 
     /**
      *  Prints the actual document.

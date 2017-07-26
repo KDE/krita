@@ -387,17 +387,17 @@ void KisViewManager::setCurrentView(KisView *view)
     }
 
 
-    d->softProof->setChecked(view->softProofing());
-    d->gamutCheck->setChecked(view->gamutCheck());
-
-    QPointer<KisView>imageView = qobject_cast<KisView*>(view);
+    QPointer<KisView> imageView = qobject_cast<KisView*>(view);
+    d->currentImageView = imageView;
 
     if (imageView) {
+        d->softProof->setChecked(imageView->softProofing());
+        d->gamutCheck->setChecked(imageView->gamutCheck());
+
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
-        d->currentImageView = imageView;
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisConfig cfg;
@@ -472,30 +472,30 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
+
+        d->viewConnections.addUniqueConnection(
+            image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+            resourceProvider(), SLOT(slotImageSizeChanged()));
+
+        d->viewConnections.addUniqueConnection(
+            image(), SIGNAL(sigResolutionChanged(double,double)),
+            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
+        d->viewConnections.addUniqueConnection(
+            image(), SIGNAL(sigNodeChanged(KisNodeSP)),
+            this, SLOT(updateGUI()));
+
+        d->viewConnections.addUniqueConnection(
+            d->currentImageView->zoomManager()->zoomController(),
+            SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
     }
 
     d->actionManager.updateGUI();
 
-    d->viewConnections.addUniqueConnection(
-        image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
-        resourceProvider(), SLOT(slotImageSizeChanged()));
-
-    d->viewConnections.addUniqueConnection(
-        image(), SIGNAL(sigResolutionChanged(double,double)),
-        resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
-    d->viewConnections.addUniqueConnection(
-        image(), SIGNAL(sigNodeChanged(KisNodeSP)),
-        this, SLOT(updateGUI()));
-
-    d->viewConnections.addUniqueConnection(
-        view->zoomManager()->zoomController(),
-        SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-        resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
-
 
     Q_EMIT viewChanged();
 }

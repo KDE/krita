@@ -45,7 +45,8 @@ public:
             ELLIPSE,
             PAINTER_PATH,
             QPAINTER_PATH,
-            QPAINTER_PATH_FILL
+            QPAINTER_PATH_FILL,
+            UPDATE_RESOURCES
         };
 
         Data(KisNodeSP _node, int _painterInfoId,
@@ -99,6 +100,12 @@ public:
             : node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path),
             pen(_pen), customColor(_customColor)
+        {}
+
+        Data(KisNodeSP _node, int _painterInfoId,
+             const KoColor &_customColor)
+            : node(_node), painterInfoId(_painterInfoId),
+              type(UPDATE_RESOURCES), customColor(_customColor)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {

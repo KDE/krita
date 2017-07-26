@@ -45,6 +45,7 @@ public:
     void paint(QPointF pos, qreal radius, int brushType, const KoColor &color);
 
     void repaint(KisPainter *painter);
+    void drySystem();
 
 private:
     static KisWatercolorBaseItems * p_instance;

@@ -36,6 +36,8 @@ public:
     QVector<QPoint> getSpeed(QVector<QPointF> points);
 
     KisPaintDeviceSP getPaintDevice();
+
+    void dry();
 private:
     KisPaintDeviceSP m_wetMap;
 };

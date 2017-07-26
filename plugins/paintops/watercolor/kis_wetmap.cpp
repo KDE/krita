@@ -136,3 +136,8 @@ KisPaintDeviceSP KisWetMap::getPaintDevice()
 
     return ret;
 }
+
+void KisWetMap::dry()
+{
+    m_wetMap->clear();
+}

@@ -66,6 +66,21 @@ void KisWatercolorBaseItems::repaint(KisPainter *painter)
     }
 }
 
+void KisWatercolorBaseItems::drySystem()
+{
+    foreach (KisSplat *splat, m_flowing) {
+        m_dried.push_back(splat);
+        m_flowing.removeOne(splat);
+    }
+
+    foreach (KisSplat *splat, m_fixed.values()) {
+        m_dried.push_back(splat);
+        m_fixed.remove(splat);
+    }
+
+    m_wetMap->dry();
+}
+
 void KisWatercolorBaseItems::update()
 {
     foreach (KisSplat *splat, m_flowing) {

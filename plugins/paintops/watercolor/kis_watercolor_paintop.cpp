@@ -38,7 +38,7 @@ KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, 
 
 KisWatercolorPaintOp::~KisWatercolorPaintOp()
 {
-
+    KisWatercolorBaseItems::instance()->drySystem();
 }
 
 KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &info)
@@ -57,5 +57,11 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
     painter()->device()->clear();
     KisWatercolorBaseItems::instance()->repaint(painter());
 
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisWatercolorPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
+    Q_UNUSED(info);
     return KisSpacingInformation(m_watercolorOption.radius / 5);
 }

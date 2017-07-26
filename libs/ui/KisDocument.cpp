@@ -1222,7 +1222,7 @@ QString KisDocument::autoSaveFile(const QString & path) const
 
     // Using the extension allows to avoid relying on the mime magic when opening
     const QString extension (".kra");
-    QRegularExpression autosavePattern("^\..+-autosave.kra$");
+    QRegularExpression autosavePattern("^\\..+-autosave.kra$");
 
     QFileInfo fi(path);
     QString dir = fi.absolutePath();

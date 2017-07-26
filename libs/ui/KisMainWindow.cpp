@@ -556,6 +556,9 @@ void KisMainWindow::addView(KisView *view)
 void KisMainWindow::notifyChildViewDestroyed(KisView *view)
 {
     viewManager()->inputManager()->removeTrackedCanvas(view->canvasBase());
+    if (view->canvasBase() == viewManager()->canvasBase()) {
+        viewManager()->setCurrentView(0);
+    }
 }
 
 

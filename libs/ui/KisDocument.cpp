@@ -887,8 +887,13 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
 
     // Using the extension allows to avoid relying on the mime magic when opening
     const QString extension (".kra");
+    QRegularExpression autosavePattern("^\..+-autosave.kra$");
 
-    if (path.isEmpty()) {
+    QFileInfo fi(path);
+    QString dir = fi.absolutePath();
+    QString filename = fi.fileName();
+
+    if (path.isEmpty() || autosavePattern.match(filename).hasMatch()) {
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
@@ -898,9 +903,6 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
         retval = QString("%1%2.%3-%4-%5-autosave%6").arg(QDir::homePath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
-        QFileInfo fi(path);
-        QString dir = fi.absolutePath();
-        QString filename = fi.fileName();
         retval = QString("%1%2.%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension);
     }
 

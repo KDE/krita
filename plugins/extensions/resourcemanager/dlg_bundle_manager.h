@@ -41,6 +41,9 @@ class DlgBundleManager : public KoDialog
 public:
     explicit DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent = 0);
 
+Q_SIGNALS:
+    void resourceTextChanged(const QString &resourceText);
+
 private Q_SLOTS:
 
     void accept() override;
@@ -54,7 +57,7 @@ private Q_SLOTS:
     void setKnsrcFile(const QString& knsrcFileArg);
 
     void deleteBundle();
-    void searchTextChanged();
+    void searchTextChanged(const QString &lineEditText);
 
 private:
 
@@ -66,12 +69,11 @@ private:
 
     QMap<QString, KisResourceBundle*> m_blacklistedBundles;
     QMap<QString, KisResourceBundle*> m_activeBundles;
+    QMap<QString, KisResourceBundle*> m_Bundles;
 
     KisResourceBundle *m_currentBundle;
     KisActionManager *m_actionManager;
     ResourceManager *m_resourceManager;
-
-    QString searchTerm;
 
     class Private;
     Private *const d;

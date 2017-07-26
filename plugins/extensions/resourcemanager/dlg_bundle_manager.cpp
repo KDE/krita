@@ -73,7 +73,6 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     m_ui->searchLineEdit->setClearButtonEnabled(true);
     m_ui->searchLineEdit->addAction(QIcon::fromTheme(QStringLiteral("system-search")), QLineEdit::LeadingPosition);
     m_ui->searchLineEdit->setPlaceholderText("Search for the bundle name..");
-    searchTerm = m_ui->searchLineEdit->text();
 
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -129,8 +128,9 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
 
     connect(m_ui->bnDeleteBundle, SIGNAL(clicked()), SLOT(deleteBundle()));
-    connect(m_ui->searchLineEdit, SIGNAL(returnPressed()), SLOT(searchTextChanged()));
 
+    connect(m_ui->searchLineEdit, SIGNAL(textChanged(QString)), SLOT(searchTextChanged(QString)));
+    connect(m_ui->searchLineEdit, SIGNAL(textEdited(QString)), SLOT(searchTextChanged(QString)));
 }
 
 
@@ -409,7 +409,7 @@ void DlgBundleManager::deleteBundle()
     }
 }
 
-void DlgBundleManager::searchTextChanged()
+void DlgBundleManager::searchTextChanged(const QString& lineEditText)
 {
     KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
 
@@ -425,9 +425,11 @@ void DlgBundleManager::searchTextChanged()
     }
 
     Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
-        if(bundle->name().contains(searchTerm)) {
-            m_activeBundles[bundle->filename()] = bundle;
+        if(bundle->name().contains(lineEditText)) {
+            m_ui->listActive->clear();
+            m_Bundles[bundle->filename()] = bundle;
+            fillListWidget(m_Bundles.values(), m_ui->listActive);
         }
-        fillListWidget(m_activeBundles.values(), m_ui->listActive);
     }
+    emit resourceTextChanged(lineEditText);
 }

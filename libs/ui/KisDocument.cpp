@@ -112,7 +112,6 @@
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include <mutex>
-#include <kis_telemetry_actions.h>
 #include "kis_telemetry_instance.h"
 
 
@@ -743,7 +742,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             QString filename = localFilePath();
             QString colorSpace = image()->colorSpace()->name();
             QString colorProfile = image()->profile()->name();
-            KisTelemetryInstance::instance()->provider()->notify(KisSaveImageProperties{ { size, filename, colorSpace, colorProfile, numLayers } }, filename);
+            KisTelemetryInstance::instance()->provider()->notifySaveImageProperties({ size, filename, colorSpace, colorProfile, numLayers }, filename);
         }
     }
 

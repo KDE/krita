@@ -22,7 +22,7 @@
 
 #include "QSharedPointer"
 #include "abstractdatasource.h"
-#include "kis_tickets.h"
+#include "kis_telemetry_tickets.h"
 #include "kuserfeedbackcore_export.h"
 #include <QMap>
 #include <QVariant>
@@ -45,7 +45,6 @@ private:
     struct actionInfo {
         QSharedPointer<KisTicket> ticket;
         int mutable countUse;
-        void plusCount() const { countUse++; }
     };
 
 private:

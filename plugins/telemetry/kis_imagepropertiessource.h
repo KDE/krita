@@ -23,7 +23,11 @@
 
 #include "abstractdatasource.h"
 #include "kuserfeedbackcore_export.h"
-#include "kis_tickets.h"
+#include "kis_telemetry_tickets.h"
+#include <QMap>
+#include <QVariant>
+#include <QSharedPointer>
+
 
 namespace KisUserFeedback {
 
@@ -36,12 +40,11 @@ public:
     QVariant data() override;
     void removeDumpProperties(QString id);
     void createNewImageProperties(QSharedPointer<KisTicket> ticket);
+
 private:
     QVariantList m_imageDumps;
-    QMap<QString,QSharedPointer<KisTicket>> m_imagesDumpsMap;
+    QMap<QString, QSharedPointer<KisTicket> > m_imagesDumpsMap;
 };
 }
-
-
 
 #endif // KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H

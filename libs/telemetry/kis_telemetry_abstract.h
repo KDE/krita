@@ -21,31 +21,35 @@
 #ifndef KIS_TELEMETRY_ABSTRUCT_H
 #define KIS_TELEMETRY_ABSTRUCT_H
 #include "QScopedPointer"
-#include "kis_telemetry_actions.h"
+#include "kis_telemetry_tickets.h"
 #include "kritatelemetry_export.h"
 #include <KUserFeedback/AbstractDataSource>
 #include <KUserFeedback/cpuinfosource.h>
 #include <KUserFeedback/provider.h>
 #include <QString>
 #include <QVector>
-//#include <kis_types.h>
 
 class KRITATELEMETRY_EXPORT KisTelemetryAbstract {
 public:
+    enum Actions {
+        ToolActivate,
+        ToolDeactivate,
+        ToolsStartUse,
+        ToolsStopUse
+    };
+
+public:
     virtual void sendData(QString path, QString adress = QString()) = 0;
     virtual ~KisTelemetryAbstract() {}
-    void notify(KisToolsActivate action, QString id);
-    void notify(KisToolsDeactivate action, QString id);
-    void notify(KisToolsStartUse action, QString id);
-    void notify(KisToolsStopUse action, QString id);
-    void notify(KisSaveImageProperties action, QString id);
-    void notify(KisSaveActionInfo action, QString id);
+    void notifyToolAcion(Actions action, QString id);
+    void notifySaveImageProperties(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
+    void notifySaveActionInfo(KisActionInfoTicket::ActionInfo imageInfo, QString id);
 
 protected:
     virtual void getTimeTicket(QString id) = 0;
     virtual void putTimeTicket(QString id) = 0;
-    virtual void saveImageProperites(QString fileName, KisSaveImageProperties::ImageInfo imageInfo) = 0;
-    virtual void saveActionInfo(QString id, KisSaveActionInfo::ActionInfo actionInfo) = 0;
+    virtual void saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo) = 0;
+    virtual void saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo) = 0;
 
 protected:
     QString m_adress = "http://localhost:8080/";

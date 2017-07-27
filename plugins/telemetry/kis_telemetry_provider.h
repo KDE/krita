@@ -34,14 +34,13 @@
 
 #include "kis_cpuinfosource.h"
 
-#include "kis_telemetry_actions.h"
-#include "kis_tickets.h"
 #include "kritatelemetry_export.h"
 #include <QMultiMap>
 #include <QVector>
 #include <QWeakPointer>
 #include <kis_telemetry_abstract.h>
 #include <memory>
+#include "kis_telemetry_tickets.h"
 
 class KRITATELEMETRY_EXPORT KisTelemetryProvider : public KisTelemetryAbstract {
 public:
@@ -53,8 +52,8 @@ public:
 protected:
     void getTimeTicket(QString id) override;
     void putTimeTicket(QString id) override;
-    void saveImageProperites(QString fileName, KisSaveImageProperties::ImageInfo imageInfo) override;
-    void saveActionInfo(QString id, KisSaveActionInfo::ActionInfo actionInfo) override;
+    void saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo) override;
+    void saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo) override;
 
 private:
     enum TelemetryCategory {

@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kis_telemetry_tests.h"
-#include "kis_telemetry_actions.h"
 #include "plugins/telemetry/kis_telemetry_provider.h"
 #include <QEventLoop>
 #include <QJsonDocument>
@@ -151,14 +150,14 @@ private:
     void testUse(QString toolID, int count)
     {
         for (int i = 0; i < count; i++) {
-            m_provider->notify(KisToolsStartUse(), toolID);
+            m_provider->notifyToolAcion(KisTelemetryAbstract::ToolsStartUse, toolID);
             QTest::qWait(m_time[0]);
-            m_provider->notify(KisToolsStopUse(), toolID);
+            m_provider->notifyToolAcion(KisTelemetryAbstract::ToolsStopUse, toolID);
         }
     }
     void uncorrectCountUse(QString toolID)
     {
-        m_provider->notify(KisToolsStartUse(), toolID);
+        m_provider->notifyToolAcion(KisTelemetryAbstract::ToolsStartUse, toolID);
         QTest::qWait(m_time[0]);
     }
 

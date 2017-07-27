@@ -18,13 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_tickets.h"
-#include "kis_telemetry_actions.h"
-#include <KoColorProfile.h>
-#include <KoColorSpace.h>
+#include "kis_telemetry_tickets.h"
 #include <QFileInfo>
 #include <QTime>
-#include <kis_image.h>
 #include <limits>
 
 KisTimeTicket::KisTimeTicket(QString id)
@@ -83,7 +79,7 @@ void KisTicket::setTickedId(QString id)
     m_id = id;
 }
 
-KisImagePropertiesTicket::KisImagePropertiesTicket(KisSaveImageProperties::ImageInfo imageInfo, QString id)
+KisImagePropertiesTicket::KisImagePropertiesTicket(KisImagePropertiesTicket::ImageInfo imageInfo, QString id)
     : m_imageInfo(imageInfo)
     , m_fileInfo(id)
 {
@@ -119,13 +115,13 @@ QString KisImagePropertiesTicket::getColorProfile() const
     return m_imageInfo.colorProfile;
 }
 
-KisActionInfoTicket::KisActionInfoTicket(KisSaveActionInfo::ActionInfo actionInfo, QString id)
+KisActionInfoTicket::KisActionInfoTicket(KisActionInfoTicket::ActionInfo actionInfo, QString id)
     : KisTicket(id)
     , m_actionInfo(actionInfo)
 {
 }
 
-KisSaveActionInfo::ActionInfo KisActionInfoTicket::actionInfo() const
+KisActionInfoTicket::ActionInfo KisActionInfoTicket::actionInfo() const
 {
     return m_actionInfo;
 }

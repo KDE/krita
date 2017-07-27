@@ -5,7 +5,7 @@ include_directories(SYSTEM
 set(kritalibtelemetry_LIB_SRCS
     kis_telemetry_abstract.cpp
     kis_telemetry_instance.cpp
-    kis_telemetry_actions.cpp
+    kis_telemetry_tickets.cpp
 )
 
 add_library(kritalibtelemetry SHARED ${kritalibtelemetry_LIB_SRCS} )

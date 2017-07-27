@@ -17,16 +17,15 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef KIS_TICKETS_H
-#define KIS_TICKETS_H
+#ifndef KIS_TELEMETRY_TICKETS_H
+#define KIS_TELEMETRY_TICKETS_H
 
 #include <QDateTime>
 #include <QSize>
-#include <kis_types.h>
-#include "kis_telemetry_actions.h"
 #include <QFileInfo>
+#include "kritatelemetry_export.h"
 
-class KisTicket {
+class KRITATELEMETRY_EXPORT KisTicket {
 public:
     KisTicket() {}
     KisTicket(QString id);
@@ -37,7 +36,7 @@ protected:
     QString m_id;
 };
 
-class KisTimeTicket : public KisTicket {
+class KRITATELEMETRY_EXPORT KisTimeTicket : public KisTicket {
 public:
     KisTimeTicket(QString id);
     void setStartTime(QDateTime& time);
@@ -52,9 +51,17 @@ private:
     QDateTime m_end;
 };
 
-class KisImagePropertiesTicket : public KisTicket {
+class KRITATELEMETRY_EXPORT KisImagePropertiesTicket : public KisTicket {
 public:
-    KisImagePropertiesTicket(KisSaveImageProperties::ImageInfo imageInfo, QString id);
+    struct ImageInfo {
+        QSize size;
+        QString filename;
+        QString colorProfile;
+        QString colorSpace;
+        int numLayers;
+    };
+public:
+    KisImagePropertiesTicket(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
 
     QSize size() const;
     int getNumLayers() const;
@@ -64,18 +71,23 @@ public:
     QString getColorProfile() const;
 
 private:
-    KisSaveImageProperties::ImageInfo m_imageInfo;
+    KisImagePropertiesTicket::ImageInfo m_imageInfo;
     QFileInfo m_fileInfo;
 };
 
-class KisActionInfoTicket : public KisTicket {
+class KRITATELEMETRY_EXPORT KisActionInfoTicket : public KisTicket {
 public:
-    KisActionInfoTicket(KisSaveActionInfo::ActionInfo actionInfo, QString id);
+    struct ActionInfo{
+        QString name;
+        QString source;
+    };
+public:
+    KisActionInfoTicket(KisActionInfoTicket::ActionInfo actionInfo, QString id);
 
-    KisSaveActionInfo::ActionInfo actionInfo() const;
+    KisActionInfoTicket::ActionInfo actionInfo() const;
 
 private:
-    KisSaveActionInfo::ActionInfo m_actionInfo;
+    KisActionInfoTicket::ActionInfo m_actionInfo;
 };
 
 #endif

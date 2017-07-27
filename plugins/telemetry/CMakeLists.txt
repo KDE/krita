@@ -4,7 +4,6 @@ set(kritaplugintelemetry_SOURCES
     kis_telemetry.cpp
     kis_cpuinfosource.cpp
     kis_toolsinfosource.cpp
-    kis_tickets.cpp
     kis_assertinfosource.cpp
     kis_imagepropertiessource.cpp
     kis_actionsinfosource.cpp

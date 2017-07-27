@@ -58,7 +58,8 @@ QVariant KisUserFeedback::ActionsInfoSource::data()
 void ActionsInfoSource::insert(QSharedPointer<KisTicket> ticket)
 {
     if (m_actionsInfoMap.count(ticket->ticketId())) {
-        m_actionsInfoMap.value(ticket->ticketId()).plusCount();
+        int countUse = m_actionsInfoMap.value(ticket->ticketId()).countUse;
+        m_actionsInfoMap.insert(ticket->ticketId(), { ticket, ++countUse });
     } else {
         m_actionsInfoMap.insert(ticket->ticketId(), { ticket, 1 });
     }

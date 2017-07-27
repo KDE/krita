@@ -345,7 +345,6 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
     connect(action, SIGNAL(triggered()), d->signalMapper.data(), SLOT(map()));
     d->signalMapper->setMapping(action, name);
     connect(d->signalMapper.data(), SIGNAL(mapped(QString)), d->actionProxy.data(), SLOT(triggered(QString)));
-   // connect(action, SIGNAL(triggered()), d->actionProxy.data(), SLOT(triggered()));
     emit inserted(action);
     return action;
 }

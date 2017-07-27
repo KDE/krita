@@ -29,7 +29,6 @@
 
 #include "Vc/cpuid.h"
 #include "kis_actionsinfosource.h"
-#include "kis_tickets.h"
 #include "kis_toolsinfosource.h"
 #include <KoToolRegistry.h>
 #include <QTime>
@@ -176,7 +175,7 @@ void KisTelemetryProvider::putTimeTicket(QString id)
     tools->activateTool(timeTicket);
 }
 
-void KisTelemetryProvider::saveImageProperites(QString fileName, KisSaveImageProperties::ImageInfo imageInfo)
+void KisTelemetryProvider::saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo)
 {
     KUserFeedback::AbstractDataSource* m_imageProperties = m_imagePropertiesSources[0].get();
     KisUserFeedback::ImagePropertiesSource* imageProperties = nullptr;
@@ -198,7 +197,7 @@ void KisTelemetryProvider::saveImageProperites(QString fileName, KisSaveImagePro
     imageProperties->createNewImageProperties(imagePropertiesTicket);
 }
 
-void KisTelemetryProvider::saveActionInfo(QString id, KisSaveActionInfo::ActionInfo actionInfo)
+void KisTelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionInfo  actionInfo)
 {
     static QString lastAction = "start name";
     static QTime lastTime = QTime(0, 0, 0, 0);

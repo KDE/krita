@@ -21,7 +21,6 @@
 #include "input/kis_tablet_debugger.h"
 
 #include <KoToolProxy_p.h>
-#include "kis_telemetry_actions.h"
 #include "kis_telemetry_instance.h"
 
 
@@ -167,7 +166,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
                 activeTool->beginPrimaryDoubleClickAction(&ev);
             } else {
                 activeTool->beginPrimaryAction(&ev);
-                KisTelemetryInstance::instance()->provider()->notify(KisToolsStartUse(),activeTool->toolId());
+                KisTelemetryInstance::instance()->provider()->notifyToolAcion(KisTelemetryAbstract::ToolsStartUse, activeTool->toolId());
             }
         } else {
             if (event->type() == QEvent::MouseButtonDblClick) {
@@ -187,7 +186,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
     case END:
         if (action == KisTool::Primary) {
             activeTool->endPrimaryAction(&ev);
-            KisTelemetryInstance::instance()->provider()->notify(KisToolsStopUse(),activeTool->toolId());
+            KisTelemetryInstance::instance()->provider()->notifyToolAcion(KisTelemetryAbstract::ToolsStopUse, activeTool->toolId());
         } else {
             activeTool->endAlternateAction(&ev, KisTool::actionToAlternateAction(action));
         }

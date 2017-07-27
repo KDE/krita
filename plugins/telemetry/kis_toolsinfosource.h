@@ -31,7 +31,7 @@
 #include <QVariantMap>
 #include <QVector>
 #include "kis_telemetry_abstract.h"
-#include "kis_tickets.h"
+#include "kis_telemetry_tickets.h"
 
 
 namespace KisUserFeedback {

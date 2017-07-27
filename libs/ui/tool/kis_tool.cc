@@ -70,7 +70,6 @@
 #include "kis_tool_utils.h"
 #include "KisPart.h"
 #include <QSharedPointer>
-#include "kis_telemetry_actions.h"
 #include "kis_telemetry_instance.h"
 
 
@@ -124,7 +123,7 @@ KisTool::~KisTool()
 void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
-    KisTelemetryInstance::instance()->provider()->notify( KisToolsActivate(), toolId());
+    KisTelemetryInstance::instance()->provider()->notifyToolAcion(KisTelemetryAbstract::ToolActivate, toolId());
 
     resetCursorStyle();
     if (!canvas()) return;
@@ -169,7 +168,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 void KisTool::deactivate()
 {
     bool result = true;
-    KisTelemetryInstance::instance()->provider()->notify(KisToolsActivate(), toolId());
+    KisTelemetryInstance::instance()->provider()->notifyToolAcion(KisTelemetryAbstract::ToolDeactivate, toolId());
 
     result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);

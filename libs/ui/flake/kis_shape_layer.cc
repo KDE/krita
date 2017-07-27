@@ -172,7 +172,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
     initShapeLayer(controller, _rhs.m_d->paintDevice);
 
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
-        addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        addShape(clonedShape);
     }
 }
 
@@ -188,12 +190,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 
     // copy in _rhs's shapes
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
-        addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        addShape(clonedShape);
     }
 
     // copy in _addShapes's shapes
     Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
-        addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        addShape(clonedShape);
     }
 }
 

@@ -18,20 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kactionproxy.h"
-#include <QDebug>
+#include "kis_telemetry_instance.h"
 
 KActionProxy::KActionProxy(QObject* parent)
     : QObject(parent)
 {
 }
 
-void KActionProxy::triggered(bool state)
+void KActionProxy::triggered(QString name)
 {
-    qDebug() << "triggered " << state;
-    emit processed(state);
+    KisSaveActionInfo saveActionInfo{{name, "smth"}};
+    saveActionInfo.doAction(KisTelemetryInstance::instance()->provider(), name);
 }
 
-void KActionProxy::triggered()
-{
-    qDebug() << "triggered w\o bool ";
-}

@@ -31,6 +31,7 @@
 #include "kxmlguifactory.h"
 #include "kactioncategory.h"
 #include "kis_action_registry.h"
+#include "kactionproxy.h"
 
 #include <kauthorized.h>
 #include <kconfiggroup.h>
@@ -43,7 +44,10 @@
 #include <QtCore/QMap>
 #include <QtCore/QList>
 #include <QAction>
+#include <QSharedPointer>
 #include <QMetaMethod>
+#include <QSignalMapper>
+#include <QScopedPointer>
 
 #include <stdio.h>
 
@@ -59,8 +63,9 @@ public:
           configGroup(QStringLiteral("Shortcuts")),
           connectTriggered(false),
           connectHovered(false),
-          q(0)
-
+          q(0),
+          actionProxy(new KActionProxy),
+          signalMapper(new QSignalMapper)
     {
     }
 
@@ -95,7 +100,8 @@ public:
     bool connectHovered : 1;
 
     KActionCollection *q;
-
+    QScopedPointer<KActionProxy> actionProxy;
+    QScopedPointer<QSignalMapper> signalMapper;
     QList<QWidget *> associatedWidgets;
 };
 
@@ -336,6 +342,10 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
         connect(action, SIGNAL(triggered(bool)), SLOT(slotActionTriggered()));
     }
 
+    connect(action, SIGNAL(triggered()), d->signalMapper.data(), SLOT(map()));
+    d->signalMapper->setMapping(action, name);
+    connect(d->signalMapper.data(), SIGNAL(mapped(QString)), d->actionProxy.data(), SLOT(triggered(QString)));
+   // connect(action, SIGNAL(triggered()), d->actionProxy.data(), SLOT(triggered()));
     emit inserted(action);
     return action;
 }

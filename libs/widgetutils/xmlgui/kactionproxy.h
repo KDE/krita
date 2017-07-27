@@ -25,10 +25,8 @@ class KActionProxy : public QObject {
     Q_OBJECT
 public:
     KActionProxy(QObject* parent = nullptr);
-Q_SIGNALS:
-    void processed(bool state);
+
 public Q_SLOTS:
-    void triggered(bool state);
-    void triggered();
+    void triggered(QString name);
 };
 #endif

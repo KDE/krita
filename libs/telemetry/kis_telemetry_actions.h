@@ -23,8 +23,6 @@
 #include "kritatelemetry_export.h"
 #include <QSize>
 #include <QString>
-#include <kis_types.h>
-
 
 class KisTelemetryAbstract;
 class KisTelemetryAction {
@@ -37,6 +35,7 @@ class KRITATELEMETRY_EXPORT KisToolsActivate : public KisTelemetryAction {
 public:
     void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
+
 class KRITATELEMETRY_EXPORT KisToolsDeactivate : public KisTelemetryAction {
 public:
     void doAction(KisTelemetryAbstract* provider, QString id) override;
@@ -46,6 +45,7 @@ class KRITATELEMETRY_EXPORT KisToolsStartUse : public KisTelemetryAction {
 public:
     void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
+
 class KRITATELEMETRY_EXPORT KisToolsStopUse : public KisTelemetryAction {
 public:
     void doAction(KisTelemetryAbstract* provider, QString id) override;
@@ -53,15 +53,38 @@ public:
 
 class KRITATELEMETRY_EXPORT KisSaveImageProperties : public KisTelemetryAction {
 public:
-  KisSaveImageProperties(KisImageSP& image);
+    struct ImageInfo {
+        QSize size;
+        QString filename;
+        QString colorProfile;
+        QString colorSpace;
+        int numLayers;
+    };
+public:
+    KisSaveImageProperties(ImageInfo imageInfo);
 
     void doAction(KisTelemetryAbstract* provider, QString id) override;
-     QString fileName() const;
-   KisImageSP& image();
+    QString fileName() const;
+    ImageInfo imageInfo() const;
 
 private:
-   KisImageSP &m_image;
-    QString m_fileName;
+    ImageInfo m_imageInfo;
 };
+
+class KRITATELEMETRY_EXPORT KisSaveActionInfo : public KisTelemetryAction {
+public:
+    struct ActionInfo{
+        QString name;
+        QString source;
+    };
+public:
+    KisSaveActionInfo(ActionInfo actionInfo);
+    void doAction(KisTelemetryAbstract* provider, QString id) override;
+    ActionInfo actionInfo() const;
+
+private:
+    ActionInfo m_actionInfo;
+};
+
 
 #endif

@@ -663,6 +663,7 @@ void KisMainWindow::sendInfo()
         provider->sendData("install");
         provider->sendData("tools");
         provider->sendData("imageProperties");
+        provider->sendData("actions");
     };
 }
 

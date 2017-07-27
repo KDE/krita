@@ -7,6 +7,7 @@ set(kritaplugintelemetry_SOURCES
     kis_tickets.cpp
     kis_assertinfosource.cpp
     kis_imagepropertiessource.cpp
+    kis_actionsinfosource.cpp
 )
 add_subdirectory( tests )
 

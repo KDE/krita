@@ -19,12 +19,13 @@
 */
 
 #include "kis_tickets.h"
-#include <QTime>
-#include <limits>
-#include <kis_image.h>
-#include <QFileInfo>
-#include <KoColorSpace.h>
+#include "kis_telemetry_actions.h"
 #include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <QFileInfo>
+#include <QTime>
+#include <kis_image.h>
+#include <limits>
 
 KisTimeTicket::KisTimeTicket(QString id)
     : KisTicket(id)
@@ -82,48 +83,49 @@ void KisTicket::setTickedId(QString id)
     m_id = id;
 }
 
-
-KisImagePropertiesTicket::KisImagePropertiesTicket(KisImageSP &image, QString id)
-    : KisTicket(id)
+KisImagePropertiesTicket::KisImagePropertiesTicket(KisSaveImageProperties::ImageInfo imageInfo, QString id)
+    : m_imageInfo(imageInfo)
+    , m_fileInfo(id)
 {
-    m_size = image->size();
-    numLayers = image->nlayers();
-    QFileInfo fileInfo(id);
-    imageSize = fileInfo.size();
-    fileFormat = fileInfo.completeSuffix();
-    colorSpace = image->colorSpace()->name();
-    colorProfile = image->profile()->name();
 }
 
 QSize KisImagePropertiesTicket::size() const
 {
-    return m_size;
+    return m_imageInfo.size;
 }
 
 int KisImagePropertiesTicket::getNumLayers() const
 {
-    return numLayers;
+    return m_imageInfo.numLayers;
 }
 
 QString KisImagePropertiesTicket::getFileFormat() const
 {
-    return fileFormat;
+    return m_fileInfo.completeSuffix();
 }
 
 QString KisImagePropertiesTicket::getColorSpace() const
 {
-    return colorSpace;
+    return m_imageInfo.colorSpace;
 }
 
-int KisImagePropertiesTicket::getImageSize() const
+qint64 KisImagePropertiesTicket::getImageSize() const
 {
-    return imageSize;
+    return m_fileInfo.size();
 }
 
 QString KisImagePropertiesTicket::getColorProfile() const
 {
-    return colorProfile;
+    return m_imageInfo.colorProfile;
 }
 
+KisActionInfoTicket::KisActionInfoTicket(KisSaveActionInfo::ActionInfo actionInfo, QString id)
+    : KisTicket(id)
+    , m_actionInfo(actionInfo)
+{
+}
 
-
+KisSaveActionInfo::ActionInfo KisActionInfoTicket::actionInfo() const
+{
+    return m_actionInfo;
+}

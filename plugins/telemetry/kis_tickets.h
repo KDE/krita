@@ -23,6 +23,8 @@
 #include <QDateTime>
 #include <QSize>
 #include <kis_types.h>
+#include "kis_telemetry_actions.h"
+#include <QFileInfo>
 
 class KisTicket {
 public:
@@ -52,22 +54,28 @@ private:
 
 class KisImagePropertiesTicket : public KisTicket {
 public:
-    KisImagePropertiesTicket(KisImageSP& image,QString id);
+    KisImagePropertiesTicket(KisSaveImageProperties::ImageInfo imageInfo, QString id);
 
     QSize size() const;
     int getNumLayers() const;
     QString getFileFormat() const;
     QString getColorSpace() const;
-    int getImageSize() const;
+    qint64 getImageSize() const;
     QString getColorProfile() const;
 
 private:
-    QSize m_size;
-    int numLayers;
-    QString fileFormat;
-    QString colorSpace;
-    QString colorProfile;
-    qint64 imageSize;
+    KisSaveImageProperties::ImageInfo m_imageInfo;
+    QFileInfo m_fileInfo;
+};
+
+class KisActionInfoTicket : public KisTicket {
+public:
+    KisActionInfoTicket(KisSaveActionInfo::ActionInfo actionInfo, QString id);
+
+    KisSaveActionInfo::ActionInfo actionInfo() const;
+
+private:
+    KisSaveActionInfo::ActionInfo m_actionInfo;
 };
 
 #endif

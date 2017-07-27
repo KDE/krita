@@ -30,7 +30,12 @@ void KisTelemetryAbstract::doTicket(KisToolsStopUse &action, QString id)
 
 void KisTelemetryAbstract::doTicket(KisSaveImageProperties &action, QString id)
 {
-    saveImageProperites(id, action.image());
+    saveImageProperites(id, action.imageInfo());
+}
+
+void KisTelemetryAbstract::doTicket(KisSaveActionInfo &action, QString id)
+{
+    saveActionInfo(id, action.actionInfo());
 }
 
 QString KisTelemetryAbstract::getToolId(QString id, KisTelemetryAbstract::UseMode mode)

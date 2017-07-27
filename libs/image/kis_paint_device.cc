@@ -1932,7 +1932,7 @@ QVector<qint32> KisPaintDevice::channelSizes() const
 {
     QVector<qint32> sizes;
     QList<KoChannelInfo*> channels = colorSpace()->channels();
-    qSort(channels);
+    std::sort(channels.begin(), channels.end());
 
     Q_FOREACH (KoChannelInfo * channelInfo, channels) {
         sizes.append(channelInfo->size());

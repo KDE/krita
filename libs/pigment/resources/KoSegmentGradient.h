@@ -3,6 +3,7 @@
                  2004 Boudewijn Rempt <boud@valdyas.org>
                  2004 Adrian Page <adrian@pagenet.plus.com>
                  2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+                 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -285,6 +286,18 @@ public:
 
     /// reimplemented
     QString defaultFileExtension() const override;
+
+    /**
+     * @brief toXML
+     * convert the gradient to xml.
+     */
+    void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
+    /**
+     * @brief fromXML
+     * get a segment gradient from xml.
+     * @return gradient
+     */
+    static KoSegmentGradient fromXML(const QDomElement& elt);
 
         /**
      * a gradient colour picker can consist of one or more segments.

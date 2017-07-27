@@ -62,7 +62,7 @@ public:
     ~Private() {
         delete displayShader;
         delete checkerShader;
-        delete cursorShader;
+        delete solidColorShader;
         Sync::deleteSync(glSyncObject);
     }
 
@@ -73,7 +73,7 @@ public:
     KisOpenGLShaderLoader shaderLoader;
     KisShaderProgram *displayShader{0};
     KisShaderProgram *checkerShader{0};
-    KisShaderProgram *cursorShader{0};
+    KisShaderProgram *solidColorShader{0};
 
     GLfloat checkSizeScale;
     bool scrollCheckers;
@@ -292,11 +292,11 @@ void KisOpenGLCanvas2::initializeShaders()
     if (!d->canvasInitialized) {
         delete d->displayShader;
         delete d->checkerShader;
-        delete d->cursorShader;
+        delete d->solidColorShader;
         try {
             d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
             d->checkerShader = d->shaderLoader.loadCheckerShader();
-            d->cursorShader = d->shaderLoader.loadCursorShader();
+            d->solidColorShader = d->shaderLoader.loadSolidColorShader();
         } catch (const ShaderLoaderException &e) {
             reportFailedShaderCompilation(e.what());
         }
@@ -359,25 +359,31 @@ void KisOpenGLCanvas2::paintGL()
 
 void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 {
-    d->cursorShader->bind();
+    if (!d->solidColorShader->bind()) {
+        return;
+    }
 
     // setup the mvp transformation
-    KisCoordinatesConverter *converter = coordinatesConverter();
-
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
     projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
-    QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
+    QMatrix4x4 modelMatrix(coordinatesConverter()->flakeToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->cursorShader->setUniformValue(d->cursorShader->location(Uniform::ModelViewProjection), modelMatrix);
+    d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
     glEnable(GL_COLOR_LOGIC_OP);
     glLogicOp(GL_XOR);
+
+    KisConfig cfg;
+    QColor cursorColor = cfg.getCursorMainColor();
+    d->solidColorShader->setUniformValue(
+                d->solidColorShader->location(Uniform::FragmentColor),
+                QVector4D(cursorColor.redF(), cursorColor.greenF(), cursorColor.blueF(), 1.0f));
 
     // Paint the tool outline
     if (KisOpenGL::hasOpenGL3()) {
@@ -392,6 +398,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
         QVector<QVector3D> vertices;
         vertices.resize(polygon.count());
+
         for (int j = 0; j < polygon.count(); j++) {
             QPointF p = polygon.at(j);
             vertices[j].setX(p.x());
@@ -401,8 +408,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
         }
         else {
-            d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+            d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
         }
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
@@ -415,7 +422,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     glDisable(GL_COLOR_LOGIC_OP);
 
-    d->cursorShader->release();
+    d->solidColorShader->release();
 }
 
 bool KisOpenGLCanvas2::isBusy() const
@@ -469,7 +476,6 @@ void KisOpenGLCanvas2::drawCheckers()
     //Setup the geometry for rendering
     if (KisOpenGL::hasOpenGL3()) {
         rectToVertices(d->vertices, modelRect);
-
         d->quadBuffers[0].bind();
         d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
 
@@ -498,6 +504,75 @@ void KisOpenGLCanvas2::drawCheckers()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void KisOpenGLCanvas2::drawGrid()
+{
+    if (!d->solidColorShader->bind()) {
+        return;
+    }
+
+    QMatrix4x4 projectionMatrix;
+    projectionMatrix.setToIdentity();
+    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+    // Set view/projection matrices
+    QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
+    modelMatrix.optimize();
+    modelMatrix = projectionMatrix * modelMatrix;
+    d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    KisConfig cfg;
+    QColor gridColor = cfg.getPixelGridColor();
+    d->solidColorShader->setUniformValue(
+                d->solidColorShader->location(Uniform::FragmentColor),
+                QVector4D(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.5f));
+
+    if (KisOpenGL::hasOpenGL3()) {
+        d->outlineVAO.bind();
+        d->lineBuffer.bind();
+    }
+
+    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRectInImagePixels = coordinatesConverter()->documentToImage(coordinatesConverter()->widgetToDocument(widgetRect));
+    QRect wr = widgetRectInImagePixels.toAlignedRect();
+
+    if (!d->wrapAroundMode) {
+        wr &= d->openGLImageTextures->storedImageBounds();
+    }
+
+    QPoint topLeftCorner = wr.topLeft();
+    QPoint bottomRightCorner = wr.bottomRight() + QPoint(1, 1);
+    QVector<QVector3D> grid;
+
+    for (int i = topLeftCorner.x(); i <= bottomRightCorner.x(); ++i) {
+        grid.append(QVector3D(i, topLeftCorner.y(), 0));
+        grid.append(QVector3D(i, bottomRightCorner.y(), 0));
+    }
+    for (int i = topLeftCorner.y(); i <= bottomRightCorner.y(); ++i) {
+        grid.append(QVector3D(topLeftCorner.x(), i, 0));
+        grid.append(QVector3D(bottomRightCorner.x(), i, 0));
+    }
+
+    if (KisOpenGL::hasOpenGL3()) {
+        d->lineBuffer.allocate(grid.constData(), 3 * grid.size() * sizeof(float));
+    }
+    else {
+        d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+        d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, grid.constData());
+    }
+
+    glDrawArrays(GL_LINES, 0, grid.size());
+
+    if (KisOpenGL::hasOpenGL3()) {
+        d->lineBuffer.release();
+        d->outlineVAO.release();
+    }
+
+    d->solidColorShader->release();
+}
+
 void KisOpenGLCanvas2::drawImage()
 {
     if (!d->displayShader) {
@@ -516,7 +591,7 @@ void KisOpenGLCanvas2::drawImage()
     projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
-    QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
+    QMatrix4x4 modelMatrix(converter->imageToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ModelViewProjection), modelMatrix);
@@ -595,7 +670,6 @@ void KisOpenGLCanvas2::drawImage()
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {
                 rectToVertices(d->vertices, modelRect);
-
                 d->quadBuffers[0].bind();
                 d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
 
@@ -703,8 +777,13 @@ void KisOpenGLCanvas2::renderCanvasGL()
     if (KisOpenGL::hasOpenGL3()) {
         d->quadVAO.bind();
     }
+
     drawCheckers();
     drawImage();
+    KisConfig cfg;
+    if ((coordinatesConverter()->effectiveZoom() > cfg.getPixelGridDrawingThreshold() - 0.00001) && cfg.pixelGridEnabled()) {
+        drawGrid();
+    }
     if (KisOpenGL::hasOpenGL3()) {
         d->quadVAO.release();
     }

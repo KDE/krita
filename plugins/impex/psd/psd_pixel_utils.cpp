@@ -152,6 +152,24 @@ void readAlphaMaskPixel<AlphaF32Traits>(const QMap<quint16, QByteArray> &channel
 }
 
 template <class Traits>
+inline typename Traits::channels_type readChannelValue(const QMap<quint16, QByteArray> &channelBytes,
+                                       quint16 channelId, int col, typename Traits::channels_type defaultValue)
+{
+    typedef typename Traits::channels_type channels_type;
+
+    if (channelBytes.contains(channelId)) {
+        const QByteArray &bytes = channelBytes[channelId];
+        if (col < bytes.size()) {
+            return convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(bytes.constData())[col]);
+        }
+
+        dbgFile << "col index out of range channelId: "<< channelId << " col:" << col;
+    }
+
+    return defaultValue;
+}
+
+template <class Traits>
 void readGrayPixel(const QMap<quint16, QByteArray> &channelBytes,
                   int col, quint8 *dstPtr)
 {
@@ -159,17 +177,10 @@ void readGrayPixel(const QMap<quint16, QByteArray> &channelBytes,
     typedef typename Traits::channels_type channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-    channels_type opacity = unitValue;
-    if (channelBytes.contains(-1)) {
-        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
-    }
-
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
 
-    channels_type gray = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[0].constData())[col]);
-
-    pixelPtr->gray = gray;
-    pixelPtr->alpha = opacity;
+    pixelPtr->gray  = readChannelValue<Traits>(channelBytes, 0, col, unitValue);;
+    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
 }
 
 template <class Traits>
@@ -180,21 +191,13 @@ void readRgbPixel(const QMap<quint16, QByteArray> &channelBytes,
     typedef typename Traits::channels_type channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-    channels_type opacity = unitValue;
-    if (channelBytes.contains(-1)) {
-        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
-    }
-
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
 
-    channels_type blue = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[2].constData())[col]);
-    channels_type green = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[1].constData())[col]);
-    channels_type red = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[0].constData())[col]);
+    pixelPtr->blue  = readChannelValue<Traits>(channelBytes, 2, col, unitValue);
+    pixelPtr->green = readChannelValue<Traits>(channelBytes, 1, col, unitValue);
+    pixelPtr->red   = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
+    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
 
-    pixelPtr->blue = blue;
-    pixelPtr->green = green;
-    pixelPtr->red = red;
-    pixelPtr->alpha = opacity;
 }
 
 template <class Traits>
@@ -205,23 +208,13 @@ void readCmykPixel(const QMap<quint16, QByteArray> &channelBytes,
     typedef typename Traits::channels_type channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-    channels_type opacity = unitValue;
-    if (channelBytes.contains(-1)) {
-        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
-    }
-
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
 
-    channels_type cyan = unitValue - convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[0].constData())[col]);
-    channels_type magenta = unitValue - convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[1].constData())[col]);
-    channels_type yellow = unitValue - convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[2].constData())[col]);
-    channels_type black = unitValue - convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[3].constData())[col]);
-
-    pixelPtr->cyan = cyan;
-    pixelPtr->magenta = magenta;
-    pixelPtr->yellow = yellow;
-    pixelPtr->black = black;
-    pixelPtr->alpha = opacity;
+    pixelPtr->cyan    = unitValue - readChannelValue<Traits>(channelBytes, 0, col, unitValue);
+    pixelPtr->magenta = unitValue - readChannelValue<Traits>(channelBytes, 1, col, unitValue);
+    pixelPtr->yellow  = unitValue - readChannelValue<Traits>(channelBytes, 2, col, unitValue);
+    pixelPtr->black   = unitValue - readChannelValue<Traits>(channelBytes, 3, col, unitValue);
+    pixelPtr->alpha   = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
 }
 
 template <class Traits>
@@ -232,21 +225,12 @@ void readLabPixel(const QMap<quint16, QByteArray> &channelBytes,
     typedef typename Traits::channels_type channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-    channels_type opacity = unitValue;
-    if (channelBytes.contains(-1)) {
-        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
-    }
-
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
 
-    channels_type L = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[0].constData())[col]);
-    channels_type a = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[1].constData())[col]);
-    channels_type b = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[2].constData())[col]);
-
-    pixelPtr->L = L;
-    pixelPtr->a = a;
-    pixelPtr->b = b;
-    pixelPtr->alpha = opacity;
+    pixelPtr->L = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
+    pixelPtr->a = readChannelValue<Traits>(channelBytes, 1, col, unitValue);
+    pixelPtr->b = readChannelValue<Traits>(channelBytes, 2, col, unitValue);
+    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
 }
 
 void readRgbPixelCommon(int channelSize,
@@ -675,10 +659,10 @@ void writePixelDataCommon(QIODevice *io,
             int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
 
             quint8 *holder = 0;
-            qSwap(holder, tmp[channelIndex]);
+            std::swap(holder, tmp[channelIndex]);
 
             if (ch->channelType() == KoChannelInfo::ALPHA) {
-                qSwap(holder, alphaPlanePtr);
+                std::swap(holder, alphaPlanePtr);
             } else {
                 planes.append(holder);
             }

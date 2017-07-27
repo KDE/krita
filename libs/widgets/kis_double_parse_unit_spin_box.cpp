@@ -35,7 +35,8 @@ public:
           isDeleting(false),
           unitHasBeenChangedFromOutSideOnce(false),
           letUnitBeChangedFromOutsideMoreThanOnce(true),
-          displayUnit(true)
+          displayUnit(true),
+          allowResetDecimals(true)
     {
     }
 
@@ -58,6 +59,8 @@ public:
 
     bool displayUnit;
 
+    bool allowResetDecimals;
+
 };
 
 KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
@@ -74,6 +77,8 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     connect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
     connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
+    setDecimals(d->unitManager->getApparentUnitRecommandedDecimals());
+
 }
 
 KisDoubleParseUnitSpinBox::~KisDoubleParseUnitSpinBox()
@@ -88,7 +93,7 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
     qreal oldVal = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());
     QString oldSymbol = d->unitManager->getApparentUnitSymbol();
 
-    qreal newVal;
+    qreal newVal = 0.0;
 
     double newMin;
     double newMax;
@@ -140,13 +145,17 @@ connect_signals:
     connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
     KisDoubleParseSpinBox::setValue(newVal);
+
+    if (d->allowResetDecimals) { //if the user has not fixed the number of decimals.
+        setDecimals(d->unitManager->getApparentUnitRecommandedDecimals());
+    }
 }
 
 void KisDoubleParseUnitSpinBox::changeValue( double newValue )
 {
     double apparentValue;
-    double fact;
-    double cons;
+    double fact = 0.0;
+    double cons = 0.0;
 
     if (d->outPutSymbol.isEmpty()) {
         apparentValue = d->unitManager->getApparentValue(newValue);
@@ -219,6 +228,10 @@ void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
 
     KisDoubleParseSpinBox::setSingleStep( step );
     KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( d->previousValueInPoint ) );
+
+    if (d->allowResetDecimals) {
+        setDecimals(d->unitManager->getApparentUnitRecommandedDecimals());
+    }
 
     d->unitHasBeenChangedFromOutSideOnce = true;
 }
@@ -353,6 +366,10 @@ void KisDoubleParseUnitSpinBox::setDisplayUnit(bool toggle) {
 
     d->displayUnit = toggle;
 
+}
+
+void KisDoubleParseUnitSpinBox::preventDecimalsChangeFromUnitManager(bool prevent) {
+    d->allowResetDecimals = !prevent;
 }
 
 void KisDoubleParseUnitSpinBox::privateValueChanged()

@@ -804,7 +804,7 @@ void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
         repaintCaret();
     }
     QList<KoShape *> sortedShapes = canvas()->shapeManager()->shapesAt(area, true);
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
 
@@ -2863,7 +2863,7 @@ void TextTool::editingPluginEvents()
         int from = m_prevCursorPosition;
         int to = m_textEditor.data()->position();
         if (from > to) {
-            qSwap(from, to);
+            std::swap(from, to);
         }
         QString section = block.text().mid(from - block.position(), to - from);
         qDebug() << "from=" << from << "to=" << to;

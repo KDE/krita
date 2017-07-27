@@ -49,6 +49,12 @@ class DlgCanvasSize: public KoDialog
 public:
     enum anchor { NORTH_WEST = 0, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE};
 
+    static const QString PARAM_PREFIX;
+    static const QString PARAM_WIDTH_UNIT;
+    static const QString PARAM_HEIGTH_UNIT;
+    static const QString PARAM_XOFFSET_UNIT;
+    static const QString PARAM_YOFFSET_UNIT;
+
     DlgCanvasSize(QWidget * parent, int width, int height, double resolution);
     ~DlgCanvasSize() override;
 

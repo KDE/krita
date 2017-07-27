@@ -1027,12 +1027,12 @@ class DlgLoadMessages : public KoDialog {
 public:
     DlgLoadMessages(const QString &title, const QString &message, const QStringList &warnings) {
         setWindowTitle(title);
-        setWindowIcon(KisIconUtils::loadIcon("dialog-warning"));
+        setWindowIcon(KisIconUtils::loadIcon("warning"));
         QWidget *page = new QWidget(this);
         QVBoxLayout *layout = new QVBoxLayout(page);
         QHBoxLayout *hlayout = new QHBoxLayout();
         QLabel *labelWarning= new QLabel();
-        labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
+        labelWarning->setPixmap(KisIconUtils::loadIcon("warning").pixmap(32, 32));
         hlayout->addWidget(labelWarning);
         hlayout->addWidget(new QLabel(message));
         layout->addLayout(hlayout);

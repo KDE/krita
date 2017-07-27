@@ -224,7 +224,9 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_presets_popup.cpp
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
+    widgets/kis_paintop_presets_save.cpp
     widgets/kis_pattern_chooser.cc
+
     widgets/kis_popup_button.cc
     widgets/kis_preset_chooser.cpp
     widgets/kis_progress_widget.cpp
@@ -281,6 +283,7 @@ set(kritaui_LIB_SRCS
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
     input/kis_select_layer_action.cpp
+    input/KisQtWidgetsTweaker.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
@@ -455,6 +458,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
+    forms/wdgsavebrushpreset.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui

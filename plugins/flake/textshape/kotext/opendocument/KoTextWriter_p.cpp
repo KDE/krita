@@ -618,7 +618,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     } else {
                         // split the fragment into subspans at the points of range starts/ends
                         QList<int> subSpanTos = textRanges.uniqueKeys();
-                        qSort(subSpanTos);
+                        std::sort(subSpanTos.begin(), subSpanTos.end());
                         // ensure last subSpanTo to be at the end
                         if (subSpanTos.last() != spanTo) {
                             subSpanTos.append(spanTo);

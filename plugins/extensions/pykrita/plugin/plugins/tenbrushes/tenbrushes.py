@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from krita import *
 
+
 class DropButton(QPushButton):
 
     def __init__(self, parent):
@@ -36,7 +37,7 @@ class TenBrushesExtension(Extension):
         self.actions = []
         for i in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             action = Application.createAction("activate_preset_" + i, "Activate Preset " + i)
-            #action.setVisible(False)
+            # action.setVisible(False)
             action.setMenu("None")
             action.triggered.connect(self.activatePreset)
             if j < len(selectedPresets) and selectedPresets[j] in allPresets:
@@ -45,7 +46,6 @@ class TenBrushesExtension(Extension):
                 action.preset = None
             self.actions.append(action)
             j = j + 1
-
 
     def activatePreset(self):
         print("activatePreset", self.sender().preset)
@@ -78,7 +78,7 @@ class TenBrushesExtension(Extension):
             button.presetChooser = self.presetChooser
 
             if self.actions[j] and self.actions[j].preset and self.actions[j].preset in allPresets:
-                p = allPresets[self.actions[j].preset];
+                p = allPresets[self.actions[j].preset]
                 button.preset = p.name()
                 button.setIcon(QIcon(QPixmap.fromImage(p.image())))
 
@@ -98,7 +98,6 @@ class TenBrushesExtension(Extension):
         self.dialog.show()
         self.dialog.activateWindow()
         self.dialog.exec_()
-
 
     def accept(self):
         i = 0

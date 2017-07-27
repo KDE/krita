@@ -110,6 +110,8 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     }
 
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
+    connect((QObject*)(m_page->chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(logHistView()));
+
 
     // create the horizontal and vertical gradient labels
     m_page->hgradient->setPixmap(createGradient(Qt::Horizontal));
@@ -171,6 +173,14 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     int i;
     int height = 256;
     QPixmap pix(256, height);
+
+    bool logarithmic = m_page->chkLogarithmic->isChecked();
+
+    if (logarithmic)
+        m_histogram->setHistogramType(LOGARITHMIC);
+    else
+        m_histogram->setHistogramType(LINEAR);
+
 
     QPalette appPalette = QApplication::palette();
 
@@ -595,4 +605,9 @@ bool KisPerChannelFilter::needsTransparentPixels(const KisFilterConfigurationSP 
 {
     Q_UNUSED(config);
     return cs->colorModelId() == AlphaColorModelID;
+}
+
+void KisPerChannelConfigWidget::logHistView()
+{
+    m_page->curveWidget->setPixmap(getHistogram());
 }

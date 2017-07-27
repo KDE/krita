@@ -76,7 +76,7 @@ public:
      *
      * @param defaultDir a path to a file or directory
      */
-    void setDefaultDir(const QString &defaultDir);
+    void setDefaultDir(const QString &defaultDir, bool force = false);
 
     /**
      * @brief setImageFilters sets the name filters for the file dialog to all
@@ -84,8 +84,13 @@ public:
      */
     void setImageFilters();
 
-    void setMimeTypeFilters(const QStringList &filterList,
-                            QString defaultFilter = QString());
+    /**
+     * @brief setMimeTypeFilters Update the list of file filters from mime types.
+     * @param mimeTypeList A list of mime types that forms the basis of this dialog's file filters
+     * @param defaultMimeType Sets the default filter based on this mime type
+     */
+    void setMimeTypeFilters(const QStringList &mimeTypeList,
+                            QString defaultMimeType = QString());
 
     /// Get the file names the user selected in the file dialog
     QStringList filenames();

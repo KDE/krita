@@ -5,11 +5,10 @@ from PyQt5.QtWidgets import (qApp, QListWidget, QListWidgetItem, QTextBrowser,
 
 class PopupWidget(QWidget):
 
-
     def __init__(self, textedit):
         flags = Qt.ToolTip
         flags = Qt.Window | Qt.FramelessWindowHint | \
-                Qt.CustomizeWindowHint | Qt.X11BypassWindowManagerHint
+            Qt.CustomizeWindowHint | Qt.X11BypassWindowManagerHint
         QWidget.__init__(self, None, flags)
         self.textedit = textedit
         self.vlayout = QVBoxLayout(self)
@@ -18,7 +17,6 @@ class PopupWidget(QWidget):
         self.show()
         self.hide()
         self.active = False
-
 
     def show(self, timeout=0, above=False):
         self.cursor_start_col = self.textedit.textCursor().columnNumber()
@@ -48,24 +46,16 @@ class PopupWidget(QWidget):
         if timeout:
             QTimer.singleShot(timeout * 1000, self.hide)
 
-
     def hide(self):
         self.active = False
         QWidget.hide(self)
 
 
-
-
-
-
 class CallTip(PopupWidget):
-
 
     def init_popup(self):
         self.browser = QTextBrowser(self)
         self.layout().addWidget(self.browser)
-
-
 
 
 class AutoCompleteItem(QListWidgetItem):
@@ -78,9 +68,7 @@ class AutoCompleteItem(QListWidgetItem):
         self.kind = item.kind
 
 
-
 class AutoComplete(PopupWidget):
-
 
     def init_popup(self):
         self.list = QListWidget(self)
@@ -88,10 +76,8 @@ class AutoComplete(PopupWidget):
         self.layout().addWidget(self.list)
         self.items = []
 
-
     def insertItem(self, item):
         self.insert()
-
 
     def insert(self):
         completition = self.items[self.list.currentRow()].value
@@ -100,25 +86,23 @@ class AutoComplete(PopupWidget):
         line = unicode(cursor.block().text())
         i = self.cursor_start_col
         while i > 0:
-            #print(`line[i:col]`)
+            # print(`line[i:col]`)
             if completition.startswith(line[i:col]):
-                #print("break")
+                # print("break")
                 break
             i -= 1
-        #print(col,i)
-        cursor.insertText(completition[col-i:])
+        # print(col,i)
+        cursor.insertText(completition[col - i:])
         self.hide()
 
-
     def setItems(self, proposals):
-        proposals = sorted(proposals, cmp=lambda p1,p2:cmp(p1.name,p2.name))
+        proposals = sorted(proposals, cmp=lambda p1, p2: cmp(p1.name, p2.name))
         del self.items[:]
         self.list.clear()
         for entry in proposals:
             i = AutoCompleteItem(entry)
             self.list.addItem(i)
             self.items.append(i)
-
 
     def keyPressEvent(self, event):
         self.list.keyPressEvent(event)
@@ -150,6 +134,3 @@ class AutoComplete(PopupWidget):
             return True
         elif not text:
             self.hide()
-
-
-

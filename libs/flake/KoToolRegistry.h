@@ -43,13 +43,6 @@ public:
      */
     static KoToolRegistry *instance();
 
-    /**
-     * Add a toolfactory from a deferred plugin. This will cause the toolFactoryAdded signal
-     * to be emitted, which is caught by the KoToolManager which then adds the tool to all
-     * canvases.
-     */
-    void addDeferred(KoToolFactoryBase *toolFactory);
-
 private:
     KoToolRegistry(const KoToolRegistry&);
     KoToolRegistry operator=(const KoToolRegistry&);

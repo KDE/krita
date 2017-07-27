@@ -186,7 +186,7 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
     if( !zoomLevels.contains( zoom ) )
         zoomLevels << zoom;
 
-    qSort(zoomLevels.begin(), zoomLevels.end());
+    std::sort(zoomLevels.begin(), zoomLevels.end());
 
     // update items with new sorted zoom values
     QStringList values;

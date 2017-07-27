@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -74,6 +75,11 @@ public Q_SLOTS:
      * remove entry with a dialog window.(Necessary for groups.
      */
     bool removeEntryWithDialog(QModelIndex index);
+    /**
+     *  This tries to select the closest color in the palette.
+     *  This doesn't update the foreground color, just the visual selection.
+     */
+    void trySelectClosestColor(KoColor color);
 Q_SIGNALS:
     /**
      * @brief entrySelected
@@ -81,7 +87,10 @@ Q_SIGNALS:
      * @param entry the selected entry.
      */
     void entrySelected(KoColorSetEntry entry);
+    void entrySelectedBackGround(KoColorSetEntry entry);
+    void indexEntrySelected(QModelIndex index);
 protected:
+    void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event) override;
 
 private:
@@ -92,7 +101,7 @@ private Q_SLOTS:
      * @brief entrySelection
      * the function that will emit entrySelected when the entry changes.
      */
-    void entrySelection();
+    void entrySelection(bool foreground = true);
     /**
      * @brief modifyEntry
      * function for changing the entry at the given index.

@@ -105,23 +105,6 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QCheckBox" name="alpha">
-       <property name="toolTip">
-        <string>Disable to get smaller files if your image has no transparency</string>
-       </property>
-       <property name="whatsThis">
-        <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparency in your image to be stored by saving an alpha channel.
-You can uncheck the box if you are not using transparency and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
-       </property>
-       <property name="text">
-        <string>Store alpha channel (transparency)</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
       <widget class="QCheckBox" name="interlacing">
        <property name="toolTip">
         <string>Use interlacing when publishing on the Internet.</string>
@@ -135,13 +118,30 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item row="3" column="1">
       <widget class="QCheckBox" name="tryToSaveAsIndexed">
        <property name="toolTip">
         <string>Indexed PNG images are smaller. If you enabled this option, your image will be analyzed to see whether it is possible to save as an indexed PNG.</string>
        </property>
        <property name="text">
         <string>Save as indexed PNG, if possible</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QCheckBox" name="alpha">
+       <property name="toolTip">
+        <string>Disable to get smaller files if your image has no transparency</string>
+       </property>
+       <property name="whatsThis">
+        <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparency in your image to be stored by saving an alpha channel.
+You can uncheck the box if you are not using transparency and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
+       </property>
+       <property name="text">
+        <string>Store alpha channel (transparency)</string>
        </property>
        <property name="checked">
         <bool>true</bool>

@@ -167,8 +167,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
                 activeTool->beginPrimaryDoubleClickAction(&ev);
             } else {
                 activeTool->beginPrimaryAction(&ev);
-                KisToolsStartUse kisToolsUse;
-                kisToolsUse.doAction(KisTelemetryInstance::instance()->provider(), activeTool->toolId());
+                KisTelemetryInstance::instance()->provider()->notify(KisToolsStartUse(),activeTool->toolId());
             }
         } else {
             if (event->type() == QEvent::MouseButtonDblClick) {
@@ -188,8 +187,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
     case END:
         if (action == KisTool::Primary) {
             activeTool->endPrimaryAction(&ev);
-            KisToolsStopUse kisToolsUse;
-            kisToolsUse.doAction(KisTelemetryInstance::instance()->provider(), activeTool->toolId());
+            KisTelemetryInstance::instance()->provider()->notify(KisToolsStopUse(),activeTool->toolId());
         } else {
             activeTool->endAlternateAction(&ev, KisTool::actionToAlternateAction(action));
         }

@@ -1,39 +1,41 @@
 #include "kis_telemetry_abstract.h"
 
-void KisTelemetryAbstract::doTicket(KisToolsActivate &action, QString id)
+void KisTelemetryAbstract::notify(KisToolsActivate action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Activate);
     putTimeTicket(id);
 }
 
-void KisTelemetryAbstract::doTicket(KisToolsDeactivate &action, QString id)
+
+
+void KisTelemetryAbstract::notify(KisToolsDeactivate action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Activate);
     getTimeTicket(id);
 }
 
-void KisTelemetryAbstract::doTicket(KisToolsStartUse &action, QString id)
+void KisTelemetryAbstract::notify(KisToolsStartUse action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Use);
     putTimeTicket(id);
 }
 
-void KisTelemetryAbstract::doTicket(KisToolsStopUse &action, QString id)
+void KisTelemetryAbstract::notify(KisToolsStopUse action, QString id)
 {
     Q_UNUSED(action);
     id = getToolId(id, UseMode::Use);
     getTimeTicket(id);
 }
 
-void KisTelemetryAbstract::doTicket(KisSaveImageProperties &action, QString id)
+void KisTelemetryAbstract::notify(KisSaveImageProperties action, QString id)
 {
     saveImageProperites(id, action.imageInfo());
 }
 
-void KisTelemetryAbstract::doTicket(KisSaveActionInfo &action, QString id)
+void KisTelemetryAbstract::notify(KisSaveActionInfo action, QString id)
 {
     saveActionInfo(id, action.actionInfo());
 }

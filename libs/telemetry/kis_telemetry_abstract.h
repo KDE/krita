@@ -34,12 +34,12 @@ class KRITATELEMETRY_EXPORT KisTelemetryAbstract {
 public:
     virtual void sendData(QString path, QString adress = QString()) = 0;
     virtual ~KisTelemetryAbstract() {}
-    void doTicket(KisToolsActivate& action, QString id);
-    void doTicket(KisToolsDeactivate& action, QString id);
-    void doTicket(KisToolsStartUse& action, QString id);
-    void doTicket(KisToolsStopUse& action, QString id);
-    void doTicket(KisSaveImageProperties& action, QString id);
-    void doTicket(KisSaveActionInfo& action, QString id);
+    void notify(KisToolsActivate action, QString id);
+    void notify(KisToolsDeactivate action, QString id);
+    void notify(KisToolsStartUse action, QString id);
+    void notify(KisToolsStopUse action, QString id);
+    void notify(KisSaveImageProperties action, QString id);
+    void notify(KisSaveActionInfo action, QString id);
 
 protected:
     virtual void getTimeTicket(QString id) = 0;

@@ -27,28 +27,19 @@
 class KisTelemetryAbstract;
 class KisTelemetryAction {
 public:
-    virtual void doAction(KisTelemetryAbstract* provider, QString id) = 0;
     virtual ~KisTelemetryAction() = default;
 };
 
 class KRITATELEMETRY_EXPORT KisToolsActivate : public KisTelemetryAction {
-public:
-    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 
 class KRITATELEMETRY_EXPORT KisToolsDeactivate : public KisTelemetryAction {
-public:
-    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 
 class KRITATELEMETRY_EXPORT KisToolsStartUse : public KisTelemetryAction {
-public:
-    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 
 class KRITATELEMETRY_EXPORT KisToolsStopUse : public KisTelemetryAction {
-public:
-    void doAction(KisTelemetryAbstract* provider, QString id) override;
 };
 
 class KRITATELEMETRY_EXPORT KisSaveImageProperties : public KisTelemetryAction {
@@ -62,8 +53,6 @@ public:
     };
 public:
     KisSaveImageProperties(ImageInfo imageInfo);
-
-    void doAction(KisTelemetryAbstract* provider, QString id) override;
     QString fileName() const;
     ImageInfo imageInfo() const;
 
@@ -79,7 +68,6 @@ public:
     };
 public:
     KisSaveActionInfo(ActionInfo actionInfo);
-    void doAction(KisTelemetryAbstract* provider, QString id) override;
     ActionInfo actionInfo() const;
 
 private:

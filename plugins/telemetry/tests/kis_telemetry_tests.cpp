@@ -151,17 +151,14 @@ private:
     void testUse(QString toolID, int count)
     {
         for (int i = 0; i < count; i++) {
-            KisToolsStartUse kisToolActivate;
-            kisToolActivate.doAction(m_provider, toolID);
+            m_provider->notify(KisToolsStartUse(), toolID);
             QTest::qWait(m_time[0]);
-            KisToolsStopUse kisToolDeactivate;
-            kisToolDeactivate.doAction(m_provider, toolID);
+            m_provider->notify(KisToolsStopUse(), toolID);
         }
     }
     void uncorrectCountUse(QString toolID)
     {
-        KisToolsStartUse kisToolActivate;
-        kisToolActivate.doAction(m_provider, toolID);
+        m_provider->notify(KisToolsStartUse(), toolID);
         QTest::qWait(m_time[0]);
     }
 

@@ -124,8 +124,7 @@ KisTool::~KisTool()
 void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
-    KisToolsActivate kisToolsActivate;
-    kisToolsActivate.doAction(KisTelemetryInstance::instance()->provider(),toolId());
+    KisTelemetryInstance::instance()->provider()->notify( KisToolsActivate(), toolId());
 
     resetCursorStyle();
     if (!canvas()) return;
@@ -170,8 +169,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 void KisTool::deactivate()
 {
     bool result = true;
-    KisToolsDeactivate kisToolsDeactivate;
-    kisToolsDeactivate.doAction(KisTelemetryInstance::instance()->provider(),toolId());
+    KisTelemetryInstance::instance()->provider()->notify(KisToolsActivate(), toolId());
 
     result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);

@@ -2220,6 +2220,27 @@ void KisMainWindow::configChanged()
     Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+
+        /**
+         * Dirty workaround for a bug in Qt (checked on Qt 5.6.1):
+         *
+         * If you make a window "Show on top" and then switch to the tabbed mode
+         * the window will contiue to be painted in its initial "mid-screen"
+         * position. It will persist here until you explicitly switch to its tab.
+         */
+        if (viewMode == QMdiArea::TabbedView) {
+            Qt::WindowFlags oldFlags = subwin->windowFlags();
+            Qt::WindowFlags flags = oldFlags;
+
+            flags &= ~Qt::WindowStaysOnTopHint;
+            flags &= ~Qt::WindowStaysOnBottomHint;
+
+            if (flags != oldFlags) {
+                subwin->setWindowFlags(flags);
+                subwin->showMaximized();
+            }
+        }
+
     }
 
     KConfigGroup group( KSharedConfig::openConfig(), "theme");

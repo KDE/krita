@@ -10,7 +10,7 @@ import math
 from krita import *
 
 # import the exporters
-from . import palette_exporter_gimppalette, palette_exporter_inkscapeSVG
+from . import palette_exporter_gimppalette, palette_exporter_inkscapeSVG, palette_sortColors
 
 
 class Palette_Docker(DockWidget):
@@ -79,9 +79,13 @@ class Palette_Docker(DockWidget):
         self.exportToInkscape = QAction()
         self.exportToInkscape.setText("Export as Inkscape SVG with swatches.")
         self.exportToInkscape.triggered.connect(self.slot_export_to_inkscape_svg)
+        self.sortColors = QAction()
+        self.sortColors.setText("Sort colors")
+        self.sortColors.triggered.connect(self.slot_sort_colors)
         self.actionMenu.addAction(self.editPaletteData)
         self.actionMenu.addAction(self.exportToGimp)
         self.actionMenu.addAction(self.exportToInkscape)
+        self.actionMenu.addAction(self.sortColors)
 
         self.extra.setMenu(self.actionMenu)
 
@@ -209,12 +213,17 @@ class Palette_Docker(DockWidget):
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()
             self.currentPalette.setComment(paletteComment.toPlainText())
+            self.currentPalette.save()
 
     def slot_export_to_gimp_palette(self):
         palette_exporter_gimppalette.gimpPaletteExporter(self.cmb_palettes.currentText())
 
     def slot_export_to_inkscape_svg(self):
         palette_exporter_inkscapeSVG.inkscapeSVGExporter(self.cmb_palettes.currentText())
+        
+    def slot_sort_colors(self):
+        colorSorter = palette_sortColors.sortColors(self.cmb_palettes.currentText())
+        self.paletteView.setPalette(colorSorter.palette())
 
     def canvasChanged(self, canvas):
         pass

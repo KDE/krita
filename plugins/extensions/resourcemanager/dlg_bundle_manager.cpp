@@ -341,6 +341,8 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
         QListWidgetItem *item = new QListWidgetItem(pixmap, bundle->name());
         item->setData(Qt::UserRole, bundle->md5());
         w->addItem(item);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+        item->setCheckState(Qt::Unchecked);
 
     }
 }

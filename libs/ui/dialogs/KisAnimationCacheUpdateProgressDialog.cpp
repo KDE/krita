@@ -23,6 +23,7 @@
 #include <QElapsedTimer>
 #include <QApplication>
 #include <QThread>
+#include <QTime>
 #include <KisAnimationCacheRegenerator.h>
 #include "kis_animation_frame_cache.h"
 #include "kis_time_range.h"
@@ -47,6 +48,7 @@ struct KisAnimationCacheUpdateProgressDialog::Private
     int dirtyFramesCount = 0;
     int processedFramesCount = 0;
     bool hasSomethingToDo = true;
+    QElapsedTimer processingTime;
 
     QProgressDialog progressDialog;
 };
@@ -72,16 +74,15 @@ void KisAnimationCacheUpdateProgressDialog::regenerateRange(KisAnimationFrameCac
 
     m_d->progressDialog.setMaximum(m_d->dirtyFramesCount);
 
+    m_d->processingTime.start();
+
     // HACK ALERT: since the slot is named 'finished', so it increments
     //             the preseccedFramesCount field on every call. And since
     //             this is a cold-start, we should decrement it in advance.
     m_d->processedFramesCount = -1;
     slotFrameFinished();
 
-    QElapsedTimer t;
-    t.start();
-
-    while (t.elapsed() < m_d->busyWait) {
+    while (m_d->processingTime.elapsed() < m_d->busyWait) {
         QApplication::processEvents();
 
         if (!m_d->hasSomethingToDo) {
@@ -113,6 +114,25 @@ void KisAnimationCacheUpdateProgressDialog::slotFrameFinished()
     }
 
     m_d->progressDialog.setValue(m_d->processedFramesCount);
+
+    {
+        const qint64 elapsedMSec = m_d->processingTime.elapsed();
+        const qint64 estimatedMSec =
+            !m_d->processedFramesCount ? 0 :
+            elapsedMSec * m_d->dirtyFramesCount / m_d->processedFramesCount;
+
+        const QTime elapsedTime = QTime::fromMSecsSinceStartOfDay(elapsedMSec);
+        const QTime estimatedTime = QTime::fromMSecsSinceStartOfDay(estimatedMSec);
+
+        const QString timeFormat = estimatedTime.hour() > 0 ? "HH:mm:ss" : "mm:ss";
+
+        const QString elapsedTimeString = elapsedTime.toString(timeFormat);
+        const QString estimatedTimeString = estimatedTime.toString(timeFormat);
+
+        const QString progressLabel(i18n("Regenerating cache:\n\nElapsed: %1\nEstimated: %2\n\n",
+                                         elapsedTimeString, estimatedTimeString));
+        m_d->progressDialog.setLabelText(progressLabel);
+    }
 }
 
 void KisAnimationCacheUpdateProgressDialog::slotFrameCancelled()

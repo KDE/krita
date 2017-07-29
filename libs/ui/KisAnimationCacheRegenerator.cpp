@@ -34,6 +34,7 @@
 struct Q_DECL_HIDDEN KisAnimationCacheRegenerator::Private
 {
     int requestedFrame;
+    KisImageSP requestImage;
     KisAnimationFrameCacheSP requestCache;
     KisOpenGLUpdateInfoSP requestInfo;
     KisSignalAutoConnectionsStore imageRequestConnections;
@@ -96,7 +97,12 @@ int KisAnimationCacheRegenerator::calcFirstDirtyFrame(KisAnimationFrameCacheSP c
 
 int KisAnimationCacheRegenerator::calcNumberOfDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange)
 {
-    int result = 0;
+    return calcDirtyFramesList(cache, playbackRange).size();
+}
+
+QList<int> KisAnimationCacheRegenerator::calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange)
+{
+    QList<int> result;
 
     KisImageSP image = cache->image();
     if (!image) return result;
@@ -112,10 +118,10 @@ int KisAnimationCacheRegenerator::calcNumberOfDirtyFrame(KisAnimationFrameCacheS
             KisTimeRange stillFrameRange = KisTimeRange::infinite(0);
             KisTimeRange::calculateTimeRangeRecursive(image->root(), frame, stillFrameRange, true);
 
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(stillFrameRange.isValid(), 0);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(stillFrameRange.isValid(), result);
 
             if (cache->frameStatus(stillFrameRange.start()) == KisAnimationFrameCache::Uncached) {
-                result++;
+                result.append(stillFrameRange.start());
             }
 
             if (stillFrameRange.isInfinite()) {
@@ -129,12 +135,16 @@ int KisAnimationCacheRegenerator::calcNumberOfDirtyFrame(KisAnimationFrameCacheS
     return result;
 }
 
-void KisAnimationCacheRegenerator::startFrameRegeneration(int frame, KisAnimationFrameCacheSP cache)
+bool KisAnimationCacheRegenerator::isActive() const
+{
+    return m_d->requestCache;
+}
+
+void KisAnimationCacheRegenerator::startFrameRegeneration(int frame, KisImageSP image, KisAnimationFrameCacheSP cache)
 {
     KIS_ASSERT_RECOVER_NOOP(QThread::currentThread() == this->thread());
 
-    KisImageSP image = cache->image();
-
+    m_d->requestImage = image;
     m_d->requestCache = cache;
     m_d->requestedFrame = frame;
 
@@ -156,6 +166,7 @@ void KisAnimationCacheRegenerator::startFrameRegeneration(int frame, KisAnimatio
 void KisAnimationCacheRegenerator::cancelCurrentFrameRegeneration()
 {
     m_d->imageRequestConnections.clear();
+    m_d->requestImage = 0;
     m_d->requestCache = 0;
     m_d->requestedFrame = -1;
     m_d->requestInfo = 0;
@@ -182,7 +193,7 @@ void KisAnimationCacheRegenerator::slotFrameRegenerationFinished(int frame)
     KIS_SAFE_ASSERT_RECOVER_RETURN(frame == m_d->requestedFrame);
 
     m_d->imageRequestConnections.clear();
-    m_d->requestInfo = cache->fetchFrameData(frame);
+    m_d->requestInfo = cache->fetchFrameData(frame, m_d->requestImage);
 
     emit sigInternalStartFrameConversion();
 }
@@ -215,6 +226,7 @@ void KisAnimationCacheRegenerator::slotFrameConverted()
 
     m_d->requestCache->addConvertedFrameData(m_d->requestInfo, m_d->requestedFrame);
 
+    m_d->requestImage = 0;
     m_d->requestCache = 0;
     m_d->requestedFrame = -1;
     m_d->requestInfo = 0;

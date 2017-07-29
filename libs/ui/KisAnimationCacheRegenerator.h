@@ -40,9 +40,14 @@ public:
     static int calcNumberOfDirtyFrame(KisAnimationFrameCacheSP cache,
                                       const KisTimeRange &playbackRange);
 
+    static QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache,
+                                          const KisTimeRange &playbackRange);
+
+    bool isActive() const;
+
 
 public Q_SLOTS:
-    void startFrameRegeneration(int frame, KisAnimationFrameCacheSP cache);
+    void startFrameRegeneration(int frame, KisImageSP image, KisAnimationFrameCacheSP cache);
     void cancelCurrentFrameRegeneration();
 
 Q_SIGNALS:

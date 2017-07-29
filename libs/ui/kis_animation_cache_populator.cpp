@@ -201,7 +201,7 @@ struct KisAnimationCachePopulator::Private
          */
         enterState(WaitingForFrame);
 
-        regenerator.startFrameRegeneration(frame, cache);
+        regenerator.startFrameRegeneration(frame, cache->image(), cache);
 
         return true;
     }

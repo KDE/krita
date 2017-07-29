@@ -44,6 +44,10 @@ public Q_SLOTS:
     void slotFrameCancelled();
 
 private:
+    void tryInitiateFrameRegeneration();
+    void updateProgressLabel();
+
+private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };

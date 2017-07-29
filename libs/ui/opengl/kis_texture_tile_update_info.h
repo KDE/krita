@@ -132,12 +132,12 @@ public:
     ~KisTextureTileUpdateInfo() {
     }
 
-    void retrieveData(KisImageWSP image, const QBitArray &channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
+    void retrieveData(KisPaintDeviceSP projectionDevice, const QBitArray &channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
-        m_patchColorSpace = image->projection()->colorSpace();
+        m_patchColorSpace = projectionDevice->colorSpace();
         m_patchPixels.allocate(m_patchColorSpace->pixelSize());
 
-        image->projection()->readBytes(m_patchPixels.data(),
+        projectionDevice->readBytes(m_patchPixels.data(),
                                        m_patchRect.x(), m_patchRect.y(),
                                        m_patchRect.width(), m_patchRect.height());
 

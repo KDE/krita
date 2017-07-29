@@ -75,7 +75,6 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     m_ui->searchLineEdit->setPlaceholderText("Search for the bundle name..");
 
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(m_ui->listActive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->listActive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
@@ -304,6 +303,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current)
 {
+    m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
     itemSelected(current, 0);
 }
 

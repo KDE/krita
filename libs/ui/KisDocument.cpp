@@ -690,6 +690,10 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     d->backgroundSaveDocument.reset(clonedDocument.take());
     d->backgroundSaveJob = job;
 
+    if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
+        d->backgroundSaveDocument->d->isAutosaving = true;
+    }
+
     connect(d->backgroundSaveDocument.data(),
             SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus, const QString&)),
             this,
@@ -719,6 +723,11 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::Co
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->backgroundSaveDocument);
+
+    if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
+        d->backgroundSaveDocument->d->isAutosaving = false;
+    }
+
     d->backgroundSaveDocument.take()->deleteLater();
     d->savingMutex.unlock();
 
@@ -737,7 +746,7 @@ void KisDocument::slotAutoSave()
     bool started =
         initiateSavingInBackground(i18n("Autosaving..."),
                                    this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
-                                   KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting),
+                                   KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
                                    0);
 
     if (!started) {

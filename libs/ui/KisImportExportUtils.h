@@ -27,7 +27,8 @@ namespace KritaUtils {
 enum SaveFlag {
     SaveNone = 0,
     SaveShowWarnings = 0x1,
-    SaveIsExporting = 0x2
+    SaveIsExporting = 0x2,
+    SaveInAutosaveMode = 0x4
 };
 
 Q_DECLARE_FLAGS(SaveFlags, SaveFlag)

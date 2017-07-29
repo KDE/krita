@@ -32,13 +32,16 @@
 #include <Python.h>
 
 
+#include <QDir>
 #include <QLibrary>
 #include <QString>
 #include <QStringList>
+#include <QVector>
 
 #include <kconfigbase.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
+#include <KoResourcePaths.h>
 
 #include <kis_debug.h>
 
@@ -165,32 +168,88 @@ QString Python::lastTraceback() const
     return result;
 }
 
-void Python::libraryLoad()
+bool Python::libraryLoad()
 {
-#ifdef Q_OS_WIN
-    if (Py_IsInitialized()) {
-        dbgScript << "Python interpreter is already initialized";
-    } else {
-        dbgScript << "Initializing Python interpreter";
-#else
+    // no-op on Windows
+#ifndef Q_OS_WIN
     if (!s_pythonLibrary) {
         dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
         s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
-        if (!s_pythonLibrary)
+        if (!s_pythonLibrary) {
             errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
+            return false;
+        }
 
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
-        if (!s_pythonLibrary->load())
+        if (!s_pythonLibrary->load()) {
             errScript << "Could not load" << PYKRITA_PYTHON_LIBRARY;
+            return false;
+        }
+    }
 #endif
+    return true;
+}
 
+bool Python::setPath(const QStringList& paths)
+{
+    if (Py_IsInitialized()) {
+        warnScript << "Setting paths when Python interpreter is already initialized";
+    }
+#ifdef Q_OS_WIN
+    constexpr char pathSeparator = ';';
+#else
+    constexpr char pathSeparator = ':';
+#endif
+    QString joinedPaths = paths.join(pathSeparator);
+    // Append the default search path
+    // TODO: Properly handle embedded Python
+#ifdef Q_OS_WIN
+    QString currentPaths;
+    // Find embeddable Python
+    // TODO: Don't hard-code the paths
+    QDir pythonDir(KoResourcePaths::getApplicationRoot());
+    if (pythonDir.cd("python")) {
+        dbgScript << "Found embeddable Python at" << pythonDir.absolutePath();
+        currentPaths = pythonDir.absolutePath() + pathSeparator
+                     + pythonDir.absoluteFilePath("python36.zip");
+    } else {
+# if 1
+        // Use local Python???
+        currentPaths = QString::fromWCharArray(Py_GetPath());
+        warnScript << "Embeddable Python not found.";
+        warnScript << "Default paths:" << currentPaths;
+# else
+        // Or should we fail?
+        errScript << "Embeddable Python not found, not setting Python paths";
+        return false;
+# endif
+    }
+#else
+    QString currentPaths = QString::fromLocal8Bit(qgetenv("PYTHONPATH"));
+#endif
+    if (!currentPaths.isEmpty()) {
+        joinedPaths = joinedPaths + pathSeparator + currentPaths;
+    }
+    dbgScript << "Setting paths:" << joinedPaths;
+#ifdef Q_OS_WIN
+    QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
+    joinedPaths.toWCharArray(joinedPathsWChars.data());
+    Py_SetPath(joinedPathsWChars.data());
+#else
+    qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
+#endif
+    return true;
+}
+
+void Python::ensureInitialized()
+{
+    if (Py_IsInitialized()) {
+        warnScript << "Python interpreter is already initialized, not initializing again";
+    } else {
+        dbgScript << "Initializing Python interpreter";
         Py_InitializeEx(0);
         if (!Py_IsInitialized()) {
-#ifdef Q_OS_WIN
             errScript << "Could not initialise Python interpreter";
-#else
-            errScript << "Could not initialise" << PYKRITA_PYTHON_LIBRARY;
-#endif
         }
 #if THREADED
         PyEval_InitThreads();
@@ -200,29 +259,31 @@ void Python::libraryLoad()
     }
 }
 
+void Python::maybeFinalize()
+{
+    if (!Py_IsInitialized()) {
+        warnScript << "Python interpreter not initialized, no need to finalize";
+    } else {
+#if THREADED
+        PyEval_AcquireThread(s_pythonThreadState);
+#endif
+        Py_Finalize();
+    }
+}
+
 void Python::libraryUnload()
 {
-#ifdef Q_OS_WIN
-    warnScript << "Explicitly unloading Python interpreter isn't supported for Windows";
-    {
-#else
-    if (s_pythonLibrary) {
-#endif
-        // Shut the interpreter down if it has been started.
-        if (Py_IsInitialized()) {
-#if THREADED
-            PyEval_AcquireThread(s_pythonThreadState);
-#endif
-            //Py_Finalize();
-        }
+    // no-op on Windows
 #ifndef Q_OS_WIN
+    if (s_pythonLibrary) {
+        // Shut the interpreter down if it has been started.
         if (s_pythonLibrary->isLoaded()) {
             s_pythonLibrary->unload();
         }
         delete s_pythonLibrary;
         s_pythonLibrary = 0;
-#endif
     }
+#endif
 }
 
 PyObject* Python::moduleActions(const char* moduleName)

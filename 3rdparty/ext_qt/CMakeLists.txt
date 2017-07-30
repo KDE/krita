@@ -5,13 +5,13 @@ if (WIN32)
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
         -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools
-        -no-compile-examples -no-dbus -no-iconv -no-angle -no-qml-debug -no-ssl
+        -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-ssl
         -no-openssl -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard
         #
-        -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
+        -opengl dynamic -angle -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
         #
         -opensource -confirm-license
         #

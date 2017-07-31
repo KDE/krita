@@ -36,6 +36,8 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
 4. On Windows, you will also need Python 3.6.2 (technically any versions of 3.6 is fine, but it's not tested): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module. Make sure the version you download is exactly python-3.6.2. Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
 
+Make sure that your Python will have the correct architecture for the version you are trying to build: https://www.python.org/downloads/windows/ 
+
 == Setup your environment ==
 
 

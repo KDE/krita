@@ -1492,6 +1492,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="show_throttle">
+      <icon></icon>
+      <text>Select &amp;Toggle CPU Throttle</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show the cpu throttle</toolTip>
+      <iconText>Show the cpu throttle</iconText>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip>Show the cpu throttle</statusTip>
+    </Action>
     <Action name="switch_application_language">
       <icon>preferences-desktop-locale</icon>
       <text>Switch Application &amp;Language...</text>
@@ -1738,5 +1748,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+
   </Actions>
 </ActionCollection>

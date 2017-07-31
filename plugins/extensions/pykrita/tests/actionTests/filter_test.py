@@ -17,12 +17,12 @@ class TestFilter(unittest.TestCase):
 
     def testEqualOperator(self):
         sameFilter = self._instance
-        self.assertTrue(sameFilter==self._instance)
+        self.assertTrue(sameFilter == self._instance)
 
     def testEmptyNameProperty(self):
         self.assertFalse(self._instance.name())
 
-    #segmentation fault here, I neet to verify that.
+    # segmentation fault here, I neet to verify that.
     def testConfigurationProperties(self):
         pass
         # infoObject = InfoObject()

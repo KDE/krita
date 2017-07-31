@@ -14,7 +14,7 @@ from krita import *
 
 
 class QuickSettingsDocker(DockWidget):
-# Init the docker
+    # Init the docker
 
     def __init__(self):
         super().__init__()

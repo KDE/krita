@@ -35,33 +35,33 @@ from PyQt5.QtWidgets import qApp
 
 variant_converter = {
     "QVariantList": lambda v: v.toList(v),
-  "QVariantMap": lambda v: toPyObject(v),
-  "QPoint": lambda v: v.toPoint(),
-  "str": lambda v: v.toString(),
-  "int": lambda v: v.toInt()[0],
-  "double": lambda v: v.toDouble()[0],
-  "char": lambda v: v.toChar(),
-  "QByteArray": lambda v: v.toByteArray(),
-  "QPoint": lambda v: v.toPoint(),
-  "QPointF": lambda v: v.toPointF(),
-  "QSize": lambda v: v.toSize(),
-  "QLine": lambda v: v.toLine(),
-  "QStringList": lambda v: v.toStringList(),
-  "QTime": lambda v: v.toTime(),
-  "QDateTime": lambda v: v.toDateTime(),
-  "QDate": lambda v: v.toDate(),
-  "QLocale": lambda v: v.toLocale(),
-  "QUrl": lambda v: v.toUrl(),
-  "QRect": lambda v: v.toRect(),
-  "QBrush": lambda v: QBrush(v),
-  "QFont": lambda v: QFont(v),
-  "QPalette": lambda v: QPalette(v),
-  "QPixmap": lambda v: QPixmap(v),
-  "QImage": lambda v: QImage(v),
-  "bool": lambda v: v.toBool(),
-  "QObject*": lambda v: wrap_variant_object(v),
-  "QWidget*": lambda v: wrap_variant_object(v),
-  "ActionMap": lambda v: int(v.count())
+    "QVariantMap": lambda v: toPyObject(v),
+    "QPoint": lambda v: v.toPoint(),
+    "str": lambda v: v.toString(),
+    "int": lambda v: v.toInt()[0],
+    "double": lambda v: v.toDouble()[0],
+    "char": lambda v: v.toChar(),
+    "QByteArray": lambda v: v.toByteArray(),
+    "QPoint": lambda v: v.toPoint(),
+    "QPointF": lambda v: v.toPointF(),
+    "QSize": lambda v: v.toSize(),
+    "QLine": lambda v: v.toLine(),
+    "QStringList": lambda v: v.toStringList(),
+    "QTime": lambda v: v.toTime(),
+    "QDateTime": lambda v: v.toDateTime(),
+    "QDate": lambda v: v.toDate(),
+    "QLocale": lambda v: v.toLocale(),
+    "QUrl": lambda v: v.toUrl(),
+    "QRect": lambda v: v.toRect(),
+    "QBrush": lambda v: QBrush(v),
+    "QFont": lambda v: QFont(v),
+    "QPalette": lambda v: QPalette(v),
+    "QPixmap": lambda v: QPixmap(v),
+    "QImage": lambda v: QImage(v),
+    "bool": lambda v: v.toBool(),
+    "QObject*": lambda v: wrap_variant_object(v),
+    "QWidget*": lambda v: wrap_variant_object(v),
+    "ActionMap": lambda v: int(v.count())
 }
 
 
@@ -302,7 +302,7 @@ class PyQtProperty(object):
         self.read_only = not meta_property.isWritable()
         self.__doc__ = "%s is a %s%s" % (
             self.name, meta_property.typeName(),
-           self.read_only and "  (read-only)" or ""
+            self.read_only and "  (read-only)" or ""
         )
 
     def get(self, obj):
@@ -329,7 +329,7 @@ class PyQtMethod(object):
 
         self.__doc__ = "%s(%s)%s" % (
             self.name, params,
-           self.returnType and (" -> %s" % self.returnType) or ""
+            self.returnType and (" -> %s" % self.returnType) or ""
         )
 
     def instancemethod(self):

@@ -127,7 +127,7 @@ class PythonHighlighter(QtGui.QSyntaxHighlighter):
 
         self.rules = []
         self.rules += map(lambda s: (QtCore.QRegExp(r"\b" + s + r"\b"),
-                          self.keywordFormat), self.keywords)
+                                     self.keywordFormat), self.keywords)
 
         self.rules.append((QtCore.QRegExp(r"\b[A-Za-z_]+\(.*\)"), self.callableFormat))
         self.rules.append((QtCore.QRegExp(r"\b__[a-z]+__\b"), self.magicFormat))
@@ -172,7 +172,7 @@ class QtQmlHighlighter(PythonHighlighter):
 
         self.rules = []
         self.rules += map(lambda s: (QtCore.QRegExp(r"\b" + s + r"\b"),
-                          self.keywordFormat), self.keywords)
+                                     self.keywordFormat), self.keywords)
 
         self.rules.append((QtCore.QRegExp(r"\b[A-Za-z_]+\(.*\)"), self.callableFormat))
         # self.rules.append((QtCore.QRegExp(r"\b__[a-z]+__\b"), self.magicFormat))

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QComboBox
 import krita
 
+
 class FilterComboBox(QComboBox):
 
     def __init__(self, uiFilterManager, parent=None):

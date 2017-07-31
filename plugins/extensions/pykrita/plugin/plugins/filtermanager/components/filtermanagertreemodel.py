@@ -26,7 +26,7 @@ class FilterManagerTreeModel(QAbstractItemModel):
         else:
             parentItem = self.rootItem
 
-        #It's a FilterManagerTreeItem
+        # It's a FilterManagerTreeItem
         childItem = parentItem.child(row)
         if childItem:
             return self.createIndex(row, column, childItem)

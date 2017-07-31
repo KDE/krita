@@ -309,6 +309,7 @@ KoShape::~KoShape()
 
 KoShape *KoShape::cloneShape() const
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "not implemented!");
     return 0;
 }
 

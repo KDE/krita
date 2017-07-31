@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_name_server.h"
+#include "KisImportExportUtils.h"
 
-KisNameServer::KisNameServer(qint32 seed)
-{
-    m_generator = seed;
+namespace KritaUtils {
+
 }
-
-KisNameServer::KisNameServer(const KisNameServer &rhs)
-    : m_generator(rhs.m_generator)
-{
-}
-
-KisNameServer::~KisNameServer()
-{
-}
-
-qint32 KisNameServer::currentSeed() const
-{
-    return m_generator;
-}
-
-qint32 KisNameServer::number()
-{
-    return m_generator++;
-}
-
-void KisNameServer::rollback()
-{
-    m_generator--;
-}
-

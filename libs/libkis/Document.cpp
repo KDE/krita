@@ -430,9 +430,11 @@ void Document::crop(int x, int y, int w, int h)
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
 {
     if (!d->document) return false;
-    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename);
-    d->document->setOutputMimeType(mimeType.toLatin1());
-    return d->document->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration.configuration());
+
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QByteArray outputFormat = outputFormatString.toLatin1();
+
+    return d->document->exportDocument(QUrl::fromLocalFile(filename), outputFormat, exportConfiguration.configuration());
 }
 
 void Document::flatten()
@@ -490,13 +492,17 @@ void Document::shearImage(double angleX, double angleY)
 bool Document::save()
 {
     if (!d->document) return false;
-    return d->document->save();
+    return d->document->save(true, 0);
 }
 
 bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
-    return d->document->saveAs(QUrl::fromLocalFile(filename));
+
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QByteArray outputFormat = outputFormatString.toLatin1();
+
+    return d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);
 }
 
 Node* Document::createNode(const QString &name, const QString &nodeType)

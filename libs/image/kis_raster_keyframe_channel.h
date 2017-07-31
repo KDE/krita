@@ -26,7 +26,7 @@ class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
 
 public:
     KisRasterKeyframeChannel(const KoID& id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds);
-    KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisNodeWSP newParentNode, const KisPaintDeviceWSP newPaintDevice);
+    KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNode *newParentNode, const KisPaintDeviceWSP newPaintDevice);
     ~KisRasterKeyframeChannel() override;
 
 public:

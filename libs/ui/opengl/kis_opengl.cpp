@@ -44,6 +44,7 @@ namespace
     int glMajorVersion = 0;
     int glMinorVersion = 0;
     bool supportsDeprecatedFunctions = false;
+    bool isOpenGLES = false;
 
     QString Renderer;
 }
@@ -98,9 +99,11 @@ void KisOpenGL::initialize()
     glMajorVersion = context.format().majorVersion();
     glMinorVersion = context.format().minorVersion();
     supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
+    isOpenGLES = context.isOpenGLES();
 
     qDebug() << "     Version:" << glMajorVersion << "." << glMinorVersion;
     qDebug() << "     Supports deprecated functions" << supportsDeprecatedFunctions;
+    qDebug() << "     is OpenGL ES:" << isOpenGLES;
 
     initialized = true;
 }
@@ -179,6 +182,12 @@ bool KisOpenGL::hasOpenGL3()
 {
     initialize();
     return (glMajorVersion * 100 + glMinorVersion) >= 302;
+}
+
+bool KisOpenGL::hasOpenGLES()
+{
+    initialize();
+    return isOpenGLES;
 }
 
 bool KisOpenGL::supportsFenceSync()

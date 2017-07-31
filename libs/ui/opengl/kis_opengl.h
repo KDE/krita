@@ -51,6 +51,7 @@ public:
 
     static bool supportsLoD();
     static bool hasOpenGL3();
+    static bool hasOpenGLES();
 
     /// Check for OpenGL
     static bool hasOpenGL();

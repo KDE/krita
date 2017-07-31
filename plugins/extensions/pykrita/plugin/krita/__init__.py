@@ -32,6 +32,7 @@ builtins.Scripter = Krita.instance()
 builtins.Application = Krita.instance()
 builtins.Krita = Krita.instance()
 
+
 def qDebug(text):
     '''Use KDE way to show debug info
 
@@ -69,4 +70,3 @@ def on_pykrita_loaded():
 def on_pykrita_unloading():
     qDebug('UNLOADING PYKRITA')
     return True
-

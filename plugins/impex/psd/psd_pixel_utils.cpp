@@ -659,10 +659,10 @@ void writePixelDataCommon(QIODevice *io,
             int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
 
             quint8 *holder = 0;
-            qSwap(holder, tmp[channelIndex]);
+            std::swap(holder, tmp[channelIndex]);
 
             if (ch->channelType() == KoChannelInfo::ALPHA) {
-                qSwap(holder, alphaPlanePtr);
+                std::swap(holder, alphaPlanePtr);
             } else {
                 planes.append(holder);
             }

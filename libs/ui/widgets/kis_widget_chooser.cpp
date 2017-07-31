@@ -178,7 +178,7 @@ QLayout* KisWidgetChooser::createPopupLayout()
 
 void KisWidgetChooser::removeWidget(const QString& id)
 {
-    Iterator data = qFind(m_widgets.begin(), m_widgets.end(), Data(id));
+    Iterator data = std::find(m_widgets.begin(), m_widgets.end(), Data(id));
 
     if(data != m_widgets.end()) {
         if(!data->choosen) {
@@ -223,7 +223,7 @@ QWidget* KisWidgetChooser::chooseWidget(const QString& id)
 
 QWidget* KisWidgetChooser::getWidget(const QString& id) const
 {
-    ConstIterator data = qFind(m_widgets.begin(), m_widgets.end(), Data(id));
+    ConstIterator data = std::find(m_widgets.begin(), m_widgets.end(), Data(id));
 
     if(data != m_widgets.end())
         return data->widget;

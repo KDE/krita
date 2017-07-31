@@ -186,6 +186,8 @@ void QMic::connected()
     msg.resize(remaining);
     int got = 0;
     char* uMsgBuf = msg.data();
+    // FIXME: Should use read transaction for Qt >= 5.7:
+    //        https://doc.qt.io/qt-5/qdatastream.html#using-read-transactions
     do {
         got = ds.readRawData(uMsgBuf, remaining);
         remaining -= got;
@@ -286,13 +288,27 @@ void QMic::connected()
 
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
+    // HACK: Make sure QDataStream does not refuse to write!
+    // Proper fix: Change the above read to use read transaction
+    ds.resetStatus();
     ds.writeBytes(ba.constData(), ba.length());
+    // Flush the socket because we might not return to the event loop!
+    if (!socket->waitForBytesWritten(2000)) {
+        qWarning() << "Failed to write response:" << socket->error();
+    }
 
     // Wait for the ack
     bool r = true;
-    r &= socket->waitForReadyRead(); // wait for ack
+    r &= socket->waitForReadyRead(2000); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
-    socket->waitForDisconnected(-1);
+    if (!socket->waitForDisconnected(2000)) {
+        qWarning() << "Remote not disconnected:" << socket->error();
+        // Wait again
+        socket->disconnectFromServer();
+        if (socket->waitForDisconnected(2000)) {
+            qWarning() << "Disconnect timed out:" << socket->error();
+        }
+    }
 
 }
 
@@ -402,7 +418,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
     KisNodeListSP layers = mapper.inputNodes(m_inputMode);
 
     m_gmicApplicator->setProperties(m_view->image(), rootNode, images, actionName, layers);
-    slotStartProgressReporting();
     m_gmicApplicator->preview();
     m_gmicApplicator->finish();
 }

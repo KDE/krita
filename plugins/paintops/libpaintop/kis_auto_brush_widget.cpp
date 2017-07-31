@@ -189,6 +189,12 @@ void KisAutoBrushWidget::paramChanged()
     m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();
 
+    drawBrushPreviewArea();
+
+    emit sigBrushChanged();
+}
+
+void KisAutoBrushWidget::drawBrushPreviewArea() {
     QImage pi(m_brush);
     double coeff = 1.0;
     int bPw = brushPreview->width() - 3;
@@ -205,8 +211,6 @@ void KisAutoBrushWidget::paramChanged()
 
     QPixmap p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
-
-    emit sigBrushChanged();
 }
 
 void KisAutoBrushWidget::setStackedWidget(int index)
@@ -268,6 +272,8 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     }
 
     btnAntialiasing->setChecked(aBrush->maskGenerator()->antialiasEdges());
+
+    drawBrushPreviewArea(); // sync up what the brush preview area looks like
 }
 
 

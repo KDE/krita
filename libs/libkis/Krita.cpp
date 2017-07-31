@@ -29,6 +29,7 @@
 #include <KoDockRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoColorModelStandardIds.h>
+#include <KoID.h>
 
 #include <kis_filter_strategy.h>
 #include <kactioncollection.h>
@@ -159,7 +160,7 @@ QList<Document *> Krita::documents() const
 QStringList Krita::filters() const
 {
     QStringList ls = KisFilterRegistry::instance()->keys();
-    qSort(ls);
+    std::sort(ls.begin(), ls.end());
     return ls;
 }
 
@@ -174,6 +175,26 @@ Filter *Krita::filter(const QString &name) const
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
+}
+
+QStringList Krita::colorModels() const
+{
+    QSet<QString> colorModelsIds;
+    QList<KoID> ids = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(KoID id, ids) {
+        colorModelsIds << id.id();
+    }
+    return colorModelsIds.toList();;
+}
+
+QStringList Krita::colorDepths(const QString &colorModel) const
+{
+    QSet<QString> colorDepthsIds;
+    QList<KoID> ids = KoColorSpaceRegistry::instance()->colorDepthList(colorModel, KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(KoID id, ids) {
+        colorDepthsIds << id.id();
+    }
+    return colorDepthsIds.toList();;
 }
 
 QStringList Krita::filterStrategies() const
@@ -278,6 +299,18 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
     return resources;
 }
 
+QStringList Krita::recentDocuments() const
+{
+    KConfigGroup grp = KSharedConfig::openConfig()->group(QString("RecentFiles"));
+    QStringList keys = grp.keyList();
+    QStringList recentDocuments;
+
+    for(int i = 0; i <= keys.filter("File").count(); i++)
+        recentDocuments << grp.readEntry(QString("File%1").arg(i), QString(""));
+
+    return recentDocuments;
+}
+
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)
 {
     KisDocument *document = KisPart::instance()->createDocument();
@@ -313,7 +346,6 @@ Window* Krita::openWindow()
     KisMainWindow *mw = KisPart::instance()->createMainWindow();
     return new Window(mw);
 }
-
 
 Action *Krita::createAction(const QString &id, const QString &text)
 {
@@ -391,4 +423,3 @@ QObject *Krita::fromVariant(const QVariant& v)
     else
         return 0;
 }
-

@@ -2,6 +2,7 @@ add_subdirectory(tests)
 
 set(kritastore_LIB_SRCS
     KoDirectoryStore.cpp
+    KoStoreDevice.cpp
     KoLZF.cpp
     KoStore.cpp
     KoXmlNS.cpp

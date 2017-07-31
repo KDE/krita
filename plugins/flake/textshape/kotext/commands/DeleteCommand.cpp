@@ -374,7 +374,7 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
     }
 
     // Now lets deal with KoSectionModel
-    qSort(m_sectionsToRemove.begin(), m_sectionsToRemove.end());
+    std::sort(m_sectionsToRemove.begin(), m_sectionsToRemove.end());
     deleteSectionsFromModel();
 }
 

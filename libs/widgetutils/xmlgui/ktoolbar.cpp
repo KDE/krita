@@ -340,7 +340,7 @@ QMenu *KToolBar::Private::contextMenu(const QPoint &globalPos)
         QList<int> avSizes;
         avSizes << 16 << 22 << 24 << 32 << 48 << 64 << 128 << 256;
 
-        qSort(avSizes);
+        std::sort(avSizes.begin(), avSizes.end());
 
         if (avSizes.count() < 10) {
             // Fixed or threshold type icons

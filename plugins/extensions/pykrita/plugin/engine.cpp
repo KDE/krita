@@ -201,6 +201,7 @@ PyKrita::Engine::~Engine()
         Py_DECREF(m_sessionConfiguration);
     }
 
+    Python::maybeFinalize();
     Python::libraryUnload();
     s_engine_instance = 0;
 }
@@ -222,25 +223,26 @@ void PyKrita::Engine::unloadAllModules()
 QString PyKrita::Engine::tryInitializeGetFailureReason()
 {
     dbgScript << "Construct the Python engine for Python" << PY_MAJOR_VERSION << "," << PY_MINOR_VERSION;
-    if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
-        return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");
-    }
 
-    Python::libraryLoad();
-    Python py = Python();
+    if (!Python::libraryLoad()) {
+        return i18nc("@info:tooltip ", "Cannot load Python library");
+    }
 
     // Update PYTHONPATH
     // 0) custom plugin directories (prefer local dir over systems')
     // 1) shipped krita module's dir
-    // 2) w/ site_packages/ dir of the Python
     QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
-    pluginDirectories << KoResourcePaths::locate("appdata", "plugins/pykrita/")
-                      << QLatin1String(PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR)
-            ;
     dbgScript << "Plugin Directories: " << pluginDirectories;
-    if (!py.prependPythonPaths(pluginDirectories)) {
-        return i18nc("@info:tooltip ", "Cannot update Python paths");
+    if (!Python::setPath(pluginDirectories)) {
+        return i18nc("@info:tooltip ", "Cannot set Python paths");
     }
+
+    if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
+        return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");
+    }
+
+    Python::ensureInitialized();
+    Python py = Python();
 
     PyRun_SimpleString(
         "import sip\n"

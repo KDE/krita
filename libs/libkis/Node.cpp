@@ -321,7 +321,6 @@ Node* Node::parentNode() const
 QString Node::type() const
 {
     if (!d->node) return QString();
-    return QString();
     if (qobject_cast<const KisPaintLayer*>(d->node)) {
         return "paintlayer";
     }
@@ -358,6 +357,7 @@ QString Node::type() const
     if (qobject_cast<const KisColorizeMask*>(d->node)) {
         return "colorizemask";
     }
+    return QString();
 }
 
 bool Node::visible() const

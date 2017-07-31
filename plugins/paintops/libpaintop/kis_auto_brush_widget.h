@@ -58,6 +58,8 @@ public:
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
 
+    void drawBrushPreviewArea();
+
 private Q_SLOTS:
     void paramChanged();
     void setStackedWidget(int);

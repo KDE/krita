@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=colorspace
+X-Python-2-Compatible=false
+Name=Color Space
+Name[en_GB]=Color Space
+Name[pt]=Espaço de Cor
+Comment=Plugin to change color space to selected documents
+Comment[en_GB]=Plugin to change color space to selected documents
+Comment[pt]='Plugin' para alterar o espaço de cor de documentos selecionados

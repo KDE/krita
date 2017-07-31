@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=documenttools
+X-Python-2-Compatible=false
+Name=Document Tools
+Name[en_GB]=Document Tools
+Name[pt]=Ferramentas de Documento
+Comment=Plugin to manipulate properties of selected documents
+Comment[en_GB]=Plugin to manipulate properties of selected documents
+Comment[pt]='Plugin' para manipular propriedades de documentos selecionados

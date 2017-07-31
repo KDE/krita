@@ -78,7 +78,7 @@ public:
             result->addPath(t.map(pathShape->outline()));
         } else if (const KoShapeGroup *groupShape = dynamic_cast<const KoShapeGroup*>(shape)) {
             QList<KoShape*> shapes = groupShape->shapes();
-            qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+            std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
             Q_FOREACH (const KoShape *child, shapes) {
                 collectShapePath(result, child);
@@ -96,7 +96,7 @@ public:
         clipPath = QPainterPath();
         clipPath.setFillRule(Qt::WindingFill);
 
-        qSort(clipShapes.begin(), clipShapes.end(), KoShape::compareShapeZIndex);
+        std::sort(clipShapes.begin(), clipShapes.end(), KoShape::compareShapeZIndex);
 
         Q_FOREACH (KoShape *path, clipShapes) {
             if (!path) continue;

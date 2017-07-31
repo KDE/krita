@@ -22,7 +22,6 @@
 #include <QProgressDialog>
 #include <QEventLoop>
 
-#include <KoUpdater.h>
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_painter.h"
@@ -31,42 +30,21 @@
 
 struct KisAnimationExporter::Private
 {
-    Private(KisImageSP _image, int fromTime, int toTime, KoUpdaterPtr _updater)
-        : updater(_updater)
-        , image(_image)
-        , firstFrame(fromTime)
-        , lastFrame(toTime)
+    Private(KisImageSP _image)
+        : image(_image)
         , currentFrame(-1)
-        , batchMode(!updater)
-        , isCancelled(false)
-        , status(KisImportExportFilter::OK)
         , tmpDevice(new KisPaintDevice(image->colorSpace()))
     {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(bool(updater) == !batchMode);
     }
 
-    KoUpdaterPtr updater;
     KisImageWSP image;
-
-    int firstFrame;
-    int lastFrame;
     int currentFrame;
-
-    bool batchMode;
-    bool isCancelled;
-
-    KisImportExportFilter::ConversionStatus status;
-
     SaveFrameCallback saveFrameCallback;
-
     KisPaintDeviceSP tmpDevice;
-
-    QProgressDialog progress;
-
 };
 
-KisAnimationExporter::KisAnimationExporter(KisImageWSP image, int fromTime, int toTime, KoUpdaterPtr updater)
-    : m_d(new Private(image, fromTime, toTime, updater))
+KisAnimationExporter::KisAnimationExporter(KisImageWSP image)
+    : m_d(new Private(image))
 {
     connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady(int)),
             this, SLOT(frameReadyToCopy(int)), Qt::DirectConnection);
@@ -84,61 +62,10 @@ void KisAnimationExporter::setSaveFrameCallback(SaveFrameCallback func)
     m_d->saveFrameCallback = func;
 }
 
-KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
+void KisAnimationExporter::startFrameRegeneration(int time)
 {
-
-    if (!m_d->batchMode) {
-        QString message = i18n("Preparing to export frames...");
-
-        m_d->progress.reset();
-        m_d->progress.setLabelText(message);
-        m_d->progress.setWindowModality(Qt::ApplicationModal);
-        m_d->progress.setCancelButton(0);
-        m_d->progress.setMinimumDuration(0);
-        m_d->progress.setValue(0);
-        m_d->progress.setMinimum(0);
-        m_d->progress.setMaximum(100);
-    }
-
-    if (m_d->updater) {
-        m_d->updater->setProgress(0);
-    }
-
-    /**
-     * HACK ALERT: Here we remove the image lock! We do it in a GUI
-     *             thread under the barrier lock held, so it is
-     *             guaranteed no other stroke will accidentally be
-     *             started by this. And showing an app-modal dialog to
-     *             the user will prevent him from doing anything
-     *             nasty.
-     */
-    KisImageLockHijacker badGuy(m_d->image);
-    Q_UNUSED(badGuy);
-
-    KIS_ASSERT_RECOVER(!m_d->image->locked()) { return KisImportExportFilter::InternalError; }
-
-    m_d->status = KisImportExportFilter::OK;
-    m_d->currentFrame = m_d->firstFrame;
+    m_d->currentFrame = time;
     m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
-
-    QEventLoop loop;
-    loop.connect(this, SIGNAL(sigFinished()), SLOT(quit()));
-    loop.exec();
-
-    if (!m_d->batchMode) {
-        m_d->progress.reset();
-    }
-
-    if (m_d->updater) {
-        m_d->updater->setProgress(100);
-    }
-
-    return m_d->status;
-}
-
-void KisAnimationExporter::cancel()
-{
-    m_d->isCancelled = true;
 }
 
 void KisAnimationExporter::frameReadyToCopy(int time)
@@ -153,43 +80,18 @@ void KisAnimationExporter::frameReadyToCopy(int time)
 
 void KisAnimationExporter::frameReadyToSave()
 {
-    KIS_ASSERT_RECOVER(m_d->saveFrameCallback) {
-        m_d->status = KisImportExportFilter::InternalError;
-        emit sigFinished();
-        return;
-    }
-
-    // TODO: refactor to a signal!
-    if (m_d->isCancelled || (m_d->updater && m_d->updater->interrupted())) {
-        m_d->status = KisImportExportFilter::UserCancelled;
-        emit sigFinished();
-        return;
-    }
-
     KisImportExportFilter::ConversionStatus result =
         KisImportExportFilter::OK;
-    int time = m_d->currentFrame;
 
-    result = m_d->saveFrameCallback(time, m_d->tmpDevice);
+    result = m_d->saveFrameCallback(m_d->currentFrame, m_d->tmpDevice);
 
-    if (m_d->updater) {
-        int length = m_d->lastFrame - m_d->firstFrame;
-        m_d->updater->setProgress((time - m_d->firstFrame) * 100 / length);
-    }
-
-    // TODO: make translatable!!
-    QString dialogText = QString("Exporting Frame ").append(QString::number(time)).append(" of ").append(QString::number(m_d->lastFrame));
-    int percentageProcessed = (float(time) / float(m_d->lastFrame) * 100);
-
-    m_d->progress.setLabelText(dialogText);
-    m_d->progress.setValue(int(percentageProcessed));
-
-    if (result == KisImportExportFilter::OK && time < m_d->lastFrame) {
-        m_d->currentFrame = time + 1;
-        m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
+    if (result == KisImportExportFilter::OK) {
+        emit sigFramePrepared(m_d->currentFrame);
     } else {
-        m_d->status = result;
-        emit sigFinished();
+        emit sigFrameFailed(m_d->currentFrame, result);
     }
+
+    m_d->currentFrame = -1;
+    m_d->tmpDevice.clear();
 }
 

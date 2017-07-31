@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "kritaui_export.h"
 #include <KisImportExportFilter.h>
+#include "kis_time_range.h"
 
 /**
  * @brief The KisAnimationExportSaver class
@@ -48,6 +49,15 @@ public:
 
 private:
     KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame);
+
+    KisImportExportFilter::ConversionStatus exportAnimationWithProgress();
+
+    void tryInitiateFrameRendering();
+    void updateProgressStatus();
+
+private Q_SLOTS:
+    void slotFrameRenderingCompleted(int time);
+    void slotFrameRenderingFailed(int time, KisImportExportFilter::ConversionStatus status);
 
 private:
     struct Private;

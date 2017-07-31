@@ -37,23 +37,23 @@ class KRITAUI_EXPORT KisAnimationExporter : public QObject
 public:
     typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP)> SaveFrameCallback;
 public:
-    KisAnimationExporter(KisImageWSP image, int fromTime, int toTime, KoUpdaterPtr updater);
+    KisAnimationExporter(KisImageWSP image);
     ~KisAnimationExporter() override;
 
-    void setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration);
-    KisImportExportFilter::ConversionStatus exportAnimation();
-
+    void startFrameRegeneration(int time);
     void setSaveFrameCallback(SaveFrameCallback func);
 
 Q_SIGNALS:
     // Internal, used for getting back to main thread
     void sigFrameReadyToSave();
-    void sigFinished();
+
+    // Public, notify about the result
+    void sigFramePrepared(int time);
+    void sigFrameFailed(int time, KisImportExportFilter::ConversionStatus status);
 
 private Q_SLOTS:
     void frameReadyToCopy(int time);
     void frameReadyToSave();
-    void cancel();
 
 private:
     struct Private;

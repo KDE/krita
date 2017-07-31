@@ -112,7 +112,7 @@ void DocumentManager::newDocument(const QVariantMap& options)
 void DocumentManager::delayedNewDocument()
 {
     d->document = KisPart::instance()->createDocument();
-    d->document->setProgressProxy(d->proxy);
+
     if (qAppName().contains("sketch")) {
         d->document->setFileBatchMode(true);
     }
@@ -189,7 +189,6 @@ void DocumentManager::openDocument(const QString& document, bool import)
 void DocumentManager::delayedOpenDocument()
 {
     d->document = KisPart::instance()->createDocument();
-    d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setFileBatchMode(true);
     }
@@ -246,19 +245,19 @@ void DocumentManager::closeDocument()
 
 bool DocumentManager::save()
 {
-    if (d->document->save())
-    {
-        d->recentFileManager->addRecent(d->document->url().toLocalFile());
-        d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
-        emit documentSaved();
-        return true;
-    }
+//    if (d->document->save())
+//    {
+//        d->recentFileManager->addRecent(d->document->url().toLocalFile());
+//        d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
+//        emit documentSaved();
+//        return true;
+//    }
     return false;
 }
 
 void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 {
-    d->document->setOutputMimeType(mimetype.toLatin1());
+    d->document->setMimeType(mimetype.toLatin1());
     d->saveAsFilename = filename;
     // Yes. This is a massive hack. Basically, we need to wait a little while, to ensure
     // the save call happens late enough for a variety of UI things to happen first.
@@ -269,7 +268,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
+    //d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();

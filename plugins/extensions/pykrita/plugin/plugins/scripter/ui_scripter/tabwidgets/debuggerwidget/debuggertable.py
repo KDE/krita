@@ -25,7 +25,7 @@ class DebuggerTable(QTableWidget):
             for scope_key in all_variables:
                 for item in all_variables[scope_key]:
                     for key, value in item.items():
-                        row  = self.rowCount()
+                        row = self.rowCount()
                         self.insertRow(row)
                         self.setItem(row, 0, QTableWidgetItem(str(scope_key)))
                         self.setItem(row, 1, QTableWidgetItem(key))

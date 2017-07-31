@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=filtermanager
+X-Python-2-Compatible=false
+Name=Filter Manager
+Name[en_GB]=Filter Manager
+Name[pt]=Gerenciador de filtro
+Comment=Plugin to filters management
+Comment[en_GB]=Plugin to filters management
+Comment[pt]='Plugin' para gerenciamento de filtros

@@ -27,6 +27,9 @@
 #include <kis_types.h>
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
+#include <widgets/kis_paintop_presets_save.h>
+#include "widgets/kis_paintop_presets_popup.h"
+#include "kis_favorite_resource_manager.h"
 
 class QString;
 class KisCanvasResourceProvider;
@@ -42,16 +45,15 @@ class KisPaintOpPresetsPopup : public QWidget
 
 public:
 
-    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent = 0);
+    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
+                           KisFavoriteResourceManager* favoriteResourceManager,
+                           KisPresetSaveWidget* savePresetWidget,
+                           QWidget * parent = 0);
 
     ~KisPaintOpPresetsPopup() override;
 
     void setPaintOpSettingsWidget(QWidget * widget);
 
-    /**
-     * @return the name entered in the preset name lineedit
-     */
-    QString getPresetName() const;
 
     ///Image for preset preview
     ///@return image cut out from the scratchpad
@@ -63,7 +65,7 @@ public:
 
     /// returns the internal ID for the paint op (brush engine)
     QString currentPaintOpId();
-    
+
     ///fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
     ///@param image image that will be used, should be image of an existing preset resource
     void setPresetImage(const QImage& image);
@@ -76,23 +78,30 @@ public:
 
     void currentPresetChanged(KisPaintOpPresetSP  preset);
 
+    KisPresetSaveWidget * saveDialog;
+
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;
     void hideEvent(QHideEvent *) override;
     void showEvent(QShowEvent *) override;
 
 public Q_SLOTS:
-    void slotWatchPresetNameLineEdit();
     void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
     void updateThemedIcons();
 
+
+    void slotUpdatePresetSettings();
     void slotUpdateLodAvailability();
+    void slotRenameBrushActivated();
+    void slotRenameBrushDeactivated();
+    void slotSaveRenameCurrentBrush();
 
 Q_SIGNALS:
     void savePresetClicked();
+    void saveBrushPreset();
     void defaultPresetClicked();
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
@@ -110,6 +119,8 @@ private Q_SLOTS:
     void slotSwitchShowEditor(bool visible);
     void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);
+    void slotSaveBrushPreset();
+    void slotSaveNewBrushPreset();
 
 
 
@@ -119,6 +130,8 @@ private:
     Private * const m_d;
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
+    void toggleBrushRenameUIActive(bool isRenaming);
+    void calculateShowingTopArea();
 
 };
 

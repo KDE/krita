@@ -41,3 +41,4 @@ class LastDocumentsListModel(QAbstractListModel):
             document = self.kritaInstance.openDocument(path)
             if document:
                 self.recentDocuments.append(document.thumbnail(70, 60))
+                document.close()

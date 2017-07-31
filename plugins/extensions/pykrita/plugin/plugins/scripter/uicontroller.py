@@ -75,7 +75,7 @@ class UIController(object):
         modules = []
 
         for class_path in actions_module.action_classes:
-            _module, _klass =  class_path.rsplit('.', maxsplit=1)
+            _module, _klass = class_path.rsplit('.', maxsplit=1)
             modules.append(dict(module='{0}.{1}'.format(module_path, _module),
                                 klass=_klass))
 
@@ -95,7 +95,7 @@ class UIController(object):
         modules = []
 
         for classPath in widgetsModule.widgetClasses:
-            _module, _klass =  classPath.rsplit('.', maxsplit=1)
+            _module, _klass = classPath.rsplit('.', maxsplit=1)
             modules.append(dict(module='{0}.{1}'.format(modulePath, _module),
                                 klass=_klass))
 
@@ -167,7 +167,6 @@ class UIController(object):
                 writeSettings()
 
         self.scripter.settings.endGroup()
-
 
     def _readSettings(self):
         """ It's similar to _writeSettings, but reading the settings when the ScripterDialog is closed. """

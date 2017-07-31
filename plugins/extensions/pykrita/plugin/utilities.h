@@ -59,12 +59,29 @@ public:
     ~Python();
 
     /**
-     * Load the Python interpreter.
+     * Load the Python shared library. This does nothing on Windows.
      */
-    static void libraryLoad();
+    static bool libraryLoad();
 
     /**
-     * Unload the Python interpreter.
+     * Set the Python paths by calling Py_SetPath. This should be called before
+     * initialization to ensure the proper libraries get loaded.
+     */
+    static bool setPath(const QStringList& paths);
+
+    /**
+     * Make sure the Python interpreter is initialized. Ideally should be only
+     * called once.
+     */
+    static void ensureInitialized();
+
+    /**
+     * Finalize the Python interpreter. Not gauranteed to work.
+     */
+    static void maybeFinalize();
+
+    /**
+     * Unload the Python shared library. This does nothing on Windows.
      */
     static void libraryUnload();
 

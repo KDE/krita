@@ -1,4 +1,4 @@
-find_package(PythonLibrary)
+# PythonLibrary should've been found in the root CMakeLists.txt
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"
     URL "http://www.python.org"

@@ -7,6 +7,7 @@ from PyQt5.QtGui import QSyntaxHighlighter
 
 
 class PythonHighlighter (QSyntaxHighlighter):
+
     """Syntax highlighter for the Python language.
     """
     # Python keywords
@@ -53,11 +54,11 @@ class PythonHighlighter (QSyntaxHighlighter):
 
         # Keyword, operator, and brace rules
         rules += [(r'\b%s\b' % w, 0, 'keyword')
-            for w in PythonHighlighter.keywords]
+                  for w in PythonHighlighter.keywords]
         rules += [(r'%s' % o, 0, 'operator')
-            for o in PythonHighlighter.operators]
+                  for o in PythonHighlighter.operators]
         rules += [(r'%s' % b, 0, 'brace')
-            for b in PythonHighlighter.braces]
+                  for b in PythonHighlighter.braces]
 
         # All other rules
         rules += [
@@ -85,8 +86,7 @@ class PythonHighlighter (QSyntaxHighlighter):
 
         # Build a QRegExp for each pattern
         self.rules = [(QRegExp(pat), index, identifier)
-            for (pat, index, identifier) in rules]
-
+                      for (pat, index, identifier) in rules]
 
     def highlightBlock(self, text):
         """Apply syntax highlighting to the given block of text."""
@@ -107,7 +107,6 @@ class PythonHighlighter (QSyntaxHighlighter):
         in_multiline = self.match_multiline(text, *self.tri_single)
         if not in_multiline:
             in_multiline = self.match_multiline(text, *self.tri_double)
-
 
     def match_multiline(self, text, delimiter, in_state, style):
         """Do highlighting of multi-line strings. ``delimiter`` should be a

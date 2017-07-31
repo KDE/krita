@@ -86,6 +86,7 @@ public Q_SLOTS:
     void fillGradient();
     void fillBackground();
     void fillLayer();
+    void fillTransparent();
 
     /**
      * Set the icon of the current preset
@@ -99,6 +100,12 @@ public Q_SLOTS:
      * \see setPresetImage
      */
     void paintPresetImage();
+
+    /**
+     * Paint the icon of a custom image that is being loaded
+     *
+     */
+    void paintCustomImage(const QImage& loadedImage);
 
 private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);

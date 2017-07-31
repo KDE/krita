@@ -21,19 +21,20 @@ Otherwise you risk major confusion.
 Note: on all operating systems the entire procedure is done in a terminal window.
 
 1. git: https://git-scm.com/downloads. Make sure git is in your path
-2. cmake 3.3.2 or later: https://cmake.org/download/. Make sure cmake is in your path.
+2. CMake 3.3.2 or later: https://cmake.org/download/. Make sure cmake is in your path.
+    * CMake 3.9 does not build Krita properly at the moment, please use 3.8 instead.
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: mingw-w64 5.4 (by mingw-builds)
-               - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/5.4.0/threads-posix/dwarf/
-               - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.4.0/threads-posix/seh/
+    * Windows: mingw-w64 7.1 (by mingw-builds)
+               - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.1.0/threads-posix/dwarf/
+               - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-posix/seh/
 
                Make sure mingw's bin folder is in your path. It might be a good
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.
 
-4. On Windows, you will also need Python 3.6: https://www.python.org. Make sure to have python.exe in your path. This version of python will be used for two things: to configure Qt and to build the python scripting module. Make sure the version you download is exactly python-3.6.1. Make sure Python is in your path.
+4. On Windows, you will also need Python 3.6.2 (technically any versions of 3.6 is fine, but it's not tested): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module. Make sure the version you download is exactly python-3.6.2. Make sure that specific version of Python comes first in your path.
 
 == Setup your environment ==
 
@@ -76,11 +77,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
         -DINSTALL_ROOT=$BUILDROOT/i
 
 
-    * Windows 32 bits:
-
-    TODO
-
-    * Windows 64 bits:
+    * Windows 32-bit / 64-bit:
 
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
@@ -89,13 +86,13 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
+- If you want to build Qt and some other dependencies with parallel jobs, add
+  `-DSUBMAKE_JOBS=<n>` to the cmake command where <n> is the number of jobs to
+  run (if your PC has 4 CPU cores, you might want to set it to 5).
+
 3. build the packages:
 
 With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
-
-If you want to use the included version of Python (can be used on Windows to build Qt instead of installing Python separately):
-
-    cmake --build . --config RelWithDebInfo --target ext_python
 
 On Windows:
 
@@ -118,13 +115,6 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
-
-On Windows:
-
-    set FFTW_LIB_DIR=%BUILDROOT%\i\lib
-    dlltool.exe -k --output-lib %FFTW_LIB_DIR%\libfftw3-3.a --input-def %FFTW_LIB_DIR%\libfftw3-3.def
-    dlltool.exe -k --output-lib %FFTW_LIB_DIR%\libfftw3f-3.a --input-def %FFTW_LIB_DIR%\libfftw3f-3.def
-    dlltool.exe -k --output-lib %FFTW_LIB_DIR%\libfftw3l-3.a --input-def %FFTW_LIB_DIR%\libfftw3l-3.def
 
 On all operating systems
 
@@ -165,6 +155,12 @@ Everywhere else:
 On Windows, if you want to include DrMingw for dumping backtrace on crash:
 
     cmake --build . --config RelWithDebInfo --target ext_drmingw
+
+On Windows, if you want to include Python scripting:
+
+    cmake --build . --config RelWithDebInfo --target ext_python
+    cmake --build . --config RelWithDebInfo --target ext_sip
+    cmake --build . --config RelWithDebInfo --target ext_pyqt
 
 Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on

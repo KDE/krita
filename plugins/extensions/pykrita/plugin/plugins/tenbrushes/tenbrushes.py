@@ -29,7 +29,7 @@ class TenBrushesExtension(krita.Extension):
     def writeSettings(self):
         presets = []
 
-        for index, button in enumerate(self.buttons):            
+        for index, button in enumerate(self.buttons):
             self.actions[index].preset = button.preset
             presets.append(button.preset)
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))

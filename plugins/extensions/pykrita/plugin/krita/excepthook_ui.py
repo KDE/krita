@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_ExceptHookDialog(object):
+
     def setupUi(self, ExceptHookDialog):
         ExceptHookDialog.setObjectName("ExceptHookDialog")
         ExceptHookDialog.resize(542, 290)
@@ -45,4 +47,3 @@ class Ui_ExceptHookDialog(object):
         self.label.setText(_translate("ExceptHookDialog", "An exception occurred while running the script."))
         self.exceptionLabel.setText(_translate("ExceptHookDialog", "Exception"))
         self.closeButton.setText(_translate("ExceptHookDialog", "&Close"))
-

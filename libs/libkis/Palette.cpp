@@ -57,6 +57,12 @@ QString Palette::comment()
     return d->palette->comment();
 }
 
+void Palette::setComment(QString comment)
+{
+    if (!d->palette) return;
+    return d->palette->setComment(comment);
+}
+
 QStringList Palette::groupNames()
 {
     if (!d->palette) return QStringList();
@@ -105,6 +111,45 @@ ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
     if (!d->palette) return 0;
     ManagedColor *color = new ManagedColor(entry.color);
     return color;
+}
+
+void Palette::addEntry(KoColorSetEntry entry, QString groupName)
+{
+    d->palette->add(entry, groupName);
+}
+
+void Palette::removeEntry(int index, const QString &groupName)
+{
+    d->palette->removeAt(index, groupName);
+}
+
+void Palette::insertEntry(int index, KoColorSetEntry entry, QString groupName)
+{
+    d->palette->insertBefore(entry, index, groupName);
+}
+
+bool Palette::editEntry(int index, KoColorSetEntry entry, QString groupName)
+{
+    return d->palette->changeColorSetEntry(entry, groupName, index);
+}
+
+bool Palette::changeGroupName(QString oldGroupName, QString newGroupName)
+{
+    return d->palette->changeGroupName(oldGroupName, newGroupName);
+}
+
+bool Palette::moveGroup(const QString &groupName, const QString &groupNameInsertBefore)
+{
+    return d->palette->moveGroup(groupName, groupNameInsertBefore);
+}
+
+bool Palette::save()
+{
+    if (d->palette->filename().size()>0) {
+        return d->palette->save();
+    }
+    //if there's no filename the palette proly doesn't even exist...
+    return false;
 }
 
 KoColorSet *Palette::colorSet()

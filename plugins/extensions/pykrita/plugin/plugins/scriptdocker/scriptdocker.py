@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QListView, QFormLayout,
-                             QHBoxLayout, QPushButton, QLineEdit)
+                             QHBoxLayout, QPushButton, QLineEdit, QListWidget)
+from PyQt5.QtCore import QObject
 import krita
 
 
@@ -20,21 +21,26 @@ class ScriptDocker(krita.DockWidget):
        self.setWidget(self.baseWidget)
 
        self.setWindowTitle("Script Docker")
-       self.addButton.clicked.connect(self.addEmptyForm)
+       self.addButton.clicked.connect(self.addNewRow)
 
     def canvasChanged(self, canvas):
         pass
 
-    def addEmptyForm(self):
+    def addNewRow(self):
         directorySelectorLayout = QHBoxLayout()
         directoryTextField = QLineEdit()
         directoryDialogButton = QPushButton("...")
+
+        directoryDialogButton.clicked.connect(self.test)
 
         directorySelectorLayout.addWidget(directoryTextField)
         directorySelectorLayout.addWidget(directoryDialogButton)
 
         self.scriptsLayout.addRow("Script {0}".format(self.scriptsLayout.rowCount() + 1), directorySelectorLayout)
 
+    def test(self):
+        obj = self.sender()
+        print('button', obj)
 
     def loadActions(self):
         pass

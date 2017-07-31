@@ -245,12 +245,28 @@ copy %BUILDDIR_SRC%\packaging\windows\krita.lnk %pkg_root%
 :: windeployqt
 %BUILDDIR_INSTALL%\bin\windeployqt.exe --release -concurrent -network -printsupport -svg -xml -multimedia %pkg_root%\bin\krita.exe
 
+:: Copy embedded Python
+xcopy /Y /S /I %BUILDDIR_INSTALL%\python %pkg_root%\python
+
 :: For chopping relative path
 :: 512 should be enough
 :: n+2 to also account for a trailing backslash
 setlocal enableextensions enabledelayedexpansion
 for /L %%n in (1 1 512) do if "!pkg_root:~%%n,1!" neq "" set /a "pkg_root_len_plus_one=%%n+2"
 endlocal & set pkg_root_len_plus_one=%pkg_root_len_plus_one%
+
+echo.
+setlocal enableextensions enabledelayedexpansion
+:: Remove Python cache files
+for /d /r "%pkg_root%" %%F in (__pycache__\) do (
+	if EXIST "%%F" (
+		set relpath=%%F
+		set relpath=!relpath:~%pkg_root_len_plus_one%!
+		echo Deleting Python cache !relpath!
+		rmdir /S /Q "%%F"
+	)
+)
+endlocal
 
 echo.
 echo Splitting debug info from binaries...
@@ -280,8 +296,10 @@ echo.
 echo Krita packaged as %pkg_name%.zip
 if exist %pkg_name%-dbg.zip echo Debug info packaged as %pkg_name%-dbg.zip
 echo Packaging dir is %pkg_root%
-echo NOTE: Do not create installer with packaging dir unless you removed all debug
-echo       info from it!
+echo NOTE: Do not create installer with packaging dir. Extract from
+echo           %pkg_name%.zip instead,
+echo       and do _not_ run krita inside the extracted directory because it will
+echo       create extra unnecessary files.
 echo.
 echo Please remember to actually test the package before releasing it.
 echo.

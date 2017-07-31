@@ -29,23 +29,6 @@
 class KisDocument;
 
 /**
- * @brief The KisAnimationExporterUI class
- */
-class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    KisAnimationExporterUI(QWidget *parent);
-    ~KisAnimationExporterUI() override;
-
-private:
-    struct Private;
-    QScopedPointer<Private> m_d;
-};
-
-/**
  * @brief The KisAnimationExporter class
  */
 class KRITAUI_EXPORT KisAnimationExporter : public QObject
@@ -75,37 +58,6 @@ private Q_SLOTS:
 private:
     struct Private;
     QScopedPointer<Private> m_d;
-};
-
-/**
- * @brief The KisAnimationExportSaver class
- */
-class KRITAUI_EXPORT KisAnimationExportSaver : public QObject
-{
-    Q_OBJECT
-public:
-    KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset = 0, KoUpdaterPtr updater = 0);
-    ~KisAnimationExportSaver() override;
-
-    KisImportExportFilter::ConversionStatus exportAnimation(KisPropertiesConfigurationSP cfg = 0);
-
-    /**
-     * A standard exported files mask for ffmpeg
-     */
-    QString savedFilesMask() const;
-
-    /**
-     * Wildcards are not supported ffmpeg on Windows, so they are used for QDir
-     * only.
-     */
-    QString savedFilesMaskWildcard() const;
-
-private:
-    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration = 0);
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
 };
 
 

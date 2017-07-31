@@ -18,6 +18,7 @@
 
 #include "kis_animation_exporter_test.h"
 #include "kis_animation_exporter.h"
+#include "kis_animation_export_saver.h"
 
 #include <QTest>
 #include <testutil.h>

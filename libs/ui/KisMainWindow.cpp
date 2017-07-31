@@ -137,7 +137,6 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include "kis_animation_exporter.h"
 
 #include <mutex>
 

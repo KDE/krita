@@ -32,7 +32,7 @@
 #include <kis_image_animation_interface.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <kis_animation_exporter.h>
+#include <kis_animation_export_saver.h>
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>

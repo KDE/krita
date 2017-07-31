@@ -792,8 +792,12 @@ bool KisDocument::startExportInBackground(const QString &actionName,
     d->savingImage = d->image;
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
-    d->savingUpdater = window->viewManager()->createThreadedUpdater(actionName);
-    d->importExportManager->setUpdater(d->savingUpdater);
+    if (window) {
+        if (window->viewManager()) {
+            d->savingUpdater = window->viewManager()->createThreadedUpdater(actionName);
+            d->importExportManager->setUpdater(d->savingUpdater);
+        }
+    }
 
     d->childSavingFuture =
         d->importExportManager->exportDocumentAsyc(location,

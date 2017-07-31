@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisAnimationExporter : public QObject
 {
     Q_OBJECT
 public:
-    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP, KisPropertiesConfigurationSP)> SaveFrameCallback;
+    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP)> SaveFrameCallback;
 public:
     KisAnimationExporter(KisImageWSP image, int fromTime, int toTime, KoUpdaterPtr updater);
     ~KisAnimationExporter() override;

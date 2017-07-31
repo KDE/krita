@@ -77,6 +77,7 @@ struct KisAnimationExportSaver::Private
     QByteArray outputMimeType;
 
     KisAnimationExporter exporter;
+    KisPropertiesConfigurationSP exportConfiguration;
 
     QString filenamePrefix;
     QString filenameSuffix;
@@ -97,7 +98,7 @@ KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QS
     m_d->tmpDoc->setFileBatchMode(true);
 
     using namespace std::placeholders; // For _1 placeholder
-    m_d->exporter.setSaveFrameCallback(std::bind(&KisAnimationExportSaver::saveFrameCallback, this, _1, _2, _3));
+    m_d->exporter.setSaveFrameCallback(std::bind(&KisAnimationExportSaver::saveFrameCallback, this, _1, _2));
 }
 
 KisAnimationExportSaver::~KisAnimationExportSaver()
@@ -163,11 +164,11 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation
         }
     }
 
-    m_d->exporter.setExportConfiguration(cfg);
+    m_d->exportConfiguration = cfg;
     return m_d->exporter.exportAnimation();
 }
 
-KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallback(int time, KisPaintDeviceSP frame)
 {
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
@@ -177,7 +178,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);
 
-    if (!m_d->tmpDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, exportConfiguration)) {
+    if (!m_d->tmpDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
         status = KisImportExportFilter::InternalError;
     }
 

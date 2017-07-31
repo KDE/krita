@@ -61,7 +61,6 @@ struct KisAnimationExporter::Private
 
     KisPaintDeviceSP tmpDevice;
 
-    KisPropertiesConfigurationSP exportConfiguration;
     QProgressDialog progress;
 
 };
@@ -78,11 +77,6 @@ KisAnimationExporter::KisAnimationExporter(KisImageWSP image, int fromTime, int 
 
 KisAnimationExporter::~KisAnimationExporter()
 {
-}
-
-void KisAnimationExporter::setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration)
-{
-    m_d->exportConfiguration = exportConfiguration;
 }
 
 void KisAnimationExporter::setSaveFrameCallback(SaveFrameCallback func)
@@ -176,7 +170,7 @@ void KisAnimationExporter::frameReadyToSave()
         KisImportExportFilter::OK;
     int time = m_d->currentFrame;
 
-    result = m_d->saveFrameCallback(time, m_d->tmpDevice, m_d->exportConfiguration);
+    result = m_d->saveFrameCallback(time, m_d->tmpDevice);
 
     if (m_d->updater) {
         int length = m_d->lastFrame - m_d->firstFrame;

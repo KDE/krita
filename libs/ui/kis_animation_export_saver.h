@@ -47,7 +47,7 @@ public:
     QString savedFilesMaskWildcard() const;
 
 private:
-    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration = 0);
+    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame);
 
 private:
     struct Private;

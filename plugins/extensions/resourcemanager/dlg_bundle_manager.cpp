@@ -66,6 +66,7 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     m_ui->bnDeleteBundle->setVisible(false);
+    m_ui->lblDescription->setReadOnly(true);
 
     QString knsrcFile = "kritaresourcebundles.knsrc";
     setKnsrcFile(knsrcFile);

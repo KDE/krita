@@ -37,8 +37,6 @@ public:
     static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache,
                                    const KisTimeRange &playbackRange,
                                    const KisTimeRange &skipRange);
-    static int calcNumberOfDirtyFrame(KisAnimationFrameCacheSP cache,
-                                      const KisTimeRange &playbackRange);
 
     static QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache,
                                           const KisTimeRange &playbackRange);

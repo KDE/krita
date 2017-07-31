@@ -95,11 +95,6 @@ int KisAnimationCacheRegenerator::calcFirstDirtyFrame(KisAnimationFrameCacheSP c
     return result;
 }
 
-int KisAnimationCacheRegenerator::calcNumberOfDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange)
-{
-    return calcDirtyFramesList(cache, playbackRange).size();
-}
-
 QList<int> KisAnimationCacheRegenerator::calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange)
 {
     QList<int> result;

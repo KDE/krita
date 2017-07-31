@@ -374,10 +374,12 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     modelMatrix = projectionMatrix * modelMatrix;
     d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    if (!KisOpenGL::hasOpenGLES()) {
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-    glEnable(GL_COLOR_LOGIC_OP);
-    glLogicOp(GL_XOR);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+    }
 
     KisConfig cfg;
     QColor cursorColor = cfg.getCursorMainColor();
@@ -420,7 +422,9 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         d->outlineVAO.release();
     }
 
-    glDisable(GL_COLOR_LOGIC_OP);
+    if (!KisOpenGL::hasOpenGLES()) {
+        glDisable(GL_COLOR_LOGIC_OP);
+    }
 
     d->solidColorShader->release();
 }

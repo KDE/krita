@@ -30,6 +30,10 @@
 
 #include <QElapsedTimer>
 
+#include "kis_wetmap.h"
+#include "kis_splat.h"
+#include "KoRTree.h"
+
 class KisPainter;
 
 class KisWatercolorPaintOp : public KisPaintOp
@@ -50,6 +54,12 @@ private:
     WatercolorOption m_watercolorOption;
     QElapsedTimer m_timer;
     qint16 m_lastTime;
+
+
+    KisWetMap *m_wetMap;
+    QList<KisSplat *> m_flowing;
+    KoRTree<KisSplat *> m_fixed;
+    QList<KisSplat *> m_dried;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

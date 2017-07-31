@@ -24,6 +24,8 @@
 
 #include <QVector2D>
 
+#include "kis_sequential_iterator.h"
+
 #define START_OPACITY 100
 #define STANDART_LIFETIME 60
 
@@ -35,7 +37,7 @@ double get_random(qreal min, qreal max)
 
 KisSplat::KisSplat(QPointF offset, int width, const KoColor &color)
     : m_life(STANDART_LIFETIME), m_roughness(1.f), m_flow(1.f),
-      m_motionBias(QPointF(0.f, 0.f))
+      m_motionBias(QPointF(0.f, 0.f)), m_state(Flowing)
 {
     m_initColor.fromKoColor(color);
     m_fix = 8*STANDART_LIFETIME;
@@ -62,7 +64,7 @@ KisSplat::KisSplat(QPointF offset, int width, const KoColor &color)
 KisSplat::KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
                    qreal roughness, qreal flow, qreal radialSpeed, const KoColor &color)
     : m_life(life), m_roughness(roughness), m_flow(flow),
-      m_motionBias(velocityBias)
+      m_motionBias(velocityBias), m_state(Flowing)
 {
     m_initColor.fromKoColor(color);
     m_fix = 8*STANDART_LIFETIME;
@@ -110,6 +112,23 @@ qreal KisSplat::CalcSize()
     return s >= 0 ? s : -s;
 }
 
+void KisSplat::clearOldPath(KisPaintDeviceSP dev)
+{
+//    QRect rc = m_oldPath.boundingRect().toRect();
+//    dev->clear(rc);
+    QRect rect = m_oldPath.boundingRect().toRect();
+    KisSequentialIterator it(dev, rect);
+
+    do {
+        QPoint place(it.x(), it.y());
+        if (m_oldPath.contains(place)) {
+            qint16 *mydata = reinterpret_cast<qint16*>(it.rawData());
+            mydata[0] = 0;
+        }
+    } while (it.nextPixel());
+
+}
+
 void KisSplat::doPaint(KisPainter *painter)
 {
     qreal multiply = m_initSize / CalcSize();
@@ -119,6 +138,9 @@ void KisSplat::doPaint(KisPainter *painter)
     qint8 oldOpacity = painter->opacity();
     KisPainter::FillStyle oldFillStyle = painter->fillStyle();
     KoColor oldColor = painter->paintColor();
+
+//    if (m_state == Flowing)
+//        clearOldPath(painter->device());
 
     painter->setOpacity(START_OPACITY * multiply);
     painter->setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -155,14 +177,17 @@ int KisSplat::update(KisWetMap *wetMap)
 {
     if (m_life <= 0) {
         if (m_fix <= 0) {
+            m_state = Dried;
             return KisSplat::Dried;
         } else {
+            m_state = Fixed;
             m_fix--;
             return KisSplat::Fixed;
         }
     }
 
     m_life--;
+    m_oldPath = shape();
 
     QVector<QPointF> newVertices;
     for (int i = 0; i < m_vertices.length(); i++) {
@@ -186,6 +211,7 @@ int KisSplat::update(KisWetMap *wetMap)
         }
     }
 
+    m_state = Flowing;
     return KisSplat::Flowing;
 }
 
@@ -210,7 +236,10 @@ int KisSplat::rewet(KisWetMap *wetMap, QPointF pos, qreal radius)
         }
         m_life = STANDART_LIFETIME;
         m_fix = 8*STANDART_LIFETIME;
+        m_state = Flowing;
         return KisSplat::Flowing;
-    } else
+    } else {
+        m_state = Fixed;
         return KisSplat::Fixed;
+    }
 }

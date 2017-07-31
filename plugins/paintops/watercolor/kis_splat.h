@@ -59,6 +59,7 @@ public:
 
 private:
     qreal CalcSize();
+    void clearOldPath(KisPaintDeviceSP dev);
 
     const float alpha = 0.33f;
 
@@ -75,6 +76,9 @@ private:
     KoColor m_initColor;
 
     int m_fix;
+    int m_state;
+
+    QPainterPath m_oldPath;
 };
 
 #endif

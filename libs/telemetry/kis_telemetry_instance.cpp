@@ -20,25 +20,91 @@
 #include "kis_telemetry_instance.h"
 #include <kis_assert.h>
 
-
 Q_GLOBAL_STATIC(KisTelemetryInstance, s_instance)
 
-KisTelemetryInstance *KisTelemetryInstance::instance()
+KisTelemetryInstance* KisTelemetryInstance::instance()
 {
-    return  s_instance;
+    return s_instance;
 }
 
-void KisTelemetryInstance::setProvider(KisTelemetryAbstract *provider)
+void KisTelemetryInstance::setProvider(KisTelemetryAbstract* provider)
 {
-    if(!telemetryProvider.isNull()){
-       KIS_SAFE_ASSERT_RECOVER_RETURN(false);
+    if (!telemetryProvider.isNull()) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(false);
     }
-   telemetryProvider.reset(provider);
+    telemetryProvider.reset(provider);
 }
 
-KisTelemetryAbstract *KisTelemetryInstance::provider()
+void KisTelemetryInstance::notifyToolAcion(KisTelemetryInstance::Actions action, QString id)
 {
-    if (telemetryProvider.isNull())
-        return nullptr;
-    return telemetryProvider.data();
+    if (telemetryProvider.isNull()) {
+        return;
+    }
+    switch (action) {
+    case ToolActivate: {
+        id = getToolId(id, UseMode::Activate);
+        telemetryProvider->putTimeTicket(id);
+        break;
+    }
+    case ToolDeactivate: {
+        id = getToolId(id, UseMode::Activate);
+        telemetryProvider->getTimeTicket(id);
+        break;
+    }
+    case ToolsStartUse: {
+        id = getToolId(id, UseMode::Use);
+        telemetryProvider->putTimeTicket(id);
+        break;
+    }
+    case ToolsStopUse: {
+        id = getToolId(id, UseMode::Use);
+        telemetryProvider->getTimeTicket(id);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void KisTelemetryInstance::notifySaveImageProperties(KisImagePropertiesTicket::ImageInfo imageInfo, QString id)
+{
+    if (telemetryProvider.isNull()) {
+        return;
+    }
+    telemetryProvider->saveImageProperites(id, imageInfo);
+}
+
+void KisTelemetryInstance::notifySaveActionInfo(KisActionInfoTicket::ActionInfo actionInfo, QString id)
+{
+    if (telemetryProvider.isNull()) {
+        return;
+    }
+    telemetryProvider->saveActionInfo(id, actionInfo);
+}
+
+void KisTelemetryInstance::sendData(QString path, QString adress)
+{
+    if (telemetryProvider.isNull()) {
+        return;
+    }
+    telemetryProvider->sendData(path, adress);
+}
+
+QString KisTelemetryInstance::getToolId(QString id, KisTelemetryInstance::UseMode mode)
+{
+    QString toolId = "Tool" + getUseMode(mode);
+    toolId += id;
+    return toolId;
+}
+
+QString KisTelemetryInstance::getUseMode(KisTelemetryInstance::UseMode mode)
+{
+    switch (mode) {
+    case Activate:
+        return "/Activate/";
+    case Use:
+        return "/Use/";
+    default:
+        return "/Activate/";
+    }
 }

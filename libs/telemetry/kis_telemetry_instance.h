@@ -21,21 +21,37 @@
 #define KIS_TELEMETRY_INSTANCE_H
 
 #include "kis_telemetry_abstract.h"
-#include <QScopedPointer>
 #include "kritatelemetry_export.h"
+#include <QScopedPointer>
 
 class KRITATELEMETRY_EXPORT KisTelemetryInstance {
+public:
+    enum Actions {
+        ToolActivate,
+        ToolDeactivate,
+        ToolsStartUse,
+        ToolsStopUse
+    };
+    enum UseMode {
+        Activate,
+        Use
+    };
+
 public:
     KisTelemetryInstance() = default;
     ~KisTelemetryInstance() = default;
     static KisTelemetryInstance* instance();
 
-    void setProvider(KisTelemetryAbstract *provider);
-    KisTelemetryAbstract *provider();
+    void setProvider(KisTelemetryAbstract* provider);
+    void notifyToolAcion(Actions action, QString id);
+    void notifySaveImageProperties(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
+    void notifySaveActionInfo(KisActionInfoTicket::ActionInfo imageInfo, QString id);
+    void sendData(QString path, QString adress = QString());
+    QString getToolId(QString id, UseMode mode = Activate);
 private:
-
     KisTelemetryInstance(KisTelemetryInstance const&) = delete;
     KisTelemetryInstance& operator=(KisTelemetryInstance const&) = delete;
     QScopedPointer<KisTelemetryAbstract> telemetryProvider;
+    QString getUseMode(UseMode mode);
 };
 #endif

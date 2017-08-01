@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "telemetry_tests.h"
+#include "kis_telemetry_instance.h"
 #include "plugins/telemetry/telemetry_provider.h"
 #include <QEventLoop>
 #include <QJsonDocument>
@@ -90,6 +91,34 @@ class TestTimeTickets : public QObject {
     Q_OBJECT
 
 public:
+    void notifyToolAcion(KisTelemetryInstance::Actions action, QString id)
+    {
+
+        switch (action) {
+        case KisTelemetryInstance::ToolActivate: {
+            id = KisTelemetryInstance::instance()->getToolId(id, KisTelemetryInstance::Activate);
+            m_provider->putTimeTicket(id);
+            break;
+        }
+        case KisTelemetryInstance::ToolDeactivate: {
+            id = KisTelemetryInstance::instance()->getToolId(id, KisTelemetryInstance::Activate);
+            m_provider->getTimeTicket(id);
+            break;
+        }
+        case KisTelemetryInstance::ToolsStartUse: {
+            id = KisTelemetryInstance::instance()->getToolId(id, KisTelemetryInstance::Use);
+            m_provider->putTimeTicket(id);
+            break;
+        }
+        case KisTelemetryInstance::ToolsStopUse: {
+            id = KisTelemetryInstance::instance()->getToolId(id, KisTelemetryInstance::Use);
+            m_provider->getTimeTicket(id);
+            break;
+        }
+        default:
+            break;
+        }
+    }
     TestTimeTickets()
     {
         m_provider = new TelemetryProvider();
@@ -150,14 +179,14 @@ private:
     void testUse(QString toolID, int count)
     {
         for (int i = 0; i < count; i++) {
-            m_provider->notifyToolAcion(KisTelemetryAbstract::ToolsStartUse, toolID);
+            notifyToolAcion(KisTelemetryInstance::ToolsStartUse, toolID);
             QTest::qWait(m_time[0]);
-            m_provider->notifyToolAcion(KisTelemetryAbstract::ToolsStopUse, toolID);
+            notifyToolAcion(KisTelemetryInstance::ToolsStopUse, toolID);
         }
     }
     void uncorrectCountUse(QString toolID)
     {
-        m_provider->notifyToolAcion(KisTelemetryAbstract::ToolsStartUse, toolID);
+        notifyToolAcion(KisTelemetryInstance::ToolsStartUse, toolID);
         QTest::qWait(m_time[0]);
     }
 

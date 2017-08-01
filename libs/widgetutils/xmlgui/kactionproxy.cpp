@@ -27,5 +27,5 @@ KActionProxy::KActionProxy(QObject* parent)
 
 void KActionProxy::triggered(QString name)
 {
-    KisTelemetryInstance::instance()->provider()->notifySaveActionInfo({ name, "smth" }, name);
+    KisTelemetryInstance::instance()->notifySaveActionInfo({ name, "smth" }, name);
 }

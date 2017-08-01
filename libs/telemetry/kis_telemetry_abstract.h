@@ -31,21 +31,10 @@
 
 class KRITATELEMETRY_EXPORT KisTelemetryAbstract {
 public:
-    enum Actions {
-        ToolActivate,
-        ToolDeactivate,
-        ToolsStartUse,
-        ToolsStopUse
-    };
-
-public:
     virtual void sendData(QString path, QString adress = QString()) = 0;
     virtual ~KisTelemetryAbstract() {}
-    void notifyToolAcion(Actions action, QString id);
-    void notifySaveImageProperties(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
-    void notifySaveActionInfo(KisActionInfoTicket::ActionInfo imageInfo, QString id);
 
-protected:
+public:
     virtual void getTimeTicket(QString id) = 0;
     virtual void putTimeTicket(QString id) = 0;
     virtual void saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo) = 0;
@@ -54,15 +43,7 @@ protected:
 protected:
     QString m_adress = "http://localhost:8080/";
     // QString m_adress = "http://akapustin.me:8080/";
-private:
-    enum UseMode {
-        Activate,
-        Use
-    };
 
-private:
-    QString getToolId(QString id, UseMode mode = Activate);
-    QString getUseMode(UseMode mode);
 };
 
 #endif

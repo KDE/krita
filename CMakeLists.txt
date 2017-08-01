@@ -309,7 +309,6 @@ if (NOT WIN32 AND NOT APPLE)
 
     find_package(XCB COMPONENTS XCB ATOM)
     set(HAVE_XCB ${XCB_FOUND})
-    find_package (KUserFeedback)
 else()
     set(HAVE_DBUS FALSE)
     set(HAVE_X11 FALSE)
@@ -625,6 +624,17 @@ set_package_properties(CURL PROPERTIES
     URL "http://curl.haxx.se/"
     TYPE OPTIONAL
     PURPOSE "Optionally used by the G'Mic plugin")
+
+##
+## Test for KUserFeedback
+##
+
+find_package (KUserFeedback)
+set_package_properties(KUserFeedback PROPERTIES
+    DESCRIPTION "A tool to collect telemetry"
+    URL "https://api.kde.org/frameworks/kuserfeedback/html/index.html"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used")
 
  ############################
 #############################

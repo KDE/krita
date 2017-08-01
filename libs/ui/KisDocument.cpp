@@ -742,7 +742,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             QString filename = localFilePath();
             QString colorSpace = image()->colorSpace()->name();
             QString colorProfile = image()->profile()->name();
-            KisTelemetryInstance::instance()->provider()->notifySaveImageProperties({ size, filename, colorSpace, colorProfile, numLayers }, filename);
+            KisTelemetryInstance::instance()->notifySaveImageProperties({ size, filename, colorSpace, colorProfile, numLayers }, filename);
         }
     }
 

@@ -490,8 +490,7 @@ KisMainWindow::KisMainWindow()
 
     //check fatal asserts
     try {
-        KisTelemetryAbstract* provider = KisTelemetryInstance::instance()->provider();
-        provider->sendData("asserts");
+        KisTelemetryInstance::instance()->sendData("asserts");
     }
     catch (std::exception e){
         Q_UNUSED(e);
@@ -659,11 +658,10 @@ void KisMainWindow::sendInfo()
     qDebug()<<"send_enfo"<<"\n";
     d->telemetry.reset(new KisDlgSendTelemtry(this->viewManager()));
     if(d->telemetry->exec()== QDialog::Accepted){
-        KisTelemetryAbstract* provider = KisTelemetryInstance::instance()->provider();
-        provider->sendData("install");
-        provider->sendData("tools");
-        provider->sendData("imageProperties");
-        provider->sendData("actions");
+        KisTelemetryInstance::instance()->sendData("install");
+        KisTelemetryInstance::instance()->sendData("tools");
+        KisTelemetryInstance::instance()->sendData("imageProperties");
+        KisTelemetryInstance::instance()->sendData("actions");
     };
 }
 

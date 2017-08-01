@@ -16,20 +16,35 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+* */
 
-#ifndef KIS_TELEMETRY_H
-#define KIS_TELEMETRY_H
-#include "QScopedPointer"
+#ifndef KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H
+#define KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H
+
+#include "abstractdatasource.h"
+#include "kuserfeedbackcore_export.h"
+#include "kis_telemetry_tickets.h"
+#include <QMap>
 #include <QVariant>
+#include <QSharedPointer>
 
-class KisTelemetry : public QObject {
-    Q_OBJECT
+
+namespace UserFeedback {
+
+/*! Data source reporting about image properties info
+ */
+class TelemetryImagePropertiesSource : public KUserFeedback::AbstractDataSource {
 public:
-    KisTelemetry(QObject* parent, const QVariantList&);
-    ~KisTelemetry() override;
+    TelemetryImagePropertiesSource();
+    QString description() const override;
+    QVariant data() override;
+    void removeDumpProperties(QString id);
+    void createNewImageProperties(QSharedPointer<KisTelemetryTicket> ticket);
+
+private:
+    QVariantList m_imageDumps;
+    QMap<QString, QSharedPointer<KisTelemetryTicket> > m_imagesDumpsMap;
 };
+}
 
-
-
-#endif
+#endif // KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H

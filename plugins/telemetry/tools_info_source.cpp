@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_toolsinfosource.h"
+#include "tools_info_source.h"
 
 #include <QMutexLocker>
 #include <QSysInfo>
@@ -26,20 +26,20 @@
 #include <QVariant>
 #include <cmath>
 
-using namespace KisUserFeedback;
+using namespace UserFeedback;
 using namespace KUserFeedback;
 
-ToolsInfoSource::ToolsInfoSource()
+TelemetryToolsInfoSource::TelemetryToolsInfoSource()
     : AbstractDataSource(QStringLiteral("Tools"), Provider::DetailedSystemInformation)
 {
 }
 
-QString ToolsInfoSource::description() const
+QString TelemetryToolsInfoSource::description() const
 {
     return QObject::tr("Inforamation about tools");
 }
 
-QVariant ToolsInfoSource::data()
+QVariant TelemetryToolsInfoSource::data()
 {
     static int countCalls = 0;
     countCalls++;
@@ -47,7 +47,7 @@ QVariant ToolsInfoSource::data()
         m_tools.clear();
     }
     foreach (toolInfo tool, m_toolsMap) {
-        KisTicket* ticket = tool.ticket.data();
+        KisTelemetryTicket* ticket = tool.ticket.data();
         KisTimeTicket* timeTicket = nullptr;
 
         timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
@@ -68,7 +68,7 @@ QVariant ToolsInfoSource::data()
     return m_tools;
 }
 
-void ToolsInfoSource::activateTool(QSharedPointer<KisTicket> ticket)
+void TelemetryToolsInfoSource::activateTool(QSharedPointer<KisTelemetryTicket> ticket)
 {
     QMutexLocker locker(&m_mutex);
 
@@ -78,16 +78,16 @@ void ToolsInfoSource::activateTool(QSharedPointer<KisTicket> ticket)
     }
 }
 
-void ToolsInfoSource::deactivateTool(QString id)
+void TelemetryToolsInfoSource::deactivateTool(QString id)
 {
     QMutexLocker locker(&m_mutex);
-    KisTicket* ticket = m_currentTools.value(id).data();
+    KisTelemetryTicket* ticket = m_currentTools.value(id).data();
     KisTimeTicket* timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
     if (timeTicket) {
         QDateTime deactivateTime = QDateTime::currentDateTime();
         timeTicket->setEndTime(deactivateTime);
 
-        KisTicket* mainTicket = m_toolsMap[id].ticket.data();
+        KisTelemetryTicket* mainTicket = m_toolsMap[id].ticket.data();
         KisTimeTicket* mainTimeTicket = dynamic_cast<KisTimeTicket*>(mainTicket);
 
         if (mainTimeTicket) {

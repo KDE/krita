@@ -17,49 +17,40 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#ifndef KISUSERFEEDBACK_ACTIONSINFOSOURCE_H
+#define KISUSERFEEDBACK_ACTIONSINFOSOURCE_H
 
-#ifndef KISUSERFEEDBACK_TOOLSINFOSOURCE_H
-#define KISUSERFEEDBACK_TOOLSINFOSOURCE_H
-
+#include "QSharedPointer"
 #include "abstractdatasource.h"
+#include "kis_telemetry_tickets.h"
 #include "kuserfeedbackcore_export.h"
 #include <QMap>
-#include <QMutex>
-#include <QPair>
-#include <QSharedPointer>
-#include <QDateTime>
-#include <QVariantMap>
-#include <QVector>
-#include "kis_telemetry_abstract.h"
-#include "kis_telemetry_tickets.h"
+#include <QVariant>
 
+namespace UserFeedback {
 
-namespace KisUserFeedback {
-
-/*! Data source reporting the type and amount of CPUs.
+/*! Data source reporting about actions.
  *
  *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
  */
-class ToolsInfoSource : public KUserFeedback::AbstractDataSource {
+class TelemetryActionsInfoSource : public KUserFeedback::AbstractDataSource {
 public:
-    ToolsInfoSource();
+    TelemetryActionsInfoSource();
     QString description() const override;
     QVariant data() override;
-    void activateTool(QSharedPointer<KisTicket> ticket);
-    void deactivateTool(QString id);
+    void insert(QSharedPointer<KisTelemetryTicket> ticket);
+    void clear();
 
 private:
-    struct toolInfo{
-        QSharedPointer<KisTicket> ticket;
-        int countUse ;
+    struct actionInfo {
+        QSharedPointer<KisTelemetryTicket> ticket;
+        int mutable countUse;
     };
 
 private:
-    QVariantList m_tools;
-    QMap<QString, toolInfo> m_toolsMap;
-    QMap<QString, QSharedPointer<KisTicket> > m_currentTools;
-    QMutex m_mutex;
+    QVariantList m_actionsInfo;
+    QMap<QString, actionInfo> m_actionsInfoMap;
 };
 }
 
-#endif // KISUSERFEEDBACK_TOOLSINFOSOURCE_H
+#endif // KISUSERFEEDBACK_ACTIONSINFOSOURCE_H

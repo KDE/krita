@@ -24,7 +24,7 @@
 #include <limits>
 
 KisTimeTicket::KisTimeTicket(QString id)
-    : KisTicket(id)
+    : KisTelemetryTicket(id)
 {
     m_start = QDateTime::currentDateTime();
     m_end = m_start;
@@ -64,17 +64,17 @@ void KisTimeTicket::addMSecs(int seconds)
     m_end.addMSecs(seconds);
 }
 
-KisTicket::KisTicket(QString id)
+KisTelemetryTicket::KisTelemetryTicket(QString id)
     : m_id(id)
 {
 }
 
-QString KisTicket::ticketId() const
+QString KisTelemetryTicket::ticketId() const
 {
     return m_id;
 }
 
-void KisTicket::setTickedId(QString id)
+void KisTelemetryTicket::setTickedId(QString id)
 {
     m_id = id;
 }
@@ -116,7 +116,7 @@ QString KisImagePropertiesTicket::getColorProfile() const
 }
 
 KisActionInfoTicket::KisActionInfoTicket(KisActionInfoTicket::ActionInfo actionInfo, QString id)
-    : KisTicket(id)
+    : KisTelemetryTicket(id)
     , m_actionInfo(actionInfo)
 {
 }

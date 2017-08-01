@@ -18,28 +18,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_cpuinfosource.h"
+#include "cpu_info_source.h"
 
 #include <QSysInfo>
 #include <QThread>
 #include <QVariant>
 #include <Vc/cpuid.h>
 
-using namespace KisUserFeedback;
+using namespace UserFeedback;
 using namespace KUserFeedback;
 
 
-CpuInfoSource::CpuInfoSource()
+TelemetryCpuInfoSource::TelemetryCpuInfoSource()
     : AbstractDataSource(QStringLiteral("cpu"), Provider::DetailedSystemInformation)
 {
 }
 
-QString CpuInfoSource::description() const
+QString TelemetryCpuInfoSource::description() const
 {
     return QObject::tr("The amount and type of CPUs in the system.");
 }
 
-QVariant CpuInfoSource::data()
+QVariant TelemetryCpuInfoSource::data()
 {
     QVariantMap m;
     Vc_VERSIONED_NAMESPACE::CpuId::init();

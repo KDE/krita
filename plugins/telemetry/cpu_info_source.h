@@ -18,28 +18,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_telemetry.h"
-#include "KPluginFactory"
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <KoToolRegistry.h>
-#include "kis_telemetry_provider.h"
-#include "kis_telemetry_instance.h"
+#ifndef KISUSERFEEDBACK_CPUINFOSOURCE_H
+#define KISUSERFEEDBACK_CPUINFOSOURCE_H
 
-K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerPlugin<KisTelemetry>();)
+#include "abstractdatasource.h"
+#include "kuserfeedbackcore_export.h"
 
-KisTelemetry::KisTelemetry(QObject* parent, const QVariantList&)
-    : QObject(parent)
-{
-    KisTelemetryInstance::instance()->setProvider(new KisTelemetryProvider);
+namespace UserFeedback {
+
+/*! Data source reporting the type and amount of CPUs.
+ *
+ *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
+ */
+class TelemetryCpuInfoSource : public KUserFeedback::AbstractDataSource {
+public:
+    TelemetryCpuInfoSource();
+    QString description() const override;
+    QVariant data() override;
+};
 }
 
-KisTelemetry::~KisTelemetry()
-{
-
-}
-
-#include "kis_telemetry.moc"
-
+#endif // KISUSERFEEDBACK_CPUINFOSOURCE_H

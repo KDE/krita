@@ -18,8 +18,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "kis_telemetry_tests.h"
-#include "plugins/telemetry/kis_telemetry_provider.h"
+#include "telemetry_tests.h"
+#include "plugins/telemetry/telemetry_provider.h"
 #include <QEventLoop>
 #include <QJsonDocument>
 #include <QObject>
@@ -92,7 +92,7 @@ class TestTimeTickets : public QObject {
 public:
     TestTimeTickets()
     {
-        m_provider = new KisTelemetryProvider();
+        m_provider = new TelemetryProvider();
     }
     ~TestTimeTickets()
     {
@@ -195,23 +195,23 @@ private:
     const static int m_countUse = 4;
 };
 
-void KisTelemetryTest::testTimeTicket()
+void TelemetryTest::testTimeTicket()
 {
 
     TestTimeTickets test1;
     test1.testTimeUse(23456);
 }
 
-void KisTelemetryTest::testCountUse()
+void TelemetryTest::testCountUse()
 {
     TestTimeTickets test2;
     test2.testCountUse(23457);
 }
 
-void KisTelemetryTest::testZeroUse()
+void TelemetryTest::testZeroUse()
 {
     TestTimeTickets test3;
     test3.testCountUse(23458);
 }
-#include "kis_telemetry_tests.moc"
-QTEST_MAIN(KisTelemetryTest)
+#include "telemetry_tests.moc"
+QTEST_MAIN(TelemetryTest)

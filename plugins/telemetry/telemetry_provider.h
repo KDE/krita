@@ -32,7 +32,7 @@
 #include <KUserFeedback/provider.h>
 #include <QVariant>
 
-#include "kis_cpuinfosource.h"
+#include "cpu_info_source.h"
 
 #include "kritatelemetry_export.h"
 #include <QMultiMap>
@@ -42,12 +42,12 @@
 #include <memory>
 #include "kis_telemetry_tickets.h"
 
-class KRITATELEMETRY_EXPORT KisTelemetryProvider : public KisTelemetryAbstract {
+class KRITATELEMETRY_EXPORT TelemetryProvider : public KisTelemetryAbstract {
 public:
-    KisTelemetryProvider();
+    TelemetryProvider();
     void sendData(QString path, QString adress = QString()) override;
 
-    virtual ~KisTelemetryProvider();
+    virtual ~TelemetryProvider();
 
 protected:
     void getTimeTicket(QString id) override;
@@ -75,7 +75,7 @@ private:
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_imagePropertiesSources;
     QScopedPointer<KUserFeedback::Provider> m_actionsInfoProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_actionsSources;
-    QMultiMap<QString, QWeakPointer<KisTicket> > m_tickets;
+    QMultiMap<QString, QWeakPointer<KisTelemetryTicket> > m_tickets;
 
 private:
     TelemetryCategory pathToKind(QString path);

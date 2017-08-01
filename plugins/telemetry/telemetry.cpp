@@ -16,35 +16,30 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-* */
+*/
 
-#ifndef KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H
-#define KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H
+#include "telemetry.h"
+#include "KPluginFactory"
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
+#include <kis_global.h>
+#include <kis_types.h>
+#include <KoToolRegistry.h>
+#include "telemetry_provider.h"
+#include "kis_telemetry_instance.h"
 
-#include "abstractdatasource.h"
-#include "kuserfeedbackcore_export.h"
-#include "kis_telemetry_tickets.h"
-#include <QMap>
-#include <QVariant>
-#include <QSharedPointer>
+K_PLUGIN_FACTORY_WITH_JSON(KisTelemetryFactory, "kritatelemetry.json", registerPlugin<Telemetry>();)
 
-
-namespace KisUserFeedback {
-
-/*! Data source reporting about image properties info
- */
-class ImagePropertiesSource : public KUserFeedback::AbstractDataSource {
-public:
-    ImagePropertiesSource();
-    QString description() const override;
-    QVariant data() override;
-    void removeDumpProperties(QString id);
-    void createNewImageProperties(QSharedPointer<KisTicket> ticket);
-
-private:
-    QVariantList m_imageDumps;
-    QMap<QString, QSharedPointer<KisTicket> > m_imagesDumpsMap;
-};
+Telemetry::Telemetry(QObject* parent, const QVariantList&)
+    : QObject(parent)
+{
+    KisTelemetryInstance::instance()->setProvider(new TelemetryProvider);
 }
 
-#endif // KISUSERFEEDBACK_IMAGEPROPERTIESSOURCE_H
+Telemetry::~Telemetry()
+{
+
+}
+
+#include "telemetry.moc"
+

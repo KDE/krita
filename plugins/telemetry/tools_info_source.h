@@ -18,29 +18,48 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KISUSERFEEDBACK_ASSERTINFOSOURCE_H
-#define KISUSERFEEDBACK_ASSERTINFOSOURCE_H
+#ifndef KISUSERFEEDBACK_TOOLSINFOSOURCE_H
+#define KISUSERFEEDBACK_TOOLSINFOSOURCE_H
 
 #include "abstractdatasource.h"
 #include "kuserfeedbackcore_export.h"
-#include <exception>
+#include <QMap>
+#include <QMutex>
+#include <QPair>
+#include <QSharedPointer>
+#include <QDateTime>
+#include <QVariantMap>
+#include <QVector>
+#include "kis_telemetry_abstract.h"
+#include "kis_telemetry_tickets.h"
 
-namespace KisUserFeedback {
 
-/*! Data source reporting the assert info
+namespace UserFeedback {
+
+/*! Data source reporting the type and amount of CPUs.
+ *
+ *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
  */
-class AssertInfoSource : public KUserFeedback::AbstractDataSource {
+class TelemetryToolsInfoSource : public KUserFeedback::AbstractDataSource {
 public:
-    AssertInfoSource();
+    TelemetryToolsInfoSource();
     QString description() const override;
     QVariant data() override;
+    void activateTool(QSharedPointer<KisTelemetryTicket> ticket);
+    void deactivateTool(QString id);
+
+private:
+    struct toolInfo{
+        QSharedPointer<KisTelemetryTicket> ticket;
+        int countUse ;
+    };
+
+private:
+    QVariantList m_tools;
+    QMap<QString, toolInfo> m_toolsMap;
+    QMap<QString, QSharedPointer<KisTelemetryTicket> > m_currentTools;
+    QMutex m_mutex;
 };
 }
 
-class NoFatalError : public std::exception {
-public:
-    NoFatalError() = default;
-    virtual const char* what() const throw();
-};
-
-#endif // KISUSERFEEDBACK_ASSERTINFOSOURCE_H
+#endif // KISUSERFEEDBACK_TOOLSINFOSOURCE_H

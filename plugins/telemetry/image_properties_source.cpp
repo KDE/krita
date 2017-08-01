@@ -30,21 +30,21 @@ namespace KisUserFeedback {
  */
 
 #include <QSize>
-#include <kis_imagepropertiessource.h>
-using namespace KisUserFeedback;
+#include <image_properties_source.h>
+using namespace UserFeedback;
 using namespace KUserFeedback;
 
-ImagePropertiesSource::ImagePropertiesSource()
+TelemetryImagePropertiesSource::TelemetryImagePropertiesSource()
     : AbstractDataSource(QStringLiteral("Images"), Provider::DetailedSystemInformation)
 {
 }
 
-QString ImagePropertiesSource::description() const
+QString TelemetryImagePropertiesSource::description() const
 {
     return QObject::tr("The informtion about images");
 }
 
-QVariant ImagePropertiesSource::data()
+QVariant TelemetryImagePropertiesSource::data()
 {
     static int countCalls = 0;
     countCalls++;
@@ -52,7 +52,7 @@ QVariant ImagePropertiesSource::data()
     if (!countCalls % 2) { //kuserfeedback feature
         m_imageDumps.clear();
     }
-    foreach (QSharedPointer<KisTicket> imageDump, m_imagesDumpsMap) {
+    foreach (QSharedPointer<KisTelemetryTicket> imageDump, m_imagesDumpsMap) {
         KisImagePropertiesTicket* imagePropertiesTicket = nullptr;
 
         imagePropertiesTicket = dynamic_cast<KisImagePropertiesTicket*>(imageDump.data());
@@ -73,12 +73,12 @@ QVariant ImagePropertiesSource::data()
     return m_imageDumps;
 }
 
-void ImagePropertiesSource::removeDumpProperties(QString id)
+void TelemetryImagePropertiesSource::removeDumpProperties(QString id)
 {
     m_imagesDumpsMap.remove(id);
 }
 
-void ImagePropertiesSource::createNewImageProperties(QSharedPointer<KisTicket> ticket)
+void TelemetryImagePropertiesSource::createNewImageProperties(QSharedPointer<KisTelemetryTicket> ticket)
 {
     m_imagesDumpsMap.insert(ticket->ticketId(), ticket);
 }

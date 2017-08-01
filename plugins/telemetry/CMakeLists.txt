@@ -1,12 +1,12 @@
 
 set(kritaplugintelemetry_SOURCES
-    kis_telemetry_provider.cpp
-    kis_telemetry.cpp
-    kis_cpuinfosource.cpp
-    kis_toolsinfosource.cpp
-    kis_assertinfosource.cpp
-    kis_imagepropertiessource.cpp
-    kis_actionsinfosource.cpp
+    telemetry_provider.cpp
+    telemetry.cpp
+    cpu_info_source.cpp
+    tools_info_source.cpp
+    assert_info_source.cpp
+    image_properties_source.cpp
+    actions_info_source.cpp
 )
 add_subdirectory( tests )
 

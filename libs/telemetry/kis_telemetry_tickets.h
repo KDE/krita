@@ -25,18 +25,18 @@
 #include <QFileInfo>
 #include "kritatelemetry_export.h"
 
-class KRITATELEMETRY_EXPORT KisTicket {
+class KRITATELEMETRY_EXPORT KisTelemetryTicket {
 public:
-    KisTicket() {}
-    KisTicket(QString id);
+    KisTelemetryTicket() {}
+    KisTelemetryTicket(QString id);
     QString ticketId() const;
     void setTickedId(QString id);
-    virtual ~KisTicket() {}
+    virtual ~KisTelemetryTicket() {}
 protected:
     QString m_id;
 };
 
-class KRITATELEMETRY_EXPORT KisTimeTicket : public KisTicket {
+class KRITATELEMETRY_EXPORT KisTimeTicket : public KisTelemetryTicket {
 public:
     KisTimeTicket(QString id);
     void setStartTime(QDateTime& time);
@@ -51,7 +51,7 @@ private:
     QDateTime m_end;
 };
 
-class KRITATELEMETRY_EXPORT KisImagePropertiesTicket : public KisTicket {
+class KRITATELEMETRY_EXPORT KisImagePropertiesTicket : public KisTelemetryTicket {
 public:
     struct ImageInfo {
         QSize size;
@@ -75,7 +75,7 @@ private:
     QFileInfo m_fileInfo;
 };
 
-class KRITATELEMETRY_EXPORT KisActionInfoTicket : public KisTicket {
+class KRITATELEMETRY_EXPORT KisActionInfoTicket : public KisTelemetryTicket {
 public:
     struct ActionInfo{
         QString name;

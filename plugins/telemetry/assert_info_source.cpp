@@ -17,25 +17,25 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "kis_assertinfosource.h"
+#include "assert_info_source.h"
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <QVariantMap>
-using namespace KisUserFeedback;
+using namespace UserFeedback;
 using namespace KUserFeedback;
 
-KisUserFeedback::AssertInfoSource::AssertInfoSource()
+UserFeedback::TelemetryAssertInfoSource::TelemetryAssertInfoSource()
     : AbstractDataSource(QStringLiteral("asserts"), Provider::DetailedSystemInformation)
 {
 }
 
-QString KisUserFeedback::AssertInfoSource::description() const
+QString UserFeedback::TelemetryAssertInfoSource::description() const
 {
     return QObject::tr("Information about asserts");
 }
 
-QVariant KisUserFeedback::AssertInfoSource::data()
+QVariant UserFeedback::TelemetryAssertInfoSource::data()
 {
     QVariantMap m;
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisAsserts");

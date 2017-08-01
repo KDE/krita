@@ -19,12 +19,12 @@
 */
 
 
-#ifndef __KIS_TELEMETRY_TEST_H
-#define __KIS_TELEMETRY_TEST_H
+#ifndef __TELEMETRY_TEST_H
+#define __TELEMETRY_TEST_H
 
 #include <QtTest>
 
-class KisTelemetryTest : public QObject
+class TelemetryTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

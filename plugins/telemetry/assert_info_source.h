@@ -17,40 +17,30 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef KISUSERFEEDBACK_ACTIONSINFOSOURCE_H
-#define KISUSERFEEDBACK_ACTIONSINFOSOURCE_H
 
-#include "QSharedPointer"
+#ifndef KISUSERFEEDBACK_ASSERTINFOSOURCE_H
+#define KISUSERFEEDBACK_ASSERTINFOSOURCE_H
+
 #include "abstractdatasource.h"
-#include "kis_telemetry_tickets.h"
 #include "kuserfeedbackcore_export.h"
-#include <QMap>
-#include <QVariant>
+#include <exception>
 
-namespace KisUserFeedback {
+namespace UserFeedback {
 
-/*! Data source reporting about actions.
- *
- *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
+/*! Data source reporting the assert info
  */
-class ActionsInfoSource : public KUserFeedback::AbstractDataSource {
+class TelemetryAssertInfoSource : public KUserFeedback::AbstractDataSource {
 public:
-    ActionsInfoSource();
+    TelemetryAssertInfoSource();
     QString description() const override;
     QVariant data() override;
-    void insert(QSharedPointer<KisTicket> ticket);
-    void clear();
-
-private:
-    struct actionInfo {
-        QSharedPointer<KisTicket> ticket;
-        int mutable countUse;
-    };
-
-private:
-    QVariantList m_actionsInfo;
-    QMap<QString, actionInfo> m_actionsInfoMap;
 };
 }
 
-#endif // KISUSERFEEDBACK_ACTIONSINFOSOURCE_H
+class NoFatalError : public std::exception {
+public:
+    NoFatalError() = default;
+    virtual const char* what() const throw();
+};
+
+#endif // KISUSERFEEDBACK_ASSERTINFOSOURCE_H

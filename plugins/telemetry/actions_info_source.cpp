@@ -17,28 +17,28 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "kis_actionsinfosource.h"
-using namespace KisUserFeedback;
+#include "actions_info_source.h"
+using namespace UserFeedback;
 using namespace KUserFeedback;
 
-KisUserFeedback::ActionsInfoSource::ActionsInfoSource()
+UserFeedback::TelemetryActionsInfoSource::TelemetryActionsInfoSource()
     : AbstractDataSource(QStringLiteral("actions"), Provider::DetailedSystemInformation)
 {
 }
 
-QString KisUserFeedback::ActionsInfoSource::description() const
+QString UserFeedback::TelemetryActionsInfoSource::description() const
 {
     return QObject::tr("The number of used actions and their sources");
 }
 
-QVariant KisUserFeedback::ActionsInfoSource::data()
+QVariant UserFeedback::TelemetryActionsInfoSource::data()
 {
     if (!m_actionsInfo.isEmpty()) {
         m_actionsInfo.clear();
     }
 
     foreach (actionInfo action, m_actionsInfoMap) {
-        KisTicket* ticket = action.ticket.data();
+        KisTelemetryTicket* ticket = action.ticket.data();
         KisActionInfoTicket* actionTicket = nullptr;
 
         actionTicket = dynamic_cast<KisActionInfoTicket*>(ticket);
@@ -55,7 +55,7 @@ QVariant KisUserFeedback::ActionsInfoSource::data()
     return m_actionsInfo;
 }
 
-void ActionsInfoSource::insert(QSharedPointer<KisTicket> ticket)
+void TelemetryActionsInfoSource::insert(QSharedPointer<KisTelemetryTicket> ticket)
 {
     if (m_actionsInfoMap.count(ticket->ticketId())) {
         int countUse = m_actionsInfoMap.value(ticket->ticketId()).countUse;
@@ -65,7 +65,7 @@ void ActionsInfoSource::insert(QSharedPointer<KisTicket> ticket)
     }
 }
 
-void ActionsInfoSource::clear()
+void TelemetryActionsInfoSource::clear()
 {
     m_actionsInfoMap.clear();
     m_actionsInfo.clear();

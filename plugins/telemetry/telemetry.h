@@ -18,24 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KISUSERFEEDBACK_CPUINFOSOURCE_H
-#define KISUSERFEEDBACK_CPUINFOSOURCE_H
+#ifndef KIS_TELEMETRY_H
+#define KIS_TELEMETRY_H
+#include "QScopedPointer"
+#include <QVariant>
 
-#include "abstractdatasource.h"
-#include "kuserfeedbackcore_export.h"
-
-namespace KisUserFeedback {
-
-/*! Data source reporting the type and amount of CPUs.
- *
- *  The default telemetry mode for this source is Provider::DetailedSystemInformation.
- */
-class CpuInfoSource : public KUserFeedback::AbstractDataSource {
+class Telemetry : public QObject {
+    Q_OBJECT
 public:
-    CpuInfoSource();
-    QString description() const override;
-    QVariant data() override;
+    Telemetry(QObject* parent, const QVariantList&);
+    ~Telemetry() override;
 };
-}
 
-#endif // KISUSERFEEDBACK_CPUINFOSOURCE_H
+
+
+#endif

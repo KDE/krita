@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_telemetry_provider.h"
+#include "telemetry_provider.h"
 #include "KPluginFactory"
 #include "KisPart.h"
 #include <klocalizedstring.h>
@@ -28,22 +28,22 @@
 #include <kpluginfactory.h>
 
 #include "Vc/cpuid.h"
-#include "kis_actionsinfosource.h"
-#include "kis_toolsinfosource.h"
+#include "actions_info_source.h"
+#include "tools_info_source.h"
 #include <KoToolRegistry.h>
 #include <QTime>
 #include <iostream>
-#include <kis_assertinfosource.h>
+#include <assert_info_source.h>
 #include <kis_global.h>
-#include <kis_imagepropertiessource.h>
+#include <image_properties_source.h>
 #include <kis_types.h>
 
-KisTelemetryProvider::KisTelemetryProvider()
+TelemetryProvider::TelemetryProvider()
 {
     m_installProvider.reset(new KUserFeedback::Provider);
     m_installProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
 
-    std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new KisUserFeedback::CpuInfoSource());
+    std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
     m_installSources.push_back(std::move(cpu));
     std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
     m_installSources.push_back(std::move(qt));
@@ -64,7 +64,7 @@ KisTelemetryProvider::KisTelemetryProvider()
 
     m_toolsProvider.reset(new KUserFeedback::Provider);
     m_toolsProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> tools(new KisUserFeedback::ToolsInfoSource);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> tools(new UserFeedback::TelemetryToolsInfoSource);
     m_toolSources.push_back(std::move(tools));
 
     for (auto& source : m_toolSources) {
@@ -73,7 +73,7 @@ KisTelemetryProvider::KisTelemetryProvider()
 
     m_assertsProvider.reset(new KUserFeedback::Provider);
     m_toolsProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> asserts(new KisUserFeedback::AssertInfoSource);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> asserts(new UserFeedback::TelemetryAssertInfoSource);
     m_assertsSources.push_back(std::move(asserts));
     for (auto& source : m_assertsSources) {
         m_assertsProvider->addDataSource(source.get());
@@ -81,7 +81,7 @@ KisTelemetryProvider::KisTelemetryProvider()
 
     m_imagePropertiesProvider.reset(new KUserFeedback::Provider);
     m_imagePropertiesProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> imageProperties(new KisUserFeedback::ImagePropertiesSource);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> imageProperties(new UserFeedback::TelemetryImagePropertiesSource);
     m_imagePropertiesSources.push_back(std::move(imageProperties));
     for (auto& source : m_imagePropertiesSources) {
         m_imagePropertiesProvider.data()->addDataSource(source.get());
@@ -89,14 +89,14 @@ KisTelemetryProvider::KisTelemetryProvider()
 
     m_actionsInfoProvider.reset(new KUserFeedback::Provider);
     m_actionsInfoProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> actionsInfo(new KisUserFeedback::ActionsInfoSource);
+    std::unique_ptr<KUserFeedback::AbstractDataSource> actionsInfo(new UserFeedback::TelemetryActionsInfoSource);
     m_actionsSources.push_back(std::move(actionsInfo));
     for (auto& source : m_actionsSources) {
         m_actionsInfoProvider->addDataSource(source.get());
     }
 }
 
-void KisTelemetryProvider::sendData(QString path, QString adress)
+void TelemetryProvider::sendData(QString path, QString adress)
 {
     if (!path.endsWith(QLatin1Char('/')))
         path += QLatin1Char('/');
@@ -134,18 +134,18 @@ void KisTelemetryProvider::sendData(QString path, QString adress)
     }
 }
 
-void KisTelemetryProvider::getTimeTicket(QString id)
+void TelemetryProvider::getTimeTicket(QString id)
 {
-    KisTicket* ticket = m_tickets.value(id).lock().data();
+    KisTelemetryTicket* ticket = m_tickets.value(id).lock().data();
     if (!ticket) {
         return;
     }
     KisTimeTicket* timeTicket = nullptr;
     KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
-    KisUserFeedback::ToolsInfoSource* tools = nullptr;
+    UserFeedback::TelemetryToolsInfoSource* tools = nullptr;
 
     timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
-    tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
+    tools = dynamic_cast<UserFeedback::TelemetryToolsInfoSource*>(m_tools);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(timeTicket);
     KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
@@ -155,34 +155,34 @@ void KisTelemetryProvider::getTimeTicket(QString id)
     m_tickets.remove(id);
 }
 
-void KisTelemetryProvider::putTimeTicket(QString id)
+void TelemetryProvider::putTimeTicket(QString id)
 {
     if (m_tickets.count(id)) {
         return;
     }
     KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
-    KisUserFeedback::ToolsInfoSource* tools = nullptr;
+    UserFeedback::TelemetryToolsInfoSource* tools = nullptr;
 
-    QSharedPointer<KisTicket> timeTicket = QSharedPointer<KisTimeTicket>::create(id);
+    QSharedPointer<KisTelemetryTicket> timeTicket = QSharedPointer<KisTimeTicket>::create(id);
 
-    tools = dynamic_cast<KisUserFeedback::ToolsInfoSource*>(m_tools);
+    tools = dynamic_cast<UserFeedback::TelemetryToolsInfoSource*>(m_tools);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
 
-    QWeakPointer<KisTicket> weakTimeTicket(timeTicket);
+    QWeakPointer<KisTelemetryTicket> weakTimeTicket(timeTicket);
 
     m_tickets.insert(id, weakTimeTicket);
     tools->activateTool(timeTicket);
 }
 
-void KisTelemetryProvider::saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo)
+void TelemetryProvider::saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo)
 {
     KUserFeedback::AbstractDataSource* m_imageProperties = m_imagePropertiesSources[0].get();
-    KisUserFeedback::ImagePropertiesSource* imageProperties = nullptr;
+    UserFeedback::TelemetryImagePropertiesSource* imageProperties = nullptr;
 
-    QSharedPointer<KisTicket> imagePropertiesTicket = QSharedPointer<KisImagePropertiesTicket>::create(imageInfo, fileName);
+    QSharedPointer<KisTelemetryTicket> imagePropertiesTicket = QSharedPointer<KisImagePropertiesTicket>::create(imageInfo, fileName);
 
-    imageProperties = dynamic_cast<KisUserFeedback::ImagePropertiesSource*>(m_imageProperties);
+    imageProperties = dynamic_cast<UserFeedback::TelemetryImagePropertiesSource*>(m_imageProperties);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(imageProperties);
 
@@ -191,13 +191,13 @@ void KisTelemetryProvider::saveImageProperites(QString fileName, KisImagePropert
         return;
     }
 
-    QWeakPointer<KisTicket> weakimagePropertiesTicket(imagePropertiesTicket);
+    QWeakPointer<KisTelemetryTicket> weakimagePropertiesTicket(imagePropertiesTicket);
 
     m_tickets.insert(fileName, weakimagePropertiesTicket);
     imageProperties->createNewImageProperties(imagePropertiesTicket);
 }
 
-void KisTelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionInfo  actionInfo)
+void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionInfo  actionInfo)
 {
     static QString lastAction = "start name";
     static QTime lastTime = QTime(0, 0, 0, 0);
@@ -209,15 +209,15 @@ void KisTelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::Actio
     }
     if (!isSameAction) {
         KUserFeedback::AbstractDataSource* m_actionsInfo = m_actionsSources[0].get();
-        KisUserFeedback::ActionsInfoSource* actionsInfoSource = nullptr;
+        UserFeedback::TelemetryActionsInfoSource* actionsInfoSource = nullptr;
 
-        QSharedPointer<KisTicket> actionsInfoTicket = QSharedPointer<KisActionInfoTicket>::create(actionInfo, id);
+        QSharedPointer<KisTelemetryTicket> actionsInfoTicket = QSharedPointer<KisActionInfoTicket>::create(actionInfo, id);
 
-        actionsInfoSource = dynamic_cast<KisUserFeedback::ActionsInfoSource*>(m_actionsInfo);
+        actionsInfoSource = dynamic_cast<UserFeedback::TelemetryActionsInfoSource*>(m_actionsInfo);
 
         KIS_SAFE_ASSERT_RECOVER_RETURN(actionsInfoSource);
 
-        QWeakPointer<KisTicket> weakactionsInfoTicket(actionsInfoTicket);
+        QWeakPointer<KisTelemetryTicket> weakactionsInfoTicket(actionsInfoTicket);
 
         m_tickets.insert(id, weakactionsInfoTicket);
         actionsInfoSource->insert(actionsInfoTicket);
@@ -228,11 +228,11 @@ void KisTelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::Actio
     lastAction = actionInfo.name;
 }
 
-KisTelemetryProvider::~KisTelemetryProvider()
+TelemetryProvider::~TelemetryProvider()
 {
 }
 
-KisTelemetryProvider::TelemetryCategory KisTelemetryProvider::pathToKind(QString path)
+TelemetryProvider::TelemetryCategory TelemetryProvider::pathToKind(QString path)
 {
     if (path == "tools/")
         return tools;

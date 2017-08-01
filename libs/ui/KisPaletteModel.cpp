@@ -337,7 +337,7 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 
 KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
-    KoColorSetEntry blank =  KoColorSetEntry;
+    KoColorSetEntry blank =  KoColorSetEntry();
     if (!index.isValid()) {
         return blank;
     }

@@ -2,21 +2,21 @@ diff --git a/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp b/qtbase/s
 index 4934b6c..613e8fe 100644
 --- a/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
 +++ b/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
-@@ -299,9 +299,6 @@ struct QWindowsContextPrivate {
+@@ -238,9 +238,6 @@
      QWindowsMimeConverter m_mimeConverter;
      QWindowsScreenManager m_screenManager;
      QSharedPointer<QWindowCreationContext> m_creationContext;
--#if !defined(QT_NO_TABLETEVENT) && !defined(Q_OS_WINCE)
+-#if QT_CONFIG(tabletevent)
 -    QScopedPointer<QWindowsTabletSupport> m_tabletSupport;
 -#endif
      const HRESULT m_oleInitializeResult;
      const QByteArray m_eventType;
-     QWindow *m_lastActiveWindow;
-@@ -346,17 +343,10 @@ QWindowsContext::QWindowsContext() :
+     QWindow *m_lastActiveWindow = nullptr;
+@@ -279,17 +276,10 @@
      const QByteArray bv = qgetenv("QT_QPA_VERBOSE");
      if (!bv.isEmpty())
          QLoggingCategory::setFilterRules(QString::fromLocal8Bit(bv));
--#if !defined(QT_NO_TABLETEVENT) && !defined(Q_OS_WINCE)
+-#if QT_CONFIG(tabletevent)
 -    d->m_tabletSupport.reset(QWindowsTabletSupport::create());
 -    qCDebug(lcQpaTablet) << "Tablet support: " << (d->m_tabletSupport.isNull() ? QStringLiteral("None") : d->m_tabletSupport->description());
 -#endif
@@ -24,17 +24,17 @@ index 4934b6c..613e8fe 100644
  
  QWindowsContext::~QWindowsContext()
  {
--#if !defined(QT_NO_TABLETEVENT) && !defined(Q_OS_WINCE)
+-#if QT_CONFIG(tabletevent)
 -    d->m_tabletSupport.reset(); // Destroy internal window before unregistering classes.
 -#endif
      unregisterWindowClasses();
      if (d->m_oleInitializeResult == S_OK || d->m_oleInitializeResult == S_FALSE)
          OleUninitialize();
-@@ -397,12 +387,7 @@ bool QWindowsContext::initTouch(unsigned integrationOptions)
+@@ -335,12 +325,7 @@
  
  void QWindowsContext::setTabletAbsoluteRange(int a)
  {
--#if !defined(QT_NO_TABLETEVENT) && !defined(Q_OS_WINCE)
+-#if QT_CONFIG(tabletevent)
 -    if (!d->m_tabletSupport.isNull())
 -        d->m_tabletSupport->setAbsoluteRange(a);
 -#else
@@ -43,11 +43,11 @@ index 4934b6c..613e8fe 100644
  }
  
  int QWindowsContext::processDpiAwareness()
-@@ -792,11 +777,7 @@ QWindowsScreenManager &QWindowsContext::screenManager()
+@@ -700,11 +685,7 @@
  
  QWindowsTabletSupport *QWindowsContext::tabletSupport() const
  {
--#if !defined(QT_NO_TABLETEVENT) && !defined(Q_OS_WINCE)
+-#if QT_CONFIG(tabletevent)
 -    return d->m_tabletSupport.data();
 -#else
      return 0;
@@ -55,7 +55,7 @@ index 4934b6c..613e8fe 100644
  }
  
  /*!
-@@ -1166,10 +1147,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
+@@ -1077,10 +1058,6 @@
              *result = LRESULT(MA_NOACTIVATE);
              return true;
          }
@@ -64,5 +64,5 @@ index 4934b6c..613e8fe 100644
 -            d->m_tabletSupport->notifyActivate();
 -#endif // !QT_NO_TABLETEVENT
          if (platformWindow->testFlag(QWindowsWindow::BlockedByModal))
-             if (const QWindow *modalWindow = QGuiApplication::modalWindow())
-                 QWindowsWindow::baseWindowOf(modalWindow)->alertWindow();
+             if (const QWindow *modalWindow = QGuiApplication::modalWindow()) {
+                 QWindowsWindow *platformWindow = QWindowsWindow::windowsWindowOf(modalWindow);

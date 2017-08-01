@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=scriptdocker
+X-Python-2-Compatible=false
+Name=Script Docker
+Comment=A Python-based docker for create actions and point to Python scripts

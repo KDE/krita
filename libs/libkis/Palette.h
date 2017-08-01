@@ -115,15 +115,78 @@ public:
      */
     int colorsCountGroup(QString name);
 
+    /**
+     * @brief colorSetEntryByIndex
+     * get the colorsetEntry from the global index.
+     * @param index the global index
+     * @return the colorset entry
+     */
     KoColorSetEntry colorSetEntryByIndex(int index);
+    /**
+     * @brief colorSetEntryFromGroup
+     * @param index index in the group.
+     * @param groupName the name of the group to get the color from.
+     * @return the colorsetentry.
+     */
     KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);
 
+    /**
+     * @brief colorForEntry
+     * special function to retreive a ManagedColor object from the colorsetentry.
+     * @param entry the entry
+     * @return the ManagedColorObject
+     */
     ManagedColor *colorForEntry(KoColorSetEntry entry);
+    /**
+     * @brief addEntry
+     * add an entry to a group. Gets appended to the end.
+     * @param entry the entry
+     * @param groupName the name of the group to add to.
+     */
+    void addEntry(KoColorSetEntry entry, QString groupName = QString());
+    /**
+     * @brief removeEntry
+     * remove the entry at @param index from the group @param groupName.
+     */
+    void removeEntry(int index, const QString &groupName);
+    /**
+     * @brief insertEntry
+     * like addentry, but allows you to pick the index to insertBefore.
+     * @param index
+     * @param entry
+     * @param groupName
+     */
+    void insertEntry(int index, KoColorSetEntry entry, QString groupName = QString());
+    /**
+     * @brief editEntry
+     * Changes the entry at @param index by replacing it with @param entry.
+     * @param groupName the group at which the index is.
+     * @return whether it was succesful.
+     */
+    bool editEntry (int index, KoColorSetEntry entry, QString groupName = QString());
+    /**
+     * @brief changeGroupName
+     * change the group name.
+     * @param oldGroupName the old groupname to change.
+     * @param newGroupName the new name to change it into.
+     * @return whether succesful. Reasons for failure include not knowing have oldGroupName
+     */
+    bool changeGroupName(QString oldGroupName, QString newGroupName);
+    /**
+     * @brief moveGroup
+     * move the group to before groupNameInsertBefore.
+     * @param groupName group to move.
+     * @param groupNameInsertBefore group to inset before.
+     * @return whether succesful. Reasons for failure include either group not existing.
+     */
+    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
 
-    //getcolorgroup
-    //Add
-    //Remove
-    //Insert
+    /**
+     * @brief save
+     * save the palette
+     * @return whether it was succesful.
+     */
+    bool save();
 
 private:
     friend class PaletteView;

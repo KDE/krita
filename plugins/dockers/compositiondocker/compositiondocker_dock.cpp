@@ -227,10 +227,10 @@ void CompositionDockerDock::exportClicked()
 
             dst->refreshGraph();
 
-            d->setOutputMimeType("image/png");
             d->setFileBatchMode(true);
 
-            d->exportDocument(QUrl::fromLocalFile(path + composition->name() + ".png"));
+            const QByteArray outputFormat("image/png");
+            d->exportDocumentSync(QUrl::fromLocalFile(path + composition->name() + ".png"), outputFormat);
 
             delete d;
 

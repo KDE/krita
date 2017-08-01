@@ -74,10 +74,7 @@ void WaveletDecompose::slotWaveletDecompose()
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        KoProgressUpdater* pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
-        pu->start(100, i18n("Wavelet Decompose"));
-        QPointer<KoUpdater> updater = pu->startSubtask();
-        updater->setProgress(0);
+        QPointer<KoUpdater> updater = m_view->createUnthreadedUpdater(i18n("Wavelet Decompose"));
 
         KisImageSP image = m_view->image();
         if (!image) return;

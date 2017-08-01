@@ -77,7 +77,16 @@ public:
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded);
+    explicit KoProgressUpdater(KoProgressProxy *progressProxy, Mode mode = Threaded);
+
+    /**
+     * @brief a special contructor for connecting the progress updater to a self-destructable
+     * KoUpdater object.
+     *
+     * HACK ALERT: KoUpdater inherits KoProgressProxy, so be careful when constructing
+     *             the updater and check which override is actually used.
+     */
+    explicit KoProgressUpdater(QPointer<KoUpdater> updater);
 
     /// destructor
     ~KoProgressUpdater() override;
@@ -94,7 +103,7 @@ public:
      * @see KoProgressProxy::setRange()
      * @see KoProgressProxy::setFormat()
      */
-    void start(int range = 100, const QString &text = QLatin1String("%p%"));
+    void start(int range = 100, const QString &text = "");
 
     /**
      * After calling start() you can create any number of Updaters,
@@ -107,7 +116,9 @@ public:
      * been deleted before dereferencing.
      */
     QPointer<KoUpdater> startSubtask(int weight=1,
-                                     const QString &name = QString());
+                                     const QString &name = QString(), bool isPersistent = false);
+
+    void removePersistentSubtask(QPointer<KoUpdater> updater);
 
     /**
      * Cancelling the action will make each subtask be marked as 'interrupted' and
@@ -120,6 +131,11 @@ public:
      */
     bool interrupted() const;
 
+    void setUpdateInterval(int ms);
+    int updateInterval() const;
+
+    void setAutoNestNames(bool value);
+    bool autoNestNames() const;
 
 private Q_SLOTS:
 

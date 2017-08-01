@@ -64,3 +64,10 @@ void KisCompositeProgressProxy::setFormat(const QString &format)
     }
 }
 
+void KisCompositeProgressProxy::setAutoNestedName(const QString &name)
+{
+    Q_FOREACH (KoProgressProxy *proxy, m_uniqueProxies) {
+        proxy->setAutoNestedName(name);
+    }
+}
+

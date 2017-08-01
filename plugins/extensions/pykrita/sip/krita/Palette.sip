@@ -34,5 +34,12 @@ public:
     KoColorSetEntry colorSetEntryByIndex(int index);
     KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);
     ManagedColor *colorForEntry(KoColorSetEntry entry) /Factory/;
+    void addEntry(KoColorSetEntry entry, QString groupName);
+    void removeEntry(int index, const QString &groupName);
+    void insertEntry(int index, KoColorSetEntry entry, QString groupName);
+    bool editEntry(int index, KoColorSetEntry entry, QString groupName);
+    bool changeGroupName(QString oldGroupName, QString newGroupName);
+    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore);
+    bool save();
 private:
 };

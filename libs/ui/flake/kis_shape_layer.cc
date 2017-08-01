@@ -172,10 +172,13 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    initShapeLayer(controller);
+    // copy the projection to avoid extra round of updates!
+    initShapeLayer(controller, _rhs.m_d->paintDevice);
 
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
-        addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        addShape(clonedShape);
     }
 }
 
@@ -191,12 +194,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 
     // copy in _rhs's shapes
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
-        addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        addShape(clonedShape);
     }
 
     // copy in _addShapes's shapes
     Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
-        addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        addShape(clonedShape);
     }
 }
 
@@ -216,15 +223,20 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
+void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
     KIS_ASSERT_RECOVER_NOOP(this->image());
-    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(this->image()));
-    m_d->paintDevice->setParentNode(this);
+
+    if (!copyFromProjection) {
+        m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+        m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(this->image()));
+        m_d->paintDevice->setParentNode(this);
+    } else {
+        m_d->paintDevice = new KisPaintDevice(*copyFromProjection);
+    }
 
     m_d->canvas = new KisShapeLayerCanvas(this, image());
     m_d->canvas->setProjection(m_d->paintDevice);

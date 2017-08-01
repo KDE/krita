@@ -542,7 +542,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
 void KisPaintInformation::mixOther(qreal t, const KisPaintInformation& other)
 {
     QPointF pt = (1 - t) * other.pos() + t * this->pos();
-    this->mixOtherImpl(pt, t, pi1, pi2, false, true);
+    this->mixOtherImpl(pt, t, other, false, true);
 }
 
 void KisPaintInformation::mixOtherOnlyPosition(qreal t, const KisPaintInformation& other)

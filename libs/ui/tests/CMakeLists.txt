@@ -61,6 +61,11 @@ ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.
     TEST_NAME krita-image-BaseNodeTest
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
+ecm_add_test(
+    kis_animation_exporter_test.cpp
+    TEST_NAME kritaui-animation_exporter_test
+    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
+
 set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)
 qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
 ecm_add_test(${kis_node_view_test_SRCS}
@@ -148,11 +153,6 @@ krita_add_broken_unit_test(
 krita_add_broken_unit_test(
     kis_asl_layer_style_serializer_test.cpp
     TEST_NAME krita-ui-KisAslLayerStyleSerializerTest
-    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
-
-krita_add_broken_unit_test(
-    kis_animation_exporter_test.cpp
-    TEST_NAME kritaui-animation_exporter_test
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(

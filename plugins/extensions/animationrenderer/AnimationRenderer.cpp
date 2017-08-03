@@ -39,6 +39,7 @@
 #include <KisImportExportManager.h>
 
 #include "DlgAnimationRenderer.h"
+#include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
@@ -69,7 +70,6 @@ void AnimaterionRenderer::slotRenderAnimation()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    KoUpdaterPtr updater = m_view->createThreadedUpdater(i18n("Export frames"));
 
     DlgAnimationRenderer dlgAnimationRenderer(doc, m_view->mainWindow());
 
@@ -101,13 +101,15 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(sequenceConfig->getString("basename"))
                 .arg(extension);
 
-        KisAnimationExportSaver exporter(doc, baseFileName,
-                                         sequenceConfig->getInt("first_frame"),
-                                         sequenceConfig->getInt("last_frame"),
-                                         sequenceConfig->getInt("sequence_start"),
-                                         updater);
 
-        bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration()) == KisImportExportFilter::OK;
+        const bool batchMode = false; // TODO: fetch correctly!
+        KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
+                                                   KisTimeRange::fromTime(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
+                                                   baseFileName,
+                                                   sequenceConfig->getInt("sequence_start"),
+                                                   dlgAnimationRenderer.getFrameExportConfiguration());
+        exporter.setBatchMode(batchMode);
+        bool success = exporter.regenerateRange(0) == KisAsyncAnimationFramesSaveDialog::RenderComplete;
 
         // the folder could have been read-only or something else could happen
         if (success) {
@@ -174,25 +176,25 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    KoUpdaterPtr updater = m_view->createThreadedUpdater(i18n("Export frames"));
 
     KisConfig kisConfig;
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
-    QString mimetype = cfg->getString("mimetype");
+    KisPropertiesConfigurationSP sequenceConfig = new KisPropertiesConfiguration();
+    sequenceConfig->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
+    QString mimetype = sequenceConfig->getString("mimetype");
     QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();
-    QString baseFileName = QString("%1/%2.%3").arg(cfg->getString("directory"))
-            .arg(cfg->getString("basename"))
+    QString baseFileName = QString("%1/%2.%3").arg(sequenceConfig->getString("directory"))
+            .arg(sequenceConfig->getString("basename"))
             .arg(extension);
 
-    KisAnimationExportSaver exporter(doc, baseFileName,
-                                     cfg->getInt("first_frame"),
-                                     cfg->getInt("last_frame"),
-                                     cfg->getInt("sequence_start"),
-                                     updater);
-
-    bool success = exporter.exportAnimation();
-    Q_ASSERT(success);
+    const bool batchMode = false; // TODO: fetch correctly!
+    KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
+                                               KisTimeRange::fromTime(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
+                                               baseFileName,
+                                               sequenceConfig->getInt("sequence_start"),
+                                               0);
+    exporter.setBatchMode(batchMode);
+    bool success = exporter.regenerateRange(0) == KisAsyncAnimationFramesSaveDialog::RenderComplete;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(success);
 }
 
 #include "AnimationRenderer.moc"

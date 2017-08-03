@@ -392,6 +392,12 @@ endif()
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
         kis_animation_cache_populator.cpp
+        KisAsyncAnimationRendererBase.cpp
+        KisAsyncAnimationCacheRenderer.cpp
+        KisAsyncAnimationFramesSavingRenderer.cpp
+        dialogs/KisAsyncAnimationRenderDialogBase.cpp
+        dialogs/KisAsyncAnimationCacheRenderDialog.cpp
+        dialogs/KisAsyncAnimationFramesSaveDialog.cpp
         KisAnimationCacheRegenerator.cpp
         dialogs/KisAnimationCacheUpdateProgressDialog.cpp
         canvas/kis_animation_player.cpp

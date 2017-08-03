@@ -72,6 +72,9 @@ class Q_DECL_HIDDEN KisImportExportManager::Private
 public:
     bool batchMode {false};
     KoUpdaterPtr updater;
+
+    QString cachedExportFilterMimeType;
+    QSharedPointer<KisImportExportFilter> cachedExportFilter;
 };
 
 struct KisImportExportManager::ConversionResult {
@@ -277,7 +280,27 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         typeName = KisMimeDatabase::mimeTypeForFile(location);
     }
 
-    QSharedPointer<KisImportExportFilter> filter(filterForMimeType(typeName, direction));
+    QSharedPointer<KisImportExportFilter> filter;
+
+    /**
+     * Fetching a filter from the registry is a really expensive operation,
+     * because it blocks all the threads. Cache the filter if possible.
+     */
+    if (direction == KisImportExportManager::Export &&
+        d->cachedExportFilter &&
+        d->cachedExportFilterMimeType == typeName) {
+
+        filter = d->cachedExportFilter;
+    } else {
+
+        filter = toQShared(filterForMimeType(typeName, direction));
+
+        if (direction == Export) {
+            d->cachedExportFilter = filter;
+            d->cachedExportFilterMimeType = typeName;
+        }
+    }
+
     if (!filter) {
         return KisImportExportFilter::FilterCreationError;
     }

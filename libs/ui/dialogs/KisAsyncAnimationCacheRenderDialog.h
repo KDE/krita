@@ -29,6 +29,8 @@ public:
     KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeRange &range, int busyWait = 200);
     ~KisAsyncAnimationCacheRenderDialog();
 
+    static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange, const KisTimeRange &skipRange);
+
 protected:
     QList<int> calcDirtyFrames() const override;
     KisAsyncAnimationRendererBase* createRenderer(KisImageSP image) override;

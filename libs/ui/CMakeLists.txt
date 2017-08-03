@@ -398,11 +398,7 @@ endif()
         dialogs/KisAsyncAnimationRenderDialogBase.cpp
         dialogs/KisAsyncAnimationCacheRenderDialog.cpp
         dialogs/KisAsyncAnimationFramesSaveDialog.cpp
-        KisAnimationCacheRegenerator.cpp
-        dialogs/KisAnimationCacheUpdateProgressDialog.cpp
         canvas/kis_animation_player.cpp
-        kis_animation_exporter.cpp
-        kis_animation_export_saver.cpp
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
     )

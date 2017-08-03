@@ -196,14 +196,11 @@ typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
                                        bool& newTile)
 {
-    /**
-     * FIXME: Read access is better
-     */
-    QWriteLocker locker(&m_lock);
-
     newTile = false;
-    TileTypeSP tile = getTile(col, row);
+    TileTypeSP tile = getExistedTile(col, row);
+
     if (!tile) {
+        QWriteLocker locker(&m_lock);
         tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
         linkTile(tile);
         newTile = true;

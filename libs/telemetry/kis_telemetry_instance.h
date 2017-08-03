@@ -23,8 +23,11 @@
 #include "kis_telemetry_abstract.h"
 #include "kritatelemetry_export.h"
 #include <QScopedPointer>
+#include <QObject>
+#include <QElapsedTimer>
 
-class KRITATELEMETRY_EXPORT KisTelemetryInstance {
+class KRITATELEMETRY_EXPORT KisTelemetryInstance: public QObject {
+    Q_OBJECT
 public:
     enum Actions {
         ToolActivate,
@@ -38,7 +41,7 @@ public:
     };
 
 public:
-    KisTelemetryInstance() = default;
+    KisTelemetryInstance();
     ~KisTelemetryInstance() = default;
     static KisTelemetryInstance* instance();
 
@@ -48,10 +51,15 @@ public:
     void notifySaveActionInfo(KisActionInfoTicket::ActionInfo imageInfo, QString id);
     void sendData(QString path, QString adress = QString());
     QString getToolId(QString id, UseMode mode = Activate);
+public Q_SLOTS:
+    void agregateData();
 private:
     KisTelemetryInstance(KisTelemetryInstance const&) = delete;
     KisTelemetryInstance& operator=(KisTelemetryInstance const&) = delete;
     QScopedPointer<KisTelemetryAbstract> telemetryProvider;
     QString getUseMode(UseMode mode);
+private:
+     QElapsedTimer m_timer;
+     qint64 m_checkTime;
 };
 #endif

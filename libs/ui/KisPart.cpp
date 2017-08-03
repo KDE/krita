@@ -78,6 +78,7 @@
 
 #include "kis_action.h"
 #include "kis_action_registry.h"
+#include "kis_telemetry_instance.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -130,6 +131,8 @@ KisPart::KisPart()
         this, SLOT(updateShortcuts()));
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
         &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
+    connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
+        KisTelemetryInstance::instance(), SLOT(agregateData()));
 
     d->animationCachePopulator.slotRequestRegeneration();
 }

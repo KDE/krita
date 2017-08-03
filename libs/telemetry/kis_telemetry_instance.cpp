@@ -22,6 +22,12 @@
 
 Q_GLOBAL_STATIC(KisTelemetryInstance, s_instance)
 
+KisTelemetryInstance::KisTelemetryInstance()
+{
+    m_timer.start();
+    m_checkTime = 4e6;
+}
+
 KisTelemetryInstance* KisTelemetryInstance::instance()
 {
     return s_instance;
@@ -95,6 +101,17 @@ QString KisTelemetryInstance::getToolId(QString id, KisTelemetryInstance::UseMod
     QString toolId = "Tool" + getUseMode(mode);
     toolId += id;
     return toolId;
+}
+
+void KisTelemetryInstance::agregateData()
+{
+    if(m_timer.elapsed()>m_checkTime){
+        m_timer.restart();
+        KisTelemetryInstance::instance()->sendData("install");
+        KisTelemetryInstance::instance()->sendData("tools");
+        KisTelemetryInstance::instance()->sendData("imageProperties");
+        KisTelemetryInstance::instance()->sendData("actions");
+    }
 }
 
 QString KisTelemetryInstance::getUseMode(KisTelemetryInstance::UseMode mode)

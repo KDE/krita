@@ -22,4 +22,7 @@ add_subdirectory( generators )
 add_subdirectory( impex )
 add_subdirectory( paintops )
 add_subdirectory( tools )
-add_subdirectory( telemetry )
+if(HAVE_KUserFeedback)
+        add_subdirectory( telemetry )
+endif()
+

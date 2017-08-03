@@ -630,11 +630,13 @@ set_package_properties(CURL PROPERTIES
 ##
 
 find_package (KUserFeedback)
+macro_bool_to_01(KUserFeedback_FOUND HAVE_KUserFeedback)
 set_package_properties(KUserFeedback PROPERTIES
     DESCRIPTION "A tool to collect telemetry"
     URL "https://api.kde.org/frameworks/kuserfeedback/html/index.html"
     TYPE OPTIONAL
     PURPOSE "Optionally used")
+
 
  ############################
 #############################

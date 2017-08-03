@@ -128,7 +128,7 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
 
-    KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
+    KisMementoItemSP mi = m_index.getExistingTile(tile->col(), tile->row());
 
     if(!mi) {
         mi = new KisMementoItem();
@@ -150,7 +150,7 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
 
-    KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
+    KisMementoItemSP mi = m_index.getExistingTile(tile->col(), tile->row());
 
     if(!mi) {
         mi = new KisMementoItem();

@@ -59,7 +59,7 @@ public:
      * \param col column of the tile
      * \param row row of the tile
      */
-    TileTypeSP getExistedTile(qint32 col, qint32 row);
+    TileTypeSP getExistingTile(qint32 col, qint32 row);
 
     /**
      * Returns a tile in position (col,row). If no tile exists,

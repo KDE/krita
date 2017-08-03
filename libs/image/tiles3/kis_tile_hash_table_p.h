@@ -185,7 +185,7 @@ bool KisTileHashTableTraits<T>::tileExists(qint32 col, qint32 row)
 
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
-KisTileHashTableTraits<T>::getExistedTile(qint32 col, qint32 row)
+KisTileHashTableTraits<T>::getExistingTile(qint32 col, qint32 row)
 {
     QReadLocker locker(&m_lock);
     return getTile(col, row);
@@ -197,7 +197,7 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
                                        bool& newTile)
 {
     newTile = false;
-    TileTypeSP tile = getExistedTile(col, row);
+    TileTypeSP tile = getExistingTile(col, row);
 
     if (!tile) {
         QWriteLocker locker(&m_lock);

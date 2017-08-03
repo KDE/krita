@@ -38,6 +38,7 @@
 
 namespace
 {
+    bool defaultFormatIsSet = false;
     bool initialized = false;
     bool NeedsFenceWorkaround = false;
     bool NeedsPixmapCacheWorkaround = false;
@@ -210,6 +211,10 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
 
 void KisOpenGL::setDefaultFormat()
 {
+    if (defaultFormatIsSet) {
+        return;
+    }
+    defaultFormatIsSet = true;
     QSurfaceFormat format;
 #ifdef Q_OS_OSX
     format.setVersion(3, 2);

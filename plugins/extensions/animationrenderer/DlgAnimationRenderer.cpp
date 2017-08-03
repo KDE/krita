@@ -99,8 +99,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     setMainWidget(m_page);
 
-    KoJsonTrader trader;
-    QList<QPluginLoader *>list = trader.query("Krita/AnimationExporter", "");
+    QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/AnimationExporter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
         QStringList mimetypes = json.value("X-KDE-Export").toString().split(",");

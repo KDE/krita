@@ -155,8 +155,7 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
 
     if (direction == KisImportExportManager::Import) {
         if (m_importMimeTypes.isEmpty()) {
-            KoJsonTrader trader;
-            QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+            QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
@@ -171,8 +170,7 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
     }
     else if (direction == KisImportExportManager::Export) {
         if (m_exportMimeTypes.isEmpty()) {
-            KoJsonTrader trader;
-            QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+            QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
@@ -338,10 +336,10 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         }
 
         bool alsoAsKra = false;
-        if (!askUserAboutExportConfiguration(filter, exportConfiguration,
-                                             from, to,
-                                             batchMode(), showWarnings,
-                                             &alsoAsKra)) {
+        if (!batchMode() && !askUserAboutExportConfiguration(filter, exportConfiguration,
+                                                             from, to,
+                                                             batchMode(), showWarnings,
+                                                             &alsoAsKra)) {
 
             return KisImportExportFilter::UserCancelled;
         }

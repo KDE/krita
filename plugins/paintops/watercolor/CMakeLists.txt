@@ -1,7 +1,7 @@
 set(kritawatercolorpaintop_SOURCES
     kis_splat.cpp
     kis_wetmap.cpp
-    #kis_splat_generator.cpp
+    kis_base_splats_plane.cpp
     watercolor_paintop_plugin.cpp
     kis_watercolor_paintop.cpp
     kis_watercolor_paintop_settings.cpp

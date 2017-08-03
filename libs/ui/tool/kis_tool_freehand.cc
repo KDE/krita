@@ -82,8 +82,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     connect(m_helper, SIGNAL(requestExplicitUpdateOutline()),
             SLOT(explicitUpdateOutline()));
 
-    m_strokeNotStoped = false;
     m_needEndContinuedStroke = false;
+    m_lastID = KoID("newId-hehe");
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -173,13 +173,16 @@ void KisToolFreehand::deactivate()
         m_needEndContinuedStroke = true;
         endStroke();
         setMode(KisTool::HOVER_MODE);
+    } else if (m_helper->isRunning()) {
+        m_needEndContinuedStroke = true;
+        endStroke();
     }
     KisToolPaint::deactivate();
 }
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
-    if (m_strokeNotStoped) {
+    if (m_helper->isRunning()) {
         if (m_needEndContinuedStroke)
             m_needEndContinuedStroke = false;
         qDebug() << "Inited part of continued stroke\n";
@@ -212,11 +215,9 @@ void KisToolFreehand::endStroke()
     if (currentPaintOpPreset()->settings()->needsContinuedStroke() && !m_needEndContinuedStroke) {
             qDebug() << "Finished part of continued stroke\n" << ppVar(m_needEndContinuedStroke);
             m_helper->endPaintInContinuedStroke();
-            m_strokeNotStoped = true;
     } else {
         qDebug() << "Stroke finished finaly\n" << ppVar(m_needEndContinuedStroke);
         m_helper->endPaint();
-        m_strokeNotStoped = false;
     }
 }
 
@@ -227,6 +228,14 @@ bool KisToolFreehand::primaryActionSupportsHiResEvents() const
 
 void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 {
+    if (m_lastID != KoID("newId-hehe") &&
+        m_lastID != currentPaintOpPreset()->paintOp() &&
+        m_helper->isRunning()) {
+        m_needEndContinuedStroke = true;
+        endStroke();
+    }
+    m_lastID = currentPaintOpPreset()->paintOp();
+    m_needEndContinuedStroke = false;
     // FIXME: workaround for the Duplicate Op
     tryPickByPaintOp(event, PickFgImage);
 
@@ -270,6 +279,8 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+
+    m_lastID = currentPaintOpPreset()->paintOp();
 
     endStroke();
 

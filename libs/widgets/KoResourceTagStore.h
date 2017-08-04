@@ -2,6 +2,7 @@
 
     Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
     Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+    Copyright (c) 2017 Aniketh Girish <anikethgireesh@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -31,7 +32,10 @@ class QStringList;
 class QString;
 
 /**
- * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
+ * KoResourceTagStore class maintains all the tags and this is the place where tags are all
+ * stored, Basically TagStore is the place where tags saved could be accessed and manupilated.
+ * The handles the addition, deletion/blacklisting of tags. All the other stuff like
+ * searching through the tagstore is also maintained here.
  */
 class KRITAWIDGETS_EXPORT KoResourceTagStore
 {
@@ -65,13 +69,18 @@ public:
     /// Return a list of filenames for the given tag
     QStringList searchTag(const QString& query) const;
 
+    /// loads the tags are saved.
     void loadTags();
+
     void serializeTags();
 
 private:
     friend class KoResourceTaggingTest;
 
+    /// Tags are saved as a list of XML file, This reads the tags as XML from the tagStore.
     void readXMLFile(const QString &tagstore);
+
+    /// Write tags to the tagStore.
     void writeXMLFile(const QString &tagstore);
 
     /// To check whether the resource belongs to the present server or not

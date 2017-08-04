@@ -39,10 +39,10 @@ class KoResourceModel;
 class KoResource;
 
 /**
- * @brief The KoResourceTaggingManager class is ...
- *
- * XXX: this needs to be documented!
+ * @brief The KoResourceTaggingManager class is Widget class which controls Tagging
+ * Management functionalities. Widgets to show tagging area is created in this class.
  */
+
 class KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
@@ -64,7 +64,9 @@ Q_SIGNALS:
     
 private Q_SLOTS:
 
+    /// unDeleteTag allows the user to undo the delete operation that they have done on a certain Tag.
     void undeleteTag(const QString& tagToUndelete);
+
     void purgeTagUndeleteList();
     void contextCreateNewTag(KoResource* resource, const QString& tag);
     void contextCreateNewTag(const QString& tag);
@@ -74,7 +76,10 @@ private Q_SLOTS:
     void tagSaveButtonPressed();
     void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
     void contextAddTagToResource(KoResource* resource, const QString& tag);
+
+    /// renameTag renames the tag from it's oldName to the newName user wants it to be.
     void renameTag(const QString &oldName, const QString &newName);
+
     void tagChooserIndexChanged(const QString& lineEditText);
     void tagSearchLineEditTextChanged(const QString& lineEditText);
     void removeTagFromComboBox(const QString& tag);

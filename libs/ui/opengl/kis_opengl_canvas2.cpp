@@ -379,6 +379,9 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
+    } else {
+        glEnable(GL_BLEND);
+        glBlendFuncSeparate(GL_ONE_MINUS_DST_COLOR, GL_ZERO, GL_ONE, GL_ONE);
     }
 
     KisConfig cfg;

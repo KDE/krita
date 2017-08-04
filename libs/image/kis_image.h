@@ -102,6 +102,16 @@ public: // KisProjectionUpdateListener implementation
 public:
 
     /**
+     * Set the number of threads used by the image's working threads
+     */
+    void setWorkingThreadsLimit(int value);
+
+    /**
+     * Return the number of threads available to the image's working threads
+     */
+    int workingThreadsLimit() const;
+
+    /**
      * Makes a copy of the image with all the layers. If possible, shallow
      * copies of the layers are made.
      *

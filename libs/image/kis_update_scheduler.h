@@ -43,6 +43,16 @@ public:
     ~KisUpdateScheduler() override;
 
     /**
+     * Set the number of threads used by the scheduler
+     */
+    void setThreadsLimit(int value);
+
+    /**
+     * Return the number of threads available to the scheduler
+     */
+    int threadsLimit() const;
+
+    /**
      * Sets the proxy that is going to be notified about the progress
      * of processing of the queues. If you want to switch the proxy
      * on runtime, you should do it under the lock held.

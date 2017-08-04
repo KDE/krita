@@ -118,10 +118,16 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     m_d->processingTime.start();
 
-    const int numWorkers = qMin(m_d->dirtyFramesCount, QThread::idealThreadCount());
+    const int maxThreads = QThread::idealThreadCount();
+    const int numWorkers = qMin(m_d->dirtyFramesCount, qMax(1, maxThreads / 2));
+    const int numThreadsPerWorker = qMax(qMin(2, maxThreads), qRound(qreal(maxThreads) / numWorkers));
+
+    ENTER_FUNCTION() << ppVar(numWorkers) << ppVar(numThreadsPerWorker);
+
     for (int i = 0; i < numWorkers; i++) {
 
         KisImageSP image = m_d->image->clone(true);
+        image->setWorkingThreadsLimit(numThreadsPerWorker);
         KisAsyncAnimationRendererBase *renderer = createRenderer(image);
 
         connect(renderer, SIGNAL(sigFrameCompleted(int)), SLOT(slotFrameCompleted(int)));

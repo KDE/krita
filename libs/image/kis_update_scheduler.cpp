@@ -31,6 +31,7 @@
 
 #include <QReadWriteLock>
 #include "kis_lazy_wait_condition.h"
+#include <mutex>
 
 //#define DEBUG_BALANCING
 
@@ -84,6 +85,23 @@ KisUpdateScheduler::~KisUpdateScheduler()
 {
     delete m_d->progressUpdater;
     delete m_d;
+}
+
+void KisUpdateScheduler::setThreadsLimit(int value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->processingBlocked);
+
+    barrierLock();
+    m_d->updaterContext.lock();
+    m_d->updaterContext.setThreadsLimit(value);
+    m_d->updaterContext.unlock();
+    unlock(false);
+}
+
+int KisUpdateScheduler::threadsLimit() const
+{
+    std::lock_guard<KisUpdaterContext> l(m_d->updaterContext);
+    return m_d->updaterContext.threadsLimit();
 }
 
 void KisUpdateScheduler::connectSignals()

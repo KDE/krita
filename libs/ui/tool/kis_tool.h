@@ -28,7 +28,6 @@
 #include <kritaui_export.h>
 #include <kis_types.h>
 
-
 #ifdef __GNUC__
 #define WARN_WRONG_MODE(_mode) warnKrita << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
 #else

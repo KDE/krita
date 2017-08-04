@@ -72,6 +72,7 @@ public:
 private Q_SLOTS:
 
     void configureSliderLimitsAndLabels();
+    void resetFilter();
 };
 
 #endif

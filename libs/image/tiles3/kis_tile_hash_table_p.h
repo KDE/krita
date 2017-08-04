@@ -201,9 +201,13 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
 
     if (!tile) {
         QWriteLocker locker(&m_lock);
-        tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
-        linkTile(tile);
-        newTile = true;
+        tile = getTile(col, row);
+
+        if (!tile) {
+            tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
+            linkTile(tile);
+            newTile = true;
+        }
     }
 
     return tile;

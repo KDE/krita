@@ -96,7 +96,9 @@ KisTileDataStore* KisTileDataStore::instance()
 
 KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 {
-    QMutexLocker lock(&m_listLock);
+    //QMutexLocker lock(&m_listLock);
+
+    lockList();
 
     MemoryStatistics stats;
 
@@ -109,6 +111,8 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
     stats.totalMemorySize = memoryMetric() * metricCoeff + stats.poolSize;
 
     stats.swapSize = m_swappedStore.totalMemoryMetric() * metricCoeff;
+
+    unlockList();
 
     return stats;
 }
@@ -140,16 +144,17 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
     m_memoryMetric -= td->pixelSize();
 }
 
-void KisTileDataStore::unregisterTileData(KisTileData *td)
-{
-    QMutexLocker lock(&m_listLock);
-    unregisterTileDataImp(td);
-}
-
-KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
+KisTileData *KisTileDataStore::createDefaultTileData(qint32 pixelSize, const quint8 *defPixel)
 {
     KisTileData *td = new KisTileData(pixelSize, defPixel, this);
     registerTileData(td);
+    return td;
+}
+
+KisTileData *KisTileDataStore::createDefaultTileDataOptimized(qint32 pixelSize, const quint8 *defPixel)
+{
+    KisTileData *td = new KisTileData(pixelSize, defPixel, this);
+    m_pendingTiles.push(td);
     return td;
 }
 
@@ -169,6 +174,25 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
     }
 
     registerTileData(td);
+    return td;
+}
+
+KisTileData *KisTileDataStore::duplicateTileDataOptimized(KisTileData *rhs)
+{
+    KisTileData *td = 0;
+
+    if (rhs->m_clonesStack.pop(td)) {
+        DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
+        DEBUG_COUNT_PRECLONE_HIT(rhs);
+    } else {
+        rhs->blockSwapping();
+        td = new KisTileData(*rhs);
+        rhs->unblockSwapping();
+        DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
+        DEBUG_COUNT_PRECLONE_MISS(rhs);
+    }
+
+    m_pendingTiles.push(td);
     return td;
 }
 
@@ -192,6 +216,11 @@ void KisTileDataStore::freeTileData(KisTileData *td)
     m_listLock.unlock();
 
     delete td;
+}
+
+void KisTileDataStore::freeTileDataOptimized(KisTileData *td)
+{
+    m_discardedTiles.push(td);
 }
 
 void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
@@ -263,37 +292,43 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
 
 KisTileDataStoreIterator* KisTileDataStore::beginIteration()
 {
-    m_listLock.lock();
+    //m_listLock.lock();
+    lockList();
     return new KisTileDataStoreIterator(m_tileDataList, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreIterator* iterator)
 {
     delete iterator;
-    m_listLock.unlock();
+    unlockList();
+    //m_listLock.unlock();
 }
 
 KisTileDataStoreReverseIterator* KisTileDataStore::beginReverseIteration()
 {
-    m_listLock.lock();
+    //m_listLock.lock();
+    lockList();
     return new KisTileDataStoreReverseIterator(m_tileDataList, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
 {
     delete iterator;
-    m_listLock.unlock();
+    //m_listLock.unlock();
+    unlockList();
     DEBUG_REPORT_PRECLONE_EFFICIENCY();
 }
 
 KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
 {
-    m_listLock.lock();
+    //m_listLock.lock();
+    lockList();
     return new KisTileDataStoreClockIterator(m_clockIterator, m_tileDataList, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 {
     m_clockIterator = iterator->getFinalPosition();
     delete iterator;
-    m_listLock.unlock();
+    //m_listLock.unlock();
+    unlockList();
 }
 
 void KisTileDataStore::debugPrintList()
@@ -323,7 +358,8 @@ void KisTileDataStore::debugSwapAll()
 
 void KisTileDataStore::debugClear()
 {
-    QMutexLocker lock(&m_listLock);
+    //QMutexLocker lock(&m_listLock);
+    lockList();
 
     Q_FOREACH (KisTileData *item, m_tileDataList) {
         delete item;
@@ -334,12 +370,33 @@ void KisTileDataStore::debugClear()
 
     m_numTiles = 0;
     m_memoryMetric = 0;
+
+    unlockList();
 }
 
 void KisTileDataStore::testingRereadConfig() {
     m_pooler.testingRereadConfig();
     m_swapper.testingRereadConfig();
     kickPooler();
+}
+
+void KisTileDataStore::lockList()
+{
+    KisTileData *td = 0;
+    while (m_pendingTiles.pop(td)) {
+        registerTileData(td);
+    }
+
+    while (m_discardedTiles.pop(td)) {
+        freeTileData(td);
+    }
+
+    m_listLock.lock();
+}
+
+void KisTileDataStore::unlockList()
+{
+    m_listLock.unlock();
 }
 
 void KisTileDataStore::testingSuspendPooler()

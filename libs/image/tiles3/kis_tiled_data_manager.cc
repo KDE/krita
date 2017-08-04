@@ -107,7 +107,7 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 
 void KisTiledDataManager::setDefaultPixelImpl(const quint8 *defaultPixel)
 {
-    KisTileData *td = KisTileDataStore::instance()->createDefaultTileData(pixelSize(), defaultPixel);
+    KisTileData *td = KisTileDataStore::instance()->createDefaultTileDataOptimized(pixelSize(), defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
 
@@ -369,7 +369,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
         clearRect.width() >= KisTileData::WIDTH &&
         clearRect.height() >= KisTileData::HEIGHT) {
 
-        td = KisTileDataStore::instance()->createDefaultTileData(pixelSize, clearPixel);
+        td = KisTileDataStore::instance()->createDefaultTileDataOptimized(pixelSize, clearPixel);
         td->acquire();
     }
 

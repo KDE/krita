@@ -78,14 +78,14 @@ inline bool KisTileData::deref() {
     bool _ref;
 
     if (!(_ref = m_refCount.deref())) {
-        m_store->freeTileData(this);
+        m_store->freeTileDataOptimized(this);
         return 0;
     }
     return _ref;
 }
 
 inline KisTileData* KisTileData::clone() {
-    return m_store->duplicateTileData(this);
+    return m_store->duplicateTileDataOptimized(this);
 }
 
 inline void KisTileData::blockSwapping() {

@@ -90,9 +90,8 @@ public:
     KisTileDataStoreClockIterator* beginClockIteration();
     void endIteration(KisTileDataStoreClockIterator* iterator);
 
-    inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
-        return allocTileData(pixelSize, defPixel);
-    }
+    KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel);
+    KisTileData* createDefaultTileDataOptimized(qint32 pixelSize, const quint8 *defPixel);
 
     // Called by The Memento Manager after every commit
     inline void kickPooler() {
@@ -116,8 +115,10 @@ public:
      */
 
     KisTileData *duplicateTileData(KisTileData *rhs);
+    KisTileData *duplicateTileDataOptimized(KisTileData *rhs);
 
     void freeTileData(KisTileData *td);
+    void freeTileDataOptimized(KisTileData *td);
 
     /**
      * Ensures that the tile data is totally present in memory
@@ -132,10 +133,7 @@ public:
     void ensureTileDataLoaded(KisTileData *td);
 
 private:
-    KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
-
     void registerTileData(KisTileData *td);
-    void unregisterTileData(KisTileData *td);
     inline void registerTileDataImp(KisTileData *td);
     inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();
@@ -151,6 +149,10 @@ private:
 
     friend class KisLowMemoryBenchmark;
     void testingRereadConfig();
+
+    void lockList();
+    void unlockList();
+
 private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;
@@ -163,14 +165,17 @@ private:
 
     QMutex m_listLock;
     KisTileDataList m_tileDataList;
-    qint32 m_numTiles;
+    QAtomicInteger<qint32> m_numTiles;
 
     /**
      * This metric is used for computing the volume
      * of memory occupied by tile data objects.
      * metric = num_bytes / (KisTileData::WIDTH * KisTileData::HEIGHT)
      */
-    qint64 m_memoryMetric;
+    QAtomicInteger<qint64> m_memoryMetric;
+
+    KisLocklessStack<KisTileData*> m_pendingTiles;
+    KisLocklessStack<KisTileData*> m_discardedTiles;
 };
 
 template<typename T>

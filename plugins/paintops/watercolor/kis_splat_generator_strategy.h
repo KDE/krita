@@ -30,38 +30,38 @@ class KisSplatGeneratorStrategy
 {
 public:
     virtual ~KisSplatGeneratorStrategy(){}
-    virtual void generate(QList<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) = 0;
+    virtual QList<KisSplat *> generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) = 0;
 
 };
 
 class KisSimpleBrushGenerator : public KisSplatGeneratorStrategy
 {
 public:
-    void generate(QList<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
+    QList<KisSplat *> generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
 };
 
 class KisWetOnDryGenerator : public KisSplatGeneratorStrategy
 {
 public:
-    void generate(QList<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
+    QList<KisSplat *> generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
 };
 
 class KisCrunchyGenerator : public KisSplatGeneratorStrategy
 {
 public:
-    void generate(QList<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
+    QList<KisSplat *> generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
 };
 
 class KisWetOnWetGenerator : public KisSplatGeneratorStrategy
 {
 public:
-    void generate(QList<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
+    QList<KisSplat *> generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
 };
 
 class KisBlobbyGenerator : public KisSplatGeneratorStrategy
 {
 public:
-    void generate(QList<KisSplat *> *flowing, KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
+    QList<KisSplat *> generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color) override;
 };
 
 #endif // KIS_SPLAT_GENERATOR_STRATEGY_H

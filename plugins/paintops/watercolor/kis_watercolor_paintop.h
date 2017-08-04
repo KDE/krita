@@ -35,6 +35,7 @@
 #include "KoRTree.h"
 
 #include "kis_base_splats_plane.h"
+#include "kis_fixed_splats_plane.h"
 
 class KisPainter;
 
@@ -59,14 +60,14 @@ private:
 
 
     KisWetMap *m_wetMap;
-    QList<KisSplat *> m_flowing,
-                      m_fixed,
-                      m_dried;
-    KoRTree<KisSplat *> m_fixedTree;
+//    QList<KisSplat *> m_flowing,
+//                      m_fixed,
+//                      m_dried;
+//    KoRTree<KisSplat *> m_fixedTree;
 
-    KisBaseSplatsPlane m_driedPlane,
-                       m_fixedPlane,
-                       m_flowingPlane;
+    KisBaseSplatsPlane m_driedPlane;
+    KisFixedSplatsPlane m_fixedPlane;
+    KisBaseSplatsPlane m_flowingPlane;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

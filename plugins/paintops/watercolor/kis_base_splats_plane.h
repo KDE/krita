@@ -41,8 +41,9 @@
 class KisBaseSplatsPlane
 {
 public:
-    KisBaseSplatsPlane(const KoColorSpace* colorSpace);
-    ~KisBaseSplatsPlane(){}
+    KisBaseSplatsPlane(bool useCaching,
+                       KisBaseSplatsPlane *lowLvlPlane = 0);
+    virtual ~KisBaseSplatsPlane();
 
     /**
      * @brief add splat to list of splats and paint device
@@ -67,9 +68,23 @@ public:
      * @brief update plane
      * @param wetMap - base for updating
      */
-    QList<KisSplat *> update(KisWetMap *wetMap);
+    virtual QRect update(KisWetMap *wetMap);
+
+
+protected:
+
+    QList<KisSplat*>::iterator remove(QList<KisSplat*>::iterator it);
+    QList<KisSplat*> m_splats;
+    KisBaseSplatsPlane *m_lowLvlPlane;
+
+protected:
+    void setDirty(const QRect &rc);
+
 private:
     KisPaintDeviceSP m_cachedPD;
+    bool m_isDirty;
+    bool m_useCaching;
+    QRect m_dirtyRect;
 };
 
 #endif // KIS_ABSTRACT_SPLATS_PLANE_H

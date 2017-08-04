@@ -29,10 +29,10 @@
 #include "kis_splat_generator_strategy.h"
 
 KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
-    : KisPaintOp(painter), m_fixedTree(4, 2),
-      m_driedPlane(painter->device()->colorSpace()),
-      m_fixedPlane(painter->device()->colorSpace()),
-      m_flowingPlane(painter->device()->colorSpace())
+    : KisPaintOp(painter),
+      m_driedPlane(true),
+      m_fixedPlane(&m_driedPlane),
+      m_flowingPlane(false, &m_fixedPlane)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
@@ -50,9 +50,7 @@ KisWatercolorPaintOp::~KisWatercolorPaintOp()
 
 KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &info)
 {
-    QRect flowingRect,
-          fixedRect,
-          driedRect;
+    QRect dirtyRect;
 
     // Painting new stroke
     qint16 time = m_timer.elapsed();
@@ -80,51 +78,59 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
         break;
     }
 
-    strategy->generate(&m_flowing,
-                       m_wetMap,
+    QList<KisSplat *> newSplats =
+            strategy->generate(m_wetMap,
                        info.pos(),
                        m_watercolorOption.radius,
                        painter()->paintColor());
-    foreach (KisSplat *splat, m_flowing) {
+
+    foreach (KisSplat *splat, newSplats) {
         m_flowingPlane.add(splat);
-        flowingRect |= splat->boundingRect().toRect();
+        dirtyRect |= splat->boundingRect().toAlignedRect();
     }
 
     // Updating system
     for (int i = 0; i < timeGone / 33; i++) {
-        foreach (KisSplat *splat, m_flowing) {
-            if (splat->update(m_wetMap) == KisSplat::Fixed) {
-                m_fixed.push_back(splat);
-                m_fixedTree.insert(splat->boundingRect(), splat);
-                m_fixedPlane.add(splat);
-                fixedRect |= splat->boundingRect().toRect();
+//        foreach (KisSplat *splat, m_flowing) {
+//            // todo: check if tree should be updated when splat is changed
 
-                m_flowing.removeOne(splat);
-                m_flowingPlane.remove(splat);
-                flowingRect |= splat->boundingRect().toRect();
-            }
-        }
-        foreach (KisSplat *splat, m_fixed) {
-            if (splat->update(m_wetMap) == KisSplat::Dried) {
-                m_dried.push_back(splat);
-                m_driedPlane.add(splat);
-                driedRect |= splat->boundingRect().toRect();
+//            if (splat->update(m_wetMap) == KisSplat::Fixed) {
+//                m_fixed.push_back(splat);
+//                m_fixedTree.insert(splat->boundingRect(), splat);
+//                m_fixedPlane.add(splat);
+//                fixedRect |= splat->boundingRect().toRect();
 
-                m_fixed.removeOne(splat);
-                m_fixedTree.remove(splat);
-                m_fixedPlane.remove(splat);
-                fixedRect |= splat->boundingRect().toRect();
-            }
-        }
+//                m_flowing.removeOne(splat);
+//                m_flowingPlane.remove(splat);
+//                flowingRect |= splat->boundingRect().toRect();
+//            }
+//        }
+
+//        fixedRect |= m_fixedPlane.update(wetMap);
+
+//        /*foreach (KisSplat *splat, m_fixed) {
+//            if (splat->update(m_wetMap) == KisSplat::Dried) {
+//                m_dried.push_back(splat);
+//                m_driedPlane.add(splat);
+//                driedRect |= splat->boundingRect().toRect();
+
+//                m_fixed.removeOne(splat);
+//                m_fixedTree.remove(splat);
+//                m_fixedPlane.remove(splat);
+//                fixedRect |= splat->boundingRect().toRect();
+//            }
+//        }*/
+        dirtyRect |= m_fixedPlane.update(m_wetMap) |
+        m_flowingPlane.update(m_wetMap);
 
         m_wetMap->update();
     }
 
     m_lastTime = time - time % 33;
     source()->clear();
-    m_driedPlane.paint(painter(), driedRect);
-    m_fixedPlane.paint(painter(), fixedRect);
-    m_flowingPlane.paint(painter(), flowingRect);
+    m_driedPlane.paint(painter(), dirtyRect);
+    m_fixedPlane.paint(painter(), dirtyRect);
+    m_flowingPlane.paint(painter(), dirtyRect);
     return updateSpacingImpl(info);
 }
 

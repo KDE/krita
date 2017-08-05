@@ -54,7 +54,10 @@ void KisOpenGL::initialize()
 {
     if (initialized) return;
 
-    setDefaultFormat();
+    if (!defaultFormatIsSet) {
+        qWarning() << "Default OpenGL format was not set before calling KisOpenGL::initialize. This might be a BUG!";
+        setDefaultFormat();
+    }
 
     // we need a QSurface active to get our GL functions from the context
     QWindow  surface;

@@ -108,7 +108,11 @@ extern "C" int main(int argc, char **argv)
      */
     QLoggingCategory::setFilterRules("krita*.debug=false\n"
                                      "krita*.warning=true\n"
-                                     "krita.tabletlog=true");
+                                     "krita.tabletlog=true"
+#ifdef Q_OS_WIN
+                                     "\nqt.qpa.gl=true"
+#endif
+                                     );
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");

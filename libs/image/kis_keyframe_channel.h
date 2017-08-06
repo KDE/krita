@@ -54,7 +54,7 @@ public:
     static const KoID TransformRotationZ;
 public:
     KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);
-    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);
+    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNode *newParentNode);
     ~KisKeyframeChannel() override;
 
     QString id() const;

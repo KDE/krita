@@ -115,7 +115,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, imageElement, count, m_d->doc->url().toLocalFile(), true);
-    visitor.setSelectedNodes(m_d->doc->activeNodes());
+    visitor.setSelectedNodes({m_d->doc->preActivatedNode()});
 
     image->rootLayer()->accept(visitor);
     m_d->errorMessages.append(visitor.errorMessages());

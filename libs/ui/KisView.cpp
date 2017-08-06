@@ -81,10 +81,8 @@
 #include "KisUndoStackAction.h"
 #include "KisViewManager.h"
 #include "kis_zoom_manager.h"
-#include "kis_composite_progress_proxy.h"
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
-#include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
 #include "kis_file_layer.h"
@@ -226,8 +224,8 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
     QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
-                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(statusBarMessage(const QString&, int)),
+                this, SLOT(slotActionStatusText(const QString&, int)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -261,13 +259,11 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 KisView::~KisView()
 {
     if (d->viewManager) {
-        KoProgressProxy *proxy = d->viewManager->statusBar()->progress()->progressProxy();
-        KIS_ASSERT_RECOVER_NOOP(proxy);
-        image()->compositeProgressProxy()->removeProxy(proxy);
-
         if (d->viewManager->filterManager()->isStrokeRunning()) {
             d->viewManager->filterManager()->cancel();
         }
+
+        d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
     }
     KoToolManager::instance()->removeCanvasController(&d->canvasController);
     KisPart::instance()->removeView(this);
@@ -357,15 +353,6 @@ void KisView::setViewManager(KisViewManager *view)
     connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
             SLOT(slotContinueRemoveNode(KisNodeSP)),
             Qt::AutoConnection);
-
-    /*
-     * WARNING: Currently we access the global progress bar in two ways:
-     * connecting to composite progress proxy (strokes) and creating
-     * progress updaters. The latter way should be deprecated in favour
-     * of displaying the status of the global strokes queue
-     */
-    image()->compositeProgressProxy()->addProxy(d->viewManager->statusBar()->progress()->progressProxy());
-    connect(d->viewManager->statusBar()->progress(), SIGNAL(sigCancellationRequested()), image(), SLOT(requestStrokeCancellation()));
 
     d->viewManager->updateGUI();
 
@@ -593,7 +580,7 @@ void KisView::dropEvent(QDropEvent *event)
                         else {
                             Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
                             if (mainWindow()) {
-                                mainWindow()->openDocument(url);
+                                mainWindow()->openDocument(url, KisMainWindow::None);
                             }
                         }
                     }
@@ -617,8 +604,8 @@ void KisView::setDocument(KisDocument *document)
     d->document = document;
     QStatusBar *sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
-                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(statusBarMessage(const QString&, int)),
+                this, SLOT(slotActionStatusText(const QString&, int)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -650,11 +637,11 @@ QStatusBar * KisView::statusBar() const
     return mw ? mw->statusBar() : 0;
 }
 
-void KisView::slotActionStatusText(const QString &text)
+void KisView::slotActionStatusText(const QString &text, int timeout)
 {
     QStatusBar *sb = statusBar();
     if (sb)
-        sb->showMessage(text);
+        sb->showMessage(text, timeout);
 }
 
 void KisView::slotClearStatusText()
@@ -681,7 +668,7 @@ void KisView::closeEvent(QCloseEvent *event)
     }
 
     if (queryClose()) {
-        d->viewManager->removeStatusBarItem(zoomManager()->zoomActionWidget());
+        d->viewManager->statusBar()->setView(0);
         event->accept();
         return;
     }
@@ -695,11 +682,8 @@ bool KisView::queryClose()
     if (!document())
         return true;
 
-    if (document()->isInSaving()) {
-        viewManager()->showFloatingMessage(
-            i18n("Cannot close the document while saving is in progress"),
-            KisIconUtils::loadIcon("object-locked"), 1500 /* ms */);
-        return false;
+    if (document()->isSaving()) {
+        document()->waitForSavingToComplete();
     }
 
     if (document()->isModified()) {
@@ -720,8 +704,8 @@ bool KisView::queryClose()
 
         switch (res) {
         case QMessageBox::Yes : {
-            bool isNative = (document()->outputMimeType() == document()->nativeFormatMimeType());
-            if (!viewManager()->mainWindow()->saveDocument(document(), !isNative))
+            bool isNative = (document()->mimeType() == document()->nativeFormatMimeType());
+            if (!viewManager()->mainWindow()->saveDocument(document(), !isNative, false))
                 return false;
             break;
         }
@@ -796,10 +780,20 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
     d->canvasController.setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
 }
 
+void KisView::syncLastActiveNodeToDocument()
+{
+    KisDocument *doc = document();
+    if (doc) {
+        doc->setPreActivatedNode(d->currentNode);
+    }
+}
+
 void KisView::setCurrentNode(KisNodeSP node)
 {
     d->currentNode = node;
     d->canvas.slotTrySwitchShapeManager();
+
+    syncLastActiveNodeToDocument();
 }
 
 KisNodeSP KisView::currentNode() const
@@ -920,7 +914,6 @@ void KisView::slotLoadingFinished()
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
 
     KisNodeSP activeNode = document()->preActivatedNode();
-    document()->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 
     if (!activeNode) {
         activeNode = image()->rootLayer()->lastChild();

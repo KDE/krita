@@ -337,7 +337,14 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 
 KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
+    KoColorSetEntry blank =  KoColorSetEntry();
+    if (!index.isValid()) {
+        return blank;
+    }
     QStringList entryList = qVariantValue<QStringList>(data(index, RetrieveEntryRole));
+    if (entryList.isEmpty()) {
+        return blank;
+    }
     QString groupName = entryList.at(0);
     quint32 indexInGroup = entryList.at(1).toUInt();
     return m_colorSet->getColorGroup(indexInGroup, groupName);

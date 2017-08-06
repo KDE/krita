@@ -57,6 +57,7 @@ public:
      * @param parent a pointer to the parent object
      */
     explicit KoDocumentInfo(QObject *parent = 0);
+    explicit KoDocumentInfo(const KoDocumentInfo &rhs, QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentInfo() override;

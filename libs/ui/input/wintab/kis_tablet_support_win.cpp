@@ -415,7 +415,7 @@ bool QWindowsWinTab32DLL::init()
         return true;
     QLibrary library(QStringLiteral("wintab32"));
     if (!library.load()) {
-        qWarning() << "Could not load wintab32 dll";
+        qWarning() << QString("Could not load wintab32 dll: %1").arg(library.errorString());
         return false;
     }
     wTOpen         = (PtrWTOpen)         library.resolve("WTOpenW");

@@ -36,6 +36,10 @@ public Q_SLOTS:
     void setSelection(Selection*  value);
     int width() const;
     void setWidth(int value);
+    int xOffset() const;
+    void setXOffset(int x);
+    int yOffset() const;
+    void setYOffset(int y);
     double xRes() const;
     void setXRes(double xRes) const;
     double yRes() const;
@@ -45,7 +49,7 @@ public Q_SLOTS:
     void crop(int x, int y, int w, int h);
     bool exportImage(const QString &filename, const InfoObject & exportConfiguration);
     void flatten();
-    void resizeImage(int w, int h);
+    void resizeImage(int x, int y, int w, int h);
     void scaleImage(int w, int h, int xres, int yres, QString strategy);
     void rotateImage(double radians);
     void shearImage(double angleX, double angleY);

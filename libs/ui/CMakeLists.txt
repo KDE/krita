@@ -333,6 +333,7 @@ set(kritaui_LIB_SRCS
     KisImportExportFilter.cpp
     KisFilterEntry.cpp
     KisImportExportManager.cpp
+    KisImportExportUtils.cpp
     kis_async_action_feedback.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp

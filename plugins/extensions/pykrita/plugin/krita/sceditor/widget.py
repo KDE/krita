@@ -334,7 +334,7 @@ class EditorSidebar(QWidget):
         y = view.contentOffset().y()
         pageBottom = max(
             view.height(),
-          view.verticalScrollBar().value() + view.viewport().height())
+            view.verticalScrollBar().value() + view.viewport().height())
         fm = self.fm
         w = self.width() - 8
         while block.isValid():

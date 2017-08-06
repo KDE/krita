@@ -1,5 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/libs/widgetutils )
+include_directories (
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+    ${CMAKE_SOURCE_DIR}/sdk/tests
+)
 
 include(ECMAddTests)
 
@@ -13,4 +16,9 @@ ecm_add_tests(
 ecm_add_test(
     kis_simple_math_parser_test.cpp
     TEST_NAME krita-ui-KisSimpleMathParserTest
+    LINK_LIBRARIES kritaui Qt5::Test)
+
+ecm_add_test(
+    TestKoProgressUpdater.cpp
+    TEST_NAME TestKoProgressUpdater
     LINK_LIBRARIES kritaui Qt5::Test)

@@ -305,7 +305,7 @@ if (NOT WIN32 AND NOT APPLE)
         TYPE OPTIONAL
         PURPOSE "Optionally used for recent document handling")
 
-    find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
+    find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF5Crash PROPERTIES
         DESCRIPTION "KDE's Crash Handler"
@@ -650,9 +650,9 @@ include(MacroKritaAddBenchmark)
 ####################
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} 
-                           ${CMAKE_CURRENT_BINARY_DIR} 
-                           ${CMAKE_SOURCE_DIR}/interfaces 
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
+                           ${CMAKE_CURRENT_BINARY_DIR}
+                           ${CMAKE_SOURCE_DIR}/interfaces
 )
 
 add_subdirectory(libs)

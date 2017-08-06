@@ -26,6 +26,9 @@
 #include "kis_undo_adapter.h"
 #include "kis_layer_properties_icons.h"
 
+// HACK! please refactor out!
+#include "kis_simple_stroke_strategy.h"
+
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList)
     : KisNodeCommand(kundo2_i18n("Property Changes"), node),
@@ -143,5 +146,18 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
     else {
         image->setModified();
         cmd->redo();
+
+        /**
+         * HACK ALERT!
+         *
+         * Here we start a fake legacy stroke, so that all the LoD planes would
+         * be invalidated. Ideally, we should refactor this method and avoid
+         * resetting LoD planes when node visibility changes, Instead there should
+         * be two commands executes: LoD agnostic one (which sets the properties
+         * themselves), and two LoD-specific update commands: one for lodN and
+         * another one for lod0.
+         */
+        KisStrokeId strokeId = image->startStroke(new KisSimpleStrokeStrategy());
+        image->endStroke(strokeId);
     }
 }

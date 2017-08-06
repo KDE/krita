@@ -14,7 +14,7 @@ from . import palette_exporter_gimppalette, palette_exporter_inkscapeSVG, palett
 
 
 class Palette_Docker(DockWidget):
-# Init the docker
+    # Init the docker
 
     def __init__(self):
         super().__init__()
@@ -220,7 +220,7 @@ class Palette_Docker(DockWidget):
 
     def slot_export_to_inkscape_svg(self):
         palette_exporter_inkscapeSVG.inkscapeSVGExporter(self.cmb_palettes.currentText())
-        
+
     def slot_sort_colors(self):
         colorSorter = palette_sortColors.sortColors(self.cmb_palettes.currentText())
         self.paletteView.setPalette(colorSorter.palette())

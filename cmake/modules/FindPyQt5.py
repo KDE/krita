@@ -12,7 +12,7 @@ print("pyqt_version_str:%s" % PyQt5.Qt.PYQT_VERSION_STR)
 pyqt_version_tag = ""
 in_t = False
 for item in PyQt5.Qt.PYQT_CONFIGURATION["sip_flags"].split(' '):
-    if item=="-t":
+    if item == "-t":
         in_t = True
     elif in_t:
         if item.startswith("Qt_5"):

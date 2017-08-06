@@ -3,15 +3,16 @@ class Action : QObject
 %TypeHeaderCode
 #include "Action.h"
 %End
+
 public:
-    Action(QObject*  parent /TransferThis/ = 0);
-    Action(const QString & name, QAction*  action, QObject*  parent /TransferThis/ = 0);
+    explicit Action(QObject *parent /TransferThis/ = 0);
+    Action(const QString &name, QAction* action, QObject *parent /TransferThis/ = 0);
     virtual ~Action();
     bool operator==(const Action &other) const;
     bool operator!=(const Action &other) const;
 public Q_SLOTS:
     QString text() const;
-    void settext(QString text);
+    void setText(QString text);
     QString name() const;
     void setName(QString value);
     bool isCheckable() const;
@@ -34,4 +35,3 @@ private:
     private:
     Action(const Action &); // Generated
 };
-

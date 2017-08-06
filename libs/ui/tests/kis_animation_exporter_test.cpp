@@ -26,6 +26,7 @@
 #include "KisDocument.h"
 #include "kis_image_animation_interface.h"
 #include "KoColor.h"
+#include <KoUpdater.h>
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 

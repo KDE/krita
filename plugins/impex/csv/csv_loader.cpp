@@ -103,24 +103,27 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
     KisView *setView(0);
 
     if (!m_batchMode) {
-        //show the statusbar message even if no view
-        Q_FOREACH (KisView* view, KisPart::instance()->views()) {
-            if (view && view->document() == m_doc) {
-                setView = view;
-                break;
-            }
-        }
+        // TODO: use other systems of progress reporting (KisViewManager::createUnthreadedUpdater()
 
-        if (!setView) {
-            QStatusBar *sb = KisPart::instance()->currentMainwindow()->statusBar();
-            if (sb) {
-                sb->showMessage(i18n("Loading CSV file..."));
-            }
-        } else {
-            emit m_doc->statusBarMessage(i18n("Loading CSV file..."));
-        }
-        emit m_doc->sigProgress(0);
-        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+//        //show the statusbar message even if no view
+//        Q_FOREACH (KisView* view, KisPart::instance()->views()) {
+//            if (view && view->document() == m_doc) {
+//                setView = view;
+//                break;
+//            }
+//        }
+
+//        if (!setView) {
+//            QStatusBar *sb = KisPart::instance()->currentMainwindow()->statusBar();
+//            if (sb) {
+//                sb->showMessage(i18n("Loading CSV file..."));
+//            }
+//        } else {
+//            emit m_doc->statusBarMessage(i18n("Loading CSV file..."));
+//        }
+
+//        emit m_doc->sigProgress(0);
+//        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
     }
     int step = 0;
 
@@ -274,8 +277,8 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
 
                 if (layer->last != field) {
                     if (!m_batchMode) {
-                        emit m_doc->sigProgress((frame * layers.size() + idx) * 100 /
-                                                (frameCount * layers.size()));
+                        //emit m_doc->sigProgress((frame * layers.size() + idx) * 100 /
+                        //                        (frameCount * layers.size()));
                     }
                     retval = setLayer(layer, importDoc.data(), path);
                     layer->last = field;
@@ -328,8 +331,8 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
     io->close();
 
     if (!m_batchMode) {
-        disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
-        emit m_doc->sigProgress(100);
+        // disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        // emit m_doc->sigProgress(100);
 
         if (!setView) {
             QStatusBar *sb = KisPart::instance()->currentMainwindow()->statusBar();
@@ -441,7 +444,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
         filename.append(layer->last);
 
         result = importDoc->openUrl(QUrl::fromLocalFile(filename),
-                                    KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+                                    KisDocument::DontAddToRecent);
         if (result)
             layer->channel->importFrame(layer->frame, importDoc->image()->projection(), 0);
 

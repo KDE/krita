@@ -28,52 +28,76 @@
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
-
-// 4 updates per second should be enough
-#define PROGRESSUPDATER_GUITIMERINTERVAL 250
+#include <kis_debug.h>
 
 class Q_DECL_HIDDEN KoProgressUpdater::Private
 {
 public:
 
-    Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode)
-        : parent(_parent)
-        , progressBar(p)
+    Private(KoProgressUpdater *_q, KoProgressProxy *proxy, QPointer<KoUpdater> parentUpdater, Mode _mode)
+        : q(_q)
+        , parentProgressProxy(proxy)
+        , parentUpdater(parentUpdater)
         , mode(_mode)
-        , totalWeight(0)
         , currentProgress(0)
         , updated(false)
-        , updateGuiTimer(_parent)
+        , updateGuiTimer(_q)
         , canceled(false)
     {
     }
 
-    KoProgressUpdater *parent;
-    KoProgressProxy *progressBar;
+    KoProgressUpdater *q;
+
+private:
+    KoProgressProxy *parentProgressProxy;
+    QPointer<KoUpdater> parentUpdater;
+
+public:
     Mode mode;
-    int totalWeight;
-    int currentProgress;
+    int currentProgress = 0;
+    bool isUndefinedState = false;
     bool updated;          // is true whenever the progress needs to be recomputed
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
-    QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
     bool canceled;
+    int updateInterval = 250; // ms, 4 updates per second should be enough
+    bool autoNestNames = false;
+    QString taskName;
+    int taskMax = -1;
+    bool isStarted = false;
+
+    void updateParentText();
+    void clearState();
+
+    KoProgressProxy* progressProxy() {
+        return parentUpdater ? parentUpdater : parentProgressProxy;
+    }
 };
 
 // NOTE: do not make the KoProgressUpdater object part of the QObject
 // hierarchy. Do not make KoProgressProxy its parent (note that KoProgressProxy
 // is not necessarily castable to QObject ). This prevents proper functioning
 // of progress reporting in multi-threaded environments.
-KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar, Mode mode)
-    : d (new Private(this, progressBar, mode))
+KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressProxy, Mode mode)
+    : d (new Private(this, progressProxy, 0, mode))
 {
-    Q_ASSERT(d->progressBar);
+    KIS_ASSERT_RECOVER_RETURN(progressProxy);
+    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
+}
+
+KoProgressUpdater::KoProgressUpdater(QPointer<KoUpdater> updater)
+    : d (new Private(this, 0, updater, Unthreaded))
+{
+    KIS_ASSERT_RECOVER_RETURN(updater);
     connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
 }
 
 KoProgressUpdater::~KoProgressUpdater()
 {
-    d->progressBar->setValue(d->progressBar->maximum());
+    if (d->progressProxy()) {
+        d->progressProxy()->setRange(0, d->taskMax);
+        d->progressProxy()->setValue(d->progressProxy()->maximum());
+    }
 
     // make sure to stop the timer to avoid accessing
     // the data we are going to delete right now
@@ -82,57 +106,71 @@ KoProgressUpdater::~KoProgressUpdater()
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
 
-    qDeleteAll(d->subTaskWrappers);
-    d->subTaskWrappers.clear();
-
     delete d;
 }
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
-    d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
+    d->clearState();
+    d->taskName = text;
+    d->taskMax = range - 1;
+    d->isStarted = true;
 
-    qDeleteAll(d->subtasks);
-    d->subtasks.clear();
-
-    qDeleteAll(d->subTaskWrappers);
-    d->subTaskWrappers.clear();
-
-    d->progressBar->setRange(0, range-1);
-    d->progressBar->setValue(0);
-
-    if(!text.isEmpty()) {
-        d->progressBar->setFormat(text);
+    if (d->progressProxy()) {
+        d->progressProxy()->setRange(0, d->taskMax);
+        d->progressProxy()->setValue(0);
+        d->updateParentText();
     }
-    d->totalWeight = 0;
-    d->canceled = false;
+
+    d->updateGuiTimer.start(d->updateInterval);
 }
 
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
-                                                    const QString &name)
+                                                    const QString &name,
+                                                    bool isPersistent)
 {
-    KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
-    d->totalWeight += weight;
+    if (!d->isStarted) {
+        // lazy initialization for intermediate proxies
+        start();
+    }
+
+    KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name, isPersistent);
     d->subtasks.append(p);
     connect(p, SIGNAL(sigUpdated()), SLOT(update()));
 
-    QPointer<KoUpdater> updater = new KoUpdater(p);
-    d->subTaskWrappers.append(updater);
+    QPointer<KoUpdater> updater = p->connectedUpdater();
 
     if (!d->updateGuiTimer.isActive()) {
         // we maybe need to restart the timer if it was stopped in updateUi() cause
         // other sub-tasks created before this one finished already.
-        d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
+        d->updateGuiTimer.start(d->updateInterval);
     }
 
+    d->updated = true;
     return updater;
+}
+
+void KoProgressUpdater::removePersistentSubtask(QPointer<KoUpdater> updater)
+{
+    for (auto it = d->subtasks.begin(); it != d->subtasks.end();) {
+        if ((*it)->connectedUpdater() != updater) {
+            ++it;
+        } else {
+            KIS_SAFE_ASSERT_RECOVER_NOOP((*it)->isPersistent());
+            (*it)->deleteLater();
+            it = d->subtasks.erase(it);
+            break;
+        }
+    }
+
+    updateUi();
 }
 
 void KoProgressUpdater::cancel()
 {
     Q_FOREACH (KoUpdaterPrivate *updater, d->subtasks) {
         updater->setProgress(100);
-        updater->interrupt();
+        updater->setInterrupted(true);
     }
     d->canceled = true;
     updateUi();
@@ -143,6 +181,10 @@ void KoProgressUpdater::update()
     d->updated = true;
     if (d->mode == Unthreaded) {
         qApp->processEvents();
+    }
+
+    if (!d->updateGuiTimer.isActive()) {
+        d->updateGuiTimer.start(d->updateInterval);
     }
 }
 
@@ -155,40 +197,152 @@ void KoProgressUpdater::updateUi()
     // won't happen until we return from this function (which is
     // triggered by a timer)
 
+    /**
+     * We shouldn't let progress updater to interfere the progress
+     * reporting when it is not initialized.
+     */
+    if (d->subtasks.isEmpty()) return;
+
     if (d->updated) {
         int totalProgress = 0;
+        int totalWeight = 0;
+        d->isUndefinedState = false;
+
         Q_FOREACH (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
             if (updater->interrupted()) {
                 d->currentProgress = -1;
-                return;
+                break;
             }
 
-            int progress = updater->progress();
-            if (progress > 100 || progress < 0) {
-                progress = updater->progress();
+            if (!updater->hasValidRange()) {
+                totalWeight = 0;
+                totalProgress = 0;
+                d->isUndefinedState = true;
+                break;
             }
 
-            totalProgress += progress *updater->weight();
+            if (updater->isPersistent() && updater->isCompleted()) {
+                continue;
+            }
+
+            const int progress = qBound(0, updater->progress(), 100);
+            totalProgress += progress * updater->weight();
+            totalWeight += updater->weight();
         }
 
-        d->currentProgress = totalProgress / d->totalWeight;
+        const int progressPercent = totalWeight > 0 ? totalProgress / totalWeight : -1;
+
+        d->currentProgress =
+            d->taskMax == 99 ?
+            progressPercent :
+            qRound(qreal(progressPercent) * d->taskMax / 99.0);
+
         d->updated = false;
     }
 
-    if (d->currentProgress == -1) {
-        d->progressBar->setValue( d->progressBar->maximum() );
-        // should we hide the progressbar after a little while?
-        return;
+    if (d->progressProxy()) {
+        if (!d->isUndefinedState) {
+            d->progressProxy()->setRange(0, d->taskMax);
+
+            if (d->currentProgress == -1) {
+                d->currentProgress = d->progressProxy()->maximum();
+            }
+
+            if (d->currentProgress >= d->progressProxy()->maximum()) {
+                // we're done
+                d->updateGuiTimer.stop();
+                d->clearState();
+            } else {
+                d->progressProxy()->setValue(d->currentProgress);
+            }
+        } else {
+            d->progressProxy()->setRange(0,0);
+            d->progressProxy()->setValue(0);
+        }
+
+        d->updateParentText();
+    }
+}
+
+void KoProgressUpdater::Private::updateParentText()
+{
+    if (!progressProxy()) return;
+
+    QString actionName = taskName;
+
+    if (autoNestNames) {
+        Q_FOREACH (QPointer<KoUpdaterPrivate> updater, subtasks) {
+
+            if (updater->isPersistent() && updater->isCompleted()) {
+                continue;
+            }
+
+            if (updater->progress() < 100) {
+                const QString subTaskName = updater->mergedSubTaskName();
+
+                if (!subTaskName.isEmpty()) {
+                    if (actionName.isEmpty()) {
+                        actionName = subTaskName;
+                    } else {
+                        actionName = QString("%1: %2").arg(actionName).arg(subTaskName);
+                    }
+                }
+                break;
+            }
+        }
+        progressProxy()->setAutoNestedName(actionName);
+    } else {
+        progressProxy()->setFormat(actionName);
     }
 
-    if (d->currentProgress >= d->progressBar->maximum()) {
-        // we're done
-        d->updateGuiTimer.stop(); // 10 updates/second should be enough?
+}
+
+void KoProgressUpdater::Private::clearState()
+{
+    for (auto it = subtasks.begin(); it != subtasks.end();) {
+        if (!(*it)->isPersistent()) {
+            (*it)->deleteLater();
+            it = subtasks.erase(it);
+        } else {
+            if ((*it)->interrupted()) {
+                (*it)->setInterrupted(false);
+            }
+            ++it;
+        }
     }
-    d->progressBar->setValue(d->currentProgress);
+
+    progressProxy()->setRange(0, taskMax);
+    progressProxy()->setValue(progressProxy()->maximum());
+
+    canceled = false;
 }
 
 bool KoProgressUpdater::interrupted() const
 {
     return d->canceled;
+}
+
+void KoProgressUpdater::setUpdateInterval(int ms)
+{
+    d->updateInterval = ms;
+
+    if (d->updateGuiTimer.isActive()) {
+        d->updateGuiTimer.start(d->updateInterval);
+    }
+}
+
+int KoProgressUpdater::updateInterval() const
+{
+    return d->updateInterval;
+}
+
+void KoProgressUpdater::setAutoNestNames(bool value)
+{
+    d->autoNestNames = value;
+    update();
+}
+
+bool KoProgressUpdater::autoNestNames() const
+{
+    return d->autoNestNames;
 }

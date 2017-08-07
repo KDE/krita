@@ -592,9 +592,9 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
             menu.addSeparator();
 
-            if (singleLayer) {
-                addActionToMenu(&menu, "show_in_timeline");
+            addActionToMenu(&menu, "show_in_timeline");
 
+            if (singleLayer) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
                     addActionToMenu(&menu, "isolate_layer");

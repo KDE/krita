@@ -31,12 +31,50 @@ using namespace KNSCore;
 
 class DlgContentDownloaderPrivate;
 
+/**
+ * Using KNewStuffCore
+ * Content Downloader widget.
+ *
+ * The content downloader widget will present items to the user
+ * for installation, updates and removal.
+ * Preview images as well as other meta information can be seen.
+ *
+ * \section knsrc knsrc Files
+ * The Dialog is configured by a .knsrc file containing the KHotNewStuff configuration.
+ * Your application should install a file called: <em>$KDEDIR/share/config/appname.knsrc</em>
+ *
+ * An example file could look like this:
+ * <pre>
+    [KNewStuff3]
+    ProvidersUrl=https://share.krita.org/ocs/providers.xml
+    Categories=Krita Brush
+    XdgTargetDir=krita/brushes
+    Uncompress=never
+ * </pre>
+ *
+ * Uncompress can be one of: always, never or archive:
+ * <ol>
+ * <li>always: assume all downloaded files are archives and need to be extracted</li>
+ * <li>never: never try to extract the file</li>
+ * <li>archive: if the file is an archive, uncompress it, otherwise just pass it on</li>
+ * <li>subdir: logic as archive, but decompress into a subdirectory named after the payload filename</li>
+ * </ol>
+ *
+ * You have different options to set the target install directory:
+ *   <ol><li>StandardResource: not available in KF5, use XdgTargetDir instead.</li>
+ *       <li>TargetDir: since KF5, this is equivalent to XdgTargetDir.
+ *       <li>XdgTargetDir: a directory in the $XDG_DATA_HOME directory such as <em>.local/share/krita</em>.
+ *           This is what QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + name will return.</li>
+ *   </ol>
+ *
+ */
+
 class DlgContentDownloader: public QWidget
 {
 Q_OBJECT
 public:
     /**
-     * Create a ContentDownloadDialog that lets the user install, update and uninstall
+     * Create a ContentDownloader Widget that lets the user install, update and uninstall
      * contents. It will try to find a appname.knsrc file with the configuration.
      * Appname is the name of your application as provided in the about data->
      *
@@ -45,7 +83,7 @@ public:
     explicit DlgContentDownloader(QWidget *parent = nullptr);
 
     /**
-     * Create a DownloadDialog that lets the user install, update and uninstall
+     * Create a Content Downloader Widget that lets the user install, update and uninstall
      * contents. Manually specify the name of a .knsrc file where the
      * KHotNewStuff configuration can be found.
      *

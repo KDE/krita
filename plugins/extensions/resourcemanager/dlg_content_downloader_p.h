@@ -93,12 +93,26 @@ public:
 
     void scrollbarValueChanged(int value);
 
+    /** The following provides the user with an option on which type of view they desire to let thier downloadable items
+     *  could be shown to them.
+     * <li>slotListViewListMode</li> Shows the items in a List view.
+     * <li>slotListViewIconMode</li> Shows the item in Icon view.
+     * <li>setListViewMode</li> This sets the item to be icon or list according to what the other functions, ie,
+     * slotListViewListMode and slotListViewIconMode returns.
+     */
+
     void slotListViewListMode();
     void slotListViewIconMode();
     void setListViewMode(QListView::ViewMode mode);
 
 public Q_SLOTS:
 
+    /**
+     * @brief progressBarBusy @brief progressBarIdle @brief progressBarError
+     * @param These functions doesn't gives the user with real-time progress of what the content downloader is doing
+     * accordance with the content downloader widget. But it gives an instance of what the content downloader is doing
+     * at the moment.
+     */
     void progressBarBusy(const QString &message);
     void progressBarIdle(const QString &message);
     void progressBarError(const QString &message);

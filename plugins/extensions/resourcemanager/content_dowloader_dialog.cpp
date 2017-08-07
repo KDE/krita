@@ -4,7 +4,7 @@
  *  Copyright (C) 2007 Dirk Mueller <mueller@kde.org>
  *  Copyright (C) 2007-2009 Jeremy Whiting <jpwhiting@kde.org>
  *  Copyright (C) 2009-2010 Frederik Gladhorn <gladhorn@kde.org>
- *  Copyright (c) 2017 Aniketh Girish anikethgireesh@gmail.com
+ *  Copyright (c) 2017 Aniketh Girish <anikethgireesh@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

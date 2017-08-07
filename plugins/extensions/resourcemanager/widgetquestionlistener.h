@@ -23,6 +23,13 @@
 
 #include <KNSCore/QuestionListener>
 
+/**
+ * @brief The WidgetQuestionListener class
+ * @param Extends the QuestionListener class for use in widget based applications,
+ * and ensures that queries are forwarded to the user. It allows the framework to ask the user
+ * Questions/things which comes from KNSCore class Questionlistener.
+ */
+
 class WidgetQuestionListener : public KNSCore::QuestionListener
 {
     Q_OBJECT

@@ -24,7 +24,6 @@
 #include <QPointer>
 
 #include <KisMainWindow.h>
-#include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
 #include <kritaui_export.h>
@@ -53,6 +52,8 @@ class KisPaintopBox;
 class KisActionManager;
 class KisScriptManager;
 class KisInputManager;
+class KoUpdater;
+class KoProgressUpdater;
 
 /**
  * Krita view class
@@ -118,7 +119,8 @@ public:  // Krita specific interfaces
     KisPaintopBox* paintOpBox() const;
 
     /// create a new progress updater
-    KoProgressUpdater *createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
+    QPointer<KoUpdater> createUnthreadedUpdater(const QString &name);
+    QPointer<KoUpdater> createThreadedUpdater(const QString &name);
 
     /// The selection manager handles everything action related to
     /// selections.

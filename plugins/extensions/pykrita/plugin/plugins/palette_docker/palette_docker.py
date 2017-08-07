@@ -10,11 +10,11 @@ import math
 from krita import *
 
 # import the exporters
-from . import palette_exporter_gimppalette, palette_exporter_inkscapeSVG
+from . import palette_exporter_gimppalette, palette_exporter_inkscapeSVG, palette_sortColors
 
 
 class Palette_Docker(DockWidget):
-# Init the docker
+    # Init the docker
 
     def __init__(self):
         super().__init__()
@@ -30,6 +30,7 @@ class Palette_Docker(DockWidget):
         allPalettes = Application.resources("palette")
         for palette_name in allPalettes:
             self.cmb_palettes.addItem(palette_name)
+            self.cmb_palettes.model().sort(0)
 
         self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
         self.cmb_palettes.currentTextChanged.connect(self.slot_paletteChanged)
@@ -42,21 +43,27 @@ class Palette_Docker(DockWidget):
         self.colorComboBox = QComboBox()
         self.colorList = list()
         buttonLayout.addWidget(self.colorComboBox)
-        self.addEntry = QPushButton()
-        self.addEntry.setText("A")
-        self.addEntry.setToolTip("Add Entry")
-        self.addEntry.clicked.connect(self.slot_add_entry)
-        buttonLayout.addWidget(self.addEntry)
-        self.addGroup = QPushButton()
-        self.addGroup.clicked.connect(self.slot_add_group)
-        self.addGroup.setText("G")
-        self.addGroup.setToolTip("Add Group")
-        buttonLayout.addWidget(self.addGroup)
-        self.removeEntry = QPushButton()
-        self.removeEntry.setText("R")
-        self.removeEntry.setToolTip("Remove Entry")
-        self.removeEntry.clicked.connect(self.slot_remove_entry)
-        buttonLayout.addWidget(self.removeEntry)
+        self.addEntry = QAction()
+        self.addEntry.setText("Add Entry")
+        self.addEntry.setIconText("+")
+        self.addEntry.triggered.connect(self.slot_add_entry)
+        self.addGroup = QAction()
+        self.addGroup.triggered.connect(self.slot_add_group)
+        self.addGroup.setText("Add Group")
+        self.addGroup.setIconText(str("\U0001F4C2"))
+        self.removeEntry = QAction()
+        self.removeEntry.setText("Remove Entry")
+        self.removeEntry.setIconText("-")
+        self.removeEntry.triggered.connect(self.slot_remove_entry)
+        addEntryButton = QToolButton()
+        addEntryButton.setDefaultAction(self.addEntry)
+        buttonLayout.addWidget(addEntryButton)
+        addGroupButton = QToolButton()
+        addGroupButton.setDefaultAction(self.addGroup)
+        buttonLayout.addWidget(addGroupButton)
+        removeEntryButton = QToolButton()
+        removeEntryButton.setDefaultAction(self.removeEntry)
+        buttonLayout.addWidget(removeEntryButton)
 
         # QActions
         self.extra = QToolButton()
@@ -65,7 +72,6 @@ class Palette_Docker(DockWidget):
         self.editPaletteData.triggered.connect(self.slot_edit_palette_data)
         self.extra.setDefaultAction(self.editPaletteData)
         buttonLayout.addWidget(self.extra)
-
         self.actionMenu = QMenu()
         self.exportToGimp = QAction()
         self.exportToGimp.setText("Export as GIMP palette file.")
@@ -73,9 +79,13 @@ class Palette_Docker(DockWidget):
         self.exportToInkscape = QAction()
         self.exportToInkscape.setText("Export as Inkscape SVG with swatches.")
         self.exportToInkscape.triggered.connect(self.slot_export_to_inkscape_svg)
+        self.sortColors = QAction()
+        self.sortColors.setText("Sort colors")
+        self.sortColors.triggered.connect(self.slot_sort_colors)
         self.actionMenu.addAction(self.editPaletteData)
         self.actionMenu.addAction(self.exportToGimp)
         self.actionMenu.addAction(self.exportToInkscape)
+        self.actionMenu.addAction(self.sortColors)
 
         self.extra.setMenu(self.actionMenu)
 
@@ -125,6 +135,7 @@ class Palette_Docker(DockWidget):
                 brush = QBrush(Qt.SolidPattern)
                 brush.setColor(color)
                 circlePainter.setBrush(brush)
+                circlePainter.pen().setWidth(0)
                 circlePainter.drawEllipse(0, 0, 11, 11)
                 circlePainter.end()
                 colorSquare = QPixmap.fromImage(img)
@@ -202,12 +213,17 @@ class Palette_Docker(DockWidget):
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()
             self.currentPalette.setComment(paletteComment.toPlainText())
+            self.currentPalette.save()
 
     def slot_export_to_gimp_palette(self):
         palette_exporter_gimppalette.gimpPaletteExporter(self.cmb_palettes.currentText())
 
     def slot_export_to_inkscape_svg(self):
         palette_exporter_inkscapeSVG.inkscapeSVGExporter(self.cmb_palettes.currentText())
+
+    def slot_sort_colors(self):
+        colorSorter = palette_sortColors.sortColors(self.cmb_palettes.currentText())
+        self.paletteView.setPalette(colorSorter.palette())
 
     def canvasChanged(self, canvas):
         pass

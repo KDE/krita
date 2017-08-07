@@ -49,6 +49,12 @@ struct SliderConfig {
     {
         return (double)value / (double)m_maximum;
     }
+
+    inline void resetSlider( QSlider* slider) const
+    {
+        slider->setValue(0);
+    }
+
 };
 
 struct WidgetSlidersConfig {
@@ -136,6 +142,7 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     connect(m_page->cmbType, SIGNAL(activated(int)), this, SLOT(configureSliderLimitsAndLabels()));
     connect(m_page->chkColorize, SIGNAL(toggled(bool)), this, SLOT(configureSliderLimitsAndLabels()));
 
+    connect(m_page->reset,SIGNAL(clicked(bool)),this,SLOT(resetFilter()));
 
     // connect horizontal sliders
     connect(m_page->hueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
@@ -188,3 +195,13 @@ void KisHSVConfigWidget::configureSliderLimitsAndLabels()
 
     emit sigConfigurationItemChanged();
 }
+
+void KisHSVConfigWidget::resetFilter()
+{
+    const WidgetSlidersConfig& widget = getCurrentWidgetConfig(m_page->cmbType->currentIndex(), m_page->chkColorize->isChecked());
+
+    widget.m_sliders[0].resetSlider(m_page->hueSlider);
+    widget.m_sliders[1].resetSlider(m_page->saturationSlider);
+    widget.m_sliders[2].resetSlider(m_page->valueSlider);
+}
+

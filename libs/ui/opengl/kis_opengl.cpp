@@ -38,6 +38,7 @@
 
 namespace
 {
+    bool defaultFormatIsSet = false;
     bool initialized = false;
     bool NeedsFenceWorkaround = false;
     bool NeedsPixmapCacheWorkaround = false;
@@ -52,7 +53,10 @@ void KisOpenGL::initialize()
 {
     if (initialized) return;
 
-    setDefaultFormat();
+    if (!defaultFormatIsSet) {
+        qWarning() << "Default OpenGL format was not set before calling KisOpenGL::initialize. This might be a BUG!";
+        setDefaultFormat();
+    }
 
     // we need a QSurface active to get our GL functions from the context
     QWindow  surface;
@@ -201,6 +205,10 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
 
 void KisOpenGL::setDefaultFormat()
 {
+    if (defaultFormatIsSet) {
+        return;
+    }
+    defaultFormatIsSet = true;
     QSurfaceFormat format;
 #ifdef Q_OS_OSX
     format.setVersion(3, 2);

@@ -81,11 +81,12 @@ void KisPSDTest::testTransparencyMask()
     QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
     QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single", 1, 1));
 
-    doc->setBackupFile(false);
+
     doc->setFileBatchMode(true);
-    doc->setOutputMimeType("image/vnd.adobe.photoshop");
+    doc->setMimeType("image/vnd.adobe.photoshop");
+
     QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_tmask.psd");
-    bool retval = doc->saveAs(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()));
+    bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
     QVERIFY(retval);
 
     {
@@ -205,11 +206,10 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
     QVERIFY(layer->layerStyle()->stroke()->pattern());
     QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
 
-
-    doc->setBackupFile(false);
-    doc->setOutputMimeType("image/vnd.adobe.photoshop");
+    doc->setFileBatchMode(true);
+    const QByteArray mimeType("image/vnd.adobe.photoshop");
     QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_save_styles.psd");
-    bool retval = doc->saveAs(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()));
+    bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), mimeType);
     QVERIFY(retval);
 
     {
@@ -314,8 +314,8 @@ void KisPSDTest::testSavingAllFormats()
 
         QString baseName = sourceFileInfo.fileName();
 
-        QString originalName = QString("%1_0orig").arg(baseName);
-        QString resultName = QString("%1_1result").arg(baseName);
+        //QString originalName = QString("%1_0orig").arg(baseName);
+        //QString resultName = QString("%1_1result").arg(baseName);
         QString tempPsdName = QString("%1_3interm.psd").arg(baseName);
 
         QImage refImage = doc->image()->projection()->convertToQImage(0, QRect(0,0,100,100));
@@ -323,14 +323,14 @@ void KisPSDTest::testSavingAllFormats()
         // uncomment to do a visual check
         // KIS_DUMP_DEVICE_2(doc->image()->projection(), QRect(0,0,100,100), originalName, "dd");
 
-        doc->setBackupFile(false);
         doc->setFileBatchMode(true);
-        doc->setOutputMimeType("image/vnd.adobe.photoshop");
+        doc->setMimeType("image/vnd.adobe.photoshop");
+
         QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + tempPsdName);
 
         dbgKrita << "Saving" << ppVar(dstFileInfo.fileName());
 
-        bool retval = doc->saveAs(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()));
+        bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
         QVERIFY(retval);
 
         {

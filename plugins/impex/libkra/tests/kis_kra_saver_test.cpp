@@ -82,7 +82,7 @@ void KisKraSaverTest::testRoundTrip()
     KisDocument* doc = createCompleteDocument();
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
-    doc->exportDocument(QUrl::fromLocalFile("roundtriptest.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtriptest.kra"), doc->mimeType());
 
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
@@ -119,7 +119,7 @@ void KisKraSaverTest::testRoundTrip()
 void KisKraSaverTest::testSaveEmpty()
 {
     KisDocument* doc = createEmptyDocument();
-    doc->exportDocument(QUrl::fromLocalFile("emptytest.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("emptytest.kra"), doc->mimeType());
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
@@ -162,7 +162,7 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
     p.image->waitForDone();
     chk.checkImage(p.image, "00_initial_layer_update");
 
-    doc->exportDocument(QUrl::fromLocalFile("roundtrip_fill_layer_test.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_fill_layer_test.kra"), doc->mimeType());
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_fill_layer_test.kra");
@@ -254,7 +254,7 @@ void KisKraSaverTest::testRoundTripLayerStyles()
     image->initialRefreshGraph();
     chk.checkImage(image, "00_initial_layers");
 
-    doc->exportDocument(QUrl::fromLocalFile("roundtrip_layer_styles.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_layer_styles.kra"), doc->mimeType());
 
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
@@ -303,7 +303,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->setUseInTimeline(true);
 
     doc->setCurrentImage(image);
-    doc->exportDocument(QUrl::fromLocalFile("roundtrip_animation.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_animation.kra"), doc->mimeType());
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_animation.kra");
@@ -393,7 +393,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
 
 
 
-    doc->exportDocument(QUrl::fromLocalFile("roundtrip_colorize.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_colorize.kra"), doc->mimeType());
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_colorize.kra");
@@ -466,7 +466,7 @@ void KisKraSaverTest::testRoundTripShapeLayer()
 
     chk.checkImage(p.image, "00_initial_layer_update");
 
-    doc->exportDocument(QUrl::fromLocalFile("roundtrip_shapelayer_test.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_shapelayer_test.kra"), doc->mimeType());
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_shapelayer_test.kra");
@@ -526,7 +526,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     chk.checkImage(p.image, "00_initial_shape_selection");
 
-    doc->exportDocument(QUrl::fromLocalFile("roundtrip_shapeselection_test.kra"));
+    doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_shapeselection_test.kra"), doc->mimeType());
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_shapeselection_test.kra");

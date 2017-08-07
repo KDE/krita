@@ -343,17 +343,17 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("isolate_layer");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
-    action = actionManager->createAction("toggle_layer_lock");
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleLock()));
-
     action = actionManager->createAction("toggle_layer_visibility");
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
-    action = actionManager->createAction("toggle_layer_alpha_lock");
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleAlphaLock()));
+    action = actionManager->createAction("toggle_layer_lock");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleLock()));
 
     action = actionManager->createAction("toggle_layer_inherit_alpha");
     connect(action, SIGNAL(triggered()), this, SLOT(toggleInheritAlpha()));
+
+    action = actionManager->createAction("toggle_layer_alpha_lock");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleAlphaLock()));
 
     action  = actionManager->createAction("split_alpha_into_mask");
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaIntoMask()));
@@ -1001,8 +1001,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     dst->initialRefreshGraph();
 
-    doc->setOutputMimeType(mimefilter.toLatin1());
-    doc->exportDocument(url);
+    doc->exportDocumentSync(url, mimefilter.toLatin1());
 }
 
 void KisNodeManager::saveNodeAsImage()

@@ -236,6 +236,11 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         case QEvent::FocusIn: {
             QFocusEvent *fevent = static_cast<QFocusEvent*>(event);
             KisCanvas2 *canvas = canvasResolver.value(object);
+
+            // only relevant canvases from the same main window should be
+            // registered in the switcher
+            KIS_SAFE_ASSERT_RECOVER_BREAK(canvas);
+
             if (canvas != d->canvas) {
                 eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
             }

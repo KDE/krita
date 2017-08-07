@@ -99,7 +99,9 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_canvas->shapeManager()->addShape(this);
 
     Q_FOREACH (KoShape *shape, rhs.shapes()) {
-        this->addShape(shape->cloneShape());
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        this->addShape(clonedShape);
     }
 }
 

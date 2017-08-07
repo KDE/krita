@@ -12,22 +12,28 @@ if (UNIX)
         BUILD_IN_SOURCE 1
 
         UPDATE_COMMAND ""
-        ALWAYS 0
     )
 elseif (MINGW)
+    list(APPEND _SIP_conf
+        --platform win32-g++
+        -b ${PREFIX_ext_sip}/bin
+        -d ${PREFIX_ext_sip}/share/krita/pykrita
+        -e ${PREFIX_ext_sip}/include
+        --sipdir ${PREFIX_ext_sip}/share/sip
+        --target-py-version 3.6
+    )
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://files.kde.org/krita/build/dependencies/sip-4.18.zip
-        URL_MD5 e860d06782962fa02f81aeecba3d82a7
-        
-        CONFIGURE_COMMAND python.exe <SOURCE_DIR>/configure.py --platform win32-g++ -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.6
-        BUILD_COMMAND mingw32-make
-        INSTALL_COMMAND mingw32-make install
+        URL https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.3/sip-4.19.3.zip
+        URL_MD5 1098da9ee1915354fedf38fd6fbe22ce
+
+        CONFIGURE_COMMAND python.exe <SOURCE_DIR>/configure.py ${_SIP_conf}
+        BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+        INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
         
         BUILD_IN_SOURCE 1
 
         UPDATE_COMMAND ""
-        ALWAYS 0
     )
 endif()
 

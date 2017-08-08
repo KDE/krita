@@ -465,8 +465,8 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
-    void setEnableOpenGLDebugging(bool value) const;
-    bool enableOpenGLDebugging(bool defaultValue = false) const;
+    void setEnableOpenGLFramerateLogging(bool value) const;
+    bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;

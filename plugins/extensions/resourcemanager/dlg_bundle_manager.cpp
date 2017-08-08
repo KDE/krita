@@ -30,6 +30,7 @@
 #include <QPixmap>
 #include <QMessageBox>
 #include <QMenu>
+#include <QFileInfo>
 
 #include <kis_icon.h>
 #include "kis_action.h"
@@ -383,7 +384,12 @@ void DlgBundleManager::slotShareResources()
 
         foreach(const QString &file, e.installedFiles()) {
             QFileInfo fi(file);
-            d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+            if(file.isNull() && file.isEmpty()) {
+                d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+            }
+            else {
+                qDebug() << "File Info doesn not exist while importing resource file";
+            }
         }
 
         foreach(const QString &file, e.uninstalledFiles()) {

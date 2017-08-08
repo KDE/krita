@@ -20,33 +20,18 @@ class TenScriptsExtension(krita.Extension):
         action.setToolTip("Assign ten scripts to ten shortcuts.")
         action.triggered.connect(self.initialize)
 
+        self.loadActions()
+
+
     def initialize(self):
         self.uitenscripts = uitenscripts.UITenScripts()
         self.uitenscripts.initialize(self)
-
-    def selectScript(self):
-        dialog = QFileDialog(self)
-        dialog.setNameFilter('Python files (*.py)')
-
-        if dialog.exec():
-            selectedFile = dialog.selectedFiles()[0]
-            obj = self.sender()
-            textField = self.scriptsLayout.itemAt(self.scriptsLayout.indexOf(obj)-1).widget()
-            textField.setText(selectedFile)
-
-    def loadActions(self):
-        pass
-
-    def _accept(self):
-        self.writeSettings()
-        self.close()
 
     def _executeScript(self):
         print('script executed')
 
     def readSettings(self):
-        self.scripts = Application.readSetting("scriptdocker", "scripts", "").split(',')
-        self.shortcuts = Application.readSetting("scriptdocker", "shortcuts", "").split(',')
+        self.scripts = Application.readSetting("tenscripts", "scripts", "").split(',')
 
     def writeSettings(self):
         self.actions = []
@@ -55,7 +40,6 @@ class TenScriptsExtension(krita.Extension):
         index = 0
 
         for row in range(self.scriptsLayout.rowCount()-1):
-            print('index', index)
             shortcutWidget = self.scriptsLayout.itemAt(index).widget()
             textField = self.scriptsLayout.itemAt(index + 1).widget()
 
@@ -63,6 +47,13 @@ class TenScriptsExtension(krita.Extension):
                 action = Application.createAction("execute_script_" + str(row), "Execute Script " + str(row))
                 action.setMenu("None")
                 action.triggered.connect(self._executeScript)
+
+                if index < len(self.scripts) and self.selectedPresets[index] in allPresets:
+                    action.preset = self.selectedPresets[index]
+                else:
+                    action.preset = None
+
+                self.actions.append(action)
                 action.setShortcut("CTRL+SHIFT+1")
                 action.script = textField.text()
 
@@ -72,8 +63,18 @@ class TenScriptsExtension(krita.Extension):
 
             index += 3
 
-        Application.writeSetting("scriptdocker", "scripts", ','.join(map(str, scripts)))
-        Application.writeSetting("scriptdocker", "shortcuts", ','.join(map(str, shortcuts)))
+        Application.writeSetting("tenscripts", "scripts", ','.join(map(str, scripts)))
 
+    def loadActions(self):
+        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
+            action = Application.createAction("execute_script_" + item, "Execute Script " + item)
+            action.setMenu("None")
+            action.script = None
+            action.triggered.connect(self._executeScript)
+
+            if index < len(self.scripts):
+                action.script = self.scripts[index]
+
+            self.actions.append(action)            
 
 Scripter.addExtension(TenScriptsExtension(Application))

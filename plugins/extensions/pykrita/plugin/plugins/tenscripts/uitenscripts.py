@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtGui import QPixmap, QIcon, QKeySequence
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QListView, QFormLayout,
                              QHBoxLayout, QPushButton, QLineEdit, QListWidget,
                              QScrollArea, QGridLayout, QFileDialog, QKeySequenceEdit,
@@ -31,34 +31,45 @@ class UITenScripts(object):
     def initialize(self, tenscripts):
         self.tenscripts = tenscripts
 
-        self.loadGridLayout()
+        self._loadGridLayout()
 
         self.baseArea.setLayout(self.scriptsLayout)
         self.scrollArea.setWidget(self.baseArea)
 
         self.layout.addWidget(self.scrollArea)
-        self.layout.addWidget(self.buttonBox)    
+        self.layout.addWidget(self.buttonBox)
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()
         self.mainDialog.exec_()
 
-    def addNewRow(self):
+    def addNewRow(self, key):
         rowPosition = self.scriptsLayout.rowCount()
         rowLayout = QHBoxLayout()
-        shortcutEdit = QKeySequenceEdit()
+        label = QLabel()
         directoryTextField = QLineEdit()
         directoryDialogButton = QPushButton("...")
 
         directoryTextField.setReadOnly(True)
-        shortcutEdit.setToolTip("Shortcut Ex:CTRL + SHIFT + 1")
+        label.setText("CTRL+SHIFT+{0}".format(key))
         directoryTextField.setToolTip("Selected Path")
         directoryDialogButton.setToolTip("Select the script")
-        directoryDialogButton.clicked.connect(self.selectScript)
+        directoryDialogButton.clicked.connect(self._selectScript)
 
-        self.scriptsLayout.addWidget(shortcutEdit, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
+        self.scriptsLayout.addWidget(label, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
         self.scriptsLayout.addWidget(directoryTextField, rowPosition, 1, Qt.AlignLeft|Qt.AlignTop)
         self.scriptsLayout.addWidget(directoryDialogButton, rowPosition, 2, Qt.AlignLeft|Qt.AlignTop)
 
-    def loadGridLayout(self):
-        pass
+    def _selectScript(self):
+        dialog = QFileDialog(self.mainDialog)
+        dialog.setNameFilter('Python files (*.py)')
+
+        if dialog.exec():
+            selectedFile = dialog.selectedFiles()[0]
+            obj = self.mainDialog.sender()
+            textField = self.scriptsLayout.itemAt(self.scriptsLayout.indexOf(obj)-1).widget()
+            textField.setText(selectedFile)
+
+    def _loadGridLayout(self):
+        for item in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            self.addNewRow(item)

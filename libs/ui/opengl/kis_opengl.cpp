@@ -53,7 +53,7 @@ void KisOpenGL::initialize()
 {
     if (initialized) return;
 
-    if (!defaultFormatIsSet) {
+    KIS_SAFE_ASSERT_RECOVER(defaultFormatIsSet) {
         qWarning() << "Default OpenGL format was not set before calling KisOpenGL::initialize. This might be a BUG!";
         setDefaultFormat();
     }

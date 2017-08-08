@@ -384,7 +384,7 @@ void DlgBundleManager::slotShareResources()
 
         foreach(const QString &file, e.installedFiles()) {
             QFileInfo fi(file);
-            if(file.isNull() && file.isEmpty()) {
+            if(file.isNull() || file.isEmpty()) {
                 d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
             }
             else {

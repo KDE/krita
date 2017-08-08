@@ -332,10 +332,6 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
     KisConfig cfg;
 
-    if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgUI << "GL-log:" << context;
-    }
-
     qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
                           QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),

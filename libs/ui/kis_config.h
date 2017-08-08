@@ -454,8 +454,6 @@ public:
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;
 
-    bool useVerboseOpenGLDebugOutput(bool defaultValue = false) const;
-
     int workaroundX11SmoothPressureSteps(bool defaultValue = false) const;
 
     bool showCanvasMessages(bool defaultValue = false) const;

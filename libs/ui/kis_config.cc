@@ -1561,11 +1561,6 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
     m_cfg.writeEntry("testingCompressBrushEvents", value);
 }
 
-bool KisConfig::useVerboseOpenGLDebugOutput(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("useVerboseOpenGLDebugOutput", false));
-}
-
 int KisConfig::workaroundX11SmoothPressureSteps(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0));

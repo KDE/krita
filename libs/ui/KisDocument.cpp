@@ -1076,8 +1076,11 @@ bool KisDocument::openFile()
     dbgUI << localFilePath() << "type:" << typeName;
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
-    KoUpdaterPtr updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
-    d->importExportManager->setUpdater(updater);
+
+    if (window) {
+        KoUpdaterPtr updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
+        d->importExportManager->setUpdater(updater);
+    }
 
     KisImportExportFilter::ConversionStatus status;
 

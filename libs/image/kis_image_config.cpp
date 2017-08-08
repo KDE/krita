@@ -470,7 +470,7 @@ void KisImageConfig::setMaxNumberOfThreads(int value)
 
 int KisImageConfig::frameRenderingClones(bool defaultValue) const
 {
-    const int defaultClonesCount = qMax(1, QThread::idealThreadCount() / 2);
+    const int defaultClonesCount = qMax(1, maxNumberOfThreads(defaultValue) / 2);
     return defaultValue ? defaultClonesCount : m_config.readEntry("frameRenderingClones", defaultClonesCount);
 }
 

@@ -4,65 +4,25 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QListView, QFormLayout,
                              QLabel, QAction, QDialogButtonBox)
 from PyQt5.QtCore import QObject, Qt
 import krita
+from tenscripts import uitenscripts
 
 
-class ScriptDocker(krita.DockWidget):
+class TenScriptsExtension(krita.Extension):
 
-    def __init__(self):
-       super(ScriptDocker, self).__init__()
-
-       self.baseWidget = QWidget()
-       self.layout = QVBoxLayout()
-       self.scrollArea =  QScrollArea()
-       self.scriptsLayout = QGridLayout()
-       self.addButton = QPushButton("Add Script")
-       self.baseArea = QWidget()
-       self.buttonBox = QDialogButtonBox(self)
+    def __init__(self, parent):
+       super(TenScriptsExtension, self).__init__(parent)
 
        self.actions = []
        self.scripts = []
 
-       self.initialize()
+    def setup(self):
+        action = Application.createAction("ten_scripts", "Ten Scripts")
+        action.setToolTip("Assign ten scripts to ten shortcuts.")
+        action.triggered.connect(self.initialize)
 
     def initialize(self):
-        self.buttonBox.accepted.connect(self._accept)
-        self.buttonBox.rejected.connect(self.close)
-        self.addButton.clicked.connect(self.addNewRow)
-
-        self.baseArea.setLayout(self.scriptsLayout)
-        self.scrollArea.setWidget(self.baseArea)
-
-        self.layout.addWidget(self.scrollArea)
-        self.layout.addWidget(self.addButton)
-        self.layout.addWidget(self.buttonBox)
-
-        self.baseWidget.setLayout(self.layout)
-        self.setWidget(self.baseWidget)
-
-        self.scrollArea.setWidgetResizable(True)
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        self.setWindowTitle("Script Docker")
-
-    def canvasChanged(self, canvas):
-        pass
-
-    def addNewRow(self):
-        rowPosition = self.scriptsLayout.rowCount()
-        rowLayout = QHBoxLayout()
-        shortcutEdit = QKeySequenceEdit()
-        directoryTextField = QLineEdit()
-        directoryDialogButton = QPushButton("...")
-
-        directoryTextField.setReadOnly(True)
-        shortcutEdit.setToolTip("Shortcut Ex:CTRL + SHIFT + 1")
-        directoryTextField.setToolTip("Selected Path")
-        directoryDialogButton.setToolTip("Select the script")
-        directoryDialogButton.clicked.connect(self.selectScript)
-
-        self.scriptsLayout.addWidget(shortcutEdit, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
-        self.scriptsLayout.addWidget(directoryTextField, rowPosition, 1, Qt.AlignLeft|Qt.AlignTop)
-        self.scriptsLayout.addWidget(directoryDialogButton, rowPosition, 2, Qt.AlignLeft|Qt.AlignTop)
+        self.uitenscripts = uitenscripts.UITenScripts()
+        self.uitenscripts.initialize(self)
 
     def selectScript(self):
         dialog = QFileDialog(self)
@@ -116,4 +76,4 @@ class ScriptDocker(krita.DockWidget):
         Application.writeSetting("scriptdocker", "shortcuts", ','.join(map(str, shortcuts)))
 
 
-Application.addDockWidgetFactory(krita.DockWidgetFactory("scriptdocker", krita.DockWidgetFactoryBase.DockRight, ScriptDocker))
+Scripter.addExtension(TenScriptsExtension(Application))

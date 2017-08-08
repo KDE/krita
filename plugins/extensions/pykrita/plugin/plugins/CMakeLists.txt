@@ -88,7 +88,7 @@ DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 install_pykrita_plugin(palette_docker)
 install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
-install_pykrita_plugin(scriptdocker)
+install_pykrita_plugin(tenscripts)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

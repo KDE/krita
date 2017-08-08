@@ -79,6 +79,7 @@
 
 // for the performance update
 #include <kis_cubic_curve.h>
+#include <kis_signals_blocker.h>
 
 #include "input/config/kis_input_configuration_page.h"
 
@@ -661,6 +662,12 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     lblSwapFileLocation->setText(cfg.swapDir());
     connect(bnSwapFile, SIGNAL(clicked()), SLOT(selectSwapDir()));
 
+    sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
+    sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
+
+    connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
+    connect(sliderFrameClonesLimit, SIGNAL(valueChanged(int)), SLOT(slotFrameClonesLimitChanged(int)));
+
     load(false);
 }
 
@@ -682,6 +689,12 @@ void PerformanceTab::load(bool requestDefault)
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
     lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+
+    m_lastUsedThreadsLimit = cfg.maxNumberOfThreads(requestDefault);
+    m_lastUsedClonesLimit = cfg.frameRenderingClones(requestDefault);
+
+    sliderThreadsLimit->setValue(m_lastUsedThreadsLimit);
+    sliderFrameClonesLimit->setValue(m_lastUsedClonesLimit);
 
     {
         KisConfig cfg2;
@@ -705,6 +718,9 @@ void PerformanceTab::save()
 
     cfg.setSwapDir(lblSwapFileLocation->text());
 
+    cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
+    cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
+
     {
         KisConfig cfg2;
         cfg2.setEnableOpenGLDebugging(chkOpenGLLogging->isChecked());
@@ -718,6 +734,20 @@ void PerformanceTab::selectSwapDir()
     QString swapDir = cfg.swapDir();
     swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
     lblSwapFileLocation->setText(swapDir);
+}
+
+void PerformanceTab::slotThreadsLimitChanged(int value)
+{
+    KisSignalsBlocker b(sliderFrameClonesLimit);
+    sliderFrameClonesLimit->setValue(qMin(m_lastUsedClonesLimit, value));
+    m_lastUsedThreadsLimit = value;
+}
+
+void PerformanceTab::slotFrameClonesLimitChanged(int value)
+{
+    KisSignalsBlocker b(sliderThreadsLimit);
+    sliderThreadsLimit->setValue(qMax(m_lastUsedThreadsLimit, value));
+    m_lastUsedClonesLimit = value;
 }
 
 //---------------------------------------------------------------------------------------------------

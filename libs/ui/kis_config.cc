@@ -677,16 +677,6 @@ int KisConfig::textureOverlapBorder() const
     return 1 << qMax(0, numMipmapLevels());
 }
 
-qint32 KisConfig::maxNumberOfThreads(bool defaultValue) const
-{
-    return (defaultValue ? QThread::idealThreadCount() : m_cfg.readEntry("maxthreads", QThread::idealThreadCount()));
-}
-
-void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
-{
-    m_cfg.writeEntry("maxthreads", maxThreads);
-}
-
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
     int v = m_cfg.readEntry("gridmainstyle", 0);

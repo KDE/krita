@@ -28,6 +28,7 @@
 #include "kis_strokes_queue.h"
 
 #include "kis_queues_progress_updater.h"
+#include "KisUpdateSchedulerConfigNotifier.h"
 
 #include <QReadWriteLock>
 #include "kis_lazy_wait_condition.h"
@@ -49,7 +50,7 @@
 struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     Private(KisUpdateScheduler *_q, KisProjectionUpdateListener *p)
         : q(_q)
-        , updaterContext(KisUpdaterContext::useIdealThreadCountTag, q)
+        , updaterContext(KisImageConfig().maxNumberOfThreads(), q)
         , projectionUpdateListener(p)
     {}
 
@@ -115,6 +116,9 @@ void KisUpdateScheduler::connectSignals()
 
     connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
             SLOT(spareThreadAppeared()), Qt::DirectConnection);
+
+    connect(KisUpdateSchedulerConfigNotifier::instance(), SIGNAL(configChanged()),
+            SLOT(updateSettings()));
 }
 
 void KisUpdateScheduler::setProgressProxy(KoProgressProxy *progressProxy)
@@ -301,6 +305,8 @@ void KisUpdateScheduler::updateSettings()
 
     KisImageConfig config;
     m_d->balancingRatio = config.schedulerBalancingRatio();
+
+    setThreadsLimit(config.maxNumberOfThreads());
 }
 
 void KisUpdateScheduler::lock()

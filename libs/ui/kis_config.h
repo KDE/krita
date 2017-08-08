@@ -177,9 +177,6 @@ public:
     int openGLTextureSize(bool defaultValue = false) const;
     int textureOverlapBorder() const;
 
-    qint32 maxNumberOfThreads(bool defaultValue = false) const;
-    void setMaxNumberOfThreads(qint32 numberOfThreads);
-
     quint32 getGridMainStyle(bool defaultValue = false) const;
     void setGridMainStyle(quint32 v) const;
 

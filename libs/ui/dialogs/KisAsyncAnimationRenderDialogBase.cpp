@@ -25,6 +25,7 @@
 #include <QThread>
 #include <QTime>
 #include <QList>
+#include <QtMath>
 
 #include <klocalizedstring.h>
 
@@ -32,6 +33,7 @@
 #include "KisAsyncAnimationRendererBase.h"
 #include "kis_time_range.h"
 #include "kis_image.h"
+#include "kis_image_config.h"
 
 #include <vector>
 #include <memory>
@@ -118,9 +120,11 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     m_d->processingTime.start();
 
-    const int maxThreads = QThread::idealThreadCount();
-    const int numWorkers = qMin(m_d->dirtyFramesCount, qMax(1, maxThreads / 2));
-    const int numThreadsPerWorker = qMax(qMin(2, maxThreads), qRound(qreal(maxThreads) / numWorkers));
+    KisImageConfig cfg;
+
+    const int maxThreads = cfg.maxNumberOfThreads();
+    const int numWorkers = qMin(m_d->dirtyFramesCount, cfg.frameRenderingClones());
+    const int numThreadsPerWorker = qMax(1, qCeil(qreal(maxThreads) / numWorkers));
 
     ENTER_FUNCTION() << ppVar(numWorkers) << ppVar(numThreadsPerWorker);
 

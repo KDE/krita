@@ -453,3 +453,32 @@ void KisImageConfig::setUseLodForColorizeMask(bool value)
 {
     m_config.writeEntry("useLodForColorizeMask", value);
 }
+
+int KisImageConfig::maxNumberOfThreads(bool defaultValue) const
+{
+    return (defaultValue ? QThread::idealThreadCount() : m_config.readEntry("maxNumberOfThreads", QThread::idealThreadCount()));
+}
+
+void KisImageConfig::setMaxNumberOfThreads(int value)
+{
+    if (value == QThread::idealThreadCount()) {
+        m_config.deleteEntry("maxNumberOfThreads");
+    } else {
+        m_config.writeEntry("maxNumberOfThreads", value);
+    }
+}
+
+int KisImageConfig::frameRenderingClones(bool defaultValue) const
+{
+    const int defaultClonesCount = qMax(1, QThread::idealThreadCount() / 2);
+    return defaultValue ? defaultClonesCount : m_config.readEntry("frameRenderingClones", defaultClonesCount);
+}
+
+void KisImageConfig::setFrameRenderingClones(int value)
+{
+    if (value == frameRenderingClones(true)) {
+        m_config.deleteEntry("frameRenderingClones");
+    } else {
+        m_config.writeEntry("frameRenderingClones", value);
+    }
+}

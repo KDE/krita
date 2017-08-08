@@ -80,11 +80,6 @@ public:
     void unlock(bool resetLodLevels = true);
 
     /**
-     * Called when it is necessary to reread configuration
-     */
-    void updateSettings();
-
-    /**
      * Waits until all the running jobs are finished.
      *
      * If some other thread adds jobs in parallel, then you may
@@ -213,6 +208,12 @@ protected:
     KisUpdateScheduler();
     void connectSignals();
     void processQueues();
+
+protected Q_SLOTS:
+    /**
+     * Called when it is necessary to reread configuration
+     */
+    void updateSettings();
 
 private Q_SLOTS:
     void continueUpdate(const QRect &rect);

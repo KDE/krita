@@ -73,7 +73,7 @@ public:
      */
     static bool needsPixmapCacheWorkaround();
 
-    static void setDefaultFormat();
+    static void setDefaultFormat(bool enableDebug = false, bool debugSynchronous = false);
 
 private:
 

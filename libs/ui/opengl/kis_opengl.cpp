@@ -19,6 +19,7 @@
 #include "opengl/kis_opengl.h"
 
 #include <QOpenGLContext>
+#include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
 
 #include <QApplication>
@@ -39,6 +40,8 @@
 namespace
 {
     bool defaultFormatIsSet = false;
+    bool isDebugEnabled = false;
+    bool isDebugSynchronous = false;
     bool initialized = false;
     bool NeedsFenceWorkaround = false;
     bool NeedsPixmapCacheWorkaround = false;
@@ -48,13 +51,17 @@ namespace
     bool isOpenGLES = false;
 
     QString Renderer;
+
+    void openglOnMessageLogged(const QOpenGLDebugMessage& debugMessage) {
+        qDebug() << "OpenGL:" << debugMessage;
+    }
 }
 
 void KisOpenGL::initialize()
 {
     if (initialized) return;
 
-    if (!defaultFormatIsSet) {
+    KIS_SAFE_ASSERT_RECOVER(!defaultFormatIsSet) {
         qWarning() << "Default OpenGL format was not set before calling KisOpenGL::initialize. This might be a BUG!";
         setDefaultFormat();
     }
@@ -118,6 +125,21 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     initialize();
 
     dbgUI << "OpenGL: Opening new context";
+    if (isDebugEnabled) {
+        // Passing ctx for ownership management only, not specifying context.
+        // QOpenGLDebugLogger only function on the current active context.
+        // FIXME: Do we need to make sure ctx is the active context?
+        QOpenGLDebugLogger* openglLogger = new QOpenGLDebugLogger(ctx);
+        if (openglLogger->initialize()) {
+            qDebug() << "QOpenGLDebugLogger is initialized. Check whether you get a message below.";
+            QObject::connect(openglLogger, &QOpenGLDebugLogger::messageLogged, &openglOnMessageLogged);
+            openglLogger->startLogging(isDebugSynchronous ? QOpenGLDebugLogger::SynchronousLogging : QOpenGLDebugLogger::AsynchronousLogging);
+            openglLogger->logMessage(QOpenGLDebugMessage::createApplicationMessage(QStringLiteral("QOpenGLDebugLogger is logging.")));
+        } else {
+            qDebug() << "QOpenGLDebugLogger cannot be initialized.";
+            delete openglLogger;
+        }
+    }
 
     // Double check we were given the version we requested
     QSurfaceFormat format = ctx->format();
@@ -212,7 +234,7 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
     return NeedsPixmapCacheWorkaround;
 }
 
-void KisOpenGL::setDefaultFormat()
+void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 {
     if (defaultFormatIsSet) {
         return;
@@ -232,6 +254,12 @@ void KisOpenGL::setDefaultFormat()
     format.setStencilBufferSize(8);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     format.setSwapInterval(0); // Disable vertical refresh syncing
+    isDebugEnabled = enableDebug;
+    if (enableDebug) {
+        format.setOption(QSurfaceFormat::DebugContext, true);
+        isDebugSynchronous = debugSynchronous;
+        qDebug() << "QOpenGLDebugLogger will be enabled, synchronous:" << debugSynchronous;
+    }
     QSurfaceFormat::setDefaultFormat(format);
 }
 

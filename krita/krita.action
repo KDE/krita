@@ -2264,10 +2264,10 @@
     </Action>
     <Action name="toggle_layer_lock">
       <icon>layer-locked</icon>
-      <text>&amp;Lock/unlock layer</text>
+      <text>&amp;Toggle layer lock</text>
       <whatsThis></whatsThis>
-      <toolTip>Lock/unlock layer</toolTip>
-      <iconText>Lock/unlock layer</iconText>
+      <toolTip>Toggle layer lock</toolTip>
+      <iconText>Toggle layer lock</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -2288,10 +2288,10 @@
     </Action>
     <Action name="toggle_layer_alpha_lock">
       <icon>transparency-locked</icon>
-      <text>Lock/unlock layer &amp;alpha</text>
+      <text>Toggle layer &amp;alpha</text>
       <whatsThis></whatsThis>
-      <toolTip>Lock/unlock layer's alpha</toolTip>
-      <iconText>Lock/unlock layer's alpha</iconText>
+      <toolTip>Toggle layer alpha</toolTip>
+      <iconText>Toggle layer alpha</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

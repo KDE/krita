@@ -119,7 +119,6 @@ extern "C" int main(int argc, char **argv)
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-    KisOpenGL::setDefaultFormat();
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -127,18 +126,29 @@ extern "C" int main(int argc, char **argv)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
     bool singleApplication = true;
-#if QT_VERSION >= 0x050600
+    bool enableOpenGLDebug = false;
+    bool openGLDebugSynchronous = false;
     {
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-        singleApplication = kritarc.value("EnableSingleApplication").toBool();
+        singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
+#if QT_VERSION >= 0x050600
         if (kritarc.value("EnableHiDPI", false).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
-    }
 #endif
+        if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
+            enableOpenGLDebug = true;
+        } else {
+            enableOpenGLDebug = kritarc.value("EnableOpenGLDebug", false).toBool();
+        }
+        if (enableOpenGLDebug && (qgetenv("KRITA_OPENGL_DEBUG") == "sync" || kritarc.value("OpenGLDebugSynchronous", false).toBool())) {
+            openGLDebugSynchronous = true;
+        }
+    }
+    KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
 
     KLocalizedString::setApplicationDomain("krita");
 

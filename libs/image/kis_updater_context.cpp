@@ -111,7 +111,12 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
-    m_threadPool.start(m_jobs[jobIndex]);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
 }
 
 /**
@@ -134,7 +139,12 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setStrokeJob(strokeJob);
-    m_threadPool.start(m_jobs[jobIndex]);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
 }
 
 /**
@@ -157,7 +167,12 @@ void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
-    m_threadPool.start(m_jobs[jobIndex]);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
 }
 
 /**

@@ -541,9 +541,21 @@ void KisOpenGLImageTextures::updateTextureFormat()
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (!(m_image && ctx)) return;
 
-    m_texturesInfo.internalFormat = GL_RGBA8;
-    m_texturesInfo.type = GL_UNSIGNED_BYTE;
-    m_texturesInfo.format = GL_BGRA;
+    if (!KisOpenGL::hasOpenGLES()) {
+        m_texturesInfo.internalFormat = GL_RGBA8;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_BGRA;
+    } else {
+        // The only OpenGL ES target we are supporting is ANGLE and it supports GL_BGRA8_EXT
+        m_texturesInfo.internalFormat = GL_BGRA8_EXT;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_BGRA_EXT;
+        KIS_SAFE_ASSERT_RECOVER(ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
+            m_texturesInfo.internalFormat = GL_RGBA8;
+            m_texturesInfo.type = GL_UNSIGNED_BYTE;
+            m_texturesInfo.format = GL_RGBA;
+        }
+    }
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -604,28 +616,15 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_RGBA;
             destinationColorDepthId = Float32BitsColorDepthID;
         }
-        else if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
-            m_texturesInfo.internalFormat = GL_RGBA16;
-            m_texturesInfo.type = GL_UNSIGNED_SHORT;
-            m_texturesInfo.format = GL_BGRA;
-            destinationColorDepthId = Integer16BitsColorDepthID;
-            dbgUI << "Using 16 bits rgba";
-        } else if (KisOpenGL::hasOpenGLES()) {
-            if (ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
-                m_texturesInfo.internalFormat = GL_BGRA8_EXT;
-                m_texturesInfo.type = GL_UNSIGNED_BYTE;
-                m_texturesInfo.format = GL_BGRA_EXT;
-                destinationColorDepthId = Integer8BitsColorDepthID;
-                dbgUI << "Using conversion to 8-bit bgra (GLES)";
-            } else {
-                warnUI << "GL_EXT_texture_format_BGRA8888 not supported."
-                    << "Using GL_HALF_FLOAT instead!";
-                m_texturesInfo.internalFormat = GL_RGBA16F;
-                m_texturesInfo.type = GL_HALF_FLOAT;
-                m_texturesInfo.format = GL_RGBA;
-                destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Using half (GLES)";
+        else if (colorDepthId == Integer16BitsColorDepthID) {
+            if (!KisOpenGL::hasOpenGLES()) {
+                m_texturesInfo.internalFormat = GL_RGBA16;
+                m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                m_texturesInfo.format = GL_BGRA;
+                destinationColorDepthId = Integer16BitsColorDepthID;
+                dbgUI << "Using 16 bits rgba";
             }
+            // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
         }
     }
     else {
@@ -636,23 +635,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
-        } else if (KisOpenGL::hasOpenGLES()) {
-            if (ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
-                m_texturesInfo.internalFormat = GL_BGRA8_EXT;
-                m_texturesInfo.type = GL_UNSIGNED_BYTE;
-                m_texturesInfo.format = GL_BGRA_EXT;
-                destinationColorDepthId = Integer8BitsColorDepthID;
-                dbgUI << "Using conversion to 8-bit bgra (GLES)";
-            } else {
-                warnUI << "GL_EXT_texture_format_BGRA8888 not supported."
-                    << "Using GL_HALF_FLOAT instead!";
-                m_texturesInfo.internalFormat = GL_RGBA16F;
-                m_texturesInfo.type = GL_HALF_FLOAT;
-                m_texturesInfo.format = GL_RGBA;
-                destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Using conversion to half (GLES)";
-            }
         }
+        // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
     }
 
     if (!m_internalColorManagementActive &&

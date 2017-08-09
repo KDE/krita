@@ -76,6 +76,8 @@ private Q_SLOTS:
     /// Dialog for cleaning up the blacklisted files.
     void slotDeleteBackupFiles();
 
+    void slotImportResources();
+
     /// Opens a dialog pointing towards the Resource diectory.
     void slotOpenResourceFolder();
 

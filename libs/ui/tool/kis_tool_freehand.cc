@@ -84,6 +84,9 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     m_needEndContinuedStroke = false;
     m_lastID = KoID("newId-hehe");
+
+    connect(&m_updateTimer, SIGNAL(timeout()),
+            SLOT(slotUpdateSystem()));
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -190,13 +193,15 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
                                              canvas()->resourceManager(),
                                              image(),
                                              currentNode());
-    } else
+        m_updateTimer.stop();
+    } else {
         m_helper->initPaint(event,
                             convertToPixelCoord(event),
                             canvas()->resourceManager(),
                             image(),
                             currentNode(),
                             image().data());
+    }
 }
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
@@ -215,6 +220,7 @@ void KisToolFreehand::endStroke()
     if (currentPaintOpPreset()->settings()->needsContinuedStroke() && !m_needEndContinuedStroke) {
             qDebug() << "Finished part of continued stroke\n" << ppVar(m_needEndContinuedStroke);
             m_helper->endPaintInContinuedStroke();
+            m_updateTimer.start(50);
     } else {
         qDebug() << "Stroke finished finaly\n" << ppVar(m_needEndContinuedStroke);
         m_helper->endPaint();
@@ -352,6 +358,8 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
+    if (m_updateTimer.isActive())
+        m_updateTimer.stop();
     if (currentPaintOpPreset()->settings()->needsContinuedStroke()) {
         m_needEndContinuedStroke = true;
         endStroke();
@@ -460,6 +468,11 @@ void KisToolFreehand::slotDoResizeBrush(qreal newSize)
     settings->setPaintOpSize(newSize);
     requestUpdateOutline(m_initialGestureDocPoint, 0);
 
+}
+
+void KisToolFreehand::slotUpdateSystem()
+{
+    m_helper->updateContinuedSystem();
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)

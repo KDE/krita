@@ -94,6 +94,8 @@ protected Q_SLOTS:
     void setOnlyOneAssistantSnap(bool assistant);
     void slotDoResizeBrush(qreal newSize);
 
+    void slotUpdateSystem();
+
 private:
     friend class KisToolFreehandPaintingInformationBuilder;
 
@@ -133,6 +135,8 @@ private:
 
     bool m_needEndContinuedStroke;
     KoID m_lastID;
+
+    QTimer m_updateTimer;
 };
 
 

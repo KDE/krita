@@ -764,6 +764,7 @@ public:
      */
     void setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags);
 
+    void updateSystem();
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();

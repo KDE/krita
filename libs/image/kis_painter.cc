@@ -2741,6 +2741,11 @@ void KisPainter::setColorConversionFlags(KoColorConversionTransformation::Conver
     d->conversionFlags = conversionFlags;
 }
 
+void KisPainter::updateSystem()
+{
+    d->paintOp->updateSystem();
+}
+
 void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
 {
     if (!d->mirrorHorizontally && !d->mirrorVertically) return;

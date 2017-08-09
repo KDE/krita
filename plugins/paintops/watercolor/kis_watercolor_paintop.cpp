@@ -41,6 +41,7 @@ KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, 
     m_watercolorOption.readOptionSetting(settings);
     m_lastTime = 0;
     m_timer.start();
+    m_oldPD = new KisPaintDevice(*painter->device().constData());
 }
 
 KisWatercolorPaintOp::~KisWatercolorPaintOp()
@@ -51,10 +52,6 @@ KisWatercolorPaintOp::~KisWatercolorPaintOp()
 KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &info)
 {
     QRect dirtyRect;
-
-    // Painting new stroke
-    qint16 time = m_timer.elapsed();
-    qint16 timeGone = time - m_lastTime;
 
     KisSplatGeneratorStrategy *strategy;
     switch (m_watercolorOption.type) {
@@ -86,52 +83,35 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
 
     foreach (KisSplat *splat, newSplats) {
         m_flowingPlane.add(splat);
-        dirtyRect |= splat->boundingRect().toAlignedRect();
+        splat->doPaint(painter());
     }
 
+    return updateSpacingImpl(info);
+}
+
+void KisWatercolorPaintOp::updateSystem()
+{
+    // Painting new stroke
+    qint16 time = m_timer.elapsed();
+    qint16 timeGone = time - m_lastTime;
+    QRect dirtyRect;
     // Updating system
-    for (int i = 0; i < timeGone / 33; i++) {
-//        foreach (KisSplat *splat, m_flowing) {
-//            // todo: check if tree should be updated when splat is changed
-
-//            if (splat->update(m_wetMap) == KisSplat::Fixed) {
-//                m_fixed.push_back(splat);
-//                m_fixedTree.insert(splat->boundingRect(), splat);
-//                m_fixedPlane.add(splat);
-//                fixedRect |= splat->boundingRect().toRect();
-
-//                m_flowing.removeOne(splat);
-//                m_flowingPlane.remove(splat);
-//                flowingRect |= splat->boundingRect().toRect();
-//            }
-//        }
-
-//        fixedRect |= m_fixedPlane.update(wetMap);
-
-//        /*foreach (KisSplat *splat, m_fixed) {
-//            if (splat->update(m_wetMap) == KisSplat::Dried) {
-//                m_dried.push_back(splat);
-//                m_driedPlane.add(splat);
-//                driedRect |= splat->boundingRect().toRect();
-
-//                m_fixed.removeOne(splat);
-//                m_fixedTree.remove(splat);
-//                m_fixedPlane.remove(splat);
-//                fixedRect |= splat->boundingRect().toRect();
-//            }
-//        }*/
-        dirtyRect |= m_fixedPlane.update(m_wetMap) |
-        m_flowingPlane.update(m_wetMap);
+//    for (int i = 0; i < timeGone / 33; i++) {
+        dirtyRect |= m_fixedPlane.update(m_wetMap);
+        dirtyRect |= m_flowingPlane.update(m_wetMap);
 
         m_wetMap->update();
-    }
+//    }
 
     m_lastTime = time - time % 33;
     source()->clear();
+    painter()->bitBlt(m_oldPD->exactBounds().topLeft(),
+                      m_oldPD, m_oldPD->exactBounds());
     m_driedPlane.paint(painter(), dirtyRect);
     m_fixedPlane.paint(painter(), dirtyRect);
     m_flowingPlane.paint(painter(), dirtyRect);
-    return updateSpacingImpl(info);
+
+
 }
 
 KisSpacingInformation KisWatercolorPaintOp::updateSpacingImpl(const KisPaintInformation &info) const

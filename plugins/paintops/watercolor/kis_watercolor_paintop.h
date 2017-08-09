@@ -49,6 +49,8 @@ public:
 
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
+    void updateSystem() override;
+
 protected:
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
@@ -68,6 +70,8 @@ private:
     KisBaseSplatsPlane m_driedPlane;
     KisFixedSplatsPlane m_fixedPlane;
     KisBaseSplatsPlane m_flowingPlane;
+
+    KisPaintDeviceSP m_oldPD;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

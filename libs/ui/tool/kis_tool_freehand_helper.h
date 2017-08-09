@@ -79,6 +79,7 @@ public:
                                     KoCanvasResourceManager *resourceManager,
                                     KisImageWSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds = 0);
     void endPaintInContinuedStroke();
+    void updateContinuedSystem();
 
     const KisPaintOp* currentPaintOp() const;
     QPainterPath paintOpOutline(const QPointF &savedCursorPos,

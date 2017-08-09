@@ -131,6 +131,9 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     case Data::UPDATE_RESOURCES:
         info->painter->setPaintColor(d->customColor);
         break;
+    case Data::UPDATE_SYSTEM:
+        info->painter->updateSystem();
+        break;
     case Data::QPAINTER_PATH_FILL: {
         info->painter->setBackgroundColor(d->customColor);
         info->painter->fillPainterPath(d->path);}

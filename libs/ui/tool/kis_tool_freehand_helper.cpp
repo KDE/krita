@@ -673,6 +673,12 @@ void KisToolFreehandHelper::endPaintInContinuedStroke()
     }
 }
 
+void KisToolFreehandHelper::updateContinuedSystem()
+{
+    m_d->strokesFacade->addJob(m_d->strokeId,
+                               new FreehandStrokeStrategy::Data(m_d->resources->currentNode(), 0));
+}
+
 void KisToolFreehandHelper::cancelPaint()
 {
     if (!m_d->strokeId) return;

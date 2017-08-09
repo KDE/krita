@@ -111,6 +111,11 @@ public:
      */
     static void splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction);
 
+    /**
+     * Updating system in dynamic paintops, such as watercolor
+     */
+    virtual void updateSystem(){}
+
 protected:
     friend class KisPaintInformation;
     /**

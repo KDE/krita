@@ -46,7 +46,8 @@ public:
             PAINTER_PATH,
             QPAINTER_PATH,
             QPAINTER_PATH_FILL,
-            UPDATE_RESOURCES
+            UPDATE_RESOURCES,
+            UPDATE_SYSTEM
         };
 
         Data(KisNodeSP _node, int _painterInfoId,
@@ -106,6 +107,11 @@ public:
              const KoColor &_customColor)
             : node(_node), painterInfoId(_painterInfoId),
               type(UPDATE_RESOURCES), customColor(_customColor)
+        {}
+
+        Data(KisNodeSP _node, int _painterInfoId)
+            : node(_node), painterInfoId(_painterInfoId),
+              type(UPDATE_SYSTEM)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {

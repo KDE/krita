@@ -79,12 +79,12 @@ protected:
 
 protected:
     void setDirty(const QRect &rc);
+    QRect m_dirtyRect;
 
 private:
     KisPaintDeviceSP m_cachedPD;
     bool m_isDirty;
     bool m_useCaching;
-    QRect m_dirtyRect;
 };
 
 #endif // KIS_ABSTRACT_SPLATS_PLANE_H

@@ -87,9 +87,39 @@ quint32 KisTileHashTableTraits<T>::calculateHash(qint32 col, qint32 row)
 
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
-KisTileHashTableTraits<T>::getTile(qint32 col, qint32 row)
+KisTileHashTableTraits<T>::getTileMinefieldWalk(qint32 col, qint32 row, qint32 idx)
 {
-    qint32 idx = calculateHash(col, row);
+    /**
+     * This is a special method for dangerous and unsafe access to
+     * the tiles table. Thanks to the fact that our shared pointers
+     * are thread safe, we can iterate through the linked list without
+     * having any locks help. In the worst case, we will miss the needed
+     * tile. In that case, the higher level code will do the proper
+     * locking and do the second try with all the needed locks held.
+     */
+
+    TileTypeSP headTile = m_hashTable[idx];
+    TileTypeSP tile = headTile;
+
+    for (; tile; tile = tile->next()) {
+        if (tile->col() == col &&
+            tile->row() == row) {
+
+            if (m_hashTable[idx] != headTile) {
+                tile.clear();
+            }
+
+            break;
+        }
+    }
+
+    return tile;
+}
+
+template<class T>
+typename KisTileHashTableTraits<T>::TileTypeSP
+KisTileHashTableTraits<T>::getTile(qint32 col, qint32 row, qint32 idx)
+{
     TileTypeSP tile = m_hashTable[idx];
 
     for (; tile; tile = tile->next()) {
@@ -104,9 +134,8 @@ KisTileHashTableTraits<T>::getTile(qint32 col, qint32 row)
 }
 
 template<class T>
-void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile)
+void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile, qint32 idx)
 {
-    qint32 idx = calculateHash(tile->col(), tile->row());
     TileTypeSP firstTile = m_hashTable[idx];
 
 #ifdef SHARED_TILES_SANITY_CHECK
@@ -121,9 +150,8 @@ void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile)
 
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
-KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
+KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row, qint32 idx)
 {
-    qint32 idx = calculateHash(col, row);
     TileTypeSP tile = m_hashTable[idx];
     TileTypeSP prevTile;
 
@@ -179,16 +207,22 @@ inline KisTileData* KisTileHashTableTraits<T>::defaultTileDataImp() const
 template<class T>
 bool KisTileHashTableTraits<T>::tileExists(qint32 col, qint32 row)
 {
-    QReadLocker locker(&m_lock);
-    return getTile(col, row);
+    return this->getExisitngTile(col, row);
 }
 
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getExistingTile(qint32 col, qint32 row)
 {
+    const qint32 idx = calculateHash(col, row);
+
+    // first quick and non-guaranteed way
+    TileTypeSP tile = getTileMinefieldWalk(col, row, idx);
+    if (tile) return tile;
+
+    // then try with a proper locking
     QReadLocker locker(&m_lock);
-    return getTile(col, row);
+    return getTile(col, row, idx);
 }
 
 template<class T>
@@ -196,16 +230,20 @@ typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
                                        bool& newTile)
 {
-    newTile = false;
-    TileTypeSP tile = getExistingTile(col, row);
+    const qint32 idx = calculateHash(col, row);
 
+    // first quick and non-guaranteed way
+    newTile = false;
+    TileTypeSP tile = getTileMinefieldWalk(col, row, idx);
+
+    // then try with a proper locking
     if (!tile) {
         QWriteLocker locker(&m_lock);
-        tile = getTile(col, row);
+        tile = getTile(col, row, idx);
 
         if (!tile) {
             tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
-            linkTile(tile);
+            linkTile(tile, idx);
             newTile = true;
         }
     }
@@ -217,11 +255,22 @@ template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
 {
-    QReadLocker locker(&m_lock);
+    const qint32 idx = calculateHash(col, row);
 
-    TileTypeSP tile = getTile(col, row);
-    if (!tile)
-        tile = new TileType(col, row, m_defaultTileData, 0);
+    // first quick and non-guaranteed way
+    TileTypeSP tile = getTileMinefieldWalk(col, row, idx);
+    if (tile) return tile;
+
+
+    // then try with a proper locking
+    {
+        QReadLocker locker(&m_lock);
+
+        tile = getTile(col, row, idx);
+        if (!tile) {
+            tile = new TileType(col, row, m_defaultTileData, 0);
+        }
+    }
 
     return tile;
 }
@@ -229,16 +278,19 @@ KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
 template<class T>
 void KisTileHashTableTraits<T>::addTile(TileTypeSP tile)
 {
+    const qint32 idx = calculateHash(tile->col(), tile->row());
+
     QWriteLocker locker(&m_lock);
-    linkTile(tile);
+    linkTile(tile, idx);
 }
 
 template<class T>
 void KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
 {
-    QWriteLocker locker(&m_lock);
+    const qint32 idx = calculateHash(col, row);
 
-    TileTypeSP tile = unlinkTile(col, row);
+    QWriteLocker locker(&m_lock);
+    TileTypeSP tile = unlinkTile(col, row, idx);
 
     /* Done by KisSharedPtr */
     //if(tile)

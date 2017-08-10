@@ -95,11 +95,13 @@ public:
 
     void debugPrintInfo();
     void debugMaxListLength(qint32 &min, qint32 &max);
+
 private:
 
-    TileTypeSP getTile(qint32 col, qint32 row);
-    void linkTile(TileTypeSP tile);
-    TileTypeSP unlinkTile(qint32 col, qint32 row);
+    TileTypeSP getTileMinefieldWalk(qint32 col, qint32 row, qint32 idx);
+    TileTypeSP getTile(qint32 col, qint32 row, qint32 idx);
+    void linkTile(TileTypeSP tile, qint32 idx);
+    TileTypeSP unlinkTile(qint32 col, qint32 row, qint32 idx);
 
     inline void setDefaultTileDataImp(KisTileData *defaultTileData);
     inline KisTileData* defaultTileDataImp() const;

@@ -51,6 +51,8 @@ namespace
 
     QString Renderer;
 
+    QString debugText("OpenGL Info\n  **OpenGL not initialized**");
+
     void openglOnMessageLogged(const QOpenGLDebugMessage& debugMessage) {
         qDebug() << "OpenGL:" << debugMessage;
     }
@@ -98,20 +100,26 @@ void KisOpenGL::initialize()
         cfg.writeEntry("WarnedAboutIntel", true);
     }
 #endif
-    qDebug() << "OpenGL Info";
-    qDebug() << "  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
-    qDebug() << "  Renderer: " << Renderer;
-    qDebug() << "  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
-    qDebug() << "  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
-    qDebug() << "  Requested format: " << QSurfaceFormat::defaultFormat();
-    qDebug() << "  Current format:   " << context.format();
-    
+
     glMajorVersion = context.format().majorVersion();
     glMinorVersion = context.format().minorVersion();
     supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
 
-    qDebug() << "     Version:" << glMajorVersion << "." << glMinorVersion;
-    qDebug() << "     Supports deprecated functions" << supportsDeprecatedFunctions;
+    debugText.clear();
+    QDebug debugOut(&debugText);
+    debugOut << "OpenGL Info";
+    debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
+    debugOut << "\n  Renderer: " << Renderer;
+    debugOut << "\n  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
+    debugOut << "\n  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
+    debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
+    debugOut << "\n  Current format:   " << context.format();
+    debugOut.nospace();
+    debugOut << "\n     Version: " << glMajorVersion << "." << glMinorVersion;
+    debugOut.resetFormat();
+    debugOut << "\n     Supports deprecated functions" << supportsDeprecatedFunctions;
+
+    qDebug().noquote() << debugText;
 
     initialized = true;
 }
@@ -191,6 +199,12 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     }
 
 
+}
+
+const QString &KisOpenGL::getDebugText()
+{
+    initialize();
+    return debugText;
 }
 
 // XXX Temporary function to allow LoD on OpenGL3 without triggering

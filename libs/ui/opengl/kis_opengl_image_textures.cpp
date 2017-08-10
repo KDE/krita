@@ -546,11 +546,12 @@ void KisOpenGLImageTextures::updateTextureFormat()
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA;
     } else {
-        // The only OpenGL ES target we are supporting is ANGLE and it supports GL_BGRA8_EXT
         m_texturesInfo.internalFormat = GL_BGRA8_EXT;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA_EXT;
-        KIS_SAFE_ASSERT_RECOVER(ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
+        if(!ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
+            // The red and blue channels are swapped, but it will be re-swapped
+            // by texture swizzle mask set in KisTextureTile::setTextureParameters
             m_texturesInfo.internalFormat = GL_RGBA8;
             m_texturesInfo.type = GL_UNSIGNED_BYTE;
             m_texturesInfo.format = GL_RGBA;

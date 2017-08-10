@@ -51,7 +51,7 @@ class UITenScripts(object):
         directoryDialogButton = QPushButton("...")
 
         directoryTextField.setReadOnly(True)
-        label.setText("CTRL+SHIFT+{0}".format(key))
+        label.setText("Ctrl+Shift+{0}".format(key))
         directoryTextField.setToolTip("Selected Path")
         directoryDialogButton.setToolTip("Select the script")
         directoryDialogButton.clicked.connect(self._selectScript)
@@ -59,6 +59,18 @@ class UITenScripts(object):
         self.scriptsLayout.addWidget(label, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
         self.scriptsLayout.addWidget(directoryTextField, rowPosition, 1, Qt.AlignLeft|Qt.AlignTop)
         self.scriptsLayout.addWidget(directoryDialogButton, rowPosition, 2, Qt.AlignLeft|Qt.AlignTop)
+
+    def saved_scripts(self):
+        _saved_scripts = []
+        index = 0
+
+        for row in range(self.scriptsLayout.rowCount()-1):
+            textField = self.scriptsLayout.itemAt(index + 1).widget()
+            if textField.text():
+                _saved_scripts.append(textField.text())
+            index += 3
+
+        return _saved_scripts
 
     def _selectScript(self):
         dialog = QFileDialog(self.mainDialog)

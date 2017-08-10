@@ -20,8 +20,8 @@ class TenScriptsExtension(krita.Extension):
         action.setToolTip("Assign ten scripts to ten shortcuts.")
         action.triggered.connect(self.initialize)
 
+        self.readSettings()
         self.loadActions()
-
 
     def initialize(self):
         self.uitenscripts = uitenscripts.UITenScripts()
@@ -34,39 +34,15 @@ class TenScriptsExtension(krita.Extension):
         self.scripts = Application.readSetting("tenscripts", "scripts", "").split(',')
 
     def writeSettings(self):
-        self.actions = []
-        shortcuts = []
-        scripts = []
-        index = 0
+        saved_scripts = self.uitenscripts.saved_scripts()
 
-        for row in range(self.scriptsLayout.rowCount()-1):
-            shortcutWidget = self.scriptsLayout.itemAt(index).widget()
-            textField = self.scriptsLayout.itemAt(index + 1).widget()
+        for index, script in enumerate(saved_scripts):
+            self.actions[index].script = script
 
-            if shortcutWidget.keySequence() and textField.text():
-                action = Application.createAction("execute_script_" + str(row), "Execute Script " + str(row))
-                action.setMenu("None")
-                action.triggered.connect(self._executeScript)
-
-                if index < len(self.scripts) and self.selectedPresets[index] in allPresets:
-                    action.preset = self.selectedPresets[index]
-                else:
-                    action.preset = None
-
-                self.actions.append(action)
-                action.setShortcut("CTRL+SHIFT+1")
-                action.script = textField.text()
-
-                shortcuts.append(shortcutWidget.keySequence().toString())
-                scripts.append(textField.text())
-                self.actions.append(action)
-
-            index += 3
-
-        Application.writeSetting("tenscripts", "scripts", ','.join(map(str, scripts)))
+        Application.writeSetting("tenscripts", "scripts", ','.join(map(str, saved_scripts)))
 
     def loadActions(self):
-        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
+        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']):
             action = Application.createAction("execute_script_" + item, "Execute Script " + item)
             action.setMenu("None")
             action.script = None
@@ -75,6 +51,7 @@ class TenScriptsExtension(krita.Extension):
             if index < len(self.scripts):
                 action.script = self.scripts[index]
 
-            self.actions.append(action)            
+            self.actions.append(action)
+            print(action.shortcut())
 
 Scripter.addExtension(TenScriptsExtension(Application))

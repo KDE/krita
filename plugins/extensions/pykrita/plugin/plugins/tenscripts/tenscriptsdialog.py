@@ -9,7 +9,7 @@ class TenScriptsDialog(QDialog):
         self.uitenscripts = uitenscripts
 
     def accept(self):
-        self.uitenbrushes.tenscripts.writeSettings()
+        self.uitenscripts.tenscripts.writeSettings()
 
         super(TenScriptsDialog, self).accept()
 

@@ -537,7 +537,7 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, gmic_i
 
 }
 
-// gmic assumes float rgba in 0.0 - 255.0, thus default value
+// gmic assumes float rgba in 0.0 - 255.0
 void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float> *gmicImage, QRect rc)
 {
     Q_ASSERT(!dev.isNull());
@@ -551,6 +551,8 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
     Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
+
+    KoColorTransformation *pixelToGmicPixelFormat = createTransformation(rgbaFloat32bitcolorSpace);
 
     int greenOffset = gmicImage->_width * gmicImage->_height;
     int blueOffset = greenOffset * 2;
@@ -576,6 +578,7 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
             numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
             colorSpace->convertPixelsTo(it->rawDataConst(), floatRGBApixel, rgbaFloat32bitcolorSpace, numContiguousColumns, renderingIntent, conversionFlags);
+            pixelToGmicPixelFormat->transform(floatRGBApixel, floatRGBApixel, numContiguousColumns);
 
             pos = y * gmicImage->_width + x;
             for (qint32 bx = 0; bx < numContiguousColumns; bx++)
@@ -591,6 +594,7 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
         }
     }
     delete [] floatRGBApixel;
+    delete pixelToGmicPixelFormat;
 }
 
 void KisQmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue)

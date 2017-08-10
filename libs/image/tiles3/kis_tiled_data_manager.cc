@@ -130,7 +130,7 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
     }
 
 
-    KisTileHashTableIterator iter(m_hashTable);
+    KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     KisAbstractTileCompressorSP compressor =
@@ -289,7 +289,7 @@ void KisTiledDataManager::purge(const QRect& area)
         tileData->blockSwapping();
         const quint8 *defaultData = tileData->data();
 
-        KisTileHashTableIterator iter(m_hashTable);
+        KisTileHashTableConstIterator iter(m_hashTable);
         KisTileSP tile;
 
         while ((tile = iter.tile())) {
@@ -646,7 +646,7 @@ void KisTiledDataManager::recalculateExtent()
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
 
-    KisTileHashTableIterator iter(m_hashTable);
+    KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     while ((tile = iter.tile())) {
@@ -694,7 +694,7 @@ QRegion KisTiledDataManager::region() const
 {
     QRegion region;
 
-    KisTileHashTableIterator iter(m_hashTable);
+    KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     while ((tile = iter.tile())) {

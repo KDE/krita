@@ -395,7 +395,7 @@ void KisMementoManager::debugPrintInfo()
     printf("KisMementoManager stats:\n");
     printf("Index list\n");
     KisMementoItemSP mi;
-    KisMementoItemHashTableIterator iter(&m_index);
+    KisMementoItemHashTableIteratorConst iter(&m_index);
 
     while ((mi = iter.tile())) {
         mi->debugPrintInfo();

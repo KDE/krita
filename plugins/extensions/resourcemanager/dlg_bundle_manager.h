@@ -43,6 +43,7 @@ class WdgDlgBundleManager;
  * Preview images as well as other meta information like Bundle Name, Author, License, Description, can be seen.
  * Bundle manager provides the user the functionality to create a new bundle. Where the Create bundle functionality is
  * maintained by dlg_create_bundle class.
+ *
  * Options to delete the bundle created, Edit the bundle created are also available in the Bundle Manager.
  * User are capable of searching through the bundles they have created/Imported.
  * Other funtions to import different resources like Brushes, Bundles, Workspaces, Palettes, Patterns, Presets, Gradients.
@@ -57,6 +58,8 @@ class DlgBundleManager : public KoDialog
     Q_OBJECT
 public:
     explicit DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent = 0);
+
+    ~DlgBundleManager() override;
 
 Q_SIGNALS:
     void resourceTextChanged(const QString &resourceText);

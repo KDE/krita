@@ -107,6 +107,11 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     connect(m_ui->searchLineEdit, SIGNAL(textEdited(QString)), SLOT(searchTextChanged(QString)));
 }
 
+DlgBundleManager::~DlgBundleManager()
+{
+    delete(m_ui->m_importResources->menu());
+}
+
 
 void DlgBundleManager::refreshListData()
 {

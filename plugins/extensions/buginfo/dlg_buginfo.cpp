@@ -20,10 +20,8 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+#include <opengl/kis_opengl.h>
 #include <QSysInfo>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
-#include <QWindow>
 
 #include <QDesktopWidget>
 #include <QClipboard>
@@ -56,38 +54,7 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     info.append("\n");
 
     // OpenGL information
-    // we need a QSurface active to get our GL functions from the context
-    QWindow  surface;
-    surface.setSurfaceType( QSurface::OpenGLSurface );
-    surface.create();
-
-    QOpenGLContext context;
-    context.create();
-    if (!context.isValid()) return;
-
-    context.makeCurrent( &surface );
-
-    QOpenGLFunctions  *funcs = context.functions();
-    funcs->initializeOpenGLFunctions();
-
-#ifndef GL_RENDERER
-#  define GL_RENDERER 0x1F01
-#endif
-    QString Renderer = QString((const char*)funcs->glGetString(GL_RENDERER));
-    info.append("\nOpenGL Info");
-    info.append("\n  Vendor: ").append(reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR)));
-    info.append("\n  Renderer: ").append(Renderer);
-    info.append("\n  Version: ").append(reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION)));
-    info.append("\n  Shading language: ").append(reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION)));
-
-    int glMajorVersion = context.format().majorVersion();
-    int glMinorVersion = context.format().minorVersion();
-    bool supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
-
-    info.append(QString("\n   Version: %1.%2").arg(glMajorVersion).arg(glMinorVersion));
-    info.append(QString("\n     Supports deprecated functions: %1").arg(supportsDeprecatedFunctions ? "true" : "false"));
-
-
+    info.append("\n").append(KisOpenGL::getDebugText());
 
     // Installation information
 

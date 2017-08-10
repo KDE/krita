@@ -198,7 +198,7 @@ void KisMementoManager::commit()
         m_headsHashTable.deleteTile(mi->col(), mi->row());
 
         iter.moveCurrentToHashTable(&m_headsHashTable);
-        //++iter; // previous line does this for us
+        //iter.next(); // previous line does this for us
     }
 
     KisHistoryItem hItem;
@@ -399,7 +399,7 @@ void KisMementoManager::debugPrintInfo()
 
     while ((mi = iter.tile())) {
         mi->debugPrintInfo();
-        ++iter;
+        iter.next();
     }
 
     printf("Revisions list:\n");

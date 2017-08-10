@@ -156,11 +156,6 @@ public:
     ~KisTileHashTableIteratorTraits() {
     }
 
-    KisTileHashTableIteratorTraits<T, LockerType>& operator++() {
-        next();
-        return *this;
-    }
-
     void next() {
         if (m_tile) {
             m_tile = m_tile->next();

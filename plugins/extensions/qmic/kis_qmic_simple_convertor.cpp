@@ -573,8 +573,8 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
         int x = 0;
         while (x < rc.width())
         {
-            it->moveTo(x, y);
-            qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+            it->moveTo(rc.x() + x, rc.y() + y);
+            qint32 numContiguousColumns = qMin(it->numContiguousColumns(rc.x() + x), optimalBufferSize);
             numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
             colorSpace->convertPixelsTo(it->rawDataConst(), floatRGBApixel, rgbaFloat32bitcolorSpace, numContiguousColumns, renderingIntent, conversionFlags);

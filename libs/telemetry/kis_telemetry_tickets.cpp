@@ -22,6 +22,8 @@
 #include <QFileInfo>
 #include <QTime>
 #include <limits>
+#include <QDebug>
+
 
 KisTimeTicket::KisTimeTicket(QString id)
     : KisTelemetryTicket(id)
@@ -107,12 +109,14 @@ QString KisImagePropertiesTicket::getColorSpace() const
 
 qint64 KisImagePropertiesTicket::getImageSize() const
 {
-    return m_fileInfo.size();
+    double size = static_cast<qint64>(static_cast<double>(m_fileInfo.size()) / 1024.0 / 1024.0);
+    return size;
 }
 
 QString KisImagePropertiesTicket::getColorProfile() const
 {
-    return m_imageInfo.colorProfile;
+    QString colorProfile = m_imageInfo.colorProfile.split(" ")[0];
+    return colorProfile;
 }
 
 KisActionInfoTicket::KisActionInfoTicket(KisActionInfoTicket::ActionInfo actionInfo, QString id)

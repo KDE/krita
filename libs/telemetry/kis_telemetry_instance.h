@@ -46,7 +46,7 @@ public:
     static KisTelemetryInstance* instance();
 
     void setProvider(KisTelemetryAbstract* provider);
-    void notifyToolAcion(Actions action, QString id);
+    void notifyToolAction(Actions action, QString id);
     void notifySaveImageProperties(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
     void notifySaveActionInfo(KisActionInfoTicket::ActionInfo imageInfo, QString id);
     void sendData(QString path, QString adress = QString());

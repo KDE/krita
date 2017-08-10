@@ -41,10 +41,11 @@ QString TelemetryToolsInfoSource::description() const
 
 QVariant TelemetryToolsInfoSource::data()
 {
-    static int countCalls = 0;
-    countCalls++;
-    if (!countCalls % 2) { //kuserfeedback feature
+    static bool firstCall = false;//kuserfeedback feature
+    firstCall = !firstCall;
+    if (firstCall) {
         m_tools.clear();
+        return QVariant() ;
     }
     foreach (toolInfo tool, m_toolsMap) {
         KisTelemetryTicket* ticket = tool.ticket.data();
@@ -73,8 +74,8 @@ void TelemetryToolsInfoSource::activateTool(QSharedPointer<KisTelemetryTicket> t
     QMutexLocker locker(&m_mutex);
 
     m_currentTools.insert(ticket->ticketId(), ticket);
-    if (!m_toolsMap.count(ticket->ticketId())){
-        m_toolsMap.insert(ticket->ticketId(), {ticket, 0});
+    if (!m_toolsMap.count(ticket->ticketId())) {
+        m_toolsMap.insert(ticket->ticketId(), { ticket, 0 });
     }
 }
 

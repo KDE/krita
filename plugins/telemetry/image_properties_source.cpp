@@ -31,6 +31,7 @@ namespace KisUserFeedback {
 
 #include <QSize>
 #include <image_properties_source.h>
+#include <QDebug>
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
@@ -46,11 +47,11 @@ QString TelemetryImagePropertiesSource::description() const
 
 QVariant TelemetryImagePropertiesSource::data()
 {
-    static int countCalls = 0;
-    countCalls++;
-
-    if (!countCalls % 2) { //kuserfeedback feature
+    static bool firstCall = false;//kuserfeedback feature
+    firstCall = !firstCall;
+    if (firstCall) {
         m_imageDumps.clear();
+        return QVariant() ;
     }
     foreach (QSharedPointer<KisTelemetryTicket> imageDump, m_imagesDumpsMap) {
         KisImagePropertiesTicket* imagePropertiesTicket = nullptr;
@@ -69,6 +70,7 @@ QVariant TelemetryImagePropertiesSource::data()
         }
     }
     m_imagesDumpsMap.clear();
+
 
     return m_imageDumps;
 }

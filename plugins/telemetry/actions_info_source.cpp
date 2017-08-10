@@ -33,10 +33,12 @@ QString UserFeedback::TelemetryActionsInfoSource::description() const
 
 QVariant UserFeedback::TelemetryActionsInfoSource::data()
 {
-    if (!m_actionsInfo.isEmpty()) {
+    static bool firstCall = false;//kuserfeedback feature
+    firstCall = !firstCall;
+    if (firstCall) {
         m_actionsInfo.clear();
+        return QVariant() ;
     }
-
     foreach (actionInfo action, m_actionsInfoMap) {
         KisTelemetryTicket* ticket = action.ticket.data();
         KisActionInfoTicket* actionTicket = nullptr;
@@ -51,6 +53,7 @@ QVariant UserFeedback::TelemetryActionsInfoSource::data()
             m_actionsInfo.push_back(m);
         }
     }
+    m_actionsInfoMap.clear();
 
     return m_actionsInfo;
 }

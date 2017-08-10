@@ -20,10 +20,10 @@
 #ifndef KIS_TELEMETRY_TICKETS_H
 #define KIS_TELEMETRY_TICKETS_H
 
-#include <QDateTime>
-#include <QSize>
-#include <QFileInfo>
 #include "kritatelemetry_export.h"
+#include <QDateTime>
+#include <QFileInfo>
+#include <QSize>
 
 class KRITATELEMETRY_EXPORT KisTelemetryTicket {
 public:
@@ -60,6 +60,7 @@ public:
         QString colorSpace;
         int numLayers;
     };
+
 public:
     KisImagePropertiesTicket(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
 
@@ -77,10 +78,11 @@ private:
 
 class KRITATELEMETRY_EXPORT KisActionInfoTicket : public KisTelemetryTicket {
 public:
-    struct ActionInfo{
+    struct ActionInfo {
         QString name;
         QString source;
     };
+
 public:
     KisActionInfoTicket(KisActionInfoTicket::ActionInfo actionInfo, QString id);
 

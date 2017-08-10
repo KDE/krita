@@ -41,7 +41,7 @@ void KisTelemetryInstance::setProvider(KisTelemetryAbstract* provider)
     telemetryProvider.reset(provider);
 }
 
-void KisTelemetryInstance::notifyToolAcion(KisTelemetryInstance::Actions action, QString id)
+void KisTelemetryInstance::notifyToolAction(KisTelemetryInstance::Actions action, QString id)
 {
     if (telemetryProvider.isNull()) {
         return;
@@ -98,7 +98,7 @@ void KisTelemetryInstance::sendData(QString path, QString adress)
 
 QString KisTelemetryInstance::getToolId(QString id, KisTelemetryInstance::UseMode mode)
 {
-    QString toolId = "Tool" + getUseMode(mode);
+    QString toolId = getUseMode(mode);
     toolId += id;
     return toolId;
 }

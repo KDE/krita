@@ -32,17 +32,25 @@
 #include "tools_info_source.h"
 #include <KoToolRegistry.h>
 #include <QTime>
-#include <iostream>
 #include <assert_info_source.h>
-#include <kis_global.h>
 #include <image_properties_source.h>
+#include <iostream>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kis_global.h>
 #include <kis_types.h>
+#include <ksharedconfig.h>
 
 TelemetryProvider::TelemetryProvider()
 {
     m_installProvider.reset(new KUserFeedback::Provider);
     m_installProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("KisTelemetryInstall");
 
+    QString isFirstStart = configGroup.readEntry("FirstStart");
+    if (isFirstStart.isEmpty()) {
+        //don't append install source
+    }
     std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
     m_installSources.push_back(std::move(cpu));
     std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
@@ -109,6 +117,15 @@ void TelemetryProvider::sendData(QString path, QString adress)
         break;
     }
     case install: {
+        KConfigGroup configGroup = KSharedConfig::openConfig()->group("KisTelemetryInstall");
+        QString isFirstStart = configGroup.readEntry("FirstStart");
+//        if (isFirstStart.isEmpty()) {
+//            //don't append install source
+//            configGroup.writeEntry("FirstStart", true);
+//        } else {
+//            break;
+//        }
+
         m_installProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
         m_installProvider.data()->submit();
         break;
@@ -197,7 +214,7 @@ void TelemetryProvider::saveImageProperites(QString fileName, KisImageProperties
     imageProperties->createNewImageProperties(imagePropertiesTicket);
 }
 
-void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionInfo  actionInfo)
+void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo)
 {
     static QString lastAction = "start name";
     static QTime lastTime = QTime(0, 0, 0, 0);
@@ -221,7 +238,7 @@ void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionIn
 
         m_tickets.insert(id, weakactionsInfoTicket);
         actionsInfoSource->insert(actionsInfoTicket);
-        qDebug()<<"ACTION STORED";
+        qDebug() << "ACTION STORED";
     }
 
     lastTime = QTime::currentTime();

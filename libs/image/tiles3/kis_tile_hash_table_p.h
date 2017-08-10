@@ -303,12 +303,14 @@ KisTileData* KisTileHashTableTraits<T>::defaultTileData() const
 template<class T>
 void KisTileHashTableTraits<T>::debugPrintInfo()
 {
-    dbgTiles << "==========================\n"
+    if (!m_numTiles) return;
+
+    qDebug() << "==========================\n"
              << "TileHashTable:"
              << "\n   def. data:\t\t" << m_defaultTileData
              << "\n   numTiles:\t\t" << m_numTiles;
     debugListLengthDistibution();
-    dbgTiles << "==========================\n";
+    qDebug() << "==========================\n";
 }
 
 template<class T>
@@ -357,12 +359,12 @@ void KisTileHashTableTraits<T>::debugListLengthDistibution()
         array[tmp-min]++;
     }
 
-    dbgTiles << QString("   minChain:\t\t%d\n"
-                        "   maxChain:\t\t%d").arg(min, max);
+    qDebug() << QString("   minChain: %1\n").arg(min);
+    qDebug() << QString("   maxChain: %1\n").arg(max);
 
-    dbgTiles << "   Chain size distribution:";
+    qDebug() << "   Chain size distribution:";
     for (qint32 i = 0; i < arraySize; i++)
-        dbgTiles << QString("      %1:\t%2\n").arg(i + min, array[i]);
+        qDebug() << QString("      %1: %2").arg(i + min).arg(array[i]);
 
     delete[] array;
 }

@@ -38,7 +38,9 @@
 #include "KoResourceModel.h"
 #include "KoResourceServer.h"
 
+#ifdef HAVE_NEWSTUFF
 #include "content_dowloader_dialog.h"
+#endif
 
 #define ICON_SIZE 48
 
@@ -93,6 +95,9 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     refreshListData();
 
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
+#ifndef HAVE_NEWSTUFF
+    m_ui->bnShareResources->setVisible(false);
+#endif
     connect(m_ui->bnShareResources, SIGNAL(clicked()), SLOT(slotShareResources()));
 
     connect(m_ui->m_importResources, SIGNAL(clicked()), SLOT(slotImportResources()));
@@ -390,6 +395,7 @@ void DlgBundleManager::slotOpenResourceFolder() {
 
 void DlgBundleManager::slotShareResources()
 {
+#ifdef HAVE_NEWSTUFF
     ContentDownloaderDialog dialog(d->knsrcFile, this);
     dialog.exec();
 
@@ -410,6 +416,7 @@ void DlgBundleManager::slotShareResources()
             d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
         }
     }
+#endif
 }
 
 void DlgBundleManager::setKnsrcFile(const QString &knsrcFileArg)

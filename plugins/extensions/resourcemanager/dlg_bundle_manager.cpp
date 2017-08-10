@@ -86,11 +86,39 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
     m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
 
-
     m_actionManager = actionMgr;
 
-    ///This function is called here because, If this function isn't called here the user will have to double click on the button to see the dropdown.
-    slotImportResources();
+    QMenu *importAll = new QMenu();
+
+    KisAction *importBundle = m_actionManager->actionByName("import_bundles");
+    importBundle->setText(i18n("Import Bundles"));
+    importAll->addAction(importBundle);
+
+    KisAction *importBrush = m_actionManager->actionByName("import_brushes");
+    importBrush->setText(i18n("Import Brushes"));
+    importAll->addAction(importBrush);
+
+    KisAction *importGradient = m_actionManager->actionByName("import_gradients");
+    importGradient->setText(i18n("Import Gradients"));
+    importAll->addAction(importGradient);
+
+    KisAction *importPalette = m_actionManager->actionByName("import_palettes");
+    importPalette->setText(i18n("Import Palettes"));
+    importAll->addAction(importPalette);
+
+    KisAction *importPattern = m_actionManager->actionByName("import_patterns");
+    importPattern->setText(i18n("Import Patterns"));
+    importAll->addAction(importPattern);
+
+    KisAction *importPreset = m_actionManager->actionByName("import_presets");
+    importPreset->setText(i18n("Import Presets"));
+    importAll->addAction(importPreset);
+
+    KisAction *importWorkSpace = m_actionManager->actionByName("import_workspaces");
+    importWorkSpace->setText(i18n("Import Workspace"));
+    importAll->addAction(importWorkSpace);
+
+    m_ui->m_importResources->setMenu(importAll);
 
     refreshListData();
 
@@ -99,8 +127,6 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     m_ui->bnShareResources->setVisible(false);
 #endif
     connect(m_ui->bnShareResources, SIGNAL(clicked()), SLOT(slotShareResources()));
-
-    connect(m_ui->m_importResources, SIGNAL(clicked()), SLOT(slotImportResources()));
 
     connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
     connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
@@ -347,42 +373,6 @@ void DlgBundleManager::slotDeleteBackupFiles() {
         KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
         action->trigger();
     }
-}
-
-void DlgBundleManager::slotImportResources()
-{
-
-    QMenu *importAll = new QMenu();
-
-    KisAction *importBundle = m_actionManager->actionByName("import_bundles");
-    importBundle->setText(i18n("Import Bundles"));
-    importAll->addAction(importBundle);
-
-    KisAction *importBrush = m_actionManager->actionByName("import_brushes");
-    importBrush->setText(i18n("Import Brushes"));
-    importAll->addAction(importBrush);
-
-    KisAction *importGradient = m_actionManager->actionByName("import_gradients");
-    importGradient->setText(i18n("Import Gradients"));
-    importAll->addAction(importGradient);
-
-    KisAction *importPalette = m_actionManager->actionByName("import_palettes");
-    importPalette->setText(i18n("Import Palettes"));
-    importAll->addAction(importPalette);
-
-    KisAction *importPattern = m_actionManager->actionByName("import_patterns");
-    importPattern->setText(i18n("Import Patterns"));
-    importAll->addAction(importPattern);
-
-    KisAction *importPreset = m_actionManager->actionByName("import_presets");
-    importPreset->setText(i18n("Import Presets"));
-    importAll->addAction(importPreset);
-
-    KisAction *importWorkSpace = m_actionManager->actionByName("import_workspaces");
-    importWorkSpace->setText(i18n("Import Workspace"));
-    importAll->addAction(importWorkSpace);
-
-    m_ui->m_importResources->setMenu(importAll);
 }
 
 void DlgBundleManager::slotOpenResourceFolder() {

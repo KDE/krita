@@ -71,7 +71,6 @@ KisBrushSP KisBrushRegistry::getOrCreateBrush(const QDomElement& element, bool f
     KisBrushFactory* factory = get(brushType);
     if (!factory) return 0;
 
-    KisBrushSP brush = factory->getOrCreateBrush(element, forceCopy);
-    return brush;
+    return factory->getOrCreateBrush(element, forceCopy);
 }
 

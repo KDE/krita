@@ -413,7 +413,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
     KisNodeListSP layers = mapper.inputNodes(m_inputMode);
 
     m_gmicApplicator->setProperties(m_view->image(), rootNode, images, actionName, layers);
-    slotStartProgressReporting();
     m_gmicApplicator->preview();
     m_gmicApplicator->finish();
 }

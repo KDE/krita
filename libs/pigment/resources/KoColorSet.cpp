@@ -383,10 +383,18 @@ KoColorSetEntry KoColorSet::getColorGlobal(quint32 index)
 KoColorSetEntry KoColorSet::getColorGroup(quint32 index, QString groupName)
 {
     KoColorSetEntry e;
-    if (d->groups.contains(groupName) && index<(quint32)d->groups.value(groupName).size()) {
-        e = d->groups.value(groupName).at(index);
-    } else if (groupName == QString() && index<(quint32)d->colors.size()) {
-        e = d->colors.at(index);
+    if (d->groups.contains(groupName)) {
+        if (nColorsGroup(groupName)>index) {
+            e = d->groups.value(groupName).at(index);
+        } else {
+            warnPigment<<index<<"is above"<<nColorsGroup(groupName)<<"of"<<groupName;
+        }
+    } else if (groupName.isEmpty() || groupName == QString()) {
+        if (nColorsGroup(groupName)>index) {
+            e = d->colors.at(index);
+        } else {
+            warnPigment<<index<<"is above the size of the default group:"<<nColorsGroup(groupName);
+        }
     } else {
         warnPigment << "Color group "<<groupName<<" not found";
     }

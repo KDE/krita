@@ -467,7 +467,7 @@ KisImportExportManager::askUserAboutExportConfiguration(
             QHBoxLayout *hLayout = new QHBoxLayout();
 
             QLabel *labelWarning = new QLabel();
-            labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
+            labelWarning->setPixmap(KisIconUtils::loadIcon("warning").pixmap(32, 32));
             hLayout->addWidget(labelWarning);
 
             KisPopupButton *bn = new KisPopupButton(0);

@@ -28,7 +28,6 @@ class CodeEditor(QPlainTextEdit):
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
 
-
     def debugAreaWidth(self):
         return self.DEBUG_AREA_WIDTH
 
@@ -54,9 +53,9 @@ class CodeEditor(QPlainTextEdit):
                                          qRect.height()))
 
         self.lineNumberArea.setGeometry(QRect(qRect.left() + self.debugAreaWidth(),
-                                            qRect.top(),
-                                            self.lineNumberAreaWidth(),
-                                            qRect.height()))
+                                              qRect.top(),
+                                              self.lineNumberAreaWidth(),
+                                              qRect.height()))
 
     def updateMarginsWidth(self):
         self.setViewportMargins(self.lineNumberAreaWidth() + self.debugAreaWidth(), 0, 0, 0)
@@ -97,7 +96,7 @@ class CodeEditor(QPlainTextEdit):
     def debugAreaPaintEvent(self, event):
         if self.scripter.debugcontroller.isActive and self.scripter.debugcontroller.currentLine:
             lineNumber = self.scripter.debugcontroller.currentLine
-            block = self.document().findBlockByLineNumber(lineNumber-1)
+            block = self.document().findBlockByLineNumber(lineNumber - 1)
 
             if self._stepped:
                 cursor = QTextCursor(block)
@@ -108,7 +107,7 @@ class CodeEditor(QPlainTextEdit):
             bottom = top + int(self.blockBoundingRect(block).height())
 
             painter = QPainter(self.debugArea)
-            pixmap = self.debugArrow.pixmap(QSize(self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height())))
+            pixmap = self.debugArrow.pixmap(QSize(self.debugAreaWidth() - 3, int(self.blockBoundingRect(block).height())))
             painter.drawPixmap(QPoint(0, top), pixmap)
 
     def highlightCurrentLine(self):

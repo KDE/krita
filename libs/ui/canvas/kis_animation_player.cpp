@@ -233,7 +233,7 @@ void KisAnimationPlayer::slotAudioVolumeChanged()
 void KisAnimationPlayer::slotOnAudioError(const QString &fileName, const QString &message)
 {
     QString errorMessage(i18nc("floating on-canvas message", "Cannot open audio: \"%1\"\nError: %2", fileName, message));
-    m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("dialog-warning"));
+    m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("warning"));
 }
 
 void KisAnimationPlayer::connectCancelSignals()

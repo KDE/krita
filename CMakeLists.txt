@@ -190,9 +190,19 @@ include(MacroJPEG)
 ## so we should request the correct  version in advance  ##
 ###########################################################
 
-find_package(PythonInterp 3.0)
-find_package(PythonLibrary 3.0)
-
+if(MINGW)
+    # Special check: Building on Windows and ext_python is used
+    find_package(PythonInterp 3.6)
+    if(PYTHONINTERP_FOUND)
+        find_package(PythonLibrary 3.6)
+        if(PYTHONLIBS_FOUND)
+            include("${CMAKE_CURRENT_SOURCE_DIR}/PythonWindowsCheck.cmake")
+        endif(PYTHONLIBS_FOUND)
+    endif(PYTHONINTERP_FOUND)
+else(MINGW)
+    find_package(PythonInterp 3.0)
+    find_package(PythonLibrary 3.0)
+endif(MINGW)
 
  ########################
 #########################

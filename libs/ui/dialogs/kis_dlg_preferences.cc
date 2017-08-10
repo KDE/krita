@@ -724,6 +724,9 @@ void PerformanceTab::selectSwapDir()
     KisImageConfig cfg;
     QString swapDir = cfg.swapDir();
     swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
+    if (swapDir.isEmpty()) {
+        return;
+    }
     lblSwapFileLocation->setText(swapDir);
 }
 

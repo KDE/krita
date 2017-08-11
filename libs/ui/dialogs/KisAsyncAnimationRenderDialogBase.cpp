@@ -34,6 +34,7 @@
 #include "kis_time_range.h"
 #include "kis_image.h"
 #include "kis_image_config.h"
+#include "kis_memory_statistics_server.h"
 
 #include <vector>
 #include <memory>
@@ -55,6 +56,19 @@ struct RendererPair {
     {
     }
 };
+
+int calculateNumberMemoryAllowedClones(KisImageSP image)
+{
+    KisMemoryStatisticsServer::Statistics stats =
+        KisMemoryStatisticsServer::instance()
+        ->fetchMemoryStatistics(image);
+
+    const qint64 allowedMemory = 0.8 * stats.tilesHardLimit - stats.realMemorySize;
+    const qint64 cloneSize = stats.projectionsSize;
+
+    return allowedMemory > 0 ? allowedMemory / cloneSize : 0;
+}
+
 }
 
 
@@ -73,6 +87,7 @@ struct KisAsyncAnimationRenderDialogBase::Private
     bool isBatchMode = false;
 
     std::vector<RendererPair> asyncRenderers;
+    bool memoryLimitReached = false;
 
     QElapsedTimer processingTime;
     QScopedPointer<QProgressDialog> progressDialog;
@@ -123,14 +138,21 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
     KisImageConfig cfg;
 
     const int maxThreads = cfg.maxNumberOfThreads();
-    const int numWorkers = qMin(m_d->dirtyFramesCount, cfg.frameRenderingClones());
+    const int numAllowedWorker = 1 + calculateNumberMemoryAllowedClones(m_d->image);
+    const int proposedNumWorkers = qMin(m_d->dirtyFramesCount, cfg.frameRenderingClones());
+    const int numWorkers = qMin(proposedNumWorkers, numAllowedWorker);
     const int numThreadsPerWorker = qMax(1, qCeil(qreal(maxThreads) / numWorkers));
+
+    m_d->memoryLimitReached = numWorkers < proposedNumWorkers;
+
+    const int oldWorkingThreadsLimit = m_d->image->workingThreadsLimit();
 
     ENTER_FUNCTION() << ppVar(numWorkers) << ppVar(numThreadsPerWorker);
 
     for (int i = 0; i < numWorkers; i++) {
+        // reuse the image for one of the workers
+        KisImageSP image = i == numWorkers - 1 ? m_d->image : m_d->image->clone(true);
 
-        KisImageSP image = m_d->image->clone(true);
         image->setWorkingThreadsLimit(numThreadsPerWorker);
         KisAsyncAnimationRendererBase *renderer = createRenderer(image);
 
@@ -168,6 +190,8 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         m_d->image->barrierLock(true);
         m_d->image->unlock();
     }
+
+    m_d->image->setWorkingThreadsLimit(oldWorkingThreadsLimit);
 
     m_d->progressDialog.reset();
 
@@ -249,8 +273,16 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
     const QString elapsedTimeString = elapsedTime.toString(timeFormat);
     const QString estimatedTimeString = estimatedTime.toString(timeFormat);
 
-    const QString progressLabel(i18n("%1\n\nElapsed: %2\nEstimated: %3\n\n",
-                                     m_d->actionTitle, elapsedTimeString, estimatedTimeString));
+    const QString memoryLimitMessage(
+        i18n("\n\nMemory limit is reached!\nThe number of clones is limited to %1\n\n",
+             m_d->asyncRenderers.size()));
+
+
+    const QString progressLabel(i18n("%1\n\nElapsed: %2\nEstimated: %3\n\n%4",
+                                     m_d->actionTitle,
+                                     elapsedTimeString,
+                                     estimatedTimeString,
+                                     m_d->memoryLimitReached ? memoryLimitMessage : QString()));
     if (m_d->progressDialog) {
         m_d->progressDialog->setLabelText(progressLabel);
         m_d->progressDialog->setValue(processedFramesCount);

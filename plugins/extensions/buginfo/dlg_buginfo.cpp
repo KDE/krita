@@ -21,6 +21,7 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <opengl/kis_opengl.h>
+#include <KritaVersionWrapper.h>
 #include <QSysInfo>
 
 #include <QDesktopWidget>
@@ -42,8 +43,14 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
 
     setMainWidget(m_page);
 
-    // OS information
     QString info;
+
+    // Krita version info
+    info.append("Krita");
+    info.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
+    info.append("\n\n");
+
+    // OS information
     info.append("OS Information");
     info.append("\n  Build ABI: ").append(QSysInfo::buildAbi());
     info.append("\n  Build CPU: ").append(QSysInfo::buildCpuArchitecture());
@@ -70,9 +77,12 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     QDesktopWidget dw;
     QRect screen_rect = dw.availableGeometry(dw.primaryScreen());
 
-    resize(sizeHint().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
+    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
 
-    connect(this, &KoDialog::user1Clicked, this, [this](){ QGuiApplication::clipboard()->setText(m_page->txtBugInfo->toPlainText()); });
+    connect(this, &KoDialog::user1Clicked, this, [this](){
+        QGuiApplication::clipboard()->setText(m_page->txtBugInfo->toPlainText());
+        m_page->txtBugInfo->selectAll(); // feedback
+    });
 }
 
 DlgBugInfo::~DlgBugInfo()

@@ -30,7 +30,67 @@
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 
-Q_GLOBAL_STATIC(QFileSystemWatcher, s_fileSystemWatcher)
+class FileSystemWatcherWrapper : public QObject
+{
+    Q_OBJECT
+public:
+    FileSystemWatcherWrapper() {
+        connect(&m_watcher, SIGNAL(fileChanged(QString)), SIGNAL(fileChanged(QString)));
+        connect(&m_watcher, SIGNAL(fileChanged(QString)), SLOT(slotFileChanged(QString)));
+    }
+
+    bool addPath(const QString &file) {
+        bool result = true;
+        const QString ufile = unifyFilePath(file);
+
+        if (m_pathCount.contains(ufile)) {
+            m_pathCount[ufile]++;
+        } else {
+            m_pathCount.insert(ufile, 1);
+            result = m_watcher.addPath(ufile);
+        }
+
+        return result;
+    }
+
+    bool removePath(const QString &file) {
+        bool result = true;
+        const QString ufile = unifyFilePath(file);
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_pathCount.contains(ufile), false);
+
+        if (m_pathCount[ufile] == 1) {
+            m_pathCount.remove(ufile);
+            result = m_watcher.removePath(ufile);
+        } else {
+            m_pathCount[ufile]--;
+        }
+        return result;
+    }
+
+private Q_SLOTS:
+    void slotFileChanged(const QString &path) {
+        // re-add the file after QSaveFile optimization
+        if (!m_watcher.files().contains(path) && QFileInfo(path).exists()) {
+            m_watcher.addPath(path);
+        }
+    }
+
+Q_SIGNALS:
+    void fileChanged(const QString &path);
+
+private:
+    QString unifyFilePath(const QString &path) {
+        return QFileInfo(path).absoluteFilePath();
+    }
+
+private:
+    QFileSystemWatcher m_watcher;
+    QHash<QString, int> m_pathCount;
+};
+
+Q_GLOBAL_STATIC(FileSystemWatcherWrapper, s_fileSystemWatcher)
+
 
 struct KisSafeDocumentLoader::Private
 {
@@ -175,4 +235,4 @@ void KisSafeDocumentLoader::delayedLoadStart()
     m_d->doc.reset();
 }
 
-
+#include "kis_safe_document_loader.moc"

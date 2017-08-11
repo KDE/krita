@@ -606,35 +606,6 @@ set_package_properties(Poppler PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
 
-##
-## Test for pthreads (for G'Mic)
-##
-find_package(Threads)
-set_package_properties(Threads PROPERTIES
-    DESCRIPTION "PThreads - A low-level threading library"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
-##
-## Test for OpenMP (for G'Mic)
-##
-find_package(OpenMP)
-set_package_properties(OpenMP PROPERTIES
-    DESCRIPTION "A low-level parallel execution library"
-    URL "http://openmp.org/wp/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
-##
-## Test for Curl (for G'Mic)
-##
-find_package(CURL)
-set_package_properties(CURL PROPERTIES
-    DESCRIPTION "A tool to fetch remote data"
-    URL "http://curl.haxx.se/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
  ############################
 #############################
 ## Add Krita helper macros ##

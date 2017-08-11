@@ -476,9 +476,5 @@ int KisImageConfig::frameRenderingClones(bool defaultValue) const
 
 void KisImageConfig::setFrameRenderingClones(int value)
 {
-    if (value == frameRenderingClones(true)) {
-        m_config.deleteEntry("frameRenderingClones");
-    } else {
-        m_config.writeEntry("frameRenderingClones", value);
-    }
+    m_config.writeEntry("frameRenderingClones", value);
 }

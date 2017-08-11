@@ -112,8 +112,8 @@ void TelemetryProvider::sendData(QString path, QString adress)
     QString finalAdress = adress.isNull() ? m_adress : adress;
     switch (enumPath) {
     case tools: {
-        m_toolsProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
-        m_toolsProvider.data()->submit();
+        m_toolsProvider->setFeedbackServer(QUrl(finalAdress + path));
+        m_toolsProvider->submit();
         break;
     }
     case install: {
@@ -125,25 +125,24 @@ void TelemetryProvider::sendData(QString path, QString adress)
 //        } else {
 //            break;
 //        }
-
-        m_installProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
-        m_installProvider.data()->submit();
+        m_installProvider->setFeedbackServer(QUrl(finalAdress + path));
+        m_installProvider->submit();
         break;
     }
     case asserts: {
-        m_assertsProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
-        m_assertsProvider.data()->submit();
+        m_assertsProvider->setFeedbackServer(QUrl(finalAdress + path));
+        m_assertsProvider->submit();
         break;
     }
     case imageProperties: {
-        m_imagePropertiesProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
-        m_imagePropertiesProvider.data()->submit();
+        m_imagePropertiesProvider->setFeedbackServer(QUrl(finalAdress + path));
+        m_imagePropertiesProvider->submit();
         break;
     }
     case actions: {
         qDebug() << "Send actions!";
-        m_actionsInfoProvider.data()->setFeedbackServer(QUrl(finalAdress + path));
-        m_actionsInfoProvider.data()->submit();
+        m_actionsInfoProvider->setFeedbackServer(QUrl(finalAdress + path));
+        m_actionsInfoProvider->submit();
         break;
     }
     default:

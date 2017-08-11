@@ -41,12 +41,7 @@ QString TelemetryToolsInfoSource::description() const
 
 QVariant TelemetryToolsInfoSource::data()
 {
-    static bool firstCall = false;//kuserfeedback feature
-    firstCall = !firstCall;
-    if (firstCall) {
-        m_tools.clear();
-        return QVariant() ;
-    }
+    m_tools.clear();
     foreach (toolInfo tool, m_toolsMap) {
         KisTelemetryTicket* ticket = tool.ticket.data();
         KisTimeTicket* timeTicket = nullptr;

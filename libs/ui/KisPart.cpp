@@ -139,6 +139,11 @@ KisPart::KisPart()
 
 KisPart::~KisPart()
 {
+    qDebug()<<"~~KisPart";
+    KisTelemetryInstance::instance()->sendData("install");
+    KisTelemetryInstance::instance()->sendData("tools");
+    KisTelemetryInstance::instance()->sendData("imageProperties");
+    KisTelemetryInstance::instance()->sendData("actions");
     while (!d->documents.isEmpty()) {
         delete d->documents.takeFirst();
     }

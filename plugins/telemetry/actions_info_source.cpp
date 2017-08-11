@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "actions_info_source.h"
+#include <QDebug>
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
@@ -33,12 +34,8 @@ QString UserFeedback::TelemetryActionsInfoSource::description() const
 
 QVariant UserFeedback::TelemetryActionsInfoSource::data()
 {
-    static bool firstCall = false;//kuserfeedback feature
-    firstCall = !firstCall;
-    if (firstCall) {
-        m_actionsInfo.clear();
-        return QVariant() ;
-    }
+    qDebug()<<"call actions";
+    m_actionsInfo.clear();
     foreach (actionInfo action, m_actionsInfoMap) {
         KisTelemetryTicket* ticket = action.ticket.data();
         KisActionInfoTicket* actionTicket = nullptr;

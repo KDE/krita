@@ -47,12 +47,7 @@ QString TelemetryImagePropertiesSource::description() const
 
 QVariant TelemetryImagePropertiesSource::data()
 {
-    static bool firstCall = false;//kuserfeedback feature
-    firstCall = !firstCall;
-    if (firstCall) {
-        m_imageDumps.clear();
-        return QVariant() ;
-    }
+    m_imageDumps.clear();
     foreach (QSharedPointer<KisTelemetryTicket> imageDump, m_imagesDumpsMap) {
         KisImagePropertiesTicket* imagePropertiesTicket = nullptr;
 

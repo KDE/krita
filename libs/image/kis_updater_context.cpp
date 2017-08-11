@@ -229,6 +229,8 @@ void KisUpdaterContext::unlock()
 
 void KisUpdaterContext::setThreadsLimit(int value)
 {
+    m_threadPool.setMaxThreadCount(value);
+
     for (int i = 0; i < m_jobs.size(); i++) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(!m_jobs[i]->isRunning());
         // don't delete the jobs until all of them are checked!

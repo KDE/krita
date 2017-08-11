@@ -21,6 +21,7 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <opengl/kis_opengl.h>
+#include <KritaVersionWrapper.h>
 #include <QSysInfo>
 
 #include <QDesktopWidget>
@@ -40,8 +41,14 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
 
     setMainWidget(m_page);
 
-    // OS information
     QString info;
+
+    // Krita version info
+    info.append("Krita");
+    info.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
+    info.append("\n\n");
+
+    // OS information
     info.append("OS Information");
     info.append("\n  Build ABI: ").append(QSysInfo::buildAbi());
     info.append("\n  Build CPU: ").append(QSysInfo::buildCpuArchitecture());

@@ -35,21 +35,19 @@ Q_GLOBAL_STATIC(QFileSystemWatcher, s_fileSystemWatcher)
 struct KisSafeDocumentLoader::Private
 {
     Private()
-        : fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
-          isLoading(false),
-          fileChangedFlag(false)
+        : fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE)
     {
     }
 
     QScopedPointer<KisDocument>  doc;
     KisSignalCompressor fileChangedSignalCompressor;
     QTimer delayedLoadTimer;
-    bool isLoading {true};
-    bool fileChangedFlag {false};
+    bool isLoading = false;
+    bool fileChangedFlag = false;
     QString path;
     QString temporaryPath;
 
-    qint64 initialFileSize;
+    qint64 initialFileSize = 0;
     QDateTime initialFileTimeStamp;
 };
 
@@ -59,9 +57,6 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 {
     connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
             SLOT(fileChanged(QString)));
-
-    connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
-            &m_d->fileChangedSignalCompressor, SLOT(start()));
 
     connect(&m_d->fileChangedSignalCompressor, SIGNAL(timeout()),
             SLOT(fileChangedCompressed()));
@@ -102,6 +97,7 @@ void KisSafeDocumentLoader::fileChanged(QString path)
 {
     if (path == m_d->path) {
         m_d->fileChangedFlag = true;
+        m_d->fileChangedSignalCompressor.start();
     }
 }
 

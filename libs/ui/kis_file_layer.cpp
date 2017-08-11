@@ -67,15 +67,14 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 {
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
-    Q_ASSERT(QFile::exists(rhs.path()));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(QFile::exists(path()));
 
     m_scalingMethod = rhs.m_scalingMethod;
 
-    m_paintDevice = new KisPaintDevice(rhs.image()->colorSpace());
+    m_paintDevice = new KisPaintDevice(*rhs.m_paintDevice);
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
     m_loader.setPath(path());
-    m_loader.reloadImage();
 }
 
 QIcon KisFileLayer::icon() const

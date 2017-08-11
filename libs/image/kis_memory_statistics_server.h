@@ -35,6 +35,9 @@ public:
     {
         Statistics()
             : imageSize(0),
+              layersSize(0),
+              projectionsSize(0),
+              lodSize(0),
 
               totalMemorySize(0),
               realMemorySize(0),
@@ -51,6 +54,9 @@ public:
         }
 
         qint64 imageSize;
+        qint64 layersSize;
+        qint64 projectionsSize;
+        qint64 lodSize;
 
         qint64 totalMemorySize;
         qint64 realMemorySize;

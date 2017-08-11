@@ -96,6 +96,12 @@ KisTileDataStore* KisTileDataStore::instance()
 
 KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 {
+    // in case the pooler is disabled, we should force it
+    // to update the stats
+    if (!m_pooler.isRunning()) {
+        m_pooler.forceUpdateMemoryStats();
+    }
+
     QMutexLocker lock(&m_listLock);
 
     MemoryStatistics stats;

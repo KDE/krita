@@ -135,18 +135,23 @@ void QMic::slotQMic(bool again)
     QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
 
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-        KoDialog dlg;
-        dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
-        QWidget *w = new QWidget(&dlg);
-        dlg.setMainWidget(w);
-        QVBoxLayout *l = new QVBoxLayout(w);
-        l->addWidget(new PluginSettings(w));
-        dlg.setButtons(KoDialog::Ok);
-        dlg.exec();
+        {
+            KoDialog dlg;
+            dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
+            QWidget *w = new QWidget(&dlg);
+            dlg.setMainWidget(w);
+            QVBoxLayout *l = new QVBoxLayout(w);
+            l->addWidget(new PluginSettings(w));
+            dlg.setButtons(KoDialog::Ok);
+            dlg.exec();
+        }
         pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
         if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
+            m_qmicAction->setEnabled(true);
+            m_againAction->setEnabled(true);
             return;
         }
+
     }
 
     m_key = QUuid::createUuid().toString();

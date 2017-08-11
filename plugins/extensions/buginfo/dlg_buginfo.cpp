@@ -77,9 +77,12 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     QDesktopWidget dw;
     QRect screen_rect = dw.availableGeometry(dw.primaryScreen());
 
-    resize(sizeHint().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
+    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
 
-    connect(this, &KoDialog::user1Clicked, this, [this](){ QGuiApplication::clipboard()->setText(m_page->txtBugInfo->toPlainText()); });
+    connect(this, &KoDialog::user1Clicked, this, [this](){
+        QGuiApplication::clipboard()->setText(m_page->txtBugInfo->toPlainText());
+        m_page->txtBugInfo->selectAll(); // feedback
+    });
 }
 
 DlgBugInfo::~DlgBugInfo()

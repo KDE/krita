@@ -20,7 +20,7 @@
 
 const QLoggingCategory &FLAKE_LOG() \
 {
-    static const QLoggingCategory category("krita.lib.flake");
+    static const QLoggingCategory category("krita.lib.flake", QtInfoMsg);
     return category;
 }
 

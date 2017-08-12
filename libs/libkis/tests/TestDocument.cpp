@@ -146,6 +146,7 @@ void TestDocument::testCreateAndSave()
     kisdoc->setCurrentImage(image);
 
     Document d(kisdoc);
+    d.setBatchmode(true);
     d.refreshProjection();
 
     QString filename = QDir::tempPath() + "/TestDocumentTestCreateAndSave.kra";

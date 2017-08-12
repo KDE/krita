@@ -89,7 +89,6 @@ QMic::QMic(QObject *parent, const QVariantList &)
 
     m_gmicApplicator = new KisQmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
-
 }
 
 QMic::~QMic()
@@ -130,9 +129,7 @@ void QMic::slotQMic(bool again)
     connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
 
     // find the krita-gmic-qt plugin
-    KisConfig cfg;
-    QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-
+    QString pluginPath = PluginSettings::gmicQtPath();
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
         {
             KoDialog dlg;
@@ -144,7 +141,7 @@ void QMic::slotQMic(bool again)
             dlg.setButtons(KoDialog::Ok);
             dlg.exec();
         }
-        pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
+        pluginPath = PluginSettings::gmicQtPath();
         if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
             m_qmicAction->setEnabled(true);
             m_againAction->setEnabled(true);

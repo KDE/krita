@@ -19,13 +19,16 @@
 */
 #include "kis_telemetry_instance.h"
 #include <kis_assert.h>
+#include <QDebug>
 
 Q_GLOBAL_STATIC(KisTelemetryInstance, s_instance)
 
 KisTelemetryInstance::KisTelemetryInstance()
 {
     m_timer.start();
-    m_checkTime = 4e6;
+   // m_checkTime = 4e6;
+    m_checkTime = 300e3; //every 5 mins
+
 }
 
 KisTelemetryInstance* KisTelemetryInstance::instance()
@@ -105,8 +108,10 @@ QString KisTelemetryInstance::getToolId(QString id, KisTelemetryInstance::UseMod
 
 void KisTelemetryInstance::agregateData()
 {
+    qDebug()<<"call agregateData()";
     if(m_timer.elapsed()>m_checkTime){
         m_timer.restart();
+        qDebug()<<"did agregateData()";
         KisTelemetryInstance::instance()->sendData("install");
         KisTelemetryInstance::instance()->sendData("tools");
         KisTelemetryInstance::instance()->sendData("imageProperties");

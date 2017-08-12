@@ -36,6 +36,8 @@ public:
     virtual QString header();
     virtual QIcon icon();
 
+    static QString gmicQtPath();
+
 public Q_SLOTS:
     void savePreferences() const;
     void loadPreferences();

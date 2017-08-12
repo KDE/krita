@@ -162,6 +162,8 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     } else if (event->type() == QEvent::TabletMove) {
         QTabletEvent *tevent = static_cast<QTabletEvent*>(event);
         m_d->mousePositionCompressor->start(tevent->pos());
+    } else if (event->type() == QEvent::FocusIn) {
+        m_d->view->syncLastActiveNodeToDocument();
     }
 
     return false;

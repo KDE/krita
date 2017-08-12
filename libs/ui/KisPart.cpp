@@ -139,11 +139,6 @@ KisPart::KisPart()
 
 KisPart::~KisPart()
 {
-    qDebug()<<"~~KisPart";
-    KisTelemetryInstance::instance()->sendData("install");
-    KisTelemetryInstance::instance()->sendData("tools");
-    KisTelemetryInstance::instance()->sendData("imageProperties");
-    KisTelemetryInstance::instance()->sendData("actions");
     while (!d->documents.isEmpty()) {
         delete d->documents.takeFirst();
     }
@@ -370,24 +365,12 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
 
 void KisPart::openExistingFile(const QUrl& url)
 {
-    Q_ASSERT(url.isLocalFile());
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    KisDocument* document = createDocument();
-    if (!document->openUrl(url)) {
-        delete document;
-        return;
-    }
-    if (!document->image()) {
-        delete document;
-        return;
-    }
-    document->setModified(false);
-    addDocument(document);
+    // TODO: refactor out this method!
 
-    KisMainWindow* mw = currentMainwindow();
-    mw->addViewAndNotifyLoadingCompleted(document);
+    KisMainWindow *mw = currentMainwindow();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mw);
 
-    qApp->restoreOverrideCursor();
+    mw->openDocument(url, KisMainWindow::None);
 }
 
 void KisPart::updateShortcuts()

@@ -151,7 +151,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
 
         m_d->doc.reset(KisPart::instance()->createDocument());
         successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
-                                               KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+                                               KisDocument::DontAddToRecent);
     } else {
         dbgKrita << "File was modified externally. Restarting.";
         dbgKrita << ppVar(m_d->fileChangedFlag);

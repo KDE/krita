@@ -29,7 +29,6 @@
 #include <kis_types.h>
 #include <KisPart.h>
 
-
 #ifdef __GNUC__
 #define WARN_WRONG_MODE(_mode) warnKrita << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
 #else

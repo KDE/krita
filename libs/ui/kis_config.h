@@ -192,11 +192,14 @@ public:
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
 
-    QColor getOpenGLGridColor(bool defaultValue = false) const;
-    void setOpenGLGridColor(const QColor & v) const;
+    QColor getPixelGridColor(bool defaultValue = false) const;
+    void setPixelGridColor(const QColor & v) const;
 
-    qreal getOpenGLGridDrawingThreshold(bool defaultValue = false) const;
-    void setOpenGLGridDrawingThreshold(qreal v) const;
+    qreal getPixelGridDrawingThreshold(bool defaultValue = false) const;
+    void setPixelGridDrawingThreshold(qreal v) const;
+
+    bool pixelGridEnabled(bool defaultValue = false) const;
+    void enablePixelGrid(bool v) const;
 
     quint32 guidesLineStyle(bool defaultValue = false) const;
     void setGuidesLineStyle(quint32 v) const;
@@ -470,8 +473,6 @@ public:
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;
 
-    bool useVerboseOpenGLDebugOutput(bool defaultValue = false) const;
-
     int workaroundX11SmoothPressureSteps(bool defaultValue = false) const;
 
     bool showCanvasMessages(bool defaultValue = false) const;
@@ -483,8 +484,8 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
-    void setEnableOpenGLDebugging(bool value) const;
-    bool enableOpenGLDebugging(bool defaultValue = false) const;
+    void setEnableOpenGLFramerateLogging(bool value) const;
+    bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;

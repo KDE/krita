@@ -250,9 +250,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkOpenGLLogging">
+       <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
         <property name="text">
-         <string>Enable OpenGL logging</string>
+         <string>Enable debug logging of OpenGL framerate</string>
         </property>
        </widget>
       </item>

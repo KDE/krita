@@ -82,7 +82,7 @@ KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document
 
     KisImageBuilder_Result res;
 
-    if ((res = oraConverter.buildFile(io, image, document->activeNodes())) == KisImageBuilder_RESULT_OK) {
+    if ((res = oraConverter.buildFile(io, image, {document->preActivatedNode()})) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

@@ -21,21 +21,24 @@
 #define koStoreDevice_h
 
 #include "KoStore.h"
+#include <kritastore_export.h>
+
 
 /**
  * This class implements a QIODevice around KoStore, so that
  * it can be used to create a QDomDocument from it, to be written or read
  * using QDataStream or to be written using QTextStream
  */
-class KoStoreDevice : public QIODevice
+class KRITASTORE_EXPORT KoStoreDevice : public QIODevice
 {
+    Q_OBJECT
 public:
     /// Note: KoStore::open() should be called before calling this.
     explicit KoStoreDevice(KoStore * store) : m_store(store) {
         // calligra-1.x behavior compat: a KoStoreDevice is automatically open
         setOpenMode(m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly);
     }
-    ~KoStoreDevice() override {}
+    ~KoStoreDevice() override;
 
     bool isSequential() const override {
         return true;

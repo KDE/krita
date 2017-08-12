@@ -283,12 +283,12 @@ QColor KisConfig::getCursorMainColor(bool defaultValue) const
 {
     QColor col;
     col.setRgbF(0.501961, 1.0, 0.501961);
-    return (defaultValue ? col : m_cfg.readEntry("cursormaincolor", col));
+    return (defaultValue ? col : m_cfg.readEntry("cursorMaincColor", col));
 }
 
 void KisConfig::setCursorMainColor(const QColor &v) const
 {
-    m_cfg.writeEntry("cursormaincolor", v);
+    m_cfg.writeEntry("cursorMaincColor", v);
 }
 
 OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
@@ -733,26 +733,37 @@ void KisConfig::setGridSubdivisionColor(const QColor & v) const
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
 
-QColor KisConfig::getOpenGLGridColor(bool defaultValue) const
+QColor KisConfig::getPixelGridColor(bool defaultValue) const
 {
     QColor col(255, 255, 255);
-    return (defaultValue ? col : m_cfg.readEntry("openglgridcolor", col));
+    return (defaultValue ? col : m_cfg.readEntry("pixelGridColor", col));
 }
 
-void KisConfig::setOpenGLGridColor(const QColor & v) const
+void KisConfig::setPixelGridColor(const QColor & v) const
 {
-    m_cfg.writeEntry("openglgridcolor", v);
+    m_cfg.writeEntry("pixelGridColor", v);
 }
 
-qreal KisConfig::getOpenGLGridDrawingThreshold(bool defaultValue) const
+qreal KisConfig::getPixelGridDrawingThreshold(bool defaultValue) const
 {
     qreal border = 8.0f;
-    return (defaultValue ? border : m_cfg.readEntry("griddrawingborder", border));
+    return (defaultValue ? border : m_cfg.readEntry("pixelGridDrawingThreshold", border));
 }
 
-void KisConfig::setOpenGLGridDrawingThreshold(qreal v) const
+void KisConfig::setPixelGridDrawingThreshold(qreal v) const
 {
-    m_cfg.writeEntry("griddrawingborder", v);
+    m_cfg.writeEntry("pixelGridDrawingThreshold", v);
+}
+
+bool KisConfig::pixelGridEnabled(bool defaultValue) const
+{
+    bool enabled = true;
+    return (defaultValue ? enabled : m_cfg.readEntry("pixelGridEnabled", enabled));
+}
+
+void KisConfig::enablePixelGrid(bool v) const
+{
+    m_cfg.writeEntry("pixelGridEnabled", v);
 }
 
 quint32 KisConfig::guidesLineStyle(bool defaultValue) const
@@ -1615,11 +1626,6 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
     m_cfg.writeEntry("testingCompressBrushEvents", value);
 }
 
-bool KisConfig::useVerboseOpenGLDebugOutput(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("useVerboseOpenGLDebugOutput", false));
-}
-
 int KisConfig::workaroundX11SmoothPressureSteps(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0));
@@ -1688,14 +1694,14 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
-bool KisConfig::enableOpenGLDebugging(bool defaultValue) const
+bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLDebugging", false));
+    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLFramerateLogging", false));
 }
 
-void KisConfig::setEnableOpenGLDebugging(bool value) const
+void KisConfig::setEnableOpenGLFramerateLogging(bool value) const
 {
-    m_cfg.writeEntry("enableOpenGLDebugging", value);
+    m_cfg.writeEntry("enableOpenGLFramerateLogging", value);
 }
 
 void KisConfig::setEnableAmdVectorizationWorkaround(bool value)

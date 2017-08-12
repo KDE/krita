@@ -24,6 +24,7 @@
 #include "KisImportExportFilter.h"
 
 class QWidget;
+class QMutex;
 
 class KisAsyncActionFeedback
 {
@@ -32,6 +33,8 @@ public:
     ~KisAsyncActionFeedback();
 
     KisImportExportFilter::ConversionStatus runAction(std::function<KisImportExportFilter::ConversionStatus()> func);
+    void runVoidAction(std::function<void()> func);
+    void waitForMutex(QMutex *mutex);
 
 private:
     struct Private;

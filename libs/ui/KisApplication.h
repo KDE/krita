@@ -116,7 +116,6 @@ private:
     class ResetStarting;
     friend class ResetStarting;
     KisAutoSaveRecoveryDialog *m_autosaveDialog;
-    QStringList m_autosaveFiles;
     QPointer<KisMainWindow> m_mainWindow; // The first mainwindow we create on startup
     bool m_batchRun;
 };

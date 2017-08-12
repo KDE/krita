@@ -92,7 +92,6 @@ public:
 
         setSection(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_smart_patch"));
-        setShortcut(QKeySequence(Qt::Key_Shift + Qt::Key_I));
         setPriority(4);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

@@ -37,9 +37,14 @@ void KoProgressBar::setValue(int value)
 {
     QProgressBar::setValue(value);
 
-    if (value >= minimum() && value < maximum()) {
+    // we also show the bar if it is in undetermined state
+    if (minimum() == maximum() ||
+        (value >= minimum() && value < maximum())) {
+
         setVisible( true );
+
     } else {
+
         emit done();
         setVisible( false );
     }

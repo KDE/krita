@@ -55,6 +55,31 @@ ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 # krita_build -- build directory for krita itself
 # krita.appdir -- install directory for krita and the dependencies
 
+# fetch and build gmic
+if [ ! -d /gmic ] ; then
+	git clone  --depth 1 https://github.com/dtschump/gmic.git
+fi
+
+cd /gmic/
+git_pull_rebase_helper
+cd /
+make -C gmic/src CImg.h gmic_stdlib.h
+
+# fetch and build gmic-qt
+if [ ! -d /gmic-qt ] ; then
+	git clone  --depth 1 https://github.com/c-koi/gmic-qt.git
+fi
+
+cd /gmic-qt/
+git_pull_rebase_helper
+
+cd /
+mkdir gmic-qt-build
+cd  gmic-qt-build
+cmake3 ../gmic-qt -DGMIC_QT_HOST=krita
+cp gmic_krita_qt /krita.appdir/usr/bin
+
+
 # Get Krita
 if [ ! -d /krita ] ; then
 	git clone  --depth 1 https://github.com/KDE/krita.git /krita
@@ -78,6 +103,7 @@ cmake3 ../krita \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DPACKAGERS_BUILD=1 \
     -DBUILD_TESTING=FALSE \
     -DKDE4_BUILD_TESTS=FALSE \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE

@@ -1,9 +1,7 @@
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QPixmap, QIcon, QKeySequence
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QListView, QFormLayout,
-                             QHBoxLayout, QPushButton, QLineEdit, QListWidget,
-                             QScrollArea, QGridLayout, QFileDialog, QKeySequenceEdit,
-                             QLabel, QAction, QDialogButtonBox)
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
+                             QLineEdit, QScrollArea, QGridLayout, QFileDialog,
+                             QLabel, QDialogButtonBox)
 from tenscripts import tenscriptsdialog
 import krita
 
@@ -32,6 +30,7 @@ class UITenScripts(object):
         self.tenscripts = tenscripts
 
         self._loadGridLayout()
+        self._fillScripts()
 
         self.baseArea.setLayout(self.scriptsLayout)
         self.scrollArea.setWidget(self.baseArea)
@@ -85,3 +84,15 @@ class UITenScripts(object):
     def _loadGridLayout(self):
         for item in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.addNewRow(item)
+
+    def _fillScripts(self):
+        scripts = self.tenscripts.scripts
+        index = 0
+
+        for row in range(self.scriptsLayout.rowCount()-1):
+            if row >= len(scripts):
+                return
+
+            textField = self.scriptsLayout.itemAt(index + 1).widget()
+            textField.setText(scripts[row])
+            index += 3

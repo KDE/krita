@@ -46,6 +46,7 @@ class RunAction(QAction):
         sys.stderr = output
         script = self.editor.document().toPlainText()
         document = self.scripter.documentcontroller.activeDocument
+
         try:
             if document:
                 spec = importlib.util.spec_from_file_location("users_script", document.filePath)
@@ -62,5 +63,5 @@ class RunAction(QAction):
         sys.stderr = stderr
 
         # scroll to bottom of output
-        max = self.output.verticalScrollBar().maximum()
-        self.output.verticalScrollBar().setValue(max)
+        bottom = self.output.verticalScrollBar().maximum()
+        self.output.verticalScrollBar().setValue(bottom)

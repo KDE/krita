@@ -1,10 +1,7 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QListView, QFormLayout,
-                             QHBoxLayout, QPushButton, QLineEdit, QListWidget,
-                             QScrollArea, QGridLayout, QFileDialog, QKeySequenceEdit,
-                             QLabel, QAction, QDialogButtonBox)
-from PyQt5.QtCore import QObject, Qt
+from PyQt5.QtWidgets import QMessageBox
 import krita
 from tenscripts import uitenscripts
+import importlib
 
 
 class TenScriptsExtension(krita.Extension):
@@ -27,9 +24,6 @@ class TenScriptsExtension(krita.Extension):
         self.uitenscripts = uitenscripts.UITenScripts()
         self.uitenscripts.initialize(self)
 
-    def _executeScript(self):
-        print('script executed')
-
     def readSettings(self):
         self.scripts = Application.readSetting("tenscripts", "scripts", "").split(',')
 
@@ -44,14 +38,36 @@ class TenScriptsExtension(krita.Extension):
     def loadActions(self):
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']):
             action = Application.createAction("execute_script_" + item, "Execute Script " + item)
-            action.setMenu("None")
             action.script = None
+            action.setMenu("None")
             action.triggered.connect(self._executeScript)
 
             if index < len(self.scripts):
                 action.script = self.scripts[index]
 
             self.actions.append(action)
-            print(action.shortcut())
+
+    def _executeScript(self):
+        script = self.sender().script
+        if script:
+            try:
+                spec = importlib.util.spec_from_file_location("users_script", script)
+                users_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(users_module)
+                
+                if hasattr(users_module, 'main') and callable(users_module.main):
+                    users_module.main()
+
+                self.showMessage('script {0} executed'.format(self.sender().script))
+            except Exception as e:
+                self.showMessage(str(e))
+        else:
+            self.showMessage("You don't assign a script to that action")
+
+    def showMessage(self, message):
+        self.msgBox  = QMessageBox(Application.activeWindow().qwindow())
+        self.msgBox.setText(message)
+        self.msgBox.exec_()
+
 
 Scripter.addExtension(TenScriptsExtension(Application))

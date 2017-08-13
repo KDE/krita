@@ -39,10 +39,6 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     KisOpenGL::setDefaultFormat();
 
-    QLoggingCategory::setFilterRules("krita*.debug=false\n"
-                                     "krita*.warning=false\n"
-                                     "krita.tabletlog=false");
-
 
     // first create the application so we can create a pixmap
     KisApplication app("kritarunner", argc, argv);

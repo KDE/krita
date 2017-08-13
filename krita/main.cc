@@ -28,7 +28,6 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QDate>
-#include <QLoggingCategory>
 #include <QLocale>
 #include <QSettings>
 
@@ -97,22 +96,6 @@ extern "C" int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
-    /**
-     * Disable debug output by default. (krita.input enables tablet debugging.)
-     * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
-     *
-     * As an example, to get full debug output, run the following:
-     * export QT_LOGGING_RULES="krita*=true"; krita
-     *
-     * See: http://doc.qt.io/qt-5/qloggingcategory.html
-     */
-    QLoggingCategory::setFilterRules("krita*.debug=false\n"
-                                     "krita*.warning=true\n"
-                                     "krita.tabletlog=true"
-#ifdef Q_OS_WIN
-                                     "\nqt.qpa.gl=true"
-#endif
-                                     );
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");

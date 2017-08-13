@@ -42,6 +42,31 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+    /**
+     * @brief horizontalGuides
+     * The horizontal guides.
+     * @return a list of the horizontal positions of guides.
+     */
+    QList<qreal> horizontalGuides() const;
+    /**
+     * @brief verticalGuides
+     * The vertical guide lines.
+     * @return a list of vertical guides.
+     */
+    QList<qreal> verticalGuides() const;
+    /**
+     * @brief setHorizontalGuides
+     * replace all existing horizontal guides with the entries in the list.
+     * @param list a list of floats containing the new guides.
+     */
+    void setHorizontalGuides(const QList<qreal> &lines);
+    /**
+     * @brief setVerticalGuides
+     * replace all existing horizontal guides with the entries in the list.
+     * @param list a list of floats containing the new guides.
+     */
+    void setVerticalGuides(const QList<qreal> &lines);
+
 public Q_SLOTS:
 
     /**

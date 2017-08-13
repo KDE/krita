@@ -51,6 +51,9 @@ class WdgDlgBundleManager;
  * To get any item from the system folder there is an option to open-up the Resource Folder made available in the bundle manager.
  * The integration of Content Downloader is made available here.
  *
+ * Active bundles and inactive bundles could be set by the checkboxes in the Active list widget. Checked bundles denotes
+ * that the bundle is active and the unchecked bundles denote it's inactive.
+ *
  */
 
 class DlgBundleManager : public KoDialog
@@ -88,11 +91,7 @@ private Q_SLOTS:
     /// This sets the knsrcFile, the file which allows to link share.krita.org and this helps in populating the categories.
     void setKnsrcFile(const QString& knsrcFileArg);
 
-    /// deleteBundle provides the provision to blackList the bundles and user could manually clean up the reasources.
-    void deleteBundle();
-
-    /// Allows to search the bundles created in the resource manager.
-    void searchTextChanged(const QString &lineEditText);
+    void refreshListData();
 
 private:
 
@@ -100,13 +99,10 @@ private:
     Ui::WdgDlgBundleManager *m_ui;
 
     /// Populates the listWidget in the Bundle manager with the bundles.
-    void fillListWidget(QList<KisResourceBundle*> bundles, QListWidget *w);
+    void fillListWidget(QVector<KisResourceBundle *> bundles, QListWidget *w);
 
-    void refreshListData();
-
-    QMap<QString, KisResourceBundle*> m_blacklistedBundles;
-    QMap<QString, KisResourceBundle*> m_activeBundles;
-    QMap<QString, KisResourceBundle*> m_Bundles;
+    QVector<KisResourceBundle*> m_blacklistedBundles;
+    QVector<KisResourceBundle*> m_activeBundles;
 
     KisResourceBundle *m_currentBundle;
     KisActionManager *m_actionManager;

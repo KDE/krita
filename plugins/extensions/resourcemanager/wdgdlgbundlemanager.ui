@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>708</width>
+    <width>864</width>
     <height>431</height>
    </rect>
   </property>
@@ -206,13 +206,6 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="bnDeleteBundle">
-             <property name="text">
-              <string>Delete Bundle</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
@@ -408,9 +401,6 @@
   </layout>
   <zorder></zorder>
   <zorder></zorder>
-  <zorder></zorder>
-  <zorder>lblPreview</zorder>
-  <zorder>horizontalLayoutWidget_2</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -69,7 +69,6 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     resize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    m_ui->bnDeleteBundle->setVisible(false);
     m_ui->lblDescription->setReadOnly(true);
 
     QString knsrcFile = "kritaresourcebundles.knsrc";
@@ -132,17 +131,15 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
     connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
 
-    connect(m_ui->bnDeleteBundle, SIGNAL(clicked()), SLOT(deleteBundle()));
-
-    connect(m_ui->searchLineEdit, SIGNAL(textChanged(QString)), SLOT(searchTextChanged(QString)));
-    connect(m_ui->searchLineEdit, SIGNAL(textEdited(QString)), SLOT(searchTextChanged(QString)));
+    connect(m_ui->searchLineEdit, SIGNAL(textChanged(QString)), SLOT(refreshListData()));
+    connect(m_ui->searchLineEdit, SIGNAL(textEdited(QString)), SLOT(refreshListData()));
 }
 
 DlgBundleManager::~DlgBundleManager()
 {
     delete(m_ui->m_importResources->menu());
+    qDeleteAll(m_blacklistedBundles);
 }
-
 
 void DlgBundleManager::refreshListData()
 {
@@ -150,21 +147,35 @@ void DlgBundleManager::refreshListData()
 
     m_ui->listActive->clear();
 
+    qDeleteAll(m_blacklistedBundles);
+
     Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
         KisResourceBundle *bundle = new KisResourceBundle(f);
         bundle->load();
         if (bundle->valid()) {
             bundle->setInstalled(false);
-            m_blacklistedBundles[f] = bundle;
+            m_blacklistedBundles.append(bundle);
         }
     }
-
     Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
-        if (bundle->valid()) {
-            m_activeBundles[bundle->filename()] = bundle;
+
+        m_activeBundles.removeAll(bundle);
+
+        if (bundle->valid() && bundle->name().contains(m_ui->searchLineEdit->text())) {
+            m_activeBundles.append(bundle);
         }
+
+        else if(bundle->valid() && bundle->getMeta("author").contains(m_ui->searchLineEdit->text())) {
+            m_activeBundles.append(bundle);
+        }
+
+        else if(bundle->valid() && bundle->getMeta("description").contains(m_ui->searchLineEdit->text().trimmed())) {
+            m_activeBundles.append(bundle);
+        }
+
     }
-    fillListWidget(m_activeBundles.values(), m_ui->listActive);
+    fillListWidget(m_activeBundles + m_blacklistedBundles, m_ui->listActive);
+
 }
 
 void DlgBundleManager::accept()
@@ -181,7 +192,7 @@ void DlgBundleManager::accept()
 
         if (!bundle) {
             // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
@@ -245,14 +256,13 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
         if (!bundle) {
             // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
                 }
             }
         }
-
 
         if (bundle) {
 
@@ -308,8 +318,6 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_currentBundle = 0;
         }
     }
-
-    m_ui->bnDeleteBundle->setVisible(true);
 }
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current)
@@ -322,8 +330,10 @@ void DlgBundleManager::editBundle()
 {
     if (m_currentBundle) {
         DlgCreateBundle dlg(m_currentBundle);
-        m_activeBundles.remove(m_currentBundle->filename());
-        m_currentBundle = 0;
+        if (m_activeBundles.contains(m_currentBundle)) {
+            m_activeBundles.remove(m_activeBundles.indexOf(m_currentBundle));
+            m_currentBundle = 0;
+        }
         if (dlg.exec() != QDialog::Accepted) {
             return;
         }
@@ -332,10 +342,11 @@ void DlgBundleManager::editBundle()
     }
 }
 
-void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListWidget *w)
+void DlgBundleManager::fillListWidget(QVector<KisResourceBundle *> bundles, QListWidget *w)
 {
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     w->setSelectionMode(QAbstractItemView::MultiSelection);
+    w->clear();
 
     Q_FOREACH (KisResourceBundle *bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
@@ -353,8 +364,7 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
         item->setData(Qt::UserRole, bundle->md5());
         w->addItem(item);
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-        item->setCheckState(Qt::Unchecked);
-
+        item->setCheckState(m_activeBundles.contains(bundle) ? Qt::Checked : Qt::Unchecked);
     }
 }
 
@@ -414,42 +424,3 @@ void DlgBundleManager::setKnsrcFile(const QString &knsrcFileArg)
     d->knsrcFile = knsrcFileArg;
 }
 
-void DlgBundleManager::deleteBundle()
-{
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
-
-    Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
-
-            QByteArray ba = item->data(Qt::UserRole).toByteArray();
-            KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-
-            m_activeBundles.remove(m_currentBundle->filename());
-            m_ui->listActive->takeItem(m_ui->listActive->row(item));
-            bundleServer->removeResourceAndBlacklist(bundle);
-    }
-}
-
-void DlgBundleManager::searchTextChanged(const QString& lineEditText)
-{
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
-
-    m_ui->listActive->clear();
-
-    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
-        KisResourceBundle *bundle = new KisResourceBundle(f);
-        bundle->load();
-        if (bundle->valid()) {
-            bundle->setInstalled(false);
-            m_blacklistedBundles[f] = bundle;
-        }
-    }
-
-    Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
-        if(bundle->name().contains(lineEditText)) {
-            m_ui->listActive->clear();
-            m_Bundles[bundle->filename()] = bundle;
-            fillListWidget(m_Bundles.values(), m_ui->listActive);
-        }
-    }
-    emit resourceTextChanged(lineEditText);
-}

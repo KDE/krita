@@ -34,6 +34,7 @@
 #include <time.h>
 
 #include <KisApplication.h>
+#include <KisLoggingManager.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 
@@ -96,6 +97,7 @@ extern "C" int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
+    KisLoggingManager::initialize();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");

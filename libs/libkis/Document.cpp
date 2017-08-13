@@ -48,6 +48,8 @@
 #include <kis_selection.h>
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
+#include <kis_guides_config.h>
+#include <kis_coordinates_converter.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -602,6 +604,68 @@ void Document::refreshProjection()
 {
     if (!d->document || !d->document->image()) return;
     d->document->image()->refreshGraph();
+}
+
+QList<qreal> Document::horizontalGuides() const
+{
+    QList<qreal> lines;
+    if (!d->document || !d->document->image()) return lines;
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform().inverted();
+    QList<qreal> untransformedLines = d->document->guidesConfig().horizontalGuideLines();
+    for (int i = 0; i< untransformedLines.size(); i++) {
+        qreal line = untransformedLines[i];
+        lines.append(transform.map(QPointF(line, line)).x());
+    }
+    return lines;
+}
+
+QList<qreal> Document::verticalGuides() const
+{
+    QList<qreal> lines;
+    if (!d->document || !d->document->image()) return lines;
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform().inverted();
+    QList<qreal> untransformedLines = d->document->guidesConfig().verticalGuideLines();
+    for (int i = 0; i< untransformedLines.size(); i++) {
+        qreal line = untransformedLines[i];
+        lines.append(transform.map(QPointF(line, line)).y());
+    }
+    return lines;
+}
+
+void Document::setHorizontalGuides(const QList<qreal> &lines)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform();
+    QList<qreal> transformedLines;
+    for (int i = 0; i< lines.size(); i++) {
+        qreal line = lines[i];
+        transformedLines.append(transform.map(QPointF(line, line)).x());
+    }
+    config.setHorizontalGuideLines(transformedLines);
+    d->document->setGuidesConfig(config);
+}
+
+void Document::setVerticalGuides(const QList<qreal> &lines)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform();
+    QList<qreal> transformedLines;
+    for (int i = 0; i< lines.size(); i++) {
+        qreal line = lines[i];
+        transformedLines.append(transform.map(QPointF(line, line)).y());
+    }
+    config.setVerticalGuideLines(transformedLines);
+    d->document->setGuidesConfig(config);
 }
 
 QPointer<KisDocument> Document::document() const

@@ -8,6 +8,10 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+    QList<qreal> horizontalGuides();
+    QList<qreal> verticalGuides();
+    void setHorizontalGuides(const QList<qreal> &lines);
+    void setVerticalGuides(const QList<qreal> &lines);
 public Q_SLOTS:
 
     Node * activeNode() const  /Factory/;

@@ -155,9 +155,4 @@ KisImageSP KisAsyncAnimationRendererBase::requestedImage() const
     return m_d->requestedImage;
 }
 
-int KisAsyncAnimationRendererBase::requestedFrame() const
-{
-    return m_d->requestedFrame;
-}
-
 

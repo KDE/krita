@@ -114,8 +114,6 @@ qreal KisSplat::CalcSize()
 
 void KisSplat::clearOldPath(KisPaintDeviceSP dev)
 {
-//    QRect rc = m_oldPath.boundingRect().toRect();
-//    dev->clear(rc);
     QRect rect = m_oldPath.boundingRect().toRect();
     KisSequentialIterator it(dev, rect);
 
@@ -138,9 +136,6 @@ void KisSplat::doPaint(KisPainter *painter)
     qint8 oldOpacity = painter->opacity();
     KisPainter::FillStyle oldFillStyle = painter->fillStyle();
     KoColor oldColor = painter->paintColor();
-
-//    if (m_state == Flowing)
-//        clearOldPath(painter->device());
 
     painter->setOpacity(START_OPACITY * multiply);
     painter->setFillStyle(KisPainter::FillStyleForegroundColor);

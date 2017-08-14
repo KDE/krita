@@ -42,7 +42,8 @@ class KisBaseSplatsPlane
 {
 public:
     KisBaseSplatsPlane(bool useCaching,
-                       KisBaseSplatsPlane *lowLvlPlane = 0);
+                       KisBaseSplatsPlane *lowLvlPlane = 0,
+                       const KoColorSpace *colorSpace = 0);
     virtual ~KisBaseSplatsPlane();
 
     /**
@@ -72,14 +73,12 @@ public:
 
 
 protected:
-
-    QList<KisSplat*>::iterator remove(QList<KisSplat*>::iterator it);
     QList<KisSplat*> m_splats;
     KisBaseSplatsPlane *m_lowLvlPlane;
 
 protected:
-    void setDirty(const QRect &rc);
-    QRect m_dirtyRect;
+    void setDirty(KisSplat *splat);
+    QList<KisSplat *> m_dirtySplats;
 
 private:
     KisPaintDeviceSP m_cachedPD;

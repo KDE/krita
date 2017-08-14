@@ -97,12 +97,12 @@ QVector<int> KisWetMap::getWater(QVector<QPointF> points)
     return ret;
 }
 
-// TODO: KisRandomAccessorSP
 QVector<QPoint> KisWetMap::getSpeed(QVector<QPointF> points)
 {
     QVector<QPoint> ret;
-    KisRandomConstAccessorSP accesser = m_wetMap->createRandomConstAccessorNG(points.first().toPoint().x(),
-                                                                         points.first().toPoint().y());
+    KisRandomConstAccessorSP accesser =
+            m_wetMap->createRandomConstAccessorNG(points.first().toPoint().x(),
+                                                  points.first().toPoint().y());
     points.pop_front();
     const qint16 *data = reinterpret_cast<const qint16 *>(accesser->rawDataConst());
     ret.push_back(QPoint(data[1], data[2]));

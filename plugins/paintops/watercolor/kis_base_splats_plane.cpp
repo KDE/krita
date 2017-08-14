@@ -20,11 +20,13 @@
 
 #include "kis_base_splats_plane.h"
 
-KisBaseSplatsPlane::KisBaseSplatsPlane(bool useCaching, KisBaseSplatsPlane *lowLvlPlane)
+KisBaseSplatsPlane::KisBaseSplatsPlane(bool useCaching, KisBaseSplatsPlane *lowLvlPlane, const KoColorSpace* colorSpace)
     : m_lowLvlPlane(lowLvlPlane),
       m_isDirty(true),
       m_useCaching(useCaching)
 {
+    if (useCaching)
+        m_cachedPD = new KisPaintDevice(colorSpace);
 }
 
 KisBaseSplatsPlane::~KisBaseSplatsPlane()
@@ -35,33 +37,42 @@ KisBaseSplatsPlane::~KisBaseSplatsPlane()
 void KisBaseSplatsPlane::add(KisSplat *splat)
 {
     m_splats << splat;
-    setDirty(splat->boundingRect().toAlignedRect());
+    if (m_useCaching) {
+        KisPainter *painter = new KisPainter(m_cachedPD);
+        splat->doPaint(painter);
+    }
+//    setDirty(splat);
 }
 
 void KisBaseSplatsPlane::remove(KisSplat *splat)
 {
     m_splats.removeOne(splat);
-    setDirty(splat->boundingRect().toAlignedRect());
+    if (m_useCaching) {
+        m_cachedPD->clear(splat->boundingRect().toAlignedRect());
+    }
+//    setDirty(splat);
 }
 
 void KisBaseSplatsPlane::paint(KisPainter *gc, QRect rect)
 {
+    if (rect.isNull())
+        return;
+
     if (m_useCaching) {
+//        if (!m_dirtySplats.isEmpty()) {
+//            if (!m_cachedPD) {
+//                m_cachedPD = new KisPaintDevice(gc->device()->colorSpace());
+//            } else {
+//                m_cachedPD->clear(rect);
+//            }
 
-        if (!m_dirtyRect.isNull()) {
-            if (!m_cachedPD) {
-                m_cachedPD = new KisPaintDevice(gc->device()->colorSpace());
-            } else {
-                m_cachedPD->clear(m_dirtyRect);
-            }
-
-            KisPainter *painter = new KisPainter(m_cachedPD);
-            Q_FOREACH (KisSplat *splat, m_splats) {
-                if (m_dirtyRect.contains(splat->boundingRect().toAlignedRect()))
-                    splat->doPaint(painter);
-            }
+//            KisPainter *painter = new KisPainter(m_cachedPD);
+//            Q_FOREACH (KisSplat *splat, m_dirtySplats) {
+//                splat->doPaint(painter);
+//            }
 //            m_isDirty = false;
-        }
+//            m_dirtySplats.clear();
+//        }
         gc->bitBlt(rect.topLeft(),
                    m_cachedPD,
                    rect);
@@ -74,31 +85,32 @@ void KisBaseSplatsPlane::paint(KisPainter *gc, QRect rect)
 
 QRect KisBaseSplatsPlane::update(KisWetMap *wetMap)
 {
-//    QRect dirtyRect;
+    QRect dirtyRect;
 
     for (auto it = m_splats.begin(); it != m_splats.end();) {
         KisSplat *splat = *it;
-        setDirty( splat->boundingRect().toAlignedRect());
+
+        dirtyRect |= splat->boundingRect().toAlignedRect();
         if (splat->update(wetMap) == KisSplat::Fixed) {
             m_lowLvlPlane->add(splat);
             {
                 // move to protected call to parent class
                 it = m_splats.erase(it);
-                setDirty(splat->boundingRect().toAlignedRect());
-
+                setDirty(splat);
+                dirtyRect |= splat->boundingRect().toAlignedRect();
             }
-//            setDirty(splat->boundingRect().toAlignedRect());
         } else {
-            setDirty(splat->boundingRect().toAlignedRect());
+            setDirty(splat);
+            dirtyRect |= splat->boundingRect().toAlignedRect();
             ++it;
         }
     }
 
-    return m_dirtyRect;
+    return dirtyRect;
 }
 
-void KisBaseSplatsPlane::setDirty(const QRect &rc)
+void KisBaseSplatsPlane::setDirty(KisSplat *splat)
 {
-    m_dirtyRect |= rc;
-//    m_isDirty = true;
+    m_dirtySplats << splat;
+    m_isDirty = true;
 }

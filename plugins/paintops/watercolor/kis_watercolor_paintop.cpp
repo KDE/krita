@@ -30,8 +30,8 @@
 
 KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter),
-      m_driedPlane(true),
-      m_fixedPlane(&m_driedPlane),
+      m_driedPlane(true, 0, painter->device()->colorSpace()),
+      m_fixedPlane(&m_driedPlane, painter->device()->colorSpace()),
       m_flowingPlane(false, &m_fixedPlane)
 {
     Q_UNUSED(image);
@@ -39,20 +39,15 @@ KisWatercolorPaintOp::KisWatercolorPaintOp(const KisPaintOpSettingsSP settings, 
 
     m_wetMap = new KisWetMap();
     m_watercolorOption.readOptionSetting(settings);
-    m_lastTime = 0;
-    m_timer.start();
     m_oldPD = new KisPaintDevice(*painter->device().constData());
 }
 
 KisWatercolorPaintOp::~KisWatercolorPaintOp()
 {
-//    KisWatercolorBaseItems::instance()->drySystem();
 }
 
 KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &info)
 {
-    QRect dirtyRect;
-
     KisSplatGeneratorStrategy *strategy;
     switch (m_watercolorOption.type) {
     case 0:
@@ -86,31 +81,38 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
         splat->doPaint(painter());
     }
 
+    m_fixedPlane.rewet(m_wetMap, info.pos(), m_watercolorOption.radius, &m_flowingPlane);
+
     return updateSpacingImpl(info);
 }
 
 void KisWatercolorPaintOp::updateSystem()
 {
-    // Painting new stroke
-    qint16 time = m_timer.elapsed();
-    qint16 timeGone = time - m_lastTime;
     QRect dirtyRect;
-    // Updating system
-//    for (int i = 0; i < timeGone / 33; i++) {
-        dirtyRect |= m_fixedPlane.update(m_wetMap);
-        dirtyRect |= m_flowingPlane.update(m_wetMap);
 
-        m_wetMap->update();
-//    }
+    QElapsedTimer timer;
+    timer.start();
 
-    m_lastTime = time - time % 33;
-    source()->clear();
-    painter()->bitBlt(m_oldPD->exactBounds().topLeft(),
-                      m_oldPD, m_oldPD->exactBounds());
+    dirtyRect = m_fixedPlane.update(m_wetMap);
+    dirtyRect |= m_flowingPlane.update(m_wetMap);
+
+    m_wetMap->update();
+
+    qDebug() << "\n" << ppVar(timer.elapsed());
+    qDebug() << ppVar(dirtyRect);
+
+    source()->clear(dirtyRect);
+    painter()->bitBlt(dirtyRect.topLeft(),
+                      m_oldPD, dirtyRect);
+
+    qDebug() << ppVar(timer.elapsed());
     m_driedPlane.paint(painter(), dirtyRect);
+    qDebug() << ppVar(timer.elapsed());
     m_fixedPlane.paint(painter(), dirtyRect);
+    qDebug() << ppVar(timer.elapsed());
     m_flowingPlane.paint(painter(), dirtyRect);
 
+    qDebug() << ppVar(timer.elapsed()) << "\n";
 
 }
 

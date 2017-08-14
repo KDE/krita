@@ -220,7 +220,7 @@ void KisToolFreehand::endStroke()
     if (currentPaintOpPreset()->settings()->needsContinuedStroke() && !m_needEndContinuedStroke) {
             qDebug() << "Finished part of continued stroke\n" << ppVar(m_needEndContinuedStroke);
             m_helper->endPaintInContinuedStroke();
-            m_updateTimer.start(50);
+            m_updateTimer.start(100);
     } else {
         qDebug() << "Stroke finished finaly\n" << ppVar(m_needEndContinuedStroke);
         m_helper->endPaint();

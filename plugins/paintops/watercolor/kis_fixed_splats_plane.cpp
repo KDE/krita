@@ -18,15 +18,14 @@
 
 #include "kis_fixed_splats_plane.h"
 
-KisFixedSplatsPlane::KisFixedSplatsPlane(KisBaseSplatsPlane *driedPlane)
-    : KisBaseSplatsPlane(true, driedPlane)
+KisFixedSplatsPlane::KisFixedSplatsPlane(KisBaseSplatsPlane *driedPlane, const KoColorSpace *colorSpace)
+    : KisBaseSplatsPlane(true, driedPlane, colorSpace),
+      m_splatsTree(4, 2)
 {
 }
 
 QRect KisFixedSplatsPlane::update(KisWetMap *wetMap)
 {
-//    QRect dirtyRect;
-
     for (auto it = m_splats.begin(); it != m_splats.end();) {
         KisSplat *splat = *it;
 
@@ -35,14 +34,26 @@ QRect KisFixedSplatsPlane::update(KisWetMap *wetMap)
             {
                 // move to protected call to parent class
                 it = m_splats.erase(it);
-                setDirty(splat->boundingRect().toAlignedRect());
+                setDirty(splat);
             }
-//            dirtyRect |= splat->boundingRect().toAlignedRect();
         } else {
             ++it;
         }
     }
 
-    return m_dirtyRect;
+    return QRect();
 }
 
+void KisFixedSplatsPlane::rewet(KisWetMap *wetMap, QPointF pos, qreal rad, KisBaseSplatsPlane *flowingPlane)
+{
+    QRectF rect(pos.x() - rad, pos.y() - rad,
+                rad * 2, rad * 2);
+
+    QList<KisSplat *> reweted = m_splatsTree.intersects(rect);\
+    Q_FOREACH(KisSplat *splat, reweted) {
+        splat->rewet(wetMap, pos, rad);
+        remove(splat);
+        m_splatsTree.remove(splat);
+        flowingPlane->add(splat);
+    }
+}

@@ -57,15 +57,8 @@ protected:
 
 private:
     WatercolorOption m_watercolorOption;
-    QElapsedTimer m_timer;
-    qint16 m_lastTime;
-
 
     KisWetMap *m_wetMap;
-//    QList<KisSplat *> m_flowing,
-//                      m_fixed,
-//                      m_dried;
-//    KoRTree<KisSplat *> m_fixedTree;
 
     KisBaseSplatsPlane m_driedPlane;
     KisFixedSplatsPlane m_fixedPlane;

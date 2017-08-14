@@ -20,16 +20,20 @@
 #define KISFIXEDSPLATSPLANE_H
 
 #include "kis_base_splats_plane.h"
+#include "KoRTree.h"
 
 class KisFixedSplatsPlane : public KisBaseSplatsPlane
 {
 public:
-    KisFixedSplatsPlane(KisBaseSplatsPlane *driedPlane);
+    KisFixedSplatsPlane(KisBaseSplatsPlane *driedPlane, const KoColorSpace *colorSpace);
 
     QRect update(KisWetMap *wetMap) override;
 
+    void rewet(KisWetMap *wetMap, QPointF pos, qreal rad, KisBaseSplatsPlane *flowingPlane);
+
 private:
     KisBaseSplatsPlane *m_flowingPlane;
+    KoRTree<KisSplat *> m_splatsTree;
 };
 
 #endif // KISFIXEDSPLATSPLANE_H

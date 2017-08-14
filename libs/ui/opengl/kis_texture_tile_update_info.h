@@ -196,7 +196,13 @@ public:
                    KoColorConversionTransformation::Intent renderingIntent,
                    KoColorConversionTransformation::ConversionFlags conversionFlags)
     {
-        if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty) return;
+        // we use two-stage check of the color space equivalence:
+        // first check pointers, and if not, check the spaces themselves
+        if ((dstCS == m_patchColorSpace || *dstCS == *m_patchColorSpace) &&
+            conversionFlags == KoColorConversionTransformation::Empty) {
+
+            return;
+        }
 
         if (m_patchRect.isValid()) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();

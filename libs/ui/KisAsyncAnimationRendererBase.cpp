@@ -33,10 +33,11 @@ struct KisAsyncAnimationRendererBase::Private
 
     KisImageSP requestedImage;
     int requestedFrame = -1;
+    bool isCancelled = false;
 
     static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
 
-    void clearFrameRegenerationState();
+    void clearFrameRegenerationState(bool cancelled);
 };
 
 KisAsyncAnimationRendererBase::KisAsyncAnimationRendererBase(QObject *parent)
@@ -59,6 +60,7 @@ void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int
 
     m_d->requestedImage = image;
     m_d->requestedFrame = frame;
+    m_d->isCancelled = false;
 
     KisImageAnimationInterface *animation = m_d->requestedImage->animationInterface();
 
@@ -88,12 +90,13 @@ void KisAsyncAnimationRendererBase::cancelCurrentFrameRendering()
     frameCancelledCallback(m_d->requestedFrame);
 }
 
-void KisAsyncAnimationRendererBase::Private::clearFrameRegenerationState()
+void KisAsyncAnimationRendererBase::Private::clearFrameRegenerationState(bool cancelled)
 {
     imageRequestConnections.clear();
     requestedImage = 0;
     requestedFrame = -1;
     regenerationTimeout.stop();
+    isCancelled = true;
 }
 
 void KisAsyncAnimationRendererBase::slotFrameRegenerationCancelled()
@@ -105,7 +108,8 @@ void KisAsyncAnimationRendererBase::slotFrameRegenerationCancelled()
 
 void KisAsyncAnimationRendererBase::slotFrameRegenerationFinished(int frame)
 {
-    // we might have already cancelled the regeneration
+    // We might have already cancelled the regeneration. We don't check
+    // isCancelled flag here because this code runs asynchronously.
     if (!m_d->requestedImage) return;
 
     // WARNING: executed in the context of image worker thread!
@@ -119,20 +123,30 @@ void KisAsyncAnimationRendererBase::slotFrameRegenerationFinished(int frame)
 void KisAsyncAnimationRendererBase::notifyFrameCompleted(int frame)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == this->thread());
+
+    // the image events can come with a delay, even after
+    // the processing was cancelled
+    if (m_d->isCancelled) return;
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
 
-    m_d->clearFrameRegenerationState();
+    m_d->clearFrameRegenerationState(false);
     emit sigFrameCompleted(frame);
 }
 
 void KisAsyncAnimationRendererBase::notifyFrameCancelled(int frame)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == this->thread());
+
+    // the image events can come with a delay, even after
+    // the processing was cancelled
+    if (m_d->isCancelled) return;
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
 
-    m_d->clearFrameRegenerationState();
+    m_d->clearFrameRegenerationState(true);
     emit sigFrameCancelled(frame);
 }
 

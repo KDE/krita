@@ -90,6 +90,8 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame)
 {
     KisImageSP image = requestedImage();
+    if (!image) return;
+
     m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
 
     KisTimeRange range(frame, 1);

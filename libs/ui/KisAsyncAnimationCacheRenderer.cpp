@@ -46,9 +46,10 @@ void KisAsyncAnimationCacheRenderer::setFrameCache(KisAnimationFrameCacheSP cach
 void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame)
 {
     KisAnimationFrameCacheSP cache = m_d->requestedCache;
-    if (!cache) return;
+    KisImageSP image = requestedImage();
+    if (!cache || !image) return;
 
-    m_d->requestInfo = cache->fetchFrameData(frame, requestedImage());
+    m_d->requestInfo = cache->fetchFrameData(frame, image);
     emit sigCompleteRegenerationInternal(frame);
 }
 

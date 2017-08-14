@@ -473,7 +473,9 @@ QString DlgAnimationRenderer::findFFMpeg()
 
         QProcess testProcess;
         testProcess.start(path, QStringList() << "-version");
-        testProcess.waitForFinished(1000);
+        if (testProcess.waitForStarted(1000)) {
+            testProcess.waitForFinished(1000);
+        }
 
         const bool successfulStart =
             testProcess.state() == QProcess::NotRunning &&

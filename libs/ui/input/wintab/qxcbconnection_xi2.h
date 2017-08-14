@@ -109,7 +109,11 @@ public:
 
         ENTER_FUNCTION();
     }
+#if QT_VERSION >= 0x050700
+    static void handleWheelEvent(QWindow *w, ulong timestamp, const QPointF & local, const QPointF & global, QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods = Qt::NoModifier, Qt::ScrollPhase phase = Qt::NoScrollPhase, Qt::MouseEventSource source = Qt::MouseEventNotSynthesized);
+#else
     static void handleWheelEvent(QWindow *w, ulong timestamp, const QPointF & local, const QPointF & global, QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods = Qt::NoModifier, Qt::ScrollPhase phase = Qt::ScrollUpdate, Qt::MouseEventSource source = Qt::MouseEventNotSynthesized);
+#endif
 
     static void handleTabletEnterProximityEvent(int device, int pointerType, qint64 uid);
     static void handleTabletLeaveProximityEvent(int device, int pointerType, qint64 uid);

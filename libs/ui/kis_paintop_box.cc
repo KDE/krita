@@ -174,42 +174,28 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     // mirror tool options for the X Mirror
     QMenu *toolbarMenuXMirror = new QMenu();
 
-    KisAction* hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
-    hideCanvasDecorationsX->setCheckable(true);
-    hideCanvasDecorationsX->setText(i18n("Hide Mirror Line"));
+    hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
     toolbarMenuXMirror->addAction(hideCanvasDecorationsX);
 
-    KisAction* lockActionX = m_viewManager->actionManager()->createAction("mirrorX-lock");
-    lockActionX->setText(i18n("Lock"));
-    lockActionX->setCheckable(true);
+    lockActionX = m_viewManager->actionManager()->createAction("mirrorX-lock");
     toolbarMenuXMirror->addAction(lockActionX);
 
-    KisAction* moveToCenterActionX = m_viewManager->actionManager()->createAction("mirrorX-moveToCenter");
-    moveToCenterActionX->setCheckable(false);
-    moveToCenterActionX->setText(i18n("Move to Canvas Center"));
+    moveToCenterActionX = m_viewManager->actionManager()->createAction("mirrorX-moveToCenter");
     toolbarMenuXMirror->addAction(moveToCenterActionX);
-
 
 
     // mirror tool options for the Y Mirror
     QMenu *toolbarMenuYMirror = new QMenu();
 
-    KisAction* hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
-    hideCanvasDecorationsY->setCheckable(true);
-    hideCanvasDecorationsY->setText(i18n("Hide Mirror Line"));
+    hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
     toolbarMenuYMirror->addAction(hideCanvasDecorationsY);
 
 
-    KisAction* lockActionY = m_viewManager->actionManager()->createAction("mirrorY-lock");
-    lockActionY->setText(i18n("Lock"));
-    lockActionY->setCheckable(true);
+    lockActionY = m_viewManager->actionManager()->createAction("mirrorY-lock");
     toolbarMenuYMirror->addAction(lockActionY);
 
-    KisAction* moveToCenterActionY = m_viewManager->actionManager()->createAction("mirrorY-moveToCenter");
-    moveToCenterActionY->setCheckable(false);
-    moveToCenterActionY->setText(i18n("Move to Canvas Center"));
+    moveToCenterActionY = m_viewManager->actionManager()->createAction("mirrorY-moveToCenter");
     toolbarMenuYMirror->addAction(moveToCenterActionY);
-
 
 
 

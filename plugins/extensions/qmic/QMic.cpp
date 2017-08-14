@@ -73,6 +73,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
     , m_gmicApplicator(0)
     , m_progressManager(0)
 {
+#ifndef Q_OS_MAC
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
     preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
@@ -89,6 +90,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
 
     m_gmicApplicator = new KisQmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
+#endif
 }
 
 QMic::~QMic()
@@ -470,8 +472,6 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             message->append(m->key().toUtf8());
 
             m->unlock();
-
-            qDebug() << "size" << m->size();
 
             message->append(",");
             message->append(node->name().toUtf8().toHex());

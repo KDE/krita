@@ -30,12 +30,14 @@
 #include <QFile>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QStringList>
 #include <QWindow>
 
 #include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kis_config.h>
+#include <KisLoggingManager.h>
 
 namespace
 {
@@ -58,6 +60,73 @@ namespace
         qDebug() << "OpenGL:" << debugMessage;
     }
 }
+
+#ifdef Q_OS_WIN
+namespace
+{
+    struct OpenGLCheckResult {
+        bool openGLValid;
+        bool usingAngle;
+    };
+
+    QStringList qpaDetectionLog;
+    OpenGLCheckResult qpaDetectionResult = {};
+
+    OpenGLCheckResult checkQpaOpenGLStatus() {
+        OpenGLCheckResult retval;
+        retval.openGLValid = false;
+        retval.usingAngle = false;
+
+        QOpenGLContext *context = QOpenGLContext::globalShareContext();
+        if (!context) {
+            qDebug() << "Global shared OpenGL context is null while checking Qt's OpenGL detection";
+            return retval;
+        }
+        if (!context->isValid()) {
+            qDebug() << "Global shared OpenGL context is not valid while checking Qt's OpenGL detection";
+            return retval;
+        }
+        retval.openGLValid = true;
+        retval.usingAngle = context->isOpenGLES();
+        return retval;
+    }
+} // namespace
+
+/**
+ * This function probes the Qt Platform Abstraction (QPA) for OpenGL diagnostics
+ * information. The code works under the assumption that the bundled Qt is built
+ * with `-opengl dynamic` and includes support for ANGLE.
+ *
+ * This function is written for Qt 5.9.1. On other versions it might not work
+ * as well.
+ */
+void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
+{
+    // Clear env var to prevent affecting tests
+    QByteArray userQtOpenGLEnv = qgetenv("QT_OPENGL");
+    qunsetenv("QT_OPENGL");
+
+    qDebug() << "Probing Qt OpenGL detection:";
+    {
+        KisLoggingManager::ScopedLogCapturer logCapturer(
+            "qt.qpa.gl",
+            [&qpaDetectionLog](QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+                Q_UNUSED(type)
+                Q_UNUSED(context)
+                qpaDetectionLog.append(msg);
+            }
+        );
+        {
+            QGuiApplication app(argc, argv);
+            qpaDetectionResult = checkQpaOpenGLStatus();
+        }
+    }
+    qDebug() << "Done probing Qt OpenGL detection";
+
+    // Restore env var
+    qputenv("QT_OPENGL", userQtOpenGLEnv);
+}
+#endif
 
 void KisOpenGL::initialize()
 {
@@ -121,6 +190,16 @@ void KisOpenGL::initialize()
     debugOut.resetFormat();
     debugOut << "\n     Supports deprecated functions" << supportsDeprecatedFunctions;
     debugOut << "\n     is OpenGL ES:" << isOpenGLES;
+#ifdef Q_OS_WIN
+    debugOut << "\n\nQPA OpenGL Detection Info";
+    debugOut << "\n  openGLValid:" << qpaDetectionResult.openGLValid;
+    debugOut << "\n  usingAngle:" << qpaDetectionResult.usingAngle;
+    debugOut << "\n== log ==\n";
+    debugOut.noquote();
+    debugOut << qpaDetectionLog.join('\n');
+    debugOut.resetFormat();
+    debugOut << "\n== end log ==";
+#endif
 
     qDebug().noquote() << debugText;
 

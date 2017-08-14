@@ -44,6 +44,11 @@ public:
     };
 public:
 
+#ifdef Q_OS_WIN
+    // Probe the Windows platform abstraction layer for OpenGL detection
+    static void probeWindowsQpaOpenGL(int argc, char **argv);
+#endif
+
     /// Request OpenGL version 3.2
     static void initialize();
 

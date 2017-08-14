@@ -135,6 +135,11 @@ extern "C" int main(int argc, char **argv)
     }
     KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
 
+#ifdef Q_OS_WIN
+    // Probe QPA auto OpenGL detection
+    KisOpenGL::probeWindowsQpaOpenGL(argc, argv);
+#endif
+
     KLocalizedString::setApplicationDomain("krita");
 
     // first create the application so we can create a pixmap

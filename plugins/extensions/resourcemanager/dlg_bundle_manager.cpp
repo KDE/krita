@@ -345,7 +345,7 @@ void DlgBundleManager::editBundle()
 void DlgBundleManager::fillListWidget(QVector<KisResourceBundle *> bundles, QListWidget *w)
 {
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    w->setSelectionMode(QAbstractItemView::MultiSelection);
+    w->setSelectionMode(QAbstractItemView::SingleSelection);
     w->clear();
 
     Q_FOREACH (KisResourceBundle *bundle, bundles) {

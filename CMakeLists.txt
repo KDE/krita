@@ -405,7 +405,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
+find_package(Boost 1.61 REQUIRED COMPONENTS system) # for pigment and stage
 include_directories(${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
@@ -509,8 +509,7 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for exiv2
 ##
-set(EXIV2_MIN_VERSION "0.16")
-find_package(Exiv2 REQUIRED)
+find_package(Exiv2 REQUIRED "0.16")
 set_package_properties(Exiv2 PROPERTIES
     DESCRIPTION "Image metadata library and tools"
     URL "http://www.exiv2.org"

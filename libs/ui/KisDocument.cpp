@@ -320,6 +320,7 @@ public:
 
     StdLockableWrapper<QMutex> savingLock;
 
+    bool modifiedWhileSaving = false;
     QScopedPointer<KisDocument> backgroundSaveDocument;
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportFilter::ConversionStatus> childSavingFuture;
@@ -610,7 +611,9 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
             setMimeType(job.mimeType);
             updateEditingTime(true);
 
-            d->undoStack->setClean();
+            if (!d->modifiedWhileSaving) {
+                d->undoStack->setClean();
+            }
             setRecovered(false);
             removeAutoSaveFiles();
         }
@@ -689,6 +692,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), false);
     d->backgroundSaveDocument.reset(clonedDocument.take());
     d->backgroundSaveJob = job;
+    d->modifiedWhileSaving = false;
 
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = true;
@@ -774,8 +778,10 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
         KisConfig cfg;
         d->autoSaveDelay = cfg.autoSaveInterval();
 
-        if (!d->modifiedAfterAutosave) {
+        if (!d->modifiedWhileSaving) {
             d->autoSaveTimer.stop(); // until the next change
+        } else {
+            setAutoSaveDelay(d->autoSaveDelay); // restart the timer
         }
 
         emit statusBarMessage(i18n("Finished autosaving %1", fileName), successMessageTimeout);
@@ -1151,7 +1157,8 @@ void KisDocument::setModified(bool mod)
         // First change since last autosave -> start the autosave timer
         setAutoSaveDelay(d->autoSaveDelay);
     }
-    d->modifiedAfterAutosave = mod;
+    d->modifiedAfterAutosave |= mod;
+    d->modifiedWhileSaving |= mod;
 
     if (mod == isModified())
         return;

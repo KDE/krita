@@ -108,10 +108,12 @@ void AnimaterionRenderer::slotRenderAnimation()
                                                    sequenceConfig->getInt("sequence_start"),
                                                    dlgAnimationRenderer.getFrameExportConfiguration());
         exporter.setBatchMode(batchMode);
-        bool success = exporter.regenerateRange(0) == KisAsyncAnimationFramesSaveDialog::RenderComplete;
+
+        KisAsyncAnimationFramesSaveDialog::Result result =
+            exporter.regenerateRange(m_view->mainWindow()->viewManager());
 
         // the folder could have been read-only or something else could happen
-        if (success) {
+        if (result == KisAsyncAnimationFramesSaveDialog::RenderComplete) {
             QString savedFilesMask = exporter.savedFilesMask();
 
             KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
@@ -163,6 +165,8 @@ void AnimaterionRenderer::slotRenderAnimation()
                     }
                 }
             }
+        } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
+            m_view->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
         }
     }
 }

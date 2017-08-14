@@ -179,6 +179,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
             viewManager->blockUntilOperationsFinishedForced(pair.image);
         } else {
             pair.image->barrierLock(true);
+            pair.image->unlock();
         }
 
     }

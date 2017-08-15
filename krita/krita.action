@@ -400,42 +400,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="fill_selection_foreground_color_opacity">
-      <icon></icon>
-      <text>Fill with Foreground Color (Opacity)</text>
-      <whatsThis></whatsThis>
-      <toolTip>Fill with Foreground Color (Opacity)</toolTip>
-      <iconText>Fill with Foreground Color (Opacity)</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut>Ctrl+Shift+Backspace</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="fill_selection_background_color_opacity">
-      <icon></icon>
-      <text>Fill with Background Color (Opacity)</text>
-      <whatsThis></whatsThis>
-      <toolTip>Fill with Background Color (Opacity)</toolTip>
-      <iconText>Fill with Background Color (Opacity)</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut>Ctrl+Backspace</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="fill_selection_pattern_opacity">
-      <icon></icon>
-      <text>Fill with Pattern (Opacity)</text>
-      <whatsThis></whatsThis>
-      <toolTip>Fill with Pattern (Opacity)</toolTip>
-      <iconText>Fill with Pattern (Opacity)</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="toggle-selection-overlay-mode">
       <icon></icon>
       <text>&amp;Toggle Selection Display Mode</text>

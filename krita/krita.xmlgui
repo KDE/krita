@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="120"
+version="121"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -55,6 +55,12 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>
       <Action name="fill_selection_pattern"/>
+      <Menu name="fill_special">
+        <text>Fill Special</text>
+        <Action name="fill_selection_foreground_color_opacity"/>
+        <Action name="fill_selection_background_color_opacity"/>
+        <Action name="fill_selection_pattern_opacity"/>
+      </Menu>
       <Action name="stroke_shapes"/>
       <Action name="stroke_selection"/>
       <Action name="delete"/>

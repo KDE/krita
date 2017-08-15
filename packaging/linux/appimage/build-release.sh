@@ -90,7 +90,7 @@ cd /gmic-qt/
 git_pull_rebase_helper
 
 cd /gmic-qt-build
-cmake3 ../gmic-qt -DGMIC_QT_HOST=krita
+cmake3 ../gmic-qt -DGMIC_QT_HOST=krita -DCMAKE_BUILD_TYPE=Release
 make -j4
 cp gmic_krita_qt /krita.appdir/usr/bin
 

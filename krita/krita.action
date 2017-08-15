@@ -1272,6 +1272,33 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="KritaShape/KisToolLazyBrush">
+      <icon></icon>
+      <text>Lazy Brush Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lazy Brush Tool</toolTip>
+      <iconText>Lazy Brush Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="KritaShape/KisToolSmartPatch">
+      <icon></icon>
+      <text>Smart Patch Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Smart Patch Tool</toolTip>
+      <iconText>Smart Patch Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="PanTool">
+      <icon></icon>
+      <text>Pan Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Pan Tool</toolTip>
+      <iconText>Pan Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
     <Action name="InteractionTool">
       <icon></icon>
       <text>Shape Manipulation Tool</text>

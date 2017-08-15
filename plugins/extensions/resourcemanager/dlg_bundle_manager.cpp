@@ -407,13 +407,19 @@ void DlgBundleManager::slotShareResources()
                 d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
             }
             else {
-                qDebug() << "File Info doesn not exist while importing resource file";
+                qDebug() << "Failed to install resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file info does not exist";
             }
         }
 
         foreach(const QString &file, e.uninstalledFiles()) {
             QFileInfo fi(file);
-            d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+            if(file.isNull() || file.isEmpty()) {
+                d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+            }
+
+            else {
+                qDebug() << "Failed to Remove/Uninstall resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file does not exist";
+            }
         }
     }
 #endif

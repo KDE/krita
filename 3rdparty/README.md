@@ -167,7 +167,8 @@ Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on
 Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
-Note 3: if you want to build a release, you need to get the binary gettext
+Note 2: if you want to build a release, you need to get the binary gettext
+
 archives from files.kde.org/krita/build/dependencies:
 
   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip

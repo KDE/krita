@@ -182,7 +182,7 @@ bool Python::libraryLoad()
 
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load()) {
-            errScript << "Could not load" << PYKRITA_PYTHON_LIBRARY;
+            errScript << QString("Could not load %1 -- Reason: %2").arg(PYKRITA_PYTHON_LIBRARY).arg(s_pythonLibrary->errorString());
             return false;
         }
     }

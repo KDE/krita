@@ -53,7 +53,7 @@ KisOpenglCanvasDebugger::KisOpenglCanvasDebugger()
     : m_d(new Private)
 {
     KisConfig cfg;
-    m_d->isEnabled = cfg.enableOpenGLDebugging();
+    m_d->isEnabled = cfg.enableOpenGLFramerateLogging();
 
     if (m_d->isEnabled) {
         m_d->time.start();

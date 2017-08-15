@@ -24,6 +24,7 @@
 
 #include <QtGlobal>
 class QOpenGLContext;
+class QString;
 
 #include "kritaui_export.h"
 
@@ -49,6 +50,8 @@ public:
     /// Initialize shared OpenGL context
     static void initializeContext(QOpenGLContext *ctx);
 
+    static const QString &getDebugText();
+
     static bool supportsLoD();
     static bool hasOpenGL3();
 
@@ -72,7 +75,7 @@ public:
      */
     static bool needsPixmapCacheWorkaround();
 
-    static void setDefaultFormat();
+    static void setDefaultFormat(bool enableDebug = false, bool debugSynchronous = false);
 
 private:
 

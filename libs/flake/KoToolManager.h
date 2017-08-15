@@ -193,7 +193,7 @@ public:
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
     /**
-     * Returns the tool for the given tool id.
+     * Returns the tool for the given tool id. The tool may be 0
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
      * @see addController()

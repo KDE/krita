@@ -692,7 +692,7 @@ void PerformanceTab::load(bool requestDefault)
 
     {
         KisConfig cfg2;
-        chkOpenGLLogging->setChecked(cfg2.enableOpenGLDebugging(requestDefault));
+        chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
         chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
     }
 }
@@ -714,7 +714,7 @@ void PerformanceTab::save()
 
     {
         KisConfig cfg2;
-        cfg2.setEnableOpenGLDebugging(chkOpenGLLogging->isChecked());
+        cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
         cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
     }
 }
@@ -724,6 +724,9 @@ void PerformanceTab::selectSwapDir()
     KisImageConfig cfg;
     QString swapDir = cfg.swapDir();
     swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
+    if (swapDir.isEmpty()) {
+        return;
+    }
     lblSwapFileLocation->setText(swapDir);
 }
 

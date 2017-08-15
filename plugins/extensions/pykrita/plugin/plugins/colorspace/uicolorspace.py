@@ -101,16 +101,15 @@ class UIColorSpace(object):
 
     def confirmButton(self):
         selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
-        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path==document.fileName()]
+        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path == document.fileName()]
 
-        self.msgBox  = QMessageBox(self.mainDialog)
+        self.msgBox = QMessageBox(self.mainDialog)
         if selectedDocuments:
             self.convertColorSpace(selectedDocuments)
             self.msgBox.setText("The selected documents has been converted.")
         else:
             self.msgBox.setText("Select at least one document.")
         self.msgBox.exec_()
-
 
     def convertColorSpace(self, documents):
         for document in documents:

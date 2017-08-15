@@ -146,8 +146,8 @@ class DockWidgetTitleBar(QWidget):
                        self.collapseButton.size().height() + self.pinButton.size().height()),
                 QSize(
                     self.geometry().width() - (fw * 2),
-                   self.geometry().height() - (fw * 2) -
-                   mw - self.collapseButton.size().height() - self.pinButton.size().height()))
+                    self.geometry().height() - (fw * 2) -
+                    mw - self.collapseButton.size().height() - self.pinButton.size().height()))
             titleOpt.title = q.windowTitle()
             titleOpt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
             titleOpt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
@@ -163,8 +163,8 @@ class DockWidgetTitleBar(QWidget):
                        self.collapseButton.size().width() + self.pinButton.size().width(), fw),
                 QSize(
                     self.geometry().width() - (fw * 2) -
-                   mw - self.collapseButton.size().width() - self.pinButton.size().width(),
-                   self.geometry().height() - (fw * 2)))
+                    mw - self.collapseButton.size().width() - self.pinButton.size().width(),
+                    self.geometry().height() - (fw * 2)))
             titleOpt.title = q.windowTitle()
             titleOpt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
             titleOpt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
@@ -182,7 +182,7 @@ class DockWidgetTitleBar(QWidget):
                 QPoint(fh, 40),  # self.geometry().height() - (fh * 3)),
                 QSize(
                     self.geometry().width() - (fh * 2),
-                  fh * 2))
+                    fh * 2))
             opt.title = q.windowTitle()
             opt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
             opt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
@@ -217,7 +217,7 @@ class DockWidgetTitleBar(QWidget):
                 QPoint(fw, fw),
                 QSize(
                     self.geometry().width() - (fw * 2),
-                  self.geometry().height() - (fw * 2)))
+                    self.geometry().height() - (fw * 2)))
             opt.title = q.windowTitle()
             opt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
             opt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)

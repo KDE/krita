@@ -148,8 +148,10 @@ public:
 
     bool exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
+private:
     bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration);
 
+public:
     /**
      * @brief Sets whether the document can be edited or is read only.
      *

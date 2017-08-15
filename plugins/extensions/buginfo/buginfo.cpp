@@ -34,7 +34,6 @@ BugInfo::BugInfo(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
     KisAction *action  = createAction("buginfo");
-    action->setText(i18n("Show system information for bug reports."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotBugInfo()));
 }
 

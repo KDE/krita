@@ -50,8 +50,8 @@
 
 struct XInput2TouchDeviceData {
     XInput2TouchDeviceData()
-    : xiDeviceInfo(0)
-    , qtTouchDevice(0)
+        : xiDeviceInfo(0)
+        , qtTouchDevice(0)
     {
     }
     XIDeviceInfo *xiDeviceInfo;
@@ -163,7 +163,7 @@ void QXcbConnection::xi2SetupDevices()
                     // Some drivers have no labels on the wheel buttons, some have no label on just one and some have no label on
                     // button 4 and the wrong one on button 5. So we just check that they are not labelled with unrelated buttons.
                     if ((!label4 || qatom(label4) == QXcbAtom::ButtonWheelUp || qatom(label4) == QXcbAtom::ButtonWheelDown) &&
-                        (!label5 || qatom(label5) == QXcbAtom::ButtonWheelUp || qatom(label5) == QXcbAtom::ButtonWheelDown))
+                            (!label5 || qatom(label5) == QXcbAtom::ButtonWheelUp || qatom(label5) == QXcbAtom::ButtonWheelDown))
                         scrollingDevice.legacyOrientations |= Qt::Vertical;
                 }
                 if (bci->num_buttons >= 7) {
@@ -230,6 +230,10 @@ void QXcbConnection::xi2SetupDevices()
             isTablet = true;
             tabletData.pointerType = QTabletEvent::Pen;
             dbgType = QLatin1String("pen");
+        } else if (name.contains("ugee")) {
+                isTablet = true;
+                tabletData.pointerType = QTabletEvent::Pen;
+                dbgType = QLatin1String("pen");
         } else {
             isTablet = false;
         }
@@ -444,9 +448,9 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
                     dev->size.width() > 10000 || dev->size.height() > 10000)
                 dev->size = QSizeF(130, 110);
         }
-// WARNING: Krita edit
-//        if (!isAtLeastXI22() || type == QTouchDevice::TouchPad)
-//            caps |= QTouchDevice::MouseEmulation;
+        // WARNING: Krita edit
+        //        if (!isAtLeastXI22() || type == QTouchDevice::TouchPad)
+        //            caps |= QTouchDevice::MouseEmulation;
 
         if (type >= QTouchDevice::TouchScreen && type <= QTouchDevice::TouchPad) {
             dev->qtTouchDevice = new QTouchDevice;
@@ -669,7 +673,7 @@ Qt::MouseButton QXcbConnection::xiToQtMouseButton(uint32_t b)
     case 1: return Qt::LeftButton;
     case 2: return Qt::MiddleButton;
     case 3: return Qt::RightButton;
-    // 4-7 are for scrolling
+        // 4-7 are for scrolling
     default: break;
     }
     if (b >= 8 && b <= Qt::MaxMouseButton)
@@ -764,8 +768,8 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
      */
 
     if (xiEvent->evtype == XI_Motion ||
-        xiEvent->evtype == XI_ButtonPress ||
-        xiEvent->evtype == XI_ButtonRelease) {
+            xiEvent->evtype == XI_ButtonPress ||
+            xiEvent->evtype == XI_ButtonRelease) {
 
         Qt::MouseButtons expectedButtons = xiToQtMouseButtons(xiDeviceEvent);
 
@@ -849,8 +853,8 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
                         // TODO maybe have a hash of tabletData->deviceId to device data so we can
                         // look up the tablet name here, and distinguish multiple tablets
                         qCDebug(lcQpaXInput, "XI2 proximity change on tablet %d (USB %x): last tool: %x id %x current tool: %x id %x TabletDevice %d",
-                            tabletData->deviceId, ptr[_WACSER_USB_ID], ptr[_WACSER_LAST_TOOL_SERIAL], ptr[_WACSER_LAST_TOOL_ID],
-                            ptr[_WACSER_TOOL_SERIAL], ptr[_WACSER_TOOL_ID], tabletData->tool);
+                                tabletData->deviceId, ptr[_WACSER_USB_ID], ptr[_WACSER_LAST_TOOL_SERIAL], ptr[_WACSER_LAST_TOOL_ID],
+                                ptr[_WACSER_TOOL_SERIAL], ptr[_WACSER_TOOL_ID], tabletData->tool);
                     }
                     XFree(data);
                 }
@@ -897,7 +901,7 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
     QRect screenArea = qApp->desktop()->rect();
 
     for (QHash<int, TabletData::ValuatorClassInfo>::iterator it = tabletData.valuatorInfo.begin(),
-            ite = tabletData.valuatorInfo.end(); it != ite; ++it) {
+         ite = tabletData.valuatorInfo.end(); it != ite; ++it) {
         int valuator = it.key();
         TabletData::ValuatorClassInfo &classInfo(it.value());
         xi2GetValuatorValueIfSet(event, classInfo.number, &classInfo.curVal);
@@ -945,10 +949,10 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
 
     if (Q_UNLIKELY(lcQpaXInput().isDebugEnabled()))
         qCDebug(lcQpaXInput, "XI2 event on tablet %d with tool %d type %d seq %d detail %d pos %6.1f, %6.1f root pos %6.1f, %6.1f buttons 0x%x pressure %4.2lf tilt %d, %d rotation %6.2lf",
-            tabletData.deviceId, tabletData.tool, ev->evtype, ev->sequenceNumber, ev->detail,
-            fixed1616ToReal(ev->event_x), fixed1616ToReal(ev->event_y),
-            fixed1616ToReal(ev->root_x), fixed1616ToReal(ev->root_y),
-            (int)tabletData.buttons, pressure, xTilt, yTilt, rotation);
+                tabletData.deviceId, tabletData.tool, ev->evtype, ev->sequenceNumber, ev->detail,
+                fixed1616ToReal(ev->event_x), fixed1616ToReal(ev->event_y),
+                fixed1616ToReal(ev->root_x), fixed1616ToReal(ev->root_y),
+                (int)tabletData.buttons, pressure, xTilt, yTilt, rotation);
 
     Qt::KeyboardModifiers modifiers = QApplication::queryKeyboardModifiers();
 

@@ -756,8 +756,8 @@ void PyKrita::Engine::loadModule(const int idx)
     } else {
         plugin.m_errorReason = i18nc(
                                    "@info:tooltip"
-                                   , "Module not loaded:<nl/>%1"
-                                   , py.lastTraceback()
+                                   , "Module not loaded:<br/>%1"
+                                   , py.lastTraceback().replace("\n", "<br/>")
                                );
     }
     plugin.m_broken = true;

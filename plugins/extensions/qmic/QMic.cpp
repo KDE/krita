@@ -73,6 +73,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
     , m_gmicApplicator(0)
     , m_progressManager(0)
 {
+#ifndef Q_OS_MAC
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
     preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
@@ -89,7 +90,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
 
     m_gmicApplicator = new KisQmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
-
+#endif
 }
 
 QMic::~QMic()
@@ -130,22 +131,25 @@ void QMic::slotQMic(bool again)
     connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
 
     // find the krita-gmic-qt plugin
-    KisConfig cfg;
-    QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-
+    QString pluginPath = PluginSettings::gmicQtPath();
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-        KoDialog dlg;
-        dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
-        QWidget *w = new QWidget(&dlg);
-        dlg.setMainWidget(w);
-        QVBoxLayout *l = new QVBoxLayout(w);
-        l->addWidget(new PluginSettings(w));
-        dlg.setButtons(KoDialog::Ok);
-        dlg.exec();
-        pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
+        {
+            KoDialog dlg;
+            dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
+            QWidget *w = new QWidget(&dlg);
+            dlg.setMainWidget(w);
+            QVBoxLayout *l = new QVBoxLayout(w);
+            l->addWidget(new PluginSettings(w));
+            dlg.setButtons(KoDialog::Ok);
+            dlg.exec();
+        }
+        pluginPath = PluginSettings::gmicQtPath();
         if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
+            m_qmicAction->setEnabled(true);
+            m_againAction->setEnabled(true);
             return;
         }
+
     }
 
     m_key = QUuid::createUuid().toString();
@@ -186,6 +190,8 @@ void QMic::connected()
     msg.resize(remaining);
     int got = 0;
     char* uMsgBuf = msg.data();
+    // FIXME: Should use read transaction for Qt >= 5.7:
+    //        https://doc.qt.io/qt-5/qdatastream.html#using-read-transactions
     do {
         got = ds.readRawData(uMsgBuf, remaining);
         remaining -= got;
@@ -286,6 +292,9 @@ void QMic::connected()
 
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
+    // HACK: Make sure QDataStream does not refuse to write!
+    // Proper fix: Change the above read to use read transaction
+    ds.resetStatus();
     ds.writeBytes(ba.constData(), ba.length());
     // Flush the socket because we might not return to the event loop!
     if (!socket->waitForBytesWritten(2000)) {
@@ -468,8 +477,6 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             message->append(m->key().toUtf8());
 
             m->unlock();
-
-            qDebug() << "size" << m->size();
 
             message->append(",");
             message->append(node->name().toUtf8().toHex());

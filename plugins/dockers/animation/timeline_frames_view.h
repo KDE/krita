@@ -41,6 +41,8 @@ public:
 
     QMap<QString, KisAction*> globalActions() const;
 
+    void setShowInTimeline(KisAction *action);
+
 public Q_SLOTS:
     void slotSelectionChanged();
 
@@ -52,7 +54,6 @@ private Q_SLOTS:
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
     void slotRemoveLayer();
-    void slotHideLayerFromTimeline();
 
     void slotLayerContextMenuRequested(const QPoint &globalPos);
 
@@ -81,8 +82,6 @@ private Q_SLOTS:
 
 private:
     void setFramesPerSecond(int fps);
-
-    void updateShowInTimeline();
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,

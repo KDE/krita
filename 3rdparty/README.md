@@ -29,7 +29,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
     * Windows: mingw-w64 7.1 (by mingw-builds)
                - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.1.0/threads-posix/dwarf/
                - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-posix/seh/
-               
+
                Make sure mingw's bin folder is in your path. It might be a good
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.
@@ -68,13 +68,13 @@ Note: on all operating systems the entire procedure is done in a terminal window
         -DCMAKE_INSTALL_PREFIX=BUILDROOT/i
 
     * OSX:
-    
+
     export PATH=$BUILDROOT/i/bin:$PATH
     export PYTHONHOME=$BUILDROOT/i (only if you want to build your own python)
     cmake ../krita/3rdparty/  \
         -DCMAKE_INSTALL_PREFIX=$BUILDROOT/i \
         -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d  \
-        -DINSTALL_ROOT=$BUILDROOT/i 
+        -DINSTALL_ROOT=$BUILDROOT/i
 
 
     * Windows 32-bit / 64-bit:
@@ -103,7 +103,7 @@ On Windows:
 On OSX:
 
     cmake --build . --config RelWithDebInfo --target ext_gettext
-    
+
 On all operating systems:
 
     cmake --build . --config RelWithDebInfo --target ext_qt
@@ -117,7 +117,7 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_fftw3
 
 On all operating systems
-    
+
     cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2
@@ -166,9 +166,7 @@ Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on
 Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
-Note 2: libcurl still isn't available.
-
-Note 3: if you want to build a release, you need to get the binary gettext
+Note 2: if you want to build a release, you need to get the binary gettext
 archives from files.kde.org/krita/build/dependencies:
 
   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
@@ -177,15 +175,15 @@ archives from files.kde.org/krita/build/dependencies:
 Take care, these zips contain a libstdc++-6.dll that you don't want in your path when building.
 
 == Build Krita ==
- 
-1. Make a krita build directory: 
+
+1. Make a krita build directory:
     mkdir BUILDROOT/build
 2. Enter the BUILDROOT/build
-3. Run 
+3. Run
 
 On Windows
 
-Depending on what you want to use, run this command for MSBuild: 
+Depending on what you want to use, run this command for MSBuild:
 
     cmake ..\krita -G "MinGW Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
@@ -202,7 +200,7 @@ On OSX
     cmake ../krita -DCMAKE_INSTALL_PREFIX=$BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DBUNDLE_INSTALL_DIR=$BUILDROOT/i/bin -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 
-4. Run 
+4. Run
 
 On Linux and OSX
 
@@ -238,4 +236,5 @@ On OSX
 
 If you want to create a stripped down version of Krita to distribute, after building everything just copy the package_2.cmd file from the "windows" folder inside krita root source folder to BUILDROOT and run it (most likely C:\dev\).
 
-That script will copy the necessary files into the specified folder and leave out developer related files. After the script runs there will be two new ZIP files that contain a small portable version of Krita and a separate portable debug version. 
+That script will copy the necessary files into the specified folder and leave out developer related files. After the script runs there will be two new ZIP files that contain a small portable version of Krita and a separate portable debug version.
+>>>>>>> origin/master

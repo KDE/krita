@@ -279,6 +279,14 @@ for /r "%pkg_root%" %%F in (*.dll) do (
 	call :split-debug "%%F" !relpath!
 )
 endlocal
+setlocal enableextensions enabledelayedexpansion
+:: Find all Python native modules
+for /r "%pkg_root%\share\krita\pykrita\" %%F in (*.pyd) do (
+	set relpath=%%F
+	set relpath=!relpath:~%pkg_root_len_plus_one%!
+	call :split-debug "%%F" !relpath!
+)
+endlocal
 
 echo.
 echo Packaging debug info...

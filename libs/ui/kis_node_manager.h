@@ -158,6 +158,8 @@ public Q_SLOTS:
      */
     void createFromVisible();
 
+    void slotShowHideTimeline(bool value);
+
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);
     void slotUpdateIsolateModeAction();

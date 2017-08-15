@@ -37,7 +37,7 @@ class KisLoggingManager::Private
 
     static void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
     {
-        foreach (const ScopedLogCapturer *const &capturer, capturerSet) {
+        Q_FOREACH (const ScopedLogCapturer *const &capturer, capturerSet) {
             if (capturer->m_category == context.category) {
                 capturer->m_callback(type, context, msg);
             }
@@ -51,7 +51,7 @@ class KisLoggingManager::Private
         oldCategoryFilter(category);
         // Enable categories to be captured
         // TODO: Keep track of default filter stage to hide message from output
-        foreach (const ScopedLogCapturer *const &capturer, capturerSet) {
+        Q_FOREACH (const ScopedLogCapturer *const &capturer, capturerSet) {
             if (capturer->m_category == category->categoryName()) {
                 category->setEnabled(QtDebugMsg, true);
                 category->setEnabled(QtInfoMsg, true);

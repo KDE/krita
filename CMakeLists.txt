@@ -405,7 +405,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost 1.61 REQUIRED COMPONENTS system) # for pigment and stage
+find_package(Boost 1.55 REQUIRED COMPONENTS system) # for pigment and stage
 include_directories(${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library

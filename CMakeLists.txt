@@ -500,7 +500,7 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 REQUIRED "3.0")
+find_package(Eigen3 3.0 REQUIRED)
 set_package_properties(Eigen3 PROPERTIES
     DESCRIPTION "C++ template library for linear algebra"
     URL "http://eigen.tuxfamily.org"
@@ -509,7 +509,7 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for exiv2
 ##
-find_package(Exiv2 REQUIRED "0.16")
+find_package(Exiv2 0.16 REQUIRED)
 set_package_properties(Exiv2 PROPERTIES
     DESCRIPTION "Image metadata library and tools"
     URL "http://www.exiv2.org"
@@ -518,7 +518,7 @@ set_package_properties(Exiv2 PROPERTIES
 ##
 ## Test for lcms
 ##
-find_package(LCMS2 REQUIRED "2.4")
+find_package(LCMS2 2.4 REQUIRED)
 set_package_properties(LCMS2 PROPERTIES
     DESCRIPTION "LittleCMS Color management engine"
     URL "http://www.littlecms.com"

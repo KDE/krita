@@ -1359,6 +1359,15 @@
       <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>
+    <Action name="PanTool">
+      <icon></icon>
+      <text>Pan Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Pan Tool</toolTip>
+      <iconText>Pan Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
     <Action name="InteractionTool">
       <icon></icon>
       <text>Shape Manipulation Tool</text>

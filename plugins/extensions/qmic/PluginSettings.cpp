@@ -67,7 +67,18 @@ QString PluginSettings::gmicQtPath()
 #ifdef Q_OS_WIN
     gmicqt += ".exe";
 #endif
-    return KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
+    gmicqt = KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
+    QFileInfo fi(gmicqt);
+    if (!fi.exists()) {
+        QFileInfo fi2(qApp->applicationDirPath() + "/" + gmicqt);
+        if (fi2.exists()) {
+            gmicqt = qApp->applicationDirPath() + "/" + gmicqt;
+        }
+        else {
+            gmicqt.clear();
+        }
+    }
+    return gmicqt;
 }
 
 

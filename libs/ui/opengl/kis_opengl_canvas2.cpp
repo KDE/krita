@@ -423,6 +423,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     if (!KisOpenGL::hasOpenGLES()) {
         glDisable(GL_COLOR_LOGIC_OP);
+    } else {
+        glDisable(GL_BLEND);
     }
 
     d->solidColorShader->release();
@@ -574,6 +576,7 @@ void KisOpenGLCanvas2::drawGrid()
     }
 
     d->solidColorShader->release();
+    glDisable(GL_BLEND);
 }
 
 void KisOpenGLCanvas2::drawImage()
@@ -741,6 +744,7 @@ void KisOpenGLCanvas2::drawImage()
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisable(GL_BLEND);
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

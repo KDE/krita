@@ -604,16 +604,6 @@ set_package_properties(OpenMP PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Optionally used by the G'Mic plugin")
 
-##
-## Test for Curl (for G'Mic)
-##
-find_package(CURL)
-set_package_properties(CURL PROPERTIES
-    DESCRIPTION "A tool to fetch remote data"
-    URL "http://curl.haxx.se/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
  ############################
 #############################
 ## Add Krita helper macros ##

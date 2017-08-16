@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>356</height>
+    <width>895</width>
+    <height>505</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -194,10 +194,24 @@
            <property name="verticalSpacing">
             <number>3</number>
            </property>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Rating:</string>
+             </property>
+            </widget>
+           </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Website:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="4">
+            <widget class="QLabel" name="authorLabel">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -231,23 +245,6 @@
              </item>
             </layout>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>Rating:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" colspan="4">
-            <widget class="QLabel" name="homepageLabel">
-             <property name="text">
-              <string>&lt;a href=&quot;http://opendesktop.org&quot;&gt;Homepage&lt;/a&gt;</string>
-             </property>
-             <property name="openExternalLinks">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_3">
              <property name="sizePolicy">
@@ -267,10 +264,13 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1" colspan="4">
-            <widget class="QLabel" name="authorLabel">
+           <item row="2" column="1" colspan="4">
+            <widget class="QLabel" name="homepageLabel">
              <property name="text">
-              <string/>
+              <string>&lt;a href=&quot;http://opendesktop.org&quot;&gt;Homepage&lt;/a&gt;</string>
+             </property>
+             <property name="openExternalLinks">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -279,24 +279,14 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="descriptionLabel">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Description</string>
+          <string>Description:</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        <widget class="QTextEdit" name="descriptionTextEdit"/>
        </item>
       </layout>
      </item>
@@ -357,9 +347,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>preview1</zorder>
-  <zorder>horizontalLayoutWidget_2</zorder>
-  <zorder>verticalLayoutWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

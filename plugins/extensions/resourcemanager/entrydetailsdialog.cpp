@@ -91,7 +91,7 @@ void EntryDetails::entryChanged(const KNSCore::EntryInternal &entry)
         description += "<br/><p><b>" + i18n("Changelog:") + "</b><br/>" + changelog + "</p>";
     }
     description += QLatin1String("</body></html>");
-    ui->descriptionLabel->setText(description);
+    ui->descriptionTextEdit->setText(description);
 
     QString homepageText("<a href=\"" + m_entry.homepage().url() + "\">" +
                          i18nc("A link to the description of this Get Hot New Stuff item", "Homepage") + "</a>");

@@ -4,7 +4,7 @@
         <file alias="kritarc">data/kritarc</file>
     </qresource>
     <qresource prefix="/kxmlgui5">
-        <file alias="krita.xmlgui">krita.xmlgui</file>
+        <file alias="krita4.xmlgui">krita4.xmlgui</file>
     </qresource>
     <qresource>
         <file>pics/broken-preset.png</file>

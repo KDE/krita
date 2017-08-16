@@ -74,6 +74,7 @@ public:
     KisShaderProgram *displayShader{0};
     KisShaderProgram *checkerShader{0};
     KisShaderProgram *cursorShader{0};
+    bool displayShaderCompiledWithDisplayFilterSupport{false};
 
     GLfloat checkSizeScale;
     bool scrollCheckers;
@@ -183,18 +184,6 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> dis
 
     d->displayFilter = displayFilter;
 
-    if (d->canvasInitialized) {
-        d->canvasInitialized = false;
-        delete d->displayShader;
-        bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
-        try {
-            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-        } catch (const ShaderLoaderException &e) {
-            reportFailedShaderCompilation(e.what());
-        }
-        d->canvasInitialized = true;
-    }
-
     if (!initializing && needsFullRefresh) {
         canvas()->startUpdateInPatches(canvas()->image()->bounds());
     }
@@ -287,19 +276,37 @@ void KisOpenGLCanvas2::initializeGL()
  */
 void KisOpenGLCanvas2::initializeShaders()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->canvasInitialized);
+
+    delete d->checkerShader;
+    delete d->cursorShader;
+    d->checkerShader = 0;
+    d->cursorShader = 0;
+
+    try {
+        d->checkerShader = d->shaderLoader.loadCheckerShader();
+        d->cursorShader = d->shaderLoader.loadCursorShader();
+    } catch (const ShaderLoaderException &e) {
+        reportFailedShaderCompilation(e.what());
+    }
+
+    initializeDisplayShader();
+}
+
+void KisOpenGLCanvas2::initializeDisplayShader()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->canvasInitialized);
+
     bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
 
-    if (!d->canvasInitialized) {
-        delete d->displayShader;
-        delete d->checkerShader;
-        delete d->cursorShader;
-        try {
-            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-            d->checkerShader = d->shaderLoader.loadCheckerShader();
-            d->cursorShader = d->shaderLoader.loadCursorShader();
-        } catch (const ShaderLoaderException &e) {
-            reportFailedShaderCompilation(e.what());
-        }
+    delete d->displayShader;
+    d->displayShader = 0;
+
+    try {
+        d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+        d->displayShaderCompiledWithDisplayFilterSupport = d->displayFilter;
+    } catch (const ShaderLoaderException &e) {
+        reportFailedShaderCompilation(e.what());
     }
 }
 
@@ -696,8 +703,14 @@ void KisOpenGLCanvas2::renderCanvasGL()
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (d->displayFilter) {
-        d->displayFilter->updateShader();
+    if ((d->displayFilter && d->displayFilter->updateShader()) ||
+        (!d->displayFilter && d->displayShaderCompiledWithDisplayFilterSupport)) {
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvasInitialized);
+
+        d->canvasInitialized = false; // TODO: check if actually needed?
+        initializeDisplayShader();
+        d->canvasInitialized = true;
     }
 
     if (KisOpenGL::hasOpenGL3()) {

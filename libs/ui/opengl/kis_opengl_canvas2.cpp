@@ -774,7 +774,7 @@ void KisOpenGLCanvas2::renderCanvasGL()
     glClear(GL_COLOR_BUFFER_BIT);
 
     if ((d->displayFilter && d->displayFilter->updateShader()) ||
-        (!d->displayFilter && d->displayShaderCompiledWithDisplayFilterSupport)) {
+        (bool(d->displayFilter) != d->displayShaderCompiledWithDisplayFilterSupport)) {
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvasInitialized);
 

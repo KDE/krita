@@ -161,7 +161,7 @@ void DlgBundleManager::refreshListData()
 
         m_activeBundles.removeAll(bundle);
 
-        if (bundle->valid() && bundle->name().contains(m_ui->searchLineEdit->text())) {
+        if (bundle->valid() && bundle->name().toLower().contains(m_ui->searchLineEdit->text())) {
             m_activeBundles.append(bundle);
         }
 

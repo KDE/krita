@@ -81,7 +81,6 @@ public:
     bool needsFpsDebugging() const;
 
 public: // Implement kis_abstract_canvas_widget interface
-    void initializeShaders();
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
     void setWrapAroundViewingMode(bool value) override;
     void channelSelectionChanged(const QBitArray &channelFlags) override;
@@ -107,6 +106,9 @@ protected: // KisCanvasWidgetBase
     bool callFocusNextPrevChild(bool next) override;
 
 private:
+    void initializeShaders();
+    void initializeDisplayShader();
+
     void reportFailedShaderCompilation(const QString &context);
     void drawImage();
     void drawCheckers();

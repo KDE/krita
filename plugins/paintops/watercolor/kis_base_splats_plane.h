@@ -79,11 +79,11 @@ protected:
 protected:
     void setDirty(KisSplat *splat);
     QList<KisSplat *> m_dirtySplats;
+    bool m_useCaching;
+    KisPaintDeviceSP m_cachedPD;
 
 private:
-    KisPaintDeviceSP m_cachedPD;
     bool m_isDirty;
-    bool m_useCaching;
 };
 
 #endif // KIS_ABSTRACT_SPLATS_PLANE_H

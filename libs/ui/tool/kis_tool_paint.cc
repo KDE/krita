@@ -449,7 +449,8 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
     KisTool::mouseMoveEvent(event);
     if (mode() == KisTool::HOVER_MODE) {
         requestUpdateOutline(event->point, event);
-    }
+    } else
+    requestUpdateOutline(event->point, event);
 }
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
@@ -685,6 +686,9 @@ QRectF KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
+    ENTER_FUNCTION() << ppVar(outlineDocPoint) << ppVar(m_supportOutline);
+
+
     if (!m_supportOutline) return;
 
     KisConfig cfg;
@@ -738,6 +742,8 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     // DIRTY HACK ALERT: we should fetch the assistant's dirty rect when requesting
     //                   the update, instead of just dumbly update the entire canvas!
+
+    ENTER_FUNCTION() << ppVar(outlineDocRect);
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();

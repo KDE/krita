@@ -50,6 +50,7 @@ public:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
     void updateSystem() override;
+    void updateSettings(KisPaintOpSettingsSP newSettings) override;
 
 protected:
 

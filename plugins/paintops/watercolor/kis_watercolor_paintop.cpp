@@ -76,10 +76,15 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
                        m_watercolorOption.radius,
                        painter()->paintColor());
 
+    const QString oldCompositeOpId = painter()->compositeOp()->id();
+    painter()->setCompositeOp(COMPOSITE_OVER);
+
     foreach (KisSplat *splat, newSplats) {
         m_flowingPlane.add(splat);
         splat->doPaint(painter());
     }
+
+    painter()->setCompositeOp(oldCompositeOpId);
 
     m_fixedPlane.rewet(m_wetMap, info.pos(), m_watercolorOption.radius, &m_flowingPlane);
 
@@ -98,26 +103,24 @@ void KisWatercolorPaintOp::updateSystem()
 
     m_wetMap->update();
 
-    qDebug() << "\n" << ppVar(timer.elapsed());
-    qDebug() << ppVar(dirtyRect);
-
     source()->clear(dirtyRect);
-    painter()->bitBlt(dirtyRect.topLeft(),
-                      m_oldPD, dirtyRect);
 
-    qDebug() << ppVar(timer.elapsed());
+    const QString oldCompositeOpId = painter()->compositeOp()->id();
+    painter()->setCompositeOp(COMPOSITE_OVER);
+
     m_driedPlane.paint(painter(), dirtyRect);
-    qDebug() << ppVar(timer.elapsed());
     m_fixedPlane.paint(painter(), dirtyRect);
-    qDebug() << ppVar(timer.elapsed());
     m_flowingPlane.paint(painter(), dirtyRect);
+    painter()->setCompositeOp(oldCompositeOpId);
+}
 
-    qDebug() << ppVar(timer.elapsed()) << "\n";
-
+void KisWatercolorPaintOp::updateSettings(KisPaintOpSettingsSP newSettings)
+{
+    m_watercolorOption.readOptionSetting(newSettings);
 }
 
 KisSpacingInformation KisWatercolorPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
     Q_UNUSED(info);
-    return KisSpacingInformation(m_watercolorOption.radius / 5);
+    return KisSpacingInformation(m_watercolorOption.radius / 10);
 }

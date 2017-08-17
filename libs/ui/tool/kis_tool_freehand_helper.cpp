@@ -649,9 +649,9 @@ void KisToolFreehandHelper::initPaintInContinuedStroke(KoPointerEvent *event,
                                              elapsedStrokeTime());
 
     m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                0,
-                                                                m_d->resources->currentFgColor()));
+                               new KisPainterBasedStrokeStrategy::UpdateResourceData(m_d->resources->currentPaintOpPreset(),
+                                                                                     m_d->resources->currentFgColor(),
+                                                                                     m_d->resources->currentBgColor()));
 
     m_d->previousPaintInformation = info;
 

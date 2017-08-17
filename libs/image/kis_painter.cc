@@ -2746,6 +2746,11 @@ void KisPainter::updateSystem()
     d->paintOp->updateSystem();
 }
 
+void KisPainter::updatePaintOpSettings(KisPaintOpSettingsSP newSettings)
+{
+    d->paintOp->updateSettings(newSettings);
+}
+
 void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
 {
     if (!d->mirrorHorizontally && !d->mirrorVertically) return;

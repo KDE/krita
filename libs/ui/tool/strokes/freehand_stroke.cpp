@@ -30,10 +30,9 @@
 
 struct FreehandStrokeStrategy::Private
 {
-    Private(KisResourcesSnapshotSP _resources) : resources(_resources) {}
+    Private() {}
 
     KisStrokeRandomSource randomSource;
-    KisResourcesSnapshotSP resources;
 };
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -43,7 +42,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfo),
-      m_d(new Private(resources))
+      m_d(new Private())
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -55,7 +54,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfos),
-      m_d(new Private(resources))
+      m_d(new Private())
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -86,69 +85,73 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    PainterInfo *info = painterInfos()[d->painterInfoId];
+    if (d) {
+        PainterInfo *info = painterInfos()[d->painterInfoId];
 
-    KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
-    KisRandomSourceSP rnd = m_d->randomSource.source();
+        KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
+        KisRandomSourceSP rnd = m_d->randomSource.source();
 
-    switch(d->type) {
-    case Data::POINT:
-        d->pi1.setRandomSource(rnd);
-        info->painter->paintAt(d->pi1, info->dragDistance);
-        break;
-    case Data::LINE:
-        d->pi1.setRandomSource(rnd);
-        d->pi2.setRandomSource(rnd);
-        info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
-        break;
-    case Data::CURVE:
-        d->pi1.setRandomSource(rnd);
-        d->pi2.setRandomSource(rnd);
-        info->painter->paintBezierCurve(d->pi1,
-                                        d->control1,
-                                        d->control2,
-                                        d->pi2,
-                                        info->dragDistance);
-        break;
-    case Data::POLYLINE:
-        info->painter->paintPolyline(d->points, 0, d->points.size());
-        break;
-    case Data::POLYGON:
-        info->painter->paintPolygon(d->points);
-        break;
-    case Data::RECT:
-        info->painter->paintRect(d->rect);
-        break;
-    case Data::ELLIPSE:
-        info->painter->paintEllipse(d->rect);
-        break;
-    case Data::PAINTER_PATH:
-        info->painter->paintPainterPath(d->path);
-        break;
-    case Data::QPAINTER_PATH:
-        info->painter->drawPainterPath(d->path, d->pen);
-        break;
-    case Data::UPDATE_RESOURCES:
-        info->painter->setPaintColor(d->customColor);
-        break;
-    case Data::UPDATE_SYSTEM:
-        info->painter->updateSystem();
-        break;
-    case Data::QPAINTER_PATH_FILL: {
-        info->painter->setBackgroundColor(d->customColor);
-        info->painter->fillPainterPath(d->path);}
-        info->painter->drawPainterPath(d->path, d->pen);    
-        break;
-    };
+        switch(d->type) {
+        case Data::POINT:
+            d->pi1.setRandomSource(rnd);
+            info->painter->paintAt(d->pi1, info->dragDistance);
+            break;
+        case Data::LINE:
+            d->pi1.setRandomSource(rnd);
+            d->pi2.setRandomSource(rnd);
+            info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
+            break;
+        case Data::CURVE:
+            d->pi1.setRandomSource(rnd);
+            d->pi2.setRandomSource(rnd);
+            info->painter->paintBezierCurve(d->pi1,
+                                            d->control1,
+                                            d->control2,
+                                            d->pi2,
+                                            info->dragDistance);
+            break;
+        case Data::POLYLINE:
+            info->painter->paintPolyline(d->points, 0, d->points.size());
+            break;
+        case Data::POLYGON:
+            info->painter->paintPolygon(d->points);
+            break;
+        case Data::RECT:
+            info->painter->paintRect(d->rect);
+            break;
+        case Data::ELLIPSE:
+            info->painter->paintEllipse(d->rect);
+            break;
+        case Data::PAINTER_PATH:
+            info->painter->paintPainterPath(d->path);
+            break;
+        case Data::QPAINTER_PATH:
+            info->painter->drawPainterPath(d->path, d->pen);
+            break;
+        case Data::UPDATE_RESOURCES:
+            info->painter->setPaintColor(d->customColor);
+            break;
+        case Data::UPDATE_SYSTEM:
+            info->painter->updateSystem();
+            break;
+        case Data::QPAINTER_PATH_FILL: {
+            info->painter->setBackgroundColor(d->customColor);
+            info->painter->fillPainterPath(d->path);}
+            info->painter->drawPainterPath(d->path, d->pen);
+            break;
+        };
 
-    QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
-    KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
-    d->node->setDirty(dirtyRects);
+        QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
+        KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
+        d->node->setDirty(dirtyRects);
+    } else {
+        KisPainterBasedStrokeStrategy::doStrokeCallback(data);
+    }
 }
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    if (!m_d->resources->presetAllowsLod()) return 0;
+    if (!resources()->presetAllowsLod()) return 0;
 
     FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
     return clone;

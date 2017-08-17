@@ -26,7 +26,7 @@
 
 #include "kis_sequential_iterator.h"
 
-#define START_OPACITY 100
+#define START_OPACITY 70
 #define STANDART_LIFETIME 60
 
 double get_random(qreal min, qreal max)

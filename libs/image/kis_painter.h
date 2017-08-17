@@ -765,6 +765,8 @@ public:
     void setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     void updateSystem();
+    void updatePaintOpSettings(KisPaintOpSettingsSP newSettings);
+
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();

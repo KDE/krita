@@ -23,6 +23,8 @@
 #include "kis_resources_snapshot.h"
 #include "kis_selection.h"
 
+#include "kis_paintop_preset.h"
+
 class KisPainter;
 class KisDistanceInformation;
 class KisTransaction;
@@ -31,6 +33,20 @@ class KisTransaction;
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
+    class UpdateResourceData : public KisStrokeJobData {
+    public:
+        UpdateResourceData(KisPaintOpPresetSP _preset,
+                           KoColor _fgColor,
+                           KoColor _bgColor)
+            : preset(_preset.data()), fgColor(_fgColor), bgColor(_bgColor)
+        {}
+
+    public:
+        KisPaintOpPresetSP preset;
+        KoColor fgColor;
+        KoColor bgColor;
+    };
+
     /**
      * The distance information should be associated with each
      * painter individually, so we strore and manipulate with
@@ -76,12 +92,16 @@ public:
     void suspendStrokeCallback() override;
     void resumeStrokeCallback() override;
 
+    void doStrokeCallback(KisStrokeJobData *data) override;
+
 protected:
     KisPaintDeviceSP targetDevice() const;
     KisSelectionSP activeSelection() const;
     const QVector<PainterInfo*> painterInfos() const;
 
     void setUndoEnabled(bool value);
+
+    KisResourcesSnapshotSP resources() const;
 
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail);

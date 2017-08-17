@@ -116,6 +116,8 @@ public:
      */
     virtual void updateSystem(){}
 
+    virtual void updateSettings(KisPaintOpSettingsSP newSettings);
+
 protected:
     friend class KisPaintInformation;
     /**

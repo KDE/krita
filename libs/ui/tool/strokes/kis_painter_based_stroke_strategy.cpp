@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include <kis_distance_information.h>
 #include "kis_undo_stores.h"
+#include "kis_paintop_settings.h"
 
 
 KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo()
@@ -164,6 +165,11 @@ void KisPainterBasedStrokeStrategy::deletePainters()
     }
 
     m_painterInfos.clear();
+}
+
+KisResourcesSnapshotSP KisPainterBasedStrokeStrategy::resources() const
+{
+    return m_resources;
 }
 
 void KisPainterBasedStrokeStrategy::initStrokeCallback()
@@ -313,4 +319,21 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
             indirect->setTemporarySelection(m_activeSelection);
         }
     }
+}
+
+void KisPainterBasedStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
+{
+    qDebug() << "Updating resources";
+    UpdateResourceData *d = dynamic_cast<UpdateResourceData *>(data);
+    m_resources->setBrush(d->preset);
+    m_resources->setFGColorOverride(d->fgColor);
+    m_resources->setBGColorOverride(d->bgColor);
+
+     Q_FOREACH (PainterInfo *info, m_painterInfos) {
+         KisPainter *painter = info->painter;
+
+         painter->setPaintColor(d->fgColor);
+         painter->setBackgroundColor(d->bgColor);
+         painter->updatePaintOpSettings(d->preset->settings());
+     }
 }

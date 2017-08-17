@@ -41,7 +41,7 @@ bool KisWatercolorPaintOpSettings::paintIncremental()
      * The watercolor brush supports working in the
      * WASH mode only!
      */
-    return true;
+    return false;
 }
 
 void KisWatercolorPaintOpSettings::setPaintOpSize(qreal value)

@@ -41,7 +41,6 @@ void KisBaseSplatsPlane::add(KisSplat *splat)
         KisPainter *painter = new KisPainter(m_cachedPD);
         splat->doPaint(painter);
     }
-//    setDirty(splat);
 }
 
 void KisBaseSplatsPlane::remove(KisSplat *splat)
@@ -50,7 +49,6 @@ void KisBaseSplatsPlane::remove(KisSplat *splat)
     if (m_useCaching) {
         m_cachedPD->clear(splat->boundingRect().toAlignedRect());
     }
-//    setDirty(splat);
 }
 
 void KisBaseSplatsPlane::paint(KisPainter *gc, QRect rect)
@@ -59,20 +57,6 @@ void KisBaseSplatsPlane::paint(KisPainter *gc, QRect rect)
         return;
 
     if (m_useCaching) {
-//        if (!m_dirtySplats.isEmpty()) {
-//            if (!m_cachedPD) {
-//                m_cachedPD = new KisPaintDevice(gc->device()->colorSpace());
-//            } else {
-//                m_cachedPD->clear(rect);
-//            }
-
-//            KisPainter *painter = new KisPainter(m_cachedPD);
-//            Q_FOREACH (KisSplat *splat, m_dirtySplats) {
-//                splat->doPaint(painter);
-//            }
-//            m_isDirty = false;
-//            m_dirtySplats.clear();
-//        }
         gc->bitBlt(rect.topLeft(),
                    m_cachedPD,
                    rect);

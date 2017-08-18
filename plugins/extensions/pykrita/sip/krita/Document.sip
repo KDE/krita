@@ -8,10 +8,10 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
-    QList<qreal> horizontalGuides();
-    QList<qreal> verticalGuides();
-    void setHorizontalGuides(const QList<qreal> &lines);
-    void setVerticalGuides(const QList<qreal> &lines);
+    QList<qreal> horizontalGuides() const;
+    QList<qreal> verticalGuides() const;
+    bool guidesVisible() const;
+    bool guidesLocked() const;
 public Q_SLOTS:
 
     Node * activeNode() const  /Factory/;
@@ -68,6 +68,10 @@ public Q_SLOTS:
     bool tryBarrierLock();
     bool isIdle();
     void refreshProjection();
+    void setHorizontalGuides(const QList<qreal> &lines);
+    void setVerticalGuides(const QList<qreal> &lines);
+    void setGuidesVisible(bool visible);
+    void setGuidesLocked(bool locked);
 private:
 
 };

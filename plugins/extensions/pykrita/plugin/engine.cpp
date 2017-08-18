@@ -3,6 +3,7 @@
 // Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
 // Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
 // Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
+// Copyright (C) 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public

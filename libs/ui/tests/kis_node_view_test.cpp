@@ -92,7 +92,7 @@ void KisNodeViewTest::testLayers()
     dlg.resize(280, 400);
     view->expandAll();
 
-    dlg.exec();
+    //dlg.exec();
 }
 
 #include "kis_color_label_selector_widget.h"
@@ -114,7 +114,7 @@ void KisNodeViewTest::testColorLabels()
     layout->addStretch(1);
 
     dlg.resize(280, 400);
-    dlg.exec();
+    //dlg.exec();
 }
 
 QTEST_MAIN(KisNodeViewTest)

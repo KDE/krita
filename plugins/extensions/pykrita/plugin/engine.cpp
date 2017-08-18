@@ -73,6 +73,271 @@ PyObject* debug(PyObject* /*self*/, PyObject* args)
 
 namespace
 {
+
+class ScopedPyObject
+{
+public:
+    ScopedPyObject(PyObject* obj)
+        : m_obj(obj)
+    {
+    }
+
+    ~ScopedPyObject()
+    {
+        Py_XDECREF(m_obj);
+    }
+
+    double toDouble(bool *ok = nullptr)
+    {
+        double result = PyFloat_AsDouble(m_obj);
+        setSuccessState(ok);
+        return result;
+    }
+
+    long toLong(bool *ok = nullptr)
+    {
+        long result = PyLong_AsLong(m_obj);
+        setSuccessState(ok);
+        return result;
+    }
+
+    long long toLongLong(bool *ok = nullptr)
+    {
+        long long result = PyLong_AsLongLong(m_obj);
+        setSuccessState(ok);
+        return result;
+    }
+
+    QString toString(bool *ok = nullptr)
+    {
+        const char* temp = PyUnicode_AsUTF8(m_obj);
+        setSuccessState(ok);
+        if (temp)
+            return QString(temp);
+        return QString();
+    }
+
+    bool isValid()
+    {
+        return m_obj != nullptr;
+    }
+
+private:
+    void setSuccessState(bool *success)
+    {
+        if(success != nullptr)
+        {
+            *success = PyErr_Occurred() == nullptr;
+        }
+    }
+
+    PyObject* m_obj;
+};
+
+// these correspond Python's logging.LogRecord attributes
+// with the exception of message, which is the processed message as returned by log.getMessage()
+// https://docs.python.org/3/library/logging.html#logrecord-attributes
+struct LogRecord
+{
+    QString m_filename;
+    QString m_funcName;
+    QString m_levelname;
+    QString m_module;
+    QString m_message;
+    QString m_name;
+    QString m_pathname;
+    QString m_processName;
+    QString m_threadName;
+    double  m_created;
+    long    m_levelno;
+    long    m_msecs;
+    long    m_process;
+    long    m_relativeCreated;
+    long    m_thread;
+};
+
+static void addLogHandler()
+{
+    const char* h = "import logging\n"
+                    "from pykrita import _cppLogHandler\n"
+                    "class _kritaLogForwarder(logging.Handler):\n"
+                    "    def __init__(self):\n"
+                    "        print('Log forward setup!')\n"
+                    "        super().__init__()\n"
+
+                    "    def emit(self, record):\n"
+                    "        _cppLogHandler(record)\n"
+
+                    "_logh = _kritaLogForwarder()\n"
+                    "logging.getLogger().setLevel(logging.DEBUG)\n"
+                    "logging.getLogger().addHandler(_logh)\n";
+    PyRun_SimpleString(h);
+}
+
+PyObject* cppLogHandler(PyObject* /*self*/, PyObject* args)
+{
+    PyObject* record;
+
+    if (!PyArg_ParseTuple(args, "O", &record))
+        return nullptr;
+
+    LogRecord r;
+
+    bool ok;
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "created"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_created = attr.toDouble(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "filename"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_filename = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "funcName"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_funcName = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "levelname"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_levelname = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "levelno"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_levelno = attr.toLong(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "module"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_module = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "msecs"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_msecs = attr.toLong(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "name"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_name = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "pathname"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_pathname = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "process"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_process = attr.toLong(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "processName"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_processName = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "relativeCreated"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_relativeCreated = attr.toLong(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "thread"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_thread = attr.toLong(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_GetAttrString(record, "threadName"));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_threadName = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    {
+        ScopedPyObject attr(PyObject_CallMethod(record, "getMessage", nullptr));
+        if(!attr.isValid())
+            return nullptr;
+
+        r.m_message = attr.toString(&ok);
+        if(!ok)
+            return nullptr;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
 PyObject* s_pykrita;
 /**
  * \attention Krita has embedded Python, so init function \b never will be called
@@ -123,6 +388,12 @@ PyMethodDef pykritaMethods[] = {
         , &PYKRITA::debug
         , METH_VARARGS
         , "True KDE way to show debug info"
+    }
+    , {
+        "_cppLogHandler"
+        , &cppLogHandler
+        , METH_VARARGS
+        , "Handle Python log records"
     }
     , { 0, 0, 0, 0 }
 };
@@ -260,6 +531,8 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
     if (!s_pykrita) {
         return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
     }
+
+    addLogHandler();
 
     // Setup global configuration
     m_configuration = PyDict_New();

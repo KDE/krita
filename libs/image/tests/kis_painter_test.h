@@ -54,6 +54,11 @@ private Q_SLOTS:
     void benchmarkBitBlt();
     void benchmarkBitBltOldData();
 
+    void testMassiveBltFixedSingleTile();
+    void testMassiveBltFixedMultiTile();
+
+    void testMassiveBltFixedCornerCases();
+
 };
 
 #endif

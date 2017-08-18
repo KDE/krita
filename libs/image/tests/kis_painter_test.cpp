@@ -516,6 +516,106 @@ void KisPainterTest::benchmarkBitBltOldData()
         gc.bitBltOldData(QPoint(), src, fillRect);
     }
 }
+#include "kis_paint_device_debug_utils.h"
+
+void testMassiveBltFixedImpl(int numRects)
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    QList<QColor> colors;
+    colors << Qt::red;
+    colors << Qt::green;
+    colors << Qt::blue;
+
+    QRect devicesRect;
+    QList<KisFixedPaintDeviceSP> devices;
+
+    for (int i = 0; i < numRects; i++) {
+        const QRect rc(10 + i * 10, 10 + i * 10, 30, 30);
+        KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+        dev->setRect(rc);
+        dev->initialize();
+        dev->fill(rc, KoColor(colors[i % 3], cs));
+        dev->fill(kisGrowRect(rc, -5), KoColor(Qt::white, cs));
+        devices << dev;
+        devicesRect |= rc;
+    }
+
+    const QRect fullRect = kisGrowRect(devicesRect, 10);
+
+    {
+        KisPainter painter(dst);
+        painter.bltFixed(fullRect, devices);
+        painter.end();
+        QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
+                                      "kispainter_test",
+                                      "massive_bitblt",
+                                      QString("full_update_%1").arg(numRects)));
+    }
+
+    dst->clear();
+
+    {
+        KisPainter painter(dst);
+        for (int i = fullRect.x(); i <= fullRect.center().x(); i += 10) {
+            const QRect rc(i, fullRect.y(), 10, fullRect.height());
+            painter.bltFixed(rc, devices);
+        }
+
+        painter.end();
+
+        QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
+                                      "kispainter_test",
+                                      "massive_bitblt",
+                                      QString("partial_update_%1").arg(numRects)));
+
+    }
+}
+
+void KisPainterTest::testMassiveBltFixedSingleTile()
+{
+    testMassiveBltFixedImpl(3);
+}
+
+void KisPainterTest::testMassiveBltFixedMultiTile()
+{
+    testMassiveBltFixedImpl(6);
+}
+
+void KisPainterTest::testMassiveBltFixedCornerCases()
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    QList<KisFixedPaintDeviceSP> devices;
+
+    QVERIFY(dst->extent().isEmpty());
+
+    {
+        // empty devices, shouldn't crash
+        KisPainter painter(dst);
+        painter.bltFixed(QRect(60,60,20,20), devices);
+        painter.end();
+    }
+
+    QVERIFY(dst->extent().isEmpty());
+
+    const QRect rc(10,10,20,20);
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+    dev->setRect(rc);
+    dev->initialize();
+    dev->fill(rc, KoColor(Qt::white, cs));
+
+    {
+        // rect outside the devices bounds, shouldn't crash
+        KisPainter painter(dst);
+        painter.bltFixed(QRect(60,60,20,20), devices);
+        painter.end();
+    }
+
+    QVERIFY(dst->extent().isEmpty());
+}
 
 QTEST_MAIN(KisPainterTest)
 

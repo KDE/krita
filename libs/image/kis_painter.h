@@ -295,6 +295,14 @@ public:
                   qint32 srcX, qint32 srcY,
                   qint32 srcWidth, qint32 srcHeight);
 
+
+    /**
+     * Render the area \p rc from \p srcDevices on the destination device.
+     * If \p rc doesn't cross the device's rect, then the device is not
+     * rendered at all.
+     */
+    void bltFixed(const QRect &rc, const QList<KisFixedPaintDeviceSP> allSrcDevices);
+
     /**
      * Convenience method that uses QPoint and QRect.
      *

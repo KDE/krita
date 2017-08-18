@@ -52,7 +52,7 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
         it != d->stackInformation.constEnd(); ++it)
     {
         errorPigment << "*******************************************";
-        errorPigment << it.key()->id() << " still in used, and grabed in: ";
+        errorPigment << it.key()->id() << " still in used, and grabbed in: ";
         errorPigment << it.value();
     }
     if( count != d->colorspaces.size())

@@ -135,7 +135,7 @@ private:
     PyObject* m_obj;
 };
 
-// these correspond Python's logging.LogRecord attributes
+// these correspond to Python's logging.LogRecord attributes
 // with the exception of message, which is the processed message as returned by log.getMessage()
 // https://docs.python.org/3/library/logging.html#logrecord-attributes
 struct LogRecord
@@ -163,7 +163,6 @@ static void addLogHandler()
                     "from pykrita import _cppLogHandler\n"
                     "class _kritaLogForwarder(logging.Handler):\n"
                     "    def __init__(self):\n"
-                    "        print('Log forward setup!')\n"
                     "        super().__init__()\n"
 
                     "    def emit(self, record):\n"

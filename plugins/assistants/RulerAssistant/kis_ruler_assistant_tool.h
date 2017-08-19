@@ -78,7 +78,8 @@ protected:
 
 protected:
     KisCanvas2* m_canvas;
-    QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
+    QList<KisPaintingAssistantHandleSP> m_handles;
+    QList<KisPaintingAssistantHandleSP> m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
     KisPaintingAssistantSP m_assistantDrag;

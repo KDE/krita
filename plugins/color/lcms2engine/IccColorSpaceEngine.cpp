@@ -303,7 +303,7 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace *cs) const
         } else if (depthId == Float64BitsColorDepthID.id()) {
             depthType = BYTES_SH(0);
         } else {
-            qWarning() << "Unknow bit depth";
+            qWarning() << "Unknown bit depth";
             return 0;
         }
         // Compute the model part of the type

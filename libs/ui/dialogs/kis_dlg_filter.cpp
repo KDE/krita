@@ -70,6 +70,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
 
     d->uiFilterDialog.pushButtonCreateMaskEffect->show();
     connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
+    connect(d->uiFilterDialog.pushButtonCreateMaskEffect,SIGNAL(pressed()),SLOT(close()));
 
     d->uiFilterDialog.filterGalleryToggle->setChecked(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
     d->uiFilterDialog.filterGalleryToggle->setIcon(QPixmap(":/pics/sidebaricon.png"));
@@ -161,6 +162,7 @@ void KisDlgFilter::slotOnAccept()
         KisFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
         startApplyingFilter(config);
     }
+
     d->filterManager->finish();
 
     d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -195,7 +197,6 @@ void KisDlgFilter::createMask()
 
     KisNodeCommandsAdapter adapter(d->view);
     adapter.addNode(mask, layer, layer->lastChild());
-    accept();
 }
 
 void KisDlgFilter::enablePreviewToggled(bool state)

@@ -249,7 +249,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 #ifdef HAVE_X11
     isOnX11 = true;
 #endif
-    
+
     if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
@@ -358,6 +358,10 @@ void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 
 bool KisOpenGL::hasOpenGL()
 {
-    return ((glMajorVersion * 100 + glMinorVersion) >= 201);
-    //return (glMajorVersion >= 3 && supportsDeprecatedFunctions);
+#ifdef Q_OS_OSX
+    return ((glMajorVersion * 100 + glMinorVersion) >= 302);
+#else
+    return (glMajorVersion >= 3 && supportsDeprecatedFunctions) ||
+           ((glMajorVersion * 100 + glMinorVersion) == 201);
+#endif
 }

@@ -12,7 +12,7 @@ def hello():
     """
     Show a test message box.
     """
-    QMessageBox.information(QWidget(), "Test", "Hello! This is Krita version %s" % Application.version())
+    QMessageBox.information(QWidget(), i18n("Test"), i18n("Hello! This is Krita version %s") % Application.version())
 
 
 class HelloExtension(Extension):

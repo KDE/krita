@@ -29,6 +29,7 @@
 
 #include "Vc/cpuid.h"
 #include "actions_info_source.h"
+#include "general_info_source.h"
 #include "tools_info_source.h"
 #include <KoToolRegistry.h>
 #include <QTime>
@@ -41,6 +42,7 @@
 #include <kis_types.h>
 #include <ksharedconfig.h>
 
+
 TelemetryProvider::TelemetryProvider()
 {
     m_installProvider.reset(new KUserFeedback::Provider);
@@ -50,22 +52,23 @@ TelemetryProvider::TelemetryProvider()
     QString isFirstStart = configGroup.readEntry("FirstStart");
     if (isFirstStart.isEmpty()) {
         //don't append install source
+        std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
+        m_installSources.push_back(std::move(cpu));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
+        m_installSources.push_back(std::move(qt));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
+        m_installSources.push_back(std::move(compiler));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
+        m_installSources.push_back(std::move(locale));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
+        m_installSources.push_back(std::move(opengl));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
+        m_installSources.push_back(std::move(platform));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
+        m_installSources.push_back(std::move(screen));
+        std::unique_ptr<KUserFeedback::AbstractDataSource> general(new UserFeedback::TelemetryGeneralInfoSource);
+        m_installSources.push_back(std::move(general));
     }
-    std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
-    m_installSources.push_back(std::move(cpu));
-    std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
-    m_installSources.push_back(std::move(qt));
-    std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
-    m_installSources.push_back(std::move(compiler));
-    std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
-    m_installSources.push_back(std::move(locale));
-    std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
-    m_installSources.push_back(std::move(opengl));
-    std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
-    m_installSources.push_back(std::move(platform));
-    std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
-    m_installSources.push_back(std::move(screen));
-
     for (auto& source : m_installSources) {
         m_installProvider->addDataSource(source.get());
     }
@@ -119,12 +122,13 @@ void TelemetryProvider::sendData(QString path, QString adress)
     case install: {
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KisTelemetryInstall");
         QString isFirstStart = configGroup.readEntry("FirstStart");
-//        if (isFirstStart.isEmpty()) {
-//            //don't append install source
-//            configGroup.writeEntry("FirstStart", true);
-//        } else {
-//            break;
-//        }
+
+        if (isFirstStart.isEmpty()) {
+            //don't append install source
+            configGroup.writeEntry("FirstStart", true);
+        } else {
+            break;
+        }
         m_installProvider->setFeedbackServer(QUrl(finalAdress + path));
         m_installProvider->submit();
         break;

@@ -271,8 +271,9 @@ void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 bool KisOpenGL::hasOpenGL()
 {
 #ifdef Q_OS_OSX
-    return (glMajorVersion >= 3 && glMinorVersion >= 2);
+    return ((glMajorVersion * 100 + glMinorVersion) >= 302);
 #else
-    return (glMajorVersion >= 3 && supportsDeprecatedFunctions);
+    return (glMajorVersion >= 3 && supportsDeprecatedFunctions) ||
+           ((glMajorVersion * 100 + glMinorVersion) == 201);
 #endif
 }

@@ -21,8 +21,11 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_0>
+#ifndef Q_OS_OSX
+#include <QOpenGLFunctions>
+#else
 #include <QOpenGLFunctions_3_2_Core>
+#endif
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
@@ -35,8 +38,8 @@ class QOpenGLShaderProgram;
 class QPainterPath;
 
 #ifndef Q_MOC_RUN
-#ifndef Q_OS_MAC
-#define GLFunctions QOpenGLFunctions_3_0
+#ifndef Q_OS_OSX
+#define GLFunctions QOpenGLFunctions
 #else
 #define GLFunctions QOpenGLFunctions_3_2_Core
 #endif

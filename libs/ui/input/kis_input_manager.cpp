@@ -562,13 +562,11 @@ void KisInputManager::slotToolChanged()
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;
             d->matcher.suppressAllActions(true);
+        } else {
+            d->forwardAllEventsToTool = false;
+            d->matcher.suppressAllActions(false);
         }
-    } else {
-        d->forwardAllEventsToTool = false;
-        d->matcher.suppressAllActions(false);
     }
-
-
 }
 
 

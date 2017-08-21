@@ -103,7 +103,7 @@ public:
         filename->setText(fileItem->name);
         modified->setText(fileItem->date);
 
-        // move the page _up_ otherwise it will draw relative to the actual postion
+        // move the page _up_ otherwise it will draw relative to the actual position
         page->setGeometry(option.rect.translated(0, -option.rect.y()));
     }
 

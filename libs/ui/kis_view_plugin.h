@@ -42,7 +42,7 @@ protected:
 
    /**
     *  Registers a KisAction to the UI and action manager.
-    *  @param name - title of the action in the krita.xmlgui file
+    *  @param name - title of the action in the krita4.xmlgui file
     *  @param action the action that should be added
     */
     void addAction(const QString& name, KisAction* action);

@@ -636,6 +636,16 @@ QList<qreal> Document::verticalGuides() const
     return lines;
 }
 
+bool Document::guidesVisible() const
+{
+    return d->document->guidesConfig().lockGuides();
+}
+
+bool Document::guidesLocked() const
+{
+    return d->document->guidesConfig().showGuides();
+}
+
 void Document::setHorizontalGuides(const QList<qreal> &lines)
 {
     if (!d->document) return;
@@ -665,6 +675,22 @@ void Document::setVerticalGuides(const QList<qreal> &lines)
         transformedLines.append(transform.map(QPointF(line, line)).y());
     }
     config.setVerticalGuideLines(transformedLines);
+    d->document->setGuidesConfig(config);
+}
+
+void Document::setGuidesVisible(bool visible)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    config.setShowGuides(visible);
+    d->document->setGuidesConfig(config);
+}
+
+void Document::setGuidesLocked(bool locked)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    config.setLockGuides(locked);
     d->document->setGuidesConfig(config);
 }
 

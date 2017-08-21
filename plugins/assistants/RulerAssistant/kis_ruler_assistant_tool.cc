@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>

@@ -20,14 +20,24 @@
 
 #include <QtQuickWidgets/QQuickWidget>
 
-
 class KisCanvas2;
 
 class Throttle : public QQuickWidget  {
     Q_OBJECT
+    Q_PROPERTY(int threadCount READ threadCount WRITE setThreadCount NOTIFY threadCountChanged)
+    Q_PROPERTY(int maxThreadCount READ maxThreadCount)
 public:
     Throttle(QWidget *parent);
     ~Throttle() override;
+
+    void setThreadCount(int threadCount);
+    int threadCount() const;
+    int maxThreadCount() const;
+
+Q_SIGNALS:
+    void threadCountChanged();
+private:
+    int m_threadCount {0};
 };
 
 

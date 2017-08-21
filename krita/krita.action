@@ -2,6 +2,16 @@
 <ActionCollection version="2" name="Krita">
   <Actions category="General">
     <text>General</text>
+     <Action name="show_throttle">
+      <icon></icon>
+      <text>Select &amp;Toggle CPU Throttle</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show the cpu throttle</toolTip>
+      <iconText>Show the cpu throttle</iconText>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip>Show the cpu throttle</statusTip>
+    </Action>
     <Action name="open_resources_directory">
       <icon></icon>
       <text>Open Resources Folder</text>

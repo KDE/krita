@@ -33,7 +33,6 @@ public:
 private Q_SLOTS:
     void slotActivated();
 private:
-
     Throttle * m_throttle {0};
 
 };

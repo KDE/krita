@@ -165,6 +165,21 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    
+    
+    
+    <Action name="buginfo">
+      <icon></icon>
+      <text>Show system information for bug reports.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show system information for bug reports.</toolTip>
+      <iconText>Show system information for bug reports.</iconText>
+      <shortcut>/</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    
+    
     <Action name="rename_composition">
       <icon></icon>
       <text>Rename Composition...</text>
@@ -386,6 +401,72 @@
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorX-hideDecorations">
+      <icon></icon>
+      <text>Hide Mirror X Line</text>
+      <whatsThis></whatsThis>
+      <toolTip>Hide Mirror X Line</toolTip>
+      <iconText>Hide Mirror X Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorY-hideDecorations">
+      <icon></icon>
+      <text>Hide Mirror Y Line</text>
+      <whatsThis></whatsThis>
+      <toolTip>Hide Mirror Y Line</toolTip>
+      <iconText>Hide Mirror Y Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+   <Action name="mirrorX-lock">
+      <icon></icon>
+      <text>Lock</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock X Line</toolTip>
+      <iconText>Lock X Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+   <Action name="mirrorY-lock">
+      <icon></icon>
+      <text>Lock Y Line</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock Y Line</toolTip>
+      <iconText>Lock Y Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+   <Action name="mirrorX-moveToCenter">
+      <icon></icon>
+      <text>Move to Canvas Center</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move to Canvas Center X</toolTip>
+      <iconText>Move to Canvas Center X</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorY-moveToCenter">
+      <icon></icon>
+      <text>Move to Canvas Center Y</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move to Canvas Center Y</toolTip>
+      <iconText>Move to Canvas Center Y</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="invert">
@@ -1258,6 +1339,33 @@
       <iconText>Multibrush Tool</iconText>
       <shortcut>Q</shortcut>
       <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="KritaShape/KisToolLazyBrush">
+      <icon></icon>
+      <text>Lazy Brush Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lazy Brush Tool</toolTip>
+      <iconText>Lazy Brush Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="KritaShape/KisToolSmartPatch">
+      <icon></icon>
+      <text>Smart Patch Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Smart Patch Tool</toolTip>
+      <iconText>Smart Patch Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="PanTool">
+      <icon></icon>
+      <text>Pan Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Pan Tool</toolTip>
+      <iconText>Pan Tool</iconText>
+      <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>
     <Action name="InteractionTool">

@@ -37,8 +37,8 @@ class LastDocumentsListModel(QAbstractListModel):
     def _loadRecentDocuments(self):
         recentDocumentsPaths = self.kritaInstance.recentDocuments()
 
-        for path in recentDocumentsPaths:
-            document = self.kritaInstance.openDocument(path)
-            if document:
-                self.recentDocuments.append(document.thumbnail(70, 60))
-                document.close()
+        #for path in recentDocumentsPaths:
+        #    document = self.kritaInstance.openDocument(path)
+        #    if document:
+        #        self.recentDocuments.append(document.thumbnail(70, 60))
+        #        document.close()

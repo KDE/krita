@@ -1040,7 +1040,7 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
     {
         case RawDecodingSettings::DCB:
         case RawDecodingSettings::VCD_AHD:
-            // These options can be only avaialble if Libraw use GPL2 pack.
+            // These options can be only available if Libraw use GPL2 pack.
             d->medianFilterPassesLabel->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
             d->medianFilterPassesSpinBox->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
             d->refineInterpolationBox->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
@@ -1141,7 +1141,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
             if (q == i)
             {
                 q = RawDecodingSettings::BILINEAR;
-                qCDebug(LIBKDCRAW_LOG) << "Libraw GPL2 pack not avaialble. Raw quality set to Bilinear";
+                qCDebug(LIBKDCRAW_LOG) << "Libraw GPL2 pack not available. Raw quality set to Bilinear";
                 break;
             }
         }
@@ -1151,7 +1151,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     if (!KDcraw::librawUseGPL3DemosaicPack() && (q == RawDecodingSettings::AMAZE))
     {
         q = RawDecodingSettings::BILINEAR;
-        qCDebug(LIBKDCRAW_LOG) << "Libraw GPL3 pack not avaialble. Raw quality set to Bilinear";
+        qCDebug(LIBKDCRAW_LOG) << "Libraw GPL3 pack not available. Raw quality set to Bilinear";
     }
 
     d->RAWQualityComboBox->setCurrentIndex(q);

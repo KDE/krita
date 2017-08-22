@@ -27,7 +27,7 @@ import excepthook
 excepthook.install()
 
 import builtins
-builtins.i18n = lambda s: unicode(QCoreApplication.translate("PyKrita", s))
+builtins.i18n = lambda s: QCoreApplication.translate("PyKrita", s)
 builtins.Scripter = Krita.instance()
 builtins.Application = Krita.instance()
 builtins.Krita = Krita.instance()

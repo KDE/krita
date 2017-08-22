@@ -1626,11 +1626,6 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
     m_cfg.writeEntry("testingCompressBrushEvents", value);
 }
 
-bool KisConfig::useVerboseOpenGLDebugOutput(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("useVerboseOpenGLDebugOutput", false));
-}
-
 int KisConfig::workaroundX11SmoothPressureSteps(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0));
@@ -1699,14 +1694,14 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
-bool KisConfig::enableOpenGLDebugging(bool defaultValue) const
+bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLDebugging", false));
+    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLFramerateLogging", false));
 }
 
-void KisConfig::setEnableOpenGLDebugging(bool value) const
+void KisConfig::setEnableOpenGLFramerateLogging(bool value) const
 {
-    m_cfg.writeEntry("enableOpenGLDebugging", value);
+    m_cfg.writeEntry("enableOpenGLFramerateLogging", value);
 }
 
 void KisConfig::setEnableAmdVectorizationWorkaround(bool value)

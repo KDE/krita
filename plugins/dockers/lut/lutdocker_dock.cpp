@@ -189,8 +189,6 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
-                m_displayFilter = QSharedPointer<KisDisplayFilter>(new OcioDisplayFilter(this));
-                m_canvas->setDisplayFilter(m_displayFilter);
                 resetOcioConfiguration();
                 updateDisplaySettings();
             }
@@ -382,6 +380,16 @@ void LutDockerDock::updateDisplaySettings()
     writeControls();
 
     if (m_chkUseOcio->isChecked() && m_ocioConfig) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_canvas->displayFilter() ||
+                                     m_canvas->displayFilter() == m_displayFilter);
+
+        if (!m_displayFilter) {
+            m_displayFilter =
+                m_canvas->displayFilter() ?
+                    m_canvas->displayFilter() :
+                    QSharedPointer<KisDisplayFilter>(new OcioDisplayFilter(this));
+        }
+
         OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
         displayFilter->config = m_ocioConfig;
         displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
@@ -447,24 +455,6 @@ void LutDockerDock::selectOcioConfiguration()
 void LutDockerDock::resetOcioConfiguration()
 {
     KisConfig cfg;
-    if (cfg.ocioColorManagementMode() == m_colorManagement->currentIndex()
-            && cfg.useOcio() == m_chkUseOcio->isChecked()
-            && cfg.ocioLockColorVisualRepresentation() == m_btnConvertCurrentColor->isChecked()
-            && cfg.ocioConfigurationPath() == m_txtConfigurationPath->text()
-            ) {
-        return;
-    }
-
-    m_ocioConfig.reset();
-
-    if (cfg.ocioColorManagementMode() == m_colorManagement->currentIndex()
-            && cfg.useOcio() == m_chkUseOcio->isChecked()
-            && cfg.ocioLockColorVisualRepresentation() == m_btnConvertCurrentColor->isChecked()
-            && cfg.ocioConfigurationPath() == m_txtConfigurationPath->text()
-            ) {
-        return;
-    }
-
     m_ocioConfig.reset();
 
     try {
@@ -524,34 +514,45 @@ void LutDockerDock::refillControls()
     { // Components
         const KoColorSpace *cs = m_canvas->viewManager()->image()->colorSpace();
 
-        KisSignalsBlocker componentsBlocker(m_cmbComponents);
-        m_cmbComponents->clear();
-        m_cmbComponents->addSqueezedItem(i18n("Luminance"));
-        m_cmbComponents->addSqueezedItem(i18n("All Channels"));
+        QStringList itemsList;
+        itemsList << i18n("Luminance");
+        itemsList << i18n("All Channels");
         Q_FOREACH (KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(cs->channels())) {
-            m_cmbComponents->addSqueezedItem(channel->name());
+            itemsList << channel->name();
         }
-        m_cmbComponents->setCurrentIndex(1); // All Channels...
+
+        if (m_cmbComponents->originalTexts() != itemsList) {
+            KisSignalsBlocker componentsBlocker(m_cmbComponents);
+            m_cmbComponents->resetOriginalTexts(itemsList);
+            m_cmbComponents->setCurrentIndex(1); // All Channels...
+        }
     }
 
     { // Input Color Space
-        KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
-        m_cmbInputColorSpace->clear();
-
+        QStringList itemsList;
         int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
         for(int i = 0; i < numOcioColorSpaces; ++i) {
             const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
             OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
-            m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getName()));
+            itemsList << QString::fromUtf8(colorSpace->getName());
+        }
+
+        if (itemsList != m_cmbInputColorSpace->originalTexts()) {
+            KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
+            m_cmbInputColorSpace->resetOriginalTexts(itemsList);
         }
     }
 
     { // Display Device
-        KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
-        m_cmbDisplayDevice->clear();
+        QStringList itemsList;
         int numDisplays = m_ocioConfig->getNumDisplays();
         for (int i = 0; i < numDisplays; ++i) {
-            m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
+            itemsList << QString::fromUtf8(m_ocioConfig->getDisplay(i));
+        }
+
+        if (itemsList != m_cmbDisplayDevice->originalTexts()) {
+            KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
+            m_cmbDisplayDevice->resetOriginalTexts(itemsList);
         }
     }
 
@@ -564,13 +565,17 @@ void LutDockerDock::refillControls()
     refillViewCombobox();
 
     {
-        KisSignalsBlocker LookComboLocker(m_cmbLook);
-        m_cmbLook->clear();
+        QStringList itemsList;
         int numLooks = m_ocioConfig->getNumLooks();
         for (int k = 0; k < numLooks; k++) {
-           m_cmbLook->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getLookNameByIndex(k)));
+           itemsList << QString::fromUtf8(m_ocioConfig->getLookNameByIndex(k));
         }
-        m_cmbLook->addSqueezedItem(i18nc("Item to indicate no look transform being selected","None"));
+        itemsList << i18nc("Item to indicate no look transform being selected","None");
+
+        if (itemsList != m_cmbLook->originalTexts()) {
+            KisSignalsBlocker LookComboLocker(m_cmbLook);
+            m_cmbLook->resetOriginalTexts(itemsList);
+        }
     }
     updateDisplaySettings();
 }

@@ -174,7 +174,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show system information for bug reports.</toolTip>
       <iconText>Show system information for bug reports.</iconText>
-      <shortcut>/</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

@@ -44,6 +44,10 @@
 #include <QOpenGLBuffer>
 #include <QMessageBox>
 
+#ifndef Q_OS_OSX
+#include <QOpenGLFunctions_2_1>
+#endif
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -97,6 +101,10 @@ public:
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
+
+#ifndef Q_OS_OSX
+    QOpenGLFunctions_2_1 *glFn201;
+#endif
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -222,6 +230,12 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
+#ifndef Q_OS_OSX
+    d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
+    if (!d->glFn201) {
+        warnUI << "Cannot obtain QOpenGLFunctions_2_1, glLogicOp cannot be used";
+    }
+#endif
 
     KisConfig cfg;
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
@@ -380,7 +394,13 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
     glEnable(GL_COLOR_LOGIC_OP);
+#ifndef Q_OS_OSX
+    if (d->glFn201) {
+        d->glFn201->glLogicOp(GL_XOR);
+    }
+#else
     glLogicOp(GL_XOR);
+#endif
 
     KisConfig cfg;
     QColor cursorColor = cfg.getCursorMainColor();

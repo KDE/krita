@@ -430,8 +430,8 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita.xmlgui"));
-    setXMLFile(":/kxmlgui5/krita.xmlgui");
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
+    setXMLFile(":/kxmlgui5/krita4.xmlgui");
 
     guiFactory()->addClient(this);
 

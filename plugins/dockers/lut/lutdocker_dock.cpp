@@ -455,7 +455,6 @@ void LutDockerDock::selectOcioConfiguration()
 void LutDockerDock::resetOcioConfiguration()
 {
     KisConfig cfg;
-
     m_ocioConfig.reset();
 
     try {

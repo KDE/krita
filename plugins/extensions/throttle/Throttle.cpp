@@ -18,8 +18,13 @@
 #include "Throttle.h"
 
 #include <QAction>
+#include <QThread>
+#include <QQmlContext>
+#include <QQmlEngine>
+
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
+
 #include <kis_icon.h>
 #include <KoCanvasBase.h>
 #include <KisViewManager.h>
@@ -30,9 +35,34 @@ Throttle::Throttle(QWidget *parent)
     : QQuickWidget(parent)
 {
     setEnabled(true);
-    setSource(QUrl("qrc:/hello.qml"));
+    // In % of available cores...
+    setThreadCount(100);
+    setSource(QUrl("qrc:/slider.qml"));
+    engine()->rootContext()->setContextProperty("ThreadManager", this);
 }
 
 Throttle::~Throttle()
 {
+    qDebug() << "Deleting throttle";
+}
+
+void Throttle::setThreadCount(int threadCount)
+{
+    threadCount = qMin(maxThreadCount(), int(qreal(threadCount) * (maxThreadCount() / 100.0)));
+
+    if (m_threadCount != threadCount) {
+        m_threadCount = threadCount;
+        emit threadCountChanged();
+        // XXX: set the threadcount globally in Krita.
+    }
+}
+
+int Throttle::threadCount() const
+{
+    return m_threadCount;
+}
+
+int Throttle::maxThreadCount() const
+{
+    return QThread::idealThreadCount();
 }

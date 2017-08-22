@@ -17,10 +17,13 @@
 
 #include "ThrottlePlugin.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
-
+#include <kis_action.h>
 #include "kis_config.h"
 #include "kis_types.h"
 #include "KisViewManager.h"
@@ -33,19 +36,32 @@ K_PLUGIN_FACTORY_WITH_JSON(ThrottlePluginFactory, "krita_throttle.json", registe
 ThrottlePlugin::ThrottlePlugin(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
 {
-    KisAction* action = createAction("show_throttle");
-    //connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
-    //m_throttle = new Throttle(m_view->mainWindow());
-    //m_throttle->hide();
+    KisAction *action = createAction("show_throttle");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
+
 }
 
 ThrottlePlugin::~ThrottlePlugin()
 {
 }
 
+const int MARGIN = 70;
+
 void ThrottlePlugin::slotActivated()
 {
-    //m_throttle->setVisible(!m_throttle->isVisible());
+    if (!m_throttle) {
+        m_throttle = new Throttle(m_view->mainWindow());
+        m_throttle->setVisible(false);
+        m_throttle->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
+        m_throttle->setFocusPolicy(Qt::NoFocus);
+        m_throttle->setAttribute(Qt::WA_ShowWithoutActivating);
+        QRect screen = m_throttle->parentWidget()->geometry();
+        screen.setTopLeft(m_throttle->parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN + 50)));
+        m_throttle->setGeometry(QRect(screen.topLeft(), m_throttle->sizeHint()  ));
+    }
+
+    m_throttle->setVisible(!m_throttle->isVisible());
+
 }
 
 #include "ThrottlePlugin.moc"

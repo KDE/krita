@@ -344,6 +344,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="help_contents"/>
       <Action name="help_whats_this"/>
       <Separator/>
+      <Action name="show_throttle"/>
+      <Separator/>
       <MergeLocal/>
       <Action name="help_show_tip"/>
       <Separator/>

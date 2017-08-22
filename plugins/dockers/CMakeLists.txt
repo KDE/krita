@@ -23,3 +23,7 @@ add_subdirectory(animation)
 add_subdirectory(presethistory)
 add_subdirectory(shapedockers)
 add_subdirectory(histogram)
+if(HAVE_QT_QUICK)
+    add_subdirectory(touchdocker)
+endif()
+

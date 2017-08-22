@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="hello.qml">qml/hello.qml</file>
+    </qresource>
+</RCC>

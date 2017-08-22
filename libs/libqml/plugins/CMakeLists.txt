@@ -1,0 +1,2 @@
+add_subdirectory(draganddrop)
+add_subdirectory(kritasketchplugin)

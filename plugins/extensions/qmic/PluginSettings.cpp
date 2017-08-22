@@ -31,7 +31,7 @@ PluginSettings::PluginSettings(QWidget *parent)
     : KisPreferenceSet(parent)
 {
     setupUi(this);
-    fileRequester->setFileName(KisConfig().readEntry<QString>("gmic_qt_plugin_path"));
+    fileRequester->setFileName(gmicQtPath());
     fileRequester->setStartDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 }
 
@@ -58,7 +58,27 @@ QString PluginSettings::header()
 
 QIcon PluginSettings::icon()
 {
-    return koIcon("gmic"); // XXX: Replace with Animtim's G'Mic icon
+    return koIcon("gmic");
+}
+
+QString PluginSettings::gmicQtPath()
+{
+    QString gmicqt("gmic_krita_qt");
+#ifdef Q_OS_WIN
+    gmicqt += ".exe";
+#endif
+    gmicqt = KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
+    QFileInfo fi(gmicqt);
+    if (!fi.exists()) {
+        QFileInfo fi2(qApp->applicationDirPath() + "/" + gmicqt);
+        if (fi2.exists()) {
+            gmicqt = qApp->applicationDirPath() + "/" + gmicqt;
+        }
+        else {
+            gmicqt.clear();
+        }
+    }
+    return gmicqt;
 }
 
 
@@ -70,10 +90,14 @@ void PluginSettings::savePreferences() const
 
 void PluginSettings::loadPreferences()
 {
-    fileRequester->setFileName(KisConfig().readEntry<QString>("gmic_qt_plugin_path"));
+    QString gmicqt("gmic_host_krita");
+#ifdef Q_OS_WIN
+    gmicqt += ".exe";
+#endif
+    fileRequester->setFileName(gmicQtPath());
 }
 
 void PluginSettings::loadDefaultPreferences()
 {
-    fileRequester->setFileName("");
+    fileRequester->setFileName(gmicQtPath());
 }

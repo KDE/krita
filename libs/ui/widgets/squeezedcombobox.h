@@ -78,6 +78,17 @@ public:
      */
     qint32 findOriginalText(const QString & text) const;
     
+
+    /**
+     * Return the list of original text items
+     */
+    QStringList originalTexts() const;
+
+    /**
+     * Reset the combo box and initialize it with the list of (original) text items
+     */
+    void resetOriginalTexts(const QStringList &texts);
+
     /**
      * This inserts a item to the list. See QComboBox::insertItem()
      * for detaills. Please do not use QComboBox::insertItem() to this

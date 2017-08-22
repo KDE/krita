@@ -208,6 +208,14 @@ private:
     KisAction* m_hMirrorAction;
     KisAction* m_vMirrorAction;
 
+    KisAction* hideCanvasDecorationsX;
+    KisAction* lockActionX;
+    KisAction* moveToCenterActionX;
+    KisAction* hideCanvasDecorationsY;
+    KisAction* lockActionY;
+    KisAction* moveToCenterActionY;
+
+
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
             uniqueID = dev.uniqueTabletId();

@@ -405,7 +405,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
+find_package(Boost 1.55 REQUIRED COMPONENTS system) # for pigment and stage
 include_directories(${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
@@ -500,7 +500,7 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 REQUIRED "3.0")
+find_package(Eigen3 3.0 REQUIRED)
 set_package_properties(Eigen3 PROPERTIES
     DESCRIPTION "C++ template library for linear algebra"
     URL "http://eigen.tuxfamily.org"
@@ -509,8 +509,7 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for exiv2
 ##
-set(EXIV2_MIN_VERSION "0.16")
-find_package(Exiv2 REQUIRED)
+find_package(Exiv2 0.16 REQUIRED)
 set_package_properties(Exiv2 PROPERTIES
     DESCRIPTION "Image metadata library and tools"
     URL "http://www.exiv2.org"
@@ -519,7 +518,7 @@ set_package_properties(Exiv2 PROPERTIES
 ##
 ## Test for lcms
 ##
-find_package(LCMS2 REQUIRED "2.4")
+find_package(LCMS2 2.4 REQUIRED)
 set_package_properties(LCMS2 PROPERTIES
     DESCRIPTION "LittleCMS Color management engine"
     URL "http://www.littlecms.com"
@@ -605,48 +604,6 @@ set_package_properties(Poppler PROPERTIES
     URL "http://poppler.freedesktop.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
-
-##
-## Test for pthreads (for G'Mic)
-##
-find_package(Threads)
-set_package_properties(Threads PROPERTIES
-    DESCRIPTION "PThreads - A low-level threading library"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
-##
-## Test for OpenMP (for G'Mic)
-##
-find_package(OpenMP)
-set_package_properties(OpenMP PROPERTIES
-    DESCRIPTION "A low-level parallel execution library"
-    URL "http://openmp.org/wp/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
-##
-## Test for Curl (for G'Mic)
-##
-find_package(CURL)
-set_package_properties(CURL PROPERTIES
-    DESCRIPTION "A tool to fetch remote data"
-    URL "http://curl.haxx.se/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic plugin")
-
-##
-## Test for KUserFeedback
-##
-
-find_package (KUserFeedback)
-macro_bool_to_01(KUserFeedback_FOUND HAVE_KUserFeedback)
-set_package_properties(KUserFeedback PROPERTIES
-    DESCRIPTION "A tool to collect telemetry"
-    URL "https://api.kde.org/frameworks/kuserfeedback/html/index.html"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used")
-
 
  ############################
 #############################

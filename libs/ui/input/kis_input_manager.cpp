@@ -554,9 +554,10 @@ KisToolProxy* KisInputManager::toolProxy() const
 
 void KisInputManager::slotAboutToChangeTool()
 {
-    QPointF currentLocalPos =
-            canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
-
+    QPointF currentLocalPos;
+    if (canvas() && canvas()->canvasWidget()) {
+        currentLocalPos = canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+    }
     d->matcher.lostFocusEvent(currentLocalPos);
 }
 
@@ -564,16 +565,16 @@ void KisInputManager::slotToolChanged()
 {
     KoToolManager *toolManager = KoToolManager::instance();
     KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
-    d->setMaskSyntheticEvents(tool->maskSyntheticEvents());
-    if (tool && tool->isInTextMode()) {
-        d->forwardAllEventsToTool = true;
-        d->matcher.suppressAllActions(true);
-    } else {
-        d->forwardAllEventsToTool = false;
-        d->matcher.suppressAllActions(false);
+    if (tool) {
+        d->setMaskSyntheticEvents(tool->maskSyntheticEvents());
+        if (tool->isInTextMode()) {
+            d->forwardAllEventsToTool = true;
+            d->matcher.suppressAllActions(true);
+        } else {
+            d->forwardAllEventsToTool = false;
+            d->matcher.suppressAllActions(false);
+        }
     }
-
-
 }
 
 

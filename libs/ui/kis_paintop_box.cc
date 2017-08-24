@@ -1063,36 +1063,47 @@ void KisPaintopBox::slotPreviousFavoritePreset()
 {
     if (!m_favoriteResourceManager) return;
 
-    int i = 0;
-    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->name() == preset->name()) {
+    QVector<KisPaintOpPresetSP> presets = m_favoriteResourceManager->favoritePresetList();
+    for (int i=0; i < presets.size(); ++i) {
+        if (m_resourceProvider->currentPreset() &&
+                m_resourceProvider->currentPreset()->name() == presets[i]->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             } else {
                 m_favoriteResourceManager->slotChangeActivePaintop(m_favoriteResourceManager->numFavoritePresets() - 1);
             }
+            //floating message should have least 2 lines, otherwise
+            //preset thumbnail will be too small to distinguish
+            //(because size of image on floating message depends on amount of lines in msg)
+            m_viewManager->showFloatingMessage(
+                i18n("%1\nselected",
+                        m_resourceProvider->currentPreset()->name()),
+                QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
+
             return;
         }
-        i++;
     }
-
 }
 
 void KisPaintopBox::slotNextFavoritePreset()
 {
     if (!m_favoriteResourceManager) return;
 
-    int i = 0;
-    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
+    QVector<KisPaintOpPresetSP> presets = m_favoriteResourceManager->favoritePresetList();
+    for(int i = 0; i < presets.size(); ++i) {
+        if (m_resourceProvider->currentPreset()->name() == presets[i]->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
             } else {
                 m_favoriteResourceManager->slotChangeActivePaintop(0);
             }
+            m_viewManager->showFloatingMessage(
+                i18n("%1\nselected",
+                        m_resourceProvider->currentPreset()->name()),
+                QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
+
             return;
         }
-        i++;
     }
 }
 
@@ -1101,6 +1112,10 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
     if (m_resourceProvider->previousPreset()) {
         //qDebug() << "slotSwitchToPreviousPreset();" << m_resourceProvider->previousPreset();
         setCurrentPaintop(m_resourceProvider->previousPreset());
+        m_viewManager->showFloatingMessage(
+                i18n("%1\nselected",
+                        m_resourceProvider->currentPreset()->name()),
+            QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
     }
 }
 

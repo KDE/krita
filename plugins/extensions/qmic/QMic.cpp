@@ -443,7 +443,7 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     for (int i = 0; i < nodes->size(); ++i) {
         KisNodeSP node = nodes->at(i);
-        if (node->paintDevice()) {
+        if (node && node->paintDevice()) {
             QRect cropRect;
 
             KisSelectionSP selection = m_view->image()->globalSelection();

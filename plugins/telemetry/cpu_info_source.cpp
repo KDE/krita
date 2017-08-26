@@ -23,8 +23,7 @@
 #include <QSysInfo>
 #include <QThread>
 #include <QVariant>
-#include <Vc/cpuid.h>
-
+#include <cpu_info.h>
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
@@ -42,16 +41,16 @@ QString TelemetryCpuInfoSource::description() const
 QVariant TelemetryCpuInfoSource::data()
 {
     QVariantMap m;
-    Vc_VERSIONED_NAMESPACE::CpuId::init();
+    CPUInfo cpuInfo;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
     m.insert(QStringLiteral("architecture"), QSysInfo::currentCpuArchitecture());
 #else
     m.insert(QStringLiteral("architecture"), QStringLiteral("unknown"));
 #endif
     m.insert(QStringLiteral("count"), QThread::idealThreadCount());
-    m.insert(QStringLiteral("model"),Vc_VERSIONED_NAMESPACE::CpuId::processorModel());
-    m.insert(QStringLiteral("family"),Vc_VERSIONED_NAMESPACE::CpuId::processorFamily());
-    m.insert(QStringLiteral("isIntel"),Vc_VERSIONED_NAMESPACE::CpuId::isIntel());
+    m.insert(QStringLiteral("model"), cpuInfo.processorModel());
+    m.insert(QStringLiteral("family"), cpuInfo.processorFamily());
+    m.insert(QStringLiteral("isIntel"),cpuInfo.isIntel());
 
     return m;
 }

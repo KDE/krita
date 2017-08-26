@@ -8,6 +8,7 @@ set(kritaplugintelemetry_SOURCES
     image_properties_source.cpp
     actions_info_source.cpp
     general_info_source.cpp
+    cpu_info.cpp
 )
 add_subdirectory( tests )
 

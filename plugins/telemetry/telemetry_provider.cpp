@@ -50,7 +50,7 @@ TelemetryProvider::TelemetryProvider()
     KConfigGroup configGroup = KSharedConfig::openConfig()->group("KisTelemetryInstall");
 
     QString isFirstStart = configGroup.readEntry("FirstStart");
-    if (isFirstStart.isEmpty()) {
+   // if (isFirstStart.isEmpty()) {
         //don't append install source
         std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
         m_installSources.push_back(std::move(cpu));
@@ -68,7 +68,7 @@ TelemetryProvider::TelemetryProvider()
         m_installSources.push_back(std::move(screen));
         std::unique_ptr<KUserFeedback::AbstractDataSource> general(new UserFeedback::TelemetryGeneralInfoSource);
         m_installSources.push_back(std::move(general));
-    }
+   // }
     for (auto& source : m_installSources) {
         m_installProvider->addDataSource(source.get());
     }
@@ -127,7 +127,7 @@ void TelemetryProvider::sendData(QString path, QString adress)
             //don't append install source
             configGroup.writeEntry("FirstStart", true);
         } else {
-            break;
+           // break;
         }
         m_installProvider->setFeedbackServer(QUrl(finalAdress + path));
         m_installProvider->submit();

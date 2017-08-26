@@ -17,33 +17,47 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#ifndef KIS_CPU_INFO_H
+#define KIS_CPU_INFO_H
 
-#ifndef KIS_TELEMETRY_ABSTRUCT_H
-#define KIS_TELEMETRY_ABSTRUCT_H
-#include "QScopedPointer"
-#include "kis_telemetry_tickets.h"
-#include "kritatelemetry_export.h"
-#include <KUserFeedback/AbstractDataSource>
-#include <KUserFeedback/cpuinfosource.h>
-#include <KUserFeedback/provider.h>
-#include <QString>
-#include <QVector>
+#ifdef _WIN32
+#include <intrin.h> \
+#include <limits.h> \
+typedef unsigned __int32 uint32_t;
 
-class KRITATELEMETRY_EXPORT KisTelemetryAbstract {
+#else
+#include <stdint.h>
+#endif
+#include <iostream>
+#include <string>
+
+class CPUID {
+    uint32_t regs[4];
+
 public:
-    virtual void sendData(QString path, QString adress = QString()) = 0;
-    virtual ~KisTelemetryAbstract() {}
+    explicit CPUID(unsigned int i);
 
+    const uint32_t& EAX() const;
+    const uint32_t& EBX() const;
+    const uint32_t& ECX() const;
+    const uint32_t& EDX() const;
+};
+class CPUInfo {
 public:
-    virtual void getTimeTicket(QString id) = 0;
-    virtual void putTimeTicket(QString id) = 0;
-    virtual void saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo) = 0;
-    virtual void saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo) = 0;
+    CPUInfo();
+    bool isIntel() const;
+    bool isAmd() const;
+    unsigned int processorModel() const;
 
-protected:
-   QString m_adress = "http://localhost:8080/";
-   //QString m_adress = "http://akapustin.me:8080/";
+    unsigned int processorFamily() const;
 
+    std::string vendor() const;
+
+private:
+    unsigned int m_ecx0;
+    unsigned int m_processorModel;
+    unsigned int m_processorFamily;
+    std::string m_vendor;
 };
 
 #endif

@@ -487,6 +487,13 @@ set_package_properties(OCIO PROPERTIES
     PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 
+find_package (KUserFeedback)
+macro_bool_to_01(KUserFeedback_FOUND HAVE_KUserFeedback)
+set_package_properties(KUserFeedback PROPERTIES
+    DESCRIPTION "A tool to collect telemetry"
+    URL "https://api.kde.org/frameworks/kuserfeedback/html/index.html"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used")
 ##
 ## Look for OpenGL
 ##

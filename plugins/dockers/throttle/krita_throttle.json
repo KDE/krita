@@ -1,7 +1,7 @@
 {
-    "Id": "Touch Gui Docker",
+    "Id": "CPU Throttle Docker",
     "Type": "Service",
-    "X-KDE-Library": "kritatouchdocker",
+    "X-KDE-Library": "kritatthrottledocker",
     "X-KDE-ServiceTypes": [
         "Krita/ViewPlugin"
     ],

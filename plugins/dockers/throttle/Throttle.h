@@ -22,13 +22,13 @@
 
 class KisCanvas2;
 
-class Throttle : public QQuickWidget  {
+class ThreadManager : public QObject {
     Q_OBJECT
     Q_PROPERTY(int threadCount READ threadCount WRITE setThreadCount NOTIFY threadCountChanged)
     Q_PROPERTY(int maxThreadCount READ maxThreadCount)
 public:
-    Throttle(QWidget *parent);
-    ~Throttle() override;
+    ThreadManager(QObject *parent = 0);
+    ~ThreadManager() override;
 
     void setThreadCount(int threadCount);
     int threadCount() const;
@@ -38,6 +38,19 @@ Q_SIGNALS:
     void threadCountChanged();
 private:
     int m_threadCount {0};
+};
+
+class Throttle : public QQuickWidget  {
+    Q_OBJECT
+public:
+    Throttle(QWidget *parent);
+    ~Throttle() override;
+private Q_SLOTS:
+    void onQuit();
+    void onExit(int retCode);
+    void onWarnings(const QList<QQmlError> &warnings);
+private:
+    ThreadManager *m_threadManager {0};
 };
 
 

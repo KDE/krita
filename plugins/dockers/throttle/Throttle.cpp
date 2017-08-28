@@ -31,22 +31,15 @@
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
 
-Throttle::Throttle(QWidget *parent)
-    : QQuickWidget(parent)
+ThreadManager::ThreadManager(QObject *parent)
+    : QObject(parent)
+{}
+
+ThreadManager::~ThreadManager()
 {
-    setEnabled(true);
-    // In % of available cores...
-    setThreadCount(100);
-    setSource(QUrl("qrc:/slider.qml"));
-    engine()->rootContext()->setContextProperty("ThreadManager", this);
 }
 
-Throttle::~Throttle()
-{
-    qDebug() << "Deleting throttle";
-}
-
-void Throttle::setThreadCount(int threadCount)
+void ThreadManager::setThreadCount(int threadCount)
 {
     threadCount = qMin(maxThreadCount(), int(qreal(threadCount) * (maxThreadCount() / 100.0)));
 
@@ -57,12 +50,28 @@ void Throttle::setThreadCount(int threadCount)
     }
 }
 
-int Throttle::threadCount() const
+int ThreadManager::threadCount() const
 {
     return m_threadCount;
 }
 
-int Throttle::maxThreadCount() const
+int ThreadManager::maxThreadCount() const
 {
     return QThread::idealThreadCount();
+}
+
+
+Throttle::Throttle(QWidget *parent)
+    : QQuickWidget(parent)
+{
+    m_threadManager = new ThreadManager();
+    // In % of available cores...
+    engine()->rootContext()->setContextProperty("ThreadManager", m_threadManager);
+    m_threadManager->setThreadCount(100);
+    setSource(QUrl("qrc:/slider.qml"));
+}
+
+Throttle::~Throttle()
+{
+    setSource(QUrl());
 }

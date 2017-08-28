@@ -24,17 +24,12 @@
 
 class Throttle;
 
-class ThrottlePlugin : public KisViewPlugin
+class ThrottlePlugin : public QObject
 {
     Q_OBJECT
 public:
     ThrottlePlugin(QObject *parent, const QVariantList &);
     ~ThrottlePlugin() override;
-private Q_SLOTS:
-    void slotActivated();
-private:
-    Throttle * m_throttle {0};
-
 };
 
 #endif

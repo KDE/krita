@@ -24,44 +24,60 @@
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
 #include <kis_action.h>
-#include "kis_config.h"
-#include "kis_types.h"
-#include "KisViewManager.h"
+#include <kis_config.h>
+#include <kis_types.h>
+#include <KisViewManager.h>
+#include <KoDockFactoryBase.h>
+#include <KoDockRegistry.h>
 
 #include "Throttle.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ThrottlePluginFactory, "krita_throttle.json", registerPlugin<ThrottlePlugin>();)
 
+class ThrottleDockerDockFactory : public KoDockFactoryBase
+{
+public:
+    ThrottleDockerDockFactory()
+    {
+    }
+
+    QString id() const override
+    {
+        return QStringLiteral("ThrottleDocker");
+    }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    QDockWidget* createDockWidget() override
+    {
+        QDockWidget *dockWidget = new QDockWidget();
+        dockWidget->setObjectName(id());
+        Throttle *throttle = new Throttle(dockWidget);
+        dockWidget->setWidget(throttle);
+        dockWidget->setMinimumSize(throttle->sizeHint());
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const override
+    {
+        return DockMinimized;
+    }
+
+};
+
 
 ThrottlePlugin::ThrottlePlugin(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : QObject(parent)
 {
-    KisAction *action = createAction("show_throttle");
-    connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
-
+    KoDockRegistry::instance()->add(new ThrottleDockerDockFactory());
 }
 
 ThrottlePlugin::~ThrottlePlugin()
 {
 }
 
-const int MARGIN = 70;
-
-void ThrottlePlugin::slotActivated()
-{
-    if (!m_throttle) {
-        m_throttle = new Throttle(m_view->mainWindow());
-        m_throttle->setVisible(false);
-        m_throttle->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
-        m_throttle->setFocusPolicy(Qt::NoFocus);
-        m_throttle->setAttribute(Qt::WA_ShowWithoutActivating);
-        QRect screen = m_throttle->parentWidget()->geometry();
-        screen.setTopLeft(m_throttle->parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN + 50)));
-        m_throttle->setGeometry(QRect(screen.topLeft(), m_throttle->sizeHint()  ));
-    }
-
-    m_throttle->setVisible(!m_throttle->isVisible());
-
-}
 
 #include "ThrottlePlugin.moc"

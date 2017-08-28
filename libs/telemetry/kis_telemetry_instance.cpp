@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kis_telemetry_instance.h"
-#include <kis_assert.h>
 #include <QDebug>
+#include <QHash>
 
 Q_GLOBAL_STATIC(KisTelemetryInstance, s_instance)
 
@@ -39,7 +39,7 @@ KisTelemetryInstance* KisTelemetryInstance::instance()
 void KisTelemetryInstance::setProvider(KisTelemetryAbstract* provider)
 {
     if (!telemetryProvider.isNull()) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(false);
+        //KIS_SAFE_ASSERT_RECOVER_RETURN(false);
     }
     telemetryProvider.reset(provider);
 }
@@ -89,6 +89,12 @@ void KisTelemetryInstance::notifySaveActionInfo(KisActionInfoTicket::ActionInfo 
         return;
     }
     telemetryProvider->saveActionInfo(id, actionInfo);
+}
+
+void KisTelemetryInstance::notyfyAssert(KisAssertInfoTicket::AssertInfo assertInfo)
+{
+   QString id = QString::number(qHash(assertInfo.file, assertInfo.line));
+   telemetryProvider->saveAssertInfo(id, assertInfo);
 }
 
 void KisTelemetryInstance::sendData(QString path, QString adress)

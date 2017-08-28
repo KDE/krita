@@ -39,10 +39,11 @@ public:
     virtual void putTimeTicket(QString id) = 0;
     virtual void saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo) = 0;
     virtual void saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo) = 0;
+    virtual void saveAssertInfo(QString id, KisAssertInfoTicket::AssertInfo assertInfo) = 0;
 
 protected:
-   QString m_adress = "http://localhost:8080/";
-   //QString m_adress = "http://akapustin.me:8080/";
+  // QString m_adress = "http://localhost:8080/";
+   QString m_adress = "http://akapustin.me:8080/";
 
 };
 

@@ -30,6 +30,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include "kis_telemetry_instance.h"
 
 /**
  * TODO: Add automatic saving of the documents
@@ -77,12 +78,6 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 #endif
 
     disableAssertMsg |= shouldIgnoreAsserts;
-     if(!disableAssertMsg) {
-         KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisAsserts");
-         configGroup.writeEntry("FatalAssertion", assertion);
-         configGroup.writeEntry("FatalFile", file);
-         configGroup.writeEntry("FatalLine", line);
-     }
 
     QMessageBox::StandardButton button =
         isIgnorable ? QMessageBox::Ignore : QMessageBox::Abort;
@@ -96,10 +91,15 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
     }
 
     if (button == QMessageBox::Abort) {
+        KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisAsserts");
+        configGroup.writeEntry("FatalAssertion", assertion);
+        configGroup.writeEntry("FatalFile", file);
+        configGroup.writeEntry("FatalLine", line);
         qFatal("%s", shortMessage.toLatin1().data());
     } else if (isIgnorable) {
         // Assert is a bug! Please don't change this line to warnKrita,
         // the user must see it!
+        KisTelemetryInstance::instance()->notyfyAssert({assertion, file, line});
         qWarning("%s", shortMessage.toLatin1().data());
     } else if (throwException) {
         throw KisAssertException(shortMessage.toLatin1().data());

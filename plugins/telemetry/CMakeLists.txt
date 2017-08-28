@@ -5,6 +5,7 @@ set(kritaplugintelemetry_SOURCES
     cpu_info_source.cpp
     tools_info_source.cpp
     assert_info_source.cpp
+    fatal_assert_info_source.cpp
     image_properties_source.cpp
     actions_info_source.cpp
     general_info_source.cpp

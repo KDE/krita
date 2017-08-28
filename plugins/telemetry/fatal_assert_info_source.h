@@ -18,38 +18,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KISUSERFEEDBACK_ASSERTINFOSOURCE_H
-#define KISUSERFEEDBACK_ASSERTINFOSOURCE_H
+#ifndef KISUSERFEEDBACK_FATALASSERTINFOSOURCE_H
+#define KISUSERFEEDBACK_FATALASSERTINFOSOURCE_H
 
 #include "abstractdatasource.h"
-#include "kis_telemetry_tickets.h"
 #include "kuserfeedbackcore_export.h"
-#include <QMap>
-#include <QSharedPointer>
-#include <QVariant>
+#include <exception>
 
 namespace UserFeedback {
 
 /*! Data source reporting the assert info
  */
-class TelemetryAssertInfoSource : public KUserFeedback::AbstractDataSource {
+class TelemetryFatalAssertInfoSource : public KUserFeedback::AbstractDataSource {
 public:
-    TelemetryAssertInfoSource();
+    TelemetryFatalAssertInfoSource();
     QString description() const override;
     QVariant data() override;
-    void removeAssert(QString id);
-    void addCounter(QString id);
-    void insert(QSharedPointer<KisTelemetryTicket> ticket);
-    int count(QString id);
-
-private:
-    struct assertInfo {
-        QSharedPointer<KisTelemetryTicket> ticket;
-        int count;
-    };
-    QVariantList m_assertsDumps;
-    QMap<QString, assertInfo> m_assertsDumpsMap;
 };
 }
 
-#endif // KISUSERFEEDBACK_ASSERTINFOSOURCE_H
+class NoFatalError : public std::exception {
+public:
+    NoFatalError() = default;
+    virtual const char* what() const throw();
+};
+
+#endif // KISUSERFEEDBACK_FATALASSERTINFOSOURCE_H

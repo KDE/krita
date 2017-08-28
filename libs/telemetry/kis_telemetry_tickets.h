@@ -91,5 +91,22 @@ public:
 private:
     KisActionInfoTicket::ActionInfo m_actionInfo;
 };
+class KRITATELEMETRY_EXPORT KisAssertInfoTicket : public KisTelemetryTicket {
+public:
+    struct AssertInfo {
+        QString assertText;
+        QString file;
+        int line;
+    };
+
+public:
+    KisAssertInfoTicket(KisAssertInfoTicket::AssertInfo assertInfo, QString id);
+
+
+    KisAssertInfoTicket::AssertInfo assertInfo() const;
+
+private:
+    KisAssertInfoTicket::AssertInfo m_assertInfo;
+};
 
 #endif

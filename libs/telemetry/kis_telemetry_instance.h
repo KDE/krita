@@ -49,6 +49,7 @@ public:
     void notifyToolAction(Actions action, QString id);
     void notifySaveImageProperties(KisImagePropertiesTicket::ImageInfo imageInfo, QString id);
     void notifySaveActionInfo(KisActionInfoTicket::ActionInfo imageInfo, QString id);
+    void notyfyAssert(KisAssertInfoTicket::AssertInfo assertInfo);
     void sendData(QString path, QString adress = QString());
     QString getToolId(QString id, UseMode mode = Activate);
 public Q_SLOTS:

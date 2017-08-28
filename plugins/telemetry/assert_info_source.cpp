@@ -18,46 +18,72 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "assert_info_source.h"
+#include <QVariantMap>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <QVariantMap>
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
-UserFeedback::TelemetryAssertInfoSource::TelemetryAssertInfoSource()
+TelemetryAssertInfoSource::TelemetryAssertInfoSource()
     : AbstractDataSource(QStringLiteral("asserts"), Provider::DetailedSystemInformation)
+
 {
 }
 
 QString UserFeedback::TelemetryAssertInfoSource::description() const
 {
-    return QObject::tr("Information about asserts");
+    return QObject::tr("The information about usual asserts");
 }
 
 QVariant UserFeedback::TelemetryAssertInfoSource::data()
 {
-    QVariantMap m;
-    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisAsserts");
 
-    QString assertText = configGroup.readEntry("FatalAssertion", "Empty");
-    if(assertText == "Empty" )
-        throw NoFatalError();
-    m.insert(QStringLiteral("assertText"), assertText);
-    configGroup.writeEntry("FatalAssertion", "Empty");
+    m_assertsDumps.clear();
+    foreach (assertInfo assert, m_assertsDumpsMap) {
+        KisTelemetryTicket* ticket = assert.ticket.data();
 
-    QString assertFile = configGroup.readEntry("FatalFile", "Empty");
-    m.insert(QStringLiteral("assertFile"), assertFile);
-    configGroup.writeEntry("FatalFile", "Empty");
+        KisAssertInfoTicket* assertTicket = nullptr;
 
-    QString assertLine = configGroup.readEntry("FatalLine", "Empty");
-    m.insert(QStringLiteral("assertLine"), assertLine);
-    configGroup.writeEntry("FatalLine", "Empty");
-    return m;
+        assertTicket = dynamic_cast<KisAssertInfoTicket*>(ticket);
+        if (assertTicket) {
+            QVariantMap m;
+            m.insert(QStringLiteral("assertText"), assertTicket->assertInfo().assertText);
 
+            m.insert(QStringLiteral("assertFile"), assertTicket->assertInfo().file);
+
+            m.insert(QStringLiteral("assertLine"), assertTicket->assertInfo().line);
+            m.insert(QStringLiteral("count"), assertTicket->assertInfo().line);
+            m.insert(QStringLiteral("isFatal"), false);
+
+            m_assertsDumps.push_back(m);
+        }
+    }
+    m_assertsDumpsMap.clear();
+
+    return m_assertsDumps;
 }
 
-const char *NoFatalError::what() const  throw()
+void TelemetryAssertInfoSource::removeAssert(QString id)
 {
-    return "no fatal error \n";
+    m_assertsDumpsMap.remove(id);
+}
+
+void TelemetryAssertInfoSource::addCounter(QString id)
+{
+}
+
+void TelemetryAssertInfoSource::insert(QSharedPointer<KisTelemetryTicket> ticket)
+{
+    if (m_assertsDumpsMap.count(ticket->ticketId())) {
+        int count = m_assertsDumpsMap.value(ticket->ticketId()).count;
+        m_assertsDumpsMap.insert(ticket->ticketId(), { ticket, ++count });
+    } else {
+        m_assertsDumpsMap.insert(ticket->ticketId(), { ticket, 1 });
+    }
+}
+
+int TelemetryAssertInfoSource::count(QString id)
+{
+    return 0;
 }

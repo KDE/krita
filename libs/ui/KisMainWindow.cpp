@@ -485,7 +485,7 @@ KisMainWindow::KisMainWindow()
 
     //check fatal asserts
     try {
-        KisTelemetryInstance::instance()->sendData("asserts");
+        KisTelemetryInstance::instance()->sendData("fatalAsserts");
     }
     catch (std::exception e){
         Q_UNUSED(e);

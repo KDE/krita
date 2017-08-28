@@ -54,12 +54,14 @@ protected:
     void putTimeTicket(QString id) override;
     void saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo) override;
     void saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo) override;
+    void saveAssertInfo(QString id, KisAssertInfoTicket::AssertInfo assertInfo) override;
 
 private:
     enum TelemetryCategory {
         tools,
         install,
         asserts,
+        fatalAsserts,
         imageProperties,
         actions
     };
@@ -69,8 +71,11 @@ private:
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_toolSources;
     QScopedPointer<KUserFeedback::Provider> m_installProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_installSources;
+    //TODO Fatal asserts and usual asserts
     QScopedPointer<KUserFeedback::Provider> m_assertsProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_assertsSources;
+    QScopedPointer<KUserFeedback::Provider> m_fatalAssertsProvider;
+    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_fatalAssertsSources;
     QScopedPointer<KUserFeedback::Provider> m_imagePropertiesProvider;
     std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_imagePropertiesSources;
     QScopedPointer<KUserFeedback::Provider> m_actionsInfoProvider;

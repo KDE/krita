@@ -34,6 +34,7 @@
 #include <KoToolRegistry.h>
 #include <QTime>
 #include <assert_info_source.h>
+#include <fatal_assert_info_source.h>
 #include <image_properties_source.h>
 #include <iostream>
 #include <kconfig.h>
@@ -42,7 +43,6 @@
 #include <kis_types.h>
 #include <ksharedconfig.h>
 
-
 TelemetryProvider::TelemetryProvider()
 {
     m_installProvider.reset(new KUserFeedback::Provider);
@@ -50,25 +50,25 @@ TelemetryProvider::TelemetryProvider()
     KConfigGroup configGroup = KSharedConfig::openConfig()->group("KisTelemetryInstall");
 
     QString isFirstStart = configGroup.readEntry("FirstStart");
-   // if (isFirstStart.isEmpty()) {
-        //don't append install source
-        std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
-        m_installSources.push_back(std::move(cpu));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
-        m_installSources.push_back(std::move(qt));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
-        m_installSources.push_back(std::move(compiler));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
-        m_installSources.push_back(std::move(locale));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
-        m_installSources.push_back(std::move(opengl));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
-        m_installSources.push_back(std::move(platform));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
-        m_installSources.push_back(std::move(screen));
-        std::unique_ptr<KUserFeedback::AbstractDataSource> general(new UserFeedback::TelemetryGeneralInfoSource);
-        m_installSources.push_back(std::move(general));
-   // }
+    // if (isFirstStart.isEmpty()) {
+    //don't append install source
+    std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
+    m_installSources.push_back(std::move(cpu));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
+    m_installSources.push_back(std::move(qt));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
+    m_installSources.push_back(std::move(compiler));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
+    m_installSources.push_back(std::move(locale));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
+    m_installSources.push_back(std::move(opengl));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
+    m_installSources.push_back(std::move(platform));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
+    m_installSources.push_back(std::move(screen));
+    std::unique_ptr<KUserFeedback::AbstractDataSource> general(new UserFeedback::TelemetryGeneralInfoSource);
+    m_installSources.push_back(std::move(general));
+    // }
     for (auto& source : m_installSources) {
         m_installProvider->addDataSource(source.get());
     }
@@ -82,12 +82,12 @@ TelemetryProvider::TelemetryProvider()
         m_toolsProvider->addDataSource(source.get());
     }
 
-    m_assertsProvider.reset(new KUserFeedback::Provider);
+    m_fatalAssertsProvider.reset(new KUserFeedback::Provider);
     m_toolsProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> asserts(new UserFeedback::TelemetryAssertInfoSource);
-    m_assertsSources.push_back(std::move(asserts));
-    for (auto& source : m_assertsSources) {
-        m_assertsProvider->addDataSource(source.get());
+    std::unique_ptr<KUserFeedback::AbstractDataSource> asserts(new UserFeedback::TelemetryFatalAssertInfoSource);
+    m_fatalAssertsSources.push_back(std::move(asserts));
+    for (auto& source : m_fatalAssertsSources) {
+        m_fatalAssertsProvider->addDataSource(source.get());
     }
 
     m_imagePropertiesProvider.reset(new KUserFeedback::Provider);
@@ -127,7 +127,7 @@ void TelemetryProvider::sendData(QString path, QString adress)
             //don't append install source
             configGroup.writeEntry("FirstStart", true);
         } else {
-           // break;
+            // break;
         }
         m_installProvider->setFeedbackServer(QUrl(finalAdress + path));
         m_installProvider->submit();
@@ -136,6 +136,11 @@ void TelemetryProvider::sendData(QString path, QString adress)
     case asserts: {
         m_assertsProvider->setFeedbackServer(QUrl(finalAdress + path));
         m_assertsProvider->submit();
+        break;
+    }
+    case fatalAsserts: {
+        m_fatalAssertsProvider->setFeedbackServer(QUrl(finalAdress + path));
+        m_fatalAssertsProvider->submit();
         break;
     }
     case imageProperties: {
@@ -248,6 +253,19 @@ void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionIn
     lastAction = actionInfo.name;
 }
 
+void TelemetryProvider::saveAssertInfo(QString id, KisAssertInfoTicket::AssertInfo assertInfo)
+{
+    KUserFeedback::AbstractDataSource* m_assertSource = m_assertsSources[0].get();
+    UserFeedback::TelemetryAssertInfoSource* assertSource = nullptr;
+
+    QSharedPointer<KisTelemetryTicket> assertInfoTicket = QSharedPointer<KisAssertInfoTicket>::create(assertInfo, id);
+
+    assertSource = dynamic_cast<UserFeedback::TelemetryAssertInfoSource*>(m_assertSource);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(imageProperties);
+    assertSource->insert(assertInfoTicket);
+}
+
 TelemetryProvider::~TelemetryProvider()
 {
 }
@@ -258,8 +276,8 @@ TelemetryProvider::TelemetryCategory TelemetryProvider::pathToKind(QString path)
         return tools;
     else if (path == "install/")
         return install;
-    else if (path == "asserts/")
-        return asserts;
+    else if (path == "fatalAsserts/")
+        return fatalAsserts;
     else if (path == "imageProperties/")
         return imageProperties;
     else if (path == "actions/")

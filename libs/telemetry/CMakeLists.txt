@@ -12,8 +12,7 @@ add_library(kritalibtelemetry SHARED ${kritalibtelemetry_LIB_SRCS} )
 generate_export_header(kritalibtelemetry BASE_NAME kritalibtelemetry)
 
 
-target_link_libraries(kritalibtelemetry  KUserFeedbackCore kritaglobal) #kritaimage
-
+target_link_libraries(kritalibtelemetry  KUserFeedbackCore ) #kritaimage kritaglobal
 set_target_properties(kritalibtelemetry PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )

@@ -34,7 +34,6 @@ QString UserFeedback::TelemetryActionsInfoSource::description() const
 
 QVariant UserFeedback::TelemetryActionsInfoSource::data()
 {
-    qDebug()<<"call actions";
     m_actionsInfo.clear();
     foreach (actionInfo action, m_actionsInfoMap) {
         KisTelemetryTicket* ticket = action.ticket.data();

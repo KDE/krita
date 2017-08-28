@@ -27,7 +27,6 @@
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
-
 TelemetryCpuInfoSource::TelemetryCpuInfoSource()
     : AbstractDataSource(QStringLiteral("cpu"), Provider::DetailedSystemInformation)
 {
@@ -50,7 +49,7 @@ QVariant TelemetryCpuInfoSource::data()
     m.insert(QStringLiteral("count"), QThread::idealThreadCount());
     m.insert(QStringLiteral("model"), cpuInfo.processorModel());
     m.insert(QStringLiteral("family"), cpuInfo.processorFamily());
-    m.insert(QStringLiteral("isIntel"),cpuInfo.isIntel());
+    m.insert(QStringLiteral("isIntel"), cpuInfo.isIntel());
 
     return m;
 }

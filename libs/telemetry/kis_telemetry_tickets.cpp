@@ -19,11 +19,10 @@
 */
 
 #include "kis_telemetry_tickets.h"
+#include <QDebug>
 #include <QFileInfo>
 #include <QTime>
 #include <limits>
-#include <QDebug>
-
 
 KisTimeTicket::KisTimeTicket(QString id)
     : KisTelemetryTicket(id)
@@ -128,4 +127,15 @@ KisActionInfoTicket::KisActionInfoTicket(KisActionInfoTicket::ActionInfo actionI
 KisActionInfoTicket::ActionInfo KisActionInfoTicket::actionInfo() const
 {
     return m_actionInfo;
+}
+
+KisAssertInfoTicket::KisAssertInfoTicket(KisAssertInfoTicket::AssertInfo assertInfo, QString id)
+    : KisTelemetryTicket(id)
+    , m_assertInfo(assertInfo)
+{
+}
+
+KisAssertInfoTicket::AssertInfo KisAssertInfoTicket::assertInfo() const
+{
+    return m_assertInfo;
 }

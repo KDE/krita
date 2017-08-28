@@ -224,6 +224,8 @@ void KisToolFreehand::endStroke()
     } else {
         qDebug() << "Stroke finished finaly\n" << ppVar(m_needEndContinuedStroke);
         m_helper->endPaint();
+        if (m_updateTimer.isActive())
+            m_updateTimer.stop();
     }
 }
 

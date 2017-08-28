@@ -46,7 +46,6 @@ public:
             PAINTER_PATH,
             QPAINTER_PATH,
             QPAINTER_PATH_FILL,
-            UPDATE_RESOURCES,
             UPDATE_SYSTEM
         };
 
@@ -101,12 +100,6 @@ public:
             : node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path),
             pen(_pen), customColor(_customColor)
-        {}
-
-        Data(KisNodeSP _node, int _painterInfoId,
-             const KoColor &_customColor)
-            : node(_node), painterInfoId(_painterInfoId),
-              type(UPDATE_RESOURCES), customColor(_customColor)
         {}
 
         Data(KisNodeSP _node, int _painterInfoId)
@@ -164,6 +157,8 @@ public:
                 path = t.map(rhs.path);
                 pen = rhs.pen;
                 customColor = rhs.customColor;
+                break;
+            case Data::UPDATE_SYSTEM:
                 break;
             };
         }

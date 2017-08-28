@@ -34,6 +34,9 @@ QRect KisFixedSplatsPlane::update(KisWetMap *wetMap)
             {
                 // move to protected call to parent class
                 it = m_splats.erase(it);
+                if (m_useCaching) {
+                    m_cachedPD->clear(splat->boundingRect().toAlignedRect());
+                }
                 setDirty(splat);
             }
         } else {

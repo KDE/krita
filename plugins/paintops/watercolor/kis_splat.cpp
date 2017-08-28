@@ -40,7 +40,7 @@ KisSplat::KisSplat(QPointF offset, int width, const KoColor &color)
       m_motionBias(QPointF(0.f, 0.f)), m_state(Flowing)
 {
     m_initColor.fromKoColor(color);
-    m_fix = 8*STANDART_LIFETIME;
+    m_fix = STANDART_LIFETIME;
 
     int r = width / 2;
     int n = 128;
@@ -67,7 +67,7 @@ KisSplat::KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
       m_motionBias(velocityBias), m_state(Flowing)
 {
     m_initColor.fromKoColor(color);
-    m_fix = 8*STANDART_LIFETIME;
+    m_fix = STANDART_LIFETIME;
     int r = width / 2;
     int n = 128;
 
@@ -230,7 +230,7 @@ int KisSplat::rewet(KisWetMap *wetMap, QPointF pos, qreal radius)
             m_velocities[num] = newSpeed.at(i);
         }
         m_life = STANDART_LIFETIME;
-        m_fix = 8*STANDART_LIFETIME;
+        m_fix = STANDART_LIFETIME;
         m_state = Flowing;
         return KisSplat::Flowing;
     } else {

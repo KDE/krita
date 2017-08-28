@@ -86,7 +86,7 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
 
     painter()->setCompositeOp(oldCompositeOpId);
 
-    m_fixedPlane.rewet(m_wetMap, info.pos(), m_watercolorOption.radius, &m_flowingPlane);
+//    m_fixedPlane.rewet(m_wetMap, info.pos(), m_watercolorOption.radius, &m_flowingPlane);
 
     return updateSpacingImpl(info);
 }

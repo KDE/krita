@@ -41,6 +41,20 @@ public:
             : preset(_preset.data()), fgColor(_fgColor), bgColor(_bgColor)
         {}
 
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new UpdateResourceData(*this, levelOfDetail);
+        }
+
+    private:
+        UpdateResourceData(const UpdateResourceData &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs)
+        {
+            Q_UNUSED(levelOfDetail)
+            preset = rhs.preset;
+            fgColor = rhs.fgColor;
+            bgColor = rhs.bgColor;
+        }
+
     public:
         KisPaintOpPresetSP preset;
         KoColor fgColor;

@@ -62,7 +62,8 @@ void KisBaseSplatsPlane::paint(KisPainter *gc, QRect rect)
                    rect);
     } else {
         Q_FOREACH (KisSplat *splat, m_splats) {
-            splat->doPaint(gc);
+            if (rect.contains(splat->boundingRect().toAlignedRect()))
+                splat->doPaint(gc);
         }
     }
 }

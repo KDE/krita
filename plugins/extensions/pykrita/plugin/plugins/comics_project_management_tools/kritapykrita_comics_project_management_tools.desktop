@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=comics_project_management_tools
+X-Python-2-Compatible=false
+Name=Comics Project Management Tools
+Comment=Tools for managing comics.

@@ -53,6 +53,8 @@ function(install_pykrita_plugin name)
             FILES_MATCHING
                 PATTERN "*.py"
                 PATTERN "*.ui"
+                PATTERN "*.txt"
+                PATTERN "*.csv"
                 PATTERN "__pycache__*" EXCLUDE
            )
         # TODO Is there any way to form a long PATTERN options string
@@ -89,6 +91,7 @@ install_pykrita_plugin(palette_docker)
 install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
 install_pykrita_plugin(scriptdocker)
+install_pykrita_plugin(comics_project_management_tools)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

@@ -45,10 +45,7 @@ class Throttle : public QQuickWidget  {
 public:
     Throttle(QWidget *parent);
     ~Throttle() override;
-private Q_SLOTS:
-    void onQuit();
-    void onExit(int retCode);
-    void onWarnings(const QList<QQmlError> &warnings);
+
 private:
     ThreadManager *m_threadManager {0};
 };

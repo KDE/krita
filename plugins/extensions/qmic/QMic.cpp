@@ -45,6 +45,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
 
+#include <KisPart.h>
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kis_config.h>
@@ -234,6 +235,7 @@ void QMic::connected()
     }
 
     QByteArray ba;
+    QString messageBoxWarningText;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
         KisSelectionSP selection = m_view->image()->globalSelection();
@@ -269,7 +271,7 @@ void QMic::connected()
         QStringList layers = messageMap.values("layer");
         m_outputMode = (OutputMode)mode;
         if (m_outputMode != IN_PLACE) {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented yet."));
+            messageBoxWarningText = i18n("Sorry, this output mode is not implemented yet.");
             m_outputMode = IN_PLACE;
         }
         slotStartApplicator(layers);
@@ -314,6 +316,12 @@ void QMic::connected()
         }
     }
 
+    if (!messageBoxWarningText.isEmpty()) {
+        // Defer the message box to the event loop
+        QTimer::singleShot(0, [messageBoxWarningText]() {
+            QMessageBox::warning(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita"), messageBoxWarningText);
+        });
+    }
 }
 
 void QMic::pluginStateChanged(QProcess::ProcessState state)

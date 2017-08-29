@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>422</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -593,6 +593,16 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDocumentInfo">
+     <property name="text">
+      <string>This document...</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout">

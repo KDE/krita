@@ -158,6 +158,23 @@ class labelSelector(QComboBox):
             item.setCheckState(True)
 
 
+"""
+The comic export settings dialog will allow configuring the export.
+
+This config consists of...
+
+* Crop settings. for removing bleeds.
+* Selecting layer labels to remove.
+* Choosing which formats to export to.
+    * Choosing how to resize these
+    * Whether to crop.
+    * Which file type to use.
+
+And for ACBF, it gives the ability to edit acbf document info.
+
+"""
+
+
 class comic_export_setting_dialog(QDialog):
 
     def __init__(self):
@@ -222,7 +239,7 @@ class comic_export_setting_dialog(QDialog):
         CBZexportSettings.layout().addWidget(self.CBZgroupResize)
         self.CBZactive.clicked.connect(self.CBZgroupResize.setEnabled)
         CBZgroupMeta = QGroupBox(i18n("Metadata to add"))
-        CBZexportSettings.layout().addWidget(CBZgroupMeta)
+        # CBZexportSettings.layout().addWidget(CBZgroupMeta)
         CBZgroupMeta.setLayout(QFormLayout())
 
         mainWidget.addTab(CBZexportSettings, "CBZ")
@@ -281,10 +298,20 @@ class comic_export_setting_dialog(QDialog):
         #SVGExportSettings = QWidget()
 
         #mainWidget.addTab(SVGExportSettings, "SVG")
+
+    """
+    Add a history item to the acbf version history list.
+    """
+
     def slot_add_history_item(self):
         newItem = QStandardItem()
         newItem.setText("v" + str(self.spnACBFVersion.value()) + "-" + i18n("in this version..."))
         self.ACBFhistoryModel.appendRow(newItem)
+
+    """
+    Get the margins by treating the active selection in a document as the trim area.
+    This allows people to snap selections to a vector or something, and then get the margins.
+    """
 
     def slot_set_margin_from_selection(self):
         doc = Application.activeDocument()

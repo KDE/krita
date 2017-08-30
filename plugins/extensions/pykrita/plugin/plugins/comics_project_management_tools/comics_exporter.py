@@ -14,6 +14,11 @@ from PyQt5.QtWidgets import QLabel, QProgressDialog  # For the progress dialog.
 from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt
 from krita import *
 
+"""
+The sizesCalculator is a convenience class for interpretting the resize configuration
+from the export settings dialog. It is also used for batch resize.
+"""
+
 
 class sizesCalculator():
 
@@ -53,6 +58,14 @@ class sizesCalculator():
         return listScaleTo
 
 
+"""
+The comicsExporter is a class that batch exports to all the requested formats.
+Make it, set_config with the right data, and then call up "export".
+
+The majority of the functions are meta-data encoding functions.
+"""
+
+
 class comicsExporter():
     acbfLocation = str()
     cometLocation = str()
@@ -63,6 +76,14 @@ class comicsExporter():
     def __init__(self):
         pass
 
+    """
+    The the configuration of the exporter.
+
+    @param config: A dictionary containing all the config.
+
+    @param projectUrl: the main location of the project folder.
+    """
+
     def set_config(self, config, projectURL):
         self.configDictionary = config
         self.projectURL = projectURL
@@ -72,40 +93,63 @@ class comicsExporter():
         self.comicRackInfo = str()
         self.comic_book_info_json_dump = str()
 
+    """
+    Export everything according to config and get yourself a coffee.
+    This won't work if the config hasn't been set.
+    """
+
     def export(self):
         export_success = False
 
         path = Path(self.projectURL)
-        exportPath = path / self.configDictionary["exportLocation"]
-        if Path(exportPath / "metadata").exists() is False:
-            Path(exportPath / "metadata").mkdir()
+        if path.exists():
+            # Make a meta-data folder so we keep the export folder nice and clean.
+            exportPath = path / self.configDictionary["exportLocation"]
+            if Path(exportPath / "metadata").exists() is False:
+                Path(exportPath / "metadata").mkdir()
 
-        sizesList = {}
-        if "CBZ" in self.configDictionary.keys():
-            if self.configDictionary["CBZactive"]:
-                sizesList["CBZ"] = self.configDictionary["CBZ"]
-        if "EPUB" in self.configDictionary.keys():
-            if self.configDictionary["EPUBactive"]:
-                sizesList["EPUB"] = self.configDictionary["EPUB"]
-        if "TIFF" in self.configDictionary.keys():
-            if self.configDictionary["TIFFactive"]:
-                sizesList["TIFF"] = self.configDictionary["TIFF"]
-        export_success = self.save_out_pngs(sizesList)
-        if export_success:
-            export_success = self.export_to_acbf()
-        if export_success:
-            if "CBZ" in sizesList.keys():
-                export_success = self.export_to_cbz()
-                print("Exported to CBZ", export_success)
-            if "EPUB" in sizesList.keys():
-                export_success = self.export_to_epub()
-                print("Exported to EPUB", export_success)
+            # Get to which formats to export, and set the sizeslist.
+            sizesList = {}
+            if "CBZ" in self.configDictionary.keys():
+                if self.configDictionary["CBZactive"]:
+                    sizesList["CBZ"] = self.configDictionary["CBZ"]
+            if "EPUB" in self.configDictionary.keys():
+                if self.configDictionary["EPUBactive"]:
+                    sizesList["EPUB"] = self.configDictionary["EPUB"]
+            if "TIFF" in self.configDictionary.keys():
+                if self.configDictionary["TIFFactive"]:
+                    sizesList["TIFF"] = self.configDictionary["TIFF"]
+            # Export the pngs according to the sizeslist.
+            export_success = self.save_out_pngs(sizesList)
+
+            # Export acbf metadata.
+            if export_success:
+                export_success = self.export_to_acbf()
+
+            # Export and package CBZ and Epub.
+            if export_success:
+                if "CBZ" in sizesList.keys():
+                    export_success = self.export_to_cbz()
+                    print("CPMT: Exported to CBZ", export_success)
+                if "EPUB" in sizesList.keys():
+                    export_success = self.export_to_epub()
+                    print("CPMT: Exported to EPUB", export_success)
+        else:
+            print("CPMT: Nothing to export, url not set.")
 
         return export_success
+
+    """
+    This calls up all the functions necessary for making a acbf.
+    """
 
     def export_to_acbf(self):
         self.write_acbf_meta_data()
         return True
+
+    """
+    This calls up all the functions necessary for making a cbz.
+    """
 
     def export_to_cbz(self):
         export_success = self.write_comet_meta_data()
@@ -392,9 +436,14 @@ class comicsExporter():
         return True
 
     def save_out_pngs(self, sizesList):
+        # A small fix to ensure crop to guides is set.
         if "cropToGuides" not in self.configDictionary.keys():
             self.configDictionary["cropToGuides"] = False
+
+        # Check if we have pages at all...
         if "pages" in self.configDictionary.keys():
+
+            # Check if there's export methods, and if so make sure the appropriate dictionaries are initialised.
             if len(sizesList.keys()) < 1:
                 print("CPMT: Export failed because there's no export methods set.")
                 return False
@@ -402,18 +451,22 @@ class comicsExporter():
                 for key in sizesList.keys():
                     self.pagesLocationList[key] = []
 
+            # Get the appropriate paths.
             path = Path(self.projectURL)
             exportPath = path / self.configDictionary["exportLocation"]
             pagesList = self.configDictionary["pages"]
-
             fileName = str(exportPath)
 
+            # Create a progress dialog.
             progress = QProgressDialog("Preparing export.", str(), 0, len(pagesList))
             progress.setWindowTitle("Exporting comic...")
             progress.setCancelButton(None)
             timer = QElapsedTimer()
             timer.start()
+
             for p in range(0, len(pagesList)):
+
+                # Update the label in the progress dialog.
                 progress.setValue(p)
                 timePassed = timer.elapsed()
                 if (p > 0):
@@ -421,9 +474,12 @@ class comicsExporter():
                     passedString = str(int(timePassed / 60000)) + ":" + format(int(timePassed / 1000), "02d") + ":" + format(timePassed % 1000, "03d")
                     estimatedString = str(int(timeEstimated / 60000)) + ":" + format(int(timeEstimated / 1000), "02d") + ":" + format(int(timeEstimated % 1000), "03d")
                     progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(pagesList), passedString=passedString, estimated=estimatedString))
+
+                # Get the appropriate url and open the page.
                 url = os.path.join(self.projectURL, pagesList[p])
                 page = Application.openDocument(url)
 
+                # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
                 root = page.rootNode()
                 self.removeLayers(labelList, node=root)
@@ -431,8 +487,9 @@ class comicsExporter():
                 page.flatten()
                 while page.isIdle() is False:
                     page.waitForDone()
+
+                # Start making the format specific copy.
                 if page.isIdle():
-                    # page crop
                     for key in sizesList.keys():
                         w = sizesList[key]
                         # copy over data
@@ -441,19 +498,19 @@ class comicsExporter():
                         Application.setBatchmode(True)
                         projection.activeNode().setPixelData(page.pixelData(0, 0, page.width(), page.height()), 0, 0, page.width(), page.height())
 
-                        # crop
+                        # Crop. Cropping per guide only happens if said guides have been found.
                         if w["Crop"] is True:
                             listHGuides = page.horizontalGuides()
                             listHGuides.sort()
                             listVGuides = page.verticalGuides()
                             listVGuides.sort()
-                            if self.configDictionary["cropToGuides"] and len(listVGuides) > 0:
+                            if self.configDictionary["cropToGuides"] and len(listVGuides) > 1:
                                 cropx = listVGuides[0]
                                 cropw = listVGuides[-1] - cropx
                             else:
                                 cropx = self.configDictionary["cropLeft"]
                                 cropw = page.width() - self.configDictionary["cropRight"] - cropx
-                            if self.configDictionary["cropToGuides"] and len(listHGuides) > 0:
+                            if self.configDictionary["cropToGuides"] and len(listHGuides) > 1:
                                 cropy = listHGuides[0]
                                 croph = listHGuides[-1] - cropy
                             else:
@@ -470,20 +527,28 @@ class comicsExporter():
                         projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
                         projection.waitForDone()
 
+                        # png, gif and other webformats should probably be in 8bit srgb at maximum.
                         if key is not "TIFF":
                             if projection.colorModel() is not "RGBA" or projection.colorModel() is not "GRAYA" or projection.colorDepth() is not "U8":
                                 projection.setColorSpace("RGBA", "U8", "sRGB built-in")
                                 projection.refreshProjection()
                         else:
+                            # Tiff on the other hand can handle all the colormodels, but can only handle integer bit depths.
+                            # Tiff is intended for print output, and 16 bit integer will be sufficient.
                             if projection.colorDepth() is not "U8" or projection.colorDepth() is not "U16":
                                 projection.setColorSpace(page.colorModel(), "U16", page.colorProfile())
                                 projection.refreshProjection()
 
                         # save
+                        # Make sure the folder name for this export exists. It'll allow us to keep the
+                        # export folders nice and clean.
                         folderName = str(key + "-" + w["FileType"])
                         if Path(exportPath / folderName).exists() is False:
                             Path.mkdir(exportPath / folderName)
+                        # Get a nice and descriptive fle name.
                         fn = os.path.join(str(Path(exportPath / folderName)), "page_" + format(p, "03d") + "_" + str(listScales[0]) + "x" + str(listScales[1]) + "." + w["FileType"])
+                        # Finally save and add the page to a list of pages. This will make it easy for the packaging function to
+                        # find the pages and store them.
                         if projection.isIdle():
                             projection.activeNode().save(fn, projection.resolution(), projection.resolution())
                             projection.waitForDone()
@@ -499,6 +564,12 @@ class comicsExporter():
             return True
         print("CPMT: Export not happening because there aren't any pages.")
         return False
+
+    """
+    Function to remove layers when they have the given labels.
+
+    If not, but the node does have children, check those too.
+    """
 
     def removeLayers(self, labels, node):
         if node.colorLabel() in labels:
@@ -740,6 +811,7 @@ class comicsExporter():
         document.write(location, encoding="UTF-8", xml_declaration=True)
         self.acbfLocation = location
         return True
+
     """
     Write a CoMet xml file to url
     """
@@ -1057,28 +1129,55 @@ class comicsExporter():
         self.comic_book_info_json_dump = json.dumps(basedata)
         return True
 
+    """
+    package cbz puts all the meta-data and relevant files into an zip file ending with ".cbz"
+    """
+
     def package_cbz(self):
+
+        # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
+
+        # Get the appropriate path.
         url = os.path.join(self.projectURL, self.configDictionary["exportLocation"], title + ".cbz")
+
+        # Create a zip file.
         cbzArchive = zipfile.ZipFile(url, mode="w", compression=zipfile.ZIP_STORED)
+
+        # Add all the meta data files.
         cbzArchive.write(self.acbfLocation, os.path.basename(self.acbfLocation))
         cbzArchive.write(self.cometLocation, os.path.basename(self.cometLocation))
         cbzArchive.write(self.comicRackInfo, os.path.basename(self.comicRackInfo))
         cbzArchive.comment = self.comic_book_info_json_dump.encode("utf-8")
+
+        # Add the pages.
         if "CBZ" in self.pagesLocationList.keys():
             for page in self.pagesLocationList["CBZ"]:
                 if (os.path.exists(page)):
                     cbzArchive.write(page, os.path.basename(page))
+
+        # Close the zip file when done.
         cbzArchive.close()
-        pass
+
+    """
+    package epub packages the whole epub folder and renames the zip file to .epub.
+    """
 
     def package_epub(self):
+
+        # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
+
+        # Get the appropriate paths.
         url = os.path.join(self.projectURL, self.configDictionary["exportLocation"], title)
         epub = os.path.join(self.projectURL, self.configDictionary["exportLocation"], "EPUB-files")
+
+        # Make the archive.
         shutil.make_archive(base_name=url, format="zip", root_dir=epub)
+
+        # Rename the archive to epub.
         shutil.move(src=str(url + ".zip"), dst=str(url + ".epub"))

@@ -6,7 +6,7 @@ This is a docker that helps you organise your comics project.
 import sys
 import json
 import os
-import zipfile  # quick readin gof documents
+import zipfile  # quick reading of documents
 import shutil
 import xml.etree.ElementTree as ET
 from PyQt5.QtCore import QElapsedTimer
@@ -15,6 +15,17 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, Q
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
+
+"""
+This is a Krita docker called 'Comics Manager'.
+
+It allows people to create comics project files, load those files, add pages, remove pages, move pages, manage the metadata,
+and finally export the result.
+
+The logic behind this docker is that it is very easy to get lost in a comics project due to the massive amount of files.
+By having a docker that gives the user quick access to the pages and also allows them to do all of the meta-stuff, like
+meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focussed on actual writing and drawing.
+"""
 
 
 class comics_project_manager_docker(DockWidget):
@@ -462,7 +473,7 @@ class comics_project_manager_docker(DockWidget):
                 url = str(self.pagesModel.data(index, role=Qt.ToolTipRole))
                 if url not in pagesList:
                     pagesList.append(url)
-                listOfHeaderLabels[iLogical]=str(i+1)
+                listOfHeaderLabels[iLogical] = str(i + 1)
             self.pagesModel.setVerticalHeaderLabels(listOfHeaderLabels)
             self.comicPageList.verticalHeader().update()
             self.setupDictionary["pages"] = pagesList

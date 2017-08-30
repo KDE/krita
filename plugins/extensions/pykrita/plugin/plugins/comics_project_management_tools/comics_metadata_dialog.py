@@ -301,10 +301,10 @@ class comic_meta_data_editor(QDialog):
     def slot_reset_author_row_visual(self):
         headerLabelList = []
         for i in range(self.authorTable.verticalHeader().count()):
-                headerLabelList.append(str(i))
+            headerLabelList.append(str(i))
         for i in range(self.authorTable.verticalHeader().count()):
             logicalI = self.authorTable.verticalHeader().logicalIndex(i)
-            headerLabelList[logicalI] = str(i+1)
+            headerLabelList[logicalI] = str(i + 1)
         self.authorModel.setVerticalHeaderLabels(headerLabelList)
     """
     Set the publish date to the current date.

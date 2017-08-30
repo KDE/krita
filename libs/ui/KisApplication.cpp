@@ -88,6 +88,7 @@
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
+#include "kis_workspace_resource.h"
 
 #include <KritaVersionWrapper.h>
 namespace {
@@ -423,6 +424,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (showmainWindow) {
             m_mainWindow->initializeGeometry();
+
+            if (!args.workspace().isEmpty()) {
+                KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+                KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
+                if (workspace) {
+                    m_mainWindow->restoreWorkspace(workspace->dockerState());
+                }
+            }
 
             if (args.canvasOnly()) {
                 m_mainWindow->viewManager()->switchCanvasOnly(true);

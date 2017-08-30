@@ -30,6 +30,7 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
+
 #include "Throttle.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ThrottlePluginFactory, "krita_throttle.json", registerPlugin<ThrottlePlugin>();)
@@ -53,7 +54,7 @@ public:
 
     QDockWidget* createDockWidget() override
     {
-        QDockWidget *dockWidget = new QDockWidget();
+        QDockWidget *dockWidget = new BasicDocker();
         dockWidget->setObjectName(id());
         Throttle *throttle = new Throttle(dockWidget);
         dockWidget->setWidget(throttle);

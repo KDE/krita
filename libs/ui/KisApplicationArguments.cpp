@@ -47,7 +47,6 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     QString workspace;
     bool canvasOnly {false};
     bool noSplash {false};
-
 };
 
 
@@ -65,20 +64,15 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addHelpOption();
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("print"), i18n("Only print and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("template"), i18n("Open a new document with a template")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("workspace"), i18n("The name of the workspace to open Krita with"), QLatin1String("workspace")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("canvasonly"), i18n("Start Krita in canvas-only mode")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("nosplash"), i18n("Do not show the splash screen")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("dpi"), i18n("Override display DPI"), QLatin1String("dpiX,dpiY")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-pdf"), i18n("Only export to PDF and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export/export-pdf"), QLatin1String("filename")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("workspace"), i18n("The name of the workspace to open Krita with", QLatin1String("workspace"))));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("canvasonly"), i18n("Start Krita in canvas-only mode")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("nosplash"), i18n("Do not show the splash screen")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
     parser.process(app);
-
-    const QDir currentDir = QDir::current();
-    Q_FOREACH (const QString &filename, parser.positionalArguments()) {
-        d->filenames << currentDir.absoluteFilePath(filename);
-    }
 
     QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {
@@ -96,14 +90,21 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
             }
         }
     }
+
+    d->exportFileName = parser.value("export-filename");
+    d->workspace = parser.value("workspace");
+
     d->doTemplate = parser.isSet("template");
     d->print = parser.isSet("print");
     d->exportAs = parser.isSet("export");
     d->exportAsPdf = parser.isSet("export-pdf");
-    d->exportFileName = parser.value("export-filename");
-    d->workspace = parser.value("workspace");
     d->canvasOnly = parser.isSet("canvasonly");
     d->noSplash = parser.isSet("nosplash");
+
+    const QDir currentDir = QDir::current();
+    Q_FOREACH (const QString &filename, parser.positionalArguments()) {
+        d->filenames << currentDir.absoluteFilePath(filename);
+    }
 }
 
 KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &rhs)

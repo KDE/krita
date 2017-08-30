@@ -69,6 +69,7 @@ Throttle::Throttle(QWidget *parent)
     engine()->rootContext()->setContextProperty("ThreadManager", m_threadManager);
     m_threadManager->setThreadCount(100);
     setSource(QUrl("qrc:/slider.qml"));
+    setResizeMode(SizeRootObjectToView);
 }
 
 Throttle::~Throttle()

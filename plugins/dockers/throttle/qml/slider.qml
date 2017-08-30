@@ -1,7 +1,6 @@
 import QtQuick 2.2
 Rectangle {
     color: "#545454"
-    width: 300; height: 150
 
     Text {
         id: numberOfCores

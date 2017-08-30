@@ -58,7 +58,6 @@ public:
         dockWidget->setObjectName(id());
         Throttle *throttle = new Throttle(dockWidget);
         dockWidget->setWidget(throttle);
-        dockWidget->setMinimumSize(throttle->sizeHint());
         return dockWidget;
     }
 

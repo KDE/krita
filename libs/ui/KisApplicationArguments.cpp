@@ -33,24 +33,29 @@
 struct Q_DECL_HIDDEN KisApplicationArguments::Private
 {
     Private()
-        : dpiX(0)
-        , dpiY(0)
-        , doTemplate(false)
-        , print(false)
-        , exportAs(false)
-        , exportAsPdf(false)
     {
     }
 
     QStringList filenames;
-    int dpiX;
-    int dpiY;
-    bool doTemplate;
-    bool print;
-    bool exportAs;
-    bool exportAsPdf;
+    int dpiX {72};
+    int dpiY {72};
+    bool doTemplate {false};
+    bool print {false};
+    bool exportAs {false};
+    bool exportAsPdf {false};
     QString exportFileName;
+    QString workspace;
+    bool canvasOnly {false};
+    bool noSplash {false};
+
 };
+
+
+KisApplicationArguments::KisApplicationArguments()
+    : d(new Private)
+{
+}
+
 
 KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     : d(new Private)
@@ -64,6 +69,9 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-pdf"), i18n("Only export to PDF and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export/export-pdf"), QLatin1String("filename")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("workspace"), i18n("The name of the workspace to open Krita with", QLatin1String("workspace"))));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("canvasonly"), i18n("Start Krita in canvas-only mode")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("nosplash"), i18n("Do not show the splash screen")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
     parser.process(app);
 
@@ -93,6 +101,9 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     d->exportAs = parser.isSet("export");
     d->exportAsPdf = parser.isSet("export-pdf");
     d->exportFileName = parser.value("export-filename");
+    d->workspace = parser.value("workspace");
+    d->canvasOnly = parser.isSet("canvasonly");
+    d->noSplash = parser.isSet("nosplash");
 }
 
 KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &rhs)
@@ -106,6 +117,9 @@ KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &
     d->exportAs = rhs.exportAs();
     d->exportAsPdf = rhs.exportAsPdf();
     d->exportFileName = rhs.exportFileName();
+    d->canvasOnly = rhs.canvasOnly();
+    d->workspace = rhs.workspace();
+    d->noSplash = rhs.noSplash();
 }
 
 KisApplicationArguments::~KisApplicationArguments()
@@ -122,6 +136,9 @@ void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)
     d->exportAs = rhs.exportAs();
     d->exportAsPdf = rhs.exportAsPdf();
     d->exportFileName = rhs.exportFileName();
+    d->canvasOnly = rhs.canvasOnly();
+    d->workspace = rhs.workspace();
+    d->noSplash = rhs.noSplash();
 }
 
 QByteArray KisApplicationArguments::serialize()
@@ -142,6 +159,9 @@ QByteArray KisApplicationArguments::serialize()
     ds << d->exportAs;
     ds << d->exportAsPdf;
     ds << d->exportFileName;
+    ds << d->workspace;
+    ds << d->canvasOnly;
+    ds << d->noSplash;
 
     buf.close();
 
@@ -170,6 +190,9 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
     ds >> args.d->exportAs;
     ds >> args.d->exportAsPdf;
     ds >> args.d->exportFileName;
+    ds >> args.d->workspace;
+    ds >> args.d->canvasOnly;
+    ds >> args.d->noSplash;
 
     buf.close();
 
@@ -216,7 +239,17 @@ QString KisApplicationArguments::exportFileName() const
     return d->exportFileName;
 }
 
-KisApplicationArguments::KisApplicationArguments()
-    : d(new Private)
+QString KisApplicationArguments::workspace() const
 {
+    return d->workspace;
+}
+
+bool KisApplicationArguments::canvasOnly() const
+{
+    return d->canvasOnly;
+}
+
+bool KisApplicationArguments::noSplash() const
+{
+    return d->noSplash;
 }

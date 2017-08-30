@@ -48,6 +48,9 @@ public:
     bool exportAs() const;
     bool exportAsPdf() const;
     QString exportFileName() const;
+    QString workspace() const;
+    bool canvasOnly() const;
+    bool noSplash() const;
 
 private:
 

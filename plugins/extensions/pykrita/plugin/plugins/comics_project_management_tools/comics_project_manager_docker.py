@@ -453,6 +453,8 @@ class comics_project_manager_docker(DockWidget):
             pagesList = []
             listOfHeaderLabels = []
             for i in range(self.pagesModel.rowCount()):
+                listOfHeaderLabels.append(str(i))
+            for i in range(self.pagesModel.rowCount()):
                 iLogical = self.comicPageList.verticalHeader().logicalIndex(i)
                 index = self.pagesModel.index(iLogical, 0)
                 if index.isValid() is False:
@@ -460,8 +462,9 @@ class comics_project_manager_docker(DockWidget):
                 url = str(self.pagesModel.data(index, role=Qt.ToolTipRole))
                 if url not in pagesList:
                     pagesList.append(url)
-                listOfHeaderLabels.append(str(index.row() + 1))
+                listOfHeaderLabels[iLogical]=str(i+1)
             self.pagesModel.setVerticalHeaderLabels(listOfHeaderLabels)
+            self.comicPageList.verticalHeader().update()
             self.setupDictionary["pages"] = pagesList
 
             # Save to our json file.

@@ -60,6 +60,7 @@ class language_combo_box(QComboBox):
                 self.languageList.append(row[0])
                 self.codesList.append(row[1])
                 self.addItem(row[0])
+            file.close()
 
     def codeForCurrentEntry(self):
         if self.currentText() in self.languageList:
@@ -91,6 +92,7 @@ class license_combo_box(QComboBox):
                 license = QStandardItem(row[0])
                 license.setToolTip(row[1])
                 model.appendRow(license)
+            file.close()
         self.setModel(model)
 
 

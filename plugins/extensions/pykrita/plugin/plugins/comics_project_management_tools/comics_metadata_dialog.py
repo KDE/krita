@@ -4,9 +4,9 @@ Part of the comics project management tools (CPMT).
 This is a metadata editor that helps out setting the proper metadata
 """
 import sys
-import os #For finding the script location.
+import os  # For finding the script location.
 import csv
-from pathlib import Path #For reading all the files in a directory.
+from pathlib import Path  # For reading all the files in a directory.
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -15,20 +15,22 @@ mult entry completer cobbled together from the two examples on stackoverflow:377
 
 This allows us to let people type in comma seperated lists and get completion for those.
 """
+
+
 class multi_entry_completer(QCompleter):
     punctuation = ","
-    
+
     def __init__(self, parent=None):
         super(QCompleter, self).__init__(parent)
-        
+
     def pathFromIndex(self, index):
         path = QCompleter.pathFromIndex(self, index)
         string = str(self.widget().text())
         split = string.split(self.punctuation)
-        if len(split)>1:
+        if len(split) > 1:
             path = "%s, %s" % (",".join(split[:-1]), path)
         return path
-        
+
     def splitPath(self, path):
         split = str(path.split(self.punctuation)[-1])
         if split.startswith(" "):
@@ -36,12 +38,17 @@ class multi_entry_completer(QCompleter):
         if split.endswith(" "):
             split = split[:-1]
         return [split]
+
+
 """
 Language combobox that can take locale codes and get the right language for it and visa-versa.
 """
+
+
 class language_combo_box(QComboBox):
     languageList = []
     codesList = []
+
     def __init__(self, parent=None):
         super(QComboBox, self).__init__(parent)
         mainP = os.path.dirname(__file__)
@@ -57,16 +64,20 @@ class language_combo_box(QComboBox):
     def codeForCurrentEntry(self):
         if self.currentText() in self.languageList:
             return self.codesList[self.languageList.index(self.currentText())]
-    
+
     def setEntryToCode(self, code):
-        if (code=="C" and "en" in self.codesList):
+        if (code == "C" and "en" in self.codesList):
             self.setCurrentIndex(self.codesList.index("en"))
         if code in self.codesList:
             self.setCurrentIndex(self.codesList.index(code))
+
+
 """
 A combobox that fills up with licenses from a CSV, and also sets tooltips from that
 csv.
 """
+
+
 class license_combo_box(QComboBox):
     def __init__(self, parent=None):
         super(QComboBox, self).__init__(parent)
@@ -81,16 +92,21 @@ class license_combo_box(QComboBox):
                 license.setToolTip(row[1])
                 model.appendRow(license)
         self.setModel(model)
+
+
 """
 Allows us to set completers on the author roles.
 """
+
+
 class author_delegate(QStyledItemDelegate):
-    completerStrings=[]
-    completerColumn=0
+    completerStrings = []
+    completerColumn = 0
+
     def __init__(self, parent=None):
         super(QStyledItemDelegate, self).__init__(parent)
 
-    def setCompleterData(self,completerStrings, completerColumn):
+    def setCompleterData(self, completerStrings, completerColumn):
         self.completerStrings = completerStrings
         self.completerColumn = completerColumn
 
@@ -100,15 +116,18 @@ class author_delegate(QStyledItemDelegate):
             editor.setCompleter(QCompleter(self.completerStrings))
             editor.completer().setCaseSensitivity(False)
         return editor
-                
+
+
 """
 A comic project metadata editing dialog that can take our config diactionary and set all the relevant information.
 
 To help our user, the dialog loads up lists of keywords to populate several autocompletion methods.
 """
+
+
 class comic_meta_data_editor(QDialog):
     configGroup = "ComicsProjectManagementTools"
-    
+
     def __init__(self):
         super().__init__()
         # Get the keys for the autocompletion.
@@ -122,43 +141,43 @@ class comic_meta_data_editor(QDialog):
         self.get_auto_completion_keys(mainP)
         extraKeyP = Path(QDir.homePath()) / Application.readSetting(self.configGroup, "extraKeysLocation", str())
         self.get_auto_completion_keys(extraKeyP)
-        
+
         # Setup the dialog.
         self.setLayout(QVBoxLayout())
         mainWidget = QTabWidget()
         self.layout().addWidget(mainWidget)
         self.setWindowTitle(i18n("Comic Metadata"))
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok|QDialogButtonBox.Cancel)
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.layout().addWidget(buttons)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
-        
+
         # Title, concept, summary, genre, characters, format, rating, language, series, other keywords
         metadataPage = QWidget()
         mformLayout = QFormLayout()
         metadataPage.setLayout(mformLayout)
-        
+
         self.lnTitle = QLineEdit()
         self.lnTitle.setToolTip(i18n("The proper title of the comic."))
-        
+
         self.teSummary = QPlainTextEdit()
         self.teSummary.setToolTip(i18n("What will you tell others to entice them to read your comic?"))
-        
+
         self.lnGenre = QLineEdit()
         genreCompletion = multi_entry_completer()
         genreCompletion.setModel(QStringListModel(self.genreKeysList))
         self.lnGenre.setCompleter(genreCompletion)
         genreCompletion.setCaseSensitivity(False)
         self.lnGenre.setToolTip(i18n("The genre of the work. Prefilled values are from the ACBF, but you can fill in your own. Seperate genres with commas. Try to limit the amount to about two or three"))
-        
+
         self.lnCharacters = QLineEdit()
         characterCompletion = multi_entry_completer()
         characterCompletion.setModel(QStringListModel(self.characterKeysList))
         characterCompletion.setCaseSensitivity(False)
-        characterCompletion.setFilterMode(Qt.MatchContains) #So that if there is a list of names with last names, people can type in a last name.
+        characterCompletion.setFilterMode(Qt.MatchContains)  # So that if there is a list of names with last names, people can type in a last name.
         self.lnCharacters.setCompleter(characterCompletion)
         self.lnCharacters.setToolTip(i18n("The names of the characters that this comic revolves around. Comma seperate."))
-        
+
         self.lnFormat = QLineEdit()
         formatCompletion = multi_entry_completer()
         formatCompletion.setModel(QStringListModel(self.formatKeysList))
@@ -174,7 +193,7 @@ class comic_meta_data_editor(QDialog):
         self.cmbRatingSystem.currentIndexChanged.connect(self.slot_refill_ratings)
         ratingLayout.addWidget(self.cmbRatingSystem)
         ratingLayout.addWidget(self.cmbRating)
-        
+
         self.lnSeriesName = QLineEdit()
         self.lnSeriesName.setToolTip(i18n("If this is part of a series, enter the name of the series and the number."))
         self.spnSeriesNumber = QSpinBox()
@@ -185,7 +204,7 @@ class comic_meta_data_editor(QDialog):
         seriesLayout.addWidget(self.lnSeriesName)
         seriesLayout.addWidget(self.spnSeriesVol)
         seriesLayout.addWidget(self.spnSeriesNumber)
-        
+
         otherCompletion = multi_entry_completer()
         otherCompletion.setModel(QStringListModel(self.otherKeysList))
         otherCompletion.setCaseSensitivity(False)
@@ -193,15 +212,15 @@ class comic_meta_data_editor(QDialog):
         self.lnOtherKeywords = QLineEdit()
         self.lnOtherKeywords.setCompleter(otherCompletion)
         self.lnOtherKeywords.setToolTip(i18n("Other keywords that don't fit in the previously mentioned sets. As always, comma seperate"))
-        
+
         self.cmbLanguage = language_combo_box()
         self.cmbReadingMode = QComboBox()
         self.cmbReadingMode.addItem(i18n("Left to Right"))
         self.cmbReadingMode.addItem(i18n("Right to Left"))
-        
+
         self.cmbCoverPage = QComboBox()
         self.cmbCoverPage.setToolTip(i18n("Which page is the cover page? This will be empty if there's no pages."))
-        
+
         mformLayout.addRow(i18n("Title:"), self.lnTitle)
         mformLayout.addRow(i18n("Cover Page:"), self.cmbCoverPage)
         mformLayout.addRow(i18n("Summary:"), self.teSummary)
@@ -213,9 +232,9 @@ class comic_meta_data_editor(QDialog):
         mformLayout.addRow(i18n("Rating:"), ratingLayout)
         mformLayout.addRow(i18n("Series:"), seriesLayout)
         mformLayout.addRow(i18n("Other:"), self.lnOtherKeywords)
-        
+
         mainWidget.addTab(metadataPage, i18n("Work"))
-        
+
         # The page for the authors.
         authorPage = QWidget()
         authorPage.setLayout(QVBoxLayout())
@@ -245,7 +264,7 @@ class comic_meta_data_editor(QDialog):
         authorPage.layout().addWidget(self.authorTable)
         authorPage.layout().addWidget(author_button_layout)
         mainWidget.addTab(authorPage, i18n("Authors"))
-        
+
         # The page with publisher information.
         publisherPage = QWidget()
         publisherLayout = QFormLayout()
@@ -263,7 +282,7 @@ class comic_meta_data_editor(QDialog):
         self.publishCity = QLineEdit()
         self.publishCity.setToolTip(i18n("Traditional publishers are always mentioned in source with the city they are located."))
         self.isbn = QLineEdit()
-        self.license = license_combo_box() #Maybe ought to make this a QLineEdit...
+        self.license = license_combo_box()  # Maybe ought to make this a QLineEdit...
         self.license.setEditable(True)
         self.license.completer().setCompletionMode(QCompleter.PopupCompletion)
         publisherLayout.addRow(i18n("Name:"), self.publisherName)
@@ -271,27 +290,30 @@ class comic_meta_data_editor(QDialog):
         publisherLayout.addRow(i18n("Date:"), publishDateLayout)
         publisherLayout.addRow(i18n("ISBN:"), self.isbn)
         publisherLayout.addRow(i18n("License:"), self.license)
-        
+
         mainWidget.addTab(publisherPage, i18n("Publisher"))
     """
     Ensure that the drag and drop of authors doesn't mess up the labels.
     """
+
     def slot_reset_author_row_visual(self):
         headerLabelList = []
         for i in self.authorTable.verticalHeader().count():
             logicalI = self.authorTable.verticalHeader().logicalIndex(i)
-            headerLabelList.append(str(logicalI+1))
+            headerLabelList.append(str(logicalI + 1))
         self.authorModel.setVerticalHeaderLabels(headerLabelList)
     """
     Set the publish date to the current date.
-    """    
+    """
+
     def slot_set_date(self):
         self.publishDate.setDate(QDate().currentDate())
-        
+
     """
     Append keys to autocompletion lists from the directory mainP.
     """
-    def get_auto_completion_keys(self, mainP = Path()):
+
+    def get_auto_completion_keys(self, mainP=Path()):
         genre = Path(mainP / "key_genre")
         characters = Path(mainP / "key_characters")
         rating = Path(mainP / "key_rating")
@@ -347,11 +369,12 @@ class comic_meta_data_editor(QDialog):
                 for l in file:
                     self.authorRoleList.append(str(l).strip("\n"))
                 file.close()
-    
+
     """
     Refill the ratings box.
     This is called whenever the rating system changes.
     """
+
     def slot_refill_ratings(self):
         if self.cmbRatingSystem.currentText() in self.ratingKeysList.keys():
             self.cmbRating.clear()
@@ -362,32 +385,35 @@ class comic_meta_data_editor(QDialog):
                 item.setToolTip(i[1])
                 model.appendRow(item)
             self.cmbRating.setModel(model)
-    
+
     """
     Add an author with default values initialised.
     """
+
     def slot_add_author(self):
         listItems = []
-        listItems.append(QStandardItem(i18n("Anon"))) #Nick name
-        listItems.append(QStandardItem(i18n("John"))) # First name
-        listItems.append(QStandardItem()) #Middle name
-        listItems.append(QStandardItem(i18n("Doe")))#Last name
-        listItems.append(QStandardItem())#role
-        listItems.append(QStandardItem())#email
-        listItems.append(QStandardItem())#homepage
+        listItems.append(QStandardItem(i18n("Anon")))  # Nick name
+        listItems.append(QStandardItem(i18n("John")))  # First name
+        listItems.append(QStandardItem())  # Middle name
+        listItems.append(QStandardItem(i18n("Doe")))  # Last name
+        listItems.append(QStandardItem())  # role
+        listItems.append(QStandardItem())  # email
+        listItems.append(QStandardItem())  # homepage
         self.authorModel.appendRow(listItems)
 
     """
     Remove the selected author from the author list.
     """
+
     def slot_remove_author(self):
         self.authorModel.removeRow(self.authorTable.currentIndex().row())
 
     """
     Load the UI values from the config dictionary given.
     """
+
     def setConfig(self, config):
-        
+
         if "title" in config.keys():
             self.lnTitle.setText(config["title"])
         self.teSummary.clear()
@@ -423,7 +449,7 @@ class comic_meta_data_editor(QDialog):
         if "seriesNumber" in config.keys():
             self.spnSeriesNumber.setValue(config["seriesNumber"])
         if "language" in config.keys():
-            code  = config["language"]
+            code = config["language"]
             if "_" in code:
                 code = code.split("_")[0]
             self.cmbLanguage.setEntryToCode(code)
@@ -445,12 +471,12 @@ class comic_meta_data_editor(QDialog):
         if "license" in config.keys():
             self.license.setCurrentText(config["license"])
         else:
-            self.license.setCurrentText("") #I would like to keep it ambiguous whether the artist has thought about the license or not.
+            self.license.setCurrentText("")  # I would like to keep it ambiguous whether the artist has thought about the license or not.
         if "authorList" in config.keys():
             authorList = config["authorList"]
             for i in range(len(authorList)):
                 author = authorList[i]
-                if len(author.keys())>0:
+                if len(author.keys()) > 0:
                     listItems = []
                     authorNickName = QStandardItem()
                     if "nickname" in author.keys():
@@ -490,53 +516,52 @@ class comic_meta_data_editor(QDialog):
                     self.authorModel.appendRow(listItems)
         else:
             self.slot_add_author()
-                    
-                        
-                
+
     """
     Store the GUI values into the config dictionary given.
     
     @return the config diactionary filled with new values.
     """
+
     def getConfig(self, config):
 
         text = self.lnTitle.text()
-        if len(text)>0 and text.isspace() is False:
+        if len(text) > 0 and text.isspace() is False:
             config["title"] = text
         elif "title" in config.keys():
             config.pop("title")
         config["cover"] = self.cmbCoverPage.currentText()
         listkeys = self.lnGenre.text()
-        if len(listkeys)>0 and listkeys.isspace() is False:
+        if len(listkeys) > 0 and listkeys.isspace() is False:
             config["genre"] = self.lnGenre.text().split(", ")
         elif "genre" in config.keys():
             config.pop("genre")
         listkeys = self.lnCharacters.text()
-        if len(listkeys)>0 and listkeys.isspace() is False:
+        if len(listkeys) > 0 and listkeys.isspace() is False:
             config["characters"] = self.lnCharacters.text().split(", ")
         elif "characters" in config.keys():
             config.pop("characters")
         listkeys = self.lnFormat.text()
-        if len(listkeys)>0 and listkeys.isspace() is False:
+        if len(listkeys) > 0 and listkeys.isspace() is False:
             config["format"] = self.lnFormat.text().split(", ")
         elif "format" in config.keys():
             config.pop("format")
         config["ratingSystem"] = self.cmbRatingSystem.currentText()
         config["rating"] = self.cmbRating.currentText()
         listkeys = self.lnOtherKeywords.text()
-        if len(listkeys)>0 and listkeys.isspace() is False:
+        if len(listkeys) > 0 and listkeys.isspace() is False:
             config["otherKeywords"] = self.lnOtherKeywords.text().split(", ")
         elif "characters" in config.keys():
             config.pop("otherKeywords")
         text = self.teSummary.toPlainText()
-        if len(text)>0 and text.isspace() is False:
+        if len(text) > 0 and text.isspace() is False:
             config["summary"] = text
         elif "summary" in config.keys():
             config.pop("summary")
-        if len(self.lnSeriesName.text())>0:
+        if len(self.lnSeriesName.text()) > 0:
             config["seriesName"] = self.lnSeriesName.text()
             config["seriesNumber"] = self.spnSeriesNumber.value()
-            if self.spnSeriesVol.value() >0:
+            if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
         config["language"] = str(self.cmbLanguage.codeForCurrentEntry())
         if self.cmbReadingMode is Qt.LeftToRight:
@@ -552,7 +577,7 @@ class comic_meta_data_editor(QDialog):
                 entry = self.authorModel.data(self.authorModel.index(logicalIndex, i))
                 if entry is None:
                     entry = " "
-                if entry.isspace() is False and len(entry)>0:
+                if entry.isspace() is False and len(entry) > 0:
                     author[listEntries[i]] = entry
                 elif listEntries[i] in author.keys():
                     author.pop(listEntries[i])

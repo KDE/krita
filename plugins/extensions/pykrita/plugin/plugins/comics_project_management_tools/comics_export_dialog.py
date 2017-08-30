@@ -14,10 +14,12 @@ A generic widget to make selecting size easier.
 It works by initialising with a config name(like "scale"), and then optionally setting the config with a dictionary.
 Then, afterwards, you get the config with a dictionary, with the config name being the entry the values are under.
 """
+
+
 class comic_export_resize_widget(QGroupBox):
     configName = ""
-    
-    def __init__(self, configName, batch=False, fileType = True):
+
+    def __init__(self, configName, batch=False, fileType=True):
         super().__init__()
         self.configName = configName
         self.setTitle("Adjust Workingfile")
@@ -59,14 +61,14 @@ class comic_export_resize_widget(QGroupBox):
         formLayout.addRow(i18n("Width:"), self.spn_width)
         formLayout.addRow(i18n("Height:"), self.spn_height)
         self.slot_set_enabled()
-        
+
     def slot_set_enabled(self):
         method = self.resizeMethod.currentIndex()
         self.spn_DPI.setEnabled(False)
         self.spn_PER.setEnabled(False)
         self.spn_width.setEnabled(False)
         self.spn_height.setEnabled(False)
-        
+
         if method is 0:
             self.spn_PER.setEnabled(True)
         if method is 1:
@@ -75,7 +77,7 @@ class comic_export_resize_widget(QGroupBox):
             self.spn_width.setEnabled(True)
         if method is 3:
             self.spn_height.setEnabled(True)
-        
+
     def set_config(self, config):
         if self.configName in config.keys():
             mConfig = config[self.configName]
@@ -109,23 +111,27 @@ class comic_export_resize_widget(QGroupBox):
         mConfig["Height"] = self.spn_height.value()
         config[self.configName] = mConfig
         return config
+
+
 """
 Quick combobox for selecting the color label.
 """
+
+
 class labelSelector(QComboBox):
     def __init__(self):
         super(labelSelector, self).__init__()
         lisOfColors = []
         lisOfColors.append(Qt.transparent)
-        lisOfColors.append(QColor(91,173,220))
-        lisOfColors.append(QColor(151,202,63))
-        lisOfColors.append(QColor(247,229,61))
-        lisOfColors.append(QColor(255,170,63))
-        lisOfColors.append(QColor(177,102,63))
-        lisOfColors.append(QColor(238,50,51))
-        lisOfColors.append(QColor(191,106,209))
-        lisOfColors.append(QColor(118,119,114))
-        
+        lisOfColors.append(QColor(91, 173, 220))
+        lisOfColors.append(QColor(151, 202, 63))
+        lisOfColors.append(QColor(247, 229, 61))
+        lisOfColors.append(QColor(255, 170, 63))
+        lisOfColors.append(QColor(177, 102, 63))
+        lisOfColors.append(QColor(238, 50, 51))
+        lisOfColors.append(QColor(191, 106, 209))
+        lisOfColors.append(QColor(118, 119, 114))
+
         self.itemModel = QStandardItemModel()
         for color in lisOfColors:
             item = QStandardItem()
@@ -135,7 +141,7 @@ class labelSelector(QComboBox):
             item.setData(color, Qt.BackgroundColorRole)
             self.itemModel.appendRow(item)
         self.setModel(self.itemModel)
-            
+
     def getLabels(self):
         listOfIndexes = []
         for i in range(self.itemModel.rowCount()):
@@ -144,29 +150,30 @@ class labelSelector(QComboBox):
             if item.checkState():
                 listOfIndexes.append(i)
         return listOfIndexes
-    
+
     def setLabels(self, listOfIndexes):
         for i in listOfIndexes:
             index = self.itemModel.index(i, 0)
             item = self.itemModel.itemFromIndex(index)
             item.setCheckState(True)
 
+
 class comic_export_setting_dialog(QDialog):
-    
+
     def __init__(self):
         super().__init__()
         self.setLayout(QVBoxLayout())
         self.setWindowTitle(i18n("Export settings"))
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok|QDialogButtonBox.Cancel)
-        
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         mainWidget = QTabWidget()
         self.layout().addWidget(mainWidget)
         self.layout().addWidget(buttons)
-        
-        #Set basic crop settings
-        #Set which layers to remove before export.
+
+        # Set basic crop settings
+        # Set which layers to remove before export.
         mainExportSettings = QWidget()
         mainExportSettings.setLayout(QVBoxLayout())
         groupExportCrop = QGroupBox(i18n("Crop settings"))
@@ -178,7 +185,7 @@ class comic_export_setting_dialog(QDialog):
         formCrop.addRow("", self.chk_toOutmostGuides)
         btn_fromSelection = QPushButton(i18n("Set margins from active selection"))
         btn_fromSelection.clicked.connect(self.slot_set_margin_from_selection)
-        #This doesn't work.
+        # This doesn't work.
         formCrop.addRow("", btn_fromSelection)
         self.spn_marginLeft = QSpinBox()
         self.spn_marginLeft.setMaximum(99999)
@@ -201,12 +208,12 @@ class comic_export_setting_dialog(QDialog):
         groupExportLayers.setLayout(formLayers)
         self.cmbLabelsRemove = labelSelector()
         formLayers.addRow(i18n("Label for removal:"), self.cmbLabelsRemove)
-        
+
         mainExportSettings.layout().addWidget(groupExportCrop)
         mainExportSettings.layout().addWidget(groupExportLayers)
         mainWidget.addTab(mainExportSettings, i18n("General"))
-        
-        #CBZ, crop, resize, which metadata to add.
+
+        # CBZ, crop, resize, which metadata to add.
         CBZexportSettings = QWidget()
         CBZexportSettings.setLayout(QVBoxLayout())
         self.CBZactive = QCheckBox(i18n("Export to CBZ"))
@@ -217,10 +224,10 @@ class comic_export_setting_dialog(QDialog):
         CBZgroupMeta = QGroupBox(i18n("Metadata to add"))
         CBZexportSettings.layout().addWidget(CBZgroupMeta)
         CBZgroupMeta.setLayout(QFormLayout())
-        
+
         mainWidget.addTab(CBZexportSettings, "CBZ")
-        
-        #ACBF, crop, resize, creator name, version history, panel layer, text layers.
+
+        # ACBF, crop, resize, creator name, version history, panel layer, text layers.
         ACBFExportSettings = QWidget()
         ACBFform = QFormLayout()
         ACBFExportSettings.setLayout(QVBoxLayout())
@@ -239,18 +246,18 @@ class comic_export_setting_dialog(QDialog):
         acbfHistoryList.setModel(self.ACBFhistoryModel)
         btn_add_history = QPushButton(i18n("Add history entry"))
         btn_add_history.clicked.connect(self.slot_add_history_item)
-        
+
         ACBFform.addRow(i18n("Author-name:"), self.lnACBFAuthor)
         ACBFform.addRow(i18n("Source:"), self.lnACBFSource)
         ACBFform.addRow(i18n("ACBF UID:"), self.lnACBFID)
         ACBFform.addRow(i18n("Version:"), self.spnACBFVersion)
         ACBFform.addRow(i18n("Version History:"), acbfHistoryList)
         ACBFform.addRow("", btn_add_history)
-        
+
         ACBFExportSettings.layout().addWidget(ACBFdocInfo)
         mainWidget.addTab(ACBFExportSettings, "ACBF")
-        
-        #Epub export, crop, resize, other questions.
+
+        # Epub export, crop, resize, other questions.
         EPUBexportSettings = QWidget()
         EPUBexportSettings.setLayout(QVBoxLayout())
         self.EPUBactive = QCheckBox(i18n("Export to EPUB"))
@@ -259,8 +266,8 @@ class comic_export_setting_dialog(QDialog):
         EPUBexportSettings.layout().addWidget(self.EPUBgroupResize)
         self.EPUBactive.clicked.connect(self.EPUBgroupResize.setEnabled)
         mainWidget.addTab(EPUBexportSettings, "EPUB")
-        
-        #For Print. Crop, no resize.
+
+        # For Print. Crop, no resize.
         TIFFExportSettings = QWidget()
         TIFFExportSettings.setLayout(QVBoxLayout())
         self.TIFFactive = QCheckBox(i18n("Export to TIFF"))
@@ -269,28 +276,29 @@ class comic_export_setting_dialog(QDialog):
         TIFFExportSettings.layout().addWidget(self.TIFFgroupResize)
         self.TIFFactive.clicked.connect(self.TIFFgroupResize.setEnabled)
         mainWidget.addTab(TIFFExportSettings, "TIFF")
-        
-        #SVG, crop, resize, embed vs link.
+
+        # SVG, crop, resize, embed vs link.
         #SVGExportSettings = QWidget()
-        
+
         #mainWidget.addTab(SVGExportSettings, "SVG")
     def slot_add_history_item(self):
         newItem = QStandardItem()
-        newItem.setText("v"+self.spnACBFVersion.value()+"-"+i18n("in this version..."))
+        newItem.setText("v" + self.spnACBFVersion.value() + "-" + i18n("in this version..."))
         self.ACBFhistoryModel.appendRow(newItem)
-        
+
     def slot_set_margin_from_selection(self):
         doc = Application.activeDocument()
         if doc is not None:
             if doc.selection() is not None:
                 self.spn_marginLeft.setValue(doc.selection().x())
                 self.spn_marginTop.setValue(doc.selection().y())
-                self.spn_marginRight.setValue(doc.width() - (doc.selection().x()+doc.selection().width()))
-                self.spn_marginBottom.setValue(doc.height() - (doc.selection().y()+doc.selection().height()))
-        
+                self.spn_marginRight.setValue(doc.width() - (doc.selection().x() + doc.selection().width()))
+                self.spn_marginBottom.setValue(doc.height() - (doc.selection().y() + doc.selection().height()))
+
     """
     Load the UI values from the config dictionary given.
     """
+
     def setConfig(self, config):
         if "cropToGuides" in config.keys():
             self.chk_toOutmostGuides.setChecked(config["cropToGuides"])
@@ -329,14 +337,15 @@ class comic_export_setting_dialog(QDialog):
                 item.setText(h)
                 self.ACBFhistoryModel.appendRow(item)
         self.CBZgroupResize.setEnabled(self.CBZactive.isChecked())
-    
+
     """
     Store the GUI values into the config dictionary given.
     
     @return the config diactionary filled with new values.
     """
+
     def getConfig(self, config):
-        
+
         config["cropToGuides"] = self.chk_toOutmostGuides.isChecked()
         config["cropLeft"] = self.spn_marginLeft.value()
         config["cropTop"] = self.spn_marginTop.value()

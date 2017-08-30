@@ -10,44 +10,47 @@ import json
 import zipfile
 import xml.etree.ElementTree as ET
 import shutil
-from PyQt5.QtGui import * #For the progress dialog.
+from PyQt5.QtGui import *  # For the progress dialog.
 from krita import *
 
+
 class sizesCalculator():
-    
+
     def __init__(self):
         pass
+
     def get_scale_from_resize_config(self, config, listSizes):
         listScaleTo = listSizes
         oldWidth = listSizes[0]
-        oldHeight= listSizes[1]
+        oldHeight = listSizes[1]
         oldXDPI = listSizes[2]
         oldYDPI = listSizes[3]
         if "Method" in config.keys():
             method = config["Method"]
             if method is 0:
-                #percentage
-                percentage = config["Percentage"]/100
-                listScaleTo[0] = round(oldWidth*percentage)
-                listScaleTo[1] = round(oldHeight*percentage)
+                # percentage
+                percentage = config["Percentage"] / 100
+                listScaleTo[0] = round(oldWidth * percentage)
+                listScaleTo[1] = round(oldHeight * percentage)
             if method is 1:
-                #dpi
+                # dpi
                 DPI = config["DPI"]
-                listScaleTo[0] = round((oldWidth/oldXDPI)*DPI)
-                listScaleTo[1] = round((oldHeight/oldYDPI)*DPI)
+                listScaleTo[0] = round((oldWidth / oldXDPI) * DPI)
+                listScaleTo[1] = round((oldHeight / oldYDPI) * DPI)
                 listScaleTo[2] = DPI
                 listScaleTo[3] = DPI
             if method is 2:
-                #maximum width
+                # maximum width
                 width = config["Width"]
                 listScaleTo[0] = width
-                listScaleTo[1] = round((oldHeight/oldWidth)*width)
+                listScaleTo[1] = round((oldHeight / oldWidth) * width)
             if method is 3:
-                #maximum height
+                # maximum height
                 height = config["Height"]
                 listScaleTo[1] = height
-                listScaleTo[0] = round((oldWidth/oldHeight)*height)
+                listScaleTo[0] = round((oldWidth / oldHeight) * height)
         return listScaleTo
+
 
 class comicsExporter():
     acbfLocation = str()
@@ -55,10 +58,10 @@ class comicsExporter():
     comicRackInfo = str()
     comic_book_info_json_dump = str()
     pagesLocationList = {}
-    
+
     def __init__(self):
         pass
-    
+
     def set_config(self, config, projectURL):
         self.configDictionary = config
         self.projectURL = projectURL
@@ -67,16 +70,15 @@ class comicsExporter():
         self.cometLocation = str()
         self.comicRackInfo = str()
         self.comic_book_info_json_dump = str()
-        
+
     def export(self):
         export_success = False
-        
+
         path = Path(self.projectURL)
         exportPath = path / self.configDictionary["exportLocation"]
         if Path(exportPath / "metadata").exists() is False:
-            Path(exportPath/"metadata").mkdir()
-        
-        
+            Path(exportPath / "metadata").mkdir()
+
         sizesList = {}
         if "CBZ" in self.configDictionary.keys():
             if self.configDictionary["CBZactive"]:
@@ -97,23 +99,24 @@ class comicsExporter():
             if "EPUB" in sizesList.keys():
                 export_success = self.export_to_epub()
                 print("Exported to EPUB", export_success)
-        
+
         return export_success
-    
+
     def export_to_acbf(self):
         self.write_acbf_meta_data()
         return True
-    
+
     def export_to_cbz(self):
         export_success = self.write_comet_meta_data()
         export_success = self.write_comic_rack_info()
         export_success = self.write_comic_book_info_json()
         self.package_cbz()
         return export_success
-    
+
     """
     Create an epub folder, finally, package to a epubzip.
     """
+
     def export_to_epub(self):
         path = Path(os.path.join(self.projectURL, self.configDictionary["exportLocation"]))
         exportPath = path / "EPUB-files"
@@ -129,11 +132,11 @@ class comicsExporter():
             imagePath.mkdir()
             stylesPath.mkdir()
             textPath.mkdir()
-        
-        mimetype = open(str(Path(exportPath/"mimetype")), mode="w")
+
+        mimetype = open(str(Path(exportPath / "mimetype")), mode="w")
         mimetype.write("application/epub+zip")
         mimetype.close()
-        
+
         container = ET.ElementTree()
         cRoot = ET.Element("container")
         cRoot.set("version", "1.0")
@@ -145,9 +148,9 @@ class comicsExporter():
         rootfile.set("media-type", "application/oebps-package+xml")
         rootFiles.append(rootfile)
         cRoot.append(rootFiles)
-        container.write(str(Path(metaInf/"container.xml")), encoding="utf-8", xml_declaration=True)
-        
-        #copyimages to images
+        container.write(str(Path(metaInf / "container.xml")), encoding="utf-8", xml_declaration=True)
+
+        # copyimages to images
         pagesList = []
         if "EPUB" in self.pagesLocationList.keys():
             coverNumber = self.configDictionary["pages"].index(self.configDictionary["cover"])
@@ -160,50 +163,50 @@ class comicsExporter():
         else:
             print("CPMT: Couldn't find the location for the epub files.")
             return False
-        
-        #for each image, make an xml file
+
+        # for each image, make an xml file
         htmlFiles = []
         for i in range(len(pagesList)):
-            pageName = "Page"+str(i)+".xhtml"
+            pageName = "Page" + str(i) + ".xhtml"
             doc = ET.ElementTree()
             html = ET.Element("html")
             doc._setroot(html)
             html.set("xmlns", "http://www.w3.org/1999/xhtml")
             html.set("xmlns:epub", "http://www.idpf.org/2007/ops")
-            
+
             head = ET.Element("head")
             html.append(head)
-            
+
             body = ET.Element("body")
-            
+
             img = ET.Element("img")
             img.set("src", os.path.relpath(pagesList[i], str(textPath)))
             body.append(img)
-            
-            if pagesList[i]!=coverpageurl:
+
+            if pagesList[i] != coverpageurl:
                 pagenumber = ET.Element("p")
-                pagenumber.text = "Page "+str(i)
+                pagenumber.text = "Page " + str(i)
                 body.append(pagenumber)
             html.append(body)
-            
-            filename = str(Path(textPath/pageName))
+
+            filename = str(Path(textPath / pageName))
             doc.write(filename, encoding="utf-8", xml_declaration=True)
-            if pagesList[i]==coverpageurl:
+            if pagesList[i] == coverpageurl:
                 coverpagehtml = os.path.relpath(filename, str(oebps))
             htmlFiles.append(filename)
-        
-        #opf file
+
+        # opf file
         opfFile = ET.ElementTree()
         opfRoot = ET.Element("package")
         opfRoot.set("version", "3.0")
-        opfRoot.set("unique-identifier","BookId")
+        opfRoot.set("unique-identifier", "BookId")
         opfRoot.set("xmlns", "http://www.idpf.org/2007/opf")
         opfFile._setroot(opfRoot)
-        
-        #metadata
+
+        # metadata
         opfMeta = ET.Element("metadata")
         opfMeta.set("xmlns:dc", "http://purl.org/dc/elements/1.1/")
-        
+
         if "language" in self.configDictionary.keys():
             bookLang = ET.Element("dc:language")
             bookLang.text = self.configDictionary["language"]
@@ -230,18 +233,18 @@ class comicsExporter():
                 if "initials" in authorDict.keys():
                     authorName.append(authorDict["initials"])
                 if "nickname" in authorDict.keys():
-                    authorName.append("("+authorDict["nickname"]+")")
+                    authorName.append("(" + authorDict["nickname"] + ")")
                 author.text = ", ".join(authorName)
                 opfMeta.append(author)
                 if "role" in authorDict.keys():
-                    author.set("id", "cre"+str(authorE))
+                    author.set("id", "cre" + str(authorE))
                     role = ET.Element("meta")
-                    role.set("refines", "cre"+str(authorE))
+                    role.set("refines", "cre" + str(authorE))
                     role.set("scheme", "marc:relators")
                     role.set("property", "role")
-                    role.text= str(authorDict["role"])
+                    role.text = str(authorDict["role"])
                     opfMeta.append(role)
-        
+
         if "publishingDate" in self.configDictionary.keys():
             date = ET.Element("dc:date")
             date.text = self.configDictionary["publishingDate"]
@@ -252,7 +255,7 @@ class comicsExporter():
         else:
             description.text = "There was no summary upon generation of this file."
         opfMeta.append(description)
-        
+
         type = ET.Element("dc:type")
         type.text = "Comic"
         opfMeta.append(type)
@@ -262,13 +265,13 @@ class comicsExporter():
             opfMeta.append(publisher)
         if "isbn-number" in self.configDictionary.keys():
             publishISBN = ET.Element("dc:identifier")
-            publishISBN.text = str("urn:isbn:")+self.configDictionary["isbn-number"]
+            publishISBN.text = str("urn:isbn:") + self.configDictionary["isbn-number"]
             opfMeta.append(publishISBN)
         if "license" in self.configDictionary.keys():
             rights = ET.Element("dc:rights")
             rights.text = self.configDictionary["license"]
             opfMeta.append(rights)
-        
+
         if "genre" in self.configDictionary.keys():
             for g in self.configDictionary["genre"]:
                 subject = ET.Element("dc:subject")
@@ -289,9 +292,9 @@ class comicsExporter():
                 word = ET.Element("dc:subject")
                 word.text = key
                 opfMeta.append(word)
-        
+
         opfRoot.append(opfMeta)
-        
+
         opfManifest = ET.Element("manifest")
         toc = ET.Element("item")
         toc.set("id", "ncx")
@@ -312,9 +315,9 @@ class comicsExporter():
             if os.path.basename(p) == os.path.basename(coverpageurl):
                 item.set("properties", "cover-image")
             opfManifest.append(item)
-        
+
         opfRoot.append(opfManifest)
-        
+
         opfSpine = ET.Element("spine")
         opfSpine.set("toc", "ncx")
         for p in htmlFiles:
@@ -322,24 +325,23 @@ class comicsExporter():
             item.set("idref", os.path.basename(p))
             opfSpine.append(item)
         opfRoot.append(opfSpine)
-        
-        
+
         opfGuide = ET.Element("guide")
-        if coverpagehtml is not None and coverpagehtml.isspace() is False and len(coverpagehtml)>0:
+        if coverpagehtml is not None and coverpagehtml.isspace() is False and len(coverpagehtml) > 0:
             item = ET.Element("reference")
             item.set("type", "cover")
             item.set("title", "Cover")
             item.set("href", coverpagehtml)
         opfRoot.append(opfGuide)
-        
-        opfFile.write(str(Path(oebps/"content.opf")), encoding="utf-8", xml_declaration=True)
-        #toc
+
+        opfFile.write(str(Path(oebps / "content.opf")), encoding="utf-8", xml_declaration=True)
+        # toc
         tocDoc = ET.ElementTree()
         ncx = ET.Element("ncx")
         ncx.set("version", "2005-1")
         ncx.set("xmlns", "http://www.daisy.org/z3986/2005/ncx/")
         tocDoc._setroot(ncx)
-        
+
         tocHead = ET.Element("head")
         metaID = ET.Element("meta")
         metaID.set("content", "ID_UNKNOWN")
@@ -358,7 +360,7 @@ class comicsExporter():
         metaMax.set("name", "dtb:maxPageNumber")
         tocHead.append(metaDepth)
         ncx.append(tocHead)
-        
+
         docTitle = ET.Element("docTitle")
         text = ET.Element("text")
         if "title" in self.configDictionary.keys():
@@ -367,7 +369,7 @@ class comicsExporter():
             text.text = "Comic with no Name"
         docTitle.append(text)
         ncx.append(docTitle)
-        
+
         navmap = ET.Element("navMap")
         navPoint = ET.Element("navPoint")
         navPoint.set("id", "navPoint-1")
@@ -382,30 +384,29 @@ class comicsExporter():
         navPoint.append(navContent)
         navmap.append(navPoint)
         ncx.append(navmap)
-        
-        tocDoc.write(str(Path(oebps/"toc.ncx")), encoding="utf-8", xml_declaration=True)
-        
+
+        tocDoc.write(str(Path(oebps / "toc.ncx")), encoding="utf-8", xml_declaration=True)
+
         self.package_epub()
         return True
-    
+
     def save_out_pngs(self, sizesList):
         if "cropToGuides" not in self.configDictionary.keys():
             self.configDictionary["cropToGuides"] = False
         if "pages" in self.configDictionary.keys():
-            if len(sizesList.keys())<1:
+            if len(sizesList.keys()) < 1:
                 print("CPMT: Export failed because there's no export methods set.")
                 return False
             else:
                 for key in sizesList.keys():
                     self.pagesLocationList[key] = []
-            
+
             path = Path(self.projectURL)
             exportPath = path / self.configDictionary["exportLocation"]
             pagesList = self.configDictionary["pages"]
-        
+
             fileName = str(exportPath)
-            
-            
+
             progress = QProgressDialog("Preparing export.", str(), 0, len(pagesList))
             progress.setWindowTitle("Exporting comic...")
             progress.setCancelButton(None)
@@ -414,118 +415,119 @@ class comicsExporter():
             for p in range(0, len(pagesList)):
                 progress.setValue(p)
                 timePassed = timer.elapsed()
-                if (p>0):
-                    timeEstimated = (len(pagesList)-p)*(timePassed/p)
-                    passedString =    str(int(   timePassed/60000))+":"+format(int(   timePassed/1000),"02d")+":"+format(timePassed%1000,"03d")
-                    estimatedString = str(int(timeEstimated/60000))+":"+format(int(timeEstimated/1000),"02d")+":"+format(int(timeEstimated%1000),"03d")
-                    progress.setLabelText( str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(pagesList), passedString=passedString, estimated=estimatedString))
+                if (p > 0):
+                    timeEstimated = (len(pagesList) - p) * (timePassed / p)
+                    passedString = str(int(timePassed / 60000)) + ":" + format(int(timePassed / 1000), "02d") + ":" + format(timePassed % 1000, "03d")
+                    estimatedString = str(int(timeEstimated / 60000)) + ":" + format(int(timeEstimated / 1000), "02d") + ":" + format(int(timeEstimated % 1000), "03d")
+                    progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(pagesList), passedString=passedString, estimated=estimatedString))
                 url = os.path.join(self.projectURL, pagesList[p])
                 page = Application.openDocument(url)
-                
+
                 labelList = self.configDictionary["labelsToRemove"]
                 root = page.rootNode()
                 self.removeLayers(labelList, node=root)
-                page.refreshProjection();
+                page.refreshProjection()
                 page.flatten()
                 while page.isIdle() is False:
                     page.waitForDone()
                 if page.isIdle():
-                #page crop
+                    # page crop
                     for key in sizesList.keys():
                         w = sizesList[key]
-                        #copy over data
+                        # copy over data
                         projection = Application.createDocument(page.width(), page.height(), page.name(), page.colorModel(), page.colorDepth(), page.colorProfile())
                         batchsave = Application.batchmode()
                         Application.setBatchmode(True)
-                        projection.activeNode().setPixelData(page.pixelData( 0, 0, page.width(), page.height()) ,0, 0, page.width(), page.height())
-                        
-                        #crop
+                        projection.activeNode().setPixelData(page.pixelData(0, 0, page.width(), page.height()), 0, 0, page.width(), page.height())
+
+                        # crop
                         if w["Crop"] is True:
                             listHGuides = page.horizontalGuides()
                             listHGuides.sort()
                             listVGuides = page.verticalGuides()
                             listVGuides.sort()
-                            if self.configDictionary["cropToGuides"] and len(listVGuides)>0:
+                            if self.configDictionary["cropToGuides"] and len(listVGuides) > 0:
                                 cropx = listVGuides[0]
                                 cropw = listVGuides[-1] - cropx
                             else:
                                 cropx = self.configDictionary["cropLeft"]
-                                cropw = page.width()-self.configDictionary["cropRight"]-cropx
-                            if self.configDictionary["cropToGuides"] and len(listHGuides)>0:
+                                cropw = page.width() - self.configDictionary["cropRight"] - cropx
+                            if self.configDictionary["cropToGuides"] and len(listHGuides) > 0:
                                 cropy = listHGuides[0]
                                 croph = listHGuides[-1] - cropy
                             else:
                                 cropy = self.configDictionary["cropTop"]
-                                croph = page.height()-self.configDictionary["cropBottom"]-cropy
+                                croph = page.height() - self.configDictionary["cropBottom"] - cropy
                             projection.crop(cropx, cropy, cropw, croph)
                             projection.waitForDone()
-                        
-                        #resize appropriately
+
+                        # resize appropriately
                         res = page.resolution()
                         listScales = [projection.width(), projection.height(), res, res]
                         sizesCalc = sizesCalculator()
                         listScales = sizesCalc.get_scale_from_resize_config(config=w, listSizes=listScales)
                         projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
                         projection.waitForDone()
-                        
+
                         if key is not "TIFF":
                             if projection.colorModel() is not "RGBA" or projection.colorModel() is not "GRAYA" or projection.colorDepth() is not "U8":
                                 projection.setColorSpace("RGBA", "U8", "sRGB built-in")
                                 projection.refreshProjection()
                         else:
-                           if projection.colorDepth() is not "U8" or projection.colorDepth() is not "U16":
+                            if projection.colorDepth() is not "U8" or projection.colorDepth() is not "U16":
                                 projection.setColorSpace(page.colorModel(), "U16", page.colorProfile())
                                 projection.refreshProjection()
-                        
-                        #save
-                        folderName = str(key+"-"+w["FileType"])
+
+                        # save
+                        folderName = str(key + "-" + w["FileType"])
                         if Path(exportPath / folderName).exists() is False:
-                            Path.mkdir(exportPath/folderName)
-                        fn = os.path.join(str(Path(exportPath/folderName)), "page_"+format(p,"03d")+"_"+str(listScales[0])+"x"+str(listScales[1])+"."+w["FileType"])
+                            Path.mkdir(exportPath / folderName)
+                        fn = os.path.join(str(Path(exportPath / folderName)), "page_" + format(p, "03d") + "_" + str(listScales[0]) + "x" + str(listScales[1]) + "." + w["FileType"])
                         if projection.isIdle():
                             projection.activeNode().save(fn, projection.resolution(), projection.resolution())
                             projection.waitForDone()
                         self.pagesLocationList[key].append(fn)
-                        
-                        #close
+
+                        # close
                         Application.setBatchmode(batchsave)
                         projection.close()
                     page.close()
             progress.setValue(len(pagesList))
-            #TODO: Check what or whether memory leaks are still caused and otherwise remove the entry below.
+            # TODO: Check what or whether memory leaks are still caused and otherwise remove the entry below.
             print("CPMT: Export has finished. There are memory leaks, but the source is not obvious due wild times on git master. Last attempt to fix was august 2017")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
         return False
-    
+
     def removeLayers(self, labels, node):
         if node.colorLabel() in labels:
             node.remove()
         else:
-            if len(node.childNodes())>0:
+            if len(node.childNodes()) > 0:
                 for child in node.childNodes():
                     self.removeLayers(labels, node=child)
-    
+
     """
     Write the Advanced Comic Book Data xml file.
     
     http://acbf.wikia.com/wiki/ACBF_Specifications
     
     """
+
     def write_acbf_meta_data(self):
         acbfGenreList = ["science_fiction", "fantasy", "adventure", "horror", "mystery", "crime", "military", "real_life", "superhero", "humor", "western", "manga", "politics", "caricature", "sports", "history", "biography", "education", "computer", "religion", "romance", "children", "non-fiction", "adult", "alternative", "other"]
         acbfAuthorRolesList = ["Writer", "Adapter", "Artist", "Penciller", "Inker", "Colorist", "Letterer", "Cover Artist", "Photographer", "Editor", "Assistant Editor", "Translator", "Other"]
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
-        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata",title+".acbf"))
+        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata", title + ".acbf"))
         document = ET.ElementTree()
         root = ET.Element("ACBF")
         root.set("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
         document._setroot(root)
-        
+
         meta = ET.Element("meta-data")
-        
+
         bookInfo = ET.Element("book-info")
         if "authorList" in self.configDictionary.keys():
             for authorE in range(len(self.configDictionary["authorList"])):
@@ -572,7 +574,7 @@ class comicsExporter():
                 genreModified.replace(" ", "_")
                 if genreModified in acbfGenreList:
                     bookGenre = ET.Element("genre")
-                    bookGenre.text = genreModified 
+                    bookGenre.text = genreModified
                     bookInfo.append(bookGenre)
                 else:
                     extraGenres.append(genre)
@@ -588,7 +590,7 @@ class comicsExporter():
             p.text = "There was no summary upon generation of this file."
             annotation.append(p)
         bookInfo.append(annotation)
-        
+
         if "characters" in self.configDictionary.keys():
             character = ET.Element("characters")
             for name in self.configDictionary["characters"]:
@@ -596,7 +598,7 @@ class comicsExporter():
                 char.text = name
                 character.append(char)
             bookInfo.append(character)
-        
+
         keywords = ET.Element("keywords")
         stringKeywordsList = []
         for key in extraGenres:
@@ -609,7 +611,7 @@ class comicsExporter():
                 stringKeywordsList.append(str(key))
         keywords.text = ", ".join(stringKeywordsList)
         bookInfo.append(keywords)
-        
+
         coverpageurl = ""
         coverpage = ET.Element("coverpage")
         if "pages" in self.configDictionary.keys():
@@ -623,7 +625,7 @@ class comicsExporter():
                     image.set("href", os.path.basename(coverpageurl))
                 coverpage.append(image)
         bookInfo.append(coverpage)
-        
+
         if "language" in self.configDictionary.keys():
             language = ET.Element("languages")
             textlayer = ET.Element("text-layer")
@@ -632,8 +634,8 @@ class comicsExporter():
             language.append(textlayer)
             bookInfo.append(language)
         #database = ET.Element("databaseref")
-        #bookInfo.append(database)
-        
+        # bookInfo.append(database)
+
         if "seriesName" in self.configDictionary.keys():
             sequence = ET.Element("sequence")
             sequence.set("title", self.configDictionary["seriesName"])
@@ -645,7 +647,7 @@ class comicsExporter():
                 sequence.text = 0
             bookInfo.append(sequence)
         contentrating = ET.Element("content-rating")
-        
+
         if "rating" in self.configDictionary.keys():
             contentrating.text = self.configDictionary["rating"]
         else:
@@ -654,7 +656,7 @@ class comicsExporter():
             contentrating.set("type", self.configDictionary["ratingSystem"])
         bookInfo.append(contentrating)
         meta.append(bookInfo)
-        
+
         publisherInfo = ET.Element("publish-info")
         if "publisherName" in self.configDictionary.keys():
             publisherName = ET.Element("publisher")
@@ -675,13 +677,13 @@ class comicsExporter():
             publisherInfo.append(publishISBN)
         if "license" in self.configDictionary.keys():
             license = self.configDictionary["license"]
-            if license.isspace() is False and len(license)>0:
+            if license.isspace() is False and len(license) > 0:
                 publishLicense = ET.Element("license")
                 publishLicense.text = self.configDictionary["license"]
                 publisherInfo.append(publishLicense)
-        
+
         meta.append(publisherInfo)
-        
+
         documentInfo = ET.Element("document-info")
         acbfAuthor = ET.Element("author")
         if "acbfAuthor" in self.configDictionary.keys():
@@ -695,22 +697,22 @@ class comicsExporter():
         acbfDate.set("value", now.toString(Qt.ISODate))
         acbfDate.text = now.toString(Qt.SystemLocaleLongDate)
         documentInfo.append(acbfDate)
-        
+
         acbfSource = ET.Element("source")
         if "acbfSource" in self.configDictionary.keys():
             acbfSource.text = self.configDictionary["acbfSource"]
         documentInfo.append(acbfSource)
-        
+
         acbfID = ET.Element("id")
         if "acbfID" in self.configDictionary.keys():
             acbfID.text = self.configDictionary["acbfID"]
         documentInfo.append(acbfID)
-        
+
         acbfVersion = ET.Element("version")
         if "acbfVersion" in self.configDictionary.keys():
             acbfVersion.text = str(self.configDictionary["acbfVersion"])
         documentInfo.append(acbfVersion)
-        
+
         acbfHistory = ET.Element("history")
         if "acbfHistory" in self.configDictionary.keys():
             for h in self.configDictionary["acbfHistory"]:
@@ -721,9 +723,9 @@ class comicsExporter():
         meta.append(documentInfo)
 
         root.append(meta)
-        
+
         body = ET.Element("body")
-        
+
         for page in self.pagesLocationList["CBZ"]:
             if page is not coverpageurl:
                 pg = ET.Element("page")
@@ -731,27 +733,28 @@ class comicsExporter():
                 image.set("href", os.path.basename(page))
                 pg.append(image)
                 body.append(pg)
-        
+
         root.append(body)
-        
+
         document.write(location, encoding="UTF-8", xml_declaration=True)
         self.acbfLocation = location
         return True
     """
     Write a CoMet xml file to url
     """
+
     def write_comet_meta_data(self):
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
-        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"],"metadata",title+" CoMet.xml"))
+        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata", title + " CoMet.xml"))
         document = ET.ElementTree()
         root = ET.Element("comet")
         root.set("xmlns:comet", "http://www.denvog.com/comet/")
         root.set("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
         root.set("xsi:schemaLocation", "http://www.denvog.com http://www.denvog.com/comet/comet.xsd")
         document._setroot(root)
-        
+
         title = ET.Element("title")
         if "title" in self.configDictionary.keys():
             title.text = self.configDictionary["title"]
@@ -776,34 +779,34 @@ class comicsExporter():
                 volume = ET.Element("volume")
                 volume.text = str(self.configDictionary["seriesVolume"])
                 root.append(volume)
-        
+
         if "publisherName" in self.configDictionary.keys():
             pubisher = ET.Element("publisher")
             pubisher.text = self.configDictionary["publisherName"]
             root.append(pubisher)
-        
+
         if "publishingDate" in self.configDictionary.keys():
             date = ET.Element("date")
             date.text = self.configDictionary["publishingDate"]
             root.append(date)
-        
+
         if "genre" in self.configDictionary.keys():
             for genreE in self.configDictionary["genre"]:
                 genre = ET.Element("genre")
                 genre.text = genreE
                 root.append(genre)
-        
+
         if "characters" in self.configDictionary.keys():
             for char in self.configDictionary["characters"]:
                 character = ET.Element("character")
                 character.text = char
                 root.append(character)
-        
+
         if "format" in self.configDictionary.keys():
             format = ET.Element("format")
             format.text = ",".join(self.configDictionary["format"])
             root.append(format)
-        
+
         if "language" in self.configDictionary.keys():
             language = ET.Element("language")
             language.text = self.configDictionary["language"]
@@ -822,7 +825,7 @@ class comicsExporter():
             identifier = ET.Element("identifier")
             identifier.text = self.configDictionary["isbn-number"]
             root.append(identifier)
-        
+
         if "authorList" in self.configDictionary.keys():
             for authorE in range(len(self.configDictionary["authorList"])):
                 author = ET.Element("creator")
@@ -841,7 +844,7 @@ class comicsExporter():
                 if "first-name" in authorDict.keys():
                     stringName.append(authorDict["first-name"])
                 if "last-name" in authorDict.keys():
-                    stringName.append("("+authorDict["nickname"]+")")
+                    stringName.append("(" + authorDict["nickname"] + ")")
                 author.text = ",".join(stringName)
                 root.append(author)
 
@@ -860,9 +863,7 @@ class comicsExporter():
             if self.configDictionary["readingDirection"] is "rightToLeft":
                 readingDirection.text = "rtl"
         root.append(readingDirection)
-        
-        
-        
+
         document.write(location, encoding="UTF-8", xml_declaration=True)
         self.cometLocation = location
         return True
@@ -870,13 +871,14 @@ class comicsExporter():
     The comicrack information is sorta... incomplete, so no idea if the following is right...
     I can't check in any case: It is a windows application.
     """
+
     def write_comic_rack_info(self):
-        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"],"metadata","ComicInfo.xml"))
+        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata", "ComicInfo.xml"))
         document = ET.ElementTree()
         root = ET.Element("ComicInfo")
         root.set("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
         root.set("xmlns:xsd", "http://www.w3.org/2001/XMLSchema")
-        
+
         title = ET.Element("Title")
         if "title" in self.configDictionary.keys():
             title.text = self.configDictionary["title"]
@@ -902,7 +904,7 @@ class comicsExporter():
             publishMonth.text = str(date.month())
             root.append(publishYear)
             root.append(publishMonth)
-            
+
         if "format" in self.configDictionary.keys():
             for form in self.configDictionary["format"]:
                 formattag = ET.Element("Format")
@@ -931,14 +933,14 @@ class comicsExporter():
                 if "first-name" in authorDict.keys():
                     stringName.append(authorDict["first-name"])
                 if "last-name" in authorDict.keys():
-                    stringName.append("("+authorDict["nickname"]+")")
+                    stringName.append("(" + authorDict["nickname"] + ")")
                 author.text = ",".join(stringName)
                 root.append(author)
         if "publisherName" in self.configDictionary.keys():
             publisher = ET.Element("Publisher")
             publisher.text = self.configDictionary["publisherName"]
             root.append(publisher)
-        
+
         if "genre" in self.configDictionary.keys():
             for genreE in self.configDictionary["genre"]:
                 genre = ET.Element("Genre")
@@ -953,7 +955,7 @@ class comicsExporter():
             if self.configDictionary["readingDirection"] is "rightToLeft":
                 readingDirection.text = "Yes"
         root.append(readingDirection)
-        
+
         if "characters" in self.configDictionary.keys():
             for char in self.configDictionary["characters"]:
                 character = ET.Element("Character")
@@ -967,7 +969,7 @@ class comicsExporter():
         covernumber = 0
         if "pages" in self.configDictionary.keys() and "cover" in self.configDictionary.keys():
             covernumber = self.configDictionary["pages"].index(self.configDictionary["cover"])
-        for i in range( len(self.pagesLocationList["CBZ"])):
+        for i in range(len(self.pagesLocationList["CBZ"])):
             page = ET.Element("Page")
             page.set("Image", str(i))
             if i is covernumber:
@@ -983,18 +985,19 @@ class comicsExporter():
     Doesn't seem to be supported much. :/
     https://code.google.com/archive/p/comicbookinfo/wikis/Example.wiki
     """
+
     def write_comic_book_info_json(self):
         self.comic_book_info_json_dump = str()
-        
+
         basedata = {}
         metadata = {}
         authorList = []
         taglist = []
-        
+
         if "authorList" in self.configDictionary.keys():
             for authorE in range(len(self.configDictionary["authorList"])):
                 author = {}
-                
+
                 authorDict = self.configDictionary["authorList"][authorE]
                 stringName = []
                 if "last-name" in authorDict.keys():
@@ -1002,7 +1005,7 @@ class comicsExporter():
                 if "first-name" in authorDict.keys():
                     stringName.append(authorDict["first-name"])
                 if "nickname" in authorDict.keys():
-                    stringName.append("("+authorDict["nickname"]+")")
+                    stringName.append("(" + authorDict["nickname"] + ")")
                 author["person"] = ",".join(stringName)
                 if "role" in authorDict.keys():
                     author["role"] = str(authorDict["role"]).title()
@@ -1037,27 +1040,27 @@ class comicsExporter():
             metadata["genre"] = self.configDictionary["genre"]
         if "language" in self.configDictionary.keys():
             metadata["language"] = QLocale.languageToString(QLocale(self.configDictionary["language"]).language())
-        
+
         metadata["credits"] = authorList
-        
+
         metadata["tags"] = taglist
         if "summary" in self.configDictionary.keys():
             metadata["comments"] = self.configDictionary["summary"]
         else:
             metadata["comments"] = "File generated without summary"
-        
+
         basedata["appID"] = "Krita"
         basedata["lastModified"] = QDateTime.currentDateTimeUtc().toString(Qt.ISODate)
         basedata["ComicBookInfo/1.0"] = metadata
-        
+
         self.comic_book_info_json_dump = json.dumps(basedata)
         return True
-    
+
     def package_cbz(self):
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
-        url = os.path.join(self.projectURL, self.configDictionary["exportLocation"], title+".cbz")
+        url = os.path.join(self.projectURL, self.configDictionary["exportLocation"], title + ".cbz")
         cbzArchive = zipfile.ZipFile(url, mode="w", compression=zipfile.ZIP_STORED)
         cbzArchive.write(self.acbfLocation, os.path.basename(self.acbfLocation))
         cbzArchive.write(self.cometLocation, os.path.basename(self.cometLocation))
@@ -1069,7 +1072,7 @@ class comicsExporter():
                     cbzArchive.write(page, os.path.basename(page))
         cbzArchive.close()
         pass
-    
+
     def package_epub(self):
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
@@ -1077,4 +1080,4 @@ class comicsExporter():
         url = os.path.join(self.projectURL, self.configDictionary["exportLocation"], title)
         epub = os.path.join(self.projectURL, self.configDictionary["exportLocation"], "EPUB-files")
         shutil.make_archive(base_name=url, format="zip", root_dir=epub)
-        shutil.move(src=str(url+".zip"), dst=str(url+".epub"))
+        shutil.move(src=str(url + ".zip"), dst=str(url + ".epub"))

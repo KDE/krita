@@ -4,9 +4,8 @@ Part of the comics project management tools (CPMT).
 A dialog for editing the general project settings.
 """
 import os
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QAction, QFileDialog, QComboBox, QSizePolicy
+from PyQt5.QtCore import QDir, Qt, pyqtSignal
 from krita import *
 
 """

@@ -4,9 +4,9 @@ Part of the comics project management tools (CPMT).
 A dialog for editing the exporter settings.
 """
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView
+from PyQt5.QtCore import Qt, QUuid
 from krita import *
 
 """
@@ -283,7 +283,7 @@ class comic_export_setting_dialog(QDialog):
         #mainWidget.addTab(SVGExportSettings, "SVG")
     def slot_add_history_item(self):
         newItem = QStandardItem()
-        newItem.setText("v" + self.spnACBFVersion.value() + "-" + i18n("in this version..."))
+        newItem.setText("v" + str(self.spnACBFVersion.value()) + "-" + i18n("in this version..."))
         self.ACBFhistoryModel.appendRow(newItem)
 
     def slot_set_margin_from_selection(self):

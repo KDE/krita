@@ -4,9 +4,9 @@ Part of the comics project management tools (CPMT).
 This is a docker that shows your comic pages.
 """
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtGui import QImage, QPainter
+from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout, QSizePolicy
+from PyQt5.QtCore import QSize, Qt
 from krita import *
 
 

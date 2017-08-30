@@ -7,9 +7,9 @@ import sys
 import os  # For finding the script location.
 import csv
 from pathlib import Path  # For reading all the files in a directory.
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
+from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate
 """
 mult entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -298,7 +298,7 @@ class comic_meta_data_editor(QDialog):
 
     def slot_reset_author_row_visual(self):
         headerLabelList = []
-        for i in self.authorTable.verticalHeader().count():
+        for i in range(self.authorTable.verticalHeader().count()):
             logicalI = self.authorTable.verticalHeader().logicalIndex(i)
             headerLabelList.append(str(logicalI + 1))
         self.authorModel.setVerticalHeaderLabels(headerLabelList)

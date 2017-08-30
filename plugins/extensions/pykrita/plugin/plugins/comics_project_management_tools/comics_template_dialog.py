@@ -5,9 +5,9 @@ Template dialog
 """
 import os
 import shutil
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget
+from PyQt5.QtCore import QLocale, Qt, QByteArray
 from krita import *
 """
 Quick and dirty QComboBox subclassing that handles unitconversion for us.

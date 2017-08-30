@@ -9,8 +9,9 @@ import os
 import zipfile  # quick readin gof documents
 import shutil
 import xml.etree.ElementTree as ET
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QElapsedTimer
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer

@@ -10,7 +10,8 @@ import json
 import zipfile
 import xml.etree.ElementTree as ET
 import shutil
-from PyQt5.QtGui import *  # For the progress dialog.
+from PyQt5.QtWidgets import QLabel, QProgressDialog  # For the progress dialog.
+from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt
 from krita import *
 
 

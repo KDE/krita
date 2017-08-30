@@ -3,14 +3,13 @@ Part of the comics project management tools (CPMT).
 
 This is a wizard that helps you set up a comics project in Krita.
 """
-import sys
+
 import json  # For writing to json.
 import os  # For finding the script location.
 from pathlib import Path  # For reading all the files in a directory.
 import random  # For selecting two random words from a list.
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QFileDialog, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
+from PyQt5.QtCore import QDate, QLocale
 from krita import *
 from . import comics_metadata_dialog
 

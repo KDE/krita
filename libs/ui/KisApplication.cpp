@@ -85,6 +85,9 @@
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
+#include "kis_spin_box_unit_manager.h"
+#include "kis_document_aware_spin_box_unit_manager.h"
+#include "KisViewManager.h"
 
 #include <KritaVersionWrapper.h>
 namespace {
@@ -390,7 +393,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
 
-
     ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);
 
@@ -413,6 +415,11 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (showmainWindow) {
             m_mainWindow->initializeGeometry();
+
+            if (args.canvasOnly()) {
+                m_mainWindow->viewManager()->switchCanvasOnly(true);
+            }
+
             m_mainWindow->show();
         }
     }

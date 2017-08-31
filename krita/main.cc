@@ -28,7 +28,6 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QDate>
-#include <QLoggingCategory>
 #include <QLocale>
 #include <QSettings>
 
@@ -97,25 +96,12 @@ extern "C" int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
-    /**
-     * Disable debug output by default. (krita.input enables tablet debugging.)
-     * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
-     *
-     * As an example, to get full debug output, run the following:
-     * export QT_LOGGING_RULES="krita*=true"; krita
-     *
-     * See: http://doc.qt.io/qt-5/qloggingcategory.html
-     */
-    QLoggingCategory::setFilterRules("krita*.debug=false\n"
-                                     "krita*.warning=true\n"
-                                     "krita.tabletlog=true");
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-    KisOpenGL::setDefaultFormat();
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -123,18 +109,29 @@ extern "C" int main(int argc, char **argv)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
     bool singleApplication = true;
-#if QT_VERSION >= 0x050600
+    bool enableOpenGLDebug = false;
+    bool openGLDebugSynchronous = false;
     {
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-        singleApplication = kritarc.value("EnableSingleApplication").toBool();
+        singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
+#if QT_VERSION >= 0x050600
         if (kritarc.value("EnableHiDPI", false).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
-    }
 #endif
+        if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
+            enableOpenGLDebug = true;
+        } else {
+            enableOpenGLDebug = kritarc.value("EnableOpenGLDebug", false).toBool();
+        }
+        if (enableOpenGLDebug && (qgetenv("KRITA_OPENGL_DEBUG") == "sync" || kritarc.value("OpenGLDebugSynchronous", false).toBool())) {
+            openGLDebugSynchronous = true;
+        }
+    }
+    KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
 
     KLocalizedString::setApplicationDomain("krita");
 

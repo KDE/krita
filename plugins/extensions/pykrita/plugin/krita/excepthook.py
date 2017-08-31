@@ -16,7 +16,6 @@ from PyQt5.QtWidgets import QApplication, QDialog
 from excepthook_ui import Ui_ExceptHookDialog
 
 
-
 def on_error(exc_type, exc_obj, exc_tb):
     """
     This is the callback function for sys.excepthook
@@ -26,13 +25,12 @@ def on_error(exc_type, exc_obj, exc_tb):
     dlg.exec_()
 
 
-
 def show_current_error(title=None):
     """
     Call this function to show the current error.
     It can be used inside an except-block.
     """
-    dlg = ExceptHookDialog(sys.exc_type, sys.exc_value, sys.exc_traceback, title)
+    dlg = ExceptHookDialog(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2], title)
     dlg.show()
     dlg.exec_()
 
@@ -42,7 +40,6 @@ def install():
     sys.excepthook = on_error
 
 
-    
 def uninstall():
     "removes the error handler"
     sys.excepthook = sys.__excepthook__
@@ -51,7 +48,6 @@ atexit.register(uninstall)
 
 
 class ExceptHookDialog(QDialog):
-
 
     def __init__(self, exc_type, exc_obj, exc_tb, title=None):
         QDialog.__init__(self)
@@ -63,7 +59,7 @@ class ExceptHookDialog(QDialog):
         self.ui.exceptionLabel.setText(msg)
         html = cgitb.text((exc_type, exc_obj, exc_tb))
         self.ui.tracebackBrowser.setText(html)
-        self.resize(650, 350) # give enough space to see the backtrace better
+        self.resize(650, 350)  # give enough space to see the backtrace better
 
     @pyqtSlot()
     def on_closeButton_clicked(self):

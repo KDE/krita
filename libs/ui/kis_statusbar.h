@@ -33,6 +33,7 @@ class QPushButton;
 class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
+class KoProgressUpdater;
 
 #include "kritaui_export.h"
 
@@ -85,7 +86,7 @@ public:
     void hideAllStatusBarItems();
     void showAllStatusBarItems();
 
-    KisProgressWidget *progress();
+    KoProgressUpdater *progressUpdater();
 
 public Q_SLOTS:
 
@@ -101,6 +102,9 @@ private Q_SLOTS:
     void updateSelectionIcon();
     void showMemoryInfoToolTip();
 
+Q_SIGNALS:
+    void sigCancellationRequested();
+
 private:
    void updateMemoryStatus();
 
@@ -109,7 +113,8 @@ private:
     QPointer<KisViewManager> m_view;
     QPointer<KisView> m_imageView;
     QPointer<QStatusBar> m_statusBar;
-    KisProgressWidget * m_progress;
+    KisProgressWidget *m_progress;
+    QScopedPointer<KoProgressUpdater> m_progressUpdater;
 
     QToolButton *m_selectionStatus;
     QPushButton *m_memoryReportBox;

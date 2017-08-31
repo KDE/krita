@@ -70,6 +70,20 @@ qint32 SqueezedComboBox::findOriginalText(const QString& text) const
     return -1;
 }
 
+QStringList SqueezedComboBox::originalTexts() const
+{
+    return m_originalItems.values();
+}
+
+void SqueezedComboBox::resetOriginalTexts(const QStringList &texts)
+{
+    if (texts == m_originalItems.values()) return;
+
+    clear();
+    Q_FOREACH (const QString &item, texts) {
+        addSqueezedItem(item);
+    }
+}
 
 QSize SqueezedComboBox::sizeHint() const
 {

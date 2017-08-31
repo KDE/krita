@@ -86,7 +86,7 @@ bool Schema::Private::load(const QString& _fileName)
 void Schema::Private::parseStructures(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "structures");
-    dbgImage << "Parse sturctures";
+    dbgImage << "Parse structures";
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();

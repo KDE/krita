@@ -1,14 +1,12 @@
 SET(PREFIX_ext_vc "${EXTPREFIX}" )
 ExternalProject_Add( ext_vc
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/Vc-1.2.0.tar.gz
-    URL_MD5 f2a213ae4bad0dcf4ec6469e4dad41c1
+    URL https://github.com/VcDevel/Vc/releases/download/1.3.2/Vc-1.3.2.tar.gz
+    URL_HASH SHA1=2a87ff94dd18836cd3934b54180b15b3505bd50c
 
     INSTALL_DIR ${PREFIX_ext_vc}
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/vc1.2_malloc_free.patch
 
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_vc} -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DCMAKE_SYSTEM_PROCESSOR=x86
 
 	UPDATE_COMMAND ""
 )
-

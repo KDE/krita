@@ -243,7 +243,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 if (url.isEmpty())
                     return;
 
-                QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                const QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();
@@ -254,8 +254,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 d->setCurrentImage(dst);
                 dst->addNode(l->clone().data(), dst->rootLayer());
 
-                d->setOutputMimeType(mimefilter.toLatin1());
-                d->exportDocument(url);
+                d->exportDocumentSync(url, mimeType.toLatin1());
 
                 delete d;
 

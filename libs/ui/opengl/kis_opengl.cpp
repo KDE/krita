@@ -19,6 +19,7 @@
 #include "opengl/kis_opengl.h"
 
 #include <QOpenGLContext>
+#include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
 
 #include <QApplication>
@@ -38,6 +39,9 @@
 
 namespace
 {
+    bool defaultFormatIsSet = false;
+    bool isDebugEnabled = false;
+    bool isDebugSynchronous = false;
     bool initialized = false;
     bool NeedsFenceWorkaround = false;
     bool NeedsPixmapCacheWorkaround = false;
@@ -46,13 +50,22 @@ namespace
     bool supportsDeprecatedFunctions = false;
 
     QString Renderer;
+
+    QString debugText("OpenGL Info\n  **OpenGL not initialized**");
+
+    void openglOnMessageLogged(const QOpenGLDebugMessage& debugMessage) {
+        qDebug() << "OpenGL:" << debugMessage;
+    }
 }
 
 void KisOpenGL::initialize()
 {
     if (initialized) return;
 
-    setDefaultFormat();
+    KIS_SAFE_ASSERT_RECOVER(defaultFormatIsSet) {
+        qWarning() << "Default OpenGL format was not set before calling KisOpenGL::initialize. This might be a BUG!";
+        setDefaultFormat();
+    }
 
     // we need a QSurface active to get our GL functions from the context
     QWindow  surface;
@@ -87,20 +100,26 @@ void KisOpenGL::initialize()
         cfg.writeEntry("WarnedAboutIntel", true);
     }
 #endif
-    qDebug() << "OpenGL Info";
-    qDebug() << "  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
-    qDebug() << "  Renderer: " << Renderer;
-    qDebug() << "  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
-    qDebug() << "  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
-    qDebug() << "  Requested format: " << QSurfaceFormat::defaultFormat();
-    qDebug() << "  Current format:   " << context.format();
-    
+
     glMajorVersion = context.format().majorVersion();
     glMinorVersion = context.format().minorVersion();
     supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
 
-    qDebug() << "     Version:" << glMajorVersion << "." << glMinorVersion;
-    qDebug() << "     Supports deprecated functions" << supportsDeprecatedFunctions;
+    debugText.clear();
+    QDebug debugOut(&debugText);
+    debugOut << "OpenGL Info";
+    debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
+    debugOut << "\n  Renderer: " << Renderer;
+    debugOut << "\n  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
+    debugOut << "\n  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
+    debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
+    debugOut << "\n  Current format:   " << context.format();
+    debugOut.nospace();
+    debugOut << "\n     Version: " << glMajorVersion << "." << glMinorVersion;
+    debugOut.resetFormat();
+    debugOut << "\n     Supports deprecated functions" << supportsDeprecatedFunctions;
+
+    qDebug().noquote() << debugText;
 
     initialized = true;
 }
@@ -111,6 +130,21 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     initialize();
 
     dbgUI << "OpenGL: Opening new context";
+    if (isDebugEnabled) {
+        // Passing ctx for ownership management only, not specifying context.
+        // QOpenGLDebugLogger only function on the current active context.
+        // FIXME: Do we need to make sure ctx is the active context?
+        QOpenGLDebugLogger* openglLogger = new QOpenGLDebugLogger(ctx);
+        if (openglLogger->initialize()) {
+            qDebug() << "QOpenGLDebugLogger is initialized. Check whether you get a message below.";
+            QObject::connect(openglLogger, &QOpenGLDebugLogger::messageLogged, &openglOnMessageLogged);
+            openglLogger->startLogging(isDebugSynchronous ? QOpenGLDebugLogger::SynchronousLogging : QOpenGLDebugLogger::AsynchronousLogging);
+            openglLogger->logMessage(QOpenGLDebugMessage::createApplicationMessage(QStringLiteral("QOpenGLDebugLogger is logging.")));
+        } else {
+            qDebug() << "QOpenGLDebugLogger cannot be initialized.";
+            delete openglLogger;
+        }
+    }
 
     // Double check we were given the version we requested
     QSurfaceFormat format = ctx->format();
@@ -133,7 +167,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 #ifdef HAVE_X11
     isOnX11 = true;
 #endif
-    
+
     if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
@@ -165,6 +199,12 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     }
 
 
+}
+
+const QString &KisOpenGL::getDebugText()
+{
+    initialize();
+    return debugText;
 }
 
 // XXX Temporary function to allow LoD on OpenGL3 without triggering
@@ -199,8 +239,12 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
     return NeedsPixmapCacheWorkaround;
 }
 
-void KisOpenGL::setDefaultFormat()
+void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 {
+    if (defaultFormatIsSet) {
+        return;
+    }
+    defaultFormatIsSet = true;
     QSurfaceFormat format;
 #ifdef Q_OS_OSX
     format.setVersion(3, 2);
@@ -215,11 +259,21 @@ void KisOpenGL::setDefaultFormat()
     format.setStencilBufferSize(8);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     format.setSwapInterval(0); // Disable vertical refresh syncing
+    isDebugEnabled = enableDebug;
+    if (enableDebug) {
+        format.setOption(QSurfaceFormat::DebugContext, true);
+        isDebugSynchronous = debugSynchronous;
+        qDebug() << "QOpenGLDebugLogger will be enabled, synchronous:" << debugSynchronous;
+    }
     QSurfaceFormat::setDefaultFormat(format);
 }
 
 bool KisOpenGL::hasOpenGL()
 {
-    return ((glMajorVersion * 100 + glMinorVersion) >= 201);
-    //return (glMajorVersion >= 3 && supportsDeprecatedFunctions);
+#ifdef Q_OS_OSX
+    return ((glMajorVersion * 100 + glMinorVersion) >= 302);
+#else
+    return (glMajorVersion >= 3 && supportsDeprecatedFunctions) ||
+           ((glMajorVersion * 100 + glMinorVersion) == 201);
+#endif
 }

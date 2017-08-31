@@ -45,6 +45,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
 
+#include <KisPart.h>
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kis_config.h>
@@ -73,6 +74,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
     , m_gmicApplicator(0)
     , m_progressManager(0)
 {
+#ifndef Q_OS_MAC
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
     preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
@@ -89,7 +91,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
 
     m_gmicApplicator = new KisQmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
-
+#endif
 }
 
 QMic::~QMic()
@@ -130,22 +132,25 @@ void QMic::slotQMic(bool again)
     connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
 
     // find the krita-gmic-qt plugin
-    KisConfig cfg;
-    QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-
+    QString pluginPath = PluginSettings::gmicQtPath();
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-        KoDialog dlg;
-        dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
-        QWidget *w = new QWidget(&dlg);
-        dlg.setMainWidget(w);
-        QVBoxLayout *l = new QVBoxLayout(w);
-        l->addWidget(new PluginSettings(w));
-        dlg.setButtons(KoDialog::Ok);
-        dlg.exec();
-        pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
+        {
+            KoDialog dlg;
+            dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
+            QWidget *w = new QWidget(&dlg);
+            dlg.setMainWidget(w);
+            QVBoxLayout *l = new QVBoxLayout(w);
+            l->addWidget(new PluginSettings(w));
+            dlg.setButtons(KoDialog::Ok);
+            dlg.exec();
+        }
+        pluginPath = PluginSettings::gmicQtPath();
         if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
+            m_qmicAction->setEnabled(true);
+            m_againAction->setEnabled(true);
             return;
         }
+
     }
 
     m_key = QUuid::createUuid().toString();
@@ -186,6 +191,8 @@ void QMic::connected()
     msg.resize(remaining);
     int got = 0;
     char* uMsgBuf = msg.data();
+    // FIXME: Should use read transaction for Qt >= 5.7:
+    //        https://doc.qt.io/qt-5/qdatastream.html#using-read-transactions
     do {
         got = ds.readRawData(uMsgBuf, remaining);
         remaining -= got;
@@ -228,6 +235,7 @@ void QMic::connected()
     }
 
     QByteArray ba;
+    QString messageBoxWarningText;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
         KisSelectionSP selection = m_view->image()->globalSelection();
@@ -263,7 +271,7 @@ void QMic::connected()
         QStringList layers = messageMap.values("layer");
         m_outputMode = (OutputMode)mode;
         if (m_outputMode != IN_PLACE) {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented yet."));
+            messageBoxWarningText = i18n("Sorry, this output mode is not implemented yet.");
             m_outputMode = IN_PLACE;
         }
         slotStartApplicator(layers);
@@ -286,6 +294,9 @@ void QMic::connected()
 
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
+    // HACK: Make sure QDataStream does not refuse to write!
+    // Proper fix: Change the above read to use read transaction
+    ds.resetStatus();
     ds.writeBytes(ba.constData(), ba.length());
     // Flush the socket because we might not return to the event loop!
     if (!socket->waitForBytesWritten(2000)) {
@@ -305,6 +316,12 @@ void QMic::connected()
         }
     }
 
+    if (!messageBoxWarningText.isEmpty()) {
+        // Defer the message box to the event loop
+        QTimer::singleShot(0, [messageBoxWarningText]() {
+            QMessageBox::warning(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita"), messageBoxWarningText);
+        });
+    }
 }
 
 void QMic::pluginStateChanged(QProcess::ProcessState state)
@@ -413,7 +430,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
     KisNodeListSP layers = mapper.inputNodes(m_inputMode);
 
     m_gmicApplicator->setProperties(m_view->image(), rootNode, images, actionName, layers);
-    slotStartProgressReporting();
     m_gmicApplicator->preview();
     m_gmicApplicator->finish();
 }
@@ -435,7 +451,7 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     for (int i = 0; i < nodes->size(); ++i) {
         KisNodeSP node = nodes->at(i);
-        if (node->paintDevice()) {
+        if (node && node->paintDevice()) {
             QRect cropRect;
 
             KisSelectionSP selection = m_view->image()->globalSelection();
@@ -469,8 +485,6 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             message->append(m->key().toUtf8());
 
             m->unlock();
-
-            qDebug() << "size" << m->size();
 
             message->append(",");
             message->append(node->name().toUtf8().toHex());

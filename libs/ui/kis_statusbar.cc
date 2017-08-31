@@ -97,6 +97,10 @@ void KisStatusBar::setup()
     m_progress = new KisProgressWidget();
     addStatusBarItem(m_progress);
     m_progress->setVisible(false);
+    connect(m_progress, SIGNAL(sigCancellationRequested()), this, SIGNAL(sigCancellationRequested()));
+
+    m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
+    m_progressUpdater->setAutoNestNames(true);
 
     m_memoryReportBox = new QPushButton();
     m_memoryReportBox->setFlat(true);
@@ -383,10 +387,9 @@ void KisStatusBar::updateStatusBarProfileLabel()
     setProfile(m_imageView->image());
 }
 
-
-KisProgressWidget* KisStatusBar::progress()
+KoProgressUpdater *KisStatusBar::progressUpdater()
 {
-    return m_progress;
+    return m_progressUpdater.data();
 }
 
 

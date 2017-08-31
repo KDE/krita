@@ -38,6 +38,7 @@ class DefaultSyntaxStyle(object):
 
 
 class PythonVimSyntaxStyle(object):
+
     """ It based in the colorschemme of the Vim editor for python code http://www.vim.org/scripts/script.php?script_id=790 """
     # Syntax styles that combines with dark backgrounds
     STYLES = {

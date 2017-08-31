@@ -25,6 +25,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_group_layer.h"
+#include <KoUpdater.h>
 
 void KisAnimationImporterTest::testImport()
 {

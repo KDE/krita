@@ -26,6 +26,7 @@
 
 #include "KoFileDialog.h"
 #include "KisDocument.h"
+#include <KoUpdater.h>
 #include "kis_image.h"
 #include "KisImportExportManager.h"
 #include "kis_image_animation_interface.h"
@@ -65,20 +66,21 @@ KisAnimationExporterUI::~KisAnimationExporterUI()
 
 struct KisAnimationExporter::Private
 {
-    Private(KisDocument *document, int fromTime, int toTime)
-        : document(document)
-        , image(document->image())
+    Private(KisImageSP _image, int fromTime, int toTime, KoUpdaterPtr _updater)
+        : updater(_updater)
+        , image(_image)
         , firstFrame(fromTime)
         , lastFrame(toTime)
         , currentFrame(-1)
-        , batchMode(document->fileBatchMode())
+        , batchMode(!updater)
         , isCancelled(false)
         , status(KisImportExportFilter::OK)
         , tmpDevice(new KisPaintDevice(image->colorSpace()))
     {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(bool(updater) == !batchMode);
     }
 
-    KisDocument *document;
+    KoUpdaterPtr updater;
     KisImageWSP image;
 
     int firstFrame;
@@ -99,8 +101,8 @@ struct KisAnimationExporter::Private
 
 };
 
-KisAnimationExporter::KisAnimationExporter(KisDocument *document, int fromTime, int toTime)
-    : m_d(new Private(document, fromTime, toTime))
+KisAnimationExporter::KisAnimationExporter(KisImageWSP image, int fromTime, int toTime, KoUpdaterPtr updater)
+    : m_d(new Private(image, fromTime, toTime, updater))
 {
     connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady(int)),
             this, SLOT(frameReadyToCopy(int)), Qt::DirectConnection);
@@ -137,10 +139,10 @@ KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
         m_d->progress.setValue(0);
         m_d->progress.setMinimum(0);
         m_d->progress.setMaximum(100);
+    }
 
-        emit m_d->document->statusBarMessage(message);
-        emit m_d->document->sigProgress(0);
-        connect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+    if (m_d->updater) {
+        m_d->updater->setProgress(0);
     }
 
     /**
@@ -165,10 +167,11 @@ KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
     loop.exec();
 
     if (!m_d->batchMode) {
-        disconnect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
-        emit m_d->document->sigProgress(100);
-        emit m_d->document->clearStatusBarMessage();
         m_d->progress.reset();
+    }
+
+    if (m_d->updater) {
+        m_d->updater->setProgress(100);
     }
 
     return m_d->status;
@@ -197,7 +200,8 @@ void KisAnimationExporter::frameReadyToSave()
         return;
     }
 
-    if (m_d->isCancelled) {
+    // TODO: refactor to a signal!
+    if (m_d->isCancelled || (m_d->updater && m_d->updater->interrupted())) {
         m_d->status = KisImportExportFilter::UserCancelled;
         emit sigFinished();
         return;
@@ -209,13 +213,12 @@ void KisAnimationExporter::frameReadyToSave()
 
     result = m_d->saveFrameCallback(time, m_d->tmpDevice, m_d->exportConfiguration);
 
-    if (!m_d->batchMode) {
-        int length = m_d->lastFrame - m_d->firstFrame + 1;
-        emit m_d->document->sigProgress((time - m_d->firstFrame) * 100 / length);
+    if (m_d->updater) {
+        int length = m_d->lastFrame - m_d->firstFrame;
+        m_d->updater->setProgress((time - m_d->firstFrame) * 100 / length);
     }
 
-    qDebug() << result << time << m_d->lastFrame;
-
+    // TODO: make translatable!!
     QString dialogText = QString("Exporting Frame ").append(QString::number(time)).append(" of ").append(QString::number(m_d->lastFrame));
     int percentageProcessed = (float(time) / float(m_d->lastFrame) * 100);
 
@@ -233,18 +236,19 @@ void KisAnimationExporter::frameReadyToSave()
 
 struct KisAnimationExportSaver::Private
 {
-    Private(KisDocument *document, int fromTime, int toTime, int _sequenceNumberingOffset)
-        : document(document)
-        , image(document->image())
+    Private(KisDocument *_document, int fromTime, int toTime, int _sequenceNumberingOffset, KoUpdaterPtr _updater)
+        : document(_document)
+        , image(_document->image())
         , firstFrame(fromTime)
         , lastFrame(toTime)
         , sequenceNumberingOffset(_sequenceNumberingOffset)
+        , updater(_updater)
         , tmpDoc(KisPart::instance()->createDocument())
-        , exporter(document, fromTime, toTime)
+        , exporter(_document->image(), fromTime, toTime, _updater)
     {
         tmpDoc->setAutoSaveDelay(0);
 
-        tmpImage = new KisImage(tmpDoc->createUndoStore(),
+        KisImageSP tmpImage = new KisImage(tmpDoc->createUndoStore(),
                                 image->bounds().width(),
                                 image->bounds().height(),
                                 image->colorSpace(),
@@ -264,10 +268,11 @@ struct KisAnimationExportSaver::Private
     int firstFrame;
     int lastFrame;
     int sequenceNumberingOffset;
+    KoUpdaterPtr updater;
 
     QScopedPointer<KisDocument> tmpDoc;
-    KisImageSP tmpImage;
     KisPaintDeviceSP tmpDevice;
+    QByteArray outputMimeType;
 
     KisAnimationExporter exporter;
 
@@ -275,8 +280,8 @@ struct KisAnimationExportSaver::Private
     QString filenameSuffix;
 };
 
-KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset)
-    : m_d(new Private(document, fromTime, toTime, sequenceNumberingOffset))
+KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset, KoUpdaterPtr updater)
+    : m_d(new Private(document, fromTime, toTime, sequenceNumberingOffset, updater))
 {
     int baseLength = baseFilename.lastIndexOf(".");
     if (baseLength > -1) {
@@ -286,15 +291,11 @@ KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QS
         m_d->filenamePrefix = baseFilename;
     }
 
-    QString mimefilter = KisMimeDatabase::mimeTypeForFile(baseFilename);
-    m_d->tmpDoc->setOutputMimeType(mimefilter.toLatin1());
+    m_d->outputMimeType = KisMimeDatabase::mimeTypeForFile(baseFilename).toLatin1();
     m_d->tmpDoc->setFileBatchMode(true);
 
     using namespace std::placeholders; // For _1 placeholder
     m_d->exporter.setSaveFrameCallback(std::bind(&KisAnimationExportSaver::saveFrameCallback, this, _1, _2, _3));
-    
-   
-    
 }
 
 KisAnimationExportSaver::~KisAnimationExportSaver()
@@ -315,7 +316,8 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation
     QStringList filesList = dir.entryList({ info.fileName() });
 
     if (!filesList.isEmpty()) {
-        if (m_d->document->fileBatchMode()) {
+        // we are in batch mode!
+        if (!m_d->updater) {
             return KisImportExportFilter::CreationError;
         }
 
@@ -372,8 +374,9 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);
-    if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration)) {
-        status = KisImportExportFilter::CreationError;
+
+    if (!m_d->tmpDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, exportConfiguration)) {
+        status = KisImportExportFilter::InternalError;
     }
 
     return status;

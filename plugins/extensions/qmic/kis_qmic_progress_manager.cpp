@@ -20,13 +20,14 @@
 #include <QApplication>
 
 #include <KisViewManager.h>
+#include <KoProgressUpdater.h>
 
 static const int UPDATE_PROGRESS_TIMEOUT = 500;
 
 KisQmicProgressManager::KisQmicProgressManager(KisViewManager* viewManager)
     : m_progressPulseRequest(0)
 {
-        m_progressUpdater = viewManager->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        m_progressUpdater = new KoProgressUpdater(viewManager->createUnthreadedUpdater(""));
         m_progressTimer.setInterval(UPDATE_PROGRESS_TIMEOUT);
         connect(&m_progressTimer, SIGNAL(timeout()), this, SIGNAL(sigProgress()));
 }

@@ -44,6 +44,10 @@
 #include <QOpenGLBuffer>
 #include <QMessageBox>
 
+#ifndef Q_OS_OSX
+#include <QOpenGLFunctions_2_1>
+#endif
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -74,6 +78,7 @@ public:
     KisShaderProgram *displayShader{0};
     KisShaderProgram *checkerShader{0};
     KisShaderProgram *solidColorShader{0};
+    bool displayShaderCompiledWithDisplayFilterSupport{false};
 
     GLfloat checkSizeScale;
     bool scrollCheckers;
@@ -96,6 +101,14 @@ public:
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
+
+#ifndef Q_OS_OSX
+    QOpenGLFunctions_2_1 *glFn201;
+#endif
+
+    qreal pixelGridDrawingThreshold;
+    bool pixelGridEnabled;
+    QColor gridColor;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -183,18 +196,6 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> dis
 
     d->displayFilter = displayFilter;
 
-    if (d->canvasInitialized) {
-        d->canvasInitialized = false;
-        delete d->displayShader;
-        bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
-        try {
-            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-        } catch (const ShaderLoaderException &e) {
-            reportFailedShaderCompilation(e.what());
-        }
-        d->canvasInitialized = true;
-    }
-
     if (!initializing && needsFullRefresh) {
         canvas()->startUpdateInPatches(canvas()->image()->bounds());
     }
@@ -233,6 +234,12 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
+#ifndef Q_OS_OSX
+    d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
+    if (!d->glFn201) {
+        warnUI << "Cannot obtain QOpenGLFunctions_2_1, glLogicOp cannot be used";
+    }
+#endif
 
     KisConfig cfg;
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
@@ -287,19 +294,37 @@ void KisOpenGLCanvas2::initializeGL()
  */
 void KisOpenGLCanvas2::initializeShaders()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->canvasInitialized);
+
+    delete d->checkerShader;
+    delete d->solidColorShader;
+    d->checkerShader = 0;
+    d->solidColorShader = 0;
+
+    try {
+        d->checkerShader = d->shaderLoader.loadCheckerShader();
+        d->solidColorShader = d->shaderLoader.loadSolidColorShader();
+    } catch (const ShaderLoaderException &e) {
+        reportFailedShaderCompilation(e.what());
+    }
+
+    initializeDisplayShader();
+}
+
+void KisOpenGLCanvas2::initializeDisplayShader()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->canvasInitialized);
+
     bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
 
-    if (!d->canvasInitialized) {
-        delete d->displayShader;
-        delete d->checkerShader;
-        delete d->solidColorShader;
-        try {
-            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-            d->checkerShader = d->shaderLoader.loadCheckerShader();
-            d->solidColorShader = d->shaderLoader.loadSolidColorShader();
-        } catch (const ShaderLoaderException &e) {
-            reportFailedShaderCompilation(e.what());
-        }
+    delete d->displayShader;
+    d->displayShader = 0;
+
+    try {
+        d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+        d->displayShaderCompiledWithDisplayFilterSupport = d->displayFilter;
+    } catch (const ShaderLoaderException &e) {
+        reportFailedShaderCompilation(e.what());
     }
 }
 
@@ -310,10 +335,6 @@ void KisOpenGLCanvas2::initializeShaders()
 void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
     KisConfig cfg;
-
-    if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgUI << "GL-log:" << context;
-    }
 
     qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
@@ -377,7 +398,13 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
     glEnable(GL_COLOR_LOGIC_OP);
+#ifndef Q_OS_OSX
+    if (d->glFn201) {
+        d->glFn201->glLogicOp(GL_XOR);
+    }
+#else
     glLogicOp(GL_XOR);
+#endif
 
     KisConfig cfg;
     QColor cursorColor = cfg.getCursorMainColor();
@@ -523,11 +550,9 @@ void KisOpenGLCanvas2::drawGrid()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    KisConfig cfg;
-    QColor gridColor = cfg.getOpenGLGridColor();
     d->solidColorShader->setUniformValue(
                 d->solidColorShader->location(Uniform::FragmentColor),
-                QVector4D(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.5f));
+                QVector4D(d->gridColor.redF(), d->gridColor.greenF(), d->gridColor.blueF(), 0.5f));
 
     if (KisOpenGL::hasOpenGL3()) {
         d->outlineVAO.bind();
@@ -750,6 +775,10 @@ void KisOpenGLCanvas2::slotConfigChanged()
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
+    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
+    d->pixelGridEnabled = cfg.pixelGridEnabled();
+    d->gridColor = cfg.getPixelGridColor();
+
     notifyConfigChanged();
 }
 
@@ -770,8 +799,14 @@ void KisOpenGLCanvas2::renderCanvasGL()
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (d->displayFilter) {
-        d->displayFilter->updateShader();
+    if ((d->displayFilter && d->displayFilter->updateShader()) ||
+        (bool(d->displayFilter) != d->displayShaderCompiledWithDisplayFilterSupport)) {
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvasInitialized);
+
+        d->canvasInitialized = false; // TODO: check if actually needed?
+        initializeDisplayShader();
+        d->canvasInitialized = true;
     }
 
     if (KisOpenGL::hasOpenGL3()) {
@@ -780,8 +815,7 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
     drawCheckers();
     drawImage();
-    KisConfig cfg;
-    if (coordinatesConverter()->effectiveZoom() > cfg.getOpenGLGridDrawingThreshold() - 0.00001) {
+    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
         drawGrid();
     }
     if (KisOpenGL::hasOpenGL3()) {

@@ -31,10 +31,12 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <KisImportExportFilter.h>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
 #include <kis_debug.h>
+#include <KisImportExportUtils.h>
 
 #include "kritaui_export.h"
 
@@ -50,8 +52,6 @@ class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
 class KoDocumentInfo;
-class KoProgressUpdater;
-class KoProgressProxy;
 class KoDocumentInfoDlg;
 class KisImportExportManager;
 class KisUndoStore;
@@ -80,12 +80,22 @@ protected:
 
     explicit KisDocument();
 
-public:
+    /**
+     * @brief KisDocument makes a deep copy of the document \p rhs.
+     *        The caller *must* ensure that the image is properly
+     *        locked and is in consistent state before asking for
+     *        cloning.
+     * @param rhs the source document to copy from
+     */
+    explicit KisDocument(const KisDocument &rhs);
 
-    enum OpenUrlFlags {
-        OPEN_URL_FLAG_NONE                       = 1 << 0,
-        OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES = 1 << 1,
+public:
+    enum OpenFlag {
+        None = 0,
+        DontAddToRecent = 0x1,
+        RecoveryFile = 0x2
     };
+    Q_DECLARE_FLAGS(OpenFlags, OpenFlag)
 
     /**
      *  Destructor.
@@ -101,13 +111,20 @@ public:
      */
     bool reload();
 
+
+    /**
+     * @brief creates a clone of the document and returns it. Please make sure that you
+     * hold all the necessary locks on the image before asking for a clone!
+     */
+    KisDocument* clone();
+
     /**
      * @brief openUrl Open an URL
      * @param url The URL to open
      * @param flags Control specific behavior
      * @return success status
      */
-    bool openUrl(const QUrl &url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
+    bool openUrl(const QUrl &url, OpenFlags flags = None);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -126,13 +143,15 @@ public:
      * KisDocument (URL, modified flag etc.). Call this instead of
      * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
      * File --> Export feature.
-     *
-     * @note This will call KisDocument::saveAs(). To differentiate this
-     *       from an ordinary Save operation (in any reimplementation of
-     *       saveFile()) call isExporting().
      */
-    bool exportDocument(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
 
+    bool exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
+
+private:
+    bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration);
+
+public:
     /**
      * @brief Sets whether the document can be edited or is read only.
      *
@@ -169,17 +188,6 @@ public:
      * selected by default.
      */
     void setMimeType(const QByteArray & mimeType) override;
-
-    /**
-     * @brief Set the format in which the document should be saved.
-     *
-     * This is called on loading, and in "save as", so you shouldn't
-     * have to call it.
-     *
-     * @param mimeType the mime type (format) to use.
-     */
-    void setOutputMimeType(const QByteArray & mimeType) override;
-    QByteArray outputMimeType() const override;
 
     /**
      * @return true if file operations should inhibit the option dialog
@@ -279,32 +287,9 @@ public:
     KoDocumentInfo *documentInfo() const;
 
     /**
-     * @return the object to report progress to.
-     *
-     * This is only not zero if loading or saving is in progress.
-     *
-     * One can add more KoUpdaters to it to make the progress reporting more
-     * accurate. If no active progress reporter is present, 0 is returned.
-     **/
-    KoProgressUpdater *progressUpdater() const;
-
-    /**
-     * Set a custom progress proxy to use to report loading
-     * progress to.
-     */
-    void setProgressProxy(KoProgressProxy *progressProxy);
-    KoProgressProxy* progressProxy() const;
-
-    /**
      * Performs a cleanup of unneeded backup files
      */
     void removeAutoSaveFiles();
-
-    /**
-     * @brief setBackupFile enable/disable saving a backup of the file on saving
-     * @param saveBackup if true, Krita will save a backup of the file
-     */
-    void setBackupFile(bool saveBackup);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
@@ -359,6 +344,9 @@ public:
      *  to be saved or not before deleting it.
      */
     void setModified(bool _mod);
+
+    void setRecovered(bool value);
+    bool isRecovered() const;
 
     void updateEditingTime(bool forceStoreElapsed);
 
@@ -417,23 +405,10 @@ Q_SIGNALS:
     void unitChanged(const KoUnit &unit);
 
     /**
-     * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)
-     * Your KisDocument-derived class should emit the signal now and then during load/save.
-     * KisMainWindow will take care of displaying a progress bar automatically.
-     */
-    void sigProgress(int value);
-
-    /**
-     * Progress cancel button pressed
-     * This is emitted by KisDocument
-     */
-    void sigProgressCanceled();
-
-    /**
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KisDocument and used by KisView to display a statusbar message
      */
-    void statusBarMessage(const QString& text);
+    void statusBarMessage(const QString& text, int timeout = 0);
 
     /**
      * Emitted e.g. at the end of a save operation
@@ -454,10 +429,31 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
+    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+private Q_SLOTS:
+    void finishExportInBackground();
+    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 private:
 
     friend class KisPart;
     friend class SafeSavingLocker;
+
+    bool initiateSavingInBackground(const QString actionName,
+                                    const QObject *receiverObject, const char *receiverMethod,
+                                    const KritaUtils::ExportFileJob &job,
+                                    KisPropertiesConfigurationSP exportConfiguration);
+
+    bool startExportInBackground(const QString &actionName, const QString &location,
+                                 const QString &realLocation,
+                                 const QByteArray &mimeType,
+                                 bool showWarnings,
+                                 KisPropertiesConfigurationSP exportConfiguration);
 
     /**
      * Generate a name for the document.
@@ -478,33 +474,8 @@ private:
      */
     bool openFile();
 
-    /**
-     *  Saves a document
-     *
-     *  Applies a filter if necessary, and calls exportDocument in any case
-     *  You should not have to reimplement, except for very special cases.
-     */
-    bool saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration = 0);
-
-
     /** @internal */
     void setModified();
-
-    /**
-     *  Returns whether or not the current openUrl() or openFile() call is
-     *  actually an import operation (like File --> Import).
-     *  This is for informational purposes only.
-     */
-    bool isImporting() const;
-
-    /**
-     *  Returns whether or not the current saveFile() call is actually an export
-     *  operation (like File --> Export).
-     *  If this function returns true during saveFile() and you are changing
-     *  some sort of state, you _must_ restore it before the end of saveFile();
-     *  otherwise, File --> Export will not work properly.
-     */
-    bool isExporting() const;
 
 public:
 
@@ -524,7 +495,7 @@ public:
 
     bool closeUrl(bool promptToSave = true);
 
-    bool saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfigration = 0);
+    bool saveAs(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
 
     /**
      * Create a new image that has this document as a parent and
@@ -532,6 +503,9 @@ public:
      */
     bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, bool backgroundAsLayer,
                   int numberOfLayers, const QString &imageDescription, const double imageResolution);
+
+    bool isSaving() const;
+    void waitForSavingToComplete();
 
 
     KisImageWSP image() const;
@@ -544,26 +518,6 @@ public:
      * @return a shallow copy of the original image, or 0 is saving is not in progress
      */
     KisImageSP savingImage() const;
-
-    /**
-     * Adds progressproxy for file operations
-     */
-    void setFileProgressProxy();
-
-    /**
-     * Clears progressproxy for file operations
-     */
-    void clearFileProgressProxy();
-
-    /**
-     * Adds progressupdater for file operations
-     */
-    void setFileProgressUpdater(const QString &text);
-
-    /**
-     * Clears progressupdater for file operations
-     */
-    void clearFileProgressUpdater();
 
     /**
      * Set the current image to the specified image and turn undo on.
@@ -581,24 +535,21 @@ public:
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
     /**
-     * @return a list of all layers that are active in all current views
-     */
-    vKisNodeSP activeNodes() const;
-
-    /**
-     * set the list of nodes that were marked as currently active
+     * Set the list of nodes that was marked as currently active. Used *only*
+     * for saving loading. Never use it for tools or processing.
      */
     void setPreActivatedNode(KisNodeSP activatedNode);
 
     /**
-     * @return the node that was set as active during loading
+     * @return the node that was set as active during loading. Used *only*
+     * for saving loading. Never use it for tools or processing.
      */
     KisNodeSP preActivatedNode() const;
 
     QList<KisPaintingAssistantSP> assistants() const;
     void setAssistants(const QList<KisPaintingAssistantSP> value);
 
-    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 
 Q_SIGNALS:
 
@@ -611,15 +562,20 @@ private Q_SLOTS:
 
     void slotAutoSave();
 
-    /// Called by the undo stack when undo or redo is called
-    void slotUndoStackIndexChanged(int idx);
+    void slotUndoStackCleanChanged(bool value);
+
+    void slotConfigChanged();
 
 
 private:
+    /**
+     * @brief try to clone the image. This method handles all the locking for you. If locking
+     *        has failed, no cloning happens
+     * @return cloned document on success, null otherwise
+     */
+    KisDocument *lockAndCloneForSaving();
 
-    bool prepareLocksForSaving();
-
-    void unlockAfterSaving();
+    QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
     QString prettyPathOrUrl() const;
 
@@ -629,6 +585,7 @@ private:
     Private *const d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisDocument::OpenFlags)
 Q_DECLARE_METATYPE(KisDocument*)
 
 #endif

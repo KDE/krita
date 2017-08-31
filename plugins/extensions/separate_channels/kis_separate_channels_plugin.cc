@@ -81,18 +81,14 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
         QApplication::setOverrideCursor(Qt::BusyCursor);
-        KoProgressUpdater* pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
-        pu->start(100, i18n("Separate Image"));
-        QPointer<KoUpdater> u = pu->startSubtask();
 
         KisChannelSeparator separator(m_view);
-        separator.separate(u,
+        separator.separate(m_view->createUnthreadedUpdater(i18n("Separate Image")),
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),
                            dlgSeparate->getDownscale(),
                            dlgSeparate->getToColor());
-        pu->deleteLater();
         QApplication::restoreOverrideCursor();
     }
 

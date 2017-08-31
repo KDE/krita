@@ -120,6 +120,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
     colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
     colorSpaceSelector->setCurrentProfile(defColorProfile);
+    connect(colorSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(changeDocumentInfoLabel()));
 
     //connect(chkFromClipboard,SIGNAL(stateChanged(int)),this,SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
@@ -153,6 +154,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     palette_highlight.setColor(QPalette::Button, c);
     bnLandscape->setPalette(palette_highlight);
     bnPortrait->setPalette(palette_highlight);
+    changeDocumentInfoLabel();
 }
 
 void KisCustomImageWidget::showEvent(QShowEvent *)
@@ -178,6 +180,7 @@ void KisCustomImageWidget::resolutionChanged(double res)
         m_heightUnit.setFactor(res / 72.0);
         m_height = m_heightUnit.fromUserValue(doubleHeight->value());
     }
+    changeDocumentInfoLabel();
 }
 
 
@@ -196,11 +199,13 @@ void KisCustomImageWidget::widthUnitChanged(int index)
     doubleWidth->setValue(KoUnit::ptToUnit(m_width, m_widthUnit));
 
     doubleWidth->blockSignals(false);
+    changeDocumentInfoLabel();
 }
 
 void KisCustomImageWidget::widthChanged(double value)
 {
     m_width = m_widthUnit.fromUserValue(value);
+    changeDocumentInfoLabel();
 }
 
 void KisCustomImageWidget::heightUnitChanged(int index)
@@ -218,11 +223,13 @@ void KisCustomImageWidget::heightUnitChanged(int index)
     doubleHeight->setValue(KoUnit::ptToUnit(m_height, m_heightUnit));
 
     doubleHeight->blockSignals(false);
+    changeDocumentInfoLabel();
 }
 
 void KisCustomImageWidget::heightChanged(double value)
 {
     m_height = m_heightUnit.fromUserValue(value);
+    changeDocumentInfoLabel();
 }
 
 void KisCustomImageWidget::createImage()
@@ -370,6 +377,7 @@ void KisCustomImageWidget::predefinedClicked(int index)
 
     doubleWidth->setValue(predefined->getDouble("width"));
     doubleHeight->setValue(predefined->getDouble("height"));
+    changeDocumentInfoLabel();
 
 }
 
@@ -453,6 +461,7 @@ void KisCustomImageWidget::switchWidthHeight()
 
     widthChanged(doubleWidth->value());
     heightChanged(doubleHeight->value());
+    changeDocumentInfoLabel();
 }
 
 void KisCustomImageWidget::switchPortraitLandscape()
@@ -461,5 +470,34 @@ void KisCustomImageWidget::switchPortraitLandscape()
         bnLandscape->setChecked(true);
     else
         bnPortrait->setChecked(true);
+}
+
+void KisCustomImageWidget::changeDocumentInfoLabel()
+{
+    int layerSize = doubleWidth->value()*doubleHeight->value();
+    const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
+    int bitSize = 8*cs->pixelSize(); //pixelsize is in bytes.
+    layerSize = layerSize*cs->pixelSize();
+    QString byte = "bytes";
+    if (layerSize>1000) {
+        layerSize/=1000;
+        byte = "kB";
+    }
+    if (layerSize>1000) {
+        layerSize/=1000;
+        byte = "mB";
+    }
+    if (layerSize>1000) {
+        layerSize/=1000;
+        byte = "gB";
+    }
+    QString text = QString("This document will be %1x%2 px %4, which means the pixel size is %3 bit, a single paint layer will thus take up %5 %6 of ram.")
+            .arg(doubleWidth->value())
+            .arg(doubleHeight->value())
+            .arg(bitSize)
+            .arg(cs->name())
+            .arg(layerSize)
+            .arg(byte);
+    lblDocumentInfo->setText(text);
 }
 

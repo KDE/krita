@@ -29,6 +29,7 @@ install(FILES
 23-dynamic-screentone-A.png
 24-dynamic-screentone-B.png
 25-dynamic-screentone-C.png
+26_brush-marks.png
 Canvas_Hard.pat
 Canvas_covered.pat
 Canvas_small_01.pat

@@ -80,13 +80,21 @@ int Selection::height() const
 int Selection::x() const
 {
     if (!d->selection) return 0;
-    return d->selection->x();
+    int xPos = d->selection->x();
+    if (d->selection->hasPixelSelection()) {
+        xPos = d->selection->selectedExactRect().x();
+    }
+    return xPos;
 }
 
 int Selection::y() const
 {
     if (!d->selection) return 0;
-    return d->selection->y();
+    int yPos = d->selection->y();
+    if (d->selection->hasPixelSelection()) {
+        yPos = d->selection->selectedExactRect().y();
+    }
+    return yPos;
 }
 
 void Selection::move(int x, int y)

@@ -28,7 +28,7 @@ class OpenAction(QAction):
                 selectedFile = dialog.selectedFiles()[0]
                 fileExtension = selectedFile.rsplit('.', maxsplit=1)[1]
 
-                if fileExtension=='py':
+                if fileExtension == 'py':
                     document = self.scripter.documentcontroller.openDocument(selectedFile)
                     self.scripter.uicontroller.setDocumentEditor(document)
                     self.scripter.uicontroller.setStatusBar(document.filePath)

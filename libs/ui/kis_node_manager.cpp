@@ -80,6 +80,8 @@
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
 
+#include <kis_signals_blocker.h>
+
 struct KisNodeManager::Private {
 
     Private(KisNodeManager *_q, KisViewManager *v)
@@ -102,6 +104,8 @@ struct KisNodeManager::Private {
     KisNodeCommandsAdapter commandsAdapter;
     QScopedPointer<KisNodeSelectionAdapter> nodeSelectionAdapter;
     QScopedPointer<KisNodeInsertionAdapter> nodeInsertionAdapter;
+
+    KisAction *showInTimeline;
 
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
@@ -300,6 +304,11 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
 
+    action = actionManager->createAction("show_in_timeline");
+    action->setCheckable(true);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(slotShowHideTimeline(bool)));
+    m_d->showInTimeline = action;
+
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
     NEW_LAYER_ACTION("add_new_group_layer", "KisGroupLayer");
@@ -343,17 +352,17 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("isolate_layer");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
-    action = actionManager->createAction("toggle_layer_lock");
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleLock()));
-
     action = actionManager->createAction("toggle_layer_visibility");
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
-    action = actionManager->createAction("toggle_layer_alpha_lock");
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleAlphaLock()));
+    action = actionManager->createAction("toggle_layer_lock");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleLock()));
 
     action = actionManager->createAction("toggle_layer_inherit_alpha");
     connect(action, SIGNAL(triggered()), this, SLOT(toggleInheritAlpha()));
+
+    action = actionManager->createAction("toggle_layer_alpha_lock");
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleAlphaLock()));
 
     action  = actionManager->createAction("split_alpha_into_mask");
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaIntoMask()));
@@ -537,6 +546,13 @@ void KisNodeManager::createFromVisible()
     KisLayerUtils::newLayerFromVisible(m_d->view->image(), m_d->view->image()->root()->lastChild());
 }
 
+void KisNodeManager::slotShowHideTimeline(bool value)
+{
+    Q_FOREACH (KisNodeSP node, selectedNodes()) {
+        node->setUseInTimeline(value);
+    }
+}
+
 KisLayerSP KisNodeManager::createPaintLayer()
 {
     KisNodeSP activeNode = this->activeNode();
@@ -654,6 +670,10 @@ void KisNodeManager::nodesUpdated()
     m_d->view->updateGUI();
     m_d->view->selectionManager()->selectionChanged();
 
+    {
+        KisSignalsBlocker b(m_d->showInTimeline);
+        m_d->showInTimeline->setChecked(node->useInTimeline());
+    }
 }
 
 KisPaintDeviceSP KisNodeManager::activePaintDevice()
@@ -1001,8 +1021,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     dst->initialRefreshGraph();
 
-    doc->setOutputMimeType(mimefilter.toLatin1());
-    doc->exportDocument(url);
+    doc->exportDocumentSync(url, mimefilter.toLatin1());
 }
 
 void KisNodeManager::saveNodeAsImage()

@@ -42,8 +42,8 @@ public:
     virtual void saveAssertInfo(QString id, KisAssertInfoTicket::AssertInfo assertInfo) = 0;
 
 protected:
-  // QString m_adress = "http://localhost:8080/";
-   QString m_adress = "http://akapustin.me:8080/";
+   QString m_adress = "http://localhost:8080/";
+   //QString m_adress = "http://akapustin.me:8080/";
 
 };
 

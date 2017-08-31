@@ -22,6 +22,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <QDebug>
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
@@ -38,7 +39,7 @@ QString UserFeedback::TelemetryAssertInfoSource::description() const
 
 QVariant UserFeedback::TelemetryAssertInfoSource::data()
 {
-
+    qDebug()<<"TelemetryAssertInfoSource";
     m_assertsDumps.clear();
     foreach (assertInfo assert, m_assertsDumpsMap) {
         KisTelemetryTicket* ticket = assert.ticket.data();
@@ -49,11 +50,11 @@ QVariant UserFeedback::TelemetryAssertInfoSource::data()
         if (assertTicket) {
             QVariantMap m;
             m.insert(QStringLiteral("assertText"), assertTicket->assertInfo().assertText);
-
+            qDebug()<<assertTicket->assertInfo().assertText;
             m.insert(QStringLiteral("assertFile"), assertTicket->assertInfo().file);
 
             m.insert(QStringLiteral("assertLine"), assertTicket->assertInfo().line);
-            m.insert(QStringLiteral("count"), assertTicket->assertInfo().line);
+            m.insert(QStringLiteral("count"), assert.count);
             m.insert(QStringLiteral("isFatal"), false);
 
             m_assertsDumps.push_back(m);

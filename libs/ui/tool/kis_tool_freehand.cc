@@ -263,6 +263,8 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     }
 
     setMode(KisTool::HOVER_MODE);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(0);
+
 }
 
 bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction action)

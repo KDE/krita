@@ -84,6 +84,7 @@ private:
 
 private:
     TelemetryCategory pathToKind(QString path);
+    bool m_sendInstallInfo;
 };
 
 #endif

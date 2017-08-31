@@ -665,6 +665,7 @@ void KisMainWindow::sendInfo()
     qDebug()<<"send_enfo"<<"\n";
     d->telemetry.reset(new KisDlgSendTelemtry(this->viewManager()));
     if(d->telemetry->exec()== QDialog::Accepted){
+        KisTelemetryInstance::instance()->sendData("asserts");
         KisTelemetryInstance::instance()->sendData("install");
         KisTelemetryInstance::instance()->sendData("tools");
         KisTelemetryInstance::instance()->sendData("imageProperties");

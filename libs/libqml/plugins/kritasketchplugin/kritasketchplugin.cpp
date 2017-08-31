@@ -54,6 +54,7 @@
 #include "PanelConfiguration.h"
 #include "DocumentManager.h"
 #include "kis_clipboard.h"
+#include "KisSketchView.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -89,6 +90,7 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
 
 void KritaSketchPlugin::registerTypes(const char* uri)
 {
+    qDebug() << "registerTypes();" << uri;
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
@@ -98,6 +100,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
     qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");
     qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
+    qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
     qmlRegisterType<FiltersCategoryModel>("org.krita.sketch", 1, 0, "FiltersCategoryModel");
     qmlRegisterType<RecentImagesModel>("org.krita.sketch", 1, 0, "RecentImagesModel");
@@ -121,6 +124,8 @@ void KritaSketchPlugin::registerTypes(const char* uri)
 
 void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 {
+    qDebug() << "initializeEngine();" << uri;
+
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     // QT5TODO: seems to be run in thread other than the one of KritaSketchPlugin, so parenting directly not possible

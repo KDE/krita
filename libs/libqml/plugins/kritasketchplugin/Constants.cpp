@@ -25,8 +25,8 @@
 Constants::Constants(QObject* parent)
     : QObject(parent)
 {
-    m_gridWidth = qApp->activeWindow()->width() / gridColumns();
-    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+//    m_gridWidth = qApp->activeWindow()->width() / gridColumns();
+//    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
     m_toolbarButtonSize = m_gridHeight;
 }
 
@@ -103,9 +103,9 @@ qreal Constants::hugeFontSize() const
 
 bool Constants::isLandscape() const
 {
-	// If user switches certain settings in windows, activeWindow can become null.
-	if(qApp->activeWindow())
-	    return qApp->activeWindow()->height() > qApp->activeWindow()->width();
-	return true;
+    // If user switches certain settings in windows, activeWindow can become null.
+    if(qApp->activeWindow())
+        return qApp->activeWindow()->height() > qApp->activeWindow()->width();
+    return true;
 }
 

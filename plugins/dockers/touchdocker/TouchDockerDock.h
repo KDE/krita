@@ -22,9 +22,14 @@
 #include <KoCanvasObserverBase.h>
 
 class KisCanvas2;
+class QQuickWidget;
 
 class TouchDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
+    Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
+    Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
+    Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
+
 public:
     TouchDockerDock();
     ~TouchDockerDock() override;
@@ -32,8 +37,29 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
+    bool allowClose() const;
+    void setAllowClose(bool allow);
+
+    QString currentSketchPage() const;
+    void setCurrentSketchPage(QString newPage);
+
+    QObject *sketchKisView() const;
+    void setSketchKisView(QObject *newView);
+
+    virtual void closeEvent(QCloseEvent *event);
+
+Q_SIGNALS:
+    void closeRequested();
+    void currentSketchPageChanged();
+    void sketchKisViewChanged();
+
 private:
     KisCanvas2 *m_canvas {0};
+    QQuickWidget *m_quickWidget {0};
+
+    class Private;
+    const QScopedPointer<Private> d;
+
 };
 
 

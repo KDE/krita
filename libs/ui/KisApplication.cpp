@@ -437,7 +437,12 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 m_mainWindow->viewManager()->switchCanvasOnly(true);
             }
 
-            m_mainWindow->show();
+            if (args.fullScreen()) {
+                m_mainWindow->showFullScreen();
+            }
+            else {
+                m_mainWindow->show();
+            }
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open

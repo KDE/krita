@@ -21,9 +21,10 @@ set(kritaqml_SRCS
     VirtualKeyboardController.cpp
     Theme.cpp
     QmlGlobalEngine.cpp
+    KisSketchView.cpp
 )
 
-qt5_add_resources(kritaqml_SRCS qml.qrc)
+qt5_add_resources(kritaqml_SRCS qml/qml.qrc)
 
 add_library(kritaqml SHARED ${kritaqml_SRCS})
 generate_export_header(kritaqml BASE_NAME krita_sketch)

@@ -51,6 +51,7 @@ public:
     QString workspace() const;
     bool canvasOnly() const;
     bool noSplash() const;
+    bool fullScreen() const;
 
 private:
 

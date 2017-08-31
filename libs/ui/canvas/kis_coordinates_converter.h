@@ -124,7 +124,8 @@ public:
 
     void getQPainterCheckersInfo(QTransform *transform,
                                  QPointF *brushOrigin,
-                                 QPolygonF *poligon) const;
+                                 QPolygonF *poligon,
+                                 const bool scrollCheckers) const;
 
     void getOpenGLCheckersInfo(const QRectF &viewportRect,
                                QTransform *textureTransform,

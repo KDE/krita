@@ -77,6 +77,9 @@ private:
     void drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private Q_SLOTS:
+    void slotConfigChanged();
 };
 
 #endif

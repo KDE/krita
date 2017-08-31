@@ -34,6 +34,7 @@
 #include <QMenu>
 
 #include <kis_debug.h>
+#include <kis_config.h>
 
 #include <KoColorProfile.h>
 #include "kis_coordinates_converter.h"
@@ -66,6 +67,7 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
     QImage buffer;
+    bool scrollCheckers;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
@@ -127,7 +129,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     QPointF brushOrigin;
     QPolygonF polygon;
 
-    converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
+    converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon, m_d->scrollCheckers);
     gc.setPen(Qt::NoPen);
     gc.setBrush(m_d->checkBrush);
     gc.setBrushOrigin(brushOrigin);
@@ -251,7 +253,10 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
+    KisConfig cfg;
+
     m_d->checkBrush = QBrush(createCheckersImage());
+    m_d->scrollCheckers = cfg.scrollCheckers();
     notifyConfigChanged();
 }
 

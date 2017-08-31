@@ -59,6 +59,9 @@ struct KisVisualColorSelectorShape::Private
     qreal hue = 0.0;
     qreal sat = 0.0;
     qreal tone = 0.0;
+    bool usesOCIO = false;
+    bool isRGBA = false;
+    bool is8Bit = false;
 
 };
 
@@ -73,6 +76,29 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->dimension = dimension;
     m_d->model = model;
     m_d->colorSpace = cs;
+
+    // TODO: The following is done because the IDs are actually strings. Ideally, in the future, we
+    // refactor everything so that the IDs are actually proper enums or something faster.
+    if (m_d->displayRenderer
+            && (m_d->colorSpace->colorDepthId() == Float16BitsColorDepthID
+                || m_d->colorSpace->colorDepthId() == Float32BitsColorDepthID
+                || m_d->colorSpace->colorDepthId() == Float64BitsColorDepthID)
+            && m_d->colorSpace->colorModelId() != LABAColorModelID
+            && m_d->colorSpace->colorModelId() != CMYKAColorModelID) {
+        m_d->usesOCIO = true;
+    } else {
+        m_d->usesOCIO = false;
+    }
+    if (m_d->colorSpace->colorModelId() == RGBAColorModelID) {
+        m_d->isRGBA = true;
+    } else {
+        m_d->isRGBA = false;
+    }
+    if (m_d->colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
+        m_d->is8Bit = true;
+    } else {
+        m_d->is8Bit = false;
+    }
     m_d->currentColor = KoColor();
     m_d->currentColor.setOpacity(1.0);
     m_d->currentColor.convertTo(cs);
@@ -231,12 +257,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
 
-    if (m_d->displayRenderer
-            && (m_d->colorSpace->colorDepthId() == Float16BitsColorDepthID
-                || m_d->colorSpace->colorDepthId() == Float32BitsColorDepthID
-                || m_d->colorSpace->colorDepthId() == Float64BitsColorDepthID)
-            && m_d->colorSpace->colorModelId() != LABAColorModelID
-            && m_d->colorSpace->colorModelId() != CMYKAColorModelID) {
+    if (m_d->usesOCIO == true) {
 
         for (int ch = 0; ch < maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->colorSpace->channels()[ch];
@@ -262,7 +283,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
         huedivider2 = 360.0;
     }
 
-    if (m_d->model != ColorModel::Channel && c.colorSpace()->colorModelId().id() == "RGBA") {
+    if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
 
         if (m_d->model == ColorModel::HSV) {
             /*
@@ -375,12 +396,7 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     QVector <float> channelValuesDisplay = channelValues;
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
-    if (m_d->displayRenderer
-            && (m_d->colorSpace->colorDepthId() == Float16BitsColorDepthID
-                || m_d->colorSpace->colorDepthId() == Float32BitsColorDepthID
-                || m_d->colorSpace->colorDepthId() == Float64BitsColorDepthID)
-            && m_d->colorSpace->colorModelId() != LABAColorModelID
-            && m_d->colorSpace->colorModelId() != CMYKAColorModelID) {
+    if (m_d->usesOCIO == true) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->colorSpace->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
@@ -401,8 +417,8 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     if (m_d->channel2==0) {
         huedivider2 = 360.0;
     }
-    if (m_d->model != ColorModel::Channel && c.colorSpace()->colorModelId().id() == "RGBA") {
-        if (c.colorSpace()->colorModelId().id() == "RGBA") {
+    if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
+        if (m_d->isRGBA == true) {
             if (m_d->model == ColorModel::HSV){
                 QVector <float> inbetween(3);
                 RGBToHSV(channelValuesDisplay[0],channelValuesDisplay[1], channelValuesDisplay[2], &inbetween[0], &inbetween[1], &inbetween[2]);
@@ -541,7 +557,7 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
     if (!wrangler){
         //Ok, so this docker will not update luminosity if there's not at the least 3% more variation.
         //This is necessary for 8bit.
-        if (m_d->colorSpace->colorDepthId()==Integer8BitsColorDepthID){
+        if (m_d->is8Bit == true){
             if (hsx[2]>m_d->tone-0.03 && hsx[2]<m_d->tone+0.03) {
                 ihsx[2] = m_d->tone;
             }

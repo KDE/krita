@@ -1,0 +1,13 @@
+Writer
+Adapter
+Artist
+Penciller
+Inker
+Colorist
+Letterer
+Cover Artist
+Photographer
+Editor
+Assistant Editor
+Translator
+Other

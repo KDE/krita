@@ -35,9 +35,11 @@ double get_random(qreal min, qreal max)
 }
 
 
-KisSplat::KisSplat(QPointF offset, int width, const KoColor &color)
+KisSplat::KisSplat(QPointF offset, int width, const KoColor &color,
+                   int gravityX, int gravityY)
     : m_life(STANDART_LIFETIME), m_roughness(1.f), m_flow(1.f),
-      m_motionBias(QPointF(0.f, 0.f)), m_state(Flowing)
+      m_motionBias(QPointF(0.f, 0.f)), m_state(Flowing),
+      m_gravityX(gravityX), m_gravityY(gravityY)
 {
     m_initColor.fromKoColor(color);
     m_fix = STANDART_LIFETIME;
@@ -62,9 +64,11 @@ KisSplat::KisSplat(QPointF offset, int width, const KoColor &color)
 }
 
 KisSplat::KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
-                   qreal roughness, qreal flow, qreal radialSpeed, const KoColor &color)
+                   qreal roughness, qreal flow, qreal radialSpeed, const KoColor &color,
+                   int gravityX, int gravityY)
     : m_life(life), m_roughness(roughness), m_flow(flow),
-      m_motionBias(velocityBias), m_state(Flowing)
+      m_motionBias(velocityBias), m_state(Flowing),
+      m_gravityX(gravityX), m_gravityY(gravityY)
 {
     m_initColor.fromKoColor(color);
     m_fix = STANDART_LIFETIME;
@@ -190,8 +194,9 @@ int KisSplat::update(KisWetMap *wetMap)
         QPointF v = m_velocities[i];
         QPointF d = (1.f - alpha) * m_motionBias + alpha / get_random(1.f, 1.f + m_roughness) * v;
 
-        QPointF x1 = x + m_flow * d; + QPointF(get_random(-m_roughness, m_roughness),
-                                               get_random(-m_roughness, m_roughness));
+        QPointF x1 = x + m_flow * d + QPointF(m_gravityX / 12, m_gravityY / 12)/*
+                + QPointF(get_random(-m_roughness, m_roughness) / 5,
+                          get_random(-m_roughness, m_roughness) / 5)*/;
         newVertices.push_back(x1);
     }
     QVector<int> wetPoints = wetMap->getWater(newVertices);

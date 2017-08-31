@@ -39,6 +39,8 @@ public:
 
     bool needsContinuedStroke() override;
 
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

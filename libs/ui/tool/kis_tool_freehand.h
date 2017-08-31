@@ -55,6 +55,9 @@ public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
+public Q_SLOTS:
+    void requestStrokeEnd() override;
+
 protected:
     bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
 

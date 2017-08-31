@@ -104,6 +104,8 @@ struct KisToolFreehandHelper::Private
     int canvasRotation;
     bool canvasMirroredH;
 
+    bool strokeNotFinished;
+
     qreal effectiveSmoothnessDistance() const;
 };
 
@@ -134,6 +136,8 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
                 [this]() {
                     emit requestExplicitUpdateOutline();
                 });
+
+    m_d->strokeNotFinished = false;
 }
 
 KisToolFreehandHelper::~KisToolFreehandHelper()
@@ -164,7 +168,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
     KisDistanceInformation distanceInfo(prevPoint, 0, startAngle);
 
-    if (!m_d->painterInfos.isEmpty()) {
+    if (!m_d->painterInfos.isEmpty() && !m_d->strokeNotFinished) {
         settings = m_d->resources->currentPaintOpPreset()->settings();
         if (m_d->stabilizerDelayedPaintHelper.running() &&
                 m_d->stabilizerDelayedPaintHelper.hasLastPaintInformation()) {
@@ -602,6 +606,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
 
 void KisToolFreehandHelper::endPaint()
 {
+    m_d->strokeNotFinished = false;
     if (!m_d->hasPaintAtLeastOnce) {
         paintAt(m_d->previousPaintInformation);
     } else if (m_d->smoothingOptions->smoothingType() != KisSmoothingOptions::NO_SMOOTHING) {
@@ -668,6 +673,7 @@ void KisToolFreehandHelper::initPaintInContinuedStroke(KoPointerEvent *event,
 
 void KisToolFreehandHelper::endPaintInContinuedStroke()
 {
+    m_d->strokeNotFinished = true;
     if (!m_d->hasPaintAtLeastOnce) {
         paintAt(m_d->previousPaintInformation);
     }

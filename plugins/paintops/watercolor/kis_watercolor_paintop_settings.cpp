@@ -204,3 +204,19 @@ bool KisWatercolorPaintOpSettings::needsContinuedStroke()
 {
     return true;
 }
+
+QPainterPath KisWatercolorPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode)
+{
+    QPainterPath path;
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+        qreal size = getInt(WATERCOLOR_RADIUS) + 1;
+        path = ellipseOutline(size, size, 1.0, 0.0);
+
+        if (mode == CursorTiltOutline) {
+            path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), size * 0.5, 3.0));
+        }
+
+        path.translate(info.pos());
+    }
+    return path;
+}

@@ -686,9 +686,6 @@ QRectF KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
-    ENTER_FUNCTION() << ppVar(outlineDocPoint) << ppVar(m_supportOutline);
-
-
     if (!m_supportOutline) return;
 
     KisConfig cfg;
@@ -717,7 +714,6 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     m_outlineDocPoint = outlineDocPoint;
     m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
-
     QRectF outlinePixelRect = m_currentOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
@@ -742,8 +738,6 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     // DIRTY HACK ALERT: we should fetch the assistant's dirty rect when requesting
     //                   the update, instead of just dumbly update the entire canvas!
-
-    ENTER_FUNCTION() << ppVar(outlineDocRect);
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();

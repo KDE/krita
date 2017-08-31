@@ -22,7 +22,6 @@
 
 KisBaseSplatsPlane::KisBaseSplatsPlane(bool useCaching, KisBaseSplatsPlane *lowLvlPlane, const KoColorSpace* colorSpace)
     : m_lowLvlPlane(lowLvlPlane),
-      m_isDirty(true),
       m_useCaching(useCaching)
 {
     if (useCaching)
@@ -81,21 +80,13 @@ QRect KisBaseSplatsPlane::update(KisWetMap *wetMap)
             {
                 // move to protected call to parent class
                 it = m_splats.erase(it);
-                setDirty(splat);
                 dirtyRect |= splat->boundingRect().toAlignedRect();
             }
         } else {
-            setDirty(splat);
             dirtyRect |= splat->boundingRect().toAlignedRect();
             ++it;
         }
     }
 
     return dirtyRect;
-}
-
-void KisBaseSplatsPlane::setDirty(KisSplat *splat)
-{
-    m_dirtySplats << splat;
-    m_isDirty = true;
 }

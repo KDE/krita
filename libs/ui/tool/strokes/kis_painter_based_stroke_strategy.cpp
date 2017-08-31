@@ -323,8 +323,8 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
 
 void KisPainterBasedStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    qDebug() << "Updating resources";
     UpdateResourceData *d = dynamic_cast<UpdateResourceData *>(data);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d);
     m_resources->setBrush(d->preset);
     m_resources->setFGColorOverride(d->fgColor);
     m_resources->setBGColorOverride(d->bgColor);

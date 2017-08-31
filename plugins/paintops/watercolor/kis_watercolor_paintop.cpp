@@ -72,9 +72,11 @@ KisSpacingInformation KisWatercolorPaintOp::paintAt(const KisPaintInformation &i
 
     QList<KisSplat *> newSplats =
             strategy->generate(m_wetMap,
-                       info.pos(),
-                       m_watercolorOption.radius,
-                       painter()->paintColor());
+                               info.pos(),
+                               m_watercolorOption.radius,
+                               painter()->paintColor(),
+                               m_watercolorOption.gravityX,
+                               m_watercolorOption.gravityY);
 
     const QString oldCompositeOpId = painter()->compositeOp()->id();
     painter()->setCompositeOp(COMPOSITE_OVER);

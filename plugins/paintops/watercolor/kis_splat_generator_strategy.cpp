@@ -22,18 +22,19 @@
 
 #include <QVector2D>
 
-QList<KisSplat *> KisSimpleBrushGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
+QList<KisSplat *> KisSimpleBrushGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color, int gravityX, int gravityY)
 {
     QList<KisSplat *> ret;
     KisSplat *newSplat = new KisSplat(pos, radius,
-                                      color);
+                                      color,
+                                      gravityX, gravityY);
     wetMap->addWater(pos.toPoint(), radius / 2);
     ret << newSplat;
 
     return ret;
 }
 
-QList<KisSplat *> KisWetOnDryGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
+QList<KisSplat *> KisWetOnDryGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color, int gravityX, int gravityY)
 {
     QList<KisSplat *> ret;
     wetMap->addWater(pos.toPoint(), radius / 2);
@@ -45,7 +46,8 @@ QList<KisSplat *> KisWetOnDryGenerator::generate(KisWetMap *wetMap, QPointF pos,
     QVector2D offset;
 
     KisSplat *splat = new KisSplat(pos, radius,
-                                   color);
+                                   color,
+                                   gravityX, gravityY);
     ret << splat;
 
     for (int i = 0; i < 6; i++) {
@@ -60,27 +62,29 @@ QList<KisSplat *> KisWetOnDryGenerator::generate(KisWetMap *wetMap, QPointF pos,
                              0.5f * radialSpeed,
                              1.f,
                              radialSpeed,
-                             color);
+                             color,
+                             gravityX, gravityY);
         ret << splat;
     }
     return ret;
 }
 
-QList<KisSplat *> KisCrunchyGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
+QList<KisSplat *> KisCrunchyGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color, int gravityX, int gravityY)
 {
     QList<KisSplat *> ret;
     wetMap->addWater(pos.toPoint(), radius / 2);
 
     KisSplat *splat = new KisSplat(pos,
-                                      QPointF(0, 0),
-                                      radius,
-                                      15, 5, 0.25f, 2.f,
-                                   color);
+                                   QPointF(0, 0),
+                                   radius,
+                                   30, 5, 0.25f, 2.f,
+                                   color,
+                                   gravityX, gravityY);
     ret << splat;
     return ret;
 }
 
-QList<KisSplat *> KisWetOnWetGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
+QList<KisSplat *> KisWetOnWetGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color, int gravityX, int gravityY)
 {
     QList<KisSplat *> ret;
     wetMap->addWater(pos.toPoint(), radius / 2);
@@ -91,20 +95,22 @@ QList<KisSplat *> KisWetOnWetGenerator::generate(KisWetMap *wetMap, QPointF pos,
     KisSplat *splat = new KisSplat(pos,
                                    QPointF(0, 0),
                                    bigD,
-                                   15, 5, 1.f, 2.f,
-                                   color);
+                                   30, 5, 1.f, 2.f,
+                                   color,
+                                   gravityX, gravityY);
     ret << splat;
 
     splat = new KisSplat(pos,
                          QPointF(0, 0),
                          smallD,
-                         15, 5, 1.f, 2.f,
-                         color);
+                         30, 5, 1.f, 2.f,
+                         color,
+                         gravityX, gravityY);
     ret << splat;
     return ret;
 }
 
-QList<KisSplat *> KisBlobbyGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color)
+QList<KisSplat *> KisBlobbyGenerator::generate(KisWetMap *wetMap, QPointF pos, qreal radius, const KoColor &color, int gravityX, int gravityY)
 {
     QList<KisSplat *> ret;
     wetMap->addWater(pos.toPoint(), radius / 2);
@@ -134,8 +140,9 @@ QList<KisSplat *> KisBlobbyGenerator::generate(KisWetMap *wetMap, QPointF pos, q
         splat = new KisSplat(posN,
                              QPointF(0, 0),
                              size,
-                             15, 5, 1.f, 2.f,
-                             color);
+                             30, 5, 1.f, 2.f,
+                             color,
+                             gravityX, gravityY);
         ret << splat;
     }
 

@@ -26,6 +26,7 @@ KisFixedSplatsPlane::KisFixedSplatsPlane(KisBaseSplatsPlane *driedPlane, const K
 
 QRect KisFixedSplatsPlane::update(KisWetMap *wetMap)
 {
+    QRect dirtyRect;
     for (auto it = m_splats.begin(); it != m_splats.end();) {
         KisSplat *splat = *it;
 
@@ -34,17 +35,15 @@ QRect KisFixedSplatsPlane::update(KisWetMap *wetMap)
             {
                 // move to protected call to parent class
                 it = m_splats.erase(it);
-                if (m_useCaching) {
-                    m_cachedPD->clear(splat->boundingRect().toAlignedRect());
-                }
-                setDirty(splat);
+                m_cachedPD->clear(splat->boundingRect().toAlignedRect());
+                dirtyRect |= splat->boundingRect().toAlignedRect();
             }
         } else {
             ++it;
         }
     }
 
-    return QRect();
+    return dirtyRect;
 }
 
 void KisFixedSplatsPlane::rewet(KisWetMap *wetMap, QPointF pos, qreal rad, KisBaseSplatsPlane *flowingPlane)

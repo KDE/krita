@@ -45,9 +45,11 @@ public:
         Dried
     };
 
-    KisSplat(QPointF offset, int width, const KoColor &color);
+    KisSplat(QPointF offset, int width, const KoColor &color,
+             int gravityX, int gravityY);
     KisSplat(QPointF offset, QPointF velocityBias, int width, int life,
-          qreal roughness, qreal flow, qreal radialSpeed, const KoColor &color);
+             qreal roughness, qreal flow, qreal radialSpeed, const KoColor &color,
+             int gravityX, int gravityY);
 
     void doPaint(KisPainter *painter);
 
@@ -79,6 +81,9 @@ private:
     int m_state;
 
     QPainterPath m_oldPath;
+
+    int m_gravityX,
+        m_gravityY;
 };
 
 #endif

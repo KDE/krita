@@ -183,12 +183,19 @@ void KisToolFreehand::deactivate()
     KisToolPaint::deactivate();
 }
 
+void KisToolFreehand::requestStrokeEnd()
+{
+    if (!m_needEndContinuedStroke && m_helper->isRunning()) {
+        m_needEndContinuedStroke = true;
+        endStroke();
+    }
+}
+
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     if (m_helper->isRunning()) {
         if (m_needEndContinuedStroke)
             m_needEndContinuedStroke = false;
-        qDebug() << "Inited part of continued stroke\n";
         m_helper->initPaintInContinuedStroke(event,
                                              canvas()->resourceManager(),
                                              image(),
@@ -218,11 +225,9 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
 void KisToolFreehand::endStroke()
 {
     if (currentPaintOpPreset()->settings()->needsContinuedStroke() && !m_needEndContinuedStroke) {
-            qDebug() << "Finished part of continued stroke\n" << ppVar(m_needEndContinuedStroke);
             m_helper->endPaintInContinuedStroke();
             m_updateTimer.start(100);
     } else {
-        qDebug() << "Stroke finished finaly\n" << ppVar(m_needEndContinuedStroke);
         m_helper->endPaint();
         if (m_updateTimer.isActive())
             m_updateTimer.stop();

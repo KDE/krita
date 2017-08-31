@@ -46,16 +46,20 @@ bool KisWatercolorPaintOpSettings::paintIncremental()
 
 void KisWatercolorPaintOpSettings::setPaintOpSize(qreal value)
 {
+    qDebug() << "\n setSize";
     WatercolorOption op;
     op.readOptionSettingImpl(this);
-    op.radius = qRound(0.5 * value);
+    op.radius = value;
+    qDebug() << ppVar(op.radius);
     op.writeOptionSettingImpl(this);
 }
 
 qreal KisWatercolorPaintOpSettings::paintOpSize() const
 {
+    qDebug() << "\nreadSize";
     WatercolorOption op;
     op.readOptionSettingImpl(this);
+    qDebug() << ppVar(op.radius);
     return op.radius;
 
 }

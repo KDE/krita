@@ -43,8 +43,8 @@ public:
         gravityY->setSingleStep(1.0);
 
         radius->setRange(0.0, 1000.0);
-        radius->setPrefix("px");
-        radius->setValue(25);
+        radius->setSuffix(i18n(" px"));
+        radius->setValue(100.0);
         radius->setSingleStep(1.0);
     }
 };
@@ -75,23 +75,10 @@ void KisWatercolorOpOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     setting->setProperty(WATERCOLOR_GRAVITY_Y, m_options->gravityY->value());
     setting->setProperty(WATERCOLOR_TYPE, m_options->brushType->currentIndex());
     setting->setProperty(WATERCOLOR_RADIUS, m_options->radius->value());
-//    WatercolorOption op;
-
-//    op.gravityX = m_options->gravityX->value();
-//    op.gravityY = m_options->gravityY->value();
-
-//    op.type = m_options->brushType->currentIndex();
-
-//    op.radius = m_options->radius->value();
-
-//    op.writeOptionSettingImpl(setting);
 }
 
 void KisWatercolorOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-//    WatercolorOption op;
-//    op.readOptionSettingImpl(setting);
-
     m_options->gravityX->setValue(setting->getDouble(WATERCOLOR_GRAVITY_X));
     m_options->gravityY->setValue(setting->getDouble(WATERCOLOR_GRAVITY_Y));
     m_options->brushType->setCurrentIndex(setting->getInt(WATERCOLOR_TYPE));

@@ -26,6 +26,7 @@ KisBaseSplatsPlane::KisBaseSplatsPlane(bool useCaching, KisBaseSplatsPlane *lowL
 {
     if (useCaching)
         m_cachedPD = new KisPaintDevice(colorSpace);
+    m_splatsTree = new KoRTree<KisSplat*>(4, 2);
 }
 
 KisBaseSplatsPlane::~KisBaseSplatsPlane()
@@ -36,6 +37,7 @@ KisBaseSplatsPlane::~KisBaseSplatsPlane()
 void KisBaseSplatsPlane::add(KisSplat *splat)
 {
     m_splats << splat;
+    m_splatsTree->insert(splat->boundingRect().toAlignedRect(), splat);
     if (m_useCaching) {
         KisPainter *painter = new KisPainter(m_cachedPD);
         splat->doPaint(painter);
@@ -45,6 +47,7 @@ void KisBaseSplatsPlane::add(KisSplat *splat)
 void KisBaseSplatsPlane::remove(KisSplat *splat)
 {
     m_splats.removeOne(splat);
+    m_splatsTree->remove(splat);
     if (m_useCaching) {
         m_cachedPD->clear(splat->boundingRect().toAlignedRect());
     }
@@ -61,7 +64,7 @@ void KisBaseSplatsPlane::paint(KisPainter *gc, QRect rect)
                    rect);
     } else {
         Q_FOREACH (KisSplat *splat, m_splats) {
-            if (rect.contains(splat->boundingRect().toAlignedRect()))
+//            if (rect.contains(splat->boundingRect().toAlignedRect()))
                 splat->doPaint(gc);
         }
     }
@@ -89,4 +92,9 @@ QRect KisBaseSplatsPlane::update(KisWetMap *wetMap)
     }
 
     return dirtyRect;
+}
+
+KoRTree<KisSplat *> *KisBaseSplatsPlane::splatsTree() const
+{
+    return m_splatsTree;
 }

@@ -52,6 +52,7 @@ public:
              int gravityX, int gravityY);
 
     void doPaint(KisPainter *painter);
+    void doPaint(KisPainter *painter, QRectF rect);
 
     QPainterPath shape() const;
     QRectF boundingRect() const;

@@ -32,14 +32,14 @@ public:
 
     bool paintIncremental() override;
 
-    void setPaintOpSize(qreal value) override;
-    qreal paintOpSize() const override;
-
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
     bool needsContinuedStroke() override;
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 
 private:
     struct Private;

@@ -151,6 +151,29 @@ void KisSplat::doPaint(KisPainter *painter)
     painter->setPaintColor(oldColor);
 }
 
+void KisSplat::doPaint(KisPainter *painter, QRectF rect)
+{
+    qreal multiply = m_initSize / CalcSize();
+    if (multiply < 0.f || multiply > 1.f)
+        multiply = 1;
+
+    qint8 oldOpacity = painter->opacity();
+    KisPainter::FillStyle oldFillStyle = painter->fillStyle();
+    KoColor oldColor = painter->paintColor();
+
+    painter->setOpacity(START_OPACITY * multiply);
+    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter->setPaintColor(m_initColor);
+    QPainterPath rectPath;
+    rectPath.addRect(rect);
+    QPainterPath shapeIn = shape().intersected(rectPath);
+    painter->fillPainterPath(shapeIn);
+
+    painter->setOpacity(oldOpacity);
+    painter->setFillStyle(oldFillStyle);
+    painter->setPaintColor(oldColor);
+}
+
 QPainterPath KisSplat::shape() const
 {
     QPainterPath path;
@@ -194,7 +217,7 @@ int KisSplat::update(KisWetMap *wetMap)
         QPointF v = m_velocities[i];
         QPointF d = (1.f - alpha) * m_motionBias + alpha / get_random(1.f, 1.f + m_roughness) * v;
 
-        QPointF x1 = x + m_flow * d + QPointF(m_gravityX / 12, m_gravityY / 12)/*
+        QPointF x1 = x + m_flow * d + QPointF(m_gravityX / 10, m_gravityY / 10)/*
                 + QPointF(get_random(-m_roughness, m_roughness) / 5,
                           get_random(-m_roughness, m_roughness) / 5)*/;
         newVertices.push_back(x1);

@@ -25,6 +25,7 @@
 #include "kis_wetmap.h"
 #include "kis_paint_device.h"
 #include <QRect>
+#include "KoRTree.h"
 
 /**
  * Base class for the splats' containers in watercolor
@@ -71,10 +72,12 @@ public:
      */
     virtual QRect update(KisWetMap *wetMap);
 
-
 protected:
     QList<KisSplat*> m_splats;
+    KoRTree<KisSplat *> *m_splatsTree;
     KisBaseSplatsPlane *m_lowLvlPlane;
+
+    KoRTree<KisSplat *> *splatsTree() const;
 
 protected:
     bool m_useCaching;

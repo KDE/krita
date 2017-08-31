@@ -20,7 +20,6 @@
 #define KISFIXEDSPLATSPLANE_H
 
 #include "kis_base_splats_plane.h"
-#include "KoRTree.h"
 
 class KisFixedSplatsPlane : public KisBaseSplatsPlane
 {
@@ -33,7 +32,6 @@ public:
 
 private:
     KisBaseSplatsPlane *m_flowingPlane;
-    KoRTree<KisSplat *> m_splatsTree;
 };
 
 #endif // KISFIXEDSPLATSPLANE_H

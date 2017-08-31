@@ -47,6 +47,7 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     QString workspace;
     bool canvasOnly {false};
     bool noSplash {false};
+    bool fullScreen {false};
 };
 
 
@@ -55,6 +56,10 @@ KisApplicationArguments::KisApplicationArguments()
 {
 }
 
+
+KisApplicationArguments::~KisApplicationArguments()
+{
+}
 
 KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     : d(new Private)
@@ -67,6 +72,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("workspace"), i18n("The name of the workspace to open Krita with"), QLatin1String("workspace")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("canvasonly"), i18n("Start Krita in canvas-only mode")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("nosplash"), i18n("Do not show the splash screen")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("fullscreen"), i18n("Start Krita in full-screen mode")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("dpi"), i18n("Override display DPI"), QLatin1String("dpiX,dpiY")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-pdf"), i18n("Only export to PDF and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
@@ -100,6 +106,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     d->exportAsPdf = parser.isSet("export-pdf");
     d->canvasOnly = parser.isSet("canvasonly");
     d->noSplash = parser.isSet("nosplash");
+    d->fullScreen = parser.isSet("fullscreen");
 
     const QDir currentDir = QDir::current();
     Q_FOREACH (const QString &filename, parser.positionalArguments()) {
@@ -121,10 +128,7 @@ KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &
     d->canvasOnly = rhs.canvasOnly();
     d->workspace = rhs.workspace();
     d->noSplash = rhs.noSplash();
-}
-
-KisApplicationArguments::~KisApplicationArguments()
-{
+    d->fullScreen = rhs.fullScreen();
 }
 
 void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)
@@ -140,6 +144,7 @@ void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)
     d->canvasOnly = rhs.canvasOnly();
     d->workspace = rhs.workspace();
     d->noSplash = rhs.noSplash();
+    d->fullScreen = rhs.fullScreen();
 }
 
 QByteArray KisApplicationArguments::serialize()
@@ -163,6 +168,7 @@ QByteArray KisApplicationArguments::serialize()
     ds << d->workspace;
     ds << d->canvasOnly;
     ds << d->noSplash;
+    ds << d->fullScreen;
 
     buf.close();
 
@@ -194,6 +200,7 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
     ds >> args.d->workspace;
     ds >> args.d->canvasOnly;
     ds >> args.d->noSplash;
+    ds >> args.d->fullScreen;
 
     buf.close();
 
@@ -253,4 +260,9 @@ bool KisApplicationArguments::canvasOnly() const
 bool KisApplicationArguments::noSplash() const
 {
     return d->noSplash;
+}
+
+bool KisApplicationArguments::fullScreen() const
+{
+    return d->fullScreen;
 }

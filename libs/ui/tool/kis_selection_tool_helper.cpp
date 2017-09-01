@@ -108,22 +108,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
             pixelSelection->applySelection(m_selection, m_action);
 
-            const QRect imageBounds = m_view->image()->bounds();
-            QRect selectionExactRect = m_view->selection()->selectedExactRect();
-
-            if (!imageBounds.contains(selectionExactRect)) {
-                pixelSelection->crop(imageBounds);
-                if (pixelSelection->outlineCacheValid()) {
-                    QPainterPath cache = pixelSelection->outlineCache();
-                    QPainterPath imagePath;
-                    imagePath.addRect(imageBounds);
-                    cache &= imagePath;
-                    pixelSelection->setOutlineCache(cache);
-                }
-                selectionExactRect &= imageBounds;
-            }
-
-            QRect dirtyRect = imageBounds;
+            QRect dirtyRect = m_view->image()->bounds();
             if (hasSelection && m_action != SELECTION_REPLACE && m_action != SELECTION_INTERSECT) {
                 dirtyRect = m_selection->selectedRect();
             }
@@ -132,7 +117,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             KUndo2Command *savedCommand = transaction.endAndTake();
             pixelSelection->setDirty(dirtyRect);
 
-            if (selectionExactRect.isEmpty()) {
+            if (m_view->selection()->selectedExactRect().isEmpty()) {
                 KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
                 cmd->addCommand(savedCommand);
                 cmd->addCommand(new KisDeselectGlobalSelectionCommand(m_view->image()));
@@ -216,16 +201,6 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
     applicator.end();
 }
 
-
-void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect, SelectionAction action)
-{
-    KisImageWSP image = m_canvas->viewManager()->image();
-
-    if (!image->wrapAroundModePermitted() && action != SELECTION_SUBTRACT) {
-        *rect &= image->bounds();
-    }
-}
-
 bool KisSelectionToolHelper::canShortcutToDeselect(const QRect &rect, SelectionAction action)
 {
     return rect.isEmpty() && (action == SELECTION_INTERSECT || action == SELECTION_REPLACE);
@@ -234,17 +209,6 @@ bool KisSelectionToolHelper::canShortcutToDeselect(const QRect &rect, SelectionA
 bool KisSelectionToolHelper::canShortcutToNoop(const QRect &rect, SelectionAction action)
 {
     return rect.isEmpty() && action == SELECTION_ADD;
-}
-
-void KisSelectionToolHelper::cropPathIfNeeded(QPainterPath *path)
-{
-    KisImageWSP image = m_canvas->viewManager()->image();
-
-    if (!image->wrapAroundModePermitted()) {
-        QPainterPath cropPath;
-        cropPath.addRect(image->bounds());
-        *path &= cropPath;
-    }
 }
 
 bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action)

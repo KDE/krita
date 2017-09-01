@@ -52,7 +52,6 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Rectangle"));
 
     QRect rc(rect.normalized().toRect());
-    helper.cropRectIfNeeded(&rc, selectionAction());
 
     if (helper.tryDeselectCurrentSelection(pixelToView(rc), selectionAction())) {
         return;

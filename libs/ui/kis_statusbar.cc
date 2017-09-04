@@ -307,8 +307,7 @@ void KisStatusBar::updateMemoryStatus()
                   formatSize(stats.tilesPoolLimit),
 
                   formatSize(stats.historicalMemorySize),
-                  formatSize(stats.swapSize),
-                  formatSize(stats.lodSize));
+                  formatSize(stats.swapSize));
 
     QString longStats = imageStatsMsg + "\n" + memoryStatsMsg;
 

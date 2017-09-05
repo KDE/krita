@@ -545,7 +545,26 @@ void KisPopupPalette::slotShowTagsPopup()
     }
 }
 
-void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
+void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+    event->accept();
+    QEvent::Type evType =
+            event->type() == QEvent::TabletPress ? QEvent::MouseButtonPress :
+            event->type() == QEvent::TabletRelease ? QEvent::MouseButtonRelease :
+            QEvent::MouseMove;
+    QMouseEvent mouseEvent(evType, event->posF(), event->globalPosF(), event->button(), event->buttons(), event->modifiers());
+    mouseEvent.setTimestamp(event->timestamp());
+    switch (event->type()) {
+    case QEvent::TabletPress:
+        mousePressEvent(&mouseEvent);
+        break;
+    case QEvent::TabletMove:
+        mouseMoveEvent(&mouseEvent);
+        break;
+    case QEvent::TabletRelease:
+        mouseReleaseEvent(&mouseEvent);
+        break;
+    default: break;
+    }
 }
 
 

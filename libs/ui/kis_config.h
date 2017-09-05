@@ -267,6 +267,9 @@ public:
     QString pressureTabletCurve(bool defaultValue = false) const;
     void setPressureTabletCurve(const QString& curveString) const;
 
+    bool useWin8PointerInput(bool defaultValue = false) const;
+    void setUseWin8PointerInput(bool value) const;
+
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
 

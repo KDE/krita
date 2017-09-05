@@ -66,7 +66,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setModel(self.pagesModel)
         pageBox = QWidget()
         pageBox.setLayout(QVBoxLayout())
-        zoomSlider = QSlider(pageBox, Qt.Horizontal)
+        zoomSlider = QSlider(Qt.Horizontal, None)
         zoomSlider.setRange(1, 8)
         zoomSlider.setValue(4)
         zoomSlider.setTickInterval(1)

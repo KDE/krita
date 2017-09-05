@@ -11,7 +11,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from PyQt5.QtCore import QElapsedTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
@@ -38,12 +38,16 @@ class comics_project_manager_docker(DockWidget):
         self.setWindowTitle(self.stringName)
 
         # Setup layout:
-        self.baseLayout = QHBoxLayout()
+        base = QHBoxLayout()
         widget = QWidget()
-        widget.setLayout(self.baseLayout)
+        widget.setLayout(base)
+        self.baseLayout = QSplitter()
+        base.addWidget(self.baseLayout)
         self.setWidget(widget)
         self.buttonLayout = QVBoxLayout()
-        self.baseLayout.addLayout(self.buttonLayout)
+        buttonBox = QWidget()
+        buttonBox.setLayout(self.buttonLayout)
+        self.baseLayout.addWidget(buttonBox)
 
         # Comic page list and pages model
         self.comicPageList = QTableView()
@@ -400,7 +404,7 @@ class comics_project_manager_docker(DockWidget):
 
         # Search for the possible name.
         extraUnderscore = str()
-        if str(self.setupDictionary["projectName"])[:-1].isdigit():
+        if str(self.setupDictionary["projectName"])[-1].isdigit():
             extraUnderscore = "_"
         pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(len(pagesList), "03d"))
         url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")

@@ -320,7 +320,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
-
+    
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp

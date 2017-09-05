@@ -26,6 +26,7 @@
 #include "krita_sketch_export.h"
 
 class QQuickItem;
+class Theme;
 
 class KRITA_SKETCH_EXPORT Settings : public QObject
 {
@@ -41,6 +42,8 @@ class KRITA_SKETCH_EXPORT Settings : public QObject
 public:
     explicit Settings( QObject* parent = 0);
     virtual ~Settings();
+
+    void setTheme(Theme *theme);
 
 public Q_SLOTS:
 

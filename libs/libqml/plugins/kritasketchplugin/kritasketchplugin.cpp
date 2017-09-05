@@ -128,22 +128,15 @@ void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
-    // QT5TODO: seems to be run in thread other than the one of KritaSketchPlugin, so parenting directly not possible
-    // TODO: constants and other things are expected by the components, which results in circular dependency
-    // Use singletons instead, in the right namespace
-    Settings *settings = new Settings;//( this );
-    DocumentManager::instance()->setSettingsManager( settings );
-    RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
 
     engine->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     engine->addImageProvider(QLatin1String("color"), new ColorImageProvider);
     engine->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
 
-    engine->rootContext()->setContextProperty("Settings", settings);
+    RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
     engine->rootContext()->setContextProperty("RecentFileManager", recentFileManager);
     engine->rootContext()->setContextProperty("KisClipBoard", KisClipboard::instance());
-    // QT5TODO: check how this hack can be prevented
-//     engine->rootContext()->setContextProperty("QMLEngine", engine);
+    engine->rootContext()->setContextProperty("QMLEngine", engine);
     // This would be a problem, but doesn't seem to be used...
 //    engine->rootContext()->setContextProperty("View", d->view);
 }

@@ -24,6 +24,8 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include <KoResourcePaths.h>
 #include <kis_icon.h>
@@ -32,6 +34,11 @@
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
 #include <KisViewManager.h>
+#include <kis_config.h>
+
+#include <Theme.h>
+#include <Settings.h>
+#include <DocumentManager.h>
 
 class TouchDockerDock::Private
 {
@@ -58,6 +65,14 @@ TouchDockerDock::TouchDockerDock( )
 
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
+
+    Settings *settings = new Settings(this);
+    DocumentManager::instance()->setSettingsManager(settings);
+    m_quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);
+
+    Theme *theme = Theme::load(KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default"),
+                               m_quickWidget->engine());
+    settings->setTheme(theme);
 
     m_quickWidget->setSource(QUrl("qrc:/kritasketch.qml"));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);

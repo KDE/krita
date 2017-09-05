@@ -34,16 +34,11 @@
 
 #include "QmlGlobalEngine.h"
 
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
-
-class Theme::Private
+class Q_DECL_HIDDEN Theme::Private
 {
 public:
     Private()
-        : inheritedTheme(0)
-        , iconPath("icons/")
+        : iconPath("icons/")
         , imagePath("images/")
         , fontPath("fonts/")
         , fontsAdded(false)
@@ -55,8 +50,6 @@ public:
 
     QString id;
     QString name;
-    QString inherits;
-    Theme* inheritedTheme;
 
     QVariantMap colors;
     QVariantMap sizes;
@@ -101,7 +94,8 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        const QString themeQmlPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("kritasketch/themes/%1/theme.qml").arg(d->id));
+
+        const QString themeQmlPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("krita/qmlthemes/%1/theme.qml").arg(d->id));
         d->basePath = QFileInfo(themeQmlPath).dir().absolutePath();
         emit idChanged();
     }
@@ -117,29 +111,6 @@ void Theme::setName(const QString& newValue)
     if(newValue != d->name) {
         d->name = newValue;
         emit nameChanged();
-    }
-}
-
-QString Theme::inherits() const
-{
-    return d->inherits;
-}
-
-void Theme::setInherits(const QString& newValue)
-{
-    if(newValue != d->inherits) {
-        if(d->inheritedTheme) {
-            delete d->inheritedTheme;
-            d->inheritedTheme = 0;
-        }
-        d->inherits = newValue;
-
-        if(!d->inherits.isEmpty()) {
-            d->inheritedTheme = Theme::load(d->inherits, this);
-            connect(d->inheritedTheme, SIGNAL(fontCacheRebuilt()), SIGNAL(fontCacheRebuilt()));
-        }
-
-        emit inheritsChanged();
     }
 }
 
@@ -186,10 +157,6 @@ QColor Theme::color(const QString& name)
                 map = QVariantMap();
             }
         }
-    }
-
-    if(!result.isValid() && d->inheritedTheme) {
-        result = d->inheritedTheme->color(name);
     }
 
     if(!result.isValid()) {
@@ -249,15 +216,12 @@ QFont Theme::font(const QString& name)
         d->fontsAdded = true;
     }
 
-    if(d->fontMap.isEmpty()) {
+    if (d->fontMap.isEmpty()) {
         d->rebuildFontCache();
     }
 
-    if(d->fontMap.contains(name))
+    if (d->fontMap.contains(name))
         return d->fontMap.value(name);
-
-    if(d->inheritedTheme)
-        return d->inheritedTheme->font(name);
 
     warnKrita << "Unable to find font" << name;
     return QFont();
@@ -304,11 +268,7 @@ QUrl Theme::icon(const QString& name)
 {
     QString url = QString("%1/%2/%3.svg").arg(d->basePath, d->iconPath, name);
     if(!QFile::exists(url)) {
-        if(d->inheritedTheme) {
-            return d->inheritedTheme->icon(name);
-        } else {
-            warnKrita << "Unable to find icon" << url;
-        }
+        warnKrita << "Unable to find icon" << url;
     }
 
     return QUrl::fromLocalFile(url);
@@ -331,43 +291,20 @@ QUrl Theme::image(const QString& name)
 {
     QString url = QString("%1/%2/%3").arg(d->basePath, d->imagePath, name);
     if(!QFile::exists(url)) {
-        if(d->inheritedTheme) {
-            return d->inheritedTheme->image(name);
-        } else {
-            warnKrita << "Unable to find image" << url;
-        }
+        warnKrita << "Unable to find image" << url;
     }
 
     return QUrl::fromLocalFile(url);
 }
 
-Theme* Theme::load(const QString& id, QObject* parent)
+Theme* Theme::load(const QString& id, QQmlEngine *engine)
 {
-    QString qml;
-
-    //Ugly hacky stuff for making things work on Windows
-#ifdef Q_OS_WIN
-    QDir appdir(qApp->applicationDirPath());
-
-    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
-    wchar_t buffer[1024];
-    QString absolute = appdir.absolutePath();
-    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
-    rv = ::GetLongPathName(buffer, buffer, 1024);
-    QString correctedPath((QChar *)buffer);
-    appdir.setPath(correctedPath);
-
-    // for now, the app in bin/ and we still use the env.bat script
-    appdir.cdUp();
-    qml = QString("%1/share/apps/kritasketch/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
-#else
-    qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("kritasketch/themes/%1/theme.qml").arg(id));
-#endif
-
-    QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
+    QString qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                         QString("krita/qmlthemes/%1/theme.qml").arg(id));
+    QQmlComponent themeComponent(engine, 0);
     themeComponent.loadUrl(QUrl::fromLocalFile(qml), QQmlComponent::PreferSynchronous);
 
-    if(themeComponent.isError()) {
+    if (themeComponent.isError()) {
         warnKrita << themeComponent.errorString();
         return 0;
     }
@@ -406,9 +343,11 @@ void Theme::Private::rebuildFontCache()
         if(font.isCopyOf(qApp->font()))
             warnKrita << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
 
-        float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
-        float lineHeight = qApp->activeWindow()->height() / lineCount;
-        font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
+        if (qApp->activeWindow()) {
+            float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
+            float lineHeight = qApp->activeWindow()->height() / lineCount;
+            font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
+        }
 
         fontMap.insert(itr.key(), font);
     }

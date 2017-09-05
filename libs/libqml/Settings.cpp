@@ -36,23 +36,26 @@ public:
     QString currentFile;
     bool temporaryFile;
     QQuickItem *focusItem;
-    Theme* theme;
+    Theme* theme {0};
 };
 
 Settings::Settings( QObject* parent )
-    : QObject( parent ), d( new Private )
+    : QObject( parent )
+    , d( new Private )
 {
-    // QT5TODO: Settings object is constructed in KritaSketchPlugin::initializeEngine(), where
-    // creation of other qml components is not possible. But Theme::load() does that.
-    // This needs some refactoring to resolve the deps. For now creating lazily in Settings::theme(), error-prone.
-//     QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
-//     d->theme = Theme::load(theme, this);
-//     connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
 }
 
 Settings::~Settings()
 {
     delete d;
+}
+
+void Settings::setTheme(Theme *theme)
+{
+    d->theme = theme;
+    d->theme->setParent(this);
+    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
+
 }
 
 
@@ -98,12 +101,6 @@ void Settings::setFocusItem(QQuickItem* item)
 
 QObject* Settings::theme() const
 {
-    // create lazily for now, see constructor notes
-    if (!d->theme) {
-    QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
-    d->theme = Theme::load(theme, const_cast<Settings*>(this));
-    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
-    }
     return d->theme;
 }
 
@@ -117,17 +114,17 @@ QString Settings::themeID() const
 
 void Settings::setThemeID(const QString& id)
 {
-    if(!d->theme || id != d->theme->id()) {
-        if(d->theme) {
-            delete d->theme;
-            d->theme = 0;
-        }
+//    if(!d->theme || id != d->theme->id()) {
+//        if(d->theme) {
+//            delete d->theme;
+//            d->theme = 0;
+//        }
 
-        d->theme = Theme::load(id, this);
-        KSharedConfig::openConfig()->group("General").writeEntry<QString>("theme", id);
+//        d->theme = Theme::load(id, this);
+//        KSharedConfig::openConfig()->group("General").writeEntry<QString>("theme", id);
 
-        emit themeChanged();
-    }
+//        emit themeChanged();
+//    }
 }
 
 QObject* Settings::customImageSettings() const

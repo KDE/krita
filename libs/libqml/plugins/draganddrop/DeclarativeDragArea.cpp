@@ -91,8 +91,8 @@ void DeclarativeDragArea::resetDelegate()
 }
 
 /*!
-  The QML element that is the source of this drag and drop operation. This can be defined to any item, and will
-  be available to the DropArea as event.data.source
+  The QML element that is the source of this drag and drop operation. This can be
+  defined to any item, and will be available to the DropArea as event.data.source
 */
 QQuickItem* DeclarativeDragArea::source() const
 {

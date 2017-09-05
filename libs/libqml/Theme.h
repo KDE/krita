@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QVariantMap>
 
+class QQmlEngine;
+
 #include "krita_sketch_export.h"
 
 class KRITA_SKETCH_EXPORT Theme : public QObject
@@ -46,19 +48,6 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
      * \notify nameChanged()
      */
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    /**
-     * \property inherits
-     * \brief The id of the theme this theme inherits.
-     *
-     * If a certain property can not be found, the theme will try to get that property
-     * from the inherited theme.
-     *
-     * \default None
-     * \get inherits() const
-     * \set setInherits()
-     * \notify inheritsChanged()
-     */
-    Q_PROPERTY(QString inherits READ inherits WRITE setInherits NOTIFY inheritsChanged)
     /**
      * \property colors
      * \brief A JavaScript object describing the colors to be used by this theme.
@@ -124,6 +113,8 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
      */
     Q_PROPERTY(QString fontPath READ fontPath WRITE setFontPath NOTIFY fontPathChanged)
 public:
+
+    static Theme *instance();
     explicit Theme(QObject* parent = 0);
     virtual ~Theme();
 
@@ -144,15 +135,6 @@ public:
      * Setter for property #name.
      */
     void setName(const QString& newValue);
-
-    /**
-     * Getter for property #inherits.
-     */
-    QString inherits() const;
-    /**
-     * Setter for property #inherits.
-     */
-    void setInherits(const QString& newValue);
 
     /**
      * Getter for property #colors.
@@ -232,12 +214,11 @@ public:
      */
     Q_INVOKABLE QUrl image(const QString& name);
 
-    static Theme* load(const QString& id, QObject* parent = 0);
+    static Theme* load(const QString& id, QQmlEngine *engine = 0);
 
 Q_SIGNALS:
     void idChanged();
     void nameChanged();
-    void inheritsChanged();
     void colorsChanged();
     void sizesChanged();
     void fontsChanged();

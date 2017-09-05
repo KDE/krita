@@ -42,5 +42,5 @@ target_link_libraries(kritaqml
 
 include(GNUInstallDirs)
 install(TARGETS kritaqml ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/krita/qmlthemes)
+install(DIRECTORY qmlthemes DESTINATION ${DATA_INSTALL_DIR}/krita)
 

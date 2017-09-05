@@ -27,7 +27,6 @@
 #include <QQuickItem>
 #include <QImage>
 
-class QQmlComponent;
 class DeclarativeMimeData;
 
 class DeclarativeDragArea : public QQuickItem

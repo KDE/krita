@@ -50,6 +50,8 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <kis_tablet_support_win.h>
+#include <kis_tablet_support_win8.h>
+#include <kis_config.h>
 
 #elif defined HAVE_X11
 #include <kis_tablet_support_x11.h>
@@ -247,8 +249,26 @@ extern "C" int main(int argc, char **argv)
 
 
 #if defined Q_OS_WIN
-    KisTabletSupportWin::init();
-    // app.installNativeEventFilter(new KisTabletSupportWin());
+    {
+        KisConfig cfg;
+        bool isUsingWin8PointerInput = false;
+        if (cfg.useWin8PointerInput()) {
+            KisTabletSupportWin8 *penFilter = new KisTabletSupportWin8();
+            if (penFilter->init()) {
+                // penFilter.registerPointerDeviceNotifications();
+                app.installNativeEventFilter(penFilter);
+                isUsingWin8PointerInput = true;
+                qDebug() << "Using Win8 Pointer Input for tablet support";
+            } else {
+                qDebug() << "No Win8 Pointer Input available";
+                delete penFilter;
+            }
+        }
+        if (!isUsingWin8PointerInput) {
+            KisTabletSupportWin::init();
+            // app.installNativeEventFilter(new KisTabletSupportWin());
+        }
+    }
 #endif
 
     if (!app.start(args)) {

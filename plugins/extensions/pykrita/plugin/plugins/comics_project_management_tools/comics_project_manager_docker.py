@@ -399,13 +399,16 @@ class comics_project_manager_docker(DockWidget):
             self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
 
         # Search for the possible name.
-        pageName = str(self.setupDictionary["projectName"]) + str(format(len(pagesList), "03d"))
+        extraUnderscore = str()
+        if str(self.setupDictionary["projectName"])[:-1].isdigit():
+            extraUnderscore = "_"
+        pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(len(pagesList), "03d"))
         url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
         pageNumber = 0
         if (url in pagesList):
             while (url in pagesList):
                 pageNumber += 1
-                pageName = str(self.setupDictionary["projectName"]) + str(format(pageNumber, "03d"))
+                pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(pageNumber, "03d"))
                 url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
 
         # open the page by opening the template and resaving it, or just opening it.

@@ -11,7 +11,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from PyQt5.QtCore import QElapsedTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
@@ -57,14 +57,23 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setAcceptDrops(True)
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
-        self.comicPageList.setIconSize(QSize(100, 100))
+        self.comicPageList.setIconSize(QSize(128, 128))
         # self.comicPageList.itemDelegate().closeEditor.connect(self.slot_write_description)
         self.pagesModel.layoutChanged.connect(self.slot_write_config)
         self.pagesModel.rowsInserted.connect(self.slot_write_config)
         self.pagesModel.rowsRemoved.connect(self.slot_write_config)
         self.comicPageList.verticalHeader().sectionMoved.connect(self.slot_write_config)
         self.comicPageList.setModel(self.pagesModel)
-        self.baseLayout.addWidget(self.comicPageList)
+        pageBox = QWidget()
+        pageBox.setLayout(QVBoxLayout())
+        zoomSlider = QSlider(pageBox, Qt.Horizontal)
+        zoomSlider.setRange(1, 8)
+        zoomSlider.setValue(4)
+        zoomSlider.setTickInterval(1)
+        zoomSlider.valueChanged.connect(self.slot_scale_thumbnails)
+        pageBox.layout().addWidget(zoomSlider)
+        pageBox.layout().addWidget(self.comicPageList)
+        self.baseLayout.addWidget(pageBox)
 
         self.btn_project = QToolButton()
         self.btn_project.setPopupMode(QToolButton.MenuButtonPopup)
@@ -223,6 +232,13 @@ class comics_project_manager_docker(DockWidget):
                 progress.setValue(progress.value() + 1)
         progress.setValue(len(pagesList))
         self.loadingPages = False
+    """
+    Function that is triggered by the zoomSlider
+    Resizes the thumbnails.
+    """
+    def slot_scale_thumbnails(self, multiplier = 4):
+        self.comicPageList.setIconSize(QSize(multiplier*32, multiplier*32))
+        self.comicPageList.resizeRowsToContents()
 
     """
     Function that takes the documentinfo.xml and parses it for the title, subject and abstract tags,

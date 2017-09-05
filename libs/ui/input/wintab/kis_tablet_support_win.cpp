@@ -682,9 +682,10 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
         result.virtualDesktopArea = dlg.screenRect();
         dialogOpen = false;
     } else {
-        // this branch is really improbable and most probably means
-        // a bug in the tablet driver. Anyway, we just shouldn't show
-        // hundreds of tablet initialization dialogs
+        // This branch should've been explicitly prevented.
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!dialogOpen);
+        warnTablet << "Trying to init a WinTab device while screen resolution dialog is active, this should not happen!";
+        warnTablet << "Tablet coordinates could be wrong as a result.";
         result.virtualDesktopArea = qtDesktopRect;
     }
 
@@ -696,7 +697,12 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
 
 bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, LPARAM lParam)
 {
-
+    if (dialogOpen) {
+        // tabletInit(...) may show the screen resolution dialog and is blocking.
+        // During this period, don't process any tablet events at all.
+        dbgTablet << "WinTab screen resolution dialog is active, ignoring WinTab proximity event";
+        return false;
+    }
     auto sendProximityEvent = [&](QEvent::Type type) {
         QPointF emptyPos;
         qreal zero = 0.0;

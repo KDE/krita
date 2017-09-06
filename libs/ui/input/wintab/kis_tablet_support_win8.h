@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ * Copyright (c) 2017 Alvin Wong <alvinhochun@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_ROUND_HUD_BUTTON_H
-#define __KIS_ROUND_HUD_BUTTON_H
+#ifndef KIS_TABLET_SUPPORT_WIN8_H
+#define KIS_TABLET_SUPPORT_WIN8_H
 
-#include <QScopedPointer>
-#include <QAbstractButton>
+#include <QAbstractNativeEventFilter>
 
+#include <kritaui_export.h>
 
-
-class KisRoundHudButton : public QAbstractButton
+class KRITAUI_EXPORT KisTabletSupportWin8 : public QAbstractNativeEventFilter
 {
+    Q_DISABLE_COPY(KisTabletSupportWin8)
+
 public:
-    KisRoundHudButton(QWidget *parent);
-    ~KisRoundHudButton() override;
+    static bool isAvailable();
 
-    void setOnOffIcons(const QIcon &on, const QIcon &off);
+    KisTabletSupportWin8() = default;
+    ~KisTabletSupportWin8() = default;
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
-    bool hitButton(const QPoint &pos) const override;
-
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void leaveEvent(QEvent *event) override;
-
-    void tabletEvent(QTabletEvent *) override;
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    bool init();
+    // void registerPointerDeviceNotifications();
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
 };
 
-#endif /* __KIS_ROUND_HUD_BUTTON_H */
+#endif // KIS_TABLET_SUPPORT_WIN8_H

@@ -48,6 +48,8 @@ public:
 
     void mouseMoveEvent(KoPointerEvent *event) override;
 
+    QMenu* popupActionsMenu() override;
+
 public Q_SLOTS:
     void deactivate() override;
     void setSelectionAction(int);

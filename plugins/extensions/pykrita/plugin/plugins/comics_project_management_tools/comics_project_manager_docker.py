@@ -11,7 +11,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from PyQt5.QtCore import QElapsedTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
@@ -38,12 +38,16 @@ class comics_project_manager_docker(DockWidget):
         self.setWindowTitle(self.stringName)
 
         # Setup layout:
-        self.baseLayout = QHBoxLayout()
+        base = QHBoxLayout()
         widget = QWidget()
-        widget.setLayout(self.baseLayout)
+        widget.setLayout(base)
+        self.baseLayout = QSplitter()
+        base.addWidget(self.baseLayout)
         self.setWidget(widget)
         self.buttonLayout = QVBoxLayout()
-        self.baseLayout.addLayout(self.buttonLayout)
+        buttonBox = QWidget()
+        buttonBox.setLayout(self.buttonLayout)
+        self.baseLayout.addWidget(buttonBox)
 
         # Comic page list and pages model
         self.comicPageList = QTableView()
@@ -53,14 +57,23 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setAcceptDrops(True)
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
-        self.comicPageList.setIconSize(QSize(100, 100))
+        self.comicPageList.setIconSize(QSize(128, 128))
         # self.comicPageList.itemDelegate().closeEditor.connect(self.slot_write_description)
         self.pagesModel.layoutChanged.connect(self.slot_write_config)
         self.pagesModel.rowsInserted.connect(self.slot_write_config)
         self.pagesModel.rowsRemoved.connect(self.slot_write_config)
         self.comicPageList.verticalHeader().sectionMoved.connect(self.slot_write_config)
         self.comicPageList.setModel(self.pagesModel)
-        self.baseLayout.addWidget(self.comicPageList)
+        pageBox = QWidget()
+        pageBox.setLayout(QVBoxLayout())
+        zoomSlider = QSlider(Qt.Horizontal, None)
+        zoomSlider.setRange(1, 8)
+        zoomSlider.setValue(4)
+        zoomSlider.setTickInterval(1)
+        zoomSlider.valueChanged.connect(self.slot_scale_thumbnails)
+        pageBox.layout().addWidget(zoomSlider)
+        pageBox.layout().addWidget(self.comicPageList)
+        self.baseLayout.addWidget(pageBox)
 
         self.btn_project = QToolButton()
         self.btn_project.setPopupMode(QToolButton.MenuButtonPopup)
@@ -219,6 +232,13 @@ class comics_project_manager_docker(DockWidget):
                 progress.setValue(progress.value() + 1)
         progress.setValue(len(pagesList))
         self.loadingPages = False
+    """
+    Function that is triggered by the zoomSlider
+    Resizes the thumbnails.
+    """
+    def slot_scale_thumbnails(self, multiplier = 4):
+        self.comicPageList.setIconSize(QSize(multiplier*32, multiplier*32))
+        self.comicPageList.resizeRowsToContents()
 
     """
     Function that takes the documentinfo.xml and parses it for the title, subject and abstract tags,
@@ -399,13 +419,16 @@ class comics_project_manager_docker(DockWidget):
             self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
 
         # Search for the possible name.
-        pageName = str(self.setupDictionary["projectName"]) + str(format(len(pagesList), "03d"))
+        extraUnderscore = str()
+        if str(self.setupDictionary["projectName"])[-1].isdigit():
+            extraUnderscore = "_"
+        pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(len(pagesList), "03d"))
         url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
         pageNumber = 0
         if (url in pagesList):
             while (url in pagesList):
                 pageNumber += 1
-                pageName = str(self.setupDictionary["projectName"]) + str(format(pageNumber, "03d"))
+                pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(pageNumber, "03d"))
                 url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
 
         # open the page by opening the template and resaving it, or just opening it.

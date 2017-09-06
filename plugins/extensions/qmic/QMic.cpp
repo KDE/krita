@@ -133,7 +133,7 @@ void QMic::slotQMic(bool again)
 
     // find the krita-gmic-qt plugin
     QString pluginPath = PluginSettings::gmicQtPath();
-    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
+    if (pluginPath.isEmpty() || (!QFileInfo(pluginPath).exists() && !QFileInfo(pluginPath).isFile())) {
         {
             KoDialog dlg;
             dlg.setWindowTitle(i18nc("@title:Window", "Krita"));

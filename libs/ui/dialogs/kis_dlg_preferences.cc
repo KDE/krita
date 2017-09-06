@@ -83,6 +83,10 @@
 
 #include "input/config/kis_input_configuration_page.h"
 
+#ifdef Q_OS_WIN
+#  include <kis_tablet_support_win8.h>
+#endif
+
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -566,6 +570,17 @@ void TabletSettingsTab::setDefault()
     KisCubicCurve curve;
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
+
+#ifdef Q_OS_WIN
+    if (KisTabletSupportWin8::isAvailable()) {
+        KisConfig cfg;
+        m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
+        m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput(true));
+    } else {
+        m_page->radioWintab->setChecked(true);
+        m_page->radioWin8PointerInput->setChecked(false);
+    }
+#endif
 }
 
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
@@ -583,6 +598,19 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
+
+#ifdef Q_OS_WIN
+    if (KisTabletSupportWin8::isAvailable()) {
+        m_page->radioWintab->setChecked(!cfg.useWin8PointerInput());
+        m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput());
+    } else {
+        m_page->radioWintab->setChecked(true);
+        m_page->radioWin8PointerInput->setChecked(false);
+        m_page->grpTabletApi->setVisible(false);
+    }
+#else
+    m_page->grpTabletApi->setVisible(false);
+#endif
 }
 
 
@@ -1128,6 +1156,11 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+#ifdef Q_OS_WIN
+        if (KisTabletSupportWin8::isAvailable()) {
+            cfg.setUseWin8PointerInput(dialog->m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
+        }
+#endif
 
         dialog->m_performanceSettings->save();
 

@@ -26,6 +26,7 @@ public Q_SLOTS:
     bool isEnabled() const;
     void setEnabled(bool value);
     void setToolTip(QString tooltip);
+    QString tooltip() const;
     void trigger();
     void setMenu(const QString menu);
     QString menu() const;

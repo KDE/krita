@@ -53,6 +53,11 @@
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
+#include "kis_node.h"
+#include "kis_node_manager.h"
+#include "KisViewManager.h"
+#include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
 #include <KoInteractionStrategyFactory.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
@@ -653,6 +658,20 @@ void DefaultTool::updateCursor()
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    // this tool only works on a vector layer right now, so give a warning if another layer type is trying to use it
+    KisNodeSP currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+
+    if (currentNode.isNull() || !currentNode->inherits("KisShapeLayer")) {
+
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        kiscanvas->viewManager()->showFloatingMessage(
+            i18n("This tool only works on vector layers. You probably want the move tool."),
+            QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+
+        return;
+    }
+
+
     SelectionDecorator decorator(canvas()->resourceManager());
     decorator.setSelection(koSelection());
     decorator.setHandleRadius(handleRadius());

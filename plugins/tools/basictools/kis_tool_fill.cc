@@ -103,7 +103,6 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
     }
 
 
-
     if (!nodeEditable()) {
         event->ignore();
         return;

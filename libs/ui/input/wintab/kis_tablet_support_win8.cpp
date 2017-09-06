@@ -36,6 +36,7 @@
 #include <QTabletEvent>
 #include <QVector>
 #include <QWidget>
+#include <QWindow>
 
 #include <utility>
 
@@ -288,6 +289,7 @@ struct PenPointerItem
     HWND hwnd;
     HANDLE deviceHandle;
     QPointer<QWidget> activeWidget; // Current widget receiving events
+    qreal oneOverDpr; // 1 / devicePixelRatio of activeWidget
     bool widgetIsCaptured; // Current widget is capturing a pen cown event
     bool widgetIsIgnored; // Pen events should be ignored until pen up
 
@@ -488,15 +490,15 @@ QTabletEvent makeProximityTabletEvent(const QEvent::Type eventType, const POINTE
     );
 }
 
-QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &deviceItem)
+QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &deviceItem, const PenPointerItem &penPointerItem)
 {
     PenFlagsWrapper penFlags = PenFlagsWrapper::fromPenInfo(penInfo);
     PointerFlagsWrapper pointerFlags = PointerFlagsWrapper::fromPenInfo(penInfo);
     PenMaskWrapper penMask = PenMaskWrapper::fromPenInfo(penInfo);
 
     const QPointF globalPosF(
-        deviceItem.himetricToPixelX * penInfo.pointerInfo.ptHimetricLocationRaw.x + deviceItem.pixelOffsetX,
-        deviceItem.himetricToPixelY * penInfo.pointerInfo.ptHimetricLocationRaw.y + deviceItem.pixelOffsetY
+        (deviceItem.himetricToPixelX * penInfo.pointerInfo.ptHimetricLocationRaw.x + deviceItem.pixelOffsetX) * penPointerItem.oneOverDpr,
+        (deviceItem.himetricToPixelY * penInfo.pointerInfo.ptHimetricLocationRaw.y + deviceItem.pixelOffsetY) * penPointerItem.oneOverDpr
     );
     const QPoint globalPos = globalPosF.toPoint();
     const QPoint localPos = targetWidget->mapFromGlobal(globalPos);
@@ -576,13 +578,13 @@ bool sendProximityTabletEvent(const QEvent::Type eventType, const POINTER_PEN_IN
     return ev.isAccepted();
 }
 
-bool sendPositionalTabletEvent(QWidget *target, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &device)
+bool sendPositionalTabletEvent(QWidget *target, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &device, const PenPointerItem &penPointerItem)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
         eventType == QEvent::TabletMove || eventType == QEvent::TabletPress || eventType == QEvent::TabletRelease,
         false
     );
-    QTabletEvent ev = makePositionalTabletEvent(target, eventType, penInfo, device);
+    QTabletEvent ev = makePositionalTabletEvent(target, eventType, penInfo, device, penPointerItem);
     ev.setAccepted(false);
     ev.setTimestamp(penInfo.pointerInfo.dwTime);
     QCoreApplication::sendEvent(target, &ev);
@@ -615,6 +617,7 @@ bool handlePenEnterMsg(const POINTER_PEN_INFO &penInfo)
     penPointerItem.hwnd = penInfo.pointerInfo.hwndTarget;
     penPointerItem.deviceHandle = penInfo.pointerInfo.sourceDevice;
     penPointerItem.activeWidget = nullptr;
+    penPointerItem.oneOverDpr = 1.0;
     penPointerItem.widgetIsCaptured = false;
     penPointerItem.widgetIsIgnored = false;
     // penPointerItem.pointerId = pointerId;
@@ -676,7 +679,18 @@ bool handleSinglePenUpdate(PenPointerItem &penPointerItem, const POINTER_PEN_INF
                 return false;
             }
         }
-        QPoint posInHwndWidget = hwndWidget->mapFromGlobal(QPoint(penInfo.pointerInfo.ptPixelLocationRaw.x, penInfo.pointerInfo.ptPixelLocationRaw.y));
+        {
+            QWindow *topLevelWindow = hwndWidget->windowHandle();
+            if (topLevelWindow) {
+                penPointerItem.oneOverDpr = 1.0 / topLevelWindow->devicePixelRatio();
+            } else {
+                penPointerItem.oneOverDpr = 1.0 / qApp->devicePixelRatio();
+            }
+        }
+        QPoint posInHwndWidget = hwndWidget->mapFromGlobal(QPoint(
+            static_cast<int>(penInfo.pointerInfo.ptPixelLocationRaw.x * penPointerItem.oneOverDpr),
+            static_cast<int>(penInfo.pointerInfo.ptPixelLocationRaw.y * penPointerItem.oneOverDpr)
+        ));
         targetWidget = hwndWidget->childAt(posInHwndWidget);
         if (!targetWidget) {
             // dbgTablet << "No childQWidget at cursor position";
@@ -685,7 +699,7 @@ bool handleSinglePenUpdate(PenPointerItem &penPointerItem, const POINTER_PEN_INF
         // penPointerItem.activeWidget = targetWidget;
     }
 
-    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletMove, penInfo, device);
+    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletMove, penInfo, device, penPointerItem);
     if (!handled) {
         // dbgTablet << "Target widget doesn't want pen events";
     }
@@ -750,7 +764,18 @@ bool handlePenDownMsg(const POINTER_PEN_INFO &penInfo)
         dbgTablet << "HWND cannot be mapped to QWidget (what?)";
         return false;
     }
-    QPoint posInHwndWidget = hwndWidget->mapFromGlobal(QPoint(penInfo.pointerInfo.ptPixelLocationRaw.x, penInfo.pointerInfo.ptPixelLocationRaw.y));
+    {
+        QWindow *topLevelWindow = hwndWidget->windowHandle();
+        if (topLevelWindow) {
+            currentPointerIt->oneOverDpr = 1.0 / topLevelWindow->devicePixelRatio();
+        } else {
+            currentPointerIt->oneOverDpr = 1.0 / qApp->devicePixelRatio();
+        }
+    }
+    QPoint posInHwndWidget = hwndWidget->mapFromGlobal(QPoint(
+        static_cast<int>(penInfo.pointerInfo.ptPixelLocationRaw.x * currentPointerIt->oneOverDpr),
+        static_cast<int>(penInfo.pointerInfo.ptPixelLocationRaw.y * currentPointerIt->oneOverDpr)
+    ));
     QWidget *targetWidget = hwndWidget->childAt(posInHwndWidget);
     if (!targetWidget) {
         dbgTablet << "No childQWidget at cursor position";
@@ -780,7 +805,7 @@ bool handlePenDownMsg(const POINTER_PEN_INFO &penInfo)
         return false;
     }
 
-    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletPress, penInfo, *devIt);
+    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletPress, penInfo, *devIt, *currentPointerIt);
     if (!handled) {
         // dbgTablet << "QWidget did not handle tablet down event";
     }
@@ -820,7 +845,7 @@ bool handlePenUpMsg(const POINTER_PEN_INFO &penInfo)
         return false;
     }
 
-    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletRelease, penInfo, *devIt);
+    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletRelease, penInfo, *devIt, penPointerItem);
 
     // dbgTablet << "QWidget" << currentPointerIt->activeWidget->windowTitle() << "is releasing capture to pointer" << penInfo.pointerInfo.pointerId;
     penPointerItem.widgetIsCaptured = false;

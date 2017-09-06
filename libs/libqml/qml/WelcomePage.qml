@@ -29,58 +29,58 @@ Page {
         color: Settings.theme.color("pages/welcome/background");
     }
 
-    Header {
-        id: header;
+//    Header {
+//        id: header;
 
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
+//        anchors {
+//            top: parent.top;
+//            left: parent.left;
+//            right: parent.right;
+//        }
 
-        text: (window.applicationName !== undefined) ? window.applicationName : "KRITA SKETCH";
+//        text: (window.applicationName !== undefined) ? window.applicationName : "KRITA SKETCH";
 
-        leftArea: Image {
-            width: Constants.GridWidth * 0.5;
-            height: parent.height;
-            source: Settings.theme.image("kritasketch.png");
-            fillMode: Image.PreserveAspectFit;
+//        leftArea: Image {
+//            width: Constants.GridWidth * 0.5;
+//            height: parent.height;
+//            source: Settings.theme.image("kritasketch.png");
+//            fillMode: Image.PreserveAspectFit;
 
-            sourceSize.width: width;
-        }
+//            sourceSize.width: width;
+//        }
 
-        rightArea: [
-            Button {
-                id: minimizeButton;
+//        rightArea: [
+//            Button {
+//                id: minimizeButton;
 
-                anchors.verticalCenter: parent.verticalCenter;
-                width: Constants.GridWidth * 0.75;
-                height: Constants.GridHeight * 0.75;
+//                anchors.verticalCenter: parent.verticalCenter;
+//                width: Constants.GridWidth * 0.75;
+//                height: Constants.GridHeight * 0.75;
 
-                tooltip: "Minimize";
+//                tooltip: "Minimize";
 
-                image: Settings.theme.icon("minimize");
-                onClicked: Krita.Window.minimize();
-            },
-            Button {
-                id: closeButton;
+//                image: Settings.theme.icon("minimize");
+//                onClicked: Krita.Window.minimize();
+//            },
+//            Button {
+//                id: closeButton;
 
-                anchors.verticalCenter: parent.verticalCenter;
-                width: Constants.GridWidth * 0.75;
-                height: Constants.GridHeight * 0.75;
+//                anchors.verticalCenter: parent.verticalCenter;
+//                width: Constants.GridWidth * 0.75;
+//                height: Constants.GridHeight * 0.75;
 
-                tooltip: "Close";
+//                tooltip: "Close";
 
-                image: Settings.theme.icon("close");
-                onClicked: Krita.Window.close();
-            }
-        ]
+//                image: Settings.theme.icon("close");
+//                onClicked: Krita.Window.close();
+//            }
+//        ]
 
-        Image {
-            anchors.fill: parent;
-            source: Settings.theme.image("header_krita_sketch_light.png");
-        }
-    }
+//        Image {
+//            anchors.fill: parent;
+//            source: Settings.theme.image("header_krita_sketch_light.png");
+//        }
+//    }
 
     Row {
         id: headersRow;

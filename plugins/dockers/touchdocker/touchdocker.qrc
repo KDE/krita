@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file alias="kritasketch.qml">qml/kritasketch.qml</file>
+        <file alias="hello.qml">qml/hello.qml</file>
     </qresource>
 </RCC>

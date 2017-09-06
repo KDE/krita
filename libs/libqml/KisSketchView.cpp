@@ -109,7 +109,8 @@ KisSketchView::KisSketchView(QQuickItem* parent)
     setAcceptHoverEvents(true);
 
     d->actionCollection = new KActionCollection(this, "krita");
-    d->viewManager = new KisViewManager(qApp->activeWindow(), d->actionCollection);
+    qDebug() << ">>>>>>>>>>>>>" << qApp->activeWindow();
+    d->viewManager = 0; //new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
     // QT5TODO
 //     grabGesture(Qt::PanGesture);

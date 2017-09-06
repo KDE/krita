@@ -276,7 +276,7 @@ void LayerModel::setView(QObject *newView)
     d->thumbProvider->setLayerModel(this);
     d->thumbProvider->setLayerID(Private::counter());
 // QT5TODO: results in a crash
-//     d->declarativeEngine->addImageProvider(QString("layerthumb%1").arg(d->thumbProvider->layerID()), d->thumbProvider);
+     d->declarativeEngine->addImageProvider(QString("layerthumb%1").arg(d->thumbProvider->layerID()), d->thumbProvider);
 
     if (d->canvas) {
         d->image = d->canvas->imageView()->image();

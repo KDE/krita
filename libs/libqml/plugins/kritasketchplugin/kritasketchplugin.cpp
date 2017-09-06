@@ -82,7 +82,7 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
     Q_UNUSED(scriptEngine)
 
     MultiFeedRssModel *rssModel = new MultiFeedRssModel;
-    rssModel->addFeed(QLatin1String("https://krita.org/feed/"));
+    rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
 
     return rssModel;
 }

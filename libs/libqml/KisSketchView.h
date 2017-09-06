@@ -26,18 +26,18 @@
 class KRITA_SKETCH_EXPORT KisSketchView : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QObject *selectionManager READ selectionManager NOTIFY viewChanged)
-    Q_PROPERTY(QObject *selectionExtras READ selectionExtras NOTIFY viewChanged)
+//    Q_PROPERTY(QObject *selectionManager READ selectionManager NOTIFY viewChanged)
+//    Q_PROPERTY(QObject *selectionExtras READ selectionExtras NOTIFY viewChanged)
     Q_PROPERTY(QObject *view READ view NOTIFY viewChanged)
-    Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
-    Q_PROPERTY(QString fileTitle READ fileTitle NOTIFY fileChanged);
-    Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
+//    Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
+//    Q_PROPERTY(QString fileTitle READ fileTitle NOTIFY fileChanged);
+//    Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
 
-    Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged);
-    Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged);
+//    Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged);
+//    Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged);
 
-    Q_PROPERTY(int imageHeight READ imageHeight NOTIFY imageSizeChanged)
-    Q_PROPERTY(int imageWidth READ imageWidth NOTIFY imageSizeChanged)
+//    Q_PROPERTY(int imageHeight READ imageHeight NOTIFY imageSizeChanged)
+//    Q_PROPERTY(int imageWidth READ imageWidth NOTIFY imageSizeChanged)
 
 public:
     explicit KisSketchView(QQuickItem* parent = 0);
@@ -63,6 +63,7 @@ public:
 
     int imageHeight() const;
     int imageWidth() const;
+
 public Q_SLOTS:
     void undo();
     void redo();

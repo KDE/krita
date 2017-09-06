@@ -53,7 +53,14 @@ Q_SIGNALS:
     void currentSketchPageChanged();
     void sketchKisViewChanged();
 
+public Q_SLOTS:
+
+    void slotButtonPressed(const QString &id);
+
 private:
+
+    void showFileDialog();
+
     KisCanvas2 *m_canvas {0};
     QQuickWidget *m_quickWidget {0};
 

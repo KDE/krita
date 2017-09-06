@@ -85,8 +85,6 @@
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
-#include "kis_spin_box_unit_manager.h"
-#include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
 

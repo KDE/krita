@@ -430,6 +430,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
+    m_presetsChooserPopup->setMinimumHeight(450);
+    m_presetsChooserPopup->setMinimumWidth(350);
     m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();

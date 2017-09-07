@@ -144,6 +144,9 @@ To help our user, the dialog loads up lists of keywords to populate several auto
 
 class comic_meta_data_editor(QDialog):
     configGroup = "ComicsProjectManagementTools"
+    
+    # Translatable genre dictionary that has it's translated entries added to the genrelist and from which the untranslated items are taken.
+    acbfGenreList = {"science_fiction":str(i18n("Science Fiction")), "fantasy":str(i18n("Fantasy")), "adventure":str(i18n("Adventure")), "horror":str(i18n("Horror")), "mystery":str(i18n("Mystery")), "crime":str(i18n("Crime")), "military":str(i18n("Military")), "real_life":str(i18n("Real Life")), "superhero":str(i18n("Superhero")), "humor":str(i18n("Humor")), "western":str(i18n("Western")), "manga":str(i18n("Manga")), "politics":str(i18n("Politics")), "caricature":str(i18n("Caricature")), "sports":str(i18n("Sports")), "history":str(i18n("History")), "biography":str(i18n("Biography")), "education":str(i18n("Education")), "computer":str(i18n("Computer")), "religion":str(i18n("Religion")), "romance":str(i18n("Romance")), "children":str(i18n("Children")), "non-fiction":str(i18n("Non Fiction")), "adult":str(i18n("Adult")), "alternative":str(i18n("Alternative")), "other":str(i18n("Other"))}
 
     def __init__(self):
         super().__init__()
@@ -154,6 +157,8 @@ class comic_meta_data_editor(QDialog):
         self.formatKeysList = []
         self.otherKeysList = []
         self.authorRoleList = []
+        for g in self.acbfGenreList.values():
+            self.genreKeysList.append(g)
         mainP = Path(os.path.abspath(__file__)).parent
         self.get_auto_completion_keys(mainP)
         extraKeyP = Path(QDir.homePath()) / Application.readSetting(self.configGroup, "extraKeysLocation", str())
@@ -456,7 +461,13 @@ class comic_meta_data_editor(QDialog):
         if "summary" in config.keys():
             self.teSummary.appendPlainText(config["summary"])
         if "genre" in config.keys():
-            self.lnGenre.setText(", ".join(config["genre"]))
+            genreList = []
+            for genre in config["genre"]:
+                if genre in self.acbfGenreList.keys():
+                    genreList.append(self.acbfGenreList[genre])
+                else:
+                    genreList.append(genre)
+            self.lnGenre.setText(", ".join(genreList))
         if "characters" in config.keys():
             self.lnCharacters.setText(", ".join(config["characters"]))
         if "format" in config.keys():
@@ -567,7 +578,14 @@ class comic_meta_data_editor(QDialog):
         config["cover"] = self.cmbCoverPage.currentText()
         listkeys = self.lnGenre.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
-            config["genre"] = self.lnGenre.text().split(", ")
+            genreList = []
+            for genre in self.lnGenre.text().split(", "):
+                if genre in self.acbfGenreList.values():
+                    i = list(self.acbfGenreList.values()).index(genre)
+                    genreList.append(list(self.acbfGenreList.keys())[i])
+                else:
+                    genreList.append(genre)
+            config["genre"] = genreList
         elif "genre" in config.keys():
             config.pop("genre")
         listkeys = self.lnCharacters.text()

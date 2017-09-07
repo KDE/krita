@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2005 David Faure  <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2010 Boudewijn Rempt   <boud@kogmbh.com>
+   Copyright (C) 2010 Boudewijn Rempt   <boud@valdyas.org>
    Copyright (C) 2015 Michael Abrahams  <miabraha@gmail.com>
 
    This library is free software; you can redistribute it and/or

@@ -39,8 +39,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
-    void tabletEvent(QTabletEvent *) override;
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

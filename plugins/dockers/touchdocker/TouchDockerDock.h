@@ -57,6 +57,7 @@ public Q_SLOTS:
 
     void slotButtonPressed(const QString &id);
     void slotOpenImage(QString path);
+    void hideFileDialog();
 
 private:
 

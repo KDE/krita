@@ -20,13 +20,7 @@ import QtQuick 2.3
 
 Text {
     verticalAlignment: Text.AlignVCenter;
-
-//     font.pixelSize: Constants.DefaultFontSize;
-
     color: Settings.theme.color("components/label");
-//     font.family: "Source Sans Pro"
-
     font: Settings.theme.font("application");
-
     elide: Text.ElideRight;
 }

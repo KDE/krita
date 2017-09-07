@@ -22,8 +22,6 @@ import org.krita.sketch 1.0
 OpenImagePageStack {
 
     id: openImagePageStack
-    width: 1280;
-    height: 768;
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     window: mainWindow;

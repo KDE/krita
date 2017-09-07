@@ -122,7 +122,6 @@ void TouchDockerDock::closeEvent(QCloseEvent* event)
 
 void TouchDockerDock::slotButtonPressed(const QString &id)
 {
-    qDebug() << "slotButtonPressed" << sender() << id;
     if (id == "fileOpenButton") {
         showFileDialog();
     }
@@ -130,8 +129,17 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
 
 void TouchDockerDock::slotOpenImage(QString path)
 {
-    d->openDialog->accept();
-    KisPart::instance()->currentMainwindow()->openDocument(QUrl::fromLocalFile(path), KisMainWindow::None);
+    if (d->openDialog) {
+        d->openDialog->accept();
+        KisPart::instance()->currentMainwindow()->openDocument(QUrl::fromLocalFile(path), KisMainWindow::None);
+    }
+}
+
+void TouchDockerDock::hideFileDialog()
+{
+    if (d->openDialog) {
+        d->openDialog->accept();
+    }
 }
 
 
@@ -139,7 +147,7 @@ void TouchDockerDock::showFileDialog()
 {
     if (!d->openDialog) {
         d->openDialog = new KoDialog(this);
-        d->openDialog->setButtons(KoDialog::Close);
+        d->openDialog->setButtons(KoDialog::None);
 
         QQuickWidget *quickWidget = new QQuickWidget(this);
         d->openDialog->setMainWidget(quickWidget);

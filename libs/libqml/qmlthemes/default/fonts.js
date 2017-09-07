@@ -30,7 +30,7 @@ var values = {
     pageHeader: {
         family: "Source Sans Pro",
         style: "Bold",
-        size: 4,
+        size: 2,
     },
     title: {
         family: "Source Sans Pro",

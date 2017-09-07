@@ -38,16 +38,16 @@ Page {
             right: parent.right;
         }
 
-        text: "Open Image";
+        //text: "Open Image";
 
         background: "images/header_krita_sketch.png";
 
-//        leftArea: Button {
-//            width: Krita.Constants.GridWidth;
-//            height: Krita.Constants.GridHeight;
-//            image: Settings.theme.icon("back");
-//            onClicked: pageStack.pop();
-//        }
+        leftArea: Button {
+            width: Krita.Constants.GridWidth;
+            height: Krita.Constants.GridHeight;
+            image: Settings.theme.icon("close");
+            onClicked: mainWindow.hideFileDialog();
+        }
 
         rightArea: Button {
             width: Krita.Constants.GridWidth;
@@ -124,7 +124,7 @@ Page {
             image.smooth: true;
 
             title: model.fileName;
-            description: model.icon !== "inode/directory" ? model.date : "";
+            //description: model.icon !== "inode/directory" ? model.date : "";
 
             onClicked: {
                 if ( GridView.view.navigating ) {

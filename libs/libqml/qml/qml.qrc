@@ -183,5 +183,6 @@
         <file>OpenImagePageStack.qml</file>
         <file>MainPage.qml</file>
         <file>OpenImagePageStack.qml</file>
+        <file>SaveImagePageStack.qml</file>
     </qresource>
 </RCC>

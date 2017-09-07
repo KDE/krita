@@ -21,6 +21,7 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+class KoDialog;
 class KisCanvas2;
 class QQuickWidget;
 
@@ -57,11 +58,17 @@ public Q_SLOTS:
 
     void slotButtonPressed(const QString &id);
     void slotOpenImage(QString path);
-    void hideFileDialog();
+    void slotSaveAs(QString path, QString mime);
+
+    void hideFileOpenDialog();
+    void hideFileSaveAsDialog();
 
 private:
 
-    void showFileDialog();
+    void showFileOpenDialog();
+    void showFileSaveAsDialog();
+
+    KoDialog *createDialog(const QString qml);
 
     KisCanvas2 *m_canvas {0};
     QQuickWidget *m_quickWidget {0};

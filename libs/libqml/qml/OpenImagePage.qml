@@ -46,7 +46,7 @@ Page {
             width: Krita.Constants.GridWidth;
             height: Krita.Constants.GridHeight;
             image: Settings.theme.icon("close");
-            onClicked: mainWindow.hideFileDialog();
+            onClicked: mainWindow.hideFileOpenDialog();
         }
 
         rightArea: Button {

@@ -46,10 +46,10 @@ Page {
         background: "images/header_krita_sketch.png";
 
         leftArea: Button {
-            width: Constants.GridWidth;
-            height: Constants.GridHeight;
-            image: Settings.theme.icon("back");
-            onClicked: pageStack.pop();
+            width: Krita.Constants.GridWidth;
+            height: Krita.Constants.GridHeight;
+            image: Settings.theme.icon("close");
+            onClicked: mainWindow.hideFileSaveAsDialog()();
         }
 
         rightArea: Button {
@@ -182,7 +182,8 @@ Page {
                             confirmOverwrite.show();
                         }
                         else {
-                            base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                            //base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                            mainWindow.slotSaveAs(filePath, fileType.model.get(fileType.currentIndex).mime );
                         }
                     }
                 }
@@ -226,16 +227,16 @@ Page {
         buttons: [ "Overwrite", "Cancel" ];
         onButtonClicked: {
             switch(button) {
-                case 0:
-                    var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
-                    base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
-                    break;
-                case 1:
-                    // do nothing, just dismiss dialog
-                    break;
-                default:
-                    console.debug("Nope, shouldn't be here. How did you press a button that doesn't exist?");
-                    break;
+            case 0:
+                var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+                base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                break;
+            case 1:
+                // do nothing, just dismiss dialog
+                break;
+            default:
+                console.debug("Nope, shouldn't be here. How did you press a button that doesn't exist?");
+                break;
             }
             confirmOverwrite.hide();
             pageStack.pop();

@@ -147,6 +147,7 @@ class comic_meta_data_editor(QDialog):
     
     # Translatable genre dictionary that has it's translated entries added to the genrelist and from which the untranslated items are taken.
     acbfGenreList = {"science_fiction":str(i18n("Science Fiction")), "fantasy":str(i18n("Fantasy")), "adventure":str(i18n("Adventure")), "horror":str(i18n("Horror")), "mystery":str(i18n("Mystery")), "crime":str(i18n("Crime")), "military":str(i18n("Military")), "real_life":str(i18n("Real Life")), "superhero":str(i18n("Superhero")), "humor":str(i18n("Humor")), "western":str(i18n("Western")), "manga":str(i18n("Manga")), "politics":str(i18n("Politics")), "caricature":str(i18n("Caricature")), "sports":str(i18n("Sports")), "history":str(i18n("History")), "biography":str(i18n("Biography")), "education":str(i18n("Education")), "computer":str(i18n("Computer")), "religion":str(i18n("Religion")), "romance":str(i18n("Romance")), "children":str(i18n("Children")), "non-fiction":str(i18n("Non Fiction")), "adult":str(i18n("Adult")), "alternative":str(i18n("Alternative")), "other":str(i18n("Other"))}
+    acbfAuthorRolesList = {"Writer":str(i18n("Writer")), "Adapter":str(i18n("Adapter")), "Artist":str(i18n("Artist")), "Penciller":str(i18n("Penciller")), "Inker":str(i18n("Inker")), "Colorist":str(i18n("Colorist")), "Letterer":str(i18n("Letterer")), "Cover Artist":str(i18n("Cover Artist")), "Photographer":str(i18n("Photographer")), "Editor":str(i18n("Editor")), "Assistant Editor":str(i18n("Assistant Editor")), "Translator":str(i18n("Translator")), "Other":str(i18n("Other"))}
 
     def __init__(self):
         super().__init__()
@@ -159,6 +160,8 @@ class comic_meta_data_editor(QDialog):
         self.authorRoleList = []
         for g in self.acbfGenreList.values():
             self.genreKeysList.append(g)
+        for r in self.acbfAuthorRolesList.values():
+            self.authorRoleList.append(r)
         mainP = Path(os.path.abspath(__file__)).parent
         self.get_auto_completion_keys(mainP)
         extraKeyP = Path(QDir.homePath()) / Application.readSetting(self.configGroup, "extraKeysLocation", str())
@@ -521,37 +524,33 @@ class comic_meta_data_editor(QDialog):
                     authorNickName = QStandardItem()
                     if "nickname" in author.keys():
                         authorNickName.setText(author["nickname"])
-                        pass
                     listItems.append(authorNickName)
                     authorFirstName = QStandardItem()
                     if "first-name" in author.keys():
                         authorFirstName.setText(author["first-name"])
-                        pass
                     listItems.append(authorFirstName)
                     authorMiddleName = QStandardItem()
                     if "initials" in author.keys():
                         authorMiddleName.setText(author["initials"])
-                        pass
                     listItems.append(authorMiddleName)
                     authorLastName = QStandardItem()
                     if "last-name" in author.keys():
                         authorLastName.setText(author["last-name"])
-                        pass
                     listItems.append(authorLastName)
                     authorRole = QStandardItem()
                     if "role" in author.keys():
-                        authorRole.setText(author["role"])
-                        pass
+                        role = author["role"]
+                        if author["role"] in self.acbfAuthorRolesList.keys():
+                            role = self.acbfAuthorRolesList[author["role"]]
+                        authorRole.setText(role)
                     listItems.append(authorRole)
                     authorEMail = QStandardItem()
                     if "email" in author.keys():
                         authorEMail.setText(author["email"])
-                        pass
                     listItems.append(authorEMail)
                     authorHomePage = QStandardItem()
                     if "homepage" in author.keys():
                         authorHomePage.setText(author["homepage"])
-                        pass
                     listItems.append(authorHomePage)
                     authorLanguage = QStandardItem()
                     if "language" in author.keys():
@@ -630,6 +629,10 @@ class comic_meta_data_editor(QDialog):
                 if entry is None:
                     entry = " "
                 if entry.isspace() is False and len(entry) > 0:
+                    if listEntries[i] == "role":
+                        if entry in self.acbfAuthorRolesList.values():
+                            entryI = list(self.acbfAuthorRolesList.values()).index(entry)
+                            entry = list(self.acbfAuthorRolesList.keys())[entryI]
                     author[listEntries[i]] = entry
                 elif listEntries[i] in author.keys():
                     author.pop(listEntries[i])

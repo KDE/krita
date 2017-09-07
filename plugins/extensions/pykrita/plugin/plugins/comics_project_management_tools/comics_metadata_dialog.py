@@ -104,19 +104,34 @@ Allows us to set completers on the author roles.
 class author_delegate(QStyledItemDelegate):
     completerStrings = []
     completerColumn = 0
+    languageColumn = 0
 
     def __init__(self, parent=None):
         super(QStyledItemDelegate, self).__init__(parent)
 
-    def setCompleterData(self, completerStrings, completerColumn):
+    def setCompleterData(self, completerStrings=[str()], completerColumn=0):
         self.completerStrings = completerStrings
         self.completerColumn = completerColumn
+        
+    def setLanguageData(self, languageColumn=0):
+        self.languageColumn = languageColumn
 
     def createEditor(self, parent, option, index):
-        editor = QLineEdit(parent)
+        if index.column() != self.languageColumn:
+            editor = QLineEdit(parent)
+        else:
+            editor = QComboBox(parent)
+            for i in range(2, 356):
+                if QLocale(i, QLocale.AnyScript, QLocale.AnyCountry) is not None:
+                    languagecode = QLocale(i, QLocale.AnyScript, QLocale.AnyCountry).name().split("_")[0]
+                    if languagecode != "C":
+                        editor.addItem(languagecode)
+            editor.model().sort(0)
+                    
         if index.column() == self.completerColumn:
             editor.setCompleter(QCompleter(self.completerStrings))
             editor.completer().setCaseSensitivity(False)
+        
         return editor
 
 
@@ -243,7 +258,7 @@ class comic_meta_data_editor(QDialog):
         explaination = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
         explaination.setWordWrap(True)
         self.authorModel = QStandardItemModel(0, 7)
-        labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage")]
+        labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage"), i18n("Language")]
         self.authorModel.setHorizontalHeaderLabels(labels)
         self.authorTable = QTableView()
         self.authorTable.setModel(self.authorModel)
@@ -253,6 +268,7 @@ class comic_meta_data_editor(QDialog):
         self.authorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
         delegate = author_delegate()
         delegate.setCompleterData(self.authorRoleList, 4)
+        delegate.setLanguageData(len(labels)-1)
         self.authorTable.setItemDelegate(delegate)
         author_button_layout = QWidget()
         author_button_layout.setLayout(QHBoxLayout())
@@ -328,19 +344,22 @@ class comic_meta_data_editor(QDialog):
             for t in list(genre.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.genreKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.genreKeysList:
+                        self.genreKeysList.append(str(l).strip("\n"))
                 file.close()
         if characters.exists():
             for t in list(characters.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.characterKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.characterKeysList:
+                        self.characterKeysList.append(str(l).strip("\n"))
                 file.close()
         if format.exists():
             for t in list(format.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.formatKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.formatKeysList:
+                        self.formatKeysList.append(str(l).strip("\n"))
                 file.close()
         if rating.exists():
             for t in list(rating.glob('**/*.csv')):
@@ -365,13 +384,15 @@ class comic_meta_data_editor(QDialog):
             for t in list(keywords.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.otherKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.otherKeysList:
+                        self.otherKeysList.append(str(l).strip("\n"))
                 file.close()
         if authorRole.exists():
             for t in list(authorRole.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.authorRoleList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.authorRoleList:
+                        self.authorRoleList.append(str(l).strip("\n"))
                 file.close()
 
     """
@@ -403,6 +424,10 @@ class comic_meta_data_editor(QDialog):
         listItems.append(QStandardItem())  # role
         listItems.append(QStandardItem())  # email
         listItems.append(QStandardItem())  # homepage
+        language = QLocale.system().name().split("_")[0]
+        if language == "C":
+            language = "en"
+        listItems.append(QStandardItem(language))  # Language
         self.authorModel.appendRow(listItems)
 
     """
@@ -517,6 +542,11 @@ class comic_meta_data_editor(QDialog):
                         authorHomePage.setText(author["homepage"])
                         pass
                     listItems.append(authorHomePage)
+                    authorLanguage = QStandardItem()
+                    if "language" in author.keys():
+                        authorLanguage.setText(author["language"])
+                        pass
+                    listItems.append(authorLanguage)
                     self.authorModel.appendRow(listItems)
         else:
             self.slot_add_author()
@@ -575,7 +605,7 @@ class comic_meta_data_editor(QDialog):
         authorList = []
         for row in range(self.authorTable.verticalHeader().count()):
             logicalIndex = self.authorTable.verticalHeader().logicalIndex(row)
-            listEntries = ["nickname", "first-name", "initials", "last-name", "role", "email", "homepage"]
+            listEntries = ["nickname", "first-name", "initials", "last-name", "role", "email", "homepage", "language"]
             author = {}
             for i in range(len(listEntries)):
                 entry = self.authorModel.data(self.authorModel.index(logicalIndex, i))

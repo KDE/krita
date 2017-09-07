@@ -153,10 +153,8 @@ Things I still want to do:
 	- Generate text from the author list. (Requires text api)
 	- batch export broken. (bug)
 	- save as doesn't work on a new file. (bug)
-* comment code better. (only the exporter really needs to be commented)
 * clean up path relativeness. (Not sure how much better this can be done)
 * Make label removal just a list? (unsure)
-* For translation, figure out a way to translate certain roles/genres to the acbf defaults. (probably will need to use a list)
 
 ACBF list:
 

@@ -121,6 +121,7 @@ class author_delegate(QStyledItemDelegate):
             editor = QLineEdit(parent)
         else:
             editor = QComboBox(parent)
+            editor.addItem("")
             for i in range(2, 356):
                 if QLocale(i, QLocale.AnyScript, QLocale.AnyCountry) is not None:
                     languagecode = QLocale(i, QLocale.AnyScript, QLocale.AnyCountry).name().split("_")[0]

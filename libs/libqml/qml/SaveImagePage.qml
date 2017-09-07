@@ -199,7 +199,7 @@ Page {
             width: GridView.view.cellWidth;
             z: 10;
 
-            property bool directory: model.fileType === "inode/directory";
+            property bool directory: model.icon === "inode/directory";
 
             imageShadow: directory ? false : true;
             image.source: directory ? Settings.theme.icon("fileopen-black") : model.icon;
@@ -207,10 +207,10 @@ Page {
             image.smooth: true;
 
             title: model.fileName;
-            description: model.fileType != "inode/directory" ? model.date : "";
+            description: model.icon !== "inode/directory" ? model.date : "";
 
             onClicked: {
-                if ( model.fileType == "inode/directory" ) {
+                if ( model.icon === "inode/directory" ) {
                     GridView.view.model.path = model.path;
                 } else {
                     fileNameField.text = model.fileName.substring(0, model.fileName.lastIndexOf('.'));

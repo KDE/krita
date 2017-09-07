@@ -42,12 +42,12 @@ Page {
 
         background: "images/header_krita_sketch.png";
 
-        leftArea: Button {
-            width: Krita.Constants.GridWidth;
-            height: Krita.Constants.GridHeight;
-            image: Settings.theme.icon("back");
-            onClicked: pageStack.pop();
-        }
+//        leftArea: Button {
+//            width: Krita.Constants.GridWidth;
+//            height: Krita.Constants.GridHeight;
+//            image: Settings.theme.icon("back");
+//            onClicked: pageStack.pop();
+//        }
 
         rightArea: Button {
             width: Krita.Constants.GridWidth;
@@ -116,7 +116,7 @@ Page {
 
             width: GridView.view.cellWidth;
 
-            property bool directory: model.fileType === "inode/directory";
+            property bool directory: model.icon === "inode/directory";
 
             imageShadow: directory ? false : true;
             image.source: directory ? Settings.theme.icon("fileopen-black") : model.icon;
@@ -124,16 +124,17 @@ Page {
             image.smooth: true;
 
             title: model.fileName;
-            description: model.fileType !== "inode/directory" ? model.date : "";
+            description: model.icon !== "inode/directory" ? model.date : "";
 
             onClicked: {
                 if ( GridView.view.navigating ) {
                     return;
                 }
-                if ( model.fileType === "inode/directory" ) {
+                if ( model.icon === "inode/directory" ) {
                     view.startNavigation(model.path);
                 } else {
-                    base.finished(model.path);
+                    //base.finished(model.path);
+                    mainWindow.slotOpenImage(model.path)
                 }
             }
         }

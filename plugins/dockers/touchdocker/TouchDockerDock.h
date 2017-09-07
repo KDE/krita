@@ -56,6 +56,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotButtonPressed(const QString &id);
+    void slotOpenImage(QString path);
 
 private:
 

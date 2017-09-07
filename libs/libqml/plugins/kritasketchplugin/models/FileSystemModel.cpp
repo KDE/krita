@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDesktopServices>
-
+#include <QDebug>
 
 class FileSystemModel::Private
 {
@@ -43,14 +43,6 @@ FileSystemModel::FileSystemModel(QObject* parent)
 {
     d->dir.setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
     d->dir.setSorting(QDir::DirsFirst | QDir::Name | QDir::IgnoreCase);
-
-    QHash<int, QByteArray> roles;
-    roles.insert(FileNameRole, "fileName");
-    roles.insert(FilePathRole, "path");
-    roles.insert(FileIconRole, "icon");
-    roles.insert(FileTypeRole, "fileType");
-    roles.insert(FileDateRole, "date");
-    setRoleNames(roles);
 }
 
 FileSystemModel::~FileSystemModel()
@@ -62,21 +54,19 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid()) {
         const QFileInfo &fileInfo = d->list.at(index.row());
+
         switch(role) {
-            case FileNameRole:
-                return fileInfo.fileName();
-                break;
-            case FilePathRole:
-                return fileInfo.absoluteFilePath();
-                break;
-            case FileIconRole:
-                    return fileInfo.isDir() ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(fileInfo.absoluteFilePath());
-                break;
-            case FileTypeRole:
-                return KisMimeDatabase::mimeTypeForFile(fileInfo.fileName());
-                break;
-            case FileDateRole:
-                return fileInfo.lastModified().toString(Qt::SystemLocaleShortDate);
+        case FileNameRole:
+            return fileInfo.fileName();
+            break;
+        case FilePathRole:
+            return fileInfo.absoluteFilePath();
+            break;
+        case FileIconRole:
+            return fileInfo.isDir() ? "inode/directory" : QString("image://recentimage/%1").arg(fileInfo.absoluteFilePath());
+            break;
+        case FileDateRole:
+            return fileInfo.lastModified().toString(Qt::SystemLocaleShortDate);
         }
     }
     return QVariant();
@@ -158,5 +148,15 @@ QString FileSystemModel::filter()
 void FileSystemModel::setFilter(const QString& filter)
 {
     d->dir.setNameFilters(filter.split(" "));
+}
+
+QHash<int, QByteArray> FileSystemModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles.insert(FileNameRole, "fileName");
+    roles.insert(FilePathRole, "path");
+    roles.insert(FileIconRole, "icon");
+    roles.insert(FileDateRole, "date");
+    return roles;
 }
 

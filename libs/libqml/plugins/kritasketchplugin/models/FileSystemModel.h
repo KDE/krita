@@ -41,8 +41,7 @@ public:
         FileNameRole = Qt::UserRole,
         FilePathRole,
         FileIconRole,
-        FileTypeRole,
-        FileDateRole,
+        FileDateRole
     };
 
     explicit FileSystemModel(QObject* parent = 0);
@@ -61,6 +60,8 @@ public:
 
     virtual QString filter();
     virtual void setFilter(const QString& filter);
+
+    QHash<int, QByteArray> roleNames() const override;
 
 Q_SIGNALS:
     void pathChanged();

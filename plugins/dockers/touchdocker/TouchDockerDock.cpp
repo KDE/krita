@@ -21,6 +21,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QAction>
+#include <QUrl>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -36,6 +37,7 @@
 #include <KisMainWindow.h>
 #include <KisViewManager.h>
 #include <kis_config.h>
+#include <KisPart.h>
 
 #include <Theme.h>
 #include <Settings.h>
@@ -54,6 +56,7 @@ public:
     KisViewManager *viewManager {0};
     KisSketchView *sketchView {0};
     QString currentSketchPage;
+    KoDialog *openDialog {0};
 };
 
 
@@ -125,34 +128,43 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
     }
 }
 
+void TouchDockerDock::slotOpenImage(QString path)
+{
+    d->openDialog->accept();
+    KisPart::instance()->currentMainwindow()->openDocument(QUrl::fromLocalFile(path), KisMainWindow::None);
+}
+
 
 void TouchDockerDock::showFileDialog()
 {
-    KoDialog dlg;
+    if (!d->openDialog) {
+        d->openDialog = new KoDialog(this);
+        d->openDialog->setButtons(KoDialog::Close);
 
-    QQuickWidget *quickWidget = new QQuickWidget(this);
-    dlg.setMainWidget(quickWidget);
+        QQuickWidget *quickWidget = new QQuickWidget(this);
+        d->openDialog->setMainWidget(quickWidget);
 
-    setEnabled(true);
-    quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
+        setEnabled(true);
+        quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
 
-    quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
+        quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
+        quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
-    Settings *settings = new Settings(this);
-    DocumentManager::instance()->setSettingsManager(settings);
-    quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);
+        Settings *settings = new Settings(this);
+        DocumentManager::instance()->setSettingsManager(settings);
+        quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);
 
-    Theme *theme = Theme::load(KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default"),
-                               quickWidget->engine());
-    settings->setTheme(theme);
+        Theme *theme = Theme::load(KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default"),
+                                   quickWidget->engine());
+        settings->setTheme(theme);
 
+        quickWidget->setSource(QUrl("qrc:/opendialog.qml"));
+        quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
-    quickWidget->setSource(QUrl("qrc:/kritasketch.qml"));
-    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+        d->openDialog->setMinimumSize(1280, 768);
+    }
 
-    dlg.setMinimumSize(1280, 768);
-    dlg.exec();
+    d->openDialog->exec();
 }
 
 QObject *TouchDockerDock::sketchKisView() const

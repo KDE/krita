@@ -40,6 +40,8 @@
 #include <KisPart.h>
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
+#include <kis_action_manager.h>
+#include <kis_action.h>
 
 #include <Theme.h>
 #include <Settings.h>
@@ -83,7 +85,7 @@ TouchDockerDock::TouchDockerDock( )
                                m_quickWidget->engine());
     settings->setTheme(theme);
 
-    m_quickWidget->setSource(QUrl("qrc:/hello.qml"));
+    m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
 }
@@ -136,6 +138,26 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
     }
     else if (id == "fileSaveAsButton" && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         showFileSaveAsDialog();
+    }
+    else if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->actionManager()) {
+        KisAction *action = m_canvas->viewManager()->actionManager()->actionByName(id);
+        if (action) {
+            if (action->isCheckable()) {
+                action->toggle();
+            }
+            else {
+                action->trigger();
+            }
+        }
+    }
+    else if (id == "Key_Shift") {
+        // set shift state for the next pointer event, somehow
+    }
+    else if (id == "Key_Ctrl") {
+        // set ctrl state for the next pointer event, somehow
+    }
+    else if (id == "Key_Alt") {
+        // set alt state for the next pointer event, somehow
     }
 }
 

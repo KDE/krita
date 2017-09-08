@@ -91,11 +91,11 @@
 
 #include "ui_wdglayerbox.h"
 
-inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
+inline void KisLayerBox::connectActionToButton(KisViewManager* viewManager, QAbstractButton *button, const QString &id)
 {
-    if (!view || !button) return;
+    if (!viewManager || !button) return;
 
-    KisAction *action = view->actionManager()->actionByName(id);
+    KisAction *action = viewManager->actionManager()->actionByName(id);
 
     if (!action) return;
 
@@ -107,7 +107,7 @@ inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
 {
     if (m_canvas) {
         menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
-    }        
+    }
 }
 
 KisLayerBox::KisLayerBox()

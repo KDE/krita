@@ -6,8 +6,6 @@ By Wolthera.
 
 # Importing the relevant dependancies:
 import sys
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 import math
 from krita import *
 

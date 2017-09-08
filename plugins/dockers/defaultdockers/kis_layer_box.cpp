@@ -107,7 +107,7 @@ inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
 {
     if (m_canvas) {
         menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
-    }
+    }        
 }
 
 KisLayerBox::KisLayerBox()

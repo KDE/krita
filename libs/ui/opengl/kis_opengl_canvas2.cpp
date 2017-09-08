@@ -106,6 +106,10 @@ public:
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
+    qreal pixelGridDrawingThreshold;
+    bool pixelGridEnabled;
+    QColor gridColor;
+
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
         int lastImageColumn = openGLImageTextures->xToCol(imageRect.right());
@@ -559,11 +563,9 @@ void KisOpenGLCanvas2::drawGrid()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    KisConfig cfg;
-    QColor gridColor = cfg.getPixelGridColor();
     d->solidColorShader->setUniformValue(
                 d->solidColorShader->location(Uniform::FragmentColor),
-                QVector4D(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.5f));
+                QVector4D(d->gridColor.redF(), d->gridColor.greenF(), d->gridColor.blueF(), 0.5f));
 
     if (KisOpenGL::hasOpenGL3()) {
         d->outlineVAO.bind();
@@ -788,6 +790,10 @@ void KisOpenGLCanvas2::slotConfigChanged()
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
+    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
+    d->pixelGridEnabled = cfg.pixelGridEnabled();
+    d->gridColor = cfg.getPixelGridColor();
+
     notifyConfigChanged();
 }
 
@@ -824,8 +830,7 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
     drawCheckers();
     drawImage();
-    KisConfig cfg;
-    if ((coordinatesConverter()->effectiveZoom() > cfg.getPixelGridDrawingThreshold() - 0.00001) && cfg.pixelGridEnabled()) {
+    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
         drawGrid();
     }
     if (KisOpenGL::hasOpenGL3()) {

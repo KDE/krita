@@ -250,6 +250,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     setVisible(true);
     setVisible(false);
+
+    // Prevent tablet events from being captured by the canvas
+    setAttribute(Qt::WA_NoMousePropagation, true);
 }
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)

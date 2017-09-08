@@ -111,6 +111,9 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     setLayout(layout);
     setCursor(Qt::ArrowCursor);
+
+    // Prevent tablet events from being captured by the canvas
+    setAttribute(Qt::WA_NoMousePropagation, true);
 }
 
 KisBrushHud::~KisBrushHud()
@@ -246,6 +249,8 @@ bool KisBrushHud::event(QEvent *event)
     case QEvent::TabletPress:
     case QEvent::TabletMove:
     case QEvent::TabletRelease:
+        // Allow the tablet event to be translated to a mouse event on certain platforms
+        break;
     case QEvent::MouseButtonPress:
     case QEvent::MouseMove:
     case QEvent::MouseButtonRelease:

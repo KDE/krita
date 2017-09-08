@@ -51,6 +51,8 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <kis_tablet_support_win.h>
+#include <kis_tablet_support_win8.h>
+#include <kis_config.h>
 
 #elif defined HAVE_X11
 #include <kis_tablet_support_x11.h>
@@ -241,25 +243,45 @@ extern "C" int main(int argc, char **argv)
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
 
-    // then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-    QDate currentDate = QDate::currentDate();
-    QWidget *splash = 0;
-    if (currentDate > QDate(currentDate.year(), 12, 4) ||
-            currentDate < QDate(currentDate.year(), 1, 9)) {
-        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
-    }
-    else {
-        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
-    }
+    if (!args.noSplash()) {
+        // then create the pixmap from an xpm: we cannot get the
+        // location of our datadir before we've started our components,
+        // so use an xpm.
+        QDate currentDate = QDate::currentDate();
+        QWidget *splash = 0;
+        if (currentDate > QDate(currentDate.year(), 12, 4) ||
+                currentDate < QDate(currentDate.year(), 1, 9)) {
+            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
+        }
+        else {
+            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
+        }
 
-    app.setSplashScreen(splash);
+        app.setSplashScreen(splash);
+    }
 
 
 #if defined Q_OS_WIN
-    KisTabletSupportWin::init();
-    // app.installNativeEventFilter(new KisTabletSupportWin());
+    {
+        KisConfig cfg;
+        bool isUsingWin8PointerInput = false;
+        if (cfg.useWin8PointerInput()) {
+            KisTabletSupportWin8 *penFilter = new KisTabletSupportWin8();
+            if (penFilter->init()) {
+                // penFilter.registerPointerDeviceNotifications();
+                app.installNativeEventFilter(penFilter);
+                isUsingWin8PointerInput = true;
+                qDebug() << "Using Win8 Pointer Input for tablet support";
+            } else {
+                qDebug() << "No Win8 Pointer Input available";
+                delete penFilter;
+            }
+        }
+        if (!isUsingWin8PointerInput) {
+            KisTabletSupportWin::init();
+            // app.installNativeEventFilter(new KisTabletSupportWin());
+        }
+    }
 #endif
 
     if (!app.start(args)) {

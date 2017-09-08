@@ -63,21 +63,26 @@ QIcon PluginSettings::icon()
 
 QString PluginSettings::gmicQtPath()
 {
-    QString gmicqt("gmic_krita_qt");
+    QString gmicqt = "gmic_krita_qt";
 #ifdef Q_OS_WIN
     gmicqt += ".exe";
 #endif
-    gmicqt = KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
-    QFileInfo fi(gmicqt);
-    if (!fi.exists()) {
+
+    QString gmicqt_path = KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
+
+    QFileInfo fi(gmicqt_path);
+    if (!fi.exists() || !fi.isFile()) {
+
         QFileInfo fi2(qApp->applicationDirPath() + "/" + gmicqt);
-        if (fi2.exists()) {
-            gmicqt = qApp->applicationDirPath() + "/" + gmicqt;
+
+        if (fi2.exists() && fi2.isFile()) {
+            gmicqt_path = fi2.canonicalFilePath();
         }
         else {
-            gmicqt.clear();
+            gmicqt_path.clear();
         }
     }
+
     return gmicqt;
 }
 

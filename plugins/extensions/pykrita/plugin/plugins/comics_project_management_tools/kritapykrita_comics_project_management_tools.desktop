@@ -1,0 +1,27 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=comics_project_management_tools
+X-Python-2-Compatible=false
+Name=Comics Project Management Tools
+Name[ca]=Eines per a la gestió dels projectes de còmics
+Name[ca@valencia]=Eines per a la gestió dels projectes de còmics
+Name[es]=Herramientas de gestión de proyectos de cómics
+Name[it]=Strumenti per la gestione dei progetti di fumetti
+Name[nl]=Hulpmiddelen voor projectbeheer van strips
+Name[pl]=Narzędzia do zarządzania projektami komiksów
+Name[pt]=Ferramentas de Gestão de Projectos de Banda Desenhada
+Name[sv]=Projekthanteringsverktyg för tecknade serier
+Name[uk]=Інструменти для керування проектами коміксів
+Name[x-test]=xxComics Project Management Toolsxx
+Comment=Tools for managing comics.
+Comment[ca]=Eines per a gestionar els còmics.
+Comment[ca@valencia]=Eines per a gestionar els còmics.
+Comment[es]=Herramientas para gestionar cómics.
+Comment[it]=Strumenti per la gestione dei fumetti.
+Comment[nl]=Hulpmiddelen voor beheer van strips.
+Comment[pl]=Narzędzie do zarządzania komiksami.
+Comment[pt]=Ferramentas para gerir bandas desenhadas.
+Comment[sv]=Verktyg för att hantera tecknade serier.
+Comment[uk]=Інструменти для керування коміксами
+Comment[x-test]=xxTools for managing comics.xx

@@ -1065,6 +1065,26 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
     m_cfg.writeEntry("tabletPressureCurve", curveString);
 }
 
+bool KisConfig::useWin8PointerInput(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
+#else
+    return false;
+#endif
+}
+
+void KisConfig::setUseWin8PointerInput(bool value) const
+{
+#ifdef Q_OS_WIN
+    // Special handling: Only set value if changed
+    // I don't want it to be set if the user hasn't touched it
+    if (useWin8PointerInput() != value) {
+        m_cfg.writeEntry("useWin8PointerInput", value);
+    }
+#endif
+}
+
 qreal KisConfig::vastScrolling(bool defaultValue) const
 {
     return (defaultValue ? 0.9 : m_cfg.readEntry("vastScrolling", 0.9));

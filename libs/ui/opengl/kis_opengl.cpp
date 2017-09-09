@@ -95,6 +95,13 @@ namespace
         bool supportsFenceSync() const {
             return glMajorVersion >= 3;
         }
+#ifdef Q_OS_WIN
+        // This is only for detecting whether ANGLE is being used.
+        // For detecting generic OpenGL ES please check isOpenGLES
+        bool isUsingAngle() const {
+            return rendererString.startsWith("ANGLE", Qt::CaseInsensitive);
+        }
+#endif
     };
     boost::optional<OpenGLCheckResult> openGLCheckResult;
 
@@ -111,32 +118,60 @@ namespace
 #ifdef Q_OS_WIN
 namespace
 {
-    struct WinOpenGLCheckResult {
-        bool openGLValid;
-        bool usingAngle;
+    struct WindowsOpenGLStatus {
+        bool supportsDesktopGL = false;
+        bool supportsAngleD3D11 = false;
+        bool isQtPreferAngle = false;
     };
+    WindowsOpenGLStatus windowsOpenGLStatus = {};
 
     QStringList qpaDetectionLog;
-    WinOpenGLCheckResult qpaDetectionResult = {};
 
-    WinOpenGLCheckResult checkQpaOpenGLStatus() {
-        WinOpenGLCheckResult retval;
-        retval.openGLValid = false;
-        retval.usingAngle = false;
-
-        QOpenGLContext *context = QOpenGLContext::globalShareContext();
-        if (!context) {
-            qDebug() << "Global shared OpenGL context is null while checking Qt's OpenGL detection";
-            return retval;
+    boost::optional<OpenGLCheckResult> checkQpaOpenGLStatus() {
+        QWindow surface;
+        surface.setSurfaceType(QSurface::OpenGLSurface);
+        surface.create();
+        QOpenGLContext context;
+        context.create();
+        if (!context.isValid()) {
+            qDebug() << "Global shared OpenGL context is not valid while checking Qt's OpenGL status";
+            return boost::none;
         }
-        if (!context->isValid()) {
-            qDebug() << "Global shared OpenGL context is not valid while checking Qt's OpenGL detection";
-            return retval;
-        }
-        retval.openGLValid = true;
-        retval.usingAngle = context->isOpenGLES();
-        return retval;
+        context.makeCurrent(&surface);
+        return OpenGLCheckResult(context);
     }
+
+    bool checkIsSupportedDesktopGL(const OpenGLCheckResult &checkResult) {
+        if (checkResult.isUsingAngle()) {
+            qWarning() << "ANGLE was being used when desktop OpenGL was wanted, assuming no desktop OpenGL support";
+            return false;
+        }
+        if (checkResult.isOpenGLES) {
+            qWarning() << "Got OpenGL ES instead of desktop OpenGL, this shouldn't happen!";
+            return false;
+        }
+        return checkResult.isSupportedVersion();
+    }
+
+    bool checkIsSupportedAngleD3D11(const OpenGLCheckResult &checkResult) {
+        if (!checkResult.isUsingAngle()) {
+            qWarning() << "Desktop OpenGL was being used when ANGLE was wanted, assuming no ANGLE support";
+            return false;
+        }
+        if (!checkResult.isOpenGLES) {
+            qWarning() << "Got desktop OpenGL instead of OpenGL ES, this shouldn't happen!";
+            return false;
+        }
+        // HACK: Block ANGLE with Direct3D9
+        //       Direct3D9 does not give OpenGL ES 3.0
+        //       Some versions of ANGLE returns OpenGL version 3.0 incorrectly
+        if (checkResult.rendererString.contains("Direct3D9", Qt::CaseInsensitive)) {
+            qWarning() << "ANGLE tried to use Direct3D9, Krita won't work with it";
+            return false;
+        }
+        return checkResult.isSupportedVersion();
+    }
+
 } // namespace
 
 /**
@@ -149,15 +184,22 @@ namespace
  */
 void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
 {
+    KIS_SAFE_ASSERT_RECOVER(defaultFormatIsSet) {
+        qWarning() << "Default OpenGL format was not set before calling KisOpenGL::probeWindowsQpaOpenGL. This might be a BUG!";
+        setDefaultFormat();
+    }
+
     // Clear env var to prevent affecting tests
     QByteArray userQtOpenGLEnv = qgetenv("QT_OPENGL");
     qunsetenv("QT_OPENGL");
+
+    boost::optional<OpenGLCheckResult> qpaDetectionResult;
 
     qDebug() << "Probing Qt OpenGL detection:";
     {
         KisLoggingManager::ScopedLogCapturer logCapturer(
             "qt.qpa.gl",
-            [&qpaDetectionLog](QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+            [](QtMsgType type, const QMessageLogContext &context, const QString &msg) {
                 Q_UNUSED(type)
                 Q_UNUSED(context)
                 qpaDetectionLog.append(msg);
@@ -168,7 +210,49 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
             qpaDetectionResult = checkQpaOpenGLStatus();
         }
     }
+    if (!qpaDetectionResult) {
+        qWarning() << "Could not initialize OpenGL context!";
+        return;
+    }
     qDebug() << "Done probing Qt OpenGL detection";
+
+    windowsOpenGLStatus.isQtPreferAngle = qpaDetectionResult->isUsingAngle();
+
+    boost::optional<OpenGLCheckResult> checkResultAngle, checkResultDesktopGL;
+    if (qpaDetectionResult->isUsingAngle()) {
+        checkResultAngle = qpaDetectionResult;
+        // We already checked ANGLE, now check desktop OpenGL
+        qputenv("QT_OPENGL", "desktop");
+        qDebug() << "Checking desktop OpenGL...";
+        {
+            QGuiApplication app(argc, argv);
+            checkResultDesktopGL = checkQpaOpenGLStatus();
+        }
+        if (!checkResultDesktopGL) {
+            qWarning() << "Could not initialize OpenGL context!";
+        }
+        qDebug() << "Done checking desktop OpenGL";
+        qunsetenv("QT_OPENGL");
+    } else {
+        checkResultDesktopGL = qpaDetectionResult;
+        // We already checked desktop OpenGL, now check ANGLE
+        qputenv("QT_OPENGL", "angle");
+        qDebug() << "Checking ANGLE...";
+        {
+            QGuiApplication app(argc, argv);
+            checkResultAngle = checkQpaOpenGLStatus();
+        }
+        if (!checkResultAngle) {
+            qWarning() << "Could not initialize OpenGL context!";
+        }
+        qDebug() << "Done checking ANGLE";
+        qunsetenv("QT_OPENGL");
+    }
+
+    windowsOpenGLStatus.supportsDesktopGL =
+            checkResultDesktopGL && checkIsSupportedDesktopGL(*checkResultDesktopGL);
+    windowsOpenGLStatus.supportsAngleD3D11 =
+            checkResultAngle && checkIsSupportedAngleD3D11(*checkResultAngle);
 
     // Restore env var
     qputenv("QT_OPENGL", userQtOpenGLEnv);
@@ -231,8 +315,9 @@ void KisOpenGL::initialize()
     debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES;
 #ifdef Q_OS_WIN
     debugOut << "\n\nQPA OpenGL Detection Info";
-    debugOut << "\n  openGLValid:" << qpaDetectionResult.openGLValid;
-    debugOut << "\n  usingAngle:" << qpaDetectionResult.usingAngle;
+    debugOut << "\n  supportsDesktopGL:" << windowsOpenGLStatus.supportsDesktopGL;
+    debugOut << "\n  supportsAngleD3D11:" << windowsOpenGLStatus.supportsAngleD3D11;
+    debugOut << "\n  isQtPreferAngle:" << windowsOpenGLStatus.isQtPreferAngle;
     debugOut << "\n== log ==\n";
     debugOut.noquote();
     debugOut << qpaDetectionLog.join('\n');

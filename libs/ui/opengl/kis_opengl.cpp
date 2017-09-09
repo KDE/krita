@@ -39,20 +39,67 @@
 #include <kis_config.h>
 #include <KisLoggingManager.h>
 
+#include <boost/optional.hpp>
+
+#ifndef GL_RENDERER
+#  define GL_RENDERER 0x1F01
+#endif
+
 namespace
 {
     bool defaultFormatIsSet = false;
     bool isDebugEnabled = false;
     bool isDebugSynchronous = false;
-    bool initialized = false;
+
+    struct OpenGLCheckResult {
+        // bool contextValid = false;
+        int glMajorVersion = 0;
+        int glMinorVersion = 0;
+        bool supportsDeprecatedFunctions = false;
+        bool isOpenGLES = false;
+        QString rendererString;
+
+        OpenGLCheckResult(QOpenGLContext &context) {
+            if (!context.isValid()) {
+                return;
+            }
+
+            QOpenGLFunctions *funcs = context.functions(); // funcs is ready to be used
+
+            rendererString = QString((const char*)funcs->glGetString(GL_RENDERER));
+            glMajorVersion = context.format().majorVersion();
+            glMinorVersion = context.format().minorVersion();
+            supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
+            isOpenGLES = context.isOpenGLES();
+        }
+
+        bool isSupportedVersion() const {
+            return
+#ifdef Q_OS_OSX
+                    ((glMajorVersion * 100 + glMinorVersion) >= 302)
+#else
+                    (glMajorVersion >= 3 && (supportsDeprecatedFunctions || isOpenGLES)) ||
+                    ((glMajorVersion * 100 + glMinorVersion) == 201)
+#endif
+                    ;
+        }
+
+        bool supportsLoD() const {
+            return (glMajorVersion * 100 + glMinorVersion) >= 300;
+        }
+
+        bool hasOpenGL3() const {
+            return (glMajorVersion * 100 + glMinorVersion) >= 302;
+        }
+
+        bool supportsFenceSync() const {
+            return glMajorVersion >= 3;
+        }
+    };
+    boost::optional<OpenGLCheckResult> openGLCheckResult;
+
     bool NeedsFenceWorkaround = false;
     bool NeedsPixmapCacheWorkaround = false;
-    int glMajorVersion = 0;
-    int glMinorVersion = 0;
-    bool supportsDeprecatedFunctions = false;
-    bool isOpenGLES = false;
-
-    QString Renderer;
 
     QString debugText("OpenGL Info\n  **OpenGL not initialized**");
 
@@ -64,16 +111,16 @@ namespace
 #ifdef Q_OS_WIN
 namespace
 {
-    struct OpenGLCheckResult {
+    struct WinOpenGLCheckResult {
         bool openGLValid;
         bool usingAngle;
     };
 
     QStringList qpaDetectionLog;
-    OpenGLCheckResult qpaDetectionResult = {};
+    WinOpenGLCheckResult qpaDetectionResult = {};
 
-    OpenGLCheckResult checkQpaOpenGLStatus() {
-        OpenGLCheckResult retval;
+    WinOpenGLCheckResult checkQpaOpenGLStatus() {
+        WinOpenGLCheckResult retval;
         retval.openGLValid = false;
         retval.usingAngle = false;
 
@@ -130,7 +177,7 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
 
 void KisOpenGL::initialize()
 {
-    if (initialized) return;
+    if (openGLCheckResult) return;
 
     KIS_SAFE_ASSERT_RECOVER(defaultFormatIsSet) {
         qWarning() << "Default OpenGL format was not set before calling KisOpenGL::initialize. This might be a BUG!";
@@ -149,18 +196,14 @@ void KisOpenGL::initialize()
     context.makeCurrent( &surface );
 
     QOpenGLFunctions  *funcs = context.functions();
-    funcs->initializeOpenGLFunctions();
+    openGLCheckResult = OpenGLCheckResult(context);
 
-#ifndef GL_RENDERER
-#  define GL_RENDERER 0x1F01
-#endif
-    Renderer = QString((const char*)funcs->glGetString(GL_RENDERER));
     /**
      * Warn about Intel's broken video drivers
      */
 #if defined Q_OS_WIN
     KisConfig cfg;
-    if (cfg.useOpenGL() && Renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+    if (cfg.useOpenGL() && openGLCheckResult->rendererString.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You have an Intel(R) HD Graphics video adapter.\n"
@@ -171,25 +214,21 @@ void KisOpenGL::initialize()
     }
 #endif
 
-    glMajorVersion = context.format().majorVersion();
-    glMinorVersion = context.format().minorVersion();
-    supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
-    isOpenGLES = context.isOpenGLES();
 
     debugText.clear();
     QDebug debugOut(&debugText);
     debugOut << "OpenGL Info";
     debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
-    debugOut << "\n  Renderer: " << Renderer;
+    debugOut << "\n  Renderer: " << openGLCheckResult->rendererString;
     debugOut << "\n  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
     debugOut << "\n  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
     debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
     debugOut << "\n  Current format:   " << context.format();
     debugOut.nospace();
-    debugOut << "\n     Version: " << glMajorVersion << "." << glMinorVersion;
+    debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion << "." << openGLCheckResult->glMinorVersion;
     debugOut.resetFormat();
-    debugOut << "\n     Supports deprecated functions" << supportsDeprecatedFunctions;
-    debugOut << "\n     is OpenGL ES:" << isOpenGLES;
+    debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions;
+    debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES;
 #ifdef Q_OS_WIN
     debugOut << "\n\nQPA OpenGL Detection Info";
     debugOut << "\n  openGLValid:" << qpaDetectionResult.openGLValid;
@@ -203,7 +242,6 @@ void KisOpenGL::initialize()
 
     qDebug().noquote() << debugText;
 
-    initialized = true;
 }
 
 void KisOpenGL::initializeContext(QOpenGLContext *ctx)
@@ -238,7 +276,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());
     log.write(", ");
-    log.write(Renderer.toLatin1());
+    log.write(openGLCheckResult->rendererString.toLatin1());
     log.write(", ");
     QString version((const char*)f->glGetString(GL_VERSION));
     log.write(version.toLatin1());
@@ -250,7 +288,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     isOnX11 = true;
 #endif
 
-    if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
+    if ((isOnX11 && openGLCheckResult->rendererString.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
 
@@ -294,25 +332,25 @@ const QString &KisOpenGL::getDebugText()
 bool KisOpenGL::supportsLoD()
 {
     initialize();
-    return (glMajorVersion * 100 + glMinorVersion) >= 300;
+    return openGLCheckResult->supportsLoD();
 }
 
 bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    return (glMajorVersion * 100 + glMinorVersion) >= 302;
+    return openGLCheckResult->hasOpenGL3();
 }
 
 bool KisOpenGL::hasOpenGLES()
 {
     initialize();
-    return isOpenGLES;
+    return openGLCheckResult->isOpenGLES;
 }
 
 bool KisOpenGL::supportsFenceSync()
 {
     initialize();
-    return glMajorVersion >= 3;
+    return openGLCheckResult->supportsFenceSync();
 }
 
 bool KisOpenGL::needsFenceWorkaround()
@@ -358,10 +396,5 @@ void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 
 bool KisOpenGL::hasOpenGL()
 {
-#ifdef Q_OS_OSX
-    return ((glMajorVersion * 100 + glMinorVersion) >= 302);
-#else
-    return (glMajorVersion >= 3 && (supportsDeprecatedFunctions || hasOpenGLES())) ||
-           ((glMajorVersion * 100 + glMinorVersion) == 201);
-#endif
+    return openGLCheckResult->isSupportedVersion();
 }

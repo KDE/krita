@@ -109,6 +109,8 @@ private:
 
 };
 
+#ifdef Q_OS_WIN
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisOpenGL::OpenGLRenderers);
+#endif
 
 #endif // KIS_OPENGL_H_

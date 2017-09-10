@@ -20,6 +20,7 @@ set(kritaglobal_LIB_SRCS
     kis_signal_compressor_with_param.cpp
     kis_acyclic_signal_connector.cpp
     KisQPainterStateSaver.cpp
+    KisLoggingManager.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

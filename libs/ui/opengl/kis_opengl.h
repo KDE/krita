@@ -23,6 +23,7 @@
 #include <KoConfig.h>
 
 #include <QtGlobal>
+#include <QFlags>
 class QOpenGLContext;
 class QString;
 
@@ -44,6 +45,28 @@ public:
     };
 public:
 
+#ifdef Q_OS_WIN
+    enum OpenGLRenderer {
+        RendererNone = 0x00,
+        RendererAuto = 0x01,
+        RendererDesktopGL = 0x02,
+        RendererAngle = 0x04,
+    };
+    Q_DECLARE_FLAGS(OpenGLRenderers, OpenGLRenderer);
+
+    // Probe the Windows platform abstraction layer for OpenGL detection
+    static void probeWindowsQpaOpenGL(int argc, char **argv, QString userRendererConfigString);
+
+    static OpenGLRenderer getCurrentOpenGLRenderer();
+    static OpenGLRenderer getQtPreferredOpenGLRenderer();
+    static OpenGLRenderers getSupportedOpenGLRenderers();
+    static OpenGLRenderer getUserOpenGLRendererConfig();
+    static OpenGLRenderer getNextUserOpenGLRendererConfig();
+    static void setNextUserOpenGLRendererConfig(OpenGLRenderer renderer);
+    static QString convertOpenGLRendererToConfig(OpenGLRenderer renderer);
+    static OpenGLRenderer convertConfigToOpenGLRenderer(QString renderer);
+#endif
+
     /// Request OpenGL version 3.2
     static void initialize();
 
@@ -54,6 +77,7 @@ public:
 
     static bool supportsLoD();
     static bool hasOpenGL3();
+    static bool hasOpenGLES();
 
     /// Check for OpenGL
     static bool hasOpenGL();
@@ -84,5 +108,9 @@ private:
 
 
 };
+
+#ifdef Q_OS_WIN
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisOpenGL::OpenGLRenderers);
+#endif
 
 #endif // KIS_OPENGL_H_

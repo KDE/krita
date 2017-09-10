@@ -124,6 +124,9 @@ namespace
         bool isQtPreferAngle = false;
     };
     WindowsOpenGLStatus windowsOpenGLStatus = {};
+    KisOpenGL::OpenGLRenderer userRendererConfig;
+    KisOpenGL::OpenGLRenderer nextUserRendererConfig;
+    KisOpenGL::OpenGLRenderer currentRenderer;
 
     QStringList qpaDetectionLog;
 
@@ -182,7 +185,7 @@ namespace
  * This function is written for Qt 5.9.1. On other versions it might not work
  * as well.
  */
-void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
+void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv, QString userRendererConfigString)
 {
     KIS_SAFE_ASSERT_RECOVER(defaultFormatIsSet) {
         qWarning() << "Default OpenGL format was not set before calling KisOpenGL::probeWindowsQpaOpenGL. This might be a BUG!";
@@ -190,7 +193,6 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
     }
 
     // Clear env var to prevent affecting tests
-    QByteArray userQtOpenGLEnv = qgetenv("QT_OPENGL");
     qunsetenv("QT_OPENGL");
 
     boost::optional<OpenGLCheckResult> qpaDetectionResult;
@@ -254,8 +256,87 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv)
     windowsOpenGLStatus.supportsAngleD3D11 =
             checkResultAngle && checkIsSupportedAngleD3D11(*checkResultAngle);
 
-    // Restore env var
-    qputenv("QT_OPENGL", userQtOpenGLEnv);
+    userRendererConfig = convertConfigToOpenGLRenderer(userRendererConfigString);
+    if ((userRendererConfig == RendererDesktopGL && !windowsOpenGLStatus.supportsDesktopGL) ||
+            (userRendererConfig == RendererAngle && !windowsOpenGLStatus.supportsAngleD3D11)) {
+        // Set it to auto so we won't get stuck
+        userRendererConfig = RendererAuto;
+    }
+    nextUserRendererConfig = userRendererConfig;
+    switch (userRendererConfig) {
+    case RendererDesktopGL:
+        QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
+        currentRenderer = RendererDesktopGL;
+        break;
+    case RendererAngle:
+        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
+        currentRenderer = RendererAngle;
+        break;
+    default:
+        if (windowsOpenGLStatus.isQtPreferAngle && windowsOpenGLStatus.supportsAngleD3D11) {
+            currentRenderer = RendererAngle;
+        } else if (!windowsOpenGLStatus.isQtPreferAngle && windowsOpenGLStatus.supportsAngleD3D11) {
+            currentRenderer = RendererDesktopGL;
+        } else {
+            currentRenderer = RendererNone;
+        }
+        break;
+    }
+}
+
+KisOpenGL::OpenGLRenderer KisOpenGL::getCurrentOpenGLRenderer()
+{
+    return currentRenderer;
+}
+
+KisOpenGL::OpenGLRenderer KisOpenGL::getQtPreferredOpenGLRenderer()
+{
+    return windowsOpenGLStatus.isQtPreferAngle ? RendererAngle : RendererDesktopGL;
+}
+
+KisOpenGL::OpenGLRenderers KisOpenGL::getSupportedOpenGLRenderers()
+{
+    return RendererAuto |
+            (windowsOpenGLStatus.supportsDesktopGL ? RendererDesktopGL : static_cast<OpenGLRenderer>(0)) |
+            (windowsOpenGLStatus.supportsAngleD3D11 ? RendererAngle : static_cast<OpenGLRenderers>(0));
+}
+
+KisOpenGL::OpenGLRenderer KisOpenGL::getUserOpenGLRendererConfig()
+{
+    return userRendererConfig;
+}
+
+KisOpenGL::OpenGLRenderer KisOpenGL::getNextUserOpenGLRendererConfig()
+{
+    return nextUserRendererConfig;
+}
+
+void KisOpenGL::setNextUserOpenGLRendererConfig(KisOpenGL::OpenGLRenderer renderer)
+{
+    nextUserRendererConfig = renderer;
+}
+
+QString KisOpenGL::convertOpenGLRendererToConfig(KisOpenGL::OpenGLRenderer renderer)
+{
+    switch (renderer) {
+    case RendererDesktopGL:
+        return QStringLiteral("desktop");
+    case RendererAngle:
+        return QStringLiteral("angle");
+    default:
+        return QStringLiteral("auto");
+    }
+}
+
+KisOpenGL::OpenGLRenderer KisOpenGL::convertConfigToOpenGLRenderer(QString renderer)
+{
+    if (renderer == "desktop") {
+        return RendererDesktopGL;
+    } else if (renderer == "angle") {
+        return RendererAngle;
+    } else {
+        return RendererAuto;
+    }
 }
 #endif
 
@@ -280,24 +361,8 @@ void KisOpenGL::initialize()
     context.makeCurrent( &surface );
 
     QOpenGLFunctions  *funcs = context.functions();
+
     openGLCheckResult = OpenGLCheckResult(context);
-
-    /**
-     * Warn about Intel's broken video drivers
-     */
-#if defined Q_OS_WIN
-    KisConfig cfg;
-    if (cfg.useOpenGL() && openGLCheckResult->rendererString.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Warning"),
-                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a crash, a black or blank screen,"
-                                      "please update your display driver to the latest version.\n\n"
-                                      "If Krita crashes, it will disable OpenGL rendering. Please restart Krita in that case.\n After updating your drivers you can re-enable OpenGL in Krita's Settings.\n"));
-        cfg.writeEntry("WarnedAboutIntel", true);
-    }
-#endif
-
 
     debugText.clear();
     QDebug debugOut(&debugText);

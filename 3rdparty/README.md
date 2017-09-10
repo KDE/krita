@@ -33,6 +33,8 @@ Note: on all operating systems the entire procedure is done in a terminal window
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.
 
+4. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
+
 == Setup your environment ==
 
 
@@ -77,6 +79,9 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
 
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
+
+- If you don't have Windows 10 SDK and don't want to build Qt with ANGLE, add
+  `-DQT_ENABLE_DYNAMIC_OPENGL=OFF` to the CMake command line args.
 
 3. build the packages:
 

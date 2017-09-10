@@ -11,7 +11,7 @@ if (WIN32)
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard
         #
-        -opengl dynamic -angle -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
+        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
         #
         -opensource -confirm-license
         #
@@ -24,6 +24,11 @@ if (WIN32)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)
     endif(QT_ENABLE_DEBUG_INFO)
+    if (QT_ENABLE_DYNAMIC_OPENGL)
+        list(APPEND _QT_conf -opengl dynamic -angle)
+    else (QT_ENABLE_DYNAMIC_OPENGL)
+        list(APPEND _QT_conf -opengl desktop -no-angle)
+    endif (QT_ENABLE_DYNAMIC_OPENGL)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

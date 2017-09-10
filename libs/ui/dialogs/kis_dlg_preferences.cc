@@ -792,7 +792,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
     }
 #else
-    lblRenderer.setEnabled(false);
+    lblRenderer->setEnabled(false);
     cmbRenderer->setEnabled(false);
     cmbRenderer->clear();
     cmbRenderer->addItem(rendererOpenGLText);

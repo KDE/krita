@@ -49,7 +49,6 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      ALWAYS 0
       DEPENDS ext_patch
   )
 elseif (NOT APPLE)

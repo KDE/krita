@@ -15,10 +15,10 @@ Date:   Wed Jun 21 10:49:59 2017 +0200
     Reviewed-by: Alexander Volkov <a.volkov@rusbitech.ru>
     Reviewed-by: Tor Arne Vestb繪 <tor.arne.vestbo@qt.io>
 
-diff --git a/src/widgets/widgets/qdialogbuttonbox.cpp b/src/widgets/widgets/qdialogbuttonbox.cpp
+diff --git a/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp b/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp
 index a3e55114bb..90cb17da59 100644
---- a/src/widgets/widgets/qdialogbuttonbox.cpp
-+++ b/src/widgets/widgets/qdialogbuttonbox.cpp
+--- a/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp
++++ b/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp
 @@ -411,7 +411,9 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
      else
          addButton(button, static_cast<QDialogButtonBox::ButtonRole>(role), doLayout);

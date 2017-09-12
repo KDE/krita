@@ -548,7 +548,8 @@ void KisPopupPalette::slotShowTagsPopup()
     }
 }
 
-void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
+void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+    event->ignore();
 }
 
 

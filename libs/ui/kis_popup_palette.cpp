@@ -816,7 +816,8 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
 
 
 
-void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
+void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+    event->ignore();
 }
 
 

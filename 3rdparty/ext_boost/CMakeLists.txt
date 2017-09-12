@@ -8,7 +8,7 @@ if (MSVC)
 			URL_MD5 015ae4afa6f3e597232bfe1dab949ace
 
 			CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --prefix=${PREFIX_ext_boost}
-			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc-14.0 variant=release link=shared  threading=multi architecture=x86 address-model=64 variant=release install
+			BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc-14.0 variant=release link=shared  threading=multi architecture=x86 address-model=64 variant=release install
 			INSTALL_COMMAND ""
 			INSTALL_DIR ${EXTPREFIX_boost}
 
@@ -32,7 +32,7 @@ if (MSVC)
 			URL_MD5 015ae4afa6f3e597232bfe1dab949ace
 
 			CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --prefix=${PREFIX_ext_boost}
-			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc-14.0 variant=release link=shared  threading=multi architecture=x86 variant=release install
+			BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc-14.0 variant=release link=shared  threading=multi architecture=x86 variant=release install
 			INSTALL_COMMAND ""
 			INSTALL_DIR ${EXTPREFIX_boost}
 
@@ -58,7 +58,7 @@ elseif(MINGW)
        URL_MD5 015ae4afa6f3e597232bfe1dab949ace
 
        CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat gcc --prefix=${PREFIX_ext_boost}
-       BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared  threading=multi architecture=x86 variant=release install
+       BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared  threading=multi architecture=x86 variant=release install
        INSTALL_COMMAND ""
        INSTALL_DIR ${EXTPREFIX_boost}
 
@@ -79,7 +79,7 @@ else()
         	URL_MD5 6095876341956f65f9d35939ccea1a9f
 
         	CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${PREFIX_ext_boost} --with-libraries=system
-	        BUILD_COMMAND <SOURCE_DIR>/b2 install
+	        BUILD_COMMAND <SOURCE_DIR>/b2 -j${SUBMAKE_JOBS} install
 	        INSTALL_COMMAND ""
         	INSTALL_DIR ${PREFIX_ext_boost}
 

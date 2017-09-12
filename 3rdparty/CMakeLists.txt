@@ -11,6 +11,10 @@ project (krita-and-all-its-deps)
 
 cmake_minimum_required(VERSION 2.8.6)
 
+if(NOT SUBMAKE_JOBS)
+	set(SUBMAKE_JOBS 1)
+endif(NOT SUBMAKE_JOBS)
+
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 	message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
 endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -46,6 +50,18 @@ message( STATUS "CMAKE_CL_64: ${CMAKE_CL_64}")
 
 set(GLOBAL_BUILD_TYPE RelWithDebInfo)
 set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
+
+if (MINGW)
+	option(QT_ENABLE_DEBUG_INFO "Build Qt with debug info included" OFF)
+	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
+    if (QT_ENABLE_DYNAMIC_OPENGL)
+		if (DEFINED ENV{WindowsSdkDir})
+			message(STATUS "WindowsSdkDir is set to '$ENV{WindowsSdkDir}'")
+		else (DEFINED ENV{WindowsSdkDir})
+			message(FATAL_ERROR "Environemnt variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
+		endif (DEFINED ENV{WindowsSdkDir})
+	endif (QT_ENABLE_DYNAMIC_OPENGL)
+endif (MINGW)
 
 if (MSVC)
         set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_EXE_LINKER_FLAGS=/PROFILE -DCMAKE_SHARED_LINKER_FLAGS=/PROFILE)

@@ -1,0 +1,32 @@
+commit 7ef58de78af89438bf0c2875d8d02b6b0fb71f9a
+Author: Kai Uwe Broulik <kde@privat.broulik.de>
+Date:   Wed Jun 21 10:49:59 2017 +0200
+
+    QDialogButtonBox: Don't overwrite shortcut with standardButtonShortcut
+    
+    de63bbd2f806b0219a60775017899cedb121581f introduced a new
+    QPlatformTheme::standardButtonShortcut which would then unconditionally
+    overwrite the QPushButton shortcut, even when empty, breaking activating
+    mnemonics potentially included in the button's text.
+    
+    Task-number: QTBUG-61197
+    Change-Id: I2a5a460a820a5ab4054eb44f349066aaeca1436f
+    Reviewed-by: Marco Martin <notmart@gmail.com>
+    Reviewed-by: Alexander Volkov <a.volkov@rusbitech.ru>
+    Reviewed-by: Tor Arne Vestb繪 <tor.arne.vestbo@qt.io>
+
+diff --git a/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp b/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp
+index a3e55114bb..90cb17da59 100644
+--- a/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp
++++ b/qtbase/src/widgets/widgets/qdialogbuttonbox.cpp
+@@ -411,7 +411,9 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
+     else
+         addButton(button, static_cast<QDialogButtonBox::ButtonRole>(role), doLayout);
+ #if QT_CONFIG(shortcut)
+-    button->setShortcut(QGuiApplicationPrivate::platformTheme()->standardButtonShortcut(sbutton));
++    const QKeySequence standardShortcut = QGuiApplicationPrivate::platformTheme()->standardButtonShortcut(sbutton);
++    if (!standardShortcut.isEmpty())
++        button->setShortcut(standardShortcut);
+ #endif
+     return button;
+ }

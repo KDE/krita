@@ -231,9 +231,13 @@ void KisOpenGLCanvas2::initializeGL()
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
 #ifndef Q_OS_OSX
-    d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
-    if (!d->glFn201) {
-        warnUI << "Cannot obtain QOpenGLFunctions_2_1, glLogicOp cannot be used";
+    if (!KisOpenGL::hasOpenGLES()) {
+        d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
+        if (!d->glFn201) {
+            warnUI << "Cannot obtain QOpenGLFunctions_2_1, glLogicOp cannot be used";
+        }
+    } else {
+        d->glFn201 = nullptr;
     }
 #endif
 
@@ -391,16 +395,21 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     modelMatrix = projectionMatrix * modelMatrix;
     d->cursorShader->setUniformValue(d->cursorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    if (!KisOpenGL::hasOpenGLES()) {
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-    glEnable(GL_COLOR_LOGIC_OP);
+        glEnable(GL_COLOR_LOGIC_OP);
 #ifndef Q_OS_OSX
-    if (d->glFn201) {
-        d->glFn201->glLogicOp(GL_XOR);
-    }
+        if (d->glFn201) {
+            d->glFn201->glLogicOp(GL_XOR);
+        }
 #else
-    glLogicOp(GL_XOR);
+        glLogicOp(GL_XOR);
 #endif
+    } else {
+        glEnable(GL_BLEND);
+        glBlendFuncSeparate(GL_ONE_MINUS_DST_COLOR, GL_ZERO, GL_ONE, GL_ONE);
+    }
 
     // Paint the tool outline
     if (KisOpenGL::hasOpenGL3()) {
@@ -436,7 +445,11 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         d->outlineVAO.release();
     }
 
-    glDisable(GL_COLOR_LOGIC_OP);
+    if (!KisOpenGL::hasOpenGLES()) {
+        glDisable(GL_COLOR_LOGIC_OP);
+    } else {
+        glDisable(GL_BLEND);
+    }
 
     d->cursorShader->release();
 }
@@ -687,6 +700,7 @@ void KisOpenGLCanvas2::drawImage()
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisable(GL_BLEND);
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

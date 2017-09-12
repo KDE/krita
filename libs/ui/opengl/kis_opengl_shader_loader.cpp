@@ -63,7 +63,11 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 #ifdef Q_OS_OSX
     vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
 #else
-    vertSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
+    if (KisOpenGL::hasOpenGLES()) {
+        vertSource.append("#version 300 es\n");
+    } else {
+        vertSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
+    }
 #endif
     vertSource.append(vertHeader);
     QFile vertexShaderFile(":/" + vertPath);
@@ -81,7 +85,11 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 #ifdef Q_OS_OSX
     fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
 #else
-    fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
+    if (KisOpenGL::hasOpenGLES()) {
+        fragSource.append("#version 300 es\nprecision mediump float;\n");
+    } else {
+        fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
+    }
 #endif
     fragSource.append(fragHeader);
     QFile fragmentShaderFile(":/" + fragPath);

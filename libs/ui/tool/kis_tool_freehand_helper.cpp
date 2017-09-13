@@ -162,7 +162,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, savedCursorPos, 0);
     info.setCanvasRotation(m_d->canvasRotation);
     info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
-    KisDistanceInformation distanceInfo(prevPoint, 0, startAngle);
+    KisDistanceInformation distanceInfo(prevPoint, startAngle);
 
     if (!m_d->painterInfos.isEmpty()) {
         settings = m_d->resources->currentPaintOpPreset()->settings();
@@ -193,7 +193,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
              * local copy of the coordinates.
              */
             distanceInfo = *buddyDistance;
-            distanceInfo.overrideLastValues(prevPoint, 0, startAngle);
+            distanceInfo.overrideLastValues(prevPoint, startAngle);
 
         } else if (m_d->painterInfos.first()->dragDistance->isStarted()) {
             distanceInfo = *m_d->painterInfos.first()->dragDistance;
@@ -284,7 +284,6 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     const bool useSpacingUpdates = m_d->resources->needsSpacingUpdates();
 
     KisDistanceInitInfo startDistInfo(m_d->previousPaintInformation.pos(),
-                                      m_d->previousPaintInformation.currentTime(),
                                       startAngle,
                                       useSpacingUpdates ? SPACING_UPDATE_INTERVAL : LONG_TIME,
                                       airbrushing ? TIMING_UPDATE_INTERVAL : LONG_TIME);

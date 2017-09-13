@@ -48,8 +48,6 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
         timeSinceTimingUpdate(0.0),
         lastDabInfoValid(false),
         lastPaintInfoValid(false),
-        lockedDrawingAngle(0.0),
-        hasLockedDrawingAngle(false),
         totalDistance(0.0) {}
 
     // Accumulators of time/distance passed since the last painted dab
@@ -68,7 +66,6 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
 
     // Information about the last position considered (not necessarily a painted dab)
     QPointF lastPosition;
-    qreal lastTime;
     qreal lastAngle;
     bool lastDabInfoValid;
 
@@ -76,26 +73,23 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     KisPaintInformation lastPaintInformation;
     bool lastPaintInfoValid;
 
-    qreal lockedDrawingAngle;
-    bool hasLockedDrawingAngle;
     qreal totalDistance;
+    boost::optional<qreal> lockedDrawingAngleOptional;
 };
 
 struct Q_DECL_HIDDEN KisDistanceInitInfo::Private {
     Private() :
         hasLastInfo(false),
         lastPosition(),
-        lastTime(0.0),
         lastAngle(0.0),
         spacingUpdateInterval(LONG_TIME),
         timingUpdateInterval(LONG_TIME) {}
 
 
-    // Indicates whether lastPosition, lastTime, and lastAngle are valid or not.
+    // Indicates whether lastPosition,  and lastAngle are valid or not.
     bool hasLastInfo;
 
     QPointF lastPosition;
-    qreal lastTime;
     qreal lastAngle;
 
     qreal spacingUpdateInterval;
@@ -114,24 +108,22 @@ KisDistanceInitInfo::KisDistanceInitInfo(qreal spacingUpdateInterval, qreal timi
     m_d->timingUpdateInterval = timingUpdateInterval;
 }
 
-KisDistanceInitInfo::KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime,
+KisDistanceInitInfo::KisDistanceInitInfo(const QPointF &lastPosition,
                                          qreal lastAngle)
     : m_d(new Private)
 {
     m_d->hasLastInfo = true;
     m_d->lastPosition = lastPosition;
-    m_d->lastTime = lastTime;
     m_d->lastAngle = lastAngle;
 }
 
-KisDistanceInitInfo::KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime,
+KisDistanceInitInfo::KisDistanceInitInfo(const QPointF &lastPosition,
                                          qreal lastAngle, qreal spacingUpdateInterval,
                                          qreal timingUpdateInterval)
     : m_d(new Private)
 {
     m_d->hasLastInfo = true;
     m_d->lastPosition = lastPosition;
-    m_d->lastTime = lastTime;
     m_d->lastAngle = lastAngle;
     m_d->spacingUpdateInterval = spacingUpdateInterval;
     m_d->timingUpdateInterval = timingUpdateInterval;
@@ -156,7 +148,7 @@ bool KisDistanceInitInfo::operator==(const KisDistanceInitInfo &other) const
         return false;
     }
     if (m_d->hasLastInfo) {
-        if (m_d->lastPosition != other.m_d->lastPosition || m_d->lastTime != other.m_d->lastTime
+        if (m_d->lastPosition != other.m_d->lastPosition
             || m_d->lastAngle != other.m_d->lastAngle)
         {
             return false;
@@ -180,7 +172,7 @@ KisDistanceInitInfo &KisDistanceInitInfo::operator=(const KisDistanceInitInfo &r
 KisDistanceInformation KisDistanceInitInfo::makeDistInfo()
 {
     if (m_d->hasLastInfo) {
-        return KisDistanceInformation(m_d->lastPosition, m_d->lastTime, m_d->lastAngle,
+        return KisDistanceInformation(m_d->lastPosition, m_d->lastAngle,
                                       m_d->spacingUpdateInterval, m_d->timingUpdateInterval);
     }
     else {
@@ -196,7 +188,6 @@ void KisDistanceInitInfo::toXML(QDomDocument &doc, QDomElement &elt) const
         QDomElement lastInfoElt = doc.createElement("LastInfo");
         lastInfoElt.setAttribute("lastPosX", QString::number(m_d->lastPosition.x(), 'g', 15));
         lastInfoElt.setAttribute("lastPosY", QString::number(m_d->lastPosition.y(), 'g', 15));
-        lastInfoElt.setAttribute("lastTime", QString::number(m_d->lastTime, 'g', 15));
         lastInfoElt.setAttribute("lastAngle", QString::number(m_d->lastAngle, 'g', 15));
         elt.appendChild(lastInfoElt);
     }
@@ -216,12 +207,10 @@ KisDistanceInitInfo KisDistanceInitInfo::fromXML(const QDomElement &elt)
                                                                                  "0.0")));
         const qreal lastPosY = qreal(KisDomUtils::toDouble(lastInfoElt.attribute("lastPosY",
                                                                                  "0.0")));
-        const qreal lastTime = qreal(KisDomUtils::toDouble(lastInfoElt.attribute("lastTime",
-                                                                                 "0.0")));
         const qreal lastAngle = qreal(KisDomUtils::toDouble(lastInfoElt.attribute("lastAngle",
                                                                                   "0.0")));
 
-        return KisDistanceInitInfo(QPointF(lastPosX, lastPosY), lastTime, lastAngle,
+        return KisDistanceInitInfo(QPointF(lastPosX, lastPosY), lastAngle,
                                    spacingUpdateInterval, timingUpdateInterval);
     }
     else {
@@ -243,23 +232,20 @@ KisDistanceInformation::KisDistanceInformation(qreal spacingUpdateInterval,
 }
 
 KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
-                                               qreal lastTime,
                                                qreal lastAngle)
     : m_d(new Private)
 {
     m_d->lastPosition = lastPosition;
-    m_d->lastTime = lastTime;
     m_d->lastAngle = lastAngle;
 
     m_d->lastDabInfoValid = true;
 }
 
 KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
-                                               qreal lastTime,
                                                qreal lastAngle,
                                                qreal spacingUpdateInterval,
                                                qreal timingUpdateInterval)
-    : KisDistanceInformation(lastPosition, lastTime, lastAngle)
+    : KisDistanceInformation(lastPosition, lastAngle)
 {
     m_d->spacingUpdateInterval = spacingUpdateInterval;
     m_d->timingUpdateInterval = timingUpdateInterval;
@@ -289,11 +275,10 @@ KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInfor
     return *this;
 }
 
-void KisDistanceInformation::overrideLastValues(const QPointF &lastPosition, qreal lastTime,
+void KisDistanceInformation::overrideLastValues(const QPointF &lastPosition,
                                                 qreal lastAngle)
 {
     m_d->lastPosition = lastPosition;
-    m_d->lastTime = lastTime;
     m_d->lastAngle = lastAngle;
 
     m_d->lastDabInfoValid = true;
@@ -346,11 +331,6 @@ QPointF KisDistanceInformation::lastPosition() const
     return m_d->lastPosition;
 }
 
-qreal KisDistanceInformation::lastTime() const
-{
-    return m_d->lastTime;
-}
-
 qreal KisDistanceInformation::lastDrawingAngle() const
 {
     return m_d->lastAngle;
@@ -380,9 +360,8 @@ void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
     m_d->lastPaintInformation = info;
     m_d->lastPaintInfoValid = true;
 
-    m_d->lastAngle = nextDrawingAngle(info.pos());
+    m_d->lastAngle = info.drawingAngle(false);
     m_d->lastPosition = info.pos();
-    m_d->lastTime = info.currentTime();
     m_d->lastDabInfoValid = true;
 
     m_d->spacing = spacing;
@@ -569,81 +548,37 @@ void KisDistanceInformation::resetAccumulators()
     m_d->accumTime = 0.0;
 }
 
-bool KisDistanceInformation::hasLockedDrawingAngle() const
+boost::optional<qreal> KisDistanceInformation::lockedDrawingAngleOptional() const
 {
-    return m_d->hasLockedDrawingAngle;
+    return m_d->lockedDrawingAngleOptional;
 }
 
-qreal KisDistanceInformation::lockedDrawingAngle() const
+void KisDistanceInformation::lockCurrentDrawingAngle(const KisPaintInformation &info) const
 {
-    return m_d->lockedDrawingAngle;
-}
+    const qreal angle = info.drawingAngle(false);
 
-void KisDistanceInformation::setLockedDrawingAngle(qreal angle)
-{
-    m_d->hasLockedDrawingAngle = true;
-    m_d->lockedDrawingAngle = angle;
-}
+    qreal newAngle = angle;
 
-qreal KisDistanceInformation::nextDrawingAngle(const QPointF &nextPos,
-                                               bool considerLockedAngle) const
-{
-    if (!m_d->lastDabInfoValid) {
-        warnKrita << "KisDistanceInformation::nextDrawingAngle()" << "No last dab data";
-        return 0.0;
+    if (m_d->lockedDrawingAngleOptional) {
+        const qreal stabilizingCoeff = 20.0;
+        const qreal dist = stabilizingCoeff * m_d->spacing.scalarApprox();
+        const qreal alpha = qMax(0.0, dist - scalarDistanceApprox()) / dist;
+
+        const qreal oldAngle = *m_d->lockedDrawingAngleOptional;
+
+        if (shortestAngularDistance(oldAngle, newAngle) < M_PI / 6) {
+            newAngle = (1.0 - alpha) * oldAngle + alpha * newAngle;
+        } else {
+            newAngle = oldAngle;
+        }
     }
 
-    // Compute the drawing angle. If the new position is the same as the previous position, an angle
-    // can't be computed. In that case, act as if the angle is the same as in the previous dab.
-    return drawingAngleImpl(m_d->lastPosition, nextPos, considerLockedAngle, m_d->lastAngle);
+    m_d->lockedDrawingAngleOptional = newAngle;
 }
 
-QPointF KisDistanceInformation::nextDrawingDirectionVector(const QPointF &nextPos,
-                                                           bool considerLockedAngle) const
-{
-    if (!m_d->lastDabInfoValid) {
-        warnKrita << "KisDistanceInformation::nextDrawingDirectionVector()" << "No last dab data";
-        return QPointF(1.0, 0.0);
-    }
-
-    // Compute the direction vector. If the new position is the same as the previous position, a
-    // direction can't be computed. In that case, act as if the direction is the same as in the
-    // previous dab.
-    return drawingDirectionVectorImpl(m_d->lastPosition, nextPos, considerLockedAngle,
-                                      m_d->lastAngle);
-}
 
 qreal KisDistanceInformation::scalarDistanceApprox() const
 {
     return m_d->totalDistance;
 }
 
-qreal KisDistanceInformation::drawingAngleImpl(const QPointF &start, const QPointF &end,
-                                               bool considerLockedAngle, qreal defaultAngle) const
-{
-    if (m_d->hasLockedDrawingAngle && considerLockedAngle) {
-        return m_d->lockedDrawingAngle;
-    }
-
-    // If the start and end positions are the same, we can't compute an angle. In that case, use the
-    // provided default.
-    return KisAlgebra2D::directionBetweenPoints(start, end, defaultAngle);
-}
-
-QPointF KisDistanceInformation::drawingDirectionVectorImpl(const QPointF &start, const QPointF &end,
-                                                           bool considerLockedAngle,
-                                                           qreal defaultAngle) const
-{
-    if (m_d->hasLockedDrawingAngle && considerLockedAngle) {
-        return QPointF(cos(m_d->lockedDrawingAngle), sin(m_d->lockedDrawingAngle));
-    }
-
-    // If the start and end positions are the same, we can't compute a drawing direction. In that
-    // case, use the provided default.
-    if (KisAlgebra2D::fuzzyPointCompare(start, end)) {
-        return QPointF(cos(defaultAngle), sin(defaultAngle));
-    }
-
-    const QPointF diff(end - start);
-    return KisAlgebra2D::normalize(diff);
-}

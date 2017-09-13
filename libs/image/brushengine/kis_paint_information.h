@@ -113,6 +113,13 @@ public:
             DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
             spacingInfo = op.paintAt(*this);
             timingInfo = op.updateTimingImpl(*this);
+
+            // Initiate the process of locking the drawing angle. The locked value will
+            // always be present in the internals, but it will be requested but the users
+            // with a special parameter of drawingAngle() only.
+            if (!this->isHoveringMode()) {
+                distanceInfo->lockCurrentDrawingAngle(*this);
+            }
         }
 
         distanceInfo->registerPaintedDab(*this, spacingInfo, timingInfo);
@@ -154,14 +161,7 @@ public:
      * WARNING: this method is available *only* inside paintAt() call,
      * that is when the distance information is registered.
      */
-    qreal drawingAngle() const;
-
-    /**
-     * Lock current drawing angle for the rest of the stroke. If some
-     * value has already been locked, \p alpha shown the coefficient
-     * with which the new velue should be blended in.
-     */
-    void lockCurrentDrawingAngle(qreal alpha) const;
+    qreal drawingAngle(bool considerLockedAngle = false) const;
 
     /**
      * Current brush direction vector computed from the cursor movement

@@ -115,13 +115,13 @@ void KisDistanceInformationTest::testInitInfoEquality() const
     QVERIFY(info3 == info4);
     QVERIFY(!(info3 != info4));
 
-    KisDistanceInitInfo info5(QPointF(1.1, -10.7), 100.0, 3.3);
-    KisDistanceInitInfo info6(QPointF(1.1, -10.7), 100.0, 3.3);
+    KisDistanceInitInfo info5(QPointF(1.1, -10.7), 3.3);
+    KisDistanceInitInfo info6(QPointF(1.1, -10.7), 3.3);
     QVERIFY(info5 == info6);
     QVERIFY(!(info5 != info6));
 
-    KisDistanceInitInfo info7(QPointF(-12.3, 24.0), 104.0, 5.0, 20.1, 35.7);
-    KisDistanceInitInfo info8(QPointF(-12.3, 24.0), 104.0, 5.0, 20.1, 35.7);
+    KisDistanceInitInfo info7(QPointF(-12.3, 24.0), 5.0, 20.1, 35.7);
+    KisDistanceInitInfo info8(QPointF(-12.3, 24.0), 5.0, 20.1, 35.7);
     QVERIFY(info7 == info8);
     QVERIFY(!(info7 != info8));
 
@@ -151,13 +151,13 @@ void KisDistanceInformationTest::testInitInfoXMLClone() const
     KisDistanceInitInfo clone2 = KisDistanceInitInfo::fromXML(elt2);
     QVERIFY(clone2 == info2);
 
-    KisDistanceInitInfo info3(QPointF(-8.0, -5.0), 0.0, 60.0);
+    KisDistanceInitInfo info3(QPointF(-8.0, -5.0), 60.0);
     QDomElement elt3 = doc.createElement("Test3");
     info3.toXML(doc, elt3);
     KisDistanceInitInfo clone3 = KisDistanceInitInfo::fromXML(elt3);
     QVERIFY(clone3 == info3);
 
-    KisDistanceInitInfo info4(QPointF(0.0, 9.0), 10.0, 6.0, 1.0, 3.0);
+    KisDistanceInitInfo info4(QPointF(0.0, 9.0), 6.0, 1.0, 3.0);
     QDomElement elt4 = doc.createElement("Test4");
     info4.toXML(doc, elt4);
     KisDistanceInitInfo clone4 = KisDistanceInitInfo::fromXML(elt4);

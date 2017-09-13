@@ -1069,7 +1069,7 @@ void KisPainter::paintPolyline(const vQPointF &points,
         numPoints = points.count() - index;
 
     if (numPoints > 1) {
-        KisDistanceInformation saveDist(points[0], 0.0,
+        KisDistanceInformation saveDist(points[0],
                                         KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
         for (int i = index; i < index + numPoints - 1; i++) {
             paintLine(points [i], points [i + 1], &saveDist);
@@ -1236,7 +1236,7 @@ void KisPainter::paintPolygon(const vQPointF& points)
 
     if (d->strokeStyle != StrokeStyleNone) {
         if (points.count() > 1) {
-            KisDistanceInformation distance(points[0], 0.0,
+            KisDistanceInformation distance(points[0],
                                             KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
 
             for (int i = 0; i < points.count() - 1; i++) {

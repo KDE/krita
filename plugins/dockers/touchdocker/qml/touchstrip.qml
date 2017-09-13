@@ -14,7 +14,7 @@ Rectangle {
         GridLayout {
 
             id: toolbar
-            columns: 2
+            columns: 3
 
             Button {
                 id: fileOpenButton
@@ -71,6 +71,116 @@ Rectangle {
                 }
             }
 
+            Button {
+                id: canvasOnlyButton
+                color: "grey"
+                width: 75; height: 75
+                radius: 3
+                image: Settings.theme.icon("redo");
+                onClicked: {
+                    mainWindow.slotButtonPressed("edit_redo")
+                }
+            }
+
         }
+
+        Button {
+            id: button1
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button1")
+            }
+        }
+
+        Button {
+            id: button2
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button2")
+            }
+        }
+
+        Button {
+            id: button3
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button3")
+            }
+        }
+
+        Button {
+            id: button4
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button4")
+            }
+        }
+
+        Rectangle {
+            id: rockerSwitch
+            width: parent.width
+            height: 300
+            color: red
+
+        }
+
+        Button {
+            id: button5
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button5")
+            }
+        }
+
+        Button {
+            id: button6
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button6")
+            }
+        }
+
+        Button {
+            id: button7
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button7")
+            }
+        }
+
+        Button {
+            id: button8
+            color: "grey"
+            width: 75; height: 75
+            radius: 3
+            image: Settings.theme.icon("redo");
+            onClicked: {
+                mainWindow.slotButtonPressed("button8")
+            }
+        }
+
     }
+
+
 }

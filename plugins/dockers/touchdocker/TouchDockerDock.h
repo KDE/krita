@@ -49,6 +49,7 @@ public:
 
     virtual void closeEvent(QCloseEvent *event);
 
+
 Q_SIGNALS:
     void closeRequested();
     void currentSketchPageChanged();
@@ -62,6 +63,9 @@ public Q_SLOTS:
 
     void hideFileOpenDialog();
     void hideFileSaveAsDialog();
+
+
+    QAction *action(const QString id) const;
 
 private:
 

@@ -83,7 +83,9 @@ TouchDockerDock::TouchDockerDock( )
 
     Theme *theme = Theme::load(KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default"),
                                m_quickWidget->engine());
-    settings->setTheme(theme);
+    if (theme) {
+        settings->setTheme(theme);
+    }
 
     m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -140,13 +142,13 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
         showFileSaveAsDialog();
     }
     else if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->actionManager()) {
-        KisAction *action = m_canvas->viewManager()->actionManager()->actionByName(id);
-        if (action) {
-            if (action->isCheckable()) {
-                action->toggle();
+        QAction *a = action(id);
+        if (a) {
+            if (a->isCheckable()) {
+                a->toggle();
             }
             else {
-                action->trigger();
+                a->trigger();
             }
         }
     }
@@ -190,6 +192,11 @@ void TouchDockerDock::hideFileSaveAsDialog()
     if (d->saveAsDialog) {
         d->saveAsDialog->accept();
     }
+}
+
+QAction *TouchDockerDock::action(const QString id) const
+{
+    return m_canvas->viewManager()->actionManager()->actionByName(id);
 }
 
 void TouchDockerDock::showFileOpenDialog()

@@ -19,6 +19,8 @@ set(kritalibpaintop_LIB_SRCS
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
+    KisDabCacheUtils.cpp
+    kis_dab_cache_base.cpp
     kis_dab_cache.cpp
     kis_filter_option.cpp
     kis_multi_sensors_model_p.cpp

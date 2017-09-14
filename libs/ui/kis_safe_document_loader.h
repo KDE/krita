@@ -22,8 +22,6 @@
 #include <QObject>
 #include "kis_types.h"
 
-
-
 class KisSafeDocumentLoader : public QObject
 {
     Q_OBJECT

@@ -68,6 +68,10 @@ public:
         return result;
     }
 
+    QStringList files() const {
+        return m_watcher.files();
+    }
+
 private Q_SLOTS:
     void slotFileChanged(const QString &path) {
         // re-add the file after QSaveFile optimization

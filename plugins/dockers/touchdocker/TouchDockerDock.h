@@ -19,6 +19,7 @@
 #define TOUCHDOCKER_DOCK_H
 
 #include <QDockWidget>
+#include <QIcon>
 #include <KoCanvasObserverBase.h>
 
 class KoDialog;
@@ -49,7 +50,6 @@ public:
 
     virtual void closeEvent(QCloseEvent *event);
 
-
 Q_SIGNALS:
     void closeRequested();
     void currentSketchPageChanged();
@@ -64,8 +64,9 @@ public Q_SLOTS:
     void hideFileOpenDialog();
     void hideFileSaveAsDialog();
 
-
-    QAction *action(const QString id) const;
+    QString imageForButton(QString id);
+    QString textForButton(QString id);
+    QAction *action(QString id) const;
 
 private:
 

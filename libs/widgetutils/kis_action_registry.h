@@ -62,6 +62,12 @@ public:
     static KisActionRegistry *instance();
 
     /**
+     * @return true if the given action exists
+     */
+    bool hasAction(const QString &name) const;
+
+
+    /**
      * @return value @p property for an action @p name.
      *
      * Allow flexible info structure for KisActions, etc.
@@ -80,7 +86,7 @@ public:
      *
      * N.B. this action will not be saved in the registry.
      */
-    QAction * makeQAction(const QString &name, QObject *parent);
+    QAction *makeQAction(const QString &name, QObject *parent);
 
     /**
      * Fills the standard QAction properties of an action.

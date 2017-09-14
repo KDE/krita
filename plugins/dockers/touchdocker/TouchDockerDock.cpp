@@ -22,12 +22,16 @@
 #include <QQmlContext>
 #include <QAction>
 #include <QUrl>
+#include <QAction>
+#include <QKeyEvent>
+#include <QApplication>g
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+#include <kis_action_registry.h>
 #include <KoDialog.h>
 #include <KoResourcePaths.h>
 #include <kis_icon.h>
@@ -35,13 +39,13 @@
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
-#include <KisViewManager.h>
 #include <kis_config.h>
 #include <KisPart.h>
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
+#include <kis_config.h>
 
 #include <Theme.h>
 #include <Settings.h>
@@ -57,18 +61,45 @@ public:
 
     TouchDockerDock *q;
     bool allowClose {true};
-    KisViewManager *viewManager {0};
     KisSketchView *sketchView {0};
     QString currentSketchPage;
     KoDialog *openDialog {0};
     KoDialog *saveAsDialog {0};
+
+    QMap<QString, QString> buttonMapping;
+
+    bool shiftOn {false};
+    bool ctrlOn {false};
+    bool altOn {false};
 };
 
 
-TouchDockerDock::TouchDockerDock( )
+TouchDockerDock::TouchDockerDock()
     : QDockWidget(i18n("Touch Docker"))
     , d(new Private())
 {
+
+    QStringList defaultMapping = QStringList() << "decrease_opacity"
+                                               << "increase_opacity"
+                                               << "make_brush_color_lighter"
+                                               << "make_brush_color_darker"
+                                               << "decrease_brush_size"
+                                               << "increase_brush_size"
+                                               << "previous_preset"
+                                               << "clear";
+
+    QStringList mapping = KisConfig().readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
+    for (int i = 0; i < 8; ++i) {
+        if (i < mapping.size()) {
+            d->buttonMapping[QString("button%1").arg(i + 1)] = mapping[i];
+        }
+        else if (i < defaultMapping.size()) {
+            d->buttonMapping[QString("button%1").arg(i + 1)] = defaultMapping[i];
+        }
+    }
+
+    qDebug() << d->buttonMapping;
+
     m_quickWidget = new QQuickWidget(this);
     setWidget(m_quickWidget);
     setEnabled(true);
@@ -87,8 +118,10 @@ TouchDockerDock::TouchDockerDock( )
         settings->setTheme(theme);
     }
 
-    m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
+
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
+
 
 }
 
@@ -141,7 +174,7 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
     else if (id == "fileSaveAsButton" && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         showFileSaveAsDialog();
     }
-    else if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->actionManager()) {
+    else {
         QAction *a = action(id);
         if (a) {
             if (a->isCheckable()) {
@@ -151,15 +184,32 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
                 a->trigger();
             }
         }
-    }
-    else if (id == "Key_Shift") {
-        // set shift state for the next pointer event, somehow
-    }
-    else if (id == "Key_Ctrl") {
-        // set ctrl state for the next pointer event, somehow
-    }
-    else if (id == "Key_Alt") {
-        // set alt state for the next pointer event, somehow
+
+        else if (id == "shift") {
+            // set shift state for the next pointer event, somehow
+            QKeyEvent event(d->shiftOn ? QEvent::KeyRelease : QEvent::KeyPress,
+                               0,
+                               Qt::ShiftModifier);
+            QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
+            d->shiftOn == !d->shiftOn;
+        }
+        else if (id == "ctrl") {
+            // set ctrl state for the next pointer event, somehow
+            QKeyEvent event(d->ctrlOn ? QEvent::KeyRelease : QEvent::KeyPress,
+                               0,
+                               Qt::ControlModifier);
+            QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
+            d->ctrlOn == !d->ctrlOn;
+        }
+        else if (id == "alt") {
+            // set alt state for the next pointer event, somehow
+            QKeyEvent event(d->altOn ? QEvent::KeyRelease : QEvent::KeyPress,
+                               0,
+                               Qt::AltModifier);
+            QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
+            d->altOn == !d->altOn;
+
+        }
     }
 }
 
@@ -194,9 +244,47 @@ void TouchDockerDock::hideFileSaveAsDialog()
     }
 }
 
-QAction *TouchDockerDock::action(const QString id) const
+QString TouchDockerDock::imageForButton(QString id)
 {
-    return m_canvas->viewManager()->actionManager()->actionByName(id);
+    qDebug() << id << d->buttonMapping.contains(id);
+
+    if (d->buttonMapping.contains(id)) {
+        id = d->buttonMapping[id];
+    }
+    if (KisActionRegistry::instance()->hasAction(id)) {
+        QString a = KisActionRegistry::instance()->getActionProperty(id, "icon");
+        if (!a.isEmpty()) {
+            return "image://icon/" + a;
+        }
+    }
+    return QString();
+}
+
+QString TouchDockerDock::textForButton(QString id)
+{
+    if (d->buttonMapping.contains(id)) {
+        id = d->buttonMapping[id];
+    }
+    if (KisActionRegistry::instance()->hasAction(id)) {
+        QString a = KisActionRegistry::instance()->getActionProperty(id, "iconText");
+        if (a.isEmpty()) {
+            a = KisActionRegistry::instance()->getActionProperty(id, "text");
+        }
+        return a;
+    }
+
+    return id;
+}
+
+QAction *TouchDockerDock::action(QString id) const
+{
+    if (m_canvas && m_canvas->viewManager()) {
+        if (d->buttonMapping.contains(id)) {
+            id = d->buttonMapping[id];
+        }
+        return m_canvas->viewManager()->actionManager()->actionByName(id);
+    }
+    return 0;
 }
 
 void TouchDockerDock::showFileOpenDialog()

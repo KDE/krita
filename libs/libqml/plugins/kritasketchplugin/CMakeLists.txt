@@ -38,6 +38,7 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorModelModel.cpp
     models/ColorDepthModel.cpp
     models/ColorProfileModel.cpp
+    models/IconImageProvider.cpp
 )
 
 

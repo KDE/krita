@@ -36,6 +36,7 @@
 #include "PresetImageProvider.h"
 #include "RecentImageImageProvider.h"
 #include "RecentFileManager.h"
+#include "IconImageProvider.h"
 #include "KisMultiFeedRSSModel.h"
 #include "FileSystemModel.h"
 #include "CompositeOpModel.h"
@@ -45,6 +46,7 @@
 #include "ColorProfileModel.h"
 #include <TemplatesModel.h>
 #include "Theme.h"
+
 
 #include "Constants.h"
 #include "Settings.h"
@@ -132,6 +134,7 @@ void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
     engine->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     engine->addImageProvider(QLatin1String("color"), new ColorImageProvider);
     engine->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
+    engine->addImageProvider(QLatin1String("icon"), new IconImageProvider);
 
     RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
     engine->rootContext()->setContextProperty("RecentFileManager", recentFileManager);

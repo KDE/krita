@@ -41,7 +41,6 @@ PresetImageProvider::PresetImageProvider()
 QImage PresetImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(size);
-    Q_UNUSED(requestedSize);
     QImage image(requestedSize, QImage::Format_ARGB32);
     QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     int theID = id.toInt();

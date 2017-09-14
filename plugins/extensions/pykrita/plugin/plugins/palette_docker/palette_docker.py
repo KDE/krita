@@ -3,9 +3,9 @@
 
 # Importing the relevant dependancies:
 import sys
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.Qt import *
+from PyQt5.QtGui import QPixmap, QIcon, QImage, QPainter, QBrush, QPalette
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QAction, QTabWidget, QLineEdit, QSpinBox, QDialogButtonBox, QToolButton, QDialog, QPlainTextEdit, QCompleter, QMenu
+from PyQt5.Qt import Qt, pyqtSignal, pyqtSlot
 import math
 from krita import *
 

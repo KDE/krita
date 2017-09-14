@@ -8,8 +8,9 @@ By Wolthera
 
 # Importing the relevant dependancies:
 import sys
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSlot, Qt, QPointF
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QPainter, QPalette, QPixmap, QImage, QBrush, QIcon
+from PyQt5.QtWidgets import QWidget, QTabWidget, QListView, QVBoxLayout
 from krita import *
 
 

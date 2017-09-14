@@ -38,6 +38,8 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
 Make sure that your Python will have the correct architecture for the version you are trying to build: https://www.python.org/downloads/windows/ 
 
+5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
+
 == Setup your environment ==
 
 
@@ -90,6 +92,9 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
 - If you want to build Qt and some other dependencies with parallel jobs, add
   `-DSUBMAKE_JOBS=<n>` to the cmake command where <n> is the number of jobs to
   run (if your PC has 4 CPU cores, you might want to set it to 5).
+
+- If you don't have Windows 10 SDK and don't want to build Qt with ANGLE, add
+  `-DQT_ENABLE_DYNAMIC_OPENGL=OFF` to the CMake command line args.
 
 3. build the packages:
 

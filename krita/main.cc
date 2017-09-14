@@ -34,6 +34,7 @@
 #include <time.h>
 
 #include <KisApplication.h>
+#include <KisLoggingManager.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 
@@ -98,6 +99,7 @@ extern "C" int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
+    KisLoggingManager::initialize();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
@@ -132,8 +134,20 @@ extern "C" int main(int argc, char **argv)
         if (enableOpenGLDebug && (qgetenv("KRITA_OPENGL_DEBUG") == "sync" || kritarc.value("OpenGLDebugSynchronous", false).toBool())) {
             openGLDebugSynchronous = true;
         }
+
+        KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
+
+#ifdef Q_OS_WIN
+        QString preferredOpenGLRenderer = kritarc.value("OpenGLRenderer", "auto").toString();
+
+        // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
+        //  might get weird crashes atm.
+        qputenv("QT_ANGLE_PLATFORM", "d3d11");
+
+        // Probe QPA auto OpenGL detection
+        KisOpenGL::probeWindowsQpaOpenGL(argc, argv, preferredOpenGLRenderer);
+#endif
     }
-    KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
 
     KLocalizedString::setApplicationDomain("krita");
 

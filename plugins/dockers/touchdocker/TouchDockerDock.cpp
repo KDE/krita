@@ -98,8 +98,6 @@ TouchDockerDock::TouchDockerDock()
         }
     }
 
-    qDebug() << d->buttonMapping;
-
     m_quickWidget = new QQuickWidget(this);
     setWidget(m_quickWidget);
     setEnabled(true);

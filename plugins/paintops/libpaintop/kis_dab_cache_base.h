@@ -100,11 +100,7 @@ protected:
      */
     void fetchDabGenerationInfo(bool hasDabInCache,
                                 KisDabCacheUtils::DabRenderingResources *resources,
-                                const KoColor& color,
-                                const QPointF &cursorPoint,
-                                KisDabShape shape,
-                                const KisPaintInformation& info,
-                                qreal softnessFactor,
+                                const KisDabCacheUtils::DabRequestInfo &request,
                                 /* out */
                                 KisDabCacheUtils::DabGenerationInfo *di,
                                 bool *shouldUseCache);

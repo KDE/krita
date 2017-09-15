@@ -27,6 +27,9 @@
 #include <kis_pressure_mirror_option.h>
 #include "kis_dab_shape.h"
 
+#include "kritapaintop_export.h"
+#include <functional>
+
 class KisBrush;
 typedef KisSharedPtr<KisBrush> KisBrushSP;
 
@@ -38,18 +41,53 @@ class KisTextureProperties;
 namespace KisDabCacheUtils
 {
 
-struct DabRenderingResources
+struct PAINTOP_EXPORT DabRenderingResources
 {
-    KisBrushSP brush;
-    const KisColorSource *colorSource;
+    DabRenderingResources();
+    ~DabRenderingResources();
 
-    KisPressureSharpnessOption *sharpnessOption;
-    KisTextureProperties *textureOption;
+    void syncResourcesToSeqNo(int seqNo);
+
+    KisBrushSP brush;
+    const KisColorSource *colorSource = 0;
+
+    KisPressureSharpnessOption *sharpnessOption = 0;
+    KisTextureProperties *textureOption = 0;
 
     KisPaintDeviceSP colorSourceDevice;
+
+private:
+    DabRenderingResources(const DabRenderingResources &rhs) = delete;
 };
 
-struct DabGenerationInfo
+typedef std::function<DabRenderingResources*()> ResourcesFactory;
+
+struct PAINTOP_EXPORT DabRequestInfo
+{
+    DabRequestInfo(const KoColor &_color,
+                   const QPointF &_cursorPoint,
+                   const KisDabShape &_shape,
+                   const KisPaintInformation &_info,
+                   qreal _softnessFactor)
+        : color(_color),
+          cursorPoint(_cursorPoint),
+          shape(_shape),
+          info(_info),
+          softnessFactor(_softnessFactor)
+    {
+    }
+
+    const KoColor &color;
+    const QPointF &cursorPoint;
+    const KisDabShape &shape;
+    const KisPaintInformation &info;
+    const qreal softnessFactor;
+
+private:
+    DabRequestInfo(const DabRequestInfo &rhs);
+};
+
+struct PAINTOP_EXPORT DabGenerationInfo
 {
     MirrorProperties mirrorProperties;
     KisDabShape shape;
@@ -63,17 +101,17 @@ struct DabGenerationInfo
     bool needsPostprocessing = false;
 };
 
-QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
-                                         const QSize &realDabSize);
+PAINTOP_EXPORT QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
+                                                        const QSize &realDabSize);
 
-void generateDab(const DabGenerationInfo &di,
-                 DabRenderingResources *resources,
-                 KisFixedPaintDeviceSP *dab);
+PAINTOP_EXPORT void generateDab(const DabGenerationInfo &di,
+                                DabRenderingResources *resources,
+                                KisFixedPaintDeviceSP *dab);
 
-void postProcessDab(KisFixedPaintDeviceSP dab,
-                    const QPoint &dabTopLeft,
-                    const KisPaintInformation& info,
-                    DabRenderingResources *resources);
+PAINTOP_EXPORT void postProcessDab(KisFixedPaintDeviceSP dab,
+                                   const QPoint &dabTopLeft,
+                                   const KisPaintInformation& info,
+                                   DabRenderingResources *resources);
 
 }
 

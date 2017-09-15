@@ -1,0 +1,135 @@
+/*
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "KisDabRenderingJob.h"
+
+#include <KisSharedThreadPoolAdapter.h>
+
+#include "KisDabCacheUtils.h"
+#include "KisDabRenderingQueue.h"
+
+
+KisDabRenderingJob::KisDabRenderingJob()
+{
+}
+
+KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabCacheUtils::DabGenerationInfo _generationInfo, KisDabCacheUtils::DabRenderingResources *_resources, KisDabRenderingJob::JobType _type)
+    : seqNo(_seqNo),
+      generationInfo(_generationInfo),
+      resources(_resources),
+      type(_type)
+{
+}
+
+KisDabRenderingJob::KisDabRenderingJob(const KisDabRenderingJob &rhs)
+    : KisSharedRunnable(),
+      seqNo(rhs.seqNo),
+      generationInfo(rhs.generationInfo),
+      resources(rhs.resources),
+      type(rhs.type),
+      originalDevice(rhs.originalDevice),
+      postprocessedDevice(rhs.postprocessedDevice),
+      parentQueue(rhs.parentQueue),
+      sharedThreadPool(rhs.sharedThreadPool)
+{
+}
+
+KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
+{
+    seqNo = rhs.seqNo;
+    generationInfo = rhs.generationInfo;
+    resources = rhs.resources;
+    type = rhs.type;
+    originalDevice = rhs.originalDevice;
+    postprocessedDevice = rhs.postprocessedDevice;
+    parentQueue = rhs.parentQueue;
+    sharedThreadPool = rhs.sharedThreadPool;
+
+    return *this;
+}
+
+void KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
+{
+    using namespace KisDabCacheUtils;
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(job->type == KisDabRenderingJob::Dab ||
+                                 job->type == KisDabRenderingJob::Postprocess);
+
+    if (job->type == KisDabRenderingJob::Dab) {
+        // TODO: thing about better interface for the reverse queue link
+        job->originalDevice = job->parentQueue->fetchCachedPaintDevce();
+
+        generateDab(job->generationInfo, job->resources, &job->originalDevice);
+    }
+
+    // by now the original device should be already prepared
+    KIS_SAFE_ASSERT_RECOVER_RETURN(job->originalDevice);
+
+    if (job->type == KisDabRenderingJob::Dab ||
+        job->type == KisDabRenderingJob::Postprocess) {
+
+        if (job->generationInfo.needsPostprocessing) {
+            // TODO: cache postprocessed device
+
+            if (!job->postprocessedDevice ||
+                *job->originalDevice->colorSpace() != *job->postprocessedDevice->colorSpace()) {
+
+                job->postprocessedDevice = new KisFixedPaintDevice(*job->originalDevice);
+            } else {
+                *job->postprocessedDevice = *job->originalDevice;
+            }
+
+            postProcessDab(job->postprocessedDevice,
+                           job->generationInfo.dstDabRect.topLeft(),
+                           job->generationInfo.info,
+                           job->resources);
+        } else {
+            job->postprocessedDevice = job->originalDevice;
+        }
+    }
+}
+
+void KisDabRenderingJob::runShared()
+{
+    executeOneJob(this);
+    QList<KisDabRenderingJob *> jobs = parentQueue->notifyJobFinished(this);
+
+    while (!jobs.isEmpty()) {
+        // start all-but-first jobs asynchronously
+        for (int i = 1; i < jobs.size(); i++) {
+            sharedThreadPool->start(jobs[i]);
+        }
+
+        // execute the first job in the current thread
+        KisDabRenderingJob *job = jobs.first();
+        executeOneJob(job);
+        jobs = parentQueue->notifyJobFinished(job);
+
+        // mimic the behavior of the thread pool
+        if (job->autoDelete()) {
+            delete job;
+        }
+    }
+}
+
+QPoint KisDabRenderingJob::dstDabOffset() const
+{
+    return generationInfo.dstDabRect.topLeft();
+}
+
+

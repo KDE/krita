@@ -245,33 +245,29 @@ KisDabCacheBase::calculateDabRect(KisBrushSP brush,
 
 void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
                                              KisDabCacheUtils::DabRenderingResources *resources,
-                                             const KoColor &color,
-                                             const QPointF &cursorPoint,
-                                             KisDabShape shape,
-                                             const KisPaintInformation &info,
-                                             qreal softnessFactor,
+                                             const KisDabCacheUtils::DabRequestInfo &request,
                                              KisDabCacheUtils::DabGenerationInfo *di,
                                              bool *shouldUseCache)
 {
-    di->info = info;
-    di->softnessFactor = softnessFactor;
+    di->info = request.info;
+    di->softnessFactor = request.softnessFactor;
 
     if (m_d->mirrorOption) {
-        di->mirrorProperties = m_d->mirrorOption->apply(info);
+        di->mirrorProperties = m_d->mirrorOption->apply(request.info);
     }
 
     DabPosition position = calculateDabRect(resources->brush,
-                                            cursorPoint,
-                                            shape,
-                                            info,
+                                            request.cursorPoint,
+                                            request.shape,
+                                            request.info,
                                             di->mirrorProperties);
-    di->shape = KisDabShape(shape.scale(), shape.ratio(), position.realAngle);
+    di->shape = KisDabShape(request.shape.scale(), request.shape.ratio(), position.realAngle);
     di->dstDabRect = position.rect;
     di->subPixel = position.subPixel;
 
     di->solidColorFill = !resources->colorSource || resources->colorSource->isUniformColor();
     di->paintColor = resources->colorSource && resources->colorSource->isUniformColor() ?
-                resources->colorSource->uniformColor() : color;
+                resources->colorSource->uniformColor() : request.color;
 
     SavedDabParameters newParams = getDabParameters(resources->brush,
                                                     di->paintColor,

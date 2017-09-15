@@ -31,6 +31,19 @@
 namespace KisDabCacheUtils
 {
 
+DabRenderingResources::DabRenderingResources()
+{
+}
+
+DabRenderingResources::~DabRenderingResources()
+{
+}
+
+void DabRenderingResources::syncResourcesToSeqNo(int seqNo)
+{
+    Q_UNUSED(seqNo);
+    // TODO: sync the piped brushes to the passed seqNo
+}
 
 QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
                                          const QSize &realDabSize)
@@ -45,6 +58,7 @@ QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
 
 void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, KisFixedPaintDeviceSP *dab)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(*dab);
     const KoColorSpace *cs = (*dab)->colorSpace();
 
 

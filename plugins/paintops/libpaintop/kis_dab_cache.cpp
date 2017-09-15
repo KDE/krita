@@ -136,11 +136,12 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
     fetchDabGenerationInfo(hasDabInCache,
                            &resources,
-                           color,
-                           cursorPoint,
-                           shape,
-                           info,
-                           softnessFactor,
+                           DabRequestInfo(
+                               color,
+                               cursorPoint,
+                               shape,
+                               info,
+                               softnessFactor),
                            &di,
                            &shouldUseCache);
 

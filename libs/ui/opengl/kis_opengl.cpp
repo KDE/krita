@@ -135,12 +135,18 @@ namespace
         surface.setSurfaceType(QSurface::OpenGLSurface);
         surface.create();
         QOpenGLContext context;
-        context.create();
-        if (!context.isValid()) {
-            qDebug() << "Global shared OpenGL context is not valid while checking Qt's OpenGL status";
+        if (!context.create()) {
+            qDebug() << "OpenGL context cannot be created";
             return boost::none;
         }
-        context.makeCurrent(&surface);
+        if (!context.isValid()) {
+            qDebug() << "OpenGL context is not valid while checking Qt's OpenGL status";
+            return boost::none;
+        }
+        if (!context.makeCurrent(&surface)) {
+            qDebug() << "OpenGL context cannot be made current";
+            return boost::none;
+        }
         return OpenGLCheckResult(context);
     }
 
@@ -355,10 +361,19 @@ void KisOpenGL::initialize()
     surface.create();
 
     QOpenGLContext context;
-    context.create();
-    if (!context.isValid()) return;
+    if (!context.create()) {
+        qDebug() << "OpenGL context cannot be created";
+        return;
+    }
+    if (!context.isValid()) {
+        qDebug() << "OpenGL context is not valid";
+        return;
+    }
 
-    context.makeCurrent( &surface );
+    if (!context.makeCurrent(&surface)) {
+        qDebug() << "OpenGL context cannot be made current";
+        return;
+    }
 
     QOpenGLFunctions  *funcs = context.functions();
 

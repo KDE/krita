@@ -321,9 +321,11 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     return cfg;
 }
 
-void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP /*cfg*/)
+void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP cfg)
 {
-
+    if (m_encoderConfigWidget) {
+        m_encoderConfigWidget->setConfiguration(cfg);
+    }
 }
 
 QSharedPointer<KisImportExportFilter> DlgAnimationRenderer::encoderFilter() const
@@ -369,6 +371,8 @@ void DlgAnimationRenderer::selectRenderOptions()
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {
                 m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+            } else {
+                KisConfig().setExportConfiguration(mimetype.toLatin1(), m_encoderConfigWidget->configuration());
             }
             dlg.setMainWidget(0);
             m_encoderConfigWidget->hide();

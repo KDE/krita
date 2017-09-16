@@ -244,8 +244,6 @@ void TouchDockerDock::hideFileSaveAsDialog()
 
 QString TouchDockerDock::imageForButton(QString id)
 {
-    qDebug() << id << d->buttonMapping.contains(id);
-
     if (d->buttonMapping.contains(id)) {
         id = d->buttonMapping[id];
     }

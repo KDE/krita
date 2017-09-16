@@ -175,7 +175,7 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
         
         addItem(widget);
         setSceneRect(widget->boundingRect());
-        
+
         m_loader->start(QThread::LowPriority);
         return true;
     }

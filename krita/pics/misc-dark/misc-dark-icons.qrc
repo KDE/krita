@@ -50,5 +50,11 @@
         <file>dark_pathpoint-symmetric.svg</file>
         <file>dark_pathsegment-curve.svg</file>
         <file>dark_pathsegment-line.svg</file>
+        <file>dark_opacity-increase.svg</file>
+        <file>dark_opacity-decrease.svg</file>
+        <file>dark_lightness-increase.svg</file>
+        <file>dark_lightness-decrease.svg</file>
+        <file>dark_brushsize-increase.svg</file>
+        <file>dark_brushsize-decrease.svg</file>
     </qresource>
 </RCC>

@@ -25,7 +25,7 @@
         <file>light_distribute-vertical.svg</file>
         <file>light_paintop_settings_01.svg</file>
         <file>light_paintop_settings_02.svg</file>
-        <file>light_pivot-point.svg</file>        
+        <file>light_pivot-point.svg</file>
         <file>light_stroke-cap-butt.svg</file>
         <file>light_stroke-cap-round.svg</file>
         <file>light_stroke-cap-square.svg</file>
@@ -50,5 +50,11 @@
         <file>light_pathpoint-symmetric.svg</file>
         <file>light_pathsegment-curve.svg</file>
         <file>light_pathsegment-line.svg</file>
+        <file>light_opacity-increase.svg</file>
+        <file>light_opacity-decrease.svg</file>
+        <file>light_lightness-increase.svg</file>
+        <file>light_lightness-decrease.svg</file>
+        <file>light_brushsize-increase.svg</file>
+        <file>light_brushsize-decrease.svg</file>
     </qresource>
 </RCC>

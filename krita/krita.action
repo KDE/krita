@@ -209,7 +209,7 @@
   <Actions category="Painting">
     <text>Painting</text>
     <Action name="make_brush_color_lighter">
-      <icon></icon>
+      <icon>lightness-increase</icon>
       <text>Make brush color lighter</text>
       <whatsThis></whatsThis>
       <toolTip>Make brush color lighter</toolTip>
@@ -221,7 +221,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="make_brush_color_darker">
-      <icon></icon>
+      <icon>lightness-decrease</icon>
       <text>Make brush color darker</text>
       <whatsThis></whatsThis>
       <toolTip>Make brush color darker</toolTip>
@@ -313,7 +313,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="increase_opacity">
-      <icon></icon>
+      <icon>opacity-increase</icon>
       <text>Increase opacity</text>
       <whatsThis></whatsThis>
       <toolTip>Increase opacity</toolTip>
@@ -325,7 +325,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="decrease_opacity">
-      <icon></icon>
+      <icon>opacity-decrease</icon>
       <text>Decrease opacity</text>
       <whatsThis></whatsThis>
       <toolTip>Decrease opacity</toolTip>
@@ -584,7 +584,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="decrease_brush_size">
-      <icon></icon>
+      <icon>brushsize-decrease</icon>
       <text>Decrease Brush Size</text>
       <whatsThis></whatsThis>
       <toolTip>Decrease Brush Size</toolTip>
@@ -606,7 +606,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="increase_brush_size">
-      <icon></icon>
+      <icon>brushsize-increase</icon>
       <text>Increase Brush Size</text>
       <whatsThis></whatsThis>
       <toolTip>Increase Brush Size</toolTip>

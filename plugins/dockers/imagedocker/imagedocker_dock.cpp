@@ -228,8 +228,6 @@ ImageDockerDock::ImageDockerDock():
 
     connect(m_ui->cmbPath, SIGNAL(activated(const QString&)), SLOT(slotChangeRoot(const QString&)));
 
-    loadConfigState();
-
     connect(m_ui->treeView           , SIGNAL(doubleClicked(const QModelIndex&))      , SLOT(slotItemDoubleClicked(const QModelIndex&)));
     connect(m_ui->bnBack             , SIGNAL(clicked(bool))                          , SLOT(slotBackButtonClicked()));
     connect(m_ui->bnHome             , SIGNAL(clicked(bool))                          , SLOT(slotHomeButtonClicked()));
@@ -303,9 +301,12 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
 
 void ImageDockerDock::showEvent(QShowEvent *)
 {
-    if (m_imageStripScene->currentPath().isNull()) {
-        updatePath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    }
+    loadConfigState();
+}
+
+void ImageDockerDock::hideEvent(QHideEvent *event)
+{
+    saveConfigState();
 }
 
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
@@ -313,9 +314,9 @@ void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
     // Intentionally not disabled if there's no canvas
 
     // "Every connection you make emits a signal, so duplicate connections emit two signals"
-    if(m_canvas)
+    if(m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-
+    }
     m_canvas = canvas;
 }
 
@@ -584,8 +585,7 @@ bool ImageDockerDock::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
 
-    if (event->type() == QEvent::Resize)
-    {
+    if (event->type() == QEvent::Resize) {
         m_ui->treeView->setColumnWidth(0, width());
         return true;
     }

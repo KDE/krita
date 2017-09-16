@@ -22,6 +22,7 @@ Name[zh_CN]=色彩空间
 Comment=Plugin to change color space to selected documents
 Comment[ca]=Un connector per canviar l'espai de color dels documents seleccionats
 Comment[ca@valencia]=Un connector per canviar l'espai de color dels documents seleccionats
+Comment[cs]=Modul pro změnu rozsahu barvy pro vybrané dokumenty
 Comment[es]=Complemento para cambiar el espacio de color de los documentos seleccionados
 Comment[gl]=Complemento para cambiar o espazo de cores dos documentos seleccionados.
 Comment[it]=Estensione per cambiare lo spazio dei colori ai documenti selezionati

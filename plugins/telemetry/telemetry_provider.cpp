@@ -54,12 +54,12 @@ TelemetryProvider::TelemetryProvider()
     QString version = configGroup.readEntry("Version", "noversion");
     m_sendInstallInfo = false;
     qDebug() << "APP VERSION______" << qApp->applicationVersion();
-    if (qApp->applicationVersion() != version) {
+   // if (qApp->applicationVersion() != version) {
         configGroup.writeEntry("Version", qApp->applicationVersion());
         qDebug() << "SEND INSTALL__"<<version;
-#ifndef HAVE_BACKTRACE
-        if (isFirstStart.isEmpty()) {
-#endif
+//#ifndef HAVE_BACKTRACE
+//        if (isFirstStart.isEmpty()) {
+//#endif
             //don't append install source
             std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
             m_installSources.push_back(std::move(cpu));
@@ -67,8 +67,6 @@ TelemetryProvider::TelemetryProvider()
             m_installSources.push_back(std::move(qt));
             std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
             m_installSources.push_back(std::move(compiler));
-            std::unique_ptr<KUserFeedback::AbstractDataSource> locale(new KUserFeedback::LocaleInfoSource());
-            m_installSources.push_back(std::move(locale));
             std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
             m_installSources.push_back(std::move(opengl));
             std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
@@ -83,10 +81,10 @@ TelemetryProvider::TelemetryProvider()
                 m_installProvider->addDataSource(source.get());
             }
             m_sendInstallInfo = true;
-#ifndef HAVE_BACKTRACE
-        }
-#endif
-    }
+//#ifndef HAVE_BACKTRACE
+//        }
+//#endif
+   // }
 
     m_toolsProvider.reset(new KUserFeedback::Provider);
     m_toolsProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
@@ -144,12 +142,12 @@ void TelemetryProvider::sendData(QString path, QString adress)
         break;
     }
     case install: {
-        if (m_sendInstallInfo) {
+      //  if (m_sendInstallInfo) {
             m_installProvider->setFeedbackServer(QUrl(finalAdress + path));
             m_installProvider->submit();
             m_sendInstallInfo = false;
             break;
-        }
+     //   }
     }
     case asserts: {
         m_assertsProvider->setFeedbackServer(QUrl(finalAdress + path));

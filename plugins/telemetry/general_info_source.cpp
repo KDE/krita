@@ -19,11 +19,14 @@
 */
 #include "general_info_source.h"
 
+#include <QDebug>
 #include <QSysInfo>
 #include <QThread>
 #include <QVariant>
-#include <Vc/cpuid.h>
-
+#include <QSettings>
+#include <QStandardPaths>
+#include <QDir>
+typedef QSharedPointer<QSettings> QSettingsPtr;
 using namespace UserFeedback;
 using namespace KUserFeedback;
 
@@ -40,6 +43,21 @@ QString TelemetryGeneralInfoSource::description() const
 QVariant TelemetryGeneralInfoSource::data()
 {
     QVariantMap m;
-    m.insert(QStringLiteral("appVersion"), qApp->applicationVersion());
+    QLocale l = QLocale::system().name();;
+    QString version = qApp->applicationVersion();
+    qDebug() << version;
+    version = version.left(version.indexOf(" "));
+    qDebug() << version;
+    m.insert(QStringLiteral("appVersion"), version);
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    const QDir configDir(configPath);
+    if (!configDir.exists()) {
+        configDir.mkpath(QStringLiteral("."));
+    }
+    QSettingsPtr settings = QSettingsPtr(new QSettings(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat));
+    settings->beginGroup(QStringLiteral("Language"));
+    m.insert(QStringLiteral("appLanguage"), settings->value(qAppName()).toString());
+    m.insert(QStringLiteral("systemLanguage"),l.name());
     return m;
 }

@@ -5,7 +5,7 @@ This is a docker that shows your comic pages.
 """
 
 from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout, QSizePolicy, QDialogButtonBox
 from PyQt5.QtCore import QSize, Qt
 from krita import *
 
@@ -43,6 +43,9 @@ class comics_project_page_viewer(QDialog):
 
         self.viewer = page_viewer()
         self.layout().addWidget(self.viewer)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Close)
+        buttonBox.rejected.connect(self.close)
+        self.layout().addWidget(buttonBox)
 
     def update_image(self, image=QImage()):
         self.viewer.set_image(image)

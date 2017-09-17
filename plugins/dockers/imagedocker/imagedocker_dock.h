@@ -85,7 +85,8 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void showEvent(QShowEvent *) override;
-private:
+    void hideEvent(QHideEvent *event) override;
+ private:
     void addCurrentPathToHistory();
     void updatePath(const QString& path);
     qint64 generateImageID() const;

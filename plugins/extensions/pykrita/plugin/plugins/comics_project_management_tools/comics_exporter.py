@@ -632,6 +632,8 @@ class comicsExporter():
                 if "role" in authorDict.keys():
                     if str(authorDict["role"]).title() in acbfAuthorRolesList:
                         author.set("activity", str(authorDict["role"]))
+                if "language" in authorDict.keys():
+                    author.set("lang", str(authorDict["language"]))
                 bookInfo.append(author)
         bookTitle = ET.Element("book-title")
         if "title" in self.configDictionary.keys():

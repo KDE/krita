@@ -3,7 +3,7 @@
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
-   CopyRight (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   CopyRight (C) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

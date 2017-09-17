@@ -19,7 +19,7 @@
 #define KIS_SELECTION_TOOL_HELPER_H
 
 #include <kritaui_export.h>
-
+#include <QMenu>
 #include <QPointer>
 
 #include "kundo2magicstring.h"
@@ -47,6 +47,8 @@ public:
     bool canShortcutToNoop(const QRect &rect, SelectionAction action);
 
     bool tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action);
+    static QMenu* getSelectionContextMenu(KisCanvas2* canvas);
+
 
 private:
     QPointer<KisCanvas2> m_canvas;

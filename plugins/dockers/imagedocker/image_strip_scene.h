@@ -105,7 +105,7 @@ public:
     QString currentPath() { return m_path; }
 Q_SIGNALS:
     void sigImageActivated(const QString& path);
-    
+
 private:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
     

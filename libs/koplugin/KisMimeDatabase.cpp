@@ -42,7 +42,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
     }
 
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile(file);
+    QMimeType mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
     if (mime.name() != "application/octet-stream") {
         debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
         return mime.name();
@@ -256,7 +256,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.description = i18nc("description of a file type", "Krita Taskset");
         mimeType.suffixes = QStringList() << "*.kts";
         s_mimeDatabase << mimeType;
-
 
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");

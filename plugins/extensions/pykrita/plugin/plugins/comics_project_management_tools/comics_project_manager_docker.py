@@ -9,12 +9,37 @@ import os
 import zipfile  # quick reading of documents
 import shutil
 import xml.etree.ElementTree as ET
-from PyQt5.QtCore import QElapsedTimer
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp
+from PyQt5.QtCore import QElapsedTimer, QSize, Qt
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
+
+"""
+A very simple class so we can have a label that is single line, but doesn't force the
+widget size to be bigger.
+This is used by the project name.
+"""
+
+class Elided_Text_Label(QLabel):
+    mainText = str()
+
+    def __init__(self, parent=None):
+        super(QLabel, self).__init__(parent)
+        self.setMinimumWidth(self.fontMetrics().width("..."))
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+    def setMainText(self, text=str()):
+        self.mainText = text
+        self.elideText()
+
+    def elideText(self):
+        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.ElideRight, self.width()))
+
+    def resizeEvent(self, event):
+        self.elideText()
+
 
 """
 This is a Krita docker called 'Comics Manager'.
@@ -38,12 +63,16 @@ class comics_project_manager_docker(DockWidget):
         self.setWindowTitle(self.stringName)
 
         # Setup layout:
-        self.baseLayout = QHBoxLayout()
+        base = QHBoxLayout()
         widget = QWidget()
-        widget.setLayout(self.baseLayout)
+        widget.setLayout(base)
+        baseLayout = QSplitter()
+        base.addWidget(baseLayout)
         self.setWidget(widget)
-        self.buttonLayout = QVBoxLayout()
-        self.baseLayout.addLayout(self.buttonLayout)
+        buttonLayout = QVBoxLayout()
+        buttonBox = QWidget()
+        buttonBox.setLayout(buttonLayout)
+        baseLayout.addWidget(buttonBox)
 
         # Comic page list and pages model
         self.comicPageList = QTableView()
@@ -53,14 +82,26 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setAcceptDrops(True)
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
-        self.comicPageList.setIconSize(QSize(100, 100))
+        self.comicPageList.setIconSize(QSize(128, 128))
         # self.comicPageList.itemDelegate().closeEditor.connect(self.slot_write_description)
         self.pagesModel.layoutChanged.connect(self.slot_write_config)
         self.pagesModel.rowsInserted.connect(self.slot_write_config)
         self.pagesModel.rowsRemoved.connect(self.slot_write_config)
         self.comicPageList.verticalHeader().sectionMoved.connect(self.slot_write_config)
         self.comicPageList.setModel(self.pagesModel)
-        self.baseLayout.addWidget(self.comicPageList)
+        pageBox = QWidget()
+        pageBox.setLayout(QVBoxLayout())
+        zoomSlider = QSlider(Qt.Horizontal, None)
+        zoomSlider.setRange(1, 8)
+        zoomSlider.setValue(4)
+        zoomSlider.setTickInterval(1)
+        zoomSlider.setMinimumWidth(10)
+        zoomSlider.valueChanged.connect(self.slot_scale_thumbnails)
+        self.projectName = Elided_Text_Label()
+        pageBox.layout().addWidget(self.projectName)
+        pageBox.layout().addWidget(zoomSlider)
+        pageBox.layout().addWidget(self.comicPageList)
+        baseLayout.addWidget(pageBox)
 
         self.btn_project = QToolButton()
         self.btn_project.setPopupMode(QToolButton.MenuButtonPopup)
@@ -74,7 +115,7 @@ class comics_project_manager_docker(DockWidget):
         menu_project.addAction(self.action_load_project)
         self.btn_project.setMenu(menu_project)
         self.btn_project.setDefaultAction(self.action_load_project)
-        self.buttonLayout.addWidget(self.btn_project)
+        buttonLayout.addWidget(self.btn_project)
 
         # Settings dropdown with actions for the different settings menus.
         self.btn_settings = QToolButton()
@@ -92,13 +133,14 @@ class comics_project_manager_docker(DockWidget):
         menu_settings.addAction(self.action_edit_export_settings)
         self.btn_settings.setDefaultAction(self.action_edit_project_settings)
         self.btn_settings.setMenu(menu_settings)
-        self.buttonLayout.addWidget(self.btn_settings)
+        buttonLayout.addWidget(self.btn_settings)
         self.btn_settings.setDisabled(True)
 
         # Add page drop down with different page actions.
         self.btn_add_page = QToolButton()
         self.btn_add_page.setPopupMode(QToolButton.MenuButtonPopup)
         self.btn_add_page.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         self.action_add_page = QAction(i18n("Add Page"), None)
         self.action_add_page.triggered.connect(self.slot_add_new_page_single)
         self.action_add_template = QAction(i18n("Add Page From Template"), None)
@@ -126,7 +168,7 @@ class comics_project_manager_docker(DockWidget):
         actionList.append(self.action_scrape_authors)
         menu_page.addActions(actionList)
         self.btn_add_page.setMenu(menu_page)
-        self.buttonLayout.addWidget(self.btn_add_page)
+        buttonLayout.addWidget(self.btn_add_page)
         self.btn_add_page.setDisabled(True)
 
         self.comicPageList.setContextMenuPolicy(Qt.ActionsContextMenu)
@@ -135,20 +177,20 @@ class comics_project_manager_docker(DockWidget):
         # Export button that... exports.
         self.btn_export = QPushButton(i18n("Export Comic"))
         self.btn_export.clicked.connect(self.slot_export)
-        self.buttonLayout.addWidget(self.btn_export)
+        buttonLayout.addWidget(self.btn_export)
         self.btn_export.setDisabled(True)
 
         self.btn_project_url = QPushButton(i18n("Copy Location"))
         self.btn_project_url.setToolTip(i18n("Copies the path of the project to the clipboard. Useful for quickly copying to a file manager or the like."))
         self.btn_project_url.clicked.connect(self.slot_copy_project_url)
         self.btn_project_url.setDisabled(True)
-        self.buttonLayout.addWidget(self.btn_project_url)
+        buttonLayout.addWidget(self.btn_project_url)
 
         self.page_viewer_dialog = comics_project_page_viewer.comics_project_page_viewer()
 
         Application.notifier().imageSaved.connect(self.slot_check_for_page_update)
 
-        self.buttonLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding))
+        buttonLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding))
 
     """
     Open the config file and load the json file into a dictionary.
@@ -167,7 +209,7 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def load_config(self):
-        self.setWindowTitle(self.stringName + ": " + str(self.setupDictionary["projectName"]))
+        self.projectName.setMainText(text=str(self.setupDictionary["projectName"]))
         self.fill_pages()
         self.btn_settings.setEnabled(True)
         self.btn_add_page.setEnabled(True)
@@ -219,6 +261,14 @@ class comics_project_manager_docker(DockWidget):
                 progress.setValue(progress.value() + 1)
         progress.setValue(len(pagesList))
         self.loadingPages = False
+    """
+    Function that is triggered by the zoomSlider
+    Resizes the thumbnails.
+    """
+
+    def slot_scale_thumbnails(self, multiplier=4):
+        self.comicPageList.setIconSize(QSize(multiplier * 32, multiplier * 32))
+        self.comicPageList.resizeRowsToContents()
 
     """
     Function that takes the documentinfo.xml and parses it for the title, subject and abstract tags,
@@ -399,13 +449,16 @@ class comics_project_manager_docker(DockWidget):
             self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
 
         # Search for the possible name.
-        pageName = str(self.setupDictionary["projectName"]) + str(format(len(pagesList), "03d"))
+        extraUnderscore = str()
+        if str(self.setupDictionary["projectName"])[-1].isdigit():
+            extraUnderscore = "_"
+        pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(len(pagesList), "03d"))
         url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
         pageNumber = 0
         if (url in pagesList):
             while (url in pagesList):
                 pageNumber += 1
-                pageName = str(self.setupDictionary["projectName"]) + str(format(pageNumber, "03d"))
+                pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(pageNumber, "03d"))
                 url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
 
         # open the page by opening the template and resaving it, or just opening it.
@@ -578,6 +631,16 @@ class comics_project_manager_docker(DockWidget):
     def slot_new_project(self):
         setup = comics_project_setup_wizard.ComicsProjectSetupWizard()
         setup.showDialog()
+    """
+    This is triggered by any document save.
+    It checks if the given url in in the pages list, and if so,
+    updates the appropriate page thumbnail.
+    This helps with the management of the pages, because the user
+    will be able to see the thumbnails as a todo for the whole comic,
+    giving a good overview over whether they still need to ink, color or
+    the like for a given page, and it thus also rewards the user whenever
+    they save.
+    """
 
     def slot_check_for_page_update(self, url):
         if "pages" in self.setupDictionary.keys():

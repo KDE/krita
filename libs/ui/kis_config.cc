@@ -614,12 +614,20 @@ bool KisConfig::useOpenGL(bool defaultValue) const
 
     //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
     QString cs = canvasState();
+#ifdef Q_OS_WIN
+    return (m_cfg.readEntry("useOpenGLWindows", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
+#else
     return (m_cfg.readEntry("useOpenGL", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
+#endif
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const
 {
+#ifdef Q_OS_WIN
+    m_cfg.writeEntry("useOpenGLWindows", useOpenGL);
+#else
     m_cfg.writeEntry("useOpenGL", useOpenGL);
+#endif
 }
 
 int KisConfig::openGLFilteringMode(bool defaultValue) const
@@ -1063,6 +1071,26 @@ QString KisConfig::pressureTabletCurve(bool defaultValue) const
 void KisConfig::setPressureTabletCurve(const QString& curveString) const
 {
     m_cfg.writeEntry("tabletPressureCurve", curveString);
+}
+
+bool KisConfig::useWin8PointerInput(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
+#else
+    return false;
+#endif
+}
+
+void KisConfig::setUseWin8PointerInput(bool value) const
+{
+#ifdef Q_OS_WIN
+    // Special handling: Only set value if changed
+    // I don't want it to be set if the user hasn't touched it
+    if (useWin8PointerInput() != value) {
+        m_cfg.writeEntry("useWin8PointerInput", value);
+    }
+#endif
 }
 
 qreal KisConfig::vastScrolling(bool defaultValue) const

@@ -104,19 +104,35 @@ Allows us to set completers on the author roles.
 class author_delegate(QStyledItemDelegate):
     completerStrings = []
     completerColumn = 0
+    languageColumn = 0
 
     def __init__(self, parent=None):
         super(QStyledItemDelegate, self).__init__(parent)
 
-    def setCompleterData(self, completerStrings, completerColumn):
+    def setCompleterData(self, completerStrings=[str()], completerColumn=0):
         self.completerStrings = completerStrings
         self.completerColumn = completerColumn
+        
+    def setLanguageData(self, languageColumn=0):
+        self.languageColumn = languageColumn
 
     def createEditor(self, parent, option, index):
-        editor = QLineEdit(parent)
+        if index.column() != self.languageColumn:
+            editor = QLineEdit(parent)
+        else:
+            editor = QComboBox(parent)
+            editor.addItem("")
+            for i in range(2, 356):
+                if QLocale(i, QLocale.AnyScript, QLocale.AnyCountry) is not None:
+                    languagecode = QLocale(i, QLocale.AnyScript, QLocale.AnyCountry).name().split("_")[0]
+                    if languagecode != "C":
+                        editor.addItem(languagecode)
+            editor.model().sort(0)
+                    
         if index.column() == self.completerColumn:
             editor.setCompleter(QCompleter(self.completerStrings))
             editor.completer().setCaseSensitivity(False)
+        
         return editor
 
 
@@ -129,6 +145,10 @@ To help our user, the dialog loads up lists of keywords to populate several auto
 
 class comic_meta_data_editor(QDialog):
     configGroup = "ComicsProjectManagementTools"
+    
+    # Translatable genre dictionary that has it's translated entries added to the genrelist and from which the untranslated items are taken.
+    acbfGenreList = {"science_fiction":str(i18n("Science Fiction")), "fantasy":str(i18n("Fantasy")), "adventure":str(i18n("Adventure")), "horror":str(i18n("Horror")), "mystery":str(i18n("Mystery")), "crime":str(i18n("Crime")), "military":str(i18n("Military")), "real_life":str(i18n("Real Life")), "superhero":str(i18n("Superhero")), "humor":str(i18n("Humor")), "western":str(i18n("Western")), "manga":str(i18n("Manga")), "politics":str(i18n("Politics")), "caricature":str(i18n("Caricature")), "sports":str(i18n("Sports")), "history":str(i18n("History")), "biography":str(i18n("Biography")), "education":str(i18n("Education")), "computer":str(i18n("Computer")), "religion":str(i18n("Religion")), "romance":str(i18n("Romance")), "children":str(i18n("Children")), "non-fiction":str(i18n("Non Fiction")), "adult":str(i18n("Adult")), "alternative":str(i18n("Alternative")), "other":str(i18n("Other"))}
+    acbfAuthorRolesList = {"Writer":str(i18n("Writer")), "Adapter":str(i18n("Adapter")), "Artist":str(i18n("Artist")), "Penciller":str(i18n("Penciller")), "Inker":str(i18n("Inker")), "Colorist":str(i18n("Colorist")), "Letterer":str(i18n("Letterer")), "Cover Artist":str(i18n("Cover Artist")), "Photographer":str(i18n("Photographer")), "Editor":str(i18n("Editor")), "Assistant Editor":str(i18n("Assistant Editor")), "Translator":str(i18n("Translator")), "Other":str(i18n("Other"))}
 
     def __init__(self):
         super().__init__()
@@ -139,6 +159,10 @@ class comic_meta_data_editor(QDialog):
         self.formatKeysList = []
         self.otherKeysList = []
         self.authorRoleList = []
+        for g in self.acbfGenreList.values():
+            self.genreKeysList.append(g)
+        for r in self.acbfAuthorRolesList.values():
+            self.authorRoleList.append(r)
         mainP = Path(os.path.abspath(__file__)).parent
         self.get_auto_completion_keys(mainP)
         extraKeyP = Path(QDir.homePath()) / Application.readSetting(self.configGroup, "extraKeysLocation", str())
@@ -243,7 +267,7 @@ class comic_meta_data_editor(QDialog):
         explaination = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
         explaination.setWordWrap(True)
         self.authorModel = QStandardItemModel(0, 7)
-        labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage")]
+        labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage"), i18n("Language")]
         self.authorModel.setHorizontalHeaderLabels(labels)
         self.authorTable = QTableView()
         self.authorTable.setModel(self.authorModel)
@@ -253,6 +277,7 @@ class comic_meta_data_editor(QDialog):
         self.authorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
         delegate = author_delegate()
         delegate.setCompleterData(self.authorRoleList, 4)
+        delegate.setLanguageData(len(labels)-1)
         self.authorTable.setItemDelegate(delegate)
         author_button_layout = QWidget()
         author_button_layout.setLayout(QHBoxLayout())
@@ -328,19 +353,22 @@ class comic_meta_data_editor(QDialog):
             for t in list(genre.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.genreKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.genreKeysList:
+                        self.genreKeysList.append(str(l).strip("\n"))
                 file.close()
         if characters.exists():
             for t in list(characters.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.characterKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.characterKeysList:
+                        self.characterKeysList.append(str(l).strip("\n"))
                 file.close()
         if format.exists():
             for t in list(format.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.formatKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.formatKeysList:
+                        self.formatKeysList.append(str(l).strip("\n"))
                 file.close()
         if rating.exists():
             for t in list(rating.glob('**/*.csv')):
@@ -365,13 +393,15 @@ class comic_meta_data_editor(QDialog):
             for t in list(keywords.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.otherKeysList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.otherKeysList:
+                        self.otherKeysList.append(str(l).strip("\n"))
                 file.close()
         if authorRole.exists():
             for t in list(authorRole.glob('**/*.txt')):
                 file = open(str(t), "r", errors="replace")
                 for l in file:
-                    self.authorRoleList.append(str(l).strip("\n"))
+                    if str(l).strip("\n") not in self.authorRoleList:
+                        self.authorRoleList.append(str(l).strip("\n"))
                 file.close()
 
     """
@@ -403,6 +433,10 @@ class comic_meta_data_editor(QDialog):
         listItems.append(QStandardItem())  # role
         listItems.append(QStandardItem())  # email
         listItems.append(QStandardItem())  # homepage
+        language = QLocale.system().name().split("_")[0]
+        if language == "C":
+            language = "en"
+        listItems.append(QStandardItem(language))  # Language
         self.authorModel.appendRow(listItems)
 
     """
@@ -431,7 +465,13 @@ class comic_meta_data_editor(QDialog):
         if "summary" in config.keys():
             self.teSummary.appendPlainText(config["summary"])
         if "genre" in config.keys():
-            self.lnGenre.setText(", ".join(config["genre"]))
+            genreList = []
+            for genre in config["genre"]:
+                if genre in self.acbfGenreList.keys():
+                    genreList.append(self.acbfGenreList[genre])
+                else:
+                    genreList.append(genre)
+            self.lnGenre.setText(", ".join(genreList))
         if "characters" in config.keys():
             self.lnCharacters.setText(", ".join(config["characters"]))
         if "format" in config.keys():
@@ -485,38 +525,39 @@ class comic_meta_data_editor(QDialog):
                     authorNickName = QStandardItem()
                     if "nickname" in author.keys():
                         authorNickName.setText(author["nickname"])
-                        pass
                     listItems.append(authorNickName)
                     authorFirstName = QStandardItem()
                     if "first-name" in author.keys():
                         authorFirstName.setText(author["first-name"])
-                        pass
                     listItems.append(authorFirstName)
                     authorMiddleName = QStandardItem()
                     if "initials" in author.keys():
                         authorMiddleName.setText(author["initials"])
-                        pass
                     listItems.append(authorMiddleName)
                     authorLastName = QStandardItem()
                     if "last-name" in author.keys():
                         authorLastName.setText(author["last-name"])
-                        pass
                     listItems.append(authorLastName)
                     authorRole = QStandardItem()
                     if "role" in author.keys():
-                        authorRole.setText(author["role"])
-                        pass
+                        role = author["role"]
+                        if author["role"] in self.acbfAuthorRolesList.keys():
+                            role = self.acbfAuthorRolesList[author["role"]]
+                        authorRole.setText(role)
                     listItems.append(authorRole)
                     authorEMail = QStandardItem()
                     if "email" in author.keys():
                         authorEMail.setText(author["email"])
-                        pass
                     listItems.append(authorEMail)
                     authorHomePage = QStandardItem()
                     if "homepage" in author.keys():
                         authorHomePage.setText(author["homepage"])
-                        pass
                     listItems.append(authorHomePage)
+                    authorLanguage = QStandardItem()
+                    if "language" in author.keys():
+                        authorLanguage.setText(author["language"])
+                        pass
+                    listItems.append(authorLanguage)
                     self.authorModel.appendRow(listItems)
         else:
             self.slot_add_author()
@@ -537,7 +578,14 @@ class comic_meta_data_editor(QDialog):
         config["cover"] = self.cmbCoverPage.currentText()
         listkeys = self.lnGenre.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
-            config["genre"] = self.lnGenre.text().split(", ")
+            genreList = []
+            for genre in self.lnGenre.text().split(", "):
+                if genre in self.acbfGenreList.values():
+                    i = list(self.acbfGenreList.values()).index(genre)
+                    genreList.append(list(self.acbfGenreList.keys())[i])
+                else:
+                    genreList.append(genre)
+            config["genre"] = genreList
         elif "genre" in config.keys():
             config.pop("genre")
         listkeys = self.lnCharacters.text()
@@ -575,13 +623,17 @@ class comic_meta_data_editor(QDialog):
         authorList = []
         for row in range(self.authorTable.verticalHeader().count()):
             logicalIndex = self.authorTable.verticalHeader().logicalIndex(row)
-            listEntries = ["nickname", "first-name", "initials", "last-name", "role", "email", "homepage"]
+            listEntries = ["nickname", "first-name", "initials", "last-name", "role", "email", "homepage", "language"]
             author = {}
             for i in range(len(listEntries)):
                 entry = self.authorModel.data(self.authorModel.index(logicalIndex, i))
                 if entry is None:
                     entry = " "
                 if entry.isspace() is False and len(entry) > 0:
+                    if listEntries[i] == "role":
+                        if entry in self.acbfAuthorRolesList.values():
+                            entryI = list(self.acbfAuthorRolesList.values()).index(entry)
+                            entry = list(self.acbfAuthorRolesList.keys())[entryI]
                     author[listEntries[i]] = entry
                 elif listEntries[i] in author.keys():
                     author.pop(listEntries[i])

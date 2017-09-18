@@ -31,6 +31,7 @@
 #include <QWidget>
 #include <QQmlComponent>
 #include <QStandardPaths>
+#include <KoResourcePaths.h>
 
 #include "QmlGlobalEngine.h"
 
@@ -92,10 +93,9 @@ QString Theme::id() const
 
 void Theme::setId(const QString& newValue)
 {
-    if(newValue != d->id) {
+    if (newValue != d->id) {
         d->id = newValue;
-
-        const QString themeQmlPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("krita/qmlthemes/%1/theme.qml").arg(d->id));
+        const QString themeQmlPath = themePath(d->id);
         d->basePath = QFileInfo(themeQmlPath).dir().absolutePath();
         emit idChanged();
     }
@@ -299,8 +299,9 @@ QUrl Theme::image(const QString& name)
 
 Theme* Theme::load(const QString& id, QQmlEngine *engine)
 {
-    QString qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                         QString("krita/qmlthemes/%1/theme.qml").arg(id));
+    
+    QString qml = themePath(id);
+    
     QQmlComponent themeComponent(engine, 0);
     themeComponent.loadUrl(QUrl::fromLocalFile(qml), QQmlComponent::PreferSynchronous);
 
@@ -353,3 +354,12 @@ void Theme::Private::rebuildFontCache()
     }
 }
 
+QString Theme::themePath(const QString &id)
+{
+    QString qml = QStandardPaths::locate(QStandardPaths::AppDataLocation,
+                                         QString("krita/qmlthemes/%1/theme.qml").arg(id));
+    if (qml.isEmpty()) {
+            qml = KoResourcePaths::getApplicationRoot() + QString("/share/krita/qmlthemes/%1/theme.qml").arg(id);
+    }
+    return qml;
+}

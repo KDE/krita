@@ -67,8 +67,11 @@ ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_wheel.cpp
 ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_combo_box.cpp
 )
 
-
-add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_SOURCES})
+if (WIN32)
+    add_library(kritasketchplugin MODULE ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_SOURCES})
+else()
+    add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_SOURCES})
+endif()
 
 target_link_libraries(kritasketchplugin
     Qt5::Quick

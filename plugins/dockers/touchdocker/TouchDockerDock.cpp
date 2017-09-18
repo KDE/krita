@@ -24,7 +24,7 @@
 #include <QUrl>
 #include <QAction>
 #include <QKeyEvent>
-#include <QApplication>g
+#include <QApplication>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -105,7 +105,10 @@ TouchDockerDock::TouchDockerDock()
 
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
+    
+    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
+    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
+    
     Settings *settings = new Settings(this);
     DocumentManager::instance()->setSettingsManager(settings);
     m_quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);
@@ -314,6 +317,10 @@ KoDialog *TouchDockerDock::createDialog(const QString qml)
     quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
+    quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
+    quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
+
+    
     Settings *settings = new Settings(this);
     DocumentManager::instance()->setSettingsManager(settings);
     quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);

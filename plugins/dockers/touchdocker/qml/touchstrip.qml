@@ -1,13 +1,11 @@
 import QtQuick 2.3
-import QtQuick.Layouts 1.3
 import org.krita.sketch 1.0
 import org.krita.sketch.components 1.0
 
 Rectangle {
     id: base
-    color: "black" //Settings.theme.color("pages/open/background")
-    anchors.fill: parent
-
+    color: "#545454"
+    
     Button {
         id: fileOpenButton
         color: "grey"
@@ -49,7 +47,7 @@ Rectangle {
             mainWindow.slotButtonPressed("fileSaveAsButton")
         }
     }
-
+    
     Button {
         id: undoButton
         color: "grey"
@@ -77,8 +75,7 @@ Rectangle {
             mainWindow.slotButtonPressed("edit_redo")
         }
     }
-
-
+    
     Button {
         id: button1
         color: "grey"
@@ -142,7 +139,6 @@ Rectangle {
             mainWindow.slotButtonPressed("button4")
         }
     }
-
 
     Button {
         id: rockerSwitchTop
@@ -286,4 +282,6 @@ Rectangle {
             mainWindow.slotButtonPressed("button8")
         }
     }
+
+
 }

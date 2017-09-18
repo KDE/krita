@@ -1,7 +1,7 @@
 import QtQuick 2.2
 Rectangle {
     color: "#545454"
-
+    
     Text {
         id: numberOfCores
         font.family: "Helvetica"

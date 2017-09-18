@@ -231,6 +231,9 @@ protected:
     virtual bool eventFilter(QObject*, QEvent*);
 
 private:
+    
+    static QString themePath(const QString &id);
+    
     class Private;
     Private * const d;
 };

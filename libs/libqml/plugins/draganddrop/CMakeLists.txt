@@ -14,7 +14,12 @@ include_directories(
         
 )
 
-add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
+if (WIN32)
+    add_library(draganddropplugin MODULE ${declarativedragdrop_SRCS})
+else()
+    add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
+endif()
+
 target_link_libraries(draganddropplugin Qt5::Core Qt5::Gui Qt5::Quick kritawidgetutils)
 
 install(TARGETS draganddropplugin DESTINATION ${QML_INSTALL_DIR}/org/krita/draganddrop)

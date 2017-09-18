@@ -328,7 +328,7 @@ void DlgAnimationRenderer::selectRenderOptions()
             if (!dlg.exec()) {
                 m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
             } else {
-                KisConfig().setExportConfiguration(mimetype.toLatin1(), m_encoderConfigWidget->configuration());
+                KisConfig().setExportConfiguration(mimetype.toLatin1(), *m_encoderConfigWidget->configuration());
             }
             dlg.setMainWidget(0);
             m_encoderConfigWidget->hide();

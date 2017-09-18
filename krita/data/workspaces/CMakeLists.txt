@@ -7,6 +7,6 @@ install( FILES
     Default.kws
     Small_Vector.kws
     VFX_Paint.kws
-    Intel_Minimal.kws
+    Minimal.kws
     DESTINATION ${DATA_INSTALL_DIR}/krita/workspaces)
 

@@ -21,10 +21,12 @@
 #include <QThread>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <qmath.h>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
+#include <kis_image_config.h>
 #include <kis_icon.h>
 #include <KoCanvasBase.h>
 #include <KisViewManager.h>
@@ -46,7 +48,9 @@ void ThreadManager::setThreadCount(int threadCount)
     if (m_threadCount != threadCount) {
         m_threadCount = threadCount;
         emit threadCountChanged();
-        // XXX: set the threadcount globally in Krita.
+        KisImageConfig().setMaxNumberOfThreads(m_threadCount);
+        KisImageConfig().setFrameRenderingClones(qCeil(m_threadCount * 0.5));
+        // XXX: also set for the brush threads
     }
 }
 

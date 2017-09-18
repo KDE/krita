@@ -47,6 +47,15 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
         debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
         return mime.name();
     }
+
+    if (mime.name() == "application/octet-stream") {
+        mime = db.mimeTypeForFile(file);
+        if (mime.name() != "application/octet-stream") {
+            debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
+            return mime.name();
+        }
+    }
+
     return "";
 }
 

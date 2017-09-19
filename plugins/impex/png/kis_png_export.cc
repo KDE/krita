@@ -131,7 +131,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     const KoColorSpace* cs = l->paintDevice()->colorSpace();
 
     KisPNGOptions options;
-    bool isThereAlpha = false;
+    bool isThereAlpha = true;
     KisPropertiesConfigurationSP cfg = defaultConfiguration();
     do {
         if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
@@ -242,8 +242,8 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     bool isThereAlpha = cfg->getBool("isThereAlpha");
 
-    alpha->setChecked(cfg->getBool("alpha", isThereAlpha) && isThereAlpha);
-    alpha->setEnabled(isThereAlpha);
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
+    //alpha->setEnabled(isThereAlpha);
 
     bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 

@@ -21,6 +21,7 @@
 #define DLG_BUNDLE_MANAGER_H
 
 #include <QWidget>
+#include <QCoreApplication>
 
 #include <KoDialog.h>
 #include "kis_action_manager.h"

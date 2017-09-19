@@ -23,7 +23,6 @@
 #include "resourcemanager.h"
 #include "dlg_create_bundle.h"
 
-#include <QApplication>
 #include <QListWidget>
 #include <QTreeWidget>
 #include <QListWidgetItem>
@@ -36,6 +35,7 @@
 #include <kis_icon.h>
 #include "kis_action.h"
 #include <kis_resource_server_provider.h>
+#include <KoResourcePaths.h>
 #include "KoResourceModel.h"
 #include "KoResourceServer.h"
 
@@ -72,7 +72,9 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     setDefaultButton(Ok);
     m_ui->lblDescription->setReadOnly(true);
 
-    QString knsrcFile = qApp->applicationDirPath() + "/../etc/xdg/kritaresourcebundles.knsrc";
+    QString approot = KoResourcePaths::getApplicationRoot();
+
+    QString knsrcFile = approot + "/etc/xdg/" + "kritaresourcebundles.knsrc";
     setKnsrcFile(knsrcFile);
 
     m_ui->searchLineEdit->setClearButtonEnabled(true);

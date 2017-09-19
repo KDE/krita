@@ -224,7 +224,7 @@ bool KisBaseNode::visible(bool recursive) const
     KisBaseNodeSP parentNode = parentCallback();
 
     return recursive && isVisible && parentNode ?
-        parentNode->visible() : isVisible;
+        parentNode->visible(recursive) : isVisible;
 }
 
 void KisBaseNode::setVisible(bool visible, bool loading)

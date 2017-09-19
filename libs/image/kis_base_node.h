@@ -341,6 +341,9 @@ public:
      * @return true if this node is visible (i.e, active (except for
      * selection masks where visible and active properties are
      * different)) in the graph
+     *
+     * @param bool recursive if true, check whether all parents of
+     * this node are visible as well.
      */
     virtual bool visible(bool recursive = false) const;
 

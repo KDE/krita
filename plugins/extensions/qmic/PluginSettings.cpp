@@ -18,6 +18,7 @@
 
 #include <QVBoxLayout>
 #include <QStandardPaths>
+#include <QDir>
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
@@ -37,7 +38,7 @@ PluginSettings::PluginSettings(QWidget *parent)
 
 PluginSettings::~PluginSettings()
 {
-    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
+//    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
 }
 
 QString PluginSettings::id()
@@ -68,21 +69,29 @@ QString PluginSettings::gmicQtPath()
     gmicqt += ".exe";
 #endif
 
-    QString gmicqt_path = KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
+    QFileInfo fi(qApp->applicationDirPath() + "/" + gmicqt);
 
-    QFileInfo fi(gmicqt_path);
-    if (!fi.exists() || !fi.isFile()) {
-
-        QFileInfo fi2(qApp->applicationDirPath() + "/" + gmicqt);
-
-        if (fi2.exists() && fi2.isFile()) {
-            gmicqt_path = fi2.canonicalFilePath();
-        }
-        else {
-            gmicqt_path.clear();
-        }
+    // Check for gmic-qt next to krita
+    if (fi.exists() && fi.isFile()) {
+//        qDebug() << 1 << fi.canonicalFilePath();
+        return fi.canonicalFilePath();
     }
 
+    // Check whether we've got a gmic subfolder
+    QDir d(qApp->applicationDirPath());
+    QStringList gmicdirs = d.entryList(QStringList() << "gmic*", QDir::Dirs);
+    qDebug() << gmicdirs;
+    if (gmicdirs.isEmpty()) {
+//        qDebug() << 2;
+        return "";
+    }
+    fi = QFileInfo(qApp->applicationDirPath() + "/" + gmicdirs.first() + "/" + gmicqt);
+    if (fi.exists() && fi.isFile()) {
+//        qDebug() << "3" << fi.canonicalFilePath();
+        return fi.canonicalFilePath();
+    }
+
+//    qDebug() << 4 << gmicqt;
     return gmicqt;
 }
 

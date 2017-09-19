@@ -40,6 +40,7 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
+#include <KoDocumentInfo.h>
 
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
@@ -66,6 +67,7 @@
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
 #include "kis_import_catcher.h"
+
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -416,14 +418,14 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     if (rect.isEmpty()) return;
 
     KisDocument *doc = KisPart::instance()->createDocument();
-
+    doc->documentInfo()->setAboutInfo("title", i18n("Untitled"));
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
                                     rect.height(),
                                     clip->colorSpace(),
                                     i18n("Pasted"));
     KisPaintLayerSP layer =
-        new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"),
+        new KisPaintLayer(image.data(), image->nextLayerName() + " " + i18n("(pasted)"),
                           OPACITY_OPAQUE_U8, clip->colorSpace());
 
     KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);

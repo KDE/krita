@@ -113,6 +113,8 @@ protected:
 
     // lo-level methods for painting primitives
 
+    void asyncUpdate(int painterInfoId);
+
     void paintAt(int painterInfoId, const KisPaintInformation &pi);
 
     void paintLine(int painterInfoId,
@@ -126,6 +128,8 @@ protected:
                           const KisPaintInformation &pi2);
 
     // hi-level methods for painting primitives
+
+    virtual void asyncUpdate();
 
     virtual void paintAt(const KisPaintInformation &pi);
 
@@ -152,6 +156,7 @@ private Q_SLOTS:
 
     void finishStroke();
     void doAirbrushing();
+    void doAsynchronousUpdate();
     void stabilizerPollAndPaint();
 
 private:

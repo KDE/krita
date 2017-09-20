@@ -103,6 +103,11 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
+int KisPaintOp::doAsyncronousUpdate()
+{
+    return 40;
+}
+
 static void paintBezierCurve(KisPaintOp *paintOp,
                              const KisPaintInformation &pi1,
                              const KisVector2D &control1,

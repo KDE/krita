@@ -373,6 +373,11 @@ bool KisResourcesSnapshot::presetAllowsLod() const
     return m_d->presetAllowsLod;
 }
 
+bool KisResourcesSnapshot::presetNeedsAsynchronousUpdates() const
+{
+    return m_d->currentPaintOpPreset && m_d->currentPaintOpPreset->settings()->needsAsynchronousUpdates();
+}
+
 void KisResourcesSnapshot::setFGColorOverride(const KoColor &color)
 {
     m_d->currentFgColor = color;

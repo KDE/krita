@@ -48,9 +48,10 @@ public:
     KisDabRenderingQueue(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory, KisSharedThreadPoolAdapter *sharedThreadPool = 0);
     ~KisDabRenderingQueue();
 
-    KisDabRenderingJob* addDab(const KisDabCacheUtils::DabRequestInfo &request);
+    KisDabRenderingJob* addDab(const KisDabCacheUtils::DabRequestInfo &request,
+                               qreal opacity, qreal flow);
 
-    QList<KisDabRenderingJob*> notifyJobFinished(KisDabRenderingJob *job);
+    QList<KisDabRenderingJob*> notifyJobFinished(KisDabRenderingJob *job, int usecsTime = -1);
 
     QList<KisRenderedDab> takeReadyDabs();
 
@@ -59,6 +60,8 @@ public:
     void setCacheInterface(CacheInterface *interface);
 
     KisFixedPaintDeviceSP fetchCachedPaintDevce();
+
+    int averageExecutionTime() const;
 
     int testingGetQueueSize() const;
 

@@ -77,6 +77,7 @@ public:
     void resumeStrokeCallback() override;
 
 protected:
+    KisNodeSP targetNode() const;
     KisPaintDeviceSP targetDevice() const;
     KisSelectionSP activeSelection() const;
     const QVector<PainterInfo*> painterInfos() const;

@@ -61,7 +61,7 @@ public:
     KisSharedThreadPoolAdapter *sharedThreadPool = 0;
 
 private:
-    static void executeOneJob(KisDabRenderingJob *job);
+    static int executeOneJob(KisDabRenderingJob *job);
 };
 
 #endif // KISDABRENDERINGJOB_H

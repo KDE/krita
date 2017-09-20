@@ -517,8 +517,9 @@ void KisPainterTest::benchmarkBitBltOldData()
     }
 }
 #include "kis_paint_device_debug_utils.h"
+#include "KisRenderedDab.h"
 
-void testMassiveBltFixedImpl(int numRects)
+void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false)
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
@@ -529,7 +530,7 @@ void testMassiveBltFixedImpl(int numRects)
     colors << Qt::blue;
 
     QRect devicesRect;
-    QList<KisFixedPaintDeviceSP> devices;
+    QList<KisRenderedDab> devices;
 
     for (int i = 0; i < numRects; i++) {
         const QRect rc(10 + i * 10, 10 + i * 10, 30, 30);
@@ -538,10 +539,18 @@ void testMassiveBltFixedImpl(int numRects)
         dev->initialize();
         dev->fill(rc, KoColor(colors[i % 3], cs));
         dev->fill(kisGrowRect(rc, -5), KoColor(Qt::white, cs));
-        devices << dev;
+
+        KisRenderedDab dab;
+        dab.device = dev;
+        dab.offset = dev->bounds().topLeft();
+        dab.opacity = varyOpacity ? qreal(1 + i) / numRects : 1.0;
+        dab.flow = 1.0;
+
+        devices << dab;
         devicesRect |= rc;
     }
 
+    const QString opacityPostfix = varyOpacity ? "_varyop" : "";
     const QRect fullRect = kisGrowRect(devicesRect, 10);
 
     {
@@ -551,7 +560,7 @@ void testMassiveBltFixedImpl(int numRects)
         QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
                                       "kispainter_test",
                                       "massive_bitblt",
-                                      QString("full_update_%1").arg(numRects)));
+                                      QString("full_update_%1%2").arg(numRects).arg(opacityPostfix)));
     }
 
     dst->clear();
@@ -568,7 +577,7 @@ void testMassiveBltFixedImpl(int numRects)
         QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
                                       "kispainter_test",
                                       "massive_bitblt",
-                                      QString("partial_update_%1").arg(numRects)));
+                                      QString("partial_update_%1%2").arg(numRects).arg(opacityPostfix)));
 
     }
 }
@@ -583,12 +592,17 @@ void KisPainterTest::testMassiveBltFixedMultiTile()
     testMassiveBltFixedImpl(6);
 }
 
+void KisPainterTest::testMassiveBltFixedMultiTileWithOpacity()
+{
+    testMassiveBltFixedImpl(6, true);
+}
+
 void KisPainterTest::testMassiveBltFixedCornerCases()
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
 
-    QList<KisFixedPaintDeviceSP> devices;
+    QList<KisRenderedDab> devices;
 
     QVERIFY(dst->extent().isEmpty());
 
@@ -606,6 +620,8 @@ void KisPainterTest::testMassiveBltFixedCornerCases()
     dev->setRect(rc);
     dev->initialize();
     dev->fill(rc, KoColor(Qt::white, cs));
+
+    devices.append(KisRenderedDab(dev));
 
     {
         // rect outside the devices bounds, shouldn't crash

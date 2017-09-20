@@ -57,8 +57,9 @@ private Q_SLOTS:
     void testMassiveBltFixedSingleTile();
     void testMassiveBltFixedMultiTile();
 
-    void testMassiveBltFixedCornerCases();
+    void testMassiveBltFixedMultiTileWithOpacity();
 
+    void testMassiveBltFixedCornerCases();
 };
 
 #endif

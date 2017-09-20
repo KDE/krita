@@ -18,11 +18,12 @@
 
 #include "KisDabRenderingJob.h"
 
+#include <QElapsedTimer>
+
 #include <KisSharedThreadPoolAdapter.h>
 
 #include "KisDabCacheUtils.h"
 #include "KisDabRenderingQueue.h"
-
 
 KisDabRenderingJob::KisDabRenderingJob()
 {
@@ -63,12 +64,15 @@ KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
     return *this;
 }
 
-void KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
+int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
 {
     using namespace KisDabCacheUtils;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(job->type == KisDabRenderingJob::Dab ||
                                  job->type == KisDabRenderingJob::Postprocess);
+
+    QElapsedTimer executionTime;
+    executionTime.start();
 
     if (job->type == KisDabRenderingJob::Dab) {
         // TODO: thing about better interface for the reverse queue link
@@ -78,7 +82,7 @@ void KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
     }
 
     // by now the original device should be already prepared
-    KIS_SAFE_ASSERT_RECOVER_RETURN(job->originalDevice);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(job->originalDevice, 0);
 
     if (job->type == KisDabRenderingJob::Dab ||
         job->type == KisDabRenderingJob::Postprocess) {
@@ -102,12 +106,16 @@ void KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
             job->postprocessedDevice = job->originalDevice;
         }
     }
+
+    return executionTime.nsecsElapsed() / 1000;
 }
 
 void KisDabRenderingJob::runShared()
 {
-    executeOneJob(this);
-    QList<KisDabRenderingJob *> jobs = parentQueue->notifyJobFinished(this);
+    int executionTime = 0;
+
+    executionTime = executeOneJob(this);
+    QList<KisDabRenderingJob *> jobs = parentQueue->notifyJobFinished(this, executionTime);
 
     while (!jobs.isEmpty()) {
         // start all-but-first jobs asynchronously
@@ -117,8 +125,8 @@ void KisDabRenderingJob::runShared()
 
         // execute the first job in the current thread
         KisDabRenderingJob *job = jobs.first();
-        executeOneJob(job);
-        jobs = parentQueue->notifyJobFinished(job);
+        executionTime = executeOneJob(job);
+        jobs = parentQueue->notifyJobFinished(job, executionTime);
 
         // mimic the behavior of the thread pool
         if (job->autoDelete()) {

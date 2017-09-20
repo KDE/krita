@@ -2542,6 +2542,20 @@ void KisPainter::setOpacityUpdateAverage(quint8 opacity)
     d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
 }
 
+void KisPainter::setAverageOpacity(qreal averageOpacity)
+{
+    d->paramInfo.setOpacityAndAverage(d->paramInfo.opacity, averageOpacity);
+}
+
+qreal KisPainter::blendAverageOpacity(qreal opacity, qreal averageOpacity)
+{
+    const float exponent = 0.1;
+
+    return averageOpacity < opacity ?
+        opacity :
+        exponent * opacity + (1.0 - exponent) * (averageOpacity);
+}
+
 void KisPainter::setOpacity(quint8 opacity)
 {
     d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;

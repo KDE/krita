@@ -314,3 +314,8 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
         }
     }
 }
+
+KisNodeSP KisPainterBasedStrokeStrategy::targetNode() const
+{
+    return m_resources->currentNode();
+}

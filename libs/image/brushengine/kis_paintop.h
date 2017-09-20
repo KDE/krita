@@ -111,6 +111,14 @@ public:
      */
     static void splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction);
 
+    /**
+     * If the preset supports asynchronous updates, then the stroke execution core will
+     * call this method with a desured frame rate.
+     *
+     * @return the desired FPS rate (period of updates)
+     */
+    virtual int doAsyncronousUpdate();
+
 protected:
     friend class KisPaintInformation;
     /**

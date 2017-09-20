@@ -49,9 +49,10 @@ KisDabRenderingExecutor::~KisDabRenderingExecutor()
 {
 }
 
-void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &request)
+void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &request,
+                                     qreal opacity, qreal flow)
 {
-    KisDabRenderingJob *job = m_d->renderingQueue->addDab(request);
+    KisDabRenderingJob *job = m_d->renderingQueue->addDab(request, opacity, flow);
     if (job) {
         m_d->sharedThreadPool->start(job);
     }
@@ -65,6 +66,11 @@ QList<KisRenderedDab> KisDabRenderingExecutor::takeReadyDabs()
 bool KisDabRenderingExecutor::hasPreparedDabs() const
 {
     return m_d->renderingQueue->hasPreparedDabs();
+}
+
+int KisDabRenderingExecutor::averageDabRenderingTime() const
+{
+    return m_d->renderingQueue->averageExecutionTime();
 }
 
 void KisDabRenderingExecutor::waitForDone()

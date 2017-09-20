@@ -43,7 +43,7 @@
 
 class KisPainter;
 class KisColorSource;
-
+class KisDabRenderingExecutor;
 
 class KisBrushOp : public KisBrushBasedPaintOp
 {
@@ -54,6 +54,8 @@ public:
     ~KisBrushOp() override;
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+
+    int doAsyncronousUpdate() override;
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
@@ -82,6 +84,9 @@ private:
     KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_lineCacheDevice;
     KisPaintDeviceSP m_colorSourceDevice;
+
+    QScopedPointer<KisDabRenderingExecutor> m_dabExecutor;
+    qreal m_currentUpdatePeriod = 20.0;
 };
 
 #endif // KIS_BRUSHOP_H_

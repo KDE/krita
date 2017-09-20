@@ -53,6 +53,7 @@ class KoPattern;
 class KisPaintInformation;
 class KisPaintOp;
 class KisDistanceInformation;
+class KisRenderedDab;
 
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
@@ -301,7 +302,7 @@ public:
      * If \p rc doesn't cross the device's rect, then the device is not
      * rendered at all.
      */
-    void bltFixed(const QRect &rc, const QList<KisFixedPaintDeviceSP> allSrcDevices);
+    void bltFixed(const QRect &rc, const QList<KisRenderedDab> allSrcDevices);
 
     /**
      * Convenience method that uses QPoint and QRect.
@@ -713,6 +714,16 @@ public:
      * make ALPHA_DARKEN painting look correct
      */
     void setOpacityUpdateAverage(quint8 opacity);
+
+    /**
+     * Sets average opacity, that is used to make ALPHA_DARKEN painting look correct
+     */
+    void setAverageOpacity(qreal averageOpacity);
+
+    /**
+     * Calculate average opacity value after painting a single dab with \p opacity
+     */
+    static qreal blendAverageOpacity(qreal opacity, qreal averageOpacity);
 
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);

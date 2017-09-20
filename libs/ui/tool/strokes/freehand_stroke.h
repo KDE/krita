@@ -50,14 +50,16 @@ public:
 
         Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
               type(POINT), pi1(_pi)
         {}
 
         Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi1,
              const KisPaintInformation &_pi2)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
               type(LINE), pi1(_pi1), pi2(_pi2)
         {}
 
@@ -66,7 +68,8 @@ public:
              const QPointF &_control1,
              const QPointF &_control2,
              const KisPaintInformation &_pi2)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
               type(CURVE), pi1(_pi1), pi2(_pi2),
               control1(_control1), control2(_control2)
         {}
@@ -74,21 +77,24 @@ public:
         Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const vQPointF &_points)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
             type(_type), points(_points)
         {}
 
         Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const QRectF &_rect)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
             type(_type), rect(_rect)
         {}
 
         Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const QPainterPath &_path)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path)
         {}
 
@@ -96,7 +102,8 @@ public:
              DabType _type,
              const QPainterPath &_path,
              const QPen &_pen, const KoColor &_customColor)
-            : node(_node), painterInfoId(_painterInfoId),
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path),
             pen(_pen), customColor(_customColor)
         {}
@@ -171,6 +178,32 @@ public:
         KoColor customColor;
     };
 
+    class UpdateData : public KisStrokeJobData {
+    public:
+        UpdateData(KisNodeSP _node, int _painterInfoId)
+            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+              node(_node),
+              painterInfoId(_painterInfoId)
+        {}
+
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new UpdateData(*this, levelOfDetail);
+        }
+
+    private:
+        UpdateData(const UpdateData &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs),
+              node(rhs.node),
+              painterInfoId(rhs.painterInfoId)
+        {
+            Q_UNUSED(levelOfDetail);
+        }
+    public:
+        KisNodeSP node;
+        int painterInfoId;
+    };
+
 public:
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            const QString &indirectPaintingCompositeOp,
@@ -187,6 +220,7 @@ public:
     ~FreehandStrokeStrategy() override;
 
     void doStrokeCallback(KisStrokeJobData *data) override;
+    void finishStrokeCallback() override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
@@ -195,6 +229,8 @@ protected:
 
 private:
     void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
+
+    void tryDoUpdate(bool force = false);
 
 private:
     struct Private;

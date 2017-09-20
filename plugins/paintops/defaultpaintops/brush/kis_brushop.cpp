@@ -42,6 +42,12 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
 #include <kis_paintop_plugin_utils.h>
+#include "krita_utils.h"
+#include <QtConcurrent>
+#include "kis_algebra_2d.h"
+#include <KisDabRenderingExecutor.h>
+#include <KisDabCacheUtils.h>
+#include <KisRenderedDab.h>
 
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -96,6 +102,20 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
 
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_rotationOption.applyFanCornersInfo(this);
+
+    KisBrushSP baseBrush = m_brush;
+    auto resourcesFactory =
+        [baseBrush] () {
+            KisDabCacheUtils::DabRenderingResources *resources =
+                new KisDabCacheUtils::DabRenderingResources();
+            resources->brush = baseBrush->clone();
+            return resources;
+        };
+
+    m_dabExecutor.reset(
+        new KisDabRenderingExecutor(
+                    painter->device()->compositionSourceColorSpace(),
+                    resourcesFactory));
 }
 
 KisBrushOp::~KisBrushOp()
@@ -124,19 +144,19 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     qreal rotation = m_rotationOption.apply(info);
     qreal ratio = m_ratioOption.apply(info);
 
-    KisPaintDeviceSP device = painter()->device();
-
-
     KisDabShape shape(scale, ratio, rotation);
     QPointF cursorPos =
         m_scatterOption.apply(info,
                               brush->maskWidth(shape, 0, 0, info),
                               brush->maskHeight(shape, 0, 0, info));
 
-    quint8 origOpacity = painter()->opacity();
-
     m_opacityOption.setFlow(m_flowOption.apply(info));
-    m_opacityOption.apply(painter(), info);
+
+    quint8 dabOpacity = OPACITY_OPAQUE_U8;
+    quint8 dabFlow = OPACITY_OPAQUE_U8;
+
+    m_opacityOption.apply(info, &dabOpacity, &dabFlow);
+
     m_colorSource->selectColor(m_mixOption.apply(info), info);
     m_darkenOption.apply(m_colorSource, info);
 
@@ -147,29 +167,61 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    QRect dabRect;
-    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
-                                m_colorSource,
-                                cursorPos,
-                                shape,
-                                info,
-                                m_softnessOption.apply(info),
-                                &dabRect);
+    KisDabCacheUtils::DabRequestInfo request(painter()->paintColor(),
+                                             cursorPos,
+                                             shape,
+                                             info,
+                                             m_softnessOption.apply(info));
 
-    // sanity check for the size calculation code
-    if (dab->bounds().size() != dabRect.size()) {
-        warnKrita << "KisBrushOp: dab bounds is not dab rect. See bug 327156" << dab->bounds().size() << dabRect.size();
-    }
-
-    painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
-
-    painter()->renderMirrorMaskSafe(dabRect,
-                                    dab,
-                                    !m_dabCache->needSeparateOriginal());
-    painter()->setOpacity(origOpacity);
+    m_dabExecutor->addDab(request, qreal(dabOpacity) / 255.0, qreal(dabFlow) / 255.0);
 
     return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 }
+
+int KisBrushOp::doAsyncronousUpdate()
+{
+    if (!m_dabExecutor->hasPreparedDabs()) return m_currentUpdatePeriod;
+
+    const int numThreads = 8;
+    const int splitInto = numThreads;
+
+    QList<KisRenderedDab> dabsQueue = m_dabExecutor->takeReadyDabs();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!dabsQueue.isEmpty(), m_currentUpdatePeriod);
+
+    QRect totalRect;
+    Q_FOREACH (const KisRenderedDab &dab, dabsQueue) {
+        totalRect |= dab.realBounds();
+    }
+
+    int idealPatchSize = KisAlgebra2D::maxDimension(totalRect) / splitInto;
+    idealPatchSize &= ~63;
+
+    idealPatchSize = qMax(idealPatchSize, 64);
+
+    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(totalRect, QSize(idealPatchSize,idealPatchSize));
+
+    KisPainter *gc = painter();
+
+    //ENTER_FUNCTION() << ppVar(idealPatchSize) << ppVar(rects.size()) << ppVar(dabsQueue.size());
+
+    QtConcurrent::blockingMap(rects,
+        [gc, dabsQueue] (const QRect &rc) {
+             KisPainter painter(gc->device());
+             painter.bltFixed(rc, dabsQueue);
+        });
+
+    Q_FOREACH(const QRect &rc, rects) {
+        painter()->addDirtyRect(rc);
+    }
+
+    painter()->setAverageOpacity(dabsQueue.last().averageOpacity);
+
+    const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime();
+    m_currentUpdatePeriod = qBound(20.0, 100.0 * dabRenderingTime, 80.0);
+
+    return m_currentUpdatePeriod;
+}
+
 
 KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &info) const
 {

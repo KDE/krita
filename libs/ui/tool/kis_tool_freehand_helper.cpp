@@ -101,6 +101,8 @@ struct KisToolFreehandHelper::Private
     KisStabilizedEventsSampler stabilizedSampler;
     KisStabilizerDelayedPaintHelper stabilizerDelayedPaintHelper;
 
+    QTimer asynchronousUpdatesThresholdTimer;
+
     int canvasRotation;
     bool canvasMirroredH;
 
@@ -124,6 +126,7 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
+    connect(&m_d->asynchronousUpdatesThresholdTimer, SIGNAL(timeout()), SLOT(doAsynchronousUpdate()));
     connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
 
     m_d->stabilizerDelayedPaintHelper.setPaintLineCallback(
@@ -306,9 +309,12 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     m_d->history.clear();
     m_d->distanceHistory.clear();
 
-    if(airbrushing) {
+    if (airbrushing) {
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
         m_d->airbrushingTimer.start();
+    } else if (m_d->resources->presetNeedsAsynchronousUpdates()) {
+        m_d->asynchronousUpdatesThresholdTimer.setInterval(80 /* msec */);
+        m_d->asynchronousUpdatesThresholdTimer.start();
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
@@ -612,6 +618,10 @@ void KisToolFreehandHelper::endPaint()
         m_d->airbrushingTimer.stop();
     }
 
+    if (m_d->asynchronousUpdatesThresholdTimer.isActive()) {
+        m_d->asynchronousUpdatesThresholdTimer.stop();
+    }
+
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerEnd();
     }
@@ -640,6 +650,10 @@ void KisToolFreehandHelper::cancelPaint()
 
     if (m_d->airbrushingTimer.isActive()) {
         m_d->airbrushingTimer.stop();
+    }
+
+    if (m_d->asynchronousUpdatesThresholdTimer.isActive()) {
+        m_d->asynchronousUpdatesThresholdTimer.stop();
     }
 
     if (m_d->stabilizerPollTimer.isActive()) {
@@ -862,10 +876,22 @@ void KisToolFreehandHelper::doAirbrushing()
     }
 }
 
+void KisToolFreehandHelper::doAsynchronousUpdate()
+{
+    asyncUpdate();
+}
+
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 {
     qreal realInterval = m_d->resources->airbrushingInterval() * AIRBRUSH_INTERVAL_FACTOR;
     return qMax(1, qFloor(realInterval));
+}
+
+void KisToolFreehandHelper::asyncUpdate(int painterInfoId)
+{
+    m_d->strokesFacade->addJob(m_d->strokeId,
+                               new FreehandStrokeStrategy::UpdateData(m_d->resources->currentNode(),
+                                                                      painterInfoId));
 }
 
 void KisToolFreehandHelper::paintAt(int painterInfoId,
@@ -940,6 +966,11 @@ void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
                                            const KisDistanceInformation &startDist)
 {
     painterInfos << new PainterInfo(startDist);
+}
+
+void KisToolFreehandHelper::asyncUpdate()
+{
+    asyncUpdate(0);
 }
 
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)

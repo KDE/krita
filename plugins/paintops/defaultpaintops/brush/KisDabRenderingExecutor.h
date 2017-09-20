@@ -35,11 +35,14 @@ public:
     KisDabRenderingExecutor(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory);
     ~KisDabRenderingExecutor();
 
-    void addDab(const KisDabCacheUtils::DabRequestInfo &request);
+    void addDab(const KisDabCacheUtils::DabRequestInfo &request,
+                qreal opacity, qreal flow);
 
     QList<KisRenderedDab> takeReadyDabs();
 
     bool hasPreparedDabs() const;
+
+    int averageDabRenderingTime() const; // usecs
 
     void waitForDone();
 

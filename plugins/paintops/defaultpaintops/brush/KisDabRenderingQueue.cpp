@@ -21,6 +21,14 @@
 #include "KisDabRenderingJob.h"
 #include "KisRenderedDab.h"
 #include "KisSharedThreadPoolAdapter.h"
+#include "kis_painter.h"
+
+#include <QMutex>
+#include <QMutexLocker>
+
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/rolling_mean.hpp>
 
 struct KisDabRenderingQueue::Private
 {
@@ -33,6 +41,9 @@ struct KisDabRenderingQueue::Private
 
         KisDabRenderingJob job;
         Status status = New;
+
+        qreal opacity = OPACITY_OPAQUE_F;
+        qreal flow = OPACITY_OPAQUE_F;
     };
 
     struct DumbCacheInterface : public CacheInterface {
@@ -59,7 +70,8 @@ struct KisDabRenderingQueue::Private
         : cacheInterface(new DumbCacheInterface),
           colorSpace(_colorSpace),
           sharedThreadPool(_sharedThreadPool),
-          resourcesFactory(_resourcesFactory)
+          resourcesFactory(_resourcesFactory),
+          avgExecutionTime(boost::accumulators::tag::rolling_window::window_size = 50)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(resourcesFactory);
     }
@@ -75,10 +87,15 @@ struct KisDabRenderingQueue::Private
     QScopedPointer<CacheInterface> cacheInterface;
     const KoColorSpace *colorSpace;
     KisSharedThreadPoolAdapter *sharedThreadPool;
+    qreal averageOpacity = 0.0;
 
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
     QList<KisDabCacheUtils::DabRenderingResources*> cachedResources;
     QList<KisFixedPaintDeviceSP> cachedPaintDevices;
+
+    QMutex mutex;
+
+    boost::accumulators::accumulator_set<qreal, boost::accumulators::stats<boost::accumulators::tag::lazy_rolling_mean> > avgExecutionTime;
 
     int findLastDabJobIndex(int startSearchIndex = -1);
     KisDabRenderingJob* createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob);
@@ -119,8 +136,11 @@ KisDabRenderingJob *KisDabRenderingQueue::Private::createPostprocessingJob(const
     return job;
 }
 
-KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequestInfo &request)
+KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequestInfo &request,
+                                                 qreal opacity, qreal flow)
 {
+    QMutexLocker l(&m_d->mutex);
+
     const int seqNo =
         !m_d->jobs.isEmpty() ?
             m_d->jobs.last().job.seqNo + 1:
@@ -159,6 +179,8 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
         KisDabRenderingJob::Copy;
     wrapper.job.parentQueue = this;
     wrapper.job.sharedThreadPool = m_d->sharedThreadPool;
+    wrapper.opacity = opacity;
+    wrapper.flow = flow;
 
     KisDabRenderingJob *jobToRun = 0;
 
@@ -195,8 +217,10 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
     return jobToRun;
 }
 
-QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRenderingJob *job)
+QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRenderingJob *job, int usecsTime)
 {
+    QMutexLocker l(&m_d->mutex);
+
     QList<KisDabRenderingJob *> dependentJobs;
 
     const int jobIndex = job->seqNo - m_d->startSeqNo;
@@ -246,6 +270,10 @@ QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRender
         }
     }
 
+    if (usecsTime >= 0) {
+        m_d->avgExecutionTime(usecsTime);
+    }
+
     return dependentJobs;
 }
 
@@ -275,6 +303,8 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
 
 QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs()
 {
+    QMutexLocker l(&m_d->mutex);
+
     QList<KisRenderedDab> renderedDabs;
     if (m_d->startSeqNo < 0) return renderedDabs;
 
@@ -294,6 +324,12 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs()
 
         dab.device = j.postprocessedDevice;
         dab.offset = j.dstDabOffset();
+        dab.opacity = w.opacity;
+        dab.flow = w.flow;
+
+        m_d->averageOpacity = KisPainter::blendAverageOpacity(w.opacity, m_d->averageOpacity);
+        dab.averageOpacity = m_d->averageOpacity;
+
 
         renderedDabs.append(dab);
 
@@ -306,6 +342,8 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs()
 
 bool KisDabRenderingQueue::hasPreparedDabs() const
 {
+    QMutexLocker l(&m_d->mutex);
+
     const int nextToBePainted = m_d->lastPaintedJob + 1;
 
     return
@@ -321,10 +359,18 @@ void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterfac
 
 KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
 {
+    QMutexLocker l(&m_d->mutex);
+
     return
         m_d->cachedPaintDevices.isEmpty() ?
             new KisFixedPaintDevice(m_d->colorSpace) :
-            m_d->cachedPaintDevices.takeLast();
+                m_d->cachedPaintDevices.takeLast();
+}
+
+int KisDabRenderingQueue::averageExecutionTime() const
+{
+    using namespace boost::accumulators;
+    return rolling_mean(m_d->avgExecutionTime);
 }
 
 int KisDabRenderingQueue::testingGetQueueSize() const

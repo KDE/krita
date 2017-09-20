@@ -40,6 +40,7 @@ public:
     void setFlow(qreal flow);
     void setOpacity(qreal opacity);
     void apply(KisPainter* painter, const KisPaintInformation& info);
+    void apply(const KisPaintInformation& info, quint8 *opacity, quint8 *flow);
 
     qreal getFlow() const;
     qreal getStaticOpacity() const;

@@ -79,7 +79,9 @@ namespace
         bool isSupportedVersion() const {
             return
 #ifdef Q_OS_OSX
-                    ((glMajorVersion * 100 + glMinorVersion) >= 302)
+                    ((glMajorVersion * 100 + glMinorVersion) >= 302
+                     && !rendererString.toLower().contains("amd")
+                     && !rendererString.toLower().contains("radeon"))
 #else
                     (glMajorVersion >= 3 && (supportsDeprecatedFunctions || isOpenGLES)) ||
                     ((glMajorVersion * 100 + glMinorVersion) == 201)

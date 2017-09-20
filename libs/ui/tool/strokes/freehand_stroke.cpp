@@ -174,7 +174,7 @@ void FreehandStrokeStrategy::finishStrokeCallback()
     KisPainterBasedStrokeStrategy::finishStrokeCallback();
 }
 
-void FreehandStrokeStrategy::tryDoUpdate(bool force)
+void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
 {
     // We do not distinguish between updates for each painter info. Just
     // update all of them at once!
@@ -182,10 +182,10 @@ void FreehandStrokeStrategy::tryDoUpdate(bool force)
     Q_FOREACH (PainterInfo *info, painterInfos()) {
         KisPaintOp *paintop = info->painter->paintOp();
         if (m_d->needsAsynchronousUpdates && paintop &&
-            (force || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod)) {
+            (forceEnd || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod)) {
 
             m_d->timeSinceLastUpdate.restart();
-            m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate();
+            m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate(forceEnd);
         }
 
         QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();

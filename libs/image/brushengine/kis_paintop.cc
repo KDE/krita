@@ -103,8 +103,9 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
-int KisPaintOp::doAsyncronousUpdate()
+int KisPaintOp::doAsyncronousUpdate(bool forceLastUpdate)
 {
+    Q_UNUSED(forceLastUpdate);
     return 40;
 }
 

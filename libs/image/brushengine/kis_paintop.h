@@ -117,7 +117,7 @@ public:
      *
      * @return the desired FPS rate (period of updates)
      */
-    virtual int doAsyncronousUpdate();
+    virtual int doAsyncronousUpdate(bool forceLastUpdate);
 
 protected:
     friend class KisPaintInformation;

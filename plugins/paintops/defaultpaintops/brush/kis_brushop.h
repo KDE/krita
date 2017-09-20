@@ -55,7 +55,7 @@ public:
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
-    int doAsyncronousUpdate() override;
+    int doAsyncronousUpdate(bool forceLastUpdate) override;
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;

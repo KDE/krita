@@ -230,7 +230,7 @@ protected:
 private:
     void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
 
-    void tryDoUpdate(bool force = false);
+    void tryDoUpdate(bool forceEnd = false);
 
 private:
     struct Private;

@@ -178,8 +178,12 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 }
 
-int KisBrushOp::doAsyncronousUpdate()
+int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 {
+    if (forceLastUpdate) {
+        m_dabExecutor->waitForDone();
+    }
+
     if (!m_dabExecutor->hasPreparedDabs()) return m_currentUpdatePeriod;
 
     const int numThreads = 8;

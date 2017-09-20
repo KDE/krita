@@ -21,9 +21,11 @@
 #include <QDockWidget>
 #include <QIcon>
 #include <KoCanvasObserverBase.h>
+#include <QPointer>
+
+#include <kis_canvas2.h>
 
 class KoDialog;
-class KisCanvas2;
 class QQuickWidget;
 
 class TouchDockerDock : public QDockWidget, public KoCanvasObserverBase {
@@ -75,7 +77,7 @@ private:
 
     KoDialog *createDialog(const QString qml);
 
-    KisCanvas2 *m_canvas {0};
+    QPointer<KisCanvas2> m_canvas;
     QQuickWidget *m_quickWidget {0};
 
     class Private;

@@ -372,7 +372,6 @@ void TouchDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-
 }
 
 

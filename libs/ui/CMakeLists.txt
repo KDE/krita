@@ -13,6 +13,7 @@ add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
+    find_library(APPKIT_LIBRARY AppKit)
 endif ()
 
 set(kritaui_LIB_SRCS
@@ -425,6 +426,12 @@ if(UNIX)
     endif()
 endif()
 
+if(APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        osx.mm
+    )
+endif()
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgdlgpngimport.ui
@@ -524,6 +531,7 @@ endif()
 
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
+    target_link_libraries(kritaui ${APPKIT_LIBRARY})
 endif ()
 
 

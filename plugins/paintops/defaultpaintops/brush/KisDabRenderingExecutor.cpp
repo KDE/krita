@@ -33,8 +33,8 @@ struct KisDabRenderingExecutor::Private
     {
     }
 
-    QScopedPointer<KisSharedThreadPoolAdapter> sharedThreadPool;
     QScopedPointer<KisDabRenderingQueue> renderingQueue;
+    QScopedPointer<KisSharedThreadPoolAdapter> sharedThreadPool;
 };
 
 KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory)
@@ -47,6 +47,10 @@ KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs, KisDabC
 
 KisDabRenderingExecutor::~KisDabRenderingExecutor()
 {
+    // explicitly wait for the pool to end, because we might be mistaken about our
+    // assumptions about object destruction order in ~Private()
+
+    m_d->sharedThreadPool->waitForDone();
 }
 
 void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &request,

@@ -7,6 +7,7 @@ include_directories(brush
 set(kritadefaultpaintops_SOURCES
 	defaultpaintops_plugin.cc
 	brush/kis_brushop.cpp
+        brush/KisBrushOpResources.cpp
         brush/KisBrushOpSettings.cpp
 	brush/kis_brushop_settings_widget.cpp
         brush/KisDabRenderingQueue.cpp

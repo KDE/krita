@@ -25,18 +25,14 @@
 
 #include "kis_brush_based_paintop.h"
 #include <kis_airbrush_option.h>
-#include <kis_pressure_darken_option.h>
 #include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_ratio_option.h>
 #include <kis_pressure_flow_option.h>
 #include <kis_pressure_rotation_option.h>
-#include <kis_pressure_mix_option.h>
-#include <kis_pressure_hsv_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
-#include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_brush_based_paintop_settings.h>
@@ -65,7 +61,6 @@ protected:
     KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
-    KisColorSource *m_colorSource;
     KisAirbrushOption m_airbrushOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRatioOption m_ratioOption;
@@ -75,15 +70,10 @@ private:
     KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
-    KisPressureDarkenOption m_darkenOption;
     KisPressureRotationOption m_rotationOption;
-    KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
-    QList<KisPressureHSVOption*> m_hsvOptions;
 
-    KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_lineCacheDevice;
-    KisPaintDeviceSP m_colorSourceDevice;
 
     QScopedPointer<KisDabRenderingExecutor> m_dabExecutor;
     qreal m_currentUpdatePeriod = 20.0;

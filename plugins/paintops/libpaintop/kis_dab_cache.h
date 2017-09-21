@@ -59,7 +59,7 @@ public:
     ~KisDabCache();
 
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
-                                   const KisColorSource *colorSource,
+                                   KisColorSource *colorSource,
                                    const QPointF &cursorPoint,
                                    KisDabShape const&,
                                    const KisPaintInformation& info,
@@ -74,13 +74,18 @@ public:
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
 
+    void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
+    void setTexturePostprocessing(KisTextureProperties *option);
+
+    bool needSeparateOriginal() const;
+
 private:
 
     inline KisFixedPaintDeviceSP fetchFromCache(KisDabCacheUtils::DabRenderingResources *resources, const KisPaintInformation& info,
                                                 QRect *dstDabRect);
 
     inline KisFixedPaintDeviceSP fetchDabCommon(const KoColorSpace *cs,
-            const KisColorSource *colorSource,
+            KisColorSource *colorSource,
             const KoColor& color,
             const QPointF &cursorPoint,
             KisDabShape,

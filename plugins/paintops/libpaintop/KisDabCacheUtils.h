@@ -44,15 +44,15 @@ namespace KisDabCacheUtils
 struct PAINTOP_EXPORT DabRenderingResources
 {
     DabRenderingResources();
-    ~DabRenderingResources();
+    virtual ~DabRenderingResources();
 
-    void syncResourcesToSeqNo(int seqNo);
+    virtual void syncResourcesToSeqNo(int seqNo, const KisPaintInformation &info);
 
     KisBrushSP brush;
-    const KisColorSource *colorSource = 0;
+    QScopedPointer<KisColorSource> colorSource;
 
-    KisPressureSharpnessOption *sharpnessOption = 0;
-    KisTextureProperties *textureOption = 0;
+    QScopedPointer<KisPressureSharpnessOption> sharpnessOption;
+    QScopedPointer<KisTextureProperties> textureOption;
 
     KisPaintDeviceSP colorSourceDevice;
 

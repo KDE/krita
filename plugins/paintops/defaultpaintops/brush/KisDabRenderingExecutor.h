@@ -28,11 +28,17 @@ class KisRenderedDab;
 
 #include "KisDabCacheUtils.h"
 
+class KisPressureMirrorOption;
+class KisPrecisionOption;
+
 
 class KRITADEFAULTPAINTOPS_EXPORT KisDabRenderingExecutor
 {
 public:
-    KisDabRenderingExecutor(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory);
+    KisDabRenderingExecutor(const KoColorSpace *cs,
+                            KisDabCacheUtils::ResourcesFactory resourcesFactory,
+                            KisPressureMirrorOption *mirrorOption = 0,
+                            KisPrecisionOption *precisionOption = 0);
     ~KisDabRenderingExecutor();
 
     void addDab(const KisDabCacheUtils::DabRequestInfo &request,

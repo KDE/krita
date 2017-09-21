@@ -90,6 +90,7 @@ struct KisDabRenderingQueue::Private
     qreal averageOpacity = 0.0;
 
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
+
     QList<KisDabCacheUtils::DabRenderingResources*> cachedResources;
     QList<KisFixedPaintDeviceSP> cachedPaintDevices;
 
@@ -157,7 +158,7 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resources, 0);
 
     // We should sync the cached brush into the current seqNo
-    resources->syncResourcesToSeqNo(seqNo);
+    resources->syncResourcesToSeqNo(seqNo, request.info);
 
     const int lastDabJobIndex = m_d->findLastDabJobIndex();
 

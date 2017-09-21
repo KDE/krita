@@ -58,8 +58,6 @@ public:
     ~KisDabCacheBase();
 
     void setMirrorPostprocessing(KisPressureMirrorOption *option);
-    void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
-    void setTexturePostprocessing(KisTextureProperties *option);
     void setPrecisionOption(KisPrecisionOption *option);
 
     /**
@@ -74,13 +72,13 @@ public:
      * Return true if the dab needs postprocesing by special options
      * like 'texture' or 'sharpness'
      */
-    bool needSeparateOriginal();
+    bool needSeparateOriginal(KisTextureProperties *textureOption,
+                              KisPressureSharpnessOption *sharpnessOption) const;
 
 protected:
     /**
      * Fetches all the necessary information for dab generation and
-     * tells if the caller must should reuse the preciously returned dab.
-     *
+     * tells if the caller must should reuse the preciously returned dab. *
      * Please note that KisDabCacheBase has an internal state, that keeps the
      * parameters of the previously generated (on a cache-miss) dab. This function
      * automatically updates this state when 'shouldUseCache == false'. Therefore, the
@@ -105,9 +103,6 @@ protected:
                                 KisDabCacheUtils::DabGenerationInfo *di,
                                 bool *shouldUseCache);
 
-    KisTextureProperties* texturePostprocessing() const;
-    KisPressureSharpnessOption* sharpnessPostprocessing() const;
-
 private:
     struct SavedDabParameters;
     struct DabPosition;
@@ -123,7 +118,7 @@ private:
     calculateDabRect(KisBrushSP brush, const QPointF &cursorPoint,
                      KisDabShape,
                      const KisPaintInformation& info,
-                     const MirrorProperties &mirrorProperties);
+                     const MirrorProperties &mirrorProperties, KisPressureSharpnessOption *sharpnessOption);
 
 private:
     struct Private;

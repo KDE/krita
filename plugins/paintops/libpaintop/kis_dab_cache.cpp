@@ -22,6 +22,9 @@
 #include "kis_paint_device.h"
 #include "kis_brush.h"
 #include <kis_fixed_paint_device.h>
+#include "kis_color_source.h"
+#include "kis_pressure_sharpness_option.h"
+#include "kis_texture_option.h"
 
 #include <kundo2command.h>
 
@@ -36,6 +39,9 @@ struct KisDabCache::Private {
 
     KisBrushSP brush;
     KisPaintDeviceSP colorSourceDevice;
+
+    KisPressureSharpnessOption *sharpnessOption;
+    KisTextureProperties *textureOption;
 };
 
 
@@ -50,8 +56,24 @@ KisDabCache::~KisDabCache()
     delete m_d;
 }
 
+void KisDabCache::setSharpnessPostprocessing(KisPressureSharpnessOption *option)
+{
+    m_d->sharpnessOption = option;
+}
+
+void KisDabCache::setTexturePostprocessing(KisTextureProperties *option)
+{
+    m_d->textureOption = option;
+}
+
+bool KisDabCache::needSeparateOriginal() const
+{
+    return KisDabCacheBase::needSeparateOriginal(m_d->textureOption, m_d->sharpnessOption);
+}
+
+
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
-        const KisColorSource *colorSource,
+        KisColorSource *colorSource,
         const QPointF &cursorPoint,
         KisDabShape const& shape,
         const KisPaintInformation& info,
@@ -100,9 +122,24 @@ KisFixedPaintDeviceSP KisDabCache::fetchFromCache(KisDabCacheUtils::DabRendering
     return m_d->dab;
 }
 
+/**
+ * A special hack class that allows creation of temporary object with resources
+ * without taking ownershop over the option classes
+ */
+struct TemporaryResourcesWithoutOwning : public KisDabCacheUtils::DabRenderingResources
+{
+    ~TemporaryResourcesWithoutOwning() override {
+        // we do not own these resources, so just
+        // release them before destruction
+        colorSource.take();
+        sharpnessOption.take();
+        textureOption.take();
+    }
+};
+
 inline
 KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
-        const KisColorSource *colorSource,
+        KisColorSource *colorSource,
         const KoColor& color,
         const QPointF &cursorPoint,
         KisDabShape shape,
@@ -123,12 +160,15 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
     // 1. Calculate new dab parameters and whether we can reuse the cache
 
-    DabRenderingResources resources;
+    TemporaryResourcesWithoutOwning resources;
     resources.brush = m_d->brush;
-    resources.colorSource = colorSource;
     resources.colorSourceDevice = m_d->colorSourceDevice;
-    resources.sharpnessOption = sharpnessPostprocessing();
-    resources.textureOption = texturePostprocessing();
+
+    // NOTE: we use a special subclass of resources that will NOT
+    //       delete options on destruction!
+    resources.colorSource.reset(colorSource);
+    resources.sharpnessOption.reset(m_d->sharpnessOption);
+    resources.textureOption.reset(m_d->textureOption);
 
 
     DabGenerationInfo di;

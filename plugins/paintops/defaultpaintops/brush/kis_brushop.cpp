@@ -37,9 +37,6 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_brush_based_paintop_settings.h>
-#include <kis_color_source.h>
-#include <kis_pressure_sharpness_option.h>
-#include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
 #include <kis_paintop_plugin_utils.h>
 #include "krita_utils.h"
@@ -48,31 +45,15 @@
 #include <KisDabRenderingExecutor.h>
 #include <KisDabCacheUtils.h>
 #include <KisRenderedDab.h>
+#include "KisBrushOpResources.h"
 
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_opacityOption(node)
-    , m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
-
-    KisColorSourceOption colorSourceOption;
-    colorSourceOption.readOptionSetting(settings);
-    m_colorSource = colorSourceOption.createColorSource(painter);
-
-    m_hsvOptions.append(KisPressureHSVOption::createHueOption());
-    m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
-    m_hsvOptions.append(KisPressureHSVOption::createValueOption());
-
-    Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
-        option->readOptionSetting(settings);
-        option->resetAllSensors();
-        if (option->isChecked() && !m_hsvTransformation) {
-            m_hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
-        }
-    }
 
     m_airbrushOption.readOptionSetting(settings);
 
@@ -83,11 +64,9 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_spacingOption.readOptionSetting(settings);
     m_rateOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
-    m_sharpnessOption.readOptionSetting(settings);
-    m_darkenOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
-    m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
+    m_sharpnessOption.readOptionSetting(settings);
 
     m_opacityOption.resetAllSensors();
     m_flowOption.resetAllSensors();
@@ -96,33 +75,32 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_rateOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
-    m_darkenOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
+    m_sharpnessOption.resetAllSensors();
 
-    m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_rotationOption.applyFanCornersInfo(this);
 
     KisBrushSP baseBrush = m_brush;
     auto resourcesFactory =
-        [baseBrush] () {
+        [baseBrush, settings, painter] () {
             KisDabCacheUtils::DabRenderingResources *resources =
-                new KisDabCacheUtils::DabRenderingResources();
+                new KisBrushOpResources(settings, painter);
             resources->brush = baseBrush->clone();
+
             return resources;
         };
 
     m_dabExecutor.reset(
         new KisDabRenderingExecutor(
                     painter->device()->compositionSourceColorSpace(),
-                    resourcesFactory));
+                    resourcesFactory,
+                    &m_mirrorOption,
+                    &m_precisionOption));
 }
 
 KisBrushOp::~KisBrushOp()
 {
-    qDeleteAll(m_hsvOptions);
-    delete m_colorSource;
-    delete m_hsvTransformation;
 }
 
 KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -156,16 +134,6 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     quint8 dabFlow = OPACITY_OPAQUE_U8;
 
     m_opacityOption.apply(info, &dabOpacity, &dabFlow);
-
-    m_colorSource->selectColor(m_mixOption.apply(info), info);
-    m_darkenOption.apply(m_colorSource, info);
-
-    if (m_hsvTransformation) {
-        Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
-            option->apply(m_hsvTransformation, info);
-        }
-        m_colorSource->applyColorTransformation(m_hsvTransformation);
-    }
 
     KisDabCacheUtils::DabRequestInfo request(painter()->paintColor(),
                                              cursorPos,

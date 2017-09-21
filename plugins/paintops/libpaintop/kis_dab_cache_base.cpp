@@ -78,15 +78,11 @@ struct KisDabCacheBase::Private {
 
     Private()
         : mirrorOption(0),
-          sharpnessOption(0),
-          textureOption(0),
           precisionOption(0),
           subPixelPrecisionDisabled(false)
     {}
 
     KisPressureMirrorOption *mirrorOption;
-    KisPressureSharpnessOption *sharpnessOption;
-    KisTextureProperties *textureOption;
     KisPrecisionOption *precisionOption;
     bool subPixelPrecisionDisabled;
 
@@ -110,16 +106,6 @@ KisDabCacheBase::~KisDabCacheBase()
 void KisDabCacheBase::setMirrorPostprocessing(KisPressureMirrorOption *option)
 {
     m_d->mirrorOption = option;
-}
-
-void KisDabCacheBase::setSharpnessPostprocessing(KisPressureSharpnessOption *option)
-{
-    m_d->sharpnessOption = option;
-}
-
-void KisDabCacheBase::setTexturePostprocessing(KisTextureProperties *option)
-{
-    m_d->textureOption = option;
 }
 
 void KisDabCacheBase::setPrecisionOption(KisPrecisionOption *option)
@@ -156,10 +142,11 @@ KisDabCacheBase::getDabParameters(KisBrushSP brush,
     return params;
 }
 
-bool KisDabCacheBase::needSeparateOriginal()
+bool KisDabCacheBase::needSeparateOriginal(KisTextureProperties *textureOption,
+                                           KisPressureSharpnessOption *sharpnessOption) const
 {
-    return (m_d->textureOption && m_d->textureOption->m_enabled) ||
-           (m_d->sharpnessOption && m_d->sharpnessOption->isChecked());
+    return (textureOption && textureOption->m_enabled) ||
+           (sharpnessOption && sharpnessOption->isChecked());
 }
 
 struct KisDabCacheBase::DabPosition {
@@ -190,7 +177,8 @@ KisDabCacheBase::calculateDabRect(KisBrushSP brush,
                                   const QPointF &cursorPoint,
                                   KisDabShape shape,
                                   const KisPaintInformation& info,
-                                  const MirrorProperties &mirrorProperties)
+                                  const MirrorProperties &mirrorProperties,
+                                  KisPressureSharpnessOption *sharpnessOption)
 {
     qint32 x = 0, y = 0;
     qreal subPixelX = 0.0, subPixelY = 0.0;
@@ -202,8 +190,8 @@ KisDabCacheBase::calculateDabRect(KisBrushSP brush,
     QPointF hotSpot = brush->hotSpot(shape, info);
     QPointF pt = cursorPoint - hotSpot;
 
-    if (m_d->sharpnessOption) {
-        m_d->sharpnessOption->apply(info, pt, x, y, subPixelX, subPixelY);
+    if (sharpnessOption) {
+        sharpnessOption->apply(info, pt, x, y, subPixelX, subPixelY);
     }
     else {
         KisPaintOp::splitCoordinate(pt.x(), &x, &subPixelX);
@@ -260,7 +248,8 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
                                             request.cursorPoint,
                                             request.shape,
                                             request.info,
-                                            di->mirrorProperties);
+                                            di->mirrorProperties,
+                                            resources->sharpnessOption.data());
     di->shape = KisDabShape(request.shape.scale(), request.shape.ratio(), position.realAngle);
     di->dstDabRect = position.rect;
     di->subPixel = position.subPixel;
@@ -286,16 +275,6 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
         m_d->lastSavedDabParameters = newParams;
     }
 
-    di->needsPostprocessing = needSeparateOriginal();
-}
-
-KisTextureProperties *KisDabCacheBase::texturePostprocessing() const
-{
-    return m_d->textureOption;
-}
-
-KisPressureSharpnessOption *KisDabCacheBase::sharpnessPostprocessing() const
-{
-    return m_d->sharpnessOption;
+    di->needsPostprocessing = needSeparateOriginal(resources->textureOption.data(), resources->sharpnessOption.data());
 }
 

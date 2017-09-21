@@ -37,12 +37,20 @@ struct KisDabRenderingExecutor::Private
     QScopedPointer<KisSharedThreadPoolAdapter> sharedThreadPool;
 };
 
-KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory)
+KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs,
+                                                 KisDabCacheUtils::ResourcesFactory resourcesFactory,
+                                                 KisPressureMirrorOption *mirrorOption,
+                                                 KisPrecisionOption *precisionOption)
     : m_d(new Private)
 {
     m_d->renderingQueue.reset(
         new KisDabRenderingQueue(cs, resourcesFactory, m_d->sharedThreadPool.data()));
-    m_d->renderingQueue->setCacheInterface(new KisDabRenderingQueueCache());
+
+    KisDabRenderingQueueCache *cache = new KisDabRenderingQueueCache();
+    cache->setMirrorPostprocessing(mirrorOption);
+    cache->setPrecisionOption(precisionOption);
+
+    m_d->renderingQueue->setCacheInterface(cache);
 }
 
 KisDabRenderingExecutor::~KisDabRenderingExecutor()

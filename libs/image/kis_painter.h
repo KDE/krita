@@ -629,15 +629,32 @@ public:
     void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontally, bool mirrorVertically);
 
     /**
-     * copy the mirror information to other painter
-     */
-    void copyMirrorInformation(KisPainter * painter);
-
-    /**
      * Returns whether the mirroring methods will do any
      * work when called
      */
     bool hasMirroring() const;
+
+    /**
+     * Indicates if horizontal mirroring mode is activated
+     */
+    bool hasHorizontalMirroring() const;
+
+    /**
+     * Indicates if vertical mirroring mode is activated
+     */
+    bool hasVerticalMirroring() const;
+
+    /**
+     * Mirror \p rc in the requested \p direction around the center point defined
+     * in the painter.
+     */
+    void mirrorRect(Qt::Orientation direction, QRect *rc) const;
+
+    /**
+     * Mirror \p dab in the requested direction around the center point defined
+     * in the painter. The dab's offset is adjusted automatically.
+     */
+    void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const;
 
     /// Set the current pattern
     void setPattern(const KoPattern * pattern);

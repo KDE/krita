@@ -146,6 +146,97 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 }
 
+
+void renderSingleMirrorDabsPack(Qt::Orientation direction, KisPainter *gc,
+                                QList<KisRenderedDab> &dabs,
+                                QVector<QRect> &rects)
+{
+    QtConcurrent::blockingMap(dabs,
+        [gc, direction] (KisRenderedDab &dab) {
+            gc->mirrorDab(direction, &dab);
+        });
+
+    for (auto it = rects.begin(); it != rects.end(); ++it) {
+        gc->mirrorRect(direction, &(*it));
+    }
+
+    QtConcurrent::blockingMap(rects,
+        [gc, dabs] (const QRect &rc) {
+             KisPainter painter(gc->device());
+             painter.bltFixed(rc, dabs);
+        });
+}
+
+QVector<QRect> renderMirrorDabs(KisPainter *gc,
+                                QList<KisRenderedDab> &dabs,
+                                QVector<QRect> &rects)
+{
+    QVector<QRect> dirtyRects;
+
+    if (gc->hasHorizontalMirroring()) {
+        renderSingleMirrorDabsPack(Qt::Horizontal, gc, dabs, rects);
+        dirtyRects << rects;
+    }
+
+    if (gc->hasVerticalMirroring()) {
+        renderSingleMirrorDabsPack(Qt::Vertical, gc, dabs, rects);
+        dirtyRects << rects;
+    }
+
+    if (gc->hasHorizontalMirroring() && gc->hasVerticalMirroring()) {
+        renderSingleMirrorDabsPack(Qt::Horizontal, gc, dabs, rects);
+        dirtyRects << rects;
+    }
+
+    return dirtyRects;
+}
+
+
+QVector<QRect> renderMirrorDabs(KisPainter *gc,
+                                QList<KisRenderedDab> &dabs,
+                                QVector<QRect> &rects,
+                                bool doCloneDabDevices)
+{
+    QVector<QRect> dirtyRects;
+
+    if (doCloneDabDevices) {
+
+        // TODO: fix this code to not to copy-mirror dabs that are shared
+        //       between several dabs. Threre are a few troubles in implementing
+        //       that:
+        //           1) Shared dab devices should be mirrored oinly once
+        //           2) Shared dab object's offsets should be still mirrored separately
+
+        // For now we just clone everything
+
+        for (auto it = dabs.begin(); it != dabs.end(); ++it) {
+            it->device = new KisFixedPaintDevice(*it->device);
+        }
+#if 0
+        KisFixedPaintDeviceSP lastOriginalDevice;
+        KisFixedPaintDeviceSP lastClonedDevice;
+
+        for (auto it = dabs.begin(); it != dabs.end(); ++it) {
+            if (!lastOriginalDevice || lastOriginalDevice != it->device) {
+                lastOriginalDevice = it->device;
+                lastClonedDevice = new KisFixedPaintDevice(*lastOriginalDevice);
+
+                it->device = lastClonedDevice;
+                dabsToMirror << &(*it);
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_BREAK(lastClonedDevice);
+                it->device = lastClonedDevice;
+            }
+        }
+#endif
+
+    }
+
+    dirtyRects = renderMirrorDabs(gc, dabs, rects);
+
+    return dirtyRects;
+}
+
 int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 {
     if (forceLastUpdate) {
@@ -160,6 +251,7 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
     QList<KisRenderedDab> dabsQueue = m_dabExecutor->takeReadyDabs();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!dabsQueue.isEmpty(), m_currentUpdatePeriod);
 
+    // TODO: instead of splitting the total rect, approximate needed rects only
     QRect totalRect;
     Q_FOREACH (const KisRenderedDab &dab, dabsQueue) {
         totalRect |= dab.realBounds();
@@ -176,13 +268,17 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 
     //ENTER_FUNCTION() << ppVar(idealPatchSize) << ppVar(rects.size()) << ppVar(dabsQueue.size());
 
+    QVector<QRect> allDirtyRects = rects;
+
     QtConcurrent::blockingMap(rects,
         [gc, dabsQueue] (const QRect &rc) {
              KisPainter painter(gc->device());
              painter.bltFixed(rc, dabsQueue);
         });
 
-    Q_FOREACH(const QRect &rc, rects) {
+    allDirtyRects << renderMirrorDabs(gc, dabsQueue, rects, !m_dabExecutor->dabsHaveSeparateOriginal());
+
+    Q_FOREACH(const QRect &rc, allDirtyRects) {
         painter()->addDirtyRect(rc);
     }
 

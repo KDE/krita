@@ -41,6 +41,8 @@ public:
                                 /* out */
                                 KisDabCacheUtils::DabGenerationInfo *di,
                                 bool *shouldUseCache) = 0;
+
+        virtual bool hasSeparateOriginal(KisDabCacheUtils::DabRenderingResources *resources) const = 0;
     };
 
 
@@ -62,6 +64,7 @@ public:
     KisFixedPaintDeviceSP fetchCachedPaintDevce();
 
     int averageExecutionTime() const;
+    bool dabsHaveSeparateOriginal() const;
 
     int testingGetQueueSize() const;
 

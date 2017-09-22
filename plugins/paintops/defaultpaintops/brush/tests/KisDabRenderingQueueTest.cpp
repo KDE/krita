@@ -52,6 +52,11 @@ struct SurrogateCacheInterface : public KisDabRenderingQueue::CacheInterface
         di->info = request.info;
     }
 
+    bool hasSeparateOriginal(KisDabCacheUtils::DabRenderingResources *resources) const override {
+        Q_UNUSED(resources);
+        return typeOverride == KisDabRenderingJob::Postprocess;
+    }
+
     KisDabRenderingJob::JobType typeOverride = KisDabRenderingJob::Dab;
 };
 

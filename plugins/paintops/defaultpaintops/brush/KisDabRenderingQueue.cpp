@@ -47,12 +47,12 @@ struct KisDabRenderingQueue::Private
     };
 
     struct DumbCacheInterface : public CacheInterface {
-        virtual void getDabType(bool hasDabInCache,
+        void getDabType(bool hasDabInCache,
                                 KisDabCacheUtils::DabRenderingResources *resources,
                                 const KisDabCacheUtils::DabRequestInfo &request,
                                 /* out */
                                 KisDabCacheUtils::DabGenerationInfo *di,
-                                bool *shouldUseCache)
+                                bool *shouldUseCache) override
         {
             Q_UNUSED(hasDabInCache);
             Q_UNUSED(resources);
@@ -60,6 +60,12 @@ struct KisDabRenderingQueue::Private
 
             di->needsPostprocessing = false;
             *shouldUseCache = false;
+        }
+
+        bool hasSeparateOriginal(KisDabCacheUtils::DabRenderingResources *resources) const override
+        {
+            Q_UNUSED(resources);
+            return false;
         }
 
     };
@@ -372,6 +378,27 @@ int KisDabRenderingQueue::averageExecutionTime() const
 {
     using namespace boost::accumulators;
     return rolling_mean(m_d->avgExecutionTime);
+}
+
+bool KisDabRenderingQueue::dabsHaveSeparateOriginal() const
+{
+    QMutexLocker l(&m_d->mutex);
+
+    KisDabCacheUtils::DabRenderingResources *resources = 0;
+
+    // fetch/create a temporary resources object that
+    // will be returned to the cache immediately
+    if (!m_d->cachedResources.isEmpty()) {
+        resources = m_d->cachedResources.takeLast();
+    } else {
+        resources = m_d->resourcesFactory();
+    }
+
+    bool result = m_d->cacheInterface->hasSeparateOriginal(resources);
+
+    m_d->cachedResources << resources;
+
+    return result;
 }
 
 int KisDabRenderingQueue::testingGetQueueSize() const

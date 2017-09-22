@@ -85,6 +85,11 @@ int KisDabRenderingExecutor::averageDabRenderingTime() const
     return m_d->renderingQueue->averageExecutionTime();
 }
 
+bool KisDabRenderingExecutor::dabsHaveSeparateOriginal() const
+{
+    return m_d->renderingQueue->dabsHaveSeparateOriginal();
+}
+
 void KisDabRenderingExecutor::waitForDone()
 {
     m_d->sharedThreadPool->waitForDone();

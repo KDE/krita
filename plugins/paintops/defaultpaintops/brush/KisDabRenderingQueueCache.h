@@ -43,6 +43,8 @@ public:
                     KisDabCacheUtils::DabGenerationInfo *di,
                     bool *shouldUseCache) override;
 
+    bool hasSeparateOriginal(KisDabCacheUtils::DabRenderingResources *resources) const override;
+
 private:
     struct Private;
     QScopedPointer<Private> m_d;

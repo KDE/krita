@@ -62,6 +62,7 @@
 #include <KoColorSpaceMaths.h>
 #include "kis_lod_transform.h"
 #include "kis_algebra_2d.h"
+#include "krita_utils.h"
 
 
 
@@ -2641,14 +2642,19 @@ void KisPainter::setMirrorInformation(const QPointF& axesCenter, bool mirrorHori
     d->mirrorVertically = mirrorVertically;
 }
 
-void KisPainter::copyMirrorInformation(KisPainter* painter)
-{
-    painter->setMirrorInformation(d->axesCenter, d->mirrorHorizontally, d->mirrorVertically);
-}
-
 bool KisPainter::hasMirroring() const
 {
     return d->mirrorHorizontally || d->mirrorVertically;
+}
+
+bool KisPainter::hasHorizontalMirroring() const
+{
+    return d->mirrorHorizontally;
+}
+
+bool KisPainter::hasVerticalMirroring() const
+{
+    return d->mirrorVertically;
 }
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
@@ -2723,7 +2729,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
     int y = rc.topLeft().y();
 
     KisLodTransform t(d->device);
-    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
     int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
@@ -2754,7 +2760,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedP
     int y = rc.topLeft().y();
 
     KisLodTransform t(d->device);
-    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
     int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
@@ -2819,7 +2825,7 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
     int y = rc.topLeft().y();
 
     KisLodTransform t(d->device);
-    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
     int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
@@ -2867,3 +2873,18 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
     }
 }
 
+void KisPainter::mirrorRect(Qt::Orientation direction, QRect *rc) const
+{
+    KisLodTransform t(d->device);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+
+    KritaUtils::mirrorRect(direction, effectiveAxesCenter, rc);
+}
+
+void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
+{
+    KisLodTransform t(d->device);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+
+    KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
+}

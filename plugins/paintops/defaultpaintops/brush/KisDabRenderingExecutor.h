@@ -49,6 +49,7 @@ public:
     bool hasPreparedDabs() const;
 
     int averageDabRenderingTime() const; // usecs
+    bool dabsHaveSeparateOriginal() const;
 
     void waitForDone();
 

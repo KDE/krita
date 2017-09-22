@@ -100,6 +100,13 @@ struct Q_DECL_HIDDEN KisPainter::Private {
                      const QList<ChunkDescriptor> &chunks,
                      const KoColorSpace *srcColorSpace, KoCompositeOp::ParameterInfo &localParamInfo);
 
+    void applyChunksWithSelection(int x, int y, int width, int height,
+                                  KisRandomAccessorSP dstIt,
+                                  KisRandomConstAccessorSP maskIt,
+                                  const QList<ChunkDescriptor> &chunks,
+                                  const KoColorSpace *srcColorSpace,
+                                  KoCompositeOp::ParameterInfo &localParamInfo);
+
 };
 
 #endif // KISPAINTERPRIVATE_H

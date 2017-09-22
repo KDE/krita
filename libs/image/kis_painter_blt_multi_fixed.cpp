@@ -162,11 +162,84 @@ void KisPainter::Private::applyChunks(int x, int y, int width, int height,
 
 }
 
+void KisPainter::Private::applyChunksWithSelection(int x, int y, int width, int height,
+                                                   KisRandomAccessorSP dstIt,
+                                                   KisRandomConstAccessorSP maskIt,
+                                                   const QList<ChunkDescriptor> &chunks,
+                                                   const KoColorSpace *srcColorSpace,
+                                                   KoCompositeOp::ParameterInfo &localParamInfo)
+{
+    const int srcPixelSize = srcColorSpace->pixelSize();
+    QList<ChunkDescriptor> savedChunks = chunks;
 
-void KisPainter::bltFixed(const QRect &rc, const QList<KisRenderedDab> allSrcDevices)
+    qint32 dstY = y;
+    qint32 rowsRemaining = height;
+
+    while (rowsRemaining > 0) {
+        qint32 dstX = x;
+
+        qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
+        qint32 numContiguousMaskRows = maskIt->numContiguousRows(dstY);
+        qint32 rows = qMin(rowsRemaining, qMin(numContiguousDstRows, numContiguousMaskRows));
+
+        qint32 columnsRemaining = width;
+
+        QList<ChunkDescriptor> rowChunks = savedChunks;
+
+        while (columnsRemaining > 0) {
+
+            qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
+            qint32 numContiguousMaskColumns = maskIt->numContiguousColumns(dstX);
+            qint32 columns = qMin(columnsRemaining, qMin(numContiguousDstColumns, numContiguousMaskColumns));
+
+            qint32 dstRowStride = dstIt->rowStride(dstX, dstY);
+            qint32 maskRowStride = maskIt->rowStride(dstX, dstY);
+            dstIt->moveTo(dstX, dstY);
+            maskIt->moveTo(dstX, dstY);
+
+            localParamInfo.dstRowStart   = dstIt->rawData();
+            localParamInfo.dstRowStride  = dstRowStride;
+            localParamInfo.maskRowStart  = maskIt->rawDataConst();
+            localParamInfo.maskRowStride = maskRowStride;
+            localParamInfo.rows          = rows;
+            localParamInfo.cols          = columns;
+
+            const int srcColumnStep = srcPixelSize * columns;
+
+            for (auto it = rowChunks.begin(); it != rowChunks.end(); ++it) {
+                localParamInfo.srcRowStart   = it->ptr;
+                localParamInfo.srcRowStride  = it->rowStride;
+                localParamInfo.setOpacityAndAverage(it->opacity, it->averageOpacity);
+                localParamInfo.flow = it->flow;
+                colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
+
+                it->ptr += srcColumnStep;
+            }
+
+            dstX += columns;
+            columnsRemaining -= columns;
+        }
+
+        for (auto it = savedChunks.begin(); it != savedChunks.end(); ++it) {
+            it->ptr += it->rowStride * rows;
+        }
+
+        dstY += rows;
+        rowsRemaining -= rows;
+    }
+}
+
+
+void KisPainter::bltFixed(const QRect &applyRect, const QList<KisRenderedDab> allSrcDevices)
 {
     const KoColorSpace *srcColorSpace = 0;
     QList<KisRenderedDab> devices;
+    QRect rc = applyRect;
+
+    if (d->selection) {
+        rc &= d->selection->selectedRect();
+    }
+
     QRect totalDevicesRect;
 
     Q_FOREACH (const KisRenderedDab &dab, allSrcDevices) {
@@ -182,10 +255,13 @@ void KisPainter::bltFixed(const QRect &rc, const QList<KisRenderedDab> allSrcDev
         }
     }
 
-    if (devices.isEmpty() || !totalDevicesRect.intersects(rc)) return;
+    rc &= totalDevicesRect;
+
+    if (devices.isEmpty() || rc.isEmpty()) return;
 
     KoCompositeOp::ParameterInfo localParamInfo = d->paramInfo;
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(rc.left(), rc.top());
+    KisRandomConstAccessorSP maskIt = d->selection ? d->selection->projection()->createRandomConstAccessorNG(rc.left(), rc.top()) : 0;
 
     int row = rc.top();
     QList<KisRenderedDab> rowDevices;
@@ -206,12 +282,22 @@ void KisPainter::bltFixed(const QRect &rc, const QList<KisRenderedDab> allSrcDev
                                  &chunks, &numContiguousColumnsInDevices);
 
                 if (!chunks.isEmpty()) {
-                    d->applyChunks(column, row,
-                                   numContiguousColumnsInDevices, numContiguousRowsInDevices,
-                                   dstIt,
-                                   chunks,
-                                   srcColorSpace,
-                                   localParamInfo);
+                    if (!maskIt) {
+                        d->applyChunks(column, row,
+                                       numContiguousColumnsInDevices, numContiguousRowsInDevices,
+                                       dstIt,
+                                       chunks,
+                                       srcColorSpace,
+                                       localParamInfo);
+                    } else {
+                        d->applyChunksWithSelection(column, row,
+                                                    numContiguousColumnsInDevices, numContiguousRowsInDevices,
+                                                    dstIt,
+                                                    maskIt,
+                                                    chunks,
+                                                    srcColorSpace,
+                                                    localParamInfo);
+                    }
                 }
 
                 column += numContiguousColumnsInDevices;

@@ -519,7 +519,7 @@ void KisPainterTest::benchmarkBitBltOldData()
 #include "kis_paint_device_debug_utils.h"
 #include "KisRenderedDab.h"
 
-void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false)
+void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false, bool useSelection = false)
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
@@ -550,23 +550,38 @@ void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false)
         devicesRect |= rc;
     }
 
+    KisSelectionSP selection;
+
+    if (useSelection) {
+        selection = new KisSelection();
+        selection->pixelSelection()->select(kisGrowRect(devicesRect, -7));
+    }
+
     const QString opacityPostfix = varyOpacity ? "_varyop" : "";
+    const QString selectionPostfix = useSelection ? "_sel" : "";
+
     const QRect fullRect = kisGrowRect(devicesRect, 10);
 
     {
         KisPainter painter(dst);
+        painter.setSelection(selection);
         painter.bltFixed(fullRect, devices);
         painter.end();
         QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
                                       "kispainter_test",
                                       "massive_bitblt",
-                                      QString("full_update_%1%2").arg(numRects).arg(opacityPostfix)));
+                                      QString("full_update_%1%2%3")
+                                          .arg(numRects)
+                                          .arg(opacityPostfix)
+                                          .arg(selectionPostfix)));
     }
 
     dst->clear();
 
     {
         KisPainter painter(dst);
+        painter.setSelection(selection);
+
         for (int i = fullRect.x(); i <= fullRect.center().x(); i += 10) {
             const QRect rc(i, fullRect.y(), 10, fullRect.height());
             painter.bltFixed(rc, devices);
@@ -577,7 +592,10 @@ void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false)
         QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
                                       "kispainter_test",
                                       "massive_bitblt",
-                                      QString("partial_update_%1%2").arg(numRects).arg(opacityPostfix)));
+                                      QString("partial_update_%1%2%3")
+                                          .arg(numRects)
+                                          .arg(opacityPostfix)
+                                          .arg(selectionPostfix)));
 
     }
 }
@@ -595,6 +613,11 @@ void KisPainterTest::testMassiveBltFixedMultiTile()
 void KisPainterTest::testMassiveBltFixedMultiTileWithOpacity()
 {
     testMassiveBltFixedImpl(6, true);
+}
+
+void KisPainterTest::testMassiveBltFixedMultiTileWithSelection()
+{
+    testMassiveBltFixedImpl(6, false, true);
 }
 
 void KisPainterTest::testMassiveBltFixedCornerCases()

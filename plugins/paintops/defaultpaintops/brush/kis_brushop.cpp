@@ -162,8 +162,7 @@ void renderSingleMirrorDabsPack(Qt::Orientation direction, KisPainter *gc,
 
     QtConcurrent::blockingMap(rects,
         [gc, dabs] (const QRect &rc) {
-             KisPainter painter(gc->device());
-             painter.bltFixed(rc, dabs);
+             gc->bltFixed(rc, dabs);
         });
 }
 
@@ -272,8 +271,7 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 
     QtConcurrent::blockingMap(rects,
         [gc, dabsQueue] (const QRect &rc) {
-             KisPainter painter(gc->device());
-             painter.bltFixed(rc, dabsQueue);
+             gc->bltFixed(rc, dabsQueue);
         });
 
     allDirtyRects << renderMirrorDabs(gc, dabsQueue, rects, !m_dabExecutor->dabsHaveSeparateOriginal());

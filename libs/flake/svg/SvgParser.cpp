@@ -68,6 +68,64 @@
 
 #include "kis_debug.h"
 #include "kis_global.h"
+#include <algorithm>
+
+
+struct SvgParser::DeferredUseStore {
+    struct El {
+        El(const KoXmlElement* ue, const QString& key) :
+            m_useElement(ue), m_key(key) {
+        }
+        const KoXmlElement* m_useElement;
+        QString m_key;
+    };
+    DeferredUseStore(SvgParser* p) :
+        m_parse(p) {
+    }
+
+    void add(const KoXmlElement* useE, const QString& key) {
+        m_uses.push_back(El(useE, key));
+    }
+    bool empty() const {
+        return m_uses.empty();
+    }
+
+    void checkPendingUse(const KoXmlElement &b, QList<KoShape*>& shapes) {
+        KoShape* shape = 0;
+        const QString id = b.attribute("id");
+
+        if (id.isEmpty())
+            return;
+
+        // qDebug() << "Checking id: " << id;
+        auto i = std::partition(m_uses.begin(), m_uses.end(),
+                                [&](const El& e) -> bool {return e.m_key != id;});
+
+        while (i != m_uses.end()) {
+            const El& el = m_uses.back();
+            if (m_parse->m_context.hasDefinition(el.m_key)) {
+                // qDebug() << "Found pending use for id: " << el.m_key;
+                shape = m_parse->resolveUse(*(el.m_useElement), el.m_key);
+                if (shape) {
+                    shapes.append(shape);
+                }
+            }
+            m_uses.pop_back();
+        }
+    }
+
+    ~DeferredUseStore() {
+        while (!m_uses.empty()) {
+            const El& el = m_uses.back();
+            qDebug()
+                    << "WARNING: could not find path in <use xlink:href=\"#xxxxx\" expression. Losing data here. Key:"
+                    << el.m_key;
+            m_uses.pop_back();
+        }
+    }
+    SvgParser* m_parse;
+    std::vector<El> m_uses;
+};
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
@@ -99,6 +157,7 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
 {
     KIS_ASSERT(!m_context.currentGC());
     m_context.pushGraphicsContext();
+    m_context.currentGC()->isResolutionFrame = true;
     m_context.currentGC()->pixelsPerInch = pixelsPerInch;
 
     const qreal scale = 72.0 / pixelsPerInch;
@@ -1129,28 +1188,39 @@ void SvgParser::applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginal
     shape->setClipMask(clipMask);
 }
 
-KoShape* SvgParser::parseUse(const KoXmlElement &e)
+KoShape* SvgParser::parseUse(const KoXmlElement &e, DeferredUseStore* deferredUseStore)
+{
+    QString href = e.attribute("xlink:href");
+    if (href.isEmpty())
+        return 0;
+
+    QString key = href.mid(1);
+    const bool gotDef = m_context.hasDefinition(key);
+    if (gotDef) {
+        return resolveUse(e, key);
+    }
+    if (!gotDef && deferredUseStore) {
+        deferredUseStore->add(&e, key);
+        return 0;
+    }
+    qDebug() << "WARNING: Did not find reference for svg 'use' element. Skipping. Id: "
+             << key;
+    return 0;
+}
+
+KoShape* SvgParser::resolveUse(const KoXmlElement &e, const QString& key)
 {
     KoShape *result = 0;
 
-    QString id = e.attribute("xlink:href");
-    if (!id.isEmpty()) {
+    SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
 
-        QString key = id.mid(1);
-        if (m_context.hasDefinition(key)) {
+    // TODO: parse 'width' and 'height' as well
+    gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
 
-            SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
+    const KoXmlElement &referencedElement = m_context.definition(key);
+    result = parseGroup(e, referencedElement);
 
-            // TODO: parse 'width' and 'hight' as well
-            gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
-
-            const KoXmlElement &referencedElement = m_context.definition(key);
-            result = parseGroup(e, referencedElement);
-
-            m_context.popGraphicsContext();
-        }
-    }
-
+    m_context.popGraphicsContext();
     return result;
 }
 
@@ -1294,7 +1364,7 @@ KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overri
     if (!overrideChildrenFrom.isNull()) {
         // we upload styles from both: <use> and <defs>
         uploadStyleToContext(overrideChildrenFrom);
-        childShapes = parseSingleElement(overrideChildrenFrom);
+        childShapes = parseSingleElement(overrideChildrenFrom, 0);
     } else {
         childShapes = parseContainer(b);
     }
@@ -1318,6 +1388,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
     // are we parsing a switch container
     bool isSwitch = e.tagName() == "switch";
 
+    DeferredUseStore deferredUseStore(this);
+
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement b = n.toElement();
         if (b.isNull())
@@ -1339,23 +1411,25 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             }
         }
 
-        QList<KoShape*> currentShapes = parseSingleElement(b);
+        QList<KoShape*> currentShapes = parseSingleElement(b, &deferredUseStore);
         shapes.append(currentShapes);
 
         // if we are parsing a switch, stop after the first supported element
         if (isSwitch && !currentShapes.isEmpty())
             break;
     }
-
     return shapes;
 }
 
-QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
+QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b, DeferredUseStore* deferredUseStore)
 {
     QList<KoShape*> shapes;
 
     // save definition for later instantiation with 'use'
     m_context.addDefinition(b);
+    if (deferredUseStore) {
+        deferredUseStore->checkPendingUse(b, shapes);
+    }
 
     if (b.tagName() == "svg") {
         shapes += parseSvg(b);
@@ -1404,7 +1478,10 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         if (shape)
             shapes.append(shape);
     } else if (b.tagName() == "use") {
-        shapes += parseUse(b);
+        KoShape* s = parseUse(b, deferredUseStore);
+        if (s) {
+            shapes += s;
+        }
     } else if (b.tagName() == "color-profile") {
         m_context.parseProfile(b);
     } else {

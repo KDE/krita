@@ -986,7 +986,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first().remove("*.");
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first();
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }

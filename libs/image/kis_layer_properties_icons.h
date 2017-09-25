@@ -43,6 +43,7 @@ public:
     static const KoID colorizeNeedsUpdate;
     static const KoID colorizeEditKeyStrokes;
     static const KoID colorizeShowColoring;
+    static const KoID openFileLayerFile;
 
     static KisLayerPropertiesIcons* instance();
 

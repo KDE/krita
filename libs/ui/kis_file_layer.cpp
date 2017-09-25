@@ -28,6 +28,10 @@
 #include "kis_types.h"
 #include "commands_new/kis_node_move_command2.h"
 #include "kis_default_bounds.h"
+#include "kis_layer_properties_icons.h"
+#include <KisPart.h>
+#include <KisDocument.h>
+#include <QDir>
 
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
@@ -97,10 +101,21 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
     return 0;
 }
 
+void KisFileLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
+{
+    KisBaseNode::setSectionModelProperties(properties);
+    Q_FOREACH (const KisBaseNode::Property &property, properties) {
+        if (property.id== KisLayerPropertiesIcons::openFileLayerFile.id()) {
+            openFile();
+        }
+    }
+}
+
 KisBaseNode::PropertyList KisFileLayer::sectionModelProperties() const
 {
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     l << KisBaseNode::Property(KoID("sourcefile", i18n("File")), m_filename);
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::openFileLayerFile, QFileInfo(path()).exists());
     return l;
 }
 
@@ -124,7 +139,20 @@ QString KisFileLayer::path() const
         return m_filename;
     }
     else {
-        return m_basePath + '/' + m_filename;
+        return QDir(m_basePath).filePath(QDir::cleanPath(m_filename));;
+    }
+}
+
+void KisFileLayer::openFile() const
+{
+    bool fileAlreadyOpen = false;
+    Q_FOREACH (KisDocument *doc, KisPart::instance()->documents()) {
+        if (doc->url().toLocalFile()==path()){
+            fileAlreadyOpen = true;
+        }
+    }
+    if (!fileAlreadyOpen) {
+        KisPart::instance()->openExistingFile(QUrl::fromLocalFile(QFileInfo(path()).absoluteFilePath()));
     }
 }
 

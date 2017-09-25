@@ -330,8 +330,6 @@ KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const Kis
     ValueComponents components;
 
     if (m_useCurve) {
-        QVector<KisDynamicSensorSP> additiveSensors;
-
         Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
             if (s->isActive()) {
                 if (s->isAdditive()) {

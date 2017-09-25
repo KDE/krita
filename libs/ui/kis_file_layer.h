@@ -52,11 +52,13 @@ public:
 
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
     KisBaseNode::PropertyList sectionModelProperties() const override;
 
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;
     QString path() const;
+    void openFile() const;
 
     ScalingMethod scalingMethod() const;
 

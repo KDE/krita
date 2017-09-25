@@ -119,7 +119,7 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
     QString defaultFilter;
 
     if (!defaultMimeType.isEmpty()) {
-        QString suffix = KisMimeDatabase::suffixesForMimeType(defaultMimeType).first().remove("*.");
+        QString suffix = KisMimeDatabase::suffixesForMimeType(defaultMimeType).first();
 
         if (!d->proposedFileName.isEmpty()) {
             d->proposedFileName = QFileInfo(d->proposedFileName).baseName() + "." + suffix;

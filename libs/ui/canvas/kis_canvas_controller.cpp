@@ -101,15 +101,23 @@ KisCanvasController::~KisCanvasController()
 
 void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 {
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(kritaCanvas);
+    if (canvas) {
+        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(kritaCanvas);
 
-    m_d->coordinatesConverter =
-        const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
+        m_d->coordinatesConverter =
+            const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
+
+        m_d->paintOpTransformationConnector =
+            new KisPaintopTransformationConnector(kritaCanvas, this);
+    } else {
+        m_d->coordinatesConverter = 0;
+
+        delete m_d->paintOpTransformationConnector;
+        m_d->paintOpTransformationConnector = 0;
+    }
+
     KoCanvasControllerWidget::setCanvas(canvas);
-
-    m_d->paintOpTransformationConnector =
-        new KisPaintopTransformationConnector(kritaCanvas, this);
 }
 
 void KisCanvasController::changeCanvasWidget(QWidget *widget)

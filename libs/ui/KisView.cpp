@@ -265,9 +265,11 @@ KisView::~KisView()
 
         d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
     }
-    KoToolManager::instance()->removeCanvasController(&d->canvasController);
-    KisPart::instance()->removeView(this);
 
+    KoToolManager::instance()->removeCanvasController(&d->canvasController);
+    d->canvasController.setCanvas(0);
+
+    KisPart::instance()->removeView(this);
     delete d;
 }
 

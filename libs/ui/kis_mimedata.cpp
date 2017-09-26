@@ -123,6 +123,16 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage)
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
 {
+    /**
+     * HACK ALERT:
+     *
+     * Sometimes Qt requests the data *after* destruction of Krita,
+     * we cannot load the nodes in that case, because we need signals
+     * and timers. So we just skip serializing.
+     */
+    if (!QApplication::instance()) return QVariant();
+
+
     Q_ASSERT(m_nodes.size() > 0);
 
     if (mimetype == "application/x-qt-image") {

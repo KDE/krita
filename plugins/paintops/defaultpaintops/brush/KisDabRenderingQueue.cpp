@@ -376,6 +376,8 @@ KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
 
 int KisDabRenderingQueue::averageExecutionTime() const
 {
+    QMutexLocker l(&m_d->mutex);
+
     using namespace boost::accumulators;
     return rolling_mean(m_d->avgExecutionTime);
 }
@@ -403,6 +405,8 @@ bool KisDabRenderingQueue::dabsHaveSeparateOriginal() const
 
 int KisDabRenderingQueue::testingGetQueueSize() const
 {
+    QMutexLocker l(&m_d->mutex);
+
     return m_d->jobs.size();
 }
 

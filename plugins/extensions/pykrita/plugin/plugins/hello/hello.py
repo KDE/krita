@@ -66,6 +66,7 @@ class HelloDocker(DockWidget):
         Override canvasChanged from :class:`DockWidget`.
         This gets called when the canvas changes.
         You can also access the active canvas via :func:`DockWidget.canvas`
+        Parameter `canvas` can be null if the last document is closed
         """
         self._label.setText("HelloDocker: canvas changed")
 

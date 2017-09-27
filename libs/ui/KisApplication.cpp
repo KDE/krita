@@ -282,6 +282,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
+
+    // Indicate that it is now safe for users of KoResourcePaths to load resources
+    KoResourcePaths::setReady();
 }
 
 void KisApplication::loadResources()
@@ -417,6 +420,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     setSplashScreenLoadingText(i18n("Adding resource types"));
     processEvents();
     addResourceTypes();
+
+    // now we're set up, and the LcmsEnginePlugin will have access to resource paths for color management,
+    // we can finally initialize KoColor.
+    KoColor::init();
 
     // Load all resources and tags before the plugins do that
     loadResources();

@@ -24,7 +24,10 @@
 #include <QMetaType>
 #include "kritapigment_export.h"
 #include "KoColorConversionTransformation.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoColorSpaceTraits.h"
 #include <boost/operators.hpp>
+#include "kis_assert.h"
 
 
 class QDomDocument;
@@ -41,10 +44,13 @@ class KRITAPIGMENT_EXPORT KoColor : public boost::equality_comparable<KoColor>
 {
 
 public:
-    /// Create an empty KoColor. It will be valid, but also black and transparent
-    KoColor();
+    static void init();
 
-    ~KoColor();
+    /// Create an empty KoColor. It will be valid, but also black and transparent
+    KoColor() : d(s_prefab) {
+        // assert that KoColor::init was called and everything is set up properly.
+        KIS_ASSERT_X(d.colorSpace != nullptr, "KoColor::KoColor()", "KoColor not initialized yet.");
+    }
 
     /// Create a null KoColor. It will be valid, but all channels will be set to 0
     explicit KoColor(const KoColorSpace * colorSpace);
@@ -59,19 +65,36 @@ public:
     KoColor(const KoColor &src, const KoColorSpace * colorSpace);
 
     /// Copy constructor -- deep copies the colors.
-    KoColor(const KoColor & rhs);
+    KoColor(const KoColor & rhs) : d(rhs.d) {
+        assertPermanentColorspace();
+    }
 
     /**
      * assignment operator to copy the data from the param color into this one.
      * @param other the color we are going to copy
      * @return this color
      */
-    KoColor &operator=(const KoColor &other);
+    KoColor &operator=(const KoColor &rhs) {
+        if (&rhs == this) {
+            return *this;
+        }
 
-    bool operator==(const KoColor &other) const;
+        d = rhs.d;
+        assertPermanentColorspace();
+
+        return *this;
+    }
+
+    bool operator==(const KoColor &other) const {
+        if (*colorSpace() != *other.colorSpace())
+            return false;
+        return memcmp(d.data, other.d.data, d.size) == 0;
+    }
 
     /// return the current colorSpace
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const {
+        return d.colorSpace;
+    }
 
     /// return the current profile
     const KoColorProfile *profile() const;
@@ -112,21 +135,25 @@ public:
     qreal opacityF() const;
 
     /// Convenient function for converting from a QColor
-    void fromQColor(const QColor& c) const;
+    void fromQColor(const QColor& c);
 
     /**
      * @return the buffer associated with this color object to be used with the
      *         transformation object created by the color space of this KoColor
      *         or to copy to a different buffer from the same color space
      */
-    quint8 * data();
+    quint8 * data() {
+        return d.data;
+    }
 
     /**
      * @return the buffer associated with this color object to be used with the
      *         transformation object created by the color space of this KoColor
      *         or to copy to a different buffer from the same color space
      */
-    const quint8 * data() const;
+    const quint8 * data() const {
+        return d.data;
+    }
 
     /**
      * Serialize this color following Create's swatch color specification available
@@ -184,8 +211,39 @@ public:
 #endif
 
 private:
-    class Private;
-    Private * const d;
+    void assertPermanentColorspace() {
+#ifndef NODEBUG
+        if (d.colorSpace) {
+            // here we want to do a check on pointer, since d-colorSpace is supposed to already be a permanent one
+            Q_ASSERT(d.colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d.colorSpace));
+        }
+#endif
+    }
+
+    class Q_DECL_HIDDEN Private
+    {
+        public:
+        Private() : colorSpace(nullptr) {}
+
+        Private(const Private &rhs) {
+            *this = rhs;
+        }
+
+        Private &operator=(const Private &rhs) {
+            colorSpace = rhs.colorSpace;
+            size = rhs.size;
+            memcpy(data, rhs.data, size);
+            return *this;
+        }
+
+        const KoColorSpace * colorSpace;
+        quint8 data[MAX_PIXEL_SIZE];
+        quint8 size;
+    };
+
+    Private d;
+
+    static Private s_prefab;
 };
 
 Q_DECLARE_METATYPE(KoColor)

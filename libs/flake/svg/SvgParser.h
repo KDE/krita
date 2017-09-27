@@ -50,6 +50,8 @@ class KoSvgTextShape;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
+    class DeferredUseStore;
+
 public:
     explicit SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
@@ -93,10 +95,12 @@ protected:
     QList<KoShape*> parseContainer(const KoXmlElement &, bool parseTextNodes = false);
 
     /// XXX
-    QList<KoShape*> parseSingleElement(const KoXmlElement &b);
+    QList<KoShape*> parseSingleElement(const KoXmlElement &b, DeferredUseStore* deferredUseStore = 0);
 
     /// Parses a use element, returning a list of child shapes
-    KoShape* parseUse(const KoXmlElement &);
+    KoShape* parseUse(const KoXmlElement &, DeferredUseStore* deferredUseStore);
+
+    KoShape* resolveUse(const KoXmlElement &e, const QString& key);
 
     /// Parses a gradient element
     SvgGradientHelper *parseGradient(const KoXmlElement &);

@@ -42,6 +42,7 @@
 #include "kis_icon_utils.h"
 #include "kis_layer_properties_icons.h"
 #include "krita_utils.h"
+#include "kis_config_notifier.h"
 
 typedef KisBaseNode::Property* OptionalProperty;
 
@@ -56,6 +57,9 @@ public:
     QPointer<QWidget> edit;
     KisNodeToolTip tip;
 
+    QColor checkersColor1;
+    QColor checkersColor2;
+
     QList<OptionalProperty> rightmostProperties(const KisBaseNode::PropertyList &props) const;
     int numProperties(const QModelIndex &index) const;
     OptionalProperty findProperty(KisBaseNode::PropertyList &props, const OptionalProperty &refProp) const;
@@ -64,19 +68,14 @@ public:
     void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, bool controlPressed, const QModelIndex &index);
 };
 
-void KisNodeDelegate::slotOnCloseEditor()
-{
-    KisPart::instance()->currentInputManager()->slotFocusOnEnter(true);
-}
-
 KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
     , d(new Private)
 {
     d->view = view;
     QApplication::instance()->installEventFilter(this);
-
-    connect(this, SIGNAL(closeEditor(QWidget*)), this, SLOT(slotOnCloseEditor()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 }
 
 KisNodeDelegate::~KisNodeDelegate()
@@ -283,16 +282,14 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     offset.setY((fitRect.height() - img.height()) / 2);
     offset += fitRect.topLeft();
 
-    KisConfig cfg;
-
     // paint in a checkerboard pattern behind the layer contents to represent transparent
     const int step = scm.thumbnailSize() / 6;
     QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
     QPainter gc(&checkers);
-    gc.fillRect(QRect(0, 0, step, step), cfg.checkersColor1());
-    gc.fillRect(QRect(step, 0, step, step), cfg.checkersColor2());
-    gc.fillRect(QRect(step, step, step, step), cfg.checkersColor1());
-    gc.fillRect(QRect(0, step, step, step), cfg.checkersColor2());
+    gc.fillRect(QRect(0, 0, step, step), d->checkersColor1);
+    gc.fillRect(QRect(step, 0, step, step), d->checkersColor2);
+    gc.fillRect(QRect(step, step, step, step), d->checkersColor1);
+    gc.fillRect(QRect(0, step, step, step), d->checkersColor2);
 
     QBrush brush(checkers);
     p->setBrushOrigin(offset);
@@ -475,7 +472,7 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
             const qreal oldOpacity = p->opacity(); // remember previous opacity
 
 
-            if (fullColor) {              
+            if (fullColor) {
                  p->setOpacity(1.0);
             }
             else {
@@ -733,7 +730,6 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
 
 QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
-    KisPart::instance()->currentInputManager()->slotFocusOnEnter(false);
     d->edit = new QLineEdit(parent);
     d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
     return d->edit;
@@ -802,6 +798,25 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
             }
         }
     } break;
+    case QEvent::ShortcutOverride : {
+        QLineEdit *edit = qobject_cast<QLineEdit*>(object);
+        if (edit && edit == d->edit){
+            auto* key = static_cast<QKeyEvent*>(event);
+            if (key->modifiers() == Qt::NoModifier){
+                switch (key->key()){
+                case Qt::Key_Escape:
+                case Qt::Key_Tab:
+                case Qt::Key_Backtab:
+                case Qt::Key_Return:
+                case Qt::Key_Enter:
+                    event->accept();
+                    return true;
+                default: break;
+                }
+            }
+        }
+
+    } break;
     case QEvent::FocusOut : {
         QLineEdit *edit = qobject_cast<QLineEdit*>(object);
         if (edit && edit == d->edit) {
@@ -869,4 +884,12 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
         }
         p->restore();
     }
+}
+
+void KisNodeDelegate::slotConfigChanged()
+{
+    KisConfig cfg;
+
+    d->checkersColor1 = cfg.checkersColor1();
+    d->checkersColor2 = cfg.checkersColor2();
 }

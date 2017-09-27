@@ -174,7 +174,7 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
     KoColorTransformation * colorTransformation = 0;
     if (colorSpace->colorModelId() != RGBAColorModelID)
     {
-        dbgKrita << "Unsupported color space for fast pixel tranformation to gmic pixel format" << colorSpace->id();
+        dbgKrita << "Unsupported color space for fast pixel transformation to gmic pixel format" << colorSpace->id();
         return 0;
     }
 
@@ -225,7 +225,7 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
         }
     }
     else {
-        dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel transformation to gmic pixel format";
         return 0;
     }
 
@@ -238,7 +238,7 @@ static KoColorTransformation* createTransformation(const KoColorSpace* colorSpac
     KoColorTransformation * colorTransformation = 0;
     if (colorSpace->colorModelId() != RGBAColorModelID)
     {
-        dbgKrita << "Unsupported color space for fast pixel tranformation to gmic pixel format" << colorSpace->id();
+        dbgKrita << "Unsupported color space for fast pixel transformation to gmic pixel format" << colorSpace->id();
         return 0;
     }
 
@@ -255,7 +255,7 @@ static KoColorTransformation* createTransformation(const KoColorSpace* colorSpac
     } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
         colorTransformation = new KisColorToFloatConvertor< quint8, KoBgrTraits < quint8 > >();
     } else {
-        dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel transformation to gmic pixel format";
         return 0;
     }
     return colorTransformation;
@@ -537,7 +537,7 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, gmic_i
 
 }
 
-// gmic assumes float rgba in 0.0 - 255.0, thus default value
+// gmic assumes float rgba in 0.0 - 255.0
 void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float> *gmicImage, QRect rc)
 {
     Q_ASSERT(!dev.isNull());
@@ -551,6 +551,8 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
     Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
+
+    KoColorTransformation *pixelToGmicPixelFormat = createTransformation(rgbaFloat32bitcolorSpace);
 
     int greenOffset = gmicImage->_width * gmicImage->_height;
     int blueOffset = greenOffset * 2;
@@ -571,11 +573,12 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
         int x = 0;
         while (x < rc.width())
         {
-            it->moveTo(x, y);
-            qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+            it->moveTo(rc.x() + x, rc.y() + y);
+            qint32 numContiguousColumns = qMin(it->numContiguousColumns(rc.x() + x), optimalBufferSize);
             numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
             colorSpace->convertPixelsTo(it->rawDataConst(), floatRGBApixel, rgbaFloat32bitcolorSpace, numContiguousColumns, renderingIntent, conversionFlags);
+            pixelToGmicPixelFormat->transform(floatRGBApixel, floatRGBApixel, numContiguousColumns);
 
             pos = y * gmicImage->_width + x;
             for (qint32 bx = 0; bx < numContiguousColumns; bx++)
@@ -591,6 +594,7 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
         }
     }
     delete [] floatRGBApixel;
+    delete pixelToGmicPixelFormat;
 }
 
 void KisQmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue)

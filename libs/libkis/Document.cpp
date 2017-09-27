@@ -48,6 +48,8 @@
 #include <kis_selection.h>
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
+#include <kis_guides_config.h>
+#include <kis_coordinates_converter.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -208,6 +210,7 @@ void Document::setDocumentInfo(const QString &document)
     d->document->documentInfo()->load(doc);
 }
 
+
 QString Document::fileName() const
 {
     if (!d->document) return QString::null;
@@ -233,7 +236,10 @@ void Document::setHeight(int value)
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    resizeImage(d->document->image()->width(), value);
+    resizeImage(d->document->image()->bounds().x(),
+                d->document->image()->bounds().y(),
+                d->document->image()->width(),
+                value);
 }
 
 
@@ -311,8 +317,50 @@ void Document::setWidth(int value)
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    resizeImage(value, d->document->image()->height());
+    resizeImage(d->document->image()->bounds().x(),
+                d->document->image()->bounds().y(),
+                value,
+                d->document->image()->height());
 }
+
+
+int Document::xOffset() const
+{
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+    return image->bounds().x();
+}
+
+void Document::setXOffset(int x)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    resizeImage(x,
+                d->document->image()->bounds().y(),
+                d->document->image()->width(),
+                d->document->image()->height());
+}
+
+
+int Document::yOffset() const
+{
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+    return image->bounds().y();
+}
+
+void Document::setYOffset(int y)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    resizeImage(d->document->image()->bounds().x(),
+                y,
+                d->document->image()->width(),
+                d->document->image()->height());
+}
+
 
 double Document::xRes() const
 {
@@ -384,9 +432,11 @@ void Document::crop(int x, int y, int w, int h)
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
 {
     if (!d->document) return false;
-    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename);
-    d->document->setOutputMimeType(mimeType.toLatin1());
-    return d->document->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration.configuration());
+
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QByteArray outputFormat = outputFormatString.toLatin1();
+
+    return d->document->exportDocumentSync(QUrl::fromLocalFile(filename), outputFormat, exportConfiguration.configuration());
 }
 
 void Document::flatten()
@@ -396,14 +446,17 @@ void Document::flatten()
     d->document->image()->flatten();
 }
 
-void Document::resizeImage(int w, int h)
+void Document::resizeImage(int x, int y, int w, int h)
 {
     if (!d->document) return;
     KisImageSP image = d->document->image();
     if (!image) return;
-    QRect rc = image->bounds();
+    QRect rc;
+    rc.setX(x);
+    rc.setY(y);
     rc.setWidth(w);
     rc.setHeight(h);
+
     image->resizeImage(rc);
 }
 
@@ -441,13 +494,23 @@ void Document::shearImage(double angleX, double angleY)
 bool Document::save()
 {
     if (!d->document) return false;
-    return d->document->save();
+    bool retval = d->document->save(true, 0);
+    d->document->waitForSavingToComplete();
+
+    return retval;
 }
 
 bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
-    return d->document->saveAs(QUrl::fromLocalFile(filename));
+
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QByteArray outputFormat = outputFormatString.toLatin1();
+
+    bool retval = d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);
+    d->document->waitForSavingToComplete();
+
+    return retval;
 }
 
 Node* Document::createNode(const QString &name, const QString &nodeType)
@@ -541,6 +604,94 @@ void Document::refreshProjection()
 {
     if (!d->document || !d->document->image()) return;
     d->document->image()->refreshGraph();
+}
+
+QList<qreal> Document::horizontalGuides() const
+{
+    QList<qreal> lines;
+    if (!d->document || !d->document->image()) return lines;
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform().inverted();
+    QList<qreal> untransformedLines = d->document->guidesConfig().horizontalGuideLines();
+    for (int i = 0; i< untransformedLines.size(); i++) {
+        qreal line = untransformedLines[i];
+        lines.append(transform.map(QPointF(line, line)).x());
+    }
+    return lines;
+}
+
+QList<qreal> Document::verticalGuides() const
+{
+    QList<qreal> lines;
+    if (!d->document || !d->document->image()) return lines;
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform().inverted();
+    QList<qreal> untransformedLines = d->document->guidesConfig().verticalGuideLines();
+    for (int i = 0; i< untransformedLines.size(); i++) {
+        qreal line = untransformedLines[i];
+        lines.append(transform.map(QPointF(line, line)).y());
+    }
+    return lines;
+}
+
+bool Document::guidesVisible() const
+{
+    return d->document->guidesConfig().lockGuides();
+}
+
+bool Document::guidesLocked() const
+{
+    return d->document->guidesConfig().showGuides();
+}
+
+void Document::setHorizontalGuides(const QList<qreal> &lines)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform();
+    QList<qreal> transformedLines;
+    for (int i = 0; i< lines.size(); i++) {
+        qreal line = lines[i];
+        transformedLines.append(transform.map(QPointF(line, line)).x());
+    }
+    config.setHorizontalGuideLines(transformedLines);
+    d->document->setGuidesConfig(config);
+}
+
+void Document::setVerticalGuides(const QList<qreal> &lines)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    KisCoordinatesConverter converter;
+    converter.setImage(d->document->image());
+    QTransform transform = converter.imageToDocumentTransform();
+    QList<qreal> transformedLines;
+    for (int i = 0; i< lines.size(); i++) {
+        qreal line = lines[i];
+        transformedLines.append(transform.map(QPointF(line, line)).y());
+    }
+    config.setVerticalGuideLines(transformedLines);
+    d->document->setGuidesConfig(config);
+}
+
+void Document::setGuidesVisible(bool visible)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    config.setShowGuides(visible);
+    d->document->setGuidesConfig(config);
+}
+
+void Document::setGuidesLocked(bool locked)
+{
+    if (!d->document) return;
+    KisGuidesConfig config = d->document->guidesConfig();
+    config.setLockGuides(locked);
+    d->document->setGuidesConfig(config);
 }
 
 QPointer<KisDocument> Document::document() const

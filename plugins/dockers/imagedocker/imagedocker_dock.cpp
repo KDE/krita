@@ -15,6 +15,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
 #include "imagedocker_dock.h"
 #include "image_strip_scene.h"
 #include "image_view.h"
@@ -224,9 +228,6 @@ ImageDockerDock::ImageDockerDock():
 
     connect(m_ui->cmbPath, SIGNAL(activated(const QString&)), SLOT(slotChangeRoot(const QString&)));
 
-    m_model->setRootPath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    m_ui->treeView->setRootIndex(m_proxyModel->mapFromSource(m_model->index(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation))));
-
     connect(m_ui->treeView           , SIGNAL(doubleClicked(const QModelIndex&))      , SLOT(slotItemDoubleClicked(const QModelIndex&)));
     connect(m_ui->bnBack             , SIGNAL(clicked(bool))                          , SLOT(slotBackButtonClicked()));
     connect(m_ui->bnHome             , SIGNAL(clicked(bool))                          , SLOT(slotHomeButtonClicked()));
@@ -249,6 +250,8 @@ ImageDockerDock::ImageDockerDock():
 
 ImageDockerDock::~ImageDockerDock()
 {
+    saveConfigState();
+
     delete m_proxyModel;
     delete m_model;
     delete m_imageStripScene;
@@ -298,9 +301,12 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
 
 void ImageDockerDock::showEvent(QShowEvent *)
 {
-    if (m_imageStripScene->currentPath().isNull()) {
-        updatePath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    }
+    loadConfigState();
+}
+
+void ImageDockerDock::hideEvent(QHideEvent *event)
+{
+    saveConfigState();
 }
 
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
@@ -308,9 +314,9 @@ void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
     // Intentionally not disabled if there's no canvas
 
     // "Every connection you make emits a signal, so duplicate connections emit two signals"
-    if(m_canvas)
+    if(m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-
+    }
     m_canvas = canvas;
 }
 
@@ -372,6 +378,30 @@ void ImageDockerDock::setZoom(const ImageInfo& info)
     m_popupUi->zoomSlider->blockSignals(true);
     m_popupUi->zoomSlider->setValue(zoom);
     m_popupUi->zoomSlider->blockSignals(false);
+}
+
+void ImageDockerDock::saveConfigState()
+{
+    const QString lastUsedDirectory = m_model->filePath(m_proxyModel->mapToSource(m_ui->treeView->rootIndex()));
+
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("referenceImageDocker");
+    cfg.writeEntry("lastUsedDirectory", lastUsedDirectory);
+}
+
+void ImageDockerDock::loadConfigState()
+{
+    const QString defaultLocation = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("referenceImageDocker");
+    QString lastUsedDirectory = cfg.readEntry("lastUsedDirectory", defaultLocation);
+
+    if (!QFileInfo(lastUsedDirectory).exists()) {
+        lastUsedDirectory = defaultLocation;
+    }
+
+    m_model->setRootPath(lastUsedDirectory);
+    m_ui->treeView->setRootIndex(m_proxyModel->mapFromSource(m_model->index(lastUsedDirectory)));
+    updatePath(lastUsedDirectory);
 }
 
 
@@ -555,8 +585,7 @@ bool ImageDockerDock::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
 
-    if (event->type() == QEvent::Resize)
-    {
+    if (event->type() == QEvent::Resize) {
         m_ui->treeView->setColumnWidth(0, width());
         return true;
     }

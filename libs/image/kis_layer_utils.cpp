@@ -1094,7 +1094,7 @@ namespace KisLayerUtils {
         filterMergableNodes(mergedNodes);
         {
             KisNodeList tempNodes;
-            qSwap(mergedNodes, tempNodes);
+            std::swap(mergedNodes, tempNodes);
             sortMergableNodes(image->root(), tempNodes, mergedNodes);
         }
 

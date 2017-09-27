@@ -24,6 +24,8 @@
 #include "krita_filter_gradient_map.h"
 #include "KoResourceServerProvider.h"
 #include "kis_config_widget.h"
+#include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
@@ -53,12 +55,16 @@ void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
 
 KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 1);
-    QString gradientName;
+    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 2);
     if (m_page && m_page->gradientchooser && m_page->gradientchooser->currentResource()) {
-        gradientName = m_page->gradientchooser->currentResource()->name();
+        KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(m_page->gradientchooser->currentResource());
+        KoStopGradient *stopGradient = KoStopGradient::fromQGradient(gradient->toQGradient());
+        QDomDocument doc;
+        QDomElement elt = doc.createElement("gradient");
+        stopGradient->toXML(doc, elt);
+        doc.appendChild(elt);
+        cfg->setProperty("gradientXML", doc.toString());
     }
-    cfg->setProperty("gradientName", gradientName);
 
     return cfg;
 }
@@ -67,7 +73,7 @@ KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 
 void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    m_page->gradientchooser->setCurrentResource(KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName")));
+    //m_page->gradientchooser->setCurrentResource(KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName")));
     Q_ASSERT(config);
     Q_UNUSED(config);
 }

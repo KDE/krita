@@ -39,6 +39,7 @@
 #include <QPointer>
 #include "kis_signal_compressor.h"
 #include "kis_debug.h"
+#include "kis_global.h"
 
 KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(QWidget *parent,
                                                                  Dimensions dimension,
@@ -122,7 +123,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     angle = angle+180.0;
     if (m_type==KisVisualEllipticalSelectorShape::borderMirrored) {
         angle = (coordinate.x()/2)*360.0;
-        angle = fmod((angle+90.0), 360.0);
+        angle = fmod((angle+270.0), 360.0);
     }
     line.setAngle(angle);
     if (getDimensions()!=KisVisualColorSelectorShape::onedimensional) {
@@ -139,29 +140,32 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     qreal x = 0.5;
     qreal y = 1.0;
     qreal offset = 7.0;
-    QRect total(0, 0, width(), height());
-    QLineF line(total.center(), coordinate);
-    qreal a = (total.width()/2);
-    qreal angle;
+    QPointF center = QRectF(QPointF(0.0, 0.0), this->size()).center();
+    qreal a = (this->width()/2);
+    qreal xRel = center.x()-coordinate.x();
+    qreal yRel = center.y()-coordinate.y();
+    qreal angle = atan2(xRel, yRel);
+    qreal radius = sqrt(xRel*xRel+yRel*yRel);
+    angle = kisRadiansToDegrees(angle);
 
     if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
-        angle = fmod((line.angle()+180.0), 360.0);
+        angle = fmod(angle-90, 360.0);
         angle = 180.0-angle;
         angle = angle+180.0;
         x = angle/360.0;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-            y = qBound(0.0,line.length()/(a-offset), 1.0);
+            y = qBound(0.0,radius/(a-offset), 1.0);
         }
 
     } else {
-        angle = fmod((line.angle()+270.0), 360.0);
+        angle = fmod(angle+180, 360.0);
         if (angle>180.0) {
             angle = 180.0-angle;
             angle = angle+180;
         }
         x = (angle/360.0)*2;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-            y = qBound(0.0,(line.length()+offset)/a, 1.0);
+            y = qBound(0.0,(radius+offset)/a, 1.0);
         }
     }
 

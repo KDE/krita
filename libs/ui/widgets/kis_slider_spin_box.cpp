@@ -143,11 +143,6 @@ void KisAbstractSliderSpinBox::showEdit()
     d->edit->show();
     d->edit->setFocus(Qt::OtherFocusReason);
     update();
-
-    KisInputManager *inputManager = KisPart::instance()->currentInputManager();
-    if (inputManager) {
-        inputManager->slotFocusOnEnter(false);
-    }
 }
 
 void KisAbstractSliderSpinBox::hideEdit()
@@ -155,11 +150,6 @@ void KisAbstractSliderSpinBox::hideEdit()
     Q_D(KisAbstractSliderSpinBox);
     d->edit->hide();
     update();
-
-    KisInputManager *inputManager = KisPart::instance()->currentInputManager();
-    if (inputManager) {
-        inputManager->slotFocusOnEnter(true);
-    }
 }
 
 void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
@@ -503,6 +493,25 @@ void KisAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     }
     update();
     e->accept();
+}
+
+bool KisAbstractSliderSpinBox::event(QEvent *event)
+{
+    if (event->type() == QEvent::ShortcutOverride){
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if (key->modifiers() == Qt::NoModifier){
+            switch(key->key()){
+            case Qt::Key_Up:
+            case Qt::Key_Right:
+            case Qt::Key_Down:
+            case Qt::Key_Left:
+                event->accept();
+                return true;
+            default: break;
+            }
+        }
+    }
+    return QWidget::event(event);
 }
 
 void KisAbstractSliderSpinBox::commitEnteredValue()

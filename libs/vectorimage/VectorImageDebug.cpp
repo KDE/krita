@@ -19,7 +19,7 @@
 #include "VectorImageDebug.h"
 const QLoggingCategory &VECTOR_IMAGE_LOG() \
 {
-    static const QLoggingCategory category("krita.lib.vectorimage");
+    static const QLoggingCategory category("krita.lib.vectorimage", QtInfoMsg);
     return category;
 }
 

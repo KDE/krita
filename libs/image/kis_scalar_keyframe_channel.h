@@ -32,6 +32,7 @@ public:
     };
 
     KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation=KisKeyframe::Constant);
+    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNode *newParentNode);
     ~KisScalarKeyframeChannel() override;
 
     bool hasScalarValue() const override;

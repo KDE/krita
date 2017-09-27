@@ -114,9 +114,23 @@ QString getInstallationPrefix() {
 
      debugWidgetUtils << ">>>>>>>>>>>" << bundlePath;
      return bundlePath;
- #else
-     return qApp->applicationDirPath() + "/../";
- #endif
+#else
+    #ifdef Q_OS_QWIN
+        QDir appdir(qApp->applicationDirPath());
+
+        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+        wchar_t buffer[1024];
+        QString absolute = appdir.absolutePath();
+        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+        rv = ::GetLongPathName(buffer, buffer, 1024);
+        QString correctedPath((QChar *)buffer);
+        appdir.setPath(correctedPath);
+        appdir.cdUp();
+        return appdir.canonicalPath();
+    #else
+        return qApp->applicationDirPath() + "/../";
+    #endif
+#endif
 }
 
 class Q_DECL_HIDDEN KoResourcePaths::Private {
@@ -312,7 +326,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
             }
         }
     }
-    if (resource.isEmpty() || !QFile::exists(resource)) {        
+    if (resource.isEmpty() || !QFile::exists(resource)) {
         QString approot = getApplicationRoot();
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;

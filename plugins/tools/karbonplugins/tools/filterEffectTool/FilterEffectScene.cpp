@@ -231,7 +231,7 @@ void FilterEffectScene::layoutConnections()
         connectionIndex++;
     }
 
-    qSort(sortedConnections);
+    std::sort(sortedConnections.begin(), sortedConnections.end());
     qreal distance = ConnectionDistance;
     int lastSize = -1;
     int connectionCount = sortedConnections.count();

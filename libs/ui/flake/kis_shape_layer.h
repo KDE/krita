@@ -68,7 +68,7 @@ public:
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     ~KisShapeLayer() override;
 private:
-    void initShapeLayer(KoShapeBasedDocumentBase* controller);
+    void initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection = 0);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);

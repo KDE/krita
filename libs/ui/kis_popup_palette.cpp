@@ -250,6 +250,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     setVisible(true);
     setVisible(false);
+
+    // Prevent tablet events from being captured by the canvas
+    setAttribute(Qt::WA_NoMousePropagation, true);
 }
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
@@ -762,7 +765,7 @@ void KisPopupPalette::slotShowTagsPopup()
 {
     KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QStringList tags = rServer->tagNamesList();
-    qSort(tags);
+    std::sort(tags.begin(), tags.end());
 
     if (!tags.isEmpty()) {
         QMenu menu;
@@ -813,7 +816,8 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
 
 
 
-void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
+void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+    event->ignore();
 }
 
 

@@ -32,7 +32,7 @@ public:
     static QImage convertToQImage(gmic_image<float>& gmicImage, float gmicMaxChannelValue = 255.0);
     static void convertFromQImage(const QImage &image, gmic_image<float> *gmicImage, float gmicUnitValue = 1.0);
 
-    // output gmic image will have max channel 1.0 as in Krita's float rgba color-space
+    // output gmic image will have max channel 255.0
     static void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float> *gmicImage, QRect rc = QRect());
     // gmicMaxChannelValue indicates if the gmic image pixels rgb has range 0..255 or 0..1.0
     static void convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue);

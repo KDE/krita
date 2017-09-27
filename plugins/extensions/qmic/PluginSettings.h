@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Boudewijn Rempt <boud@kogmbh.com>
+ *  Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,8 @@ public:
     virtual QString name();
     virtual QString header();
     virtual QIcon icon();
+
+    static QString gmicQtPath();
 
 public Q_SLOTS:
     void savePreferences() const;

@@ -246,16 +246,16 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
 
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentLeaf, applyRect);
-            currentLeaf->accept(originalVisitor);
             if (currentLeaf->visible()) {
+                currentLeaf->accept(originalVisitor);
                 currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
             }
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentLeaf, applyRect);
             if(currentLeaf->dependsOnLowerNodes()) {
-                currentLeaf->accept(originalVisitor);
                 if (currentLeaf->visible()) {
+                    currentLeaf->accept(originalVisitor);
                     currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node());
                 }
             }

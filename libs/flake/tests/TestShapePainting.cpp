@@ -238,7 +238,7 @@ void TestShapePainting::testPaintOrder()
     sortedShapes.append(branch1->shapes());
     sortedShapes.append(branch2->shapes());
     
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     QCOMPARE(sortedShapes.count(), 7);
     QVERIFY(sortedShapes[0] == root);
     QVERIFY(sortedShapes[1] == branch1);

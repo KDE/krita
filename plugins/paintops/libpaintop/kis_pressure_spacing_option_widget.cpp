@@ -34,12 +34,12 @@
 KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
     KisCurveOptionWidget(new KisPressureSpacingOption(), i18n("0%"), i18n("100%"))
 {
-    QCheckBox *isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
-    QCheckBox *useSpacingUpdates = new QCheckBox(i18n("Update Between Dabs"));
+    m_isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
+    m_useSpacingUpdates = new QCheckBox(i18n("Update Between Dabs"));
 
     QHBoxLayout *hl = new QHBoxLayout;
-    hl->addWidget(isotropicSpacing);
-    hl->addWidget(useSpacingUpdates);
+    hl->addWidget(m_isotropicSpacing);
+    hl->addWidget(m_useSpacingUpdates);
 
     QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
@@ -51,12 +51,22 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
 
     KisCurveOptionWidget::setConfigurationPage(w);
 
-    connect(isotropicSpacing, SIGNAL(stateChanged(int)),
+    connect(m_isotropicSpacing, SIGNAL(stateChanged(int)),
             this, SLOT(setIsotropicSpacing(int)));
-    connect(useSpacingUpdates, SIGNAL(stateChanged(int)),
+    connect(m_useSpacingUpdates, SIGNAL(stateChanged(int)),
             this, SLOT(setUseSpacingUpdates(int)));
 
     setIsotropicSpacing(false);
+}
+
+void KisPressureSpacingOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    // First invoke superclass behavior.
+    KisCurveOptionWidget::readOptionSetting(setting);
+
+    KisPressureSpacingOption *option = dynamic_cast<KisPressureSpacingOption*>(curveOption());
+    m_isotropicSpacing->setChecked(option->isotropicSpacing());
+    m_useSpacingUpdates->setChecked(option->usingSpacingUpdates());
 }
 
 void KisPressureSpacingOptionWidget::setIsotropicSpacing(int isotropic)

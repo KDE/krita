@@ -35,6 +35,7 @@ class KoInteractionStrategy;
 class KoShapeMoveCommand;
 class KoSelection;
 class DefaultToolTabbedWidget;
+class KisViewManager;
 
 /**
  * The default tool (associated with the arrow icon) implements the default

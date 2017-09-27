@@ -133,4 +133,3 @@ public:
 
 
 #endif //KIS_TOOL_LINE_H_
-

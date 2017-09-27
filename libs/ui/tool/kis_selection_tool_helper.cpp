@@ -43,6 +43,9 @@
 
 #include "kis_algebra_2d.h"
 #include "kis_config.h"
+#include "kis_action_manager.h"
+#include "kis_action.h"
+#include <QMenu>
 
 
 KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name)
@@ -108,22 +111,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
             pixelSelection->applySelection(m_selection, m_action);
 
-            const QRect imageBounds = m_view->image()->bounds();
-            QRect selectionExactRect = m_view->selection()->selectedExactRect();
-
-            if (!imageBounds.contains(selectionExactRect)) {
-                pixelSelection->crop(imageBounds);
-                if (pixelSelection->outlineCacheValid()) {
-                    QPainterPath cache = pixelSelection->outlineCache();
-                    QPainterPath imagePath;
-                    imagePath.addRect(imageBounds);
-                    cache &= imagePath;
-                    pixelSelection->setOutlineCache(cache);
-                }
-                selectionExactRect &= imageBounds;
-            }
-
-            QRect dirtyRect = imageBounds;
+            QRect dirtyRect = m_view->image()->bounds();
             if (hasSelection && m_action != SELECTION_REPLACE && m_action != SELECTION_INTERSECT) {
                 dirtyRect = m_selection->selectedRect();
             }
@@ -132,7 +120,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             KUndo2Command *savedCommand = transaction.endAndTake();
             pixelSelection->setDirty(dirtyRect);
 
-            if (selectionExactRect.isEmpty()) {
+            if (m_view->selection()->selectedExactRect().isEmpty()) {
                 KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
                 cmd->addCommand(savedCommand);
                 cmd->addCommand(new KisDeselectGlobalSelectionCommand(m_view->image()));
@@ -216,16 +204,6 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
     applicator.end();
 }
 
-
-void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect, SelectionAction action)
-{
-    KisImageWSP image = m_canvas->viewManager()->image();
-
-    if (!image->wrapAroundModePermitted() && action != SELECTION_SUBTRACT) {
-        *rect &= image->bounds();
-    }
-}
-
 bool KisSelectionToolHelper::canShortcutToDeselect(const QRect &rect, SelectionAction action)
 {
     return rect.isEmpty() && (action == SELECTION_INTERSECT || action == SELECTION_REPLACE);
@@ -234,17 +212,6 @@ bool KisSelectionToolHelper::canShortcutToDeselect(const QRect &rect, SelectionA
 bool KisSelectionToolHelper::canShortcutToNoop(const QRect &rect, SelectionAction action)
 {
     return rect.isEmpty() && action == SELECTION_ADD;
-}
-
-void KisSelectionToolHelper::cropPathIfNeeded(QPainterPath *path)
-{
-    KisImageWSP image = m_canvas->viewManager()->image();
-
-    if (!image->wrapAroundModePermitted()) {
-        QPainterPath cropPath;
-        cropPath.addRect(image->bounds());
-        *path &= cropPath;
-    }
 }
 
 bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action)
@@ -260,4 +227,44 @@ bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionV
     }
 
     return result;
+}
+
+
+QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
+{
+    QMenu *m_contextMenu = new QMenu();
+
+    KisActionManager * actionMan = canvas->viewManager()->actionManager();
+
+
+    m_contextMenu->addAction(actionMan->actionByName("deselect"));
+    m_contextMenu->addAction(actionMan->actionByName("invert"));
+    m_contextMenu->addAction(actionMan->actionByName("select_all"));
+
+    m_contextMenu->addSeparator();
+
+    m_contextMenu->addAction(actionMan->actionByName("cut_selection_to_new_layer"));
+    m_contextMenu->addAction(actionMan->actionByName("copy_selection_to_new_layer"));
+
+    m_contextMenu->addSeparator();
+
+    QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));
+    transformMenu->addAction(actionMan->actionByName("selectionscale"));
+    transformMenu->addAction(actionMan->actionByName("growselection"));
+    transformMenu->addAction(actionMan->actionByName("shrinkselection"));
+    transformMenu->addAction(actionMan->actionByName("borderselection"));
+    transformMenu->addAction(actionMan->actionByName("smoothselection"));
+    transformMenu->addAction(actionMan->actionByName("featherselection"));
+    transformMenu->addAction(actionMan->actionByName("stroke_selection"));
+
+    m_contextMenu->addSeparator();
+
+    m_contextMenu->addAction(actionMan->actionByName("resizeimagetoselection"));
+
+    m_contextMenu->addSeparator();
+
+    m_contextMenu->addAction(actionMan->actionByName("toggle_display_selection"));
+    m_contextMenu->addAction(actionMan->actionByName("show-global-selection-mask"));
+
+    return m_contextMenu;
 }

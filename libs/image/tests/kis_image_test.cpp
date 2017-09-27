@@ -891,7 +891,7 @@ void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
     const KoColorSpace *cs3 = KoColorSpaceRegistry::instance()->rgb16();
 
     if (swapSpaces) {
-        qSwap(cs2, cs3);
+        std::swap(cs2, cs3);
     }
 
     dbgKrita << "Testing testMergeCrossColorSpaceImpl:";

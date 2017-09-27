@@ -45,6 +45,14 @@
 #define GL_BGRA 0x80E1
 #endif
 
+// GL_EXT_texture_format_BGRA8888
+#ifndef GL_BGRA_EXT
+#define GL_BGRA_EXT 0x80E1
+#endif
+#ifndef GL_BGRA8_EXT
+#define GL_BGRA8_EXT 0x93A1
+#endif
+
 
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
@@ -108,7 +116,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
-    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
+    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds(), m_image);
     recalculateCache(info);
 }
 
@@ -245,17 +253,18 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
     m_storedImageBounds = QRect();
 }
 
-KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect, KisImageSP srcImage)
 {
-    return updateCacheImpl(rect, true);
+    return updateCacheImpl(rect, srcImage, true);
 }
 
 KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheNoConversion(const QRect& rect)
 {
-    return updateCacheImpl(rect, false);
+    return updateCacheImpl(rect, m_image, false);
 }
 
-KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect, bool convertColorSpace)
+// TODO: add sanity checks about the conformance of the passed srcImage!
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect, KisImageSP srcImage, bool convertColorSpace)
 {
     const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
 
@@ -267,7 +276,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
 
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo(options);
 
-    QRect updateRect = rect & m_image->bounds();
+    QRect updateRect = rect & srcImage->bounds();
     if (updateRect.isEmpty() || !(m_initialized)) return info;
 
     /**
@@ -280,7 +289,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
      */
 
     QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
-    artificialRect &= m_image->bounds();
+    artificialRect &= srcImage->bounds();
 
     int firstColumn = xToCol(artificialRect.left());
     int lastColumn = xToCol(artificialRect.right());
@@ -289,7 +298,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
 
     QBitArray channelFlags; // empty by default
 
-    if (m_channelFlags.size() != m_image->projection()->colorSpace()->channels().size()) {
+    if (m_channelFlags.size() != srcImage->projection()->colorSpace()->channels().size()) {
         setChannelFlags(QBitArray());
     }
     if (!m_useOcio) { // Ocio does its own channel flipping
@@ -301,8 +310,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
-    const QRect bounds = m_image->bounds();
-    const int levelOfDetail = m_image->currentLevelOfDetail();
+    const QRect bounds = srcImage->bounds();
+    const int levelOfDetail = srcImage->currentLevelOfDetail();
 
     QRect alignedUpdateRect = updateRect;
     QRect alignedBounds = bounds;
@@ -331,7 +340,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                                                      m_infoChunksPool));
             // Don't update empty tiles
             if (tileInfo->valid()) {
-                tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
+                tileInfo->retrieveData(srcImage->projection(), channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
 
                 //create transform
                 if (m_createNewProofingTransform) {
@@ -351,7 +360,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                 info->tileList.append(tileInfo);
             }
             else {
-                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
+                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << srcImage->bounds();
             }
         }
     }
@@ -400,8 +409,17 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
         if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
             img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
         }
-        f->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-                        0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
+        GLint format = GL_BGRA, internalFormat = GL_RGBA8;
+        if (KisOpenGL::hasOpenGLES()) {
+            if (ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
+                format = GL_BGRA_EXT;
+                internalFormat = GL_BGRA8_EXT;
+            } else {
+                format = GL_RGBA;
+            }
+        }
+        f->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
+                        0, format, GL_UNSIGNED_BYTE, img.constBits());
     }
     else {
         dbgUI << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
@@ -524,9 +542,22 @@ void KisOpenGLImageTextures::updateTextureFormat()
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (!(m_image && ctx)) return;
 
-    m_texturesInfo.internalFormat = GL_RGBA8;
-    m_texturesInfo.type = GL_UNSIGNED_BYTE;
-    m_texturesInfo.format = GL_BGRA;
+    if (!KisOpenGL::hasOpenGLES()) {
+        m_texturesInfo.internalFormat = GL_RGBA8;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_BGRA;
+    } else {
+        m_texturesInfo.internalFormat = GL_BGRA8_EXT;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_BGRA_EXT;
+        if(!ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
+            // The red and blue channels are swapped, but it will be re-swapped
+            // by texture swizzle mask set in KisTextureTile::setTextureParameters
+            m_texturesInfo.internalFormat = GL_RGBA8;
+            m_texturesInfo.type = GL_UNSIGNED_BYTE;
+            m_texturesInfo.format = GL_RGBA;
+        }
+    }
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -539,7 +570,10 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
 
-            if (ctx->hasExtension("GL_ARB_texture_float")) {
+            if (KisOpenGL::hasOpenGLES()) {
+                m_texturesInfo.internalFormat = GL_RGBA16F;
+                dbgUI << "Using half (GLES)";
+            } else if (ctx->hasExtension("GL_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
             }
@@ -553,7 +587,11 @@ void KisOpenGLImageTextures::updateTextureFormat()
             haveBuiltInOpenExr = true;
 #endif
 
-            if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
+            if (haveBuiltInOpenExr && KisOpenGL::hasOpenGLES()) {
+                m_texturesInfo.type = GL_HALF_FLOAT;
+                destinationColorDepthId = Float16BitsColorDepthID;
+                dbgUI << "Pixel type half (GLES)";
+            } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
                 destinationColorDepthId = Float16BitsColorDepthID;
                 dbgUI << "Pixel type half";
@@ -565,7 +603,10 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_RGBA;
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
-            if (ctx->hasExtension("GL_ARB_texture_float")) {
+            if (KisOpenGL::hasOpenGLES()) {
+                m_texturesInfo.internalFormat = GL_RGBA32F;
+                dbgUI << "Using float (GLES)";
+            } else if (ctx->hasExtension("GL_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
@@ -578,22 +619,26 @@ void KisOpenGLImageTextures::updateTextureFormat()
             destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
-            m_texturesInfo.internalFormat = GL_RGBA16;
-            m_texturesInfo.type = GL_UNSIGNED_SHORT;
-            m_texturesInfo.format = GL_BGRA;
-            destinationColorDepthId = Integer16BitsColorDepthID;
-            dbgUI << "Using 16 bits rgba";
+            if (!KisOpenGL::hasOpenGLES()) {
+                m_texturesInfo.internalFormat = GL_RGBA16;
+                m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                m_texturesInfo.format = GL_BGRA;
+                destinationColorDepthId = Integer16BitsColorDepthID;
+                dbgUI << "Using 16 bits rgba";
+            }
+            // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
         }
     }
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
-        if (colorDepthId == Integer16BitsColorDepthID) {
+        if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
         }
+        // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
     }
 
     if (!m_internalColorManagementActive &&

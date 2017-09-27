@@ -100,6 +100,8 @@ public:
     KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectPath(canvas);
     }
+
+
 };
 
 

@@ -31,6 +31,9 @@
 #include <KoIcon.h>
 #include <QKeySequence>
 #include <kis_icon.h>
+#include <QMenu>
+
+
 
 class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 {
@@ -38,13 +41,15 @@ class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 
 public:
     __KisToolSelectEllipticalLocal(KoCanvasBase *canvas);
-
 protected:
     virtual SelectionMode selectionMode() const = 0;
     virtual SelectionAction selectionAction() const = 0;
     virtual bool antiAliasSelection() const = 0;
 private:
     void finishRect(const QRectF &rect) override;
+
+
+
 };
 
 
@@ -56,6 +61,8 @@ class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
     Q_OBJECT
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
+    QMenu* popupActionsMenu() override;
+
 public Q_SLOTS:
     void setSelectionAction(int);
 };

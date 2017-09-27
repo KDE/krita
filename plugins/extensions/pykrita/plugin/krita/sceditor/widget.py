@@ -24,37 +24,22 @@ from assist import AutoComplete, CallTip
 from highlighter import PythonHighlighter,  QtQmlHighlighter
 
 
-
-
-
-
-
-
-
 class EditorBlockData(QTextBlockUserData):
-    
+
     def __init__(self):
         QTextBlockUserData.__init__(self)
 
 
-
-
-
-
 class RopeEditorWrapper(object):
-
 
     def __init__(self, editview):
         self.editview = editview
 
-
     def length(self):
         return self.editview.length()
 
-
     def line_editor(self):
         return self
-
 
     def _get_block(self, line_no=None):
         cursor = self.editview.textCursor()
@@ -70,17 +55,15 @@ class RopeEditorWrapper(object):
             row += 1
         return block
 
-
     def get_line(self, line_no=None):
         return unicode(self._get_block(line_no).text())
-
 
     def indent_line(self, line_no, indent_length):
         block = self._get_block(line_no)
         cursor = QTextCursor(block)
         cursor.joinPreviousEditBlock()
         cursor.movePosition(QTextCursor.StartOfBlock, QTextCursor.MoveAnchor)
-        if indent_length <  0:
+        if indent_length < 0:
             for i in range(-indent_length):
                 cursor.deleteChar()
         else:
@@ -96,10 +79,7 @@ class RopeEditorWrapper(object):
         cursor.endEditBlock()
 
 
-
-
 class EditorView(QPlainTextEdit):
-
 
     def __init__(self, parent=None, text=None,
                  EditorHighlighterClass=PythonHighlighter,
@@ -118,7 +98,7 @@ class EditorView(QPlainTextEdit):
             self.setPlainText(text)
         self.frame_style = self.frameStyle()
         self.draw_line = True
-        self.print_width = self.fontMetrics().width("x"*78)
+        self.print_width = self.fontMetrics().width("x" * 78)
         self.line_pen = QPen(QColor("lightgrey"))
         self.last_row = self.last_col = -1
         self.last_block = None
@@ -135,23 +115,18 @@ class EditorView(QPlainTextEdit):
         self.calltip = CallTip(self)
         self.autocomplete = AutoComplete(self)
 
-
     def closeEvent(self, event):
         self.calltip.close()
         self.autocomplete.close()
 
-
     def isModified(self):
         return self.document().isModified()
-
 
     def setModified(self, flag):
         self.document().setModified(flag)
 
-
     def length(self):
         return self.document().blockCount()
-
 
     def goto(self, line_no):
         cursor = self.textCursor()
@@ -166,12 +141,10 @@ class EditorView(QPlainTextEdit):
         cursor = QTextCursor(block)
         self.setTextCursor(cursor)
 
-
     def move_start_of_doc(self):
         cursor = self.textCursor()
         cursor.setPosition(0)
         self.setTextCursor(cursor)
-
 
     def move_end_of_doc(self):
         cursor = self.textCursor()
@@ -181,27 +154,23 @@ class EditorView(QPlainTextEdit):
             block = block.next()
         cursor.setPosition(last_block.position())
         cursor.movePosition(
-                QTextCursor.EndOfBlock, QTextCursor.MoveAnchor)
+            QTextCursor.EndOfBlock, QTextCursor.MoveAnchor)
         self.setTextCursor(cursor)
-
 
     def move_start_of_row(self):
         cursor = self.textCursor()
         cursor.movePosition(
-                QTextCursor.StartOfBlock, QTextCursor.MoveAnchor)
+            QTextCursor.StartOfBlock, QTextCursor.MoveAnchor)
         self.setTextCursor(cursor)
-
 
     def move_end_of_row(self):
         cursor = self.textCursor()
         cursor.movePosition(
-                QTextCursor.EndOfBlock, QTextCursor.MoveAnchor)
+            QTextCursor.EndOfBlock, QTextCursor.MoveAnchor)
         self.setTextCursor(cursor)
-
 
     def highline(self, cursor):
         self.viewport().update()
-
 
     def onCursorPositionChanged(self):
         cursor = self.textCursor()
@@ -214,16 +183,13 @@ class EditorView(QPlainTextEdit):
             self.last_col = col
         self.cursorPositionChanged.emit(row, col)
 
-
     def _create_line(self):
         x = self.print_width
         self.line = QLine(x, 0, x, self.height())
 
-    
     def resizeEvent(self, event):
         self._create_line()
         QPlainTextEdit.resizeEvent(self, event)
-
 
     def paintEvent(self, event):
         painter = QPainter(self.viewport())
@@ -238,28 +204,22 @@ class EditorView(QPlainTextEdit):
         painter.end()
         QPlainTextEdit.paintEvent(self, event)
 
-
     def setDocument(self, document):
         QPlainTextEdit.setDocument(self, document)
         self.highlighter.setDocument(document)
 
-
     def indent(self):
         self.indenter.correct_indentation(self.textCursor().blockNumber())
-
 
     def tab_pressed(self):
         self.indent()
 
-
     def dedent(self):
         self.indenter.deindent(self.textCursor().blockNumber())
-
 
     def backtab_pressed(self):
         self.dedent()
         return True
-
 
     def backspace_pressed(self):
         cursor = self.textCursor()
@@ -268,7 +228,6 @@ class EditorView(QPlainTextEdit):
         if col > 0 and text[:col].strip() == "":
             self.indenter.deindent(self.textCursor().blockNumber())
             return True
-
 
     def autocomplete_pressed(self):
         try:
@@ -280,11 +239,9 @@ class EditorView(QPlainTextEdit):
         if items:
             self.autocomplete.setItems(items)
             self.autocomplete.show()
-        
 
     def after_return_pressed(self):
         self.indenter.entering_new_line(self.textCursor().blockNumber())
-
 
     def keyPressEvent(self, event):
         if self.autocomplete.active:
@@ -297,7 +254,7 @@ class EditorView(QPlainTextEdit):
         m = event.modifiers()
         k = event.key()
         t = event.text()
-        # Disable some shortcuts 
+        # Disable some shortcuts
         if self.disable_shortcuts and \
                 m & Qt.ControlModifier and k in [Qt.Key_A, Qt.Key_R,
                                                  Qt.Key_C, Qt.Key_K,
@@ -317,7 +274,7 @@ class EditorView(QPlainTextEdit):
             if self.backspace_pressed():
                 return
         elif k == Qt.Key_Period or \
-              (k == Qt.Key_Space and event.modifiers() == Qt.ControlModifier):
+                (k == Qt.Key_Space and event.modifiers() == Qt.ControlModifier):
             QPlainTextEdit.keyPressEvent(self, event)
             self.autocomplete_pressed()
             return
@@ -329,23 +286,19 @@ class EditorView(QPlainTextEdit):
         if k == Qt.Key_Return or k == Qt.Key_Enter:
             self.after_return_pressed()
 
-
-
     def paren_opened(self, key):
         close_char = {
             Qt.Key_ParenLeft: ")",
-            Qt.Key_BraceLeft:" }",
-            Qt.Key_BracketLeft:"]"
-            }
+            Qt.Key_BraceLeft: " }",
+            Qt.Key_BracketLeft: "]"
+        }
         cursor = self.textCursor()
         cursor.insertText(close_char[key])
-        cursor.setPosition(cursor.position()-1)
+        cursor.setPosition(cursor.position() - 1)
         self.setTextCursor(cursor)
 
 
-
 class EditorSidebar(QWidget):
-
 
     def __init__(self, editor):
         QWidget.__init__(self, editor)
@@ -356,10 +309,10 @@ class EditorSidebar(QWidget):
         self.show_line_numbers = True
 
         self.setAutoFillBackground(True)
-        #bg = editor.view.palette().base().color()
-        #pal = QPalette()
-        #pal.setColor(self.backgroundRole(), bg)
-        #self.setPalette(pal)
+        # bg = editor.view.palette().base().color()
+        # pal = QPalette()
+        # pal.setColor(self.backgroundRole(), bg)
+        # self.setPalette(pal)
         self.setBackgroundRole(QPalette.Base)
 
         self.doc().documentLayout().update.connect(self.update)
@@ -369,8 +322,6 @@ class EditorSidebar(QWidget):
         if self.show_line_numbers:
             width += self.fm.width("00000")
         self.setFixedWidth(width)
-
-
 
     def paintEvent(self, event):
         QWidget.paintEvent(self, event)
@@ -382,10 +333,10 @@ class EditorSidebar(QWidget):
         row = first_row
         y = view.contentOffset().y()
         pageBottom = max(
-          view.height(),
-          view.verticalScrollBar().value() + view.viewport().height())
+            view.height(),
+            view.verticalScrollBar().value() + view.viewport().height())
         fm = self.fm
-        w  = self.width() - 8
+        w = self.width() - 8
         while block.isValid():
             txt = str(row).rjust(5)
             y = view.blockBoundingGeometry(block).y()
@@ -398,13 +349,11 @@ class EditorSidebar(QWidget):
         p.end()
 
 
-
 class EditorWidget(QFrame):
 
-
     def __init__(self, parent=None, text=None,
-                    EditorSidebarClass=EditorSidebar, 
-                    EditorViewClass=EditorView):
+                 EditorSidebarClass=EditorSidebar,
+                 EditorViewClass=EditorView):
         QFrame.__init__(self, parent)
         self.view = EditorViewClass(self, text)
         self.sidebar = EditorSidebarClass(self)
@@ -419,7 +368,6 @@ class EditorWidget(QFrame):
         self.hlayout.addWidget(self.view)
         self.vlayout.setContentsMargins(2, 2, 2, 2)
 
-
     def setPlainText(self, text):
         self.view.document().setPlainText(text)
         self.view.setModified(False)
@@ -433,31 +381,35 @@ class EditorWidget(QFrame):
     def setModified(self, flag):
         self.view.document().setModified(flag)
 
+
 class PythonEditorWidget(EditorWidget):
     pass
 
+
 class QtQmlEditorWidget(QPlainTextEdit):
-    
+
     def __init__(self,  parent):
         QPlainTextEdit.__init__(self,  parent)
         self.highlighter = QtQmlHighlighter(self)
 
+
 class SaveDialog(QMessageBox):
 
     def __init__(self, msg):
-	QMessageBox.__init__(self)
-	self.setWindowTitle("Save")
-	self.setText(msg)
-	self.setStandardButtons(QMessageBox.Save |QMessageBox.Discard | QMessageBox.Cancel)
-	self.setDefaultButton(QMessageBox.Save)
+        QMessageBox.__init__(self)
+        self.setWindowTitle("Save")
+        self.setText(msg)
+        self.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        self.setDefaultButton(QMessageBox.Save)
 
 
 if __name__ == "__main__":
-    if __file__ == "<stdin>": __file__ = "./widget.py"
+    if __file__ == "<stdin>":
+        __file__ = "./widget.py"
     import sys
     app = QApplication(sys.argv)
     src = open(__file__).read()
     edit = EditorWidget(text=src)
-    edit.resize(640,480)
+    edit.resize(640, 480)
     edit.show()
     app.exec_()

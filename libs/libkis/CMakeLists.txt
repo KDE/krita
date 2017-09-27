@@ -13,6 +13,7 @@ set(kritalibkis_LIB_SRCS
     Notifier.cpp
     PresetChooser
     Palette.cpp
+    PaletteView.cpp
     Resource.cpp
     Selection.cpp
     View.cpp

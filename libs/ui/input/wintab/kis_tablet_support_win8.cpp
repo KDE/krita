@@ -553,8 +553,8 @@ QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent
         QTabletEvent::Stylus, // device
         pointerType, // pointerType
         penMask.pressureValid() ? static_cast<qreal>(penInfo.pressure) / 1024 : 0, // pressure
-        penMask.tiltXValid() ? penInfo.tiltX * 2 / 3 : 0, // xTilt
-        penMask.tiltYValid() ? penInfo.tiltY * 2 / 3 : 0, // yTilt
+        penMask.tiltXValid() ? qBound(-60, penInfo.tiltX, 60) : 0, // xTilt
+        penMask.tiltYValid() ? qBound(-60, penInfo.tiltY, 60) : 0, // yTilt
         0, // tangentialPressure
         rotation, // rotation
         0, // z

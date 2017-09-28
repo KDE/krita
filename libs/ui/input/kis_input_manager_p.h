@@ -23,6 +23,7 @@
 #include <QEvent>
 #include <QTouchEvent>
 #include <QScopedPointer>
+#include <QPointer>
 
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"
@@ -53,8 +54,8 @@ public:
 
     KisInputManager *q;
 
-    KisCanvas2 *canvas = 0;
-    KisToolProxy *toolProxy = 0;
+    QPointer<KisCanvas2> canvas = 0;
+    QPointer<KisToolProxy> toolProxy;
 
     bool forwardAllEventsToTool = false;
     bool ignoringQtCursorEvents();

@@ -25,6 +25,7 @@
 
 class KisToolProxy : public KoToolProxy
 {
+    Q_OBJECT
 public:
     enum ActionState {
         BEGIN,  /**< Beginning an action */

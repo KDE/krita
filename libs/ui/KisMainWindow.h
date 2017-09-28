@@ -383,7 +383,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
-    void setToolbarList(QList<QAction*> toolbarList);
 
 private:
     /**

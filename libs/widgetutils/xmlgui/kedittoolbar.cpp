@@ -586,16 +586,6 @@ public:
 
 Q_GLOBAL_STATIC(QString, s_defaultToolBarName)
 
-KEditToolBar::KEditToolBar(KActionCollection *collection,
-                           QWidget *parent)
-    : QDialog(parent),
-      d(new KEditToolBarPrivate(this))
-{
-    d->m_widget = new KEditToolBarWidget(collection, this);
-    d->init();
-    d->m_collection = collection;
-}
-
 KEditToolBar::KEditToolBar(KXMLGUIFactory *factory,
                            QWidget *parent)
     : QDialog(parent),

@@ -1706,8 +1706,7 @@ void KisMainWindow::slotConfigureToolbars()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
     saveMainWindowSettings(group);
-
-    KEditToolBar edit(actionCollection(), this);
+    KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
     applyToolBarLayout();

@@ -489,9 +489,6 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
-
-
-
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)

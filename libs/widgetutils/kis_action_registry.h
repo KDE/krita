@@ -82,12 +82,10 @@ public:
      */
     bool propertizeAction(const QString &name, QAction *a);
 
-
     /**
      * Called when "OK" button is pressed in settings dialog.
      */
     void settingsPageSaved();
-
 
     /**
      * Reload custom shortcuts from kritashortcutsrc
@@ -120,7 +118,6 @@ public:
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
-
 
     /**
      * @brief loadShortcutScheme

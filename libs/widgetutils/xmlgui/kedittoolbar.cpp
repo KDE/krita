@@ -17,13 +17,16 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #include "kedittoolbar.h"
 #include "kedittoolbar_p.h"
+
 #include "config-xmlgui.h"
+
 #include <QShowEvent>
 #include <QAction>
 #include <QDialogButtonBox>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include <QLayout>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -95,10 +98,14 @@ public:
     enum XmlType { Shell = 0, Part, Local, Merged };
 
     explicit XmlData(XmlType xmlType, const QString &xmlFile, KActionCollection *collection)
-        : m_isModified(false),
-          m_xmlFile(xmlFile),
-          m_type(xmlType),
-          m_actionCollection(collection)
+        : m_isModified(false)
+        , m_xmlFile(xmlFile)
+        , m_type(xmlType)
+        , m_actionCollection(collection)
+    {
+    }
+
+    ~XmlData()
     {
     }
 
@@ -172,7 +179,7 @@ private:
     QString      m_xmlFile;
     QDomDocument m_document;
     XmlType      m_type;
-    KActionCollection *m_actionCollection;
+    KActionCollection *m_actionCollection {0};
 };
 
 QString XmlData::toolBarText(const QDomElement &it) const

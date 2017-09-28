@@ -28,6 +28,9 @@ class QAction;
 class KActionCollection;
 
 
+/**
+ * @brief The KisActionsSnapshot class
+ */
 class KRITAWIDGETUTILS_EXPORT KisActionsSnapshot
 {
 public:

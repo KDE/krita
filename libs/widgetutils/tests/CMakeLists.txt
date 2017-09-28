@@ -14,3 +14,8 @@ ecm_add_test(
     kis_simple_math_parser_test.cpp
     TEST_NAME krita-ui-KisSimpleMathParserTest
     LINK_LIBRARIES kritaui Qt5::Test)
+
+ecm_add_test(
+    KisActionsSnapshotTest.cpp
+    NAME_PREFIX "libs-widgetutils-"
+    LINK_LIBRARIES kritawidgetutils Qt5::Test)

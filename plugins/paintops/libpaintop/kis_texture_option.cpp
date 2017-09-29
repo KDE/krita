@@ -83,12 +83,14 @@ public:
         brightnessSlider->setRange(-1.0, 1.0, 2);
         brightnessSlider->setValue(0.0);
         brightnessSlider->setToolTip(i18n("Makes texture lighter or darker"));
+        brightnessSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
         formLayout->addRow(i18n("Brightness:"), brightnessSlider);
 
         contrastSlider = new KisDoubleSliderSpinBox(this);
         contrastSlider->setRange(0.0, 2.0, 2);
         contrastSlider->setValue(1.0);
+        contrastSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
         formLayout->addRow(i18n("Contrast:"), contrastSlider);
 

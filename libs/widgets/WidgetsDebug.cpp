@@ -20,7 +20,7 @@
 
 const QLoggingCategory &WIDGETS_LOG() \
 {
-    static const QLoggingCategory category("krita.lib.widgets");
+    static const QLoggingCategory category("krita.lib.widgets", QtInfoMsg);
     return category;
 }
 

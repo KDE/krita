@@ -201,6 +201,7 @@ PyKrita::Engine::~Engine()
         Py_DECREF(m_sessionConfiguration);
     }
 
+    Python::maybeFinalize();
     Python::libraryUnload();
     s_engine_instance = 0;
 }
@@ -222,25 +223,26 @@ void PyKrita::Engine::unloadAllModules()
 QString PyKrita::Engine::tryInitializeGetFailureReason()
 {
     dbgScript << "Construct the Python engine for Python" << PY_MAJOR_VERSION << "," << PY_MINOR_VERSION;
-    if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
-        return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");
-    }
 
-    Python::libraryLoad();
-    Python py = Python();
+    if (!Python::libraryLoad()) {
+        return i18nc("@info:tooltip ", "Cannot load Python library");
+    }
 
     // Update PYTHONPATH
     // 0) custom plugin directories (prefer local dir over systems')
     // 1) shipped krita module's dir
-    // 2) w/ site_packages/ dir of the Python
     QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
-    pluginDirectories << KoResourcePaths::locate("appdata", "plugins/pykrita/")
-                      << QLatin1String(PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR)
-            ;
     dbgScript << "Plugin Directories: " << pluginDirectories;
-    if (!py.prependPythonPaths(pluginDirectories)) {
-        return i18nc("@info:tooltip ", "Cannot update Python paths");
+    if (!Python::setPath(pluginDirectories)) {
+        return i18nc("@info:tooltip ", "Cannot set Python paths");
     }
+
+    if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
+        return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");
+    }
+
+    Python::ensureInitialized();
+    Python py = Python();
 
     PyRun_SimpleString(
         "import sip\n"
@@ -440,21 +442,20 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
 {
     // Find the module:
     // 0) try to locate directory based plugin first
-    QString rel_path = QString(Python::PYKRITA_ENGINE);
-    dbgScript << rel_path;
-    rel_path = rel_path + "/" + plugin.moduleFilePathPart();
-    dbgScript << rel_path;
+    QString rel_path = plugin.moduleFilePathPart();
     rel_path = rel_path + "/" + "__init__.py";
-    dbgScript << rel_path;
+    dbgScript << "Finding Pyrhon module with rel_path:" << rel_path;
 
-    QString module_path = KoResourcePaths::findResource("appdata", rel_path);
+    QString module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
 
-    dbgScript << module_path;
+    dbgScript << "module_path:" << module_path;
 
     if (module_path.isEmpty()) {
         // 1) Nothing found, then try file based plugin
-        rel_path = QString(Python::PYKRITA_ENGINE) + "/" + plugin.moduleFilePathPart() + ".py";
-        module_path = KoResourcePaths::findResource("appdata", rel_path);
+        rel_path = plugin.moduleFilePathPart() + ".py";
+        dbgScript << "Finding Pyrhon module with rel_path:" << rel_path;
+        module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
+        dbgScript << "module_path:" << module_path;
     } else {
         plugin.m_isDir = true;
     }
@@ -467,7 +468,7 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
                                    , "Unable to find the module specified <application>%1</application>"
                                    , plugin.m_pythonPlugin.library()
                                );
-        dbgScript << "Plugin is " << plugin.m_errorReason;
+        dbgScript << "Cannot load module:" << plugin.m_errorReason;
         return false;
     }
     dbgScript << "Found module path:" << module_path;
@@ -755,8 +756,8 @@ void PyKrita::Engine::loadModule(const int idx)
     } else {
         plugin.m_errorReason = i18nc(
                                    "@info:tooltip"
-                                   , "Module not loaded:<nl/>%1"
-                                   , py.lastTraceback()
+                                   , "Module not loaded:<br/>%1"
+                                   , py.lastTraceback().replace("\n", "<br/>")
                                );
     }
     plugin.m_broken = true;

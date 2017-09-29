@@ -176,6 +176,8 @@ void KisInputManager::Private::CanvasSwitcher::setupFocusThreshold(QObject* obje
 
 void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 {
+    if (!canvas) return;
+
     QObject *canvasWidget = canvas->canvasWidget();
 
     if (!canvasResolver.contains(canvasWidget)) {
@@ -187,7 +189,7 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
         focusSwitchThreshold.setEnabled(false);
 
         d->canvas = canvas;
-        d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+        d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
     } else {
         KIS_ASSERT_RECOVER_RETURN(d->canvas == canvas);
     }
@@ -236,12 +238,17 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         case QEvent::FocusIn: {
             QFocusEvent *fevent = static_cast<QFocusEvent*>(event);
             KisCanvas2 *canvas = canvasResolver.value(object);
+
+            // only relevant canvases from the same main window should be
+            // registered in the switcher
+            KIS_SAFE_ASSERT_RECOVER_BREAK(canvas);
+
             if (canvas != d->canvas) {
                 eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
             }
 
             d->canvas = canvas;
-            d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+            d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
 
             d->q->setupAsEventFilter(object);
 
@@ -521,7 +528,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
 
-    if (!matcher.pointerMoved(event)) {
+    if (!matcher.pointerMoved(event) && toolProxy) {
         toolProxy->forwardHoverEvent(event);
     }
     retval = true;

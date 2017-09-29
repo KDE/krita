@@ -59,7 +59,7 @@ public Q_SLOTS:
     /**
      * set the user-visible text of the action to @param text.
      */
-    void settext(QString text);
+    void setText(QString text);
 
     /**
      * @return the internal name of the action.
@@ -125,6 +125,11 @@ public Q_SLOTS:
      * Set the tooltip to the given @param tooltip
      */
     void setToolTip(QString tooltip);
+
+    /**
+     * @return the tooltip text
+     */
+    QString tooltip() const;
 
     /**
      * Trigger this action

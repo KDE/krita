@@ -949,7 +949,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal startMargin = block.blockFormat().leftMargin();
     qreal endMargin = block.blockFormat().rightMargin();
     if (d->isRtl) {
-        qSwap(startMargin, endMargin);
+        std::swap(startMargin, endMargin);
     }
     d->indent = textIndent(block, textList, pStyle) + d->extraTextIndent;
 
@@ -1102,7 +1102,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // We need to sort as the MaximumTabPos may be converted to a value that really
     // should be in the middle, and listtab needs to be sorted in too
-    qSort(qTabs.begin(), qTabs.end(), compareTab);
+    std::sort(qTabs.begin(), qTabs.end(), compareTab);
 
     // Regular interval tabs. Since Qt doesn't handle regular interval tabs offset
     // by a fixed number we need to create the regular tabs ourselves.

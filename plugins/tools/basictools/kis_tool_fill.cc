@@ -90,6 +90,19 @@ void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
 void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 {
+    // cannot use fill tool on non-painting layers.
+    // this logic triggers with multiple layer types like vector layer, clone layer, file layer, group layer
+    if ( currentNode().isNull() || currentNode()->inherits("KisShapeLayer") || nodePaintAbility()!=NodePaintAbility::PAINT ) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        kiscanvas->viewManager()->
+                showFloatingMessage(
+                    i18n("You cannot use this tool with the selected layer type"),
+                    QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+        event->ignore();
+        return;
+    }
+
+
     if (!nodeEditable()) {
         event->ignore();
         return;

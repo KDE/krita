@@ -30,6 +30,7 @@
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QGlobalStatic>
+#include <QMutexLocker>
 
 KoJsonTrader::KoJsonTrader()
 {
@@ -110,6 +111,8 @@ KoJsonTrader* KoJsonTrader::instance()
 
 QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype) const
 {
+    QMutexLocker l(&m_mutex);
+
     QList<QPluginLoader *>list;
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {

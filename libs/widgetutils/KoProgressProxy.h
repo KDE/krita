@@ -40,6 +40,7 @@ public:
     virtual void setValue(int value) = 0;
     virtual void setRange(int minimum, int maximum) = 0;
     virtual void setFormat(const QString &format) = 0;
+    virtual void setAutoNestedName(const QString &name);
 };
 
 

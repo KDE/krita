@@ -158,6 +158,12 @@ public:
     QVector<float> components() const;
 
     /**
+     * @brief componentsOrdered()
+     * @return same as Components, except the values are ordered to the display.
+     */
+    QVector<float> componentsOrdered() const;
+
+    /**
      * @brief setComponents
      * Set the channel/components with normalized values. For integer colorspace, this obviously means the limit
      * is between 0.0-1.0, but for floating point colorspaces, 2.4 or 103.5 are still meaningful (if bright) values.
@@ -193,6 +199,7 @@ public:
 private:
 
     friend class View;
+    friend class PaletteView;
     KoColor color() const;
 
     struct Private;

@@ -94,7 +94,7 @@ KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
         filt.filter = filter;
         d->categories[filter->menuCategory().id()].filters.append(filt);
     }
-    qSort(d->categoriesKeys);
+    std::sort(d->categoriesKeys.begin(), d->categoriesKeys.end());
 
 }
 

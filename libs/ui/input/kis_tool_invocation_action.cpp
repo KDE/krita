@@ -145,9 +145,12 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
-        inputManager()->toolProxy()->
-            forwardEvent(KisToolProxy::END, KisTool::Primary, event, event);
-
+        // It might happen that the action is still running, while the
+        // canvas has been removed, which kills the toolProxy.
+        if (inputManager() && inputManager()->toolProxy()) {
+            inputManager()->toolProxy()->
+                    forwardEvent(KisToolProxy::END, KisTool::Primary, event, event);
+        }
         d->active = false;
     }
 

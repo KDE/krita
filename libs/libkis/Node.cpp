@@ -321,7 +321,6 @@ Node* Node::parentNode() const
 QString Node::type() const
 {
     if (!d->node) return QString();
-    return QString();
     if (qobject_cast<const KisPaintLayer*>(d->node)) {
         return "paintlayer";
     }
@@ -358,6 +357,7 @@ QString Node::type() const
     if (qobject_cast<const KisColorizeMask*>(d->node)) {
         return "colorizemask";
     }
+    return QString();
 }
 
 bool Node::visible() const
@@ -469,7 +469,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     KisPaintDeviceSP projection = d->node->projection();
     QRect bounds = d->node->exactBounds();
 
-    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename);
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     KisImageSP dst = new KisImage(doc->createUndoStore(),
@@ -484,9 +484,8 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     paintLayer->paintDevice()->makeCloneFrom(projection, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
     dst->initialRefreshGraph();
-    doc->setOutputMimeType(mimefilter.toLatin1());
 
-    bool r = doc->exportDocument(QUrl::fromLocalFile(filename));
+    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());
     if (!r) {
         qWarning() << doc->errorMessage();
     }

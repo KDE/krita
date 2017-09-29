@@ -85,7 +85,9 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     options.exif = configuration->getBool("exif", true);
     options.iptc = configuration->getBool("iptc", true);
     options.xmp = configuration->getBool("xmp", true);
-    options.transparencyFillColor = configuration->getColor("transparencyFillcolor").toQColor();
+    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+    c.fromQColor(Qt::white);
+    options.transparencyFillColor = configuration->getColor("transparencyFillcolor", c).toQColor();
     KisMetaData::FilterRegistryModel m;
     m.setEnabledFilters(configuration->getString("filters").split(","));
     options.filters = m.enabledFilters();
@@ -132,7 +134,14 @@ KisPropertiesConfigurationSP KisJPEGExport::defaultConfiguration(const QByteArra
     cfg->setProperty("exif", true);
     cfg->setProperty("iptc", true);
     cfg->setProperty("xmp", true);
-    cfg->setProperty("transparencyFillcolor", QString("255,255,255"));
+
+    KoColor fill_color(KoColorSpaceRegistry::instance()->rgb8());
+    fill_color = KoColor();
+    fill_color.fromQColor(Qt::white);
+    QVariant v;
+    v.setValue(fill_color);
+
+    cfg->setProperty("transparencyFillcolor", v);
     cfg->setProperty("filters", "");
 
     return cfg;
@@ -184,12 +193,10 @@ void KisWdgOptionsJPEG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setVisible(cfg->getBool("is_sRGB"));
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
     chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
-    QStringList rgb = cfg->getString("transparencyFillcolor", "255,255,255").split(',');
     KoColor background(KoColorSpaceRegistry::instance()->rgb8());
     background.fromQColor(Qt::white);
     bnTransparencyFillColor->setDefaultColor(background);
-    background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
-    bnTransparencyFillColor->setColor(background);
+    bnTransparencyFillColor->setColor(cfg->getColor("transparencyFillcolor", background));
 
     m_filterRegistryModel.setEnabledFilters(cfg->getString("filters").split(','));
 
@@ -198,6 +205,10 @@ void KisWdgOptionsJPEG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 KisPropertiesConfigurationSP KisWdgOptionsJPEG::configuration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+
+    QVariant transparencyFillcolor;
+    transparencyFillcolor.setValue(bnTransparencyFillColor->color());
+
     cfg->setProperty("progressive", progressive->isChecked());
     cfg->setProperty("quality", (int)qualityLevel->value());
     cfg->setProperty("forceSRGB", chkForceSRGB->isChecked());
@@ -209,8 +220,8 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEG::configuration() const
     cfg->setProperty("exif", exif->isChecked());
     cfg->setProperty("iptc", iptc->isChecked());
     cfg->setProperty("xmp", xmp->isChecked());
-    QColor c = bnTransparencyFillColor->color().toQColor();
-    cfg->setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
+    cfg->setProperty("transparencyFillcolor", transparencyFillcolor);
+
     QString enabledFilters;
     Q_FOREACH (const KisMetaData::Filter* filter, m_filterRegistryModel.enabledFilters()) {
         enabledFilters = enabledFilters + filter->id() + ',';

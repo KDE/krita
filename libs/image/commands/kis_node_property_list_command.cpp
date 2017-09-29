@@ -26,6 +26,9 @@
 #include "kis_undo_adapter.h"
 #include "kis_layer_properties_icons.h"
 
+// HACK! please refactor out!
+#include "kis_simple_stroke_strategy.h"
+
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList)
     : KisNodeCommand(kundo2_i18n("Property Changes"), node),
@@ -81,15 +84,24 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
     bool oldPassThroughValue = false;
     bool newPassThroughValue = false;
 
+    bool oldVisibilityValue = false;
+    bool newVisibilityValue = false;
+
     Q_FOREACH (const KisBaseNode::Property &prop, oldPropertyList) {
-        if (prop.name == i18n("Pass Through")) {
+        if (prop.id == KisLayerPropertiesIcons::passThrough.id()) {
             oldPassThroughValue = prop.state.toBool();
+        }
+        if (prop.id == KisLayerPropertiesIcons::visible.id()) {
+            oldVisibilityValue = prop.state.toBool();
         }
     }
 
     Q_FOREACH (const KisBaseNode::Property &prop, newPropertyList) {
-        if (prop.name == i18n("Pass Through")) {
+        if (prop.id == KisLayerPropertiesIcons::passThrough.id()) {
             newPassThroughValue = prop.state.toBool();
+        }
+        if (prop.id == KisLayerPropertiesIcons::visible.id()) {
+            newVisibilityValue = prop.state.toBool();
         }
     }
 
@@ -99,7 +111,10 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
         if (image) {
             image->refreshGraphAsync(layer);
         }
-    } else if (m_node->parent() && !oldPassThroughValue && newPassThroughValue) {
+    } else if ((m_node->parent() && !oldPassThroughValue && newPassThroughValue) ||
+               (oldPassThroughValue && newPassThroughValue &&
+                !oldVisibilityValue && newVisibilityValue)) {
+
         KisLayerSP layer(qobject_cast<KisLayer*>(m_node->parent().data()));
         KisImageSP image = layer->image().toStrongRef();
         if (image) {
@@ -143,5 +158,18 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
     else {
         image->setModified();
         cmd->redo();
+
+        /**
+         * HACK ALERT!
+         *
+         * Here we start a fake legacy stroke, so that all the LoD planes would
+         * be invalidated. Ideally, we should refactor this method and avoid
+         * resetting LoD planes when node visibility changes, Instead there should
+         * be two commands executes: LoD agnostic one (which sets the properties
+         * themselves), and two LoD-specific update commands: one for lodN and
+         * another one for lod0.
+         */
+        KisStrokeId strokeId = image->startStroke(new KisSimpleStrokeStrategy());
+        image->endStroke(strokeId);
     }
 }

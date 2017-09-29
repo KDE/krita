@@ -96,6 +96,10 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , KisShared()
     , m_d(new Private(*rhs.m_d))
 {
+    if (rhs.m_d->opacityChannel) {
+        m_d->opacityChannel.reset(new KisScalarKeyframeChannel(*rhs.m_d->opacityChannel, 0));
+        m_d->keyframeChannels.insert(m_d->opacityChannel->id(), m_d->opacityChannel.data());
+    }
 }
 
 KisBaseNode::~KisBaseNode()
@@ -227,7 +231,7 @@ bool KisBaseNode::visible(bool recursive) const
     KisBaseNodeSP parentNode = parentCallback();
 
     return recursive && isVisible && parentNode ?
-        parentNode->visible() : isVisible;
+        parentNode->visible(recursive) : isVisible;
 }
 
 void KisBaseNode::setVisible(bool visible, bool loading)

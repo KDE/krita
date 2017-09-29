@@ -80,45 +80,12 @@ public:
      * call KMainWindow::toolBar(name), or they use XML-GUI and specify
      * toolbars using XML.
      *
-     * @param parent      The standard toolbar parent (usually a KMainWindow)
-     * @param isMainToolBar  True for the "main toolbar", false for other toolbars. Different settings apply.
-     * @param readConfig  whether to apply the configuration (global and application-specific)
-     */
-    explicit KToolBar(QWidget *parent, bool isMainToolBar = false, bool readConfig = true);
-    // KDE5: remove. The one below is preferred so that all debug output from init() shows the right objectName already,
-    // and so that isMainToolBar() and iconSizeDefault() return correct values during loading too.
-
-    /**
-     * Constructor.
-     *
-     * This constructor takes care of adding the toolbar to the mainwindow,
-     * if @p parent is a QMainWindow.
-     *
-     * Normally KDE applications do not call this directly, they either
-     * call KMainWindow::toolBar(name), or they use XML-GUI and specify
-     * toolbars using XML.
-     *
      * @param objectName  The QObject name of this toolbar, required so that QMainWindow can save and load the toolbar position,
      *                    and so that KToolBar can find out if it's the main toolbar.
      * @param parent      The standard toolbar parent (usually a KMainWindow)
      * @param readConfig  whether to apply the configuration (global and application-specific)
      */
     explicit KToolBar(const QString &objectName, QWidget *parent, bool readConfig = true);
-
-    /**
-     * Alternate constructor with additional arguments, e.g. to choose in which area
-     * the toolbar should be auto-added. This is rarely used in KDE. When using XMLGUI
-     * you can specify this as an xml attribute instead.
-     *
-     * @param objectName  The QObject name of this toolbar, required so that QMainWindow can save and load the toolbar position
-     * @param parentWindow The window that should be the parent of this toolbar
-     * @param area        The position of the toolbar. Usually Qt::TopToolBarArea.
-     * @param newLine     If true, start a new line in the dock for this toolbar.
-     * @param isMainToolBar  True for the "main toolbar", false for other toolbars. Different settings apply.
-     * @param readConfig  whether to apply the configuration (global and application-specific)
-     */
-    KToolBar(const QString &objectName, QMainWindow *parentWindow, Qt::ToolBarArea area, bool newLine = false,
-             bool isMainToolBar = false, bool readConfig = true); // KDE5: remove, I don't think anyone is using this.
 
     /**
      * Destroys the toolbar.

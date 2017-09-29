@@ -26,5 +26,8 @@ target_link_libraries(kritarunner
                       Qt5::Svg
                       Qt5::Concurrent)
 
-install(TARGETS kritarunner ${INSTALL_TARGETS_DEFAULT_ARGS})
+if (MINGW)
+    target_compile_definitions(kritarunner PRIVATE _hypot=hypot)
+endif (MINGW)
 
+install(TARGETS kritarunner ${INSTALL_TARGETS_DEFAULT_ARGS})

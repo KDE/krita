@@ -296,7 +296,7 @@ QRectF KisTool::convertToPt(const QRectF &rect)
     QRectF r;
     //We add 1 in the following to the extreme coords because a pixel always has size
     r.setCoords(int(rect.left()) / image()->xRes(), int(rect.top()) / image()->yRes(),
-                int(1 + rect.right()) / image()->xRes(), int(1 + rect.bottom()) / image()->yRes());
+                int(rect.right()) / image()->xRes(), int( rect.bottom()) / image()->yRes());
     return r;
 }
 
@@ -516,6 +516,11 @@ void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
     Q_UNUSED(event);
 }
 
+void KisTool::mouseTripleClickEvent(KoPointerEvent *event)
+{
+    mouseDoubleClickEvent(event);
+}
+
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
@@ -571,9 +576,11 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         painter->endNativePainting();
     }
     else {
+        painter->save();
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
+        painter->restore();
     }
 }
 

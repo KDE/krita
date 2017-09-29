@@ -133,7 +133,7 @@ public:
      * @param to The mimetype of the destination file/document
      * @return a serializable KisPropertiesConfiguration object
      */
-    virtual KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
+    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
 
     /**
      * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter

@@ -70,6 +70,7 @@ protected:
     void mouseMoveEvent(QMouseEvent* e) override;
     void keyPressEvent(QKeyEvent* e) override;
     void wheelEvent(QWheelEvent *) override;
+    bool event(QEvent *event) override;
 
     bool eventFilter(QObject* recv, QEvent* e) override;
 

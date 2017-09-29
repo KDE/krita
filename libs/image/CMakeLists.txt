@@ -176,6 +176,7 @@ set(kritaimage_LIB_SRCS
    kis_sync_lod_cache_stroke_strategy.cpp
    kis_lod_capable_layer_offset.cpp
    kis_update_time_monitor.cpp
+   KisUpdateSchedulerConfigNotifier.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc

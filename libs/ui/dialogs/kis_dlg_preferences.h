@@ -227,11 +227,16 @@ private Q_SLOTS:
 
     void selectSwapDir();
 
+    void slotThreadsLimitChanged(int value);
+    void slotFrameClonesLimitChanged(int value);
+
 private:
     int realTilesRAM();
 
 private:
     QVector<SliderAndSpinBoxSync*> m_syncs;
+    int m_lastUsedThreadsLimit;
+    int m_lastUsedClonesLimit;
 };
 
 //=======================

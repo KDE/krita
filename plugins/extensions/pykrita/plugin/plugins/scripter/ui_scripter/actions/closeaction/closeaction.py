@@ -22,11 +22,11 @@ class CloseAction(QAction):
     def close(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)
 
-        msgBox.setInformativeText("Do you want to save the current document?");
-        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel);
-        msgBox.setDefaultButton(QMessageBox.Save);
+        msgBox.setInformativeText("Do you want to save the current document?")
+        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        msgBox.setDefaultButton(QMessageBox.Save)
 
-        ret = msgBox.exec();
+        ret = msgBox.exec()
 
         if ret == QMessageBox.Cancel:
             return

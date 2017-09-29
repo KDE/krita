@@ -34,6 +34,7 @@
 #include <QMenu>
 
 #include <kis_debug.h>
+#include <kis_config.h>
 
 #include <KoColorProfile.h>
 #include "kis_coordinates_converter.h"
@@ -65,7 +66,7 @@ class KisQPainterCanvas::Private
 public:
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
-    QImage buffer;
+    bool scrollCheckers;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
@@ -105,15 +106,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     setAutoFillBackground(false);
 
-    if (m_d->buffer.size() != size()) {
-        m_d->buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
-    }
-
-    QPainter gc(&m_d->buffer);
-
-    // we double buffer, so we paint on an image first, then from the image onto the canvas,
-    // so copy the clip region since otherwise we're filling the whole buffer every time with
-    // the background color _and_ the transparent squares.
+    QPainter gc(this);
     gc.setClipRegion(ev->region());
 
     KisCoordinatesConverter *converter = coordinatesConverter();
@@ -127,7 +120,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     QPointF brushOrigin;
     QPolygonF polygon;
 
-    converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
+    converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon, m_d->scrollCheckers);
     gc.setPen(Qt::NoPen);
     gc.setBrush(m_d->checkBrush);
     gc.setBrushOrigin(brushOrigin);
@@ -144,10 +137,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 #endif
 
     drawDecorations(gc, ev->rect());
-    gc.end();
-
-    QPainter painter(this);
-    painter.drawImage(ev->rect(), m_d->buffer, ev->rect());
 }
 
 void KisQPainterCanvas::drawImage(QPainter & gc, const QRect &updateWidgetRect) const
@@ -251,7 +240,10 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
+    KisConfig cfg;
+
     m_d->checkBrush = QBrush(createCheckersImage());
+    m_d->scrollCheckers = cfg.scrollCheckers();
     notifyConfigChanged();
 }
 

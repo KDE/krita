@@ -118,10 +118,13 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     }
 }
 
-static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2)
-{
-    return tab1.position < tab2.position;
-}
+struct {
+    bool operator()(KoRuler::Tab tab1, KoRuler::Tab tab2) const
+    {
+        return tab1.position < tab2.position;
+    }
+} compareTabs;
+
 
 QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter)
 {
@@ -664,7 +667,7 @@ void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate 
     points << d->effectiveActiveRangeStart();
     points << d->effectiveActiveRangeEnd();
     points << d->rulerLength;
-    qSort(points.begin(), points.end());
+    std::sort(points.begin(), points.end());
     QListIterator<qreal> i(points);
     i.next();
     while (i.hasNext() && i.hasPrevious()) {
@@ -1047,7 +1050,7 @@ void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs, qreal tabDistance)
 QList<KoRuler::Tab> KoRuler::tabs() const
 {
     QList<Tab> answer = d->tabs;
-    qSort(answer.begin(), answer.end(), compareTabs);
+    std::sort(answer.begin(), answer.end(), compareTabs);
 
     return answer;
 }

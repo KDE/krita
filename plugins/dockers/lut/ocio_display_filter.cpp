@@ -265,11 +265,13 @@ void OcioDisplayFilter::updateProcessor()
     m_shaderDirty = true;
 }
 
-void OcioDisplayFilter::updateShader()
+bool OcioDisplayFilter::updateShader()
 {
+    bool result = false;
+
     if (KisOpenGL::hasOpenGL3()) {
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
-        updateShaderImpl(f);
+        result = updateShaderImpl(f);
     }
     // XXX This option can be removed once we move to Qt 5.7+
     else if (KisOpenGL::supportsLoD()) {
@@ -278,28 +280,32 @@ void OcioDisplayFilter::updateShader()
 #else
         QOpenGLFunctions_3_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
 #endif
-        updateShaderImpl(f);
+        result = updateShaderImpl(f);
     } else {
         QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
-        updateShaderImpl(f);
+        result = updateShaderImpl(f);
     }
+
+    return result;
 }
 
 template <class F>
-void OcioDisplayFilter::updateShaderImpl(F *f) {
+bool OcioDisplayFilter::updateShaderImpl(F *f) {
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
     KisConfig cfg;
-    if (!cfg.useOpenGL()) return;
+    if (!cfg.useOpenGL()) return false;
 
-    if (!m_shaderDirty) return;
+    if (!m_shaderDirty) return false;
 
     if (!f) {
         qWarning() << "Failed to get valid OpenGL functions for OcioDisplayFilter!";
-        return;
+        return false;
     }
 
     f->initializeOpenGLFunctions();
+
+    bool shouldRecompileShader = false;
 
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 
@@ -363,7 +369,9 @@ void OcioDisplayFilter::updateShaderImpl(F *f) {
         os << m_processor->getGpuShaderText(shaderDesc) << "\n";
 
         m_program = QString::fromLatin1(os.str().c_str());
+        shouldRecompileShader = true;
     }
 
     m_shaderDirty = false;
+    return shouldRecompileShader;
 }

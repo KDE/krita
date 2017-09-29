@@ -86,8 +86,6 @@ KisImportCatcher::KisImportCatcher(const QUrl &url, KisViewManager *view, const 
 {
     m_d->doc = KisPart::instance()->createDocument();
 
-    KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
-    m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
     m_d->layerType = layerType;

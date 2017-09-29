@@ -69,6 +69,8 @@ KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 
 void KisSimpleUpdateQueue::updateSettings()
 {
+    QMutexLocker locker(&m_lock);
+
     KisImageConfig config;
 
     m_patchWidth = config.updatePatchWidth();

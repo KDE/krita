@@ -45,16 +45,17 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
 
+#include <KisPart.h>
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kis_config.h>
 #include <kis_preference_set_registry.h>
 #include <kis_image.h>
-#include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_paint_layer.h>
+#include <kis_algebra_2d.h>
 
 #include "kis_input_output_mapper.h"
 #include "kis_qmic_simple_convertor.h"
@@ -62,7 +63,6 @@
 #include <PluginSettings.h>
 
 #include "kis_qmic_applicator.h"
-#include "kis_qmic_progress_manager.h"
 
 static const char ack[] = "ack";
 
@@ -71,11 +71,11 @@ K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>()
 QMic::QMic(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
     , m_gmicApplicator(0)
-    , m_progressManager(0)
 {
-    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
-    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
+#ifndef Q_OS_MAC
+//    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+//    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
+//    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
     m_qmicAction = createAction("QMic");
     m_qmicAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -89,7 +89,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
 
     m_gmicApplicator = new KisQmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
-
+#endif
 }
 
 QMic::~QMic()
@@ -106,7 +106,6 @@ QMic::~QMic()
     }
 
     delete m_gmicApplicator;
-    delete m_progressManager;
     delete m_localServer;
 }
 
@@ -120,32 +119,11 @@ void QMic::slotQMic(bool again)
     m_qmicAction->setEnabled(false);
     m_againAction->setEnabled(false);
 
-    if (m_pluginProcess) {
-        qDebug() << "Plugin is already started" << m_pluginProcess->state();
-        return;
-    }
-
-    delete m_progressManager;
-    m_progressManager = new KisQmicProgressManager(m_view);
-    connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
-
     // find the krita-gmic-qt plugin
-    KisConfig cfg;
-    QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-
-    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-        KoDialog dlg;
-        dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
-        QWidget *w = new QWidget(&dlg);
-        dlg.setMainWidget(w);
-        QVBoxLayout *l = new QVBoxLayout(w);
-        l->addWidget(new PluginSettings(w));
-        dlg.setButtons(KoDialog::Ok);
-        dlg.exec();
-        pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-        if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-            return;
-        }
+    QString pluginPath = PluginSettings::gmicQtPath();
+    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists() || !QFileInfo(pluginPath).isFile()) {
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin."));
+        return;
     }
 
     m_key = QUuid::createUuid().toString();
@@ -186,6 +164,8 @@ void QMic::connected()
     msg.resize(remaining);
     int got = 0;
     char* uMsgBuf = msg.data();
+    // FIXME: Should use read transaction for Qt >= 5.7:
+    //        https://doc.qt.io/qt-5/qdatastream.html#using-read-transactions
     do {
         got = ds.readRawData(uMsgBuf, remaining);
         remaining -= got;
@@ -228,13 +208,22 @@ void QMic::connected()
     }
 
     QByteArray ba;
+    QString messageBoxWarningText;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
-        ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+        KisSelectionSP selection = m_view->image()->globalSelection();
+
+        if (selection) {
+            QRect selectionRect = selection->selectedExactRect();
+            ba = QByteArray::number(selectionRect.width()) + "," + QByteArray::number(selectionRect.height());
+        }
+        else {
+            ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+        }
     }
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
-        QRectF cropRect = m_view->image()->bounds();
+        QRectF cropRect(0.0, 0.0, 1.0, 1.0);
         if (!messageMap.contains("croprect") || messageMap.values("croprect").first().split(',', QString::SkipEmptyParts).size() != 4) {
             qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
         }
@@ -255,7 +244,7 @@ void QMic::connected()
         QStringList layers = messageMap.values("layer");
         m_outputMode = (OutputMode)mode;
         if (m_outputMode != IN_PLACE) {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented yet."));
+            messageBoxWarningText = i18n("Sorry, this output mode is not implemented yet.");
             m_outputMode = IN_PLACE;
         }
         slotStartApplicator(layers);
@@ -278,14 +267,34 @@ void QMic::connected()
 
     qDebug() << "Sending" << QString::fromUtf8(ba);
 
+    // HACK: Make sure QDataStream does not refuse to write!
+    // Proper fix: Change the above read to use read transaction
+    ds.resetStatus();
     ds.writeBytes(ba.constData(), ba.length());
+    // Flush the socket because we might not return to the event loop!
+    if (!socket->waitForBytesWritten(2000)) {
+        qWarning() << "Failed to write response:" << socket->error();
+    }
 
     // Wait for the ack
     bool r = true;
-    r &= socket->waitForReadyRead(); // wait for ack
+    r &= socket->waitForReadyRead(2000); // wait for ack
     r &= (socket->read(qstrlen(ack)) == ack);
-    socket->waitForDisconnected(-1);
+    if (!socket->waitForDisconnected(2000)) {
+        qWarning() << "Remote not disconnected:" << socket->error();
+        // Wait again
+        socket->disconnectFromServer();
+        if (socket->waitForDisconnected(2000)) {
+            qWarning() << "Disconnect timed out:" << socket->error();
+        }
+    }
 
+    if (!messageBoxWarningText.isEmpty()) {
+        // Defer the message box to the event loop
+        QTimer::singleShot(0, [messageBoxWarningText]() {
+            QMessageBox::warning(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita"), messageBoxWarningText);
+        });
+    }
 }
 
 void QMic::pluginStateChanged(QProcess::ProcessState state)
@@ -300,29 +309,8 @@ void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
     m_pluginProcess = 0;
     delete m_localServer;
     m_localServer = 0;
-    delete m_progressManager;
-    m_progressManager = 0;
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);
-}
-
-void QMic::slotUpdateProgress()
-{
-    if (!m_gmicApplicator) {
-        qWarning() << "G'Mic applicator already deleted!";
-        return;
-    }
-    qDebug() << "slotUpdateProgress" << m_gmicApplicator->getProgress();
-    m_progressManager->updateProgress(m_gmicApplicator->getProgress());
-}
-
-void QMic::slotStartProgressReporting()
-{
-    qDebug() << "slotStartProgressReporting();";
-    if (m_progressManager->inProgress()) {
-        m_progressManager->finishProgress();
-    }
-    m_progressManager->initProgress();
 }
 
 void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &msg)
@@ -394,7 +382,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
     KisNodeListSP layers = mapper.inputNodes(m_inputMode);
 
     m_gmicApplicator->setProperties(m_view->image(), rootNode, images, actionName, layers);
-    slotStartProgressReporting();
     m_gmicApplicator->preview();
     m_gmicApplicator->finish();
 }
@@ -416,42 +403,47 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     for (int i = 0; i < nodes->size(); ++i) {
         KisNodeSP node = nodes->at(i);
-        qDebug() << "Converting node" << node->name() << node->exactBounds();
-        if (node->paintDevice()) {
+        if (node && node->paintDevice()) {
+            QRect cropRect;
 
-            QRect cropRect = node->exactBounds();
+            KisSelectionSP selection = m_view->image()->globalSelection();
 
-            const int ix = static_cast<int>(std::floor(rc.x() * cropRect.width()));
-            const int iy = static_cast<int>(std::floor(rc.y() * cropRect.height()));
-            const int iw = std::min(cropRect.width() - ix, static_cast<int>(1 + std::ceil(rc.width() * cropRect.width())));
-            const int ih = std::min(cropRect.height() - iy, static_cast<int>(1 + std::ceil(rc.height() * cropRect.height())));
+            if (selection) {
+                cropRect = selection->selectedExactRect();
+            }
+            else {
+                cropRect = m_view->image()->bounds();
+            }
+
+            qDebug() << "Converting node" << node->name() << cropRect;
+
+            const QRectF mappedRect = KisAlgebra2D::mapToRect(cropRect).mapRect(rc);
+            const QRect resultRect = mappedRect.toAlignedRect();
 
             QSharedMemory *m = new QSharedMemory(QString("key_%1").arg(QUuid::createUuid().toString()));
             m_sharedMemorySegments.append(m);
-            if (!m->create(iw * ih * 4 * sizeof(float))) {  //buf.size())) {
+            if (!m->create(resultRect.width() * resultRect.height() * 4 * sizeof(float))) {  //buf.size())) {
                 qWarning() << "Could not create shared memory segment" << m->error() << m->errorString();
                 return false;
             }
             m->lock();
 
             gmic_image<float> img;
-            img.assign(iw, ih, 1, 4);
+            img.assign(resultRect.width(), resultRect.height(), 1, 4);
             img._data = reinterpret_cast<float*>(m->data());
 
-            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, QRect(ix, iy, iw, ih));
+            KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, resultRect);
 
             message->append(m->key().toUtf8());
 
             m->unlock();
 
-            qDebug() << "size" << m->size();
-
             message->append(",");
             message->append(node->name().toUtf8().toHex());
             message->append(",");
-            message->append(QByteArray::number(iw));
+            message->append(QByteArray::number(resultRect.width()));
             message->append(",");
-            message->append(QByteArray::number(ih));
+            message->append(QByteArray::number(resultRect.height()));
 
             message->append("\n");
         }

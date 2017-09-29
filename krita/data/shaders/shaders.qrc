@@ -1,13 +1,8 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>bilinear_gradient.frag</file>
         <file>conical_gradient.frag</file>
         <file>conical_symetric_gradient.frag</file>
-        <file>cursor_legacy.frag</file>
-        <file>cursor_legacy.vert</file>
-        <file>cursor.frag</file>
-        <file>cursor.vert</file>
         <file>highq_downscale.frag</file>
         <file>linear_gradient.frag</file>
         <file>matrix_transform.vert</file>
@@ -16,5 +11,7 @@
         <file>square_gradient.frag</file>
         <file>matrix_transform_legacy.vert</file>
         <file>simple_texture_legacy.frag</file>
+        <file>solid_color.frag</file>
+        <file>solid_color_legacy.frag</file>
     </qresource>
 </RCC>

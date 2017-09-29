@@ -16,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "KisApplication.h"
@@ -25,6 +25,10 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <tchar.h>
+#endif
+
+#ifdef Q_OS_OSX
+#include "osx.h"
 #endif
 
 #include <QDesktopServices>
@@ -87,6 +91,8 @@
 #include "opengl/kis_opengl.h"
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
+#include "KisViewManager.h"
+#include "kis_workspace_resource.h"
 
 #include <KritaVersionWrapper.h>
 namespace {
@@ -149,6 +155,10 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     , m_mainWindow(0)
     , m_batchRun(false)
 {
+#ifdef Q_OS_OSX
+    setMouseCoalescingEnabled(false);
+#endif
+
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
     setApplicationDisplayName("Krita");
@@ -400,7 +410,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
 
-
     ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);
 
@@ -423,7 +432,25 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (showmainWindow) {
             m_mainWindow->initializeGeometry();
-            m_mainWindow->show();
+
+            if (!args.workspace().isEmpty()) {
+                KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+                KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
+                if (workspace) {
+                    m_mainWindow->restoreWorkspace(workspace->dockerState());
+                }
+            }
+
+            if (args.canvasOnly()) {
+                m_mainWindow->viewManager()->switchCanvasOnly(true);
+            }
+
+            if (args.fullScreen()) {
+                m_mainWindow->showFullScreen();
+            }
+            else {
+                m_mainWindow->show();
+            }
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
@@ -475,17 +502,15 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     qApp->processEvents(); // For vector layers to be updated
 
                     doc->setFileBatchMode(true);
-                    doc->setOutputMimeType(outputMimetype.toLatin1());
-                    if (!doc->exportDocument(QUrl::fromLocalFile(exportFileName))) {
+                    if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
                         dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
                 else if (m_mainWindow) {
-                    KisDocument *doc = KisPart::instance()->createDocument();
-                    doc->setFileBatchMode(m_batchRun);
-                    if (m_mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
+                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                    if (m_mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
                         if (print) {
                             m_mainWindow->slotFilePrint();
                             nPrinted++;
@@ -594,9 +619,8 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
                 createNewDocFromTemplate(filename, mw);
             }
             else if (QFile(filename).exists()) {
-                KisDocument *doc = KisPart::instance()->createDocument();
-                doc->setFileBatchMode(m_batchRun);
-                mw->openDocumentInternal(QUrl::fromLocalFile(filename), doc);
+                KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                mw->openDocument(QUrl::fromLocalFile(filename), flags);
             }
         }
     }
@@ -606,9 +630,8 @@ void KisApplication::fileOpenRequested(const QString &url)
 {
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
-        KisDocument *doc = KisPart::instance()->createDocument();
-        doc->setFileBatchMode(m_batchRun);
-        mainWindow->openDocumentInternal(QUrl::fromLocalFile(url), doc);
+        KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+        mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
     }
 }
 
@@ -630,40 +653,39 @@ void KisApplication::checkAutosaveFiles()
 #endif
 
     // all autosave files for our application
-    m_autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+    QStringList autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
     // Allow the user to make their selection
-    if (m_autosaveFiles.size() > 0) {
+    if (autosaveFiles.size() > 0) {
         if (d->splashScreen) {
             // hide the splashscreen to see the dialog
             d->splashScreen->hide();
         }
-        m_autosaveDialog = new KisAutoSaveRecoveryDialog(m_autosaveFiles, activeWindow());
+        m_autosaveDialog = new KisAutoSaveRecoveryDialog(autosaveFiles, activeWindow());
         QDialog::DialogCode result = (QDialog::DialogCode) m_autosaveDialog->exec();
 
         if (result == QDialog::Accepted) {
             QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
-            Q_FOREACH (const QString &autosaveFile, m_autosaveFiles) {
+            Q_FOREACH (const QString &autosaveFile, autosaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
-            m_autosaveFiles = filesToRecover;
+            autosaveFiles = filesToRecover;
         } else {
-            m_autosaveFiles.clear();
+            autosaveFiles.clear();
         }
 
-        if (m_autosaveFiles.size() > 0) {
+        if (autosaveFiles.size() > 0) {
             QList<QUrl> autosaveUrls;
-            Q_FOREACH (const QString &autoSaveFile, m_autosaveFiles) {
+            Q_FOREACH (const QString &autoSaveFile, autosaveFiles) {
                 const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
                 autosaveUrls << url;
             }
             if (m_mainWindow) {
                 Q_FOREACH (const QUrl &url, autosaveUrls) {
-                    KisDocument *doc = KisPart::instance()->createDocument();
-                    doc->setFileBatchMode(m_batchRun);
-                    m_mainWindow->openDocumentInternal(url, doc);
+                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                    m_mainWindow->openDocument(url, flags | KisMainWindow::RecoveryFile);
                 }
             }
         }
@@ -711,11 +733,8 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QUrl templateURL;
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
 
-        KisDocument *doc = KisPart::instance()->createDocument();
-        doc->setFileBatchMode(m_batchRun);
-        if (mainWindow->openDocumentInternal(templateURL, doc)) {
-            doc->resetURL();
-            doc->setTitleModified();
+        KisMainWindow::OpenFlags batchFlags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+        if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {
             dbgUI << "Template loaded...";
             return true;
         }

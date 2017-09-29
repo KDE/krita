@@ -124,7 +124,6 @@ parts:
         - libraw15
         - libkf5crash5
         - libpoppler-qt5-1
-        - curl
     after: [qt, kdeframeworks]
     
   integration:

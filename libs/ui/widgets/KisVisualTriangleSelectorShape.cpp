@@ -39,6 +39,7 @@
 #include <QPointer>
 #include "kis_signal_compressor.h"
 #include "kis_debug.h"
+#include "kis_global.h"
 
 KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
                                                                  Dimensions dimension,
@@ -98,14 +99,16 @@ void KisVisualTriangleSelectorShape::setTriangle()
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
     qreal offset=7.0;//the offset is so we get a nice little border that allows selecting extreme colors better.
-    qreal y = qMin(coordinate.y()*(height()-offset*2-5.0)+offset+5.0, (qreal)height()-offset);
+    qreal yOffset = (cos(kisDegreesToRadians(30))*offset)*2;
+    qreal xOffset = qFloor(sin(kisDegreesToRadians(30))*offset);
+    qreal y = qMax(qMin((coordinate.y()*(height()-yOffset-offset))+yOffset, (qreal)height()-offset),yOffset);
 
     qreal triWidth = width();
-    qreal horizontalLineLength = y*(2./sqrt(3.));
-    qreal horizontalLineStart = triWidth/2.-horizontalLineLength/2.;
-    qreal relativeX = coordinate.x()*(horizontalLineLength-offset*2);
-    qreal x = qMin(relativeX + horizontalLineStart + offset, (qreal)width()-offset*2);
-    if (y<offset){
+    qreal horizontalLineLength = ((y-yOffset)*(2./sqrt(3.)));
+    qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
+    qreal relativeX = qMin(coordinate.x()*(horizontalLineLength), horizontalLineLength);
+    qreal x = qMax(relativeX + horizontalLineStart + xOffset, horizontalLineStart+xOffset);
+    if (y<=yOffset){
         x = 0.5*width();
     }
 
@@ -118,16 +121,18 @@ QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate
     qreal x = 0.5;
     qreal y = 0.5;
     qreal offset=7.0; //the offset is so we get a nice little border that allows selecting extreme colors better.
+    qreal yOffset = (cos(kisDegreesToRadians(30))*offset)*2;
+    qreal xOffset = qFloor(sin(kisDegreesToRadians(30))*offset);
 
-    y = qMax((qreal)coordinate.y()-offset,0.0)/(height()-offset*2);
+    y = qMin(qMax((qreal)coordinate.y()-yOffset, 0.0)/(height()-yOffset-offset), 1.0);
 
     qreal triWidth = width();
-    qreal horizontalLineLength = ((qreal)coordinate.y())*(2./sqrt(3.))-(offset*2);
+    qreal horizontalLineLength = ((qreal)coordinate.y()-yOffset)*(2./sqrt(3.));
     qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
 
-    qreal relativeX = qMax((qreal)coordinate.x(),0.0)-horizontalLineStart;
-    x = relativeX/horizontalLineLength;
-    if (coordinate.y()<offset){
+    qreal relativeX = qMax((qreal)coordinate.x()-xOffset-horizontalLineStart,0.0);
+    x = qMin(relativeX/horizontalLineLength, 1.0);
+    if (coordinate.y()<=yOffset){
         x = 0.5;
     }
     return QPointF(x, y);

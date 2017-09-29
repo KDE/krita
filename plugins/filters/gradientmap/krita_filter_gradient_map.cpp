@@ -29,6 +29,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
 #include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
 #include <KoColorSet.h>
 #include "gradientmap.h"
 
@@ -41,7 +42,7 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap()
     setShowConfigurationWidget(true);
     setSupportsLevelOfDetail(true);
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(false);
+    setSupportsAdjustmentLayers(true);
     setSupportsThreading(true);
 }
 
@@ -56,16 +57,26 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
         progressUpdater->setRange(0, applyRect.height() * applyRect.width());
     }
 
-    KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
-    if (!gradient) {
-        qDebug() << "Could not find gradient" << config->getString("gradientName");
-        return;
+    QDomDocument doc;
+    if (config->version()==1) {
+        QDomElement elt = doc.createElement("gradient");
+        KoAbstractGradient *gradientAb = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
+            if (!gradientAb) {
+                qDebug() << "Could not find gradient" << config->getString("gradientName");
+            }
+        gradientAb = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();
+        KoStopGradient::fromQGradient(gradientAb->toQGradient())->toXML(doc, elt);
+        doc.appendChild(elt);
+    } else {
+        doc.setContent(config->getString("gradientXML", ""));
     }
+   KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
+
 
     KoColorSet *gradientCache = new KoColorSet();
     for (int i=0; i<256; i++) {
         KoColor gc;
-        gradient->colorAt(gc, ((qreal)i/255.0));
+        gradient.colorAt(gc, ((qreal)i/255.0));
         KoColorSetEntry col;
         col.color = gc;
         gradientCache->add(col);
@@ -90,9 +101,15 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 2);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();
-    config->setProperty("gradientName", gradient->name());
+    KoStopGradient stopGradient;
+    stopGradient.fromQGradient(gradient->toQGradient());
+    QDomDocument doc;
+    QDomElement elt = doc.createElement("gradient");
+    stopGradient.toXML(doc, elt);
+    doc.appendChild(elt);
+    config->setProperty("gradientXML", doc.toString());
     return config;
 }
 

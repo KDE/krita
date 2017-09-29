@@ -166,7 +166,7 @@ namespace KisAnimationUtils {
 
     void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset)
     {
-        qSort(points->begin(), points->end(), LessOperator(offset));
+        std::sort(points->begin(), points->end(), LessOperator(offset));
     }
 
     KUndo2Command* createMoveKeyframesCommand(const FrameItemList &srcFrames,

@@ -131,7 +131,7 @@ public:
         return 1.0 / m_texturesInfo.width;
     }
 
-    KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
+    KisOpenGLUpdateInfoSP updateCache(const QRect& rect, KisImageSP srcImage);
     KisOpenGLUpdateInfoSP updateCacheNoConversion(const QRect& rect);
 
     void recalculateCache(KisUpdateInfoSP info);
@@ -157,7 +157,7 @@ private:
     void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
-    KisOpenGLUpdateInfoSP updateCacheImpl(const QRect& rect, bool convertColorSpace);
+    KisOpenGLUpdateInfoSP updateCacheImpl(const QRect& rect, KisImageSP srcImage, bool convertColorSpace);
 
 private:
     KisImageWSP m_image;

@@ -163,7 +163,7 @@ void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
 {
     RssReader reader;
     m_aggregatedFeed.append(reader.parse(reply));
-    qSort(m_aggregatedFeed.begin(), m_aggregatedFeed.end(), sortForPubDate);
+    std::sort(m_aggregatedFeed.begin(), m_aggregatedFeed.end(), sortForPubDate);
     setArticleCount(m_aggregatedFeed.size());
     reset();
 }

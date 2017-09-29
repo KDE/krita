@@ -115,8 +115,6 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
 
     // create a layer
     QList<int> pages = wdg->pages();
-    QPointer<KoUpdater> loadUpdater =  document->progressUpdater()->startSubtask(1, "load");
-    loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),
                 i18n("Page %1", *it + 1),
@@ -130,7 +128,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
 
         delete page;
         image->addNode(layer, image->rootLayer(), 0);
-        loadUpdater->setProgress(*it + 1);
+        setProgress(qreal(*it + 1) * 100 / pages.count());
     }
 
     document->setCurrentImage(image);

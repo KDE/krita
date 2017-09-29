@@ -62,7 +62,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP de
     m_d->defaultBounds = defaultBounds;
 }
 
-KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode)
+KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNode *newParentNode)
     : m_d(new Private(*rhs.m_d, newParentNode))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);

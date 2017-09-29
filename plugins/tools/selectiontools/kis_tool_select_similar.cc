@@ -171,3 +171,12 @@ void KisToolSelectSimilar::setSelectionAction(int action)
 {
     changeSelectionAction(action);
 }
+
+QMenu* KisToolSelectSimilar::popupActionsMenu()
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+
+
+    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+}

@@ -51,6 +51,7 @@
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_opacityOption(node)
+    , m_avgSpacing(50)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -143,7 +144,14 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
     m_dabExecutor->addDab(request, qreal(dabOpacity) / 255.0, qreal(dabFlow) / 255.0);
 
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+
+    KisSpacingInformation spacingInfo =
+        effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+
+    // gather statistics about dabs
+    m_avgSpacing(spacingInfo.scalarApprox());
+
+    return spacingInfo;
 }
 
 
@@ -244,30 +252,21 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 
     if (!m_dabExecutor->hasPreparedDabs()) return m_currentUpdatePeriod;
 
-    const int numThreads = 8;
-    const int splitInto = numThreads;
-
     QList<KisRenderedDab> dabsQueue = m_dabExecutor->takeReadyDabs();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!dabsQueue.isEmpty(), m_currentUpdatePeriod);
 
-    // TODO: instead of splitting the total rect, approximate needed rects only
-    QRect totalRect;
-    Q_FOREACH (const KisRenderedDab &dab, dabsQueue) {
-        totalRect |= dab.realBounds();
-    }
+    const int diameter = m_dabExecutor->averageDabSize();
+    const qreal spacing = m_avgSpacing.rollingMean();
 
-    int idealPatchSize = KisAlgebra2D::maxDimension(totalRect) / splitInto;
-    idealPatchSize &= ~63;
-
-    idealPatchSize = qMax(idealPatchSize, 64);
-
-    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(totalRect, QSize(idealPatchSize,idealPatchSize));
+    const int idealNumRects = QThread::idealThreadCount();
+    QVector<QRect> rects = KisPaintOpUtils::splitDabsIntoRects(dabsQueue, idealNumRects, diameter, spacing);
 
     KisPainter *gc = painter();
 
-    //ENTER_FUNCTION() << ppVar(idealPatchSize) << ppVar(rects.size()) << ppVar(dabsQueue.size());
-
     QVector<QRect> allDirtyRects = rects;
+
+    QElapsedTimer dabRenderingTimer;
+    dabRenderingTimer.start();
 
     QtConcurrent::blockingMap(rects,
         [gc, dabsQueue] (const QRect &rc) {
@@ -282,12 +281,21 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 
     painter()->setAverageOpacity(dabsQueue.last().averageOpacity);
 
-    const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime();
-    m_currentUpdatePeriod = qBound(20.0, 100.0 * dabRenderingTime, 80.0);
+    const int updateRenderingTime = dabRenderingTimer.elapsed();
+    const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime() / 1000;
+
+    m_currentUpdatePeriod = qBound(20, qMax(20 * dabRenderingTime, 3 * updateRenderingTime / 2), 100);
+
+
+//    { // debug chunk
+//        const int updateRenderingTime = dabRenderingTimer.nsecsElapsed() / 1000;
+//        const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime();
+//        ENTER_FUNCTION() << ppVar(rects.size()) << ppVar(dabsQueue.size()) << ppVar(dabRenderingTime) << ppVar(updateRenderingTime);
+//        ENTER_FUNCTION() << ppVar(m_currentUpdatePeriod);
+//    }
 
     return m_currentUpdatePeriod;
 }
-
 
 KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &info) const
 {

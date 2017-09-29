@@ -24,102 +24,29 @@
 #include "kis_random_accessor_ng.h"
 #include "KisRenderedDab.h"
 
-void KisPainter::Private::collectRowDevices(int x1, int x2, int y, int y2,
-                                            const QList<KisRenderedDab> allDevices,
-                                            QList<KisRenderedDab> *rowDevices,
-                                            int *numContiguousRows)
-{
-    *numContiguousRows = y2 - y + 1;
-    rowDevices->clear();
-
-    for (auto it = allDevices.cbegin(); it != allDevices.cend(); ++it) {
-        const QRect rc = it->realBounds();
-
-        if (rc.left() > x2 || rc.right() < x1 ||
-            rc.top() > y || rc.bottom() < y) {
-
-            const int distance = rc.top() - y;
-            if (distance > 0 && distance < *numContiguousRows) {
-                *numContiguousRows = distance;
-            }
-
-            continue;
-        }
-
-        *numContiguousRows = qMin(*numContiguousRows, rc.bottom() - y + 1);
-        *rowDevices << *it;
-    }
-}
-
-struct KisPainter::Private::ChunkDescriptor {
-    quint8 *ptr;
-    int rowStride;
-
-    float opacity = 1.0;
-    float averageOpacity = 1.0;
-    float flow = 1.0;
-};
-
-void KisPainter::Private::collectChunks(int x, int x2, int y,
-                                        QList<KisRenderedDab> rowDevices,
-                                        QList<ChunkDescriptor> *chunks,
-                                        int *numContiguosColumns)
-{
-    *numContiguosColumns = x2 - x + 1;
-    chunks->erase(chunks->begin(), chunks->end());
-
-    for (auto it = rowDevices.cbegin(); it != rowDevices.cend(); ++it) {
-        const QRect rc = it->realBounds();
-
-        if (rc.left() > x || rc.right() < x) {
-            const int distance = rc.left() - x;
-            if (distance > 0 && distance < *numContiguosColumns) {
-                *numContiguosColumns = distance;
-            }
-
-            continue;
-        }
-
-        *numContiguosColumns = qMin(*numContiguosColumns,
-                                    rc.right() - x + 1);
-
-        const int pixelSize = it->device->pixelSize();
-
-        ChunkDescriptor chunk;
-        chunk.opacity = it->opacity;
-        chunk.averageOpacity = it->averageOpacity;
-        chunk.flow = it->flow;
-        chunk.rowStride = rc.width() * pixelSize;
-        chunk.ptr =
-            it->device->data() +
-            chunk.rowStride * (y - rc.top()) +
-            pixelSize * (x - rc.left());
-
-        *chunks << chunk;
-    }
-}
-
-void KisPainter::Private::applyChunks(int x, int y, int width, int height,
+void KisPainter::Private::applyDevice(const QRect &applyRect,
+                                      const KisRenderedDab &dab,
                                       KisRandomAccessorSP dstIt,
-                                      const QList<ChunkDescriptor> &chunks,
                                       const KoColorSpace *srcColorSpace,
                                       KoCompositeOp::ParameterInfo &localParamInfo)
 {
-    const int srcPixelSize = srcColorSpace->pixelSize();
-    QList<ChunkDescriptor> savedChunks = chunks;
+    const QRect dabRect = dab.realBounds();
+    const QRect rc = applyRect & dabRect;
 
-    qint32 dstY = y;
-    qint32 rowsRemaining = height;
+    const int srcPixelSize = srcColorSpace->pixelSize();
+    const int dabRowStride = srcPixelSize * dabRect.width();
+
+
+    qint32 dstY = rc.y();
+    qint32 rowsRemaining = rc.height();
 
     while (rowsRemaining > 0) {
-        qint32 dstX = x;
+        qint32 dstX = rc.x();
 
         qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
         qint32 rows = qMin(rowsRemaining, numContiguousDstRows);
 
-        qint32 columnsRemaining = width;
-
-        QList<ChunkDescriptor> rowChunks = savedChunks;
+        qint32 columnsRemaining = rc.width();
 
         while (columnsRemaining > 0) {
 
@@ -136,24 +63,18 @@ void KisPainter::Private::applyChunks(int x, int y, int width, int height,
             localParamInfo.rows          = rows;
             localParamInfo.cols          = columns;
 
-            const int srcColumnStep = srcPixelSize * columns;
 
-            for (auto it = rowChunks.begin(); it != rowChunks.end(); ++it) {
-                localParamInfo.srcRowStart   = it->ptr;
-                localParamInfo.srcRowStride  = it->rowStride;
-                localParamInfo.setOpacityAndAverage(it->opacity, it->averageOpacity);
-                localParamInfo.flow = it->flow;
-                colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
+            const int dabX = dstX - dabRect.x();
+            const int dabY = dstY - dabRect.y();
 
-                it->ptr += srcColumnStep;
-            }
+            localParamInfo.srcRowStart   = dab.device->data() + dabX * pixelSize + dabY * dabRowStride;
+            localParamInfo.srcRowStride  = dabRowStride;
+            localParamInfo.setOpacityAndAverage(dab.opacity, dab.averageOpacity);
+            localParamInfo.flow = dab.flow;
+            colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
 
             dstX += columns;
             columnsRemaining -= columns;
-        }
-
-        for (auto it = savedChunks.begin(); it != savedChunks.end(); ++it) {
-            it->ptr += it->rowStride * rows;
         }
 
         dstY += rows;
@@ -162,29 +83,31 @@ void KisPainter::Private::applyChunks(int x, int y, int width, int height,
 
 }
 
-void KisPainter::Private::applyChunksWithSelection(int x, int y, int width, int height,
+void KisPainter::Private::applyDeviceWithSelection(const QRect &applyRect,
+                                                   const KisRenderedDab &dab,
                                                    KisRandomAccessorSP dstIt,
                                                    KisRandomConstAccessorSP maskIt,
-                                                   const QList<ChunkDescriptor> &chunks,
                                                    const KoColorSpace *srcColorSpace,
                                                    KoCompositeOp::ParameterInfo &localParamInfo)
 {
-    const int srcPixelSize = srcColorSpace->pixelSize();
-    QList<ChunkDescriptor> savedChunks = chunks;
+    const QRect dabRect = dab.realBounds();
+    const QRect rc = applyRect & dabRect;
 
-    qint32 dstY = y;
-    qint32 rowsRemaining = height;
+    const int srcPixelSize = srcColorSpace->pixelSize();
+    const int dabRowStride = srcPixelSize * dabRect.width();
+
+
+    qint32 dstY = rc.y();
+    qint32 rowsRemaining = rc.height();
 
     while (rowsRemaining > 0) {
-        qint32 dstX = x;
+        qint32 dstX = rc.x();
 
         qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
         qint32 numContiguousMaskRows = maskIt->numContiguousRows(dstY);
         qint32 rows = qMin(rowsRemaining, qMin(numContiguousDstRows, numContiguousMaskRows));
 
-        qint32 columnsRemaining = width;
-
-        QList<ChunkDescriptor> rowChunks = savedChunks;
+        qint32 columnsRemaining = rc.width();
 
         while (columnsRemaining > 0) {
 
@@ -204,31 +127,25 @@ void KisPainter::Private::applyChunksWithSelection(int x, int y, int width, int 
             localParamInfo.rows          = rows;
             localParamInfo.cols          = columns;
 
-            const int srcColumnStep = srcPixelSize * columns;
 
-            for (auto it = rowChunks.begin(); it != rowChunks.end(); ++it) {
-                localParamInfo.srcRowStart   = it->ptr;
-                localParamInfo.srcRowStride  = it->rowStride;
-                localParamInfo.setOpacityAndAverage(it->opacity, it->averageOpacity);
-                localParamInfo.flow = it->flow;
-                colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
+            const int dabX = dstX - dabRect.x();
+            const int dabY = dstY - dabRect.y();
 
-                it->ptr += srcColumnStep;
-            }
+            localParamInfo.srcRowStart   = dab.device->data() + dabX * pixelSize + dabY * dabRowStride;
+            localParamInfo.srcRowStride  = dabRowStride;
+            localParamInfo.setOpacityAndAverage(dab.opacity, dab.averageOpacity);
+            localParamInfo.flow = dab.flow;
+            colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
 
             dstX += columns;
             columnsRemaining -= columns;
         }
 
-        for (auto it = savedChunks.begin(); it != savedChunks.end(); ++it) {
-            it->ptr += it->rowStride * rows;
-        }
-
         dstY += rows;
         rowsRemaining -= rows;
     }
-}
 
+}
 
 void KisPainter::bltFixed(const QRect &applyRect, const QList<KisRenderedDab> allSrcDevices)
 {
@@ -263,49 +180,14 @@ void KisPainter::bltFixed(const QRect &applyRect, const QList<KisRenderedDab> al
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(rc.left(), rc.top());
     KisRandomConstAccessorSP maskIt = d->selection ? d->selection->projection()->createRandomConstAccessorNG(rc.left(), rc.top()) : 0;
 
-    int row = rc.top();
-    QList<KisRenderedDab> rowDevices;
-    int numContiguousRowsInDevices = 0;
-
-    while (row <= rc.bottom()) {
-        d->collectRowDevices(rc.left(), rc.right(), row, rc.bottom(),
-                             devices,
-                             &rowDevices, &numContiguousRowsInDevices);
-
-        if (!rowDevices.isEmpty()) {
-            int column = rc.left();
-            int numContiguousColumnsInDevices = 0;
-            QList<Private::ChunkDescriptor> chunks;
-
-            while (column <= rc.right()) {
-                d->collectChunks(column, rc.right(), row, rowDevices,
-                                 &chunks, &numContiguousColumnsInDevices);
-
-                if (!chunks.isEmpty()) {
-                    if (!maskIt) {
-                        d->applyChunks(column, row,
-                                       numContiguousColumnsInDevices, numContiguousRowsInDevices,
-                                       dstIt,
-                                       chunks,
-                                       srcColorSpace,
-                                       localParamInfo);
-                    } else {
-                        d->applyChunksWithSelection(column, row,
-                                                    numContiguousColumnsInDevices, numContiguousRowsInDevices,
-                                                    dstIt,
-                                                    maskIt,
-                                                    chunks,
-                                                    srcColorSpace,
-                                                    localParamInfo);
-                    }
-                }
-
-                column += numContiguousColumnsInDevices;
-            }
-
+    if (maskIt) {
+        Q_FOREACH (const KisRenderedDab &dab, devices) {
+            d->applyDeviceWithSelection(rc, dab, dstIt, maskIt, srcColorSpace, localParamInfo);
         }
-
-        row += numContiguousRowsInDevices;
+    } else {
+        Q_FOREACH (const KisRenderedDab &dab, devices) {
+            d->applyDevice(rc, dab, dstIt, srcColorSpace, localParamInfo);
+        }
     }
 
 

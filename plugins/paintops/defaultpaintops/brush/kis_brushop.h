@@ -37,9 +37,12 @@
 #include <kis_pressure_rate_option.h>
 #include <kis_brush_based_paintop_settings.h>
 
+#include <KisRollingMeanAccumulatorWrapper.h>
+
 class KisPainter;
 class KisColorSource;
 class KisDabRenderingExecutor;
+class KisRenderedDab;
 
 class KisBrushOp : public KisBrushBasedPaintOp
 {
@@ -77,6 +80,7 @@ private:
 
     QScopedPointer<KisDabRenderingExecutor> m_dabExecutor;
     qreal m_currentUpdatePeriod = 20.0;
+    KisRollingMeanAccumulatorWrapper m_avgSpacing;
 };
 
 #endif // KIS_BRUSHOP_H_

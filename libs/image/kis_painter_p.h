@@ -84,26 +84,16 @@ struct Q_DECL_HIDDEN KisPainter::Private {
 
     void fillPainterPathImpl(const QPainterPath& path, const QRect &requestedRect);
 
-    static void collectRowDevices(int x1, int x2, int y, int y2,
-                                  const QList<KisRenderedDab> allDevices,
-                                  QList<KisRenderedDab> *rowDevices,
-                                  int *numContiguousRows);
-
-
-    struct ChunkDescriptor;
-    static void collectChunks(int x, int x2, int y,
-                              QList<KisRenderedDab> rowDevices,
-                              QList<ChunkDescriptor> *chunks,
-                              int *numContiguosColumns);
-    void applyChunks(int x, int y, int width, int height,
+    void applyDevice(const QRect &applyRect,
+                     const KisRenderedDab &dab,
                      KisRandomAccessorSP dstIt,
-                     const QList<ChunkDescriptor> &chunks,
-                     const KoColorSpace *srcColorSpace, KoCompositeOp::ParameterInfo &localParamInfo);
+                     const KoColorSpace *srcColorSpace,
+                     KoCompositeOp::ParameterInfo &localParamInfo);
 
-    void applyChunksWithSelection(int x, int y, int width, int height,
+    void applyDeviceWithSelection(const QRect &applyRect,
+                                  const KisRenderedDab &dab,
                                   KisRandomAccessorSP dstIt,
                                   KisRandomConstAccessorSP maskIt,
-                                  const QList<ChunkDescriptor> &chunks,
                                   const KoColorSpace *srcColorSpace,
                                   KoCompositeOp::ParameterInfo &localParamInfo);
 

@@ -62,6 +62,8 @@ private Q_SLOTS:
     void testMassiveBltFixedMultiTileWithSelection();
 
     void testMassiveBltFixedCornerCases();
+
+    void benchmarkMassiveBltFixed();
 };
 
 #endif

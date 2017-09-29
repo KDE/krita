@@ -24,6 +24,7 @@ set(kritaglobal_LIB_SRCS
     KisQPainterStateSaver.cpp
     KisSharedThreadPoolAdapter.cpp
     KisSharedRunnable.cpp
+    KisRollingMeanAccumulatorWrapper.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

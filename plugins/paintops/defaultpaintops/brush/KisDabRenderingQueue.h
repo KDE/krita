@@ -64,6 +64,7 @@ public:
     KisFixedPaintDeviceSP fetchCachedPaintDevce();
 
     int averageExecutionTime() const;
+    int averageDabSize() const;
     bool dabsHaveSeparateOriginal() const;
 
     int testingGetQueueSize() const;

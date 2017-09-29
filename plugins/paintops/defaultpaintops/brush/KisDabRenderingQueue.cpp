@@ -25,10 +25,9 @@
 
 #include <QMutex>
 #include <QMutexLocker>
+#include <KisRollingMeanAccumulatorWrapper.h>
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/rolling_mean.hpp>
+#include "kis_algebra_2d.h"
 
 struct KisDabRenderingQueue::Private
 {
@@ -77,7 +76,8 @@ struct KisDabRenderingQueue::Private
           colorSpace(_colorSpace),
           sharedThreadPool(_sharedThreadPool),
           resourcesFactory(_resourcesFactory),
-          avgExecutionTime(boost::accumulators::tag::rolling_window::window_size = 50)
+          avgExecutionTime(50),
+          avgDabSize(50)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(resourcesFactory);
     }
@@ -102,7 +102,8 @@ struct KisDabRenderingQueue::Private
 
     QMutex mutex;
 
-    boost::accumulators::accumulator_set<qreal, boost::accumulators::stats<boost::accumulators::tag::lazy_rolling_mean> > avgExecutionTime;
+    KisRollingMeanAccumulatorWrapper avgExecutionTime;
+    KisRollingMeanAccumulatorWrapper avgDabSize;
 
     int findLastDabJobIndex(int startSearchIndex = -1);
     KisDabRenderingJob* createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob);
@@ -189,6 +190,7 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
     wrapper.opacity = opacity;
     wrapper.flow = flow;
 
+
     KisDabRenderingJob *jobToRun = 0;
 
     if (wrapper.job.type == KisDabRenderingJob::Dab) {
@@ -220,6 +222,9 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
     if (wrapper.job.type == KisDabRenderingJob::Dab) {
         m_d->cleanPaintedDabs();
     }
+
+    // collect some statistics about the dab
+    m_d->avgDabSize(KisAlgebra2D::maxDimension(wrapper.job.generationInfo.dstDabRect));
 
     return jobToRun;
 }
@@ -377,9 +382,13 @@ KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
 int KisDabRenderingQueue::averageExecutionTime() const
 {
     QMutexLocker l(&m_d->mutex);
+    return qRound(m_d->avgExecutionTime.rollingMean());
+}
 
-    using namespace boost::accumulators;
-    return rolling_mean(m_d->avgExecutionTime);
+int KisDabRenderingQueue::averageDabSize() const
+{
+    QMutexLocker l(&m_d->mutex);
+    return qRound(m_d->avgDabSize.rollingMean());
 }
 
 bool KisDabRenderingQueue::dabsHaveSeparateOriginal() const

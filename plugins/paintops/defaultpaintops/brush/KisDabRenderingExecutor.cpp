@@ -85,6 +85,11 @@ int KisDabRenderingExecutor::averageDabRenderingTime() const
     return m_d->renderingQueue->averageExecutionTime();
 }
 
+int KisDabRenderingExecutor::averageDabSize() const
+{
+    return m_d->renderingQueue->averageDabSize();
+}
+
 bool KisDabRenderingExecutor::dabsHaveSeparateOriginal() const
 {
     return m_d->renderingQueue->dabsHaveSeparateOriginal();

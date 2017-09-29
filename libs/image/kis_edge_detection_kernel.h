@@ -70,6 +70,20 @@ public:
     static int kernelSizeFromRadius(qreal radius);
     static qreal sigmaFromRadius(qreal radius);
 
+    /**
+     * @brief applyEdgeDetection
+     * This applies the edge detection filter to the device.
+     * @param device the device to apply to.
+     * @param rect the affected rect.
+     * @param xRadius the radius of the horizontal sampling, radius of 0 is effectively disabling it.
+     * @param yRadius the radius of the vertical sampling, refius of 0 is effectively disabling it.
+     * @param type the type can be prewitt, sobol or simple, each of which
+     * have a different sampling for the eventual edge detection.
+     * @param channelFlags the affected channels.
+     * @param progressUpdater the progress updater if it exists.
+     * @param writeToAlpha whether or not to have the result applied to the transparency than the color channels,
+     * this is useful for fringe effects.
+     */
     static void applyEdgeDetection(KisPaintDeviceSP device,
                               const QRect& rect,
                               qreal xRadius, qreal yRadius,

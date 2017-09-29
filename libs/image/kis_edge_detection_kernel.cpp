@@ -244,8 +244,9 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                         KoColor col(finalIt.rawData(), device->colorSpace());
                         qreal alpha = 0;
                         for (quint32 c = 0; c<device->colorSpace()->colorChannelCount(); c++) {
-                            alpha = (alpha+finalNorm[c])*0.5;
+                            alpha = alpha+finalNorm[c];
                         }
+                        alpha = qMin(alpha/device->colorSpace()->colorChannelCount(), col.opacityF());
                         col.setOpacity(alpha);
                         memcpy(finalIt.rawData(), col.data(), pixelSize);
                     } else {

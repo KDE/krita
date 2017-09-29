@@ -56,10 +56,10 @@
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings_update_proxy.h>
 
+
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
-
-
+#include <kis_preset_live_preview_view.h>
 
 
 struct KisPaintOpPresetsPopup::Private
@@ -168,8 +168,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     menu->addSection(i18n("Icon Size"));
     menu->addAction(sliderAction);
-
-
 
 
     // configure the button and assign menu
@@ -305,6 +303,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
+    // setup things like the scene construct images, layers, etc that is a one-time thing
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup();
 }
 
 
@@ -465,29 +465,6 @@ void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
     KisPaintopLodLimitations l = m_d->settingsWidget->lodLimitations();
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
-
-
-void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
-{
-    if (!m_d->resourceProvider) {
-        return;
-    }
-    if (!m_d->resourceProvider->currentPreset()) {
-        return;
-    }
-
-
-    bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
-
-    // don't need to reload or overwrite a clean preset
-    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
-    m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
-
-
-
-}
-
 
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
 {
@@ -761,4 +738,26 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+}
+
+void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
+{
+    if (!m_d->resourceProvider) {
+        return;
+    }
+    if (!m_d->resourceProvider->currentPreset()) {
+        return;
+    }
+
+    bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
+
+    // don't need to reload or overwrite a clean preset
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
+    m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
+
+
+    // update live preview area in here...
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->paintStroke();
 }

@@ -19,6 +19,7 @@
 
 #include <filter/kis_filter_configuration.h>
 #include <QComboBox>
+#include <klocalizedstring.h>
 
 KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
     KisConfigWidget(parent),
@@ -26,9 +27,15 @@ KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_types << "prewitt"<< "sobol"<< "simple";
+    m_types_translatable << i18n("Prewitt") << i18n("Sobol") << i18n("Simple");
+
+    ui->cmbType->addItems(m_types_translatable);
+
     connect(ui->cmbType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationItemChanged()));
     connect(ui->spnHorizontalRadius, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationItemChanged()));
     connect(ui->spnVerticalRadius, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->chkTransparent, SIGNAL(clicked()), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisWdgEdgeDetection::~KisWdgEdgeDetection()
@@ -41,14 +48,9 @@ KisPropertiesConfigurationSP KisWdgEdgeDetection::configuration() const
     KisFilterConfigurationSP config = new KisFilterConfiguration("edge detection", 1);
     config->setProperty("horizRadius", ui->spnHorizontalRadius->value());
     config->setProperty("vertRadius", ui->spnVerticalRadius->value());
-    if (ui->cmbType->currentIndex() == 0) {
-        config->setProperty("type", "prewit");
-    } else if (ui->cmbType->currentIndex() == 1) {
-        config->setProperty("type", "sobolvector");
-    } else if (ui->cmbType->currentIndex() == 2) {
-        config->setProperty("type", "simple");
-    }
+    config->setProperty("type", m_types.at(ui->cmbType->currentIndex()));
     config->setProperty("lockAspect", true);
+    config->setProperty("transparency", ui->chkTransparent->isChecked());
 
     return config;
 }
@@ -57,4 +59,11 @@ void KisWdgEdgeDetection::setConfiguration(const KisPropertiesConfigurationSP co
 {
     ui->spnHorizontalRadius->setValue(config->getFloat("horizRadius", 1.0));
     ui->spnVerticalRadius->setValue(config->getFloat("vertRadius", 1.0));
+    int index = 0;
+    if (m_types.contains(config->getString("type", "prewitt"))){
+        index = m_types.indexOf(config->getString("type", "prewitt"));
+    }
+    ui->cmbType->setCurrentIndex(index);
+    ui->chkTransparent->setChecked(config->getBool("transparency", false));
+
 }

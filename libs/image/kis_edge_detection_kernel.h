@@ -75,7 +75,8 @@ public:
                               qreal xRadius, qreal yRadius,
                               FilterType type,
                               const QBitArray &channelFlags,
-                              KoUpdater *progressUpdater);
+                              KoUpdater *progressUpdater,
+                              bool writeToAlpha = false);
 };
 
 #endif // KIS_EDGE_DETECTION_KERNEL_H

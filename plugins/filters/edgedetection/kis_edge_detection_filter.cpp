@@ -79,16 +79,20 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
     }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobolVector;
-    if (config->getString("type") == "prewit") {
+    if (config->getString("type") == "prewitt") {
         type = KisEdgeDetectionKernel::Prewit;
     } else if (config->getString("type") == "simple") {
         type = KisEdgeDetectionKernel::Simple;
     }
 
-    KisEdgeDetectionKernel::applyEdgeDetection(device, rect,
-                                     horizontalRadius, verticalRadius,
+    KisEdgeDetectionKernel::applyEdgeDetection(device,
+                                               rect,
+                                               horizontalRadius,
+                                               verticalRadius,
                                                type,
-                                     channelFlags, progressUpdater);
+                                               channelFlags,
+                                               progressUpdater,
+                                               config->getBool("transparency", false));
 }
 
 KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration() const
@@ -96,8 +100,9 @@ KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration() const
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
-    config->setProperty("type", "prewit");
+    config->setProperty("type", "prewitt");
     config->setProperty("lockAspect", true);
+    config->setProperty("transparency", false);
 
     return config;
 }

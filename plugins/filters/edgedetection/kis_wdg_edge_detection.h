@@ -38,6 +38,8 @@ public:
 
 private:
     Ui_WidgetEdgeDetection *ui;
+    QStringList m_types;
+    QStringList m_types_translatable;
 };
 
 #endif // KIS_WDG_EDGE_DETECTION_H

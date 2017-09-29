@@ -186,15 +186,17 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                                 qreal yRadius,
                                                 KisEdgeDetectionKernel::FilterType type,
                                                 const QBitArray &channelFlags,
-                                                KoUpdater *progressUpdater)
+                                                KoUpdater *progressUpdater,
+                                                bool writeToAlpha)
 {
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
     finalPainter.setChannelFlags(channelFlags);
     finalPainter.setProgress(progressUpdater);
+    KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
+    KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
 
     if (xRadius > 0.0) {
-        KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
 
         KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
 
@@ -207,10 +209,11 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
-        finalPainter.bitBlt(srcTopLeft, x_denormalised, rect);
+        if (yRadius == 0.0) {
+            finalPainter.bitBlt(srcTopLeft, x_denormalised, rect);
+        }
     }
     if (yRadius > 0.0) {
-        KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
         KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
         qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
 
@@ -223,7 +226,8 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
         if (xRadius > 0.0) {
             KisSequentialIterator yItterator(y_denormalised, rect);
-            KisSequentialIterator xItterator(device, rect);
+            KisSequentialIterator xItterator(x_denormalised, rect);
+            KisSequentialIterator finalIt(device, rect);
             const int pixelSize = device->colorSpace()->pixelSize();
             do {
 
@@ -231,13 +235,25 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                     device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
                     QVector<float> xNormalised(device->channelCount());
                     device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
+                    QVector<float> finalNorm(device->channelCount());
+                    device->colorSpace()->normalisedChannelsValue(finalIt.rawData(), finalNorm);
                     for (quint32 c = 0; c<device->channelCount(); c++) {
-                        xNormalised[c] = 2 * sqrt( ((xNormalised[c]-0.5)*(xNormalised[c]-0.5)) + ((yNormalised[c]-0.5)*(yNormalised[c]-0.5)));
+                        finalNorm[c] = 2 * sqrt( ((xNormalised[c]-0.5)*(xNormalised[c]-0.5)) + ((yNormalised[c]-0.5)*(yNormalised[c]-0.5)));
                     }
-                    quint8* f = xItterator.rawData();
-                    device->colorSpace()->fromNormalisedChannelsValue(f, xNormalised);
-                    memcpy(xItterator.rawData(), f, pixelSize);
-            } while(yItterator.nextPixel() && xItterator.nextPixel());
+                    if (writeToAlpha) {
+                        KoColor col(finalIt.rawData(), device->colorSpace());
+                        qreal alpha = 0;
+                        for (quint32 c = 0; c<device->colorSpace()->colorChannelCount(); c++) {
+                            alpha = (alpha+finalNorm[c])*0.5;
+                        }
+                        col.setOpacity(alpha);
+                        memcpy(finalIt.rawData(), col.data(), pixelSize);
+                    } else {
+                        quint8* f = finalIt.rawData();
+                        device->colorSpace()->fromNormalisedChannelsValue(f, finalNorm);
+                        memcpy(finalIt.rawData(), f, pixelSize);
+                    }
+            } while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel());
 
         } else {
             finalPainter.bitBlt(srcTopLeft, y_denormalised, rect);

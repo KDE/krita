@@ -17,23 +17,8 @@
    <item>
     <widget class="QComboBox" name="cmbType">
      <property name="currentText">
-      <string>Prewit</string>
+      <string/>
      </property>
-     <item>
-      <property name="text">
-       <string>Prewit</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sobel</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Simple</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
@@ -55,6 +40,13 @@
    </item>
    <item>
     <widget class="QDoubleSpinBox" name="spnVerticalRadius"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkTransparent">
+     <property name="text">
+      <string>Make result transparent.</string>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

@@ -139,6 +139,10 @@ public:
 
     void setVastScrolling(qreal factor) override;
 
+    QPointF currentCursorPosition() const override;
+
+
+
     /**
      * \internal
      */

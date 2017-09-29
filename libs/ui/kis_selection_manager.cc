@@ -84,6 +84,7 @@
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 #include "actions/kis_selection_action_factories.h"
+#include "actions/KisPasteActionFactory.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
@@ -158,7 +159,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_invert = actionManager->createAction("invert");
     m_invert->setOperationID("invertselection");
 
-    actionManager->registerOperation(new KisInvertSelectionOperaton);
+    actionManager->registerOperation(new KisInvertSelectionOperation);
 
     m_copyToNewLayer = actionManager->createAction("copy_selection_to_new_layer");
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
@@ -388,12 +389,13 @@ void KisSelectionManager::copyMerged()
 void KisSelectionManager::paste()
 {
     KisPasteActionFactory factory;
-    factory.run(m_view);
+    factory.run(false, m_view);
 }
 
 void KisSelectionManager::pasteAt()
 {
-    //XXX
+    KisPasteActionFactory factory;
+    factory.run(true, m_view);
 }
 
 void KisSelectionManager::pasteNew()

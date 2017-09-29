@@ -384,29 +384,6 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisPasteActionFactory::run(KisViewManager *view)
-{
-    KisImageWSP image = view->image();
-    if (!image) return;
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
-
-    if (clip) {
-        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-        KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
-        KisNodeSP aboveNode = view->activeLayer();
-        KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
-
-        KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
-        KisProcessingApplicator *ap = beginAction(view, cmd->text());
-        ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-        endAction(ap, KisOperationConfiguration(id()).toXML());
-    } else {
-        // XXX: "Add saving of XML data for Paste of shapes"
-        view->canvasBase()->toolProxy()->paste();
-    }
-}
-
 void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 {
     Q_UNUSED(viewManager);
@@ -438,7 +415,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     win->addViewAndNotifyLoadingCompleted(doc);
 }
 
-void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
+void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
     runFilter(filter, view, config);

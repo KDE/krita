@@ -33,6 +33,9 @@ void KisPresetLivePreviewView::setup()
 {
     scaleFactor = 1.0;
 
+    noPreviewText = 0;
+    sceneImageItem = 0;
+
     setCursor(Qt::SizeAllCursor);
 
     setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
@@ -80,9 +83,12 @@ void KisPresetLivePreviewView::paintStroke()
 {
     m_brushPreviewPainter->setPaintOpPreset(m_currentPreset, m_layer, m_image);
 
-    // TODO: there is some weird clearing issue that is not working right at the start
-    // there is going to have to be some reset or clear that happens to the layer or
-    // image data to prevent it
+    // clean up "no preview" text object if it exists
+    if (noPreviewText) {
+        this->scene()->removeItem(noPreviewText);
+        noPreviewText = 0;
+    }
+
 
     if (m_currentPreset->paintOp().id() == "colorsmudge") {
 
@@ -137,13 +143,21 @@ void KisPresetLivePreviewView::paintStroke()
         // roundbrush (quick) -- this isn't showing anything, disable showing preview
         // experimentbrush -- this creates artifacts that carry over to other previews and messes up their display
 
-        this->scene()->clear();
+        if(sceneImageItem) {
+            this->scene()->removeItem(sceneImageItem);
+            sceneImageItem = 0;
+        }
+
+
+
         slotResetViewZoom();
 
         QFont font;
         font.setPixelSize(14);
         font.setBold(false);
-        this->scene()->addText(i18n("No Preview for this engine"),font);
+
+        noPreviewText = this->scene()->addText(i18n("No Preview for this engine"),font);
+
 
         return;
 
@@ -172,15 +186,26 @@ void KisPresetLivePreviewView::paintStroke()
     m_layer->paintDevice()->crop(0,0, m_layer->image()->width(), m_layer->image()->height()); // in case of a super big brush
     temp_image = m_layer->paintDevice()->convertToQImage(0);
 
-    this->scene()->clear();
 
-    sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(temp_image));
-    sceneImageItem->setFlag(QGraphicsItem::ItemIsSelectable);
-    sceneImageItem->setFlag(QGraphicsItem::ItemIsMovable);
-    sceneImageItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    // only add the object once...then just update the pixmap so we can move the preview around
+    if (!sceneImageItem) {
+        sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(temp_image));
+        sceneImageItem->setFlag(QGraphicsItem::ItemIsSelectable);
+        sceneImageItem->setFlag(QGraphicsItem::ItemIsMovable);
+        sceneImageItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+        sceneImageItem->setPos(-m_canvasCenterPoint.x(), -m_canvasCenterPoint.y());
+    } else {
+        sceneImageItem->setPixmap(QPixmap::fromImage(temp_image));
+    }
 
-    // transform the item to the center so it fits in the viewport
-    sceneImageItem->setPos(-m_canvasCenterPoint.x(), -m_canvasCenterPoint.y());
+
+
+
+
+
+
+
+
 }
 
 

@@ -64,6 +64,7 @@ private:
     QGraphicsScene* m_brushPreviewScene;
     QPixmap* m_pixMapToDrawOn;
     QGraphicsPixmapItem *sceneImageItem;
+    QGraphicsTextItem * noPreviewText;
 
     QPen m_penSettings;
     KisDistanceInformation m_currentDistance;

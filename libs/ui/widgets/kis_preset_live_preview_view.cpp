@@ -31,8 +31,6 @@ KisPresetLivePreviewView::~KisPresetLivePreviewView()
 
 void KisPresetLivePreviewView::setup()
 {
-    scaleFactor = 1.0;
-
     noPreviewText = 0;
     sceneImageItem = 0;
 
@@ -43,7 +41,7 @@ void KisPresetLivePreviewView::setup()
 
 
     // layer image needs to be big enough to get an entire stroke of data at 1,000px
-    m_canvasSize.setWidth(800);
+    m_canvasSize.setWidth(1200);
     m_canvasSize.setHeight(400);
 
     m_canvasCenterPoint.setX(m_canvasSize.width()*0.5);
@@ -63,14 +61,21 @@ void KisPresetLivePreviewView::setup()
     // points for drawing an S curve
     // we are going to paint the stroke right in the middle of the canvas to make sure
     // everything is captured for big brush strokes
-    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x()-this->width()*0.5,
+    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x()-this->width(),
                                    m_canvasCenterPoint.y()));
     m_curvePointPI1.setPressure(0.0);
 
-    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x()+this->width()*0.5,
+    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x()+this->width(),
                                    m_canvasCenterPoint.y()));
 
     m_curvePointPI2.setPressure(1.0);
+
+
+    scaleFactor = 1.0;
+    slotZoomViewOut();// zoomed out a bit by default for now until we get something better
+    slotZoomViewOut();
+    slotZoomViewOut();
+    slotZoomViewOut();
 
 }
 

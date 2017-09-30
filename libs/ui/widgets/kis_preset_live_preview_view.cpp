@@ -133,13 +133,12 @@ void KisPresetLivePreviewView::paintStroke()
         m_brushPreviewPainter->setPaintColor(KoColor(Qt::white, m_colorSpace));
 
     }
-    else if (m_currentPreset->paintOp().id() == "roundmarker"){
-        // this doesn't get a preview since it isn't showing anything
-        // clear whatever was there, add the text, then get out!
-        if (m_brushPreviewScene->children().length() > 0) {
-             m_brushPreviewScene->removeItem(sceneImageItem);
-             m_brushPreviewScene->clear();
-        }
+    else if (m_currentPreset->paintOp().id() == "roundmarker" || m_currentPreset->paintOp().id() == "experimentbrush"){
+        // roundbrush (quick) -- this isn't showing anything, disable showing preview
+        // experimentbrush -- this creates artifacts that carry over to other previews and messes up their display
+
+        this->scene()->clear();
+        slotResetViewZoom();
 
         QFont font;
         font.setPixelSize(14);

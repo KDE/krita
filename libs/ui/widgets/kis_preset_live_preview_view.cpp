@@ -95,9 +95,9 @@ void KisPresetLivePreviewView::paintStroke()
     }
 
 
-    if (m_currentPreset->paintOp().id() == "colorsmudge") {
+    if (m_currentPreset->paintOp().id() == "colorsmudge" || m_currentPreset->paintOp().id() == "deformbrush") {
 
-        // have grey and black strips behind this since it smudges
+        // easier to see deformations and smudging with alternating stripes in the background
         int grayStrips = 20;
         for (int i=0; i < grayStrips; i++ ) {
 
@@ -181,14 +181,6 @@ void KisPresetLivePreviewView::paintStroke()
     } else {
         sceneImageItem->setPixmap(QPixmap::fromImage(temp_image));
     }
-
-
-
-
-
-
-
-
 
 }
 

@@ -1,10 +1,12 @@
 set(kritatoolreferenceimages_SOURCES
     Plugin.cpp
     ToolReferenceImages.cpp
-    #ToolReferenceImagesWidget.cpp
+    ToolReferenceImagesWidget.cpp
     )
 
-#ki18n_wrap_ui(kritatoolreferenceimages_SOURCES WdgToolReferenceImagesOptions.ui)
+ki18n_wrap_ui(kritatoolreferenceimages_SOURCES 
+    WdgToolOptions.ui
+)
 
 add_library(kritatoolreferenceimages MODULE ${kritatoolreferenceimages_SOURCES})
 

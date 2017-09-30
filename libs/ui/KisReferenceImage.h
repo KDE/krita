@@ -40,6 +40,7 @@ public:
 
     void setImage(QImage image);
     void setPosition(QPointF pos);
+    void setGrayscale(bool grayscale);
 
 
     void draw(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);

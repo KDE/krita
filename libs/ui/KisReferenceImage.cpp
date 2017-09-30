@@ -25,6 +25,7 @@
 struct KisReferenceImage::Private {
     QImage image;
     QPointF pos;
+    bool grayscale;
 };
 
 KisReferenceImage::KisReferenceImage()
@@ -46,6 +47,11 @@ void KisReferenceImage::setImage(QImage image)
 void KisReferenceImage::setPosition(QPointF pos)
 {
     d->pos = pos;
+}
+
+void KisReferenceImage::setGrayscale(bool grayscale)
+{
+    d->grayscale = grayscale;
 }
 
 void KisReferenceImage::draw(QPainter &gc, const QRectF &/*updateRect*/, const KisCoordinatesConverter *converter, KisCanvas2 */*canvas*/)

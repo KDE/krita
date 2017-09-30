@@ -28,6 +28,9 @@
 #include <kis_icon.h>
 #include <kis_canvas2.h>
 
+class ToolReferenceImagesWidget;
+
+
 class ToolReferenceImages : public KisTool
 {
     Q_OBJECT
@@ -63,6 +66,7 @@ protected:
 
 private:
 
+    ToolReferenceImagesWidget *m_optionsWidget;
 };
 
 

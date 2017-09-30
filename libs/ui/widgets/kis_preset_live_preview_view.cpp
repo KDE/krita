@@ -19,6 +19,7 @@
 #include <kis_preset_live_preview_view.h>
 #include <QDebug>
 #include <QGraphicsPixmapItem>
+#include "kis_paintop_settings.h"
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
 {
@@ -27,7 +28,6 @@ KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsVi
 KisPresetLivePreviewView::~KisPresetLivePreviewView()
 {
 }
-
 
 void KisPresetLivePreviewView::setup()
 {
@@ -61,11 +61,12 @@ void KisPresetLivePreviewView::setup()
     // points for drawing an S curve
     // we are going to paint the stroke right in the middle of the canvas to make sure
     // everything is captured for big brush strokes
-    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x()-this->width(),
+    //TODO: we need to update these points according to the brush size. Larger brushes need larger strokes
+    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*0.4),
                                    m_canvasCenterPoint.y()));
     m_curvePointPI1.setPressure(0.0);
 
-    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x()+this->width(),
+    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*0.4),
                                    m_canvasCenterPoint.y()));
 
     m_curvePointPI2.setPressure(1.0);
@@ -87,6 +88,14 @@ void KisPresetLivePreviewView::setCurrentPreset(KisPaintOpPresetSP preset)
 void KisPresetLivePreviewView::paintStroke()
 {
     m_brushPreviewPainter->setPaintOpPreset(m_currentPreset, m_layer, m_image);
+
+
+    // scale the viewport if we are changing brush size
+    if (m_currentBrushSize != m_currentPreset->settings()->paintOpSize()) {
+        m_currentBrushSize = m_currentPreset->settings()->paintOpSize();
+        zoomToBrushSize();
+    }
+
 
     // clean up "no preview" text object if it exists
     if (noPreviewText) {
@@ -158,7 +167,6 @@ void KisPresetLivePreviewView::paintStroke()
     }
 
 
-    //m_brushPreviewPainter->paintLine(m_pi1, m_pi2, &m_currentDistance); // option to display line (works)
     m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
                                             QPointF(m_canvasCenterPoint.x(),
                                                     m_canvasCenterPoint.y()-this->height()),
@@ -184,7 +192,6 @@ void KisPresetLivePreviewView::paintStroke()
 
 }
 
-
 void KisPresetLivePreviewView::slotResetViewZoom()
 {
     scaleFactor = 1.0;
@@ -198,4 +205,28 @@ void KisPresetLivePreviewView::slotZoomViewOut()
     this->scale(scaleFactor, scaleFactor);
 }
 
+void KisPresetLivePreviewView::zoomToBrushSize() {
+
+    // m_currentBrushSize.
+    // when the zooming will start and stop
+    float minBrushVal = 1.0;
+    float maxBrushVal = 250.0;
+
+    // range of scale values
+    qreal minScale = 1.0;
+    qreal maxScale = 0.1;
+
+
+    // find the slope of the line (slope-intercept form)
+    float slope = (maxScale-minScale) / (maxBrushVal-minBrushVal);  // y2-y1 / x2-x1
+    float yIntercept = minScale - slope * minBrushVal;  // y1 − m * x1
+
+
+    // finally calculate our zoom level
+    float thresholdValue = qBound(minBrushVal, m_currentBrushSize, maxBrushVal);
+    scaleFactor = thresholdValue * slope + yIntercept; // y = mx + b
+
+    resetMatrix();
+    this->scale(scaleFactor,scaleFactor);
+}
 

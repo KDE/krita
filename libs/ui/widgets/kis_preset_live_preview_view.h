@@ -55,6 +55,7 @@ public Q_SLOTS:
     void slotZoomViewOut();
 
 
+
 private:
     KisImageSP m_image;
     KisLayerSP m_layer;
@@ -88,7 +89,10 @@ private:
 
     QImage temp_image;
 
-    qreal scaleFactor;
+    float scaleFactor;
+    float m_currentBrushSize = 1.0;
+
+    void zoomToBrushSize();
 
 
 

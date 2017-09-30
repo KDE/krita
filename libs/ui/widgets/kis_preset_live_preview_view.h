@@ -23,6 +23,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPainterPath>
+#include <QGraphicsPixmapItem>
 
 #include "kis_paintop_preset.h"
 #include "KoColorSpaceRegistry.h"
@@ -48,6 +49,12 @@ public:
     void setCurrentPreset(KisPaintOpPresetSP preset);
     void paintStroke();
 
+
+public Q_SLOTS:
+    void slotResetViewZoom();
+    void slotZoomViewOut();
+
+
 private:
     KisImageSP m_image;
     KisLayerSP m_layer;
@@ -56,9 +63,13 @@ private:
 
     QGraphicsScene* m_brushPreviewScene;
     QPixmap* m_pixMapToDrawOn;
+    QGraphicsPixmapItem *sceneImageItem;
+
     QPen m_penSettings;
     KisDistanceInformation m_currentDistance;
 
+    QRect m_canvasSize;
+    QPointF m_canvasCenterPoint;
 
     // for constructing the stroke shape
     QPointF m_startPoint;
@@ -75,6 +86,10 @@ private:
     KisPaintOpPresetSP m_currentPreset;
 
     QImage temp_image;
+
+    qreal scaleFactor;
+
+
 
 };
 

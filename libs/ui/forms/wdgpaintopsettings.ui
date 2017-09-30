@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>981</width>
-    <height>488</height>
+    <width>1134</width>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,29 +62,84 @@
        <property name="interactive">
         <bool>false</bool>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignHCenter|Qt::AlignTop</set>
+       </property>
        <property name="renderHints">
         <set>QPainter::Antialiasing</set>
+       </property>
+       <property name="transformationAnchor">
+        <enum>QGraphicsView::AnchorViewCenter</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="currentBrushNameLabel">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Current Brush Name</string>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <property name="indent">
-        <number>5</number>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="brushNameLayout">
+       <item>
+        <widget class="QLabel" name="currentBrushNameLabel">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <property name="text">
+          <string>Current Brush Name</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <property name="indent">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="currentBrushEngineLabel">
+         <property name="text">
+          <string>Current Brush Engine</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         </property>
+         <property name="indent">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="KisPresetLivePreviewView" name="liveBrushPreviewView">
@@ -96,13 +151,13 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>300</width>
+         <width>375</width>
          <height>50</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>5000</width>
+         <width>375</width>
          <height>50</height>
         </size>
        </property>
@@ -112,10 +167,13 @@
         </font>
        </property>
        <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+        <enum>QFrame::Box</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Plain</enum>
+       </property>
+       <property name="midLineWidth">
+        <number>0</number>
        </property>
        <property name="verticalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -124,12 +182,33 @@
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
        <property name="interactive">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="renderHints">
-        <set>QPainter::Antialiasing</set>
+        <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform</set>
+       </property>
+       <property name="resizeAnchor">
+        <enum>QGraphicsView::AnchorViewCenter</enum>
        </property>
       </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="zoomOutGraphicsViewButton">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="resetGraphicsViewButton">
+         <property name="text">
+          <string>reset</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer name="horizontalSpacer_3">
@@ -421,127 +500,6 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="2">
-    <widget class="QGroupBox" name="scratchpadControls">
-     <property name="title">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
-      <property name="spacing">
-       <number>5</number>
-      </property>
-      <property name="leftMargin">
-       <number>5</number>
-      </property>
-      <property name="topMargin">
-       <number>5</number>
-      </property>
-      <property name="rightMargin">
-       <number>5</number>
-      </property>
-      <property name="bottomMargin">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QFrame" name="frame">
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>0</number>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="KisScratchPad" name="scratchPad" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>300</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
-        <item>
-         <widget class="QPushButton" name="paintPresetIcon">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="fillLayer">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="fillGradient">
-          <property name="toolTip">
-           <string>Fill area with gradient</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="fillSolid">
-          <property name="toolTip">
-           <string>Fill area with background color</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="eraseScratchPad">
-          <property name="toolTip">
-           <string>Reset area to white</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="2" column="1">
     <widget class="QGroupBox" name="brushEditorSettingsControls">
      <property name="title">
@@ -709,10 +667,128 @@
      </layout>
     </widget>
    </item>
+   <item row="2" column="2">
+    <widget class="QGroupBox" name="scratchpadControls">
+     <property name="title">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="frame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="KisScratchPad" name="scratchPad" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>300</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
+        <item>
+         <widget class="QPushButton" name="paintPresetIcon">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="fillLayer">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="fillGradient">
+          <property name="toolTip">
+           <string>Fill area with gradient</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="fillSolid">
+          <property name="toolTip">
+           <string>Fill area with background color</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="eraseScratchPad">
+          <property name="toolTip">
+           <string>Reset area to white</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
-  <zorder>presetsContainer</zorder>
-  <zorder>brushEditorSettingsControls</zorder>
-  <zorder>scratchpadControls</zorder>
  </widget>
  <customwidgets>
   <customwidget>

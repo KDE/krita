@@ -274,9 +274,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
 
-
-
-
     m_d->detached = false;
     m_d->ignoreHideEvents = false;
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
@@ -305,6 +302,15 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // setup things like the scene construct images, layers, etc that is a one-time thing
     m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup();
+
+        connect(m_d->uiWdgPaintOpPresetSettings.zoomOutGraphicsViewButton, SIGNAL(clicked(bool)),
+                m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView,
+                 SLOT(slotZoomViewOut()));
+
+        connect(m_d->uiWdgPaintOpPresetSettings.resetGraphicsViewButton, SIGNAL(clicked(bool)),
+                m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView,
+                 SLOT(slotResetViewZoom()));
+
 }
 
 
@@ -533,9 +539,10 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
         }
     }
 
-    QString selectedBrush = resource->name().append(" (").append(currentBrushEngineName).append(" ").append("Engine").append(")");
+    QString selectedBrush = resource->name();
 
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
+    m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(currentBrushEngineName.append(" ").append("Engine"));
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name());
 
 

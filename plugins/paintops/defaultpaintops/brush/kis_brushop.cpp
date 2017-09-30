@@ -47,11 +47,13 @@
 #include <KisRenderedDab.h>
 #include "KisBrushOpResources.h"
 
+#include <QThreadPool>
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_opacityOption(node)
     , m_avgSpacing(50)
+    , m_speedMeasurer(1000)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -98,10 +100,13 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
                     resourcesFactory,
                     &m_mirrorOption,
                     &m_precisionOption));
+
+    m_strokeTimeSource.start();
 }
 
 KisBrushOp::~KisBrushOp()
 {
+    ENTER_FUNCTION() << ppVar(m_speedMeasurer.averageSpeed()) << ppVar(m_speedMeasurer.currentSpeed()) << ppVar(m_speedMeasurer.maxSpeed());
 }
 
 KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -265,6 +270,11 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 
     QVector<QRect> allDirtyRects = rects;
 
+    QVector<QPointF> dabPoints;
+    Q_FOREACH (const KisRenderedDab &dab, dabsQueue) {
+        dabPoints.append(dab.realBounds().center());
+    }
+
     QElapsedTimer dabRenderingTimer;
     dabRenderingTimer.start();
 
@@ -281,11 +291,12 @@ int KisBrushOp::doAsyncronousUpdate(bool forceLastUpdate)
 
     painter()->setAverageOpacity(dabsQueue.last().averageOpacity);
 
+    m_speedMeasurer.addSamples(dabPoints, m_strokeTimeSource.elapsed());
+
     const int updateRenderingTime = dabRenderingTimer.elapsed();
     const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime() / 1000;
 
     m_currentUpdatePeriod = qBound(20, qMax(20 * dabRenderingTime, 3 * updateRenderingTime / 2), 100);
-
 
 //    { // debug chunk
 //        const int updateRenderingTime = dabRenderingTimer.nsecsElapsed() / 1000;

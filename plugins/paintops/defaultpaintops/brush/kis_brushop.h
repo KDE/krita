@@ -39,6 +39,9 @@
 
 #include <KisRollingMeanAccumulatorWrapper.h>
 
+#include "KisStrokeSpeedMeasurer.h"
+#include <QElapsedTimer>
+
 class KisPainter;
 class KisColorSource;
 class KisDabRenderingExecutor;
@@ -81,6 +84,9 @@ private:
     QScopedPointer<KisDabRenderingExecutor> m_dabExecutor;
     qreal m_currentUpdatePeriod = 20.0;
     KisRollingMeanAccumulatorWrapper m_avgSpacing;
+
+    KisStrokeSpeedMeasurer m_speedMeasurer;
+    QElapsedTimer m_strokeTimeSource;
 };
 
 #endif // KIS_BRUSHOP_H_

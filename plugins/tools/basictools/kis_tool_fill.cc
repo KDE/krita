@@ -59,7 +59,7 @@
 
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
+    : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
     m_feather = 0;
@@ -90,7 +90,9 @@ void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
 void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (!nodeEditable()) {
+    NodePaintAbility paintability = nodePaintAbility();
+
+    if (!nodeEditable() || paintability != PAINT) {
         event->ignore();
         return;
     }
@@ -108,8 +110,8 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 
     if (!currentNode() ||
-        (!image()->wrapAroundModePermitted() &&
-         !image()->bounds().contains(m_startPos))) {
+            (!image()->wrapAroundModePermitted() &&
+             !image()->bounds().contains(m_startPos))) {
 
         return;
     }
@@ -139,20 +141,20 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                        kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
+            new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(m_startPos,
-                                  resources->activeSelection(),
-                                  resources,
-                                  useFastMode,
-                                  m_usePattern,
-                                  m_fillOnlySelection,
-                                  m_feather,
-                                  m_sizemod,
-                                  m_threshold,
-                                  m_unmerged,
-                                  false);
+            new FillProcessingVisitor(m_startPos,
+                                      resources->activeSelection(),
+                                      resources,
+                                      useFastMode,
+                                      m_usePattern,
+                                      m_fillOnlySelection,
+                                      m_feather,
+                                      m_sizemod,
+                                      m_threshold,
+                                      m_unmerged,
+                                      false);
 
     applicator.applyVisitor(visitor,
                             KisStrokeJobData::SEQUENTIAL,
@@ -169,9 +171,9 @@ QWidget* KisToolFill::createOptionWidget()
     QLabel *lbl_fastMode = new QLabel(i18n("Fast mode: "), widget);
     m_useFastMode = new QCheckBox(QString(), widget);
     m_useFastMode->setToolTip(
-        i18n("Fills area faster, but does not take composition "
-             "mode into account. Selections and other extended "
-             "features will also be disabled."));
+                i18n("Fills area faster, but does not take composition "
+                     "mode into account. Selections and other extended "
+                     "features will also be disabled."));
 
 
     QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
@@ -192,7 +194,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
-    m_featherWidget->setSingleStep(1);   
+    m_featherWidget->setSingleStep(1);
     m_featherWidget->setSuffix(i18n(" px"));
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);

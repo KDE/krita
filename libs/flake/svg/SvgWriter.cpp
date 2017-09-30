@@ -54,17 +54,15 @@
 #include <QPainter>
 #include <QSvgGenerator>
 
-SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
-    : m_pageSize(pageSize)
-    , m_writeInlineImages(true)
+SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers)
+    : m_writeInlineImages(true)
 {
     Q_FOREACH (KoShapeLayer *layer, layers)
         m_toplevelShapes.append(layer);
 }
 
-SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
+SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes)
     : m_toplevelShapes(toplevelShapes)
-    , m_pageSize(pageSize)
     , m_writeInlineImages(true)
 {
 }
@@ -74,7 +72,7 @@ SvgWriter::~SvgWriter()
 
 }
 
-bool SvgWriter::save(const QString &filename, bool writeInlineImages)
+bool SvgWriter::save(const QString &filename, const QSizeF &pageSize, bool writeInlineImages)
 {
     QFile fileOut(filename);
     if (!fileOut.open(QIODevice::WriteOnly))
@@ -82,7 +80,7 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
 
     m_writeInlineImages = writeInlineImages;
 
-    const bool success = save(fileOut);
+    const bool success = save(fileOut, pageSize);
 
     m_writeInlineImages = true;
 
@@ -91,7 +89,7 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
     return success;
 }
 
-bool SvgWriter::save(QIODevice &outputDevice)
+bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
 {
     if (m_toplevelShapes.isEmpty())
         return false;
@@ -111,10 +109,10 @@ bool SvgWriter::save(QIODevice &outputDevice)
     svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
     svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
     svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
-    svgStream << "    width=\"" << m_pageSize.width() << "pt\"\n";
-    svgStream << "    height=\"" << m_pageSize.height() << "pt\"\n";
+    svgStream << "    width=\"" << pageSize.width() << "pt\"\n";
+    svgStream << "    height=\"" << pageSize.height() << "pt\"\n";
     svgStream << "    viewBox=\"0 0 "
-              << m_pageSize.width() << " " << m_pageSize.height()
+              << pageSize.width() << " " << pageSize.height()
               << "\"";
     svgStream << ">" << endl;
 
@@ -163,7 +161,7 @@ void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", context.getID(layer));
 
     QList<KoShape*> sortedShapes = layer->shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
@@ -185,7 +183,7 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(group, context);
 
     QList<KoShape*> sortedShapes = group->shapes();
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);

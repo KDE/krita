@@ -91,11 +91,11 @@
 
 #include "ui_wdglayerbox.h"
 
-inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
+inline void KisLayerBox::connectActionToButton(KisViewManager* viewManager, QAbstractButton *button, const QString &id)
 {
-    if (!view || !button) return;
+    if (!viewManager || !button) return;
 
-    KisAction *action = view->actionManager()->actionByName(id);
+    KisAction *action = viewManager->actionManager()->actionByName(id);
 
     if (!action) return;
 
@@ -564,11 +564,11 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(groupMenu, "create_quick_group");
             addActionToMenu(groupMenu, "create_quick_clipping_group");
             addActionToMenu(groupMenu, "quick_ungroup");
-            QMenu *locksMenu = menu.addMenu(i18n("&Locks && visibility"));
-            addActionToMenu(locksMenu, "toggle_layer_lock");
+            QMenu *locksMenu = menu.addMenu(i18n("&Toggle Locks && Visibility"));
             addActionToMenu(locksMenu, "toggle_layer_visibility");
-            addActionToMenu(locksMenu, "toggle_layer_alpha_lock");
+            addActionToMenu(locksMenu, "toggle_layer_lock");
             addActionToMenu(locksMenu, "toggle_layer_inherit_alpha");
+            addActionToMenu(locksMenu, "toggle_layer_alpha_lock");
 
             if (singleLayer) {
                 QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
@@ -592,9 +592,9 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
             menu.addSeparator();
 
-            if (singleLayer) {
-                addActionToMenu(&menu, "show_in_timeline");
+            addActionToMenu(&menu, "show_in_timeline");
 
+            if (singleLayer) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
                     addActionToMenu(&menu, "isolate_layer");

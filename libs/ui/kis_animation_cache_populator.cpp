@@ -40,7 +40,8 @@
 #include "kis_node_manager.h"
 #include "kis_keyframe_channel.h"
 
-#include "KisAnimationCacheRegenerator.h"
+#include "KisAsyncAnimationCacheRenderer.h"
+#include "dialogs/KisAsyncAnimationCacheRenderDialog.h"
 
 
 struct KisAnimationCachePopulator::Private
@@ -65,7 +66,7 @@ struct KisAnimationCachePopulator::Private
 
     QFutureWatcher<void> infoConversionWatcher;
 
-    KisAnimationCacheRegenerator regenerator;
+    KisAsyncAnimationCacheRenderer regenerator;
     bool calculateAnimationCacheInBackground = true;
 
 
@@ -178,7 +179,7 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
 
-        const int frame = KisAnimationCacheRegenerator::calcFirstDirtyFrame(cache, currentRange, skipRange);
+        const int frame = KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
         if (frame >= 0) {
             return regenerate(cache, frame);
@@ -201,7 +202,8 @@ struct KisAnimationCachePopulator::Private
          */
         enterState(WaitingForFrame);
 
-        regenerator.startFrameRegeneration(frame, cache);
+        regenerator.setFrameCache(cache);
+        regenerator.startFrameRegeneration(cache->image(), frame);
 
         return true;
     }
@@ -229,6 +231,8 @@ struct KisAnimationCachePopulator::Private
 
     void enterState(State newState)
     {
+        //ENTER_FUNCTION() << debugStateToString(state) << "->" << debugStateToString(newState);
+
         state = newState;
         int timerTimeout = -1;
 
@@ -263,8 +267,8 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
 {
     connect(&m_d->timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
 
-    connect(&m_d->regenerator, SIGNAL(sigFrameCancelled()), SLOT(slotRegeneratorFrameCancelled()));
-    connect(&m_d->regenerator, SIGNAL(sigFrameFinished()), SLOT(slotRegeneratorFrameReady()));
+    connect(&m_d->regenerator, SIGNAL(sigFrameCancelled(int)), SLOT(slotRegeneratorFrameCancelled()));
+    connect(&m_d->regenerator, SIGNAL(sigFrameCompleted(int)), SLOT(slotRegeneratorFrameReady()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();

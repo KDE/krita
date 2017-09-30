@@ -131,7 +131,7 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
             layerRecord->density = (float)(paintLayer->opacity()) / OPACITY_OPAQUE_U8;
             layerRecord->blending = convertToBlending(paintLayer->compositeOpId());
             layerRecord->layer = paintLayer;
-            layerRecord->channel = paintLayer->projection()->keyframeChannel();
+            layerRecord->channel = paintLayer->original()->keyframeChannel();
             layerRecord->last = "";
             layerRecord->frame = 0;
             idx++;
@@ -170,9 +170,10 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
 
     if (!m_batchMode) {
-        emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
-        emit m_doc->sigProgress(0);
-        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        // TODO: use other systems of progress reporting (KisViewManager::createUnthreadedUpdater()
+        //emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
+        //emit m_doc->sigProgress(0);
+        //connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
     }
     int frame = start;
     int step = 0;
@@ -314,8 +315,8 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
                 if ( !keyframe.isNull() || (frame == start) ) {
 
                     if (!m_batchMode) {
-                        emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
-                                                ((end - start) * layers.size()));
+                        //emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
+                        //                        ((end - start) * layers.size()));
                     }
                     retval = getLayer(layer, exportDoc.data(), keyframe, path, frame, idx);
 
@@ -342,9 +343,9 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     // io->close();  it seems this is not required anymore
 
     if (!m_batchMode) {
-        disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
-        emit m_doc->sigProgress(100);
-        emit m_doc->clearStatusBarMessage();
+        //disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        //emit m_doc->sigProgress(100);
+        //emit m_doc->clearStatusBarMessage();
     }
     QApplication::restoreOverrideCursor();
     return retval;
@@ -449,7 +450,6 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 void CSVSaver::createTempImage(KisDocument* exportDoc)
 {
     exportDoc->setAutoSaveDelay(0);
-    exportDoc->setOutputMimeType("image/png");
     exportDoc->setFileBatchMode(true);
 
     KisImageSP exportImage = new KisImage(exportDoc->createUndoStore(),

@@ -28,13 +28,13 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QDate>
-#include <QLoggingCategory>
 #include <QLocale>
 #include <QSettings>
 
 #include <time.h>
 
 #include <KisApplication.h>
+#include <KisLoggingManager.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 
@@ -45,11 +45,14 @@
 #include "KisPart.h"
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
+#include "input/KisQtWidgetsTweaker.h"
 
 #if defined Q_OS_WIN
 #include <windows.h>
 #include <stdlib.h>
 #include <kis_tablet_support_win.h>
+#include <kis_tablet_support_win8.h>
+#include <kis_config.h>
 
 #elif defined HAVE_X11
 #include <kis_tablet_support_x11.h>
@@ -96,25 +99,13 @@ extern "C" int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
-    /**
-     * Disable debug output by default. (krita.input enables tablet debugging.)
-     * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
-     *
-     * As an example, to get full debug output, run the following:
-     * export QT_LOGGING_RULES="krita*=true"; krita
-     *
-     * See: http://doc.qt.io/qt-5/qloggingcategory.html
-     */
-    QLoggingCategory::setFilterRules("krita*.debug=false\n"
-                                     "krita*.warning=true\n"
-                                     "krita.tabletlog=true");
+    KisLoggingManager::initialize();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-    KisOpenGL::setDefaultFormat();
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -122,18 +113,41 @@ extern "C" int main(int argc, char **argv)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
     bool singleApplication = true;
-#if QT_VERSION >= 0x050600
+    bool enableOpenGLDebug = false;
+    bool openGLDebugSynchronous = false;
     {
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-        singleApplication = kritarc.value("EnableSingleApplication").toBool();
+        singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
+#if QT_VERSION >= 0x050600
         if (kritarc.value("EnableHiDPI", false).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
-    }
 #endif
+        if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
+            enableOpenGLDebug = true;
+        } else {
+            enableOpenGLDebug = kritarc.value("EnableOpenGLDebug", false).toBool();
+        }
+        if (enableOpenGLDebug && (qgetenv("KRITA_OPENGL_DEBUG") == "sync" || kritarc.value("OpenGLDebugSynchronous", false).toBool())) {
+            openGLDebugSynchronous = true;
+        }
+
+        KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
+
+#ifdef Q_OS_WIN
+        QString preferredOpenGLRenderer = kritarc.value("OpenGLRenderer", "auto").toString();
+
+        // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
+        //  might get weird crashes atm.
+        qputenv("QT_ANGLE_PLATFORM", "d3d11");
+
+        // Probe QPA auto OpenGL detection
+        KisOpenGL::probeWindowsQpaOpenGL(argc, argv, preferredOpenGLRenderer);
+#endif
+    }
 
     KLocalizedString::setApplicationDomain("krita");
 
@@ -229,26 +243,48 @@ extern "C" int main(int argc, char **argv)
 #if defined HAVE_X11
     app.installNativeEventFilter(KisXi2EventFilter::instance());
 #endif
+    app.installEventFilter(KisQtWidgetsTweaker::instance());
 
-    // then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-    QDate currentDate = QDate::currentDate();
-    QWidget *splash = 0;
-    if (currentDate > QDate(currentDate.year(), 12, 4) ||
-            currentDate < QDate(currentDate.year(), 1, 9)) {
-        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
-    }
-    else {
-        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
-    }
 
-    app.setSplashScreen(splash);
+    if (!args.noSplash()) {
+        // then create the pixmap from an xpm: we cannot get the
+        // location of our datadir before we've started our components,
+        // so use an xpm.
+        QDate currentDate = QDate::currentDate();
+        QWidget *splash = 0;
+        if (currentDate > QDate(currentDate.year(), 12, 4) ||
+                currentDate < QDate(currentDate.year(), 1, 9)) {
+            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
+        }
+        else {
+            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
+        }
+
+        app.setSplashScreen(splash);
+    }
 
 
 #if defined Q_OS_WIN
-    KisTabletSupportWin::init();
-    // app.installNativeEventFilter(new KisTabletSupportWin());
+    {
+        KisConfig cfg;
+        bool isUsingWin8PointerInput = false;
+        if (cfg.useWin8PointerInput()) {
+            KisTabletSupportWin8 *penFilter = new KisTabletSupportWin8();
+            if (penFilter->init()) {
+                // penFilter.registerPointerDeviceNotifications();
+                app.installNativeEventFilter(penFilter);
+                isUsingWin8PointerInput = true;
+                qDebug() << "Using Win8 Pointer Input for tablet support";
+            } else {
+                qDebug() << "No Win8 Pointer Input available";
+                delete penFilter;
+            }
+        }
+        if (!isUsingWin8PointerInput) {
+            KisTabletSupportWin::init();
+            // app.installNativeEventFilter(new KisTabletSupportWin());
+        }
+    }
 #endif
 
     if (!app.start(args)) {

@@ -49,7 +49,7 @@
 #include "kis_icon_utils.h"
 
 #include "KisPart.h"
-#include "dialogs/KisAnimationCacheUpdateProgressDialog.h"
+#include "dialogs/KisAsyncAnimationCacheRenderDialog.h"
 
 
 using namespace boost::accumulators;
@@ -233,7 +233,7 @@ void KisAnimationPlayer::slotAudioVolumeChanged()
 void KisAnimationPlayer::slotOnAudioError(const QString &fileName, const QString &message)
 {
     QString errorMessage(i18nc("floating on-canvas message", "Cannot open audio: \"%1\"\nError: %2", fileName, message));
-    m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("dialog-warning"));
+    m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("warning"));
 }
 
 void KisAnimationPlayer::connectCancelSignals()
@@ -336,8 +336,16 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
-            KisAnimationCacheUpdateProgressDialog dlg(200, KisPart::instance()->currentMainwindow());
-            dlg.regenerateRange(m_d->canvas->frameCache(), range, m_d->canvas->viewManager());
+            KisAsyncAnimationCacheRenderDialog dlg(m_d->canvas->frameCache(),
+                                                   range,
+                                                   200);
+
+            KisAsyncAnimationCacheRenderDialog::Result result =
+                dlg.regenerateRange(m_d->canvas->viewManager());
+
+            if (result != KisAsyncAnimationCacheRenderDialog::RenderComplete) {
+                return;
+            }
         }
     }
 

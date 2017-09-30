@@ -126,7 +126,17 @@ void KisDynaPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintI
 KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
     doPaintLine(info, info);
+    return updateSpacingImpl(info);
+}
+
+KisSpacingInformation KisDynaPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+{
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOption, nullptr, &m_rateOption, info);
+                                                   &m_airbrushOption, nullptr, info);
+}
+
+KisTimingInformation KisDynaPaintOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

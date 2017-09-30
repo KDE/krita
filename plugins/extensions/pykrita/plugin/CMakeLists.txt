@@ -24,6 +24,10 @@ target_link_libraries(
     kritalibkis
   )
 
+if (MINGW)
+    target_compile_definitions(kritapykrita PRIVATE _hypot=hypot)
+endif (MINGW)
+
 install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 # Install "built-in" api

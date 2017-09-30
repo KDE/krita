@@ -86,7 +86,7 @@ QMap<QString, KActionCollection *> KisActionsSnapshot::actionCollections()
     if (m_d->nonRegisteredShortcuts.size() > 4 &&
         m_d->nonRegisteredShortcuts.size() < 160) {
 
-        warnKrita << "WARNING: The following shortcuts are not registeren in the collection, "
+        warnKrita << "WARNING: The following shortcuts are not registered in the collection, "
                      "they might have wrong shortcuts in the end:";
         Q_FOREACH (const QString &str, m_d->nonRegisteredShortcuts) {
             warnKrita << str;

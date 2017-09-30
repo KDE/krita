@@ -63,7 +63,7 @@ QString Action::text() const
     return d->action->text();
 }
 
-void Action::settext(QString text)
+void Action::setText(QString text)
 {
     if (!d->action) return;
     d->action->setText(text);
@@ -145,6 +145,11 @@ void Action::setToolTip(QString tooltip)
 {
     if (!d->action) return;
     d->action->setToolTip(tooltip);
+}
+
+QString Action::tooltip() const
+{
+    return d->action->toolTip();
 }
 
 void Action::trigger()

@@ -32,6 +32,7 @@
 #include <QWidgetAction>
 #include <QApplication>
 #include <QMenu>
+#include <QTime>
 
 #include <kis_debug.h>
 
@@ -116,6 +117,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
+    m_favoriteResourceManager = new KisFavoriteResourceManager(this);
+
+
     KConfigGroup grp =  KSharedConfig::openConfig()->group("krita").group("Toolbar BrushesAndStuff");
     int iconsize = grp.readEntry("IconSize", 32);
 
@@ -170,42 +174,28 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     // mirror tool options for the X Mirror
     QMenu *toolbarMenuXMirror = new QMenu();
 
-    KisAction* hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
-    hideCanvasDecorationsX->setCheckable(true);
-    hideCanvasDecorationsX->setText(i18n("Hide Mirror Line"));
+    hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
     toolbarMenuXMirror->addAction(hideCanvasDecorationsX);
 
-    KisAction* lockActionX = m_viewManager->actionManager()->createAction("mirrorX-lock");
-    lockActionX->setText(i18n("Lock"));
-    lockActionX->setCheckable(true);
+    lockActionX = m_viewManager->actionManager()->createAction("mirrorX-lock");
     toolbarMenuXMirror->addAction(lockActionX);
 
-    KisAction* moveToCenterActionX = m_viewManager->actionManager()->createAction("mirrorX-moveToCenter");
-    moveToCenterActionX->setCheckable(false);
-    moveToCenterActionX->setText(i18n("Move to Canvas Center"));
+    moveToCenterActionX = m_viewManager->actionManager()->createAction("mirrorX-moveToCenter");
     toolbarMenuXMirror->addAction(moveToCenterActionX);
-
 
 
     // mirror tool options for the Y Mirror
     QMenu *toolbarMenuYMirror = new QMenu();
 
-    KisAction* hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
-    hideCanvasDecorationsY->setCheckable(true);
-    hideCanvasDecorationsY->setText(i18n("Hide Mirror Line"));
+    hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
     toolbarMenuYMirror->addAction(hideCanvasDecorationsY);
 
 
-    KisAction* lockActionY = m_viewManager->actionManager()->createAction("mirrorY-lock");
-    lockActionY->setText(i18n("Lock"));
-    lockActionY->setCheckable(true);
+    lockActionY = m_viewManager->actionManager()->createAction("mirrorY-lock");
     toolbarMenuYMirror->addAction(lockActionY);
 
-    KisAction* moveToCenterActionY = m_viewManager->actionManager()->createAction("mirrorY-moveToCenter");
-    moveToCenterActionY->setCheckable(false);
-    moveToCenterActionY->setText(i18n("Move to Canvas Center"));
+    moveToCenterActionY = m_viewManager->actionManager()->createAction("mirrorY-moveToCenter");
     toolbarMenuYMirror->addAction(moveToCenterActionY);
-
 
 
 
@@ -428,14 +418,20 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_toolOptionsPopup->switchDetached(false);
     }
 
-    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
+
+    m_savePresetWidget = new KisPresetSaveWidget(this);
+
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager, m_savePresetWidget);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->parentWidget()->setWindowTitle(i18n("Brush Editor"));
+
 
     connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
+    m_presetsChooserPopup->setMinimumHeight(450);
+    m_presetsChooserPopup->setMinimumWidth(350);
     m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -451,7 +447,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetsPopup->setPaintOpList(factoryList);
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
-    connect(m_presetsPopup       , SIGNAL(savePresetClicked())                , SLOT(slotSaveActivePreset()));
     connect(m_presetsPopup       , SIGNAL(defaultPresetClicked())             , SLOT(slotSetupDefaultPreset()));
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
@@ -487,7 +482,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     //Needed to connect canvas to favorite resource manager
     connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 
-    m_favoriteResourceManager = new KisFavoriteResourceManager(this);
+
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
 
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotChangeFGColorSelector(KoColor)));
@@ -531,6 +526,7 @@ KisPaintopBox::~KisPaintopBox()
 
 void KisPaintopBox::restoreResource(KoResource* resource)
 {
+
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     //qDebug() << "restoreResource" << resource << preset;
     if (preset) {
@@ -847,48 +843,6 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
     }
 }
 
-void KisPaintopBox::slotSaveActivePreset()
-{
-    KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
-
-    if (!curPreset)
-        return;
-
-    m_favoriteResourceManager->setBlockUpdates(true);
-
-    KisPaintOpPresetSP newPreset = curPreset->clone();
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QString saveLocation = rServer->saveLocation();
-    QString presetName = m_presetsPopup->getPresetName();
-    QString presetFilename = saveLocation + presetName + newPreset->defaultFileExtension();
-
-    QStringList tags;
-    KisPaintOpPresetSP resource = rServer->resourceByName(presetName);
-    if (resource) {
-
-        tags = rServer->assignedTagsList(resource.data());
-        rServer->removeResourceAndBlacklist(resource);
-
-    }
-
-    newPreset->setImage(m_presetsPopup->cutOutOverlay());
-    newPreset->setFilename(presetFilename);
-    newPreset->setName(presetName);
-    newPreset->setPresetDirty(false);
-
-    rServer->addResource(newPreset);
-    Q_FOREACH (const QString & tag, tags) {
-        rServer->addTag(newPreset.data(), tag);
-    }
-
-    // HACK ALERT! the server does not notify the observers
-    // automatically, so we need to call theupdate manually!
-    rServer->tagCategoryMembersChanged();
-
-    restoreResource(newPreset.data());
-
-    m_favoriteResourceManager->setBlockUpdates(false);
-}
 
 void KisPaintopBox::slotUpdatePreset()
 {
@@ -1111,36 +1065,47 @@ void KisPaintopBox::slotPreviousFavoritePreset()
 {
     if (!m_favoriteResourceManager) return;
 
-    int i = 0;
-    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->name() == preset->name()) {
+    QVector<KisPaintOpPresetSP> presets = m_favoriteResourceManager->favoritePresetList();
+    for (int i=0; i < presets.size(); ++i) {
+        if (m_resourceProvider->currentPreset() &&
+                m_resourceProvider->currentPreset()->name() == presets[i]->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             } else {
                 m_favoriteResourceManager->slotChangeActivePaintop(m_favoriteResourceManager->numFavoritePresets() - 1);
             }
+            //floating message should have least 2 lines, otherwise
+            //preset thumbnail will be too small to distinguish
+            //(because size of image on floating message depends on amount of lines in msg)
+            m_viewManager->showFloatingMessage(
+                i18n("%1\nselected",
+                        m_resourceProvider->currentPreset()->name()),
+                QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
+
             return;
         }
-        i++;
     }
-
 }
 
 void KisPaintopBox::slotNextFavoritePreset()
 {
     if (!m_favoriteResourceManager) return;
 
-    int i = 0;
-    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
+    QVector<KisPaintOpPresetSP> presets = m_favoriteResourceManager->favoritePresetList();
+    for(int i = 0; i < presets.size(); ++i) {
+        if (m_resourceProvider->currentPreset()->name() == presets[i]->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
             } else {
                 m_favoriteResourceManager->slotChangeActivePaintop(0);
             }
+            m_viewManager->showFloatingMessage(
+                i18n("%1\nselected",
+                        m_resourceProvider->currentPreset()->name()),
+                QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
+
             return;
         }
-        i++;
     }
 }
 
@@ -1149,6 +1114,10 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
     if (m_resourceProvider->previousPreset()) {
         //qDebug() << "slotSwitchToPreviousPreset();" << m_resourceProvider->previousPreset();
         setCurrentPaintop(m_resourceProvider->previousPreset());
+        m_viewManager->showFloatingMessage(
+                i18n("%1\nselected",
+                        m_resourceProvider->currentPreset()->name()),
+            QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
     }
 }
 

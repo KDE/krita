@@ -128,7 +128,7 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
 
-    KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
+    KisMementoItemSP mi = m_index.getExistingTile(tile->col(), tile->row());
 
     if(!mi) {
         mi = new KisMementoItem();
@@ -150,7 +150,7 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
 
-    KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
+    KisMementoItemSP mi = m_index.getExistingTile(tile->col(), tile->row());
 
     if(!mi) {
         mi = new KisMementoItem();
@@ -198,7 +198,7 @@ void KisMementoManager::commit()
         m_headsHashTable.deleteTile(mi->col(), mi->row());
 
         iter.moveCurrentToHashTable(&m_headsHashTable);
-        //++iter; // previous line does this for us
+        //iter.next(); // previous line does this for us
     }
 
     KisHistoryItem hItem;
@@ -395,11 +395,11 @@ void KisMementoManager::debugPrintInfo()
     printf("KisMementoManager stats:\n");
     printf("Index list\n");
     KisMementoItemSP mi;
-    KisMementoItemHashTableIterator iter(&m_index);
+    KisMementoItemHashTableIteratorConst iter(&m_index);
 
     while ((mi = iter.tile())) {
         mi->debugPrintInfo();
-        ++iter;
+        iter.next();
     }
 
     printf("Revisions list:\n");

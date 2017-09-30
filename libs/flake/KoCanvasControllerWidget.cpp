@@ -155,7 +155,7 @@ void KoCanvasControllerWidget::Private::activate()
 
 }
 
-void KoCanvasControllerWidget::Private::unsetCanvas(KoCanvasBase *canvas)
+void KoCanvasControllerWidget::Private::unsetCanvas()
 {
     QWidget *parent = q;
     while (parent->parentWidget()) {
@@ -168,7 +168,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas(KoCanvasBase *canvas)
     Q_FOREACH (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
        if (observer) {
-            if (!canvas || observer->observedCanvas() == q->canvas()) {
+            if (observer->observedCanvas() == q->canvas()) {
                 observer->unsetObservedCanvas();
             }
         }
@@ -250,21 +250,24 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 {
     Q_ASSERT(canvas); // param is not null
     if (d->canvas) {
-        d->unsetCanvas(canvas);
+        d->unsetCanvas();
         proxyObject->emitCanvasRemoved(this);
-        canvas->setCanvasController(0);
+        d->canvas->setCanvasController(0);
         d->canvas->canvasWidget()->removeEventFilter(this);
     }
-    canvas->setCanvasController(this);
+
     d->canvas = canvas;
 
-    changeCanvasWidget(canvas->canvasWidget());
+    if (d->canvas) {
+        d->canvas->setCanvasController(this);
+        changeCanvasWidget(d->canvas->canvasWidget());
 
-    proxyObject->emitCanvasSet(this);
-    QTimer::singleShot(0, this, SLOT(activate()));
+        proxyObject->emitCanvasSet(this);
+        QTimer::singleShot(0, this, SLOT(activate()));
 
-    setPreferredCenterFractionX(0);
-    setPreferredCenterFractionY(0);
+        setPreferredCenterFractionX(0);
+        setPreferredCenterFractionY(0);
+    }
 }
 
 KoCanvasBase* KoCanvasControllerWidget::canvas() const
@@ -495,6 +498,26 @@ void KoCanvasControllerWidget::pan(const QPoint &distance)
 {
     QPoint sourcePoint = scrollBarValue();
     setScrollBarValue(sourcePoint + distance);
+}
+
+void KoCanvasControllerWidget::panUp()
+{
+    pan(QPoint(0, verticalScrollBar()->singleStep()));
+}
+
+void KoCanvasControllerWidget::panDown()
+{
+    pan(QPoint(0, -verticalScrollBar()->singleStep()));
+}
+
+void KoCanvasControllerWidget::panLeft()
+{
+    pan(QPoint(horizontalScrollBar()->singleStep(), 0));
+}
+
+void KoCanvasControllerWidget::panRight()
+{
+    pan(QPoint(-horizontalScrollBar()->singleStep(), 0));
 }
 
 void KoCanvasControllerWidget::setPreferredCenter(const QPointF &viewPoint)

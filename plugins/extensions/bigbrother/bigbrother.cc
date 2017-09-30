@@ -29,6 +29,7 @@
 #include <KoUpdater.h>
 #include <KoResourceServerProvider.h>
 #include <KoFileDialog.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_config.h>
 #include <kis_cursor.h>
@@ -113,9 +114,8 @@ void BigBrotherPlugin::slotOpenPlay()
     dbgKrita << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
-    KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start(1, i18n("Playing back macro"));
-    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater->startSubtask());
+    KoUpdaterPtr updater = m_view->createUnthreadedUpdater(i18n("Playing back macro"));
+    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater);
     player.start();
     while(player.isRunning())
     {

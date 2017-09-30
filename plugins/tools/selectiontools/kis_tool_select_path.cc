@@ -98,7 +98,6 @@ void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
     }
 }
 
-
 bool KisDelegatedSelectPathWrapper::listeningToModifiers() {
     return m_localTool->listeningToModifiers();
 }
@@ -114,6 +113,7 @@ void KisDelegatedSelectPathWrapper::continuePrimaryAction(KoPointerEvent *event)
 void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
     mouseReleaseEvent(event);
 }
+
 
 __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
@@ -171,3 +171,5 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
         helper.addSelectionShape(pathShape);
     }
 }
+
+

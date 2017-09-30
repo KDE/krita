@@ -62,7 +62,6 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     setLayout(mainLayout);
     mainLayout->addWidget(d->m_shortcutsEditor);
 
-
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     d->m_schemeEditor = new KShortcutSchemesEditor(this);
     connect(d->m_schemeEditor, SIGNAL(shortcutsSchemeChanged(QString)),
@@ -75,7 +74,6 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
     bottomLayout->addWidget(buttonBox);
-
 
     mainLayout->addLayout(bottomLayout);
 

@@ -34,6 +34,7 @@ public:
     void setValue(int value) override;
     void setRange(int minimum, int maximum) override;
     void setFormat(const QString &format) override;
+    void setAutoNestedName(const QString &name) override;
 
 private:
     QList<KoProgressProxy*> m_proxies;

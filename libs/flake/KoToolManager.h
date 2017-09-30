@@ -184,14 +184,6 @@ public:
     KoCanvasController *activeCanvasController() const;
 
     /**
-     * Connect all the tools for the given canvas to the new shape controller.
-     *
-     * @param shapecontroller the new shape controller
-     * @param canvasController the canvas
-     */
-    void updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController);
-
-    /**
      * Return the tool that is able to create shapes for this param canvas.
      * This is typically used by the KoShapeSelector to set which shape to create next.
      * @param canvas the canvas that is a child of a previously registered controller
@@ -201,7 +193,7 @@ public:
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
     /**
-     * Returns the tool for the given tool id.
+     * Returns the tool for the given tool id. The tool may be 0
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
      * @see addController()
@@ -253,11 +245,6 @@ public Q_SLOTS:
      * @param id the id of the input device
      */
     void switchInputDeviceRequested(const KoInputDevice &id);
-
-    /**
-     * a new tool has become known to mankind
-     */
-    void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
 
     /**
      * Request for temporary switching the tools.

@@ -53,6 +53,8 @@ function(install_pykrita_plugin name)
             FILES_MATCHING
                 PATTERN "*.py"
                 PATTERN "*.ui"
+                PATTERN "*.txt"
+                PATTERN "*.csv"
                 PATTERN "__pycache__*" EXCLUDE
            )
         # TODO Is there any way to form a long PATTERN options string
@@ -75,6 +77,10 @@ endfunction()
 install_pykrita_plugin(hello)
 install_pykrita_plugin(assignprofiledialog)
 install_pykrita_plugin(scripter)
+install_pykrita_plugin(colorspace)
+install_pykrita_plugin(documenttools)
+install_pykrita_plugin(filtermanager)
+install_pykrita_plugin(exportlayers)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
 install( FILES
@@ -82,6 +88,10 @@ install( FILES
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 
 install_pykrita_plugin(palette_docker)
+install_pykrita_plugin(quick_settings_docker)
+install_pykrita_plugin(lastdocumentsdocker)
+install_pykrita_plugin(scriptdocker)
+install_pykrita_plugin(comics_project_management_tools)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

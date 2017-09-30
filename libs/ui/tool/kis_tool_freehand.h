@@ -19,8 +19,6 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
-#include <Eigen/Core>
-
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_distance_information.h>
@@ -48,8 +46,6 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
     Q_OBJECT
 
 public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText);
     ~KisToolFreehand() override;
     int flags() const override;
@@ -116,7 +112,6 @@ private:
 protected:
     friend class KisViewManager;
     friend class KisView;
-    friend class KisSketchView;
     KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;
     double m_magnetism;
@@ -139,4 +134,3 @@ private:
 
 
 #endif // KIS_TOOL_FREEHAND_H_
-

@@ -107,17 +107,6 @@ void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
     }
 }
 
-QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
-{
-    QList<KisPaintingAssistantHandleSP> newHandles;
-    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
-        KisPaintingAssistantHandleSP newHandle(new KisPaintingAssistantHandle(*this));
-        newHandles.append(newHandle);
-        assistant->replaceHandle(this, newHandle);
-    }
-    return newHandles;
-}
-
 void KisPaintingAssistantHandle::uncache()
 {
     Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {

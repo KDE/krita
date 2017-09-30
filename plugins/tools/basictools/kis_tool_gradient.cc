@@ -171,10 +171,9 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         painter.beginTransaction();
 
         KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-        KoProgressUpdater * updater = canvas->viewManager()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        KoUpdaterPtr updater = canvas->viewManager()->createUnthreadedUpdater(i18nc("@info:progress", "Gradient..."));
 
-        updater->start(100, i18nc("@info:progress", "Gradient..."));
-        painter.setProgress(updater->startSubtask());
+        painter.setProgress(updater);
 
         painter.setGradientShape(m_shape);
         painter.paintGradient(m_startPos, m_endPos, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());
@@ -184,7 +183,6 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         QApplication::restoreOverrideCursor();
         currentNode()->setDirty();
         notifyModified();
-        delete updater;
     }
     canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
 }

@@ -279,6 +279,18 @@ void KisConfig::setNewCursorStyle(CursorStyle style)
     m_cfg.writeEntry("newCursorStyle", (int)style);
 }
 
+QColor KisConfig::getCursorMainColor(bool defaultValue) const
+{
+    QColor col;
+    col.setRgbF(0.501961, 1.0, 0.501961);
+    return (defaultValue ? col : m_cfg.readEntry("cursorMaincColor", col));
+}
+
+void KisConfig::setCursorMainColor(const QColor &v) const
+{
+    m_cfg.writeEntry("cursorMaincColor", v);
+}
+
 OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
 {
     if (defaultValue) {
@@ -602,12 +614,20 @@ bool KisConfig::useOpenGL(bool defaultValue) const
 
     //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
     QString cs = canvasState();
+#ifdef Q_OS_WIN
+    return (m_cfg.readEntry("useOpenGLWindows", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
+#else
     return (m_cfg.readEntry("useOpenGL", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
+#endif
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const
 {
+#ifdef Q_OS_WIN
+    m_cfg.writeEntry("useOpenGLWindows", useOpenGL);
+#else
     m_cfg.writeEntry("useOpenGL", useOpenGL);
+#endif
 }
 
 int KisConfig::openGLFilteringMode(bool defaultValue) const
@@ -665,16 +685,6 @@ int KisConfig::textureOverlapBorder() const
     return 1 << qMax(0, numMipmapLevels());
 }
 
-qint32 KisConfig::maxNumberOfThreads(bool defaultValue) const
-{
-    return (defaultValue ? QThread::idealThreadCount() : m_cfg.readEntry("maxthreads", QThread::idealThreadCount()));
-}
-
-void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
-{
-    m_cfg.writeEntry("maxthreads", maxThreads);
-}
-
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
     int v = m_cfg.readEntry("gridmainstyle", 0);
@@ -719,6 +729,39 @@ QColor KisConfig::getGridSubdivisionColor(bool defaultValue) const
 void KisConfig::setGridSubdivisionColor(const QColor & v) const
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
+}
+
+QColor KisConfig::getPixelGridColor(bool defaultValue) const
+{
+    QColor col(255, 255, 255);
+    return (defaultValue ? col : m_cfg.readEntry("pixelGridColor", col));
+}
+
+void KisConfig::setPixelGridColor(const QColor & v) const
+{
+    m_cfg.writeEntry("pixelGridColor", v);
+}
+
+qreal KisConfig::getPixelGridDrawingThreshold(bool defaultValue) const
+{
+    qreal border = 8.0f;
+    return (defaultValue ? border : m_cfg.readEntry("pixelGridDrawingThreshold", border));
+}
+
+void KisConfig::setPixelGridDrawingThreshold(qreal v) const
+{
+    m_cfg.writeEntry("pixelGridDrawingThreshold", v);
+}
+
+bool KisConfig::pixelGridEnabled(bool defaultValue) const
+{
+    bool enabled = true;
+    return (defaultValue ? enabled : m_cfg.readEntry("pixelGridEnabled", enabled));
+}
+
+void KisConfig::enablePixelGrid(bool v) const
+{
+    m_cfg.writeEntry("pixelGridEnabled", v);
 }
 
 quint32 KisConfig::guidesLineStyle(bool defaultValue) const
@@ -1020,6 +1063,26 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
     m_cfg.writeEntry("tabletPressureCurve", curveString);
 }
 
+bool KisConfig::useWin8PointerInput(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
+#else
+    return false;
+#endif
+}
+
+void KisConfig::setUseWin8PointerInput(bool value) const
+{
+#ifdef Q_OS_WIN
+    // Special handling: Only set value if changed
+    // I don't want it to be set if the user hasn't touched it
+    if (useWin8PointerInput() != value) {
+        m_cfg.writeEntry("useWin8PointerInput", value);
+    }
+#endif
+}
+
 qreal KisConfig::vastScrolling(bool defaultValue) const
 {
     return (defaultValue ? 0.9 : m_cfg.readEntry("vastScrolling", 0.9));
@@ -1209,7 +1272,17 @@ void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesCon
 {
     QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
+}
 
+QString KisConfig::importConfiguration(const QString &filterId, bool defaultValue) const
+{
+    return (defaultValue ? QString() : m_cfg.readEntry("ImportConfiguration-" + filterId, QString()));
+}
+
+void KisConfig::setImportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
+{
+    QString importConfig = properties->toXML();
+    m_cfg.writeEntry("ImportConfiguration-" + filterId, importConfig);
 }
 
 bool KisConfig::useOcio(bool defaultValue) const
@@ -1571,11 +1644,6 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
     m_cfg.writeEntry("testingCompressBrushEvents", value);
 }
 
-bool KisConfig::useVerboseOpenGLDebugOutput(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("useVerboseOpenGLDebugOutput", false));
-}
-
 int KisConfig::workaroundX11SmoothPressureSteps(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0));
@@ -1644,14 +1712,14 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
-bool KisConfig::enableOpenGLDebugging(bool defaultValue) const
+bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLDebugging", false));
+    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLFramerateLogging", false));
 }
 
-void KisConfig::setEnableOpenGLDebugging(bool value) const
+void KisConfig::setEnableOpenGLFramerateLogging(bool value) const
 {
-    m_cfg.writeEntry("enableOpenGLDebugging", value);
+    m_cfg.writeEntry("enableOpenGLFramerateLogging", value);
 }
 
 void KisConfig::setEnableAmdVectorizationWorkaround(bool value)
@@ -1747,17 +1815,17 @@ void KisConfig::setStabilizerSampleSize(int value)
     m_cfg.writeEntry("stabilizerSampleSize", value);
 }
 
-int KisConfig::stabilizerDelayedPaintInterval(bool defaultValue) const
+bool KisConfig::stabilizerDelayedPaint(bool defaultValue) const
 {
-    const int defaultInterval = 20;
+    const bool defaultEnabled = true;
 
     return defaultValue ?
-        defaultInterval : m_cfg.readEntry("stabilizerDelayedPaintInterval", defaultInterval);
+        defaultEnabled : m_cfg.readEntry("stabilizerDelayedPaint", defaultEnabled);
 }
 
-void KisConfig::setStabilizerDelayedPaintInterval(int value)
+void KisConfig::setStabilizerDelayedPaint(bool value)
 {
-    m_cfg.writeEntry("stabilizerDelayedPaintInterval", value);
+    m_cfg.writeEntry("stabilizerDelayedPaint", value);
 }
 
 QString KisConfig::customFFMpegPath(bool defaultValue) const

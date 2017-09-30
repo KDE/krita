@@ -28,28 +28,6 @@
 #include <kritaui_export.h>
 #include <kis_types.h>
 
-
-#define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
-    (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
-     (_event)->modifiers() == (_modifier))
-
-#define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
-    (this->mode() == (_mode) && (_event)->button() & (_button) &&            \
-     (_event)->modifiers() == (_modifier))
-
-#define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
-    (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
-     ((_event)->modifiers() & (_modifier) ||                            \
-      (_event)->modifiers() == Qt::NoModifier))
-
-#define RELEASE_CONDITION(_event, _mode, _button)               \
-    (this->mode() == (_mode) && (_event)->button() == (_button))
-
-#define RELEASE_CONDITION_WB(_event, _mode, _button)               \
-    (this->mode() == (_mode) && (_event)->button() & (_button))
-
-#define MOVE_CONDITION(_event, _mode) (this->mode() == (_mode))
-
 #ifdef __GNUC__
 #define WARN_WRONG_MODE(_mode) warnKrita << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
 #else

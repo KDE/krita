@@ -1,113 +1,58 @@
-import sys
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from krita import *
-
-class DropButton(QPushButton):
-
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setFixedSize(64, 64)
-        self.setIconSize(QSize(64, 64))
-        self.preset = None
-
-    def selectPreset(self):
-        self.preset = self.presetChooser.currentPreset().name()
-        self.setIcon(QIcon(QPixmap.fromImage(self.presetChooser.currentPreset().image())))
+import krita
+from tenbrushes import uitenbrushes
 
 
-class TenBrushesExtension(Extension):
+class TenBrushesExtension(krita.Extension):
 
     def __init__(self, parent):
-        super().__init__(parent)
-        self.buttons = []
+        super(TenBrushesExtension, self).__init__(parent)
+
         self.actions = []
+        self.buttons = []
+        self.selectedPresets = []
 
     def setup(self):
         action = Application.createAction("ten_brushes", "Ten Brushes")
         action.setToolTip("Assign ten brush presets to ten shortcuts.")
-        action.triggered.connect(self.showDialog)
+        action.triggered.connect(self.initialize)
 
-        # Read the ten selected brush presets from the settings
-        selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+        self.readSettings()
+        self.loadActions()
+
+    def initialize(self):
+        self.uitenbrushes = uitenbrushes.UITenBrushes()
+        self.uitenbrushes.initialize(self)
+
+    def readSettings(self):
+        self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+
+    def writeSettings(self):
+        presets = []
+
+        for index, button in enumerate(self.buttons):
+            self.actions[index].preset = button.preset
+            presets.append(button.preset)
+        Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
+
+    def loadActions(self):
         allPresets = Application.resources("preset")
-        # Setup up to ten actions and give them default shortcuts
-        j = 0
-        self.actions = []
-        for i in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-            action = Application.createAction("activate_preset_" + i, "Activate Preset " + i)
-            #action.setVisible(False)
+
+        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
+            action = Application.createAction("activate_preset_" + item, "Activate Brush Preset " + item)
             action.setMenu("None")
             action.triggered.connect(self.activatePreset)
-            if j < len(selectedPresets) and selectedPresets[j] in allPresets:
-                action.preset = selectedPresets[j]
+
+            if index < len(self.selectedPresets) and self.selectedPresets[index] in allPresets:
+                action.preset = self.selectedPresets[index]
             else:
                 action.preset = None
-            self.actions.append(action)
-            j = j + 1
 
+            self.actions.append(action)
 
     def activatePreset(self):
-        print("activatePreset", self.sender().preset)
         allPresets = Application.resources("preset")
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
             Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
 
-    def showDialog(self):
-        self.dialog = QDialog(Application.activeWindow().qwindow())
-
-        self.buttonBox = QDialogButtonBox(self.dialog)
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.dialog.reject)
-
-        vbox = QVBoxLayout(self.dialog)
-        hbox = QHBoxLayout(self.dialog)
-
-        self.presetChooser = PresetChooser(self.dialog)
-
-        allPresets = Application.resources("preset")
-        j = 0
-        self.buttons = []
-        for i in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-            buttonBox = QVBoxLayout()
-            button = DropButton(self.dialog)
-            button.setObjectName(i)
-            button.clicked.connect(button.selectPreset)
-            button.presetChooser = self.presetChooser
-
-            if self.actions[j] and self.actions[j].preset and self.actions[j].preset in allPresets:
-                p = allPresets[self.actions[j].preset];
-                button.preset = p.name()
-                button.setIcon(QIcon(QPixmap.fromImage(p.image())))
-
-            buttonBox.addWidget(button)
-            label = QLabel("Ctrl+Alt+" + i)
-            label.setAlignment(Qt.AlignHCenter)
-            buttonBox.addWidget(label)
-            hbox.addLayout(buttonBox)
-            self.buttons.append(button)
-            j = j + 1
-
-        vbox.addLayout(hbox)
-        vbox.addWidget(self.presetChooser)
-        vbox.addWidget(self.buttonBox)
-        vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
-
-        self.dialog.show()
-        self.dialog.activateWindow()
-        self.dialog.exec_()
-
-
-    def accept(self):
-        i = 0
-        presets = []
-        for button in self.buttons:
-            self.actions[i].preset = button.preset
-            presets.append(button.preset)
-            i = i + 1
-        Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
-        self.dialog.accept()
 
 Scripter.addExtension(TenBrushesExtension(Application))

@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>dark_draw-eraser.svg</file>
         <file>dark_geometry.svg</file>
         <file alias="dark_object-align-horizontal-center-calligra.svg">dark_ox16-action-object-align-horizontal-center-calligra.svg</file>
@@ -50,5 +49,19 @@
         <file>dark_pathpoint-symmetric.svg</file>
         <file>dark_pathsegment-curve.svg</file>
         <file>dark_pathsegment-line.svg</file>
+        <file>dark_opacity-increase.svg</file>
+        <file>dark_opacity-decrease.svg</file>
+        <file>dark_lightness-increase.svg</file>
+        <file>dark_lightness-decrease.svg</file>
+        <file>dark_brushsize-increase.svg</file>
+        <file>dark_brushsize-decrease.svg</file>
+        <file>dark_curve-preset-u.svg</file>
+        <file>dark_curve-preset-s.svg</file>
+        <file>dark_curve-preset-s-reverse.svg</file>
+        <file>dark_curve-preset-linear.svg</file>
+        <file>dark_curve-preset-linear-reverse.svg</file>
+        <file>dark_curve-preset-l.svg</file>
+        <file>dark_curve-preset-j.svg</file>
+        <file>dark_curve-preset-arch.svg</file>
     </qresource>
 </RCC>

@@ -20,7 +20,7 @@
 
 const QLoggingCategory &ODF_LOG() \
 {
-    static const QLoggingCategory category("krita.lib.odf");
+    static const QLoggingCategory category("krita.lib.odf", QtInfoMsg);
     return category;
 }
 

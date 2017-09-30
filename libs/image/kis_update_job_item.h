@@ -53,27 +53,49 @@ public:
     }
 
     void run() override {
-        if(m_exclusive) {
-            m_exclusiveJobLock->lockForWrite();
-        } else {
-            m_exclusiveJobLock->lockForRead();
+        if (!isRunning()) return;
+
+        /**
+         * Here we break the idea of QThreadPool a bit. Ideally, we should split the
+         * jobs into distinct QRunnable objects and pass all of them to QThreadPool.
+         * That is a nice idea, but it doesn't work well when the jobs are small enough
+         * and the number of available cores is high (>4 cores). It this case the
+         * threads just tend to execute the job very quickly and go to sleep, which is
+         * an expencive operation.
+         *
+         * To overcome this problem we try to bulk-process the jobs. In sigJobFinished()
+         * signal (which is DirectConnection), the context may add the job to ourselves(!!!),
+         * so we switch from "done" state into "running" again.
+         */
+
+        while (isRunning()) {
+            m_isExecuting.ref();
+
+            if(m_exclusive) {
+                m_exclusiveJobLock->lockForWrite();
+            } else {
+                m_exclusiveJobLock->lockForRead();
+            }
+
+            if(m_type == MERGE) {
+                runMergeJob();
+            } else {
+                Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
+                m_runnableJob->run();
+                delete m_runnableJob;
+                m_runnableJob = 0;
+            }
+
+            setDone();
+
+
+            emit sigDoSomeUsefulWork();
+            emit sigJobFinished();
+
+            m_exclusiveJobLock->unlock();
+
+            m_isExecuting.deref();
         }
-
-        if(m_type == MERGE) {
-            runMergeJob();
-        } else {
-            Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
-            m_runnableJob->run();
-            delete m_runnableJob;
-            m_runnableJob = 0;
-        }
-
-        setDone();
-
-        emit sigDoSomeUsefulWork();
-        emit sigJobFinished();
-
-        m_exclusiveJobLock->unlock();
     }
 
     inline void runMergeJob() {
@@ -134,6 +156,10 @@ public:
 
     inline const QRect& changeRect() const {
         return m_changeRect;
+    }
+
+    inline bool hasThreadAttached() const {
+        return m_isExecuting;
     }
 
 Q_SIGNALS:
@@ -198,6 +224,8 @@ private:
      */
     QRect m_accessRect;
     QRect m_changeRect;
+
+    QAtomicInt m_isExecuting;
 };
 
 

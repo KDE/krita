@@ -34,7 +34,6 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 
-
 __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *canvas)
     : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT,
                          KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
@@ -90,4 +89,13 @@ KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
 void KisToolSelectElliptical::setSelectionAction(int action)
 {
     changeSelectionAction(action);
+}
+
+QMenu* KisToolSelectElliptical::popupActionsMenu()
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+
+
+    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
 }

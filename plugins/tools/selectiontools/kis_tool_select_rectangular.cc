@@ -35,7 +35,6 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 
-
 __KisToolSelectRectangularLocal::__KisToolSelectRectangularLocal(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
                            KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6))
@@ -52,7 +51,6 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Rectangle"));
 
     QRect rc(rect.normalized().toRect());
-    helper.cropRectIfNeeded(&rc, selectionAction());
 
     if (helper.tryDeselectCurrentSelection(pixelToView(rc), selectionAction())) {
         return;
@@ -90,3 +88,13 @@ void KisToolSelectRectangular::setSelectionAction(int action)
 {
     changeSelectionAction(action);
 }
+
+QMenu* KisToolSelectRectangular::popupActionsMenu()
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+
+
+    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+}
+

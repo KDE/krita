@@ -60,7 +60,7 @@ public:
 
     KisImageWSP image();
 
-    KisOpenGLUpdateInfoSP fetchFrameData(int time) const;
+    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
 Q_SIGNALS:

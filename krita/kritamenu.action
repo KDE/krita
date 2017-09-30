@@ -440,6 +440,45 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Actions category="EditFill">
+      <text>Fill Special</text>
+       <Action name="fill_selection_foreground_color_opacity">
+        <icon></icon>
+        <text>Fill with Foreground Color (Opacity)</text>
+        <whatsThis></whatsThis>
+        <toolTip>Fill with Foreground Color (Opacity)</toolTip>
+        <iconText>Fill with Foreground Color (Opacity)</iconText>
+        <activationFlags>10000</activationFlags>
+        <activationConditions>1</activationConditions>
+        <shortcut>Ctrl+Shift+Backspace</shortcut>
+        <isCheckable>false</isCheckable>
+        <statusTip></statusTip>
+      </Action>
+      <Action name="fill_selection_background_color_opacity">
+        <icon></icon>
+        <text>Fill with Background Color (Opacity)</text>
+        <whatsThis></whatsThis>
+        <toolTip>Fill with Background Color (Opacity)</toolTip>
+        <iconText>Fill with Background Color (Opacity)</iconText>
+        <activationFlags>10000</activationFlags>
+        <activationConditions>1</activationConditions>
+        <shortcut>Ctrl+Backspace</shortcut>
+        <isCheckable>false</isCheckable>
+        <statusTip></statusTip>
+      </Action>
+      <Action name="fill_selection_pattern_opacity">
+        <icon></icon>
+        <text>Fill with Pattern (Opacity)</text>
+        <whatsThis></whatsThis>
+        <toolTip>Fill with Pattern (Opacity)</toolTip>
+        <iconText>Fill with Pattern (Opacity)</iconText>
+        <activationFlags>10000</activationFlags>
+        <activationConditions>1</activationConditions>
+        <shortcut></shortcut>
+        <isCheckable>false</isCheckable>
+        <statusTip></statusTip>
+      </Action>
+    </Actions>
     <Action name="stroke_shapes">
       <icon></icon>
       <text>Stro&amp;ke selected shapes</text>
@@ -1406,12 +1445,22 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="gmic">
+    <Action name="QMic">
       <icon>gmic</icon>
-      <text>G'MIC</text>
+      <text>Start G'MIC-Qt</text>
       <whatsThis></whatsThis>
-      <toolTip>Apply G'Mic Action</toolTip>
-      <iconText>Apply G'Mic Action</iconText>
+      <toolTip>Start G'Mic-Qt</toolTip>
+      <iconText>Start G'Mic-Qt</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  <Action name="QMicAgain">
+      <icon>gmic</icon>
+      <text>Re-apply the last G'MIC filter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Apply the last G'Mic-Qt action again</toolTip>
+      <iconText>Apply the last G'Mic-Qt action again</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1742,5 +1791,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+
   </Actions>
 </ActionCollection>

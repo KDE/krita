@@ -23,7 +23,7 @@
 
 /**
  * Allows the user to activate airbrushing of the brush mask (brush is painted at the same position over and over)
- * Rate is set in miliseconds.
+ * Rate is set in milliseconds.
  */
 class PAINTOP_EXPORT KisAirbrushOption : public KisPaintOpOption
 {

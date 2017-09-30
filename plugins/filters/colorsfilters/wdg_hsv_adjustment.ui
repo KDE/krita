@@ -229,6 +229,13 @@
      </property>
     </widget>
    </item>
+   <item row="9" column="2">
+    <widget class="QPushButton" name="reset">
+     <property name="text">
+      <string>Reset</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

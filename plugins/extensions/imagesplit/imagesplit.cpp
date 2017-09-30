@@ -62,11 +62,11 @@ Imagesplit::~Imagesplit()
 
 bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, const QString &url)
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
 
     KisDocument *document = KisPart::instance()->createDocument();
 
-    KisImageWSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
+    KisImageSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
     dst->setResolution(image->xRes(), image->yRes());
     document->setCurrentImage(dst);
 
@@ -76,9 +76,8 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
 
     dst->addNode(paintLayer, KisNodeSP(0));
     dst->refreshGraph();
-    document->setOutputMimeType(mimeType.toLatin1());
     document->setFileBatchMode(true);
-    if (!document->exportDocument(QUrl::fromLocalFile(url))) {
+    if (!document->exportDocumentSync(QUrl::fromLocalFile(url), mimeType.toLatin1())) {
         if (document->errorMessage().isEmpty()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", document->localFilePath()));
         } else {

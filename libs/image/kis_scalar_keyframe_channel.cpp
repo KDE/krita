@@ -56,6 +56,13 @@ public:
         : minValue(min), maxValue(max), firstFreeIndex(0), defaultInterpolation(defaultInterpolation)
     {}
 
+    Private(const Private &rhs)
+        : minValue(rhs.minValue),
+          maxValue(rhs.maxValue),
+          firstFreeIndex(rhs.firstFreeIndex),
+          defaultInterpolation(rhs.defaultInterpolation)
+    {}
+
     qreal minValue;
     qreal maxValue;
     int firstFreeIndex;
@@ -70,6 +77,12 @@ public:
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation)
     : KisKeyframeChannel(id, defaultBounds),
       m_d(new Private(minValue, maxValue, defaultInterpolation))
+{
+}
+
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNode *newParentNode)
+    : KisKeyframeChannel(rhs, newParentNode),
+      m_d(new Private(*rhs.m_d))
 {
 }
 

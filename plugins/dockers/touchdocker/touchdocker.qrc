@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="opendialog.qml">qml/opendialog.qml</file>
+        <file alias="saveasdialog.qml">qml/saveasdialog.qml</file>
+        <file alias="touchstrip.qml">qml/touchstrip.qml</file>
+    </qresource>
+</RCC>

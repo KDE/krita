@@ -124,7 +124,7 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     case OK: break;
 
     case FilterCreationError:
-        msg = i18n("Could not create the filter plugin"); break;
+        msg = i18n("Krita does not support this file format"); break;
 
     case CreationError:
         msg = i18n("Could not create the output document"); break;
@@ -187,7 +187,7 @@ KisPropertiesConfigurationSP KisImportExportFilter::lastSavedConfiguration(const
 {
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     const QString filterConfig = KisConfig().exportConfiguration(to);
-    if (!filterConfig.isEmpty()) {
+    if (cfg && !filterConfig.isEmpty()) {
         cfg->fromXML(filterConfig, false);
     }
     return cfg;

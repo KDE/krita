@@ -340,7 +340,7 @@ bool PerspectiveAssistant::quad(QPolygonF& poly) const
             int j = (i == 3) ? 0 : (i + 1);
             if (signs[i] * signs[j] == -1) {
                 // opposite signs: uncross
-                qSwap(poly[i], poly[j]);
+                std::swap(poly[i], poly[j]);
                 return true;
             }
         }

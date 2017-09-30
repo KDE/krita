@@ -81,9 +81,9 @@ void ShapeRotateStrategy::rotateBy(qreal angle)
     QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
     Q_FOREACH (KoShape *shape, m_selectedShapes) {
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 

@@ -58,7 +58,6 @@ public:
     KisPaintingAssistantHandle(const KisPaintingAssistantHandle&);
     ~KisPaintingAssistantHandle();
     void mergeWith(KisPaintingAssistantHandleSP);
-    QList<KisPaintingAssistantHandleSP> split();
     void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
     void setType(char type);

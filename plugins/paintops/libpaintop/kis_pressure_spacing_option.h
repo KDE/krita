@@ -37,11 +37,22 @@ public:
     void setIsotropicSpacing(bool isotropic);
     bool isotropicSpacing() const;
 
+    /**
+     * @param useUpdates True if and only if the spacing option should allow spacing updates between
+     *                   painted dabs.
+     */
+    void setUsingSpacingUpdates(bool useUpdates);
+    /**
+     * @return True if and only if the spacing option allows spacing updates between painted dabs.
+     */
+    bool usingSpacingUpdates() const;
+
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
 private:
     bool m_isotropicSpacing;
+    bool m_useSpacingUpdates;
 };
 
 #endif

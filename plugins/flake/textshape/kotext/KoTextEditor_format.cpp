@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *

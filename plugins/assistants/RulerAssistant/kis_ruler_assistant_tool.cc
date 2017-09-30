@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
@@ -900,7 +899,7 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             assistants << KoID(key, name);
         }
-        qSort(assistants.begin(), assistants.end(), KoID::compareNames);
+        std::sort(assistants.begin(), assistants.end(), KoID::compareNames);
         Q_FOREACH(const KoID &id, assistants) {
             m_options.comboBox->addItem(id.name(), id.id());
         }

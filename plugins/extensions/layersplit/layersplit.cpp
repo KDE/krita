@@ -86,9 +86,7 @@ void LayerSplit::slotLayerSplit()
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        KoProgressUpdater* pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
-        pu->start(100, i18n("Split into Layers"));
-        QPointer<KoUpdater> updater = pu->startSubtask();
+        QPointer<KoUpdater> updater = m_view->createUnthreadedUpdater(i18n("Split into Layers"));
 
         KisImageSP image = m_view->image();
         if (!image) return;
@@ -183,7 +181,7 @@ void LayerSplit::slotLayerSplit()
 //        }
 
         if (dlg.sortLayers()) {
-            qSort(colorMap);
+            std::sort(colorMap.begin(), colorMap.end());
         }
 
         KisUndoAdapter *undo = image->undoAdapter();

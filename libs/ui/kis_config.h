@@ -103,6 +103,9 @@ public:
     CursorStyle newCursorStyle(bool defaultValue = false) const;
     void setNewCursorStyle(CursorStyle style);
 
+    QColor getCursorMainColor(bool defaultValue = false) const;
+    void setCursorMainColor(const QColor& v) const;
+
     OutlineStyle newOutlineStyle(bool defaultValue = false) const;
     void setNewOutlineStyle(OutlineStyle style);
 
@@ -174,9 +177,6 @@ public:
     int openGLTextureSize(bool defaultValue = false) const;
     int textureOverlapBorder() const;
 
-    qint32 maxNumberOfThreads(bool defaultValue = false) const;
-    void setMaxNumberOfThreads(qint32 numberOfThreads);
-
     quint32 getGridMainStyle(bool defaultValue = false) const;
     void setGridMainStyle(quint32 v) const;
 
@@ -188,6 +188,15 @@ public:
 
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
+
+    QColor getPixelGridColor(bool defaultValue = false) const;
+    void setPixelGridColor(const QColor & v) const;
+
+    qreal getPixelGridDrawingThreshold(bool defaultValue = false) const;
+    void setPixelGridDrawingThreshold(qreal v) const;
+
+    bool pixelGridEnabled(bool defaultValue = false) const;
+    void enablePixelGrid(bool v) const;
 
     quint32 guidesLineStyle(bool defaultValue = false) const;
     void setGuidesLineStyle(quint32 v) const;
@@ -267,6 +276,9 @@ public:
     QString pressureTabletCurve(bool defaultValue = false) const;
     void setPressureTabletCurve(const QString& curveString) const;
 
+    bool useWin8PointerInput(bool defaultValue = false) const;
+    void setUseWin8PointerInput(bool value) const;
+
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
 
@@ -324,6 +336,9 @@ public:
 
     QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
     void setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
+
+    QString importConfiguration(const QString &filterId, bool defaultValue = false) const;
+    void setImportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
 
     bool useOcio(bool defaultValue = false) const;
     void setUseOcio(bool useOCIO) const;
@@ -458,8 +473,6 @@ public:
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;
 
-    bool useVerboseOpenGLDebugOutput(bool defaultValue = false) const;
-
     int workaroundX11SmoothPressureSteps(bool defaultValue = false) const;
 
     bool showCanvasMessages(bool defaultValue = false) const;
@@ -471,8 +484,8 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
-    void setEnableOpenGLDebugging(bool value) const;
-    bool enableOpenGLDebugging(bool defaultValue = false) const;
+    void setEnableOpenGLFramerateLogging(bool value) const;
+    bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
@@ -498,8 +511,8 @@ public:
     int stabilizerSampleSize(bool defaultValue = false) const;
     void setStabilizerSampleSize(int value);
 
-    int stabilizerDelayedPaintInterval(bool defaultValue = false) const;
-    void setStabilizerDelayedPaintInterval(int value);
+    bool stabilizerDelayedPaint(bool defaultValue = false) const;
+    void setStabilizerDelayedPaint(bool value);
 
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;

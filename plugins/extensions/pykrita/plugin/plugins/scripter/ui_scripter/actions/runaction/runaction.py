@@ -5,6 +5,7 @@ import sys
 from . import docwrapper
 import os
 from scripter import resources_rc
+import importlib
 
 
 class RunAction(QAction):
@@ -14,7 +15,7 @@ class RunAction(QAction):
         self.scripter = scripter
 
         self.editor = self.scripter.uicontroller.editor
-        self.output = self.scripter.uicontroller.findTabWidget('OutPut')
+        self.output = self.scripter.uicontroller.findTabWidget('OutPut', 'OutPutTextEdit')
 
         self.triggered.connect(self.run)
 
@@ -28,6 +29,14 @@ class RunAction(QAction):
         return 'toolBar'
 
     def run(self):
+        """ This method execute python code from an activeDocument (file) or direct
+            from editor (ui_scripter/editor/pythoneditor.py). When executing code
+            from a file, we use importlib to load this module/file and with
+            "users_script" name. That's implementation seeks for a "main()" function in the script.
+            When executing code from editor without creating a file, we compile
+            this script to bytecode and we execute this in an empty scope. That's
+            faster than use exec directly and cleaner, because we are using an empty scope. """
+
         self.scripter.uicontroller.setActiveWidget('OutPut')
         stdout = sys.stdout
         stderr = sys.stderr
@@ -36,9 +45,22 @@ class RunAction(QAction):
         sys.stdout = output
         sys.stderr = output
         script = self.editor.document().toPlainText()
+        document = self.scripter.documentcontroller.activeDocument
         try:
-            exec(script)
+            if document:
+                spec = importlib.util.spec_from_file_location("users_script", document.filePath)
+                users_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(users_module)
+                users_module.main()
+            else:
+                code = compile(script, '<string>', 'exec')
+                exec(script, {})
         except Exception as e:
             self.scripter.uicontroller.showException(str(e))
+
         sys.stdout = stdout
         sys.stderr = stderr
+
+        # scroll to bottom of output
+        max = self.output.verticalScrollBar().maximum()
+        self.output.verticalScrollBar().setValue(max)

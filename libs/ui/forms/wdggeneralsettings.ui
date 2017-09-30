@@ -113,6 +113,26 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Cursor Color:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="KisColorButton" name="cursorColorBtutton">
+           <property name="maximumSize">
+            <size>
+             <width>48</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item row="2" column="0">
@@ -376,6 +396,13 @@
           <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
            <property name="text">
             <string>Switch Control/Alt Selection Modifiers</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkEnableTouch">
+           <property name="text">
+            <string>Enable Touch Painting</string>
            </property>
           </widget>
          </item>

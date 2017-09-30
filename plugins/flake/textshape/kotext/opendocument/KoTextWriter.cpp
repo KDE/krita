@@ -5,7 +5,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

@@ -75,7 +75,6 @@ public:
                                            qreal rotation,
                                            const KisAirbrushOption *airbrushOption,
                                            const KisPressureSpacingOption *spacingOption,
-                                           const KisPressureRateOption *rateOption,
                                            const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0

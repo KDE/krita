@@ -52,10 +52,10 @@
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
-    tabletPressed(false),
-    hasSelection(false),
-    controller(0),
-    parent(p)
+      tabletPressed(false),
+      hasSelection(false),
+      controller(0),
+      parent(p)
 {
     scrollTimer.setInterval(100);
     mouseLeaveWorkaround = false;
@@ -124,8 +124,8 @@ bool KoToolProxyPrivate::isActiveLayerEditable()
 }
 
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
-        : QObject(parent),
-        d(new KoToolProxyPrivate(this))
+    : QObject(parent),
+      d(new KoToolProxyPrivate(this))
 {
     KoToolManager::instance()->priv()->registerToolProxy(this, canvas);
 
@@ -160,65 +160,6 @@ QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 KoCanvasBase* KoToolProxy::canvas() const
 {
     return d->controller->canvas();
-}
-
-void KoToolProxy::touchEvent(QTouchEvent *event)
-{
-    QPointF point;
-    QList<KoTouchPoint> touchPoints;
-
-    bool isPrimary = true;
-    Q_FOREACH (QTouchEvent::TouchPoint p, event->touchPoints()) {
-        QPointF docPoint = widgetToDocument(p.screenPos());
-        if (isPrimary) {
-            point = docPoint;
-            isPrimary = false;
-        }
-        KoTouchPoint touchPoint;
-        touchPoint.touchPoint = p;
-        touchPoint.point = point;
-        touchPoint.lastPoint = widgetToDocument(p.lastNormalizedPos());
-        touchPoints << touchPoint;
-    }
-
-    KoPointerEvent ev(event, point, touchPoints);
-
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-
-    switch (event->type()) {
-    case QEvent::TouchBegin:
-        ev.setTabletButton(Qt::LeftButton);
-        if (d->activeTool) {
-            if( d->activeTool->wantsTouch() )
-                d->activeTool->touchEvent(event);
-            else
-                d->activeTool->mousePressEvent(&ev);
-        }
-        break;
-    case QEvent::TouchUpdate:
-        ev.setTabletButton(Qt::LeftButton);
-        if (d->activeTool) {
-            if( d->activeTool->wantsTouch() )
-                d->activeTool->touchEvent(event);
-            else
-                d->activeTool->mouseMoveEvent(&ev);
-        }
-        break;
-    case QEvent::TouchEnd:
-        ev.setTabletButton(Qt::LeftButton);
-        if (d->activeTool) {
-            if( d->activeTool->wantsTouch() )
-                d->activeTool->touchEvent(event);
-            else
-                d->activeTool->mouseReleaseEvent(&ev);
-        }
-        break;
-    default:
-        ; // ingore the rest
-    }
-    d->mouseLeaveWorkaround = true;
-
 }
 
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -270,7 +211,7 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
     QPointF globalPoint = ev->globalPos();
     if (d->multiClickGlobalPoint != globalPoint) {
         if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
-            qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
+                qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
             d->multiClickCount = 0;
         }
         d->multiClickGlobalPoint = globalPoint;
@@ -318,7 +259,7 @@ void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point
 
 void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-     // let us handle it as any other mousepress (where we then detect multi clicks
+    // let us handle it as any other mousepress (where we then detect multi clicks
     mousePressEvent(event);
 }
 
@@ -378,23 +319,6 @@ void KoToolProxy::keyReleaseEvent(QKeyEvent *event)
 {
     if (d->activeTool)
         d->activeTool->keyReleaseEvent(event);
-    else
-        event->ignore();
-}
-
-void KoToolProxy::wheelEvent(QWheelEvent *event, const QPointF &point)
-{
-    KoPointerEvent ev(event, point);
-    if (d->activeTool)
-        d->activeTool->wheelEvent(&ev);
-    else
-        event->ignore();
-}
-
-void KoToolProxy::wheelEvent(KoPointerEvent *event)
-{
-    if (d->activeTool)
-        d->activeTool->wheelEvent(event);
     else
         event->ignore();
 }
@@ -551,10 +475,10 @@ void KoToolProxy::deleteSelection()
 void KoToolProxy::processEvent(QEvent *e) const
 {
     if(e->type()==QEvent::ShortcutOverride
-       && d->activeTool
-       && d->activeTool->isInTextMode()
-       && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
-           static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
+            && d->activeTool
+            && d->activeTool->isInTextMode()
+            && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
+                static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
         e->accept();
     }
 }

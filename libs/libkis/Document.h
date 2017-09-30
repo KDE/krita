@@ -42,6 +42,32 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+    /**
+     * @brief horizontalGuides
+     * The horizontal guides.
+     * @return a list of the horizontal positions of guides.
+     */
+    QList<qreal> horizontalGuides() const;
+    /**
+     * @brief verticalGuides
+     * The vertical guide lines.
+     * @return a list of vertical guides.
+     */
+    QList<qreal> verticalGuides() const;
+
+    /**
+     * @brief guidesVisible
+     * Returns guide visiiblity.
+     * @return whether the guides are visible.
+     */
+    bool guidesVisible() const;
+    /**
+     * @brief guidesLocked
+     * Returns guide lockedness.
+     * @return whether the guides are locked.
+     */
+    bool guidesLocked() const;
+
 public Q_SLOTS:
 
     /**
@@ -274,8 +300,29 @@ public Q_SLOTS:
     void setWidth(int value);
 
     /**
+     * @return the left edge of the canvas in pixels.
+     */
+    int xOffset() const;
+
+    /**
+     * @brief setXOffset sets the left edge of the canvas to @param x.
+     */
+    void setXOffset(int x);
+
+    /**
+     * @return the top edge of the canvas in pixels.
+     */
+    int yOffset() const;
+
+    /**
+     * @brief setYOffset sets the top edge of the canvas to @param y.
+     */
+    void setYOffset(int y);
+
+    /**
      * @return xRes the horizontal resolution of the image in pixels per pt (there are 72 pts to an inch)
      */
+
     double xRes() const;
 
     /**
@@ -344,7 +391,40 @@ public Q_SLOTS:
     /**
      * @brief exportImage export the image, without changing its URL to the given path.
      * @param filename the full path to which the image is to be saved
-     * @param exportConfiguration a configuration object appropriate to the file format
+     * @param exportConfiguration a configuration object appropriate to the file format.
+     * An InfoObject will used to that configuration.
+     *
+     * The supported formats have specific configurations that must be used when in
+     * batchmode. They are described below:
+     *
+     *\b png
+     * <ul>
+     * <li>alpha: bool (True or False)
+     * <li>compression: int (1 to 9)
+     * <li>forceSRGB: bool (True or False)
+     * <li>indexed: bool (True or False)
+     * <li>interlaced: bool (True or False)
+     * <li>saveSRGBProfile: bool (True or False)
+     * <li>transparencyFillcolor: rgb (Ex:[255,255,255])
+     * </ul>
+     *
+     *\b jpeg
+     * <ul>
+     * <li>baseline: bool (True or False)
+     * <li>exif: bool (True or False)
+     * <li>filters: bool (['ToolInfo', 'Anonymizer'])
+     * <li>forceSRGB: bool (True or False)
+     * <li>iptc: bool (True or False)
+     * <li>is_sRGB: bool (True or False)
+     * <li>optimize: bool (True or False)
+     * <li>progressive: bool (True or False)
+     * <li>quality: int (0 to 100)
+     * <li>saveProfile: bool (True or False)
+     * <li>smoothing: int (0 to 100)
+     * <li>subsampling: int (0 to 3)
+     * <li>transparencyFillcolor: rgb (Ex:[255,255,255])
+     * <li>xmp: bool (True or False)
+     * </ul>
      * @return true if the export succeeded, false if it failed.
      */
     bool exportImage(const QString &filename, const InfoObject &exportConfiguration);
@@ -355,12 +435,14 @@ public Q_SLOTS:
     void flatten();
 
     /**
-     * @brief resizeImage resizes the canvas to the given width and height.
+     * @brief resizeImage resizes the canvas to the given left edge, top edge, width and height.
      * Note: This doesn't scale, use scale image for that.
+     * @param x the new left edge
+     * @param y the new top edge
      * @param w the new width
      * @param h the new height
      */
-    void resizeImage(int w, int h);
+    void resizeImage(int x, int y, int w, int h);
 
     /**
     * @brief scaleImage
@@ -496,6 +578,32 @@ public Q_SLOTS:
      * wait until the image is fully recomputed.
      */
     void refreshProjection();
+    /**
+     * @brief setHorizontalGuides
+     * replace all existing horizontal guides with the entries in the list.
+     * @param list a list of floats containing the new guides.
+     */
+    void setHorizontalGuides(const QList<qreal> &lines);
+    /**
+     * @brief setVerticalGuides
+     * replace all existing horizontal guides with the entries in the list.
+     * @param list a list of floats containing the new guides.
+     */
+    void setVerticalGuides(const QList<qreal> &lines);
+
+    /**
+     * @brief setGuidesVisible
+     * set guides visible on this document.
+     * @param visible whether or not the guides are visible.
+     */
+    void setGuidesVisible(bool visible);
+
+    /**
+     * @brief setGuidesLocked
+     * set guides locked on this document
+     * @param locked wether or not to lock the guides on this document.
+     */
+    void setGuidesLocked(bool locked);
 
 private:
 

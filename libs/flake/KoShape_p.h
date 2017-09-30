@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,9 +60,6 @@ public:
 
     // Loads the border style.
     KoBorder *loadOdfBorder(KoShapeLoadingContext &context) const;
-
-    /// calls update on the shape where the stroke is.
-    void updateStroke();
 
 public:
     // Members

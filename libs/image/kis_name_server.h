@@ -25,6 +25,7 @@ class KRITAIMAGE_EXPORT KisNameServer
 {
 public:
     KisNameServer(qint32 seed = 1);
+    KisNameServer(const KisNameServer &rhs);
     ~KisNameServer();
 
     qint32 number();

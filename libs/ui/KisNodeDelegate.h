@@ -27,9 +27,9 @@ class KisNodeModel;
 
 /**
  * See KisNodeModel and KisNodeView.
- * 
+ *
  * A delegate provides the gui machinery, using Qt's model/view terminology.
- * This class is owned by KisNodeView to do the work of generating the 
+ * This class is owned by KisNodeView to do the work of generating the
  * graphical representation of each item.
  */
 class KisNodeDelegate: public QAbstractItemDelegate
@@ -79,7 +79,7 @@ private:
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private Q_SLOTS:
-    void slotOnCloseEditor();
+    void slotConfigChanged();
 };
 
 #endif

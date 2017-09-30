@@ -50,6 +50,14 @@
 // airbrush rate, which can improve responsiveness.
 const qreal AIRBRUSH_INTERVAL_FACTOR = 0.5;
 
+// The amount of time, in milliseconds, to allow between updates of the spacing information. Only
+// used when spacing updates between dabs are enabled.
+const qreal SPACING_UPDATE_INTERVAL = 50.0;
+
+// The amount of time, in milliseconds, to allow between updates of the timing information. Only
+// used when airbrushing.
+const qreal TIMING_UPDATE_INTERVAL = 50.0;
+
 struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
@@ -255,8 +263,6 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
                                           KisNodeSP overrideNode,
                                           KisDefaultBoundsBaseSP bounds)
 {
-    Q_UNUSED(overrideNode);
-
     m_d->strokesFacade = strokesFacade;
 
     m_d->haveTangent = false;
@@ -266,22 +272,29 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     m_d->previousPaintInformation = pi;
 
-    createPainters(m_d->painterInfos,
-                   m_d->previousPaintInformation.pos(),
-                   m_d->previousPaintInformation.currentTime(),
-                   startAngle);
-
     m_d->resources = new KisResourcesSnapshot(image,
                                               currentNode,
                                               resourceManager,
                                               bounds);
-
     if(overrideNode) {
         m_d->resources->setCurrentNode(overrideNode);
     }
 
+    const bool airbrushing = m_d->resources->needsAirbrushing();
+    const bool useSpacingUpdates = m_d->resources->needsSpacingUpdates();
+
+    KisDistanceInitInfo startDistInfo(m_d->previousPaintInformation.pos(),
+                                      m_d->previousPaintInformation.currentTime(),
+                                      startAngle,
+                                      useSpacingUpdates ? SPACING_UPDATE_INTERVAL : LONG_TIME,
+                                      airbrushing ? TIMING_UPDATE_INTERVAL : LONG_TIME);
+    KisDistanceInformation startDist = startDistInfo.makeDistInfo();
+
+    createPainters(m_d->painterInfos,
+                   startDist);
+
     if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->startStroke(image, m_d->resources);
+        m_d->recordingAdapter->startStroke(image, m_d->resources, startDistInfo);
     }
 
     KisStrokeStrategy *stroke =
@@ -294,7 +307,7 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     m_d->history.clear();
     m_d->distanceHistory.clear();
 
-    if(m_d->resources->needsAirbrushing()) {
+    if(airbrushing) {
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
         m_d->airbrushingTimer.start();
     }
@@ -304,9 +317,9 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     }
 
     // If airbrushing, paint an initial dab immediately. This is a workaround for an issue where
-    // some paintops (Dyna, Particle, Sketch) might never initialize their spacing information until
-    // paintAt is called.
-    if (m_d->resources->needsAirbrushing()) {
+    // some paintops (Dyna, Particle, Sketch) might never initialize their spacing/timing
+    // information until paintAt is called.
+    if (airbrushing) {
         paintAt(pi);
     }
 }
@@ -561,7 +574,11 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             m_d->previousTangent = newTangent;
         }
         m_d->olderPaintInformation = m_d->previousPaintInformation;
-        m_d->strokeTimeoutTimer.start(100);
+
+        // Enable stroke timeout only when not airbrushing.
+        if (!m_d->airbrushingTimer.isActive()) {
+            m_d->strokeTimeoutTimer.start(100);
+        }
     }
     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
         paintLine(m_d->previousPaintInformation, info);
@@ -569,6 +586,11 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         m_d->stabilizedSampler.addEvent(info);
+        if (m_d->stabilizerDelayedPaintHelper.running()) {
+            // Paint here so we don't have to rely on the timer
+            // This is just a tricky source for a relatively stable 7ms "timer"
+            m_d->stabilizerDelayedPaintHelper.paintSome();
+        }
     } else {
         m_d->previousPaintInformation = info;
     }
@@ -664,9 +686,9 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     m_d->stabilizerPollTimer.setInterval(stabilizerSampleSize);
     m_d->stabilizerPollTimer.start();
 
-    int delayedPaintInterval = cfg.stabilizerDelayedPaintInterval();
-    if (delayedPaintInterval < stabilizerSampleSize) {
-        m_d->stabilizerDelayedPaintHelper.start(delayedPaintInterval, firstPaintInfo);
+    bool delayedPaintEnabled = cfg.stabilizerDelayedPaint();
+    if (delayedPaintEnabled) {
+        m_d->stabilizerDelayedPaintHelper.start(firstPaintInfo);
     }
 
     m_d->stabilizedSampler.clear();
@@ -700,14 +722,14 @@ KisToolFreehandHelper::getStabilizedPaintInfo(const QQueue<KisPaintInformation> 
         if (m_d->smoothingOptions->stabilizeSensors()) {
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mixWithoutTime(k, *it, result);
+                result.KisPaintInformation::mixOtherWithoutTime(k, *it);
                 it++;
                 i++;
             }
         } else{
             while (it != end) {
                 qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-                result = KisPaintInformation::mixOnlyPosition(k, *it, result);
+                result.KisPaintInformation::mixOtherOnlyPosition(k, *it);
                 it++;
                 i++;
             }
@@ -916,11 +938,9 @@ void KisToolFreehandHelper::paintBezierCurve(int painterInfoId,
 }
 
 void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
-                                           const QPointF &lastPosition,
-                                           int lastTime,
-                                           qreal lastAngle)
+                                           const KisDistanceInformation &startDist)
 {
-    painterInfos << new PainterInfo(lastPosition, lastTime, lastAngle);
+    painterInfos << new PainterInfo(startDist);
 }
 
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)
@@ -960,4 +980,3 @@ void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
 {
    m_d->canvasMirroredH = mirrored;
 }
-

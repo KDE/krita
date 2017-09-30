@@ -119,6 +119,23 @@ public:
      */
     void unlock();
 
+    /**
+     * Set the number of threads available for this updater context
+     * WARNING: one cannot change the number of threads if there is
+     *          at least one job running in the context! So before
+     *          calling this method make sure you do two things:
+     *          1) barrierLock() the update scheduler
+     *          2) lock() the context
+     */
+    void setThreadsLimit(int value);
+
+    /**
+     * Return the number of available threads in the context. Make sure you
+     * lock the context before calling this function!
+     */
+    int threadsLimit() const;
+
+
 Q_SIGNALS:
     void sigContinueUpdate(const QRect& rc);
     void sigDoSomeUsefulWork();

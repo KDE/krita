@@ -35,6 +35,9 @@ KisAsyncActionFeedback::KisAsyncActionFeedback(const QString &message, QWidget *
     m_d->progress->setCancelButton(0);
     m_d->progress->setMinimumDuration(1000);
     m_d->progress->setValue(0);
+
+    // disable close button
+    m_d->progress->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint);
 }
 
 KisAsyncActionFeedback::~KisAsyncActionFeedback()
@@ -59,4 +62,26 @@ T runActionImpl(std::function<T()> func)
 KisImportExportFilter::ConversionStatus KisAsyncActionFeedback::runAction(std::function<KisImportExportFilter::ConversionStatus()> func)
 {
     return runActionImpl(func);
+}
+
+void KisAsyncActionFeedback::runVoidAction(std::function<void()> func)
+{
+    QFuture<void> result = QtConcurrent::run(func);
+    QFutureWatcher<void> watcher;
+    watcher.setFuture(result);
+
+    while (watcher.isRunning()) {
+        qApp->processEvents();
+    }
+
+    watcher.waitForFinished();
+}
+
+void KisAsyncActionFeedback::waitForMutex(QMutex *mutex)
+{
+    while (!mutex->tryLock()) {
+        qApp->processEvents();
+    }
+
+    mutex->unlock();
 }

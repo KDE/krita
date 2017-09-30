@@ -42,7 +42,7 @@ ImageLoader::ImageLoader(float size)
 void ImageLoader::run()
 {
     typedef QHash<ImageItem*,Data>::iterator Iterator;
-    
+
     for (Iterator data = m_data.begin(); data != m_data.end() && m_run; ++data) {
         QImage img = QImage(data->path);
         if (!img.isNull()) {
@@ -67,10 +67,10 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     if (m_loader->isImageLoaded(this)) {
         QImage  image = m_loader->getImage(this);
-        
+
         if (!image.isNull()) {
             QPointF offset((m_size-image.width()) / 2.0, (m_size-image.height()) / 2.0);
             painter->drawImage(offset, image);
@@ -88,7 +88,7 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
         QPixmap img  = icon.pixmap(rect.size());
         painter->drawPixmap(rect, img, img.rect());
     }
-    
+
     if (isSelected()) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(0.50);
@@ -97,7 +97,7 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
         QPen pen(palette().color(QPalette::Active, QPalette::Highlight), 3);
         painter->setPen(pen);
     }
-    
+
     painter->drawRect(boundingRect());
 }
 
@@ -127,29 +127,29 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
     QMutexLocker locker(&m_mutex);
     QDir         directory(path);
     QImageReader reader;
-    
+
     if (directory.exists()) {
         clear();
-        
+
         if (m_loader) {
             m_loader->disconnect(this);
             m_loader->stopExecution();
-            
+
             if (!m_loader->wait(500)) {
                 m_loader->terminate();
                 m_loader->wait();
             }
         }
-        
+
         delete m_loader;
-        
+
         m_numItems = 0;
         m_loader   = new ImageLoader(m_imgSize);
         connect(m_loader, SIGNAL(sigItemContentChanged(ImageItem*)), SLOT(slotItemContentChanged(ImageItem*)));
-        
+
         QStringList            files  = directory.entryList(QDir::Files);
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
-        
+
         for (QStringList::iterator name=files.begin(); name!=files.end(); ++name) {
             QString path = directory.absoluteFilePath(*name);
             QString fileExtension = QFileInfo(path).suffix();
@@ -168,18 +168,18 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
                 ++m_numItems;
             }
         }
-        
+
         QGraphicsWidget* widget = new QGraphicsWidget();
         widget->setLayout(layout);
         widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        
+
         addItem(widget);
         setSceneRect(widget->boundingRect());
-        
-        m_loader->start(QThread::LowPriority);
+
+        QTimer::singleShot(0, m_loader, SLOT(start()));
         return true;
     }
-    
+
     return false;
 }
 
@@ -192,7 +192,7 @@ void ImageStripScene::slotItemContentChanged(ImageItem* item)
 void ImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
     ImageItem* item = static_cast<ImageItem*>(itemAt(event->scenePos()));
-    
+
     if (item)
         emit sigImageActivated(item->path());
 }

@@ -3,7 +3,7 @@
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
-   CopyRight (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   CopyRight (C) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -189,28 +189,6 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
     }
 }
 
-void KoShapePrivate::updateStroke()
-{
-    Q_Q(KoShape);
-    if (!stroke) return;
-
-    KoInsets insets;
-    stroke->strokeInsets(q, insets);
-    QSizeF inner = q->size();
-    // update left
-    q->update(QRectF(-insets.left, -insets.top, insets.left,
-                     inner.height() + insets.top + insets.bottom));
-    // update top
-    q->update(QRectF(-insets.left, -insets.top,
-                     inner.width() + insets.left + insets.right, insets.top));
-    // update right
-    q->update(QRectF(inner.width(), -insets.top, insets.right,
-                     inner.height() + insets.top + insets.bottom));
-    // update bottom
-    q->update(QRectF(-insets.left, inner.height(),
-                     inner.width() + insets.left + insets.right, insets.bottom));
-}
-
 void KoShapePrivate::addShapeManager(KoShapeManager *manager)
 {
     shapeManagers.insert(manager);
@@ -331,6 +309,7 @@ KoShape::~KoShape()
 
 KoShape *KoShape::cloneShape() const
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "not implemented!");
     return 0;
 }
 
@@ -705,7 +684,7 @@ void KoShape::update() const
     }
 }
 
-void KoShape::update(const QRectF &rect) const
+void KoShape::updateAbsolute(const QRectF &rect) const
 {
 
     if (rect.isEmpty() && !rect.isNull()) {
@@ -715,9 +694,8 @@ void KoShape::update(const QRectF &rect) const
     Q_D(const KoShape);
 
     if (!d->shapeManagers.empty() && isVisible()) {
-        QRectF rc(absoluteTransformation(0).mapRect(rect));
         Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
-            manager->update(rc);
+            manager->update(rect);
         }
     }
 }
@@ -1248,12 +1226,7 @@ void KoShape::setStroke(KoShapeStrokeModelSP stroke)
 {
     Q_D(KoShape);
 
-    // TODO: check if it really updates stuff
-    d->updateStroke();
-
     d->stroke = stroke;
-    d->updateStroke();
-
     d->shapeChanged(StrokeChanged);
     notifyChanged();
 }

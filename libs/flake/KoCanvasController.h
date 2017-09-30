@@ -30,6 +30,7 @@
 #include <QSize>
 #include <QPoint>
 #include <QPointF>
+#include <QPointer>
 
 class KActionCollection;
 class QRect;
@@ -78,7 +79,7 @@ public:
     };
 
     // proxy QObject: use this to connect to slots and signals.
-    KoCanvasControllerProxyObject *proxyObject;
+    QPointer<KoCanvasControllerProxyObject> proxyObject;
 
     /**
      * Constructor.
@@ -253,6 +254,26 @@ public:
      * @param distance the distance in view coordinates (pixels).  A positive distance means moving the canvas up/left.
      */
     virtual void pan(const QPoint &distance) = 0;
+
+    /**
+     * Move the canvas up. This behaves the same as \sa pan() with a positive y coordinate.
+     */
+    virtual void panUp() = 0;
+
+    /**
+     * Move the canvas down. This behaves the same as \sa pan() with a negative y coordinate.
+     */
+    virtual void panDown() = 0;
+
+    /**
+     * Move the canvas to the left. This behaves the same as \sa pan() with a positive x coordinate.
+     */
+    virtual void panLeft() = 0;
+
+    /**
+     * Move the canvas to the right. This behaves the same as \sa pan() with a negative x coordinate.
+     */
+    virtual void panRight() = 0;
 
     /**
      * Get the position of the scrollbar
@@ -466,6 +487,10 @@ public:
     void setPreferredCenter(const QPointF &/*viewPoint*/) override {}
     QPointF preferredCenter() const override {return QPointF();}
     void pan(const QPoint &/*distance*/) override {}
+    void panUp() override {}
+    void panDown() override {}
+    void panLeft() override {}
+    void panRight() override {}
     QPoint scrollBarValue() const override {return QPoint();}
     void setScrollBarValue(const QPoint &/*value*/) override {}
     void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) override {}

@@ -39,12 +39,18 @@ public:
     KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisDynaPaintOp() override;
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
     virtual bool incremental() const {
         return true;
     }
+
+protected:
+    KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
     void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);

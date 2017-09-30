@@ -32,6 +32,7 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_opacity_option.h>
 
 #include "kis_duplicateop_settings.h"
 
@@ -50,7 +51,10 @@ public:
     KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisDuplicateOp() override;
 
+protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
 private:
 
@@ -67,6 +71,7 @@ private:
     QPointF m_duplicateStart;
     bool m_duplicateStartIsSet;
     KisPressureSizeOption m_sizeOption;
+    KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;
     bool m_healing;
     bool m_perspectiveCorrection;

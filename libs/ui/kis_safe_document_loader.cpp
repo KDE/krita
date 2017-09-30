@@ -30,26 +30,88 @@
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 
-Q_GLOBAL_STATIC(QFileSystemWatcher, s_fileSystemWatcher)
+class FileSystemWatcherWrapper : public QObject
+{
+    Q_OBJECT
+public:
+    FileSystemWatcherWrapper() {
+        connect(&m_watcher, SIGNAL(fileChanged(QString)), SIGNAL(fileChanged(QString)));
+        connect(&m_watcher, SIGNAL(fileChanged(QString)), SLOT(slotFileChanged(QString)));
+    }
+
+    bool addPath(const QString &file) {
+        bool result = true;
+        const QString ufile = unifyFilePath(file);
+
+        if (m_pathCount.contains(ufile)) {
+            m_pathCount[ufile]++;
+        } else {
+            m_pathCount.insert(ufile, 1);
+            result = m_watcher.addPath(ufile);
+        }
+
+        return result;
+    }
+
+    bool removePath(const QString &file) {
+        bool result = true;
+        const QString ufile = unifyFilePath(file);
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_pathCount.contains(ufile), false);
+
+        if (m_pathCount[ufile] == 1) {
+            m_pathCount.remove(ufile);
+            result = m_watcher.removePath(ufile);
+        } else {
+            m_pathCount[ufile]--;
+        }
+        return result;
+    }
+
+    QStringList files() const {
+        return m_watcher.files();
+    }
+
+private Q_SLOTS:
+    void slotFileChanged(const QString &path) {
+        // re-add the file after QSaveFile optimization
+        if (!m_watcher.files().contains(path) && QFileInfo(path).exists()) {
+            m_watcher.addPath(path);
+        }
+    }
+
+Q_SIGNALS:
+    void fileChanged(const QString &path);
+
+private:
+    QString unifyFilePath(const QString &path) {
+        return QFileInfo(path).absoluteFilePath();
+    }
+
+private:
+    QFileSystemWatcher m_watcher;
+    QHash<QString, int> m_pathCount;
+};
+
+Q_GLOBAL_STATIC(FileSystemWatcherWrapper, s_fileSystemWatcher)
+
 
 struct KisSafeDocumentLoader::Private
 {
     Private()
-        : fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
-          isLoading(false),
-          fileChangedFlag(false)
+        : fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE)
     {
     }
 
     QScopedPointer<KisDocument>  doc;
     KisSignalCompressor fileChangedSignalCompressor;
     QTimer delayedLoadTimer;
-    bool isLoading {true};
-    bool fileChangedFlag {false};
+    bool isLoading = false;
+    bool fileChangedFlag = false;
     QString path;
     QString temporaryPath;
 
-    qint64 initialFileSize;
+    qint64 initialFileSize = 0;
     QDateTime initialFileTimeStamp;
 };
 
@@ -59,9 +121,6 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 {
     connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
             SLOT(fileChanged(QString)));
-
-    connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
-            &m_d->fileChangedSignalCompressor, SLOT(start()));
 
     connect(&m_d->fileChangedSignalCompressor, SIGNAL(timeout()),
             SLOT(fileChangedCompressed()));
@@ -101,7 +160,12 @@ void KisSafeDocumentLoader::reloadImage()
 void KisSafeDocumentLoader::fileChanged(QString path)
 {
     if (path == m_d->path) {
+        if (s_fileSystemWatcher->files().contains(path) == false && QFileInfo(path).exists()) {
+            //When a path is renamed it is removed, so we ought to readd it.
+            s_fileSystemWatcher->addPath(path);
+        }
         m_d->fileChangedFlag = true;
+        m_d->fileChangedSignalCompressor.start();
     }
 }
 
@@ -151,7 +215,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
 
         m_d->doc.reset(KisPart::instance()->createDocument());
         successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
-                                               KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+                                               KisDocument::DontAddToRecent);
     } else {
         dbgKrita << "File was modified externally. Restarting.";
         dbgKrita << ppVar(m_d->fileChangedFlag);
@@ -179,4 +243,4 @@ void KisSafeDocumentLoader::delayedLoadStart()
     m_d->doc.reset();
 }
 
-
+#include "kis_safe_document_loader.moc"

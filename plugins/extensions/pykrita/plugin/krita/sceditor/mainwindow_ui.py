@@ -9,7 +9,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_ScriptEditor(object):
+
     def setupUi(self, ScriptEditor):
         ScriptEditor.setObjectName("ScriptEditor")
         ScriptEditor.resize(624, 449)
@@ -94,4 +96,3 @@ class Ui_ScriptEditor(object):
         self.actionSave.setText(_translate("ScriptEditor", "&Save"))
         self.actionSave.setToolTip(_translate("ScriptEditor", "Save the current script"))
         self.actionSave.setShortcut(_translate("ScriptEditor", "Ctrl+S"))
-

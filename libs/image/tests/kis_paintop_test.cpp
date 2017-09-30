@@ -22,6 +22,7 @@
 #include "kis_paintop.h"
 #include "kis_painter.h"
 #include "kis_paint_device.h"
+#include "kis_spacing_information.h"
 
 class TestPaintOp : public KisPaintOp
 {
@@ -31,7 +32,14 @@ public:
             : KisPaintOp(gc) {
     }
 
+protected:
+
     KisSpacingInformation paintAt(const KisPaintInformation&) override {
+        return KisSpacingInformation(0.0);
+    }
+
+    KisSpacingInformation updateSpacingImpl(const KisPaintInformation&) const override
+    {
         return KisSpacingInformation(0.0);
     }
 

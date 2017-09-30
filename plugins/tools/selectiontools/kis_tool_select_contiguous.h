@@ -29,7 +29,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
 /**
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
@@ -47,6 +46,8 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     void beginPrimaryAction(KoPointerEvent *event) override;
+
+    QMenu* popupActionsMenu() override;
 
 protected:
 

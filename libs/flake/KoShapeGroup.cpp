@@ -207,7 +207,7 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().addAttributePt("svg:y", position().y());
 
     QList<KoShape*> shapes = this->shapes();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     Q_FOREACH (KoShape* shape, shapes) {
         shape->saveOdf(context);

@@ -117,6 +117,7 @@ public:
     void loadActionFiles();
     void loadCustomShortcuts(QString filename = QStringLiteral("kritashortcutsrc"));
 
+    // XXX: this adds a default item for the given name to the list of actioninfo objects!
     ActionInfoItem &actionInfo(const QString &name) {
         if (!actionInfoList.contains(name)) {
             dbgAction << "Tried to look up info for unknown action" << name;
@@ -134,6 +135,11 @@ Q_GLOBAL_STATIC(KisActionRegistry, s_instance)
 KisActionRegistry *KisActionRegistry::instance()
 {
     return s_instance;
+}
+
+bool KisActionRegistry::hasAction(const QString &name) const
+{
+    return d->actionInfoList.contains(name);
 }
 
 

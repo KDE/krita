@@ -40,8 +40,8 @@ struct KisDabCache::Private {
     KisBrushSP brush;
     KisPaintDeviceSP colorSourceDevice;
 
-    KisPressureSharpnessOption *sharpnessOption;
-    KisTextureProperties *textureOption;
+    KisPressureSharpnessOption *sharpnessOption = 0;
+    KisTextureProperties *textureOption = 0;
 };
 
 

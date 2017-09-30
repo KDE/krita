@@ -97,49 +97,28 @@ void KisPresetLivePreviewView::paintStroke()
 
     if (m_currentPreset->paintOp().id() == "colorsmudge") {
 
-        // have grey and black strips for this
-        KoColor gray;
-        gray.fromQColor(QColor(80,80,80));
+        // have grey and black strips behind this since it smudges
+        int grayStrips = 20;
+        for (int i=0; i < grayStrips; i++ ) {
 
-        KoColor darkGray;
-        darkGray.fromQColor(QColor(140,140,140));
+            float sectionPercent = 1.0 / (float)grayStrips;
+            bool isAlternating = i % 2;
+            KoColor fillColor;
 
-
-
-        m_brushPreviewPainter->fill(0,
-                                    0,
-                                    m_layer->image()->width()*0.20,
-                                    m_layer->image()->height(),
-                                    gray);
-
-
-        m_brushPreviewPainter->fill(m_layer->image()->width()*0.20,
-                                    0,
-                                    m_layer->image()->width()*0.4,
-                                    m_layer->image()->height(),
-                                    darkGray);
+            if (isAlternating) {
+                fillColor.fromQColor(QColor(80,80,80));
+            } else {
+                fillColor.fromQColor(QColor(140,140,140));
+            }
 
 
-        m_brushPreviewPainter->fill(m_layer->image()->width()*0.4,
-                                    0,
-                                  m_layer->image()->width()*0.6,
-                                  m_layer->image()->height(),
-                                  gray);
+            m_brushPreviewPainter->fill(m_layer->image()->width()*sectionPercent*i,
+                                        0,
+                                        m_layer->image()->width()*(sectionPercent*i +sectionPercent),
+                                        m_layer->image()->height(),
+                                        fillColor);
 
-
-        m_brushPreviewPainter->fill(m_layer->image()->width()*0.6,
-                                    0,
-                                  m_layer->image()->width()*0.8,
-                                  m_layer->image()->height(),
-                                  darkGray);
-
-        m_brushPreviewPainter->fill(m_layer->image()->width()*0.8,
-                                    0,
-                                  m_layer->image()->width(),
-                                  m_layer->image()->height(),
-                                  gray);
-
-
+        }
 
         m_brushPreviewPainter->setPaintColor(KoColor(Qt::white, m_colorSpace));
 

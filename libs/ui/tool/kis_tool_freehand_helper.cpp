@@ -835,11 +835,6 @@ void KisToolFreehandHelper::stabilizerEnd()
     }
 }
 
-const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
-{
-    return !m_d->painterInfos.isEmpty() ? m_d->painterInfos.first()->painter->paintOp() : 0;
-}
-
 void KisToolFreehandHelper::finishStroke()
 {
     if (m_d->haveTangent) {

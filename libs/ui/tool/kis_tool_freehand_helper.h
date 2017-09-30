@@ -75,7 +75,6 @@ public:
     void paintEvent(KoPointerEvent *event);
     void endPaint();
 
-    const KisPaintOp* currentPaintOp() const;
     QPainterPath paintOpOutline(const QPointF &savedCursorPos,
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettingsSP globalSettings,

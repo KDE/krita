@@ -52,7 +52,7 @@ public:
 
 public Q_SLOTS:
     void slotResetViewZoom();
-    void slotZoomViewOut();
+    void slotZoomToOneHundredPercent();
 
 
 

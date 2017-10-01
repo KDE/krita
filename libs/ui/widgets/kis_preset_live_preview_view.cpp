@@ -63,7 +63,7 @@ void KisPresetLivePreviewView::setup()
     // everything is captured for big brush strokes
     //TODO: we need to update these points according to the brush size. Larger brushes need larger strokes
     m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*0.4),
-                                   m_canvasCenterPoint.y()));
+                                   m_canvasCenterPoint.y() + (this->height()*0.4)));
     m_curvePointPI1.setPressure(0.0);
 
     m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*0.4),
@@ -72,11 +72,7 @@ void KisPresetLivePreviewView::setup()
     m_curvePointPI2.setPressure(1.0);
 
 
-    scaleFactor = 1.0;
-    slotZoomViewOut();// zoomed out a bit by default for now until we get something better
-    slotZoomViewOut();
-    slotZoomViewOut();
-    slotZoomViewOut();
+    zoomToBrushSize();
 
 }
 
@@ -194,27 +190,26 @@ void KisPresetLivePreviewView::paintStroke()
 
 void KisPresetLivePreviewView::slotResetViewZoom()
 {
+    // go back to normal display scale and position
+    zoomToBrushSize();
+}
+
+void KisPresetLivePreviewView::slotZoomToOneHundredPercent()
+{
     scaleFactor = 1.0;
     resetMatrix();
     this->scale(scaleFactor, scaleFactor);
 }
 
-void KisPresetLivePreviewView::slotZoomViewOut()
-{
-    scaleFactor = scaleFactor * 0.9;
-    this->scale(scaleFactor, scaleFactor);
-}
-
 void KisPresetLivePreviewView::zoomToBrushSize() {
 
-    // m_currentBrushSize.
     // when the zooming will start and stop
-    float minBrushVal = 1.0;
-    float maxBrushVal = 250.0;
+    float minBrushVal = 15.0;
+    float maxBrushVal = 275.0;
 
     // range of scale values
     qreal minScale = 1.0;
-    qreal maxScale = 0.1;
+    qreal maxScale = 0.15;
 
 
     // find the slope of the line (slope-intercept form)

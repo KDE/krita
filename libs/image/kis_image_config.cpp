@@ -43,6 +43,13 @@ KisImageConfig::KisImageConfig(bool readOnly)
     : m_config( KSharedConfig::openConfig()->group(QString())),
       m_readOnly(readOnly)
 {
+#ifdef Q_OS_OSX
+    // clear /var/folders/ swap path set by old broken Krita swap implementation in order to use new default swap dir.
+    QString swap = m_config.readEntry("swaplocation", "");
+    if (swap.startsWith("/var/folders/")) {
+        m_config.deleteEntry("swaplocation");
+    }
+#endif
 }
 
 KisImageConfig::~KisImageConfig()
@@ -221,7 +228,25 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
 
 QString KisImageConfig::swapDir(bool requestDefault)
 {
+#ifdef Q_OS_OSX
+    // On OSX, QDir::tempPath() gives us a folder we cannot reply upon (usually
+    // something like /var/folders/.../...) and that will have vanished when we
+    // try to create the tmp file in KisMemoryWindow::KisMemoryWindow using
+    // swapFileTemplate. thus, we just pick the home folder if swapDir does not
+    // tell us otherwise.
+
+    // the other option here would be to use a "garbled name" temp file (i.e. no name
+    // KRITA_SWAP_FILE_XXXXXX) in an obsure /var/folders place, which is not
+    // nice to the user. having a clearly named swap file in the home folder is
+    // much nicer to Krita's users.
+
+    // furthermore, this is just a default and swapDir can always be configured
+    // to another location.
+
+    QString swap = QDir::homePath();
+#else
     QString swap = QDir::tempPath();
+#endif
     return !requestDefault ?
             m_config.readEntry("swaplocation", swap) : swap;
 }

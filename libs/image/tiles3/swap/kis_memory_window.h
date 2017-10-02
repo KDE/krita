@@ -66,13 +66,14 @@ private:
 
 
 private:
-    void adjustWindow(const KisChunkData &requestedChunk,
+    bool adjustWindow(const KisChunkData &requestedChunk,
                       MappingWindow *adjustingWindow,
                       MappingWindow *otherWindow);
 
 private:
     QTemporaryFile m_file;
 
+    bool m_valid;
     MappingWindow m_readWindowEx;
     MappingWindow m_writeWindowEx;
 };

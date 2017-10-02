@@ -253,8 +253,12 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
 
     if(td->data()) {
         unregisterTileDataImp(td);
-        m_swappedStore.swapOutTileData(td);
-        result = true;
+        if (m_swappedStore.trySwapOutTileData(td)) {
+            result = true;
+        } else {
+            result = false;
+            registerTileDataImp(td);
+        }
     }
     td->m_swapLock.unlock();
 

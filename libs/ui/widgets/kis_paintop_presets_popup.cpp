@@ -332,8 +332,6 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
     // This function doesn't really do anything except get the UI in a state to rename a brush preset
 
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(!isRenaming);
-    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(!isRenaming);
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(!isRenaming);
 
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(isRenaming);
     m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton->setVisible(isRenaming);
@@ -341,6 +339,9 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
 
     m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.saveNewBrushPresetButton->setEnabled(!isRenaming);
+
+    m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset->setVisible(!isRenaming);
+
 }
 
 void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
@@ -551,8 +552,8 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QGraphicsScene * thumbScene = new QGraphicsScene(this);
-    thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(30, 30)));
-    thumbScene->setSceneRect(0, 0, 30, 30); // 30 x 30 image for thumb. this is also set in the UI
+    thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(55, 55)));
+    thumbScene->setSceneRect(0, 0, 55, 55); // 55 x 55 image for thumb. this is also set in the UI
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setScene(thumbScene);
 
     toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets

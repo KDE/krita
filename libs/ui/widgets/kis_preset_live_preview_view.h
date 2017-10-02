@@ -63,7 +63,6 @@ private:
     KisPainter *m_brushPreviewPainter;
 
     QGraphicsScene* m_brushPreviewScene;
-    QPixmap* m_pixMapToDrawOn;
     QGraphicsPixmapItem *sceneImageItem;
     QGraphicsTextItem * noPreviewText;
 

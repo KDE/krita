@@ -22,11 +22,15 @@
 #include "kis_paintop_settings.h"
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
-{
+{   
+
 }
 
 KisPresetLivePreviewView::~KisPresetLivePreviewView()
 {
+    delete m_brushPreviewPainter;
+    delete noPreviewText;
+    delete m_brushPreviewScene;
 }
 
 void KisPresetLivePreviewView::setup()

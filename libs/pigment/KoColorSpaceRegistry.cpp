@@ -408,6 +408,7 @@ const KoColorProfile *KoColorSpaceRegistry::Private::profileForCsIdWithFallbackI
             QList<const KoColorProfile *> profiles = profileStorage.profilesFor(colorSpaceFactoryRegistry.value(csID));
             if (profiles.isEmpty() || !profiles.first()) {
                 dbgPigmentCSRegistry << "Couldn't fetch a fallback profile:" << profileName;
+                qWarning() << "profileForCsIdWithFallbackImpl couldn't fetch a fallback profile for " << qUtf8Printable(profileName);
                 return 0;
             }
 
@@ -437,6 +438,7 @@ const KoColorSpace *KoColorSpaceRegistry::Private::lazyCreateColorSpaceImpl(cons
         cs = csf->grabColorSpace(profile);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";
+            qWarning() << "lazyCreateColorSpaceImpl was unable to create a color space for " << csID;
             return 0;
         }
 

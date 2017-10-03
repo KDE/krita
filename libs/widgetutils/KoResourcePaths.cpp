@@ -141,6 +141,8 @@ public:
     QMutex relativesMutex;
     QMutex absolutesMutex;
 
+    bool ready = false; // Paths have been initialized
+
     QStringList aliases(const QString &type)
     {
         QStringList r;
@@ -547,4 +549,14 @@ QString KoResourcePaths::locateLocalInternal(const QString &type, const QString 
     QString path = saveLocationInternal(type, "", createDir);
     debugWidgetUtils << "locateLocal: type" << type << "filename" << filename << "CreateDir" << createDir << "path" << path;
     return path + '/' + filename;
+}
+
+void KoResourcePaths::setReady()
+{
+    s_instance->d->ready = true;
+}
+
+void KoResourcePaths::assertReady()
+{
+    KIS_ASSERT_X(s_instance->d->ready, "KoResourcePaths::assertReady", "Resource paths are not ready yet.");
 }

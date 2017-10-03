@@ -62,6 +62,7 @@ class Win8PointerInputApi
     /* Pointer Device Functions */ \
     /*FUNC(GetPointerDevices)*/ \
     /*FUNC(GetPointerDeviceProperties)*/ \
+    FUNC(GetPointerDevice) \
     FUNC(GetPointerDeviceRects) \
     /*FUNC(RegisterPointerDeviceNotifications)*/ \
     /* end */
@@ -278,6 +279,7 @@ struct PointerDeviceItem
     qreal himetricToPixelY;
     qreal pixelOffsetX;
     qreal pixelOffsetY;
+    DISPLAYCONFIG_ROTATION deviceOrientation; // This is needed to fix tilt
 };
 
 QHash<HANDLE, PointerDeviceItem> penDevices;
@@ -421,7 +423,7 @@ QDebug operator<<(QDebug debug, const RECT &rect)
     return debug;
 }
 
-bool registerOrUpdateDevice(HANDLE deviceHandle, const RECT &pointerDeviceRect, const RECT &displayRect)
+bool registerOrUpdateDevice(HANDLE deviceHandle, const RECT &pointerDeviceRect, const RECT &displayRect, const DISPLAYCONFIG_ROTATION deviceOrientation)
 {
     bool isPreviouslyRegistered = penDevices.contains(deviceHandle);
     PointerDeviceItem &deviceItem = penDevices[deviceHandle];
@@ -437,21 +439,25 @@ bool registerOrUpdateDevice(HANDLE deviceHandle, const RECT &pointerDeviceRect, 
             - deviceItem.himetricToPixelX * pointerDeviceRect.left;
     deviceItem.pixelOffsetY = static_cast<qreal>(displayRect.top)
             - deviceItem.himetricToPixelY * pointerDeviceRect.top;
+    deviceItem.deviceOrientation = deviceOrientation;
     if (!isPreviouslyRegistered) {
         dbgTablet << "Registered pen device" << deviceHandle
                   << "with displayRect" << displayRect
                   << "and deviceRect" << pointerDeviceRect
                   << "scale" << deviceItem.himetricToPixelX << deviceItem.himetricToPixelY
-                  << "offset" << deviceItem.pixelOffsetX << deviceItem.pixelOffsetY;
+                  << "offset" << deviceItem.pixelOffsetX << deviceItem.pixelOffsetY
+                  << "orientation" << deviceItem.deviceOrientation;
     } else if (deviceItem.himetricToPixelX != oldDeviceItem.himetricToPixelX
             || deviceItem.himetricToPixelY != oldDeviceItem.himetricToPixelY
             || deviceItem.pixelOffsetX != oldDeviceItem.pixelOffsetX
-            || deviceItem.pixelOffsetY != oldDeviceItem.pixelOffsetY) {
+            || deviceItem.pixelOffsetY != oldDeviceItem.pixelOffsetY
+            || deviceItem.deviceOrientation != oldDeviceItem.deviceOrientation) {
         dbgTablet << "Updated pen device" << deviceHandle
                   << "with displayRect" << displayRect
                   << "and deviceRect" << pointerDeviceRect
                   << "scale" << deviceItem.himetricToPixelX << deviceItem.himetricToPixelY
-                  << "offset" << deviceItem.pixelOffsetX << deviceItem.pixelOffsetY;
+                  << "offset" << deviceItem.pixelOffsetX << deviceItem.pixelOffsetY
+                  << "orientation" << deviceItem.deviceOrientation;
     }
     return true;
 }
@@ -463,7 +469,13 @@ bool registerOrUpdateDevice(HANDLE deviceHandle)
         dbgTablet << "GetPointerDeviceRects failed";
         return false;
     }
-    return registerOrUpdateDevice(deviceHandle, pointerDeviceRect, displayRect);
+    POINTER_DEVICE_INFO pointerDeviceInfo;
+    if (!api.GetPointerDevice(deviceHandle, &pointerDeviceInfo)) {
+        dbgTablet << "GetPointerDevice failed";
+        return false;
+    }
+    return registerOrUpdateDevice(deviceHandle, pointerDeviceRect, displayRect,
+            static_cast<DISPLAYCONFIG_ROTATION>(pointerDeviceInfo.displayOrientation));
 }
 
 QTabletEvent makeProximityTabletEvent(const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo)
@@ -488,6 +500,31 @@ QTabletEvent makeProximityTabletEvent(const QEvent::Type eventType, const POINTE
         Qt::NoButton, // button
         (Qt::MouseButtons)0 // buttons
     );
+}
+
+void rotateTiltAngles(int &tiltX, int &tiltY, const DISPLAYCONFIG_ROTATION orientation) {
+    int newTiltX, newTiltY;
+    switch (orientation) {
+    case DISPLAYCONFIG_ROTATION_ROTATE90:
+        newTiltX = -tiltY;
+        newTiltY = tiltX;
+        break;
+    case DISPLAYCONFIG_ROTATION_ROTATE180:
+        newTiltX = -tiltX;
+        newTiltY = -tiltY;
+        break;
+    case DISPLAYCONFIG_ROTATION_ROTATE270:
+        newTiltX = tiltY;
+        newTiltY = -tiltX;
+        break;
+    case DISPLAYCONFIG_ROTATION_IDENTITY:
+    default:
+        newTiltX = tiltX;
+        newTiltY = tiltY;
+        break;
+    }
+    tiltX = newTiltX;
+    tiltY = newTiltY;
 }
 
 QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &deviceItem, const PenPointerItem &penPointerItem)
@@ -538,6 +575,15 @@ QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent
         mouseButtons |= Qt::RightButton;
     }
 
+    int tiltX = 0, tiltY = 0;
+    if (penMask.tiltXValid()) {
+        tiltX = qBound(-60, penInfo.tiltX, 60);
+    }
+    if (penMask.tiltYValid()) {
+        tiltY = qBound(-60, penInfo.tiltY, 60);
+    }
+    rotateTiltAngles(tiltX, tiltY, deviceItem.deviceOrientation);
+
     int rotation = 0;
     if (penMask.rotationValid()) {
         rotation = 360 - penInfo.rotation; // Flip direction and convert to signed int
@@ -553,8 +599,8 @@ QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent
         QTabletEvent::Stylus, // device
         pointerType, // pointerType
         penMask.pressureValid() ? static_cast<qreal>(penInfo.pressure) / 1024 : 0, // pressure
-        penMask.tiltXValid() ? penInfo.tiltX * 2 / 3 : 0, // xTilt
-        penMask.tiltYValid() ? penInfo.tiltY * 2 / 3 : 0, // yTilt
+        tiltX, // xTilt
+        tiltY, // yTilt
         0, // tangentialPressure
         rotation, // rotation
         0, // z

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@kde.org>
+ *  Copyright (c) 2017 Nikita Smirnov <pakrentos@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_COMMANDS
-#define KIS_IMAGE_COMMANDS
 
-#include "kis_image_change_layers_command.h"
-#include "kis_image_command.h"
-#include "kis_image_set_projection_color_space_command.h"
-#include "kis_image_layer_add_command.h"
-#include "kis_image_layer_move_command.h"
-#include "kis_image_layer_remove_command.h"
-#include "kis_image_lock_command.h"
-#include "kis_image_change_visibility_command.h"
+#ifndef KIS_IMAGE_CHANGE_VISIBILITY_COMMAND_H_
+#define KIS_IMAGE_CHANGE_VISIBILITY_COMMAND_H_
+
+#include <kritaimage_export.h>
+
+#include "kis_types.h"
+#include <kundo2command.h>
+
+class KisImageChangeVisibilityCommand : public KUndo2Command
+{
+
+public:
+    KisImageChangeVisibilityCommand(bool visibility, KisNodeSP node);
+
+    void redo() override;
+    void undo() override;
+
+private:
+    bool m_visible;
+    KisNodeSP m_node;
+
+};
 
 #endif

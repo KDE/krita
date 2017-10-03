@@ -6,161 +6,166 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>297</width>
-    <height>101</height>
+    <width>363</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Color Range</string>
   </property>
-  <layout class="QVBoxLayout">
-   <item>
-    <layout class="QHBoxLayout">
-     <property name="margin">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QComboBox" name="cmbSelect">
+       <item>
+        <property name="text">
+         <string>Reds</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Yellows</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Greens</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Cyans</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Blues</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Magentas</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Highlights</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Midtones</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Shadows</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="chkInvert">
+       <property name="text">
+        <string>&amp;Invert</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Fuzziness</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="KisSliderSpinBox" name="intFuzziness" native="true"/>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QGroupBox" name="grpSelection">
+       <property name="title">
+        <string/>
+       </property>
+       <layout class="QVBoxLayout">
+        <item>
+         <widget class="QRadioButton" name="radioAdd">
+          <property name="text">
+           <string>&amp;Add to current selection</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioSubtract">
+          <property name="text">
+           <string>Subtract fro&amp;m current selection</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <layout class="QVBoxLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
-      <layout class="QVBoxLayout">
-       <property name="margin">
-        <number>0</number>
+      <widget class="QPushButton" name="bnSelect">
+       <property name="text">
+        <string>&amp;Select</string>
        </property>
-       <item>
-        <layout class="QHBoxLayout">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QComboBox" name="cmbSelect">
-           <item>
-            <property name="text">
-             <string>Reds</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Yellows</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Greens</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Cyans</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Blues</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Magentas</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Highlights</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Midtones</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Shadows</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Out of Gamut</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="chkInvert">
-           <property name="text">
-            <string>&amp;Invert</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="grpSelection">
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout">
-          <item>
-           <widget class="QRadioButton" name="radioAdd">
-            <property name="text">
-             <string>&amp;Add to current selection</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioSubtract">
-            <property name="text">
-             <string>&amp;Subtract from current selection</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
+      </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout">
-       <property name="margin">
-        <number>0</number>
+      <widget class="QPushButton" name="bnDeselect">
+       <property name="text">
+        <string>&amp;Deselect</string>
        </property>
-       <item>
-        <widget class="QPushButton" name="bnSelect">
-         <property name="text">
-          <string>&amp;Select</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="bnDeselect">
-         <property name="text">
-          <string>&amp;Deselect</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="spacer9">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacer9">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

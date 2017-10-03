@@ -143,6 +143,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
 
 KisColorSelectorBase::~KisColorSelectorBase()
 {
+    delete m_popup;
     delete m_colorPreviewPopup;
 }
 

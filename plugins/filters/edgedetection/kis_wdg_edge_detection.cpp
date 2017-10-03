@@ -46,7 +46,7 @@ KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
     connect(ui->sldHorizontalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(horizontalRadiusChanged(qreal)));
 
     ui->sldVerticalRadius->setRange(1.0, 100.0, 2);
-    ui->sldVerticalRadius->setPrefix(i18n("Verical Radius:"));
+    ui->sldVerticalRadius->setPrefix(i18n("Vertical Radius:"));
     connect(ui->sldVerticalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(verticalRadiusChanged(qreal)));
 
 

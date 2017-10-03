@@ -34,7 +34,7 @@
    <item row="5" column="0" colspan="2">
     <widget class="KisDoubleSliderSpinBox" name="sldHorizontalRadius" native="true"/>
    </item>
-   <item row="9" column="1">
+   <item row="8" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -47,14 +47,7 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Vertical Radius</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="2">
+   <item row="7" column="0" colspan="2">
     <widget class="QCheckBox" name="chkTransparent">
      <property name="toolTip">
       <string>This will take a desaturated result and use it to determine what is transparent. This is useful for creating edge and fringe effects.</string>
@@ -71,15 +64,8 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2">
+   <item row="6" column="0" colspan="2">
     <widget class="KisDoubleSliderSpinBox" name="sldVerticalRadius" native="true"/>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Horizontal Radius</string>
-     </property>
-    </widget>
    </item>
    <item row="3" column="0" alignment="Qt::AlignRight">
     <widget class="QLabel" name="label_4">
@@ -88,7 +74,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2" rowspan="4" alignment="Qt::AlignVCenter">
+   <item row="4" column="2" rowspan="3" alignment="Qt::AlignVCenter">
     <widget class="KoAspectButton" name="btnAspect" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

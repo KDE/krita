@@ -108,7 +108,8 @@ public:
      * @param serviceType The string used to identify the plugins.
      * @param versionString A string match that allows you to check for a specific version
      * @param config when passing a valid config only the wanted plugins are actually loaded
-     * @param cache: if true, the plugin will only be loaded more than once
+     * #param owner if 0, the plugin will be deleted after instantiation, if not, the given qobject will own the plugin in its qobject hierarchy
+     * @param cache: if true, the plugin will only be loaded once
      * @return a list of services (by library name) that were not know in the config
      */
     void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0, bool cache = true);

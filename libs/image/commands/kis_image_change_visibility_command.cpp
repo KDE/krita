@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@kde.org>
+ *  Copyright (c) 2017 Nikita Smirnov <pakrentos@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_COMMANDS
-#define KIS_IMAGE_COMMANDS
 
-#include "kis_image_change_layers_command.h"
-#include "kis_image_command.h"
-#include "kis_image_set_projection_color_space_command.h"
-#include "kis_image_layer_add_command.h"
-#include "kis_image_layer_move_command.h"
-#include "kis_image_layer_remove_command.h"
-#include "kis_image_lock_command.h"
-#include "kis_image_change_visibility_command.h"
+#include "kis_image_commands.h"
+#include "kis_image.h"
+#include "kis_node.h"
 
-#endif
+#include <klocalizedstring.h>
+
+
+KisImageChangeVisibilityCommand::KisImageChangeVisibilityCommand(bool visibility, KisNodeSP node)
+    : KUndo2Command(kundo2_noi18n("change-visibility-command"), 0)
+{
+    m_node = node;
+    m_visible = visibility;
+}
+
+void KisImageChangeVisibilityCommand::redo()
+{
+    m_node->setVisible(m_visible);
+}
+
+void KisImageChangeVisibilityCommand::undo()
+{
+    m_node->setVisible(!m_visible);
+}

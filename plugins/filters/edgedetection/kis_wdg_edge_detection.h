@@ -40,6 +40,13 @@ private:
     Ui_WidgetEdgeDetection *ui;
     QStringList m_types;
     QStringList m_types_translatable;
+    QStringList m_output;
+    QStringList m_output_translatable;
+
+private Q_SLOTS:
+    void horizontalRadiusChanged(qreal r);
+    void verticalRadiusChanged(qreal r);
+    void aspectLockChanged(bool v);
 };
 
 #endif // KIS_WDG_EDGE_DETECTION_H

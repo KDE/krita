@@ -13,42 +13,28 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="1">
+    <widget class="QComboBox" name="cmbOutput">
+     <property name="toolTip">
+      <string>Output decides what type of information you want from the lines.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
     <widget class="QComboBox" name="cmbType">
+     <property name="toolTip">
+      <string>The formula decides how the kernel is created, so different formulas choose different values in the kernel, and thus give subtly different results.</string>
+     </property>
      <property name="currentText">
       <string/>
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Horizontal Radius</string>
-     </property>
-    </widget>
+   <item row="5" column="0" colspan="2">
+    <widget class="KisDoubleSliderSpinBox" name="sldHorizontalRadius" native="true"/>
    </item>
-   <item>
-    <widget class="QDoubleSpinBox" name="spnHorizontalRadius"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Vertical Radius</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDoubleSpinBox" name="spnVerticalRadius"/>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="chkTransparent">
-     <property name="text">
-      <string>Make result transparent.</string>
-     </property>
-    </widget>
-   </item>
-   <item>
+   <item row="9" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -61,8 +47,92 @@
      </property>
     </spacer>
    </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Vertical Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QCheckBox" name="chkTransparent">
+     <property name="toolTip">
+      <string>This will take a desaturated result and use it to determine what is transparent. This is useful for creating edge and fringe effects.</string>
+     </property>
+     <property name="text">
+      <string>Apply result to alpha channel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Formula:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="KisDoubleSliderSpinBox" name="sldVerticalRadius" native="true"/>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Horizontal Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Output:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" rowspan="4" alignment="Qt::AlignVCenter">
+    <widget class="KoAspectButton" name="btnAspect" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>5</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

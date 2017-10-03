@@ -156,18 +156,28 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
 
 KisConvolutionKernelSP KisEdgeDetectionKernel::createHorizontalKernel(qreal radius,
                                                                       KisEdgeDetectionKernel::FilterType type,
+                                                                      bool denormalize,
                                                                       bool reverse)
 {
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createHorizontalMatrix(radius, type, reverse);
-    return KisConvolutionKernel::fromMatrix(matrix, 0.5, 1);
+    if (denormalize) {
+        return KisConvolutionKernel::fromMatrix(matrix, 0.5, 1);
+    } else {
+        return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
+    }
 }
 
 KisConvolutionKernelSP KisEdgeDetectionKernel::createVerticalKernel(qreal radius,
                                                                     KisEdgeDetectionKernel::FilterType type,
+                                                                    bool denormalize,
                                                                     bool reverse)
 {
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createVerticalMatrix(radius, type, reverse);
-    return KisConvolutionKernel::fromMatrix(matrix, 0.5, 1);
+    if (denormalize) {
+        return KisConvolutionKernel::fromMatrix(matrix, 0.5, 1);
+    } else {
+        return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
+    }
 }
 
 int KisEdgeDetectionKernel::kernelSizeFromRadius(qreal radius)
@@ -187,77 +197,135 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                                 KisEdgeDetectionKernel::FilterType type,
                                                 const QBitArray &channelFlags,
                                                 KoUpdater *progressUpdater,
+                                                FilterOutput output,
                                                 bool writeToAlpha)
 {
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
     finalPainter.setChannelFlags(channelFlags);
     finalPainter.setProgress(progressUpdater);
-    KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
-    KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
-
-    if (xRadius > 0.0) {
+    if (output == pythagorean || output == radian) {
+        KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
+        KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
 
         KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
+        KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
 
-        qreal verticalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
+        qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
+        qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
 
         KisConvolutionPainter horizPainterLR(x_denormalised);
         horizPainterLR.setChannelFlags(channelFlags);
         horizPainterLR.setProgress(progressUpdater);
         horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
-                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
-        if (yRadius == 0.0) {
-            finalPainter.bitBlt(srcTopLeft, x_denormalised, rect);
-        }
-    }
-    if (yRadius > 0.0) {
-        KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
-        qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
+                                   srcTopLeft - QPoint(0, ceil(horizontalCenter)),
+                                   srcTopLeft - QPoint(0, ceil(horizontalCenter)),
+                                   rect.size() + QSize(0, 2 * ceil(horizontalCenter)), BORDER_REPEAT);
+
 
         KisConvolutionPainter verticalPainterTB(y_denormalised);
         verticalPainterTB.setChannelFlags(channelFlags);
         verticalPainterTB.setProgress(progressUpdater);
         verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,
-                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
-        if (xRadius > 0.0) {
-            KisSequentialIterator yItterator(y_denormalised, rect);
-            KisSequentialIterator xItterator(x_denormalised, rect);
+                                      srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                      srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                      rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+
+        KisSequentialIterator yItterator(y_denormalised, rect);
+        KisSequentialIterator xItterator(x_denormalised, rect);
+        KisSequentialIterator finalIt(device, rect);
+        const int pixelSize = device->colorSpace()->pixelSize();
+        const int channels = device->colorSpace()->channelCount();
+        QVector<float> yNormalised(channels);
+        QVector<float> xNormalised(channels);
+        QVector<float> finalNorm(channels);
+
+        do {
+            device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
+            device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
+            device->colorSpace()->normalisedChannelsValue(finalIt.rawData(), finalNorm);
+
+            if (output == pythagorean) {
+                for (int c = 0; c<channels; c++) {
+                    finalNorm[c] = 2 * sqrt( ((xNormalised[c]-0.5)*(xNormalised[c]-0.5)) + ((yNormalised[c]-0.5)*(yNormalised[c]-0.5)));
+                }
+            } else { //radian
+                for (int c = 0; c<channels; c++) {
+                    finalNorm[c] = atan2(xNormalised[c]-0.5, yNormalised[c]-0.5);
+                }
+            }
+
+            if (writeToAlpha) {
+                KoColor col(finalIt.rawData(), device->colorSpace());
+                qreal alpha = 0;
+
+                for (int c = 0; c<(channels-1); c++) {
+                    alpha = alpha+finalNorm[c];
+                }
+
+                alpha = qMin(alpha/(channels-1), col.opacityF());
+                col.setOpacity(alpha);
+                memcpy(finalIt.rawData(), col.data(), pixelSize);
+            } else {
+                quint8* f = finalIt.rawData();
+                device->colorSpace()->fromNormalisedChannelsValue(f, finalNorm);
+                memcpy(finalIt.rawData(), f, pixelSize);
+            }
+
+        } while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel());
+    } else {
+        KisConvolutionKernelSP kernel;
+        qreal center = 0;
+        bool denormalize = !writeToAlpha;
+        if (output == xGrowth) {
+            kernel = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type, denormalize);
+            center = qreal(kernel->width()) / 2.0;
+        } else if (output == xFall) {
+            kernel = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type, denormalize, true);
+            center = qreal(kernel->width()) / 2.0;
+        } else if (output == yGrowth) {
+            kernel = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type, denormalize);
+            center = qreal(kernel->height()) / 2.0;
+        } else { //yFall
+            kernel = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type, denormalize, true);
+            center = qreal(kernel->height()) / 2.0;
+        }
+
+        if (writeToAlpha) {
+            KisPaintDeviceSP denormalised = new KisPaintDevice(device->colorSpace());
+            KisConvolutionPainter kernelP(denormalised);
+            kernelP.setChannelFlags(channelFlags);
+            kernelP.setProgress(progressUpdater);
+            kernelP.applyMatrix(kernel, device,
+                                srcTopLeft - QPoint(0, ceil(center)),
+                                srcTopLeft - QPoint(0, ceil(center)),
+                                rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
+            KisSequentialIterator itterator(denormalised, rect);
             KisSequentialIterator finalIt(device, rect);
             const int pixelSize = device->colorSpace()->pixelSize();
+            const int channels = device->colorSpace()->colorChannelCount();
+            QVector<float> normalised(channels);
             do {
+                device->colorSpace()->normalisedChannelsValue(itterator.rawData(), normalised);
+                KoColor col(finalIt.rawData(), device->colorSpace());
+                qreal alpha = 0;
+                for (int c = 0; c<channels; c++) {
+                    alpha = alpha+normalised[c];
+                }
+                alpha = qMin(alpha/channels, col.opacityF());
+                col.setOpacity(alpha);
+                memcpy(finalIt.rawData(), col.data(), pixelSize);
 
-                    QVector<float> yNormalised(device->channelCount());
-                    device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
-                    QVector<float> xNormalised(device->channelCount());
-                    device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
-                    QVector<float> finalNorm(device->channelCount());
-                    device->colorSpace()->normalisedChannelsValue(finalIt.rawData(), finalNorm);
-                    for (quint32 c = 0; c<device->channelCount(); c++) {
-                        finalNorm[c] = 2 * sqrt( ((xNormalised[c]-0.5)*(xNormalised[c]-0.5)) + ((yNormalised[c]-0.5)*(yNormalised[c]-0.5)));
-                    }
-                    if (writeToAlpha) {
-                        KoColor col(finalIt.rawData(), device->colorSpace());
-                        qreal alpha = 0;
-                        for (quint32 c = 0; c<device->colorSpace()->colorChannelCount(); c++) {
-                            alpha = alpha+finalNorm[c];
-                        }
-                        alpha = qMin(alpha/device->colorSpace()->colorChannelCount(), col.opacityF());
-                        col.setOpacity(alpha);
-                        memcpy(finalIt.rawData(), col.data(), pixelSize);
-                    } else {
-                        quint8* f = finalIt.rawData();
-                        device->colorSpace()->fromNormalisedChannelsValue(f, finalNorm);
-                        memcpy(finalIt.rawData(), f, pixelSize);
-                    }
-            } while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel());
+            } while(itterator.nextPixel() && finalIt.nextPixel());
 
         } else {
-            finalPainter.bitBlt(srcTopLeft, y_denormalised, rect);
+            KisConvolutionPainter kernelP(device);
+            kernelP.setChannelFlags(channelFlags);
+            kernelP.setProgress(progressUpdater);
+            kernelP.applyMatrix(kernel, device,
+                                srcTopLeft - QPoint(0, ceil(center)),
+                                srcTopLeft - QPoint(0, ceil(center)),
+                                rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
         }
     }
 }

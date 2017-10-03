@@ -85,6 +85,19 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
         type = KisEdgeDetectionKernel::Simple;
     }
 
+    KisEdgeDetectionKernel::FilterOutput output = KisEdgeDetectionKernel::pythagorean;
+    if (config->getString("output") == "xGrowth") {
+        output = KisEdgeDetectionKernel::xGrowth;
+    } else if (config->getString("output") == "xFall") {
+        output = KisEdgeDetectionKernel::xFall;
+    } else if (config->getString("output") == "yGrowth") {
+        output = KisEdgeDetectionKernel::yGrowth;
+    } else if (config->getString("output") == "yFall") {
+        output = KisEdgeDetectionKernel::yFall;
+    } else if (config->getString("output") == "radian") {
+        output = KisEdgeDetectionKernel::radian;
+    }
+
     KisEdgeDetectionKernel::applyEdgeDetection(device,
                                                rect,
                                                horizontalRadius,
@@ -92,6 +105,7 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
                                                type,
                                                channelFlags,
                                                progressUpdater,
+                                               output,
                                                config->getBool("transparency", false));
 }
 
@@ -101,6 +115,7 @@ KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration() const
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
     config->setProperty("type", "prewitt");
+    config->setProperty("output", "pythagorean");
     config->setProperty("lockAspect", true);
     config->setProperty("transparency", false);
 

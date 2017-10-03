@@ -37,6 +37,15 @@ public:
         SobolVector //Sobol does smooth. The creation of bigger kernels is based on an approach regarding vectors.
     };
 
+    enum FilterOutput {
+        pythagorean,
+        xGrowth,
+        xFall,
+        yGrowth,
+        yFall,
+        radian
+    };
+
     /**
      * @brief createHorizontalMatrix
      * @param radius the radius. 1 makes a 3x3 kernel.
@@ -62,10 +71,10 @@ public:
         createVerticalMatrix(qreal radius, FilterType type, bool reverse = false);
 
     static KisConvolutionKernelSP
-        createHorizontalKernel(qreal radius, FilterType type, bool reverse = false);
+        createHorizontalKernel(qreal radius, FilterType type, bool denormalize = true, bool reverse = false);
 
     static KisConvolutionKernelSP
-        createVerticalKernel(qreal radius, FilterType type, bool reverse = false);
+        createVerticalKernel(qreal radius, FilterType type, bool denormalize = true, bool reverse = false);
 
     static int kernelSizeFromRadius(qreal radius);
     static qreal sigmaFromRadius(qreal radius);
@@ -90,6 +99,7 @@ public:
                               FilterType type,
                               const QBitArray &channelFlags,
                               KoUpdater *progressUpdater,
+                              FilterOutput output = pythagorean,
                               bool writeToAlpha = false);
 };
 

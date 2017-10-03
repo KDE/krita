@@ -416,6 +416,11 @@ void DlgContentDownloaderPrivate::slotShowDetails(const KNSCore::EntryInternal &
 void DlgContentDownloaderPrivate::slotShowOverview()
 {
     ui.backButton->setVisible(false);
+
+    ui.updateButton->setVisible(false);
+    ui.installButton->setVisible(false);
+    ui.uninstallButton->setVisible(false);
+
     ui.m_titleWidget->setText(titleText);
 }
 

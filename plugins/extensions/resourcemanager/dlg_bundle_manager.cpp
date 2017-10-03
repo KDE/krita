@@ -49,6 +49,7 @@ class DlgBundleManager::Private
 {
 public:
     Private()
+        :model(0)
     {}
 
     KoResourceModel *model {0};

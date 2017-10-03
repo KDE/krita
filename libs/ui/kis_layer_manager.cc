@@ -664,10 +664,11 @@ void KisLayerManager::mergeLayer()
     if (!m_view->blockUntillOperationsFinished(image)) return;
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
-    if (selectedNodes.size() > 1) {
+      if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
+    }
 
-    } else if (tryMergeSelectionMasks(m_view->activeNode(), image)) {
+      else if (tryMergeSelectionMasks(m_view->activeNode(), image)) {
         // already done!
     } else if (tryFlattenGroupLayer(m_view->activeNode(), image)) {
         // already done!
@@ -676,8 +677,14 @@ void KisLayerManager::mergeLayer()
         if (!layer->prevSibling()) return;
         KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
+        if (prevLayer->userLocked()) {
+            m_view->showFloatingMessage(
+                i18nc("floating message in layer manager",
+                      "Layer is locked "),
+                QIcon(), 2000, KisFloatingMessage::Low);
+        }
 
-        if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
+        else if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
             image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
         }
         else {

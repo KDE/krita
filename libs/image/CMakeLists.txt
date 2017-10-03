@@ -78,6 +78,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_standard_uniform_properties_factory.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
+   commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
    commands/kis_image_set_projection_color_space_command.cpp
    commands/kis_image_layer_add_command.cpp

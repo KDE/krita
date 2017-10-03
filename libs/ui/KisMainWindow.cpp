@@ -137,7 +137,7 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include "kis_animation_exporter.h"
+#include <KisUpdateSchedulerConfigNotifier.h>
 
 #include <mutex>
 
@@ -451,11 +451,12 @@ KisMainWindow::KisMainWindow()
             connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
             act->setChecked(!toolBar->isHidden());
             toolbarList.append(act);
-        } else
+        } else {
             warnUI << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+        }
     }
     plugActionList("toolbarlist", toolbarList);
-    setToolbarList(toolbarList);
+    d->toolbarList = toolbarList;
 
     applyToolBarLayout();
 
@@ -477,9 +478,6 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
-
-
-
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -614,6 +612,7 @@ void KisMainWindow::slotPreferences()
 {
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
+        KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -985,7 +984,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first().remove("*.");
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first();
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
@@ -1935,12 +1934,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     else {
         restoreState(d->dockerStateBeforeHiding);
     }
-}
-
-void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
-{
-    qDeleteAll(d->toolbarList);
-    d->toolbarList = toolbarList;
 }
 
 void KisMainWindow::slotDocumentTitleModified()

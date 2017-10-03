@@ -1492,6 +1492,16 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
     }
 }
 
+void KisImage::setWorkingThreadsLimit(int value)
+{
+    m_d->scheduler.setThreadsLimit(value);
+}
+
+int KisImage::workingThreadsLimit() const
+{
+    return m_d->scheduler.threadsLimit();
+}
+
 void KisImage::notifySelectionChanged()
 {
     /**

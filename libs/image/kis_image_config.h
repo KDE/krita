@@ -111,6 +111,11 @@ public:
     bool useLodForColorizeMask(bool requestDefault = false) const;
     void setUseLodForColorizeMask(bool value);
 
+    int maxNumberOfThreads(bool defaultValue = false) const;
+    void setMaxNumberOfThreads(int value);
+
+    int frameRenderingClones(bool defaultValue = false) const;
+    void setFrameRenderingClones(int value);
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

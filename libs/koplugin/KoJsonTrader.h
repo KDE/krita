@@ -23,6 +23,7 @@
 
 #include <QList>
 #include <QString>
+#include <QMutex>
 #include "kritaplugin_export.h"
 
 class QPluginLoader;
@@ -68,6 +69,7 @@ public:
 
 private:
      QString m_pluginPath;
+     mutable QMutex m_mutex;
 };
 
 #endif

@@ -278,33 +278,42 @@ void KisStatusBar::updateMemoryStatus()
         KisMemoryStatisticsServer::instance()
         ->fetchMemoryStatistics(m_imageView ? m_imageView->image() : 0);
 
-    QString longStats =
-        i18nc("tooltip on statusbar memory reporting button",
-              "Image size:\t %1\n"
-              "\n"
-              "Memory used:\t %2 / %3\n"
-              "  image data:\t %4 / %5\n"
-              "  pool:\t\t %6 / %7\n"
-              "  undo data:\t %8\n"
-              "\n"
-              "Swap used:\t %9",
-              formatSize(stats.imageSize),
+    const QString imageStatsMsg =
+            i18nc("tooltip on statusbar memory reporting button (image stats)",
+                  "Image size:\t %1\n"
+                  "  - layers:\t\t %2\n"
+                  "  - projections:\t %3\n"
+                  "  - instant preview:\t %4\n",
+                  formatSize(stats.imageSize),
+                  formatSize(stats.layersSize),
+                  formatSize(stats.projectionsSize),
+                  formatSize(stats.lodSize));
 
-              formatSize(stats.totalMemorySize),
-              formatSize(stats.totalMemoryLimit),
+    const QString memoryStatsMsg =
+            i18nc("tooltip on statusbar memory reporting button (total stats)",
+                  "Memory used:\t %1 / %2\n"
+                  "  image data:\t %3 / %4\n"
+                  "  pool:\t\t %5 / %6\n"
+                  "  undo data:\t %7\n"
+                  "\n"
+                  "Swap used:\t %8",
+                  formatSize(stats.totalMemorySize),
+                  formatSize(stats.totalMemoryLimit),
 
-              formatSize(stats.realMemorySize),
-              formatSize(stats.tilesHardLimit),
+                  formatSize(stats.realMemorySize),
+                  formatSize(stats.tilesHardLimit),
 
-              formatSize(stats.poolSize),
-              formatSize(stats.tilesPoolLimit),
+                  formatSize(stats.poolSize),
+                  formatSize(stats.tilesPoolLimit),
 
-              formatSize(stats.historicalMemorySize),
-              formatSize(stats.swapSize));
+                  formatSize(stats.historicalMemorySize),
+                  formatSize(stats.swapSize));
+
+    QString longStats = imageStatsMsg + "\n" + memoryStatsMsg;
 
     QString shortStats = formatSize(stats.imageSize);
     QIcon icon;
-    qint64 warnLevel = stats.tilesHardLimit - stats.tilesHardLimit / 8;
+    const qint64 warnLevel = stats.tilesHardLimit - stats.tilesHardLimit / 8;
 
     if (stats.imageSize > warnLevel ||
         stats.realMemorySize > warnLevel) {

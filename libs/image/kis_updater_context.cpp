@@ -34,19 +34,7 @@ KisUpdaterContext::KisUpdaterContext(qint32 threadCount, QObject *parent)
         threadCount = threadCount > 0 ? threadCount : 1;
     }
 
-    m_jobs.resize(threadCount);
-    for(qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
-        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
-                SIGNAL(sigContinueUpdate(const QRect&)),
-                Qt::DirectConnection);
-
-        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
-                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
-
-        connect(m_jobs[i], SIGNAL(sigJobFinished()),
-                SLOT(slotJobFinished()), Qt::DirectConnection);
-    }
+    setThreadsLimit(threadCount);
 }
 
 KisUpdaterContext::~KisUpdaterContext()
@@ -123,7 +111,12 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
-    m_threadPool.start(m_jobs[jobIndex]);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
 }
 
 /**
@@ -146,7 +139,12 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setStrokeJob(strokeJob);
-    m_threadPool.start(m_jobs[jobIndex]);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
 }
 
 /**
@@ -169,7 +167,12 @@ void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
-    m_threadPool.start(m_jobs[jobIndex]);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
 }
 
 /**
@@ -222,6 +225,41 @@ void KisUpdaterContext::lock()
 void KisUpdaterContext::unlock()
 {
     m_lock.unlock();
+}
+
+void KisUpdaterContext::setThreadsLimit(int value)
+{
+    m_threadPool.setMaxThreadCount(value);
+
+    for (int i = 0; i < m_jobs.size(); i++) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(!m_jobs[i]->isRunning());
+        // don't delete the jobs until all of them are checked!
+    }
+
+    for (int i = 0; i < m_jobs.size(); i++) {
+        delete m_jobs[i];
+    }
+
+    m_jobs.resize(value);
+
+    for(qint32 i = 0; i < m_jobs.size(); i++) {
+        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
+        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
+                SIGNAL(sigContinueUpdate(const QRect&)),
+                Qt::DirectConnection);
+
+        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
+                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
+
+        connect(m_jobs[i], SIGNAL(sigJobFinished()),
+                SLOT(slotJobFinished()), Qt::DirectConnection);
+    }
+}
+
+int KisUpdaterContext::threadsLimit() const
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_jobs.size() == m_threadPool.maxThreadCount());
+    return m_jobs.size();
 }
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)

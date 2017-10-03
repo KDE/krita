@@ -761,6 +761,9 @@ public:
      */
     int sequenceNumber() const;
 
+
+    void estimateMemoryStats(qint64 &imageData, qint64 &temporaryData, qint64 &lodData) const;
+
 public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);

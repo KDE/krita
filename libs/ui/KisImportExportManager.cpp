@@ -72,6 +72,9 @@ class Q_DECL_HIDDEN KisImportExportManager::Private
 public:
     bool batchMode {false};
     KoUpdaterPtr updater;
+
+    QString cachedExportFilterMimeType;
+    QSharedPointer<KisImportExportFilter> cachedExportFilter;
 };
 
 struct KisImportExportManager::ConversionResult {
@@ -155,8 +158,7 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
 
     if (direction == KisImportExportManager::Import) {
         if (m_importMimeTypes.isEmpty()) {
-            KoJsonTrader trader;
-            QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+            QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
@@ -171,8 +173,7 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
     }
     else if (direction == KisImportExportManager::Export) {
         if (m_exportMimeTypes.isEmpty()) {
-            KoJsonTrader trader;
-            QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+            QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
@@ -279,7 +280,27 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         typeName = KisMimeDatabase::mimeTypeForFile(location);
     }
 
-    QSharedPointer<KisImportExportFilter> filter(filterForMimeType(typeName, direction));
+    QSharedPointer<KisImportExportFilter> filter;
+
+    /**
+     * Fetching a filter from the registry is a really expensive operation,
+     * because it blocks all the threads. Cache the filter if possible.
+     */
+    if (direction == KisImportExportManager::Export &&
+        d->cachedExportFilter &&
+        d->cachedExportFilterMimeType == typeName) {
+
+        filter = d->cachedExportFilter;
+    } else {
+
+        filter = toQShared(filterForMimeType(typeName, direction));
+
+        if (direction == Export) {
+            d->cachedExportFilter = filter;
+            d->cachedExportFilterMimeType = typeName;
+        }
+    }
+
     if (!filter) {
         return KisImportExportFilter::FilterCreationError;
     }
@@ -338,10 +359,10 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         }
 
         bool alsoAsKra = false;
-        if (!askUserAboutExportConfiguration(filter, exportConfiguration,
-                                             from, to,
-                                             batchMode(), showWarnings,
-                                             &alsoAsKra)) {
+        if (!batchMode() && !askUserAboutExportConfiguration(filter, exportConfiguration,
+                                                             from, to,
+                                                             batchMode(), showWarnings,
+                                                             &alsoAsKra)) {
 
             return KisImportExportFilter::UserCancelled;
         }

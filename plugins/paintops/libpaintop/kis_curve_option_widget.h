@@ -43,6 +43,7 @@ public:
     bool isCheckable() const override;
     bool isChecked() const override;
     void setChecked(bool checked) override;
+    void show();
 
 protected:
 
@@ -55,9 +56,21 @@ private Q_SLOTS:
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);
     void updateValues();
-    void resetCurve();
     void updateLabelsOfCurrentSensor();
     void disableWidgets(bool disable);
+    void updateThemedIcons();
+
+
+    // curve shape preset buttons
+    void changeCurveLinear();
+    void changeCurveReverseLinear();
+    void changeCurveSShape();
+    void changeCurveReverseSShape();
+    void changeCurveJShape();
+    void changeCurveLShape();
+    void changeCurveUShape();
+    void changeCurveArchShape();
+
 
 private:
     QWidget* m_widget;

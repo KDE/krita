@@ -63,7 +63,6 @@
 #include <PluginSettings.h>
 
 #include "kis_qmic_applicator.h"
-#include "kis_qmic_progress_manager.h"
 
 static const char ack[] = "ack";
 
@@ -72,12 +71,11 @@ K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>()
 QMic::QMic(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
     , m_gmicApplicator(0)
-    , m_progressManager(0)
 {
 #ifndef Q_OS_MAC
-    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
-    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
+//    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+//    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
+//    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
     m_qmicAction = createAction("QMic");
     m_qmicAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -108,7 +106,6 @@ QMic::~QMic()
     }
 
     delete m_gmicApplicator;
-    delete m_progressManager;
     delete m_localServer;
 }
 
@@ -122,35 +119,11 @@ void QMic::slotQMic(bool again)
     m_qmicAction->setEnabled(false);
     m_againAction->setEnabled(false);
 
-    if (m_pluginProcess) {
-        qDebug() << "Plugin is already started" << m_pluginProcess->state();
-        return;
-    }
-
-    delete m_progressManager;
-    m_progressManager = new KisQmicProgressManager(m_view);
-    connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
-
     // find the krita-gmic-qt plugin
     QString pluginPath = PluginSettings::gmicQtPath();
-    if (pluginPath.isEmpty() || (!QFileInfo(pluginPath).exists() && !QFileInfo(pluginPath).isFile())) {
-        {
-            KoDialog dlg;
-            dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
-            QWidget *w = new QWidget(&dlg);
-            dlg.setMainWidget(w);
-            QVBoxLayout *l = new QVBoxLayout(w);
-            l->addWidget(new PluginSettings(w));
-            dlg.setButtons(KoDialog::Ok);
-            dlg.exec();
-        }
-        pluginPath = PluginSettings::gmicQtPath();
-        if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-            m_qmicAction->setEnabled(true);
-            m_againAction->setEnabled(true);
-            return;
-        }
-
+    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists() || !QFileInfo(pluginPath).isFile()) {
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin."));
+        return;
     }
 
     m_key = QUuid::createUuid().toString();
@@ -336,29 +309,8 @@ void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
     m_pluginProcess = 0;
     delete m_localServer;
     m_localServer = 0;
-    delete m_progressManager;
-    m_progressManager = 0;
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);
-}
-
-void QMic::slotUpdateProgress()
-{
-    if (!m_gmicApplicator) {
-        qWarning() << "G'Mic applicator already deleted!";
-        return;
-    }
-    qDebug() << "slotUpdateProgress" << m_gmicApplicator->getProgress();
-    m_progressManager->updateProgress(m_gmicApplicator->getProgress());
-}
-
-void QMic::slotStartProgressReporting()
-{
-    qDebug() << "slotStartProgressReporting();";
-    if (m_progressManager->inProgress()) {
-        m_progressManager->finishProgress();
-    }
-    m_progressManager->initProgress();
 }
 
 void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &msg)

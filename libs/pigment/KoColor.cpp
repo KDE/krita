@@ -52,7 +52,7 @@ KoColor::KoColor()
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->rgb16(0);
     d->data = new quint8[d->colorSpace->pixelSize()];
-    d->colorSpace->fromQColor(Qt::black, d->data);
+    memset(d->data, 0, d->colorSpace->pixelSize());
     d->colorSpace->setOpacity(d->data, OPACITY_OPAQUE_U8, 1);
 }
 

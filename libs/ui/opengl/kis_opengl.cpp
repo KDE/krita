@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QWindow>
 
@@ -58,6 +59,7 @@ namespace
         bool supportsDeprecatedFunctions = false;
         bool isOpenGLES = false;
         QString rendererString;
+        QString driverVersionString;
 
         OpenGLCheckResult(QOpenGLContext &context) {
             if (!context.isValid()) {
@@ -66,7 +68,8 @@ namespace
 
             QOpenGLFunctions *funcs = context.functions(); // funcs is ready to be used
 
-            rendererString = QString((const char*)funcs->glGetString(GL_RENDERER));
+            rendererString = QString(reinterpret_cast<const char *>(funcs->glGetString(GL_RENDERER)));
+            driverVersionString = QString(reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION)));
             glMajorVersion = context.format().majorVersion();
             glMinorVersion = context.format().minorVersion();
             supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
@@ -76,7 +79,9 @@ namespace
         bool isSupportedVersion() const {
             return
 #ifdef Q_OS_OSX
-                    ((glMajorVersion * 100 + glMinorVersion) >= 302)
+                    ((glMajorVersion * 100 + glMinorVersion) >= 302
+                     && !rendererString.toLower().contains("amd")
+                     && !rendererString.toLower().contains("radeon"))
 #else
                     (glMajorVersion >= 3 && (supportsDeprecatedFunctions || isOpenGLES)) ||
                     ((glMajorVersion * 100 + glMinorVersion) == 201)
@@ -122,6 +127,7 @@ namespace
         bool supportsDesktopGL = false;
         bool supportsAngleD3D11 = false;
         bool isQtPreferAngle = false;
+        bool overridePreferAngle = false; // override Qt to force ANGLE to be preferred
     };
     WindowsOpenGLStatus windowsOpenGLStatus = {};
     KisOpenGL::OpenGLRenderer userRendererConfig;
@@ -179,6 +185,27 @@ namespace
             return false;
         }
         return checkResult.isSupportedVersion();
+    }
+
+    void specialOpenGLVendorFilter(WindowsOpenGLStatus &status, const OpenGLCheckResult &checkResult) {
+        if (!status.supportsAngleD3D11) {
+            return;
+        }
+        // HACK: Make ANGLE the preferred renderer for Intel driver versions
+        //       between build 4636 and 4729 (exclusive) due to an UI offset bug.
+        //       See https://communities.intel.com/thread/116003
+        //       (Build 4636 is known to work from some test results)
+        if (checkResult.rendererString.startsWith("Intel")) {
+            QRegularExpression regex("\\b\\d{2}\\.\\d{2}\\.\\d{2}\\.(\\d{4})\\b");
+            QRegularExpressionMatch match = regex.match(checkResult.driverVersionString);
+            if (match.hasMatch()) {
+                int driverBuild = match.captured(1).toInt();
+                if (driverBuild > 4636 && driverBuild < 4729) {
+                    qDebug() << "Detected Intel driver build between 4636 and 4729, making ANGLE the preferred renderer";
+                    status.overridePreferAngle = true;
+                }
+            }
+        }
     }
 
 } // namespace
@@ -262,6 +289,11 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv, QString userRendere
     windowsOpenGLStatus.supportsAngleD3D11 =
             checkResultAngle && checkIsSupportedAngleD3D11(*checkResultAngle);
 
+    // HACK: Filter specific buggy drivers not handled by Qt OpenGL buglist
+    if (checkResultDesktopGL) {
+        specialOpenGLVendorFilter(windowsOpenGLStatus, *checkResultDesktopGL);
+    }
+
     userRendererConfig = convertConfigToOpenGLRenderer(userRendererConfigString);
     if ((userRendererConfig == RendererDesktopGL && !windowsOpenGLStatus.supportsDesktopGL) ||
             (userRendererConfig == RendererAngle && !windowsOpenGLStatus.supportsAngleD3D11)) {
@@ -281,7 +313,10 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv, QString userRendere
     default:
         if (windowsOpenGLStatus.isQtPreferAngle && windowsOpenGLStatus.supportsAngleD3D11) {
             currentRenderer = RendererAngle;
-        } else if (!windowsOpenGLStatus.isQtPreferAngle && windowsOpenGLStatus.supportsAngleD3D11) {
+        } else if (windowsOpenGLStatus.overridePreferAngle && windowsOpenGLStatus.supportsAngleD3D11) {
+            QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
+            currentRenderer = RendererAngle;
+        } else if (!windowsOpenGLStatus.isQtPreferAngle && windowsOpenGLStatus.supportsDesktopGL) {
             currentRenderer = RendererDesktopGL;
         } else {
             currentRenderer = RendererNone;
@@ -297,7 +332,8 @@ KisOpenGL::OpenGLRenderer KisOpenGL::getCurrentOpenGLRenderer()
 
 KisOpenGL::OpenGLRenderer KisOpenGL::getQtPreferredOpenGLRenderer()
 {
-    return windowsOpenGLStatus.isQtPreferAngle ? RendererAngle : RendererDesktopGL;
+    return (windowsOpenGLStatus.isQtPreferAngle || windowsOpenGLStatus.overridePreferAngle)
+            ? RendererAngle : RendererDesktopGL;
 }
 
 KisOpenGL::OpenGLRenderers KisOpenGL::getSupportedOpenGLRenderers()
@@ -384,7 +420,7 @@ void KisOpenGL::initialize()
     debugOut << "OpenGL Info";
     debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
     debugOut << "\n  Renderer: " << openGLCheckResult->rendererString;
-    debugOut << "\n  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
+    debugOut << "\n  Version: " << openGLCheckResult->driverVersionString;
     debugOut << "\n  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
     debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
     debugOut << "\n  Current format:   " << context.format();
@@ -398,6 +434,7 @@ void KisOpenGL::initialize()
     debugOut << "\n  supportsDesktopGL:" << windowsOpenGLStatus.supportsDesktopGL;
     debugOut << "\n  supportsAngleD3D11:" << windowsOpenGLStatus.supportsAngleD3D11;
     debugOut << "\n  isQtPreferAngle:" << windowsOpenGLStatus.isQtPreferAngle;
+    debugOut << "\n  overridePreferAngle:" << windowsOpenGLStatus.overridePreferAngle;
     debugOut << "\n== log ==\n";
     debugOut.noquote();
     debugOut << qpaDetectionLog.join('\n');

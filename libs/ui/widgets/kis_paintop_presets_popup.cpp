@@ -746,9 +746,11 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 }
 
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
-{
-     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
-     setCurrentPaintOpId(preset->paintOp().id());
+{     
+    if (preset) {
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
+        setCurrentPaintOpId(preset->paintOp().id());
+    }
 }
 
 void KisPaintOpPresetsPopup::updateThemedIcons()

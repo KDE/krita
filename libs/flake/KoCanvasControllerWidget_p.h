@@ -55,7 +55,7 @@ public:
     void emitPointerPositionChangedSignals(QEvent *event);
 
     void activate();
-    void unsetCanvas(KoCanvasBase *canvas);
+    void unsetCanvas();
 
     KoCanvasControllerWidget *q;
     QPointer<KoCanvasBase> canvas;

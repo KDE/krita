@@ -118,20 +118,20 @@ const quint8* KisRandomAccessor2::rawDataConst() const
 KisRandomAccessor2::KisTileInfo* KisRandomAccessor2::fetchTileData(qint32 col, qint32 row)
 {
     KisTileInfo* kti = new KisTileInfo;
-    kti->tile = m_ktm->getTile(col, row, m_writable);
-    lockTile(kti->tile);
 
+    m_ktm->getTilesPair(col, row, m_writable, &kti->tile, &kti->oldtile);
+
+    lockTile(kti->tile);
     kti->data = kti->tile->data();
+
+    lockOldTile(kti->oldtile);
+    kti->oldData = kti->oldtile->data();
 
     kti->area_x1 = col * KisTileData::HEIGHT;
     kti->area_y1 = row * KisTileData::WIDTH;
     kti->area_x2 = kti->area_x1 + KisTileData::HEIGHT - 1;
     kti->area_y2 = kti->area_y1 + KisTileData::WIDTH - 1;
 
-    // set old data
-    kti->oldtile = m_ktm->getOldTile(col, row);
-    lockOldTile(kti->oldtile);
-    kti->oldData = kti->oldtile->data();
     return kti;
 }
 

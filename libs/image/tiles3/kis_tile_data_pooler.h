@@ -44,6 +44,13 @@ public:
     qint64 lastRealMemoryMetric() const;
     qint64 lastHistoricalMemoryMetric() const;
 
+
+    /**
+     * Is case the pooler thread is not running, the user might force
+     * recalculation of the memory statistics explicitly.
+     */
+    void forceUpdateMemoryStats();
+
 protected:
     static const qint32 MAX_NUM_CLONES;
     static const qint32 MAX_TIMEOUT;

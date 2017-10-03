@@ -88,6 +88,23 @@ public:
         return m_defaultPixel;
     }
 
+    /**
+     * Every iterator fetches both types of tiles all the time: old and new.
+     * For projection devices these tiles are **always** the same, but doing
+     * two distinct calls makes double pressure on the read-write lock in the
+     * hash table.
+     *
+     * Merging two calls into one allows us to avoid additional tile fetch from
+     * the hash table and therefore reduce waiting time.
+     */
+    inline void getTilesPair(qint32 col, qint32 row, bool writable, KisTileSP *tile, KisTileSP *oldTile) {
+        *tile = getTile(col, row, writable);
+        *oldTile = m_mementoManager->getCommitedTile(col, row);
+        if (!*oldTile) {
+            *oldTile = *tile;
+        }
+    }
+
     inline KisTileSP getTile(qint32 col, qint32 row, bool writable) {
         if (writable) {
             bool newTile;

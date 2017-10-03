@@ -872,7 +872,7 @@ KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, 
         d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
         canvas()->setProofingConfigUpdated(false);
     }
-    return d->openGLImageTextures->updateCache(rc);
+    return d->openGLImageTextures->updateCache(rc, d->openGLImageTextures->image());
 }
 
 

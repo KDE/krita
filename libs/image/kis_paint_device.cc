@@ -407,6 +407,42 @@ public:
 
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
+
+private:
+    qint64 estimateDataSize(Data *data) const {
+        const QRect &rc = data->dataManager()->extent();
+        return rc.width() * rc.height() * data->colorSpace()->pixelSize();
+    }
+
+public:
+
+    void estimateMemoryStats(qint64 &imageData, qint64 &temporaryData, qint64 &lodData) const {
+        imageData = 0;
+        temporaryData = 0;
+        lodData = 0;
+
+        if (m_data) {
+            imageData += estimateDataSize(m_data.data());
+
+            if (!m_frames.isEmpty()) {
+                qWarning() << "WARNING: Extra data object:" << estimateDataSize(m_data.data());
+            }
+        }
+
+        if (m_lodData) {
+            lodData += estimateDataSize(m_lodData.data());
+        }
+
+        if (m_externalFrameData) {
+            temporaryData += estimateDataSize(m_externalFrameData.data());
+        }
+
+        Q_FOREACH (DataSP value, m_frames.values()) {
+            imageData += estimateDataSize(value.data());
+        }
+    }
+
+
 private:
 
     QRegion syncWholeDevice(Data *srcData);
@@ -1053,6 +1089,11 @@ void KisPaintDevice::requestTimeSwitch(int time)
 int KisPaintDevice::sequenceNumber() const
 {
     return m_d->cache()->sequenceNumber();
+}
+
+void KisPaintDevice::estimateMemoryStats(qint64 &imageData, qint64 &temporaryData, qint64 &lodData) const
+{
+    m_d->estimateMemoryStats(imageData, temporaryData, lodData);
 }
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)

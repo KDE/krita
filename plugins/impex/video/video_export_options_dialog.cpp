@@ -198,8 +198,17 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     ui->cmbTune->setCurrentIndex(m_d->defaultTune);
     m_d->defaultBitrate = cfg->getInt("TheoraBitrate", 5000);
     ui->intBitrate->setValue(m_d->defaultBitrate);
+
     m_d->defaultCustomLine = cfg->getString("CustomLineValue", QString());
     ui->txtCustomLine->setText(m_d->defaultCustomLine);
+
+    if (!m_d->defaultCustomLine.isEmpty()) {
+        m_d->currentCustomLine = m_d->defaultCustomLine;
+        ui->chkCustomLine->setChecked(true);
+    }
+
+    ui->chkCustomLine->setChecked(!m_d->defaultCustomLine.isEmpty());
+    slotCustomLineToggled(!m_d->defaultCustomLine.isEmpty());
 
     if (cfg->hasProperty("CodecIndex")) {
         setCodec((VideoExportOptionsDialog::CodecIndex)cfg->getInt("CodecIndex"));

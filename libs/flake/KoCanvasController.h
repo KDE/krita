@@ -30,6 +30,7 @@
 #include <QSize>
 #include <QPoint>
 #include <QPointF>
+#include <QPointer>
 
 class KActionCollection;
 class QRect;
@@ -78,7 +79,7 @@ public:
     };
 
     // proxy QObject: use this to connect to slots and signals.
-    KoCanvasControllerProxyObject *proxyObject;
+    QPointer<KoCanvasControllerProxyObject> proxyObject;
 
     /**
      * Constructor.

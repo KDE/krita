@@ -116,7 +116,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
-    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
+    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds(), m_image);
     recalculateCache(info);
 }
 
@@ -253,17 +253,18 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
     m_storedImageBounds = QRect();
 }
 
-KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect, KisImageSP srcImage)
 {
-    return updateCacheImpl(rect, true);
+    return updateCacheImpl(rect, srcImage, true);
 }
 
 KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheNoConversion(const QRect& rect)
 {
-    return updateCacheImpl(rect, false);
+    return updateCacheImpl(rect, m_image, false);
 }
 
-KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect, bool convertColorSpace)
+// TODO: add sanity checks about the conformance of the passed srcImage!
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect, KisImageSP srcImage, bool convertColorSpace)
 {
     const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
 
@@ -275,7 +276,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
 
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo(options);
 
-    QRect updateRect = rect & m_image->bounds();
+    QRect updateRect = rect & srcImage->bounds();
     if (updateRect.isEmpty() || !(m_initialized)) return info;
 
     /**
@@ -288,7 +289,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
      */
 
     QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
-    artificialRect &= m_image->bounds();
+    artificialRect &= srcImage->bounds();
 
     int firstColumn = xToCol(artificialRect.left());
     int lastColumn = xToCol(artificialRect.right());
@@ -297,7 +298,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
 
     QBitArray channelFlags; // empty by default
 
-    if (m_channelFlags.size() != m_image->projection()->colorSpace()->channels().size()) {
+    if (m_channelFlags.size() != srcImage->projection()->colorSpace()->channels().size()) {
         setChannelFlags(QBitArray());
     }
     if (!m_useOcio) { // Ocio does its own channel flipping
@@ -309,8 +310,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
-    const QRect bounds = m_image->bounds();
-    const int levelOfDetail = m_image->currentLevelOfDetail();
+    const QRect bounds = srcImage->bounds();
+    const int levelOfDetail = srcImage->currentLevelOfDetail();
 
     QRect alignedUpdateRect = updateRect;
     QRect alignedBounds = bounds;
@@ -339,7 +340,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                                                      m_infoChunksPool));
             // Don't update empty tiles
             if (tileInfo->valid()) {
-                tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
+                tileInfo->retrieveData(srcImage->projection(), channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
 
                 //create transform
                 if (m_createNewProofingTransform) {
@@ -359,7 +360,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                 info->tileList.append(tileInfo);
             }
             else {
-                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
+                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << srcImage->bounds();
             }
         }
     }

@@ -91,8 +91,16 @@ private:
     float scaleFactor;
     float m_currentBrushSize = 1.0;
 
-    void zoomToBrushSize();
+    // when the zooming will start and stop
+    float minBrushVal = 15.0;
+    float maxBrushVal = 275.0;
 
+    // range of scale values
+    qreal minScale = 1.0;
+    qreal maxScale = 0.15;
+
+    void zoomToBrushSize();
+    void setupAndPaintStroke();
 
 
 };

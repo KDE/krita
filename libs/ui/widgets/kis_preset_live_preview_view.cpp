@@ -62,22 +62,7 @@ void KisPresetLivePreviewView::setup()
     m_brushPreviewScene = new QGraphicsScene();
     setScene(m_brushPreviewScene);
 
-    // points for drawing an S curve
-    // we are going to paint the stroke right in the middle of the canvas to make sure
-    // everything is captured for big brush strokes
-    //TODO: we need to update these points according to the brush size. Larger brushes need larger strokes
-    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*0.4),
-                                   m_canvasCenterPoint.y() + (this->height()*0.4)));
-    m_curvePointPI1.setPressure(0.0);
-
-    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*0.4),
-                                   m_canvasCenterPoint.y()));
-
-    m_curvePointPI2.setPressure(1.0);
-
-
     zoomToBrushSize();
-
 }
 
 void KisPresetLivePreviewView::setCurrentPreset(KisPaintOpPresetSP preset)
@@ -95,7 +80,6 @@ void KisPresetLivePreviewView::paintStroke()
         m_currentBrushSize = m_currentPreset->settings()->paintOpSize();
         zoomToBrushSize();
     }
-
 
     // clean up "no preview" text object if it exists
     if (noPreviewText) {
@@ -166,13 +150,8 @@ void KisPresetLivePreviewView::paintStroke()
         m_brushPreviewPainter->setPaintColor(KoColor(palette().color(QPalette::Text), m_colorSpace));
     }
 
+    setupAndPaintStroke();
 
-    m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
-                                            QPointF(m_canvasCenterPoint.x(),
-                                                    m_canvasCenterPoint.y()-this->height()),
-                                            QPointF(m_canvasCenterPoint.x(),
-                                                     m_canvasCenterPoint.y()+this->height()),
-                                            m_curvePointPI2, &m_currentDistance);
 
     // crop the layer so a brush stroke won't go outside of the area
     m_layer->paintDevice()->crop(0,0, m_layer->image()->width(), m_layer->image()->height()); // in case of a super big brush
@@ -205,17 +184,45 @@ void KisPresetLivePreviewView::slotZoomToOneHundredPercent()
     this->scale(scaleFactor, scaleFactor);
 }
 
-void KisPresetLivePreviewView::zoomToBrushSize() {
 
-    // when the zooming will start and stop
-    float minBrushVal = 15.0;
-    float maxBrushVal = 275.0;
+void KisPresetLivePreviewView::setupAndPaintStroke()
+{
+    // scaleFactor   1.0 -> 0.15
+    float minStrokeScale = 0.3; // small brush stroke
+    float maxStrokeScale = 1.2; // big brush stroke
 
-    // range of scale values
-    qreal minScale = 1.0;
-    qreal maxScale = 0.15;
+    // find the slope of the line (slope-intercept form)
+    float slope = (maxScale-maxStrokeScale) / (minScale-minStrokeScale);  // y2-y1 / x2-x1
+    float yIntercept = maxStrokeScale - slope * minStrokeScale;  // y1 − m * x1
 
 
+    float strokeScaleAmount = scaleFactor * slope + yIntercept; // y = mx + b
+    strokeScaleAmount = qBound(minStrokeScale, strokeScaleAmount, maxStrokeScale);
+
+
+    // points for drawing an S curve
+    // we are going to paint the stroke right in the middle of the canvas to make sure
+    // everything is captured for big brush strokes
+    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*strokeScaleAmount),
+                                   m_canvasCenterPoint.y() + (this->height()*strokeScaleAmount)));
+    m_curvePointPI1.setPressure(0.0);
+
+    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*strokeScaleAmount),
+                                   m_canvasCenterPoint.y()));
+
+    m_curvePointPI2.setPressure(1.0);
+
+
+    m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
+                                            QPointF(m_canvasCenterPoint.x(),
+                                                    m_canvasCenterPoint.y()-this->height()),
+                                            QPointF(m_canvasCenterPoint.x(),
+                                                     m_canvasCenterPoint.y()+this->height()),
+                                            m_curvePointPI2, &m_currentDistance);
+}
+
+void KisPresetLivePreviewView::zoomToBrushSize()
+{
     // find the slope of the line (slope-intercept form)
     float slope = (maxScale-minScale) / (maxBrushVal-minBrushVal);  // y2-y1 / x2-x1
     float yIntercept = minScale - slope * minBrushVal;  // y1 − m * x1

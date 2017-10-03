@@ -125,15 +125,16 @@ void KisPresetLivePreviewView::paintStroke()
             sceneImageItem = 0;
         }
 
-
-
-        slotResetViewZoom();
-
         QFont font;
         font.setPixelSize(14);
         font.setBold(false);
 
+        slotZoomToOneHundredPercent(); // 100% zoom if we are showing the text
+
         noPreviewText = this->scene()->addText(i18n("No Preview for this engine"),font);
+        noPreviewText->setPos(-this->width()/3, -this->height()/4); // this mostly centers the text in the viewport
+
+
 
 
         return;
@@ -175,6 +176,10 @@ void KisPresetLivePreviewView::slotResetViewZoom()
 {
     // go back to normal display scale and position
     zoomToBrushSize();
+
+    if(sceneImageItem) {
+       sceneImageItem->setPos(-m_canvasSize.width()/2, -m_canvasSize.height()/2 );
+    }
 }
 
 void KisPresetLivePreviewView::slotZoomToOneHundredPercent()

@@ -52,7 +52,7 @@ public:
         :model(0)
     {}
 
-    KoResourceModel *model;
+    KoResourceModel *model {0};
     QString knsrcFile;
 };
 
@@ -403,25 +403,24 @@ void DlgBundleManager::slotShareResources()
     dialog.exec();
 
     foreach (const KNSCore::EntryInternal& e, dialog.changedEntries()) {
-
         foreach(const QString &file, e.installedFiles()) {
             QFileInfo fi(file);
-            if(file.isNull() || file.isEmpty()) {
-                d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+            if (fi.exists()) {
+                d->model->importResourceFile(fi.absoluteFilePath() , false );
             }
             else {
-                qDebug() << "Failed to install resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file info does not exist";
+                qWarning() << "Failed to install resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file info does not exist";
             }
         }
 
         foreach(const QString &file, e.uninstalledFiles()) {
             QFileInfo fi(file);
-            if(file.isNull() || file.isEmpty()) {
-                d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+            if (fi.exists()) {
+                d->model->removeResourceFile(fi.absoluteFilePath());
             }
 
             else {
-                qDebug() << "Failed to Remove/Uninstall resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file does not exist";
+                qWarning() << "Failed to Remove/Uninstall resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file does not exist";
             }
         }
     }

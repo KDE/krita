@@ -47,9 +47,13 @@ public:
     static void init();
 
     /// Create an empty KoColor. It will be valid, but also black and transparent
-    KoColor() : d(s_prefab) {
+    KoColor() {
+        const KoColor * const prefab = s_prefab;
+
         // assert that KoColor::init was called and everything is set up properly.
-        KIS_ASSERT_X(d.colorSpace != nullptr, "KoColor::KoColor()", "KoColor not initialized yet.");
+        KIS_ASSERT_X(prefab != nullptr, "KoColor::KoColor()", "KoColor not initialized yet.");
+
+        *this = *prefab;
     }
 
     /// Create a null KoColor. It will be valid, but all channels will be set to 0
@@ -65,8 +69,8 @@ public:
     KoColor(const KoColor &src, const KoColorSpace * colorSpace);
 
     /// Copy constructor -- deep copies the colors.
-    KoColor(const KoColor & rhs) : d(rhs.d) {
-        assertPermanentColorspace();
+    KoColor(const KoColor & rhs) {
+        *this = rhs;
     }
 
     /**
@@ -74,12 +78,15 @@ public:
      * @param other the color we are going to copy
      * @return this color
      */
-    KoColor &operator=(const KoColor &rhs) {
+    inline KoColor &operator=(const KoColor &rhs) {
         if (&rhs == this) {
             return *this;
         }
 
-        d = rhs.d;
+        m_colorSpace = rhs.m_colorSpace;
+        m_size = rhs.m_size;
+        memcpy(m_data, rhs.m_data, m_size);
+
         assertPermanentColorspace();
 
         return *this;
@@ -88,12 +95,13 @@ public:
     bool operator==(const KoColor &other) const {
         if (*colorSpace() != *other.colorSpace())
             return false;
-        return memcmp(d.data, other.d.data, d.size) == 0;
+        Q_ASSERT(m_size == other.m_size);
+        return memcmp(m_data, other.m_data, m_size) == 0;
     }
 
     /// return the current colorSpace
     const KoColorSpace * colorSpace() const {
-        return d.colorSpace;
+        return m_colorSpace;
     }
 
     /// return the current profile
@@ -143,7 +151,7 @@ public:
      *         or to copy to a different buffer from the same color space
      */
     quint8 * data() {
-        return d.data;
+        return m_data;
     }
 
     /**
@@ -152,7 +160,7 @@ public:
      *         or to copy to a different buffer from the same color space
      */
     const quint8 * data() const {
-        return d.data;
+        return m_data;
     }
 
     /**
@@ -211,39 +219,19 @@ public:
 #endif
 
 private:
-    void assertPermanentColorspace() {
+    inline void assertPermanentColorspace() {
 #ifndef NODEBUG
-        if (d.colorSpace) {
-            // here we want to do a check on pointer, since d-colorSpace is supposed to already be a permanent one
-            Q_ASSERT(d.colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d.colorSpace));
+        if (m_colorSpace) {
+            Q_ASSERT(*m_colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(m_colorSpace));
         }
 #endif
     }
 
-    class Q_DECL_HIDDEN Private
-    {
-        public:
-        Private() : colorSpace(nullptr) {}
+    const KoColorSpace *m_colorSpace;
+    quint8 m_data[MAX_PIXEL_SIZE];
+    quint8 m_size;
 
-        Private(const Private &rhs) {
-            *this = rhs;
-        }
-
-        Private &operator=(const Private &rhs) {
-            colorSpace = rhs.colorSpace;
-            size = rhs.size;
-            memcpy(data, rhs.data, size);
-            return *this;
-        }
-
-        const KoColorSpace * colorSpace;
-        quint8 data[MAX_PIXEL_SIZE];
-        quint8 size;
-    };
-
-    Private d;
-
-    static Private s_prefab;
+    static const KoColor *s_prefab;
 };
 
 Q_DECLARE_METATYPE(KoColor)

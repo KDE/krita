@@ -83,8 +83,6 @@ void KisPresetLivePreviewView::updateStroke()
     setupAndPaintStroke();
 
 
-
-
     // crop the layer so a brush stroke won't go outside of the area
     m_layer->paintDevice()->crop(0,0, m_layer->image()->width(), m_layer->image()->height());
 
@@ -192,12 +190,12 @@ void KisPresetLivePreviewView::paintBackground()
 void KisPresetLivePreviewView::setupAndPaintStroke()
 {
     // limit the brush stroke size. larger brush strokes just don't look good and are CPU intensive
-    // we are temporarily setting the brush size, and will restore it once we are done applying the preview
-    qreal currentBrushSize = m_currentPreset->settings()->paintOpSize(); // save reference to current brush size
-    qreal previewSize = qBound(1.0, currentBrushSize, 150.0 );
-    m_currentPreset->settings()->setPaintOpSize(previewSize);
-
-    m_brushPreviewPainter->setPaintOpPreset(m_currentPreset, m_layer, m_image);
+    // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
+    // will fire off signals that make this run in an infinite loop
+    qreal previewSize = qBound(1.0, m_currentPreset->settings()->paintOpSize(), 150.0 ); // constrain current brush size to these values
+    KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
+    proxy_preset->settings()->setPaintOpSize(previewSize);
+    m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
 
 
     // we only need to change the zoom amount if we are changing the brush size
@@ -205,6 +203,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         m_currentBrushSize = m_currentPreset->settings()->paintOpSize();
         zoomToBrushSize();
     }
+
 
 
     // slope-intercept is good for mapping two values.
@@ -234,9 +233,6 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                             QPointF(m_canvasCenterPoint.x(),
                                                      m_canvasCenterPoint.y()+this->height()),
                                             m_curvePointPI2, &m_currentDistance);
-
-    m_currentPreset->settings()->setPaintOpSize(currentBrushSize); // return to normal size
-
 
 }
 

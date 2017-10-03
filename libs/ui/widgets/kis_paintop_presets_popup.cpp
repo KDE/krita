@@ -770,5 +770,5 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
 
     // update live preview area in here...
     m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
-    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->paintStroke();
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->updateStroke();
 }

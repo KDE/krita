@@ -34,7 +34,13 @@
 #include <kis_image.h>
 #include <kis_types.h>
 
-
+/**
+ * Widget for displaying a live brush preview of your
+ * selected brush. It listens for signalsetting changes
+ * that the brush preset outputs and updates the preview
+ * accordingly. This class can be added to a UI file
+ * similar to how a QGraphicsView is added
+ */
 class KisPresetLivePreviewView : public QGraphicsView
 {
     Q_OBJECT
@@ -45,34 +51,71 @@ public:
     KisPresetLivePreviewView(QWidget *parent);
     ~KisPresetLivePreviewView();
 
+    /**
+     * @brief one time setup for initialization of many variables.
+     * This live preview might be in a UI file, so make sure to
+     * call this before starting to use it
+     */
     void setup();
+
+    /**
+     * @brief set the current preset from resource manager for the live preview to use.
+     * Good to call this every stroke update in case the preset has changed
+     * @param the current preset from the resource manager
+     */
     void setCurrentPreset(KisPaintOpPresetSP preset);
-    void paintStroke();
+    void updateStroke();
 
 
 public Q_SLOTS:
+    /**
+     * @brief scales the view to fit the brush stroke and moves it back to the center position
+     */
     void slotResetViewZoom();
+
+    /**
+     * @brief sets the zoom level to full size to get a close up of larger brushes
+     */
     void slotZoomToOneHundredPercent();
 
 
 
 private:
+
+    /// internally sets the image area for brush preview
     KisImageSP m_image;
+
+    /// internally sets the layer area for brush preview
     KisLayerSP m_layer;
+
+    /// internally sets the color space for brush preview
     const KoColorSpace *m_colorSpace;
+
+    /// painter that actually paints the stroke
     KisPainter *m_brushPreviewPainter;
 
-    QGraphicsScene* m_brushPreviewScene;
-    QGraphicsPixmapItem *sceneImageItem;
-    QGraphicsTextItem * noPreviewText;
+    /// the scene that can add items like text and the brush stroke image
+    QGraphicsScene *m_brushPreviewScene;
 
-    QPen m_penSettings;
-    KisDistanceInformation m_currentDistance;
+    /// holds the preview brush stroke data
+    QGraphicsPixmapItem *m_sceneImageItem;
 
+    /// holds the 'no preview available' text object
+    QGraphicsTextItem *m_noPreviewText;
+
+    /// holds the width and height of the image of the brush preview
+    /// Probably can later add set functions to make this customizable
+    /// It is hard-coded to 1200 x 400 for right now for image size
     QRect m_canvasSize;
+
+    /// convenience variable used internally when positioning the objects
+    /// and points in the scene
     QPointF m_canvasCenterPoint;
 
-    // for constructing the stroke shape
+    /// internal variables for constructing the stroke start and end shape
+    /// there are two points that construct the "S" curve with this
+    QPen m_penSettings;
+    KisDistanceInformation m_currentDistance;
     QPointF m_startPoint;
     QPointF m_endPoint;
     KisPaintInformation m_pi1;
@@ -84,22 +127,48 @@ private:
     KisPaintInformation m_curvePointPI1;
     KisPaintInformation m_curvePointPI2;
 
+    /// internally stores the current preset.
+    /// See setCurrentPreset(KisPaintOpPresetSP preset)
+    /// for setting this externally
     KisPaintOpPresetSP m_currentPreset;
 
-    QImage temp_image;
+    /// holds the current zoom(scale) level of scene
+    float m_scaleFactor;
 
-    float scaleFactor;
+    /// internal reference for internal brush size
+    /// used to check if our brush size has changed
+    /// do zooming and other things internall if it has changed
     float m_currentBrushSize = 1.0;
 
-    // when the zooming will start and stop
-    float minBrushVal = 15.0;
-    float maxBrushVal = 275.0;
+    /// the range of brush sizes that will control zooming in/out
+    const float m_minBrushVal = 10.0;
+    const float m_maxBrushVal = 100.0;
 
-    // range of scale values
-    qreal minScale = 1.0;
-    qreal maxScale = 0.15;
+    /// range of scale values. 1.0 == 100%
+    const qreal m_minScale = 1.0;
+    const qreal m_maxScale = 0.3;
 
+    /// multiplier that is used for lengthening the brush stroke points
+    const float m_minStrokeScale = 0.4; // for smaller brush stroke
+    const float m_maxStrokeScale = 1.0; // for larger brush stroke
+
+
+    /**
+     * @brief reads the brush size and scales the view out to fit it
+     * used internally when resetting the views or changing brush sizes
+     */
     void zoomToBrushSize();
+
+    /**
+     * @brief works as both clearing the previous stroke, providing
+     * striped backgrounds for smudging brushes, and text if there is no preview
+     */
+    void paintBackground();
+
+    /**
+     * @brief creates and performs the actual stroke that goes on top of the background
+     * this is internally and should always be called after the paintBackground()
+     */
     void setupAndPaintStroke();
 
 

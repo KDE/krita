@@ -65,6 +65,10 @@ void KisSignalCompressor::start()
             m_gotSignals = true;
             if (m_mode == FIRST_ACTIVE_POSTPONE_NEXT) {
                 m_timer->start();
+            } else if (m_mode == FIRST_ACTIVE && m_timer->remainingTime() == 0) {
+                // overdue, swamped by other events
+                m_timer->stop();
+                slotTimerExpired();
             }
         }
         break;

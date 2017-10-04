@@ -387,7 +387,7 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
 
         qreal z = 1.0;
         if (channelFlip[2]==true){
-            z=0.0;
+            z=-1.0;
         }
         QVector3D normal = QVector3D((xNormalised[channelToConvert]-0.5)*2, (yNormalised[channelToConvert]-0.5)*2, z);
         normal.normalize();

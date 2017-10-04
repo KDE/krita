@@ -124,10 +124,14 @@ void KisPresetLivePreviewView::paintBackground()
     }
 
 
-    if (m_currentPreset->paintOp().id() == "colorsmudge" || m_currentPreset->paintOp().id() == "deformbrush") {
+    if (m_currentPreset->paintOp().id() == "colorsmudge" ||
+        m_currentPreset->paintOp().id() == "deformbrush" ||
+        m_currentPreset->paintOp().id() == "filter") {
 
         // easier to see deformations and smudging with alternating stripes in the background
         // paint the whole background with alternating stripes
+        // filter engine may or may not show things depending on the filter...but it is better than nothing
+
         int grayStrips = 20;
         for (int i=0; i < grayStrips; i++ ) {
 
@@ -221,6 +225,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*strokeScaleAmount),
                                    m_canvasCenterPoint.y() + (this->height()*strokeScaleAmount)));
     m_curvePointPI1.setPressure(0.0);
+
 
     m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*strokeScaleAmount),
                                    m_canvasCenterPoint.y()));

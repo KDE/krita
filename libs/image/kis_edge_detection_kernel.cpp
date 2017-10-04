@@ -24,6 +24,7 @@
 #include <QRect>
 #include <KoColorSpace.h>
 #include <kis_iterator_ng.h>
+#include <QVector3D>
 
 KisEdgeDetectionKernel::KisEdgeDetectionKernel()
 {
@@ -328,4 +329,63 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                 rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
         }
     }
+}
+
+void KisEdgeDetectionKernel::converToNormalMap(KisPaintDeviceSP device, const QRect &rect, qreal xRadius, qreal yRadius, KisEdgeDetectionKernel::FilterType type, int channelToConvert, QVector<int> channelOrder, const QBitArray &channelFlags, KoUpdater *progressUpdater)
+{
+    QPoint srcTopLeft = rect.topLeft();
+    KisPainter finalPainter(device);
+    finalPainter.setChannelFlags(channelFlags);
+    finalPainter.setProgress(progressUpdater);
+    KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
+    KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
+
+    KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
+    KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
+
+    qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
+    qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
+
+    KisConvolutionPainter horizPainterLR(x_denormalised);
+    horizPainterLR.setChannelFlags(channelFlags);
+    horizPainterLR.setProgress(progressUpdater);
+    horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
+                               srcTopLeft - QPoint(0, ceil(horizontalCenter)),
+                               srcTopLeft - QPoint(0, ceil(horizontalCenter)),
+                               rect.size() + QSize(0, 2 * ceil(horizontalCenter)), BORDER_REPEAT);
+
+
+    KisConvolutionPainter verticalPainterTB(y_denormalised);
+    verticalPainterTB.setChannelFlags(channelFlags);
+    verticalPainterTB.setProgress(progressUpdater);
+    verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,
+                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+
+    KisSequentialIterator yItterator(y_denormalised, rect);
+    KisSequentialIterator xItterator(x_denormalised, rect);
+    KisSequentialIterator finalIt(device, rect);
+    const int pixelSize = device->colorSpace()->pixelSize();
+    const int channels = device->colorSpace()->channelCount();
+    QVector<float> yNormalised(channels);
+    QVector<float> xNormalised(channels);
+    QVector<float> finalNorm(channels);
+
+    do {
+        device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
+        device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
+
+        QVector3D normal = QVector3D(xNormalised[channelToConvert], yNormalised[channelToConvert], 1.0);
+        normal.normalize();
+        finalNorm.fill(1.0);
+        finalNorm[channelOrder[0]] = normal.x();
+        finalNorm[channelOrder[1]] = normal.y();
+        finalNorm[channelOrder[2]] = normal.z();
+
+        quint8* pixel = finalIt.rawData();
+        device->colorSpace()->fromNormalisedChannelsValue(pixel, finalNorm);
+        memcpy(finalIt.rawData(), pixel, pixelSize);
+
+    } while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel());
 }

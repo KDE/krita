@@ -331,7 +331,16 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
     }
 }
 
-void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device, const QRect &rect, qreal xRadius, qreal yRadius, KisEdgeDetectionKernel::FilterType type, int channelToConvert, QVector<bool> channelOrder, const QBitArray &channelFlags, KoUpdater *progressUpdater)
+void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
+                                                const QRect &rect,
+                                                qreal xRadius,
+                                                qreal yRadius,
+                                                KisEdgeDetectionKernel::FilterType type,
+                                                int channelToConvert,
+                                                QVector<int> channelOrder,
+                                                QVector<bool> channelFlip,
+                                                const QBitArray &channelFlags,
+                                                KoUpdater *progressUpdater)
 {
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
@@ -340,8 +349,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device, const Q
     KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
     KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
 
-    KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, channelOrder[0]);
-    KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, channelOrder[1]);
+    KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, channelFlip[0]);
+    KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, channelFlip[1]);
 
     qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
     qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
@@ -376,11 +385,15 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device, const Q
         device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
         device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
 
-        QVector3D normal = QVector3D((xNormalised[channelToConvert]-0.5)*2, (yNormalised[channelToConvert]-0.5)*2, 1.0);
+        qreal z = 1.0;
+        if (channelFlip[2]==true){
+            z=0.0;
+        }
+        QVector3D normal = QVector3D((xNormalised[channelToConvert]-0.5)*2, (yNormalised[channelToConvert]-0.5)*2, z);
         normal.normalize();
         finalNorm.fill(1.0);
         for (int c = 0; c<3; c++) {
-            finalNorm[device->colorSpace()->channels().at(c)->displayPosition()] = (normal[c]/2)+0.5;
+            finalNorm[device->colorSpace()->channels().at(channelOrder[c])->displayPosition()] = (normal[channelOrder[c]]/2)+0.5;
         }
 
         quint8* pixel = finalIt.rawData();

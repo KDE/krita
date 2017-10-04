@@ -120,7 +120,8 @@ public:
                                   qreal yRadius,
                                   FilterType type,
                                   int channelToConvert,
-                                  QVector<bool> channelOrder,
+                                  QVector<int> channelOrder,
+                                  QVector<bool> channelFlip,
                                   const QBitArray &channelFlags,
                                   KoUpdater *progressUpdater);
 };

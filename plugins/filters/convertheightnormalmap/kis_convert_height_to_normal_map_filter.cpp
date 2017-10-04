@@ -76,10 +76,14 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
 
     int channelToConvert = configuration->getInt("channelToConvert", 0);
 
-    QVector<bool> channelOrder(3);
-    channelOrder[0] = false;
-    channelOrder[1] = true;
-    channelOrder[2] = false;
+    QVector<int> channelOrder(3);
+    channelOrder[0] = 0;
+    channelOrder[1] = 1;
+    channelOrder[2] = 2;
+    QVector<bool> channelFlip(3);
+    channelFlip[0] = false;
+    channelFlip[1] = true;
+    channelFlip[2] = false;
     KisEdgeDetectionKernel::convertToNormalMap(device,
                                               rect,
                                               horizontalRadius,
@@ -87,6 +91,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
                                               type,
                                               channelToConvert,
                                               channelOrder,
+                                              channelFlip,
                                               channelFlags,
                                               progressUpdater);
 }

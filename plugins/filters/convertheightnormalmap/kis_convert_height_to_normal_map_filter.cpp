@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_convert_height_to_normal_map_filter.h"
+#include "kis_wdg_convert_height_to_normal_map.h"
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
 #include <filter/kis_filter_registry.h>
@@ -42,7 +43,7 @@ KisConvertHeightToNormalMapFilter::KisConvertHeightToNormalMapFilter(): KisFilte
     setSupportsAdjustmentLayers(true);
     setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
-    setShowConfigurationWidget(false);//for now...
+    setShowConfigurationWidget(true);
 }
 
 void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
@@ -77,13 +78,35 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     int channelToConvert = configuration->getInt("channelToConvert", 0);
 
     QVector<int> channelOrder(3);
-    channelOrder[0] = 0;
-    channelOrder[1] = 1;
-    channelOrder[2] = 2;
     QVector<bool> channelFlip(3);
-    channelFlip[0] = false;
-    channelFlip[1] = true;
-    channelFlip[2] = false;
+    channelFlip.fill(false);
+
+
+    int i = config->getInt("redSwizzle", 0);
+    if (i%2==1 || i==2) {
+        channelFlip[0] = true;
+    }
+    if (i==3) {
+        channelFlip[0] = false;
+    }
+    channelOrder[device->colorSpace()->channels().at(0)->displayPosition()] = qMax(i/2,0);
+
+    i = config->getInt("greenSwizzle", 2);
+    if (i%2==1 || i==2) {
+        channelFlip[1] = true;
+    }
+    if (i==3) {
+        channelFlip[1] = false;
+    }
+    channelOrder[device->colorSpace()->channels().at(1)->displayPosition()] = qMax(i/2,0);
+    i = config->getInt("blueSwizzle", 4);
+    if (i%2==1 || i==2) {
+        channelFlip[2] = true;
+    }
+    if (i==3) {
+        channelFlip[2] = false;
+    }
+    channelOrder[device->colorSpace()->channels().at(2)->displayPosition()] = qMax(i/2,0);
     KisEdgeDetectionKernel::convertToNormalMap(device,
                                               rect,
                                               horizontalRadius,
@@ -101,11 +124,19 @@ KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::factoryConfiguration
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
-    config->setProperty("type", "prewitt");
+    config->setProperty("type", "sobol");
     config->setProperty("channelToConvert", 0);
     config->setProperty("lockAspect", true);
+    config->setProperty("redSwizzle", KisWdgConvertHeightToNormalMap::xPlus);
+    config->setProperty("greenSwizzle", KisWdgConvertHeightToNormalMap::yPlus);
+    config->setProperty("blueSwizzle", KisWdgConvertHeightToNormalMap::zPlus);
 
     return config;
+}
+
+KisConfigWidget *KisConvertHeightToNormalMapFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+{
+    return new KisWdgConvertHeightToNormalMap(parent, dev->colorSpace());
 }
 
 QRect KisConvertHeightToNormalMapFilter::neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const

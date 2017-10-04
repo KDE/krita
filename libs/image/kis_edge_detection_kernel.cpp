@@ -349,8 +349,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
     KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
 
-    KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, channelFlip[0]);
-    KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, channelFlip[1]);
+    KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, !channelFlip[1]);
+    KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, !channelFlip[0]);
 
     qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
     qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;

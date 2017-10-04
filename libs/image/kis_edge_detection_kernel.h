@@ -114,13 +114,13 @@ public:
      * @param channelFlags
      * @param progressUpdater
      */
-    static void converToNormalMap(KisPaintDeviceSP device,
+    static void convertToNormalMap(KisPaintDeviceSP device,
                                   const QRect & rect,
                                   qreal xRadius,
                                   qreal yRadius,
                                   FilterType type,
                                   int channelToConvert,
-                                  QVector<int> channelOrder,
+                                  QVector<bool> channelOrder,
                                   const QBitArray &channelFlags,
                                   KoUpdater *progressUpdater);
 };

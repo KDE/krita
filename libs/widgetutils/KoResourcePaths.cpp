@@ -459,7 +459,9 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     debugWidgetUtils << "\tresources also from aliases:" << resources.size();
 
-    QFileInfo fi(filter);
+    // if the original filter is "input/*", we only want share/input/* and share/krita/input/* here, but not
+    // share/*. therefore, use _filter here instead of filter which was split into alias and "*".
+    QFileInfo fi(_filter);
 
     QStringList prefixResources;
     prefixResources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), false);

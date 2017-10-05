@@ -24,6 +24,7 @@
 #include <QRect>
 #include <KoColorSpace.h>
 #include <kis_iterator_ng.h>
+#include <QVector3D>
 
 KisEdgeDetectionKernel::KisEdgeDetectionKernel()
 {
@@ -328,4 +329,76 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                 rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
         }
     }
+}
+
+void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
+                                                const QRect &rect,
+                                                qreal xRadius,
+                                                qreal yRadius,
+                                                KisEdgeDetectionKernel::FilterType type,
+                                                int channelToConvert,
+                                                QVector<int> channelOrder,
+                                                QVector<bool> channelFlip,
+                                                const QBitArray &channelFlags,
+                                                KoUpdater *progressUpdater)
+{
+    QPoint srcTopLeft = rect.topLeft();
+    KisPainter finalPainter(device);
+    finalPainter.setChannelFlags(channelFlags);
+    finalPainter.setProgress(progressUpdater);
+    KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
+    KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
+
+    KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, !channelFlip[1]);
+    KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, !channelFlip[0]);
+
+    qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
+    qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
+
+    KisConvolutionPainter horizPainterLR(y_denormalised);
+    horizPainterLR.setChannelFlags(channelFlags);
+    horizPainterLR.setProgress(progressUpdater);
+    horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
+                               srcTopLeft - QPoint(0, ceil(horizontalCenter)),
+                               srcTopLeft - QPoint(0, ceil(horizontalCenter)),
+                               rect.size() + QSize(0, 2 * ceil(horizontalCenter)), BORDER_REPEAT);
+
+
+    KisConvolutionPainter verticalPainterTB(x_denormalised);
+    verticalPainterTB.setChannelFlags(channelFlags);
+    verticalPainterTB.setProgress(progressUpdater);
+    verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,
+                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+
+    KisSequentialIterator yItterator(y_denormalised, rect);
+    KisSequentialIterator xItterator(x_denormalised, rect);
+    KisSequentialIterator finalIt(device, rect);
+    const int pixelSize = device->colorSpace()->pixelSize();
+    const int channels = device->colorSpace()->channelCount();
+    QVector<float> yNormalised(channels);
+    QVector<float> xNormalised(channels);
+    QVector<float> finalNorm(channels);
+
+    do {
+        device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
+        device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
+
+        qreal z = 1.0;
+        if (channelFlip[2]==true){
+            z=-1.0;
+        }
+        QVector3D normal = QVector3D((xNormalised[channelToConvert]-0.5)*2, (yNormalised[channelToConvert]-0.5)*2, z);
+        normal.normalize();
+        finalNorm.fill(1.0);
+        for (int c = 0; c<3; c++) {
+            finalNorm[device->colorSpace()->channels().at(channelOrder[c])->displayPosition()] = (normal[channelOrder[c]]/2)+0.5;
+        }
+
+        quint8* pixel = finalIt.rawData();
+        device->colorSpace()->fromNormalisedChannelsValue(pixel, finalNorm);
+        memcpy(finalIt.rawData(), pixel, pixelSize);
+
+    } while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel());
 }

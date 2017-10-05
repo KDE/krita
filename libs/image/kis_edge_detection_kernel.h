@@ -101,6 +101,29 @@ public:
                               KoUpdater *progressUpdater,
                               FilterOutput output = pythagorean,
                               bool writeToAlpha = false);
+    /**
+     * @brief converToNormalMap
+     * Conver a channel of the device to a normal map. The channel will be interpretted as a heightmap.
+     * @param device the device
+     * @param rect the rectangle to apply this to.
+     * @param xRadius the xradius
+     * @param yRadius the yradius
+     * @param type the edge detection filter.
+     * @param channelToConvert the channel to use as a grayscale.
+     * @param channelOrder the order in which the xyz coordinates ought to be written to the pixels.
+     * @param channelFlags
+     * @param progressUpdater
+     */
+    static void convertToNormalMap(KisPaintDeviceSP device,
+                                  const QRect & rect,
+                                  qreal xRadius,
+                                  qreal yRadius,
+                                  FilterType type,
+                                  int channelToConvert,
+                                  QVector<int> channelOrder,
+                                  QVector<bool> channelFlip,
+                                  const QBitArray &channelFlags,
+                                  KoUpdater *progressUpdater);
 };
 
 #endif // KIS_EDGE_DETECTION_KERNEL_H

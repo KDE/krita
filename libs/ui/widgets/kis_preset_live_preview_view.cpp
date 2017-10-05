@@ -196,11 +196,11 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // limit the brush stroke size. larger brush strokes just don't look good and are CPU intensive
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
-    qreal previewSize = qBound(1.0, m_currentPreset->settings()->paintOpSize(), 150.0 ); // constrain current brush size to these values
+    qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
+    qreal previewSize = qBound(1.0, m_currentPreset->settings()->paintOpSize(), 150.0 ); // constrain live preview brush size
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     proxy_preset->settings()->setPaintOpSize(previewSize);
     m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
-
 
     // we only need to change the zoom amount if we are changing the brush size
     if (m_currentBrushSize != m_currentPreset->settings()->paintOpSize()) {
@@ -238,6 +238,10 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                             QPointF(m_canvasCenterPoint.x(),
                                                      m_canvasCenterPoint.y()+this->height()),
                                             m_curvePointPI2, &m_currentDistance);
+
+    // even though the brush is cloned, the proxy_preset still has some connection to the original preset which will mess brush sizing
+    // we need to return brush size to normal.The normal brush sends out a lot of extra signals, so keeping the proxy for now
+    proxy_preset->settings()->setPaintOpSize(originalPresetSize);
 
 }
 

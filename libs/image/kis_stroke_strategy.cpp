@@ -19,6 +19,7 @@
 #include "kis_stroke_strategy.h"
 #include <KoCompositeOpRegistry.h>
 #include "kis_stroke_job_strategy.h"
+#include "KisStrokesQueueMutatedJobInterface.h"
 
 
 KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
@@ -31,7 +32,8 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
       m_canForgetAboutMe(false),
       m_needsExplicitCancel(false),
       m_id(id),
-      m_name(name)
+      m_name(name),
+      m_mutatedJobsInterface(0)
 {
 }
 
@@ -45,9 +47,10 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_canForgetAboutMe(rhs.m_canForgetAboutMe),
       m_needsExplicitCancel(rhs.m_needsExplicitCancel),
       m_id(rhs.m_id),
-      m_name(rhs.m_name)
+      m_name(rhs.m_name),
+      m_mutatedJobsInterface(0)
 {
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_cancelStrokeId &&
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_cancelStrokeId && !m_mutatedJobsInterface &&
                             "After the stroke has been started, no copying must happen");
 }
 
@@ -145,6 +148,21 @@ QString KisStrokeStrategy::id() const
 KUndo2MagicString KisStrokeStrategy::name() const
 {
     return m_name;
+}
+
+void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface)
+{
+    m_mutatedJobsInterface = mutatedJobsInterface;
+}
+
+void KisStrokeStrategy::addMutatedJob(KisStrokeJobData *data)
+{
+    KIS_SAFE_ASSERT_RECOVER(m_mutatedJobsInterface && m_cancelStrokeId) {
+        delete data;
+        return;
+    }
+
+    m_mutatedJobsInterface->addMutatedJob(m_cancelStrokeId, data);
 }
 
 void KisStrokeStrategy::setExclusive(bool value)

@@ -84,6 +84,29 @@ void KisStroke::addJob(KisStrokeJobData *data)
     enqueue(m_dabStrategy.data(), data);
 }
 
+void KisStroke::addMutatedJob(KisStrokeJobData *data)
+{
+    // factory methods can return null, if no action is needed
+    if (!m_dabStrategy) {
+        delete data;
+        return;
+    }
+
+    // Find first non-alien (non-suspend/non-resume) job
+    //
+    // Please note that this algorithm will stop working at the day we start
+    // adding alien jobs not to the beginning of the stroke, but to other places.
+    // Right now both suspend and resume jobs are added to the beginning of
+    // the stroke.
+
+    auto it = std::find_if(m_jobsQueue.begin(), m_jobsQueue.end(),
+        [] (KisStrokeJob *job) {
+            return job->isOwnJob();
+        });
+
+    m_jobsQueue.insert(it, new KisStrokeJob(m_dabStrategy.data(), data, worksOnLevelOfDetail(), true));
+}
+
 KisStrokeJob* KisStroke::popOneJob()
 {
     KisStrokeJob *job = dequeue();
@@ -272,7 +295,7 @@ void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
 void KisStroke::prepend(KisStrokeJobStrategy *strategy,
                         KisStrokeJobData *data,
                         int levelOfDetail,
-                        bool isCancellable)
+                        bool isOwnJob)
 {
     // factory methods can return null, if no action is needed
     if(!strategy) {
@@ -283,7 +306,7 @@ void KisStroke::prepend(KisStrokeJobStrategy *strategy,
     // LOG_MERGE_FIXME:
     Q_UNUSED(levelOfDetail);
 
-    m_jobsQueue.prepend(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), isCancellable));
+    m_jobsQueue.prepend(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), isOwnJob));
 }
 
 KisStrokeJob* KisStroke::dequeue()

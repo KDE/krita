@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,32 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_STROKES_QUEUE_TEST_H
-#define __KIS_STROKES_QUEUE_TEST_H
+#ifndef KISSTROKESQUEUEMUTATEDJOBINTERFACE_H
+#define KISSTROKESQUEUEMUTATEDJOBINTERFACE_H
 
-#include <QtTest>
+#include "kis_types.h"
 
+class KisStrokeJobData;
 
-class KisStrokesQueueTest : public QObject
+class KisStrokesQueueMutatedJobInterface
 {
-    Q_OBJECT
+public:
+    virtual ~KisStrokesQueueMutatedJobInterface();
 
-private Q_SLOTS:
-    void testSequentialJobs();
-    void testConcurrentSequentialBarrier();
-    void testExclusiveStrokes();
-    void testBarrierStrokeJobs();
-    void testStrokesOverlapping();
-    void testImmediateCancel();
-    void testOpenedStrokeCounter();
-    void testAsyncCancelWhileOpenedStroke();
-    void testStrokesLevelOfDetail();
-    void testLodUndoBase();
-    void testLodUndoBase2();
-    void testMutatedJobs();
-
-private:
-    struct LodStrokesQueueTester;
+    virtual void addMutatedJob(KisStrokeId strokeId, KisStrokeJobData *data) = 0;
 };
 
-#endif /* __KIS_STROKES_QUEUE_TEST_H */
+#endif // KISSTROKESQUEUEMUTATEDJOBINTERFACE_H

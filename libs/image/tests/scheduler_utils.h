@@ -122,13 +122,18 @@ class KisTestingStrokeJobData : public KisStrokeJobData
 {
 public:
     KisTestingStrokeJobData(Sequentiality sequentiality = SEQUENTIAL,
-                             Exclusivity exclusivity = NORMAL)
-        : KisStrokeJobData(sequentiality, exclusivity)
+                            Exclusivity exclusivity = NORMAL,
+                            bool addMutatedJobs = false,
+                            const QString &customSuffix = QString())
+        : KisStrokeJobData(sequentiality, exclusivity),
+          m_addMutatedJobs(addMutatedJobs),
+          m_customSuffix(customSuffix)
     {
     }
 
     KisTestingStrokeJobData(const KisTestingStrokeJobData &rhs)
-        : KisStrokeJobData(rhs)
+        : KisStrokeJobData(rhs),
+          m_addMutatedJobs(rhs.m_addMutatedJobs)
     {
     }
 
@@ -136,7 +141,50 @@ public:
         Q_UNUSED(levelOfDetail);
         return new KisTestingStrokeJobData(*this);
     }
+
+    bool m_addMutatedJobs = false;
+    bool m_isMutated = false;
+    QString m_customSuffix;
 };
+
+class KisMutatableDabStrategy : public KisNoopDabStrategy
+{
+public:
+    KisMutatableDabStrategy(const QString &name, KisStrokeStrategy *parentStrokeStrategy)
+        : KisNoopDabStrategy(name),
+          m_parentStrokeStrategy(parentStrokeStrategy)
+    {
+    }
+
+    void run(KisStrokeJobData *data) override {
+        KisTestingStrokeJobData *td = dynamic_cast<KisTestingStrokeJobData*>(data);
+
+        if (td && td->m_isMutated) {
+            globalExecutedDabs << QString("%1_mutated").arg(calcJobName(data));
+        } else if (td && td->m_addMutatedJobs) {
+            globalExecutedDabs << calcJobName(data);
+
+            for (int i = 0; i < 3; i++) {
+                KisTestingStrokeJobData *newData =
+                    new KisTestingStrokeJobData(td->sequentiality(), td->exclusivity(), false);
+                newData->m_isMutated = true;
+                m_parentStrokeStrategy->addMutatedJob(newData);
+            }
+        } else {
+            globalExecutedDabs << calcJobName(data);
+        }
+    }
+
+private:
+    QString calcJobName(KisStrokeJobData *data) {
+        KisTestingStrokeJobData *td = dynamic_cast<KisTestingStrokeJobData*>(data);
+        return td->m_customSuffix.isEmpty() ? name() : QString("%1_%2").arg(name()).arg(td->m_customSuffix);
+    }
+
+private:
+    KisStrokeStrategy *m_parentStrokeStrategy = 0;
+};
+
 
 class KisTestingStrokeStrategy : public KisStrokeStrategy
 {
@@ -182,7 +230,7 @@ public:
     }
 
     KisStrokeJobStrategy* createDabStrategy() override {
-        return new KisNoopDabStrategy(m_prefix + "dab");
+        return new KisMutatableDabStrategy(m_prefix + "dab", this);
     }
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override {

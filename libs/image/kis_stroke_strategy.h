@@ -26,6 +26,7 @@
 
 class KisStrokeJobStrategy;
 class KisStrokeJobData;
+class KisStrokesQueueMutatedJobInterface;
 
 class KRITAIMAGE_EXPORT KisStrokeStrategy
 {
@@ -91,7 +92,12 @@ public:
      */
     void setCancelStrokeId(KisStrokeId id) { m_cancelStrokeId = id; }
 
+    void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface);
+
 protected:
+    // testing surrogate class
+    friend class KisMutatableDabStrategy;
+
     /**
      * The cancel job may populate the stroke with some new jobs
      * for cancelling. To achieve this it needs the stroke id.
@@ -101,6 +107,27 @@ protected:
      * by the user and the sequence of jobs will be broken
      */
     KisStrokeId cancelStrokeId() { return m_cancelStrokeId; }
+
+    /**
+     * This function is supposed to be called by internal asynchronous
+     * jobs. It allows adding subtasks that may be executed concurrently.
+     *
+     * Requirements:
+     *   * must be called *only* from within the context of the strokes
+     *     worker thread during exectution one of its jobs
+     *
+     * Guarantees:
+     *   * the added job is guaranteed to be executed in some time after
+     *     the currently executed job, *before* the next SEQUENTIAL or
+     *     BARRIER job
+     *   * if the currently executed job is CUNCURRENTthe mutated job *may*
+     *     start execution right after adding to the queue without waiting for
+     *     its parent to complete. Though this behavior is *not* guaranteed,
+     *     because addMutatedJob does not initiate processQueues(), because
+     *     it may lead to a deadlock.
+     */
+    void addMutatedJob(KisStrokeJobData *data);
+
 
     // you are not supposed to change these parameters
     // after the KisStroke object has been created
@@ -134,6 +161,7 @@ private:
     KUndo2MagicString m_name;
 
     KisStrokeId m_cancelStrokeId;
+    KisStrokesQueueMutatedJobInterface *m_mutatedJobsInterface;
 };
 
 #endif /* __KIS_STROKE_STRATEGY_H */

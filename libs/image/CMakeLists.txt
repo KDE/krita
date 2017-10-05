@@ -171,6 +171,7 @@ set(kritaimage_LIB_SRCS
    kis_stroke_strategy.cpp
    kis_stroke.cpp
    kis_strokes_queue.cpp
+   KisStrokesQueueMutatedJobInterface.cpp
    kis_simple_update_queue.cpp
    kis_update_scheduler.cpp
    kis_queues_progress_updater.cpp

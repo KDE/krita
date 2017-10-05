@@ -46,6 +46,7 @@ public:
     ~KisStroke();
 
     void addJob(KisStrokeJobData *data);
+    void addMutatedJob(KisStrokeJobData *data);
 
     KUndo2MagicString name() const;
     bool hasJobs() const;
@@ -87,7 +88,7 @@ private:
     void prepend(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data,
                  int levelOfDetail,
-                 bool isCancellable);
+                 bool isOwnJob);
 
     KisStrokeJob* dequeue();
 

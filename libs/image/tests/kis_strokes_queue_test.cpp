@@ -456,6 +456,18 @@ struct KisStrokesQueueTest::LodStrokesQueueTester {
         QCOMPARE(globalExecutedDabs.size(), 1);
         globalExecutedDabs.clear();
     }
+
+    void checkExecutedJobs(const QStringList &list) {
+        realContext.waitForDone();
+
+        QCOMPARE(globalExecutedDabs, list);
+        globalExecutedDabs.clear();
+    }
+
+    void checkNothingExecuted() {
+        realContext.waitForDone();
+        QVERIFY(globalExecutedDabs.isEmpty());
+    }
 };
 
 
@@ -651,6 +663,47 @@ void KisStrokesQueueTest::testLodUndoBase2()
 
     t.processQueue();
     t.checkOnlyExecutedJob("resu_u_init");
+}
+
+void KisStrokesQueueTest::testMutatedJobs()
+{
+    LodStrokesQueueTester t(true);
+    KisStrokesQueue &queue = t.queue;
+
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true, false, true));
+
+    queue.addJob(id1,
+                 new KisTestingStrokeJobData(
+                     KisStrokeJobData::CONCURRENT,
+                     KisStrokeJobData::NORMAL,
+                     true, "1"));
+
+    queue.addJob(id1,
+                 new KisTestingStrokeJobData(
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::NORMAL,
+                     false, "2"));
+
+    queue.endStroke(id1);
+
+    t.processQueue();
+
+    t.checkOnlyExecutedJob("str1_dab_1");
+
+    t.processQueue();
+
+    QStringList refList;
+    refList << "str1_dab_mutated" << "str1_dab_mutated";
+    t.checkExecutedJobs(refList);
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("str1_dab_mutated");
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("str1_dab_2");
+
+    t.processQueue();
+    t.checkNothingExecuted();
 }
 
 

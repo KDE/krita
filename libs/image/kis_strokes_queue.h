@@ -26,7 +26,7 @@
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_strategy_factory.h"
 #include "kis_strokes_queue_undo_result.h"
-
+#include "KisStrokesQueueMutatedJobInterface.h"
 
 
 class KisUpdaterContext;
@@ -36,7 +36,7 @@ class KisStrokeJobData;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITAIMAGE_EXPORT KisStrokesQueue
+class KRITAIMAGE_EXPORT KisStrokesQueue : public KisStrokesQueueMutatedJobInterface
 {
 public:
     KisStrokesQueue();
@@ -78,6 +78,9 @@ public:
     void notifyUFOChangedImage();
 
     void debugDumpAllStrokes();
+
+    // interface for KisStrokeStrategy only!
+    void addMutatedJob(KisStrokeId id, KisStrokeJobData *data) final;
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,

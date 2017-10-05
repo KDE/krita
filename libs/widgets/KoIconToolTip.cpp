@@ -25,6 +25,7 @@
 #include <QUrl>
 
 #include <KoResourceModel.h>
+#include <klocalizedstring.h>
 
 // #include <WidgetsDebug.h>
 
@@ -45,12 +46,23 @@ QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 
     QString name = index.data( Qt::DisplayRole ).toString();
 
-    const QString image = QString( "<table align=\"center\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>" );
-    const QString body = QString( "<h3 align=\"center\">%1</h3>%2" ).arg( name ).arg(image);
+    QString tags;
+    QString tagsData = index.data( KoResourceModel::TagsRole ).toString();
+    if (tagsData.length() > 0) {
+        const QString list = QString( "<ul style=\"list-style-type: none; margin: 0px;\">%1</ul> ").arg(tagsData);
+        tags = QString("<p><table><tr><td>%1:</td><td>%2</td></tr></table></p>").arg(i18n("Tags"), list);
+    }
+
+    const QString image = QString( "<center><img src=\"data:thumbnail\"></center>");
+    const QString body = QString( "<h3 align=\"center\">%1</h3>%2%3" ).arg( name, image, tags );
     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
 
     doc->setHtml( html );
-    doc->setTextWidth( qMin( doc->size().width(), qreal(500.0) ) );
+
+    const int margin = 16;
+    doc->setTextWidth( qMin( doc->size().width() + 2 * margin, qreal(500.0) ) );
+    doc->setDocumentMargin( margin );
+    doc->setUseDesignMetrics( true );
 
     return doc;
 }

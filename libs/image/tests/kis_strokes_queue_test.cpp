@@ -466,6 +466,11 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
+
+    // process sync-lodn-planes stroke
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
     KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("lod_", false, true));
     queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id2);
@@ -557,6 +562,11 @@ void KisStrokesQueueTest::testLodUndoBase()
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
+
+    // process sync-lodn-planes stroke
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
     KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id1);

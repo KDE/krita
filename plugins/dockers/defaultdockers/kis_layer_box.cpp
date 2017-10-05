@@ -91,6 +91,42 @@
 
 #include "ui_wdglayerbox.h"
 
+#include <QProxyStyle>
+#include <QPainter>
+
+class KisLayerBoxStyle : public QProxyStyle
+{
+public:
+    KisLayerBoxStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
+                       QPainter *painter, const QWidget *widget) const
+    {
+        if (element == QStyle::PE_IndicatorItemViewItemDrop)
+        {
+            QColor color(widget->palette().color(QPalette::Highlight).lighter());
+
+            if (option->rect.height() == 0) {
+                QBrush brush(color);
+
+                QRect r(option->rect);
+                r.setTop(r.top() - 2);
+                r.setBottom(r.bottom() + 2);
+
+                painter->fillRect(r, brush);
+            } else {
+                color.setAlpha(200);
+                QBrush brush(color);
+                painter->fillRect(option->rect, brush);
+            }
+        }
+        else
+        {
+            QProxyStyle::drawPrimitive(element, option, painter, widget);
+        }
+    }
+};
+
 inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
 {
     if (!view || !button) return;
@@ -124,6 +160,8 @@ KisLayerBox::KisLayerBox()
     m_opacityDelayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
+
+    m_wdgLayerBox->listLayers->setStyle(new KisLayerBoxStyle(m_wdgLayerBox->listLayers->style()));
 
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),

@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
@@ -22,7 +23,7 @@
 #include "kis_paintop_settings.h"
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
-{   
+{
 
 }
 
@@ -107,7 +108,7 @@ void KisPresetLivePreviewView::updateStroke()
 }
 
 void KisPresetLivePreviewView::slotResetViewZoom()
-{    
+{
     zoomToBrushSize();
 }
 
@@ -209,13 +210,6 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     proxy_preset->settings()->setPaintOpSize(previewSize);
     m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
 
-    // we only need to change the zoom amount if we are changing the brush size
-    if (m_currentBrushSize != m_currentPreset->settings()->paintOpSize()) {
-        m_currentBrushSize = m_currentPreset->settings()->paintOpSize();
-        zoomToBrushSize();
-    }
-
-
 
     // slope-intercept is good for mapping two values.
     // find the slope of the line (slope-intercept form)
@@ -226,25 +220,66 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     strokeScaleAmount = qBound(m_minStrokeScale, strokeScaleAmount, m_maxStrokeScale);
 
 
+
+
+    // we only need to change the zoom amount if we are changing the brush size
+    if (m_currentBrushSize != m_currentPreset->settings()->paintOpSize()) {
+        m_currentBrushSize = m_currentPreset->settings()->paintOpSize();
+
+        zoomToBrushSize();
+
+
+    }
+
+
+
     // points for drawing an S curve
     // we are going to paint the stroke right in the middle of the canvas to make sure
     // everything is captured for big brush strokes
-    m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*strokeScaleAmount),
-                                   m_canvasCenterPoint.y() + (this->height()*strokeScaleAmount)));
-    m_curvePointPI1.setPressure(0.0);
+    if (m_currentPreset->paintOp().id() == "sketchbrush") {
+
+        slotZoomToOneHundredPercent(); // sketch brush is always scaled at 100%
+
+        KisPaintInformation pointOne;
+        pointOne.setPressure(0.0);
+        pointOne.setPos(QPointF(m_canvasCenterPoint.x() - (this->width() * 0.4),
+                                m_canvasCenterPoint.y() - (this->height()*0.2) ));
+
+        KisPaintInformation pointTwo;
+        pointTwo.setPressure(1.0);
+        pointTwo.setPos(QPointF(m_canvasCenterPoint.x() + (this->width() * 0.4),
+                                m_canvasCenterPoint.y() + (this->height()*0.2) ));
 
 
-    m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*strokeScaleAmount),
-                                   m_canvasCenterPoint.y()));
+        m_brushPreviewPainter->paintBezierCurve(pointOne,
+                                                QPointF(m_canvasCenterPoint.x() + this->width(),
+                                                        m_canvasCenterPoint.y() - (this->height()*0.2) ),
+                                                QPointF(m_canvasCenterPoint.x() - this->width(),
+                                                         m_canvasCenterPoint.y() + (this->height()*0.2) ),
+                                                pointTwo, &m_currentDistance);
 
-    m_curvePointPI2.setPressure(1.0);
 
-    m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
-                                            QPointF(m_canvasCenterPoint.x(),
-                                                    m_canvasCenterPoint.y()-this->height()),
-                                            QPointF(m_canvasCenterPoint.x(),
-                                                     m_canvasCenterPoint.y()+this->height()),
-                                            m_curvePointPI2, &m_currentDistance);
+    } else {
+
+        m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*strokeScaleAmount),
+                                       m_canvasCenterPoint.y() + (this->height()*strokeScaleAmount)));
+        m_curvePointPI1.setPressure(0.0);
+
+
+        m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*strokeScaleAmount),
+                                       m_canvasCenterPoint.y()));
+
+        m_curvePointPI2.setPressure(1.0);
+
+        m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
+                                                QPointF(m_canvasCenterPoint.x(),
+                                                        m_canvasCenterPoint.y()-this->height()),
+                                                QPointF(m_canvasCenterPoint.x(),
+                                                         m_canvasCenterPoint.y()+this->height()),
+                                                m_curvePointPI2, &m_currentDistance);
+    }
+
+
 
     // even though the brush is cloned, the proxy_preset still has some connection to the original preset which will mess brush sizing
     // we need to return brush size to normal.The normal brush sends out a lot of extra signals, so keeping the proxy for now

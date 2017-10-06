@@ -101,7 +101,8 @@ public:
         globalExecutedDabs << m_name;
     }
 
-    QString name() {
+    virtual QString name(KisStrokeJobData *data) const {
+        Q_UNUSED(data);
         return m_name;
     }
 
@@ -160,9 +161,9 @@ public:
         KisTestingStrokeJobData *td = dynamic_cast<KisTestingStrokeJobData*>(data);
 
         if (td && td->m_isMutated) {
-            globalExecutedDabs << QString("%1_mutated").arg(calcJobName(data));
+            globalExecutedDabs << QString("%1_mutated").arg(name(data));
         } else if (td && td->m_addMutatedJobs) {
-            globalExecutedDabs << calcJobName(data);
+            globalExecutedDabs << name(data);
 
             for (int i = 0; i < 3; i++) {
                 KisTestingStrokeJobData *newData =
@@ -171,14 +172,15 @@ public:
                 m_parentStrokeStrategy->addMutatedJob(newData);
             }
         } else {
-            globalExecutedDabs << calcJobName(data);
+            globalExecutedDabs << name(data);
         }
     }
 
-private:
-    QString calcJobName(KisStrokeJobData *data) {
+    virtual QString name(KisStrokeJobData *data) const {
+        const QString baseName = KisNoopDabStrategy::name(data);
+
         KisTestingStrokeJobData *td = dynamic_cast<KisTestingStrokeJobData*>(data);
-        return td->m_customSuffix.isEmpty() ? name() : QString("%1_%2").arg(name()).arg(td->m_customSuffix);
+        return td->m_customSuffix.isEmpty() ? baseName : QString("%1_%2").arg(baseName).arg(td->m_customSuffix);
     }
 
 private:
@@ -262,9 +264,9 @@ private:
 inline QString getJobName(KisStrokeJob *job) {
     KisNoopDabStrategy *pointer =
         dynamic_cast<KisNoopDabStrategy*>(job->testingGetDabStrategy());
-    Q_ASSERT(pointer);
+    KIS_ASSERT(pointer);
 
-    return pointer->name();
+    return pointer->name(job->testingGetDabData());
 }
 
 inline int cancelSeqNo(KisStrokeJob *job) {

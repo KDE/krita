@@ -27,7 +27,6 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, Type type, int levelOfDe
       m_strokeEnded(false),
       m_strokeSuspended(false),
       m_isCancelled(false),
-      m_prevJobSequential(false),
       m_worksOnLevelOfDetail(levelOfDetail),
       m_type(type)
 {
@@ -112,8 +111,6 @@ KisStrokeJob* KisStroke::popOneJob()
     KisStrokeJob *job = dequeue();
 
     if(job) {
-        m_prevJobSequential = job->isSequential() || job->isBarrier();
-
         m_strokeInitialized = true;
         m_strokeSuspended = false;
     }
@@ -263,21 +260,10 @@ bool KisStroke::canForgetAboutMe() const
     return m_strokeStrategy->canForgetAboutMe();
 }
 
-bool KisStroke::prevJobSequential() const
-{
-    return m_prevJobSequential;
-}
-
-bool KisStroke::nextJobSequential() const
+KisStrokeJobData::Sequentiality KisStroke::nextJobSequentiality() const
 {
     return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->isSequential() : false;
-}
-
-bool KisStroke::nextJobBarrier() const
-{
-    return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->isBarrier() : false;
+        m_jobsQueue.head()->sequentiality() : KisStrokeJobData::SEQUENTIAL;
 }
 
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,

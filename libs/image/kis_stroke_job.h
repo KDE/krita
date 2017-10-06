@@ -44,6 +44,10 @@ public:
         m_dabStrategy->run(m_dabData);
     }
 
+    KisStrokeJobData::Sequentiality sequentiality() const {
+        return m_dabData ? m_dabData->sequentiality() : KisStrokeJobData::SEQUENTIAL;
+    }
+
     bool isSequential() const {
         // Default value is 'SEQUENTIAL'
         return m_dabData ? m_dabData->isSequential() : true;

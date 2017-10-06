@@ -61,6 +61,35 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
     }
 }
 
+KisUpdaterContextSnapshotEx KisUpdaterContext::getContextSnapshotEx() const
+{
+    KisUpdaterContextSnapshotEx state = ContextEmpty;
+
+    Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
+        if (item->type() == KisUpdateJobItem::MERGE ||
+            item->type() == KisUpdateJobItem::SPONTANEOUS) {
+            state |= HasMergeJob;
+        } else if(item->type() == KisUpdateJobItem::STROKE) {
+            switch (item->strokeJobSequentiality()) {
+            case KisStrokeJobData::SEQUENTIAL:
+                state |= HasSequentialJob;
+                break;
+            case KisStrokeJobData::CONCURRENT:
+                state |= HasConcurrentJob;
+                break;
+            case KisStrokeJobData::BARRIER:
+                state |= HasBarrierJob;
+                break;
+            case KisStrokeJobData::UNIQUELY_CONCURRENT:
+                state |= HasUniquelyConcurrentJob;
+                break;
+            }
+        }
+    }
+
+    return state;
+}
+
 int KisUpdaterContext::currentLevelOfDetail() const
 {
     return m_lodCounter.readLod();

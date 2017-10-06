@@ -82,8 +82,6 @@ public:
             } else {
                 Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
                 m_runnableJob->run();
-                delete m_runnableJob;
-                m_runnableJob = 0;
             }
 
             setDone();
@@ -121,6 +119,7 @@ public:
     inline void setStrokeJob(KisStrokeJob *strokeJob) {
         m_type = STROKE;
         m_runnableJob = strokeJob;
+        m_strokeJobSequentiality = strokeJob->sequentiality();
 
         m_exclusive = strokeJob->isExclusive();
         m_walker = 0;
@@ -138,6 +137,7 @@ public:
 
     inline void setDone() {
         m_walker = 0;
+        delete m_runnableJob;
         m_runnableJob = 0;
         m_type = EMPTY;
     }
@@ -160,6 +160,10 @@ public:
 
     inline bool hasThreadAttached() const {
         return m_isExecuting;
+    }
+
+    inline KisStrokeJobData::Sequentiality strokeJobSequentiality() const {
+        return m_strokeJobSequentiality;
     }
 
 Q_SIGNALS:
@@ -204,6 +208,7 @@ private:
     bool m_exclusive;
 
     volatile Type m_type;
+    volatile KisStrokeJobData::Sequentiality m_strokeJobSequentiality;
 
     /**
      * Runnable jobs part

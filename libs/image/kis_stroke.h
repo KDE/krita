@@ -70,10 +70,7 @@ public:
     int worksOnLevelOfDetail() const;
     bool canForgetAboutMe() const;
 
-    bool prevJobSequential() const;
-    bool nextJobSequential() const;
-
-    bool nextJobBarrier() const;
+    KisStrokeJobData::Sequentiality nextJobSequentiality() const;
 
     void setLodBuddy(KisStrokeSP buddy);
     KisStrokeSP lodBuddy() const;
@@ -118,7 +115,6 @@ private:
     bool m_strokeEnded;
     bool m_strokeSuspended;
     bool m_isCancelled; // cancelled strokes are always 'ended' as well
-    bool m_prevJobSequential;
 
     int m_worksOnLevelOfDetail;
     Type m_type;

@@ -681,17 +681,17 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
     if(m_d->strokesQueue.isEmpty()) return false;
     bool result = false;
 
-    qint32 numMergeJobs;
-    qint32 numStrokeJobs;
-    updaterContext.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+    const int levelOfDetail = updaterContext.currentLevelOfDetail();
 
-    int levelOfDetail = updaterContext.currentLevelOfDetail();
+    const KisUpdaterContextSnapshotEx snapshot = updaterContext.getContextSnapshotEx();
 
-    if(checkStrokeState(numStrokeJobs, levelOfDetail) &&
-       checkExclusiveProperty(numMergeJobs, numStrokeJobs) &&
-       checkSequentialProperty(numMergeJobs, numStrokeJobs) &&
-       checkBarrierProperty(numMergeJobs, numStrokeJobs,
-                            externalJobsPending)) {
+    const bool hasStrokeJobs = !(snapshot == ContextEmpty ||
+                                 snapshot == HasMergeJob);
+    const bool hasMergeJobs = snapshot & HasMergeJob;
+
+    if(checkStrokeState(hasStrokeJobs, levelOfDetail) &&
+       checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
+       checkSequentialProperty(snapshot, externalJobsPending)) {
 
         KisStrokeSP stroke = m_d->strokesQueue.head();
         updaterContext.addStrokeJob(stroke->popOneJob());
@@ -768,36 +768,51 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
     return result;
 }
 
-bool KisStrokesQueue::checkExclusiveProperty(qint32 numMergeJobs,
-                                             qint32 numStrokeJobs)
+bool KisStrokesQueue::checkExclusiveProperty(bool hasMergeJobs,
+                                             bool hasStrokeJobs)
 {
+    Q_UNUSED(hasStrokeJobs);
+
     if(!m_d->strokesQueue.head()->isExclusive()) return true;
-    Q_UNUSED(numMergeJobs);
-    Q_UNUSED(numStrokeJobs);
-    Q_ASSERT(!(numMergeJobs && numStrokeJobs));
-    return numMergeJobs == 0;
+    return hasMergeJobs == 0;
 }
 
-bool KisStrokesQueue::checkSequentialProperty(qint32 numMergeJobs,
-                                              qint32 numStrokeJobs)
-{
-    Q_UNUSED(numMergeJobs);
-
-    KisStrokeSP stroke = m_d->strokesQueue.head();
-    if(!stroke->prevJobSequential() && !stroke->nextJobSequential()) return true;
-
-    Q_ASSERT(!stroke->prevJobSequential() || numStrokeJobs <= 1);
-    return numStrokeJobs == 0;
-}
-
-bool KisStrokesQueue::checkBarrierProperty(qint32 numMergeJobs,
-                                           qint32 numStrokeJobs,
-                                           bool externalJobsPending)
+bool KisStrokesQueue::checkSequentialProperty(KisUpdaterContextSnapshotEx snapshot,
+                                              bool externalJobsPending)
 {
     KisStrokeSP stroke = m_d->strokesQueue.head();
-    if(!stroke->nextJobBarrier()) return true;
 
-    return !numMergeJobs && !numStrokeJobs && !externalJobsPending;
+    if (snapshot & HasSequentialJob ||
+        snapshot & HasBarrierJob) {
+        return false;
+    }
+
+    KisStrokeJobData::Sequentiality nextSequentiality =
+        stroke->nextJobSequentiality();
+
+    if (nextSequentiality == KisStrokeJobData::UNIQUELY_CONCURRENT &&
+        snapshot & HasUniquelyConcurrentJob) {
+
+        return false;
+    }
+
+    if (nextSequentiality == KisStrokeJobData::SEQUENTIAL &&
+        (snapshot & HasUniquelyConcurrentJob ||
+         snapshot & HasConcurrentJob)) {
+
+        return false;
+    }
+
+    if (nextSequentiality == KisStrokeJobData::BARRIER &&
+        (snapshot & HasUniquelyConcurrentJob ||
+         snapshot & HasConcurrentJob ||
+         snapshot & HasMergeJob ||
+         externalJobsPending)) {
+
+        return false;
+    }
+
+    return true;
 }
 
 bool KisStrokesQueue::checkLevelOfDetailProperty(int runningLevelOfDetail)

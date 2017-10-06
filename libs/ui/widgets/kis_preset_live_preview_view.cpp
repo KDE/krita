@@ -75,8 +75,11 @@ void KisPresetLivePreviewView::updateStroke()
 {
     paintBackground();
 
-    // do not paint a stroke if we are either of these two engines
-    if (m_currentPreset->paintOp().id() == "roundmarker" || m_currentPreset->paintOp().id() == "experimentbrush") {
+    // do not paint a stroke if we are any of these engines (they have some issue currently)
+    if (m_currentPreset->paintOp().id() == "roundmarker" ||
+        m_currentPreset->paintOp().id() == "experimentbrush" ||
+        m_currentPreset->paintOp().id() == "duplicate") {
+
         return;
     }
 
@@ -157,10 +160,14 @@ void KisPresetLivePreviewView::paintBackground()
         m_brushPreviewPainter->setPaintColor(KoColor(Qt::white, m_colorSpace));
 
     }
-    else if (m_currentPreset->paintOp().id() == "roundmarker" || m_currentPreset->paintOp().id() == "experimentbrush"){
+    else if (m_currentPreset->paintOp().id() == "roundmarker" ||
+             m_currentPreset->paintOp().id() == "experimentbrush" ||
+             m_currentPreset->paintOp().id() == "duplicate" ) {
+
         // cases where we will not show a preview for now
         // roundbrush (quick) -- this isn't showing anything, disable showing preview
         // experimentbrush -- this creates artifacts that carry over to other previews and messes up their display
+        // duplicate (clone) brush doesn't have a preview as it doesn't show anything)
 
         if(m_sceneImageItem) {
             this->scene()->removeItem(m_sceneImageItem);

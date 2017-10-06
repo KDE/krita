@@ -193,9 +193,6 @@ private:
     }
 
     inline void testingSetDone() {
-        if(m_type == STROKE) {
-            delete m_runnableJob;
-        }
         setDone();
     }
 

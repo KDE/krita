@@ -180,7 +180,7 @@ public:
         const QString baseName = KisNoopDabStrategy::name(data);
 
         KisTestingStrokeJobData *td = dynamic_cast<KisTestingStrokeJobData*>(data);
-        return td->m_customSuffix.isEmpty() ? baseName : QString("%1_%2").arg(baseName).arg(td->m_customSuffix);
+        return !td || td->m_customSuffix.isEmpty() ? baseName : QString("%1_%2").arg(baseName).arg(td->m_customSuffix);
     }
 
 private:

@@ -83,11 +83,11 @@ void KisStroke::addJob(KisStrokeJobData *data)
     enqueue(m_dabStrategy.data(), data);
 }
 
-void KisStroke::addMutatedJob(KisStrokeJobData *data)
+void KisStroke::addMutatedJobs(const QVector<KisStrokeJobData *> list)
 {
     // factory methods can return null, if no action is needed
     if (!m_dabStrategy) {
-        delete data;
+        qDeleteAll(list);
         return;
     }
 
@@ -103,7 +103,11 @@ void KisStroke::addMutatedJob(KisStrokeJobData *data)
             return job->isOwnJob();
         });
 
-    m_jobsQueue.insert(it, new KisStrokeJob(m_dabStrategy.data(), data, worksOnLevelOfDetail(), true));
+
+    Q_FOREACH (KisStrokeJobData *data, list) {
+        it = m_jobsQueue.insert(it, new KisStrokeJob(m_dabStrategy.data(), data, worksOnLevelOfDetail(), true));
+        ++it;
+    }
 }
 
 KisStrokeJob* KisStroke::popOneJob()

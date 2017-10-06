@@ -24,6 +24,7 @@
 #include "kundo2magicstring.h"
 #include "kritaimage_export.h"
 
+
 class KisStrokeJobStrategy;
 class KisStrokeJobData;
 class KisStrokesQueueMutatedJobInterface;
@@ -125,6 +126,11 @@ protected:
      *     its parent to complete. Though this behavior is *not* guaranteed,
      *     because addMutatedJob does not initiate processQueues(), because
      *     it may lead to a deadlock.
+     */
+    void addMutatedJobs(const QVector<KisStrokeJobData*> list);
+
+    /**
+     * Convenience override for addMutatedJobs()
      */
     void addMutatedJob(KisStrokeJobData *data);
 

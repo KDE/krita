@@ -28,7 +28,7 @@ class KisStrokesQueueMutatedJobInterface
 public:
     virtual ~KisStrokesQueueMutatedJobInterface();
 
-    virtual void addMutatedJob(KisStrokeId strokeId, KisStrokeJobData *data) = 0;
+    virtual void addMutatedJobs(KisStrokeId strokeId, const QVector<KisStrokeJobData*> list) = 0;
 };
 
 #endif // KISSTROKESQUEUEMUTATEDJOBINTERFACE_H

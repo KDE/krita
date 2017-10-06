@@ -81,7 +81,7 @@ public:
     void debugDumpAllStrokes();
 
     // interface for KisStrokeStrategy only!
-    void addMutatedJob(KisStrokeId id, KisStrokeJobData *data) final;
+    void addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobData*> list) final;
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,

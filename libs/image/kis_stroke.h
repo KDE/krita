@@ -46,7 +46,7 @@ public:
     ~KisStroke();
 
     void addJob(KisStrokeJobData *data);
-    void addMutatedJob(KisStrokeJobData *data);
+    void addMutatedJobs(const QVector<KisStrokeJobData *> list);
 
     KUndo2MagicString name() const;
     bool hasJobs() const;

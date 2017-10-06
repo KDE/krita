@@ -357,14 +357,14 @@ void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
     stroke->addJob(data);
 }
 
-void KisStrokesQueue::addMutatedJob(KisStrokeId id, KisStrokeJobData *data)
+void KisStrokesQueue::addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobData *> list)
 {
     QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
     Q_ASSERT(stroke);
 
-    stroke->addMutatedJob(data);
+    stroke->addMutatedJobs(list);
 }
 
 void KisStrokesQueue::endStroke(KisStrokeId id)

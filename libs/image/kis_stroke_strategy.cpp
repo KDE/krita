@@ -155,14 +155,19 @@ void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterfa
     m_mutatedJobsInterface = mutatedJobsInterface;
 }
 
-void KisStrokeStrategy::addMutatedJob(KisStrokeJobData *data)
+void KisStrokeStrategy::addMutatedJobs(const QVector<KisStrokeJobData *> list)
 {
     KIS_SAFE_ASSERT_RECOVER(m_mutatedJobsInterface && m_cancelStrokeId) {
-        delete data;
+        qDeleteAll(list);
         return;
     }
 
-    m_mutatedJobsInterface->addMutatedJob(m_cancelStrokeId, data);
+    m_mutatedJobsInterface->addMutatedJobs(m_cancelStrokeId, list);
+}
+
+void KisStrokeStrategy::addMutatedJob(KisStrokeJobData *data)
+{
+    addMutatedJobs({data});
 }
 
 void KisStrokeStrategy::setExclusive(bool value)

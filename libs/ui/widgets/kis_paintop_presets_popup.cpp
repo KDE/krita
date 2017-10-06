@@ -769,6 +769,9 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
 
 
     // update live preview area in here...
-    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
-    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->updateStroke();
+    // don't update the live preview if the widget is not visible.
+    if (m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->isVisible()) {
+        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
+        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->updateStroke();
+    }
 }

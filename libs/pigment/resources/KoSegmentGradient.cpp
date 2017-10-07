@@ -284,11 +284,13 @@ void KoSegmentGradient::toXML(QDomDocument &doc, QDomElement &gradientElt) const
         segmentElt.setAttribute("start-offset", segment->startOffset());
         const KoColor startColor = segment->startColor();
         segmentElt.setAttribute("start-bitdepth", startColor.colorSpace()->colorDepthId().id());
+        segmentElt.setAttribute("start-alpha", startColor.opacityF());
         startColor.toXML(doc, start);
         segmentElt.setAttribute("middle-offset", segment->middleOffset());
         segmentElt.setAttribute("end-offset", segment->endOffset());
         const KoColor endColor = segment->endColor();
         segmentElt.setAttribute("end-bitdepth", endColor.colorSpace()->colorDepthId().id());
+        segmentElt.setAttribute("end-alpha", endColor.opacityF());
         endColor.toXML(doc, end);
         segmentElt.setAttribute("interpolation", segment->interpolation());
         segmentElt.setAttribute("color-interpolation", segment->colorInterpolation());
@@ -311,9 +313,11 @@ KoSegmentGradient KoSegmentGradient::fromXML(const QDomElement &elt)
         QDomElement start = segmentElt.firstChildElement("start");
         QString startBitdepth = segmentElt.attribute("start-bitdepth", Integer8BitsColorDepthID.id());
         QColor left = KoColor::fromXML(start.firstChildElement(), startBitdepth).toQColor();
+        left.setAlphaF(segmentElt.attribute("start-alpha", "1.0").toDouble());
         QString endBitdepth = segmentElt.attribute("end-bitdepth", Integer8BitsColorDepthID.id());
         QDomElement end = segmentElt.firstChildElement("end");
         QColor right = KoColor::fromXML(end.firstChildElement(), endBitdepth).toQColor();
+        right.setAlphaF(segmentElt.attribute("end-alpha", "1.0").toDouble());
         gradient.createSegment(interpolation, colorInterpolation, startOffset, endOffset, middleOffset, left, right);
         segmentElt = segmentElt.nextSiblingElement("segment");
     }

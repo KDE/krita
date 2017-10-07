@@ -1,8 +1,8 @@
 diff --git a/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp b/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
-index 4934b6c..613e8fe 100644
+index e6e6ee8b1a..89143b6d3f 100644
 --- a/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
 +++ b/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
-@@ -238,9 +238,6 @@
+@@ -240,9 +240,6 @@ struct QWindowsContextPrivate {
      QWindowsMimeConverter m_mimeConverter;
      QWindowsScreenManager m_screenManager;
      QSharedPointer<QWindowCreationContext> m_creationContext;
@@ -12,7 +12,7 @@ index 4934b6c..613e8fe 100644
      const HRESULT m_oleInitializeResult;
      const QByteArray m_eventType;
      QWindow *m_lastActiveWindow = nullptr;
-@@ -279,17 +276,10 @@
+@@ -281,17 +278,10 @@ QWindowsContext::QWindowsContext() :
      const QByteArray bv = qgetenv("QT_QPA_VERBOSE");
      if (!bv.isEmpty())
          QLoggingCategory::setFilterRules(QString::fromLocal8Bit(bv));
@@ -30,7 +30,7 @@ index 4934b6c..613e8fe 100644
      unregisterWindowClasses();
      if (d->m_oleInitializeResult == S_OK || d->m_oleInitializeResult == S_FALSE)
          OleUninitialize();
-@@ -335,12 +325,7 @@
+@@ -337,12 +327,7 @@ bool QWindowsContext::initTouch(unsigned integrationOptions)
  
  void QWindowsContext::setTabletAbsoluteRange(int a)
  {
@@ -43,7 +43,7 @@ index 4934b6c..613e8fe 100644
  }
  
  int QWindowsContext::processDpiAwareness()
-@@ -700,11 +685,7 @@
+@@ -702,11 +687,7 @@ QWindowsScreenManager &QWindowsContext::screenManager()
  
  QWindowsTabletSupport *QWindowsContext::tabletSupport() const
  {
@@ -55,14 +55,14 @@ index 4934b6c..613e8fe 100644
  }
  
  /*!
-@@ -1077,10 +1058,6 @@
+@@ -1112,10 +1093,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
              *result = LRESULT(MA_NOACTIVATE);
              return true;
          }
--#ifndef QT_NO_TABLETEVENT
+-#if QT_CONFIG(tabletevent)
 -        if (!d->m_tabletSupport.isNull())
 -            d->m_tabletSupport->notifyActivate();
--#endif // !QT_NO_TABLETEVENT
+-#endif // QT_CONFIG(tabletevent)
          if (platformWindow->testFlag(QWindowsWindow::BlockedByModal))
              if (const QWindow *modalWindow = QGuiApplication::modalWindow()) {
                  QWindowsWindow *platformWindow = QWindowsWindow::windowsWindowOf(modalWindow);

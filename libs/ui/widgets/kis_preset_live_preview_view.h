@@ -114,15 +114,7 @@ private:
 
     /// internal variables for constructing the stroke start and end shape
     /// there are two points that construct the "S" curve with this
-    QPen m_penSettings;
     KisDistanceInformation m_currentDistance;
-    QPointF m_startPoint;
-    QPointF m_endPoint;
-    KisPaintInformation m_pi1;
-    KisPaintInformation m_pi2;
-    KisPaintInformation m_paintDabStart;
-    KisPaintInformation m_paintDabEnd;
-
     QPainterPath m_curvedLine;
     KisPaintInformation m_curvePointPI1;
     KisPaintInformation m_curvePointPI2;

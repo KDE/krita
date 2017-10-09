@@ -197,12 +197,12 @@ else( APPLE )
         LOG_BUILD           ON
         LOG_TEST            ON
         LOG_INSTALL         ON
-        BUILD_IN_SOURCE 		ON
+        BUILD_IN_SOURCE 	ON
 
-        URL https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
-        URL_MD5 9a46cce61fc64c20c3ac0a0e0fa41b42
+        URL https://download.qt.io/archive/qt/5.9/5.9.2/single/qt-everywhere-opensource-src-5.9.2.zip
+        URL_MD5 d5239e19f6b80dcf44f4dd2de04c7d3d
 
-        PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+        #PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt}

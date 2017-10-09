@@ -50,7 +50,6 @@
 #include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "commands/kis_node_property_list_command.h"
-#include <KisDelayedUpdateNodeInterface.h>
 #include "krita_utils.h"
 
 

@@ -520,7 +520,7 @@ void KisDabRenderingQueueTest::testExecutor()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisDabRenderingExecutor executor(cs, testResourcesFactory);
+    KisDabRenderingExecutor executor(cs, testResourcesFactory, 0); // FIXME!!!
 
     KoColor color(Qt::red, cs);
     QPointF pos1(10,10);
@@ -535,7 +535,8 @@ void KisDabRenderingQueueTest::testExecutor()
     executor.addDab(request1, 0.5, 0.25);
     executor.addDab(request2, 0.125, 1.0);
 
-    executor.waitForDone();
+    // FIXME:!!!
+    //executor.waitForDone();
 
     QList<KisRenderedDab> renderedDabs = executor.takeReadyDabs();
     QCOMPARE(renderedDabs.size(), 2);

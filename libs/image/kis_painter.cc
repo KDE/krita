@@ -2701,6 +2701,16 @@ void KisPainter::setColorConversionFlags(KoColorConversionTransformation::Conver
     d->conversionFlags = conversionFlags;
 }
 
+void KisPainter::setRunnableStrokeJobsInterface(KisRunnableStrokeJobsInterface *interface)
+{
+    d->runnableStrokeJobsInterface = interface;
+}
+
+KisRunnableStrokeJobsInterface *KisPainter::runnableStrokeJobsInterface() const
+{
+    return d->runnableStrokeJobsInterface;
+}
+
 void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
 {
     if (!d->mirrorHorizontally && !d->mirrorVertically) return;

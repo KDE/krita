@@ -38,8 +38,6 @@ protected:
     void createPainters(QVector<PainterInfo*> &painterInfos,
                         const KisDistanceInformation &startDist) override;
 
-    void asyncUpdate() override;
-
     void paintAt(const KisPaintInformation &pi) override;
 
     void paintLine(const KisPaintInformation &pi1,
@@ -50,7 +48,6 @@ protected:
                           const QPointF &control2,
                           const KisPaintInformation &pi2) override;
 
-    using KisToolFreehandHelper::asyncUpdate;
     using KisToolFreehandHelper::paintAt;
     using KisToolFreehandHelper::paintLine;
     using KisToolFreehandHelper::paintBezierCurve;

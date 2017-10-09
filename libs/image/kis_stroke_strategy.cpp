@@ -31,6 +31,7 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
       m_requestsOtherStrokesToEnd(true),
       m_canForgetAboutMe(false),
       m_needsExplicitCancel(false),
+      m_balancingRatioOverride(-1.0),
       m_id(id),
       m_name(name),
       m_mutatedJobsInterface(0)
@@ -46,6 +47,7 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
       m_canForgetAboutMe(rhs.m_canForgetAboutMe),
       m_needsExplicitCancel(rhs.m_needsExplicitCancel),
+      m_balancingRatioOverride(rhs.m_balancingRatioOverride),
       m_id(rhs.m_id),
       m_name(rhs.m_name),
       m_mutatedJobsInterface(0)
@@ -228,4 +230,14 @@ bool KisStrokeStrategy::needsExplicitCancel() const
 void KisStrokeStrategy::setNeedsExplicitCancel(bool value)
 {
     m_needsExplicitCancel = value;
+}
+
+qreal KisStrokeStrategy::balancingRatioOverride() const
+{
+    return m_balancingRatioOverride;
+}
+
+void KisStrokeStrategy::setBalancingRatioOverride(qreal value)
+{
+    m_balancingRatioOverride = value;
 }

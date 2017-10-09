@@ -108,6 +108,7 @@ struct KisBrush::Private {
         , brushType(INVALID)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
+        , threadingAllowed(true)
     {}
 
     ~Private() {
@@ -131,6 +132,8 @@ struct KisBrush::Private {
 
     bool autoSpacingActive;
     qreal autoSpacingCoeff;
+
+    bool threadingAllowed;
 };
 
 KisBrush::KisBrush()
@@ -161,6 +164,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->scale = rhs.d->scale;
     d->autoSpacingActive = rhs.d->autoSpacingActive;
     d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
+    d->threadingAllowed = rhs.d->threadingAllowed;
     setFilename(rhs.filename());
 
     /**
@@ -433,6 +437,16 @@ void KisBrush::notifyStrokeStarted()
 void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
+}
+
+void KisBrush::setThreadingAllowed(bool value)
+{
+    d->threadingAllowed = value;
+}
+
+bool KisBrush::threadingAllowed() const
+{
+    return d->threadingAllowed;
 }
 
 void KisBrush::prepareBrushPyramid() const

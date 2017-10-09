@@ -19,7 +19,7 @@
 #ifndef __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 #define __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 
-#include "kis_simple_stroke_strategy.h"
+#include "KisRunnableBasedStrokeStrategy.h"
 #include "kis_resources_snapshot.h"
 #include "kis_selection.h"
 
@@ -28,7 +28,7 @@ class KisDistanceInformation;
 class KisTransaction;
 
 
-class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
+class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
     /**

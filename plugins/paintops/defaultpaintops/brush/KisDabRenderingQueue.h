@@ -26,7 +26,7 @@
 #include <QList>
 class KisDabRenderingJob;
 class KisRenderedDab;
-class KisSharedThreadPoolAdapter;
+class KisRunnableStrokeJobsInterface;
 
 #include "KisDabCacheUtils.h"
 
@@ -47,7 +47,7 @@ public:
 
 
 public:
-    KisDabRenderingQueue(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory, KisSharedThreadPoolAdapter *sharedThreadPool = 0);
+    KisDabRenderingQueue(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory, KisRunnableStrokeJobsInterface *runnableJobsInterface = 0);
     ~KisDabRenderingQueue();
 
     KisDabRenderingJob* addDab(const KisDabCacheUtils::DabRequestInfo &request,

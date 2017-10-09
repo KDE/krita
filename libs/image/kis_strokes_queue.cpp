@@ -76,6 +76,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
           openedStrokesCounter(0),
           needsExclusiveAccess(false),
           wrapAroundModeSupported(false),
+          balancingRatioOverride(-1.0),
           currentStrokeLoaded(false),
           lodNNeedsSynchronization(true),
           desiredLevelOfDetail(0),
@@ -88,6 +89,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     int openedStrokesCounter;
     bool needsExclusiveAccess;
     bool wrapAroundModeSupported;
+    qreal balancingRatioOverride;
     bool currentStrokeLoaded;
 
     bool lodNNeedsSynchronization;
@@ -571,6 +573,11 @@ bool KisStrokesQueue::wrapAroundModeSupported() const
     return m_d->wrapAroundModeSupported;
 }
 
+qreal KisStrokesQueue::balancingRatioOverride() const
+{
+    return m_d->balancingRatioOverride;
+}
+
 bool KisStrokesQueue::isEmpty() const
 {
     QMutexLocker locker(&m_d->mutex);
@@ -732,6 +739,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         if (!m_d->currentStrokeLoaded) {
             m_d->needsExclusiveAccess = stroke->isExclusive();
             m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+            m_d->balancingRatioOverride = stroke->balancingRatioOverride();
             m_d->currentStrokeLoaded = true;
         }
 
@@ -745,6 +753,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         if (!m_d->currentStrokeLoaded) {
             m_d->needsExclusiveAccess = stroke->isExclusive();
             m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+            m_d->balancingRatioOverride = stroke->balancingRatioOverride();
             m_d->currentStrokeLoaded = true;
         }
 
@@ -756,6 +765,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;
+        m_d->balancingRatioOverride = -1.0;
         m_d->currentStrokeLoaded = false;
 
         m_d->switchDesiredLevelOfDetail(false);

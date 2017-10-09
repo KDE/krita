@@ -29,7 +29,8 @@
 #include "kis_update_time_monitor.h"
 
 #include <brushengine/kis_stroke_random_source.h>
-
+#include <KisRunnableStrokeJobsInterface.h>
+#include "FreehandStrokeRunnableJobDataWithUpdate.h"
 
 struct FreehandStrokeStrategy::Private
 {
@@ -93,6 +94,14 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     if (m_d->needsAsynchronousUpdates) {
+        /**
+         * In case the paintop uses asynchronous updates, we should set priority to it,
+         * because FPS is controlled separately, not by the queue's merging algorithm.
+         */
+        setBalancingRatioOverride(0.01); // set priority to updates
+    }
+
+    if (m_d->needsAsynchronousUpdates) {
         m_d->timeSinceLastUpdate.start();
     }
 
@@ -101,18 +110,14 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    KisNodeSP updateNode;
     PainterInfo *info = 0;
 
     if (UpdateData *d = dynamic_cast<UpdateData*>(data)) {
-        info = painterInfos()[d->painterInfoId];
-        updateNode = d->node;
-
-        // do nothing, just fall through till we reach the update code
+        // this job is lod-clonable in contrast to FreehandStrokeRunnableJobDataWithUpdate!
+        tryDoUpdate(d->forceUpdate);
 
     } else if (Data *d = dynamic_cast<Data*>(data)) {
         info = painterInfos()[d->painterInfoId];
-        updateNode = d->node;
 
         KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
         KisRandomSourceSP rnd = m_d->randomSource.source();
@@ -160,34 +165,56 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             info->painter->drawPainterPath(d->path, d->pen);
             break;
         };
+
+        tryDoUpdate();
+    } else {
+        KisPainterBasedStrokeStrategy::doStrokeCallback(data);
+
+        FreehandStrokeRunnableJobDataWithUpdate *dataWithUpdate =
+            dynamic_cast<FreehandStrokeRunnableJobDataWithUpdate*>(data);
+
+        if (dataWithUpdate) {
+            tryDoUpdate();
+        }
     }
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(info);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(updateNode);
-
-    tryDoUpdate();
-}
-
-void FreehandStrokeStrategy::finishStrokeCallback()
-{
-    tryDoUpdate(true);
-    KisPainterBasedStrokeStrategy::finishStrokeCallback();
 }
 
 void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
 {
-    // We do not distinguish between updates for each painter info. Just
-    // update all of them at once!
-
-    Q_FOREACH (PainterInfo *info, painterInfos()) {
-        KisPaintOp *paintop = info->painter->paintOp();
-        if (m_d->needsAsynchronousUpdates && paintop &&
-            (forceEnd || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod)) {
-
+    if (m_d->needsAsynchronousUpdates) {
+        if (forceEnd || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod) {
             m_d->timeSinceLastUpdate.restart();
-            m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate(forceEnd);
-        }
 
+            Q_FOREACH (PainterInfo *info, painterInfos()) {
+                KisPaintOp *paintop = info->painter->paintOp();
+                KIS_SAFE_ASSERT_RECOVER_RETURN(paintop);
+
+                // TODO: well, we should count all N simultaneous painters for FPS rate!
+                QVector<KisRunnableStrokeJobData*> jobs;
+                m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate(jobs);
+
+                if (!jobs.isEmpty()) {
+                    jobs.append(new KisRunnableStrokeJobData(
+                                    [this] () {
+                                        this->issueSetDirtySignals();
+                                    },
+                                    KisStrokeJobData::SEQUENTIAL));
+
+                    runnableJobsInterface()->addRunnableJobs(jobs);
+                }
+
+            }
+        }
+    } else {
+        issueSetDirtySignals();
+    }
+
+
+}
+
+void FreehandStrokeStrategy::issueSetDirtySignals()
+{
+    Q_FOREACH (PainterInfo *info, painterInfos()) {
         QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
         //KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
         targetNode()->setDirty(dirtyRects);

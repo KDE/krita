@@ -25,8 +25,7 @@
 #include <kis_types.h>
 
 class KisDabRenderingQueue;
-class QThreadPool;
-class KisSharedThreadPoolAdapter;
+class KisRunnableStrokeJobsInterface;
 
 class KisDabRenderingJob : public KisSharedRunnable
 {
@@ -58,7 +57,7 @@ public:
     KisFixedPaintDeviceSP originalDevice;
     KisFixedPaintDeviceSP postprocessedDevice;
     KisDabRenderingQueue *parentQueue = 0;
-    KisSharedThreadPoolAdapter *sharedThreadPool = 0;
+    KisRunnableStrokeJobsInterface *runnableJobsInterface = 0;
 
 private:
     static int executeOneJob(KisDabRenderingJob *job);

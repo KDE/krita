@@ -46,6 +46,7 @@ class KisPainter;
 class KisColorSource;
 class KisDabRenderingExecutor;
 class KisRenderedDab;
+class KisRunnableStrokeJobData;
 
 class KisBrushOp : public KisBrushBasedPaintOp
 {
@@ -57,7 +58,7 @@ public:
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
-    int doAsyncronousUpdate(bool forceLastUpdate) override;
+    int doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
@@ -65,6 +66,17 @@ protected:
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
     KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+
+    struct UpdateSharedState;
+    typedef QSharedPointer<UpdateSharedState> UpdateSharedStateSP;
+
+    void addMirroringJobs(Qt::Orientation direction,
+                          QVector<QRect> &rects,
+                          UpdateSharedStateSP state,
+                          QVector<KisRunnableStrokeJobData*> &jobs);
+
+    UpdateSharedStateSP m_updateSharedState;
+
 
 private:
     KisAirbrushOption m_airbrushOption;
@@ -87,6 +99,9 @@ private:
 
     KisStrokeSpeedMeasurer m_speedMeasurer;
     QElapsedTimer m_strokeTimeSource;
+
+    int m_numUpdates;
+    const int m_idealNumRects;
 };
 
 #endif // KIS_BRUSHOP_H_

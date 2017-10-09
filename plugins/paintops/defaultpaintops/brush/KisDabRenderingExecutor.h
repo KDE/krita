@@ -30,6 +30,7 @@ class KisRenderedDab;
 
 class KisPressureMirrorOption;
 class KisPrecisionOption;
+class KisRunnableStrokeJobsInterface;
 
 
 class KRITADEFAULTPAINTOPS_EXPORT KisDabRenderingExecutor
@@ -37,6 +38,7 @@ class KRITADEFAULTPAINTOPS_EXPORT KisDabRenderingExecutor
 public:
     KisDabRenderingExecutor(const KoColorSpace *cs,
                             KisDabCacheUtils::ResourcesFactory resourcesFactory,
+                            KisRunnableStrokeJobsInterface *runnableJobsInterface,
                             KisPressureMirrorOption *mirrorOption = 0,
                             KisPrecisionOption *precisionOption = 0);
     ~KisDabRenderingExecutor();
@@ -51,8 +53,6 @@ public:
     int averageDabRenderingTime() const; // usecs
     int averageDabSize() const;
     bool dabsHaveSeparateOriginal() const;
-
-    void waitForDone();
 
 private:
     KisDabRenderingExecutor(const KisDabRenderingExecutor &rhs) = delete;

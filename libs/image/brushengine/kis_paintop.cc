@@ -103,9 +103,9 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
-int KisPaintOp::doAsyncronousUpdate(bool forceLastUpdate)
+int KisPaintOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
 {
-    Q_UNUSED(forceLastUpdate);
+    Q_UNUSED(jobs);
     return 40;
 }
 

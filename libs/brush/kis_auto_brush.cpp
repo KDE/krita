@@ -317,7 +317,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     applicator->initializeData(&data);
 
     int jobs = d->idealThreadCountCached;
-    if (dstHeight > 100 && jobs >= 4) {
+    if (threadingAllowed() && dstHeight > 100 && jobs >= 4) {
         int splitter = dstHeight / jobs;
         QVector<QRect> rects;
         for (int i = 0; i < jobs - 1; i++) {

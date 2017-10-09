@@ -20,7 +20,6 @@
 
 #include "KisDabRenderingJob.h"
 #include "KisRenderedDab.h"
-#include "KisSharedThreadPoolAdapter.h"
 #include "kis_painter.h"
 
 #include <QMutex>
@@ -71,10 +70,10 @@ struct KisDabRenderingQueue::Private
 
     Private(const KoColorSpace *_colorSpace,
             KisDabCacheUtils::ResourcesFactory _resourcesFactory,
-            KisSharedThreadPoolAdapter *_sharedThreadPool)
+            KisRunnableStrokeJobsInterface *_runnableJobsInterface)
         : cacheInterface(new DumbCacheInterface),
           colorSpace(_colorSpace),
-          sharedThreadPool(_sharedThreadPool),
+          runnableJobsInterface(_runnableJobsInterface),
           resourcesFactory(_resourcesFactory),
           avgExecutionTime(50),
           avgDabSize(50)
@@ -92,7 +91,7 @@ struct KisDabRenderingQueue::Private
     int lastPaintedJob = -1;
     QScopedPointer<CacheInterface> cacheInterface;
     const KoColorSpace *colorSpace;
-    KisSharedThreadPoolAdapter *sharedThreadPool;
+    KisRunnableStrokeJobsInterface *runnableJobsInterface;
     qreal averageOpacity = 0.0;
 
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
@@ -113,8 +112,8 @@ struct KisDabRenderingQueue::Private
 
 KisDabRenderingQueue::KisDabRenderingQueue(const KoColorSpace *cs,
                                            KisDabCacheUtils::ResourcesFactory resourcesFactory,
-                                           KisSharedThreadPoolAdapter *sharedThreadPool)
-    : m_d(new Private(cs, resourcesFactory, sharedThreadPool))
+                                           KisRunnableStrokeJobsInterface *runnableJobsInterface)
+    : m_d(new Private(cs, resourcesFactory, runnableJobsInterface))
 {
 }
 
@@ -186,7 +185,7 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
         wrapper.job.generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess :
         KisDabRenderingJob::Copy;
     wrapper.job.parentQueue = this;
-    wrapper.job.sharedThreadPool = m_d->sharedThreadPool;
+    wrapper.job.runnableJobsInterface = m_d->runnableJobsInterface;
     wrapper.opacity = opacity;
     wrapper.flow = flow;
 

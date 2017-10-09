@@ -34,6 +34,7 @@ class KoColorSpace;
 
 class KisPainter;
 class KisPaintInformation;
+class KisRunnableStrokeJobData;
 
 /**
  * KisPaintOp are use by tools to draw on a paint device. A paintop takes settings
@@ -113,11 +114,12 @@ public:
 
     /**
      * If the preset supports asynchronous updates, then the stroke execution core will
-     * call this method with a desured frame rate.
+     * call this method with a desured frame rate. The jobs that should be run to prepare the update
+     * are returned via \p jobs
      *
      * @return the desired FPS rate (period of updates)
      */
-    virtual int doAsyncronousUpdate(bool forceLastUpdate);
+    virtual int doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
 
 protected:
     friend class KisPaintInformation;

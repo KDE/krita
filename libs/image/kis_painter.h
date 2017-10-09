@@ -54,6 +54,7 @@ class KisPaintInformation;
 class KisPaintOp;
 class KisDistanceInformation;
 class KisRenderedDab;
+class KisRunnableStrokeJobsInterface;
 
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
@@ -799,6 +800,20 @@ public:
      * set the conversion flags in case pixels need to be converted before painting
      */
     void setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+    /**
+     * Set interface for running asynchronous jobs by paintops.
+     *
+     * NOTE: the painter does *not* own the interface device. It is the responsibility
+     *       of the caller to ensure that the interface object is alive during the lifetime
+     *       of the painter.
+     */
+    void setRunnableStrokeJobsInterface(KisRunnableStrokeJobsInterface *interface);
+
+    /**
+     * Get the interface for running asynchronous jobs. It is used by paintops mostly.
+     */
+    KisRunnableStrokeJobsInterface* runnableStrokeJobsInterface() const;
 
 protected:
     /// Initialize, set everything to '0' or defaults

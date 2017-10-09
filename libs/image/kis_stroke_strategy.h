@@ -85,6 +85,11 @@ public:
 
     bool needsExplicitCancel() const;
 
+    /**
+     * \see setBalancingRatioOverride() for details
+     */
+    qreal balancingRatioOverride() const;
+
     QString id() const;
     KUndo2MagicString name() const;
 
@@ -147,6 +152,20 @@ protected:
     void setCanForgetAboutMe(bool value);
     void setNeedsExplicitCancel(bool value);
 
+    /**
+     * Set override for the desired scheduler balancing ratio:
+     *
+     * ratio = stroke jobs / update jobs
+     *
+     * If \p value < 1.0, then the priority is given to updates, if
+     * the value is higher than 1.0, then the priority is given
+     * to stroke jobs.
+     *
+     * Special value -1.0, suggests the scheduler to use the default value
+     * set by the user's config file (which is 100.0 by default).
+     */
+    void setBalancingRatioOverride(qreal value);
+
 protected:
     /**
      * Protected c-tor, used for cloning of hi-level strategies
@@ -162,6 +181,7 @@ private:
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
     bool m_needsExplicitCancel;
+    qreal m_balancingRatioOverride;
 
     QString m_id;
     KUndo2MagicString m_name;

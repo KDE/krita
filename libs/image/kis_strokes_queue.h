@@ -63,6 +63,7 @@ public:
     bool hasOpenedStrokes() const;
 
     bool wrapAroundModeSupported() const;
+    qreal balancingRatioOverride() const;
 
     void setDesiredLevelOfDetail(int lod);
     void explicitRegenerateLevelOfDetail();

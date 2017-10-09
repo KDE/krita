@@ -18,33 +18,31 @@
 
 #include "KisDabRenderingExecutor.h"
 
-#include <QThreadPool>
-#include <KisSharedThreadPoolAdapter.h>
 #include "KisDabRenderingQueue.h"
 #include "KisDabRenderingQueueCache.h"
 #include "KisDabRenderingJob.h"
 #include "KisRenderedDab.h"
+#include "KisRunnableStrokeJobsInterface.h"
+#include "KisRunnableStrokeJobData.h"
+#include <tool/strokes/FreehandStrokeRunnableJobDataWithUpdate.h>
 
 struct KisDabRenderingExecutor::Private
 {
-    Private()
-        : sharedThreadPool(
-              new KisSharedThreadPoolAdapter(QThreadPool::globalInstance()))
-    {
-    }
-
     QScopedPointer<KisDabRenderingQueue> renderingQueue;
-    QScopedPointer<KisSharedThreadPoolAdapter> sharedThreadPool;
+    KisRunnableStrokeJobsInterface *runnableJobsInterface;
 };
 
 KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs,
                                                  KisDabCacheUtils::ResourcesFactory resourcesFactory,
+                                                 KisRunnableStrokeJobsInterface *runnableJobsInterface,
                                                  KisPressureMirrorOption *mirrorOption,
                                                  KisPrecisionOption *precisionOption)
     : m_d(new Private)
 {
+    m_d->runnableJobsInterface = runnableJobsInterface;
+
     m_d->renderingQueue.reset(
-        new KisDabRenderingQueue(cs, resourcesFactory, m_d->sharedThreadPool.data()));
+        new KisDabRenderingQueue(cs, resourcesFactory, runnableJobsInterface));
 
     KisDabRenderingQueueCache *cache = new KisDabRenderingQueueCache();
     cache->setMirrorPostprocessing(mirrorOption);
@@ -55,10 +53,6 @@ KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs,
 
 KisDabRenderingExecutor::~KisDabRenderingExecutor()
 {
-    // explicitly wait for the pool to end, because we might be mistaken about our
-    // assumptions about object destruction order in ~Private()
-
-    m_d->sharedThreadPool->waitForDone();
 }
 
 void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &request,
@@ -66,7 +60,8 @@ void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &req
 {
     KisDabRenderingJob *job = m_d->renderingQueue->addDab(request, opacity, flow);
     if (job) {
-        m_d->sharedThreadPool->start(job);
+        m_d->runnableJobsInterface->addRunnableJob(
+            new FreehandStrokeRunnableJobDataWithUpdate(job, KisStrokeJobData::CONCURRENT));
     }
 }
 
@@ -93,10 +88,5 @@ int KisDabRenderingExecutor::averageDabSize() const
 bool KisDabRenderingExecutor::dabsHaveSeparateOriginal() const
 {
     return m_d->renderingQueue->dabsHaveSeparateOriginal();
-}
-
-void KisDabRenderingExecutor::waitForDone()
-{
-    m_d->sharedThreadPool->waitForDone();
 }
 

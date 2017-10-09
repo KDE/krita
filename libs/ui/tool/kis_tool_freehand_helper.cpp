@@ -640,6 +640,9 @@ void KisToolFreehandHelper::endPaint()
      */
     m_d->painterInfos.clear();
 
+    // last update to complete rendering if there is still something pending
+    doAsynchronousUpdate(true);
+
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
 
@@ -647,7 +650,7 @@ void KisToolFreehandHelper::endPaint()
         m_d->recordingAdapter->endStroke();
     }
 
-    ENTER_FUNCTION() << ppVar(m_d->cursorSpeedMeasurer.averageSpeed()) << ppVar(m_d->cursorSpeedMeasurer.currentSpeed()) << ppVar(m_d->cursorSpeedMeasurer.maxSpeed());
+    ENTER_FUNCTION() << "Cursor speed:" << m_d->cursorSpeedMeasurer.averageSpeed();
 }
 
 void KisToolFreehandHelper::cancelPaint()
@@ -879,22 +882,16 @@ void KisToolFreehandHelper::doAirbrushing()
     }
 }
 
-void KisToolFreehandHelper::doAsynchronousUpdate()
+void KisToolFreehandHelper::doAsynchronousUpdate(bool forceUpdate)
 {
-    asyncUpdate();
+    m_d->strokesFacade->addJob(m_d->strokeId,
+                               new FreehandStrokeStrategy::UpdateData(m_d->resources->currentNode(), forceUpdate));
 }
 
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 {
     qreal realInterval = m_d->resources->airbrushingInterval() * AIRBRUSH_INTERVAL_FACTOR;
     return qMax(1, qFloor(realInterval));
-}
-
-void KisToolFreehandHelper::asyncUpdate(int painterInfoId)
-{
-    m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::UpdateData(m_d->resources->currentNode(),
-                                                                      painterInfoId));
 }
 
 void KisToolFreehandHelper::paintAt(int painterInfoId,
@@ -969,11 +966,6 @@ void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
                                            const KisDistanceInformation &startDist)
 {
     painterInfos << new PainterInfo(startDist);
-}
-
-void KisToolFreehandHelper::asyncUpdate()
-{
-    asyncUpdate(0);
 }
 
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)

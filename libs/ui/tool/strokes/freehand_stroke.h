@@ -50,7 +50,7 @@ public:
 
         Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
               type(POINT), pi1(_pi)
         {}
@@ -58,7 +58,7 @@ public:
         Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi1,
              const KisPaintInformation &_pi2)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
               type(LINE), pi1(_pi1), pi2(_pi2)
         {}
@@ -68,7 +68,7 @@ public:
              const QPointF &_control1,
              const QPointF &_control2,
              const KisPaintInformation &_pi2)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
               type(CURVE), pi1(_pi1), pi2(_pi2),
               control1(_control1), control2(_control2)
@@ -77,7 +77,7 @@ public:
         Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const vQPointF &_points)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
             type(_type), points(_points)
         {}
@@ -85,7 +85,7 @@ public:
         Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const QRectF &_rect)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
             type(_type), rect(_rect)
         {}
@@ -93,7 +93,7 @@ public:
         Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const QPainterPath &_path)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path)
         {}
@@ -102,7 +102,7 @@ public:
              DabType _type,
              const QPainterPath &_path,
              const QPen &_pen, const KoColor &_customColor)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
+            : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path),
             pen(_pen), customColor(_customColor)
@@ -180,10 +180,10 @@ public:
 
     class UpdateData : public KisStrokeJobData {
     public:
-        UpdateData(KisNodeSP _node, int _painterInfoId)
+        UpdateData(KisNodeSP _node, bool _forceUpdate)
             : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
               node(_node),
-              painterInfoId(_painterInfoId)
+              forceUpdate(_forceUpdate)
         {}
 
 
@@ -195,13 +195,13 @@ public:
         UpdateData(const UpdateData &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
               node(rhs.node),
-              painterInfoId(rhs.painterInfoId)
+              forceUpdate(rhs.forceUpdate)
         {
             Q_UNUSED(levelOfDetail);
         }
     public:
         KisNodeSP node;
-        int painterInfoId;
+        bool forceUpdate = false;
     };
 
 public:
@@ -220,7 +220,6 @@ public:
     ~FreehandStrokeStrategy() override;
 
     void doStrokeCallback(KisStrokeJobData *data) override;
-    void finishStrokeCallback() override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
@@ -231,6 +230,7 @@ private:
     void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
 
     void tryDoUpdate(bool forceEnd = false);
+    void issueSetDirtySignals();
 
 private:
     struct Private;

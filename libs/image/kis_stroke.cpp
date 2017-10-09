@@ -264,6 +264,11 @@ bool KisStroke::canForgetAboutMe() const
     return m_strokeStrategy->canForgetAboutMe();
 }
 
+qreal KisStroke::balancingRatioOverride() const
+{
+    return m_strokeStrategy->balancingRatioOverride();
+}
+
 KisStrokeJobData::Sequentiality KisStroke::nextJobSequentiality() const
 {
     return !m_jobsQueue.isEmpty() ?

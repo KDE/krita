@@ -20,10 +20,14 @@
 
 #include <QElapsedTimer>
 
-#include <KisSharedThreadPoolAdapter.h>
+#include <KisRunnableStrokeJobsInterface.h>
+#include <KisRunnableStrokeJobData.h>
 
 #include "KisDabCacheUtils.h"
 #include "KisDabRenderingQueue.h"
+
+#include <tool/strokes/FreehandStrokeRunnableJobDataWithUpdate.h>
+
 
 KisDabRenderingJob::KisDabRenderingJob()
 {
@@ -46,7 +50,7 @@ KisDabRenderingJob::KisDabRenderingJob(const KisDabRenderingJob &rhs)
       originalDevice(rhs.originalDevice),
       postprocessedDevice(rhs.postprocessedDevice),
       parentQueue(rhs.parentQueue),
-      sharedThreadPool(rhs.sharedThreadPool)
+      runnableJobsInterface(rhs.runnableJobsInterface)
 {
 }
 
@@ -59,7 +63,7 @@ KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
     originalDevice = rhs.originalDevice;
     postprocessedDevice = rhs.postprocessedDevice;
     parentQueue = rhs.parentQueue;
-    sharedThreadPool = rhs.sharedThreadPool;
+    runnableJobsInterface = rhs.runnableJobsInterface;
 
     return *this;
 }
@@ -118,10 +122,15 @@ void KisDabRenderingJob::runShared()
     QList<KisDabRenderingJob *> jobs = parentQueue->notifyJobFinished(this, executionTime);
 
     while (!jobs.isEmpty()) {
-        // start all-but-first jobs asynchronously
+        QVector<KisRunnableStrokeJobData*> dataList;
+
+        // start all-but-the-first jobs asynchronously
         for (int i = 1; i < jobs.size(); i++) {
-            sharedThreadPool->start(jobs[i]);
+            dataList.append(new FreehandStrokeRunnableJobDataWithUpdate(jobs[i], KisStrokeJobData::CONCURRENT));
         }
+
+        runnableJobsInterface->addRunnableJobs(dataList);
+
 
         // execute the first job in the current thread
         KisDabRenderingJob *job = jobs.first();

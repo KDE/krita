@@ -54,13 +54,6 @@ void KisToolMultihandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
     }
 }
 
-void KisToolMultihandHelper::asyncUpdate()
-{
-    for (int i = 0; i < d->transformations.size(); i++) {
-        asyncUpdate(i);
-    }
-}
-
 void KisToolMultihandHelper::paintAt(const KisPaintInformation &pi)
 {
     for (int i = 0; i < d->transformations.size(); i++) {

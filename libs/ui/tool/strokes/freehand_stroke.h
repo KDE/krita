@@ -48,62 +48,62 @@ public:
             QPAINTER_PATH_FILL
         };
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              const KisPaintInformation &_pi)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
               type(POINT), pi1(_pi)
         {}
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              const KisPaintInformation &_pi1,
              const KisPaintInformation &_pi2)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
               type(LINE), pi1(_pi1), pi2(_pi2)
         {}
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              const KisPaintInformation &_pi1,
              const QPointF &_control1,
              const QPointF &_control2,
              const KisPaintInformation &_pi2)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
               type(CURVE), pi1(_pi1), pi2(_pi2),
               control1(_control1), control2(_control2)
         {}
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              DabType _type,
              const vQPointF &_points)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
             type(_type), points(_points)
         {}
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              DabType _type,
              const QRectF &_rect)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
             type(_type), rect(_rect)
         {}
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              DabType _type,
              const QPainterPath &_path)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
             type(_type), path(_path)
         {}
 
-        Data(KisNodeSP _node, int _painterInfoId,
+        Data(int _painterInfoId,
              DabType _type,
              const QPainterPath &_path,
              const QPen &_pen, const KoColor &_customColor)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              node(_node), painterInfoId(_painterInfoId),
+              painterInfoId(_painterInfoId),
             type(_type), path(_path),
             pen(_pen), customColor(_customColor)
         {}
@@ -115,7 +115,6 @@ public:
     private:
         Data(const Data &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
-              node(rhs.node),
               painterInfoId(rhs.painterInfoId),
               type(rhs.type)
         {
@@ -162,7 +161,6 @@ public:
             };
         }
     public:
-        KisNodeSP node;
         int painterInfoId;
 
         DabType type;
@@ -180,9 +178,8 @@ public:
 
     class UpdateData : public KisStrokeJobData {
     public:
-        UpdateData(KisNodeSP _node, bool _forceUpdate)
+        UpdateData(bool _forceUpdate)
             : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
-              node(_node),
               forceUpdate(_forceUpdate)
         {}
 
@@ -194,13 +191,11 @@ public:
     private:
         UpdateData(const UpdateData &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
-              node(rhs.node),
               forceUpdate(rhs.forceUpdate)
         {
             Q_UNUSED(levelOfDetail);
         }
     public:
-        KisNodeSP node;
         bool forceUpdate = false;
     };
 

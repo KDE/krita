@@ -885,7 +885,7 @@ void KisToolFreehandHelper::doAirbrushing()
 void KisToolFreehandHelper::doAsynchronousUpdate(bool forceUpdate)
 {
     m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::UpdateData(m_d->resources->currentNode(), forceUpdate));
+                               new FreehandStrokeStrategy::UpdateData(forceUpdate));
 }
 
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const
@@ -899,8 +899,7 @@ void KisToolFreehandHelper::paintAt(int painterInfoId,
 {
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                painterInfoId, pi));
+                               new FreehandStrokeStrategy::Data(painterInfoId, pi));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addPoint(pi);
@@ -913,8 +912,7 @@ void KisToolFreehandHelper::paintLine(int painterInfoId,
 {
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                painterInfoId, pi1, pi2));
+                               new FreehandStrokeStrategy::Data(painterInfoId, pi1, pi2));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addLine(pi1, pi2);
@@ -953,8 +951,7 @@ void KisToolFreehandHelper::paintBezierCurve(int painterInfoId,
 
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                painterInfoId,
+                               new FreehandStrokeStrategy::Data(painterInfoId,
                                                                 pi1, control1, control2, pi2));
 
     if(m_d->recordingAdapter) {

@@ -122,6 +122,7 @@ protected:
                                              0, pi1, pi2));
 
         image->addJob(strokeId(), data.take());
+        image->addJob(strokeId(), new FreehandStrokeStrategy::UpdateData(resources->currentNode(), true));
     }
 
 private:

@@ -55,6 +55,8 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
 
 KisFigurePaintingToolHelper::~KisFigurePaintingToolHelper()
 {
+    m_strokesFacade->addJob(m_strokeId,
+        new FreehandStrokeStrategy::UpdateData(m_resources->currentNode(), true));
     m_strokesFacade->endStroke(m_strokeId);
 }
 

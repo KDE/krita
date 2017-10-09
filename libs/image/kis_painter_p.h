@@ -28,6 +28,7 @@
 #include "kis_fill_painter.h"
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
+#include <KisFakeRunnableStrokeJobsExecutor.h>
 
 struct Q_DECL_HIDDEN KisPainter::Private {
     Private(KisPainter *_q) : q(_q) {}
@@ -73,6 +74,7 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     KisRunnableStrokeJobsInterface *runnableStrokeJobsInterface = 0;
+    QScopedPointer<KisRunnableStrokeJobsInterface> fakeRunnableStrokeJobsInterface;
 
     bool tryReduceSourceRect(const KisPaintDevice *srcDev,
                              QRect *srcRect,

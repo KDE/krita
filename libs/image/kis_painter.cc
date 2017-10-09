@@ -65,7 +65,6 @@
 #include "krita_utils.h"
 
 
-
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
 #define BEZIER_FLATNESS_THRESHOLD 0.5
@@ -2708,6 +2707,13 @@ void KisPainter::setRunnableStrokeJobsInterface(KisRunnableStrokeJobsInterface *
 
 KisRunnableStrokeJobsInterface *KisPainter::runnableStrokeJobsInterface() const
 {
+    if (!d->runnableStrokeJobsInterface) {
+        if (!d->fakeRunnableStrokeJobsInterface) {
+            d->fakeRunnableStrokeJobsInterface.reset(new KisFakeRunnableStrokeJobsExecutor());
+        }
+        return d->fakeRunnableStrokeJobsInterface.data();
+    }
+
     return d->runnableStrokeJobsInterface;
 }
 

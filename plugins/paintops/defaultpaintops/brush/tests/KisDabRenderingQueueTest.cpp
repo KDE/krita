@@ -515,12 +515,15 @@ void KisDabRenderingQueueTest::testRunningJobs()
 }
 
 #include "../KisDabRenderingExecutor.h"
+#include "KisFakeRunnableStrokeJobsExecutor.h"
 
 void KisDabRenderingQueueTest::testExecutor()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisDabRenderingExecutor executor(cs, testResourcesFactory, 0); // FIXME!!!
+    QScopedPointer<KisRunnableStrokeJobsInterface> runner(new KisFakeRunnableStrokeJobsExecutor());
+
+    KisDabRenderingExecutor executor(cs, testResourcesFactory, runner.data());
 
     KoColor color(Qt::red, cs);
     QPointF pos1(10,10);
@@ -534,9 +537,6 @@ void KisDabRenderingQueueTest::testExecutor()
 
     executor.addDab(request1, 0.5, 0.25);
     executor.addDab(request2, 0.125, 1.0);
-
-    // FIXME:!!!
-    //executor.waitForDone();
 
     QList<KisRenderedDab> renderedDabs = executor.takeReadyDabs();
     QCOMPARE(renderedDabs.size(), 2);

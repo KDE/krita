@@ -19,7 +19,7 @@
 #ifndef KISDABRENDERINGJOB_H
 #define KISDABRENDERINGJOB_H
 
-#include <KisSharedRunnable.h>
+#include <QRunnable>
 #include <KisDabCacheUtils.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_types.h>
@@ -27,7 +27,7 @@
 class KisDabRenderingQueue;
 class KisRunnableStrokeJobsInterface;
 
-class KisDabRenderingJob : public KisSharedRunnable
+class KisDabRenderingJob : public QRunnable
 {
 public:
     enum JobType {
@@ -46,7 +46,7 @@ public:
     KisDabRenderingJob& operator=(const KisDabRenderingJob &rhs);
 
 
-    void runShared() override;
+    void run() override;
 
     QPoint dstDabOffset() const;
 

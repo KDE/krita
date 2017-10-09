@@ -42,7 +42,7 @@ KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabCacheUtils::DabGenerati
 }
 
 KisDabRenderingJob::KisDabRenderingJob(const KisDabRenderingJob &rhs)
-    : KisSharedRunnable(),
+    : QRunnable(),
       seqNo(rhs.seqNo),
       generationInfo(rhs.generationInfo),
       resources(rhs.resources),
@@ -114,7 +114,7 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
     return executionTime.nsecsElapsed() / 1000;
 }
 
-void KisDabRenderingJob::runShared()
+void KisDabRenderingJob::run()
 {
     int executionTime = 0;
 

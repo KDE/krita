@@ -31,12 +31,21 @@
 #include <brushengine/kis_stroke_random_source.h>
 #include <KisRunnableStrokeJobsInterface.h>
 #include "FreehandStrokeRunnableJobDataWithUpdate.h"
+#include <mutex>
+
 
 struct FreehandStrokeStrategy::Private
 {
     Private(KisResourcesSnapshotSP _resources)
         : resources(_resources),
           needsAsynchronousUpdates(_resources->presetNeedsAsynchronousUpdates())
+    {
+    }
+
+    Private(const Private &rhs)
+        : randomSource(rhs.randomSource),
+          resources(rhs.resources),
+          needsAsynchronousUpdates(rhs.needsAsynchronousUpdates)
     {
     }
 
@@ -47,6 +56,7 @@ struct FreehandStrokeStrategy::Private
     int currentUpdatePeriod = 40;
 
     const bool needsAsynchronousUpdates = false;
+    std::mutex updateEntryMutex;
 };
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -181,6 +191,10 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
 {
+    // we should enter this function only once!
+    std::unique_lock<std::mutex> entryLock(m_d->updateEntryMutex, std::try_to_lock);
+    if (!entryLock.owns_lock()) return;
+
     if (m_d->needsAsynchronousUpdates) {
         if (forceEnd || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod) {
             m_d->timeSinceLastUpdate.restart();

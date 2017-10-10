@@ -144,7 +144,9 @@ KisGradientColorSource::~KisGradientColorSource()
 void KisGradientColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
     Q_UNUSED(pi);
-    m_gradient->colorAt(m_color, mix);
+    if (m_gradient) {
+        m_gradient->colorAt(m_color, mix);
+    }
 }
 
 //-------------------------------------------------//

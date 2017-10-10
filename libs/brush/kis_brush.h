@@ -260,14 +260,6 @@ public:
             double subPixelX = 0, double subPixelY = 0) const;
 
     /**
-     * Apply the brush mask to the pixels in dst. Dst should be big enough!
-     */
-    void mask(KisFixedPaintDeviceSP dst,
-              KisDabShape const& shape,
-              const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
-
-    /**
      * clear dst fill it with a mask colored with KoColor
      */
     void mask(KisFixedPaintDeviceSP dst,

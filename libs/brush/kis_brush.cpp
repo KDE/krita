@@ -461,11 +461,6 @@ void KisBrush::clearBrushPyramid()
     d->brushPyramid.clear();
 }
 
-void KisBrush::mask(KisFixedPaintDeviceSP dst, KisDabShape const& shape, const KisPaintInformation& info , double subPixelX, double subPixelY, qreal softnessFactor) const
-{
-    generateMaskAndApplyMaskOrCreateDab(dst, 0, shape, info, subPixelX, subPixelY, softnessFactor);
-}
-
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     PlainColoringInformation pci(color.data());

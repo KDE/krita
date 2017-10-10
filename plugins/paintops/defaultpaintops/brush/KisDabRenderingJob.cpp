@@ -97,7 +97,8 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
             if (!job->postprocessedDevice ||
                 *job->originalDevice->colorSpace() != *job->postprocessedDevice->colorSpace()) {
 
-                job->postprocessedDevice = new KisFixedPaintDevice(*job->originalDevice);
+                job->postprocessedDevice = job->parentQueue->fetchCachedPaintDevce();
+                *job->postprocessedDevice = *job->originalDevice;
             } else {
                 *job->postprocessedDevice = *job->originalDevice;
             }

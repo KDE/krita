@@ -2813,7 +2813,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
         KisFixedPaintDeviceSP mirrorDab(new KisFixedPaintDevice(dab->colorSpace()));
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
+        mirrorDab->lazyGrowBufferWithoutInitialization();
 
         dab->readBytes(mirrorDab->data(),rc);
 
@@ -2827,7 +2827,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy
         KisFixedPaintDeviceSP mirrorDab(new KisFixedPaintDevice(dab->colorSpace()));
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
+        mirrorDab->lazyGrowBufferWithoutInitialization();
         dab->readBytes(mirrorDab->data(),QRect(QPoint(sx,sy),rc.size()));
         renderMirrorMask(rc, mirrorDab, mask);
     }

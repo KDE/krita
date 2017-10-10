@@ -499,7 +499,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     qint32 maskHeight = outputImage.height();
 
     dst->setRect(QRect(0, 0, maskWidth, maskHeight));
-    dst->initialize();
+    dst->lazyGrowBufferWithoutInitialization();
 
     quint8* color = 0;
 

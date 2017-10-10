@@ -296,8 +296,10 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
     if (sourceJob >= 1) {
         // recycle and remove first 'sourceJob' jobs
 
+        // cache unique 'original' devices
         for (auto it = jobs.begin(); it != jobs.begin() + sourceJob; ++it) {
-            if (it->job.postprocessedDevice != it->job.originalDevice) {
+            if (it->job.type == KisDabRenderingJob::Dab &&
+                it->job.postprocessedDevice != it->job.originalDevice) {
                 cachedPaintDevices << it->job.originalDevice;
                 it->job.originalDevice = 0;
             }

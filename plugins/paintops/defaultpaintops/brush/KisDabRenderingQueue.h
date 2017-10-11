@@ -62,6 +62,7 @@ public:
     void setCacheInterface(CacheInterface *interface);
 
     KisFixedPaintDeviceSP fetchCachedPaintDevce();
+    void recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices);
 
     int averageExecutionTime() const;
     int averageDabSize() const;

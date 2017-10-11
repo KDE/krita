@@ -54,6 +54,8 @@ public:
     int averageDabSize() const;
     bool dabsHaveSeparateOriginal() const;
 
+    void recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices);
+
 private:
     KisDabRenderingExecutor(const KisDabRenderingExecutor &rhs) = delete;
 

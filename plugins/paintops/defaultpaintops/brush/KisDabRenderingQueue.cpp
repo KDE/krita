@@ -22,6 +22,7 @@
 #include "KisRenderedDab.h"
 #include "kis_painter.h"
 
+#include <QSet>
 #include <QMutex>
 #include <QMutexLocker>
 #include <KisRollingMeanAccumulatorWrapper.h>
@@ -97,7 +98,7 @@ struct KisDabRenderingQueue::Private
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
 
     QList<KisDabCacheUtils::DabRenderingResources*> cachedResources;
-    QList<KisFixedPaintDeviceSP> cachedPaintDevices;
+    QSet<KisFixedPaintDeviceSP> cachedPaintDevices;
 
     QMutex mutex;
 
@@ -374,10 +375,27 @@ KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
 {
     QMutexLocker l(&m_d->mutex);
 
-    return
-        m_d->cachedPaintDevices.isEmpty() ?
-            new KisFixedPaintDevice(m_d->colorSpace) :
-                m_d->cachedPaintDevices.takeLast();
+    KisFixedPaintDeviceSP result;
+
+    if (m_d->cachedPaintDevices.isEmpty()) {
+        result = new KisFixedPaintDevice(m_d->colorSpace);
+    } else {
+        auto it = m_d->cachedPaintDevices.begin();
+        result = *it;
+        m_d->cachedPaintDevices.erase(it);
+    }
+
+    return result;
+}
+
+void KisDabRenderingQueue::recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices)
+{
+    QMutexLocker l(&m_d->mutex);
+
+    Q_FOREACH (KisFixedPaintDeviceSP device, devices) {
+        // the set automatically checks if the device is unique in the set
+        m_d->cachedPaintDevices << device;
+    }
 }
 
 int KisDabRenderingQueue::averageExecutionTime() const

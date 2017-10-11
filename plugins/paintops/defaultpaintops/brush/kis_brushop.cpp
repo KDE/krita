@@ -296,6 +296,14 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
                     const int updateRenderingTime = state->dabRenderingTimer.elapsed();
                     const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime() / 1000;
 
+                    QVector<KisFixedPaintDeviceSP> recycledDevices;
+                    for (auto it = state->dabsQueue.begin(); it != state->dabsQueue.end(); ++it) {
+                        // we don't need to check for uniqueness, it is done by the queue
+                        recycledDevices << it->device;
+                        it->device.clear();
+                    }
+                    m_dabExecutor->recyclePaintDevicesForCache(recycledDevices);
+
                     m_currentUpdatePeriod = qBound(20, qMax(20 * dabRenderingTime, 3 * updateRenderingTime / 2), 100);
                     m_numUpdates++;
 

@@ -90,3 +90,8 @@ bool KisDabRenderingExecutor::dabsHaveSeparateOriginal() const
     return m_d->renderingQueue->dabsHaveSeparateOriginal();
 }
 
+void KisDabRenderingExecutor::recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices)
+{
+    m_d->renderingQueue->recyclePaintDevicesForCache(devices);
+}
+

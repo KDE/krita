@@ -114,7 +114,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect);
+    void setDirty(const QRect & rect);
 
     /**
      * Add the given rects to the set of dirty rects for this node;
@@ -128,7 +128,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion &region);
+    void setDirty(const QRegion &region);
 
     /**
      * @brief setDirtyDontResetAnimationCache does almost the same thing as usual

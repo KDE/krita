@@ -155,7 +155,13 @@ void KisUpdateScheduler::progressUpdate()
     }
 }
 
-void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect)
+{
+    m_d->updatesQueue.addUpdateJob(node, rects, cropRect, currentLevelOfDetail());
+    processQueues();
+}
+
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect)
 {
     m_d->updatesQueue.addUpdateJob(node, rc, cropRect, currentLevelOfDetail());
     processQueues();

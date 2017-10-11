@@ -228,11 +228,14 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
 
 void FreehandStrokeStrategy::issueSetDirtySignals()
 {
+    QVector<QRect> dirtyRects;
+
     Q_FOREACH (PainterInfo *info, painterInfos()) {
-        QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
-        //KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
-        targetNode()->setDirty(dirtyRects);
+        dirtyRects.append(info->painter->takeDirtyRegion());
     }
+
+    //KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
+    targetNode()->setDirty(dirtyRects);
 }
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)

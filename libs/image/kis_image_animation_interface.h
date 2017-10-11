@@ -100,7 +100,9 @@ public:
      */
     void requestFrameRegeneration(int frameId, const QRegion &dirtyRegion);
 
+
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
+    void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
     void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
     /**

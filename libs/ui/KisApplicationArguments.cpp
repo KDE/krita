@@ -29,6 +29,10 @@
 #include <QBuffer>
 
 #include <klocalizedstring.h>
+#include <KisPart.h>
+#include <KisDocument.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 
 struct Q_DECL_HIDDEN KisApplicationArguments::Private
 {
@@ -48,6 +52,12 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     bool canvasOnly {false};
     bool noSplash {false};
     bool fullScreen {false};
+
+    bool newImage {false};
+    QString colorModel {"RGBA"};
+    QString colorDepth {"U8"};
+    int width {2000};
+    int height {5000};
 };
 
 
@@ -69,6 +79,20 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addHelpOption();
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("print"), i18n("Only print and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("template"), i18n("Open a new document with a template")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("new-image"), i18n("Create a new image on startup.\n"
+                                                                                          "Possible colorspace values are:\n"
+                                                                                          "    * RGBA\n"
+                                                                                          "    * XYZA\n"
+                                                                                          "    * LABA\n"
+                                                                                          "    * CMYKA\n"
+                                                                                          "    * GRAY\n"
+                                                                                          "    * YCbCrA\n"
+                                                                                          "Possible channel depth arguments are\n"
+                                                                                          "    * U8 (8 bits integer)\n"
+                                                                                          "    * U16 (16 bits integer)\n"
+                                                                                          "    * F16 (16 bits floating point)\n"
+                                                                                          "    * F32 (32 bits floating point)\n"),
+                                        QLatin1String("colorspace,depth,width,height")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("workspace"), i18n("The name of the workspace to open Krita with"), QLatin1String("workspace")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("canvasonly"), i18n("Start Krita in canvas-only mode")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("nosplash"), i18n("Do not show the splash screen")));
@@ -97,9 +121,23 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
         }
     }
 
+    QString newImageValues = parser.value("new-image");
+    d->newImage = !newImageValues.isEmpty();
+    if (d->newImage) {
+        QStringList v = newImageValues.split(",");
+        if (v.size() != 4) {
+            d->newImage = false;
+            qWarning() << "Cannot create a new image: please specify colormodel, depth, width and height.";
+        }
+        d->colorModel = v[0].toUpper();
+        d->colorDepth = v[1].toUpper();
+        d->width = v[2].toInt();
+        d->height = v[3].toInt();
+    }
+
+
     d->exportFileName = parser.value("export-filename");
     d->workspace = parser.value("workspace");
-
     d->doTemplate = parser.isSet("template");
     d->print = parser.isSet("print");
     d->exportAs = parser.isSet("export");
@@ -169,6 +207,14 @@ QByteArray KisApplicationArguments::serialize()
     ds << d->canvasOnly;
     ds << d->noSplash;
     ds << d->fullScreen;
+    ds << d->newImage;
+    ds << d->height;
+    ds << d->width;
+    ds << d->height;
+    ds << d->colorModel;
+    ds << d->colorDepth;
+
+
 
     buf.close();
 
@@ -201,6 +247,12 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
     ds >> args.d->canvasOnly;
     ds >> args.d->noSplash;
     ds >> args.d->fullScreen;
+    ds >> args.d->newImage;
+    ds >> args.d->height;
+    ds >> args.d->width;
+    ds >> args.d->height;
+    ds >> args.d->colorModel;
+    ds >> args.d->colorDepth;
 
     buf.close();
 
@@ -265,4 +317,23 @@ bool KisApplicationArguments::noSplash() const
 bool KisApplicationArguments::fullScreen() const
 {
     return d->fullScreen;
+}
+
+bool KisApplicationArguments::doNewImage() const
+{
+    return d->newImage;
+}
+
+KisDocument *KisApplicationArguments::image() const
+{
+    KisDocument *doc = KisPart::instance()->createDocument();
+    qDebug() << d->colorDepth << d->colorDepth;
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(d->colorModel, d->colorDepth, "");
+    if (!cs) {
+        qWarning() << "Could not create the colorspace for the new image. Check the colorspace and depth arguments.";
+        return 0;
+    }
+
+    doc->newImage(i18n("Unnamed"), d->width, d->height, cs, KoColor(QColor(Qt::white), cs), false, 1, "", 100.0);
+    return doc;
 }

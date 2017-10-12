@@ -263,7 +263,14 @@ public:
      * Return all the properties of this layer as a KoProperties-based
      * serializable key-value list.
      */
-    KoProperties & nodeProperties() const;
+    const KoProperties & nodeProperties() const;
+
+    /**
+     * Set a node property.
+     * @param name name of the property to be set.
+     * @param value value to set the property to.
+     */
+    void setNodeProperty(const QString & name, const QVariant & value);
 
     /**
      * Merge the specified properties with the properties of this

@@ -225,6 +225,13 @@ protected:
      */
     virtual QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
+    /**
+     * Called each time direct child nodes are added or removed under this
+     * node as parent. This does not track changes inside the child nodes
+     * or the child nodes' properties.
+     */
+    virtual void childNodeChanged(KisNodeSP changedChildNode);
+
 public: // Graph methods
 
     /**

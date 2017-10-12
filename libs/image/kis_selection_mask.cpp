@@ -134,7 +134,7 @@ void KisSelectionMask::setSectionModelProperties(const KisBaseNode::PropertyList
 
 void KisSelectionMask::setVisible(bool visible, bool isLoading)
 {
-    nodeProperties().setProperty("visible", visible);
+    setNodeProperty("visible", visible);
 
     if (!isLoading) {
         if (selection())
@@ -160,7 +160,7 @@ void KisSelectionMask::setActive(bool active)
         }
     }
 
-    nodeProperties().setProperty("active", active);
+    setNodeProperty("active", active);
 
     if (image) {
         image->nodeChanged(this);

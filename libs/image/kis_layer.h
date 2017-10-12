@@ -224,6 +224,11 @@ public:
      */
     void updateClones(const QRect &rect);
 
+    /**
+     * Informs this layers that its masks might have changed.
+     */
+    void notifyChildMaskChanged(KisNodeSP changedChildMask);
+
 public:
     qint32 x() const override;
     qint32 y() const override;
@@ -256,7 +261,13 @@ public:
     /**
      * @return the list of effect masks
      */
-    QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode = 0) const;
+    const QList<KisEffectMaskSP> &effectMasks() const;
+
+    /**
+     * @return the list of effect masks up to a certain node
+     */
+    QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode) const;
+
 
     /**
      * Get the group layer that contains this layer.
@@ -271,6 +282,8 @@ public:
 protected:
     // override from KisNode
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+
+    void childNodeChanged(KisNodeSP changedChildNode) override;
 
 protected:
 
@@ -371,6 +384,13 @@ protected:
                      KisNodeSP filthyNode, KisNodeSP lastNode) const;
 
     bool canMergeAndKeepBlendOptions(KisLayerSP otherLayer);
+
+    void updateSelectionMask();
+
+    void updateEffectMasks();
+
+    QList<KisEffectMaskSP> searchEffectMasks(KisNodeSP lastNode) const;
+
 private:
     friend class KisLayerProjectionPlane;
     friend class KisTransformMask;

@@ -430,8 +430,8 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita.xmlgui"));
-    setXMLFile(":/kxmlgui5/krita.xmlgui");
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
+    setXMLFile(":/kxmlgui5/krita4.xmlgui");
 
     guiFactory()->addClient(this);
 
@@ -451,11 +451,12 @@ KisMainWindow::KisMainWindow()
             connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
             act->setChecked(!toolBar->isHidden());
             toolbarList.append(act);
-        } else
+        } else {
             warnUI << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+        }
     }
     plugActionList("toolbarlist", toolbarList);
-    setToolbarList(toolbarList);
+    d->toolbarList = toolbarList;
 
     applyToolBarLayout();
 
@@ -477,9 +478,6 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
-
-
-
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -986,7 +984,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first().remove("*.");
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first();
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
@@ -1936,12 +1934,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     else {
         restoreState(d->dockerStateBeforeHiding);
     }
-}
-
-void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
-{
-    qDeleteAll(d->toolbarList);
-    d->toolbarList = toolbarList;
 }
 
 void KisMainWindow::slotDocumentTitleModified()

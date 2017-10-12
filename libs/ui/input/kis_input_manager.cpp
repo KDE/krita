@@ -192,7 +192,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         // global shortcuts (not the input manager's ones) are not
         // executed, in particular, this line will accept events when the
         // tool is in text editing, preventing shortcut triggering
-        d->toolProxy->processEvent(event);
+        if (d->toolProxy) {
+            d->toolProxy->processEvent(event);
+        }
     }
 
     // Continue with the actual switch statement...
@@ -547,7 +549,7 @@ KisCanvas2* KisInputManager::canvas() const
     return d->canvas;
 }
 
-KisToolProxy* KisInputManager::toolProxy() const
+QPointer<KisToolProxy> KisInputManager::toolProxy() const
 {
     return d->toolProxy;
 }
@@ -570,13 +572,11 @@ void KisInputManager::slotToolChanged()
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;
             d->matcher.suppressAllActions(true);
+        } else {
+            d->forwardAllEventsToTool = false;
+            d->matcher.suppressAllActions(false);
         }
-    } else {
-        d->forwardAllEventsToTool = false;
-        d->matcher.suppressAllActions(false);
     }
-
-
 }
 
 

@@ -42,16 +42,16 @@ KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
 
 void KisColorPatches::setColors(QList<KoColor>colors)
 {
-    if(m_allowColorListChangeGuard) {
+    if (m_allowColorListChangeGuard) {
         m_colors = colors;
 
         m_allowColorListChangeGuard=false;
 
         KisColorPatches* parent = dynamic_cast<KisColorPatches*>(m_parent);
-        if(parent) parent->setColors(colors);
+        if (parent) parent->setColors(colors);
 
         KisColorPatches* popup = dynamic_cast<KisColorPatches*>(m_popup);
-        if(popup) popup->setColors(colors);
+        if (popup) popup->setColors(colors);
 
         m_allowColorListChangeGuard=true;
 

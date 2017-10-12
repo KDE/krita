@@ -22,3 +22,8 @@ ecm_add_test(
     TestKoProgressUpdater.cpp
     TEST_NAME TestKoProgressUpdater
     LINK_LIBRARIES kritaui Qt5::Test)
+
+ecm_add_test(
+    KisActionsSnapshotTest.cpp
+    NAME_PREFIX "libs-widgetutils-"
+    LINK_LIBRARIES kritawidgetutils Qt5::Test)

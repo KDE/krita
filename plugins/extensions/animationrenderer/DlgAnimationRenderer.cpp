@@ -75,7 +75,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
-    m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
+   //m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end()); // animators sometimes want to export after end frame
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
     QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());

@@ -27,7 +27,7 @@
 #include "kis_global.h"
 #include "kis_curve_option.h"
 #include "kis_signals_blocker.h"
-
+#include "kis_icon_utils.h"
 
 inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
 {
@@ -61,7 +61,21 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
-    connect(m_curveOptionWidget->CurveResetButton, SIGNAL(clicked(bool)), this, SLOT(resetCurve()));
+
+
+    // set all the icons for the curve preset shapes
+    updateThemedIcons();
+
+    // various curve preset buttons with predefined curves
+    connect(m_curveOptionWidget->linearCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveLinear()));
+    connect(m_curveOptionWidget->revLinearButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveReverseLinear()));
+    connect(m_curveOptionWidget->jCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveJShape()));
+    connect(m_curveOptionWidget->lCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveLShape()));
+    connect(m_curveOptionWidget->sCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveSShape()));
+    connect(m_curveOptionWidget->reverseSCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveReverseSShape()));
+    connect(m_curveOptionWidget->uCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveUShape()));
+    connect(m_curveOptionWidget->revUCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveArchShape()));
+
 
     m_curveOptionWidget->label_ymin->setText(minLabel);
     m_curveOptionWidget->label_ymax->setText(maxLabel);
@@ -175,10 +189,81 @@ void KisCurveOptionWidget::updateValues()
     emitSettingChanged();
 }
 
-void KisCurveOptionWidget::resetCurve()
+void KisCurveOptionWidget::changeCurveLinear()
 {
-    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve());
+    QList<QPointF> points;
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(1,1));
+    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
 }
+
+void KisCurveOptionWidget::changeCurveReverseLinear()
+{
+        QList<QPointF> points;
+        points.push_back(QPointF(0,1));
+        points.push_back(QPointF(1,0));
+        m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+void KisCurveOptionWidget::changeCurveSShape()
+{
+        QList<QPointF> points;
+        points.push_back(QPointF(0,0));
+        points.push_back(QPointF(0.25,0.1));
+        points.push_back(QPointF(0.75,0.9));
+        points.push_back(QPointF(1, 1));
+        m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+
+void KisCurveOptionWidget::changeCurveReverseSShape()
+{
+        QList<QPointF> points;
+        points.push_back(QPointF(0,1));
+        points.push_back(QPointF(0.25,0.9));
+        points.push_back(QPointF(0.75,0.1));
+        points.push_back(QPointF(1,0));
+        m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+void KisCurveOptionWidget::changeCurveJShape()
+{
+    QList<QPointF> points;
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(0.35,0.1));
+    points.push_back(QPointF(1,1));
+    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+void KisCurveOptionWidget::changeCurveLShape()
+{
+    QList<QPointF> points;
+    points.push_back(QPointF(0,1));
+    points.push_back(QPointF(0.25,0.48));
+    points.push_back(QPointF(1,0));
+    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+void KisCurveOptionWidget::changeCurveUShape()
+{
+    QList<QPointF> points;
+    points.push_back(QPointF(0,1));
+    points.push_back(QPointF(0.5,0));
+    points.push_back(QPointF(1,1));
+    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+void KisCurveOptionWidget::changeCurveArchShape()
+{
+    QList<QPointF> points;
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(0.5,1));
+    points.push_back(QPointF(1,0));
+    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
+}
+
+
+
 
 void KisCurveOptionWidget::disableWidgets(bool disable)
 {
@@ -190,5 +275,19 @@ void KisCurveOptionWidget::disableWidgets(bool disable)
     m_curveOptionWidget->label_ymax->setDisabled(disable);
     m_curveOptionWidget->label_ymin->setDisabled(disable);
 
+}
+
+
+void KisCurveOptionWidget::updateThemedIcons()
+{
+    // set all the icons for the curve preset shapes
+    m_curveOptionWidget->linearCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-linear"));
+    m_curveOptionWidget->revLinearButton->setIcon(KisIconUtils::loadIcon("curve-preset-linear-reverse"));
+    m_curveOptionWidget->jCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-j"));
+    m_curveOptionWidget->lCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-l"));
+    m_curveOptionWidget->sCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-s"));
+    m_curveOptionWidget->reverseSCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-s-reverse"));
+    m_curveOptionWidget->uCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-u"));
+    m_curveOptionWidget->revUCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-arch"));
 }
 

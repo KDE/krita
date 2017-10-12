@@ -52,6 +52,8 @@ class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectang
     Q_OBJECT
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
+    QMenu* popupActionsMenu() override;
+
 public Q_SLOTS:
     void setSelectionAction(int);
 };

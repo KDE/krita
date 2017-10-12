@@ -17,13 +17,16 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #include "kedittoolbar.h"
 #include "kedittoolbar_p.h"
+
 #include "config-xmlgui.h"
+
 #include <QShowEvent>
 #include <QAction>
 #include <QDialogButtonBox>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include <QLayout>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -54,6 +57,7 @@
 #include "ktoolbar.h"
 
 #include <kis_icon_utils.h>
+#include "kis_action_registry.h"
 
 static const char separatorstring[] = I18N_NOOP("--- separator ---");
 
@@ -94,48 +98,60 @@ public:
     enum XmlType { Shell = 0, Part, Local, Merged };
 
     explicit XmlData(XmlType xmlType, const QString &xmlFile, KActionCollection *collection)
-        : m_isModified(false),
-          m_xmlFile(xmlFile),
-          m_type(xmlType),
-          m_actionCollection(collection)
+        : m_isModified(false)
+        , m_xmlFile(xmlFile)
+        , m_type(xmlType)
+        , m_actionCollection(collection)
     {
     }
+
+    ~XmlData()
+    {
+    }
+
     void dump() const
     {
 #if 0
-        qDebug(240) << "XmlData" << this << "type" << s_XmlTypeToString[m_type] << "xmlFile:" << m_xmlFile;
+        qDebug() << "XmlData" << this << "xmlFile:" << m_xmlFile;
         foreach (const QDomElement &element, m_barList) {
-            qDebug(240) << "    ToolBar:" << toolBarText(element);
+            qDebug() << "    ToolBar:" << toolBarText(element);
         }
+        //KisActionRegistry::instance()->
         if (m_actionCollection) {
-            qDebug(240) << "    " << m_actionCollection->actions().count() << "actions in the collection.";
+            qDebug() << "    " << m_actionCollection->actions().count() << "actions in the collection.";
         } else {
-            qDebug(240) << "    no action collection.";
+            qDebug() << "    no action collection.";
         }
 #endif
     }
+
     QString xmlFile() const
     {
         return m_xmlFile;
     }
+
     XmlType type() const
     {
         return m_type;
     }
+
     KActionCollection *actionCollection() const
     {
         return m_actionCollection;
     }
+
     void setDomDocument(const QDomDocument &domDoc)
     {
         m_document = domDoc.cloneNode().toDocument();
         m_barList = findToolBars(m_document.documentElement());
     }
+
     // Return reference, for e.g. actionPropertiesElement() to modify the document
     QDomDocument &domDocument()
     {
         return m_document;
     }
+
     const QDomDocument &domDocument() const
     {
         return m_document;
@@ -146,11 +162,13 @@ public:
      */
     QString toolBarText(const QDomElement &it) const;
 
-    bool         m_isModified;
+    bool m_isModified;
+
     ToolBarList &barList()
     {
         return m_barList;
     }
+
     const ToolBarList &barList() const
     {
         return m_barList;
@@ -161,7 +179,7 @@ private:
     QString      m_xmlFile;
     QDomDocument m_document;
     XmlType      m_type;
-    KActionCollection *m_actionCollection;
+    KActionCollection *m_actionCollection {0};
 };
 
 QString XmlData::toolBarText(const QDomElement &it) const
@@ -195,8 +213,6 @@ QString XmlData::toolBarText(const QDomElement &it) const
     }
     return name;
 }
-
-typedef QList<XmlData> XmlDataList;
 
 class ToolBarItem : public QListWidgetItem
 {
@@ -508,7 +524,7 @@ public:
 #ifndef NDEBUG
     void dump() const
     {
-        XmlDataList::const_iterator xit = m_xmlFiles.begin();
+        QList<XmlData>::const_iterator xit = m_xmlFiles.begin();
         for (; xit != m_xmlFiles.end(); ++xit) {
             (*xit).dump();
         }
@@ -542,7 +558,7 @@ public:
     ToolBarListWidget *m_inactiveList;
     ToolBarListWidget *m_activeList;
 
-    XmlDataList m_xmlFiles;
+    QList<XmlData> m_xmlFiles;
 
     QLabel     *m_comboLabel;
     KSeparator *m_comboSeparator;
@@ -585,16 +601,6 @@ public:
 };
 
 Q_GLOBAL_STATIC(QString, s_defaultToolBarName)
-
-KEditToolBar::KEditToolBar(KActionCollection *collection,
-                           QWidget *parent)
-    : QDialog(parent),
-      d(new KEditToolBarPrivate(this))
-{
-    d->m_widget = new KEditToolBarWidget(collection, this);
-    d->init();
-    d->m_collection = collection;
-}
 
 KEditToolBar::KEditToolBar(KXMLGUIFactory *factory,
                            QWidget *parent)
@@ -817,6 +823,7 @@ void KEditToolBarWidgetPrivate::initOldStyle(const QString &resourceFile,
         bool global,
         const QString &defaultToolBar)
 {
+    qDebug() << "initOldStyle";
     //TODO: make sure we can call this multiple times?
     if (m_loadedOnce) {
         return;
@@ -857,6 +864,7 @@ void KEditToolBarWidgetPrivate::initOldStyle(const QString &resourceFile,
 void KEditToolBarWidgetPrivate::initFromFactory(KXMLGUIFactory *factory,
         const QString &defaultToolBar)
 {
+    qDebug() << "initFromFactory";
     //TODO: make sure we can call this multiple times?
     if (m_loadedOnce) {
         return;
@@ -906,7 +914,7 @@ void KEditToolBarWidgetPrivate::initFromFactory(KXMLGUIFactory *factory,
 void KEditToolBarWidget::save()
 {
     //qDebug(240) << "KEditToolBarWidget::save";
-    XmlDataList::Iterator it = d->m_xmlFiles.begin();
+    QList<XmlData>::Iterator it = d->m_xmlFiles.begin();
     for (; it != d->m_xmlFiles.end(); ++it) {
         // let's not save non-modified files
         if (!((*it).m_isModified)) {
@@ -1130,7 +1138,7 @@ void KEditToolBarWidgetPrivate::loadToolBarCombo(const QString &defaultToolBar)
     int defaultToolBarId = -1;
     int count = 0;
     // load in all of the toolbar names into this combo box
-    XmlDataList::const_iterator xit = m_xmlFiles.constBegin();
+    QList<XmlData>::const_iterator xit = m_xmlFiles.constBegin();
     for (; xit != m_xmlFiles.constEnd(); ++xit) {
         // skip the merged one in favor of the local one,
         // so that we can change icons
@@ -1275,7 +1283,7 @@ void KEditToolBarWidgetPrivate::slotToolBarSelected(int index)
     // To do that, we do the same iteration as the one which filled in the combobox.
 
     int toolbarNumber = 0;
-    XmlDataList::iterator xit = m_xmlFiles.begin();
+    QList<XmlData>::iterator xit = m_xmlFiles.begin();
     for (; xit != m_xmlFiles.end(); ++xit) {
 
         // skip the merged one in favor of the local one,
@@ -1521,7 +1529,7 @@ void KEditToolBarWidgetPrivate::slotDownButton()
 
 void KEditToolBarWidgetPrivate::updateLocal(QDomElement &elem)
 {
-    XmlDataList::Iterator xit = m_xmlFiles.begin();
+    QList<XmlData>::Iterator xit = m_xmlFiles.begin();
     for (; xit != m_xmlFiles.end(); ++xit) {
         if ((*xit).type() == XmlData::Merged) {
             continue;

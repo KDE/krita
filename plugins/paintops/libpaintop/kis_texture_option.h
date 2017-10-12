@@ -84,6 +84,8 @@ private:
     qreal m_scale;
     int m_offsetX;
     int m_offsetY;
+    qreal m_brightness;
+    qreal m_contrast;
     TexturingMode m_texturingMode;
     bool m_invert;
     KoPattern *m_pattern;

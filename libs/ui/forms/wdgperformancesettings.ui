@@ -238,7 +238,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will not use more CPU cores than seleted by this limit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will not use more CPU cores than selected by this limit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -258,7 +258,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When rendering animation frames (into files or during animation cache regeneration), Krita will make the specified number of copies of your image and will work on them in parallel. Each copy will demand more RAM for its storage (about 20% of the size of you image), so raise this limit only if you have enough RAM installed.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recommended value:&lt;/span&gt; set Clones Limit to the number of &lt;span style=&quot; text-decoration: underline;&quot;&gt;physical&lt;/span&gt; (non-hyperthreaded) core you CPU has&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When rendering animation frames (into files or during animation cache regeneration), Krita will make the specified number of copies of your image and will work on them in parallel. Each copy will demand more RAM for its storage (about 20% of the size of you image), so raise this limit only if you have enough RAM installed.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recommended value:&lt;/span&gt; set Clones Limit to the number of &lt;span style=&quot; text-decoration: underline;&quot;&gt;physical&lt;/span&gt; (non-hyperthreaded) cores your CPU has&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>

@@ -114,9 +114,23 @@ QString getInstallationPrefix() {
 
      debugWidgetUtils << ">>>>>>>>>>>" << bundlePath;
      return bundlePath;
- #else
-     return qApp->applicationDirPath() + "/../";
- #endif
+#else
+    #ifdef Q_OS_QWIN
+        QDir appdir(qApp->applicationDirPath());
+
+        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+        wchar_t buffer[1024];
+        QString absolute = appdir.absolutePath();
+        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+        rv = ::GetLongPathName(buffer, buffer, 1024);
+        QString correctedPath((QChar *)buffer);
+        appdir.setPath(correctedPath);
+        appdir.cdUp();
+        return appdir.canonicalPath();
+    #else
+        return qApp->applicationDirPath() + "/../";
+    #endif
+#endif
 }
 
 class Q_DECL_HIDDEN KoResourcePaths::Private {
@@ -126,6 +140,8 @@ public:
 
     QMutex relativesMutex;
     QMutex absolutesMutex;
+
+    bool ready = false; // Paths have been initialized
 
     QStringList aliases(const QString &type)
     {
@@ -312,7 +328,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
             }
         }
     }
-    if (resource.isEmpty() || !QFile::exists(resource)) {        
+    if (resource.isEmpty() || !QFile::exists(resource)) {
         QString approot = getApplicationRoot();
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;
@@ -443,7 +459,9 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     debugWidgetUtils << "\tresources also from aliases:" << resources.size();
 
-    QFileInfo fi(filter);
+    // if the original filter is "input/*", we only want share/input/* and share/krita/input/* here, but not
+    // share/*. therefore, use _filter here instead of filter which was split into alias and "*".
+    QFileInfo fi(_filter);
 
     QStringList prefixResources;
     prefixResources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), false);
@@ -533,4 +551,14 @@ QString KoResourcePaths::locateLocalInternal(const QString &type, const QString 
     QString path = saveLocationInternal(type, "", createDir);
     debugWidgetUtils << "locateLocal: type" << type << "filename" << filename << "CreateDir" << createDir << "path" << path;
     return path + '/' + filename;
+}
+
+void KoResourcePaths::setReady()
+{
+    s_instance->d->ready = true;
+}
+
+void KoResourcePaths::assertReady()
+{
+    KIS_ASSERT_X(s_instance->d->ready, "KoResourcePaths::assertReady", "Resource paths are not ready yet.");
 }

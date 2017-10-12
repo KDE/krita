@@ -44,6 +44,10 @@
 #include <QOpenGLBuffer>
 #include <QMessageBox>
 
+#ifndef Q_OS_OSX
+#include <QOpenGLFunctions_2_1>
+#endif
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -97,6 +101,14 @@ public:
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
+
+#ifndef Q_OS_OSX
+    QOpenGLFunctions_2_1 *glFn201;
+#endif
+
+    qreal pixelGridDrawingThreshold;
+    bool pixelGridEnabled;
+    QColor gridColor;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -222,6 +234,16 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
+#ifndef Q_OS_OSX
+    if (!KisOpenGL::hasOpenGLES()) {
+        d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
+        if (!d->glFn201) {
+            warnUI << "Cannot obtain QOpenGLFunctions_2_1, glLogicOp cannot be used";
+        }
+    } else {
+        d->glFn201 = nullptr;
+    }
+#endif
 
     KisConfig cfg;
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
@@ -377,10 +399,21 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     modelMatrix = projectionMatrix * modelMatrix;
     d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    if (!KisOpenGL::hasOpenGLES()) {
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-    glEnable(GL_COLOR_LOGIC_OP);
-    glLogicOp(GL_XOR);
+        glEnable(GL_COLOR_LOGIC_OP);
+#ifndef Q_OS_OSX
+        if (d->glFn201) {
+            d->glFn201->glLogicOp(GL_XOR);
+        }
+#else
+        glLogicOp(GL_XOR);
+#endif
+    } else {
+        glEnable(GL_BLEND);
+        glBlendFuncSeparate(GL_ONE_MINUS_DST_COLOR, GL_ZERO, GL_ONE, GL_ONE);
+    }
 
     KisConfig cfg;
     QColor cursorColor = cfg.getCursorMainColor();
@@ -423,7 +456,11 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         d->outlineVAO.release();
     }
 
-    glDisable(GL_COLOR_LOGIC_OP);
+    if (!KisOpenGL::hasOpenGLES()) {
+        glDisable(GL_COLOR_LOGIC_OP);
+    } else {
+        glDisable(GL_BLEND);
+    }
 
     d->solidColorShader->release();
 }
@@ -526,11 +563,9 @@ void KisOpenGLCanvas2::drawGrid()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    KisConfig cfg;
-    QColor gridColor = cfg.getPixelGridColor();
     d->solidColorShader->setUniformValue(
                 d->solidColorShader->location(Uniform::FragmentColor),
-                QVector4D(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.5f));
+                QVector4D(d->gridColor.redF(), d->gridColor.greenF(), d->gridColor.blueF(), 0.5f));
 
     if (KisOpenGL::hasOpenGL3()) {
         d->outlineVAO.bind();
@@ -574,6 +609,7 @@ void KisOpenGLCanvas2::drawGrid()
     }
 
     d->solidColorShader->release();
+    glDisable(GL_BLEND);
 }
 
 void KisOpenGLCanvas2::drawImage()
@@ -741,6 +777,7 @@ void KisOpenGLCanvas2::drawImage()
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisable(GL_BLEND);
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()
@@ -752,6 +789,10 @@ void KisOpenGLCanvas2::slotConfigChanged()
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
+
+    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
+    d->pixelGridEnabled = cfg.pixelGridEnabled();
+    d->gridColor = cfg.getPixelGridColor();
 
     notifyConfigChanged();
 }
@@ -789,8 +830,7 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
     drawCheckers();
     drawImage();
-    KisConfig cfg;
-    if ((coordinatesConverter()->effectiveZoom() > cfg.getPixelGridDrawingThreshold() - 0.00001) && cfg.pixelGridEnabled()) {
+    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
         drawGrid();
     }
     if (KisOpenGL::hasOpenGL3()) {

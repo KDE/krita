@@ -33,111 +33,65 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
 
+const KoColor *KoColor::s_prefab = nullptr;
 
-class Q_DECL_HIDDEN KoColor::Private
+void KoColor::init()
 {
-public:
-    Private() : data(0), colorSpace(0) {}
-
-    ~Private() {
-        delete [] data;
-    }
-
-    quint8 * data;
-    const KoColorSpace * colorSpace;
-};
-
-KoColor::KoColor()
-        : d(new Private())
-{
-    d->colorSpace = KoColorSpaceRegistry::instance()->rgb16(0);
-    d->data = new quint8[d->colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
-    d->colorSpace->setOpacity(d->data, OPACITY_OPAQUE_U8, 1);
+	KIS_ASSERT(s_prefab == nullptr);
+	KoColor *prefab = new KoColor(KoColorSpaceRegistry::instance()->rgb16(0));
+	prefab->m_colorSpace->fromQColor(Qt::black, prefab->m_data);
+	prefab->m_colorSpace->setOpacity(prefab->m_data, OPACITY_OPAQUE_U8, 1);
+	s_prefab = prefab;
+#ifndef NODEBUG
+#ifndef QT_NO_DEBUG
+    // warn about rather expensive checks in assertPermanentColorspace().
+	qWarning() << "KoColor debug runtime checks are active.";
+#endif
+#endif
 }
 
 KoColor::KoColor(const KoColorSpace * colorSpace)
-        : d(new Private())
 {
     Q_ASSERT(colorSpace);
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
-    d->data = new quint8[d->colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
-}
-
-KoColor::~KoColor()
-{
-    delete d;
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
+    m_size = m_colorSpace->pixelSize();
+    Q_ASSERT(m_size <= MAX_PIXEL_SIZE);
+    memset(m_data, 0, m_size);
 }
 
 KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
-        : d(new Private())
 {
     Q_ASSERT(color.isValid());
     Q_ASSERT(colorSpace);
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
 
-    d->data = new quint8[colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
+    m_size = m_colorSpace->pixelSize();
+    Q_ASSERT(m_size <= MAX_PIXEL_SIZE);
+    memset(m_data, 0, m_size);
 
-    d->colorSpace->fromQColor(color, d->data);
+    m_colorSpace->fromQColor(color, m_data);
 }
 
 KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
-        : d(new Private())
 {
     Q_ASSERT(colorSpace);
     Q_ASSERT(data);
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
-    d->data = new quint8[colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
-    memmove(d->data, data, colorSpace->pixelSize());
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
+    m_size = m_colorSpace->pixelSize();
+    Q_ASSERT(m_size <= MAX_PIXEL_SIZE);
+    memmove(m_data, data, m_size);
 }
 
 
 KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
-        : d(new Private())
 {
     Q_ASSERT(colorSpace);
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
-    d->data = new quint8[colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
+    m_size = m_colorSpace->pixelSize();
+    Q_ASSERT(m_size <= MAX_PIXEL_SIZE);
+    memset(m_data, 0, m_size);
 
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-}
-
-KoColor::KoColor(const KoColor & rhs)
-        : d(new Private())
-{
-    d->colorSpace = rhs.colorSpace();
-    Q_ASSERT(*d->colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
-    if (d->colorSpace && rhs.d->data) {
-        d->data = new quint8[d->colorSpace->pixelSize()];
-        memcpy(d->data, rhs.d->data, d->colorSpace->pixelSize());
-    }
-}
-
-KoColor & KoColor::operator=(const KoColor & rhs)
-{
-    if (this == &rhs) return *this;
-
-    delete [] d->data;
-    d->data = 0;
-    d->colorSpace = rhs.colorSpace();
-
-    if (rhs.d->colorSpace && rhs.d->data) {
-        Q_ASSERT(d->colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace)); // here we want to do a check on pointer, since d->colorSpace is supposed to already be a permanent one
-        d->data = new quint8[d->colorSpace->pixelSize()];
-        memcpy(d->data, rhs.d->data, d->colorSpace->pixelSize());
-    }
-    return * this;
-}
-
-bool KoColor::operator==(const KoColor &other) const
-{
-    if (*colorSpace() != *other.colorSpace())
-        return false;
-    return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
+    src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace, 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
@@ -145,17 +99,19 @@ void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation
     //dbgPigment <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
 
-    if (*d->colorSpace == *cs)
+    if (*m_colorSpace == *cs)
         return;
 
-    quint8 * data = new quint8[cs->pixelSize()];
-    memset(data, 0, cs->pixelSize());
+    quint8 data[MAX_PIXEL_SIZE];
+    const size_t size = cs->pixelSize();
+    Q_ASSERT(size <= MAX_PIXEL_SIZE);
+    memset(data, 0, size);
 
-    d->colorSpace->convertPixelsTo(d->data, data, cs, 1, renderingIntent, conversionFlags);
+    m_colorSpace->convertPixelsTo(m_data, data, cs, 1, renderingIntent, conversionFlags);
 
-    delete [] d->data;
-    d->data = data;
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
+    memcpy(m_data, data, size);
+    m_size = size;
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
 }
 
 void KoColor::convertTo(const KoColorSpace * cs)
@@ -168,31 +124,29 @@ void KoColor::convertTo(const KoColorSpace * cs)
 void KoColor::setProfile(const KoColorProfile *profile)
 {
     const KoColorSpace *dstColorSpace =
-        KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+            KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (!dstColorSpace) return;
 
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(dstColorSpace);
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(dstColorSpace);
 }
 
 void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
 {
-    Q_ASSERT(data);
     Q_ASSERT(colorSpace);
-    if(d->colorSpace->pixelSize() != colorSpace->pixelSize())
-    {
-        delete [] d->data;
-        d->data = new quint8[colorSpace->pixelSize()];
-    }
-    memcpy(d->data, data, colorSpace->pixelSize());
-    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
+
+    const size_t size = colorSpace->pixelSize();
+    Q_ASSERT(size <= MAX_PIXEL_SIZE);
+
+    memcpy(m_data, data, size);
+    m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
 }
 
 // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a, profile
 void KoColor::toQColor(QColor *c) const
 {
     Q_ASSERT(c);
-    if (d->colorSpace && d->data) {
-        d->colorSpace->toQColor(d->data, c);
+    if (m_colorSpace) {
+        m_colorSpace->toQColor(m_data, c);
     }
 }
 
@@ -203,18 +157,18 @@ QColor KoColor::toQColor() const
     return c;
 }
 
-void KoColor::fromQColor(const QColor& c) const
+void KoColor::fromQColor(const QColor& c)
 {
-    if (d->colorSpace && d->data) {
-        d->colorSpace->fromQColor(c, d->data);
+    if (m_colorSpace) {
+        m_colorSpace->fromQColor(c, m_data);
     }
 }
 
 #ifndef NDEBUG
 void KoColor::dump() const
 {
-    dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id() <<"";
-    QList<KoChannelInfo *> channels = d->colorSpace->channels();
+    dbgPigment <<"KoColor (" << this <<")," << m_colorSpace->id() <<"";
+    QList<KoChannelInfo *> channels = m_colorSpace->channels();
 
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
     QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
@@ -224,13 +178,13 @@ void KoColor::dump() const
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
-            dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
+            dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(m_data[ch->pos()]) <<"";
         } else if (ch->size() == sizeof(quint16)) {
             // Short (may also by an nvidia half)
-            dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
+            dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(m_data+ch->pos())))  <<"";
         } else if (ch->size() == sizeof(quint32)) {
             // Integer (may also be float... Find out how to distinguish these!)
-            dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
+            dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(m_data+ch->pos())))  <<"";
         }
     }
 }
@@ -238,49 +192,34 @@ void KoColor::dump() const
 
 void KoColor::fromKoColor(const KoColor& src)
 {
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 const KoColorProfile *KoColor::profile() const
 {
-    return d->colorSpace->profile();
-}
-
-quint8 * KoColor::data()
-{
-    return d->data;
-}
-
-const quint8 * KoColor::data() const
-{
-    return d->data;
-}
-
-const KoColorSpace * KoColor::colorSpace() const
-{
-    return d->colorSpace;
+    return m_colorSpace->profile();
 }
 
 void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
 {
-    d->colorSpace->colorToXML(d->data, doc, colorElt);
+    m_colorSpace->colorToXML(m_data, doc, colorElt);
 }
 
 void KoColor::setOpacity(quint8 alpha)
 {
-    d->colorSpace->setOpacity(d->data, alpha, 1);
+    m_colorSpace->setOpacity(m_data, alpha, 1);
 }
 void KoColor::setOpacity(qreal alpha)
 {
-    d->colorSpace->setOpacity(d->data, alpha, 1);
+    m_colorSpace->setOpacity(m_data, alpha, 1);
 }
 quint8 KoColor::opacityU8() const
 {
-    return d->colorSpace->opacityU8(d->data);
+    return m_colorSpace->opacityU8(m_data);
 }
 qreal KoColor::opacityF() const
 {
-    return d->colorSpace->opacityF(d->data);
+    return m_colorSpace->opacityF(m_data);
 }
 
 KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId)

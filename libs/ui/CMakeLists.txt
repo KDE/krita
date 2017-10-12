@@ -13,6 +13,7 @@ add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
+    find_library(APPKIT_LIBRARY AppKit)
 endif ()
 
 set(kritaui_LIB_SRCS
@@ -251,6 +252,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_spinbox_color_selector.cpp
     widgets/kis_screen_color_picker.cpp
+    widgets/kis_preset_live_preview_view.cpp
     widgets/KoDualColorButton.cpp
     widgets/kis_color_input.cpp
     widgets/kis_color_button.cpp
@@ -262,6 +264,7 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     widgets/KoShapeFillWrapper.cpp
+
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -320,7 +323,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
-
+    
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
@@ -386,6 +389,7 @@ if(WIN32)
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
+        input/wintab/kis_tablet_support_win8.cpp
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
@@ -423,6 +427,12 @@ if(UNIX)
     endif()
 endif()
 
+if(APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        osx.mm
+    )
+endif()
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
@@ -525,6 +535,7 @@ endif()
 
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
+    target_link_libraries(kritaui ${APPKIT_LIBRARY})
 endif ()
 
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Boudewijn Rempt <boud@kogmbh.com>
+ *  Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,6 +18,7 @@
 
 #include <QVBoxLayout>
 #include <QStandardPaths>
+#include <QDir>
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
@@ -37,7 +38,7 @@ PluginSettings::PluginSettings(QWidget *parent)
 
 PluginSettings::~PluginSettings()
 {
-    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
+//    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
 }
 
 QString PluginSettings::id()
@@ -63,21 +64,34 @@ QIcon PluginSettings::icon()
 
 QString PluginSettings::gmicQtPath()
 {
-    QString gmicqt("gmic_krita_qt");
+    QString gmicqt = "gmic_krita_qt";
 #ifdef Q_OS_WIN
     gmicqt += ".exe";
 #endif
-    gmicqt = KisConfig().readEntry<QString>("gmic_qt_plugin_path",  qApp->applicationDirPath() + "/" + gmicqt);
-    QFileInfo fi(gmicqt);
-    if (!fi.exists()) {
-        QFileInfo fi2(qApp->applicationDirPath() + "/" + gmicqt);
-        if (fi2.exists()) {
-            gmicqt = qApp->applicationDirPath() + "/" + gmicqt;
-        }
-        else {
-            gmicqt.clear();
-        }
+
+    QFileInfo fi(qApp->applicationDirPath() + "/" + gmicqt);
+
+    // Check for gmic-qt next to krita
+    if (fi.exists() && fi.isFile()) {
+//        qDebug() << 1 << fi.canonicalFilePath();
+        return fi.canonicalFilePath();
     }
+
+    // Check whether we've got a gmic subfolder
+    QDir d(qApp->applicationDirPath());
+    QStringList gmicdirs = d.entryList(QStringList() << "gmic*", QDir::Dirs);
+    qDebug() << gmicdirs;
+    if (gmicdirs.isEmpty()) {
+//        qDebug() << 2;
+        return "";
+    }
+    fi = QFileInfo(qApp->applicationDirPath() + "/" + gmicdirs.first() + "/" + gmicqt);
+    if (fi.exists() && fi.isFile()) {
+//        qDebug() << "3" << fi.canonicalFilePath();
+        return fi.canonicalFilePath();
+    }
+
+//    qDebug() << 4 << gmicqt;
     return gmicqt;
 }
 

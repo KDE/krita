@@ -43,6 +43,9 @@ public:
     void setConfigurationSafe(const KisPropertiesConfigurationSP config);
 
 protected:
+
+    friend class CompositeOpModel;
+
     void setConfiguration(const KisPropertiesConfigurationSP  config) override = 0;
     virtual void writeConfiguration(KisPropertiesConfigurationSP config) const = 0;
 

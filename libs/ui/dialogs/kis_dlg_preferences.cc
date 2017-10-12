@@ -83,6 +83,10 @@
 
 #include "input/config/kis_input_configuration_page.h"
 
+#ifdef Q_OS_WIN
+#  include <kis_tablet_support_win8.h>
+#endif
+
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -566,6 +570,17 @@ void TabletSettingsTab::setDefault()
     KisCubicCurve curve;
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
+
+#ifdef Q_OS_WIN
+    if (KisTabletSupportWin8::isAvailable()) {
+        KisConfig cfg;
+        m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
+        m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput(true));
+    } else {
+        m_page->radioWintab->setChecked(true);
+        m_page->radioWin8PointerInput->setChecked(false);
+    }
+#endif
 }
 
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
@@ -583,6 +598,19 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
+
+#ifdef Q_OS_WIN
+    if (KisTabletSupportWin8::isAvailable()) {
+        m_page->radioWintab->setChecked(!cfg.useWin8PointerInput());
+        m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput());
+    } else {
+        m_page->radioWintab->setChecked(true);
+        m_page->radioWin8PointerInput->setChecked(false);
+        m_page->grpTabletApi->setVisible(false);
+    }
+#else
+    m_page->grpTabletApi->setVisible(false);
+#endif
 }
 
 
@@ -769,7 +797,44 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
+    const QString rendererOpenGLText = i18nc("canvas renderer", "OpenGL");
+    const QString rendererAngleText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
+#ifdef Q_OS_WIN
+    cmbRenderer->clear();
+    QString qtPreferredRendererText;
+    if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererAngle) {
+        qtPreferredRendererText = rendererAngleText;
+    } else {
+        qtPreferredRendererText = rendererOpenGLText;
+    }
+    cmbRenderer->addItem(i18nc("canvas renderer", "Auto (%1)", qtPreferredRendererText), KisOpenGL::RendererAuto);
+    cmbRenderer->setCurrentIndex(0);
+    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererDesktopGL) {
+        cmbRenderer->addItem(rendererOpenGLText, KisOpenGL::RendererDesktopGL);
+        if (KisOpenGL::getNextUserOpenGLRendererConfig() == KisOpenGL::RendererDesktopGL) {
+            cmbRenderer->setCurrentIndex(cmbRenderer->count() - 1);
+        }
+    }
+    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererAngle) {
+        cmbRenderer->addItem(rendererAngleText, KisOpenGL::RendererAngle);
+        if (KisOpenGL::getNextUserOpenGLRendererConfig() == KisOpenGL::RendererAngle) {
+            cmbRenderer->setCurrentIndex(cmbRenderer->count() - 1);
+        }
+    }
+#else
+    lblRenderer->setEnabled(false);
+    cmbRenderer->setEnabled(false);
+    cmbRenderer->clear();
+    cmbRenderer->addItem(rendererOpenGLText);
+    cmbRenderer->setCurrentIndex(0);
+#endif
+
+#ifdef Q_OS_WIN
+    if (!(KisOpenGL::getSupportedOpenGLRenderers() &
+            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererAngle))) {
+#else
     if (!KisOpenGL::hasOpenGL()) {
+#endif
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -833,7 +898,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg;
+    cmbRenderer->setCurrentIndex(0);
+#ifdef Q_OS_WIN
+    if (!(KisOpenGL::getSupportedOpenGLRenderers() &
+            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererAngle))) {
+#else
     if (!KisOpenGL::hasOpenGL()) {
+#endif
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -1128,9 +1199,25 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+#ifdef Q_OS_WIN
+        if (KisTabletSupportWin8::isAvailable()) {
+            cfg.setUseWin8PointerInput(dialog->m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
+        }
+#endif
 
         dialog->m_performanceSettings->save();
 
+#ifdef Q_OS_WIN
+        {
+            KisOpenGL::OpenGLRenderer renderer = static_cast<KisOpenGL::OpenGLRenderer>(
+                    dialog->m_displaySettings->cmbRenderer->itemData(
+                            dialog->m_displaySettings->cmbRenderer->currentIndex()).toInt());
+            KisOpenGL::setNextUserOpenGLRendererConfig(renderer);
+            const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+            QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+            kritarc.setValue("OpenGLRenderer", KisOpenGL::convertOpenGLRendererToConfig(renderer));
+        }
+#endif
         if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
             cfg.setCanvasState("TRY_OPENGL");
         cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());

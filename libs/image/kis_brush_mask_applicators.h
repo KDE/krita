@@ -54,6 +54,7 @@ protected:
 
 protected:
     MaskGenerator *m_maskGenerator;
+    std::random_device m_rand_dev;
 };
 
 #if defined HAVE_VC
@@ -162,8 +163,7 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
     const MaskProcessingData *m_d = KisBrushMaskApplicatorBase::m_d;
     MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_maskGenerator;
 
-    std::random_device rand_dev;
-    std::default_random_engine rand_engine{rand_dev()};
+    std::default_random_engine rand_engine{m_rand_dev()};
     std::uniform_real_distribution<> rand_distr(0.0f, 1.0f);
 
     qreal random = 1.0;

@@ -16,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "KisApplication.h"
@@ -25,6 +25,10 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <tchar.h>
+#endif
+
+#ifdef Q_OS_OSX
+#include "osx.h"
 #endif
 
 #include <QDesktopServices>
@@ -87,6 +91,8 @@
 #include "opengl/kis_opengl.h"
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
+#include "KisViewManager.h"
+#include "kis_workspace_resource.h"
 
 #include <KritaVersionWrapper.h>
 namespace {
@@ -149,6 +155,10 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     , m_mainWindow(0)
     , m_batchRun(false)
 {
+#ifdef Q_OS_OSX
+    setMouseCoalescingEnabled(false);
+#endif
+
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
     setApplicationDisplayName("Krita");
@@ -272,6 +282,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
+
+    // Indicate that it is now safe for users of KoResourcePaths to load resources
+    KoResourcePaths::setReady();
 }
 
 void KisApplication::loadResources()
@@ -400,7 +413,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
 
-
     ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);
 
@@ -408,6 +420,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     setSplashScreenLoadingText(i18n("Adding resource types"));
     processEvents();
     addResourceTypes();
+
+    // now we're set up, and the LcmsEnginePlugin will have access to resource paths for color management,
+    // we can finally initialize KoColor.
+    KoColor::init();
 
     // Load all resources and tags before the plugins do that
     loadResources();
@@ -423,7 +439,25 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (showmainWindow) {
             m_mainWindow->initializeGeometry();
-            m_mainWindow->show();
+
+            if (!args.workspace().isEmpty()) {
+                KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+                KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
+                if (workspace) {
+                    m_mainWindow->restoreWorkspace(workspace->dockerState());
+                }
+            }
+
+            if (args.canvasOnly()) {
+                m_mainWindow->viewManager()->switchCanvasOnly(true);
+            }
+
+            if (args.fullScreen()) {
+                m_mainWindow->showFullScreen();
+            }
+            else {
+                m_mainWindow->show();
+            }
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open

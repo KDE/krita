@@ -89,7 +89,7 @@ int main(int argc, char** argv)
             dot = FriendOfColorSpaceRegistry::bestPathToDot(srcKey, dstKey);
         }
     } else {
-        errorPigment << "Unknow graph type : " << graphType.toLatin1();
+        errorPigment << "Unknown graph type : " << graphType.toLatin1();
         exit(EXIT_FAILURE);
     }
 
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
             errorPigment << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
     } else {
-        errorPigment << "Unknow output type : " << outputType;
+        errorPigment << "Unknown output type : " << outputType;
         exit(EXIT_FAILURE);
     }
 }

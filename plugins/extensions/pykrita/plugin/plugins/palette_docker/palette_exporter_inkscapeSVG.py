@@ -7,9 +7,8 @@ By Wolthera.
 
 # Importing the relevant dependancies:
 import sys
-from PyQt5.QtGui import *
-from PyQt5.QtXml import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtXml import QDomDocument
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import math
 from krita import *
 

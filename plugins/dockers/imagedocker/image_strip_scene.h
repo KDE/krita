@@ -24,13 +24,14 @@
 #include <QThread>
 #include <QAtomicInt>
 #include <QMutex>
+#include <QTimer>
 
 class ImageItem;
 
 class ImageLoader: public QThread
 {
     Q_OBJECT
-    
+
     struct Data
     {
         Data() { }
@@ -38,26 +39,26 @@ class ImageLoader: public QThread
             path(p), isLoaded(false) { };
         Data(const Data& d):
             image(d.image), path(d.path), isLoaded(d.isLoaded) { };
-        
+
         QImage     image;
         QString    path;
         QAtomicInt isLoaded;
     };
-    
+
 Q_SIGNALS:
     void sigItemContentChanged(ImageItem* item);
-    
+
 public:
     ImageLoader(float size);
-    
+
     void addPath(ImageItem* item, const QString& path) {
         m_data[item] = Data(path);
     }
-    
+
     bool isImageLoaded(ImageItem* item) const {
         return m_data[item].isLoaded != 0;
     }
-    
+
     QImage getImage(ImageItem* item) const {
         return m_data[item].image;
     }
@@ -82,12 +83,12 @@ public:
     {
         setFlag(QGraphicsItem::ItemIsSelectable, true);
     }
-    
+
     const QString& path() const { return m_path; }
-    
+
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint=QSizeF()) const override;
     void   paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0) override;
-    
+
 private:
     float m_size;
     ImageLoader* m_loader;
@@ -97,7 +98,7 @@ private:
 class ImageStripScene: public QGraphicsScene
 {
     Q_OBJECT
-    
+
 public:
     ImageStripScene();
     ~ImageStripScene() override;
@@ -105,19 +106,20 @@ public:
     QString currentPath() { return m_path; }
 Q_SIGNALS:
     void sigImageActivated(const QString& path);
-    
+
 private:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
-    
+
 private Q_SLOTS:
     void slotItemContentChanged(ImageItem* item);
-    
+
 private:
     float  m_imgSize;
     quint32 m_numItems;
     ImageLoader* m_loader;
     QMutex m_mutex;
     QString m_path;
+    QTimer m_singleShot;
 };
 
 #endif // H_IMAGE_STRIP_SCENE_H_

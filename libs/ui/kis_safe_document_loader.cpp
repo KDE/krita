@@ -68,6 +68,10 @@ public:
         return result;
     }
 
+    QStringList files() const {
+        return m_watcher.files();
+    }
+
 private Q_SLOTS:
     void slotFileChanged(const QString &path) {
         // re-add the file after QSaveFile optimization
@@ -156,6 +160,10 @@ void KisSafeDocumentLoader::reloadImage()
 void KisSafeDocumentLoader::fileChanged(QString path)
 {
     if (path == m_d->path) {
+        if (s_fileSystemWatcher->files().contains(path) == false && QFileInfo(path).exists()) {
+            //When a path is renamed it is removed, so we ought to readd it.
+            s_fileSystemWatcher->addPath(path);
+        }
         m_d->fileChangedFlag = true;
         m_d->fileChangedSignalCompressor.start();
     }

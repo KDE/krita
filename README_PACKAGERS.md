@@ -47,7 +47,6 @@ Krita depends on:
   * ilmbase   
   * jpeg: Note that libjpeg-turbo is recommended.       
   * lcms2     
-  * libcurl   
   * libraw    
   * opencolorio
   * openexr   

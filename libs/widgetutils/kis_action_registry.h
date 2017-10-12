@@ -62,25 +62,24 @@ public:
     static KisActionRegistry *instance();
 
     /**
+     * @return true if the given action exists
+     */
+    bool hasAction(const QString &name) const;
+
+
+    /**
      * @return value @p property for an action @p name.
      *
      * Allow flexible info structure for KisActions, etc.
      */
     QString getActionProperty(const QString &name, const QString &property);
 
-
-    /**
-     * Saves action in a category. Note that this grabs ownership of the action.
-     */
-    void addAction(const QString &name, QAction *a);
-
-
     /**
      * Produces a new QAction based on the .action data files.
      *
      * N.B. this action will not be saved in the registry.
      */
-    QAction * makeQAction(const QString &name, QObject *parent);
+    QAction *makeQAction(const QString &name, QObject *parent);
 
     /**
      * Fills the standard QAction properties of an action.
@@ -89,12 +88,10 @@ public:
      */
     bool propertizeAction(const QString &name, QAction *a);
 
-
     /**
      * Called when "OK" button is pressed in settings dialog.
      */
     void settingsPageSaved();
-
 
     /**
      * Reload custom shortcuts from kritashortcutsrc
@@ -127,7 +124,6 @@ public:
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
-
 
     /**
      * @brief loadShortcutScheme

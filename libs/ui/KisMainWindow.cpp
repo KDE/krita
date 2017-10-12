@@ -590,7 +590,9 @@ void KisMainWindow::showView(KisView *imageView)
         KoToolManager::instance()->initializeCurrentToolForCanvas();
 
         if (d->mdiArea->subWindowList().size() == 1) {
-            imageView->showMaximized();
+			// showMaximized() will break things on iMac 5K
+			// imageView->showMaximized();
+            imageView->show();
         }
         else {
             imageView->show();
@@ -2116,7 +2118,7 @@ void KisMainWindow::configChanged()
 {
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
-    d->mdiArea->setViewMode(viewMode);
+    d->mdiArea->setViewMode(QMdiArea::SubWindowView);
     Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));

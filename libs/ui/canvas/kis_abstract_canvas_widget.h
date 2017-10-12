@@ -46,6 +46,12 @@ public:
 
     virtual QWidget * widget() = 0;
 
+    virtual QWindow *window() = 0;
+
+    virtual void update() = 0;
+
+    virtual void update(const QRect &r) = 0;
+
     virtual KoToolProxy * toolProxy() const = 0;
 
     /// Draw the specified decorations on the view.

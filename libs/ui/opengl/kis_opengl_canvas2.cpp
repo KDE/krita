@@ -32,6 +32,9 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 
+#include "KisViewManager.h"
+#include "input/kis_input_manager.h"
+
 #include <QPainter>
 #include <QPainterPath>
 #include <QPointF>
@@ -72,6 +75,8 @@ public:
 
     bool canvasInitialized{false};
 
+    QWidget *widget;
+    
     KisOpenGLImageTexturesSP openGLImageTextures;
 
     KisOpenGLShaderLoader shaderLoader;
@@ -139,7 +144,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                    QWidget *parent,
                                    KisImageWSP image,
                                    KisDisplayColorConverter *colorConverter)
-    : QOpenGLWidget(parent)
+    : QOpenGLWindow()
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
@@ -152,18 +157,21 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                                      colorConverter->renderingIntent(),
                                                      colorConverter->conversionFlags());
 
-    setAcceptDrops(true);
-    setAutoFillBackground(false);
+    d->widget = QWidget::createWindowContainer(this, parent);
+    QWidget *widget = d->widget; // this
 
-    setFocusPolicy(Qt::StrongFocus);
-    setAttribute(Qt::WA_NoSystemBackground, true);
+    widget->setAcceptDrops(true);
+    widget->setAutoFillBackground(false);
+
+    widget->setFocusPolicy(Qt::StrongFocus);
+    widget->setAttribute(Qt::WA_NoSystemBackground, true);
 #ifdef Q_OS_OSX
-    setAttribute(Qt::WA_AcceptTouchEvents, false);
+    widget->setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
-    setAttribute(Qt::WA_AcceptTouchEvents, true);
+    widget->setAttribute(Qt::WA_AcceptTouchEvents, true);
 #endif
-    setAttribute(Qt::WA_InputMethodEnabled, true);
-    setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+    widget->setAttribute(Qt::WA_InputMethodEnabled, true);
+    widget->setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 
@@ -175,6 +183,22 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
     delete d;
+}
+
+QWidget *KisOpenGLCanvas2::widget() {
+    return d->widget;
+}
+
+QWindow *KisOpenGLCanvas2::window() {
+    return this;
+}
+
+void KisOpenGLCanvas2::update() {
+    QOpenGLWindow::update();
+}
+
+void KisOpenGLCanvas2::update(const QRect &r) {
+    QOpenGLWindow::update(r);
 }
 
 bool KisOpenGLCanvas2::needsFpsDebugging() const
@@ -341,7 +365,7 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
     KisConfig cfg;
 
     qDebug() << "Shader Compilation Failure: " << context;
-    QMessageBox::critical(this, i18nc("@title:window", "Krita"),
+    QMessageBox::critical(widget(), i18nc("@title:window", "Krita"),
                           QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
                           QMessageBox::Close);
 
@@ -351,8 +375,9 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
-    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
-    paintGL();
+	// QT: "Avoid issuing OpenGL commands from this function as there may not be a context current when it is invoked."
+    /*coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+    paintGL();*/
 }
 
 void KisOpenGLCanvas2::paintGL()
@@ -487,7 +512,7 @@ void KisOpenGLCanvas2::drawCheckers()
 
     QRectF viewportRect = !d->wrapAroundMode ?
                 converter->imageRectInViewportPixels() :
-                converter->widgetToViewport(this->rect());
+                converter->widgetToViewport(widget()->rect());
 
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
@@ -797,7 +822,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
     notifyConfigChanged();
 }
 
-QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
+/*QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     return processInputMethodQuery(query);
 }
@@ -805,7 +830,7 @@ QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
-}
+}*/
 
 void KisOpenGLCanvas2::renderCanvasGL()
 {
@@ -900,7 +925,8 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
-    return focusNextPrevChild(next);
+    return false;
+    //return focusNextPrevChild(next);
 }
 
 KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const

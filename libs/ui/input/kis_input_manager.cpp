@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <QApplication>
 #include <QTouchEvent>
-#include <QTouchEvent>
+#include <QWindow>
 
 #include <KoToolManager.h>
 
@@ -62,6 +62,9 @@
 #include "kis_extended_modifiers_mapper.h"
 #include "kis_input_manager_p.h"
 
+
+#include "kis_abstract_canvas_widget.h"
+
 template <typename T>
 uint qHash(QPointer<T> value) {
     return reinterpret_cast<quintptr>(value.data());
@@ -88,11 +91,21 @@ KisInputManager::~KisInputManager()
 
 void KisInputManager::addTrackedCanvas(KisCanvas2 *canvas)
 {
+    QWindow *window = canvas->window();
+    if (window) {
+        d->eventsWindows.insert(window);
+        window->installEventFilter(this);
+    }
     d->canvasSwitcher.addCanvas(canvas);
 }
 
 void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
 {
+    QWindow *window = canvas->window();
+    if (window) {
+        d->eventsWindows.remove(window);
+        window->removeEventFilter(this);
+    }
     d->canvasSwitcher.removeCanvas(canvas);
 }
 
@@ -156,7 +169,9 @@ void KisInputManager::stopIgnoringEvents()
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-    if (object != d->eventsReceiver) return false;
+    if (object != d->eventsReceiver && !d->eventsWindows.contains(object)) {
+        return false;
+    }
 
     if (d->eventEater.eventFilter(object, event)) return false;
 

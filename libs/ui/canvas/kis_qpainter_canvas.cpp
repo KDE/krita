@@ -94,6 +94,18 @@ KisQPainterCanvas::~KisQPainterCanvas()
     delete m_d;
 }
 
+QWindow *KisQPainterCanvas::window() {
+    return nullptr;
+}
+
+void KisQPainterCanvas::update() {
+    widget()->update();
+}
+
+void KisQPainterCanvas::update(const QRect &r) {
+    widget()->update(r);
+}
+
 void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection)
 {
     m_d->prescaledProjection = prescaledProjection;

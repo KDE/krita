@@ -20,6 +20,7 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 
+#include <QOpenGLWindow>
 #include <QOpenGLWidget>
 #ifndef Q_OS_OSX
 #include <QOpenGLFunctions>
@@ -53,7 +54,7 @@ class QPainterPath;
  *
  */
 class KRITAUI_EXPORT KisOpenGLCanvas2
-        : public QOpenGLWidget
+        : public QOpenGLWindow
 #ifndef Q_MOC_RUN
         , protected GLFunctions
 #endif
@@ -67,14 +68,20 @@ public:
 
     ~KisOpenGLCanvas2() override;
 
+    QWindow *window() override;
+
+    void update() override;
+
+    void update(const QRect &r) override;
+
 public: // QOpenGLWidget
 
     void resizeGL(int width, int height) override;
     void initializeGL() override;
     void paintGL() override;
 
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
-    void inputMethodEvent(QInputMethodEvent *event) override;
+    /*QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
+    void inputMethodEvent(QInputMethodEvent *event) override;*/
 
 public:
     void renderCanvasGL();
@@ -92,9 +99,7 @@ public: // Implement kis_abstract_canvas_widget interface
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;
 
-    QWidget *widget() override {
-        return this;
-    }
+    QWidget *widget() override;
 
     bool isBusy() const override;
 

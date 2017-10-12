@@ -67,6 +67,7 @@ public:
     KisToolInvocationAction *defaultInputAction = 0;
 
     QObject *eventsReceiver = 0;
+    QSet<QObject*> eventsWindows;
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<QEvent> compressedMoveEvent;
     bool testingAcceptCompressedTabletEvents = false;

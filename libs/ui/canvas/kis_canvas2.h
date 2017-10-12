@@ -54,6 +54,7 @@ class KisAnimationPlayer;
 class KisShapeController;
 class KisCoordinatesConverter;
 class KoViewConverter;
+class KisAbstractCanvasWidget;
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -123,6 +124,8 @@ public: // KoCanvasBase implementation
 
     const KisCoordinatesConverter* coordinatesConverter() const;
     KoViewConverter *viewConverter() const override;
+
+    QWindow* window();
 
     QWidget* canvasWidget() override;
 
@@ -283,7 +286,7 @@ private:
     void createQPainterCanvas();
     void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
-    void setCanvasWidget(QWidget *widget);
+    void setCanvasWidget(KisAbstractCanvasWidget *widget);
     void resetCanvas(bool useOpenGL);
 
     void notifyLevelOfDetailChange();

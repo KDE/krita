@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QDesktopWidget>
+#include <QOpenGLWindow>
 
 #include <kis_debug.h>
 
@@ -230,9 +231,10 @@ KisCanvas2::~KisCanvas2()
     delete m_d;
 }
 
-void KisCanvas2::setCanvasWidget(QWidget * widget)
+void KisCanvas2::setCanvasWidget(KisAbstractCanvasWidget *tmp)
 {
-    KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
+    QWidget *widget = tmp->widget();
+    
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     if (m_d->popupPalette) {
         m_d->popupPalette->setParent(widget);
@@ -378,6 +380,11 @@ KisInputManager* KisCanvas2::globalInputManager() const
     return m_d->view->globalInputManager();
 }
 
+QWindow* KisCanvas2::window()
+{
+    return m_d->canvasWidget->window();
+}
+
 QWidget* KisCanvas2::canvasWidget()
 {
     return m_d->canvasWidget->widget();
@@ -434,12 +441,12 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->view->image(), &m_d->displayColorConverter);
-    m_d->frameCache = KisAnimationFrameCache::getFrameCache(canvasWidget->openGLImageTextures());
+    KisOpenGLCanvas2 *canvasWindow = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->view->image(), &m_d->displayColorConverter);
+    m_d->frameCache = KisAnimationFrameCache::getFrameCache(canvasWindow->openGLImageTextures());
 
-    setCanvasWidget(canvasWidget);
+    setCanvasWidget(canvasWindow);
 
-    if (canvasWidget->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
+    if (canvasWindow->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
         addDecoration(new KisFpsDecoration(imageView()));
     }
 }
@@ -695,11 +702,11 @@ void KisCanvas2::slotDoCanvasUpdate()
     }
 
     if (m_d->savedUpdateRect.isEmpty()) {
-        m_d->canvasWidget->widget()->update();
+        m_d->canvasWidget->update();
         emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
     } else {
         emit updateCanvasRequested(m_d->savedUpdateRect);
-        m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
+        m_d->canvasWidget->update(m_d->savedUpdateRect);
     }
 
     m_d->savedUpdateRect = QRect();

@@ -77,6 +77,8 @@ namespace
         }
 
         bool isSupportedVersion() const {
+			return true;
+
             return
 #ifdef Q_OS_OSX
                     ((glMajorVersion * 100 + glMinorVersion) >= 302

@@ -48,6 +48,12 @@ public:
 
     ~KisQPainterCanvas() override;
 
+    QWindow *window() override;
+
+    void update() override;
+
+    void update(const QRect &r) override;
+
     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
 public: // QWidget overrides

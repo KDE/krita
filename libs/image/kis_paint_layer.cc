@@ -306,13 +306,11 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
         m_d->onionSkinConnection.clear();
     }
 
-    nodeProperties().setProperty("onionskin", state);
-
     if (m_d->contentChannel) {
         m_d->contentChannel->setOnionSkinsEnabled(state);
     }
 
-    baseNodeChangedCallback();
+    setNodeProperty("onionskin", state);
 }
 
 void KisPaintLayer::slotExternalUpdateOnionSkins()

@@ -125,6 +125,16 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="btnXML">
+           <property name="toolTip">
+            <string>Get the XML for the current filter configuration.</string>
+           </property>
+           <property name="text">
+            <string>XML</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

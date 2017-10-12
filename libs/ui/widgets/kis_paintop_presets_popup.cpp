@@ -118,8 +118,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setToolTip(i18n("The settings for this preset have changed from their default."));
 
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
-    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setToolTip(i18n("Toggle showing presets"));
 
+
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setToolTip(i18n("Toggle showing scratchpad"));
 
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setToolTip(i18n("Reload the brush preset"));
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setToolTip(i18n("Rename the brush preset"));
@@ -662,6 +665,7 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.scratchpadSidebarLabel->setVisible(visible);
 
 
     KisConfig cfg;
@@ -679,6 +683,17 @@ void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.engineFilterLabel->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->setVisible(visible);
+
+
+    // we only want a spacer to work when the toggle icon is present. Otherwise the list of presets will shrink
+    // which is something we don't want
+    if (visible) {
+        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::Ignored,QSizePolicy::Ignored);
+    } else {
+        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    }
+
 }
 
 void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {

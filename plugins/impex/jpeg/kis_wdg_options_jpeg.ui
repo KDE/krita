@@ -68,7 +68,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Compression:</string>
+            <string>Quality</string>
            </property>
           </widget>
          </item>

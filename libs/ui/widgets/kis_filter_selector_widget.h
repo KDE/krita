@@ -37,7 +37,7 @@ class QHideEvent;
 class QShowEvent;
 
 /**
- * XXX
+ * Widget for selecting the filter. This shows the widget if there is any.
  */
 class KisFilterSelectorWidget : public QWidget
 {
@@ -59,6 +59,7 @@ protected Q_SLOTS:
     void setFilterIndex(const QModelIndex&);
     void editConfigurations();
     void update();
+    void showXMLdialog();
 Q_SIGNALS:
     void configurationChanged();
     void sigFilterGalleryToggled(bool visible);

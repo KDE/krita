@@ -87,6 +87,11 @@ public:
     void setZoomMode(KoZoomMode::Mode mode);
 
     /**
+     * @return the current zoom mode.
+     */
+    KoZoomMode::Mode zoomMode() const;
+
+    /**
      * Set the resolution, zoom, the zoom mode for this zoom Controller.
      * Typically for use just after construction to restore the
      * persistent data.

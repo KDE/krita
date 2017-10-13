@@ -114,6 +114,9 @@ private Q_SLOTS:
     void slotCompressedMoveEvent();
 
 private:
+    bool startTouch(bool &retval);
+    void endTouch();
+
     bool eventFilterImpl(QEvent * event);
     template <class Event>
         bool compressMoveEventCommon(Event *event);

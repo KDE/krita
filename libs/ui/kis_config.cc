@@ -1068,6 +1068,7 @@ bool KisConfig::useWin8PointerInput(bool defaultValue) const
 #ifdef Q_OS_WIN
     return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
 #else
+    Q_UNUSED(defaultValue);
     return false;
 #endif
 }
@@ -1080,6 +1081,8 @@ void KisConfig::setUseWin8PointerInput(bool value) const
     if (useWin8PointerInput() != value) {
         m_cfg.writeEntry("useWin8PointerInput", value);
     }
+#else
+    Q_UNUSED(value)
 #endif
 }
 

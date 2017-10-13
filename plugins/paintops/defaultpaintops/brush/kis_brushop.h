@@ -95,6 +95,7 @@ private:
     QScopedPointer<KisDabRenderingExecutor> m_dabExecutor;
     qreal m_currentUpdatePeriod = 20.0;
     KisRollingMeanAccumulatorWrapper m_avgSpacing;
+    KisRollingMeanAccumulatorWrapper m_avgNumDabs;
 
     const int m_idealNumRects;
 };

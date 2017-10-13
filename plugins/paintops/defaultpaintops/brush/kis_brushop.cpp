@@ -52,12 +52,14 @@
 
 #include <QSharedPointer>
 #include <QThread>
+#include "kis_image_config.h"
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_opacityOption(node)
     , m_avgSpacing(50)
-    , m_idealNumRects(QThread::idealThreadCount())
+    , m_avgNumDabs(50)
+    , m_idealNumRects(KisImageConfig().maxNumberOfThreads())
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -283,6 +285,7 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 
                     const int updateRenderingTime = state->dabRenderingTimer.elapsed();
                     const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime() / 1000;
+                    m_avgNumDabs(state->dabsQueue.size());
 
                     QVector<KisFixedPaintDeviceSP> recycledDevices;
                     for (auto it = state->dabsQueue.begin(); it != state->dabsQueue.end(); ++it) {
@@ -292,7 +295,12 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
                     }
                     m_dabExecutor->recyclePaintDevicesForCache(recycledDevices);
 
-                    m_currentUpdatePeriod = qBound(20, qMax(20 * dabRenderingTime, 3 * updateRenderingTime / 2), 100);
+
+
+                    const int approxDabRenderingTime = qreal(dabRenderingTime) / m_idealNumRects * m_avgNumDabs.rollingMean();
+
+                    m_currentUpdatePeriod = qBound(20, int(1.5 * (approxDabRenderingTime + updateRenderingTime)), 100);
+
 
                     { // debug chunk
 //                        const int updateRenderingTime = state->dabRenderingTimer.nsecsElapsed() / 1000;

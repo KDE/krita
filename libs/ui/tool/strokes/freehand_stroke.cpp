@@ -42,6 +42,9 @@ struct FreehandStrokeStrategy::Private
         : resources(_resources),
           needsAsynchronousUpdates(_resources->presetNeedsAsynchronousUpdates())
     {
+        if (needsAsynchronousUpdates) {
+            timeSinceLastUpdate.start();
+        }
     }
 
     Private(const Private &rhs)
@@ -49,6 +52,9 @@ struct FreehandStrokeStrategy::Private
           resources(rhs.resources),
           needsAsynchronousUpdates(rhs.needsAsynchronousUpdates)
     {
+        if (needsAsynchronousUpdates) {
+            timeSinceLastUpdate.start();
+        }
     }
 
     KisStrokeRandomSource randomSource;
@@ -118,10 +124,6 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
          * because FPS is controlled separately, not by the queue's merging algorithm.
          */
         setBalancingRatioOverride(0.01); // set priority to updates
-    }
-
-    if (m_d->needsAsynchronousUpdates) {
-        m_d->timeSinceLastUpdate.start();
     }
 
     KisUpdateTimeMonitor::instance()->startStrokeMeasure();

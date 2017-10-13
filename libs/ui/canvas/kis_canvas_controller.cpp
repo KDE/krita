@@ -214,18 +214,13 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
             QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
 }
 
-void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center)
+void KisCanvasController::rotateCanvas(qreal angle)
 {
-    QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);
+    QPoint newOffset = m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
     m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showRotationValueOnCanvas();
-}
-
-void KisCanvasController::rotateCanvas(qreal angle)
-{
-    rotateCanvas(angle, m_d->coordinatesConverter->widgetCenterPoint());
 }
 
 void KisCanvasController::rotateCanvasRight15()

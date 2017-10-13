@@ -50,7 +50,6 @@ public:
     void deactivate(int shortcut) override;
     void begin(int shortcut, QEvent *event) override;
     void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
-    void inputEvent(QEvent* event) override;
 
 private:
     class Private;

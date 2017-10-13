@@ -51,7 +51,6 @@ public:
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);
-    void rotateCanvas(qreal angle, const QPointF &center);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();

@@ -26,13 +26,11 @@
 class QEvent;
 class QWheelEvent;
 class QTouchEvent;
-class QNativeGestureEvent;
 class QString;
 class QPointF;
 
 class KisStrokeShortcut;
 class KisTouchShortcut;
-class KisNativeGestureShortcut;
 
 /**
  * The class that manages connections between shortcuts and actions.
@@ -91,7 +89,6 @@ public:
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
     void addShortcut(KisTouchShortcut *shortcut);
-    void addShortcut(KisNativeGestureShortcut *shortcut);
 
     /**
      * Returns true if the currently running shortcut supports
@@ -185,11 +182,6 @@ public:
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);
 
-
-    bool nativeGestureBeginEvent(QNativeGestureEvent *event);
-    bool nativeGestureEvent(QNativeGestureEvent *event);
-    bool nativeGestureEndEvent(QNativeGestureEvent *event);
-
     /**
      * Resets the internal state of the matcher and activates the
      * prepared action if possible.
@@ -237,9 +229,6 @@ private:
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);
-
-    bool tryRunNativeGestureShortcut(QNativeGestureEvent *event);
-    bool tryEndNativeGestureShortcut(QNativeGestureEvent *event);
 
 private:
     class Private;

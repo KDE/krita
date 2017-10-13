@@ -19,7 +19,6 @@
 #include "kis_rotate_canvas_action.h"
 
 #include <QApplication>
-#include <QNativeGestureEvent>
 #include <klocalizedstring.h>
 
 #include "kis_cursor.h"
@@ -130,23 +129,4 @@ void KisRotateCanvasAction::cursorMoved(const QPointF &lastPos, const QPointF &p
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
     canvasController->rotateCanvas(angle);
-}
-
-void KisRotateCanvasAction::inputEvent(QEvent* event)
-{
-    switch (event->type()) {
-        case QEvent::NativeGesture: {
-            QNativeGestureEvent *gevent = static_cast<QNativeGestureEvent*>(event);
-            KisCanvas2 *canvas = inputManager()->canvas();
-            KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
-
-            const float angle = gevent->value();
-            QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
-            controller->rotateCanvas(angle, widgetPos);
-            return;
-        }
-        default:
-            break;
-    }
-    KisAbstractInputAction::inputEvent(event);
 }

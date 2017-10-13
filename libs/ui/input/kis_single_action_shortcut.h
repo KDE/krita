@@ -35,7 +35,6 @@ public:
         WheelDown, ///< Mouse wheel moves down.
         WheelLeft, ///< Mouse wheel moves left.
         WheelRight, ///< Mouse wheel moves right.
-        WheelTrackpad, ///< A pan movement on a trackpad.
     };
 
     KisSingleActionShortcut(KisAbstractInputAction *action, int index);

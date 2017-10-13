@@ -76,11 +76,6 @@ void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
     setZoom(mode, 1.0);
 }
 
-KoZoomMode::Mode KoZoomController::zoomMode() const
-{
-    return d->zoomHandler->zoomMode();
-}
-
 void KoZoomController::setPageSize(const QSizeF &pageSize)
 {
     if(d->pageSize == pageSize) return;

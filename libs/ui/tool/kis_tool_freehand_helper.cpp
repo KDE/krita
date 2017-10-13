@@ -40,8 +40,6 @@
 #include "KisStabilizerDelayedPaintHelper.h"
 #include "kis_config.h"
 
-#include "KisStrokeSpeedMeasurer.h"
-
 
 #include <math.h>
 
@@ -62,8 +60,6 @@ const qreal TIMING_UPDATE_INTERVAL = 50.0;
 
 struct KisToolFreehandHelper::Private
 {
-    Private() : cursorSpeedMeasurer(1000) {}
-
     KisPaintingInformationBuilder *infoBuilder;
     KisRecordingAdapter *recordingAdapter;
     KisStrokesFacade *strokesFacade;
@@ -109,7 +105,6 @@ struct KisToolFreehandHelper::Private
 
     int canvasRotation;
     bool canvasMirroredH;
-    KisStrokeSpeedMeasurer cursorSpeedMeasurer;
 
     qreal effectiveSmoothnessDistance() const;
 };
@@ -271,7 +266,6 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
                                           KisNodeSP overrideNode,
                                           KisDefaultBoundsBaseSP bounds)
 {
-    m_d->cursorSpeedMeasurer.reset();
     m_d->strokesFacade = strokesFacade;
 
     m_d->haveTangent = false;
@@ -649,8 +643,6 @@ void KisToolFreehandHelper::endPaint()
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->endStroke();
     }
-
-    ENTER_FUNCTION() << "Cursor speed:" << m_d->cursorSpeedMeasurer.averageSpeed();
 }
 
 void KisToolFreehandHelper::cancelPaint()
@@ -968,14 +960,12 @@ void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)
 {
     paintAt(0, pi);
-    notifyCursorMoved(pi);
 }
 
 void KisToolFreehandHelper::paintLine(const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
     paintLine(0, pi1, pi2);
-    notifyCursorMoved(pi2);
 }
 
 void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
@@ -984,12 +974,6 @@ void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
                                              const KisPaintInformation &pi2)
 {
     paintBezierCurve(0, pi1, control1, control2, pi2);
-    notifyCursorMoved(pi2);
-}
-
-void KisToolFreehandHelper::notifyCursorMoved(const KisPaintInformation &pi)
-{
-    m_d->cursorSpeedMeasurer.addSample(pi.pos(), pi.currentTime());
 }
 
 int KisToolFreehandHelper::canvasRotation()

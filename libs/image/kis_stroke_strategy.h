@@ -35,6 +35,26 @@ public:
     KisStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
     virtual ~KisStrokeStrategy();
 
+    /**
+     * notifyUserStartedStroke() is a callback used by the strokes system to notify
+     * when the user adds the stroke to the strokes queue. That moment corresponds
+     * to the user calling strokesFacade->startStroke(strategy) and might happen much
+     * earlier than the first job being executed.
+     *
+     * NOTE: this method will be executed in the context of the GUI thread!
+     */
+    virtual void notifyUserStartedStroke();
+
+    /**
+     * notifyUserEndedStroke() is a callback used by the strokes system to notify
+     * when the user ends the stroke. That moment corresponds to the user calling
+     * strokesFacade->endStroke(id) and might happen much earlier when the stroke
+     * even started its execution.
+     *
+     * NOTE: this method will be executed in the context of the GUI thread!
+     */
+    virtual void notifyUserEndedStroke();
+
     virtual KisStrokeJobStrategy* createInitStrategy();
     virtual KisStrokeJobStrategy* createFinishStrategy();
     virtual KisStrokeJobStrategy* createCancelStrategy();

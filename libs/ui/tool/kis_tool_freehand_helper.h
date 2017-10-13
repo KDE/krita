@@ -136,8 +136,6 @@ protected:
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2);
 
-    void notifyCursorMoved(const KisPaintInformation &pi2);
-
 private:
     void paint(KisPaintInformation &info);
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,

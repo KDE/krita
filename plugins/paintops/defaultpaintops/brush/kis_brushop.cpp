@@ -57,8 +57,6 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     : KisBrushBasedPaintOp(settings, painter)
     , m_opacityOption(node)
     , m_avgSpacing(50)
-    , m_speedMeasurer(1000)
-    , m_numUpdates(0)
     , m_idealNumRects(QThread::idealThreadCount())
 {
     Q_UNUSED(image);
@@ -114,18 +112,10 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
                     painter->runnableStrokeJobsInterface(),
                     &m_mirrorOption,
                     &m_precisionOption));
-
-    m_strokeTimeSource.start();
 }
 
 KisBrushOp::~KisBrushOp()
 {
-    const qreal avgFps = qreal(m_numUpdates) / m_strokeTimeSource.elapsed() * 1000;
-
-    ENTER_FUNCTION() << qPrintable(QString("Stroke speed: %1 FPS: %2 Benchmark: %3")
-                           .arg(m_speedMeasurer.averageSpeed())
-                           .arg(avgFps)
-                           .arg(m_speedMeasurer.averageSpeed() * avgFps / 25.0));
 }
 
 KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -291,8 +281,6 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 
                     state->painter->setAverageOpacity(state->dabsQueue.last().averageOpacity);
 
-                    m_speedMeasurer.addSamples(state->dabPoints, m_strokeTimeSource.elapsed());
-
                     const int updateRenderingTime = state->dabRenderingTimer.elapsed();
                     const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime() / 1000;
 
@@ -305,7 +293,6 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
                     m_dabExecutor->recyclePaintDevicesForCache(recycledDevices);
 
                     m_currentUpdatePeriod = qBound(20, qMax(20 * dabRenderingTime, 3 * updateRenderingTime / 2), 100);
-                    m_numUpdates++;
 
                     { // debug chunk
 //                        const int updateRenderingTime = state->dabRenderingTimer.nsecsElapsed() / 1000;

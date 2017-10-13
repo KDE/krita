@@ -60,6 +60,13 @@ KisStrokeStrategy::~KisStrokeStrategy()
 {
 }
 
+void KisStrokeStrategy::notifyUserStartedStroke()
+{
+}
+
+void KisStrokeStrategy::notifyUserEndedStroke()
+{
+}
 
 KisStrokeJobStrategy* KisStrokeStrategy::createInitStrategy()
 {

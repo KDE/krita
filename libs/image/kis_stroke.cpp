@@ -37,6 +37,8 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, Type type, int levelOfDe
     m_suspendStrategy.reset(m_strokeStrategy->createSuspendStrategy());
     m_resumeStrategy.reset(m_strokeStrategy->createResumeStrategy());
 
+    m_strokeStrategy->notifyUserStartedStroke();
+
     if(!m_initStrategy) {
         m_strokeInitialized = true;
     }
@@ -143,6 +145,7 @@ void KisStroke::endStroke()
     m_strokeEnded = true;
 
     enqueue(m_finishStrategy.data(), m_strokeStrategy->createFinishData());
+    m_strokeStrategy->notifyUserEndedStroke();
 }
 
 /**

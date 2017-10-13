@@ -39,7 +39,6 @@
 
 #include <KisRollingMeanAccumulatorWrapper.h>
 
-#include "KisStrokeSpeedMeasurer.h"
 #include <QElapsedTimer>
 
 class KisPainter;
@@ -97,10 +96,6 @@ private:
     qreal m_currentUpdatePeriod = 20.0;
     KisRollingMeanAccumulatorWrapper m_avgSpacing;
 
-    KisStrokeSpeedMeasurer m_speedMeasurer;
-    QElapsedTimer m_strokeTimeSource;
-
-    int m_numUpdates;
     const int m_idealNumRects;
 };
 

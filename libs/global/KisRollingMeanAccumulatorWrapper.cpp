@@ -53,3 +53,9 @@ qreal KisRollingMeanAccumulatorWrapper::rollingMean() const
     return boost::accumulators::rolling_mean(m_d->accumulator);
 }
 
+void KisRollingMeanAccumulatorWrapper::reset(int windowSize)
+{
+    m_d->accumulator =
+        accumulator_set<qreal, stats<tag::lazy_rolling_mean>>(
+            tag::rolling_window::window_size = windowSize);
+}

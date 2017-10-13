@@ -16,45 +16,45 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISROLLINGMEANACCUMULATORWRAPPER_H
-#define KISROLLINGMEANACCUMULATORWRAPPER_H
+#ifndef KISSTROKEEFFICIENCYMEASURER_H
+#define KISSTROKEEFFICIENCYMEASURER_H
+
+#include "kritaui_export.h"
+#include <QScopedPointer>
 
 #include <QtGlobal>
-#include <QScopedPointer>
-#include "kritaglobal_export.h"
 
-/**
- * @brief A simple wrapper class that hides boost includes from QtCreator preventing it
- * from crashing when one adds boost's accumulator into a file
- */
+class QPointF;
 
-class KRITAGLOBAL_EXPORT KisRollingMeanAccumulatorWrapper
+class KRITAUI_EXPORT KisStrokeEfficiencyMeasurer
 {
 public:
-    /**
-     * Create a rolling mean accumulator with window \p windowSize
-     */
-    KisRollingMeanAccumulatorWrapper(int windowSize);
-    ~KisRollingMeanAccumulatorWrapper();
+    KisStrokeEfficiencyMeasurer();
+    ~KisStrokeEfficiencyMeasurer();
 
-    /**
-     * Add \p value to a set of numbers
-     */
-    void operator()(qreal value);
+    void setEnabled(bool value);
+    bool isEnabled() const;
 
-    /**
-     * Get rolling mean of the numbers passed to the operator
-     */
-    qreal rollingMean() const;
+    void addSample(const QPointF &pt);
+    void addSamples(const QVector<QPointF> &points);
 
-    /**
-     * Reset  accumulator and any stored value
-     */
-    void reset(int windowSize);
+    qreal averageCursorSpeed() const;
+    qreal averageRenderingSpeed() const;
+    qreal averageFps() const;
+
+    void notifyRenderingStarted();
+    void notifyRenderingFinished();
+
+    void notifyCursorMoveStarted();
+    void notifyCursorMoveFinished();
+
+    void notifyFrameRenderingStarted();
+
+    void reset();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif // KISROLLINGMEANACCUMULATORWRAPPER_H
+#endif // KISSTROKEEFFICIENCYMEASURER_H

@@ -214,9 +214,15 @@ public:
 
     ~FreehandStrokeStrategy() override;
 
+    void initStrokeCallback() override;
+    void finishStrokeCallback() override;
+
     void doStrokeCallback(KisStrokeJobData *data) override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
+
+    void notifyUserStartedStroke() override;
+    void notifyUserEndedStroke() override;
 
 protected:
     FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);

@@ -20,7 +20,9 @@
 
 #include <QtQuickWidgets/QQuickWidget>
 
+
 class KisCanvas2;
+class KisSignalCompressor;
 
 class ThreadManager : public QObject {
     Q_OBJECT
@@ -34,10 +36,14 @@ public:
     int threadCount() const;
     int maxThreadCount() const;
 
+private Q_SLOTS:
+    void slotDoUpdateConfig();
+
 Q_SIGNALS:
     void threadCountChanged();
 private:
-    int m_threadCount {0};
+    int m_threadCount = 0;
+    KisSignalCompressor *m_configUpdateCompressor;
 };
 
 class Throttle : public QQuickWidget  {

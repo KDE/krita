@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>449</height>
+    <width>497</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -26,7 +26,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="textureTab">
       <attribute name="title">
@@ -37,8 +37,8 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>481</width>
-         <height>391</height>
+         <width>251</width>
+         <height>181</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -67,8 +67,8 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>471</width>
-         <height>381</height>
+         <width>461</width>
+         <height>281</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">

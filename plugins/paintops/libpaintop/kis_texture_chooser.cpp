@@ -25,7 +25,6 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     setupUi(this);
 
     chooser->setGrayscalePreview(true);
-    chooser->setMaximumHeight(250);
     chooser->setCurrentItem(0, 0);
 
     scaleSlider->setRange(0.0, 2.0, 2);

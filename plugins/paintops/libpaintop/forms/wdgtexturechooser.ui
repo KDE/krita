@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KisWdgTextureChooser</class>
+ <widget class="QWidget" name="KisWdgTextureChooser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>441</width>
+    <height>310</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="KisPatternChooser" name="chooser">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0">
+     <item row="7" column="0">
+      <widget class="QLabel" name="lblSpacing_2">
+       <property name="text">
+        <string>Cutoff</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QCheckBox" name="chkInvert">
+       <property name="toolTip">
+        <string>The border of the brush will be smoothed to avoid aliasing</string>
+       </property>
+       <property name="text">
+        <string>Invert Pattern</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="2">
+      <widget class="KisMultipliersDoubleSliderSpinBox" name="scaleSlider" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblRatio">
+       <property name="text">
+        <string>Brightness:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="brightnessSlider" native="true"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblDiameter">
+       <property name="text">
+        <string>Scale:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lblAngle">
+       <property name="text">
+        <string>Contrast:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="contrastSlider" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lblSpikes">
+       <property name="text">
+        <string>Horizontal Offset:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="lblRandomness">
+       <property name="text">
+        <string>Vertical Offset:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="KisSliderSpinBox" name="offsetSliderX" native="true"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="lblDensity">
+       <property name="text">
+        <string>Texturing Mode:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="lblSpacing">
+       <property name="text">
+        <string>Cutoff Policy:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QComboBox" name="cmbCutoffPolicy">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <widget class="QCheckBox" name="randomOffsetY">
+       <property name="text">
+        <string>Random Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QCheckBox" name="randomOffsetX">
+       <property name="text">
+        <string>Random Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="KisSliderSpinBox" name="offsetSliderY" native="true"/>
+     </item>
+     <item row="5" column="1">
+      <widget class="QComboBox" name="cmbTexturingMode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="KisGradientSlider" name="cutoffSlider" native="true">
+       <property name="text" stdset="0">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisGradientSlider</class>
+   <extends>QWidget</extends>
+   <header>kis_gradient_slider.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisMultipliersDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_multipliers_double_slider_spinbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPatternChooser</class>
+   <extends>QFrame</extends>
+   <header>widgets/kis_pattern_chooser.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

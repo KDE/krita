@@ -51,150 +51,46 @@
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
-
-
+#include "kis_texture_chooser.h"
 #include <time.h>
 
-class KisTextureOptionWidget : public QWidget
-{
-public:
-
-    KisTextureOptionWidget(QWidget *parent = 0)
-        : QWidget(parent) {
-        QFormLayout *formLayout = new QFormLayout(this);
-        formLayout->setMargin(0);
-
-        chooser = new KisPatternChooser(this);
-        chooser->setGrayscalePreview(true);
-        chooser->setMaximumHeight(250);
-        chooser->setCurrentItem(0, 0);
-        formLayout->addRow(chooser);
-
-        scaleSlider = new KisMultipliersDoubleSliderSpinBox(this);
-        scaleSlider->setRange(0.0, 2.0, 2);
-        scaleSlider->setValue(1.0);
-        scaleSlider->addMultiplier(0.1);
-        scaleSlider->addMultiplier(2);
-        scaleSlider->addMultiplier(10);
-
-        formLayout->addRow(i18n("Scale:"), scaleSlider);
-
-        brightnessSlider = new KisDoubleSliderSpinBox(this);
-        brightnessSlider->setRange(-1.0, 1.0, 2);
-        brightnessSlider->setValue(0.0);
-        brightnessSlider->setToolTip(i18n("Makes texture lighter or darker"));
-        brightnessSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-        formLayout->addRow(i18n("Brightness:"), brightnessSlider);
-
-        contrastSlider = new KisDoubleSliderSpinBox(this);
-        contrastSlider->setRange(0.0, 2.0, 2);
-        contrastSlider->setValue(1.0);
-        contrastSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-        formLayout->addRow(i18n("Contrast:"), contrastSlider);
-
-
-        QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight);
-        offsetSliderX = new KisSliderSpinBox(this);
-        offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        offsetSliderX->setSuffix(i18n(" px"));
-        randomOffsetX = new QCheckBox(i18n("Random Offset"),this);
-        offsetLayoutX->addWidget(offsetSliderX,1,0);
-        offsetLayoutX->addWidget(randomOffsetX,0,0);
-        formLayout->addRow(i18n("Horizontal Offset:"), offsetLayoutX);
-
-
-        QBoxLayout *offsetLayoutY = new QBoxLayout(QBoxLayout::LeftToRight);
-        offsetSliderY = new KisSliderSpinBox(this);
-        offsetSliderY->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        offsetSliderY->setSuffix(i18n(" px"));
-        randomOffsetY = new QCheckBox(i18n("Random Offset"),this);
-        offsetLayoutY->addWidget(offsetSliderY,1,0);
-        offsetLayoutY->addWidget(randomOffsetY,0,0);
-        formLayout->addRow(i18n("Vertical Offset:"), offsetLayoutY);
-
-        cmbTexturingMode = new QComboBox(this);
-        cmbTexturingMode->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        QStringList texturingModes;
-        texturingModes << i18n("Multiply") << i18n("Subtract");
-        cmbTexturingMode->addItems(texturingModes);
-        formLayout->addRow(i18n("Texturing Mode:"), cmbTexturingMode);
-        cmbTexturingMode->setCurrentIndex(KisTextureProperties::SUBTRACT);
-
-        cmbCutoffPolicy = new QComboBox(this);
-        cmbCutoffPolicy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        QStringList cutOffPolicies;
-        cutOffPolicies << i18n("Cut Off Disabled") << i18n("Cut Off Brush") << i18n("Cut Off Pattern");
-        cmbCutoffPolicy->addItems(cutOffPolicies);
-        formLayout->addRow(i18n("Cutoff Policy:"), cmbCutoffPolicy);
-
-        cutoffSlider = new KisGradientSlider(this);
-        cutoffSlider->setMinimumSize(256, 30);
-        cutoffSlider->enableGamma(false);
-        cutoffSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        cutoffSlider->setToolTip(i18n("When pattern texture values are outside the range specified"
-                                      " by the slider, the cut-off policy will be applied."));
-        formLayout->addRow(i18n("Cutoff:"), cutoffSlider);
-
-        chkInvert = new QCheckBox(this);
-        chkInvert->setChecked(false);
-        formLayout->addRow(i18n("Invert Pattern:"), chkInvert);
-
-        setLayout(formLayout);
-    }
-    KisPatternChooser *chooser;
-    KisMultipliersDoubleSliderSpinBox *scaleSlider;
-    KisDoubleSliderSpinBox *brightnessSlider;
-    KisDoubleSliderSpinBox *contrastSlider;
-    KisSliderSpinBox *offsetSliderX;
-    QCheckBox *randomOffsetX;
-    KisSliderSpinBox *offsetSliderY;
-    QCheckBox *randomOffsetY;
-    QComboBox *cmbTexturingMode;
-    KisGradientSlider *cutoffSlider;
-    QComboBox *cmbCutoffPolicy;
-    QCheckBox *chkInvert;
-};
 
 KisTextureOption::KisTextureOption()
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
+    , m_textureChooser(new KisTextureChooser())
 {
     setObjectName("KisTextureOption");
+    setConfigurationPage(m_textureChooser);
 
-    setChecked(false);
-    m_optionWidget = new KisTextureOptionWidget;
-    m_optionWidget->hide();
-    setConfigurationPage(m_optionWidget);
+    connect(m_textureChooser->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
+    connect(m_textureChooser->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->offsetSliderX, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->randomOffsetX, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->offsetSliderY, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SLOT(emitSettingChanged()));
+    connect(m_textureChooser->chkInvert, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    resetGUI(m_textureChooser->chooser->currentResource());
 
-    connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
-    connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->randomOffsetX, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SLOT(emitSettingChanged()));
-    connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
-    resetGUI(m_optionWidget->chooser->currentResource());
 }
 
 KisTextureOption::~KisTextureOption()
 {
-    delete m_optionWidget;
+    delete m_textureChooser;
 }
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    m_optionWidget->chooser->blockSignals(true); // Checking
-    if (!m_optionWidget->chooser->currentResource()) return;
-    KoPattern *pattern = static_cast<KoPattern*>(m_optionWidget->chooser->currentResource());
-    m_optionWidget->chooser->blockSignals(false); // Checking
+     m_textureChooser->chooser->blockSignals(true); // Checking
+    if (!m_textureChooser->chooser->currentResource()) return;
+    KoPattern *pattern = static_cast<KoPattern*>(m_textureChooser->chooser->currentResource());
+    m_textureChooser->chooser->blockSignals(false); // Checking
     if (!pattern) return;
 
     setting->setProperty("Texture/Pattern/Enabled", isChecked());
@@ -202,38 +98,38 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
         return;
     }
 
-    qreal scale = m_optionWidget->scaleSlider->value();
+    qreal scale = m_textureChooser->scaleSlider->value();
 
-    qreal brightness = m_optionWidget->brightnessSlider->value();
+    qreal brightness = m_textureChooser->brightnessSlider->value();
 
-    qreal contrast = m_optionWidget->contrastSlider->value();
+    qreal contrast = m_textureChooser->contrastSlider->value();
 
-    int offsetX = m_optionWidget->offsetSliderX->value();
-    if (m_optionWidget ->randomOffsetX->isChecked()) {
+    int offsetX = m_textureChooser->offsetSliderX->value();
+    if (m_textureChooser ->randomOffsetX->isChecked()) {
 
-        m_optionWidget->offsetSliderX ->setEnabled(false);
-        m_optionWidget->offsetSliderX ->blockSignals(true);
-        m_optionWidget->offsetSliderX ->setValue(offsetX);
-        m_optionWidget->offsetSliderX ->blockSignals(false);
+        m_textureChooser->offsetSliderX ->setEnabled(false);
+        m_textureChooser->offsetSliderX ->blockSignals(true);
+        m_textureChooser->offsetSliderX ->setValue(offsetX);
+        m_textureChooser->offsetSliderX ->blockSignals(false);
     }
     else {
-        m_optionWidget->offsetSliderX ->setEnabled(true);
+        m_textureChooser->offsetSliderX ->setEnabled(true);
     }
 
-    int offsetY = m_optionWidget->offsetSliderY->value();
-    if (m_optionWidget ->randomOffsetY->isChecked()) {
+    int offsetY = m_textureChooser->offsetSliderY->value();
+    if (m_textureChooser ->randomOffsetY->isChecked()) {
 
-        m_optionWidget->offsetSliderY ->setEnabled(false);
-        m_optionWidget->offsetSliderY ->blockSignals(true);
-        m_optionWidget->offsetSliderY ->setValue(offsetY);
-        m_optionWidget->offsetSliderY ->blockSignals(false);
+        m_textureChooser->offsetSliderY ->setEnabled(false);
+        m_textureChooser->offsetSliderY ->blockSignals(true);
+        m_textureChooser->offsetSliderY ->setValue(offsetY);
+        m_textureChooser->offsetSliderY ->blockSignals(false);
     }
     else {
-        m_optionWidget->offsetSliderY ->setEnabled(true);
+        m_textureChooser->offsetSliderY ->setEnabled(true);
     }
 
-    int texturingMode = m_optionWidget->cmbTexturingMode->currentIndex();
-    bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
+    int texturingMode = m_textureChooser->cmbTexturingMode->currentIndex();
+    bool invert = (m_textureChooser->chkInvert->checkState() == Qt::Checked);
 
     setting->setProperty("Texture/Pattern/Scale", scale);
     setting->setProperty("Texture/Pattern/Brightness", brightness);
@@ -241,21 +137,22 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/TexturingMode", texturingMode);
-    setting->setProperty("Texture/Pattern/CutoffLeft", m_optionWidget->cutoffSlider->black());
-    setting->setProperty("Texture/Pattern/CutoffRight", m_optionWidget->cutoffSlider->white());
-    setting->setProperty("Texture/Pattern/CutoffPolicy", m_optionWidget->cmbCutoffPolicy->currentIndex());
+    setting->setProperty("Texture/Pattern/CutoffLeft", m_textureChooser->cutoffSlider->black());
+    setting->setProperty("Texture/Pattern/CutoffRight", m_textureChooser->cutoffSlider->white());
+    setting->setProperty("Texture/Pattern/CutoffPolicy", m_textureChooser->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
 
-    setting->setProperty("Texture/Pattern/MaximumOffsetX",m_optionWidget->offsetSliderX ->maximum());
-    setting->setProperty("Texture/Pattern/MaximumOffsetY",m_optionWidget->offsetSliderY ->maximum());
-    setting->setProperty("Texture/Pattern/isRandomOffsetX",m_optionWidget ->randomOffsetX ->isChecked());
-    setting->setProperty("Texture/Pattern/isRandomOffsetY",m_optionWidget ->randomOffsetY ->isChecked());
+    setting->setProperty("Texture/Pattern/MaximumOffsetX",m_textureChooser->offsetSliderX ->maximum());
+    setting->setProperty("Texture/Pattern/MaximumOffsetY",m_textureChooser->offsetSliderY ->maximum());
+    setting->setProperty("Texture/Pattern/isRandomOffsetX",m_textureChooser ->randomOffsetX ->isChecked());
+    setting->setProperty("Texture/Pattern/isRandomOffsetY",m_textureChooser ->randomOffsetY ->isChecked());
 
     KisEmbeddedPatternManager::saveEmbeddedPattern(setting, pattern);
 }
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
+
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
     if (!isChecked()) {
         return;
@@ -263,23 +160,24 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     if (!pattern) {
-        pattern = static_cast<KoPattern*>(m_optionWidget->chooser->currentResource());
+        pattern = static_cast<KoPattern*>(m_textureChooser->chooser->currentResource());
     }
 
-    m_optionWidget->chooser->setCurrentPattern(pattern);
+    m_textureChooser->chooser->setCurrentPattern(pattern);
 
-    m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
-    m_optionWidget->brightnessSlider->setValue(setting->getDouble("Texture/Pattern/Brightness"));
-    m_optionWidget->contrastSlider->setValue(setting->getDouble("Texture/Pattern/Contrast", 1.0));
-    m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
-    m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
-    m_optionWidget->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
-    m_optionWidget->randomOffsetY->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetY"));
-    m_optionWidget->cmbTexturingMode->setCurrentIndex(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY));
-    m_optionWidget->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
-    m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
-    m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
-    m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
+    m_textureChooser->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
+    m_textureChooser->brightnessSlider->setValue(setting->getDouble("Texture/Pattern/Brightness"));
+    m_textureChooser->contrastSlider->setValue(setting->getDouble("Texture/Pattern/Contrast", 1.0));
+    m_textureChooser->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
+    m_textureChooser->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
+    m_textureChooser->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
+    m_textureChooser->randomOffsetY->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetY"));
+    m_textureChooser->cmbTexturingMode->setCurrentIndex(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY));
+    m_textureChooser->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
+    m_textureChooser->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
+    m_textureChooser->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
+    m_textureChooser->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
+
 }
 
 void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
@@ -293,8 +191,8 @@ void KisTextureOption::resetGUI(KoResource* res)
     KoPattern *pattern = static_cast<KoPattern *>(res);
     if (!pattern) return;
 
-    m_optionWidget->offsetSliderX->setRange(0, pattern->pattern().width() / 2);
-    m_optionWidget->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
+    m_textureChooser->offsetSliderX->setRange(0, pattern->pattern().width() / 2);
+    m_textureChooser->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
 }
 
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
@@ -377,6 +275,7 @@ void KisTextureProperties::recalculateMask()
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting)
 {
+
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         m_enabled = false;
         return;

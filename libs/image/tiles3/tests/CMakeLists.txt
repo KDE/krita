@@ -19,23 +19,6 @@ ecm_add_tests(
 
 set_tests_properties(krita-image-tiles3-kis_low_memory_tests PROPERTIES TIMEOUT 180)
 
-########### next target ###############
-#kisdoc
-#set(kis_tile_compressors_test_SRCS kis_tile_compressors_test.cpp )
-#kde4_add_unit_test(KisTileCompressorsTest TEST_NAME krita-image-KisTileCompressorsTest  ${kis_tile_compressors_test_SRCS})
-#target_LINK_LIBRARIES(KisTileCompressorsTest   kritaodf kritaimage Qt5::Test)
-
-########### next target ###############
-#kisdoc
-#set(kis_compression_tests_SRCS kis_compression_tests.cpp )
-#kde4_add_unit_test(KisCompressionTests TEST_NAME krita-image-KisCompressionTests  ${kis_compression_tests_SRCS})
-#target_LINK_LIBRARIES(KisCompressionTests   kritaimage Qt5::Test)
-
-ecm_add_test(
-    kis_memory_pool_test.cpp
-    TEST_NAME krita-image-KisMemoryPoolTest
-    LINK_LIBRARIES kritaglobal Qt5::Test)
-
 ecm_add_test(
     kis_chunk_allocator_test.cpp ../swap/kis_chunk_allocator.cpp
     TEST_NAME krita-image-KisChunkAllocatorTest

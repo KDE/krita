@@ -292,7 +292,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_enabled = setting->getBool("Texture/Pattern/Enabled", false);
     m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
     m_brightness = setting->getDouble("Texture/Pattern/Brightness");
-    m_contrast = setting->getDouble("Texture/Pattern/Contrast");
+    m_contrast = setting->getDouble("Texture/Pattern/Contrast", 1.0);
     m_offsetX = setting->getInt("Texture/Pattern/OffsetX");
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
     m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);

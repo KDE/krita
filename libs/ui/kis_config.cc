@@ -570,6 +570,26 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::forceShowSaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowSaveMessages", false));
+}
+
+void KisConfig::setForceShowSaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowSaveMessages", value);
+}
+
+bool KisConfig::forceShowAutosaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowAutosaveMessages", false));
+}
+
+void KisConfig::setForceShowAutosaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowAutosaveMessages", value);
+}
+
 bool KisConfig::rulersTrackMouse(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
@@ -1068,6 +1088,7 @@ bool KisConfig::useWin8PointerInput(bool defaultValue) const
 #ifdef Q_OS_WIN
     return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
 #else
+    Q_UNUSED(defaultValue);
     return false;
 #endif
 }
@@ -1080,6 +1101,8 @@ void KisConfig::setUseWin8PointerInput(bool value) const
     if (useWin8PointerInput() != value) {
         m_cfg.writeEntry("useWin8PointerInput", value);
     }
+#else
+    Q_UNUSED(value)
 #endif
 }
 

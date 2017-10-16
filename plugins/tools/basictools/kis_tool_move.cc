@@ -48,6 +48,8 @@
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+
     setObjectName("tool_move");
     m_optionsWidget = 0;
     m_moveInProgress = false;
@@ -139,6 +141,8 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         return false;
     }
 
+    initHandles(nodes);
+
     /**
      * If the target node has changed, the stroke should be
      * restarted. Otherwise just continue processing current node.
@@ -216,7 +220,6 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
     m_accumulatedOffset += offset;
 
-
     m_moveInProgress = false;
     emit moveInProgressChanged();
     setMode(KisTool::HOVER_MODE);
@@ -246,8 +249,23 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
 void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(gc);
     Q_UNUSED(converter);
+
+    if (m_dragInProgress) {
+        QPainterPath handles;
+        handles.addRect(m_handlesRect.translated(m_pos));
+
+        QPainterPath path = pixelToView(handles);
+        paintToolOutline(&gc, path);
+    }
+}
+
+void KisToolMove::initHandles(const KisNodeList &nodes)
+{
+    m_handlesRect = QRect();
+    for (KisNodeSP node : nodes) {
+        m_handlesRect |= node->exactBounds();
+    }
 }
 
 void KisToolMove::deactivate()
@@ -315,7 +333,9 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 {
     QPoint pos = convertToPixelCoordAndSnap(event).toPoint();
     m_dragStart = pos;
+    m_pos = QPoint();
     m_moveInProgress = true;
+    m_dragInProgress = true;
     emit moveInProgressChanged();
 
     if (startStrokeImpl(mode, &pos)) {
@@ -323,6 +343,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     } else {
         event->ignore();
     }
+    m_canvas->updateCanvas();
 }
 
 void KisToolMove::continueAction(KoPointerEvent *event)
@@ -352,6 +373,8 @@ void KisToolMove::continueAction(KoPointerEvent *event)
 
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
+    m_pos = pos - m_dragStart;
+    m_canvas->updateCanvas();
 }
 
 void KisToolMove::endAction(KoPointerEvent *event)
@@ -363,9 +386,12 @@ void KisToolMove::endAction(KoPointerEvent *event)
     QPoint pos = convertToPixelCoordAndSnap(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
+    m_pos = pos - m_dragStart;
 
+    m_dragInProgress = false;
     m_startPosition += pos - m_dragStart;
     m_accumulatedOffset += pos - m_dragStart;
+    m_canvas->updateCanvas();
 }
 
 void KisToolMove::drag(const QPoint& newPos)

@@ -47,6 +47,7 @@ public:
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
     void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
+    bool addNativeGestureShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
     void setupActions();

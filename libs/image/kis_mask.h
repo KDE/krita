@@ -204,6 +204,8 @@ protected:
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 
+    void baseNodeChangedCallback() override;
+
 private:
     friend class KisMaskProjectionPlane;
 

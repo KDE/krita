@@ -98,7 +98,7 @@ void KisBaseNodeTest::testProperties()
         props.setProperty("locked", true);
         QVERIFY(!node->check(props));
 
-        node->nodeProperties().setProperty("locked", false);
+        node->setNodeProperty("locked", false);
         QVERIFY(node->userLocked() == false);
     }
     {

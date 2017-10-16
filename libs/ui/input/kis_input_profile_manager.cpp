@@ -233,6 +233,8 @@ void KisInputProfileManager::loadProfiles()
         }
     }
 
+    QStringList profilePaths;
+
     Q_FOREACH(const QString & profileName, profileEntries.keys()) {
 
         if (profileEntries[profileName].isEmpty()) {
@@ -242,6 +244,11 @@ void KisInputProfileManager::loadProfiles()
         // we have one or more entries for this profile name. We'll take the first,
         // because that's the most local one.
         ProfileEntry entry = profileEntries[profileName].first();
+
+        QString path(QFileInfo(entry.fullpath).dir().absolutePath());
+        if (!profilePaths.contains(path)) {
+            profilePaths.append(path);
+        }
 
         KConfig config(entry.fullpath, KConfig::SimpleConfig);
 
@@ -266,6 +273,9 @@ void KisInputProfileManager::loadProfiles()
             }
         }
     }
+
+    QString profilePathsStr(profilePaths.join("' AND '"));
+    qDebug() << "input profiles were read from '" << qUtf8Printable(profilePathsStr) << "'.";
 
     KisConfig cfg;
     QString currentProfile = cfg.currentInputProfile();

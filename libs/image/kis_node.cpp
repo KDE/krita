@@ -249,6 +249,10 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
+void KisNode::childNodeChanged(KisNodeSP changedChildNode)
+{
+}
+
 KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
 {
     KIS_ASSERT_RECOVER_NOOP(0 && "KisNode::projectionPlane() is not defined!");
@@ -501,10 +505,11 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
         newNode->setGraphListener(m_d->graphListener);
     }
 
+    childNodeChanged(newNode);
+
     if (m_d->graphListener) {
         m_d->graphListener->nodeHasBeenAdded(this, idx);
     }
-
 
     return true;
 }
@@ -527,6 +532,8 @@ bool KisNode::remove(quint32 index)
 
             m_d->nodes.removeAt(index);
         }
+
+        childNodeChanged(removedNode);
 
         if (m_d->graphListener) {
             m_d->graphListener->nodeHasBeenRemoved(this, index);

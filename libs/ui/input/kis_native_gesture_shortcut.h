@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (C) 2017 Bernhard Liebl <poke1024@gmx.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,21 +14,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
  */
-#ifndef KIS_MEMORY_POOL_TEST_H
-#define KIS_MEMORY_POOL_TEST_H
 
-#include <QtTest>
+#ifndef KISNATIVEGESTURESHORTCUT_H
+#define KISNATIVEGESTURESHORTCUT_H
 
+#include "kis_abstract_shortcut.h"
 
-class KisMemoryPoolTest : public QObject
+class QNativeGestureEvent;
+class KisNativeGestureShortcut : public KisAbstractShortcut
 {
-    Q_OBJECT
+public:
+	KisNativeGestureShortcut(KisAbstractInputAction* action, int index, Qt::NativeGestureType type);
+	~KisNativeGestureShortcut() override;
 
-private Q_SLOTS:
-    void benchmarkMemoryPool();
-    void benchmarkAlloc();
+	int priority() const override;
+
+	bool match(QNativeGestureEvent* event);
+
+private:
+	class Private;
+	Private * const d;
 };
 
-#endif /* KIS_MEMORY_POOL_TEST_H */
-
+#endif // KISNATIVEGESTURESHORTCUT_H

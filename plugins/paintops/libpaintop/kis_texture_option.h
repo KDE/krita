@@ -55,7 +55,8 @@ private Q_SLOTS:
     void resetGUI(KoResource*); /// called when a new pattern is selected
 
 private:
-    KisTextureChooser* m_textureChooser;
+    /// UI Widget that stores all the texture options
+    KisTextureChooser* m_textureOptions;
 
 };
 

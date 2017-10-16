@@ -26,13 +26,13 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="textureTab">
       <attribute name="title">
        <string>Texture</string>
       </attribute>
-      <widget class="KisPatternChooser" name="chooser">
+      <widget class="KisPatternChooser" name="textureSelectorWidget">
        <property name="geometry">
         <rect>
          <x>10</x>

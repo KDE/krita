@@ -162,6 +162,16 @@ void KisCanvasWidgetBase::addDecoration(KisCanvasDecorationSP deco)
     m_d->decorations.push_back(deco);
 }
 
+void KisCanvasWidgetBase::removeDecoration(const QString &id)
+{
+    for (auto it = m_d->decorations.begin(); it != m_d->decorations.end(); ++it) {
+        if ((*it)->id() == id) {
+            it = m_d->decorations.erase(it);
+            break;
+        }
+    }
+}
+
 KisCanvasDecorationSP KisCanvasWidgetBase::decoration(const QString& id) const
 {
     Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {

@@ -117,7 +117,6 @@ Comment[sk]=Program na manipuláciu s pixelmi pre Calligra Suite
 Comment[sv]=Bildpunktsbaserat bildbehandlingsprogram för Calligra-sviten
 Comment[tr]=Calligra Suite için Pixel tabanlı görüntü düzenleme programı
 Comment[uk]=Програма для роботи із растровими зображеннями для комплексу програм Calligra
-Comment[x-test]=xxPixel-based image manipulation program for the Calligra Suitexx
 Comment[zh_CN]=Calligra 套件的位图图像处理程序
 Type=Application
 Icon=${SNAP}/meta/gui/calligrakrita.png

@@ -292,12 +292,12 @@ private Q_SLOTS:
      * @brief showAboutApplication show the about box
      */
     virtual void showAboutApplication();
-
+public Q_SLOTS:
     /**
      *  Closes the mainwindow.
      */
     void slotFileQuit();
-
+private Q_SLOTS:
     /**
      *  Configure toolbars.
      */

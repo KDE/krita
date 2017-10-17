@@ -46,11 +46,15 @@
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include <kis_config.h>
-
+#include <kis_canvas_resource_provider.h>
 #include <Theme.h>
 #include <Settings.h>
 #include <DocumentManager.h>
 #include <KisSketchView.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <kis_paintop_box.h>
+#include <kis_resource_server_provider.h>
+#include <brushengine/kis_paintop_preset.h>
 
 class TouchDockerDock::Private
 {
@@ -105,10 +109,10 @@ TouchDockerDock::TouchDockerDock()
 
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-    
+
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-    
+
     Settings *settings = new Settings(this);
     DocumentManager::instance()->setSettingsManager(settings);
     m_quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);
@@ -121,9 +125,7 @@ TouchDockerDock::TouchDockerDock()
 
 
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
-
-
+    m_quickWidget->setSource(QUrl(KisConfig().readEntry<QString>("touchstrip", "qrc:/touchstrip.qml")));
 }
 
 TouchDockerDock::~TouchDockerDock()
@@ -175,8 +177,97 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
     else if (id == "fileSaveAsButton" && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         showFileSaveAsDialog();
     }
+    else if (id == "brushSmall") {
+        qDebug() << id;
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setSize(50);
+        }
+    }
+    else if (id == "brushMedium") {
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setSize(250);
+        }
+    }
+    else if (id == "brushLarge") {
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setSize(750);
+        }
+    }
+    else if (id == "preset1") {
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        KisPaintOpPresetSP preset = rserver->resourceByName("Basic_tip_default");
+        if (m_canvas && preset) {
+            m_canvas->viewManager()->paintOpBox()->restoreResource(preset.data());
+        }
+
+    }
+    else if (id == "preset2") {
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        KisPaintOpPresetSP preset = rserver->resourceByName("Smudge_soft");
+        if (m_canvas && preset) {
+            m_canvas->viewManager()->paintOpBox()->restoreResource(preset.data());
+        }
+    }
+    else if (id == "white") {
+        QColor c(Qt::white);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+    }
+    else if (id == "black") {
+        QColor c(Qt::black);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+    }
+    else if (id == "blue") {
+        QColor c(Qt::blue);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+    }
+    else if (id == "green") {
+        QColor c(Qt::green);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+    }
+    else if (id == "red") {
+        QColor c(Qt::red);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+
+    }
+    else if (id == "yellow") {
+        QColor c(Qt::yellow);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+    }
+    else if (id == "grey") {
+        QColor c(Qt::gray);
+        KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+        if (m_canvas) {
+            m_canvas->viewManager()->resourceProvider()->setFGColor(kc);
+        }
+
+    }
+    else if (id == "close") {
+        if (m_canvas) {
+            m_canvas->viewManager()->document()->setModified(false);
+        }
+        KisPart::instance()->mainWindows().first()->slotFileQuit();
+    }
     else {
         QAction *a = action(id);
+        qDebug() << a << id;
         if (a) {
             if (a->isCheckable()) {
                 a->toggle();
@@ -189,24 +280,24 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
         else if (id == "shift") {
             // set shift state for the next pointer event, somehow
             QKeyEvent event(d->shiftOn ? QEvent::KeyRelease : QEvent::KeyPress,
-                               0,
-                               Qt::ShiftModifier);
+                            0,
+                            Qt::ShiftModifier);
             QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
             d->shiftOn == !d->shiftOn;
         }
         else if (id == "ctrl") {
             // set ctrl state for the next pointer event, somehow
             QKeyEvent event(d->ctrlOn ? QEvent::KeyRelease : QEvent::KeyPress,
-                               0,
-                               Qt::ControlModifier);
+                            0,
+                            Qt::ControlModifier);
             QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
             d->ctrlOn == !d->ctrlOn;
         }
         else if (id == "alt") {
             // set alt state for the next pointer event, somehow
             QKeyEvent event(d->altOn ? QEvent::KeyRelease : QEvent::KeyPress,
-                               0,
-                               Qt::AltModifier);
+                            0,
+                            Qt::AltModifier);
             QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
             d->altOn == !d->altOn;
 
@@ -320,7 +411,7 @@ KoDialog *TouchDockerDock::createDialog(const QString qml)
     quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
-    
+
     Settings *settings = new Settings(this);
     DocumentManager::instance()->setSettingsManager(settings);
     quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);

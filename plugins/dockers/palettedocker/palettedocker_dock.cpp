@@ -130,8 +130,6 @@ void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),m_wdgPaletteDock->paletteView, SLOT(trySelectClosestColor(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
-
-
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)

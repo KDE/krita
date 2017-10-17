@@ -10,7 +10,5 @@ https://phabricator.kde.org/
 Please see the HACKING file for coding guidelines. The Krita
 API documentation is here:
 
-https://api.kde.org/bundled-apps-api/calligra-apidocs/krita/html/index.html
-
-
+https://api.kde.org/extragear-api/graphics-apidocs/krita/html/index.html
 

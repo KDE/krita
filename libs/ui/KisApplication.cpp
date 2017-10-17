@@ -1,23 +1,22 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2009 Thomas Zander <zander@kde.org>
-   Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/*
+ * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+ * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #include "KisApplication.h"
 
@@ -282,6 +281,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
+
+    // Indicate that it is now safe for users of KoResourcePaths to load resources
+    KoResourcePaths::setReady();
 }
 
 void KisApplication::loadResources()
@@ -381,6 +383,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     initializeGlobals(args);
 
+    const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
     const bool print = args.print();
     const bool exportAs = args.exportAs();
@@ -394,7 +397,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");// &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
+    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -417,6 +420,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     setSplashScreenLoadingText(i18n("Adding resource types"));
     processEvents();
     addResourceTypes();
+
+    // now we're set up, and the LcmsEnginePlugin will have access to resource paths for color management,
+    // we can finally initialize KoColor.
+    KoColor::init();
 
     // Load all resources and tags before the plugins do that
     loadResources();
@@ -468,6 +475,16 @@ bool KisApplication::start(const KisApplicationArguments &args)
     connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
+
+    // Create a new image, if needed
+    if (doNewImage) {
+        KisDocument *doc = args.image();
+        if (doc) {
+            KisPart::instance()->addDocument(doc);
+            m_mainWindow->addViewAndNotifyLoadingCompleted(doc);
+        }
+    }
+
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
@@ -487,7 +504,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 // now try to load
             }
             else {
-
                 if (exportAs) {
                     QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName);
                     if (outputMimetype == "application/octetstream") {

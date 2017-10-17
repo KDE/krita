@@ -225,7 +225,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
         connect(d->document, SIGNAL(statusBarMessage(const QString&, int)),
-                this, SLOT(slotActionStatusText(const QString&, int)));
+                this, SLOT(slotSavingStatusMessage(const QString&, int)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -607,7 +607,7 @@ void KisView::setDocument(KisDocument *document)
     QStatusBar *sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
         connect(d->document, SIGNAL(statusBarMessage(const QString&, int)),
-                this, SLOT(slotActionStatusText(const QString&, int)));
+                this, SLOT(slotSavingStatusMessage(const QString&, int)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -639,11 +639,20 @@ QStatusBar * KisView::statusBar() const
     return mw ? mw->statusBar() : 0;
 }
 
-void KisView::slotActionStatusText(const QString &text, int timeout)
+void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isAutoSaving)
 {
     QStatusBar *sb = statusBar();
     if (sb)
         sb->showMessage(text, timeout);
+
+    KisConfig cfg;
+
+    if (sb->isHidden() ||
+        (!isAutoSaving && cfg.forceShowSaveMessages()) ||
+        (cfg.forceShowAutosaveMessages() && isAutoSaving)) {
+
+        viewManager()->showFloatingMessage(text, QIcon());
+    }
 }
 
 void KisView::slotClearStatusText()

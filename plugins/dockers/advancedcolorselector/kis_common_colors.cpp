@@ -95,12 +95,12 @@ void KisCommonColors::updateSettings()
         return;
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-    if(cfg.readEntry("commonColorsAutoUpdate", false)) {
-        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+    if (cfg.readEntry("commonColorsAutoUpdate", false)) {
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
     }
     else {
-        disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+        disconnect(m_canvas->image(), SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()));
     }
 
@@ -110,8 +110,8 @@ void KisCommonColors::updateSettings()
 void KisCommonColors::setColors(QList<KoColor> colors)
 {
     QMutexLocker locker(&m_mutex);
-	KisColorPatches::setColors(colors);
-	m_reloadButton->setEnabled(true);
+    KisColorPatches::setColors(colors);
+    m_reloadButton->setEnabled(true);
     m_calculatedColors = colors;
 }
 

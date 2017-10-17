@@ -252,6 +252,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_spinbox_color_selector.cpp
     widgets/kis_screen_color_picker.cpp
+    widgets/kis_preset_live_preview_view.cpp
     widgets/KoDualColorButton.cpp
     widgets/kis_color_input.cpp
     widgets/kis_color_button.cpp
@@ -263,6 +264,7 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     widgets/KoShapeFillWrapper.cpp
+
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -280,6 +282,7 @@ set(kritaui_LIB_SRCS
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
+    input/kis_native_gesture_shortcut.cpp
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp

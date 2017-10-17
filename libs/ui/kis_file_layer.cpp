@@ -111,7 +111,9 @@ void KisFileLayer::setSectionModelProperties(const KisBaseNode::PropertyList &pr
     KisBaseNode::setSectionModelProperties(properties);
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.id== KisLayerPropertiesIcons::openFileLayerFile.id()) {
-            openFile();
+            if (property.state.toBool() == false) {
+                openFile();
+            }
         }
     }
 }
@@ -120,7 +122,7 @@ KisBaseNode::PropertyList KisFileLayer::sectionModelProperties() const
 {
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     l << KisBaseNode::Property(KoID("sourcefile", i18n("File")), m_filename);
-    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::openFileLayerFile, QFileInfo(path()).exists());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::openFileLayerFile, true);
     return l;
 }
 

@@ -148,6 +148,12 @@ public:
     bool showRulers(bool defaultValue = false) const;
     void setShowRulers(bool rulers) const;
 
+    bool forceShowSaveMessages(bool defaultValue = true) const;
+    void setForceShowSaveMessages(bool value) const;
+
+    bool forceShowAutosaveMessages(bool defaultValue = true) const;
+    void setForceShowAutosaveMessages(bool ShowAutosaveMessages) const;
+
     bool rulersTrackMouse(bool defaultValue = false) const;
     void setRulersTrackMouse(bool value) const;
 

@@ -78,6 +78,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_standard_uniform_properties_factory.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
+   commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
    commands/kis_image_set_projection_color_space_command.cpp
    commands/kis_image_layer_add_command.cpp
@@ -139,6 +140,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
    kis_gaussian_kernel.cpp
+   kis_edge_detection_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
    kis_default_bounds_base.cpp

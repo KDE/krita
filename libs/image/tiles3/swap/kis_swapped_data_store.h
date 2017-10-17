@@ -48,7 +48,7 @@ public:
      * LOCKING: the lock on the tile data should be taken
      *          by the caller before making a call.
      */
-    void swapOutTileData(KisTileData *td);
+    bool trySwapOutTileData(KisTileData *td);
 
     /**
      * Restore the data of a \a td basing on information

@@ -37,13 +37,28 @@ KisFpsDecoration::~KisFpsDecoration()
 
 void KisFpsDecoration::drawDecoration(QPainter& gc, const QRectF& /*updateRect*/, const KisCoordinatesConverter */*converter*/, KisCanvas2* /*canvas*/)
 {
+#ifdef Q_OS_OSX
+    QPixmap pixmap(256, 64);
+    pixmap.fill(Qt::transparent);
+    {
+        QPainter painter(&pixmap);
+        draw(painter);
+    }
+    gc.drawPixmap(0, 0, pixmap);
+#else
+    draw(gc);
+#endif
+}
+
+void KisFpsDecoration::draw(QPainter& gc)
+{
     const qreal value = KisOpenglCanvasDebugger::instance()->accumulatedFps();
-    const QString text = QString("FPS: %1").arg(value);
+    const QString text = QString("FPS: %1").arg(QString::number(value, 'f', 1));
 
     gc.save();
     gc.setPen(QPen(Qt::white));
-    gc.drawText(QPoint(21,31), text);
+    gc.drawText(QPoint(21, 31), text);
     gc.setPen(QPen(Qt::black));
-    gc.drawText(QPoint(20,30), text);
+    gc.drawText(QPoint(20, 30), text);
     gc.restore();
 }

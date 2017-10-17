@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Nikita Smirnov <pakrentos@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,20 +15,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_MEMORY_POOL_TEST_H
-#define KIS_MEMORY_POOL_TEST_H
-
-#include <QtTest>
 
 
-class KisMemoryPoolTest : public QObject
+#include "kis_image_commands.h"
+#include "kis_image.h"
+#include "kis_node.h"
+
+#include <klocalizedstring.h>
+
+
+KisImageChangeVisibilityCommand::KisImageChangeVisibilityCommand(bool visibility, KisNodeSP node)
+    : KUndo2Command(kundo2_noi18n("change-visibility-command"), 0)
 {
-    Q_OBJECT
+    m_node = node;
+    m_visible = visibility;
+}
 
-private Q_SLOTS:
-    void benchmarkMemoryPool();
-    void benchmarkAlloc();
-};
+void KisImageChangeVisibilityCommand::redo()
+{
+    m_node->setVisible(m_visible);
+}
 
-#endif /* KIS_MEMORY_POOL_TEST_H */
-
+void KisImageChangeVisibilityCommand::undo()
+{
+    m_node->setVisible(!m_visible);
+}

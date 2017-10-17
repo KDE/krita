@@ -88,9 +88,6 @@ private Q_SLOTS:
     /// This loads up the content downloader dialog when the Share Resource button is clicked.
     void slotShareResources();
 
-    /// This sets the knsrcFile, the file which allows to link share.krita.org and this helps in populating the categories.
-    void setKnsrcFile(const QString& knsrcFileArg);
-
     void refreshListData();
 
 private:
@@ -107,9 +104,9 @@ private:
     KisResourceBundle *m_currentBundle;
     KisActionManager *m_actionManager;
     ResourceManager *m_resourceManager;
-
-    class Private;
-    Private *const d;
+#ifdef HAVE_NEWSTUFF
+    QString m_knsrcFile;
+#endif
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

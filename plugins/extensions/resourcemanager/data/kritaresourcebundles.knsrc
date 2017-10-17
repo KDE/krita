@@ -1,5 +1,5 @@
 [KNewStuff3]
 ProvidersUrl=https://share.krita.org/ocs/providers.xml
-Categories=Drawings,Animations,Comics,Paintings,Fonts,Krita Color Profiles,Krita Resource Bundles,Krita Templates
+Categories=Krita Color Profiles,Krita Resource Bundles,Krita Templates
 XdgTargetDir=krita/DownloadedResources
 Uncompress=never

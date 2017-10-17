@@ -45,24 +45,12 @@
 
 #define ICON_SIZE 48
 
-class DlgBundleManager::Private
-{
-public:
-    Private()
-        :model(0)
-    {}
-
-    KoResourceModel *model {0};
-    QString knsrcFile;
-};
-
 DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent)
     : KoDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
     , m_currentBundle(0)
     , m_resourceManager(resourceManager)
-    , d(new Private())
 {
     setCaption(i18n("Manage Resource Bundles"));
     m_ui->setupUi(m_page);
@@ -74,8 +62,7 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
 
     QString approot = KoResourcePaths::getApplicationRoot();
 
-    QString knsrcFile = approot + "/etc/xdg/" + "kritaresourcebundles.knsrc";
-    setKnsrcFile(knsrcFile);
+    m_knsrcFile = approot + "/etc/xdg/" + "kritaresourcebundles.knsrc";
 
     m_ui->searchLineEdit->setClearButtonEnabled(true);
     m_ui->searchLineEdit->addAction(QIcon::fromTheme(QStringLiteral("system-search")), QLineEdit::LeadingPosition);
@@ -399,14 +386,17 @@ void DlgBundleManager::slotOpenResourceFolder() {
 void DlgBundleManager::slotShareResources()
 {
 #ifdef HAVE_NEWSTUFF
-    ContentDownloaderDialog dialog(d->knsrcFile, this);
+    ContentDownloaderDialog dialog(m_knsrcFile, this);
     dialog.exec();
 
     foreach (const KNSCore::EntryInternal& e, dialog.changedEntries()) {
+
+        qDebug() << e.name() << e.category() << e.installedFiles();
+
         foreach(const QString &file, e.installedFiles()) {
             QFileInfo fi(file);
             if (fi.exists()) {
-                d->model->importResourceFile(fi.absoluteFilePath() , false );
+                //d->model->importResourceFile(fi.absoluteFilePath() , false );
             }
             else {
                 qWarning() << "Failed to install resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file info does not exist";
@@ -416,7 +406,7 @@ void DlgBundleManager::slotShareResources()
         foreach(const QString &file, e.uninstalledFiles()) {
             QFileInfo fi(file);
             if (fi.exists()) {
-                d->model->removeResourceFile(fi.absoluteFilePath());
+                //d->model->removeResourceFile(fi.absoluteFilePath());
             }
 
             else {
@@ -426,9 +416,3 @@ void DlgBundleManager::slotShareResources()
     }
 #endif
 }
-
-void DlgBundleManager::setKnsrcFile(const QString &knsrcFileArg)
-{
-    d->knsrcFile = knsrcFileArg;
-}
-

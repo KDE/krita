@@ -108,6 +108,7 @@ struct KisDabRenderingQueue::Private
     int findLastDabJobIndex(int startSearchIndex = -1);
     KisDabRenderingJob* createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob);
     void cleanPaintedDabs();
+    bool dabsHaveSeparateOriginal();
 };
 
 
@@ -315,7 +316,7 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
     }
 }
 
-QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs()
+QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs)
 {
     QMutexLocker l(&m_d->mutex);
 
@@ -326,6 +327,11 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs()
         m_d->jobs.isEmpty() ||
         m_d->jobs.first().job.type == KisDabRenderingJob::Dab);
 
+    const int copyJobAfter =
+        returnMutableDabs && !m_d->dabsHaveSeparateOriginal() ?
+            m_d->findLastDabJobIndex(m_d->jobs.size() - 1) :
+            std::numeric_limits<int>::max();
+
     for (int i = 0; i < m_d->jobs.size(); i++) {
         Private::JobWrapper &w = m_d->jobs[i];
         KisDabRenderingJob &j = w.job;
@@ -335,8 +341,13 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs()
         if (i <= m_d->lastPaintedJob) continue;
 
         KisRenderedDab dab;
+        KisFixedPaintDeviceSP resultDevice = j.postprocessedDevice;
 
-        dab.device = j.postprocessedDevice;
+        if (i >= copyJobAfter) {
+            resultDevice = new KisFixedPaintDevice(*resultDevice);
+        }
+
+        dab.device = resultDevice;
         dab.offset = j.dstDabOffset();
         dab.opacity = w.opacity;
         dab.flow = w.flow;
@@ -410,23 +421,21 @@ int KisDabRenderingQueue::averageDabSize() const
     return qRound(m_d->avgDabSize.rollingMean());
 }
 
-bool KisDabRenderingQueue::dabsHaveSeparateOriginal() const
+bool KisDabRenderingQueue::Private::dabsHaveSeparateOriginal()
 {
-    QMutexLocker l(&m_d->mutex);
-
     KisDabCacheUtils::DabRenderingResources *resources = 0;
 
     // fetch/create a temporary resources object that
     // will be returned to the cache immediately
-    if (!m_d->cachedResources.isEmpty()) {
-        resources = m_d->cachedResources.takeLast();
+    if (!cachedResources.isEmpty()) {
+        resources = cachedResources.takeLast();
     } else {
-        resources = m_d->resourcesFactory();
+        resources = resourcesFactory();
     }
 
-    bool result = m_d->cacheInterface->hasSeparateOriginal(resources);
+    const bool result = cacheInterface->hasSeparateOriginal(resources);
 
-    m_d->cachedResources << resources;
+    cachedResources << resources;
 
     return result;
 }

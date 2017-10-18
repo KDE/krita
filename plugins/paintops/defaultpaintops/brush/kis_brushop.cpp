@@ -225,17 +225,9 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 
         state->painter = painter();
 
-        state->dabsQueue = m_dabExecutor->takeReadyDabs();
+        state->dabsQueue = m_dabExecutor->takeReadyDabs(painter()->hasMirroring());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!state->dabsQueue.isEmpty(),
                                              m_currentUpdatePeriod);
-
-        // detach from cached devices
-        // TODO: move that into the queue to avoid extra copying
-        if (painter()->hasMirroring() && !m_dabExecutor->dabsHaveSeparateOriginal()) {
-            for (auto it = state->dabsQueue.begin(); it != state->dabsQueue.end(); ++it) {
-                it->device = new KisFixedPaintDevice(*it->device);
-            }
-        }
 
         const int diameter = m_dabExecutor->averageDabSize();
         const qreal spacing = m_avgSpacing.rollingMean();

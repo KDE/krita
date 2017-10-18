@@ -65,9 +65,9 @@ void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &req
     }
 }
 
-QList<KisRenderedDab> KisDabRenderingExecutor::takeReadyDabs()
+QList<KisRenderedDab> KisDabRenderingExecutor::takeReadyDabs(bool returnMutableDabs)
 {
-    return m_d->renderingQueue->takeReadyDabs();
+    return m_d->renderingQueue->takeReadyDabs(returnMutableDabs);
 }
 
 bool KisDabRenderingExecutor::hasPreparedDabs() const
@@ -83,11 +83,6 @@ int KisDabRenderingExecutor::averageDabRenderingTime() const
 int KisDabRenderingExecutor::averageDabSize() const
 {
     return m_d->renderingQueue->averageDabSize();
-}
-
-bool KisDabRenderingExecutor::dabsHaveSeparateOriginal() const
-{
-    return m_d->renderingQueue->dabsHaveSeparateOriginal();
 }
 
 void KisDabRenderingExecutor::recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices)

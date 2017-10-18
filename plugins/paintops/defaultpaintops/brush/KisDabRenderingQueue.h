@@ -55,7 +55,7 @@ public:
 
     QList<KisDabRenderingJob*> notifyJobFinished(KisDabRenderingJob *job, int usecsTime = -1);
 
-    QList<KisRenderedDab> takeReadyDabs();
+    QList<KisRenderedDab> takeReadyDabs(bool returnMutableDabs = false);
 
     bool hasPreparedDabs() const;
 
@@ -66,7 +66,6 @@ public:
 
     int averageExecutionTime() const;
     int averageDabSize() const;
-    bool dabsHaveSeparateOriginal() const;
 
     int testingGetQueueSize() const;
 

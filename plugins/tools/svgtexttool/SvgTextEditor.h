@@ -25,14 +25,14 @@
 
 #include "ui_WdgSvgTextEditor.h"
 
-#include <KoDialog.h>
+#include <kxmlguiwindow.h>
 #include <KoColor.h>
 #include <KoSvgText.h>//for the enums
 
 class KoSvgTextShape;
 class KisFileNameRequester;
 
-class SvgTextEditor : public KoDialog
+class SvgTextEditor : public KXmlGuiWindow
 {
     Q_OBJECT
 public:
@@ -49,7 +49,6 @@ public:
 
 private Q_SLOTS:
 
-    void save();
     /**
      * switch the text editor tab.
      */
@@ -58,6 +57,30 @@ private Q_SLOTS:
      * in rich text, check the current format, and toggle the given buttons.
      */
     void checkFormat();
+
+    void openNew();
+    void open();
+    void save();
+    void saveAs();
+    void close();
+
+    void undo();
+    void redo();
+    void cut();
+    void copy();
+    void paste();
+    void selectAll();
+    void deselect();
+    void find();
+    void findNext();
+    void findPrev();
+    void replace();
+
+    void zoomOut();
+    void zoomIn();
+    void zoom();
+
+    void insertSpecialCharacter();
 
     void setTextBold(QFont::Weight weight = QFont::Bold);
     void setTextWeightLight();
@@ -70,6 +93,15 @@ private Q_SLOTS:
     void setTextUnderline();
     void setTextOverline();
     void setTextStrikethrough();
+    void setTextSubscript();
+    void setTextSuperScript();
+    void increaseTextSize();
+    void decreaseTextSize();
+
+    void alignLeft();
+    void alignRight();
+    void alignCenter();
+    void alignJustified();
 
     void setTextFill();
     void setTextStroke();
@@ -77,14 +109,31 @@ private Q_SLOTS:
     void setSize();
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
 
+    void setShapeProperties();
+    void slotConfigureToolbars();
+    void slotToolbarToggled(bool);
+
 Q_SIGNALS:
 
     void textUpdated(const QString &svg, const QString &defs);
+
 protected:
+
     void wheelEvent(QWheelEvent *event) override;
+
 private:
-    Ui_WdgSvgTextEditor widget;
+
+    void createAction(const QString &name,
+                      const QString &text,
+                      const QString &icon,
+                      const char *member,
+                      const QKeySequence &shortcut = QKeySequence());
+    void createActions();
+
+    Ui_WdgSvgTextEditor m_textEditorWidget;
     QWidget *m_page;
+    QMap<QString, QAction> m_actions;
+
     KoSvgTextShape *m_shape;
 };
 

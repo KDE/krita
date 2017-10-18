@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QDesktopServices>
+#include <QApplication>
 
 #include <klocalizedstring.h>
 
@@ -44,9 +45,14 @@
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
-    , m_editor(new SvgTextEditor())
+    , m_editor(new SvgTextEditor(0))
 {
     connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
+}
+
+SvgTextTool::~SvgTextTool()
+{
+    delete m_editor;
 }
 
 void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
@@ -88,7 +94,6 @@ void SvgTextTool::showEditor() const
 {
     if (!m_shape) return;
     m_editor->setShape(m_shape);
-    m_editor->setModal(false);
     m_editor->show();
 }
 

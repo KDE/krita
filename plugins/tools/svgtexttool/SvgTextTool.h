@@ -32,7 +32,7 @@ class SvgTextTool : public KoToolBase
     Q_OBJECT
 public:
     explicit SvgTextTool(KoCanvasBase *canvas);
-
+    ~SvgTextTool() override;
     /// reimplemented from KoToolBase
     void paint(QPainter &, const KoViewConverter &) override;
     /// reimplemented from KoToolBase

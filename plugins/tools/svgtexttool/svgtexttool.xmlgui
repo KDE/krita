@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="SvgTextTool" version="1" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+  <MenuBar>
+    <Menu name="file">
+      <text>&amp;File</text>
+      <Action name="file_new"/>
+      <Action name="file_open"/>
+      <Separator/>
+      <Action name="file_save"/>
+      <Action name="file_save_as"/>
+      <Separator/>
+      <Action name="file_close"/>
+    </Menu>
+    <Menu name="edit">
+      <text>&amp;Edit</text>
+      <Action name="edit_undo"/>
+      <Action name="edit_redo"/>
+      <Separator/>
+      <Action name="edit_cut"/>
+      <Action name="edit_copy"/>
+      <Action name="edit_paste"/>
+      <Separator/>
+      <Action name="edit_select_all"/>
+      <Action name="edit_deselect"/>
+      <Separator/>
+      <Action name="edit_find"/>
+      <Action name="edit_find_next"/>
+      <Action name="edit_find_prev"/>
+      <Action name="edit_replace"/>
+    </Menu>
+    <Menu name="view">
+      <text>&amp;View</text>
+      <Action name="view_zoom_out"/>
+      <Action name="view_zoom_in"/>
+      <Action name="view_zoom"/>
+    </Menu>
+    <Menu name="insert">
+      <text>&amp;Insert</text>
+      <Action name="insert_special_character"/>
+    </Menu>
+    <Menu name="format">
+      <text>&amp;Format</text>
+      <Action name="weight_bold"/>
+      <Action name="italic"/>
+      <Action name="underline"/>
+      <Action name="strike_through"/>
+      <Action name="superscript"/>
+      <Action name="subscript"/>
+      <Menu name="weight">
+        <text>&amp;Weight</text>
+        <Action name="weight_light"/>
+        <Action name="weight_normal"/>
+        <Action name="weight_bold"/>
+        <Action name="weight_demi_bold"/>
+        <Action name="weight_black"/>
+      </Menu>
+      <Separator/>
+      <Action name="increase_text_size"/>
+      <Action name="decrease_text_size"/>
+      <Separator/>
+      <Action name="align_left"/>
+      <Action name="align_center"/>
+      <Action name="align_right"/>
+      <Action name="align_justified"/>
+    </Menu>
+    <Menu name="settings">
+      <text>Setti&amp;ngs</text>
+      <Action name="options_shape_properties"/>
+      <Action name="options_configure_toolbars"/>
+      <Merge name="StandardToolBarMenuHandler"/>
+      <Separator/>
+    </Menu>
+  </MenuBar>
+  <ToolBar name="mainToolBar" fullWidth="false" noMerge="1">
+    <Text>File</Text>
+    <Action name="file_new"/>
+    <Action name="file_open"/>
+    <Action name="file_save"/>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+    <Separator/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+  </ToolBar>
+  <ToolBar name="formatting" position="top">
+    <Text>Formatting</Text>
+    <Action name="font"/>
+    <Action name="font_size"/>
+    <Action name="font_color"/>
+    <Action name="background_color"/>
+    <Action name="weight_bold"/>
+    <Action name="italic"/>
+    <Action name="underline"/>
+    <Action name="align_left"/>
+    <Action name="align_center"/>
+    <Action name="align_right"/>
+    <Action name="align_justified"/>
+  </ToolBar>
+</kpartgui>

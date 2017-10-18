@@ -56,10 +56,10 @@
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings_update_proxy.h>
 
+
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
-
-
+#include <kis_preset_live_preview_view.h>
 
 
 struct KisPaintOpPresetsPopup::Private
@@ -170,8 +170,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     menu->addAction(sliderAction);
 
 
-
-
     // configure the button and assign menu
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
@@ -276,9 +274,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
 
-
-
-
     m_d->detached = false;
     m_d->ignoreHideEvents = false;
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
@@ -305,6 +300,20 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
+    // setup things like the scene construct images, layers, etc that is a one-time thing
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup();
+
+        m_d->uiWdgPaintOpPresetSettings.zoomOutGraphicsViewButton->setIcon(KisIconUtils::loadIcon("view-fullscreen"));
+        connect(m_d->uiWdgPaintOpPresetSettings.zoomOutGraphicsViewButton, SIGNAL(clicked(bool)),
+                m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView,
+                 SLOT(slotZoomToOneHundredPercent()));
+
+
+        m_d->uiWdgPaintOpPresetSettings.resetGraphicsViewButton->setIcon(KisIconUtils::loadIcon("view-refresh"));
+        connect(m_d->uiWdgPaintOpPresetSettings.resetGraphicsViewButton, SIGNAL(clicked(bool)),
+                m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView,
+                 SLOT(slotResetViewZoom()));
+
 }
 
 
@@ -323,8 +332,6 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
     // This function doesn't really do anything except get the UI in a state to rename a brush preset
 
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(!isRenaming);
-    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(!isRenaming);
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(!isRenaming);
 
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(isRenaming);
     m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton->setVisible(isRenaming);
@@ -332,6 +339,9 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
 
     m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.saveNewBrushPresetButton->setEnabled(!isRenaming);
+
+    m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset->setVisible(!isRenaming);
+
 }
 
 void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
@@ -466,29 +476,6 @@ void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
 
-
-void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
-{
-    if (!m_d->resourceProvider) {
-        return;
-    }
-    if (!m_d->resourceProvider->currentPreset()) {
-        return;
-    }
-
-
-    bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
-
-    // don't need to reload or overwrite a clean preset
-    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
-    m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
-
-
-
-}
-
-
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
 {
     return m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay();
@@ -556,16 +543,17 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
         }
     }
 
-    QString selectedBrush = resource->name().append(" (").append(currentBrushEngineName).append(" ").append("Engine").append(")");
+    QString selectedBrush = resource->name();
 
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
+    m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(currentBrushEngineName.append(" ").append("Engine"));
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name());
 
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QGraphicsScene * thumbScene = new QGraphicsScene(this);
-    thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(30, 30)));
-    thumbScene->setSceneRect(0, 0, 30, 30); // 30 x 30 image for thumb. this is also set in the UI
+    thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(55, 55)));
+    thumbScene->setSceneRect(0, 0, 55, 55); // 55 x 55 image for thumb. this is also set in the UI
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setScene(thumbScene);
 
     toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
@@ -761,4 +749,29 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+}
+
+void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
+{
+    if (!m_d->resourceProvider) {
+        return;
+    }
+    if (!m_d->resourceProvider->currentPreset()) {
+        return;
+    }
+
+    bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
+
+    // don't need to reload or overwrite a clean preset
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
+    m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
+
+
+    // update live preview area in here...
+    // don't update the live preview if the widget is not visible.
+    if (m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->isVisible()) {
+        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
+        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->updateStroke();
+    }
 }

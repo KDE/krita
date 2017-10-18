@@ -27,6 +27,8 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
+#include "kis_assert.h"
+
 struct Q_DECL_HIDDEN KoColorSpaceFactory::Private {
     QList<KoColorProfile*> colorprofiles;
     QList<KoColorSpace*> colorspaces;
@@ -94,6 +96,7 @@ const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * p
 
     if (it == d->availableColorspaces.end()) {
         cs = createColorSpace(profile);
+        KIS_ASSERT_X(cs != nullptr, "KoColorSpaceFactory::grabColorSpace", "createColorSpace returned nullptr.");
         if (cs) {
             d->availableColorspaces[profile->name()] = cs;
         }

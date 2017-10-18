@@ -66,7 +66,6 @@ class KisQPainterCanvas::Private
 public:
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
-    QImage buffer;
     bool scrollCheckers;
 };
 
@@ -107,15 +106,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     setAutoFillBackground(false);
 
-    if (m_d->buffer.size() != size()) {
-        m_d->buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
-    }
-
-    QPainter gc(&m_d->buffer);
-
-    // we double buffer, so we paint on an image first, then from the image onto the canvas,
-    // so copy the clip region since otherwise we're filling the whole buffer every time with
-    // the background color _and_ the transparent squares.
+    QPainter gc(this);
     gc.setClipRegion(ev->region());
 
     KisCoordinatesConverter *converter = coordinatesConverter();
@@ -146,10 +137,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 #endif
 
     drawDecorations(gc, ev->rect());
-    gc.end();
-
-    QPainter painter(this);
-    painter.drawImage(ev->rect(), m_d->buffer, ev->rect());
 }
 
 void KisQPainterCanvas::drawImage(QPainter & gc, const QRect &updateWidgetRect) const

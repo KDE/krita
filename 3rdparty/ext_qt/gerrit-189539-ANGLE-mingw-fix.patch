@@ -1,18 +1,5 @@
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
-index 972c289412..cbb813b83f 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
-@@ -20,7 +20,7 @@ typedef struct D3D11_QUERY_DATA_SO_STATISTICS {
- } D3D11_QUERY_DATA_SO_STATISTICS;
- #endif // ANGLE_MINGW32_COMPAT
- 
--#ifdef __MINGW32__
-+#if defined __MINGW32__ && __GNUC__ < 6L
- typedef struct D3D11_QUERY_DATA_TIMESTAMP_DISJOINT {
-   UINT64 Frequency;
-   BOOL   Disjoint;
 diff --git a/qtbase/src/angle/src/common/common.pri b/qtbase/src/angle/src/common/common.pri
-index 7305362d86..c1f6e22a87 100644
+index c1fad14951..6a558a957b 100644
 --- a/qtbase/src/angle/src/common/common.pri
 +++ b/qtbase/src/angle/src/common/common.pri
 @@ -21,20 +21,6 @@ lib_replace.replace = \$\$\$\$[QT_INSTALL_LIBS]
@@ -38,10 +25,10 @@ index 7305362d86..c1f6e22a87 100644
  
  static: DEFINES *= LIBGLESV2_EXPORT_H_ ANGLE_EXPORT=
 diff --git a/qtbase/src/gui/configure.json b/qtbase/src/gui/configure.json
-index 2fb03a452a..a5f85e54ba 100644
+index 28c8034c75..77cfb6b592 100644
 --- a/qtbase/src/gui/configure.json
 +++ b/qtbase/src/gui/configure.json
-@@ -330,11 +330,14 @@
+@@ -615,11 +615,14 @@
              "label": "DirectX SDK",
              "type": "directX",
              "files": [
@@ -59,7 +46,7 @@ index 2fb03a452a..a5f85e54ba 100644
          "egl-x11": {
              "label": "EGL on X11",
              "type": "compile",
-@@ -440,10 +443,11 @@
+@@ -842,10 +845,11 @@
          "angle": {
              "label": "ANGLE",
              "autoDetect": "features.opengles2 || features.opengl-dynamic",
@@ -72,9 +59,9 @@ index 2fb03a452a..a5f85e54ba 100644
 +                { "type": "varAssign", "name": "QMAKE_FXC_LOCATION", "value": "tests.fxc.value" }
              ]
          },
-         "combined-angle-lib": {
+         "angle_d3d11_qdtd": {
 diff --git a/qtbase/src/gui/configure.pri b/qtbase/src/gui/configure.pri
-index aaffa835dc..c048129f55 100644
+index aaffa835dc..566686b4f6 100644
 --- a/qtbase/src/gui/configure.pri
 +++ b/qtbase/src/gui/configure.pri
 @@ -15,22 +15,12 @@ defineTest(qtConfLibrary_freetype) {

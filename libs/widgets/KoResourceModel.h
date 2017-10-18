@@ -52,7 +52,8 @@ public:
     enum ItemDataRole
     {
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
-        LargeThumbnailRole = 33
+        LargeThumbnailRole = Qt::UserRole + 1,
+        TagsRole
     };
 
     QModelIndex indexFromResource(KoResource* resource) const override;

@@ -451,11 +451,12 @@ KisMainWindow::KisMainWindow()
             connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
             act->setChecked(!toolBar->isHidden());
             toolbarList.append(act);
-        } else
+        } else {
             warnUI << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+        }
     }
     plugActionList("toolbarlist", toolbarList);
-    setToolbarList(toolbarList);
+    d->toolbarList = toolbarList;
 
     applyToolBarLayout();
 
@@ -477,9 +478,6 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
-
-
-
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -1936,12 +1934,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     else {
         restoreState(d->dockerStateBeforeHiding);
     }
-}
-
-void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
-{
-    qDeleteAll(d->toolbarList);
-    d->toolbarList = toolbarList;
 }
 
 void KisMainWindow::slotDocumentTitleModified()

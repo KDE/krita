@@ -74,13 +74,6 @@ public:
      */
     QString getActionProperty(const QString &name, const QString &property);
 
-
-    /**
-     * Saves action in a category. Note that this grabs ownership of the action.
-     */
-    void addAction(const QString &name, QAction *a);
-
-
     /**
      * Produces a new QAction based on the .action data files.
      *
@@ -95,12 +88,10 @@ public:
      */
     bool propertizeAction(const QString &name, QAction *a);
 
-
     /**
      * Called when "OK" button is pressed in settings dialog.
      */
     void settingsPageSaved();
-
 
     /**
      * Reload custom shortcuts from kritashortcutsrc
@@ -133,7 +124,6 @@ public:
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
-
 
     /**
      * @brief loadShortcutScheme

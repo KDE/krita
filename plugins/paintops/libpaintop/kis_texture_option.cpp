@@ -79,6 +79,21 @@ public:
 
         formLayout->addRow(i18n("Scale:"), scaleSlider);
 
+        brightnessSlider = new KisDoubleSliderSpinBox(this);
+        brightnessSlider->setRange(-1.0, 1.0, 2);
+        brightnessSlider->setValue(0.0);
+        brightnessSlider->setToolTip(i18n("Makes texture lighter or darker"));
+        brightnessSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+        formLayout->addRow(i18n("Brightness:"), brightnessSlider);
+
+        contrastSlider = new KisDoubleSliderSpinBox(this);
+        contrastSlider->setRange(0.0, 2.0, 2);
+        contrastSlider->setValue(1.0);
+        contrastSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+        formLayout->addRow(i18n("Contrast:"), contrastSlider);
+
 
         QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderX = new KisSliderSpinBox(this);
@@ -130,6 +145,8 @@ public:
     }
     KisPatternChooser *chooser;
     KisMultipliersDoubleSliderSpinBox *scaleSlider;
+    KisDoubleSliderSpinBox *brightnessSlider;
+    KisDoubleSliderSpinBox *contrastSlider;
     KisSliderSpinBox *offsetSliderX;
     QCheckBox *randomOffsetX;
     KisSliderSpinBox *offsetSliderY;
@@ -153,6 +170,8 @@ KisTextureOption::KisTextureOption()
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->randomOffsetX, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -185,6 +204,10 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 
     qreal scale = m_optionWidget->scaleSlider->value();
 
+    qreal brightness = m_optionWidget->brightnessSlider->value();
+
+    qreal contrast = m_optionWidget->contrastSlider->value();
+
     int offsetX = m_optionWidget->offsetSliderX->value();
     if (m_optionWidget ->randomOffsetX->isChecked()) {
 
@@ -213,6 +236,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
 
     setting->setProperty("Texture/Pattern/Scale", scale);
+    setting->setProperty("Texture/Pattern/Brightness", brightness);
+    setting->setProperty("Texture/Pattern/Contrast", contrast);
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/TexturingMode", texturingMode);
@@ -244,6 +269,8 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_optionWidget->chooser->setCurrentPattern(pattern);
 
     m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
+    m_optionWidget->brightnessSlider->setValue(setting->getDouble("Texture/Pattern/Brightness"));
+    m_optionWidget->contrastSlider->setValue(setting->getDouble("Texture/Pattern/Contrast", 1.0));
     m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
     m_optionWidget->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
@@ -319,6 +346,13 @@ void KisTextureProperties::recalculateMask()
             const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
             float maskValue = (grayValue / 255.0) * alpha + (1 - alpha);
 
+            maskValue = maskValue - m_brightness;
+
+            maskValue = ((maskValue - 0.5)*m_contrast)+0.5;
+
+            if (maskValue > 1.0) {maskValue = 1;}
+            else if (maskValue < 0) {maskValue = 0;}
+
             if (m_invert) {
                 maskValue = 1 - maskValue;
             }
@@ -358,6 +392,8 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
 
     m_enabled = setting->getBool("Texture/Pattern/Enabled", false);
     m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
+    m_brightness = setting->getDouble("Texture/Pattern/Brightness");
+    m_contrast = setting->getDouble("Texture/Pattern/Contrast", 1.0);
     m_offsetX = setting->getInt("Texture/Pattern/OffsetX");
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
     m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);

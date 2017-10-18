@@ -29,6 +29,7 @@
 #include "kis_tool_invocation_action.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
+#include "kis_native_gesture_shortcut.h"
 #include "kis_input_profile_manager.h"
 
 /**
@@ -176,6 +177,8 @@ void KisInputManager::Private::CanvasSwitcher::setupFocusThreshold(QObject* obje
 
 void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 {
+    if (!canvas) return;
+
     QObject *canvasWidget = canvas->canvasWidget();
 
     if (!canvasResolver.contains(canvasWidget)) {
@@ -187,7 +190,7 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
         focusSwitchThreshold.setEnabled(false);
 
         d->canvas = canvas;
-        d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+        d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
     } else {
         KIS_ASSERT_RECOVER_RETURN(d->canvas == canvas);
     }
@@ -246,7 +249,7 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             }
 
             d->canvas = canvas;
-            d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+            d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
 
             d->q->setupAsEventFilter(object);
 
@@ -424,6 +427,9 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     case KisShortcutConfiguration::WheelRight:
         a = KisSingleActionShortcut::WheelRight;
         break;
+    case KisShortcutConfiguration::WheelTrackpad:
+        a = KisSingleActionShortcut::WheelTrackpad;
+        break;
     default:
         return;
     }
@@ -448,6 +454,34 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         break;
     }
     matcher.addShortcut(shortcut);
+}
+
+bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
+{
+    // each platform should decide here which gestures are handled via QtNativeGestureEvent.
+    Qt::NativeGestureType type;
+    switch (gesture) {
+#ifdef Q_OS_OSX
+        case KisShortcutConfiguration::PinchGesture:
+            type = Qt::ZoomNativeGesture;
+            break;
+        case KisShortcutConfiguration::PanGesture:
+            type = Qt::PanNativeGesture;
+            break;
+        case KisShortcutConfiguration::RotateGesture:
+            type = Qt::RotateNativeGesture;
+            break;
+        case KisShortcutConfiguration::SmartZoomGesture:
+            type = Qt::SmartZoomNativeGesture;
+            break;
+#endif
+        default:
+            return false;
+    }
+
+    KisNativeGestureShortcut *shortcut = new KisNativeGestureShortcut(action, index, type);
+    matcher.addShortcut(shortcut);
+    return true;
 }
 
 void KisInputManager::Private::setupActions()
@@ -526,7 +560,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
 
-    if (!matcher.pointerMoved(event)) {
+    if (!matcher.pointerMoved(event) && toolProxy) {
         toolProxy->forwardHoverEvent(event);
     }
     retval = true;

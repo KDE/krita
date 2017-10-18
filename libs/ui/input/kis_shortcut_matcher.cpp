@@ -26,6 +26,7 @@
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
+#include "kis_native_gesture_shortcut.h"
 
 #ifdef DEBUG_MATCHER
 #include <kis_debug.h>
@@ -50,9 +51,11 @@ public:
         : runningShortcut(0)
         , readyShortcut(0)
         , touchShortcut(0)
+        , nativeGestureShortcut(0)
         , suppressAllActions(false)
         , cursorEntered(false)
         , usingTouch(false)
+        , usingNativeGesture(false)
     {}
 
     ~Private()
@@ -65,6 +68,7 @@ public:
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
+    QList<KisNativeGestureShortcut*> nativeGestureShortcuts;
 
     QSet<Qt::Key> keys; // Model of currently pressed keys
     QSet<Qt::MouseButton> buttons; // Model of currently pressed buttons
@@ -74,10 +78,12 @@ public:
     QList<KisStrokeShortcut*> candidateShortcuts;
 
     KisTouchShortcut *touchShortcut;
+    KisNativeGestureShortcut *nativeGestureShortcut;
 
     bool suppressAllActions;
     bool cursorEntered;
     bool usingTouch;
+    bool usingNativeGesture;
 
     inline bool actionsSuppressed() const {
         return suppressAllActions || !cursorEntered;
@@ -85,6 +91,10 @@ public:
 
     inline bool actionsSuppressedIgnoreFocus() const {
         return suppressAllActions;
+    }
+
+    inline bool isUsingTouch() const {
+        return usingTouch || usingNativeGesture;
     }
 };
 
@@ -115,6 +125,10 @@ void KisShortcutMatcher::addShortcut(KisStrokeShortcut *shortcut)
 void KisShortcutMatcher::addShortcut( KisTouchShortcut* shortcut )
 {
     m_d->touchShortcuts.append(shortcut);
+}
+
+void KisShortcutMatcher::addShortcut(KisNativeGestureShortcut *shortcut) {
+    m_d->nativeGestureShortcuts.append(shortcut);
 }
 
 bool KisShortcutMatcher::supportsHiResInputEvents()
@@ -181,7 +195,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
 
     bool retval = false;
 
-    if (m_d->usingTouch) {
+    if (m_d->isUsingTouch()) {
         return retval;
     }
 
@@ -208,7 +222,7 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
 
     bool retval = false;
 
-    if (m_d->usingTouch) {
+    if (m_d->isUsingTouch()) {
         return retval;
     }
 
@@ -230,7 +244,7 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
 
 bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    if (m_d->runningShortcut || m_d->usingTouch) {
+    if (m_d->runningShortcut || m_d->isUsingTouch()) {
         DEBUG_ACTION("Wheel event canceled.");
         return false;
     }
@@ -240,7 +254,7 @@ bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAc
 
 bool KisShortcutMatcher::pointerMoved(QEvent *event)
 {
-    if (m_d->usingTouch || !m_d->runningShortcut) {
+    if (m_d->isUsingTouch() || !m_d->runningShortcut) {
         return false;
     }
 
@@ -303,6 +317,38 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     }
 
     return false;
+}
+
+bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
+{
+    Q_UNUSED(event)
+    return true;
+}
+
+bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
+{
+    bool retval = false;
+
+    if ( m_d->nativeGestureShortcut && !m_d->nativeGestureShortcut->match( event ) ) {
+        retval = tryEndNativeGestureShortcut( event );
+    }
+
+    if ( !m_d->nativeGestureShortcut ) {
+        retval = tryRunNativeGestureShortcut( event );
+    }
+    else {
+        m_d->nativeGestureShortcut->action()->inputEvent( event );
+        retval = true;
+    }
+
+    return retval;
+}
+
+bool KisShortcutMatcher::nativeGestureEndEvent(QNativeGestureEvent *event)
+{
+    Q_UNUSED(event)
+    m_d->usingNativeGesture = false;
+    return true;
 }
 
 Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
@@ -560,6 +606,49 @@ bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
         touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
 
         m_d->touchShortcut = 0; // empty it out now that we are done with it
+
+        return true;
+    }
+
+    return false;
+}
+
+bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
+{
+    KisNativeGestureShortcut *goodCandidate = 0;
+
+    if (m_d->actionsSuppressed())
+        return false;
+
+    Q_FOREACH (KisNativeGestureShortcut* shortcut, m_d->nativeGestureShortcuts) {
+        if (shortcut->match(event) && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
+            goodCandidate = shortcut;
+        }
+    }
+
+    if (goodCandidate) {
+        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
+        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
+
+        m_d->nativeGestureShortcut = goodCandidate;
+        m_d->usingNativeGesture = true;
+
+        return true;
+    }
+
+    return false;
+}
+
+bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
+{
+    if (m_d->nativeGestureShortcut) {
+        // first reset running shortcut to avoid infinite recursion via end()
+        KisNativeGestureShortcut *nativeGestureShortcut = m_d->nativeGestureShortcut;
+
+        nativeGestureShortcut->action()->end(event);
+        nativeGestureShortcut->action()->deactivate(m_d->nativeGestureShortcut->shortcutIndex());
+
+        m_d->nativeGestureShortcut = 0; // empty it out now that we are done with it
 
         return true;
     }

@@ -132,9 +132,8 @@ void KisBaseNode::setOpacity(quint8 val)
 
     if (opacity() == val) return;
 
-    nodeProperties().setProperty("opacity", val);
+    setNodeProperty("opacity", val);
 
-    baseNodeChangedCallback();
     baseNodeInvalidateAllFramesCallback();
 }
 
@@ -177,9 +176,15 @@ void KisBaseNode::setSectionModelProperties(const KisBaseNode::PropertyList &pro
     setUserLocked(properties.at(1).state.toBool());
 }
 
-KoProperties & KisBaseNode::nodeProperties() const
+const KoProperties & KisBaseNode::nodeProperties() const
 {
     return m_d->properties;
+}
+
+void KisBaseNode::setNodeProperty(const QString & name, const QVariant & value)
+{
+    m_d->properties.setProperty(name, value);
+    baseNodeChangedCallback();
 }
 
 void KisBaseNode::mergeNodeProperties(const KoProperties & properties)

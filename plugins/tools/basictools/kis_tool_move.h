@@ -31,6 +31,8 @@
 #include <QGroupBox>
 #include <QRadioButton>
 
+#include "kis_canvas2.h"
+
 
 class KoCanvasBase;
 class MoveToolOptionsWidget;
@@ -83,6 +85,7 @@ public:
     void endAction(KoPointerEvent *event);
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
+    void initHandles(const KisNodeList &nodes);
 
     QWidget* createOptionWidget() override;
     void updateUIUnit(int newUnit);
@@ -131,6 +134,12 @@ private:
     int m_resolution;
 
     QAction *m_showCoordinatesAction;
+
+    KisCanvas2* m_canvas;
+
+    QPoint m_pos;
+    QRect m_handlesRect;
+    bool m_dragInProgress = false;
 };
 
 

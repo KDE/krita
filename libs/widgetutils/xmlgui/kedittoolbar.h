@@ -71,20 +71,6 @@ class KRITAWIDGETUTILS_EXPORT KEditToolBar : public QDialog
     Q_OBJECT
 public:
     /**
-     * Old constructor for apps that do not use components.
-     * This constructor is somewhat deprecated, since it doesn't work
-     * with any KXMLGuiClient being added to the mainwindow.
-     * You really want to use the other constructor.
-     *
-     * You @em must pass along your collection of actions (some of which appear in your toolbars).
-     *
-     * @param collection The collection of actions to work on.
-     * @param parent The parent of the dialog.
-     */
-    explicit KEditToolBar(KActionCollection *collection,
-                          QWidget *parent = 0);
-
-    /**
      * Main constructor.
      *
      * The main parameter, @p factory, is a pointer to the

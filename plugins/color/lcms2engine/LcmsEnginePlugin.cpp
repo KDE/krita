@@ -30,6 +30,8 @@
 #include <klocalizedstring.h>
 #include <QDebug>
 
+#include "kis_assert.h"
+
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -84,6 +86,10 @@ K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
+    // We need all resource paths to be properly initialized via KisApplication, otherwise we will
+    // initialize this instance with lacking color profiles which will cause lookup errors later on.
+    KoResourcePaths::assertReady();
+
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);
 

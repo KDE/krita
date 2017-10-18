@@ -73,14 +73,6 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
    KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
 
 
-    KoColorSet *gradientCache = new KoColorSet();
-    for (int i=0; i<256; i++) {
-        KoColor gc;
-        gradient.colorAt(gc, ((qreal)i/255.0));
-        KoColorSetEntry col;
-        col.color = gc;
-        gradientCache->add(col);
-    }
 
     KoColor outColor(Qt::white, device->colorSpace());
     KisSequentialIterator it(device, applyRect);
@@ -89,7 +81,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     const int pixelSize = device->colorSpace()->pixelSize();
     do {
         grey = device->colorSpace()->intensity8(it.oldRawData());
-        outColor = gradientCache->getColorGlobal((quint32)grey).color;
+        gradient.colorAt(outColor,(qreal)grey/255);
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);

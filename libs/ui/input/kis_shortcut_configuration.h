@@ -59,6 +59,7 @@ public:
         WheelDown, ///< Downwards movement, toward the user.
         WheelLeft, ///< Left movement.
         WheelRight, ///< Right movement.
+        WheelTrackpad, ///< A pan movement on a trackpad.
     };
 
     /**
@@ -68,6 +69,8 @@ public:
         NoGesture, ///< No gesture.
         PinchGesture, ///< Pinch gesture, fingers moving towards or away from each other.
         PanGesture, ///< Pan gesture, fingers staying together but moving across the screen.
+        RotateGesture, ///<Rotate gesture, two fingers rotating around a pivot point.
+        SmartZoomGesture, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
     };
 
     /**

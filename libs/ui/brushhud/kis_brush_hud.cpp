@@ -73,7 +73,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     QHBoxLayout *labelLayout = new QHBoxLayout();
     m_d->lblPresetIcon = new QLabel(this);
-    const QSize iconSize = QSize(22,22) * qApp->devicePixelRatio();
+    const QSize iconSize = QSize(22,22);
     m_d->lblPresetIcon->setMinimumSize(iconSize);
     m_d->lblPresetIcon->setMaximumSize(iconSize);
     m_d->lblPresetIcon->setScaledContents(true);

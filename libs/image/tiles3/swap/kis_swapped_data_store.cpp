@@ -55,7 +55,7 @@ quint64 KisSwappedDataStore::numTiles() const
     return m_allocator->numChunks();
 }
 
-void KisSwappedDataStore::swapOutTileData(KisTileData *td)
+bool KisSwappedDataStore::trySwapOutTileData(KisTileData *td)
 {
     Q_ASSERT(td->data());
     QMutexLocker locker(&m_lock);
@@ -75,12 +75,18 @@ void KisSwappedDataStore::swapOutTileData(KisTileData *td)
 
     KisChunk chunk = m_allocator->getChunk(bytesWritten);
     quint8 *ptr = m_swapSpace->getWriteChunkPtr(chunk);
+    if (!ptr) {
+        qWarning() << "swap out of tile failed";
+        return false;
+    }
     memcpy(ptr, m_buffer.data(), bytesWritten);
 
     td->releaseMemory();
     td->setSwapChunk(chunk);
 
     m_memoryMetric += td->pixelSize();
+
+    return true;
 }
 
 void KisSwappedDataStore::swapInTileData(KisTileData *td)
@@ -96,6 +102,7 @@ void KisSwappedDataStore::swapInTileData(KisTileData *td)
     td->setSwapChunk(KisChunk());
 
     quint8 *ptr = m_swapSpace->getReadChunkPtr(chunk);
+    Q_ASSERT(ptr);
     m_compressor->decompressTileData(ptr, chunk.size(), td);
     m_allocator->freeChunk(chunk);
 

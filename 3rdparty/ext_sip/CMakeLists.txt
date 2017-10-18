@@ -33,7 +33,7 @@ elseif (MINGW)
         URL https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.3/sip-4.19.3.zip
         URL_MD5 1098da9ee1915354fedf38fd6fbe22ce
 
-        CONFIGURE_COMMAND python.exe <SOURCE_DIR>/configure.py ${_SIP_conf}
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
         INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
         

@@ -2415,7 +2415,7 @@
       <whatsThis></whatsThis>
       <toolTip>Copy layer to clipboard</toolTip>
       <iconText>Copy layer to clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2427,7 +2427,7 @@
       <whatsThis></whatsThis>
       <toolTip>Cut layer to clipboard</toolTip>
       <iconText>Cut layer to clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2439,7 +2439,7 @@
       <whatsThis></whatsThis>
       <toolTip>Paste layer from clipboard</toolTip>
       <iconText>Paste layer from clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>

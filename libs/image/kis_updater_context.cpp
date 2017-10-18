@@ -51,11 +51,11 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
     numStrokeJobs = 0;
 
     Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
-        if(item->type() == KisUpdateJobItem::MERGE ||
-           item->type() == KisUpdateJobItem::SPONTANEOUS) {
+        if(item->type() == KisUpdateJobItem::Type::MERGE ||
+           item->type() == KisUpdateJobItem::Type::SPONTANEOUS) {
             numMergeJobs++;
         }
-        else if(item->type() == KisUpdateJobItem::STROKE) {
+        else if(item->type() == KisUpdateJobItem::Type::STROKE) {
             numStrokeJobs++;
         }
     }
@@ -66,10 +66,10 @@ KisUpdaterContextSnapshotEx KisUpdaterContext::getContextSnapshotEx() const
     KisUpdaterContextSnapshotEx state = ContextEmpty;
 
     Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
-        if (item->type() == KisUpdateJobItem::MERGE ||
-            item->type() == KisUpdateJobItem::SPONTANEOUS) {
+        if (item->type() == KisUpdateJobItem::Type::MERGE ||
+            item->type() == KisUpdateJobItem::Type::SPONTANEOUS) {
             state |= HasMergeJob;
-        } else if(item->type() == KisUpdateJobItem::STROKE) {
+        } else if(item->type() == KisUpdateJobItem::Type::STROKE) {
             switch (item->strokeJobSequentiality()) {
             case KisStrokeJobData::SEQUENTIAL:
                 state |= HasSequentialJob;
@@ -139,11 +139,11 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setWalker(walker);
+    const bool shouldStartThread = m_jobs[jobIndex]->setWalker(walker);
 
     // it might happen that we call this function from within
     // the thread itself, right when it finished its work
-    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+    if (shouldStartThread) {
         m_threadPool.start(m_jobs[jobIndex]);
     }
 }
@@ -157,8 +157,10 @@ void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setWalker(walker);
+    const bool shouldStartThread = m_jobs[jobIndex]->setWalker(walker);
+
     // HINT: Not calling start() here
+    Q_UNUSED(shouldStartThread);
 }
 
 void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
@@ -167,11 +169,11 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setStrokeJob(strokeJob);
+    const bool shouldStartThread = m_jobs[jobIndex]->setStrokeJob(strokeJob);
 
     // it might happen that we call this function from within
     // the thread itself, right when it finished its work
-    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+    if (shouldStartThread) {
         m_threadPool.start(m_jobs[jobIndex]);
     }
 }
@@ -185,8 +187,10 @@ void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setStrokeJob(strokeJob);
+    const bool shouldStartThread = m_jobs[jobIndex]->setStrokeJob(strokeJob);
+
     // HINT: Not calling start() here
+    Q_UNUSED(shouldStartThread);
 }
 
 void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -195,11 +199,11 @@ void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
+    const bool shouldStartThread = m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
 
     // it might happen that we call this function from within
     // the thread itself, right when it finished its work
-    if (!m_jobs[jobIndex]->hasThreadAttached()) {
+    if (shouldStartThread) {
         m_threadPool.start(m_jobs[jobIndex]);
     }
 }
@@ -213,8 +217,10 @@ void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneous
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
+    const bool shouldStartThread = m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
+
     // HINT: Not calling start() here
+    Q_UNUSED(shouldStartThread);
 }
 
 void KisUpdaterContext::waitForDone()

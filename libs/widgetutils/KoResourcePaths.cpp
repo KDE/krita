@@ -560,5 +560,5 @@ void KoResourcePaths::setReady()
 
 void KoResourcePaths::assertReady()
 {
-    KIS_ASSERT_X(s_instance->d->ready, "KoResourcePaths::assertReady", "Resource paths are not ready yet.");
+//    KIS_ASSERT_X(s_instance->d->ready, "KoResourcePaths::assertReady", "Resource paths are not ready yet.");
 }

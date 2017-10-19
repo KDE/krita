@@ -32,6 +32,7 @@
 
 class KoSvgTextShape;
 class KisFileNameRequester;
+class KoDialog;
 
 class SvgTextEditor : public KXmlGuiWindow
 {
@@ -81,7 +82,8 @@ private Q_SLOTS:
     void zoomIn();
     void zoom();
 
-    void insertSpecialCharacter();
+    void showInsertSpecialCharacterDialog();
+    void insertCharacter(const QChar &c);
 
     void setTextBold(QFont::Weight weight = QFont::Bold);
     void setTextWeightLight();
@@ -138,6 +140,7 @@ private:
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;
     KoSvgTextShape *m_shape {0};
+    KoDialog *m_charSelectDialog {0};
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

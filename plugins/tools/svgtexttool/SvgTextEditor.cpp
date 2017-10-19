@@ -32,6 +32,7 @@
 #include <QComboBox>
 #include <QMessageBox>
 
+#include <kcharselect.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -41,6 +42,7 @@
 #include <ktoggleaction.h>
 #include <kguiitem.h>
 
+#include <KoDialog.h>
 #include <KoResourcePaths.h>
 #include <KoSvgTextShape.h>
 #include <KoSvgTextShapeMarkupConverter.h>
@@ -55,9 +57,16 @@
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags)
     , m_page(new QWidget(this))
+    , m_charSelectDialog(new KoDialog(this))
 {
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
+
+    KCharSelect *charSelector = new KCharSelect(m_charSelectDialog, 0, KCharSelect::AllGuiElements);
+    m_charSelectDialog->setMainWidget(charSelector);
+    connect(charSelector, SIGNAL(currentCharChanged(QChar)), SLOT(insertCharacter(QChar)));
+    m_charSelectDialog->hide();
+    m_charSelectDialog->setButtons(KoDialog::Close);
 
     KConfigGroup cg(KSharedConfig::openConfig(), "SvgTextTool");
     actionCollection()->setConfigGroup("SvgTextTool");
@@ -274,9 +283,14 @@ void SvgTextEditor::zoom()
 }
 
 
-void SvgTextEditor::insertSpecialCharacter()
+void SvgTextEditor::showInsertSpecialCharacterDialog()
 {
+    m_charSelectDialog->setVisible(!m_charSelectDialog->isVisible());
+}
 
+void SvgTextEditor::insertCharacter(const QChar &c)
+{
+    m_currentEditor->textCursor().insertText(QString(c));
 }
 
 
@@ -603,10 +617,12 @@ void SvgTextEditor::createActions()
     KStandardAction::zoom(this, SLOT(zoom()), actionCollection());
 
     // Insert:
-    createAction("insert_special_character",
-                 i18n("Insert Special Character"),
-                 "insert-special-character",
-                 SLOT(insertSpecialCharacter()));
+    QAction * insertAction = createAction("insert_special_character",
+                                          i18n("Insert Special Character"),
+                                          "insert-special-character",
+                                          SLOT(showInsertSpecialCharacterDialog()));
+    insertAction->setCheckable(true);
+    insertAction->setChecked(false);
 
     // Format:
     m_richTextActions << createAction("weight_bold",

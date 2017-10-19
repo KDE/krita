@@ -92,9 +92,5 @@
     <Action name="weight_bold"/>
     <Action name="italic"/>
     <Action name="underline"/>
-    <Action name="align_left"/>
-    <Action name="align_center"/>
-    <Action name="align_right"/>
-    <Action name="align_justified"/>
   </ToolBar>
 </kpartgui>

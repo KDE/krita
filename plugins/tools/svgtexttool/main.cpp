@@ -32,7 +32,7 @@ extern "C" int main(int argc, char **argv)
     KAboutData aboutData(QStringLiteral("svgtexttool"),
                          i18n("Svg Text Editor"),
                          QStringLiteral("1.0"),
-                         i18n("Test for the Svg Text Tool"),
+                         i18n("Test for the Svg Text Tomol"),
                          KAboutLicense::LGPL,
                          i18n("(c) 2017"));
     KAboutData::setApplicationData(aboutData);
@@ -43,7 +43,7 @@ extern "C" int main(int argc, char **argv)
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
-
+    KoColor::init();
     SvgTextEditor *mainWindow = new SvgTextEditor();
     mainWindow->show();
     return app.exec();

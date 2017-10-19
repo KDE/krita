@@ -25,8 +25,11 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QAction>
+#include <QWidgetAction>
 #include <QMenu>
 #include <QTabWidget>
+#include <QFontComboBox>
+#include <QComboBox>
 
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
@@ -41,6 +44,7 @@
 #include <KoSvgTextShape.h>
 #include <KoSvgTextShapeMarkupConverter.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorPopupAction.h>
 
 #include <kis_icon.h>
 #include <kis_config.h>
@@ -52,11 +56,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     , m_page(new QWidget(this))
     , m_shape(0)
 {
-    Q_INIT_RESOURCE(svgtexttool);
-    QFile f(":/kxmlgui5/svgtexttool.xmlgui");
-    qDebug() << f.exists();
-    Q_ASSERT(f.exists());
-
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
 
@@ -102,15 +101,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
             connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
             act->setChecked(!toolBar->isHidden());
             toolbarList.append(act);
-            //Hide text for buttons with an icon in the toolbar
-            Q_FOREACH (QAction *ac, toolBar->actions()){
-                if (ac->icon().pixmap(QSize(1,1)).isNull() == false){
-                    ac->setPriority(QAction::LowPriority);
-                }
-                else {
-                    ac->setIcon(QIcon());
-                }
-            }
         }
     }
     plugActionList("toolbarlist", toolbarList);
@@ -529,6 +519,27 @@ void SvgTextEditor::slotToolbarToggled(bool)
 
 }
 
+void SvgTextEditor::setFont(const QString &family)
+{
+
+}
+
+
+void SvgTextEditor::setFontSize(const QString &size)
+{
+
+}
+
+void SvgTextEditor::setFontColor(const KoColor &c)
+{
+
+}
+
+void SvgTextEditor::setBackgroundColor(const KoColor &c)
+{
+
+}
+
 
 void SvgTextEditor::setTextFill()
 {
@@ -667,27 +678,27 @@ void SvgTextEditor::createActions()
 
     createAction("italic",
                  i18n("Italic"),
-                 "format-italic",
+                 "format-text-italic",
                  SLOT(setTextItalic()));
 
     createAction("underline",
                  i18n("Underline"),
-                 "format-underline",
+                 "format-text--underline",
                  SLOT(setTextUnderline()));
 
     createAction("strike_through",
                  i18n("Strike-through"),
-                 "format-strike-through",
+                 "format-text--strike-through",
                  SLOT(setTextStrikethrough()));
 
     createAction("superscript",
                  i18n("Superscript"),
-                 "format-superscript",
+                 "format-text-superscript",
                  SLOT(setTextSuperScript()));
 
     createAction("subscript",
                  i18n("Subscript"),
-                 "format-subscript",
+                 "format-text-subscript",
                  SLOT(setTextSubscript()));
 
     createAction("weight_light",
@@ -748,4 +759,33 @@ void SvgTextEditor::createActions()
 
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbars()), actionCollection());
 
+    QWidgetAction *fontComboAction = new QWidgetAction(this);
+    fontComboAction->setToolTip(i18n("Font"));
+    QFontComboBox *fontCombo = new QFontComboBox();
+    connect(fontCombo, SIGNAL(activated(QString)), SLOT(setFont(QString)));
+    fontComboAction->setDefaultWidget(fontCombo);
+    actionCollection()->addAction("font", fontComboAction);
+
+    QWidgetAction *fontSizeAction = new QWidgetAction(this);
+    fontSizeAction->setToolTip(i18n("Size"));
+    QComboBox *fontSizeCombo = new QComboBox();
+    Q_FOREACH (int size, QFontDatabase::standardSizes()) {
+        fontSizeCombo->addItem(QString::number(size));
+    }
+    fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(QApplication::font().pointSize()));
+    connect(fontSizeCombo, SIGNAL(activated(QString)), SLOT(setFontSize(QString)));
+    fontSizeAction->setDefaultWidget(fontSizeCombo);
+    actionCollection()->addAction("font_size", fontSizeAction);
+
+    KoColorPopupAction *fgColor = new KoColorPopupAction(this);
+    fgColor->setCurrentColor(QColor(Qt::black));
+    fgColor->setToolTip(i18n("Text Color"));
+    connect(fgColor, SIGNAL(colorChanged(KoColor)), SLOT(setFontColor(KoColor)));
+    actionCollection()->addAction("font_color", fgColor);
+
+    KoColorPopupAction *bgColor = new KoColorPopupAction(this);
+    bgColor->setCurrentColor(QColor(Qt::white));
+    bgColor->setToolTip(i18n("Background Color"));
+    connect(bgColor, SIGNAL(colorChanged(KoColor)), SLOT(setBackgroundColor(KoColor)));
+    actionCollection()->addAction("background_color", bgColor);
 }

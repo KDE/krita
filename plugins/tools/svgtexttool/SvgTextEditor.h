@@ -113,6 +113,12 @@ private Q_SLOTS:
     void slotConfigureToolbars();
     void slotToolbarToggled(bool);
 
+    void setFont(const QString &family);
+    void setFontSize(const QString &size);
+
+    void setFontColor(const KoColor &c);
+    void setBackgroundColor(const KoColor &c);
+
 Q_SIGNALS:
 
     void textUpdated(const QString &svg, const QString &defs);

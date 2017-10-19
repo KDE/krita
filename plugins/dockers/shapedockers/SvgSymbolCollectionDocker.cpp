@@ -62,7 +62,7 @@ QVariant SvgCollectionModel::data(const QModelIndex &index, int role) const
 
     case Qt::DecorationRole:
     {
-        QPixmap px = QPixmap::fromImage(m_symbolCollection->symbols()[index.row()]->icon);
+        QPixmap px = QPixmap::fromImage(m_symbolCollection->symbols()[index.row()]->icon());
         QIcon icon(px);
         return icon;
     }

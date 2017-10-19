@@ -22,12 +22,13 @@
 #define TEXTNGSHAPECONFIGWIDGET_H
 
 #include <QWidget>
-
-#include "ui_WdgSvgTextEditor.h"
+#include <QTextEdit>
 
 #include <kxmlguiwindow.h>
 #include <KoColor.h>
 #include <KoSvgText.h>//for the enums
+
+#include "ui_WdgSvgTextEditor.h"
 
 class KoSvgTextShape;
 class KisFileNameRequester;
@@ -89,7 +90,7 @@ private Q_SLOTS:
     void setTextWeightBlack();
 
     void setTextItalic(QFont::Style style = QFont::StyleOblique);
-    void setTextDecoration(KoSvgText::TextDecoration decor = KoSvgText::DecorationUnderline);
+    void setTextDecoration(KoSvgText::TextDecoration decor);
     void setTextUnderline();
     void setTextOverline();
     void setTextStrikethrough();
@@ -103,18 +104,13 @@ private Q_SLOTS:
     void alignCenter();
     void alignJustified();
 
-    void setTextFill();
-    void setTextStroke();
-    void setFont();
-    void setSize();
+    void setFont(const QString &fontName);
+    void setFontSize(const QString &size);
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
 
     void setShapeProperties();
     void slotConfigureToolbars();
     void slotToolbarToggled(bool);
-
-    void setFont(const QString &family);
-    void setFontSize(const QString &size);
 
     void setFontColor(const KoColor &c);
     void setBackgroundColor(const KoColor &c);
@@ -129,18 +125,19 @@ protected:
 
 private:
 
-    void createAction(const QString &name,
-                      const QString &text,
-                      const QString &icon,
-                      const char *member,
-                      const QKeySequence &shortcut = QKeySequence());
+    QAction *createAction(const QString &name,
+                          const QString &text,
+                          const QString &icon,
+                          const char *member,
+                          const QKeySequence &shortcut = QKeySequence());
     void createActions();
+    void enableRichTextActions(bool enable);
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
-    QWidget *m_page;
-    QMap<QString, QAction> m_actions;
-
-    KoSvgTextShape *m_shape;
+    QTextEdit *m_currentEditor {0};
+    QWidget *m_page {0};
+    QList<QAction*> m_richTextActions;
+    KoSvgTextShape *m_shape {0};
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

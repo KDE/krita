@@ -683,12 +683,12 @@ void SvgTextEditor::createActions()
 
     createAction("underline",
                  i18n("Underline"),
-                 "format-text--underline",
+                 "format-text-underline",
                  SLOT(setTextUnderline()));
 
     createAction("strike_through",
                  i18n("Strike-through"),
-                 "format-text--strike-through",
+                 "format-text-strike-through",
                  SLOT(setTextStrikethrough()));
 
     createAction("superscript",

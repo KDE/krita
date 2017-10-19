@@ -52,7 +52,6 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
 
 SvgTextTool::~SvgTextTool()
 {
-    delete m_editor;
 }
 
 void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)

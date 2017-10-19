@@ -24,9 +24,21 @@
 
 #include <SvgTextEditor.h>
 
+#if defined HAVE_X11
+#   include <kis_xi2_event_filter.h>
+#endif
+
+
 extern "C" int main(int argc, char **argv)
 {
+#if defined HAVE_X11
+    qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
+
     QApplication app(argc, argv);
+#if defined HAVE_X11
+    app.installNativeEventFilter(KisXi2EventFilter::instance());
+#endif
 
     KLocalizedString::setApplicationDomain("svgtexttool");
     KAboutData aboutData(QStringLiteral("svgtexttool"),

@@ -23,6 +23,7 @@
 
 #include <KoToolBase.h>
 #include <QPushButton>
+#include <QPointer>
 
 class SvgTextEditor;
 class KoSvgTextShape;

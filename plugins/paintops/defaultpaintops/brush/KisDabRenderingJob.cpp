@@ -33,10 +33,9 @@ KisDabRenderingJob::KisDabRenderingJob()
 {
 }
 
-KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabCacheUtils::DabGenerationInfo _generationInfo, KisDabCacheUtils::DabRenderingResources *_resources, KisDabRenderingJob::JobType _type)
+KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabCacheUtils::DabGenerationInfo _generationInfo, KisDabRenderingJob::JobType _type)
     : seqNo(_seqNo),
       generationInfo(_generationInfo),
-      resources(_resources),
       type(_type)
 {
 }
@@ -45,7 +44,6 @@ KisDabRenderingJob::KisDabRenderingJob(const KisDabRenderingJob &rhs)
     : QRunnable(),
       seqNo(rhs.seqNo),
       generationInfo(rhs.generationInfo),
-      resources(rhs.resources),
       type(rhs.type),
       originalDevice(rhs.originalDevice),
       postprocessedDevice(rhs.postprocessedDevice),
@@ -58,7 +56,6 @@ KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
 {
     seqNo = rhs.seqNo;
     generationInfo = rhs.generationInfo;
-    resources = rhs.resources;
     type = rhs.type;
     originalDevice = rhs.originalDevice;
     postprocessedDevice = rhs.postprocessedDevice;
@@ -68,7 +65,7 @@ KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
     return *this;
 }
 
-int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
+int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job,  KisDabCacheUtils::DabRenderingResources *resources)
 {
     using namespace KisDabCacheUtils;
 
@@ -78,11 +75,13 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
     QElapsedTimer executionTime;
     executionTime.start();
 
+    resources->syncResourcesToSeqNo(job->seqNo, job->generationInfo.info);
+
     if (job->type == KisDabRenderingJob::Dab) {
         // TODO: thing about better interface for the reverse queue link
         job->originalDevice = job->parentQueue->fetchCachedPaintDevce();
 
-        generateDab(job->generationInfo, job->resources, &job->originalDevice);
+        generateDab(job->generationInfo, resources, &job->originalDevice);
     }
 
     // by now the original device should be already prepared
@@ -106,7 +105,7 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job)
             postProcessDab(job->postprocessedDevice,
                            job->generationInfo.dstDabRect.topLeft(),
                            job->generationInfo.info,
-                           job->resources);
+                           resources);
         } else {
             job->postprocessedDevice = job->originalDevice;
         }
@@ -119,7 +118,9 @@ void KisDabRenderingJob::run()
 {
     int executionTime = 0;
 
-    executionTime = executeOneJob(this);
+    KisDabCacheUtils::DabRenderingResources *resources = parentQueue->fetchResourcesFromCache();
+
+    executionTime = executeOneJob(this, resources);
     QList<KisDabRenderingJob *> jobs = parentQueue->notifyJobFinished(this, executionTime);
 
     while (!jobs.isEmpty()) {
@@ -135,7 +136,7 @@ void KisDabRenderingJob::run()
 
         // execute the first job in the current thread
         KisDabRenderingJob *job = jobs.first();
-        executionTime = executeOneJob(job);
+        executionTime = executeOneJob(job, resources);
         jobs = parentQueue->notifyJobFinished(job, executionTime);
 
         // mimic the behavior of the thread pool
@@ -143,6 +144,8 @@ void KisDabRenderingJob::run()
             delete job;
         }
     }
+
+    parentQueue->putResourcesToCache(resources);
 }
 
 QPoint KisDabRenderingJob::dstDabOffset() const

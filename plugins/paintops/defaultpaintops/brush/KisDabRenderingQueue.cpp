@@ -109,6 +109,9 @@ struct KisDabRenderingQueue::Private
     KisDabRenderingJob* createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob);
     void cleanPaintedDabs();
     bool dabsHaveSeparateOriginal();
+
+    KisDabCacheUtils::DabRenderingResources* fetchResourcesFromCache();
+    void putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources);
 };
 
 
@@ -155,14 +158,7 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
             m_d->jobs.last().job.seqNo + 1:
             m_d->startSeqNo;
 
-    KisDabCacheUtils::DabRenderingResources *resources = 0;
-
-    if (!m_d->cachedResources.isEmpty()) {
-        resources = m_d->cachedResources.takeLast();
-    } else {
-        resources = m_d->resourcesFactory();
-    }
-
+    KisDabCacheUtils::DabRenderingResources *resources = m_d->fetchResourcesFromCache();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resources, 0);
 
     // We should sync the cached brush into the current seqNo
@@ -179,9 +175,11 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
                                     &wrapper.job.generationInfo,
                                     &shouldUseCache);
 
+    m_d->putResourcesToCache(resources);
+    resources = 0;
+
     // TODO: initialize via c-tor
     wrapper.job.seqNo = seqNo;
-    wrapper.job.resources = resources;
     wrapper.job.type =
         !shouldUseCache ? KisDabRenderingJob::Dab :
         wrapper.job.generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess :
@@ -245,7 +243,6 @@ QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRender
     KisDabRenderingJob &finishedJob = wrapper.job;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->jobs[jobIndex].status == Private::JobWrapper::Running);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob.resources == job->resources);
     KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob.seqNo == job->seqNo);
     KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob.type == job->type);
     KIS_SAFE_ASSERT_RECOVER_NOOP(job->originalDevice);
@@ -254,11 +251,6 @@ QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRender
     wrapper.status = Private::JobWrapper::Completed;
     finishedJob.originalDevice = job->originalDevice;
     finishedJob.postprocessedDevice = job->postprocessedDevice;
-
-    // recycle the resources
-    m_d->cachedResources << finishedJob.resources;
-    finishedJob.resources = 0;
-    job->resources = 0;
 
     if (finishedJob.type == KisDabRenderingJob::Dab) {
         for (int i = jobIndex + 1; i < m_d->jobs.size(); i++) {
@@ -423,21 +415,45 @@ int KisDabRenderingQueue::averageDabSize() const
 
 bool KisDabRenderingQueue::Private::dabsHaveSeparateOriginal()
 {
+    KisDabCacheUtils::DabRenderingResources *resources = fetchResourcesFromCache();
+
+    const bool result = cacheInterface->hasSeparateOriginal(resources);
+
+    putResourcesToCache(resources);
+
+    return result;
+}
+
+KisDabCacheUtils::DabRenderingResources *KisDabRenderingQueue::Private::fetchResourcesFromCache()
+{
     KisDabCacheUtils::DabRenderingResources *resources = 0;
 
-    // fetch/create a temporary resources object that
-    // will be returned to the cache immediately
+    // fetch/create a temporary resources object
     if (!cachedResources.isEmpty()) {
         resources = cachedResources.takeLast();
     } else {
         resources = resourcesFactory();
     }
 
-    const bool result = cacheInterface->hasSeparateOriginal(resources);
+    return resources;
+}
 
+void KisDabRenderingQueue::Private::putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources)
+{
     cachedResources << resources;
+}
 
-    return result;
+KisDabCacheUtils::DabRenderingResources *KisDabRenderingQueue::fetchResourcesFromCache()
+{
+    // TODO: make a separate lock for that
+    QMutexLocker l(&m_d->mutex);
+    return m_d->fetchResourcesFromCache();
+}
+
+void KisDabRenderingQueue::putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources)
+{
+    QMutexLocker l(&m_d->mutex);
+    m_d->putResourcesToCache(resources);
 }
 
 int KisDabRenderingQueue::testingGetQueueSize() const

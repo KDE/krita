@@ -64,6 +64,9 @@ public:
     KisFixedPaintDeviceSP fetchCachedPaintDevce();
     void recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices);
 
+    void putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources);
+    KisDabCacheUtils::DabRenderingResources* fetchResourcesFromCache();
+
     int averageExecutionTime() const;
     int averageDabSize() const;
 

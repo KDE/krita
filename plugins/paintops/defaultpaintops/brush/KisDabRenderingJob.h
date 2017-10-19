@@ -40,7 +40,6 @@ public:
     KisDabRenderingJob();
     KisDabRenderingJob(int _seqNo,
                        KisDabCacheUtils::DabGenerationInfo _generationInfo,
-                       KisDabCacheUtils::DabRenderingResources *_resources,
                        JobType _type);
     KisDabRenderingJob(const KisDabRenderingJob &rhs);
     KisDabRenderingJob& operator=(const KisDabRenderingJob &rhs);
@@ -52,7 +51,6 @@ public:
 
     int seqNo = -1;
     KisDabCacheUtils::DabGenerationInfo generationInfo;
-    KisDabCacheUtils::DabRenderingResources *resources;
     JobType type = Dab;
     KisFixedPaintDeviceSP originalDevice;
     KisFixedPaintDeviceSP postprocessedDevice;
@@ -60,7 +58,7 @@ public:
     KisRunnableStrokeJobsInterface *runnableJobsInterface = 0;
 
 private:
-    static int executeOneJob(KisDabRenderingJob *job);
+    static int executeOneJob(KisDabRenderingJob *job, KisDabCacheUtils::DabRenderingResources *resources);
 };
 
 #endif // KISDABRENDERINGJOB_H

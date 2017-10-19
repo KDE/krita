@@ -90,6 +90,7 @@ struct KisDabRenderingQueue::Private
     QList<JobWrapper> jobs;
     int startSeqNo = 0;
     int lastPaintedJob = -1;
+    int lastDabJobInQueue = -1;
     QScopedPointer<CacheInterface> cacheInterface;
     const KoColorSpace *colorSpace;
     KisRunnableStrokeJobsInterface *runnableJobsInterface;
@@ -105,7 +106,7 @@ struct KisDabRenderingQueue::Private
     KisRollingMeanAccumulatorWrapper avgExecutionTime;
     KisRollingMeanAccumulatorWrapper avgDabSize;
 
-    int findLastDabJobIndex(int startSearchIndex = -1);
+    int calculateLastDabJobIndex(int startSearchIndex);
     KisDabRenderingJob* createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob);
     void cleanPaintedDabs();
     bool dabsHaveSeparateOriginal();
@@ -126,12 +127,19 @@ KisDabRenderingQueue::~KisDabRenderingQueue()
 {
 }
 
-int KisDabRenderingQueue::Private::findLastDabJobIndex(int startSearchIndex)
+int KisDabRenderingQueue::Private::calculateLastDabJobIndex(int startSearchIndex)
 {
     if (startSearchIndex < 0) {
         startSearchIndex = jobs.size() - 1;
     }
 
+    // try to use cached value
+    if (startSearchIndex >= lastDabJobInQueue) {
+        return lastDabJobInQueue;
+    }
+
+    // if we are below the cached value, just iterate through the dabs
+    // (which is extremely(!) slow)
     for (int i = startSearchIndex; i >= 0; i--) {
         if (jobs[i].job.type == KisDabRenderingJob::Dab) {
             return i;
@@ -164,7 +172,7 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
     // We should sync the cached brush into the current seqNo
     resources->syncResourcesToSeqNo(seqNo, request.info);
 
-    const int lastDabJobIndex = m_d->findLastDabJobIndex();
+    const int lastDabJobIndex = m_d->lastDabJobInQueue;
 
     Private::JobWrapper wrapper;
 
@@ -219,6 +227,7 @@ KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequ
                                  m_d->jobs.first().job.seqNo);
 
     if (wrapper.job.type == KisDabRenderingJob::Dab) {
+        m_d->lastDabJobInQueue = m_d->jobs.size() - 1;
         m_d->cleanPaintedDabs();
     }
 
@@ -285,7 +294,7 @@ QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRender
 void KisDabRenderingQueue::Private::cleanPaintedDabs()
 {
     const int nextToBePainted = lastPaintedJob + 1;
-    const int sourceJob = findLastDabJobIndex(qMin(nextToBePainted, jobs.size() - 1));
+    const int sourceJob = calculateLastDabJobIndex(qMin(nextToBePainted, jobs.size() - 1));
 
     if (sourceJob >= 1) {
         // recycle and remove first 'sourceJob' jobs
@@ -304,6 +313,7 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
         KIS_SAFE_ASSERT_RECOVER_RETURN(jobs.size() > 0);
 
         lastPaintedJob -= sourceJob;
+        lastDabJobInQueue -= sourceJob;
         startSeqNo = jobs.first().job.seqNo;
     }
 }
@@ -319,9 +329,9 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
         m_d->jobs.isEmpty() ||
         m_d->jobs.first().job.type == KisDabRenderingJob::Dab);
 
-    const int copyJobAfter =
+    const int copyJobAfterInclusive =
         returnMutableDabs && !m_d->dabsHaveSeparateOriginal() ?
-            m_d->findLastDabJobIndex(m_d->jobs.size() - 1) :
+            m_d->lastDabJobInQueue :
             std::numeric_limits<int>::max();
 
     for (int i = 0; i < m_d->jobs.size(); i++) {
@@ -335,7 +345,7 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
         KisRenderedDab dab;
         KisFixedPaintDeviceSP resultDevice = j.postprocessedDevice;
 
-        if (i >= copyJobAfter) {
+        if (i >= copyJobAfterInclusive) {
             resultDevice = new KisFixedPaintDevice(*resultDevice);
         }
 

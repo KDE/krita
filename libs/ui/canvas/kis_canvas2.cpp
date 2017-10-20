@@ -228,14 +228,16 @@ void KisCanvas2::setup()
 
 void KisCanvas2::initializeFpsDecoration()
 {
+    KisConfig cfg;
+
     const bool shouldShowDebugOverlay =
-        (canvasIsOpenGL() && KisOpenglCanvasDebugger::instance()->showFpsOnCanvas()) ||
-        KisStrokeSpeedMonitor::instance()->haveStrokeSpeedMeasurement();
+        (canvasIsOpenGL() && cfg.enableOpenGLFramerateLogging()) ||
+        cfg.enableBrushSpeedLogging();
 
     if (shouldShowDebugOverlay && !decoration(KisFpsDecoration::idTag)) {
         addDecoration(new KisFpsDecoration(imageView()));
 
-        if (KisStrokeSpeedMonitor::instance()->haveStrokeSpeedMeasurement()) {
+        if (cfg.enableBrushSpeedLogging()) {
             connect(KisStrokeSpeedMonitor::instance(), SIGNAL(sigStatsUpdated()), this, SLOT(updateCanvas()));
         }
     } else if (!shouldShowDebugOverlay && decoration(KisFpsDecoration::idTag)) {

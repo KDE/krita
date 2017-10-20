@@ -370,6 +370,7 @@ KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
     if (m_d->cachedPaintDevices.isEmpty()) {
         result = new KisFixedPaintDevice(m_d->colorSpace);
     } else {
+        // there is no difference from which side to take elements from QSet
         auto it = m_d->cachedPaintDevices.begin();
         result = *it;
         m_d->cachedPaintDevices.erase(it);

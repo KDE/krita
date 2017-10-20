@@ -33,7 +33,7 @@ public:
     /**
      * \return true if an update should be dropped by the image
      */
-    virtual bool filter(KisImage *image, KisNode *node, const QRect& rect, bool resetAnimationCache) = 0;
+    virtual bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) = 0;
 };
 
 
@@ -44,7 +44,7 @@ public:
 class KisDropAllProjectionUpdatesFilter : public KisProjectionUpdatesFilter
 {
 public:
-    bool filter(KisImage *image, KisNode *node, const QRect& rect, bool resetAnimationCache) override;
+    bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
 };
 
 #endif /* __KIS_PROJECTION_UPDATES_FILTER_H */

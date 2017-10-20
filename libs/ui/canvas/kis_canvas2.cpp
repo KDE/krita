@@ -88,6 +88,8 @@
 #include "kis_canvas_updates_compressor.h"
 #include "KoZoomController.h"
 
+#include <KisStrokeSpeedMonitor.h>
+#include "opengl/kis_opengl_canvas_debugger.h"
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -220,6 +222,26 @@ void KisCanvas2::setup()
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
+
+    initializeFpsDecoration();
+}
+
+void KisCanvas2::initializeFpsDecoration()
+{
+    const bool shouldShowDebugOverlay =
+        (canvasIsOpenGL() && KisOpenglCanvasDebugger::instance()->showFpsOnCanvas()) ||
+        KisStrokeSpeedMonitor::instance()->haveStrokeSpeedMeasurement();
+
+    if (shouldShowDebugOverlay && !decoration(KisFpsDecoration::idTag)) {
+        addDecoration(new KisFpsDecoration(imageView()));
+
+        if (KisStrokeSpeedMonitor::instance()->haveStrokeSpeedMeasurement()) {
+            connect(KisStrokeSpeedMonitor::instance(), SIGNAL(sigStatsUpdated()), this, SLOT(updateCanvas()));
+        }
+    } else if (!shouldShowDebugOverlay && decoration(KisFpsDecoration::idTag)) {
+        m_d->canvasWidget->removeDecoration(KisFpsDecoration::idTag);
+        disconnect(KisStrokeSpeedMonitor::instance(), SIGNAL(sigStatsUpdated()), this, SLOT(updateCanvas()));
+    }
 }
 
 KisCanvas2::~KisCanvas2()
@@ -438,10 +460,6 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->frameCache = KisAnimationFrameCache::getFrameCache(canvasWidget->openGLImageTextures());
 
     setCanvasWidget(canvasWidget);
-
-    if (canvasWidget->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
-        addDecoration(new KisFpsDecoration(imageView()));
-    }
 }
 
 void KisCanvas2::createCanvas(bool useOpenGL)
@@ -835,6 +853,7 @@ void KisCanvas2::slotConfigChanged()
     resetCanvas(cfg.useOpenGL());
     slotSetDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this->canvasWidget())));
 
+    initializeFpsDecoration();
 }
 
 void KisCanvas2::refetchDataFromImage()

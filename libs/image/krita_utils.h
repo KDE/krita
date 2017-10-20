@@ -27,6 +27,7 @@ class QPointF;
 class QPainterPath;
 class QBitArray;
 class QPainter;
+class KisRenderedDab;
 
 #include <QVector>
 #include "kritaimage_export.h"
@@ -96,6 +97,9 @@ namespace KritaUtils
     void KRITAIMAGE_EXPORT filterAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<quint8(quint8)> func);
 
     qreal KRITAIMAGE_EXPORT estimatePortionOfTransparentPixels(KisPaintDeviceSP dev, const QRect &rect, qreal samplePortion);
+
+    void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab);
+    void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc);
 }
 
 #endif /* __KRITA_UTILS_H */

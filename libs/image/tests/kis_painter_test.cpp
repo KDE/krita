@@ -516,6 +516,284 @@ void KisPainterTest::benchmarkBitBltOldData()
         gc.bitBltOldData(QPoint(), src, fillRect);
     }
 }
+#include "kis_paint_device_debug_utils.h"
+#include "KisRenderedDab.h"
+
+void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false, bool useSelection = false)
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    QList<QColor> colors;
+    colors << Qt::red;
+    colors << Qt::green;
+    colors << Qt::blue;
+
+    QRect devicesRect;
+    QList<KisRenderedDab> devices;
+
+    for (int i = 0; i < numRects; i++) {
+        const QRect rc(10 + i * 10, 10 + i * 10, 30, 30);
+        KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+        dev->setRect(rc);
+        dev->initialize();
+        dev->fill(rc, KoColor(colors[i % 3], cs));
+        dev->fill(kisGrowRect(rc, -5), KoColor(Qt::white, cs));
+
+        KisRenderedDab dab;
+        dab.device = dev;
+        dab.offset = dev->bounds().topLeft();
+        dab.opacity = varyOpacity ? qreal(1 + i) / numRects : 1.0;
+        dab.flow = 1.0;
+
+        devices << dab;
+        devicesRect |= rc;
+    }
+
+    KisSelectionSP selection;
+
+    if (useSelection) {
+        selection = new KisSelection();
+        selection->pixelSelection()->select(kisGrowRect(devicesRect, -7));
+    }
+
+    const QString opacityPostfix = varyOpacity ? "_varyop" : "";
+    const QString selectionPostfix = useSelection ? "_sel" : "";
+
+    const QRect fullRect = kisGrowRect(devicesRect, 10);
+
+    {
+        KisPainter painter(dst);
+        painter.setSelection(selection);
+        painter.bltFixed(fullRect, devices);
+        painter.end();
+        QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
+                                      "kispainter_test",
+                                      "massive_bitblt",
+                                      QString("full_update_%1%2%3")
+                                          .arg(numRects)
+                                          .arg(opacityPostfix)
+                                          .arg(selectionPostfix)));
+    }
+
+    dst->clear();
+
+    {
+        KisPainter painter(dst);
+        painter.setSelection(selection);
+
+        for (int i = fullRect.x(); i <= fullRect.center().x(); i += 10) {
+            const QRect rc(i, fullRect.y(), 10, fullRect.height());
+            painter.bltFixed(rc, devices);
+        }
+
+        painter.end();
+
+        QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
+                                      "kispainter_test",
+                                      "massive_bitblt",
+                                      QString("partial_update_%1%2%3")
+                                          .arg(numRects)
+                                          .arg(opacityPostfix)
+                                          .arg(selectionPostfix)));
+
+    }
+}
+
+void KisPainterTest::testMassiveBltFixedSingleTile()
+{
+    testMassiveBltFixedImpl(3);
+}
+
+void KisPainterTest::testMassiveBltFixedMultiTile()
+{
+    testMassiveBltFixedImpl(6);
+}
+
+void KisPainterTest::testMassiveBltFixedMultiTileWithOpacity()
+{
+    testMassiveBltFixedImpl(6, true);
+}
+
+void KisPainterTest::testMassiveBltFixedMultiTileWithSelection()
+{
+    testMassiveBltFixedImpl(6, false, true);
+}
+
+void KisPainterTest::testMassiveBltFixedCornerCases()
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    QList<KisRenderedDab> devices;
+
+    QVERIFY(dst->extent().isEmpty());
+
+    {
+        // empty devices, shouldn't crash
+        KisPainter painter(dst);
+        painter.bltFixed(QRect(60,60,20,20), devices);
+        painter.end();
+    }
+
+    QVERIFY(dst->extent().isEmpty());
+
+    const QRect rc(10,10,20,20);
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+    dev->setRect(rc);
+    dev->initialize();
+    dev->fill(rc, KoColor(Qt::white, cs));
+
+    devices.append(KisRenderedDab(dev));
+
+    {
+        // rect outside the devices bounds, shouldn't crash
+        KisPainter painter(dst);
+        painter.bltFixed(QRect(60,60,20,20), devices);
+        painter.end();
+    }
+
+    QVERIFY(dst->extent().isEmpty());
+}
+
+
+#include "kis_paintop_utils.h"
+#include "kis_algebra_2d.h"
+
+void benchmarkMassiveBltFixedImpl(int numDabs, int size, qreal spacing, int idealNumPatches, Qt::Orientations direction)
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    QList<QColor> colors;
+    colors << QColor(255, 0, 0, 200);
+    colors << QColor(0, 255, 0, 200);
+    colors << QColor(0, 0, 255, 200);
+
+    QRect devicesRect;
+    QList<KisRenderedDab> devices;
+
+    const int step = spacing * size;
+
+    for (int i = 0; i < numDabs; i++) {
+        const QRect rc =
+            direction == Qt::Horizontal ? QRect(10 + i * step, 0, size, size) :
+            direction == Qt::Vertical ? QRect(0, 10 + i * step, size, size) :
+            QRect(10 + i * step, 10 + i * step, size, size);
+
+        KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+        dev->setRect(rc);
+        dev->initialize();
+        dev->fill(rc, KoColor(colors[i % 3], cs));
+        dev->fill(kisGrowRect(rc, -5), KoColor(Qt::white, cs));
+
+        KisRenderedDab dab;
+        dab.device = dev;
+        dab.offset = dev->bounds().topLeft();
+        dab.opacity = 1.0;
+        dab.flow = 1.0;
+
+        devices << dab;
+        devicesRect |= rc;
+    }
+
+    const QRect fullRect = kisGrowRect(devicesRect, 10);
+
+    {
+        KisPainter painter(dst);
+        painter.bltFixed(fullRect, devices);
+        painter.end();
+        //QVERIFY(TestUtil::checkQImage(dst->convertToQImage(0, fullRect),
+        //                              "kispainter_test",
+        //                              "massive_bitblt_benchmark",
+        //                              "initial"));
+        dst->clear();
+    }
+
+    QElapsedTimer t;
+
+    qint64 massiveTime = 0;
+    int massiveTries = 0;
+    int numRects = 0;
+    int avgPatchSize = 0;
+
+    for (int i = 0; i < 50 || massiveTime > 5000000; i++) {
+        QVector<QRect> rects = KisPaintOpUtils::splitDabsIntoRects(devices, idealNumPatches, size, spacing);
+        numRects = rects.size();
+
+        // HACK: please calculate real *average*!
+        avgPatchSize = KisAlgebra2D::maxDimension(rects.first());
+
+        t.start();
+
+        KisPainter painter(dst);
+        Q_FOREACH (const QRect &rc, rects) {
+            painter.bltFixed(rc, devices);
+        }
+        painter.end();
+
+        massiveTime += t.nsecsElapsed() / 1000;
+        massiveTries++;
+        dst->clear();
+    }
+
+    qint64 linearTime = 0;
+    int linearTries = 0;
+
+    for (int i = 0; i < 50 || linearTime > 5000000; i++) {
+        t.start();
+
+        KisPainter painter(dst);
+        Q_FOREACH (const KisRenderedDab &dab, devices) {
+            painter.setOpacity(255 * dab.opacity);
+            painter.setFlow(255 * dab.flow);
+            painter.bltFixed(dab.offset, dab.device, dab.device->bounds());
+        }
+        painter.end();
+
+        linearTime += t.nsecsElapsed() / 1000;
+        linearTries++;
+        dst->clear();
+    }
+
+    const qreal avgMassive = qreal(massiveTime) / massiveTries;
+    const qreal avgLinear = qreal(linearTime) / linearTries;
+
+    const QString directionMark =
+        direction == Qt::Horizontal ? "H" :
+        direction == Qt::Vertical ? "V" : "D";
+
+    qDebug()
+            << "D:" << size
+            << "S:" << spacing
+            << "N:" << numDabs
+            << "P (px):" << avgPatchSize
+            << "R:" << numRects
+            << "Dir:" << directionMark
+            << "\t"
+            << qPrintable(QString("Massive (usec): %1").arg(QString::number(avgMassive, 'f', 2), 8))
+            << "\t"
+            << qPrintable(QString("Linear (usec): %1").arg(QString::number(avgLinear, 'f', 2), 8))
+            << (avgMassive < avgLinear ? "*" : " ")
+            << qPrintable(QString("%1")
+                   .arg(QString::number((avgMassive - avgLinear) / avgLinear * 100.0, 'f', 2), 8))
+            << qRound(size + size * spacing * (numDabs - 1));
+}
+
+
+void KisPainterTest::benchmarkMassiveBltFixed()
+{
+    const qreal sp = 0.14;
+    const int idealThreadCount = 8;
+
+    for (int d = 50; d < 301; d += 50) {
+        for (int n = 1; n < 150; n = qCeil(n * 1.5)) {
+            benchmarkMassiveBltFixedImpl(n, d, sp, idealThreadCount, Qt::Horizontal);
+            benchmarkMassiveBltFixedImpl(n, d, sp, idealThreadCount, Qt::Vertical);
+            benchmarkMassiveBltFixedImpl(n, d, sp, idealThreadCount, Qt::Vertical | Qt::Horizontal);
+        }
+    }
+}
 
 QTEST_MAIN(KisPainterTest)
 

@@ -54,7 +54,7 @@ public:
     // We store the airbrush interval (in milliseconds) instead of the rate because the interval is
     // likely to be accessed more often.
     qreal airbrushInterval;
-    KisAirbrushWidget *configPage;
+    QScopedPointer<KisAirbrushWidget> configPage;
 };
 
 KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
@@ -65,11 +65,11 @@ KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
 
     // Initialize GUI.
     m_checkable = true;
-    m_d->configPage = new KisAirbrushWidget(nullptr, canIgnoreSpacing);
+    m_d->configPage.reset(new KisAirbrushWidget(nullptr, canIgnoreSpacing));
     connect(m_d->configPage->sliderRate, SIGNAL(valueChanged(qreal)), SLOT(slotIntervalChanged()));
     connect(m_d->configPage->checkBoxIgnoreSpacing, SIGNAL(toggled(bool)),
             SLOT(slotIgnoreSpacingChanged()));
-    setConfigurationPage(m_d->configPage);
+    setConfigurationPage(m_d->configPage.data());
 
     // Read initial configuration from the GUI.
     updateIgnoreSpacing();

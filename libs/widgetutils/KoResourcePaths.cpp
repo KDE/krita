@@ -558,7 +558,7 @@ void KoResourcePaths::setReady()
     s_instance->d->ready = true;
 }
 
-void KoResourcePaths::assertReady()
+bool KoResourcePaths::isReady()
 {
-    KIS_ASSERT_X(s_instance->d->ready, "KoResourcePaths::assertReady", "Resource paths are not ready yet.");
+    return s_instance->d->ready;
 }

@@ -193,7 +193,9 @@ set(kritaui_LIB_SRCS
     tool/kis_resources_snapshot.cpp
     tool/kis_smoothing_options.cpp
     tool/KisStabilizerDelayedPaintHelper.cpp
+    tool/KisStrokeSpeedMonitor.cpp
     tool/strokes/freehand_stroke.cpp
+    tool/strokes/KisStrokeEfficiencyMeasurer.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     tool/strokes/kis_color_picker_stroke_strategy.cpp

@@ -26,10 +26,8 @@ class KisGbrBrushTest : public QObject
     Q_OBJECT
 
     // XXX disabled until I figure out why they don't work from here, while the brushes do work from Krita
-    void testMaskGenerationNoColor();
     void testMaskGenerationSingleColor();
     void testMaskGenerationDevColor();
-    void testMaskGenerationDefaultColor();
 
 private Q_SLOTS:
 

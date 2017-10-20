@@ -25,6 +25,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include "kritaimage_export.h"
+#include <boost/optional.hpp>
 
 class KisPaintInformation;
 class KisSpacingInformation;
@@ -56,13 +57,13 @@ public:
      * Creates a KisDistanceInitInfo with the specified last dab information, and spacing and timing
      * update intervals set to LONG_TIME.
      */
-    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
+    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastAngle);
 
     /**
      * Creates a KisDistanceInitInfo with the specified last dab information and spacing and timing
      * update intervals.
      */
-    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
+    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastAngle,
                                  qreal spacingUpdateInterval, qreal timingUpdateInterval);
 
     KisDistanceInitInfo(const KisDistanceInitInfo &rhs);
@@ -97,7 +98,7 @@ class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
     KisDistanceInformation(qreal spacingUpdateInterval, qreal timingUpdateInterval);
-    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastAngle);
     /**
      * @param spacingUpdateInterval The amount of time allowed between spacing updates, in
      *                              milliseconds. Use LONG_TIME to only allow spacing updates when a
@@ -106,7 +107,7 @@ public:
      *                             milliseconds. Use LONG_TIME to only allow timing updates when a
      *                             dab is painted.
      */
-    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime, qreal lastAngle,
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastAngle,
                            qreal spacingUpdateInterval, qreal timingUpdateInterval);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
@@ -132,7 +133,6 @@ public:
 
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
-    qreal lastTime() const;
     qreal lastDrawingAngle() const;
 
     bool hasLastPaintInformation() const;
@@ -159,26 +159,17 @@ public:
      */
     bool isStarted() const;
 
-    bool hasLockedDrawingAngle() const;
-    qreal lockedDrawingAngle() const;
-    void setLockedDrawingAngle(qreal angle);
+    boost::optional<qreal> lockedDrawingAngleOptional() const;
 
     /**
-     * Computes the next drawing angle assuming that the next painting position will be nextPos.
-     * This method should not be called when hasLastDabInformation() is false.
+     * Lock current drawing angle for the rest of the stroke. The new value is blended
+     * into the result proportional to the length of the stroke.
      */
-    qreal nextDrawingAngle(const QPointF &nextPos, bool considerLockedAngle = true) const;
-
-    /**
-     * Returns a unit vector pointing in the direction that would have been indicated by a call to
-     * nextDrawingAngle. This method should not be called when hasLastDabInformation() is false.
-     */
-    QPointF nextDrawingDirectionVector(const QPointF &nextPos,
-                                       bool considerLockedAngle = true) const;
+    void lockCurrentDrawingAngle(const KisPaintInformation &info) const;
 
     qreal scalarDistanceApprox() const;
 
-    void overrideLastValues(const QPointF &lastPosition, qreal lastTime, qreal lastAngle);
+    void overrideLastValues(const QPointF &lastPosition, qreal lastAngle);
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
@@ -188,12 +179,6 @@ private:
     qreal getNextPointPositionTimed(qreal startTime,
                                     qreal endTime);
     void resetAccumulators();
-
-    qreal drawingAngleImpl(const QPointF &start, const QPointF &end,
-                           bool considerLockedAngle = true, qreal defaultAngle = 0.0) const;
-    QPointF drawingDirectionVectorImpl(const QPointF &start, const QPointF &end,
-                                       bool considerLockedAngle = true,
-                                       qreal defaultAngle = 0.0) const;
 
 private:
     struct Private;

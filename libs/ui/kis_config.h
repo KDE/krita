@@ -493,6 +493,9 @@ public:
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 
+    void setEnableBrushSpeedLogging(bool value) const;
+    bool enableBrushSpeedLogging(bool defaultValue = false) const;
+
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
 

@@ -50,7 +50,6 @@ struct KisPaintInformation::Private {
         speed(speed_),
         isHoveringMode(isHoveringMode_),
         randomSource(0),
-        currentDistanceInfo(0),
         levelOfDetail(0)
     {
     }
@@ -58,7 +57,7 @@ struct KisPaintInformation::Private {
 
 
     ~Private() {
-        KIS_ASSERT_RECOVER_NOOP(!currentDistanceInfo);
+        KIS_ASSERT_RECOVER_NOOP(!sanityIsRegistered);
     }
     Private(const Private &rhs) {
         copy(rhs);
@@ -80,7 +79,8 @@ struct KisPaintInformation::Private {
         speed = rhs.speed;
         isHoveringMode = rhs.isHoveringMode;
         randomSource = rhs.randomSource;
-        currentDistanceInfo = rhs.currentDistanceInfo;
+        sanityIsRegistered = false; // HINT: we do not copy registration mark!
+        directionHistoryInfo = rhs.directionHistoryInfo;
         canvasRotation = rhs.canvasRotation;
         canvasMirroredH = rhs.canvasMirroredH;
         if (rhs.drawingAngleOverride) {
@@ -106,16 +106,38 @@ struct KisPaintInformation::Private {
     bool canvasMirroredH;
 
     boost::optional<qreal> drawingAngleOverride;
-    KisDistanceInformation *currentDistanceInfo;
+    bool sanityIsRegistered = false;
+
+    struct DirectionHistoryInfo {
+        DirectionHistoryInfo() {}
+        DirectionHistoryInfo(qreal _lastAngle,
+                             QPointF _lastPosition,
+                             boost::optional<qreal> _lockedDrawingAngle)
+            : lastAngle(_lastAngle),
+              lastPosition(_lastPosition),
+              lockedDrawingAngle(_lockedDrawingAngle)
+        {
+        }
+
+        qreal lastAngle = 0.0;
+        QPointF lastPosition;
+        boost::optional<qreal> lockedDrawingAngle;
+    };
+    boost::optional<DirectionHistoryInfo> directionHistoryInfo;
 
     int levelOfDetail;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
-        currentDistanceInfo = di;
+        directionHistoryInfo = DirectionHistoryInfo(di->lastDrawingAngle(),
+                                                    di->lastPosition(),
+                                                    di->lockedDrawingAngleOptional());
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityIsRegistered);
+        sanityIsRegistered = true;
     }
 
     void unregisterDistanceInfo() {
-        currentDistanceInfo = 0;
+        sanityIsRegistered = false;
     }
 };
 
@@ -326,14 +348,14 @@ void KisPaintInformation::overrideDrawingAngle(qreal angle)
 
 qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distance) const
 {
-    if (d->drawingAngleOverride) return *d->drawingAngleOverride;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!d->directionHistoryInfo, 0.0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(distance.hasLastDabInformation(), 0.0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!d->drawingAngleOverride, 0.0);
 
-    if (!distance.hasLastDabInformation()) {
-        warnKrita << "KisPaintInformation::drawingAngleSafe()" << "Cannot access Distance Info last dab data";
-        return 0.0;
-    }
+    return KisAlgebra2D::directionBetweenPoints(distance.lastPosition(),
+                                                pos(),
+                                                distance.lastDrawingAngle());
 
-    return distance.nextDrawingAngle(pos());
 }
 
 KisPaintInformation::DistanceInformationRegistrar
@@ -342,71 +364,42 @@ KisPaintInformation::registerDistanceInformation(KisDistanceInformation *distanc
     return DistanceInformationRegistrar(this, distance);
 }
 
-qreal KisPaintInformation::drawingAngle() const
+qreal KisPaintInformation::drawingAngle(bool considerLockedAngle) const
 {
     if (d->drawingAngleOverride) return *d->drawingAngleOverride;
 
-    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        warnKrita << "KisPaintInformation::drawingAngle()" << "Cannot access Distance Info last dab data";
+    if (!d->directionHistoryInfo) {
+        warnKrita << "KisPaintInformation::drawingAngleSafe()" << "DirectionHistoryInfo object is not available";
         return 0.0;
     }
 
-    return d->currentDistanceInfo->nextDrawingAngle(pos());
-}
+    if (considerLockedAngle &&
+        d->directionHistoryInfo->lockedDrawingAngle) {
 
-void KisPaintInformation::lockCurrentDrawingAngle(qreal alpha_unused) const
-{
-    Q_UNUSED(alpha_unused);
-
-    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        warnKrita << "KisPaintInformation::lockCurrentDrawingAngle()" << "Cannot access Distance Info last dab data";
-        return;
+        return *d->directionHistoryInfo->lockedDrawingAngle;
     }
 
-    qreal angle = d->currentDistanceInfo->nextDrawingAngle(pos(), false);
-
-    qreal newAngle = angle;
-
-    if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
-        const qreal stabilizingCoeff = 20.0;
-        const qreal dist = stabilizingCoeff * d->currentDistanceInfo->currentSpacing().scalarApprox();
-        const qreal alpha = qMax(0.0, dist - d->currentDistanceInfo->scalarDistanceApprox()) / dist;
-
-        const qreal oldAngle = d->currentDistanceInfo->lockedDrawingAngle();
-
-        if (shortestAngularDistance(oldAngle, newAngle) < M_PI / 6) {
-            newAngle = (1.0 - alpha) * oldAngle + alpha * newAngle;
-        } else {
-            newAngle = oldAngle;
-        }
-    }
-
-    d->currentDistanceInfo->setLockedDrawingAngle(newAngle);
+    // If the start and end positions are the same, we can't compute an angle. In that case, use the
+    // provided default.
+    return KisAlgebra2D::directionBetweenPoints(d->directionHistoryInfo->lastPosition,
+                                                pos(),
+                                                d->directionHistoryInfo->lastAngle);
 }
 
 QPointF KisPaintInformation::drawingDirectionVector() const
 {
-    if (d->drawingAngleOverride) {
-        qreal angle = *d->drawingAngleOverride;
-        return QPointF(cos(angle), sin(angle));
-    }
-
-    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        warnKrita << "KisPaintInformation::drawingDirectionVector()" << "Cannot access Distance Info last dab data";
-        return QPointF(1.0, 0.0);
-    }
-
-    return d->currentDistanceInfo->nextDrawingDirectionVector(pos());
+    const qreal angle = drawingAngle(false);
+    return QPointF(cos(angle), sin(angle));
 }
 
 qreal KisPaintInformation::drawingDistance() const
 {
-    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        warnKrita << "KisPaintInformation::drawingDistance()" << "Cannot access Distance Info last dab data";
+    if (!d->directionHistoryInfo) {
+        warnKrita << "KisPaintInformation::drawingDistance()" << "DirectionHistoryInfo object is not available";
         return 1.0;
     }
 
-    QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
+    QVector2D diff(pos() - d->directionHistoryInfo->lastPosition);
     qreal length = diff.length();
 
     if (d->levelOfDetail) {
@@ -532,7 +525,6 @@ void KisPaintInformation::mixOtherImpl(const QPointF &p, qreal t, const KisPaint
     if (posOnly) {
         this->d->pos = p;
         this->d->isHoveringMode = false;
-        this->d->currentDistanceInfo = 0;
         this->d->levelOfDetail = 0;
         return;
     }
@@ -560,7 +552,6 @@ void KisPaintInformation::mixOtherImpl(const QPointF &p, qreal t, const KisPaint
         *(this->d) = Private(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed, other.isHoveringMode());
         this->d->randomSource = other.d->randomSource;
         // this->d->isHoveringMode = other.isHoveringMode();
-        this->d->currentDistanceInfo = 0;
         this->d->levelOfDetail = other.d->levelOfDetail;
     }
 }

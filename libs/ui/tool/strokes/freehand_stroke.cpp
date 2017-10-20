@@ -18,22 +18,55 @@
 
 #include "freehand_stroke.h"
 
+#include <QElapsedTimer>
+
 #include "kis_canvas_resource_provider.h"
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "kis_painter.h"
+#include "kis_paintop.h"
 
 #include "kis_update_time_monitor.h"
 
 #include <brushengine/kis_stroke_random_source.h>
+#include <KisRunnableStrokeJobsInterface.h>
+#include "FreehandStrokeRunnableJobDataWithUpdate.h"
+#include <mutex>
 
+#include "KisStrokeEfficiencyMeasurer.h"
+#include <KisStrokeSpeedMonitor.h>
 
 struct FreehandStrokeStrategy::Private
 {
-    Private(KisResourcesSnapshotSP _resources) : resources(_resources) {}
+    Private(KisResourcesSnapshotSP _resources)
+        : resources(_resources),
+          needsAsynchronousUpdates(_resources->presetNeedsAsynchronousUpdates())
+    {
+        if (needsAsynchronousUpdates) {
+            timeSinceLastUpdate.start();
+        }
+    }
+
+    Private(const Private &rhs)
+        : randomSource(rhs.randomSource),
+          resources(rhs.resources),
+          needsAsynchronousUpdates(rhs.needsAsynchronousUpdates)
+    {
+        if (needsAsynchronousUpdates) {
+            timeSinceLastUpdate.start();
+        }
+    }
 
     KisStrokeRandomSource randomSource;
     KisResourcesSnapshotSP resources;
+
+    KisStrokeEfficiencyMeasurer efficiencyMeasurer;
+
+    QElapsedTimer timeSinceLastUpdate;
+    int currentUpdatePeriod = 40;
+
+    const bool needsAsynchronousUpdates = false;
+    std::mutex updateEntryMutex;
 };
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -69,6 +102,11 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs
 
 FreehandStrokeStrategy::~FreehandStrokeStrategy()
 {
+    KisStrokeSpeedMonitor::instance()->notifyStrokeFinished(m_d->efficiencyMeasurer.averageCursorSpeed(),
+                                                            m_d->efficiencyMeasurer.averageRenderingSpeed(),
+                                                            m_d->efficiencyMeasurer.averageFps(),
+                                                            m_d->resources->currentPaintOpPreset());
+
     KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
@@ -80,64 +118,161 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
+    if (m_d->needsAsynchronousUpdates) {
+        /**
+         * In case the paintop uses asynchronous updates, we should set priority to it,
+         * because FPS is controlled separately, not by the queue's merging algorithm.
+         */
+        setBalancingRatioOverride(0.01); // set priority to updates
+    }
+
     KisUpdateTimeMonitor::instance()->startStrokeMeasure();
+    m_d->efficiencyMeasurer.setEnabled(KisStrokeSpeedMonitor::instance()->haveStrokeSpeedMeasurement());
 }
+
+void FreehandStrokeStrategy::initStrokeCallback()
+{
+    KisPainterBasedStrokeStrategy::initStrokeCallback();
+    m_d->efficiencyMeasurer.notifyRenderingStarted();
+}
+
+void FreehandStrokeStrategy::finishStrokeCallback()
+{
+    m_d->efficiencyMeasurer.notifyRenderingFinished();
+    KisPainterBasedStrokeStrategy::finishStrokeCallback();
+}
+
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Data *d = dynamic_cast<Data*>(data);
-    PainterInfo *info = painterInfos()[d->painterInfoId];
+    PainterInfo *info = 0;
 
-    KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
-    KisRandomSourceSP rnd = m_d->randomSource.source();
+    if (UpdateData *d = dynamic_cast<UpdateData*>(data)) {
+        // this job is lod-clonable in contrast to FreehandStrokeRunnableJobDataWithUpdate!
+        tryDoUpdate(d->forceUpdate);
 
-    switch(d->type) {
-    case Data::POINT:
-        d->pi1.setRandomSource(rnd);
-        info->painter->paintAt(d->pi1, info->dragDistance);
-        break;
-    case Data::LINE:
-        d->pi1.setRandomSource(rnd);
-        d->pi2.setRandomSource(rnd);
-        info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
-        break;
-    case Data::CURVE:
-        d->pi1.setRandomSource(rnd);
-        d->pi2.setRandomSource(rnd);
-        info->painter->paintBezierCurve(d->pi1,
-                                        d->control1,
-                                        d->control2,
-                                        d->pi2,
-                                        info->dragDistance);
-        break;
-    case Data::POLYLINE:
-        info->painter->paintPolyline(d->points, 0, d->points.size());
-        break;
-    case Data::POLYGON:
-        info->painter->paintPolygon(d->points);
-        break;
-    case Data::RECT:
-        info->painter->paintRect(d->rect);
-        break;
-    case Data::ELLIPSE:
-        info->painter->paintEllipse(d->rect);
-        break;
-    case Data::PAINTER_PATH:
-        info->painter->paintPainterPath(d->path);
-        break;
-    case Data::QPAINTER_PATH:
-        info->painter->drawPainterPath(d->path, d->pen);
-        break;
-    case Data::QPAINTER_PATH_FILL: {
-        info->painter->setBackgroundColor(d->customColor);
-        info->painter->fillPainterPath(d->path);}
-        info->painter->drawPainterPath(d->path, d->pen);    
-        break;
-    };
+    } else if (Data *d = dynamic_cast<Data*>(data)) {
+        info = painterInfos()[d->painterInfoId];
 
-    QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
-    KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
-    d->node->setDirty(dirtyRects);
+        KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
+        KisRandomSourceSP rnd = m_d->randomSource.source();
+
+        switch(d->type) {
+        case Data::POINT:
+            d->pi1.setRandomSource(rnd);
+            info->painter->paintAt(d->pi1, info->dragDistance);
+            m_d->efficiencyMeasurer.addSample(d->pi1.pos());
+            break;
+        case Data::LINE:
+            d->pi1.setRandomSource(rnd);
+            d->pi2.setRandomSource(rnd);
+            info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
+            m_d->efficiencyMeasurer.addSample(d->pi2.pos());
+            break;
+        case Data::CURVE:
+            d->pi1.setRandomSource(rnd);
+            d->pi2.setRandomSource(rnd);
+            info->painter->paintBezierCurve(d->pi1,
+                                            d->control1,
+                                            d->control2,
+                                            d->pi2,
+                                            info->dragDistance);
+            m_d->efficiencyMeasurer.addSample(d->pi2.pos());
+            break;
+        case Data::POLYLINE:
+            info->painter->paintPolyline(d->points, 0, d->points.size());
+            m_d->efficiencyMeasurer.addSamples(d->points);
+            break;
+        case Data::POLYGON:
+            info->painter->paintPolygon(d->points);
+            m_d->efficiencyMeasurer.addSamples(d->points);
+            break;
+        case Data::RECT:
+            info->painter->paintRect(d->rect);
+            m_d->efficiencyMeasurer.addSample(d->rect.topLeft());
+            m_d->efficiencyMeasurer.addSample(d->rect.topRight());
+            m_d->efficiencyMeasurer.addSample(d->rect.bottomRight());
+            m_d->efficiencyMeasurer.addSample(d->rect.bottomLeft());
+            break;
+        case Data::ELLIPSE:
+            info->painter->paintEllipse(d->rect);
+            // TODO: add speed measures
+            break;
+        case Data::PAINTER_PATH:
+            info->painter->paintPainterPath(d->path);
+            // TODO: add speed measures
+            break;
+        case Data::QPAINTER_PATH:
+            info->painter->drawPainterPath(d->path, d->pen);
+            break;
+        case Data::QPAINTER_PATH_FILL: {
+            info->painter->setBackgroundColor(d->customColor);
+            info->painter->fillPainterPath(d->path);}
+            info->painter->drawPainterPath(d->path, d->pen);
+            break;
+        };
+
+        tryDoUpdate();
+    } else {
+        KisPainterBasedStrokeStrategy::doStrokeCallback(data);
+
+        FreehandStrokeRunnableJobDataWithUpdate *dataWithUpdate =
+            dynamic_cast<FreehandStrokeRunnableJobDataWithUpdate*>(data);
+
+        if (dataWithUpdate) {
+            tryDoUpdate();
+        }
+    }
+}
+
+void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
+{
+    // we should enter this function only once!
+    std::unique_lock<std::mutex> entryLock(m_d->updateEntryMutex, std::try_to_lock);
+    if (!entryLock.owns_lock()) return;
+
+    if (m_d->needsAsynchronousUpdates) {
+        if (forceEnd || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod) {
+            m_d->timeSinceLastUpdate.restart();
+
+            Q_FOREACH (PainterInfo *info, painterInfos()) {
+                KisPaintOp *paintop = info->painter->paintOp();
+                KIS_SAFE_ASSERT_RECOVER_RETURN(paintop);
+
+                // TODO: well, we should count all N simultaneous painters for FPS rate!
+                QVector<KisRunnableStrokeJobData*> jobs;
+                m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate(jobs);
+
+                if (!jobs.isEmpty()) {
+                    jobs.append(new KisRunnableStrokeJobData(
+                                    [this] () {
+                                        this->issueSetDirtySignals();
+                                    },
+                                    KisStrokeJobData::SEQUENTIAL));
+
+                    runnableJobsInterface()->addRunnableJobs(jobs);
+                    m_d->efficiencyMeasurer.notifyFrameRenderingStarted();
+                }
+
+            }
+        }
+    } else {
+        issueSetDirtySignals();
+    }
+
+
+}
+
+void FreehandStrokeStrategy::issueSetDirtySignals()
+{
+    QVector<QRect> dirtyRects;
+
+    Q_FOREACH (PainterInfo *info, painterInfos()) {
+        dirtyRects.append(info->painter->takeDirtyRegion());
+    }
+
+    //KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
+    targetNode()->setDirty(dirtyRects);
 }
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
@@ -146,4 +281,14 @@ KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 
     FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
     return clone;
+}
+
+void FreehandStrokeStrategy::notifyUserStartedStroke()
+{
+    m_d->efficiencyMeasurer.notifyCursorMoveStarted();
+}
+
+void FreehandStrokeStrategy::notifyUserEndedStroke()
+{
+    m_d->efficiencyMeasurer.notifyCursorMoveFinished();
 }

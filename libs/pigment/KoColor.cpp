@@ -33,21 +33,35 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
 
-const KoColor *KoColor::s_prefab = nullptr;
+#include <QGlobalStatic>
 
-void KoColor::init()
+namespace {
+
+struct DeafultKoColorInitializer
 {
-	KIS_ASSERT(s_prefab == nullptr);
-	KoColor *prefab = new KoColor(KoColorSpaceRegistry::instance()->rgb16(0));
-	prefab->m_colorSpace->fromQColor(Qt::black, prefab->m_data);
-	prefab->m_colorSpace->setOpacity(prefab->m_data, OPACITY_OPAQUE_U8, 1);
-	s_prefab = prefab;
+    DeafultKoColorInitializer() {
+        const KoColorSpace *defaultColorSpace = KoColorSpaceRegistry::instance()->rgb16(0);
+        KIS_ASSERT(defaultColorSpace);
+
+        value = new KoColor(Qt::black, defaultColorSpace);
 #ifndef NODEBUG
 #ifndef QT_NO_DEBUG
-    // warn about rather expensive checks in assertPermanentColorspace().
-	qWarning() << "KoColor debug runtime checks are active.";
+        // warn about rather expensive checks in assertPermanentColorspace().
+        qWarning() << "KoColor debug runtime checks are active.";
 #endif
 #endif
+    }
+
+    KoColor *value = 0;
+};
+
+Q_GLOBAL_STATIC(DeafultKoColorInitializer, s_defaultKoColor);
+
+}
+
+
+KoColor::KoColor() {
+    *this = *s_defaultKoColor->value;
 }
 
 KoColor::KoColor(const KoColorSpace * colorSpace)

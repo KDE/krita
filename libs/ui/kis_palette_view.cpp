@@ -85,12 +85,14 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
         int curSize = horizontalHeader()->sectionSize(0);
         int setSize = numSteps + curSize;
 
-        if ( setSize >= 12 ) {
-            horizontalHeader()->setDefaultSectionSize(setSize);
-            verticalHeader()->setDefaultSectionSize(setSize);
-            KisConfig cfg;
-            cfg.setPaletteDockerPaletteViewSectionSize(setSize);
-        }
+       if ( (event->delta() <= 0) && (setSize <= 8) ) {
+           // Ignore scroll-zooming down below a certain size
+       } else {
+           horizontalHeader()->setDefaultSectionSize(setSize);
+           verticalHeader()->setDefaultSectionSize(setSize);
+           KisConfig cfg;
+           cfg.setPaletteDockerPaletteViewSectionSize(setSize);
+       }
 
         event->accept();
     } else {

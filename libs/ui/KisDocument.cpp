@@ -747,6 +747,8 @@ void KisDocument::slotAutoSave()
     if (!d->modified || !d->modifiedAfterAutosave) return;
     const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
 
+    emit statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
+
     bool started =
         initiateSavingInBackground(i18n("Autosaving..."),
                                    this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),

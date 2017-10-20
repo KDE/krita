@@ -31,20 +31,6 @@
 
 struct KisDabRenderingQueue::Private
 {
-    struct JobWrapper {
-        enum Status {
-            New,
-            Running,
-            Completed
-        };
-
-        KisDabRenderingJob job;
-        Status status = New;
-
-        qreal opacity = OPACITY_OPAQUE_F;
-        qreal flow = OPACITY_OPAQUE_F;
-    };
-
     struct DumbCacheInterface : public CacheInterface {
         void getDabType(bool hasDabInCache,
                                 KisDabCacheUtils::DabRenderingResources *resources,
@@ -70,11 +56,9 @@ struct KisDabRenderingQueue::Private
     };
 
     Private(const KoColorSpace *_colorSpace,
-            KisDabCacheUtils::ResourcesFactory _resourcesFactory,
-            KisRunnableStrokeJobsInterface *_runnableJobsInterface)
+            KisDabCacheUtils::ResourcesFactory _resourcesFactory)
         : cacheInterface(new DumbCacheInterface),
           colorSpace(_colorSpace),
-          runnableJobsInterface(_runnableJobsInterface),
           resourcesFactory(_resourcesFactory),
           avgExecutionTime(50),
           avgDabSize(50)
@@ -87,13 +71,12 @@ struct KisDabRenderingQueue::Private
         cachedResources.clear();
     }
 
-    QList<JobWrapper> jobs;
-    int startSeqNo = 0;
+    QList<KisDabRenderingJobSP> jobs;
+    int nextSeqNoToUse = 0;
     int lastPaintedJob = -1;
     int lastDabJobInQueue = -1;
     QScopedPointer<CacheInterface> cacheInterface;
     const KoColorSpace *colorSpace;
-    KisRunnableStrokeJobsInterface *runnableJobsInterface;
     qreal averageOpacity = 0.0;
 
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
@@ -107,7 +90,6 @@ struct KisDabRenderingQueue::Private
     KisRollingMeanAccumulatorWrapper avgDabSize;
 
     int calculateLastDabJobIndex(int startSearchIndex);
-    KisDabRenderingJob* createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob);
     void cleanPaintedDabs();
     bool dabsHaveSeparateOriginal();
 
@@ -117,9 +99,8 @@ struct KisDabRenderingQueue::Private
 
 
 KisDabRenderingQueue::KisDabRenderingQueue(const KoColorSpace *cs,
-                                           KisDabCacheUtils::ResourcesFactory resourcesFactory,
-                                           KisRunnableStrokeJobsInterface *runnableJobsInterface)
-    : m_d(new Private(cs, resourcesFactory, runnableJobsInterface))
+                                           KisDabCacheUtils::ResourcesFactory resourcesFactory)
+    : m_d(new Private(cs, resourcesFactory))
 {
 }
 
@@ -141,7 +122,7 @@ int KisDabRenderingQueue::Private::calculateLastDabJobIndex(int startSearchIndex
     // if we are below the cached value, just iterate through the dabs
     // (which is extremely(!) slow)
     for (int i = startSearchIndex; i >= 0; i--) {
-        if (jobs[i].job.type == KisDabRenderingJob::Dab) {
+        if (jobs[i]->type == KisDabRenderingJob::Dab) {
             return i;
         }
     }
@@ -149,137 +130,126 @@ int KisDabRenderingQueue::Private::calculateLastDabJobIndex(int startSearchIndex
     return -1;
 }
 
-KisDabRenderingJob *KisDabRenderingQueue::Private::createPostprocessingJob(const KisDabRenderingJob &postprocessingJob, int sourceDabJob)
-{
-    KisDabRenderingJob *job = new KisDabRenderingJob(postprocessingJob);
-    job->originalDevice = jobs[sourceDabJob].job.originalDevice;
-    return job;
-}
-
-KisDabRenderingJob *KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequestInfo &request,
+KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabRequestInfo &request,
                                                  qreal opacity, qreal flow)
 {
     QMutexLocker l(&m_d->mutex);
 
-    const int seqNo =
-        !m_d->jobs.isEmpty() ?
-            m_d->jobs.last().job.seqNo + 1:
-            m_d->startSeqNo;
+    const int seqNo = m_d->nextSeqNoToUse++;
 
     KisDabCacheUtils::DabRenderingResources *resources = m_d->fetchResourcesFromCache();
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resources, 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resources, KisDabRenderingJobSP());
 
     // We should sync the cached brush into the current seqNo
     resources->syncResourcesToSeqNo(seqNo, request.info);
 
     const int lastDabJobIndex = m_d->lastDabJobInQueue;
 
-    Private::JobWrapper wrapper;
+    KisDabRenderingJobSP job(new KisDabRenderingJob());
 
     bool shouldUseCache = false;
     m_d->cacheInterface->getDabType(lastDabJobIndex >= 0,
                                     resources,
                                     request,
-                                    &wrapper.job.generationInfo,
+                                    &job->generationInfo,
                                     &shouldUseCache);
 
     m_d->putResourcesToCache(resources);
     resources = 0;
 
     // TODO: initialize via c-tor
-    wrapper.job.seqNo = seqNo;
-    wrapper.job.type =
+    job->seqNo = seqNo;
+    job->type =
         !shouldUseCache ? KisDabRenderingJob::Dab :
-        wrapper.job.generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess :
+        job->generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess :
         KisDabRenderingJob::Copy;
-    wrapper.job.parentQueue = this;
-    wrapper.job.runnableJobsInterface = m_d->runnableJobsInterface;
-    wrapper.opacity = opacity;
-    wrapper.flow = flow;
+    job->opacity = opacity;
+    job->flow = flow;
 
 
-    KisDabRenderingJob *jobToRun = 0;
+    if (job->type == KisDabRenderingJob::Dab) {
+        job->status = KisDabRenderingJob::Running;
+    } else if (job->type == KisDabRenderingJob::Postprocess ||
+               job->type == KisDabRenderingJob::Copy) {
 
-    if (wrapper.job.type == KisDabRenderingJob::Dab) {
-        jobToRun = new KisDabRenderingJob(wrapper.job);
-        wrapper.status = Private::JobWrapper::Running;
-    } else if (wrapper.job.type == KisDabRenderingJob::Postprocess ||
-               wrapper.job.type == KisDabRenderingJob::Copy) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastDabJobIndex >= 0, KisDabRenderingJobSP());
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastDabJobIndex >= 0, 0);
-
-        if (m_d->jobs[lastDabJobIndex].status == Private::JobWrapper::Completed) {
-            if (wrapper.job.type == KisDabRenderingJob::Postprocess) {
-                jobToRun = m_d->createPostprocessingJob(wrapper.job, lastDabJobIndex);
-                wrapper.status = Private::JobWrapper::Running;
-                wrapper.job.originalDevice = m_d->jobs[lastDabJobIndex].job.originalDevice;
-            } else if (wrapper.job.type == KisDabRenderingJob::Copy) {
-                wrapper.status = Private::JobWrapper::Completed;
-                wrapper.job.originalDevice = m_d->jobs[lastDabJobIndex].job.originalDevice;
-                wrapper.job.postprocessedDevice = m_d->jobs[lastDabJobIndex].job.postprocessedDevice;
+        if (m_d->jobs[lastDabJobIndex]->status == KisDabRenderingJob::Completed) {
+            if (job->type == KisDabRenderingJob::Postprocess) {
+                job->status = KisDabRenderingJob::Running;
+                job->originalDevice = m_d->jobs[lastDabJobIndex]->originalDevice;
+            } else if (job->type == KisDabRenderingJob::Copy) {
+                job->status = KisDabRenderingJob::Completed;
+                job->originalDevice = m_d->jobs[lastDabJobIndex]->originalDevice;
+                job->postprocessedDevice = m_d->jobs[lastDabJobIndex]->postprocessedDevice;
             }
         }
     }
 
-    m_d->jobs.append(wrapper);
+    m_d->jobs.append(job);
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->startSeqNo ==
-                                 m_d->jobs.first().job.seqNo);
+    KisDabRenderingJobSP jobToRun;
+    if (job->status == KisDabRenderingJob::Running) {
+        jobToRun = job;
+    }
 
-    if (wrapper.job.type == KisDabRenderingJob::Dab) {
+    if (job->type == KisDabRenderingJob::Dab) {
         m_d->lastDabJobInQueue = m_d->jobs.size() - 1;
-        m_d->cleanPaintedDabs();
     }
 
     // collect some statistics about the dab
-    m_d->avgDabSize(KisAlgebra2D::maxDimension(wrapper.job.generationInfo.dstDabRect));
+    m_d->avgDabSize(KisAlgebra2D::maxDimension(job->generationInfo.dstDabRect));
 
     return jobToRun;
 }
 
-QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRenderingJob *job, int usecsTime)
+QList<KisDabRenderingJobSP> KisDabRenderingQueue::notifyJobFinished(int seqNo, int usecsTime)
 {
     QMutexLocker l(&m_d->mutex);
 
-    QList<KisDabRenderingJob *> dependentJobs;
+    QList<KisDabRenderingJobSP> dependentJobs;
 
-    const int jobIndex = job->seqNo - m_d->startSeqNo;
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
-        jobIndex >= 0 && jobIndex < m_d->jobs.size(), dependentJobs);
+    /**
+     * Here we use binary search for locating the necessary original dab
+     */
+    auto finishedJobIt =
+        std::lower_bound(m_d->jobs.begin(), m_d->jobs.end(), seqNo,
+                         [] (KisDabRenderingJobSP job, int seqNo) {
+                             return job->seqNo < seqNo;
+                         });
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(finishedJobIt != m_d->jobs.end(), dependentJobs);
+    KisDabRenderingJobSP finishedJob = *finishedJobIt;
 
-    Private::JobWrapper &wrapper = m_d->jobs[jobIndex];
-    KisDabRenderingJob &finishedJob = wrapper.job;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob->status == KisDabRenderingJob::Running);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob->seqNo == seqNo);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob->originalDevice);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob->postprocessedDevice);
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->jobs[jobIndex].status == Private::JobWrapper::Running);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob.seqNo == job->seqNo);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(finishedJob.type == job->type);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(job->originalDevice);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(job->postprocessedDevice);
+    finishedJob->status = KisDabRenderingJob::Completed;
 
-    wrapper.status = Private::JobWrapper::Completed;
-    finishedJob.originalDevice = job->originalDevice;
-    finishedJob.postprocessedDevice = job->postprocessedDevice;
-
-    if (finishedJob.type == KisDabRenderingJob::Dab) {
-        for (int i = jobIndex + 1; i < m_d->jobs.size(); i++) {
-            Private::JobWrapper &w = m_d->jobs[i];
-            KisDabRenderingJob &j = w.job;
+    if (finishedJob->type == KisDabRenderingJob::Dab) {
+        for (auto it = finishedJobIt + 1; it != m_d->jobs.end(); ++it) {
+            KisDabRenderingJobSP j = *it;
 
             // next dab job closes the chain
-            if (j.type == KisDabRenderingJob::Dab) break;
+            if (j->type == KisDabRenderingJob::Dab) break;
 
             // the non 'dab'-type job couldn't have
             // been started before the source ob was completed
-            KIS_SAFE_ASSERT_RECOVER_BREAK(w.status == Private::JobWrapper::New);
+            KIS_SAFE_ASSERT_RECOVER_BREAK(j->status == KisDabRenderingJob::New);
 
-            if (j.type == KisDabRenderingJob::Copy) {
-                j.originalDevice = job->originalDevice;
-                j.postprocessedDevice = job->postprocessedDevice;
-                w.status = Private::JobWrapper::Completed;
-            } else if (j.type == KisDabRenderingJob::Postprocess) {
-                dependentJobs << m_d->createPostprocessingJob(j, jobIndex);
-                w.status = Private::JobWrapper::Running;
+            if (j->type == KisDabRenderingJob::Copy) {
+
+                j->originalDevice = finishedJob->originalDevice;
+                j->postprocessedDevice = finishedJob->postprocessedDevice;
+                j->status = KisDabRenderingJob::Completed;
+
+            } else if (j->type == KisDabRenderingJob::Postprocess) {
+
+                j->originalDevice = finishedJob->originalDevice;
+                j->status = KisDabRenderingJob::Running;
+                dependentJobs << j;
             }
         }
     }
@@ -294,27 +264,35 @@ QList<KisDabRenderingJob *> KisDabRenderingQueue::notifyJobFinished(KisDabRender
 void KisDabRenderingQueue::Private::cleanPaintedDabs()
 {
     const int nextToBePainted = lastPaintedJob + 1;
-    const int sourceJob = calculateLastDabJobIndex(qMin(nextToBePainted, jobs.size() - 1));
+    const int lastSourceJob = calculateLastDabJobIndex(qMin(nextToBePainted, jobs.size() - 1));
 
-    if (sourceJob >= 1) {
-        // recycle and remove first 'sourceJob' jobs
+    if (lastPaintedJob >= 0) {
+        int numRemovedJobs = 0;
 
-        // cache unique 'original' devices
-        for (auto it = jobs.begin(); it != jobs.begin() + sourceJob; ++it) {
-            if (it->job.type == KisDabRenderingJob::Dab &&
-                it->job.postprocessedDevice != it->job.originalDevice) {
-                cachedPaintDevices << it->job.originalDevice;
-                it->job.originalDevice = 0;
+        auto it = jobs.begin();
+        for (int i = 0; i <= lastPaintedJob; i++) {
+            KisDabRenderingJobSP job = *it;
+
+            if (i < lastSourceJob || job->type != KisDabRenderingJob::Dab){
+
+                // cache unique 'original' devices
+                if (job->type == KisDabRenderingJob::Dab &&
+                    job->postprocessedDevice != job->originalDevice) {
+                    cachedPaintDevices << job->originalDevice;
+                    job->originalDevice = 0;
+                }
+
+                it = jobs.erase(it);
+                numRemovedJobs++;
+            } else  {
+                ++it;
             }
         }
 
-        jobs.erase(jobs.begin(), jobs.begin() + sourceJob);
-
         KIS_SAFE_ASSERT_RECOVER_RETURN(jobs.size() > 0);
 
-        lastPaintedJob -= sourceJob;
-        lastDabJobInQueue -= sourceJob;
-        startSeqNo = jobs.first().job.seqNo;
+        lastPaintedJob -= numRemovedJobs;
+        lastDabJobInQueue -= numRemovedJobs;
     }
 }
 
@@ -323,11 +301,11 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
     QMutexLocker l(&m_d->mutex);
 
     QList<KisRenderedDab> renderedDabs;
-    if (m_d->startSeqNo < 0) return renderedDabs;
+    if (m_d->jobs.isEmpty()) return renderedDabs;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(
         m_d->jobs.isEmpty() ||
-        m_d->jobs.first().job.type == KisDabRenderingJob::Dab);
+        m_d->jobs.first()->type == KisDabRenderingJob::Dab);
 
     const int copyJobAfterInclusive =
         returnMutableDabs && !m_d->dabsHaveSeparateOriginal() ?
@@ -335,26 +313,25 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
             std::numeric_limits<int>::max();
 
     for (int i = 0; i < m_d->jobs.size(); i++) {
-        Private::JobWrapper &w = m_d->jobs[i];
-        KisDabRenderingJob &j = w.job;
+        KisDabRenderingJobSP j = m_d->jobs[i];
 
-        if (w.status != Private::JobWrapper::Completed) break;
+        if (j->status != KisDabRenderingJob::Completed) break;
 
         if (i <= m_d->lastPaintedJob) continue;
 
         KisRenderedDab dab;
-        KisFixedPaintDeviceSP resultDevice = j.postprocessedDevice;
+        KisFixedPaintDeviceSP resultDevice = j->postprocessedDevice;
 
         if (i >= copyJobAfterInclusive) {
             resultDevice = new KisFixedPaintDevice(*resultDevice);
         }
 
         dab.device = resultDevice;
-        dab.offset = j.dstDabOffset();
-        dab.opacity = w.opacity;
-        dab.flow = w.flow;
+        dab.offset = j->dstDabOffset();
+        dab.opacity = j->opacity;
+        dab.flow = j->flow;
 
-        m_d->averageOpacity = KisPainter::blendAverageOpacity(w.opacity, m_d->averageOpacity);
+        m_d->averageOpacity = KisPainter::blendAverageOpacity(j->opacity, m_d->averageOpacity);
         dab.averageOpacity = m_d->averageOpacity;
 
 
@@ -376,7 +353,7 @@ bool KisDabRenderingQueue::hasPreparedDabs() const
     return
         nextToBePainted >= 0 &&
         nextToBePainted < m_d->jobs.size() &&
-            m_d->jobs[nextToBePainted].status == Private::JobWrapper::Completed;
+            m_d->jobs[nextToBePainted]->status == KisDabRenderingJob::Completed;
 }
 
 void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterface *interface)

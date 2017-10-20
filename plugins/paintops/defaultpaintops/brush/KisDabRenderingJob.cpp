@@ -41,14 +41,14 @@ KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabCacheUtils::DabGenerati
 }
 
 KisDabRenderingJob::KisDabRenderingJob(const KisDabRenderingJob &rhs)
-    : QRunnable(),
-      seqNo(rhs.seqNo),
+    : seqNo(rhs.seqNo),
       generationInfo(rhs.generationInfo),
       type(rhs.type),
       originalDevice(rhs.originalDevice),
       postprocessedDevice(rhs.postprocessedDevice),
-      parentQueue(rhs.parentQueue),
-      runnableJobsInterface(rhs.runnableJobsInterface)
+      status(rhs.status),
+      opacity(rhs.opacity),
+      flow(rhs.flow)
 {
 }
 
@@ -59,13 +59,36 @@ KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
     type = rhs.type;
     originalDevice = rhs.originalDevice;
     postprocessedDevice = rhs.postprocessedDevice;
-    parentQueue = rhs.parentQueue;
-    runnableJobsInterface = rhs.runnableJobsInterface;
+    status = rhs.status;
+    opacity = rhs.opacity;
+    flow = rhs.flow;
 
     return *this;
 }
 
-int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job,  KisDabCacheUtils::DabRenderingResources *resources)
+QPoint KisDabRenderingJob::dstDabOffset() const
+{
+    return generationInfo.dstDabRect.topLeft();
+}
+
+
+
+KisDabRenderingJobRunner::KisDabRenderingJobRunner(KisDabRenderingJobSP job,
+                                                   KisDabRenderingQueue *parentQueue,
+                                                   KisRunnableStrokeJobsInterface *runnableJobsInterface)
+    : m_job(job),
+      m_parentQueue(parentQueue),
+      m_runnableJobsInterface(runnableJobsInterface)
+{
+}
+
+KisDabRenderingJobRunner::~KisDabRenderingJobRunner()
+{
+}
+
+int KisDabRenderingJobRunner::executeOneJob(KisDabRenderingJob *job,
+                                            KisDabCacheUtils::DabRenderingResources *resources,
+                                            KisDabRenderingQueue *parentQueue)
 {
     using namespace KisDabCacheUtils;
 
@@ -79,7 +102,7 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job,  KisDabCacheUtils
 
     if (job->type == KisDabRenderingJob::Dab) {
         // TODO: thing about better interface for the reverse queue link
-        job->originalDevice = job->parentQueue->fetchCachedPaintDevce();
+        job->originalDevice = parentQueue->fetchCachedPaintDevce();
 
         generateDab(job->generationInfo, resources, &job->originalDevice);
     }
@@ -96,7 +119,7 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job,  KisDabCacheUtils
             if (!job->postprocessedDevice ||
                 *job->originalDevice->colorSpace() != *job->postprocessedDevice->colorSpace()) {
 
-                job->postprocessedDevice = job->parentQueue->fetchCachedPaintDevce();
+                job->postprocessedDevice = parentQueue->fetchCachedPaintDevce();
                 *job->postprocessedDevice = *job->originalDevice;
             } else {
                 *job->postprocessedDevice = *job->originalDevice;
@@ -114,43 +137,33 @@ int KisDabRenderingJob::executeOneJob(KisDabRenderingJob *job,  KisDabCacheUtils
     return executionTime.nsecsElapsed() / 1000;
 }
 
-void KisDabRenderingJob::run()
+void KisDabRenderingJobRunner::run()
 {
     int executionTime = 0;
 
-    KisDabCacheUtils::DabRenderingResources *resources = parentQueue->fetchResourcesFromCache();
+    KisDabCacheUtils::DabRenderingResources *resources = m_parentQueue->fetchResourcesFromCache();
 
-    executionTime = executeOneJob(this, resources);
-    QList<KisDabRenderingJob *> jobs = parentQueue->notifyJobFinished(this, executionTime);
+    executionTime = executeOneJob(m_job.data(), resources, m_parentQueue);
+    QList<KisDabRenderingJobSP> jobs = m_parentQueue->notifyJobFinished(m_job->seqNo, executionTime);
 
     while (!jobs.isEmpty()) {
         QVector<KisRunnableStrokeJobData*> dataList;
 
         // start all-but-the-first jobs asynchronously
         for (int i = 1; i < jobs.size(); i++) {
-            dataList.append(new FreehandStrokeRunnableJobDataWithUpdate(jobs[i], KisStrokeJobData::CONCURRENT));
+            dataList.append(new FreehandStrokeRunnableJobDataWithUpdate(
+                                new KisDabRenderingJobRunner(jobs[i], m_parentQueue, m_runnableJobsInterface),
+                                KisStrokeJobData::CONCURRENT));
         }
 
-        runnableJobsInterface->addRunnableJobs(dataList);
+        m_runnableJobsInterface->addRunnableJobs(dataList);
 
 
         // execute the first job in the current thread
-        KisDabRenderingJob *job = jobs.first();
-        executionTime = executeOneJob(job, resources);
-        jobs = parentQueue->notifyJobFinished(job, executionTime);
-
-        // mimic the behavior of the thread pool
-        if (job->autoDelete()) {
-            delete job;
-        }
+        KisDabRenderingJobSP job = jobs.first();
+        executionTime = executeOneJob(job.data(), resources, m_parentQueue);
+        jobs = m_parentQueue->notifyJobFinished(job->seqNo, executionTime);
     }
 
-    parentQueue->putResourcesToCache(resources);
+    m_parentQueue->putResourcesToCache(resources);
 }
-
-QPoint KisDabRenderingJob::dstDabOffset() const
-{
-    return generationInfo.dstDabRect.topLeft();
-}
-
-

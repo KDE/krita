@@ -42,7 +42,7 @@ KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs,
     m_d->runnableJobsInterface = runnableJobsInterface;
 
     m_d->renderingQueue.reset(
-        new KisDabRenderingQueue(cs, resourcesFactory, runnableJobsInterface));
+        new KisDabRenderingQueue(cs, resourcesFactory));
 
     KisDabRenderingQueueCache *cache = new KisDabRenderingQueueCache();
     cache->setMirrorPostprocessing(mirrorOption);
@@ -58,10 +58,12 @@ KisDabRenderingExecutor::~KisDabRenderingExecutor()
 void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &request,
                                      qreal opacity, qreal flow)
 {
-    KisDabRenderingJob *job = m_d->renderingQueue->addDab(request, opacity, flow);
+    KisDabRenderingJobSP job = m_d->renderingQueue->addDab(request, opacity, flow);
     if (job) {
         m_d->runnableJobsInterface->addRunnableJob(
-            new FreehandStrokeRunnableJobDataWithUpdate(job, KisStrokeJobData::CONCURRENT));
+            new FreehandStrokeRunnableJobDataWithUpdate(
+                        new KisDabRenderingJobRunner(job, m_d->renderingQueue.data(), m_d->runnableJobsInterface),
+                        KisStrokeJobData::CONCURRENT));
     }
 }
 

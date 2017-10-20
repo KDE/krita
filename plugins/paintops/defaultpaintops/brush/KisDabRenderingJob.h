@@ -23,17 +23,24 @@
 #include <KisDabCacheUtils.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_types.h>
+#include "kritadefaultpaintops_export.h"
 
 class KisDabRenderingQueue;
 class KisRunnableStrokeJobsInterface;
 
-class KisDabRenderingJob : public QRunnable
+class KRITADEFAULTPAINTOPS_EXPORT KisDabRenderingJob
 {
 public:
     enum JobType {
         Dab,
         Postprocess,
         Copy
+    };
+
+    enum Status {
+        New,
+        Running,
+        Completed
     };
 
 public:
@@ -44,9 +51,6 @@ public:
     KisDabRenderingJob(const KisDabRenderingJob &rhs);
     KisDabRenderingJob& operator=(const KisDabRenderingJob &rhs);
 
-
-    void run() override;
-
     QPoint dstDabOffset() const;
 
     int seqNo = -1;
@@ -54,11 +58,34 @@ public:
     JobType type = Dab;
     KisFixedPaintDeviceSP originalDevice;
     KisFixedPaintDeviceSP postprocessedDevice;
-    KisDabRenderingQueue *parentQueue = 0;
-    KisRunnableStrokeJobsInterface *runnableJobsInterface = 0;
+
+    // high-level members, not directly related to job execution itself
+    Status status = New;
+
+    qreal opacity = OPACITY_OPAQUE_F;
+    qreal flow = OPACITY_OPAQUE_F;
+};
+
+#include <QSharedPointer>
+typedef QSharedPointer<KisDabRenderingJob> KisDabRenderingJobSP;
+
+class KRITADEFAULTPAINTOPS_EXPORT KisDabRenderingJobRunner : public QRunnable
+{
+public:
+    KisDabRenderingJobRunner(KisDabRenderingJobSP job,
+                             KisDabRenderingQueue *parentQueue,
+                             KisRunnableStrokeJobsInterface *runnableJobsInterface);
+    ~KisDabRenderingJobRunner();
+
+    void run() override;
+
+    static int executeOneJob(KisDabRenderingJob *job, KisDabCacheUtils::DabRenderingResources *resources, KisDabRenderingQueue *parentQueue);
 
 private:
-    static int executeOneJob(KisDabRenderingJob *job, KisDabCacheUtils::DabRenderingResources *resources);
+    KisDabRenderingJobSP m_job;
+    KisDabRenderingQueue *m_parentQueue = 0;
+    KisRunnableStrokeJobsInterface *m_runnableJobsInterface = 0;
 };
+
 
 #endif // KISDABRENDERINGJOB_H

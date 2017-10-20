@@ -26,7 +26,6 @@
 #include <QList>
 class KisDabRenderingJob;
 class KisRenderedDab;
-class KisRunnableStrokeJobsInterface;
 
 #include "KisDabCacheUtils.h"
 
@@ -47,13 +46,13 @@ public:
 
 
 public:
-    KisDabRenderingQueue(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory, KisRunnableStrokeJobsInterface *runnableJobsInterface = 0);
+    KisDabRenderingQueue(const KoColorSpace *cs, KisDabCacheUtils::ResourcesFactory resourcesFactory);
     ~KisDabRenderingQueue();
 
-    KisDabRenderingJob* addDab(const KisDabCacheUtils::DabRequestInfo &request,
+    KisDabRenderingJobSP addDab(const KisDabCacheUtils::DabRequestInfo &request,
                                qreal opacity, qreal flow);
 
-    QList<KisDabRenderingJob*> notifyJobFinished(KisDabRenderingJob *job, int usecsTime = -1);
+    QList<KisDabRenderingJobSP> notifyJobFinished(int seqNo, int usecsTime = -1);
 
     QList<KisRenderedDab> takeReadyDabs(bool returnMutableDabs = false);
 

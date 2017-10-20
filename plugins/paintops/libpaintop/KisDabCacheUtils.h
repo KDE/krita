@@ -115,4 +115,8 @@ PAINTOP_EXPORT void postProcessDab(KisFixedPaintDeviceSP dab,
 
 }
 
+template<class T> class QSharedPointer;
+class KisDabRenderingJob;
+typedef QSharedPointer<KisDabRenderingJob> KisDabRenderingJobSP;
+
 #endif // KISDABCACHEUTILS_H

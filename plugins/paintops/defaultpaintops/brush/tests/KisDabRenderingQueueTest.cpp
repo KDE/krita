@@ -75,12 +75,6 @@ KisDabCacheUtils::DabRenderingResources *testResourcesFactory()
     return resources;
 }
 
-void autoDeleteJob(KisDabRenderingJob * & job)
-{
-    delete job;
-    job = 0;
-}
-
 void KisDabRenderingQueueTest::testCachedDabs()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -178,9 +172,8 @@ void KisDabRenderingQueueTest::testCachedDabs()
         // the list should be empty again
         QVERIFY(!queue.hasPreparedDabs());
 
-        // we do not delete the queue of jobs until the next 'dab'
-        // job arrives
-        QCOMPARE(queue.testingGetQueueSize(), 3);
+        // we delete all the painted jobs except the latest 'dab' job
+        QCOMPARE(queue.testingGetQueueSize(), 1);
     }
 
     {
@@ -199,9 +192,8 @@ void KisDabRenderingQueueTest::testCachedDabs()
         // the list should be empty again
         QVERIFY(!queue.hasPreparedDabs());
 
-        // we do not delete the queue of jobs until the next 'dab'
-        // job arrives
-        QCOMPARE(queue.testingGetQueueSize(), 4);
+        // we delete all the painted jobs except the latest 'dab' job
+        QCOMPARE(queue.testingGetQueueSize(), 1);
     }
 
     {
@@ -369,9 +361,8 @@ void KisDabRenderingQueueTest::testPostprocessedDabs()
         // the list should be empty again
         QVERIFY(!queue.hasPreparedDabs());
 
-        // we do not delete the queue of jobs until the next 'dab'
-        // job arrives
-        QCOMPARE(queue.testingGetQueueSize(), 3);
+        // we delete all the painted jobs except the latest 'dab' job
+        QCOMPARE(queue.testingGetQueueSize(), 1);
     }
 
     {
@@ -382,6 +373,8 @@ void KisDabRenderingQueueTest::testPostprocessedDabs()
         QVERIFY(job);
         QCOMPARE(job->seqNo, 4);
         QCOMPARE(job->generationInfo.info.pos(), request2.info.pos());
+        ENTER_FUNCTION() << ppVar(job->type);
+
         QCOMPARE(job->type, KisDabRenderingJob::Postprocess);
         QVERIFY(job->originalDevice);
         QVERIFY(!job->postprocessedDevice);
@@ -407,9 +400,8 @@ void KisDabRenderingQueueTest::testPostprocessedDabs()
         // the list should be empty again
         QVERIFY(!queue.hasPreparedDabs());
 
-        // we do not delete the queue of jobs until the next 'dab'
-        // job arrives
-        QCOMPARE(queue.testingGetQueueSize(), 4);
+        // we delete all the painted jobs except the latest 'dab' job
+        QCOMPARE(queue.testingGetQueueSize(), 1);
     }
 
     {

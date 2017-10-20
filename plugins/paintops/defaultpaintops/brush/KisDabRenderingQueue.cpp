@@ -195,6 +195,7 @@ KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabReq
 
     if (job->type == KisDabRenderingJob::Dab) {
         m_d->lastDabJobInQueue = m_d->jobs.size() - 1;
+        m_d->cleanPaintedDabs();
     }
 
     // collect some statistics about the dab
@@ -268,6 +269,7 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
 
     if (lastPaintedJob >= 0) {
         int numRemovedJobs = 0;
+        int numRemovedJobsBeforeLastSource = 0;
 
         auto it = jobs.begin();
         for (int i = 0; i <= lastPaintedJob; i++) {
@@ -284,6 +286,10 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
 
                 it = jobs.erase(it);
                 numRemovedJobs++;
+                if (i < lastSourceJob) {
+                    numRemovedJobsBeforeLastSource++;
+                }
+
             } else  {
                 ++it;
             }
@@ -292,7 +298,7 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
         KIS_SAFE_ASSERT_RECOVER_RETURN(jobs.size() > 0);
 
         lastPaintedJob -= numRemovedJobs;
-        lastDabJobInQueue -= numRemovedJobs;
+        lastDabJobInQueue -= numRemovedJobsBeforeLastSource;
     }
 }
 

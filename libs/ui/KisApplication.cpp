@@ -421,10 +421,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     addResourceTypes();
 
-    // now we're set up, and the LcmsEnginePlugin will have access to resource paths for color management,
-    // we can finally initialize KoColor.
-    KoColor::init();
-
     // Load all resources and tags before the plugins do that
     loadResources();
 

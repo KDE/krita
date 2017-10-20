@@ -29,6 +29,7 @@
 #include <KoResourcePaths.h>
 #include <klocalizedstring.h>
 #include <QDebug>
+#include <QApplication>
 
 #include "kis_assert.h"
 
@@ -88,7 +89,12 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 {
     // We need all resource paths to be properly initialized via KisApplication, otherwise we will
     // initialize this instance with lacking color profiles which will cause lookup errors later on.
-    KoResourcePaths::assertReady();
+
+    KIS_ASSERT_X(KoResourcePaths::isReady() ||
+                 (QApplication::instance()->applicationName() != "krita" &&
+                  QApplication::instance()->applicationName() != "krita.exe"),
+                 "LcmsEnginePlugin::LcmsEnginePlugin", "Resource paths are not ready yet.");
+
 
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);

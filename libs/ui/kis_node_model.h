@@ -80,6 +80,10 @@ public:
         // An index of a color label associated with the node
         ColorLabelIndexRole,
 
+        // Instruct this model to update all its items' Qt::ItemIsDropEnabled flags in order to
+        // reflect if the item allows an "onto" drop of the given QMimeData*.
+        DropEnabled,
+
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = 99,
 
@@ -119,6 +123,7 @@ public:
     QStringList mimeTypes() const override;
     QMimeData* mimeData(const QModelIndexList & indexes) const override;
     bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
+    bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
     Qt::DropActions supportedDragActions() const override;
     Qt::DropActions supportedDropActions() const override;
     bool hasDummiesFacade();
@@ -158,6 +163,9 @@ private:
 
     void regenerateItems(KisNodeDummy *dummy);
     bool belongsToIsolatedGroup(KisNodeSP node) const;
+
+	void setDropEnabled(const QMimeData *data);
+	void updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex parent = QModelIndex());
     
 private:
 

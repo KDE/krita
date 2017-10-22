@@ -756,7 +756,7 @@ bool handlePenUpdateMsg(const POINTER_PEN_INFO &penInfo)
 {
     auto currentPointerIt = penPointers.find(penInfo.pointerInfo.pointerId);
     if (currentPointerIt == penPointers.end()) {
-        dbgTablet << "Pointer" << penInfo.pointerInfo.pointerId << "wasn't being handled";
+        // dbgTablet << "Pointer" << penInfo.pointerInfo.pointerId << "wasn't being handled";
         return false;
     }
 
@@ -912,7 +912,7 @@ bool handlePointerMsg(const MSG &msg)
         return false;
     }
     if (pointerType != PT_PEN) {
-        dbgTablet << "pointerType" << pointerType << "is not PT_PEN";
+        // dbgTablet << "pointerType" << pointerType << "is not PT_PEN";
         return false;
     }
 

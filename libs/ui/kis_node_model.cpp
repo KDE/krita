@@ -71,6 +71,9 @@ struct KisNodeModel::Private
     QPersistentModelIndex activeNodeIndex;
 
     KisNodeDummy* parentOfRemovedNode = 0;
+
+    QSet<quintptr> dropEnabled;
+
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
@@ -494,12 +497,20 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
     if(!m_d->dummiesFacade || !index.isValid()) return Qt::ItemIsDropEnabled;
 
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
+    if (m_d->dropEnabled.contains(index.internalId())) {
+        flags |= Qt::ItemIsDropEnabled;
+    }
     return flags;
 }
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (role == KisNodeModel::DropEnabled) {
+        const QMimeData *mimeData = static_cast<const QMimeData*>(value.value<void*>());
+        setDropEnabled(mimeData);
+        return true;
+    }
 
     if (role == KisNodeModel::ActiveRole || role == KisNodeModel::AlternateActiveRole) {
         QModelIndex parentIndex;
@@ -642,3 +653,51 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
                                          m_d->nodeInsertionAdapter);
 }
 
+bool KisNodeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const {
+	if (parent.isValid()) {
+        // drop occured on an item. always return true as returning false will mess up
+        // QT5's drag handling (see KisNodeModel::setDropEnabled).
+        return true;
+	} else {
+		return QAbstractItemModel::canDropMimeData(data, action, row, column, parent);
+	}
+}
+
+void KisNodeModel::setDropEnabled(const QMimeData *data) {
+    // what happens here should really happen in KisNodeModel::canDropMimeData(), but QT5
+    // will mess up if an item's Qt::ItemIsDropEnabled does not match what is returned by
+    // canDropMimeData; specifically, if we set the flag, but decide in canDropMimeData()
+    // later on that an "onto" drag is not allowed, QT will display an drop indicator for
+    // insertion, but not perform any drop when the mouse is released.
+
+    // the only robust implementation seems to set all flags correctly, which is done here.
+
+    bool copyNode = false;
+    KisNodeList nodes = KisMimeData::loadNodesFast(data, m_d->image, m_d->shapeController, copyNode);
+    m_d->dropEnabled.clear();
+    updateDropEnabled(nodes);
+}
+
+void KisNodeModel::updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex parent) {
+    for (int r = 0; r < rowCount(parent); r++) {
+        QModelIndex idx = index(r, 0, parent);
+
+        KisNodeSP target = nodeFromIndex(idx);
+
+        bool dropEnabled = true;
+        Q_FOREACH (const KisNodeSP &node, nodes) {
+            if (!target->allowAsChild(node)) {
+                dropEnabled = false;
+                break;
+            }
+        }
+        if (dropEnabled) {
+            m_d->dropEnabled.insert(idx.internalId());
+        }
+        emit dataChanged(idx, idx); // indicate to QT that flags() have changed
+
+        if (hasChildren(idx)) {
+            updateDropEnabled(nodes, idx);
+        }
+    }
+}

@@ -178,7 +178,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     m_d->bootstrapLodBlocked = true;
     connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
 
-    m_d->updateSignalCompressor.setDelay(10);
+    KisImageConfig config;
+
+    m_d->updateSignalCompressor.setDelay(1000 / config.fpsLimit());
     m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
 }
 

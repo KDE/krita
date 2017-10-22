@@ -699,9 +699,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
+    sliderFpsLimit->setRange(20, 100);
 
     connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
     connect(sliderFrameClonesLimit, SIGNAL(valueChanged(int)), SLOT(slotFrameClonesLimitChanged(int)));
+    connect(sliderFpsLimit, SIGNAL(valueChanged(int)), SLOT(slotFpsLimitChanged(int)));
 
     load(false);
 }
@@ -727,9 +729,11 @@ void PerformanceTab::load(bool requestDefault)
 
     m_lastUsedThreadsLimit = cfg.maxNumberOfThreads(requestDefault);
     m_lastUsedClonesLimit = cfg.frameRenderingClones(requestDefault);
+    m_lastUsedFpsLimit = cfg.fpsLimit(requestDefault);
 
     sliderThreadsLimit->setValue(m_lastUsedThreadsLimit);
     sliderFrameClonesLimit->setValue(m_lastUsedClonesLimit);
+    sliderFpsLimit->setValue(m_lastUsedFpsLimit);
 
     {
         KisConfig cfg2;
@@ -755,6 +759,7 @@ void PerformanceTab::save()
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
+    cfg.setFpsLimit(sliderFpsLimit->value());
 
     {
         KisConfig cfg2;
@@ -786,6 +791,13 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
     KisSignalsBlocker b(sliderThreadsLimit);
     sliderThreadsLimit->setValue(qMax(m_lastUsedThreadsLimit, value));
     m_lastUsedClonesLimit = value;
+}
+
+void PerformanceTab::slotFpsLimitChanged(int value)
+{
+    KisSignalsBlocker b(sliderFrameClonesLimit);
+    sliderFrameClonesLimit->setValue(qMax(m_lastUsedFpsLimit, value));
+    m_lastUsedFpsLimit = value;
 }
 
 //---------------------------------------------------------------------------------------------------

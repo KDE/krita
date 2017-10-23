@@ -244,7 +244,23 @@ copy %BUILDDIR_SRC%\packaging\windows\krita.lnk %pkg_root%
 
 :: windeployqt
 %BUILDDIR_INSTALL%\bin\windeployqt.exe --release -concurrent -network -printsupport -svg -xml -multimedia %pkg_root%\bin\krita.exe
-%BUILDDIR_INSTALL%\bin\windeployqt.exe --release -concurrent -network -printsupport -svg -xml -multimedia %pkg_root%\bin\gmic_krita_qt.exe
+
+if errorlevel 1 (
+	echo ERROR: WinDeployQt failed!!
+	%PAUSE%
+	exit /B 1
+)
+
+if EXIST "%BUILDDIR_INSTALL%\bin\gmic_krita_qt.exe" (
+	copy %BUILDDIR_INSTALL%\bin\gmic_krita_qt.exe %pkg_root%\bin
+	%BUILDDIR_INSTALL%\bin\windeployqt.exe --release %pkg_root%\bin\gmic_krita_qt.exe
+	if errorlevel 1 (
+		echo ERROR: WinDeployQt failed!!
+		%PAUSE%
+		exit /B 1
+	)
+)
+
 
 :: For chopping relative path
 :: 512 should be enough

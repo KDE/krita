@@ -136,3 +136,7 @@ add_subdirectory( ext_frameworks )
 if (MSVC OR MINGW)
     add_subdirectory( ext_drmingw )
 endif (MSVC OR MINGW)
+
+if (NOT APPLE)
+	add_subdirectory( ext_gmic )
+endif (NOT APPLE)

@@ -640,8 +640,7 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
 
 int KisConfig::openGLTextureSize(bool defaultValue) const
 {
-    const int defaultTextureSize = 2048;
-    return (defaultValue ? defaultTextureSize : m_cfg.readEntry("textureSize", defaultTextureSize));
+    return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));
 }
 
 bool KisConfig::disableVSync(bool defaultValue) const

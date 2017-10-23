@@ -73,7 +73,7 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter,
 
         quint8* data = new quint8[pixelSize];
         static quint8** pixels = new quint8*[2];
-        qint16* weights = new qint16[2];
+        qint16 weights[2];
 
         pixels[1] = new quint8[pixelSize];
         pixels[0] = new quint8[pixelSize];

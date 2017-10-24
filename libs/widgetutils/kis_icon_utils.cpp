@@ -33,10 +33,15 @@
 namespace KisIconUtils
 {
 
+static QMap<QString, QIcon> s_cache;
 static QMap<qint64, QString> s_icons;
 
 QIcon loadIcon(const QString &name)
 {
+    QMap<QString, QIcon>::const_iterator cached = s_cache.constFind(name);
+    if (cached != s_cache.constEnd()) {
+        return cached.value();
+    }
 
     // try load themed icon
 
@@ -64,6 +69,7 @@ QIcon loadIcon(const QString &name)
         if (QFile(resname).exists()) {
             QIcon icon(resname);
             s_icons.insert(icon.cacheKey(), name);
+            s_cache.insert(name, icon);
             return icon;
         }
     }
@@ -102,11 +108,14 @@ QIcon loadIcon(const QString &name)
             icon.addFile(p.second, QSize(size, size));
         }
         s_icons.insert(icon.cacheKey(), name);
+        s_cache.insert(name, icon);
         return icon;
     }
 
     QIcon icon = QIcon::fromTheme(name);
     qWarning() << "\tfalling back on QIcon::FromTheme:" << name;
+    s_icons.insert(icon.cacheKey(), name);
+    s_cache.insert(name, icon);
     return icon;
 }
 

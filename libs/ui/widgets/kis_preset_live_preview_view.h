@@ -67,19 +67,6 @@ public:
     void updateStroke();
 
 
-public Q_SLOTS:
-    /**
-     * @brief scales the view to fit the brush stroke and moves it back to the center position
-     */
-    void slotResetViewZoom();
-
-    /**
-     * @brief sets the zoom level to full size to get a close up of larger brushes
-     */
-    void slotZoomToOneHundredPercent();
-
-
-
 private:
 
     /// internally sets the image area for brush preview
@@ -146,12 +133,6 @@ private:
 
 
     /**
-     * @brief reads the brush size and scales the view out to fit it
-     * used internally when resetting the views or changing brush sizes
-     */
-    void zoomToBrushSize();
-
-    /**
      * @brief works as both clearing the previous stroke, providing
      * striped backgrounds for smudging brushes, and text if there is no preview
      */
@@ -162,7 +143,6 @@ private:
      * this is internally and should always be called after the paintBackground()
      */
     void setupAndPaintStroke();
-
 
 };
 

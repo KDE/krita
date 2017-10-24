@@ -309,17 +309,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     // setup things like the scene construct images, layers, etc that is a one-time thing
     m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup();
 
-        m_d->uiWdgPaintOpPresetSettings.zoomOutGraphicsViewButton->setIcon(KisIconUtils::loadIcon("view-fullscreen"));
-        connect(m_d->uiWdgPaintOpPresetSettings.zoomOutGraphicsViewButton, SIGNAL(clicked(bool)),
-                m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView,
-                 SLOT(slotZoomToOneHundredPercent()));
-
-
-        m_d->uiWdgPaintOpPresetSettings.resetGraphicsViewButton->setIcon(KisIconUtils::loadIcon("view-refresh"));
-        connect(m_d->uiWdgPaintOpPresetSettings.resetGraphicsViewButton, SIGNAL(clicked(bool)),
-                m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView,
-                 SLOT(slotResetViewZoom()));
-
 }
 
 
@@ -642,7 +631,7 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
         window()->setGeometry(m_d->detachedGeometry);
     }
 
-   emit brushEditorShown();
+    emit brushEditorShown();
 }
 
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)

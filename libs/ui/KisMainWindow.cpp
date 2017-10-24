@@ -125,6 +125,7 @@
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
+#include "kis_memory_statistics_server.h"
 #include "kis_node.h"
 #include "KisOpenPane.h"
 #include "kis_paintop_box.h"
@@ -132,6 +133,7 @@
 #include "KisPrintJob.h"
 #include "kis_resource_server_provider.h"
 #include "kis_signal_compressor_with_param.h"
+#include "kis_statusbar.h"
 #include "KisView.h"
 #include "KisViewManager.h"
 #include "thememanager.h"
@@ -537,6 +539,7 @@ void KisMainWindow::addView(KisView *view)
 
     if (d->activeView) {
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
+        connect(d->viewManager->statusBar(), SIGNAL(memoryStatusUpdated()), this, SLOT(updateCaption()));
     }
 }
 
@@ -728,19 +731,38 @@ void KisMainWindow::updateCaption()
     if (!d->mdiArea->activeSubWindow()) {
         updateCaption(QString(), false);
     }
-    else if (d->activeView && d->activeView->document()){
+    else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
         QString caption(doc->caption());
         if (d->readOnly) {
-            caption += ' ' + i18n("(write protected)");
+            caption += " [" + i18n("Write Protected") + "] ";
         }
 
         if (doc->isRecovered()) {
-            caption += ' ' + i18n("[RECOVERED]");
+            caption += " [" + i18n("Recovered") + "] ";
         }
 
-        caption += "[*]";
+
+        // new documents aren't saved yet, so we don't need to say it is modified
+        // new files don't have a URL, so we are using that for the check
+        if (!doc->url().isEmpty()) {
+
+            if ( doc->isModified()) {
+                caption += " [" + i18n("Modified") + "] ";
+            }
+        }
+
+        // show the file size for the document
+
+
+        KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
+
+
+        if (m_fileSizeStats.imageSize) {
+            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+        }
+
 
         d->activeView->setWindowTitle(caption);
         d->activeView->setWindowModified(doc->isModified());

@@ -32,6 +32,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include <KisViewManager.h>
 
 #include "testutil.h"
 
@@ -63,6 +64,7 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
                                                 const QString &presetFileName)
 {
     KoCanvasResourceManager *manager = new KoCanvasResourceManager();
+    KisViewManager::initializeResourceManager(manager);
 
     QVariant i;
 

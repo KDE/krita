@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>634</width>
-    <height>354</height>
+    <width>507</width>
+    <height>344</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -70,6 +70,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="linearCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -83,6 +89,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="revLinearButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -96,6 +108,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="sCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -109,6 +127,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="reverseSCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -122,6 +146,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="uCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -135,6 +165,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="revUCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -148,6 +184,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="jCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -161,6 +203,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="lCurveButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -182,8 +230,8 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>2</width>
+         <height>2</height>
         </size>
        </property>
       </spacer>
@@ -223,8 +271,8 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>2</width>
+           <height>2</height>
           </size>
          </property>
         </spacer>
@@ -236,8 +284,8 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>2</width>
+           <height>2</height>
           </size>
          </property>
         </spacer>
@@ -297,7 +345,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>270</width>
+             <width>220</width>
              <height>190</height>
             </size>
            </property>

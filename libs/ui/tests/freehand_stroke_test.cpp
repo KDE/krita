@@ -37,6 +37,7 @@ public:
           m_useLod(useLod),
           m_flipLineDirection(false)
     {
+        setBaseFuzziness(3);
     }
 
     void setFlipLineDirection(bool value) {

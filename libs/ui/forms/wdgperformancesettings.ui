@@ -272,6 +272,30 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <layout class="QFormLayout" name="formLayout_limitFps">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_fps">
+          <property name="text">
+           <string>Limit Frames per Second:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="KisSliderSpinBox" name="sliderFpsLimit" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will try to limit the number of screen updates per second to the given number. A lower number will decrease visual responsiveness but increase stylus precision on some systems like macOS.&lt;p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkProgressReporting">
         <property name="text">
          <string>Enable progress reporting (might affect performance)</string>

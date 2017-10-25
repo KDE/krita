@@ -41,6 +41,54 @@
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
 
+
+void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+{
+    QList<KoShape*> shapes = group->shapes();
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    Q_FOREACH (KoShape *child, shapes) {
+        // we paint recursively here, so we do not have to check recursively for visibility
+        if (!child->isVisible())
+            continue;
+        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
+        if (childGroup) {
+            paintGroup(childGroup, painter, converter, paintContext);
+        } else {
+            painter.save();
+            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
+            painter.restore();
+        }
+    }
+
+}
+
+QImage KoSvgSymbol::icon()
+{
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+    Q_ASSERT(group);
+
+    QRectF rc = group->boundingRect().normalized();
+
+    QImage image(rc.width(), rc.height(), QImage::Format_ARGB32_Premultiplied);
+    QPainter gc(&image);
+    image.fill(Qt::gray);
+
+    KoViewConverter vc;
+    KoShapePaintingContext ctx;
+
+//        qDebug() << "Going to render. Original bounding rect:" << group->boundingRect()
+//                 << "Normalized: " << rc
+//                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
+
+    gc.translate(-rc.x(), -rc.y());
+    paintGroup(group, gc, vc, ctx);
+    gc.end();
+    image = image.scaled(128, 128, Qt::KeepAspectRatio);
+    return image;
+}
+
+
+
 struct KoSvgSymbolCollectionResource::Private {
     QVector<KoSvgSymbol*> symbols;
     QString title;
@@ -87,25 +135,6 @@ bool KoSvgSymbolCollectionResource::load()
 }
 
 
-void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
-{
-    QList<KoShape*> shapes = group->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    Q_FOREACH (KoShape *child, shapes) {
-        // we paint recursively here, so we do not have to check recursively for visibility
-        if (!child->isVisible())
-            continue;
-        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
-        if (childGroup) {
-            paintGroup(childGroup, painter, converter, paintContext);
-        } else {
-            painter.save();
-            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
-            painter.restore();
-        }
-    }
-
-}
 
 bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 {
@@ -150,34 +179,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
         return false;
     }
     setValid(true);;
-
-    for(int i = 0; i < d->symbols.size(); ++i) {
-
-        KoSvgSymbol *symbol = d->symbols[i];
-        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(symbol->shape);
-        Q_ASSERT(group);
-
-        QRectF rc = group->boundingRect().normalized();
-
-        QImage image(rc.width(), rc.height(), QImage::Format_ARGB32_Premultiplied);
-        QPainter gc(&image);
-        image.fill(Qt::gray);
-
-        KoViewConverter vc;
-        KoShapePaintingContext ctx;
-
-//        qDebug() << "Going to render. Original bounding rect:" << group->boundingRect()
-//                 << "Normalized: " << rc
-//                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
-
-        gc.translate(-rc.x(), -rc.y());
-        paintGroup(group, gc, vc, ctx);
-        gc.end();
-        d->symbols[i]->icon = image.scaled(500, 500, Qt::KeepAspectRatio);
-
-    }
-
-    setImage(d->symbols[0]->icon);
+    setImage(d->symbols[0]->icon());
     return true;
 }
 

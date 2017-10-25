@@ -327,7 +327,10 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         device->convertFromQImage(qimage, 0);
-        nodes << new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
+
+		if (image) {
+			nodes << new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
+		}
 
         alwaysRecenter = true;
     }
@@ -402,13 +405,11 @@ bool correctNewNodeLocation(KisNodeList nodes,
     return result;
 }
 
-bool KisMimeData::insertMimeLayers(const QMimeData *data,
-                                   KisImageSP image,
-                                   KisShapeController *shapeController,
-                                   KisNodeDummy *parentDummy,
-                                   KisNodeDummy *aboveThisDummy,
-                                   bool copyNode,
-                                   KisNodeInsertionAdapter *nodeInsertionAdapter)
+KisNodeList KisMimeData::loadNodesFast(
+    const QMimeData *data,
+    KisImageSP image,
+    KisShapeController *shapeController,
+    bool &copyNode)
 {
     QList<KisNodeSP> nodes =
         KisMimeData::tryLoadInternalNodes(data,
@@ -428,6 +429,19 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
          */
         copyNode = true;
     }
+
+    return nodes;
+}
+
+bool KisMimeData::insertMimeLayers(const QMimeData *data,
+                                   KisImageSP image,
+                                   KisShapeController *shapeController,
+                                   KisNodeDummy *parentDummy,
+                                   KisNodeDummy *aboveThisDummy,
+                                   bool copyNode,
+                                   KisNodeInsertionAdapter *nodeInsertionAdapter)
+{
+    QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
 
     if (nodes.isEmpty()) return false;
 

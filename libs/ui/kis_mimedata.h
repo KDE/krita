@@ -78,6 +78,12 @@ public:
                                       KisImageWSP image,
                                       KisShapeController *shapeController);
 
+    static KisNodeList loadNodesFast(
+        const QMimeData *data,
+        KisImageSP image,
+        KisShapeController *shapeController,
+        bool &copyNode);
+
 private:
     /**
      * Try load the node, which belongs to the same Krita instance,

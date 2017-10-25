@@ -243,7 +243,7 @@ void KisStatusBar::updateSelectionIcon()
     m_selectionStatus->setIcon(icon);
 }
 
-inline QString formatSize(qint64 size)
+QString KisStatusBar::formatSize(qint64 size)
 {
     qint64 K = 1024;
     QString suffix = i18nc("very shortened \'byte\' suffix (for statusbar)", "b");
@@ -329,6 +329,8 @@ void KisStatusBar::updateMemoryStatus()
     m_shortMemoryTag = shortStats;
     m_longMemoryTag = longStats;
     m_memoryStatusIcon = icon;
+
+    emit memoryStatusUpdated();
 }
 
 void KisStatusBar::showMemoryInfoToolTip()

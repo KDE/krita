@@ -150,6 +150,11 @@ void utils::StrokeTester::testSimpleStroke()
     testOneStroke(false, true, false, true);
 }
 
+int utils::StrokeTester::lastStrokeTime() const
+{
+    return m_strokeTime;
+}
+
 void utils::StrokeTester::test()
 {
     testOneStroke(false, false, false);
@@ -273,6 +278,9 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
         initImage(image, resources->currentNode(), i);
 
+        QElapsedTimer strokeTime;
+        strokeTime.start();
+
         KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, image);
         m_strokeId = image->startStroke(stroke);
         addPaintingJobs(image, resources, i);
@@ -285,6 +293,8 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
         }
 
         image->waitForDone();
+
+        m_strokeTime = strokeTime.elapsed();
         currentNode = resources->currentNode();
     }
 

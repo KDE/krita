@@ -700,6 +700,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
     sliderFpsLimit->setRange(20, 100);
+    sliderFpsLimit->setSuffix(i18n(" fps"));
 
     connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
     connect(sliderFrameClonesLimit, SIGNAL(valueChanged(int)), SLOT(slotFrameClonesLimitChanged(int)));

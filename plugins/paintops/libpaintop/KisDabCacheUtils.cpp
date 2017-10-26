@@ -41,9 +41,7 @@ DabRenderingResources::~DabRenderingResources()
 
 void DabRenderingResources::syncResourcesToSeqNo(int seqNo, const KisPaintInformation &info)
 {
-    Q_UNUSED(seqNo);
-    Q_UNUSED(info);
-    // TODO: sync the piped brushes to the passed seqNo
+    brush->prepareForSeqNo(info, seqNo);
 }
 
 QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,

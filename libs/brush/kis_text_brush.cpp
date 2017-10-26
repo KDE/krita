@@ -45,24 +45,36 @@ public:
     }
 
     KisTextBrushesPipe(const KisTextBrushesPipe &rhs)
-        : KisBrushesPipe<KisGbrBrush>(rhs) {
+        : KisBrushesPipe<KisGbrBrush>(), // no copy here!
+          m_text(rhs.m_text),
+          m_charIndex(rhs.m_charIndex),
+          m_currentBrushIndex(rhs.m_currentBrushIndex)
+    {
         m_brushesMap.clear();
 
         QMapIterator<QChar, KisGbrBrush*> iter(rhs.m_brushesMap);
         while (iter.hasNext()) {
             iter.next();
-            m_brushesMap.insert(iter.key(), iter.value());
+            KisGbrBrush *brush = new KisGbrBrush(*iter.value());
+            m_brushesMap.insert(iter.key(), brush);
+            KisBrushesPipe<KisGbrBrush>::addBrush(brush);
         }
     }
 
     void setText(const QString &text, const QFont &font) {
         m_text = text;
+
         m_charIndex = 0;
 
         clear();
 
         for (int i = 0; i < m_text.length(); i++) {
-            QChar letter = m_text.at(i);
+
+            const QChar letter = m_text.at(i);
+
+            // skip letters that are already present in the brushes pipe
+            if (m_brushesMap.contains(letter)) continue;
+
             QImage image = renderChar(letter, font);
             KisGbrBrush *brush = new KisGbrBrush(image, letter);
             brush->setSpacing(0.1); // support for letter spacing?
@@ -128,10 +140,15 @@ protected:
         Q_UNUSED(info);
         return m_currentBrushIndex;
     }
-    void updateBrushIndexes(const KisPaintInformation& info) override {
+    void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
         Q_UNUSED(info);
 
-        m_charIndex++;
+        if (m_text.size()) {
+            m_charIndex = (seqNo >= 0 ? seqNo : (m_charIndex + 1)) % m_text.size();
+        } else {
+            m_charIndex = 0;
+        }
+
         updateBrushIndexesImpl();
     }
 
@@ -165,6 +182,8 @@ KisTextBrush::KisTextBrush()
 
 KisTextBrush::KisTextBrush(const KisTextBrush &rhs)
     : KisScalingSizeBrush(rhs),
+      m_font(rhs.m_font),
+      m_text(rhs.m_text),
       m_brushesPipe(new KisTextBrushesPipe(*rhs.m_brushesPipe))
 {
 }
@@ -212,6 +231,11 @@ void KisTextBrush::notifyStrokeStarted()
 void KisTextBrush::notifyCachedDabPainted(const KisPaintInformation& info)
 {
     m_brushesPipe->notifyCachedDabPainted(info);
+}
+
+void KisTextBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
+{
+    m_brushesPipe->prepareForSeqNo(info, seqNo);
 }
 
 void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(

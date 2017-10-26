@@ -439,6 +439,12 @@ void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
     Q_UNUSED(info);
 }
 
+void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
+{
+    Q_UNUSED(info);
+    Q_UNUSED(seqNo);
+}
+
 void KisBrush::setThreadingAllowed(bool value)
 {
     d->threadingAllowed = value;

@@ -113,6 +113,17 @@ krita_add_broken_unit_test(
     TEST_NAME krita-ui-FreehandStrokeBenchmark
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
+# intel benchmark should be packagable
+install(TARGETS krita-ui-FreehandStrokeBenchmark ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install( FILES
+    data/testing_1000px_auto_deafult.kpp
+    data/testing_1000px_auto_gaussian.kpp
+    data/testing_1000px_auto_soft.kpp
+    data/testing_1000px_stamp_450_rotated.kpp
+    data/testing_200px_colorsmudge_default.kpp
+DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
+
 krita_add_broken_unit_test(
     fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
     TEST_NAME krita-ui-FillProcessingVisitorTest

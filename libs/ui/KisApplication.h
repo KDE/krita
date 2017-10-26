@@ -96,7 +96,7 @@ public:
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event) override;
 
-    void addResourceTypes();
+    static void addResourceTypes();
     void loadResources();
     void loadPlugins();
     void initializeGlobals(const KisApplicationArguments &args);

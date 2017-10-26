@@ -59,6 +59,8 @@ KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     return image;
 }
 
+#include <kis_resource_server_provider.h>
+
 KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
                                                 KisNodeSP node,
                                                 const QString &presetFileName)
@@ -95,10 +97,15 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
     KisPaintOpPresetSP preset;
 
     if (!presetFileName.isEmpty()) {
-        QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
-        preset = new KisPaintOpPreset(fullFileName);
-        bool presetValid = preset->load();
-        Q_ASSERT(presetValid); Q_UNUSED(presetValid);
+
+        // we install testing resources for intel builds
+        preset = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceByFilename(presetFileName);
+        KIS_ASSERT(preset);
+
+//        QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
+//        preset = new KisPaintOpPreset(fullFileName);
+//        bool presetValid = preset->load();
+//        Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
         manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);

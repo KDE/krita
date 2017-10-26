@@ -108,10 +108,21 @@ void benchmarkBrush(const QString &presetName)
 }
 
 #include <KoResourcePaths.h>
+#include <KisApplication.h>
+#include <kis_resource_server_provider.h>
+#include <kis_brush_server.h>
+#include <QApplication>
 
 void FreehandStrokeBenchmark::initTestCase()
 {
-    KoResourcePaths::addResourceType("kis_brushes", "data", FILES_DATA_DIR);
+    // we mimic being Krita instead of a test to let people package this test
+
+    qApp->setApplicationName("krita");
+    KisApplication::addResourceTypes();
+    KisBrushServer::instance()->brushServer(true);
+    KisResourceServerProvider::instance()->paintOpPresetServer(true);
+
+    //KoResourcePaths::addResourceType("kis_brushes", "data", FILES_DATA_DIR);
 }
 
 void FreehandStrokeBenchmark::testDefaultTip()

@@ -284,7 +284,7 @@ void KisTileHashTableTraits<T>::addTile(TileTypeSP tile)
 }
 
 template<class T>
-void KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
+bool KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
 {
     const qint32 idx = calculateHash(col, row);
 
@@ -295,12 +295,13 @@ void KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
     //if(tile)
     //    delete tile;
 
+    return bool(tile);
 }
 
 template<class T>
-void KisTileHashTableTraits<T>::deleteTile(TileTypeSP tile)
+bool KisTileHashTableTraits<T>::deleteTile(TileTypeSP tile)
 {
-    deleteTile(tile->col(), tile->row());
+    return deleteTile(tile->col(), tile->row());
 }
 
 template<class T>

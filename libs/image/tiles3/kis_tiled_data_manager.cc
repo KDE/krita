@@ -52,11 +52,6 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
     m_pixelSize = pixelSize;
     m_defaultPixel = new quint8[m_pixelSize];
     setDefaultPixel(defaultPixel);
-
-    m_extentMinX = qint32_MAX;
-    m_extentMinY = qint32_MAX;
-    m_extentMaxX = qint32_MIN;
-    m_extentMaxY = qint32_MIN;
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
@@ -76,11 +71,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
      * has already been made shared in m_hashTable(dm->m_hashTable)
      */
     memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
-
-    m_extentMinX = dm.m_extentMinX;
-    m_extentMinY = dm.m_extentMinY;
-    m_extentMaxX = dm.m_extentMaxX;
-    m_extentMaxY = dm.m_extentMaxY;
+    recalculateExtent();
 }
 
 KisTiledDataManager::~KisTiledDataManager()
@@ -280,8 +271,6 @@ wrongString:
 
 void KisTiledDataManager::purge(const QRect& area)
 {
-    QWriteLocker locker(&m_lock);
-
     QList<KisTileSP> tilesToDelete;
     {
         const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
@@ -306,10 +295,9 @@ void KisTiledDataManager::purge(const QRect& area)
         tileData->unblockSwapping();
     }
     Q_FOREACH (KisTileSP tile, tilesToDelete) {
+        m_extentManager.notifyTileRemoved(tile->col(), tile->row());
         m_hashTable->deleteTile(tile);
     }
-
-    recalculateExtent();
 }
 
 quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)
@@ -327,8 +315,6 @@ quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)
 
 void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 {
-    QWriteLocker locker(&m_lock);
-
     if (clearPixel == 0)
         clearPixel = m_defaultPixel;
 
@@ -348,7 +334,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
     }
 
     if (pixelBytesAreDefault) {
-        clearRect &= extentImpl();
+        clearRect &= m_extentManager.extent();
     }
 
     qint32 firstColumn = xToCol(clearRect.left());
@@ -373,8 +359,6 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
         td->acquire();
     }
 
-    bool needsRecalculateExtent = false;
-
     for (qint32 row = firstRow; row <= lastRow; ++row) {
         for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
@@ -384,19 +368,18 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 
             if (clearTileRect == tileRect) {
                  // Clear whole tile
-                 m_hashTable->deleteTile(column, row);
+                 const bool wasDeleted =
+                     m_hashTable->deleteTile(column, row);
 
-                 if (!needsRecalculateExtent &&
-                     (m_extentMinX == tileRect.left() || m_extentMaxX == tileRect.right() ||
-                      m_extentMinY == tileRect.top() || m_extentMaxY == tileRect.bottom())) {
-
-                     needsRecalculateExtent = true;
+                 if (wasDeleted) {
+                     m_extentManager.notifyTileRemoved(column, row);
                  }
+
 
                  if (!pixelBytesAreDefault) {
                      KisTileSP clearedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
                      m_hashTable->addTile(clearedTile);
-                     updateExtent(column, row);
+                     m_extentManager.notifyTileAdded(column, row);
                  }
             } else {
                 const qint32 lineSize = clearTileRect.width() * pixelSize;
@@ -425,10 +408,6 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
         }
     }
 
-    if (needsRecalculateExtent) {
-        recalculateExtent();
-    }
-
     if (td) td->release();
     delete[] clearPixelData;
 }
@@ -452,22 +431,14 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
 
 void KisTiledDataManager::clear()
 {
-    QWriteLocker locker(&m_lock);
-
     m_hashTable->clear();
-
-    m_extentMinX = qint32_MAX;
-    m_extentMinY = qint32_MAX;
-    m_extentMaxX = qint32_MIN;
-    m_extentMaxY = qint32_MIN;
+    m_extentManager.clear();
 }
 
 
 template<bool useOldSrcData>
 void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect)
 {
-    QWriteLocker locker(&m_lock);
-
     if (rect.isEmpty()) return;
 
     const qint32 pixelSize = this->pixelSize();
@@ -493,7 +464,8 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
 
             if (cloneTileRect == tileRect) {
                  // Clone whole tile
-                 m_hashTable->deleteTile(column, row);
+                 const bool wasDeleted =
+                     m_hashTable->deleteTile(column, row);
 
                  srcTile->lockForRead();
                  KisTileData *td = srcTile->tileData();
@@ -501,7 +473,10 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
                  srcTile->unlock();
 
                  m_hashTable->addTile(clonedTile);
-                 updateExtent(column, row);
+
+                 if (!wasDeleted) {
+                     m_extentManager.notifyTileAdded(column, row);
+                 }
             } else {
                 const qint32 lineSize = cloneTileRect.width() * pixelSize;
                 qint32 rowsRemaining = cloneTileRect.height();
@@ -531,8 +506,6 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
 template<bool useOldSrcData>
 void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect)
 {
-    QWriteLocker locker(&m_lock);
-
     if (rect.isEmpty()) return;
 
     qint32 firstColumn = xToCol(rect.left());
@@ -554,7 +527,8 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
                 srcDM->getOldTile(column, row) :
                 srcDM->getTile(column, row, false);
 
-            m_hashTable->deleteTile(column, row);
+            const bool wasDeleted =
+                m_hashTable->deleteTile(column, row);
 
             srcTile->lockForRead();
             KisTileData *td = srcTile->tileData();
@@ -562,7 +536,10 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
             srcTile->unlock();
 
             m_hashTable->addTile(clonedTile);
-            updateExtent(column, row);
+
+            if (!wasDeleted) {
+                m_extentManager.notifyTileAdded(column, row);
+            }
         }
     }
 }
@@ -601,8 +578,6 @@ void KisTiledDataManager::setExtent(QRect newRect)
     // that is handled by the autoextending automatically
     if (newRect.contains(oldRect)) return;
 
-    QWriteLocker locker(&m_lock);
-
     KisTileSP tile;
     QRect tileRect;
     {
@@ -637,51 +612,28 @@ void KisTiledDataManager::setExtent(QRect newRect)
                 tile->unlock();
                 iter.next();
             } else {
+                m_extentManager.notifyTileRemoved(tile->col(), tile->row());
                 iter.deleteCurrent();
             }
         }
     }
-
-    recalculateExtent();
 }
 
 void KisTiledDataManager::recalculateExtent()
 {
-    m_extentMinX = qint32_MAX;
-    m_extentMinY = qint32_MAX;
-    m_extentMaxX = qint32_MIN;
-    m_extentMaxY = qint32_MIN;
+    QVector<QPoint> indexes;
 
-    KisTileHashTableConstIterator iter(m_hashTable);
-    KisTileSP tile;
+    {
+        KisTileHashTableConstIterator iter(m_hashTable);
+        KisTileSP tile;
 
-    while ((tile = iter.tile())) {
-        updateExtent(tile->col(), tile->row());
-        iter.next();
+        while ((tile = iter.tile())) {
+            indexes << QPoint(tile->col(), tile->row());
+            iter.next();
+        }
     }
-}
 
-void KisTiledDataManager::updateExtent(qint32 col, qint32 row)
-{
-    const qint32 tileMinX = col * KisTileData::WIDTH;
-    const qint32 tileMinY = row * KisTileData::HEIGHT;
-    const qint32 tileMaxX = tileMinX + KisTileData::WIDTH - 1;
-    const qint32 tileMaxY = tileMinY + KisTileData::HEIGHT - 1;
-
-    m_extentMinX = qMin(m_extentMinX, tileMinX);
-    m_extentMaxX = qMax(m_extentMaxX, tileMaxX);
-    m_extentMinY = qMin(m_extentMinY, tileMinY);
-    m_extentMaxY = qMax(m_extentMaxY, tileMaxY);
-}
-
-QRect KisTiledDataManager::extentImpl() const
-{
-    qint32 x = m_extentMinX;
-    qint32 y = m_extentMinY;
-    qint32 w = (m_extentMaxX >= m_extentMinX) ? m_extentMaxX - m_extentMinX + 1 : 0;
-    qint32 h = (m_extentMaxY >= m_extentMinY) ? m_extentMaxY - m_extentMinY + 1 : 0;
-
-    return QRect(x, y, w, h);
+    m_extentManager.replaceTileStats(indexes);
 }
 
 void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
@@ -692,8 +644,7 @@ void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
 QRect KisTiledDataManager::extent() const
 {
-    QReadLocker locker(&m_lock);
-    return extentImpl();
+    return m_extentManager.extent();
 }
 
 QRegion KisTiledDataManager::region() const
@@ -712,7 +663,6 @@ QRegion KisTiledDataManager::region() const
 
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 {
-    QWriteLocker locker(&m_lock);
     KisTileDataWrapper tw(this, x, y, KisTileDataWrapper::WRITE);
     memcpy(tw.data(), data, pixelSize());
 }

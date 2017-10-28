@@ -81,8 +81,8 @@ public:
      */
     TileTypeSP getReadOnlyTileLazy(qint32 col, qint32 row);
     void addTile(TileTypeSP tile);
-    void deleteTile(TileTypeSP tile);
-    void deleteTile(qint32 col, qint32 row);
+    bool deleteTile(TileTypeSP tile);
+    bool deleteTile(qint32 col, qint32 row);
 
     void clear();
 

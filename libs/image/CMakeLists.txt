@@ -41,6 +41,7 @@ set(kritaimage_LIB_SRCS
     tiles3/kis_tile_data_store.cc
     tiles3/kis_tile_data_pooler.cc
     tiles3/kis_tiled_data_manager.cc
+    tiles3/KisTiledExtentManager.cpp
     tiles3/kis_memento_manager.cc
     tiles3/kis_hline_iterator.cpp
     tiles3/kis_vline_iterator.cpp

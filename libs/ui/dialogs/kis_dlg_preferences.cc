@@ -1082,6 +1082,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
 
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
+    restoreDefaultsButton->setText("Restore Defaults");
 
     connect(this, SIGNAL(accepted()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(rejected()), m_inputConfiguration, SLOT(revertChanges()));

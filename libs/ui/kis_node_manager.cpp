@@ -18,7 +18,7 @@
 
 #include "kis_node_manager.h"
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QMessageBox>
 #include <QSignalMapper>
 
@@ -994,7 +994,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 {
     KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
     QString filename = dialog.filename();
 

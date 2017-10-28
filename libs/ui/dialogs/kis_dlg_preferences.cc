@@ -33,7 +33,7 @@
 #include <QSlider>
 #include <QToolButton>
 #include <QThread>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
@@ -279,7 +279,7 @@ void GeneralTab::getBackgroundImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
     dialog.setCaption(i18n("Select a Background Image"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setImageFilters();
 
     QString fn = dialog.filename();
@@ -443,7 +443,7 @@ void ColorSettingsTab::installProfile()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/vnd.iccprofile", "application/vnd.iccprofile");
     QStringList profileNames = dialog.filenames();
 

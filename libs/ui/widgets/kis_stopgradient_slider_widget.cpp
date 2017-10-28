@@ -33,7 +33,7 @@
 #include "kis_debug.h"
 #include "krita_utils.h"
 
-KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::WFlags f)
+KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
     , m_selectedStop(0)
     , m_drag(0)

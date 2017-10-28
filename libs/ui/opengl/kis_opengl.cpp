@@ -28,7 +28,7 @@
 
 #include <QDir>
 #include <QFile>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QStringList>
@@ -471,7 +471,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     QOpenGLFunctions *f = ctx->functions();
     f->initializeOpenGLFunctions();
 
-    QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+    QFile log(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/krita-opengl.txt");
     log.open(QFile::WriteOnly);
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());

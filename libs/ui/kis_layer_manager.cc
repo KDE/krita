@@ -25,7 +25,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QFileInfo>
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>

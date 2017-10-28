@@ -31,7 +31,7 @@
 #include <QTreeWidgetItem>
 #include <QStyledItemDelegate>
 #include <QLinearGradient>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
@@ -126,7 +126,7 @@ public:
     int m_freeCustomWidgetIndex;
     KoSectionListItem* m_templatesSeparator;
 
-   
+
 };
 
 KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath)
@@ -146,7 +146,7 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
             this, SLOT(itemClicked(QTreeWidgetItem*)));
     connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
-   
+
    connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(close()));
    connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(deleteLater()));
 
@@ -200,9 +200,7 @@ void KisOpenPane::openFileDialog()
 
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
     dialog.setCaption(i18n("Open Existing Document"));
-    dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                          ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     Q_FOREACH (const QString &filename, dialog.filenames()) {
         emit openExistingFile(QUrl::fromUserInput(filename));
@@ -240,7 +238,7 @@ void KisOpenPane::initTemplates(const QString& templatesResourcePath)
                     pane, SLOT(resizeSplitter(KisDetailsPane*, const QList<int>&)));
             QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
                                             pane, group->sortingWeight() + templateOffset);
-	    
+
 
 
             if (!firstItem) {
@@ -380,5 +378,5 @@ void KisOpenPane::itemClicked(QTreeWidgetItem* item)
 
     if (selectedItem && selectedItem->widgetIndex() >= 0) {
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
-    } 
+    }
 }

@@ -173,7 +173,7 @@ QString KisSplashScreen::colorString() const
 void KisSplashScreen::repaint()
 {
     QWidget::repaint();
-    QApplication::flush();
+    qApp->sendPostedEvents();
 }
 
 void KisSplashScreen::show()

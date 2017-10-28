@@ -44,7 +44,7 @@
 #include <kis_signal_compressor.h>
 #include "kis_paint_device.h"
 
-KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
+KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WindowFlags f)
         : QLabel(parent, f),
           m_currentDev(nullptr), m_currentProducer(nullptr),
           m_smoothHistogram(false),m_histogram_type(LINEAR)

@@ -34,8 +34,9 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QMenu>

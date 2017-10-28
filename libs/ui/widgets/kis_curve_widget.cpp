@@ -59,7 +59,7 @@
 
 #include "kis_curve_widget_p.h"
 
-KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
+KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WindowFlags f)
         : QWidget(parent, f), d(new KisCurveWidget::Private(this))
 {
     setObjectName("KisCurveWidget");

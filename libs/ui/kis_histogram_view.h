@@ -59,7 +59,7 @@ class KRITAUI_EXPORT KisHistogramView : public QLabel
 
 public:
 
-    KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+    KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = 0);
 
     ~KisHistogramView() override;
 

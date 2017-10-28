@@ -999,7 +999,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
-    setFaceType(KPageDialog::List);
+    setFaceType(KPageDialog::Tree);
 
     // General
     KoVBox *vbox = new KoVBox();

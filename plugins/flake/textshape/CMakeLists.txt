@@ -1,7 +1,17 @@
 project( textPlugin)
 
+remove_definitions(
+  -DQT_DISABLE_DEPRECATED_BEFORE=0x50900
+)
+
+add_definitions(
+  -DQT_DISABLE_DEPRECATED_BEFORE=0
+)
+
 add_subdirectory( textlayout )
 add_subdirectory( kotext )
+
+
 
 set ( textshape_SRCS
     TextPlugin.cpp

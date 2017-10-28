@@ -134,7 +134,7 @@ void QMic::slotQMic(bool again)
     m_pluginProcess->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
     connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
-    m_pluginProcess->start(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString::null));
+    m_pluginProcess->start(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString()));
 
     bool r = m_pluginProcess->waitForStarted();
     while (m_pluginProcess->waitForFinished(10)) {

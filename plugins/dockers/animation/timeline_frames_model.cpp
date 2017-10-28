@@ -258,7 +258,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 
     if (m_d->dummiesFacade) {

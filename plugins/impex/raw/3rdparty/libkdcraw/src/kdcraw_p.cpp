@@ -109,7 +109,7 @@ double KDcraw::Private::progressValue() const
 
 void KDcraw::Private::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify)
 {
-    identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
+    identify.dateTime.setSecsSinceEpoch(raw->imgdata.other.timestamp);
     identify.make             = QString(raw->imgdata.idata.make);
     identify.model            = QString(raw->imgdata.idata.model);
     identify.owner            = QString(raw->imgdata.other.artist);

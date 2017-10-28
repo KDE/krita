@@ -904,8 +904,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     gridColor.fromQColor(cfg.getPixelGridColor());
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold() * 100);
-    grpPixelGrid->setEnabled(true);
-    grpPixelGrid->setChecked(cfg.pixelGridEnabled());
 }
 
 void DisplaySettingsTab::setDefault()
@@ -956,8 +954,6 @@ void DisplaySettingsTab::setDefault()
     gridColor.fromQColor(cfg.getPixelGridColor(true));
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold(true) * 100);
-    grpPixelGrid->setEnabled(true);
-    grpPixelGrid->setChecked(cfg.pixelGridEnabled(true));
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
@@ -1262,7 +1258,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCursorMainColor(dialog->m_general->cursorColorBtutton->color().toQColor());
         cfg.setPixelGridColor(dialog->m_displaySettings->pixelGridColorButton->color().toQColor());
         cfg.setPixelGridDrawingThreshold(dialog->m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
-        cfg.enablePixelGrid(dialog->m_displaySettings->grpPixelGrid->isChecked());
 
         dialog->m_authorPage->apply();
 

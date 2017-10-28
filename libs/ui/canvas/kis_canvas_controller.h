@@ -58,6 +58,7 @@ public Q_SLOTS:
     qreal rotation() const;
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
+    void slotTogglePixelGrid(bool value);
     void slotToggleLevelOfDetailMode(bool value);
 
 Q_SIGNALS:

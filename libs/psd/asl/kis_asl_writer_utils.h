@@ -37,7 +37,7 @@ namespace KisAslWriterUtils {
 struct KRITAPSD_EXPORT ASLWriteException : public std::runtime_error
 {
     ASLWriteException(const QString &msg)
-        : std::runtime_error(msg.toAscii().data())
+        : std::runtime_error(msg.toLatin1().data())
     {
     }
 };

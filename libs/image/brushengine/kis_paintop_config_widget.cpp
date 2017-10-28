@@ -21,7 +21,7 @@
 
 #include <brushengine/kis_paintop_settings.h>
 
-KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WFlags f)
+KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WindowFlags f)
     : KisConfigWidget(parent, f, 10),
       m_isInsideUpdateCall(0)
 {

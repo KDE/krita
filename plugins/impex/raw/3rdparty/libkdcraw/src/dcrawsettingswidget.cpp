@@ -42,7 +42,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 // KDE includes
 

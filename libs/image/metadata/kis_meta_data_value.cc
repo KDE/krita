@@ -306,9 +306,9 @@ Value& Value::operator+=(const Value & v)
             break;
             case QVariant::DateTime: {
                 QDateTime dt;
-                dt.fromTime_t(
-                    v1.toDateTime().toTime_t()
-                    + v2.toDateTime().toTime_t());
+                dt.fromSecsSinceEpoch(
+                    v1.toDateTime().toSecsSinceEpoch()
+                    + v2.toDateTime().toSecsSinceEpoch());
                 *d->value.variant = dt;
             }
             break;

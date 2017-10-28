@@ -25,7 +25,7 @@
 #include <QInputDialog>
 #include <QThread>
 #include <QAction>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QMenu>
 
 #include <klocalizedstring.h>
@@ -185,7 +185,7 @@ void CompositionDockerDock::exportClicked()
 
         KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "compositiondockerdock");
         dialog.setCaption(i18n("Select a Directory"));
-        dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+        dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
         path = dialog.filename();
 
 

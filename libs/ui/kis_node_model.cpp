@@ -195,7 +195,8 @@ void KisNodeModel::updateSettings()
     m_d->showGlobalSelection = cfg.showGlobalSelection();
     if (m_d->showRootLayer != oldShowRootLayer || m_d->showGlobalSelection != oldShowGlobalSelection) {
         resetIndexConverter();
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 }
 
@@ -295,7 +296,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade || m_d->shapeController != oldShapeController) {
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 }
 
@@ -364,15 +366,15 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
     m_d->updateTimer.start(1000);
 }
 
-void addChangedIndex(const QModelIndex &index, QSet<QModelIndex> *indexes)
+void addChangedIndex(const QModelIndex &idx, QSet<QModelIndex> *indexes)
 {
-    if (!index.isValid() || indexes->contains(index)) return;
+    if (!idx.isValid() || indexes->contains(idx)) return;
 
-    indexes->insert(index);
+    indexes->insert(idx);
 
-    const int rowCount = index.model()->rowCount(index);
+    const int rowCount = idx.model()->rowCount(idx);
     for (int i = 0; i < rowCount; i++) {
-        addChangedIndex(index.child(i, 0), indexes);
+        addChangedIndex(idx.model()->index(i, 0, idx), indexes);
     }
 }
 
@@ -655,13 +657,13 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 }
 
 bool KisNodeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const {
-	if (parent.isValid()) {
+    if (parent.isValid()) {
         // drop occured on an item. always return true as returning false will mess up
         // QT5's drag handling (see KisNodeModel::setDropEnabled).
         return true;
-	} else {
-		return QAbstractItemModel::canDropMimeData(data, action, row, column, parent);
-	}
+    } else {
+        return QAbstractItemModel::canDropMimeData(data, action, row, column, parent);
+    }
 }
 
 void KisNodeModel::setDropEnabled(const QMimeData *data) {

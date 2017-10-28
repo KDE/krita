@@ -109,7 +109,8 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
     }
 
     if (image != oldImage) {
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 }
 

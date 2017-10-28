@@ -28,7 +28,6 @@
 CollectionItemModel::CollectionItemModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    setSupportedDragActions(Qt::CopyAction);
 }
 
 QVariant CollectionItemModel::data(const QModelIndex &index, int role) const
@@ -66,7 +65,8 @@ int CollectionItemModel::rowCount(const QModelIndex &parent) const
 void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem> &newlist)
 {
     m_shapeTemplateList = newlist;
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 QMimeData *CollectionItemModel::mimeData(const QModelIndexList &indexes) const
@@ -126,4 +126,9 @@ const KoProperties *CollectionItemModel::properties(const QModelIndex &index) co
     }
 
     return m_shapeTemplateList[index.row()].properties;
+}
+
+Qt::DropActions CollectionItemModel::supportedDragActions() const
+{
+    return Qt::CopyAction;
 }

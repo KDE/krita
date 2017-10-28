@@ -1,23 +1,15 @@
 SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 
 # Download the gmic sources
-if (WIN32)
-    # gmic uses a shell script with wget to download some files which won't work
-    # on Windows, so we use CMake to download them instead
-    set(_GMIC_BUILD_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/gmic-downloads.cmake)
-else (WIN32)
-    set(_GMIC_BUILD_COMMAND make -C src CImg.h gmic_stdlib.h)
-endif (WIN32)
 ExternalProject_Add( ext_gmic_base
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY https://github.com/dtschump/gmic.git
-    GIT_TAG master
-    GIT_SHALLOW 1
+    URL http://gmic.eu/files/source/gmic_2.1.3.tar.gz
+    URL_HASH SHA1=f0832766f009a74287bb9fdbe013f4a84db1ad76
 
     SOURCE_DIR gmic
 
     CONFIGURE_COMMAND ""
-    BUILD_COMMAND ${_GMIC_BUILD_COMMAND}
+    BUILD_COMMAND ""
     INSTALL_COMMAND ""
 
     BUILD_IN_SOURCE 1
@@ -27,8 +19,9 @@ ExternalProject_Add( ext_gmic_base
 # FIXME: Forcing CMAKE_BUILD_TYPE to Release
 ExternalProject_Add( ext_gmic_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/c-koi/gmic-qt/archive/v.211.tar.gz
-    URL_HASH SHA1=776db5f77a4044711a9c4a4b0c6533556f4b810d
+    URL https://github.com/c-koi/gmic-qt/archive/v.213.tar.gz
+    DOWNLOAD_NAME gmic-qt_2.1.3.tar.gz
+    URL_HASH SHA1=8c6489da2ce44ae3eae6ab7e9cf7b45716c0aacd
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

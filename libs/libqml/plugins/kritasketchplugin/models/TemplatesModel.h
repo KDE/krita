@@ -40,6 +40,7 @@ public:
     };
     explicit TemplatesModel(QObject* parent = 0);
     virtual ~TemplatesModel();
+    QHash<int, QByteArray> roleNames() const;
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
     Q_INVOKABLE QString groupNameOf(int index) const;

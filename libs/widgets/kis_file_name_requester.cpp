@@ -19,7 +19,7 @@
 #include "kis_file_name_requester.h"
 #include "ui_wdg_file_name_requester.h"
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDebug>
 
 #include "KoIcon.h"
@@ -86,7 +86,7 @@ void KisFileNameRequester::slotSelectFile()
         dialog.setCaption(i18n("Select a directory to load..."));
     }
     if (m_basePath.isEmpty()) {
-        dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+        dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     }
     else {
         dialog.setDefaultDir(m_basePath);

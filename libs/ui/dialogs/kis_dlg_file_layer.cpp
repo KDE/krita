@@ -21,7 +21,7 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 

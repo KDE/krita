@@ -32,7 +32,7 @@ class KisStopGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisStopGradientSliderWidget(QWidget *parent = 0, Qt::WFlags f = 0);
+    KisStopGradientSliderWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 public:
     void paintEvent(QPaintEvent *) override;

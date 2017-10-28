@@ -117,7 +117,8 @@ void KisUndoModel::stackDestroyed(QObject *obj)
 
 void KisUndoModel::stackChanged()
 {
-    reset();
+    beginResetModel();
+    endResetModel();
 
     m_blockOutgoingHistoryChange = true;
     m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);

@@ -36,8 +36,8 @@
 #include <QDir>
 #include <QUrl>
 #include <QBoxLayout>
-#include <QDesktopServices>
 #include <QStandardPaths>
+#include <QDesktopServices>
 #include <QDebug>
 
 #include "kaboutkdedialog_p.h"

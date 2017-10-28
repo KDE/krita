@@ -47,7 +47,6 @@
 SvgCollectionModel::SvgCollectionModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    setSupportedDragActions(Qt::CopyAction);
 }
 
 QVariant SvgCollectionModel::data(const QModelIndex &index, int role) const
@@ -121,6 +120,11 @@ Qt::ItemFlags SvgCollectionModel::flags(const QModelIndex &index) const
         return QAbstractListModel::flags(index) | Qt::ItemIsDragEnabled;
     }
     return QAbstractListModel::flags(index);
+}
+
+Qt::DropActions SvgCollectionModel::supportedDragActions() const
+{
+    return Qt::CopyAction;
 }
 
 void SvgCollectionModel::setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource)

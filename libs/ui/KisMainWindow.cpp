@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QCloseEvent>
+#include <QStandardPaths>
+#include <QDesktopServices>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
@@ -869,7 +871,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 QStringList KisMainWindow::showOpenFileDialog(bool isImporting)
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setCaption(isImporting ? i18n("Import Images") : i18n("Open Images"));
 
@@ -1051,7 +1053,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             }
             // If that is empty, too, use the Pictures location.
             if (proposedPath.isEmpty()) {
-                proposedPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+                proposedPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
             }
             // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
             // open the location where the document currently is.
@@ -1622,7 +1624,7 @@ KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
         KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
-            defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+            defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
         QUrl startUrl = QUrl::fromLocalFile(defaultDir);
         KisDocument* pDoc = d->activeView->document();
         /** if document has a file name, take file name and replace extension with .pdf */

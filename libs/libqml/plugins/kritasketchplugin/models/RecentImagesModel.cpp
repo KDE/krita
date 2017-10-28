@@ -35,19 +35,23 @@ RecentImagesModel::RecentImagesModel(QObject *parent)
     , d(new Private())
 {
     d->recentFileManager = 0;
+}
 
+RecentImagesModel::~RecentImagesModel()
+{
+    delete d;
+}
+
+QHash<int, QByteArray> RecentImagesModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
     roles[TextRole] = "text";
     roles[UrlRole] = "url";
     roles[NameRole] = "name";
     roles[DateRole] = "filedate";
-    setRoleNames(roles);
-}
 
-RecentImagesModel::~RecentImagesModel()
-{
-    delete d;
+    return roles;
 }
 
 int RecentImagesModel::rowCount(const QModelIndex &/*parent*/) const
@@ -138,7 +142,8 @@ void RecentImagesModel::setRecentFileManager(QObject *recentFileManager)
 
 void RecentImagesModel::recentFilesListChanged()
 {
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 void RecentImagesModel::addRecent(const QString &_url)

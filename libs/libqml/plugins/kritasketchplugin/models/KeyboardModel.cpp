@@ -54,16 +54,21 @@ public:
 KeyboardModel::KeyboardModel(QObject* parent)
     : QAbstractListModel(parent), d(new Private)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(TextRole, "text");
-    roleNames.insert(TypeRole, "keyType");
-    roleNames.insert(WidthRole, "width");
-    setRoleNames(roleNames);
 }
 
 KeyboardModel::~KeyboardModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> KeyboardModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(TextRole, "text");
+    roleNames.insert(TypeRole, "keyType");
+    roleNames.insert(WidthRole, "width");
+
+    return roleNames;
 }
 
 void KeyboardModel::classBegin()

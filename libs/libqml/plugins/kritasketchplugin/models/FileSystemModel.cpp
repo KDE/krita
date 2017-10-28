@@ -24,7 +24,7 @@
 #include <KisMimeDatabase.h>
 #include <QFileInfo>
 #include <QDir>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDebug>
 
 class FileSystemModel::Private
@@ -84,7 +84,7 @@ void FileSystemModel::classBegin()
 
 void FileSystemModel::componentComplete()
 {
-    setPath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    setPath(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
 }
 
 QString FileSystemModel::path()

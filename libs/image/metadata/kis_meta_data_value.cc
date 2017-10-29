@@ -306,9 +306,15 @@ Value& Value::operator+=(const Value & v)
             break;
             case QVariant::DateTime: {
                 QDateTime dt;
+#if QT_VERSION >= 0x050900
                 dt.fromSecsSinceEpoch(
                     v1.toDateTime().toSecsSinceEpoch()
                     + v2.toDateTime().toSecsSinceEpoch());
+#else
+                dt.fromTime_t(
+                    v1.toDateTime().toTime_t()
+                    + v2.toDateTime().toTime_t());
+#endif
                 *d->value.variant = dt;
             }
             break;

@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <QApplication>
 #include <QTouchEvent>
-#include <QTouchEvent>
+#include <QElapsedTimer>
 
 #include <KoToolManager.h>
 
@@ -465,6 +465,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         retval = compressMoveEventCommon(tabletEvent);
+
+        if (d->tabletLatencyTracker) {
+            d->tabletLatencyTracker->push(tabletEvent->timestamp());
+        }
 
         /**
          * The flow of tablet events means the tablet is in the

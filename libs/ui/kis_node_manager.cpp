@@ -346,6 +346,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_animated", "animated");
 
+    CONVERT_NODE_ACTION_2("convert_layer_to_file_layer", "KisFileLayer", QStringList()<< "KisFileLayer" << "KisCloneLayer");
+
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 
@@ -589,7 +591,8 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
         m_d->commandsAdapter.removeNode(activeNode);
         m_d->commandsAdapter.endMacro();
-
+    } else if (nodeType == "KisFileLayer") {
+            m_d->layerManager.convertLayerToFileLayer(activeNode);
     } else {
         warnKrita << "Unsupported node conversion type:" << nodeType;
     }

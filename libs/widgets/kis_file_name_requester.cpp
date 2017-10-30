@@ -49,6 +49,7 @@ void KisFileNameRequester::setStartDir(const QString &path)
 void KisFileNameRequester::setFileName(const QString &path)
 {
     m_ui->txtFileName->setText(path);
+    m_basePath = path;
     emit fileSelected(path);
 }
 

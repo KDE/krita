@@ -435,6 +435,86 @@ void KisLayerManager::convertGroupToAnimated()
     m_commandsAdapter->endMacro();
 }
 
+void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
+{
+    KisImageSP image = m_view->image();
+    if (!image) return;
+
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+
+    KoDialog dlg;
+    QWidget *page = new QWidget(&dlg);
+    dlg.setMainWidget(page);
+    QBoxLayout *layout = new QVBoxLayout(page);
+    dlg.setWindowTitle(i18n("Save layers to..."));
+    QLabel *lbl = new QLabel(i18n("Choose the location where the layer will be saved to. The new file layer will then reference this location."));
+    lbl->setWordWrap(true);
+    layout->addWidget(lbl);
+    KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
+    urlRequester->setMode(KoFileDialog::SaveFile);
+    urlRequester->setMimeTypeFilters(listMimeFilter);
+    urlRequester->setFileName(m_view->document()->url().toLocalFile());
+    if (m_view->document()->url().isLocalFile()) {
+        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).baseName();
+        location.setFile(location.dir(), location.baseName()+"_"+ source->name()+".kra");
+        urlRequester->setFileName(location.absoluteFilePath());
+    } else {
+        const QFileInfo location = QFileInfo(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+        const QString proposedFileName = QDir(location.absoluteFilePath()).absoluteFilePath(source->name() + ".kra");
+        urlRequester->setFileName(proposedFileName);
+    }
+
+    layout->addWidget(urlRequester);
+    if (!dlg.exec()) return;
+
+    QString path = urlRequester->fileName();
+
+    if (path.isEmpty()) return;
+
+    QFileInfo f(path);
+
+    QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
+    if (mimeType.isEmpty()) {
+        mimeType = "image/png";
+    }
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+    QRect bounds = source->exactBounds();
+
+    KisImageSP dst = new KisImage(doc->createUndoStore(),
+                                  image->width(),
+                                  image->height(),
+                                  image->projection()->compositionSourceColorSpace(),
+                                  source->name());
+    dst->setResolution(image->xRes(), image->yRes());
+    doc->setFileBatchMode(false);
+    doc->setCurrentImage(dst);
+    KisNodeSP node = source->clone();
+    dst->addNode(node);
+    dst->initialRefreshGraph();
+    dst->cropImage(bounds);
+    dst->waitForDone();
+
+    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(path), mimeType.toLatin1());
+    if (!r) {
+        qDebug()<< "Path:"<<path;
+        qWarning() << doc->errorMessage();
+    } else {
+        QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
+        QString relativePath = QDir(basePath).relativeFilePath(path);
+        KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, source->name(), OPACITY_OPAQUE_U8);
+        fileLayer->setX(bounds.x());
+        fileLayer->setY(bounds.y());
+        KisNodeSP dstParent = source->parent();
+        KisNodeSP dstAboveThis = source->prevSibling();
+        m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a file layer"));
+        m_commandsAdapter->removeNode(source);
+        m_commandsAdapter->addNode(fileLayer, dstParent, dstAboveThis);
+        m_commandsAdapter->endMacro();
+    }
+    doc->closeUrl(false);
+}
+
 void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)
 {
     Q_ASSERT(activeNode);

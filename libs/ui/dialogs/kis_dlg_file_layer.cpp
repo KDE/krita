@@ -80,6 +80,25 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
     }
 }
 
+void KisDlgFileLayer::setFileName(QString fileName)
+{
+    dlgWidget.wdgUrlRequester->setFileName(fileName);
+}
+
+void KisDlgFileLayer::setScalingMethod(KisFileLayer::ScalingMethod method)
+{
+    dlgWidget.radioDontScale->setChecked(false);
+    dlgWidget.radioScaleToImageSize->setChecked(false);
+    dlgWidget.radioScalePPI->setChecked(false);
+    if (method == KisFileLayer::None) {
+        dlgWidget.radioDontScale->setChecked(true);
+    } else if (method == KisFileLayer::ToImageSize) {
+        dlgWidget.radioScaleToImageSize->setChecked(true);
+    } else {
+        dlgWidget.radioScalePPI->setChecked(true);
+    }
+}
+
 QString KisDlgFileLayer::fileName() const
 {
     QString path = dlgWidget.wdgUrlRequester->fileName();

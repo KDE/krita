@@ -81,6 +81,7 @@
 #include "commands/kis_image_commands.h"
 #include "commands/kis_layer_command.h"
 #include "commands/kis_node_commands.h"
+#include "kis_change_file_layer_command.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_selection_manager.h"
 #include "kis_statusbar.h"
@@ -246,6 +247,7 @@ void KisLayerManager::layerProperties()
 
     KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()));
     KisGeneratorLayerSP glayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));
+    KisFileLayerSP flayer = KisFileLayerSP(dynamic_cast<KisFileLayer*>(layer.data()));
 
     if (alayer && !multipleLayersSelected) {
 
@@ -327,6 +329,37 @@ void KisLayerManager::layerProperties()
                 m_view->document()->setModified(true);
             }
 
+        }
+    }  else if (flayer && !multipleLayersSelected){
+        QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
+        QString fileNameOld = flayer->fileName();
+        KisFileLayer::ScalingMethod scalingMethodOld = flayer->scalingMethod();
+        KisDlgFileLayer dlg(basePath, flayer->name(), m_view->mainWindow());
+        dlg.setCaption(i18n("File Layer Properties"));
+        dlg.setFileName(fileNameOld);
+        dlg.setScalingMethod(scalingMethodOld);
+
+        if (dlg.exec() == QDialog::Accepted) {
+            const QString fileNameNew = dlg.fileName();
+            KisFileLayer::ScalingMethod scalingMethodNew = dlg.scaleToImageResolution();
+
+            if(fileNameNew.isEmpty()){
+                QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
+                return;
+            }
+            flayer->setName(dlg.layerName());
+
+            if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew) {
+                KisChangeFileLayerCmd *cmd
+                        = new KisChangeFileLayerCmd(flayer,
+                                                basePath,
+                                                fileNameOld,
+                                                scalingMethodOld,
+                                                basePath,
+                                                fileNameNew,
+                                                scalingMethodNew);
+                m_view->undoAdapter()->addCommand(cmd);
+            }
         }
     } else { // If layer == normal painting layer, vector layer, or group layer
         QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();

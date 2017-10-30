@@ -168,10 +168,16 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
     return m_scalingMethod;
 }
 
+void KisFileLayer::setScalingMethod(ScalingMethod method)
+{
+    m_scalingMethod = method;
+}
+
 void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes)
 {
     qint32 oldX = x();
     qint32 oldY = y();
+    const QRect oldLayerExtent = m_paintDevice->extent();
 
     m_paintDevice->makeCloneFrom(projection, projection->extent());
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image()));
@@ -199,7 +205,7 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, in
     m_paintDevice->setX(oldX);
     m_paintDevice->setY(oldY);
 
-    setDirty();
+    setDirty(m_paintDevice->extent() | oldLayerExtent);
 }
 
 KisNodeSP KisFileLayer::clone() const

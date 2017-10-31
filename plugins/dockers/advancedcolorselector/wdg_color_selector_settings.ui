@@ -71,7 +71,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_typeshape">
       <attribute name="title">
@@ -1515,6 +1515,11 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisColorSelectorComboBox</class>
    <extends>QComboBox</extends>
    <header>kis_color_selector_combo_box.h</header>
@@ -1523,11 +1528,6 @@
    <class>KisShadeSelectorLinesSettings</class>
    <extends>QComboBox</extends>
    <header>kis_shade_selector_lines_settings.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleParseSpinBox</class>

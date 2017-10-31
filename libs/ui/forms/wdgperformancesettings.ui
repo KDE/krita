@@ -27,7 +27,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -312,13 +312,6 @@
            </widget>
           </item>
          </layout>
-         <zorder>label_8</zorder>
-         <zorder>sliderThreadsLimit</zorder>
-         <zorder>label_9</zorder>
-         <zorder>sliderFrameClonesLimit</zorder>
-         <zorder>label_fps</zorder>
-         <zorder>label_fps</zorder>
-         <zorder>sliderFpsLimit</zorder>
         </widget>
        </item>
        <item>

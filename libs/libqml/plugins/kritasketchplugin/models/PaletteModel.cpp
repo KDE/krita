@@ -40,15 +40,20 @@ PaletteModel::PaletteModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
-    QHash<int, QByteArray> roles;
-    roles[ImageRole] = "image";
-    roles[TextRole] = "text";
-    setRoleNames(roles);
 }
 
 PaletteModel::~PaletteModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> PaletteModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[ImageRole] = "image";
+    roles[TextRole] = "text";
+
+    return roles;
 }
 
 int PaletteModel::rowCount(const QModelIndex &parent) const

@@ -102,7 +102,7 @@ public: // Implement kis_abstract_canvas_widget interface
 
     KisOpenGLImageTexturesSP openGLImageTextures() const;
 
-private Q_SLOTS:
+public Q_SLOTS:
     void slotConfigChanged();
 
 protected: // KisCanvasWidgetBase

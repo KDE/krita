@@ -63,15 +63,9 @@ inline QString SystemInformation::userName()
 }
 
 static inline QString windowsVersionString() {
-    switch (QSysInfo::windowsVersion()) {
-    case QSysInfo::WV_XP: return QStringLiteral("Windows XP");
-    case QSysInfo::WV_2003: return QStringLiteral("Windows 2003");
-    case QSysInfo::WV_VISTA: return QStringLiteral("Windows Vista");
-    case QSysInfo::WV_WINDOWS7: return QStringLiteral("Windows 7");
-    case QSysInfo::WV_WINDOWS8: return QStringLiteral("Windows 8");
-    case QSysInfo::WV_WINDOWS8_1: return QStringLiteral("Windows 8.1");
-    default: return QStringLiteral("Unknown Windows");
-    }
+    QString productVersion = QSysInfo::productVersion();
+    if (productVersion == "unknown") return QStringLiteral("Unknown Windows");
+    return "Windows " + productVersion;
 }
 
 inline QString SystemInformation::operatingSystemVersion()
@@ -79,7 +73,7 @@ inline QString SystemInformation::operatingSystemVersion()
     SYSTEM_INFO info;
     GetNativeSystemInfo(&info);
     QString arch;
-    switch (info.dwProcessorType) {
+    switch (info.wProcessorArchitecture) {
     case PROCESSOR_ARCHITECTURE_AMD64:
     case PROCESSOR_ARCHITECTURE_IA32_ON_WIN64:
         arch = QStringLiteral(" (x86_64)");

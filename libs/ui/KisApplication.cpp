@@ -30,7 +30,7 @@
 #include "osx.h"
 #endif
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFile>

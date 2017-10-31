@@ -57,7 +57,7 @@
 #include <QTextBrowser>
 #include <QApplication>
 #include <QBuffer>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
@@ -1516,7 +1516,7 @@ bool KisDocument::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
+        setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("abstract", description);
 

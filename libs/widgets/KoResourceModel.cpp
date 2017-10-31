@@ -148,7 +148,8 @@ QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) 
 void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
 {
     emit beforeResourcesLayoutReset(activateAfterReformat);
-    reset();
+    beginResetModel();
+    endResetModel();
     emit afterResourcesLayoutReset();
 }
 
@@ -157,7 +158,8 @@ void KoResourceModel::setColumnCount( int columnCount )
     if (columnCount != m_columnCount) {
         emit beforeResourcesLayoutReset(0);
         m_columnCount = columnCount;
-        reset();
+        beginResetModel();
+        endResetModel();
         emit afterResourcesLayoutReset();
     }
 }

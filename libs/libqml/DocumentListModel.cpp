@@ -49,6 +49,14 @@ DocumentListModel::DocumentListModel(QObject *parent)
 {
     qRegisterMetaType<DocumentListModel::DocumentInfo>();
 
+}
+
+DocumentListModel::~DocumentListModel()
+{
+}
+
+QHash<int, QByteArray> DocumentListModel::roleNames() const
+{
     QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
     roleNames[FileNameRole] = "fileName";
     roleNames[FilePathRole] = "filePath";
@@ -58,11 +66,8 @@ DocumentListModel::DocumentListModel(QObject *parent)
     roleNames[AccessedTimeRole] = "accessedTime";
     roleNames[ModifiedTimeRole] = "modifiedTime";
     roleNames[UUIDRole] = "uuid";
-    setRoleNames(roleNames);
-}
 
-DocumentListModel::~DocumentListModel()
-{
+    return roleNames;
 }
 
 void DocumentListModel::addDocument(const DocumentInfo &info)
@@ -178,5 +183,6 @@ void DocumentListModel::Private::relayout()
 
     currentDocumentInfos = newList;
     emit q->layoutChanged();
-    q->reset(); // ## Required for <= Qt 4.7.2
+    q->beginResetModel();
+    q->endResetModel();
 }

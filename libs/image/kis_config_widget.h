@@ -42,7 +42,7 @@ class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 
 protected:
 
-    KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0, int delay = 200);
+    KisConfigWidget(QWidget * parent = 0, Qt::WindowFlags f = 0, int delay = 200);
 
 public:
     ~KisConfigWidget() override;

@@ -2610,6 +2610,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="convert_layer_to_file_layer">
+      <icon>fileLayer</icon>
+      <text>to &amp;File Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
+      <iconText>Convert to File Layer</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="import_layer_from_file">
       <icon></icon>
       <text>I&amp;mport Layer...</text>

@@ -32,15 +32,19 @@ ColorModelModel::ColorModelModel(QObject* parent)
     : QAbstractListModel(parent), d(new Private)
 {
     d->colorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible);
-
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(TextRole, "text");
-    setRoleNames(roleNames);
 }
 
 ColorModelModel::~ColorModelModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> ColorModelModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(TextRole, "text");
+
+    return roleNames;
 }
 
 int ColorModelModel::rowCount(const QModelIndex& parent) const

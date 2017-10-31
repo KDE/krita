@@ -133,6 +133,16 @@ MultiFeedRssModel::MultiFeedRssModel(QObject *parent) :
     connect(m_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
             SLOT(appendFeedData(QNetworkReply*)), Qt::QueuedConnection);
 
+}
+
+
+
+MultiFeedRssModel::~MultiFeedRssModel()
+{
+}
+
+QHash<int, QByteArray> MultiFeedRssModel::roleNames() const
+{
     QHash<int, QByteArray> roleNames;
     roleNames[TitleRole] = "title";
     roleNames[DescriptionRole] = "description";
@@ -140,11 +150,7 @@ MultiFeedRssModel::MultiFeedRssModel(QObject *parent) :
     roleNames[LinkRole] = "link";
     roleNames[BlogNameRole] = "blogName";
     roleNames[BlogIconRole] = "blogIcon";
-    setRoleNames(roleNames);
-}
-
-MultiFeedRssModel::~MultiFeedRssModel()
-{
+    return roleNames;
 }
 
 void MultiFeedRssModel::addFeed(const QString& feed)
@@ -165,7 +171,8 @@ void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
     m_aggregatedFeed.append(reader.parse(reply));
     std::sort(m_aggregatedFeed.begin(), m_aggregatedFeed.end(), sortForPubDate);
     setArticleCount(m_aggregatedFeed.size());
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 void MultiFeedRssModel::removeFeed(const QString &feed)

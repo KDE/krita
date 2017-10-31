@@ -197,26 +197,6 @@ LayerModel::LayerModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
-    QHash<int, QByteArray> roles;
-    roles[IconRole] = "icon";
-    roles[NameRole] = "name";
-    roles[ActiveLayerRole] = "activeLayer";
-    roles[OpacityRole] = "opacity";
-    roles[PercentOpacityRole] = "percentOpacity";
-    roles[VisibleRole] = "visible";
-    roles[LockedRole] = "locked";
-    roles[CompositeDetailsRole] = "compositeDetails";
-    roles[FilterRole] = "filter";
-    roles[ChildCountRole] = "childCount";
-    roles[DeepChildCountRole] = "deepChildCount";
-    roles[DepthRole] = "depth";
-    roles[PreviousItemDepthRole] = "previousItemDepth";
-    roles[NextItemDepthRole] = "nextItemDepth";
-    roles[CanMoveDownRole] = "canMoveDown";
-    roles[CanMoveLeftRole] = "canMoveLeft";
-    roles[CanMoveRightRole] = "canMoveRight";
-    roles[CanMoveUpRole] = "canMoveUp";
-    setRoleNames(roles);
 
     connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
             this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
@@ -240,6 +220,31 @@ LayerModel::LayerModel(QObject* parent)
 LayerModel::~LayerModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> LayerModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[IconRole] = "icon";
+    roles[NameRole] = "name";
+    roles[ActiveLayerRole] = "activeLayer";
+    roles[OpacityRole] = "opacity";
+    roles[PercentOpacityRole] = "percentOpacity";
+    roles[VisibleRole] = "visible";
+    roles[LockedRole] = "locked";
+    roles[CompositeDetailsRole] = "compositeDetails";
+    roles[FilterRole] = "filter";
+    roles[ChildCountRole] = "childCount";
+    roles[DeepChildCountRole] = "deepChildCount";
+    roles[DepthRole] = "depth";
+    roles[PreviousItemDepthRole] = "previousItemDepth";
+    roles[NextItemDepthRole] = "nextItemDepth";
+    roles[CanMoveDownRole] = "canMoveDown";
+    roles[CanMoveLeftRole] = "canMoveLeft";
+    roles[CanMoveRightRole] = "canMoveRight";
+    roles[CanMoveUpRole] = "canMoveUp";
+
+    return roles;
 }
 
 QObject* LayerModel::view() const
@@ -298,7 +303,8 @@ void LayerModel::setView(QObject *newView)
         connect(d->nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(currentNodeChanged(KisNodeSP)));
 
         d->rebuildLayerList();
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 }
 
@@ -605,7 +611,8 @@ void LayerModel::deleteLayer(int index)
         d->nodeManager->slotUiActivatedNode(d->layers.at(index));
         d->nodeManager->removeNode();
         d->rebuildLayerList();
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 }
 

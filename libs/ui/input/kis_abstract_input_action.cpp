@@ -192,7 +192,7 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
     case QEvent::MouseMove:
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
-        return static_cast<const QMouseEvent*>(event)->posF();
+        return static_cast<const QMouseEvent*>(event)->localPos();
 
     case QEvent::TabletMove:
     case QEvent::TabletPress:

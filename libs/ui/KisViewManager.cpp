@@ -34,8 +34,9 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QMenu>
@@ -191,6 +192,7 @@ public:
         , inputManager(_q)
         , scriptManager(_q)
         , actionAuthor(0)
+        , showPixelGrid(0)
     {
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
@@ -252,6 +254,7 @@ public:
     KisSignalAutoConnectionsStore viewConnections;
     KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
+    KisAction *showPixelGrid;
 
     QByteArray canvasState;
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
@@ -449,6 +452,8 @@ void KisViewManager::setCurrentView(KisView *view)
         // set up progrress reporting
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
+
+        d->viewConnections.addUniqueConnection(d->showPixelGrid, SIGNAL(toggled(bool)), canvasController, SLOT(slotTogglePixelGrid(bool)));
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -713,6 +718,9 @@ void KisViewManager::createActions()
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
+
+    d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
+    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
 
 }
 

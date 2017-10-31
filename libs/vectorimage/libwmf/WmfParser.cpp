@@ -417,7 +417,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             bufferOffset = mBuffer->pos();
             stream >> size;
             stream >> recordType;
-            
+
             // mapping between n function and index of table 'metaFuncTab'
             // lower 8 digits of the function => entry in the table
             quint16 index = recordType & 0xff;
@@ -652,7 +652,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-                    
+
                     QRegion region = mDeviceContext.clipRegion;
                     QRegion newRegion(left, top, right - left, bottom - top);
                     if (region.isEmpty()) {
@@ -660,7 +660,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         //        it should be set to the new region.  /iw
                         region = newRegion;
                     } else {
-                        region = region.subtract(newRegion);
+                        region = region.subtracted(newRegion);
                     }
 
                     mDeviceContext.clipRegion = region;
@@ -680,7 +680,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         //        it should be set to the new region.  /iw
                         region = newRegion;
                     } else {
-                        region = region.intersect(newRegion);
+                        region = region.intersected(newRegion);
                     }
 
                     mDeviceContext.clipRegion = region;
@@ -1247,7 +1247,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 }
                 break;
 #if 0
- UNSPECIFIED in the Spec: 
+ UNSPECIFIED in the Spec:
     { &WmfParser::createBitmapIndirect, "createBitmapIndirect" }, //109 0xfd
     { &WmfParser::createBitmap, "createBitmap" }, // 110 0xfe
 #endif
@@ -1288,7 +1288,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
 {
     // Check bounding rectangle for standard meta file.
     // This calculation is done in device coordinates.
-    if (!mStandard || !mValid) 
+    if (!mStandard || !mValid)
         return;
 
     bool windowExtIsSet = false;
@@ -1407,7 +1407,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
                 else {
                     // If the viewportExt is not set, then either a
                     // subsequent setViewportExt will set it, or the
-                    // windowExt will be used instead.  
+                    // windowExt will be used instead.
                     extX = windowWidth;
                     extY = windowHeight;
                 }
@@ -1436,7 +1436,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
             break;
 
             // FIXME: Also support:
-            //          ScaleWindowExt, ScaleViewportExt, 
+            //          ScaleWindowExt, ScaleViewportExt,
             //          OffsetWindowOrg, OffsetViewportOrg
 
             // The following are drawing commands.  It is only when

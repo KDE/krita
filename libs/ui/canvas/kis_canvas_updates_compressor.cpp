@@ -25,33 +25,26 @@ bool KisCanvasUpdatesCompressor::putUpdateInfo(KisUpdateInfoSP info)
     if (newUpdateRect.isEmpty()) return false;
 
     QMutexLocker l(&m_mutex);
-    bool updateOverridden = false;
-
     UpdateInfoList::iterator it = m_updatesList.begin();
+
     while (it != m_updatesList.end()) {
         if (levelOfDetail == (*it)->levelOfDetail() &&
             newUpdateRect.contains((*it)->dirtyImageRect())) {
 
-            if (info) {
-                *it = info;
-                info = 0;
-                ++it;
-            } else {
-                it = m_updatesList.erase(it);
-            }
-
-            updateOverridden = true;
+            /**
+             * We should always remove the overridden update and put 'info' to the end
+             * of the queue. Otherwise, the updates will become reordered and the canvas
+             * may have tiles artifacts with "outdated" data
+             */
+            it = m_updatesList.erase(it);
         } else {
             ++it;
         }
     }
 
-    if (!updateOverridden) {
-        Q_ASSERT(info);
-        m_updatesList.append(info);
-    }
+    m_updatesList.append(info);
 
-    return !updateOverridden;
+    return m_updatesList.size() <= 1;
 }
 
 KisUpdateInfoSP KisCanvasUpdatesCompressor::takeUpdateInfo()

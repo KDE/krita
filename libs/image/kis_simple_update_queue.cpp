@@ -188,8 +188,8 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
 
         KisBaseRectsWalkerSP walker;
 
-        if(trySplitJob(node, rc, cropRect, levelOfDetail, type)) return;
-        if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) return;
+        if(trySplitJob(node, rc, cropRect, levelOfDetail, type)) continue;
+        if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) continue;
 
         if (type == KisBaseRectsWalker::UPDATE) {
             walker = new KisMergeWalker(cropRect, KisMergeWalker::DEFAULT);

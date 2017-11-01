@@ -33,7 +33,7 @@
 #include <QSlider>
 #include <QToolButton>
 #include <QThread>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
@@ -279,7 +279,7 @@ void GeneralTab::getBackgroundImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
     dialog.setCaption(i18n("Select a Background Image"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setImageFilters();
 
     QString fn = dialog.filename();
@@ -443,7 +443,7 @@ void ColorSettingsTab::installProfile()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/vnd.iccprofile", "application/vnd.iccprofile");
     QStringList profileNames = dialog.filenames();
 
@@ -699,9 +699,12 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
+    sliderFpsLimit->setRange(20, 100);
+    sliderFpsLimit->setSuffix(i18n(" fps"));
 
     connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
     connect(sliderFrameClonesLimit, SIGNAL(valueChanged(int)), SLOT(slotFrameClonesLimitChanged(int)));
+    connect(sliderFpsLimit, SIGNAL(valueChanged(int)), SLOT(slotFpsLimitChanged(int)));
 
     load(false);
 }
@@ -727,9 +730,11 @@ void PerformanceTab::load(bool requestDefault)
 
     m_lastUsedThreadsLimit = cfg.maxNumberOfThreads(requestDefault);
     m_lastUsedClonesLimit = cfg.frameRenderingClones(requestDefault);
+    m_lastUsedFpsLimit = cfg.fpsLimit(requestDefault);
 
     sliderThreadsLimit->setValue(m_lastUsedThreadsLimit);
     sliderFrameClonesLimit->setValue(m_lastUsedClonesLimit);
+    sliderFpsLimit->setValue(m_lastUsedFpsLimit);
 
     {
         KisConfig cfg2;
@@ -756,6 +761,7 @@ void PerformanceTab::save()
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
+    cfg.setFpsLimit(sliderFpsLimit->value());
 
     {
         KisConfig cfg2;
@@ -788,6 +794,13 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
     KisSignalsBlocker b(sliderThreadsLimit);
     sliderThreadsLimit->setValue(qMax(m_lastUsedThreadsLimit, value));
     m_lastUsedClonesLimit = value;
+}
+
+void PerformanceTab::slotFpsLimitChanged(int value)
+{
+    KisSignalsBlocker b(sliderFrameClonesLimit);
+    sliderFrameClonesLimit->setValue(qMax(m_lastUsedFpsLimit, value));
+    m_lastUsedFpsLimit = value;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -893,8 +906,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     gridColor.fromQColor(cfg.getPixelGridColor());
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold() * 100);
-    grpPixelGrid->setEnabled(true);
-    grpPixelGrid->setChecked(cfg.pixelGridEnabled());
 }
 
 void DisplaySettingsTab::setDefault()
@@ -945,8 +956,6 @@ void DisplaySettingsTab::setDefault()
     gridColor.fromQColor(cfg.getPixelGridColor(true));
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold(true) * 100);
-    grpPixelGrid->setEnabled(true);
-    grpPixelGrid->setChecked(cfg.pixelGridEnabled(true));
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
@@ -992,7 +1001,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
-    setFaceType(KPageDialog::List);
+    setFaceType(KPageDialog::Tree);
 
     // General
     KoVBox *vbox = new KoVBox();
@@ -1075,6 +1084,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
 
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
+    restoreDefaultsButton->setText("Restore Defaults");
 
     connect(this, SIGNAL(accepted()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(rejected()), m_inputConfiguration, SLOT(revertChanges()));
@@ -1251,7 +1261,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCursorMainColor(dialog->m_general->cursorColorBtutton->color().toQColor());
         cfg.setPixelGridColor(dialog->m_displaySettings->pixelGridColorButton->color().toQColor());
         cfg.setPixelGridDrawingThreshold(dialog->m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
-        cfg.enablePixelGrid(dialog->m_displaySettings->grpPixelGrid->isChecked());
 
         dialog->m_authorPage->apply();
 

@@ -51,7 +51,7 @@ class KisPhongBumpmapConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget *parent, Qt::WFlags f = 0);
+    KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget *parent, Qt::WindowFlags f = 0);
     ~KisPhongBumpmapConfigWidget() override {}
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
     KisPropertiesConfigurationSP configuration() const override;

@@ -234,9 +234,9 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     QTableView *table = new QTableView(dlg);
     table->setModel(m_matrixModel);
     table->horizontalHeader()->hide();
-    table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table->verticalHeader()->hide();
-    table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);
     mainLayout->addWidget(table);

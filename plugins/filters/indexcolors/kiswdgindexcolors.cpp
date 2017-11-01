@@ -30,7 +30,7 @@
 
 #include <kis_color_button.h>
 
-KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
+KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WindowFlags f, int delay): KisConfigWidget(parent, f, delay)
 {
     ui = new Ui::KisWdgIndexColors;
     ui->setupUi(this);

@@ -97,7 +97,7 @@ void KisToolProxy::forwardHoverEvent(QEvent *event)
 
     case QEvent::MouseMove: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        QPointF docPoint = widgetToDocument(mouseEvent->posF());
+        QPointF docPoint = widgetToDocument(mouseEvent->localPos());
         mouseMoveEvent(mouseEvent, docPoint);
         return;
     }
@@ -124,7 +124,7 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         retval = tabletEvent->isAccepted();
     }
     else if (mouseEvent) {
-        QPointF docPoint = widgetToDocument(mouseEvent->posF());
+        QPointF docPoint = widgetToDocument(mouseEvent->localPos());
         mouseEvent->accept();
         if (mouseEvent->type() == QEvent::MouseButtonPress) {
             mousePressEvent(mouseEvent, docPoint);

@@ -119,7 +119,6 @@ QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensorSP arg1)
 void KisMultiSensorsModel::resetCurveOption()
 {
     beginResetModel();
-    reset();
     endResetModel();
 }
 

@@ -101,7 +101,7 @@ class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = 0);
     ~KisBrightnessContrastConfigWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;

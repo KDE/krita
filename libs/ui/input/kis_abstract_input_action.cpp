@@ -176,6 +176,9 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
     case QEvent::Wheel:
         return static_cast<const QWheelEvent*>(event)->pos();
 
+    case QEvent::NativeGesture:
+        return static_cast<const QNativeGestureEvent*>(event)->pos();
+
     default:
         warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
         return QPoint();
@@ -189,7 +192,7 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
     case QEvent::MouseMove:
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
-        return static_cast<const QMouseEvent*>(event)->posF();
+        return static_cast<const QMouseEvent*>(event)->localPos();
 
     case QEvent::TabletMove:
     case QEvent::TabletPress:
@@ -198,6 +201,9 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
 
     case QEvent::Wheel:
         return static_cast<const QWheelEvent*>(event)->posF();
+
+    case QEvent::NativeGesture:
+        return QPointF(static_cast<const QNativeGestureEvent*>(event)->pos());
 
     default:
         warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();

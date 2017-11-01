@@ -20,7 +20,7 @@
 #include "kis_debug.h"
 #include <QTimer>
 
-KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f, int delay)
+KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WindowFlags f, int delay)
         : QWidget(parent, f)
         , m_compressor(delay, KisSignalCompressor::FIRST_ACTIVE)
 {

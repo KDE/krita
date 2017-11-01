@@ -36,7 +36,8 @@ void MatrixDataModel::setMatrix(const QVector<qreal> &matrix, int rows, int cols
     Q_ASSERT(m_rows);
     Q_ASSERT(m_cols);
     Q_ASSERT(m_matrix.count() == m_rows * m_cols);
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 QVector<qreal> MatrixDataModel::matrix() const

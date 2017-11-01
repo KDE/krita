@@ -2259,7 +2259,7 @@ void KisPaintDeviceTest::testCompositionAssociativity()
         }
 
         qDebug("Errors for op %25s err rate %7.2f var %7.2f max %7.2f",
-               op->id().toAscii().data(),
+               op->id().toLatin1().data(),
                (qreal(count(accum)) / (4 * numIterations)),
                variance(accum),
                count(accum) > 0 ? (max)(accum) : 0);

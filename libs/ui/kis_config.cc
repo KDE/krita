@@ -570,6 +570,26 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::forceShowSaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowSaveMessages", false));
+}
+
+void KisConfig::setForceShowSaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowSaveMessages", value);
+}
+
+bool KisConfig::forceShowAutosaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowAutosaveMessages", false));
+}
+
+void KisConfig::setForceShowAutosaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowAutosaveMessages", value);
+}
+
 bool KisConfig::rulersTrackMouse(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
@@ -1620,6 +1640,16 @@ int KisConfig::tabletEventsDelay(bool defaultValue) const
 void KisConfig::setTabletEventsDelay(int value)
 {
     m_cfg.writeEntry("tabletEventsDelay", value);
+}
+
+bool KisConfig::trackTabletEventLatency(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("trackTabletEventLatency", false));
+}
+
+void KisConfig::setTrackTabletEventLatency(bool value)
+{
+    m_cfg.writeEntry("trackTabletEventLatency", value);
 }
 
 bool KisConfig::testingAcceptCompressedTabletEvents(bool defaultValue) const

@@ -125,15 +125,19 @@ CompositeOpModel::CompositeOpModel(QObject* parent)
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             this, SLOT(slotToolChanged(KoCanvasController*,int)));
 
-    QHash<int,QByteArray> roles;
-    roles[TextRole] = "text";
-    roles[IsCategoryRole] = "isCategory";
-    setRoleNames(roles);
 }
 
 CompositeOpModel::~CompositeOpModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> CompositeOpModel::roleNames() const
+{
+    QHash<int,QByteArray> roles;
+    roles[TextRole] = "text";
+    roles[IsCategoryRole] = "isCategory";
+    return roles;
 }
 
 QVariant CompositeOpModel::data(const QModelIndex& index, int role) const

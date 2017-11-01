@@ -91,6 +91,8 @@ private Q_SLOTS:
     void convertNodeToPaintLayer(KisNodeSP source);
     void convertGroupToAnimated();
 
+    void convertLayerToFileLayer(KisNodeSP source);
+
     KisLayerSP addLayer(KisNodeSP activeNode);
     void addGroupLayer(KisNodeSP activeNode);
 

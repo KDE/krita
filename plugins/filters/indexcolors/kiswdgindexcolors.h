@@ -37,7 +37,7 @@ class KisWdgIndexColors : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgIndexColors(QWidget* parent = 0, Qt::WFlags f = 0, int delay = 500);
+    KisWdgIndexColors(QWidget* parent = 0, Qt::WindowFlags f = 0, int delay = 500);
     KisPropertiesConfigurationSP configuration() const override;
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
     void setup(QStringList shadesLabels, int ramps);

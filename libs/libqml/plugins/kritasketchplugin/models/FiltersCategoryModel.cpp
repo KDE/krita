@@ -34,6 +34,8 @@
 
 #include <QApplication>
 
+#include <algorithm>
+
 bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
 {
     return s1->categoryName.toLower() < s2->categoryName.toLower();
@@ -98,7 +100,7 @@ public:
             cat->addFilter(filter);
             qApp->processEvents();
         }
-        qSort(categories.begin(), categories.end(), categoryLessThan);
+        std::sort(categories.begin(), categories.end(), categoryLessThan);
         q->endResetModel();
     }
 
@@ -114,14 +116,19 @@ FiltersCategoryModel::FiltersCategoryModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
-    QHash<int, QByteArray> roles;
-    roles[TextRole] = "text";
-    setRoleNames(roles);
 }
 
 FiltersCategoryModel::~FiltersCategoryModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> FiltersCategoryModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[TextRole] = "text";
+
+    return roles;
 }
 
 QVariant FiltersCategoryModel::data(const QModelIndex& index, int role) const

@@ -101,7 +101,7 @@ void EffectItemBase::createText(const QString &text)
     textItem->setFont(font);
     QRectF textBox = textItem->boundingRect();
     QPointF offset = rect().center() - textBox.center();
-    textItem->translate(offset.x(), offset.y());
+    setTransform(QTransform::fromTranslate(offset.x(), offset.y()), true);
 }
 
 void EffectItemBase::createOutput(const QPointF &position, const QString &name)

@@ -56,9 +56,9 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     QTableView *matrixWidget = new QTableView(m_stack);
     matrixWidget->setModel(m_matrixModel);
     matrixWidget->horizontalHeader()->hide();
-    matrixWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    matrixWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     matrixWidget->verticalHeader()->hide();
-    matrixWidget->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    matrixWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_stack->addWidget(matrixWidget);
 
     QWidget *saturateWidget = new QWidget(m_stack);

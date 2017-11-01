@@ -55,7 +55,7 @@ class KisDlgLayerProperties : public KoDialog
     Q_OBJECT
 
 public:
-    KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+    KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = 0);
 
     ~KisDlgLayerProperties() override;
 

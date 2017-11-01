@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file    is part of the KDE project
  * Copyright (C) 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -39,14 +39,19 @@ FiltersModel::FiltersModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    QHash<int, QByteArray> roles;
-    roles[TextRole] = "text";
-    setRoleNames(roles);
 }
 
 FiltersModel::~FiltersModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> FiltersModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[TextRole] = "text";
+
+    return roles;
 }
 
 QVariant FiltersModel::data(const QModelIndex& index, int role) const

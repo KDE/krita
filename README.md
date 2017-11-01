@@ -24,7 +24,7 @@ https://community.kde.org/Krita
 
 Apidox:
 
-https://api.kde.org/bundled-apps-api/krita-apidocs/
+https://api.kde.org/extragear-api/graphics-apidocs/krita/html/index.html
 
 ### Bugs and Wishes
 

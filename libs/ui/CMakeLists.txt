@@ -102,6 +102,7 @@ set(kritaui_LIB_SRCS
     kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
+    kis_change_file_layer_command.h
     kis_safe_document_loader.cpp
     kis_splash_screen.cpp
     kis_filter_manager.cc
@@ -160,6 +161,7 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
     opengl/kis_opengl_shader_loader.cpp
+    opengl/kis_texture_tile_info_pool.cpp
     kis_fps_decoration.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
@@ -284,6 +286,7 @@ set(kritaui_LIB_SRCS
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
+    input/kis_native_gesture_shortcut.cpp
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp

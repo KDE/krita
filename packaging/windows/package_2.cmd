@@ -251,6 +251,16 @@ if errorlevel 1 (
 	exit /B 1
 )
 
+if EXIST "%BUILDDIR_INSTALL%\bin\gmic_krita_qt.exe" (
+	copy %BUILDDIR_INSTALL%\bin\gmic_krita_qt.exe %pkg_root%\bin
+	%BUILDDIR_INSTALL%\bin\windeployqt.exe --release %pkg_root%\bin\gmic_krita_qt.exe
+	if errorlevel 1 (
+		echo ERROR: WinDeployQt failed!!
+		%PAUSE%
+		exit /B 1
+	)
+)
+
 
 :: Copy embedded Python
 xcopy /Y /S /I %BUILDDIR_INSTALL%\python %pkg_root%\python

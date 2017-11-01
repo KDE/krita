@@ -34,7 +34,7 @@ class KisGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WFlags f = 0);
+    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = 0);
 
 public:
     void paintEvent(QPaintEvent *) override;

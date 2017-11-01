@@ -51,12 +51,14 @@ public:
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);
+    void rotateCanvas(qreal angle, const QPointF &center);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     qreal rotation() const;
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
+    void slotTogglePixelGrid(bool value);
     void slotToggleLevelOfDetailMode(bool value);
 
 Q_SIGNALS:

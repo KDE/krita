@@ -52,7 +52,7 @@
 #include "actionseditor/kis_actions_editor.h"
 #include "actionseditor/kis_actions_editor_dialog.h"
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QApplication>
 
 
@@ -176,7 +176,7 @@ KisMacro* BigBrotherPlugin::openMacro()
 
     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Macro"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/krita-recorded-macro", "application/krita-recorded-macro");
     QString filename = dialog.filename();
     RecordedActionLoadContext loadContext;

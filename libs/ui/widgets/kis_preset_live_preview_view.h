@@ -33,6 +33,7 @@
 #include "kis_painting_information_builder.h"
 #include <kis_image.h>
 #include <kis_types.h>
+#include <KoColor.h>
 
 /**
  * Widget for displaying a live brush preview of your
@@ -91,8 +92,8 @@ private:
     /// internally sets the color space for brush preview
     const KoColorSpace *m_colorSpace;
 
-    /// painter that actually paints the stroke
-    KisPainter *m_brushPreviewPainter;
+    /// the color which is used for rendering the stroke
+    KoColor m_paintColor;
 
     /// the scene that can add items like text and the brush stroke image
     QGraphicsScene *m_brushPreviewScene;

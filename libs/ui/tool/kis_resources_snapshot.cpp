@@ -50,7 +50,7 @@ struct KisResourcesSnapshot::Private {
     KisDefaultBoundsBaseSP bounds;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KoPattern *currentPattern;
+    KoPattern *currentPattern = 0;
     KoAbstractGradient *currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
@@ -58,19 +58,19 @@ struct KisResourcesSnapshot::Private {
     KisFilterConfigurationSP currentGenerator;
 
     QPointF axesCenter;
-    bool mirrorMaskHorizontal;
-    bool mirrorMaskVertical;
+    bool mirrorMaskHorizontal = false;
+    bool mirrorMaskVertical = false;
 
-    quint8 opacity;
-    QString compositeOpId;
+    quint8 opacity = OPACITY_OPAQUE_U8;
+    QString compositeOpId = COMPOSITE_OVER;
     const KoCompositeOp *compositeOp;
 
-    KisPainter::StrokeStyle strokeStyle;
-    KisPainter::FillStyle fillStyle;
+    KisPainter::StrokeStyle strokeStyle = KisPainter::StrokeStyleBrush;
+    KisPainter::FillStyle fillStyle = KisPainter::FillStyleForegroundColor;
 
-    bool globalAlphaLock;
-    qreal effectiveZoom;
-    bool presetAllowsLod;
+    bool globalAlphaLock = false;
+    qreal effectiveZoom = 1.0;
+    bool presetAllowsLod = false;
     KisSelectionSP selectionOverride;
 };
 

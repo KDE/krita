@@ -152,6 +152,12 @@ public:
     virtual bool useSpacingUpdates() const;
 
     /**
+     * Indicates if the tool should call paintOp->doAsynchronousUpdate() inbetween
+     * paintAt() calls to do the asynchronous rendering
+     */
+    virtual bool needsAsynchronousUpdates() const;
+
+    /**
      * This enum defines the current mode for painting an outline.
      */
     enum OutlineMode {

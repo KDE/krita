@@ -142,10 +142,9 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
         QRect fillRect(0, 0, maskWidth, maskHeight);
 
         fixedDab->setRect(fillRect);
-        fixedDab->initialize();
-        fixedDab->fill(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), fillColor.data());
+        fixedDab->lazyGrowBufferWithoutInitialization();
 
-        brush->mask(fixedDab, KisDabShape(realScale, 1.0, realAngle), info);
+        brush->mask(fixedDab, fillColor, KisDabShape(realScale, 1.0, realAngle), info);
         QCOMPARE(fixedDab->bounds(), fillRect);
 
         QImage result = fixedDab->convertToQImage(0);

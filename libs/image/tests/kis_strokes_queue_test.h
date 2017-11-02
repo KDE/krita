@@ -20,7 +20,8 @@
 #define __KIS_STROKES_QUEUE_TEST_H
 
 #include <QtTest>
-
+#include "kis_types.h"
+#include "kis_stroke_job_strategy.h"
 
 class KisStrokesQueueTest : public QObject
 {
@@ -38,9 +39,12 @@ private Q_SLOTS:
     void testStrokesLevelOfDetail();
     void testLodUndoBase();
     void testLodUndoBase2();
+    void testMutatedJobs();
+    void testUniquelyConcurrentJobs();
 
 private:
     struct LodStrokesQueueTester;
+    static void checkJobsOverlapping(LodStrokesQueueTester &t, KisStrokeId id, KisStrokeJobData::Sequentiality first, KisStrokeJobData::Sequentiality second, bool allowed);
 };
 
 #endif /* __KIS_STROKES_QUEUE_TEST_H */

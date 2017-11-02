@@ -194,14 +194,7 @@ public:
         , actionAuthor(0)
         , showPixelGrid(0)
     {
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
-        canvasResourceManager.addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+        KisViewManager::initializeResourceManager(&canvasResourceManager);
     }
 
 public:
@@ -263,7 +256,6 @@ public:
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
-
 
 KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate(this, _actionCollection, parent))
@@ -343,6 +335,18 @@ KisViewManager::~KisViewManager()
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     delete d;
+}
+
+void KisViewManager::initializeResourceManager(KoCanvasResourceManager *resourceManager)
+{
+    resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+    resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
 }
 
 KActionCollection *KisViewManager::actionCollection() const
@@ -874,7 +878,6 @@ void KisViewManager::setQtMainWindow(QMainWindow* newMainWindow)
 {
     d->mainWindow = newMainWindow;
 }
-
 
 void KisViewManager::slotDocumentSaved()
 {

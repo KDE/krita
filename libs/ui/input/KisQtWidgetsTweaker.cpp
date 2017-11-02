@@ -101,6 +101,8 @@ public:
     }
     virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
+        Q_UNUSED(event);
+
         if ((qobject_cast<QLineEdit*>     (receiver) != nullptr)||
             (qobject_cast<QSpinBox*>      (receiver) != nullptr)||
             (qobject_cast<QDoubleSpinBox*>(receiver) != nullptr)) {
@@ -135,6 +137,8 @@ public:
     }
     virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
+        Q_UNUSED(event);
+
         if (qobject_cast<QSpinBox*>      (receiver) != nullptr||
             qobject_cast<QDoubleSpinBox*>(receiver) != nullptr) {
 
@@ -166,6 +170,8 @@ public:
     }
     virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
+        Q_UNUSED(event);
+
         if (qobject_cast<KisQPainterCanvas*>(receiver) != nullptr||
             qobject_cast<KisOpenGLCanvas2*> (receiver) != nullptr) {
 
@@ -198,7 +204,7 @@ TabShortcutOverrider overrider2;
 constexpr ShortcutOverriderBase *allShortcutOverriders[] = {
     &overrider0, &overrider1, &overrider2
 };
-constexpr size_t numOfShortcutOverriders =
+constexpr int numOfShortcutOverriders =
                     sizeof(allShortcutOverriders)/
                     sizeof(allShortcutOverriders[0]);
 
@@ -211,9 +217,9 @@ struct KisQtWidgetsTweaker::Private
 public:
     Private(KisQtWidgetsTweaker *parent)
         : q(parent)
+        , interestedHandlers(numOfShortcutOverriders)
         , lastKeyPressProcessingComplete(true)
         , decision(ShortcutOverriderBase::DecisionOnShortcutOverride::askNext)
-        , interestedHandlers(numOfShortcutOverriders)
     {
     }
 

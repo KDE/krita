@@ -226,9 +226,10 @@ public:
     static void setReady();
 
     /**
-     * Assert that all resource paths have been initialized.
+     * Return if resource paths have been initialized and users
+     * of this class may expect to load resources from the proper paths.
      */
-    static void assertReady();
+    static bool isReady();
 
 private:
 

@@ -21,7 +21,7 @@
  */
 
 #include "kis_brushop_settings_widget.h"
-#include <kis_brush_based_paintop_settings.h>
+#include <KisBrushOpSettings.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_flow_option.h>
@@ -90,7 +90,7 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisBrushOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettingsSP config = new KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings();
     config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>(this));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);

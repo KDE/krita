@@ -739,6 +739,7 @@ void PerformanceTab::load(bool requestDefault)
     {
         KisConfig cfg2;
         chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
+        chkBrushSpeedLogging->setChecked(cfg2.enableBrushSpeedLogging(requestDefault));
         chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
     }
 }
@@ -765,6 +766,7 @@ void PerformanceTab::save()
     {
         KisConfig cfg2;
         cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
+        cfg2.setEnableBrushSpeedLogging(chkBrushSpeedLogging->isChecked());
         cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
     }
 }

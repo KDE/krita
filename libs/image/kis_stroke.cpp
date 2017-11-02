@@ -27,7 +27,6 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, Type type, int levelOfDe
       m_strokeEnded(false),
       m_strokeSuspended(false),
       m_isCancelled(false),
-      m_prevJobSequential(false),
       m_worksOnLevelOfDetail(levelOfDetail),
       m_type(type)
 {
@@ -37,6 +36,8 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, Type type, int levelOfDe
     m_finishStrategy.reset(m_strokeStrategy->createFinishStrategy());
     m_suspendStrategy.reset(m_strokeStrategy->createSuspendStrategy());
     m_resumeStrategy.reset(m_strokeStrategy->createResumeStrategy());
+
+    m_strokeStrategy->notifyUserStartedStroke();
 
     if(!m_initStrategy) {
         m_strokeInitialized = true;
@@ -84,13 +85,38 @@ void KisStroke::addJob(KisStrokeJobData *data)
     enqueue(m_dabStrategy.data(), data);
 }
 
+void KisStroke::addMutatedJobs(const QVector<KisStrokeJobData *> list)
+{
+    // factory methods can return null, if no action is needed
+    if (!m_dabStrategy) {
+        qDeleteAll(list);
+        return;
+    }
+
+    // Find first non-alien (non-suspend/non-resume) job
+    //
+    // Please note that this algorithm will stop working at the day we start
+    // adding alien jobs not to the beginning of the stroke, but to other places.
+    // Right now both suspend and resume jobs are added to the beginning of
+    // the stroke.
+
+    auto it = std::find_if(m_jobsQueue.begin(), m_jobsQueue.end(),
+        [] (KisStrokeJob *job) {
+            return job->isOwnJob();
+        });
+
+
+    Q_FOREACH (KisStrokeJobData *data, list) {
+        it = m_jobsQueue.insert(it, new KisStrokeJob(m_dabStrategy.data(), data, worksOnLevelOfDetail(), true));
+        ++it;
+    }
+}
+
 KisStrokeJob* KisStroke::popOneJob()
 {
     KisStrokeJob *job = dequeue();
 
     if(job) {
-        m_prevJobSequential = job->isSequential() || job->isBarrier();
-
         m_strokeInitialized = true;
         m_strokeSuspended = false;
     }
@@ -119,6 +145,7 @@ void KisStroke::endStroke()
     m_strokeEnded = true;
 
     enqueue(m_finishStrategy.data(), m_strokeStrategy->createFinishData());
+    m_strokeStrategy->notifyUserEndedStroke();
 }
 
 /**
@@ -240,21 +267,15 @@ bool KisStroke::canForgetAboutMe() const
     return m_strokeStrategy->canForgetAboutMe();
 }
 
-bool KisStroke::prevJobSequential() const
+qreal KisStroke::balancingRatioOverride() const
 {
-    return m_prevJobSequential;
+    return m_strokeStrategy->balancingRatioOverride();
 }
 
-bool KisStroke::nextJobSequential() const
+KisStrokeJobData::Sequentiality KisStroke::nextJobSequentiality() const
 {
     return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->isSequential() : false;
-}
-
-bool KisStroke::nextJobBarrier() const
-{
-    return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->isBarrier() : false;
+        m_jobsQueue.head()->sequentiality() : KisStrokeJobData::SEQUENTIAL;
 }
 
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
@@ -272,7 +293,7 @@ void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
 void KisStroke::prepend(KisStrokeJobStrategy *strategy,
                         KisStrokeJobData *data,
                         int levelOfDetail,
-                        bool isCancellable)
+                        bool isOwnJob)
 {
     // factory methods can return null, if no action is needed
     if(!strategy) {
@@ -283,7 +304,7 @@ void KisStroke::prepend(KisStrokeJobStrategy *strategy,
     // LOG_MERGE_FIXME:
     Q_UNUSED(levelOfDetail);
 
-    m_jobsQueue.prepend(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), isCancellable));
+    m_jobsQueue.prepend(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), isOwnJob));
 }
 
 KisStrokeJob* KisStroke::dequeue()

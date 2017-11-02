@@ -24,14 +24,36 @@
 #include "kundo2magicstring.h"
 #include "kritaimage_export.h"
 
+
 class KisStrokeJobStrategy;
 class KisStrokeJobData;
+class KisStrokesQueueMutatedJobInterface;
 
 class KRITAIMAGE_EXPORT KisStrokeStrategy
 {
 public:
     KisStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
     virtual ~KisStrokeStrategy();
+
+    /**
+     * notifyUserStartedStroke() is a callback used by the strokes system to notify
+     * when the user adds the stroke to the strokes queue. That moment corresponds
+     * to the user calling strokesFacade->startStroke(strategy) and might happen much
+     * earlier than the first job being executed.
+     *
+     * NOTE: this method will be executed in the context of the GUI thread!
+     */
+    virtual void notifyUserStartedStroke();
+
+    /**
+     * notifyUserEndedStroke() is a callback used by the strokes system to notify
+     * when the user ends the stroke. That moment corresponds to the user calling
+     * strokesFacade->endStroke(id) and might happen much earlier when the stroke
+     * even started its execution.
+     *
+     * NOTE: this method will be executed in the context of the GUI thread!
+     */
+    virtual void notifyUserEndedStroke();
 
     virtual KisStrokeJobStrategy* createInitStrategy();
     virtual KisStrokeJobStrategy* createFinishStrategy();
@@ -83,6 +105,11 @@ public:
 
     bool needsExplicitCancel() const;
 
+    /**
+     * \see setBalancingRatioOverride() for details
+     */
+    qreal balancingRatioOverride() const;
+
     QString id() const;
     KUndo2MagicString name() const;
 
@@ -91,7 +118,12 @@ public:
      */
     void setCancelStrokeId(KisStrokeId id) { m_cancelStrokeId = id; }
 
+    void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface);
+
 protected:
+    // testing surrogate class
+    friend class KisMutatableDabStrategy;
+
     /**
      * The cancel job may populate the stroke with some new jobs
      * for cancelling. To achieve this it needs the stroke id.
@@ -101,6 +133,32 @@ protected:
      * by the user and the sequence of jobs will be broken
      */
     KisStrokeId cancelStrokeId() { return m_cancelStrokeId; }
+
+    /**
+     * This function is supposed to be called by internal asynchronous
+     * jobs. It allows adding subtasks that may be executed concurrently.
+     *
+     * Requirements:
+     *   * must be called *only* from within the context of the strokes
+     *     worker thread during exectution one of its jobs
+     *
+     * Guarantees:
+     *   * the added job is guaranteed to be executed in some time after
+     *     the currently executed job, *before* the next SEQUENTIAL or
+     *     BARRIER job
+     *   * if the currently executed job is CUNCURRENTthe mutated job *may*
+     *     start execution right after adding to the queue without waiting for
+     *     its parent to complete. Though this behavior is *not* guaranteed,
+     *     because addMutatedJob does not initiate processQueues(), because
+     *     it may lead to a deadlock.
+     */
+    void addMutatedJobs(const QVector<KisStrokeJobData*> list);
+
+    /**
+     * Convenience override for addMutatedJobs()
+     */
+    void addMutatedJob(KisStrokeJobData *data);
+
 
     // you are not supposed to change these parameters
     // after the KisStroke object has been created
@@ -113,6 +171,20 @@ protected:
     void setRequestsOtherStrokesToEnd(bool value);
     void setCanForgetAboutMe(bool value);
     void setNeedsExplicitCancel(bool value);
+
+    /**
+     * Set override for the desired scheduler balancing ratio:
+     *
+     * ratio = stroke jobs / update jobs
+     *
+     * If \p value < 1.0, then the priority is given to updates, if
+     * the value is higher than 1.0, then the priority is given
+     * to stroke jobs.
+     *
+     * Special value -1.0, suggests the scheduler to use the default value
+     * set by the user's config file (which is 100.0 by default).
+     */
+    void setBalancingRatioOverride(qreal value);
 
 protected:
     /**
@@ -129,11 +201,13 @@ private:
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
     bool m_needsExplicitCancel;
+    qreal m_balancingRatioOverride;
 
     QString m_id;
     KUndo2MagicString m_name;
 
     KisStrokeId m_cancelStrokeId;
+    KisStrokesQueueMutatedJobInterface *m_mutatedJobsInterface;
 };
 
 #endif /* __KIS_STROKE_STRATEGY_H */

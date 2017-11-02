@@ -60,13 +60,18 @@ struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     KisStrokesQueue strokesQueue;
     KisUpdaterContext updaterContext;
     bool processingBlocked = false;
-    qreal balancingRatio = 1.0; // updates-queue-size/strokes-queue-size
+    qreal defaultBalancingRatio = 1.0; // desired strokes-queue-size / updates-queue-size
     KisProjectionUpdateListener *projectionUpdateListener;
     KisQueuesProgressUpdater *progressUpdater = 0;
 
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
     KisLazyWaitCondition updatesFinishedCondition;
+
+    qreal balancingRatio() const {
+        const qreal strokeRatioOverride = strokesQueue.balancingRatioOverride();
+        return strokeRatioOverride > 0 ? strokeRatioOverride : defaultBalancingRatio;
+    }
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener, QObject *parent)
@@ -150,7 +155,13 @@ void KisUpdateScheduler::progressUpdate()
     }
 }
 
-void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect)
+{
+    m_d->updatesQueue.addUpdateJob(node, rects, cropRect, currentLevelOfDetail());
+    processQueues();
+}
+
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect)
 {
     m_d->updatesQueue.addUpdateJob(node, rc, cropRect, currentLevelOfDetail());
     processQueues();
@@ -304,7 +315,7 @@ void KisUpdateScheduler::updateSettings()
     m_d->updatesQueue.updateSettings();
 
     KisImageConfig config;
-    m_d->balancingRatio = config.schedulerBalancingRatio();
+    m_d->defaultBalancingRatio = config.schedulerBalancingRatio();
 
     setThreadsLimit(config.maxNumberOfThreads());
 }
@@ -391,7 +402,7 @@ void KisUpdateScheduler::processQueues()
             tryProcessUpdatesQueue();
         }
     }
-    else if(m_d->balancingRatio * m_d->strokesQueue.sizeMetric() > m_d->updatesQueue.sizeMetric()) {
+    else if(m_d->balancingRatio() * m_d->strokesQueue.sizeMetric() > m_d->updatesQueue.sizeMetric()) {
         DEBUG_BALANCING_METRICS("STROKES", "N");
         m_d->strokesQueue.processQueue(m_d->updaterContext,
                                         !m_d->updatesQueue.isEmpty());

@@ -88,7 +88,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
     KisFixedPaintDevice canvas(device->colorSpace());
     canvas.setRect(QRect(dstRect.x(), dstRect.y(), sw, sh));
-    canvas.initialize();
+    canvas.lazyGrowBufferWithoutInitialization();
     device->readBytes(canvas.data(), canvas.bounds());
 
     const KoColorSpace* cs = dab->colorSpace();

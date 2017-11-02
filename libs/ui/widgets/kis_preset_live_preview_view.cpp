@@ -140,7 +140,7 @@ void KisPresetLivePreviewView::paintBackground()
 
             float sectionPercent = 1.0 / (float)grayStrips;
             bool isAlternating = i % 2;
-            KoColor fillColor;
+            KoColor fillColor(m_layer->paintDevice()->colorSpace());
 
             if (isAlternating) {
                 fillColor.fromQColor(QColor(80,80,80));

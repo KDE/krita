@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
-    <height>344</height>
+    <width>486</width>
+    <height>464</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -277,7 +277,7 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -289,118 +289,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="0" column="1">
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="2" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_xmin">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string comment="KDE::DoNotExtract">TextLabel</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_xmax">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string comment="KDE::DoNotExtract">TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="0">
-          <widget class="KisCurveWidget" name="curveWidget" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>220</width>
-             <height>190</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QLabel" name="label_ymax">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string comment="KDE::DoNotExtract">TextLabel</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_ymin">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string comment="KDE::DoNotExtract">TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
        </item>
        <item row="1" column="1">
         <widget class="QCheckBox" name="checkBoxUseSameCurve">
@@ -414,76 +302,7 @@
        </item>
        <item row="0" column="1">
         <layout class="QGridLayout" name="gridLayout">
-         <item row="5" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_xmin">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string comment="KDE::DoNotExtract">TextLabel</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_xmax">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string comment="KDE::DoNotExtract">TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="checkBoxUseSameCurve">
-           <property name="text">
-            <string>Share curve across all settings</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="KisCurveWidget" name="curveWidget" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>230</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="2">
+         <item row="3" column="2">
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="QLabel" name="label_ymax">
@@ -505,8 +324,8 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>10</width>
+               <height>10</height>
               </size>
              </property>
             </spacer>
@@ -526,66 +345,125 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item row="4" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="QLabel" name="label">
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
-&lt;p&gt;Curve calculation mode changes how 2 or more curve works together&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; multiply (default): all values from curves multiplies &lt;/p&gt;&lt;p&gt;(0.8 pressure) * (0.5 speed) = 0.4 &lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; addition: all values from curves adds&lt;/p&gt;&lt;p&gt;(0.6 pressure) + (0.3 speed) = 0.9&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; maximum value&lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.7&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; minimum value &lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.3&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; difference between min and max values&lt;/p&gt;&lt;p&gt;(0.8 pressure), (0.3 speed), (0.6 fade) = 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <widget class="QLabel" name="label_xmin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
              <property name="text">
-              <string>Curves calculation mode:</string>
+              <string comment="KDE::DoNotExtract">TextLabel</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="curveMode">
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
-&lt;p&gt;Curve calculation mode changes how 2 or more curve works together&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; multiply (default): all values from curves multiplies &lt;/p&gt;&lt;p&gt;(0.8 pressure) * (0.5 speed) = 0.4 &lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; addition: all values from curves adds&lt;/p&gt;&lt;p&gt;(0.6 pressure) + (0.3 speed) = 0.9&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; maximum value&lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.7&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; minimum value &lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.3&lt;br/&gt;&lt;/p&gt;
-&lt;p&gt; difference between min and max values&lt;/p&gt;&lt;p&gt;(0.8 pressure), (0.3 speed), (0.6 fade) = 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-             <property name="editable">
-              <bool>false</bool>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
              </property>
-             <item>
-              <property name="text">
-               <string>multiply</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>addition</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>maximum</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>minimum</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>difference</string>
-              </property>
-             </item>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_xmax">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string comment="KDE::DoNotExtract">TextLabel</string>
+             </property>
             </widget>
            </item>
           </layout>
+         </item>
+         <item row="3" column="1">
+          <widget class="KisCurveWidget" name="curveWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>200</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Curve calculation mode changes how 2 or more curve works together&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; multiply (default): all values from curves multiplies &lt;/p&gt;&lt;p&gt;(0.8 pressure) * (0.5 speed) = 0.4 &lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; addition: all values from curves adds&lt;/p&gt;&lt;p&gt;(0.6 pressure) + (0.3 speed) = 0.9&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; maximum value&lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.7&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; minimum value &lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.3&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; difference between min and max values&lt;/p&gt;&lt;p&gt;(0.8 pressure), (0.3 speed), (0.6 fade) = 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Curves calculation mode:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="curveMode">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Curve calculation mode changes how 2 or more curve works together&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; multiply (default): all values from curves multiplies &lt;/p&gt;&lt;p&gt;(0.8 pressure) * (0.5 speed) = 0.4 &lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; addition: all values from curves adds&lt;/p&gt;&lt;p&gt;(0.6 pressure) + (0.3 speed) = 0.9&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; maximum value&lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.7&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; minimum value &lt;/p&gt;&lt;p&gt;(0.7 pressure), (0.3 speed) = 0.3&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt; difference between min and max values&lt;/p&gt;&lt;p&gt;(0.8 pressure), (0.3 speed), (0.6 fade) = 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="editable">
+            <bool>false</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>multiply</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>addition</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>maximum</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>minimum</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>difference</string>
+            </property>
+           </item>
+          </widget>
          </item>
         </layout>
        </item>
@@ -594,6 +472,7 @@
     </layout>
    </item>
   </layout>
+  <zorder>curveWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

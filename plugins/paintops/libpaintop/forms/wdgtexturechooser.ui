@@ -26,7 +26,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="textureTab">
       <attribute name="title">
@@ -299,14 +299,18 @@
         </layout>
        </item>
       </layout>
-      <zorder>verticalLayoutWidget</zorder>
-      <zorder>verticalLayoutWidget</zorder>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
@@ -317,12 +321,6 @@
    <class>KisPatternChooser</class>
    <extends>QFrame</extends>
    <header location="global">kis_pattern_chooser.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

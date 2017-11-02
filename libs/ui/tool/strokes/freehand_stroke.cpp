@@ -156,22 +156,28 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
         KisRandomSourceSP rnd = m_d->randomSource.source();
+        KisPerStrokeRandomSourceSP strokeRnd = m_d->randomSource.perStrokeSource();
 
         switch(d->type) {
         case Data::POINT:
             d->pi1.setRandomSource(rnd);
+            d->pi1.setPerStrokeRandomSource(strokeRnd);
             info->painter->paintAt(d->pi1, info->dragDistance);
             m_d->efficiencyMeasurer.addSample(d->pi1.pos());
             break;
         case Data::LINE:
             d->pi1.setRandomSource(rnd);
             d->pi2.setRandomSource(rnd);
+            d->pi1.setPerStrokeRandomSource(strokeRnd);
+            d->pi2.setPerStrokeRandomSource(strokeRnd);
             info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
             m_d->efficiencyMeasurer.addSample(d->pi2.pos());
             break;
         case Data::CURVE:
             d->pi1.setRandomSource(rnd);
             d->pi2.setRandomSource(rnd);
+            d->pi1.setPerStrokeRandomSource(strokeRnd);
+            d->pi2.setPerStrokeRandomSource(strokeRnd);
             info->painter->paintBezierCurve(d->pi1,
                                             d->control1,
                                             d->control2,

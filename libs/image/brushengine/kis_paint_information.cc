@@ -50,6 +50,7 @@ struct KisPaintInformation::Private {
         speed(speed_),
         isHoveringMode(isHoveringMode_),
         randomSource(0),
+        perStrokeRandomSource(0),
         levelOfDetail(0)
     {
     }
@@ -79,6 +80,7 @@ struct KisPaintInformation::Private {
         speed = rhs.speed;
         isHoveringMode = rhs.isHoveringMode;
         randomSource = rhs.randomSource;
+        perStrokeRandomSource = rhs.perStrokeRandomSource;
         sanityIsRegistered = false; // HINT: we do not copy registration mark!
         directionHistoryInfo = rhs.directionHistoryInfo;
         canvasRotation = rhs.canvasRotation;
@@ -102,6 +104,7 @@ struct KisPaintInformation::Private {
     qreal speed;
     bool isHoveringMode;
     KisRandomSourceSP randomSource;
+    KisPerStrokeRandomSourceSP perStrokeRandomSource;
     int canvasRotation;
     bool canvasMirroredH;
 
@@ -110,15 +113,21 @@ struct KisPaintInformation::Private {
 
     struct DirectionHistoryInfo {
         DirectionHistoryInfo() {}
-        DirectionHistoryInfo(qreal _lastAngle,
+        DirectionHistoryInfo(qreal _totalDistance,
+                             int _currentDabSeqNo,
+                             qreal _lastAngle,
                              QPointF _lastPosition,
                              boost::optional<qreal> _lockedDrawingAngle)
-            : lastAngle(_lastAngle),
+            : totalStrokeLength(_totalDistance),
+              currentDabSeqNo(_currentDabSeqNo),
+              lastAngle(_lastAngle),
               lastPosition(_lastPosition),
               lockedDrawingAngle(_lockedDrawingAngle)
         {
         }
 
+        qreal totalStrokeLength = 0.0;
+        int currentDabSeqNo = 0;
         qreal lastAngle = 0.0;
         QPointF lastPosition;
         boost::optional<qreal> lockedDrawingAngle;
@@ -128,9 +137,12 @@ struct KisPaintInformation::Private {
     int levelOfDetail;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
-        directionHistoryInfo = DirectionHistoryInfo(di->lastDrawingAngle(),
+        directionHistoryInfo = DirectionHistoryInfo(di->scalarDistanceApprox(),
+                                                    di->currentDabSeqNo(),
+                                                    di->lastDrawingAngle(),
                                                     di->lastPosition(),
                                                     di->lockedDrawingAngleOptional());
+
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityIsRegistered);
         sanityIsRegistered = true;
@@ -434,9 +446,30 @@ qreal KisPaintInformation::currentTime() const
     return d->time;
 }
 
+int KisPaintInformation::currentDabSeqNo() const
+{
+    if (!d->directionHistoryInfo) {
+        warnKrita << "KisPaintInformation::currentDabSeqNo()" << "DirectionHistoryInfo object is not available";
+        return 0;
+    }
+
+    return d->directionHistoryInfo->currentDabSeqNo;
+}
+
+qreal KisPaintInformation::totalStrokeLength() const
+{
+    if (!d->directionHistoryInfo) {
+        warnKrita << "KisPaintInformation::totalStrokeLength()" << "DirectionHistoryInfo object is not available";
+        return 0;
+    }
+
+    return d->directionHistoryInfo->totalStrokeLength;
+}
+
 KisRandomSourceSP KisPaintInformation::randomSource() const
 {
     if (!d->randomSource) {
+        qWarning() << "Accessing uninitialized random source!";
         d->randomSource = new KisRandomSource();
     }
 
@@ -446,6 +479,21 @@ KisRandomSourceSP KisPaintInformation::randomSource() const
 void KisPaintInformation::setRandomSource(KisRandomSourceSP value)
 {
     d->randomSource = value;
+}
+
+KisPerStrokeRandomSourceSP KisPaintInformation::perStrokeRandomSource() const
+{
+    if (!d->perStrokeRandomSource) {
+        qWarning() << "Accessing uninitialized per stroke random source!";
+        d->perStrokeRandomSource = new KisPerStrokeRandomSource();
+    }
+
+    return d->perStrokeRandomSource;
+}
+
+void KisPaintInformation::setPerStrokeRandomSource(KisPerStrokeRandomSourceSP value)
+{
+    d->perStrokeRandomSource = value;
 }
 
 void KisPaintInformation::setLevelOfDetail(int levelOfDetail)
@@ -551,6 +599,7 @@ void KisPaintInformation::mixOtherImpl(const QPointF &p, qreal t, const KisPaint
         KIS_ASSERT_RECOVER_NOOP(other.isHoveringMode() == this->isHoveringMode());
         *(this->d) = Private(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed, other.isHoveringMode());
         this->d->randomSource = other.d->randomSource;
+        this->d->perStrokeRandomSource = other.d->perStrokeRandomSource;
         // this->d->isHoveringMode = other.isHoveringMode();
         this->d->levelOfDetail = other.d->levelOfDetail;
     }

@@ -289,7 +289,8 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     KisDistanceInitInfo startDistInfo(m_d->previousPaintInformation.pos(),
                                       startAngle,
                                       useSpacingUpdates ? SPACING_UPDATE_INTERVAL : LONG_TIME,
-                                      airbrushing ? TIMING_UPDATE_INTERVAL : LONG_TIME);
+                                      airbrushing ? TIMING_UPDATE_INTERVAL : LONG_TIME,
+                                      0);
     KisDistanceInformation startDist = startDistInfo.makeDistInfo();
 
     createPainters(m_d->painterInfos,

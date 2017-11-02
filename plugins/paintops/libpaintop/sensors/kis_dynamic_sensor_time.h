@@ -41,9 +41,7 @@ public Q_SLOTS:
     void toXML(QDomDocument&, QDomElement&) const override;
     void fromXML(const QDomElement&) override;
 private:
-    int m_time;
     bool m_periodic;
-    int m_lastTime;
 };
 
 #endif

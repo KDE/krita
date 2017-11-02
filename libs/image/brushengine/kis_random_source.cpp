@@ -85,6 +85,7 @@ qreal KisRandomSource::generateNormalized() const
 {
     const qint64 v = m_d->uniformSource();
     const qint64 max = m_d->uniformSource.max();
+    // we don't have min, because taus88 is always positive
 
     return qreal(v) / max;
 }

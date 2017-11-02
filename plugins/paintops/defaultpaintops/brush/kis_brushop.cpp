@@ -254,6 +254,12 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
                     KisStrokeJobData::CONCURRENT));
         }
 
+        /**
+         * After the dab has been rendered once, we should mirror it either one
+         * (h __or__ v) or three (h __and__ v) times. This sequence of 'if's achives
+         * the goal without any extra copying. Please note that it has __no__ 'else'
+         * branches, which is done intentionally!
+         */
         if (state->painter->hasHorizontalMirroring()) {
             addMirroringJobs(Qt::Horizontal, rects, state, jobs);
         }

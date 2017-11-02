@@ -92,7 +92,7 @@ public: // KisNodeGraphListener implementation
     void nodeChanged(KisNode * node) override;
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
-    void requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache) override;
+    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
     void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
 
@@ -951,7 +951,7 @@ private:
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
 
     void requestProjectionUpdateImpl(KisNode *node,
-                                     const QRect& rect,
+                                     const QVector<QRect> &rects,
                                      const QRect &cropRect);
 
     friend class KisImageResizeCommand;

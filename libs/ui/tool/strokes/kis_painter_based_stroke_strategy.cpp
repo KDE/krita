@@ -73,7 +73,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              QVector<PainterInfo*> painterInfos,bool useMergeID)
-    : KisSimpleStrokeStrategy(id, name),
+    : KisRunnableBasedStrokeStrategy(id, name),
       m_resources(resources),
       m_painterInfos(painterInfos),
       m_transaction(0),
@@ -86,7 +86,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              PainterInfo *painterInfo,bool useMergeID)
-    : KisSimpleStrokeStrategy(id, name),
+    : KisRunnableBasedStrokeStrategy(id, name),
       m_resources(resources),
       m_painterInfos(QVector<PainterInfo*>() <<  painterInfo),
       m_transaction(0),
@@ -106,7 +106,7 @@ void KisPainterBasedStrokeStrategy::init()
 }
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail)
-    : KisSimpleStrokeStrategy(rhs),
+    : KisRunnableBasedStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
       m_transaction(rhs.m_transaction),
       m_useMergeID(rhs.m_useMergeID)
@@ -147,6 +147,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
         KisPainter *painter = info->painter;
 
         painter->begin(targetDevice, !hasIndirectPainting ? selection : 0);
+        painter->setRunnableStrokeJobsInterface(runnableJobsInterface());
         m_resources->setupPainter(painter);
 
         if(hasIndirectPainting) {
@@ -313,4 +314,9 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
             indirect->setTemporarySelection(m_activeSelection);
         }
     }
+}
+
+KisNodeSP KisPainterBasedStrokeStrategy::targetNode() const
+{
+    return m_resources->currentNode();
 }

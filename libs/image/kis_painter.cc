@@ -42,10 +42,6 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
-#include <KoColorSpace.h>
-#include <KoColor.h>
-#include <KoCompositeOpRegistry.h>
-
 #include "kis_image.h"
 #include "filter/kis_filter.h"
 #include "kis_layer.h"
@@ -55,9 +51,7 @@
 #include "kis_vec.h"
 #include "kis_iterator_ng.h"
 #include "kis_random_accessor_ng.h"
-#include "kis_paintop.h"
-#include "kis_selection.h"
-#include "kis_fill_painter.h"
+
 #include "filter/kis_filter_configuration.h"
 #include "kis_pixel_selection.h"
 #include <brushengine/kis_paint_information.h>
@@ -68,7 +62,7 @@
 #include <KoColorSpaceMaths.h>
 #include "kis_lod_transform.h"
 #include "kis_algebra_2d.h"
-
+#include "krita_utils.h"
 
 
 // Maximum distance from a Bezier control point to the line through the start
@@ -79,61 +73,7 @@
 
 #endif
 
-struct Q_DECL_HIDDEN KisPainter::Private {
-    Private(KisPainter *_q) : q(_q) {}
-    Private(KisPainter *_q, const KoColorSpace *cs)
-        : q(_q), paintColor(cs), backgroundColor(cs) {}
-
-    KisPainter *q;
-
-    KisPaintDeviceSP            device;
-    KisSelectionSP              selection;
-    KisTransaction*             transaction;
-    KoUpdater*                  progressUpdater;
-
-    QVector<QRect>              dirtyRects;
-    KisPaintOp*                 paintOp;
-    KoColor                     paintColor;
-    KoColor                     backgroundColor;
-    KoColor                     customColor;
-    KisFilterConfigurationSP    generator;
-    KisPaintLayer*              sourceLayer;
-    FillStyle                   fillStyle;
-    StrokeStyle                 strokeStyle;
-    bool                        antiAliasPolygonFill;
-    const KoPattern*           pattern;
-    QPointF                     duplicateOffset;
-    quint32                     pixelSize;
-    const KoColorSpace*         colorSpace;
-    KoColorProfile*             profile;
-    const KoCompositeOp*        compositeOp;
-    const KoAbstractGradient*   gradient;
-    KisPaintOpPresetSP          paintOpPreset;
-    QImage                      polygonMaskImage;
-    QPainter*                   maskPainter;
-    KisFillPainter*             fillPainter;
-    KisPaintDeviceSP            polygon;
-    qint32                      maskImageWidth;
-    qint32                      maskImageHeight;
-    QPointF                     axesCenter;
-    bool                        mirrorHorizontally;
-    bool                        mirrorVertically;
-    bool                        isOpacityUnit; // TODO: move into ParameterInfo
-    KoCompositeOp::ParameterInfo paramInfo;
-    KoColorConversionTransformation::Intent renderingIntent;
-    KoColorConversionTransformation::ConversionFlags conversionFlags;
-
-    bool tryReduceSourceRect(const KisPaintDevice *srcDev,
-                             QRect *srcRect,
-                             qint32 *srcX,
-                             qint32 *srcY,
-                             qint32 *srcWidth,
-                             qint32 *srcHeight,
-                             qint32 *dstX,
-                             qint32 *dstY);
-
-    void fillPainterPathImpl(const QPainterPath& path, const QRect &requestedRect);
-};
+#include "kis_painter_p.h"
 
 KisPainter::KisPainter()
     : d(new Private(this))
@@ -1129,7 +1069,7 @@ void KisPainter::paintPolyline(const vQPointF &points,
         numPoints = points.count() - index;
 
     if (numPoints > 1) {
-        KisDistanceInformation saveDist(points[0], 0.0,
+        KisDistanceInformation saveDist(points[0],
                                         KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
         for (int i = index; i < index + numPoints - 1; i++) {
             paintLine(points [i], points [i + 1], &saveDist);
@@ -1296,7 +1236,7 @@ void KisPainter::paintPolygon(const vQPointF& points)
 
     if (d->strokeStyle != StrokeStyleNone) {
         if (points.count() > 1) {
-            KisDistanceInformation distance(points[0], 0.0,
+            KisDistanceInformation distance(points[0],
                                             KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
 
             for (int i = 0; i < points.count() - 1; i++) {
@@ -2602,6 +2542,20 @@ void KisPainter::setOpacityUpdateAverage(quint8 opacity)
     d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
 }
 
+void KisPainter::setAverageOpacity(qreal averageOpacity)
+{
+    d->paramInfo.setOpacityAndAverage(d->paramInfo.opacity, averageOpacity);
+}
+
+qreal KisPainter::blendAverageOpacity(qreal opacity, qreal averageOpacity)
+{
+    const float exponent = 0.1;
+
+    return averageOpacity < opacity ?
+        opacity :
+        exponent * opacity + (1.0 - exponent) * (averageOpacity);
+}
+
 void KisPainter::setOpacity(quint8 opacity)
 {
     d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
@@ -2687,14 +2641,19 @@ void KisPainter::setMirrorInformation(const QPointF& axesCenter, bool mirrorHori
     d->mirrorVertically = mirrorVertically;
 }
 
-void KisPainter::copyMirrorInformation(KisPainter* painter)
-{
-    painter->setMirrorInformation(d->axesCenter, d->mirrorHorizontally, d->mirrorVertically);
-}
-
 bool KisPainter::hasMirroring() const
 {
     return d->mirrorHorizontally || d->mirrorVertically;
+}
+
+bool KisPainter::hasHorizontalMirroring() const
+{
+    return d->mirrorHorizontally;
+}
+
+bool KisPainter::hasVerticalMirroring() const
+{
+    return d->mirrorVertically;
 }
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
@@ -2741,6 +2700,23 @@ void KisPainter::setColorConversionFlags(KoColorConversionTransformation::Conver
     d->conversionFlags = conversionFlags;
 }
 
+void KisPainter::setRunnableStrokeJobsInterface(KisRunnableStrokeJobsInterface *interface)
+{
+    d->runnableStrokeJobsInterface = interface;
+}
+
+KisRunnableStrokeJobsInterface *KisPainter::runnableStrokeJobsInterface() const
+{
+    if (!d->runnableStrokeJobsInterface) {
+        if (!d->fakeRunnableStrokeJobsInterface) {
+            d->fakeRunnableStrokeJobsInterface.reset(new KisFakeRunnableStrokeJobsExecutor());
+        }
+        return d->fakeRunnableStrokeJobsInterface.data();
+    }
+
+    return d->runnableStrokeJobsInterface;
+}
+
 void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
 {
     if (!d->mirrorHorizontally && !d->mirrorVertically) return;
@@ -2769,7 +2745,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
     int y = rc.topLeft().y();
 
     KisLodTransform t(d->device);
-    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
     int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
@@ -2800,7 +2776,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedP
     int y = rc.topLeft().y();
 
     KisLodTransform t(d->device);
-    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
     int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
@@ -2837,7 +2813,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
         KisFixedPaintDeviceSP mirrorDab(new KisFixedPaintDevice(dab->colorSpace()));
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
+        mirrorDab->lazyGrowBufferWithoutInitialization();
 
         dab->readBytes(mirrorDab->data(),rc);
 
@@ -2851,7 +2827,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy
         KisFixedPaintDeviceSP mirrorDab(new KisFixedPaintDevice(dab->colorSpace()));
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
+        mirrorDab->lazyGrowBufferWithoutInitialization();
         dab->readBytes(mirrorDab->data(),QRect(QPoint(sx,sy),rc.size()));
         renderMirrorMask(rc, mirrorDab, mask);
     }
@@ -2865,7 +2841,7 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
     int y = rc.topLeft().y();
 
     KisLodTransform t(d->device);
-    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
     int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
@@ -2913,3 +2889,18 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
     }
 }
 
+void KisPainter::mirrorRect(Qt::Orientation direction, QRect *rc) const
+{
+    KisLodTransform t(d->device);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+
+    KritaUtils::mirrorRect(direction, effectiveAxesCenter, rc);
+}
+
+void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
+{
+    KisLodTransform t(d->device);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+
+    KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
+}

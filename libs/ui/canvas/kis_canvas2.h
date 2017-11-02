@@ -295,6 +295,8 @@ private:
     // TODO: see to avoid that
     void setup();
 
+    void initializeFpsDecoration();
+
 private:
     friend class KisView; // calls setup()
     class KisCanvas2Private;

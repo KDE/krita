@@ -100,7 +100,7 @@ public:
         {
             // IMPORTANT: set the PaintOp size before setting the other properties
             //            it wont work the other way
-            qreal sizeDiff = size - currentPreset->settings()->paintOpSize();
+            //qreal sizeDiff = size - currentPreset->settings()->paintOpSize();
             //currentPreset->settings()->changePaintOpSize(sizeDiff, 0);
 
             if (currentPreset->settings()->hasProperty("OpacityValue"))

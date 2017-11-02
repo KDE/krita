@@ -218,6 +218,8 @@ bool checkSupportsLodMoves(KisNodeSP subtree)
 
 KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
 {
+    Q_UNUSED(levelOfDetail);
+
     Q_FOREACH (KisNodeSP node, m_nodes) {
         if (!checkSupportsLodMoves(node)) return 0;
     }

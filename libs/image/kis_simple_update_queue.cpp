@@ -19,6 +19,7 @@
 #include "kis_simple_update_queue.h"
 
 #include <QMutexLocker>
+#include <QVector>
 
 #include "kis_image_config.h"
 #include "kis_full_refresh_walker.h"
@@ -154,47 +155,62 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     return jobAdded;
 }
 
-void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
+void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QVector<QRect> &rects, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, rc, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE);
+    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE);
 }
+
+void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QRect &rc, const QRect& cropRect, int levelOfDetail)
+{
+    addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE);
+}
+
 
 void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, rc, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
+    addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
 }
 
 void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, rc, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
+    addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
 }
 
-void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc,
+void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
                                   const QRect& cropRect,
                                   int levelOfDetail,
                                   KisBaseRectsWalker::UpdateType type)
 {
-    if(trySplitJob(node, rc, cropRect, levelOfDetail, type)) return;
-    if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) return;
+    QList<KisBaseRectsWalkerSP> walkers;
 
-    KisBaseRectsWalkerSP walker;
+    Q_FOREACH (const QRect &rc, rects) {
+        if (rc.isEmpty()) continue;
 
-    if (type == KisBaseRectsWalker::UPDATE) {
-        walker = new KisMergeWalker(cropRect, KisMergeWalker::DEFAULT);
+        KisBaseRectsWalkerSP walker;
+
+        if(trySplitJob(node, rc, cropRect, levelOfDetail, type)) continue;
+        if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) continue;
+
+        if (type == KisBaseRectsWalker::UPDATE) {
+            walker = new KisMergeWalker(cropRect, KisMergeWalker::DEFAULT);
+        }
+        else if (type == KisBaseRectsWalker::FULL_REFRESH)  {
+            walker = new KisFullRefreshWalker(cropRect);
+        }
+        else if (type == KisBaseRectsWalker::UPDATE_NO_FILTHY) {
+            walker = new KisMergeWalker(cropRect, KisMergeWalker::NO_FILTHY);
+        }
+        /* else if(type == KisBaseRectsWalker::UNSUPPORTED) fatalKrita; */
+
+        walker->collectRects(node, rc);
+        walkers.append(walker);
     }
-    else if (type == KisBaseRectsWalker::FULL_REFRESH)  {
-        walker = new KisFullRefreshWalker(cropRect);
-    }
-    else if (type == KisBaseRectsWalker::UPDATE_NO_FILTHY) {
-        walker = new KisMergeWalker(cropRect, KisMergeWalker::NO_FILTHY);
-    }
-    /* else if(type == KisBaseRectsWalker::UNSUPPORTED) fatalKrita; */
 
-    walker->collectRects(node, rc);
-
-    m_lock.lock();
-    m_updatesList.append(walker);
-    m_lock.unlock();
+    if (!walkers.isEmpty()) {
+        m_lock.lock();
+        m_updatesList.append(walkers);
+        m_lock.unlock();
+    }
 }
 
 void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -246,14 +262,20 @@ bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
     qint32 lastCol = (rc.x() + rc.width()) / m_patchWidth;
     qint32 lastRow = (rc.y() + rc.height()) / m_patchHeight;
 
+    QVector<QRect> splitRects;
+
     for(qint32 i = firstRow; i <= lastRow; i++) {
         for(qint32 j = firstCol; j <= lastCol; j++) {
             QRect maxPatchRect(j * m_patchWidth, i * m_patchHeight,
                                m_patchWidth, m_patchHeight);
             QRect patchRect = rc & maxPatchRect;
-            addJob(node, patchRect, cropRect, levelOfDetail, type);
+            splitRects.append(patchRect);
         }
     }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!splitRects.isEmpty());
+    addJob(node, splitRects, cropRect, levelOfDetail, type);
+
     return true;
 }
 

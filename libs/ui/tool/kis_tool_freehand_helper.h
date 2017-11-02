@@ -75,7 +75,6 @@ public:
     void paintEvent(KoPointerEvent *event);
     void endPaint();
 
-    const KisPaintOp* currentPaintOp() const;
     QPainterPath paintOpOutline(const QPointF &savedCursorPos,
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettingsSP globalSettings,
@@ -152,6 +151,7 @@ private Q_SLOTS:
 
     void finishStroke();
     void doAirbrushing();
+    void doAsynchronousUpdate(bool forceUpdate = false);
     void stabilizerPollAndPaint();
 
 private:

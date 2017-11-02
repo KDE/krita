@@ -38,6 +38,7 @@ public:
 
     void notifyStrokeStarted() override;
     void notifyCachedDabPainted(const KisPaintInformation& info) override;
+    void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,

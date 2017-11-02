@@ -89,6 +89,7 @@ public:
 
     qreal effectiveZoom() const;
     bool presetAllowsLod() const;
+    bool presetNeedsAsynchronousUpdates() const;
 
     void setFGColorOverride(const KoColor &color);
     void setBGColorOverride(const KoColor &color);

@@ -32,39 +32,6 @@
 #include <kis_fixed_paint_device.h>
 #include "kis_qimage_pyramid.h"
 
-void KisGbrBrushTest::testMaskGenerationNoColor()
-{
-    KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
-    brush->load();
-    Q_ASSERT(brush->valid());
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
-
-    // check masking an existing paint device
-    KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->setRect(QRect(0, 0, 100, 100));
-    fdev->initialize();
-    cs->setOpacity(fdev->data(), OPACITY_OPAQUE_U8, 100 * 100);
-
-    QPoint errpoint;
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_1.png");
-    QImage image = fdev->convertToQImage(0);
-
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_gbr_brush_test_1.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-    }
-
-    brush->mask(fdev, KisDabShape(), info);
-
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_2.png");
-    image = fdev->convertToQImage(0);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_gbr_brush_test_2.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-    }
-}
 
 void KisGbrBrushTest::testMaskGenerationSingleColor()
 {
@@ -126,37 +93,6 @@ void KisGbrBrushTest::testMaskGenerationDevColor()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
-
-void KisGbrBrushTest::testMaskGenerationDefaultColor()
-{
-    KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
-    brush->load();
-    Q_ASSERT(brush->valid());
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
-
-    // check masking an existing paint device
-    KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->setRect(QRect(0, 0, 100, 100));
-    fdev->initialize();
-    cs->setOpacity(fdev->data(), OPACITY_OPAQUE_U8, 100 * 100);
-
-    // check creating a mask dab with a default color
-    fdev = new KisFixedPaintDevice(cs);
-    brush->mask(fdev, KisDabShape(), info);
-
-    QPoint errpoint;
-    QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
-    QImage image = fdev->convertToQImage(0);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_gbr_brush_test_5.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-    }
-
-    delete brush;
-}
-
 
 void KisGbrBrushTest::testImageGeneration()
 {

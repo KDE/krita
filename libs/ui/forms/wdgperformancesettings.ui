@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>400</height>
+    <width>505</width>
+    <height>446</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -27,7 +27,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -312,13 +312,6 @@
            </widget>
           </item>
          </layout>
-         <zorder>label_8</zorder>
-         <zorder>sliderThreadsLimit</zorder>
-         <zorder>label_9</zorder>
-         <zorder>sliderFrameClonesLimit</zorder>
-         <zorder>label_fps</zorder>
-         <zorder>label_fps</zorder>
-         <zorder>sliderFpsLimit</zorder>
         </widget>
        </item>
        <item>
@@ -349,6 +342,13 @@
         <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
          <property name="text">
           <string>Debug logging of OpenGL framerate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkBrushSpeedLogging">
+         <property name="text">
+          <string>Debug logging for brush rendering speed</string>
          </property>
         </widget>
        </item>

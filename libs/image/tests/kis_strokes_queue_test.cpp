@@ -430,6 +430,14 @@ struct KisStrokesQueueTest::LodStrokesQueueTester {
         VERIFY_EMPTY(jobs[1]);
     }
 
+    void processQueueNoContextClear() {
+        queue.processQueue(context, false);
+
+        if (&context == &realContext) {
+            context.waitForDone();
+        }
+    }
+
     void processQueue() {
         processQueueNoAdd();
         queue.processQueue(context, false);
@@ -437,6 +445,31 @@ struct KisStrokesQueueTest::LodStrokesQueueTester {
         if (&context == &realContext) {
             context.waitForDone();
         }
+    }
+
+    void checkNothing() {
+        KIS_ASSERT(&context == &fakeContext);
+
+        jobs = fakeContext.getJobs();
+        VERIFY_EMPTY(jobs[0]);
+        VERIFY_EMPTY(jobs[1]);
+    }
+
+    void checkJobs(const QStringList &list) {
+        KIS_ASSERT(&context == &fakeContext);
+
+        jobs = fakeContext.getJobs();
+
+        for (int i = 0; i < 2; i++) {
+            if (list.size() <= i) {
+                VERIFY_EMPTY(jobs[i]);
+            } else {
+                QVERIFY(jobs[i]->isRunning());
+                COMPARE_NAME(jobs[i], list[i]);
+            }
+        }
+
+        QCOMPARE(queue.needsExclusiveAccess(), false);
     }
 
     void checkOnlyJob(const QString &name) {
@@ -456,6 +489,18 @@ struct KisStrokesQueueTest::LodStrokesQueueTester {
         QCOMPARE(globalExecutedDabs.size(), 1);
         globalExecutedDabs.clear();
     }
+
+    void checkExecutedJobs(const QStringList &list) {
+        realContext.waitForDone();
+
+        QCOMPARE(globalExecutedDabs, list);
+        globalExecutedDabs.clear();
+    }
+
+    void checkNothingExecuted() {
+        realContext.waitForDone();
+        QVERIFY(globalExecutedDabs.isEmpty());
+    }
 };
 
 
@@ -466,6 +511,11 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
+
+    // process sync-lodn-planes stroke
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
     KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("lod_", false, true));
     queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id2);
@@ -557,6 +607,11 @@ void KisStrokesQueueTest::testLodUndoBase()
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
+
+    // process sync-lodn-planes stroke
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
     KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id1);
@@ -641,6 +696,142 @@ void KisStrokesQueueTest::testLodUndoBase2()
 
     t.processQueue();
     t.checkOnlyExecutedJob("resu_u_init");
+}
+
+void KisStrokesQueueTest::testMutatedJobs()
+{
+    LodStrokesQueueTester t(true);
+    KisStrokesQueue &queue = t.queue;
+
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true, false, true));
+
+    queue.addJob(id1,
+                 new KisTestingStrokeJobData(
+                     KisStrokeJobData::CONCURRENT,
+                     KisStrokeJobData::NORMAL,
+                     true, "1"));
+
+    queue.addJob(id1,
+                 new KisTestingStrokeJobData(
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::NORMAL,
+                     false, "2"));
+
+    queue.endStroke(id1);
+
+    t.processQueue();
+
+    t.checkOnlyExecutedJob("str1_dab_1");
+
+    t.processQueue();
+
+    QStringList refList;
+    refList << "str1_dab_mutated" << "str1_dab_mutated";
+    t.checkExecutedJobs(refList);
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("str1_dab_mutated");
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("str1_dab_2");
+
+    t.processQueue();
+    t.checkNothingExecuted();
+}
+
+QString sequentialityToString(KisStrokeJobData::Sequentiality seq) {
+    QString result = "<unknown>";
+
+    switch (seq) {
+    case KisStrokeJobData::SEQUENTIAL:
+        result = "SEQUENTIAL";
+        break;
+    case KisStrokeJobData::UNIQUELY_CONCURRENT:
+        result = "UNIQUELY_CONCURRENT";
+        break;
+    case KisStrokeJobData::BARRIER:
+        result = "BARRIER";
+        break;
+    case KisStrokeJobData::CONCURRENT:
+        result = "CONCURRENT";
+        break;
+    }
+
+    return result;
+}
+
+void KisStrokesQueueTest::checkJobsOverlapping(LodStrokesQueueTester &t,
+                                               KisStrokeId id,
+                                               KisStrokeJobData::Sequentiality first,
+                                               KisStrokeJobData::Sequentiality second,
+                                               bool allowed)
+{
+    t.queue.addJob(id, new KisTestingStrokeJobData(first,
+                                                   KisStrokeJobData::NORMAL, false, "first"));
+    t.processQueue();
+    t.checkJobs({"str1_dab_first"});
+
+    t.queue.addJob(id, new KisTestingStrokeJobData(second,
+                                                   KisStrokeJobData::NORMAL, false, "second"));
+
+    qDebug() << QString("  test %1 after %2 allowed: %3 ")
+                .arg(sequentialityToString(second), 24)
+                .arg(sequentialityToString(first), 24)
+                .arg(allowed);
+
+    if (allowed) {
+        t.processQueueNoContextClear();
+        t.checkJobs({"str1_dab_first", "str1_dab_second"});
+    } else {
+        t.processQueueNoContextClear();
+        t.checkJobs({"str1_dab_first"});
+
+        t.processQueue();
+        t.checkJobs({"str1_dab_second"});
+    }
+
+    t.processQueueNoAdd();
+    t.checkNothing();
+}
+
+void KisStrokesQueueTest::testUniquelyConcurrentJobs()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id1);
+
+    { // manual test
+        t.processQueue();
+        t.checkJobs({"str1_dab", "str1_dab"});
+
+        queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+        t.processQueue();
+        t.checkJobs({"str1_dab"});
+
+        queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT,
+                                                  KisStrokeJobData::NORMAL, false, "ucon"));
+        t.processQueueNoContextClear();
+        t.checkJobs({"str1_dab", "str1_dab_ucon"});
+
+        t.processQueueNoAdd();
+        t.checkNothing();
+    }
+
+    // Test various cases of overlapping
+
+    checkJobsOverlapping(t, id1, KisStrokeJobData::UNIQUELY_CONCURRENT, KisStrokeJobData::CONCURRENT, true);
+    checkJobsOverlapping(t, id1, KisStrokeJobData::UNIQUELY_CONCURRENT, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
+    checkJobsOverlapping(t, id1, KisStrokeJobData::UNIQUELY_CONCURRENT, KisStrokeJobData::SEQUENTIAL, false);
+    checkJobsOverlapping(t, id1, KisStrokeJobData::UNIQUELY_CONCURRENT, KisStrokeJobData::BARRIER, false);
+
+    checkJobsOverlapping(t, id1, KisStrokeJobData::CONCURRENT, KisStrokeJobData::UNIQUELY_CONCURRENT , true);
+    checkJobsOverlapping(t, id1, KisStrokeJobData::UNIQUELY_CONCURRENT, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
+    checkJobsOverlapping(t, id1, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
+    checkJobsOverlapping(t, id1, KisStrokeJobData::BARRIER, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
 }
 
 

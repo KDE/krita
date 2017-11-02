@@ -52,6 +52,7 @@ public:
     virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const = 0;
 
     virtual void addDecoration(KisCanvasDecorationSP deco) = 0;
+    virtual void removeDecoration(const QString& id) = 0;
 
     virtual KisCanvasDecorationSP decoration(const QString& id) const = 0;
 

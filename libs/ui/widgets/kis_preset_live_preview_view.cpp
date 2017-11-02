@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QGraphicsPixmapItem>
 #include "kis_paintop_settings.h"
+#include <strokes/freehand_stroke.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
 {
@@ -29,7 +30,6 @@ KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsVi
 
 KisPresetLivePreviewView::~KisPresetLivePreviewView()
 {
-    delete m_brushPreviewPainter;
     delete m_noPreviewText;
     delete m_brushPreviewScene;
 }
@@ -56,7 +56,6 @@ void KisPresetLivePreviewView::setup()
 
 
     m_layer = new KisPaintLayer(m_image, "livePreviewStrokeSample", OPACITY_OPAQUE_U8, m_colorSpace);
-    m_brushPreviewPainter = new KisPainter(m_layer->paintDevice());
 
     // set scene for the view
     m_brushPreviewScene = new QGraphicsScene();
@@ -124,7 +123,7 @@ void KisPresetLivePreviewView::paintBackground()
 
             float sectionPercent = 1.0 / (float)grayStrips;
             bool isAlternating = i % 2;
-            KoColor fillColor;
+            KoColor fillColor(m_layer->paintDevice()->colorSpace());
 
             if (isAlternating) {
                 fillColor.fromQColor(QColor(80,80,80));
@@ -133,15 +132,14 @@ void KisPresetLivePreviewView::paintBackground()
             }
 
 
-            m_brushPreviewPainter->fill(m_layer->image()->width()*sectionPercent*i,
-                                        0,
-                                        m_layer->image()->width()*(sectionPercent*i +sectionPercent),
-                                        m_layer->image()->height(),
-                                        fillColor);
-
+            const QRect fillRect(m_layer->image()->width()*sectionPercent*i,
+                                 0,
+                                 m_layer->image()->width()*(sectionPercent*i +sectionPercent),
+                                 m_layer->image()->height());
+            m_layer->paintDevice()->fill(fillRect, fillColor);
         }
 
-        m_brushPreviewPainter->setPaintColor(KoColor(Qt::white, m_colorSpace));
+        m_paintColor = KoColor(Qt::white, m_colorSpace);
 
     }
     else if (m_currentPreset->paintOp().id() == "roundmarker" ||
@@ -171,12 +169,8 @@ void KisPresetLivePreviewView::paintBackground()
     else {
 
         // fill with gray first to clear out what existed from previous preview
-        m_brushPreviewPainter->fill(0,0,
-                                  m_layer->image()->width(),
-                                  m_layer->image()->height(),
-                                  KoColor(palette().color(QPalette::Background) , m_colorSpace));
-
-        m_brushPreviewPainter->setPaintColor(KoColor(palette().color(QPalette::Text), m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
     }
 }
 
@@ -189,7 +183,26 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     proxy_preset->settings()->setPaintOpSize(previewSize);
-    m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
+
+
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(m_image,
+                                 m_layer);
+
+    resources->setBrush(proxy_preset);
+    resources->setFGColorOverride(m_paintColor);
+    FreehandStrokeStrategy::PainterInfo *painterInfo = new FreehandStrokeStrategy::PainterInfo();
+
+    KisStrokeStrategy *stroke =
+        new FreehandStrokeStrategy(resources->needsIndirectPainting(),
+                                   resources->indirectPaintingCompositeOp(),
+                                   resources, painterInfo, kundo2_noi18n("temp_stroke"));
+
+    KisStrokeId strokeId = m_image->startStroke(stroke);
+
+
+
+    //m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
 
 
 
@@ -207,13 +220,14 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                 m_canvasCenterPoint.y() + (this->height()*0.2) ));
 
 
-        m_brushPreviewPainter->paintBezierCurve(pointOne,
-                                                QPointF(m_canvasCenterPoint.x() + this->width(),
-                                                        m_canvasCenterPoint.y() - (this->height()*0.2) ),
-                                                QPointF(m_canvasCenterPoint.x() - this->width(),
-                                                         m_canvasCenterPoint.y() + (this->height()*0.2) ),
-                                                pointTwo, &m_currentDistance);
-
+        m_image->addJob(strokeId,
+            new FreehandStrokeStrategy::Data(0,
+                                             pointOne,
+                                             QPointF(m_canvasCenterPoint.x() + this->width(),
+                                                     m_canvasCenterPoint.y() - (this->height()*0.2) ),
+                                             QPointF(m_canvasCenterPoint.x() - this->width(),
+                                                     m_canvasCenterPoint.y() + (this->height()*0.2) ),
+                                             pointTwo));
 
     } else {
 
@@ -228,14 +242,19 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
         m_curvePointPI2.setPressure(1.0);
 
-        m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
-                                                QPointF(m_canvasCenterPoint.x(),
-                                                        m_canvasCenterPoint.y()-this->height()),
-                                                QPointF(m_canvasCenterPoint.x(),
-                                                         m_canvasCenterPoint.y()+this->height()),
-                                                m_curvePointPI2, &m_currentDistance);
+        m_image->addJob(strokeId,
+            new FreehandStrokeStrategy::Data(0,
+                                             m_curvePointPI1,
+                                             QPointF(m_canvasCenterPoint.x(),
+                                                     m_canvasCenterPoint.y()-this->height()),
+                                             QPointF(m_canvasCenterPoint.x(),
+                                                     m_canvasCenterPoint.y()+this->height()),
+                                             m_curvePointPI2));
     }
 
+    m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+    m_image->endStroke(strokeId);
+    m_image->waitForDone();
 
 
     // even though the brush is cloned, the proxy_preset still has some connection to the original preset which will mess brush sizing

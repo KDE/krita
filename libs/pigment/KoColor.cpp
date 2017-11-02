@@ -37,9 +37,9 @@
 
 namespace {
 
-struct DeafultKoColorInitializer
+struct DefaultKoColorInitializer
 {
-    DeafultKoColorInitializer() {
+    DefaultKoColorInitializer() {
         const KoColorSpace *defaultColorSpace = KoColorSpaceRegistry::instance()->rgb16(0);
         KIS_ASSERT(defaultColorSpace);
 
@@ -55,7 +55,7 @@ struct DeafultKoColorInitializer
     KoColor *value = 0;
 };
 
-Q_GLOBAL_STATIC(DeafultKoColorInitializer, s_defaultKoColor);
+Q_GLOBAL_STATIC(DefaultKoColorInitializer, s_defaultKoColor);
 
 }
 

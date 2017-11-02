@@ -51,20 +51,20 @@ public:
      * Creates a KisDistanceInitInfo with no initial last dab information, and the specified spacing
      * and timing update intervals.
      */
-    explicit KisDistanceInitInfo(qreal spacingUpdateInterval, qreal timingUpdateInterval);
+    explicit KisDistanceInitInfo(qreal spacingUpdateInterval, qreal timingUpdateInterval, int currentDabSeqNo);
 
     /**
      * Creates a KisDistanceInitInfo with the specified last dab information, and spacing and timing
      * update intervals set to LONG_TIME.
      */
-    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastAngle);
+    explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastAngle, int currentDabSeqNo);
 
     /**
      * Creates a KisDistanceInitInfo with the specified last dab information and spacing and timing
      * update intervals.
      */
     explicit KisDistanceInitInfo(const QPointF &lastPosition, qreal lastAngle,
-                                 qreal spacingUpdateInterval, qreal timingUpdateInterval);
+                                 qreal spacingUpdateInterval, qreal timingUpdateInterval, int currentDabSeqNo);
 
     KisDistanceInitInfo(const KisDistanceInitInfo &rhs);
 
@@ -97,7 +97,7 @@ private:
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(qreal spacingUpdateInterval, qreal timingUpdateInterval);
+    KisDistanceInformation(qreal spacingUpdateInterval, qreal timingUpdateInterval, int currentDabSeqNo = 0);
     KisDistanceInformation(const QPointF &lastPosition, qreal lastAngle);
     /**
      * @param spacingUpdateInterval The amount of time allowed between spacing updates, in
@@ -108,7 +108,7 @@ public:
      *                             dab is painted.
      */
     KisDistanceInformation(const QPointF &lastPosition, qreal lastAngle,
-                           qreal spacingUpdateInterval, qreal timingUpdateInterval);
+                           qreal spacingUpdateInterval, qreal timingUpdateInterval, int currentDabSeqNo);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
@@ -137,6 +137,8 @@ public:
 
     bool hasLastPaintInformation() const;
     const KisPaintInformation& lastPaintInformation() const;
+
+    int currentDabSeqNo() const;
 
     /**
      * @param spacing The new effective spacing after the dab. (Painting a dab is always supposed to

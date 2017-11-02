@@ -31,7 +31,6 @@ public:
     KisDynamicSensorFade();
     ~KisDynamicSensorFade() override { }
     qreal value(const KisPaintInformation&) override;
-    void reset() override;
     QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
@@ -41,7 +40,6 @@ public Q_SLOTS:
     void toXML(QDomDocument&, QDomElement&) const override;
     void fromXML(const QDomElement&) override;
 private:
-    int m_counter;
     bool m_periodic;
 };
 

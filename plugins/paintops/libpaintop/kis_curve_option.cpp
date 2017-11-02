@@ -32,7 +32,7 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     , m_separateCurveValue(false)
 {
     Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
-        KisDynamicSensorSP sensor = KisDynamicSensor::type2Sensor(sensorType);
+        KisDynamicSensorSP sensor = KisDynamicSensor::type2Sensor(sensorType, m_name);
         sensor->setActive(false);
         replaceSensor(sensor);
     }
@@ -134,12 +134,12 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
 
     // Replace all sensors with the inactive defaults
     Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
-        replaceSensor(KisDynamicSensor::type2Sensor(sensorType));
+        replaceSensor(KisDynamicSensor::type2Sensor(sensorType, m_name));
     }
 
     QString sensorDefinition = setting->getString(prefix + "Sensor");
     if (!sensorDefinition.contains("sensorslist")) {
-        KisDynamicSensorSP s = KisDynamicSensor::createFromXML(sensorDefinition);
+        KisDynamicSensorSP s = KisDynamicSensor::createFromXML(sensorDefinition, m_name);
         if (s) {
             replaceSensor(s);
             s->setActive(true);
@@ -155,7 +155,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
             if (node.isElement())  {
                 QDomElement childelt = node.toElement();
                 if (childelt.tagName() == "ChildSensor") {
-                    KisDynamicSensorSP s = KisDynamicSensor::createFromXML(childelt);
+                    KisDynamicSensorSP s = KisDynamicSensor::createFromXML(childelt, m_name);
                     if (s) {
                         replaceSensor(s);
                         s->setActive(true);
@@ -294,7 +294,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
                     s = m_sensorMap[sensorType];
                 }
                 else {
-                    s = KisDynamicSensor::type2Sensor(sensorType);
+                    s = KisDynamicSensor::type2Sensor(sensorType, m_name);
                 }
                 s->setCurve(m_curveCache[sensorType]);
                 m_sensorMap[sensorType] = s;
@@ -302,7 +302,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
             s = 0;
             // And set the current sensor to the current curve
             if (!m_sensorMap.contains(sensorType)) {
-                s = KisDynamicSensor::type2Sensor(sensorType);
+                s = KisDynamicSensor::type2Sensor(sensorType, m_name);
             }
             if (s) {
                 s->setCurve(curve);

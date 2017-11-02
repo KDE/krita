@@ -23,6 +23,7 @@
 
 #include "kritaimage_export.h"
 #include "kis_random_source.h"
+#include "KisPerStrokeRandomSource.h"
 
 
 /**
@@ -42,6 +43,7 @@ public:
     ~KisStrokeRandomSource();
 
     KisRandomSourceSP source() const;
+    KisPerStrokeRandomSourceSP perStrokeSource() const;
 
     int levelOfDetail() const;
     void setLevelOfDetail(int value);

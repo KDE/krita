@@ -26,6 +26,7 @@
 #include "kritaimage_export.h"
 #include <kis_distance_information.h>
 #include "kis_random_source.h"
+#include "KisPerStrokeRandomSource.h"
 #include "kis_spacing_information.h"
 #include "kis_timing_information.h"
 
@@ -199,12 +200,25 @@ public:
     /// Number of ms since the beginning of the stroke
     qreal currentTime() const;
 
+    /// Number of dabs painted since the beginning of the stroke
+    int currentDabSeqNo() const;
+
+    /// The length of the stroke **before** painting the curent dab
+    qreal totalStrokeLength() const;
+
     // random source for generating in-stroke effects
     KisRandomSourceSP randomSource() const;
 
     // the stroke should initialize random source of all the used
     // paint info objects, otherwise it shows a warning
     void setRandomSource(KisRandomSourceSP value);
+
+    // random source for generating in-stroke effects, generates one(!) value per stroke
+    KisPerStrokeRandomSourceSP perStrokeRandomSource() const;
+
+    // the stroke should initialize per stroke random source of all the used
+    // paint info objects, otherwise it shows a warning
+    void setPerStrokeRandomSource(KisPerStrokeRandomSourceSP value);
 
     // set level of detail which info object has been generated for
     void setLevelOfDetail(int levelOfDetail);

@@ -30,6 +30,7 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     , m_useCurve(true)
     , m_useSameCurve(true)
     , m_separateCurveValue(false)
+    , m_curveMode(0)
 {
     Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
         KisDynamicSensorSP sensor = KisDynamicSensor::type2Sensor(sensorType);
@@ -105,6 +106,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);
+    setting->setProperty(m_name + "curveMode", m_curveMode);
 
 }
 
@@ -193,6 +195,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
     //dbgKrita << "\t" + m_name + "UseSameCurve" << m_useSameCurve;
 
+    m_curveMode = setting->getInt(m_name + "curveMode");
     //dbgKrita << "-----------------";
 }
 
@@ -234,6 +237,11 @@ bool KisCurveOption::isSameCurveUsed() const
     return m_useSameCurve;
 }
 
+int KisCurveOption::getCurveMode() const
+{
+    return m_curveMode;
+}
+
 void KisCurveOption::setSeparateCurveValue(bool separateCurveValue)
 {
     m_separateCurveValue = separateCurveValue;
@@ -257,6 +265,11 @@ void KisCurveOption::setChecked(bool checked)
 void KisCurveOption::setCurveUsed(bool useCurve)
 {
     m_useCurve = useCurve;
+}
+
+void KisCurveOption::setCurveMode(int mode)
+{
+    m_curveMode = mode;
 }
 
 void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve)
@@ -331,6 +344,7 @@ KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const Kis
 
     if (m_useCurve) {
         QMap<DynamicSensorType, KisDynamicSensorSP>::const_iterator i;
+        QList<double> sensorValues;
         for (i = m_sensorMap.constBegin(); i != m_sensorMap.constEnd(); ++i) {
             KisDynamicSensorSP s(i.value());
 
@@ -342,11 +356,41 @@ KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const Kis
                     components.absoluteOffset = s->parameter(info);
                     components.hasAbsoluteOffset =true;
                 } else {
-                    components.scaling *= s->parameter(info);
+                    sensorValues << s->parameter(info);
                     components.hasScaling = true;
                 }
             }
         }
+
+        if (sensorValues.count() == 1) {
+            components.scaling = sensorValues.first();
+        } else {
+
+            if (m_curveMode == 1){           // add
+                components.scaling = 0;
+                double i;
+                foreach (i, sensorValues) {
+                    components.scaling += i;
+                }
+            } else if (m_curveMode == 2){    //max
+                components.scaling = *std::max_element(sensorValues.begin(), sensorValues.end());
+
+            } else if (m_curveMode == 3){    //min
+                components.scaling = *std::min_element(sensorValues.begin(), sensorValues.end());
+
+            } else if (m_curveMode == 4){    //difference
+                double max = *std::max_element(sensorValues.begin(), sensorValues.end());
+                double min = *std::min_element(sensorValues.begin(), sensorValues.end());
+                components.scaling = max-min;
+
+            } else {                         //multuply - default
+                double i;
+                foreach (i, sensorValues) {
+                    components.scaling *= i;
+                }
+            }
+        }
+
     }
 
     if (!m_separateCurveValue) {

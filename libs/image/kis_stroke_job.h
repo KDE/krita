@@ -28,11 +28,11 @@ public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data,
                  int levelOfDetail,
-                 bool isCancellable)
+                 bool isOwnJob)
         : m_dabStrategy(strategy),
           m_dabData(data),
           m_levelOfDetail(levelOfDetail),
-          m_isCancellable(isCancellable)
+          m_isOwnJob(isOwnJob)
     {
     }
 
@@ -42,6 +42,10 @@ public:
 
     void run() override {
         m_dabStrategy->run(m_dabData);
+    }
+
+    KisStrokeJobData::Sequentiality sequentiality() const {
+        return m_dabData ? m_dabData->sequentiality() : KisStrokeJobData::SEQUENTIAL;
     }
 
     bool isSequential() const {
@@ -64,7 +68,11 @@ public:
     }
 
     bool isCancellable() const {
-        return m_isCancellable;
+        return m_isOwnJob;
+    }
+
+    bool isOwnJob() const {
+        return m_isOwnJob;
     }
 
 private:
@@ -89,7 +97,7 @@ private:
     KisStrokeJobData *m_dabData;
 
     int m_levelOfDetail;
-    bool m_isCancellable;
+    bool m_isOwnJob;
 };
 
 #endif /* __KIS_STROKE_JOB_H */

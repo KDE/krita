@@ -878,6 +878,10 @@ void KisPaintopBox::slotSetupDefaultPreset()
     KisPaintOpPresetSP preset = defaultPreset(m_resourceProvider->currentPreset()->paintOp());
     preset->setOptionsWidget(m_optionWidget);
     m_resourceProvider->setPaintOpPreset(preset);
+
+    // tell the brush editor that the resource has changed
+    // so it can update everything
+    m_presetsPopup->resourceSelected(preset.data());
 }
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>400</height>
+    <width>505</width>
+    <height>446</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -342,6 +342,13 @@
         <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
          <property name="text">
           <string>Debug logging of OpenGL framerate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkBrushSpeedLogging">
+         <property name="text">
+          <string>Debug logging for brush rendering speed</string>
          </property>
         </widget>
        </item>

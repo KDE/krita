@@ -26,9 +26,7 @@
 
 KisDynamicSensorTime::KisDynamicSensorTime()
     : KisDynamicSensor(TIME)
-    , m_time(0)
     , m_periodic(true)
-    , m_lastTime(0)
 {
     setLength(3);
 }
@@ -37,32 +35,16 @@ qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
 {
     if (pi.isHoveringMode()) return 1.0;
 
-    qreal curtime = pi.currentTime();
+    const qreal currentTime =
+        m_periodic ?
+        std::fmod(pi.currentTime(), m_length) :
+        qMin(pi.currentTime(), qreal(m_length));
 
-    if (curtime >= m_lastTime) {
-        m_time += curtime - m_lastTime;
-    } else {
-        // safely handle the situation when currentTime() < m_lastTime
-        m_time = 0;
-    }
-
-    m_lastTime = curtime;
-
-    if (m_time > m_length) {
-        if (m_periodic) {
-            m_time = m_time % m_length;
-        }
-        else {
-            m_time = m_length;
-        }
-    }
-    return m_time / qreal(m_length);
+    return currentTime / qreal(m_length);
 }
 
 void KisDynamicSensorTime::reset()
 {
-    m_lastTime = 0;
-    m_time = 0;
 }
 
 void KisDynamicSensorTime::setPeriodic(bool periodic)

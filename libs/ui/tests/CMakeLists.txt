@@ -109,6 +109,11 @@ krita_add_broken_unit_test(
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(
+    FreehandStrokeBenchmark.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
+    TEST_NAME krita-ui-FreehandStrokeBenchmark
+    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
+
+krita_add_broken_unit_test(
     fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
     TEST_NAME krita-ui-FillProcessingVisitorTest
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)

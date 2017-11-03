@@ -1,14 +1,20 @@
 add_subdirectory(brush/tests)
 
-include_directories(brush)
-include_directories(duplicate)
-
+include_directories(brush
+                    duplicate
+                    ${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritadefaultpaintops_SOURCES
 	defaultpaintops_plugin.cc
 	brush/kis_brushop.cpp
+        brush/KisBrushOpResources.cpp
+        brush/KisBrushOpSettings.cpp
 	brush/kis_brushop_settings_widget.cpp
-	duplicate/kis_duplicateop.cpp
+        brush/KisDabRenderingQueue.cpp
+        brush/KisDabRenderingQueueCache.cpp
+        brush/KisDabRenderingJob.cpp
+        brush/KisDabRenderingExecutor.cpp
+        duplicate/kis_duplicateop.cpp
 	duplicate/kis_duplicateop_settings.cpp
 	duplicate/kis_duplicateop_settings_widget.cpp
 	duplicate/kis_duplicateop_option.cpp
@@ -17,6 +23,7 @@ set(kritadefaultpaintops_SOURCES
 ki18n_wrap_ui(kritadefaultpaintops_SOURCES duplicate/wdgduplicateop.ui )
 
 add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_SOURCES})
+generate_export_header(kritadefaultpaintops BASE_NAME kritadefaultpaintops EXPORT_MACRO_NAME KRITADEFAULTPAINTOPS_EXPORT)
 
 target_link_libraries(kritadefaultpaintops kritalibpaintop)
 

@@ -177,11 +177,6 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
     delete d;
 }
 
-bool KisOpenGLCanvas2::needsFpsDebugging() const
-{
-    return KisOpenglCanvasDebugger::instance()->showFpsOnCanvas();
-}
-
 void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     setDisplayFilterImpl(displayFilter, false);

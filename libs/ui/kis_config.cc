@@ -1755,6 +1755,16 @@ void KisConfig::setEnableOpenGLFramerateLogging(bool value) const
     m_cfg.writeEntry("enableOpenGLFramerateLogging", value);
 }
 
+bool KisConfig::enableBrushSpeedLogging(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("enableBrushSpeedLogging", false));
+}
+
+void KisConfig::setEnableBrushSpeedLogging(bool value) const
+{
+    m_cfg.writeEntry("enableBrushSpeedLogging", value);
+}
+
 void KisConfig::setEnableAmdVectorizationWorkaround(bool value)
 {
     m_cfg.writeEntry("amdDisableVectorWorkaround", value);

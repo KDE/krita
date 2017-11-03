@@ -100,7 +100,11 @@ public:
     }
 
     void notifyCachedDabPainted(const KisPaintInformation& info) {
-        updateBrushIndexes(info);
+        updateBrushIndexes(info, -1);
+    }
+
+    void prepareForSeqNo(const KisPaintInformation& info, int seqNo) {
+        updateBrushIndexes(info, seqNo);
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
@@ -114,7 +118,7 @@ public:
 
 
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
-        updateBrushIndexes(info);
+        notifyCachedDabPainted(info);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -126,7 +130,7 @@ public:
         if (!brush) return 0;
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
-        updateBrushIndexes(info);
+        notifyCachedDabPainted(info);
         return device;
     }
 
@@ -136,7 +140,7 @@ public:
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
         (void) chooseNextBrush(info);
-        updateBrushIndexes(info);
+        notifyCachedDabPainted(info);
     }
 
     /**
@@ -165,8 +169,11 @@ protected:
      * Updates internal counters of the brush *after* a dab has been
      * painted on the canvas. Some incremental switching of the brushes
      * may me implemented in this method.
+     *
+     * If \p seqNo is equal or greater than zero, then incremental iteration is
+     * overriden by this seqNo value
      */
-    virtual void updateBrushIndexes(const KisPaintInformation& info) = 0;
+    virtual void updateBrushIndexes(const KisPaintInformation& info, int seqNo) = 0;
 
 protected:
     QVector<BrushType*> m_brushes;

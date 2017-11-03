@@ -32,10 +32,17 @@
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
+#include "kis_signal_compressor.h"
+
+#include "KisUpdateSchedulerConfigNotifier.h"
+
 
 ThreadManager::ThreadManager(QObject *parent)
-    : QObject(parent)
-{}
+    : QObject(parent),
+      m_configUpdateCompressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this))
+{
+    connect(m_configUpdateCompressor, SIGNAL(timeout()), SLOT(slotDoUpdateConfig()));
+}
 
 ThreadManager::~ThreadManager()
 {
@@ -43,14 +50,12 @@ ThreadManager::~ThreadManager()
 
 void ThreadManager::setThreadCount(int threadCount)
 {
-    threadCount = qMin(maxThreadCount(), int(qreal(threadCount) * (maxThreadCount() / 100.0)));
+    threadCount = 1 + qreal(threadCount) * (maxThreadCount() - 1) / 100.0;
 
     if (m_threadCount != threadCount) {
         m_threadCount = threadCount;
+        m_configUpdateCompressor->start();
         emit threadCountChanged();
-        KisImageConfig().setMaxNumberOfThreads(m_threadCount);
-        KisImageConfig().setFrameRenderingClones(qCeil(m_threadCount * 0.5));
-        // XXX: also set for the brush threads
     }
 }
 
@@ -62,6 +67,14 @@ int ThreadManager::threadCount() const
 int ThreadManager::maxThreadCount() const
 {
     return QThread::idealThreadCount();
+}
+
+void ThreadManager::slotDoUpdateConfig()
+{
+    KisImageConfig cfg;
+    cfg.setMaxNumberOfThreads(m_threadCount);
+    cfg.setFrameRenderingClones(qCeil(m_threadCount * 0.5));
+    KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
 }
 
 

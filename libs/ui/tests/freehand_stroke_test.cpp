@@ -37,6 +37,7 @@ public:
           m_useLod(useLod),
           m_flipLineDirection(false)
     {
+        setBaseFuzziness(3);
     }
 
     void setFlipLineDirection(bool value) {
@@ -106,6 +107,8 @@ protected:
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, int iteration) override {
+        Q_UNUSED(resources);
+
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
@@ -118,10 +121,10 @@ protected:
         }
 
         QScopedPointer<KisStrokeJobData> data(
-            new FreehandStrokeStrategy::Data(resources->currentNode(),
-                                             0, pi1, pi2));
+            new FreehandStrokeStrategy::Data(0, pi1, pi2));
 
         image->addJob(strokeId(), data.take());
+        image->addJob(strokeId(), new FreehandStrokeStrategy::UpdateData(true));
     }
 
 private:

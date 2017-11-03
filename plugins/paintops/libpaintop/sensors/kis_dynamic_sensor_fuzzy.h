@@ -38,7 +38,7 @@ public:
 
     bool isAdditive() const override;
 
-    KisDynamicSensorFuzzy(bool fuzzyPerStroke = false);
+    KisDynamicSensorFuzzy(bool fuzzyPerStroke, const QString &parentOptionName);
     ~KisDynamicSensorFuzzy() override {}
     qreal value(const KisPaintInformation &info) override;
 
@@ -46,8 +46,7 @@ public:
 
 private:
     const bool m_fuzzyPerStroke;
-    bool m_isInitialized;
-    qreal m_savedValue;
+    QString m_perStrokeRandomSourceKey;
 };
 
 #endif // KIS_DYNAMIC_SENSOR_FUZZY_H

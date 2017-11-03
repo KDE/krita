@@ -68,7 +68,7 @@ public:
     void update();
 
     using KisSelectionBasedLayer::setDirty;
-    void setDirty(const QRect & rect) override;
+    void setDirty(const QVector<QRect> &rects) override;
     void setX(qint32 x) override;
     void setY(qint32 y) override;
 

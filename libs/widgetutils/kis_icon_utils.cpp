@@ -28,21 +28,26 @@
 #include <QDebug>
 
 #include <KoIcon.h>
-
+#if QT_VERSION >= 0x050900
+#define CACHE_ICONS
+#endif
 
 namespace KisIconUtils
 {
 
+#if defined CACHE_ICONS
 static QMap<QString, QIcon> s_cache;
+#endif
 static QMap<qint64, QString> s_icons;
 
 QIcon loadIcon(const QString &name)
 {
+#if defined CACHE_ICONS
     QMap<QString, QIcon>::const_iterator cached = s_cache.constFind(name);
     if (cached != s_cache.constEnd()) {
         return cached.value();
     }
-
+#endif
     // try load themed icon
 
 
@@ -69,7 +74,9 @@ QIcon loadIcon(const QString &name)
         if (QFile(resname).exists()) {
             QIcon icon(resname);
             s_icons.insert(icon.cacheKey(), name);
+#if defined CACHE_ICONS
             s_cache.insert(name, icon);
+#endif
             return icon;
         }
     }
@@ -108,14 +115,18 @@ QIcon loadIcon(const QString &name)
             icon.addFile(p.second, QSize(size, size));
         }
         s_icons.insert(icon.cacheKey(), name);
+#if defined CACHE_ICONS
         s_cache.insert(name, icon);
+#endif
         return icon;
     }
 
     QIcon icon = QIcon::fromTheme(name);
     qWarning() << "\tfalling back on QIcon::FromTheme:" << name;
     s_icons.insert(icon.cacheKey(), name);
+#if defined CACHE_ICONS
     s_cache.insert(name, icon);
+#endif
     return icon;
 }
 

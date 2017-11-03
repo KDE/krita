@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QGraphicsPixmapItem>
 #include "kis_paintop_settings.h"
+#include <strokes/freehand_stroke.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
 {
@@ -29,7 +30,6 @@ KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsVi
 
 KisPresetLivePreviewView::~KisPresetLivePreviewView()
 {
-    delete m_brushPreviewPainter;
     delete m_noPreviewText;
     delete m_brushPreviewScene;
 }
@@ -40,15 +40,13 @@ void KisPresetLivePreviewView::setup()
     m_noPreviewText = 0;
     m_sceneImageItem = 0;
 
-    setCursor(Qt::SizeAllCursor);
-
     setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
 
 
     // layer image needs to be big enough to get an entire stroke of data
-    m_canvasSize.setWidth(1200);
-    m_canvasSize.setHeight(400);
+    m_canvasSize.setWidth(this->width());
+    m_canvasSize.setHeight(this->height());
 
     m_canvasCenterPoint.setX(m_canvasSize.width()*0.5);
     m_canvasCenterPoint.setY(m_canvasSize.height()*0.5);
@@ -58,13 +56,11 @@ void KisPresetLivePreviewView::setup()
 
 
     m_layer = new KisPaintLayer(m_image, "livePreviewStrokeSample", OPACITY_OPAQUE_U8, m_colorSpace);
-    m_brushPreviewPainter = new KisPainter(m_layer->paintDevice());
 
     // set scene for the view
     m_brushPreviewScene = new QGraphicsScene();
     setScene(m_brushPreviewScene);
 
-    zoomToBrushSize();
 }
 
 void KisPresetLivePreviewView::setCurrentPreset(KisPaintOpPresetSP preset)
@@ -97,27 +93,13 @@ void KisPresetLivePreviewView::updateStroke()
     // only add the object once...then just update the pixmap so we can move the preview around
     if (!m_sceneImageItem) {
         m_sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(m_temp_image));
-        m_sceneImageItem->setFlag(QGraphicsItem::ItemIsSelectable);
-        m_sceneImageItem->setFlag(QGraphicsItem::ItemIsMovable);
-        m_sceneImageItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-        m_sceneImageItem->setPos(-m_canvasCenterPoint.x(), -m_canvasCenterPoint.y()); // center the object
     } else {
         m_sceneImageItem->setPixmap(QPixmap::fromImage(m_temp_image));
     }
 
 }
 
-void KisPresetLivePreviewView::slotResetViewZoom()
-{
-    zoomToBrushSize();
-}
 
-void KisPresetLivePreviewView::slotZoomToOneHundredPercent()
-{
-    m_scaleFactor = 1.0;
-    resetMatrix();
-    this->scale(m_scaleFactor, m_scaleFactor);
-}
 
 void KisPresetLivePreviewView::paintBackground()
 {
@@ -141,7 +123,7 @@ void KisPresetLivePreviewView::paintBackground()
 
             float sectionPercent = 1.0 / (float)grayStrips;
             bool isAlternating = i % 2;
-            KoColor fillColor;
+            KoColor fillColor(m_layer->paintDevice()->colorSpace());
 
             if (isAlternating) {
                 fillColor.fromQColor(QColor(80,80,80));
@@ -150,15 +132,14 @@ void KisPresetLivePreviewView::paintBackground()
             }
 
 
-            m_brushPreviewPainter->fill(m_layer->image()->width()*sectionPercent*i,
-                                        0,
-                                        m_layer->image()->width()*(sectionPercent*i +sectionPercent),
-                                        m_layer->image()->height(),
-                                        fillColor);
-
+            const QRect fillRect(m_layer->image()->width()*sectionPercent*i,
+                                 0,
+                                 m_layer->image()->width()*(sectionPercent*i +sectionPercent),
+                                 m_layer->image()->height());
+            m_layer->paintDevice()->fill(fillRect, fillColor);
         }
 
-        m_brushPreviewPainter->setPaintColor(KoColor(Qt::white, m_colorSpace));
+        m_paintColor = KoColor(Qt::white, m_colorSpace);
 
     }
     else if (m_currentPreset->paintOp().id() == "roundmarker" ||
@@ -179,10 +160,8 @@ void KisPresetLivePreviewView::paintBackground()
         font.setPixelSize(14);
         font.setBold(false);
 
-        slotZoomToOneHundredPercent(); // 100% zoom if we are showing the text
-
         m_noPreviewText = this->scene()->addText(i18n("No Preview for this engine"),font);
-        m_noPreviewText->setPos(-this->width()/3, -this->height()/4); // this mostly centers the text in the viewport
+        m_noPreviewText->setPos(50, this->height()/4);
 
         return;
 
@@ -190,12 +169,8 @@ void KisPresetLivePreviewView::paintBackground()
     else {
 
         // fill with gray first to clear out what existed from previous preview
-        m_brushPreviewPainter->fill(0,0,
-                                  m_layer->image()->width(),
-                                  m_layer->image()->height(),
-                                  KoColor(palette().color(QPalette::Background) , m_colorSpace));
-
-        m_brushPreviewPainter->setPaintColor(KoColor(palette().color(QPalette::Text), m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
     }
 }
 
@@ -205,40 +180,34 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
     qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
-    qreal previewSize = qBound(1.0, m_currentPreset->settings()->paintOpSize(), 150.0 ); // constrain live preview brush size
+    qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     proxy_preset->settings()->setPaintOpSize(previewSize);
-    m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
 
 
-    // slope-intercept is good for mapping two values.
-    // find the slope of the line (slope-intercept form)
-    float slope = (m_maxScale-m_maxStrokeScale) / (m_minScale-m_minStrokeScale);  // y2-y1 / x2-x1
-    float yIntercept = m_maxStrokeScale - slope * m_minStrokeScale;  // y1 − m * x1
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(m_image,
+                                 m_layer);
 
-    float strokeScaleAmount = m_scaleFactor * slope + yIntercept; // y = mx + b
-    strokeScaleAmount = qBound(m_minStrokeScale, strokeScaleAmount, m_maxStrokeScale);
+    resources->setBrush(proxy_preset);
+    resources->setFGColorOverride(m_paintColor);
+    FreehandStrokeStrategy::PainterInfo *painterInfo = new FreehandStrokeStrategy::PainterInfo();
 
+    KisStrokeStrategy *stroke =
+        new FreehandStrokeStrategy(resources->needsIndirectPainting(),
+                                   resources->indirectPaintingCompositeOp(),
+                                   resources, painterInfo, kundo2_noi18n("temp_stroke"));
 
-
-
-    // we only need to change the zoom amount if we are changing the brush size
-    if (m_currentBrushSize != m_currentPreset->settings()->paintOpSize()) {
-        m_currentBrushSize = m_currentPreset->settings()->paintOpSize();
-
-        zoomToBrushSize();
-
-
-    }
+    KisStrokeId strokeId = m_image->startStroke(stroke);
 
 
 
-    // points for drawing an S curve
-    // we are going to paint the stroke right in the middle of the canvas to make sure
-    // everything is captured for big brush strokes
+    //m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
+
+
+
+    // paint the stroke. The sketchbrush gets a differnet shape than the others to show how it works
     if (m_currentPreset->paintOp().id() == "sketchbrush") {
-
-        slotZoomToOneHundredPercent(); // sketch brush is always scaled at 100%
 
         KisPaintInformation pointOne;
         pointOne.setPressure(0.0);
@@ -251,59 +220,46 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                 m_canvasCenterPoint.y() + (this->height()*0.2) ));
 
 
-        m_brushPreviewPainter->paintBezierCurve(pointOne,
-                                                QPointF(m_canvasCenterPoint.x() + this->width(),
-                                                        m_canvasCenterPoint.y() - (this->height()*0.2) ),
-                                                QPointF(m_canvasCenterPoint.x() - this->width(),
-                                                         m_canvasCenterPoint.y() + (this->height()*0.2) ),
-                                                pointTwo, &m_currentDistance);
-
+        m_image->addJob(strokeId,
+            new FreehandStrokeStrategy::Data(0,
+                                             pointOne,
+                                             QPointF(m_canvasCenterPoint.x() + this->width(),
+                                                     m_canvasCenterPoint.y() - (this->height()*0.2) ),
+                                             QPointF(m_canvasCenterPoint.x() - this->width(),
+                                                     m_canvasCenterPoint.y() + (this->height()*0.2) ),
+                                             pointTwo));
 
     } else {
 
-        m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*strokeScaleAmount),
-                                       m_canvasCenterPoint.y() + (this->height()*strokeScaleAmount)));
+        // paint an S curve
+        m_curvePointPI1.setPos(QPointF(m_canvasCenterPoint.x() - (this->width()*0.45),
+                                       m_canvasCenterPoint.y() + (this->height()*0.2)));
         m_curvePointPI1.setPressure(0.0);
 
 
-        m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*strokeScaleAmount),
-                                       m_canvasCenterPoint.y()));
+        m_curvePointPI2.setPos(QPointF(m_canvasCenterPoint.x() + (this->width()*0.4),
+                                       m_canvasCenterPoint.y() - (this->height()*0.2)   ));
 
         m_curvePointPI2.setPressure(1.0);
 
-        m_brushPreviewPainter->paintBezierCurve(m_curvePointPI1,
-                                                QPointF(m_canvasCenterPoint.x(),
-                                                        m_canvasCenterPoint.y()-this->height()),
-                                                QPointF(m_canvasCenterPoint.x(),
-                                                         m_canvasCenterPoint.y()+this->height()),
-                                                m_curvePointPI2, &m_currentDistance);
+        m_image->addJob(strokeId,
+            new FreehandStrokeStrategy::Data(0,
+                                             m_curvePointPI1,
+                                             QPointF(m_canvasCenterPoint.x(),
+                                                     m_canvasCenterPoint.y()-this->height()),
+                                             QPointF(m_canvasCenterPoint.x(),
+                                                     m_canvasCenterPoint.y()+this->height()),
+                                             m_curvePointPI2));
     }
 
+    m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+    m_image->endStroke(strokeId);
+    m_image->waitForDone();
 
 
     // even though the brush is cloned, the proxy_preset still has some connection to the original preset which will mess brush sizing
     // we need to return brush size to normal.The normal brush sends out a lot of extra signals, so keeping the proxy for now
     proxy_preset->settings()->setPaintOpSize(originalPresetSize);
 
-}
-
-void KisPresetLivePreviewView::zoomToBrushSize()
-{
-    // find the slope of the line (slope-intercept form)
-    float slope = (m_maxScale-m_minScale) / (m_maxBrushVal-m_minBrushVal);  // y2-y1 / x2-x1
-    float yIntercept = m_minScale - slope * m_minBrushVal;  // y1 − m * x1
-
-
-    // finally calculate our zoom level
-    float thresholdValue = qBound(m_minBrushVal, m_currentBrushSize, m_maxBrushVal);
-    m_scaleFactor = thresholdValue * slope + yIntercept; // y = mx + b
-
-    resetMatrix();
-    this->scale(m_scaleFactor,m_scaleFactor);
-
-    // reset position of image preview in case we moved it
-    if(m_sceneImageItem) {
-       m_sceneImageItem->setPos(-m_canvasSize.width()/2, -m_canvasSize.height()/2 );
-    }
 }
 

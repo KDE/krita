@@ -59,7 +59,6 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
 
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
         painter.setAntiAliasPolygonFill(antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);

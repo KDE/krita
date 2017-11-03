@@ -26,6 +26,7 @@
 
 class Ui_WdgCurveOption;
 class KisCurveOption;
+class QComboBox;
 
 #include <kis_dynamic_sensor.h>
 
@@ -56,6 +57,7 @@ private Q_SLOTS:
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);
     void updateValues();
+    void updateMode();
     void updateLabelsOfCurrentSensor();
     void disableWidgets(bool disable);
     void updateThemedIcons();
@@ -75,6 +77,7 @@ private Q_SLOTS:
 private:
     QWidget* m_widget;
     Ui_WdgCurveOption* m_curveOptionWidget;
+    QComboBox* m_curveMode;
     KisCurveOption* m_curveOption;
 };
 

@@ -263,7 +263,14 @@ public:
      * Return all the properties of this layer as a KoProperties-based
      * serializable key-value list.
      */
-    KoProperties & nodeProperties() const;
+    const KoProperties & nodeProperties() const;
+
+    /**
+     * Set a node property.
+     * @param name name of the property to be set.
+     * @param value value to set the property to.
+     */
+    void setNodeProperty(const QString & name, const QVariant & value);
 
     /**
      * Merge the specified properties with the properties of this
@@ -341,6 +348,9 @@ public:
      * @return true if this node is visible (i.e, active (except for
      * selection masks where visible and active properties are
      * different)) in the graph
+     *
+     * @param bool recursive if true, check whether all parents of
+     * this node are visible as well.
      */
     virtual bool visible(bool recursive = false) const;
 

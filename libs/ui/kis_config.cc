@@ -570,6 +570,26 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::forceShowSaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowSaveMessages", false));
+}
+
+void KisConfig::setForceShowSaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowSaveMessages", value);
+}
+
+bool KisConfig::forceShowAutosaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowAutosaveMessages", false));
+}
+
+void KisConfig::setForceShowAutosaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowAutosaveMessages", value);
+}
+
 bool KisConfig::rulersTrackMouse(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
@@ -614,12 +634,20 @@ bool KisConfig::useOpenGL(bool defaultValue) const
 
     //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
     QString cs = canvasState();
+#ifdef Q_OS_WIN
+    return (m_cfg.readEntry("useOpenGLWindows", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
+#else
     return (m_cfg.readEntry("useOpenGL", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
+#endif
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const
 {
+#ifdef Q_OS_WIN
+    m_cfg.writeEntry("useOpenGLWindows", useOpenGL);
+#else
     m_cfg.writeEntry("useOpenGL", useOpenGL);
+#endif
 }
 
 int KisConfig::openGLFilteringMode(bool defaultValue) const
@@ -675,16 +703,6 @@ int KisConfig::numMipmapLevels(bool defaultValue) const
 int KisConfig::textureOverlapBorder() const
 {
     return 1 << qMax(0, numMipmapLevels());
-}
-
-qint32 KisConfig::maxNumberOfThreads(bool defaultValue) const
-{
-    return (defaultValue ? QThread::idealThreadCount() : m_cfg.readEntry("maxthreads", QThread::idealThreadCount()));
-}
-
-void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
-{
-    m_cfg.writeEntry("maxthreads", maxThreads);
 }
 
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
@@ -1063,6 +1081,29 @@ QString KisConfig::pressureTabletCurve(bool defaultValue) const
 void KisConfig::setPressureTabletCurve(const QString& curveString) const
 {
     m_cfg.writeEntry("tabletPressureCurve", curveString);
+}
+
+bool KisConfig::useWin8PointerInput(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
+#else
+    Q_UNUSED(defaultValue);
+    return false;
+#endif
+}
+
+void KisConfig::setUseWin8PointerInput(bool value) const
+{
+#ifdef Q_OS_WIN
+    // Special handling: Only set value if changed
+    // I don't want it to be set if the user hasn't touched it
+    if (useWin8PointerInput() != value) {
+        m_cfg.writeEntry("useWin8PointerInput", value);
+    }
+#else
+    Q_UNUSED(value)
+#endif
 }
 
 qreal KisConfig::vastScrolling(bool defaultValue) const
@@ -1601,6 +1642,16 @@ void KisConfig::setTabletEventsDelay(int value)
     m_cfg.writeEntry("tabletEventsDelay", value);
 }
 
+bool KisConfig::trackTabletEventLatency(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("trackTabletEventLatency", false));
+}
+
+void KisConfig::setTrackTabletEventLatency(bool value)
+{
+    m_cfg.writeEntry("trackTabletEventLatency", value);
+}
+
 bool KisConfig::testingAcceptCompressedTabletEvents(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("testingAcceptCompressedTabletEvents", false));
@@ -1702,6 +1753,16 @@ bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const
 void KisConfig::setEnableOpenGLFramerateLogging(bool value) const
 {
     m_cfg.writeEntry("enableOpenGLFramerateLogging", value);
+}
+
+bool KisConfig::enableBrushSpeedLogging(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("enableBrushSpeedLogging", false));
+}
+
+void KisConfig::setEnableBrushSpeedLogging(bool value) const
+{
+    m_cfg.writeEntry("enableBrushSpeedLogging", value);
 }
 
 void KisConfig::setEnableAmdVectorizationWorkaround(bool value)

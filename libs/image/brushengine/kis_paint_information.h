@@ -26,6 +26,7 @@
 #include "kritaimage_export.h"
 #include <kis_distance_information.h>
 #include "kis_random_source.h"
+#include "KisPerStrokeRandomSource.h"
 #include "kis_spacing_information.h"
 #include "kis_timing_information.h"
 
@@ -113,6 +114,13 @@ public:
             DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
             spacingInfo = op.paintAt(*this);
             timingInfo = op.updateTimingImpl(*this);
+
+            // Initiate the process of locking the drawing angle. The locked value will
+            // always be present in the internals, but it will be requested but the users
+            // with a special parameter of drawingAngle() only.
+            if (!this->isHoveringMode()) {
+                distanceInfo->lockCurrentDrawingAngle(*this);
+            }
         }
 
         distanceInfo->registerPaintedDab(*this, spacingInfo, timingInfo);
@@ -154,14 +162,7 @@ public:
      * WARNING: this method is available *only* inside paintAt() call,
      * that is when the distance information is registered.
      */
-    qreal drawingAngle() const;
-
-    /**
-     * Lock current drawing angle for the rest of the stroke. If some
-     * value has already been locked, \p alpha shown the coefficient
-     * with which the new velue should be blended in.
-     */
-    void lockCurrentDrawingAngle(qreal alpha) const;
+    qreal drawingAngle(bool considerLockedAngle = false) const;
 
     /**
      * Current brush direction vector computed from the cursor movement
@@ -199,12 +200,25 @@ public:
     /// Number of ms since the beginning of the stroke
     qreal currentTime() const;
 
+    /// Number of dabs painted since the beginning of the stroke
+    int currentDabSeqNo() const;
+
+    /// The length of the stroke **before** painting the curent dab
+    qreal totalStrokeLength() const;
+
     // random source for generating in-stroke effects
     KisRandomSourceSP randomSource() const;
 
     // the stroke should initialize random source of all the used
     // paint info objects, otherwise it shows a warning
     void setRandomSource(KisRandomSourceSP value);
+
+    // random source for generating in-stroke effects, generates one(!) value per stroke
+    KisPerStrokeRandomSourceSP perStrokeRandomSource() const;
+
+    // the stroke should initialize per stroke random source of all the used
+    // paint info objects, otherwise it shows a warning
+    void setPerStrokeRandomSource(KisPerStrokeRandomSourceSP value);
 
     // set level of detail which info object has been generated for
     void setLevelOfDetail(int levelOfDetail);

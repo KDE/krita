@@ -7,7 +7,7 @@ copy Half.dll from lib to bin; openexr still cannot find ilmbase
 
 exiv2: currently tzname hacked out, should be be #define tzname _tzname
 
-todo: libssh, libcurl, libgsl
+todo: libssh,  libgsl
 
 boost_system needs to be renamed to plain boost_system.lib
 

@@ -27,6 +27,8 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
+#include "kis_assert.h"
+
 struct Q_DECL_HIDDEN KoColorSpaceFactory::Private {
     QList<KoColorProfile*> colorprofiles;
     QList<KoColorSpace*> colorspaces;
@@ -52,7 +54,7 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
         it != d->stackInformation.constEnd(); ++it)
     {
         errorPigment << "*******************************************";
-        errorPigment << it.key()->id() << " still in used, and grabed in: ";
+        errorPigment << it.key()->id() << " still in used, and grabbed in: ";
         errorPigment << it.value();
     }
     if( count != d->colorspaces.size())
@@ -94,6 +96,7 @@ const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * p
 
     if (it == d->availableColorspaces.end()) {
         cs = createColorSpace(profile);
+        KIS_ASSERT_X(cs != nullptr, "KoColorSpaceFactory::grabColorSpace", "createColorSpace returned nullptr.");
         if (cs) {
             d->availableColorspaces[profile->name()] = cs;
         }

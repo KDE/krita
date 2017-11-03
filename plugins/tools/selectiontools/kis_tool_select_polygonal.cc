@@ -37,7 +37,6 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 
-
 __KisToolSelectPolygonalLocal::__KisToolSelectPolygonalLocal(KoCanvasBase *canvas)
     : KisToolPolylineBase(canvas, KisToolPolylineBase::SELECT,
                           KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
@@ -60,7 +59,6 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
 
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
         painter.setAntiAliasPolygonFill(antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -101,3 +99,14 @@ void KisToolSelectPolygonal::setSelectionAction(int action)
 {
     changeSelectionAction(action);
 }
+
+
+QMenu* KisToolSelectPolygonal::popupActionsMenu()
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+
+
+    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+}
+

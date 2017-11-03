@@ -79,7 +79,7 @@ struct KisDlgLayerProperties::Private
     }
 };
 
-KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent, const char *name, Qt::WFlags f)
+KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent, const char *name, Qt::WindowFlags f)
     : KoDialog(parent)
     , d(new Private())
 {

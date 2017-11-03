@@ -19,6 +19,7 @@
 #include "kis_zoom_action.h"
 
 #include <QApplication>
+#include <QNativeGestureEvent>
 
 #include <klocalizedstring.h>
 
@@ -226,6 +227,25 @@ void KisZoomAction::inputEvent( QEvent* event )
                 d->lastPosition = center;
             }
             return;  // Don't try to update the cursor during a pinch-zoom
+        }
+        case QEvent::NativeGesture: {
+            QNativeGestureEvent *gevent = static_cast<QNativeGestureEvent*>(event);
+            if (gevent->gestureType() == Qt::ZoomNativeGesture) {
+                KisCanvas2 *canvas = inputManager()->canvas();
+                KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
+                const float delta = 1.0f + gevent->value();
+                controller->zoomRelativeToPoint(canvas->canvasWidget()->mapFromGlobal(gevent->globalPos()), delta);
+            } else if (gevent->gestureType() == Qt::SmartZoomNativeGesture) {
+                KisCanvas2 *canvas = inputManager()->canvas();
+                KoZoomController *controller = canvas->viewManager()->zoomController();
+
+                if (controller->zoomMode() != KoZoomMode::ZOOM_WIDTH) {
+                    controller->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
+                } else {
+                    controller->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+                }
+            }
+            return;
         }
         default:
             break;

@@ -27,6 +27,10 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QLayout>
+#include <QDialogButtonBox>
+#include <QPlainTextEdit>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "ui_wdgfilterselector.h"
 
@@ -97,6 +101,7 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
     connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),
             SLOT(slotBookmarkedFilterConfigurationSelected(int)));
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
+    connect(d->uiFilterSelector.btnXML, SIGNAL(clicked()), this, SLOT(showXMLdialog()));
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -152,6 +157,32 @@ void KisFilterSelectorWidget::showFilterGallery(bool visible)
     emit sigSizeChanged();
 }
 
+void KisFilterSelectorWidget::showXMLdialog()
+{
+    if (currentFilter()->showConfigurationWidget()) {
+        QDialog *xmlDialog = new QDialog();
+        xmlDialog->setMinimumWidth(500);
+        xmlDialog->setWindowTitle(i18n("Filter configuration XML"));
+        QVBoxLayout *xmllayout = new QVBoxLayout(xmlDialog);
+        QPlainTextEdit *text = new QPlainTextEdit(xmlDialog);
+        KisFilterConfigurationSP config = configuration();
+        text->setPlainText(config->toXML());
+        xmllayout->addWidget(text);
+        QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, xmlDialog);
+        connect(buttons, SIGNAL(accepted()), xmlDialog, SLOT(accept()));
+        connect(buttons, SIGNAL(rejected()), xmlDialog, SLOT(reject()));
+        xmllayout->addWidget(buttons);
+        if (xmlDialog->exec()==QDialog::Accepted) {
+            QDomDocument doc;
+            doc.setContent(text->toPlainText());
+            config->fromXML(doc.documentElement());
+            if (config) {
+                d->currentFilterConfigurationWidget->setConfiguration(config);
+            }
+        }
+    }
+}
+
 bool KisFilterSelectorWidget::isFilterGalleryVisible() const
 {
     return d->showFilterGallery;
@@ -183,6 +214,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     if (!widget) { // No widget, so display a label instead
         d->uiFilterSelector.comboBoxPresets->setEnabled(false);
         d->uiFilterSelector.pushButtonEditPressets->setEnabled(false);
+        d->uiFilterSelector.btnXML->setEnabled(false);
 
         d->currentFilterConfigurationWidget = 0;
         d->currentCentralWidget = new QLabel(i18n("No configuration options"),
@@ -192,6 +224,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     } else {
         d->uiFilterSelector.comboBoxPresets->setEnabled(true);
         d->uiFilterSelector.pushButtonEditPressets->setEnabled(true);
+        d->uiFilterSelector.btnXML->setEnabled(true);
 
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;

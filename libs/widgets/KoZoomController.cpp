@@ -2,7 +2,7 @@
  * Copyright (C) 2007 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This library is free software; you can redistribute it and/or
@@ -74,6 +74,11 @@ KoZoomAction *KoZoomController::zoomAction() const
 void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
 {
     setZoom(mode, 1.0);
+}
+
+KoZoomMode::Mode KoZoomController::zoomMode() const
+{
+    return d->zoomHandler->zoomMode();
 }
 
 void KoZoomController::setPageSize(const QSizeF &pageSize)

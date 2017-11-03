@@ -903,7 +903,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
-        const KoColorSpace *dstcs = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer8BitsColorDepthID.id(), "");
+        const KoColorSpace *dstcs = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer16BitsColorDepthID.id(), device->colorSpace()->profile());
         KisPaintDeviceSP tmp = new KisPaintDevice(dstcs);
         KisPainter gc(tmp);
         gc.bitBlt(imageRect.topLeft(), device, imageRect);

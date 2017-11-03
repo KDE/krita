@@ -29,6 +29,7 @@
 #include "kis_tool_invocation_action.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
+#include "kis_native_gesture_shortcut.h"
 #include "kis_input_profile_manager.h"
 
 /**
@@ -152,6 +153,10 @@ KisInputManager::Private::Private(KisInputManager *qq)
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
+
+    if (cfg.trackTabletEventLatency()) {
+        tabletLatencyTracker = new TabletLatencyTracker();
+    }
 }
 
 static const int InputWidgetsThreshold = 2000;
@@ -176,6 +181,8 @@ void KisInputManager::Private::CanvasSwitcher::setupFocusThreshold(QObject* obje
 
 void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 {
+    if (!canvas) return;
+
     QObject *canvasWidget = canvas->canvasWidget();
 
     if (!canvasResolver.contains(canvasWidget)) {
@@ -187,7 +194,7 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
         focusSwitchThreshold.setEnabled(false);
 
         d->canvas = canvas;
-        d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+        d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
     } else {
         KIS_ASSERT_RECOVER_RETURN(d->canvas == canvas);
     }
@@ -246,7 +253,7 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             }
 
             d->canvas = canvas;
-            d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+            d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
 
             d->q->setupAsEventFilter(object);
 
@@ -424,6 +431,9 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     case KisShortcutConfiguration::WheelRight:
         a = KisSingleActionShortcut::WheelRight;
         break;
+    case KisShortcutConfiguration::WheelTrackpad:
+        a = KisSingleActionShortcut::WheelTrackpad;
+        break;
     default:
         return;
     }
@@ -448,6 +458,34 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         break;
     }
     matcher.addShortcut(shortcut);
+}
+
+bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
+{
+    // each platform should decide here which gestures are handled via QtNativeGestureEvent.
+    Qt::NativeGestureType type;
+    switch (gesture) {
+#ifdef Q_OS_OSX
+        case KisShortcutConfiguration::PinchGesture:
+            type = Qt::ZoomNativeGesture;
+            break;
+        case KisShortcutConfiguration::PanGesture:
+            type = Qt::PanNativeGesture;
+            break;
+        case KisShortcutConfiguration::RotateGesture:
+            type = Qt::RotateNativeGesture;
+            break;
+        case KisShortcutConfiguration::SmartZoomGesture:
+            type = Qt::SmartZoomNativeGesture;
+            break;
+#endif
+        default:
+            return false;
+    }
+
+    KisNativeGestureShortcut *shortcut = new KisNativeGestureShortcut(action, index, type);
+    matcher.addShortcut(shortcut);
+    return true;
 }
 
 void KisInputManager::Private::setupActions()
@@ -526,11 +564,27 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
 
-    if (!matcher.pointerMoved(event)) {
+    if (!matcher.pointerMoved(event) && toolProxy) {
         toolProxy->forwardHoverEvent(event);
     }
     retval = true;
     event->setAccepted(true);
 
     return retval;
+}
+
+qint64 KisInputManager::Private::TabletLatencyTracker::currentTimestamp() const
+{
+    // on OS X, we need to compute the timestamp that compares correctly against the native event timestamp,
+    // which seems to be the msecs since system startup. On Linux with WinTab, we produce the timestamp that
+    // we compare against ourselves in QWindowSystemInterface.
+
+    QElapsedTimer elapsed;
+    elapsed.start();
+    return elapsed.msecsSinceReference();
+}
+
+void KisInputManager::Private::TabletLatencyTracker::print(const QString &message)
+{
+    dbgTablet << qUtf8Printable(message);
 }

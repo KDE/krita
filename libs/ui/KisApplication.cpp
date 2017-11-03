@@ -1,23 +1,22 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2009 Thomas Zander <zander@kde.org>
-   Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+/*
+ * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+ * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "KisApplication.h"
 
@@ -27,7 +26,11 @@
 #include <tchar.h>
 #endif
 
-#include <QDesktopServices>
+#ifdef Q_OS_OSX
+#include "osx.h"
+#endif
+
+#include <QStandardPaths>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFile>
@@ -87,6 +90,8 @@
 #include "opengl/kis_opengl.h"
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
+#include "KisViewManager.h"
+#include "kis_workspace_resource.h"
 
 #include <KritaVersionWrapper.h>
 namespace {
@@ -149,6 +154,10 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     , m_mainWindow(0)
     , m_batchRun(false)
 {
+#ifdef Q_OS_OSX
+    setMouseCoalescingEnabled(false);
+#endif
+
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
     setApplicationDisplayName("Krita");
@@ -272,6 +281,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
+
+    // Indicate that it is now safe for users of KoResourcePaths to load resources
+    KoResourcePaths::setReady();
 }
 
 void KisApplication::loadResources()
@@ -371,6 +383,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     initializeGlobals(args);
 
+    const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
     const bool print = args.print();
     const bool exportAs = args.exportAs();
@@ -384,7 +397,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");// &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
+    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -399,7 +412,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
-
 
     ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);
@@ -423,7 +435,25 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (showmainWindow) {
             m_mainWindow->initializeGeometry();
-            m_mainWindow->show();
+
+            if (!args.workspace().isEmpty()) {
+                KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+                KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
+                if (workspace) {
+                    m_mainWindow->restoreWorkspace(workspace->dockerState());
+                }
+            }
+
+            if (args.canvasOnly()) {
+                m_mainWindow->viewManager()->switchCanvasOnly(true);
+            }
+
+            if (args.fullScreen()) {
+                m_mainWindow->showFullScreen();
+            }
+            else {
+                m_mainWindow->show();
+            }
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
@@ -440,6 +470,16 @@ bool KisApplication::start(const KisApplicationArguments &args)
     KisSpinBoxUnitManagerFactory::setDefaultUnitManagerBuilder(new KisDocumentAwareSpinBoxUnitManagerBuilder());
     connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
+
+
+    // Create a new image, if needed
+    if (doNewImage) {
+        KisDocument *doc = args.image();
+        if (doc) {
+            KisPart::instance()->addDocument(doc);
+            m_mainWindow->addViewAndNotifyLoadingCompleted(doc);
+        }
+    }
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
@@ -460,7 +500,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 // now try to load
             }
             else {
-
                 if (exportAs) {
                     QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName);
                     if (outputMimetype == "application/octetstream") {

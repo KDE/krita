@@ -171,7 +171,6 @@ void KisToolSelectOutline::finishSelectionAction()
 
             KisPainter painter(tmpSel);
             painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-            painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
             painter.setAntiAliasPolygonFill(antiAliasSelection());
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -261,4 +260,13 @@ void KisToolSelectOutline::deactivate()
 void KisToolSelectOutline::setSelectionAction(int action)
 {
     changeSelectionAction(action);
+}
+
+QMenu* KisToolSelectOutline::popupActionsMenu()
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+
+
+    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
 }

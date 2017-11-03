@@ -12,7 +12,7 @@ def hello():
     """
     Show a test message box.
     """
-    QMessageBox.information(QWidget(), "Test", "Hello! This is Krita version %s" % Application.version())
+    QMessageBox.information(QWidget(), i18n("Test"), i18n("Hello! This is Krita version %s") % Application.version())
 
 
 class HelloExtension(Extension):
@@ -66,6 +66,7 @@ class HelloDocker(DockWidget):
         Override canvasChanged from :class:`DockWidget`.
         This gets called when the canvas changes.
         You can also access the active canvas via :func:`DockWidget.canvas`
+        Parameter `canvas` can be null if the last document is closed
         """
         self._label.setText("HelloDocker: canvas changed")
 

@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QCloseEvent>
+#include <QStandardPaths>
+#include <QDesktopServices>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
@@ -125,6 +127,7 @@
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
+#include "kis_memory_statistics_server.h"
 #include "kis_node.h"
 #include "KisOpenPane.h"
 #include "kis_paintop_box.h"
@@ -132,12 +135,13 @@
 #include "KisPrintJob.h"
 #include "kis_resource_server_provider.h"
 #include "kis_signal_compressor_with_param.h"
+#include "kis_statusbar.h"
 #include "KisView.h"
 #include "KisViewManager.h"
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include "kis_animation_exporter.h"
+#include <KisUpdateSchedulerConfigNotifier.h>
 
 #include <mutex>
 
@@ -430,8 +434,8 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita.xmlgui"));
-    setXMLFile(":/kxmlgui5/krita.xmlgui");
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
+    setXMLFile(":/kxmlgui5/krita4.xmlgui");
 
     guiFactory()->addClient(this);
 
@@ -451,11 +455,12 @@ KisMainWindow::KisMainWindow()
             connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
             act->setChecked(!toolBar->isHidden());
             toolbarList.append(act);
-        } else
+        } else {
             warnUI << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+        }
     }
     plugActionList("toolbarlist", toolbarList);
-    setToolbarList(toolbarList);
+    d->toolbarList = toolbarList;
 
     applyToolBarLayout();
 
@@ -477,9 +482,6 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
-
-
-
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -539,6 +541,7 @@ void KisMainWindow::addView(KisView *view)
 
     if (d->activeView) {
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
+        connect(d->viewManager->statusBar(), SIGNAL(memoryStatusUpdated()), this, SLOT(updateCaption()));
     }
 }
 
@@ -614,6 +617,7 @@ void KisMainWindow::slotPreferences()
 {
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
+        KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -729,19 +733,38 @@ void KisMainWindow::updateCaption()
     if (!d->mdiArea->activeSubWindow()) {
         updateCaption(QString(), false);
     }
-    else if (d->activeView && d->activeView->document()){
+    else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
         QString caption(doc->caption());
         if (d->readOnly) {
-            caption += ' ' + i18n("(write protected)");
+            caption += " [" + i18n("Write Protected") + "] ";
         }
 
         if (doc->isRecovered()) {
-            caption += ' ' + i18n("[RECOVERED]");
+            caption += " [" + i18n("Recovered") + "] ";
         }
 
-        caption += "[*]";
+
+        // new documents aren't saved yet, so we don't need to say it is modified
+        // new files don't have a URL, so we are using that for the check
+        if (!doc->url().isEmpty()) {
+
+            if ( doc->isModified()) {
+                caption += " [" + i18n("Modified") + "] ";
+            }
+        }
+
+        // show the file size for the document
+
+
+        KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
+
+
+        if (m_fileSizeStats.imageSize) {
+            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+        }
+
 
         d->activeView->setWindowTitle(caption);
         d->activeView->setWindowModified(doc->isModified());
@@ -848,7 +871,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 QStringList KisMainWindow::showOpenFileDialog(bool isImporting)
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setCaption(isImporting ? i18n("Import Images") : i18n("Open Images"));
 
@@ -985,7 +1008,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QString suggestedFilename = QFileInfo(suggestedURL.toLocalFile()).baseName();
 
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
-            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first().remove("*.");
+            suggestedFilename = suggestedFilename + "." + KisMimeDatabase::suffixesForMimeType(KIS_MIME_TYPE).first();
             suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
             suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
@@ -1030,7 +1053,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             }
             // If that is empty, too, use the Pictures location.
             if (proposedPath.isEmpty()) {
-                proposedPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+                proposedPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
             }
             // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
             // open the location where the document currently is.
@@ -1601,7 +1624,7 @@ KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
         KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
-            defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+            defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
         QUrl startUrl = QUrl::fromLocalFile(defaultDir);
         KisDocument* pDoc = d->activeView->document();
         /** if document has a file name, take file name and replace extension with .pdf */
@@ -1935,12 +1958,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     else {
         restoreState(d->dockerStateBeforeHiding);
     }
-}
-
-void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
-{
-    qDeleteAll(d->toolbarList);
-    d->toolbarList = toolbarList;
 }
 
 void KisMainWindow::slotDocumentTitleModified()

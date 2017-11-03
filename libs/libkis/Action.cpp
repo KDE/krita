@@ -147,6 +147,11 @@ void Action::setToolTip(QString tooltip)
     d->action->setToolTip(tooltip);
 }
 
+QString Action::tooltip() const
+{
+    return d->action->toolTip();
+}
+
 void Action::trigger()
 {
     d->action->trigger();

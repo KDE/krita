@@ -127,6 +127,11 @@ public Q_SLOTS:
     void setToolTip(QString tooltip);
 
     /**
+     * @return the tooltip text
+     */
+    QString tooltip() const;
+
+    /**
      * Trigger this action
      */
     void trigger();

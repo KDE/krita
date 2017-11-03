@@ -85,12 +85,19 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
                 return QVariant();
             QString resName = i18n( resource->name().toUtf8().data());
 
-            if (m_resourceAdapter->assignedTagsList(resource).count()) {
-                QString taglist = m_resourceAdapter->assignedTagsList(resource).join("] , [");
-                QString tagListToolTip = QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
-                return QVariant( resName + tagListToolTip );
-            }
             return QVariant( resName );
+        }
+        case KoResourceModel::TagsRole:
+        {
+            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            if( ! resource )
+                return QVariant();
+            if (m_resourceAdapter->assignedTagsList(resource).count()) {
+                QString taglist = m_resourceAdapter->assignedTagsList(resource).join("</li><li>");
+                return QString("<li>%2</li>").arg(taglist);
+            } else {
+                return QString();
+            }
         }
         case Qt::DecorationRole:
         {
@@ -141,7 +148,8 @@ QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) 
 void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
 {
     emit beforeResourcesLayoutReset(activateAfterReformat);
-    reset();
+    beginResetModel();
+    endResetModel();
     emit afterResourcesLayoutReset();
 }
 
@@ -150,7 +158,8 @@ void KoResourceModel::setColumnCount( int columnCount )
     if (columnCount != m_columnCount) {
         emit beforeResourcesLayoutReset(0);
         m_columnCount = columnCount;
-        reset();
+        beginResetModel();
+        endResetModel();
         emit afterResourcesLayoutReset();
     }
 }

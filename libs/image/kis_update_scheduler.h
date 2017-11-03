@@ -43,6 +43,16 @@ public:
     ~KisUpdateScheduler() override;
 
     /**
+     * Set the number of threads used by the scheduler
+     */
+    void setThreadsLimit(int value);
+
+    /**
+     * Return the number of threads available to the scheduler
+     */
+    int threadsLimit() const;
+
+    /**
      * Sets the proxy that is going to be notified about the progress
      * of processing of the queues. If you want to switch the proxy
      * on runtime, you should do it under the lock held.
@@ -68,11 +78,6 @@ public:
      * \see processQueues()
      */
     void unlock(bool resetLodLevels = true);
-
-    /**
-     * Called when it is necessary to reread configuration
-     */
-    void updateSettings();
 
     /**
      * Waits until all the running jobs are finished.
@@ -130,7 +135,8 @@ public:
      */
     void unblockUpdates();
 
-    void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
+    void updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect);
+    void updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect);
     void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
@@ -203,6 +209,12 @@ protected:
     KisUpdateScheduler();
     void connectSignals();
     void processQueues();
+
+protected Q_SLOTS:
+    /**
+     * Called when it is necessary to reread configuration
+     */
+    void updateSettings();
 
 private Q_SLOTS:
     void continueUpdate(const QRect &rect);

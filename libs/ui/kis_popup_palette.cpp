@@ -250,6 +250,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     setVisible(true);
     setVisible(false);
+
+    // Prevent tablet events from being captured by the canvas
+    setAttribute(Qt::WA_NoMousePropagation, true);
 }
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
@@ -657,7 +660,7 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
 
 void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
 {
-    QPointF point = event->posF();
+    QPointF point = event->localPos();
     event->accept();
 
     setToolTip(QString());
@@ -726,7 +729,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
 
 void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 {
-    QPointF point = event->posF();
+    QPointF point = event->localPos();
     event->accept();
 
     if (event->button() == Qt::LeftButton) {
@@ -813,13 +816,14 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
 
 
 
-void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
+void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+    event->ignore();
 }
 
 
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
 {
-    QPointF point = event->posF();
+    QPointF point = event->localPos();
     event->accept();
 
     m_isOverCanvasRotationIndicator = false;

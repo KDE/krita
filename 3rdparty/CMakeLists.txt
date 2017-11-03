@@ -53,6 +53,14 @@ set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 
 if (MINGW)
 	option(QT_ENABLE_DEBUG_INFO "Build Qt with debug info included" OFF)
+	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
+    if (QT_ENABLE_DYNAMIC_OPENGL)
+		if (DEFINED ENV{WindowsSdkDir})
+			message(STATUS "WindowsSdkDir is set to '$ENV{WindowsSdkDir}'")
+		else (DEFINED ENV{WindowsSdkDir})
+			message(FATAL_ERROR "Environemnt variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
+		endif (DEFINED ENV{WindowsSdkDir})
+	endif (QT_ENABLE_DYNAMIC_OPENGL)
 endif (MINGW)
 
 set(SECURITY_EXE_LINKER_FLAGS "")
@@ -118,8 +126,55 @@ if (UNIX AND NOT APPLE)
     set(PATCH_COMMAND patch)
 endif ()
 
+function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
+	include(CheckCXXSourceCompiles)
+	set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
+	set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
+	if (MINGW)
+		set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
+	endif (MINGW)
+	unset(${OUTPUT_VARNAME} CACHE)
+	CHECK_CXX_SOURCE_COMPILES("
+#include <Python.h>
+int main(int argc, char *argv[]) {
+	Py_InitializeEx(0);
+}" ${OUTPUT_VARNAME})
+endfunction()
+
+if (MINGW)
+	option(ENABLE_PYTHON_DEPS "Enable Python deps (sip, pyqt)" ON)
+	if (ENABLE_PYTHON_DEPS)
+	    # First get the Python library path to make sure the selected Python
+	    # can be used for Building, then try to get the Python interpreter again
+		find_package(PythonInterp 3.6 EXACT)
+		find_package(PythonLibs 3.6 EXACT)
+		if (PYTHONLIBS_FOUND)
+			# sip and pyqt does not use the CMake variable "PYTHON_LIBRARIES".
+			# We point to python.exe directly because we want to get the exact
+			# Python build for the target architecture, so that sip and pyqt
+			# will find the proper lib
+			get_filename_component(PYTHON_DIR ${PYTHON_LIBRARIES} DIRECTORY)
+			get_filename_component(PYTHON_DIR ${PYTHON_DIR} DIRECTORY)
+			set(PYTHON_EXECUTABLE "${PYTHON_DIR}/python.exe")
+			message(STATUS "Set Python executable: ${PYTHON_EXECUTABLE}")
+			find_package(PythonInterp 3.6 EXACT)
+		endif (PYTHONLIBS_FOUND)
+		if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+			message(STATUS "Python requirements met.")
+		else (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+			message(FATAL_ERROR "Python requirements not met. To disable Python deps, set ENABLE_PYTHON_DEPS to OFF.")
+		endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+		TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
+		if (NOT CAN_USE_PYTHON_LIBS)
+			message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct!")
+		endif (NOT CAN_USE_PYTHON_LIBS)
+	endif (ENABLE_PYTHON_DEPS)
+endif (MINGW)
+
 # this list must be dependency-ordered
-add_subdirectory( ext_python )
+if (ENABLE_PYTHON_DEPS OR NOT MINGW)
+	add_subdirectory( ext_python )
+endif (ENABLE_PYTHON_DEPS OR NOT MINGW)
 if (MSVC)
     add_subdirectory( ext_patch )
     add_subdirectory( ext_png2ico )
@@ -156,9 +211,15 @@ add_subdirectory( ext_qt )
 add_subdirectory( ext_poppler )
 add_subdirectory( ext_libraw )
 add_subdirectory( ext_frameworks )
-add_subdirectory( ext_sip )
-add_subdirectory( ext_pyqt )
+if (ENABLE_PYTHON_DEPS OR NOT MINGW)
+	add_subdirectory( ext_sip )
+	add_subdirectory( ext_pyqt )
+endif (ENABLE_PYTHON_DEPS OR NOT MINGW)
 
 if (MSVC OR MINGW)
     add_subdirectory( ext_drmingw )
 endif (MSVC OR MINGW)
+
+if (NOT APPLE)
+	add_subdirectory( ext_gmic )
+endif (NOT APPLE)

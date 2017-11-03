@@ -13,6 +13,7 @@ add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
+    find_library(APPKIT_LIBRARY AppKit)
 endif ()
 
 set(kritaui_LIB_SRCS
@@ -101,6 +102,7 @@ set(kritaui_LIB_SRCS
     kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
+    kis_change_file_layer_command.h
     kis_safe_document_loader.cpp
     kis_splash_screen.cpp
     kis_filter_manager.cc
@@ -159,6 +161,7 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
     opengl/kis_opengl_shader_loader.cpp
+    opengl/kis_texture_tile_info_pool.cpp
     kis_fps_decoration.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
@@ -192,7 +195,9 @@ set(kritaui_LIB_SRCS
     tool/kis_resources_snapshot.cpp
     tool/kis_smoothing_options.cpp
     tool/KisStabilizerDelayedPaintHelper.cpp
+    tool/KisStrokeSpeedMonitor.cpp
     tool/strokes/freehand_stroke.cpp
+    tool/strokes/KisStrokeEfficiencyMeasurer.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     tool/strokes/kis_color_picker_stroke_strategy.cpp
@@ -251,6 +256,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_spinbox_color_selector.cpp
     widgets/kis_screen_color_picker.cpp
+    widgets/kis_preset_live_preview_view.cpp
     widgets/KoDualColorButton.cpp
     widgets/kis_color_input.cpp
     widgets/kis_color_button.cpp
@@ -262,6 +268,7 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     widgets/KoShapeFillWrapper.cpp
+
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -279,6 +286,7 @@ set(kritaui_LIB_SRCS
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
+    input/kis_native_gesture_shortcut.cpp
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
@@ -320,7 +328,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
-
+    
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
@@ -386,6 +394,7 @@ if(WIN32)
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
+        input/wintab/kis_tablet_support_win8.cpp
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
@@ -394,10 +403,13 @@ endif()
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
         kis_animation_cache_populator.cpp
-        KisAnimationCacheRegenerator.cpp
-        dialogs/KisAnimationCacheUpdateProgressDialog.cpp
+        KisAsyncAnimationRendererBase.cpp
+        KisAsyncAnimationCacheRenderer.cpp
+        KisAsyncAnimationFramesSavingRenderer.cpp
+        dialogs/KisAsyncAnimationRenderDialogBase.cpp
+        dialogs/KisAsyncAnimationCacheRenderDialog.cpp
+        dialogs/KisAsyncAnimationFramesSaveDialog.cpp
         canvas/kis_animation_player.cpp
-        kis_animation_exporter.cpp
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
     )
@@ -420,6 +432,12 @@ if(UNIX)
     endif()
 endif()
 
+if(APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        osx.mm
+    )
+endif()
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
@@ -522,6 +540,7 @@ endif()
 
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
+    target_link_libraries(kritaui ${APPKIT_LIBRARY})
 endif ()
 
 

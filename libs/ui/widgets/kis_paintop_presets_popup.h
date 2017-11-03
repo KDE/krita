@@ -87,8 +87,6 @@ protected:
 
 public Q_SLOTS:
     void switchDetached(bool show = true);
-    void hideScratchPad();
-    void showScratchPad();
     void resourceSelected(KoResource* resource);
     void updateThemedIcons();
 
@@ -131,8 +129,6 @@ private:
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
     void toggleBrushRenameUIActive(bool isRenaming);
-    void calculateShowingTopArea();
-
 };
 
 #endif

@@ -31,7 +31,6 @@ public:
     KisDynamicSensorDistance();
     ~KisDynamicSensorDistance() override { }
     qreal value(const KisPaintInformation&) override;
-    void reset() override;
     QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
@@ -40,7 +39,6 @@ public Q_SLOTS:
     void toXML(QDomDocument&, QDomElement&) const override;
     void fromXML(const QDomElement&) override;
 private:
-    qreal m_measuredDistance;
     bool m_periodic;
 };
 

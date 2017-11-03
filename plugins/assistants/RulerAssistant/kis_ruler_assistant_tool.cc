@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
@@ -22,7 +21,7 @@
 #include <QPainter>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QFile>
 #include <QLineF>
 
@@ -729,7 +728,7 @@ void KisRulerAssistantTool::loadAssistants()
 {
     KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenAssistant");
     dialog.setCaption(i18n("Select an Assistant"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-assistant", "application/x-krita-assistant");
     QString filename = dialog.filename();
     if (filename.isEmpty()) return;
@@ -867,7 +866,7 @@ void KisRulerAssistantTool::saveAssistants()
 
     KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "OpenAssistant");
     dialog.setCaption(i18n("Save Assistant"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-assistant", "application/x-krita-assistant");
     QString filename = dialog.filename();
     if (filename.isEmpty()) return;

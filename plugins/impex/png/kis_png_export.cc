@@ -160,8 +160,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     const bool isThereAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag);
 
-    alpha->setChecked(cfg->getBool("alpha", isThereAlpha) && isThereAlpha);
-    alpha->setEnabled(isThereAlpha);
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
 
     bnTransparencyFillColor->setEnabled(!alpha->isChecked());
 

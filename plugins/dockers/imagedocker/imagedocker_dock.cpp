@@ -40,7 +40,7 @@
 #include <QLabel>
 #include <QAbstractListModel>
 #include <QButtonGroup>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QMimeData>
 
@@ -218,17 +218,15 @@ ImageDockerDock::ImageDockerDock():
 
     installEventFilter(this);
 
-    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-pictures"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("go-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-pictures"), QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-documents"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("go-home"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
     Q_FOREACH (const QFileInfo &info, QDir::drives()) {
         m_ui->cmbPath->addItem(KisIconUtils::loadIcon("drive-harddisk"), info.absolutePath());
     }
 
     connect(m_ui->cmbPath, SIGNAL(activated(const QString&)), SLOT(slotChangeRoot(const QString&)));
-
-    loadConfigState();
 
     connect(m_ui->treeView           , SIGNAL(doubleClicked(const QModelIndex&))      , SLOT(slotItemDoubleClicked(const QModelIndex&)));
     connect(m_ui->bnBack             , SIGNAL(clicked(bool))                          , SLOT(slotBackButtonClicked()));
@@ -303,9 +301,12 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
 
 void ImageDockerDock::showEvent(QShowEvent *)
 {
-    if (m_imageStripScene->currentPath().isNull()) {
-        updatePath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    }
+    loadConfigState();
+}
+
+void ImageDockerDock::hideEvent(QHideEvent *event)
+{
+    saveConfigState();
 }
 
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
@@ -313,9 +314,9 @@ void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
     // Intentionally not disabled if there's no canvas
 
     // "Every connection you make emits a signal, so duplicate connections emit two signals"
-    if(m_canvas)
+    if(m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-
+    }
     m_canvas = canvas;
 }
 
@@ -389,7 +390,7 @@ void ImageDockerDock::saveConfigState()
 
 void ImageDockerDock::loadConfigState()
 {
-    const QString defaultLocation = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+    const QString defaultLocation = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("referenceImageDocker");
     QString lastUsedDirectory = cfg.readEntry("lastUsedDirectory", defaultLocation);
@@ -584,8 +585,7 @@ bool ImageDockerDock::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
 
-    if (event->type() == QEvent::Resize)
-    {
+    if (event->type() == QEvent::Resize) {
         m_ui->treeView->setColumnWidth(0, width());
         return true;
     }

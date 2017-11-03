@@ -84,15 +84,24 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
     bool oldPassThroughValue = false;
     bool newPassThroughValue = false;
 
+    bool oldVisibilityValue = false;
+    bool newVisibilityValue = false;
+
     Q_FOREACH (const KisBaseNode::Property &prop, oldPropertyList) {
-        if (prop.name == i18n("Pass Through")) {
+        if (prop.id == KisLayerPropertiesIcons::passThrough.id()) {
             oldPassThroughValue = prop.state.toBool();
+        }
+        if (prop.id == KisLayerPropertiesIcons::visible.id()) {
+            oldVisibilityValue = prop.state.toBool();
         }
     }
 
     Q_FOREACH (const KisBaseNode::Property &prop, newPropertyList) {
-        if (prop.name == i18n("Pass Through")) {
+        if (prop.id == KisLayerPropertiesIcons::passThrough.id()) {
             newPassThroughValue = prop.state.toBool();
+        }
+        if (prop.id == KisLayerPropertiesIcons::visible.id()) {
+            newVisibilityValue = prop.state.toBool();
         }
     }
 
@@ -102,7 +111,10 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
         if (image) {
             image->refreshGraphAsync(layer);
         }
-    } else if (m_node->parent() && !oldPassThroughValue && newPassThroughValue) {
+    } else if ((m_node->parent() && !oldPassThroughValue && newPassThroughValue) ||
+               (oldPassThroughValue && newPassThroughValue &&
+                !oldVisibilityValue && newVisibilityValue)) {
+
         KisLayerSP layer(qobject_cast<KisLayer*>(m_node->parent().data()));
         KisImageSP image = layer->image().toStrongRef();
         if (image) {

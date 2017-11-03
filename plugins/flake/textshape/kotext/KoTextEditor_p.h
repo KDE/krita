@@ -229,7 +229,7 @@ public:
 
                 QTextCursor cursor(block);
                 cursor.setPosition(fragment.position() + 1);
-                QTextCharFormat format = cursor.charFormat(); // this gets the format one char after the postion.
+                QTextCharFormat format = cursor.charFormat(); // this gets the format one char after the position.
                 visitor.visit(format);
 
                 if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {

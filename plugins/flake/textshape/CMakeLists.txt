@@ -1,7 +1,24 @@
 project( textPlugin)
 
+
+if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
+    remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
+elseif(${Qt5_VERSION} VERSION_GREATER "5.7.0" )
+    remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50800)
+elseif(${Qt5_VERSION} VERSION_GREATER "5.6.0" )
+    remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
+else()
+    remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50600)
+endif()
+
+add_definitions(
+  -DQT_DISABLE_DEPRECATED_BEFORE=0
+)
+
 add_subdirectory( textlayout )
 add_subdirectory( kotext )
+
+
 
 set ( textshape_SRCS
     TextPlugin.cpp

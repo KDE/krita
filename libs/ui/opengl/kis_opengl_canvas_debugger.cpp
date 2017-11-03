@@ -24,7 +24,7 @@
 #include <QDebug>
 
 #include "kis_config.h"
-
+#include <kis_config_notifier.h>
 
 struct KisOpenglCanvasDebugger::Private
 {
@@ -52,12 +52,8 @@ Q_GLOBAL_STATIC(KisOpenglCanvasDebugger, s_instance)
 KisOpenglCanvasDebugger::KisOpenglCanvasDebugger()
     : m_d(new Private)
 {
-    KisConfig cfg;
-    m_d->isEnabled = cfg.enableOpenGLFramerateLogging();
-
-    if (m_d->isEnabled) {
-        m_d->time.start();
-    }
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 }
 
 KisOpenglCanvasDebugger::~KisOpenglCanvasDebugger()
@@ -84,6 +80,16 @@ qreal KisOpenglCanvasDebugger::accumulatedFps()
     }
 
     return value;
+}
+
+void KisOpenglCanvasDebugger::slotConfigChanged()
+{
+    KisConfig cfg;
+    m_d->isEnabled = cfg.enableOpenGLFramerateLogging();
+
+    if (m_d->isEnabled) {
+        m_d->time.start();
+    }
 }
 
 void KisOpenglCanvasDebugger::nofityPaintRequested()

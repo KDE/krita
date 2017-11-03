@@ -28,7 +28,8 @@ public:
     enum Sequentiality {
         CONCURRENT,
         SEQUENTIAL,
-        BARRIER
+        BARRIER,
+        UNIQUELY_CONCURRENT
     };
 
     enum Exclusivity {
@@ -45,8 +46,8 @@ public:
     bool isSequential() const;
     bool isExclusive() const;
 
-    Sequentiality sequentiality() { return m_sequentiality; };
-    Exclusivity exclusivity() { return m_exclusivity; };
+    Sequentiality sequentiality() { return m_sequentiality; }
+    Exclusivity exclusivity() { return m_exclusivity; }
 
     virtual KisStrokeJobData* createLodClone(int levelOfDetail);
 

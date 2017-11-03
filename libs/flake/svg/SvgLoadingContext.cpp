@@ -48,8 +48,10 @@ public:
 
     ~Private()
     {
-        if (! gcStack.isEmpty())
+        if (! gcStack.isEmpty() && !gcStack.top()->isResolutionFrame) {
+            // Resolution frame is usually the first and is not removed.
             warnFlake << "the context stack is not empty (current count" << gcStack.size() << ", expected 0)";
+        }
         qDeleteAll(gcStack);
         gcStack.clear();
         delete styleParser;

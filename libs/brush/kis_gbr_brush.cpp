@@ -139,6 +139,7 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     , d(new Private(*rhs.d))
 {
     setName(rhs.name());
+    setBrushTipImage(rhs.brushTipImage());
     d->data = QByteArray();
     setValid(rhs.valid());
 }

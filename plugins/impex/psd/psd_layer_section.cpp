@@ -188,7 +188,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice* io)
                 channelInfo->channelDataLength = channelInfo->channelDataLength - (channelInfo->channelDataStart - channelStartPos);
 
                 dbgFile << "\t\tchannel record" << j << "for layer" << i << "with id" << channelInfo->channelId
-                        << "starting postion" << channelInfo->channelDataStart
+                        << "starting position" << channelInfo->channelDataStart
                         << "with length" << channelInfo->channelDataLength
                         << "and has compression type" << channelInfo->compressionType;
 

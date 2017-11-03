@@ -29,6 +29,7 @@
 
 #include <QRect>
 
+class KisTextureChooser;
 class KisTextureOptionWidget;
 class KoPattern;
 class KoResource;
@@ -54,8 +55,8 @@ private Q_SLOTS:
     void resetGUI(KoResource*); /// called when a new pattern is selected
 
 private:
-    KisTextureOptionWidget *m_optionWidget;
-
+    /// UI Widget that stores all the texture options
+    KisTextureChooser* m_textureOptions;
 
 };
 
@@ -84,6 +85,8 @@ private:
     qreal m_scale;
     int m_offsetX;
     int m_offsetY;
+    qreal m_brightness;
+    qreal m_contrast;
     TexturingMode m_texturingMode;
     bool m_invert;
     KoPattern *m_pattern;

@@ -1,6 +1,6 @@
 ﻿/* This file is part of the Krita project
  *
- * Copyright (C) 2014 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,7 +57,7 @@
 #include <QTextBrowser>
 #include <QApplication>
 #include <QBuffer>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
@@ -320,6 +320,7 @@ public:
 
     StdLockableWrapper<QMutex> savingLock;
 
+    bool modifiedWhileSaving = false;
     QScopedPointer<KisDocument> backgroundSaveDocument;
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportFilter::ConversionStatus> childSavingFuture;
@@ -610,7 +611,9 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
             setMimeType(job.mimeType);
             updateEditingTime(true);
 
-            d->undoStack->setClean();
+            if (!d->modifiedWhileSaving) {
+                d->undoStack->setClean();
+            }
             setRecovered(false);
             removeAutoSaveFiles();
         }
@@ -689,6 +692,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), false);
     d->backgroundSaveDocument.reset(clonedDocument.take());
     d->backgroundSaveJob = job;
+    d->modifiedWhileSaving = false;
 
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = true;
@@ -743,6 +747,8 @@ void KisDocument::slotAutoSave()
     if (!d->modified || !d->modifiedAfterAutosave) return;
     const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
 
+    emit statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
+
     bool started =
         initiateSavingInBackground(i18n("Autosaving..."),
                                    this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
@@ -774,8 +780,10 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
         KisConfig cfg;
         d->autoSaveDelay = cfg.autoSaveInterval();
 
-        if (!d->modifiedAfterAutosave) {
+        if (!d->modifiedWhileSaving) {
             d->autoSaveTimer.stop(); // until the next change
+        } else {
+            setAutoSaveDelay(d->autoSaveDelay); // restart the timer
         }
 
         emit statusBarMessage(i18n("Finished autosaving %1", fileName), successMessageTimeout);
@@ -1080,11 +1088,9 @@ bool KisDocument::openFile()
     dbgUI << localFilePath() << "type:" << typeName;
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
-    if (window) {
-        if (window->viewManager()) {
-            KoUpdaterPtr updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
-            d->importExportManager->setUpdater(updater);
-        }
+    if (window && window->viewManager()) {
+        KoUpdaterPtr updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
+        d->importExportManager->setUpdater(updater);
     }
 
     KisImportExportFilter::ConversionStatus status;
@@ -1156,7 +1162,8 @@ void KisDocument::setModified(bool mod)
         // First change since last autosave -> start the autosave timer
         setAutoSaveDelay(d->autoSaveDelay);
     }
-    d->modifiedAfterAutosave = mod;
+    d->modifiedAfterAutosave |= mod;
+    d->modifiedWhileSaving |= mod;
 
     if (mod == isModified())
         return;
@@ -1214,16 +1221,15 @@ QString KisDocument::prettyPathOrUrl() const
 QString KisDocument::caption() const
 {
     QString c;
-    if (documentInfo()) {
-        c = documentInfo()->aboutInfo("title");
-    }
     const QString _url(url().fileName());
-    if (!c.isEmpty() && !_url.isEmpty()) {
-        c = QString("%1 - %2").arg(c).arg(_url);
-    }
-    else if (c.isEmpty()) {
+
+    // if URL is empty...it is probably an unsaved file
+    if (_url.isEmpty()) {
+        c = " [" + i18n("Not Saved") + "] ";
+    } else {
         c = _url; // Fall back to document URL
     }
+
     return c;
 }
 
@@ -1510,7 +1516,7 @@ bool KisDocument::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
+        setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("abstract", description);
 

@@ -52,8 +52,8 @@ void KisPaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
     const int maxWidth = qBound(2, minSize / 6, 4);
     const int width = isSelected ? maxWidth : 1;
 
-    if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
-        QString name = qVariantValue<QString>(index.data(Qt::DisplayRole));
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+        QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());
         }
@@ -64,12 +64,12 @@ void KisPaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
             painter->fillRect(option.rect, option.palette.highlight());
         }
         QRect paintRect = kisGrowRect(option.rect, -width);
-        QBrush brush = qVariantValue<QBrush>(index.data(Qt::BackgroundRole));
+        QBrush brush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
         painter->fillRect(paintRect, brush);
     }
     painter->restore();
 
-    QString name = qVariantValue<QString>(index.data(Qt::DisplayRole));
+    QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
     if (!m_crossedKeyword.isNull() && name.toLower().contains(m_crossedKeyword)) {
         QRect crossRect = kisGrowRect(option.rect, -maxWidth);
 

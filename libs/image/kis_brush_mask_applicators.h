@@ -22,19 +22,10 @@
 
 #include "kis_brush_mask_applicator_base.h"
 #include "kis_global.h"
+#include "kis_random_source.h"
 
 // 3x3 supersampling
 #define SUPERSAMPLING 3
-
-#if defined(_WIN32) || defined(_WIN64)
-#include <stdlib.h>
-#define srand48 srand
-inline double drand48() {
-    return double(rand()) / RAND_MAX;
-}
-#endif
-
-#include <random>
 
 
 template<class MaskGenerator, Vc::Implementation _impl>
@@ -54,6 +45,7 @@ protected:
 
 protected:
     MaskGenerator *m_maskGenerator;
+    KisRandomSource m_randomSource; // TODO: make it more deterministic for LoD
 };
 
 #if defined HAVE_VC
@@ -127,7 +119,7 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
             for (int x = 0; x < width; x++) {
 
                 if (m_d->randomness!= 0.0){
-                    random = (1.0 - m_d->randomness) + m_d->randomness * float(rand()) / RAND_MAX;
+                    random = (1.0 - m_d->randomness) + m_d->randomness * KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_randomSource.generateNormalized();
                 }
 
                 alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]*255) * random);
@@ -136,7 +128,7 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
                 if (m_d->density != 1.0){
                     // compute density only for visible pixels of the mask
                     if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(m_d->density >= drand48()) ){
+                        if ( !(m_d->density >= KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_randomSource.generateNormalized()) ){
                             alphaValue = OPACITY_TRANSPARENT_U8;
                         }
                     }
@@ -162,10 +154,6 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
     const MaskProcessingData *m_d = KisBrushMaskApplicatorBase::m_d;
     MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_maskGenerator;
 
-    std::random_device rand_dev;
-    std::default_random_engine rand_engine{rand_dev()};
-    std::uniform_real_distribution<> rand_distr(0.0f, 1.0f);
-
     qreal random = 1.0;
     quint8* dabPointer = m_d->device->data() + rect.y() * rect.width() * m_d->pixelSize;
     quint8 alphaValue = OPACITY_TRANSPARENT_U8;
@@ -189,7 +177,7 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
             if (supersample != 1) value /= samplearea;
 
             if (m_d->randomness!= 0.0){
-                random = (1.0 - m_d->randomness) + m_d->randomness * rand_distr(rand_engine);
+                random = (1.0 - m_d->randomness) + m_d->randomness * m_randomSource.generateNormalized();
             }
 
             alphaValue = quint8( (OPACITY_OPAQUE_U8 - value) * random);
@@ -198,7 +186,7 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
             if (m_d->density != 1.0){
                 // compute density only for visible pixels of the mask
                 if (alphaValue != OPACITY_TRANSPARENT_U8){
-                    if ( !(m_d->density >= rand_distr(rand_engine)) ){
+                    if ( !(m_d->density >= m_randomSource.generateNormalized()) ){
                         alphaValue = OPACITY_TRANSPARENT_U8;
                     }
                 }

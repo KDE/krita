@@ -28,6 +28,7 @@
 #include "kis_async_merger.h"
 #include "kis_lock_free_lod_counter.h"
 
+#include "KisUpdaterContextSnapshotEx.h"
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -51,6 +52,8 @@ public:
      * \see lock()
      */
     void getJobsSnapshot(qint32 &numMergeJobs, qint32 &numStrokeJobs);
+
+    KisUpdaterContextSnapshotEx getContextSnapshotEx() const;
 
     /**
      * Returns the current level of detail of all the running jobs in the
@@ -119,6 +122,23 @@ public:
      */
     void unlock();
 
+    /**
+     * Set the number of threads available for this updater context
+     * WARNING: one cannot change the number of threads if there is
+     *          at least one job running in the context! So before
+     *          calling this method make sure you do two things:
+     *          1) barrierLock() the update scheduler
+     *          2) lock() the context
+     */
+    void setThreadsLimit(int value);
+
+    /**
+     * Return the number of available threads in the context. Make sure you
+     * lock the context before calling this function!
+     */
+    int threadsLimit() const;
+
+
 Q_SIGNALS:
     void sigContinueUpdate(const QRect& rc);
     void sigDoSomeUsefulWork();
@@ -167,6 +187,8 @@ public:
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();
 };
+
+
 
 
 #endif /* __KIS_UPDATER_CONTEXT_H */

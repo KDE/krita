@@ -34,8 +34,9 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QMenu>
@@ -191,15 +192,9 @@ public:
         , inputManager(_q)
         , scriptManager(_q)
         , actionAuthor(0)
+        , showPixelGrid(0)
     {
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
-        canvasResourceManager.addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+        KisViewManager::initializeResourceManager(&canvasResourceManager);
     }
 
 public:
@@ -252,6 +247,7 @@ public:
     KisSignalAutoConnectionsStore viewConnections;
     KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
+    KisAction *showPixelGrid;
 
     QByteArray canvasState;
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
@@ -260,7 +256,6 @@ public:
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
-
 
 KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate(this, _actionCollection, parent))
@@ -340,6 +335,18 @@ KisViewManager::~KisViewManager()
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     delete d;
+}
+
+void KisViewManager::initializeResourceManager(KoCanvasResourceManager *resourceManager)
+{
+    resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+    resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
 }
 
 KActionCollection *KisViewManager::actionCollection() const
@@ -449,6 +456,8 @@ void KisViewManager::setCurrentView(KisView *view)
         // set up progrress reporting
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
+
+        d->viewConnections.addUniqueConnection(d->showPixelGrid, SIGNAL(toggled(bool)), canvasController, SLOT(slotTogglePixelGrid(bool)));
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -714,6 +723,9 @@ void KisViewManager::createActions()
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
 
+    d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
+    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
+
 }
 
 void KisViewManager::setupManagers()
@@ -866,7 +878,6 @@ void KisViewManager::setQtMainWindow(QMainWindow* newMainWindow)
 {
     d->mainWindow = newMainWindow;
 }
-
 
 void KisViewManager::slotDocumentSaved()
 {

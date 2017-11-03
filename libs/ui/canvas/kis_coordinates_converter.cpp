@@ -308,7 +308,8 @@ QTransform KisCoordinatesConverter::imageToViewportTransform() const {
 
 void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
                                                       QPointF *brushOrigin,
-                                                      QPolygonF *polygon) const
+                                                      QPolygonF *polygon,
+                                                      const bool scrollCheckers) const
 {
     /**
      * Qt has different rounding for QPainter::drawRect/drawImage.
@@ -322,8 +323,7 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
     QRectF imageRect = imageRectInViewportPixels();
     imageRect.adjust(0,0,-0.5,-0.5);
 
-    KisConfig cfg;
-    if (cfg.scrollCheckers()) {
+    if (scrollCheckers) {
         *transform = viewportToWidgetTransform();
         *polygon = imageRect;
         *brushOrigin = imageToViewport(QPointF(0,0));

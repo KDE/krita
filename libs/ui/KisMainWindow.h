@@ -30,7 +30,6 @@
 #include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
-
 #include "KisView.h"
 
 class QCloseEvent;
@@ -82,12 +81,6 @@ public:
      *  Destructor.
      */
     ~KisMainWindow() override;
-
-    /**
-     * Update caption from document info - call when document info
-     * (title in the about page) changes.
-     */
-    void updateCaption();
 
 
     // If noCleanup is set, KisMainWindow will not delete the root document
@@ -229,6 +222,14 @@ public Q_SLOTS:
      * @brief slotPreferences open the preferences dialog
      */
     void slotPreferences();
+
+    /**
+     * Update caption from document info - call when document info
+     * (title in the about page) changes.
+     */
+    void updateCaption();
+
+
 
     /**
      *  Saves the current document with the current name.
@@ -376,7 +377,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
-    void setToolbarList(QList<QAction*> toolbarList);
 
 private:
 

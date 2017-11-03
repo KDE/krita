@@ -410,3 +410,12 @@ KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
     return KisNode::requestKeyframeChannel(id);
 }
 
+void KisMask::baseNodeChangedCallback()
+{
+    KisNodeSP up = parent();
+    KisLayer *layer = dynamic_cast<KisLayer*>(up.data());
+    if (layer) {
+        layer->notifyChildMaskChanged(this);
+    }
+    KisNode::baseNodeChangedCallback();
+}

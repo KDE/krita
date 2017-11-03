@@ -53,6 +53,7 @@ void DockWidget::setCanvas(KoCanvasBase* canvas)
 
 void DockWidget::unsetCanvas()
 {
+    canvasChanged(0);
     delete d->canvas;
     d->canvas = 0;
 }

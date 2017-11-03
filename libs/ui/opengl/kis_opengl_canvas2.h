@@ -21,8 +21,11 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_0>
+#ifndef Q_OS_OSX
+#include <QOpenGLFunctions>
+#else
 #include <QOpenGLFunctions_3_2_Core>
+#endif
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
@@ -35,8 +38,8 @@ class QOpenGLShaderProgram;
 class QPainterPath;
 
 #ifndef Q_MOC_RUN
-#ifndef Q_OS_MAC
-#define GLFunctions QOpenGLFunctions_3_0
+#ifndef Q_OS_OSX
+#define GLFunctions QOpenGLFunctions
 #else
 #define GLFunctions QOpenGLFunctions_3_2_Core
 #endif
@@ -78,10 +81,7 @@ public:
     void renderDecorations(QPainter *painter);
     void paintToolOutline(const QPainterPath &path);
 
-    bool needsFpsDebugging() const;
-
 public: // Implement kis_abstract_canvas_widget interface
-    void initializeShaders();
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
     void setWrapAroundViewingMode(bool value) override;
     void channelSelectionChanged(const QBitArray &channelFlags) override;
@@ -100,13 +100,16 @@ public: // Implement kis_abstract_canvas_widget interface
 
     KisOpenGLImageTexturesSP openGLImageTextures() const;
 
-private Q_SLOTS:
+public Q_SLOTS:
     void slotConfigChanged();
 
 protected: // KisCanvasWidgetBase
     bool callFocusNextPrevChild(bool next) override;
 
 private:
+    void initializeShaders();
+    void initializeDisplayShader();
+
     void reportFailedShaderCompilation(const QString &context);
     void drawImage();
     void drawCheckers();

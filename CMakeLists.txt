@@ -191,14 +191,14 @@ include(MacroJPEG)
 ###########################################################
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
-        include(CheckCXXSourceCompiles)
-        set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
-        set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
+    set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
     if (MINGW)
         set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
     endif (MINGW)
-        unset(${OUTPUT_VARNAME} CACHE)
-        CHECK_CXX_SOURCE_COMPILES("
+    unset(${OUTPUT_VARNAME} CACHE)
+    CHECK_CXX_SOURCE_COMPILES("
 #include <Python.h>
 int main(int argc, char *argv[]) {
     Py_InitializeEx(0);
@@ -206,29 +206,15 @@ int main(int argc, char *argv[]) {
 endfunction()
 
 if(MINGW)
-    # First get the Python library path to make sure the selected Python
-    # can be used for Building, then try to get the Python interpreter again
     find_package(PythonInterp 3.6 EXACT)
     find_package(PythonLibs 3.6 EXACT)
-    if (PYTHONLIBS_FOUND)
-        # Use the same Python as the library
-        get_filename_component(PYTHON_DIR ${PYTHON_LIBRARIES} DIRECTORY)
-        get_filename_component(PYTHON_DIR ${PYTHON_DIR} DIRECTORY)
-        set(PYTHON_EXECUTABLE "${PYTHON_DIR}/python.exe")
-        message(STATUS "Set Python executable: ${PYTHON_EXECUTABLE}")
-        find_package(PythonInterp 3.6 EXACT)
-        if (PYTHONINTERP_FOUND)
-            find_package(PythonLibrary 3.6)
-        else (PYTHONINTERP_FOUND)
-            # This shouldn't happen on Windows...
-            message(FATAL_ERROR "Python library found but python.exe not found!")
-        endif (PYTHONINTERP_FOUND)
-                TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
-                if (NOT CAN_USE_PYTHON_LIBS)
-                        message(WARNING "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
-            unset(PYTHONLIBS_FOUND CACHE)
-                endif (NOT CAN_USE_PYTHON_LIBS)
-    endif (PYTHONLIBS_FOUND)
+    if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+        find_package(PythonLibrary 3.6)
+        TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
+        if (NOT CAN_USE_PYTHON_LIBS)
+            message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
+        endif (NOT CAN_USE_PYTHON_LIBS)
+    endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 else(MINGW)
     find_package(PythonInterp 3.0)
     find_package(PythonLibrary 3.0)

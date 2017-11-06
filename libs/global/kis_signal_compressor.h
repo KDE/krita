@@ -19,10 +19,10 @@
 #ifndef __KIS_SIGNAL_COMPRESSOR_H
 #define __KIS_SIGNAL_COMPRESSOR_H
 
-#include <QTimer>
+#include <QObject>
 #include "kritaglobal_export.h"
 
-class QTimer;
+class KisRelaxedTimer;
 
 /**
  * Sets a timer to delay or throttle activation of a Qt slot. One example of
@@ -51,6 +51,8 @@ class QTimer;
  * delay ms. The compressor becomes inactive and all events are ignored until
  * the timer has elapsed.
  *
+ * The current implementation allows the timeout() to be delayed by up to 2 times
+ * \p delay in certain situations (for details see cpp file).
  */
 class KRITAGLOBAL_EXPORT KisSignalCompressor : public QObject
 {
@@ -83,7 +85,7 @@ Q_SIGNALS:
     void timeout();
 
 private:
-    QTimer *m_timer;
+    KisRelaxedTimer *m_timer;
     Mode m_mode;
     bool m_gotSignals;
 };

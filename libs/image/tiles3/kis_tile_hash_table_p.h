@@ -289,8 +289,12 @@ bool KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
 {
     const qint32 idx = calculateHash(col, row);
 
-    QWriteLocker locker(&m_lock);
-    TileTypeSP tile = unlinkTile(col, row, idx);
+    TileTypeSP tile;
+
+    {
+        QWriteLocker locker(&m_lock);
+        tile = unlinkTile(col, row, idx);
+    }
 
     /* Done by KisSharedPtr */
     //if(tile)
@@ -308,13 +312,22 @@ bool KisTileHashTableTraits<T>::deleteTile(TileTypeSP tile)
 template<class T>
 void KisTileHashTableTraits<T>::clear()
 {
-    QWriteLocker locker(&m_lock);
-    TileTypeSP tile = TileTypeSP();
-    qint32 i;
+    QVector<TileTypeSP> tilesToRemove;
+    int numTilesToRemove = 0;
 
-    for (i = 0; i < TABLE_SIZE; i++) {
-        tile = m_hashTable[i];
+    {
+        QWriteLocker locker(&m_lock);
 
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            tilesToRemove << m_hashTable[i];
+            m_hashTable[i].clear();
+        }
+
+        numTilesToRemove = m_numTiles;
+        m_numTiles = 0;
+    }
+
+    Q_FOREACH (TileTypeSP tile, tilesToRemove) {
         while (tile) {
             TileTypeSP tmp = tile;
             tile = tile->next();
@@ -327,13 +340,12 @@ void KisTileHashTableTraits<T>::clear()
             tmp->notifyDead();
             tmp = 0;
 
-            m_numTiles--;
+            numTilesToRemove--;
         }
-
-        m_hashTable[i] = 0;
     }
 
-    Q_ASSERT(!m_numTiles);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!numTilesToRemove);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_numTiles);
 }
 
 template<class T>

@@ -55,6 +55,7 @@
 #include <kis_paintop_box.h>
 #include <kis_resource_server_provider.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <kis_config_notifier.h>
 
 class TouchDockerDock::Private
 {
@@ -264,6 +265,12 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
             m_canvas->viewManager()->document()->setModified(false);
         }
         KisPart::instance()->mainWindows().first()->slotFileQuit();
+    }
+    else if (id == "fps") {
+        KisConfig cfg2;
+        cfg2.setEnableOpenGLFramerateLogging(!cfg2.enableOpenGLFramerateLogging());
+        cfg2.setEnableBrushSpeedLogging(!cfg2.enableBrushSpeedLogging());
+        KisConfigNotifier::instance()->notifyConfigChanged();
     }
     else {
         QAction *a = action(id);

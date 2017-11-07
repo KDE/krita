@@ -213,4 +213,19 @@ Rectangle {
         }
     }
 
+    Button {
+        id: fps
+        color: "grey"
+        radius: 8
+        width: base.width
+        height: base.height / 10
+        anchors.top: clear.bottom
+        anchors.left: base.left
+        anchors.margins: 2
+        checkable: true
+        text: "FPS/Brush Speed"
+        onClicked: {
+            mainWindow.slotButtonPressed("fps")
+        }
+    }
 }

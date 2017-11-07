@@ -26,7 +26,6 @@
 
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
-        : m_lock(QReadWriteLock::NonRecursive)
 {
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
@@ -39,9 +38,8 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht,
         KisMementoManager *mm)
-        : m_lock(QReadWriteLock::NonRecursive)
 {
-    QReadLocker locker(&ht.m_lock);
+    ht.lockAllForRead();
 
     m_mementoManager = mm;
     m_defaultTileData = 0;
@@ -69,6 +67,8 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
         m_hashTable[i] = nativeTileHead;
     }
     m_numTiles = ht.m_numTiles;
+
+    ht.unlockAll();
 }
 
 template<class T>
@@ -221,7 +221,7 @@ KisTileHashTableTraits<T>::getExistingTile(qint32 col, qint32 row)
     if (tile) return tile;
 
     // then try with a proper locking
-    QReadLocker locker(&m_lock);
+    QReadLocker locker(&m_locksArray[lockFromHash(idx)]);
     return getTile(col, row, idx);
 }
 
@@ -238,7 +238,7 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
 
     // then try with a proper locking
     if (!tile) {
-        QWriteLocker locker(&m_lock);
+        QWriteLocker locker(&m_locksArray[lockFromHash(idx)]);
         tile = getTile(col, row, idx);
 
         if (!tile) {
@@ -264,7 +264,7 @@ KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
 
     // then try with a proper locking
     {
-        QReadLocker locker(&m_lock);
+        QReadLocker locker(&m_locksArray[lockFromHash(idx)]);
 
         tile = getTile(col, row, idx);
         if (!tile) {
@@ -280,7 +280,7 @@ void KisTileHashTableTraits<T>::addTile(TileTypeSP tile)
 {
     const qint32 idx = calculateHash(tile->col(), tile->row());
 
-    QWriteLocker locker(&m_lock);
+    QWriteLocker locker(&m_locksArray[lockFromHash(idx)]);
     linkTile(tile, idx);
 }
 
@@ -292,7 +292,7 @@ bool KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
     TileTypeSP tile;
 
     {
-        QWriteLocker locker(&m_lock);
+        QWriteLocker locker(&m_locksArray[lockFromHash(idx)]);
         tile = unlinkTile(col, row, idx);
     }
 
@@ -316,11 +316,17 @@ void KisTileHashTableTraits<T>::clear()
     int numTilesToRemove = 0;
 
     {
-        QWriteLocker locker(&m_lock);
+        const int lockStride = TABLE_SIZE / NUM_LOCKS;
 
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            tilesToRemove << m_hashTable[i];
-            m_hashTable[i].clear();
+        int i = 0;
+
+        for (int lockIndex = 0; lockIndex < NUM_LOCKS; lockIndex++) {
+            QWriteLocker locker(&m_locksArray[lockIndex]);
+            for (int k = 0; k < lockStride; k++) {
+                tilesToRemove << m_hashTable[i];
+                m_hashTable[i].clear();
+                i++;
+            }
         }
 
         numTilesToRemove = m_numTiles;
@@ -351,15 +357,21 @@ void KisTileHashTableTraits<T>::clear()
 template<class T>
 void KisTileHashTableTraits<T>::setDefaultTileData(KisTileData *defaultTileData)
 {
-    QWriteLocker locker(&m_lock);
+    lockAllForWrite();
     setDefaultTileDataImp(defaultTileData);
+    unlockAll();
 }
 
 template<class T>
 KisTileData* KisTileHashTableTraits<T>::defaultTileData() const
 {
-    QWriteLocker locker(&m_lock);
-    return defaultTileDataImp();
+    KisTileData *td = 0;
+
+    lockAllForRead();
+    td = defaultTileDataImp();
+    unlockAll();
+
+    return td;
 }
 
 
@@ -437,6 +449,8 @@ void KisTileHashTableTraits<T>::debugListLengthDistibution()
 template<class T>
 void KisTileHashTableTraits<T>::sanityChecksumCheck()
 {
+#if 0
+
     /**
      * We assume that the lock should have already been taken
      * by the code that was going to change the table
@@ -461,4 +475,5 @@ void KisTileHashTableTraits<T>::sanityChecksumCheck()
         dbgKrita << "Wrong tiles checksum!";
         Q_ASSERT(0); // not fatalKrita for a backtrace support
     }
+#endif
 }

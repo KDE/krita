@@ -39,8 +39,8 @@ class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
 
 typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
-typedef KisTileHashTableIteratorTraits<KisMementoItem, QWriteLocker> KisMementoItemHashTableIterator;
-typedef KisTileHashTableIteratorTraits<KisMementoItem, QReadLocker> KisMementoItemHashTableIteratorConst;
+typedef KisTileHashTableIteratorTraits<KisMementoItem, true> KisMementoItemHashTableIterator;
+typedef KisTileHashTableIteratorTraits<KisMementoItem, false> KisMementoItemHashTableIteratorConst;
 
 
 class KRITAIMAGE_EXPORT KisMementoManager

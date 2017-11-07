@@ -112,16 +112,41 @@ private:
     void debugListLengthDistibution();
     void sanityChecksumCheck();
 private:
-    template<class U, class LockerType> friend class KisTileHashTableIteratorTraits;
+    template<class U, bool IsWritable> friend class KisTileHashTableIteratorTraits;
 
-    static const qint32 TABLE_SIZE = 1024;
+    static constexpr int TABLE_SIZE = 1024;
     TileTypeSP *m_hashTable;
     qint32 m_numTiles;
 
     KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
 
-    mutable QReadWriteLock m_lock;
+
+    static constexpr int NUM_LOCKS = 16;
+    static constexpr int LOCKS_SHIFT = 6;
+    mutable QReadWriteLock m_locksArray[NUM_LOCKS];
+
+    constexpr int lockFromHash(int hash) { return hash >> LOCKS_SHIFT; }
+
+    inline void lockAllForRead() const {
+        for (int i = 0; i < NUM_LOCKS; i++) {
+            m_locksArray[i].lockForRead();
+        }
+    }
+
+    inline void lockAllForWrite() {
+        for (int i = 0; i < NUM_LOCKS; i++) {
+            m_locksArray[i].lockForWrite();
+        }
+    }
+
+    inline void unlockAll() const {
+        for (int i = 0; i < NUM_LOCKS; i++) {
+            m_locksArray[i].unlock();
+        }
+    }
+
+
 };
 
 #include "kis_tile_hash_table_p.h"
@@ -137,7 +162,7 @@ private:
  * LockerType defines if the iterator is constant or mutable. One should
  * pass either QReadLocker or QWriteLocker as a parameter.
  */
-template<class T, class LockerType>
+template<class T, bool IsWritable>
 class KisTileHashTableIteratorTraits
 {
 public:
@@ -145,8 +170,13 @@ public:
     typedef KisSharedPtr<T> TileTypeSP;
 
     KisTileHashTableIteratorTraits(KisTileHashTableTraits<T> *ht)
-        : m_locker(&ht->m_lock)
     {
+        if (IsWritable) {
+            ht->lockAllForWrite();
+        } else {
+            ht->lockAllForRead();
+        }
+
         m_hashTable = ht;
         m_index = nextNonEmptyList(0);
         if (m_index < KisTileHashTableTraits<T>::TABLE_SIZE)
@@ -154,6 +184,7 @@ public:
     }
 
     ~KisTileHashTableIteratorTraits() {
+        m_hashTable->unlockAll();
     }
 
     void next() {
@@ -181,8 +212,8 @@ public:
     }
 
     // disable the method if we didn't lock for writing
-    template <class Helper = LockerType>
-    typename std::enable_if<std::is_same<Helper, QWriteLocker>::value, void>::type
+    template <bool MyWritable = IsWritable>
+    typename std::enable_if<MyWritable, void>::type
     deleteCurrent() {
         TileTypeSP tile = m_tile;
         next();
@@ -192,8 +223,8 @@ public:
     }
 
     // disable the method if we didn't lock for writing
-    template <class Helper = LockerType>
-    typename std::enable_if<std::is_same<Helper, QWriteLocker>::value, void>::type
+    template <bool MyWritable = IsWritable>
+    typename std::enable_if<MyWritable, void>::type
     moveCurrentToHashTable(KisTileHashTableTraits<T> *newHashTable) {
         TileTypeSP tile = m_tile;
         next();
@@ -208,7 +239,6 @@ protected:
     TileTypeSP m_tile;
     qint32 m_index;
     KisTileHashTableTraits<T> *m_hashTable;
-    LockerType m_locker;
 
 protected:
     qint32 nextNonEmptyList(qint32 startIdx) {
@@ -227,7 +257,7 @@ private:
 
 
 typedef KisTileHashTableTraits<KisTile> KisTileHashTable;
-typedef KisTileHashTableIteratorTraits<KisTile, QWriteLocker> KisTileHashTableIterator;
-typedef KisTileHashTableIteratorTraits<KisTile, QReadLocker> KisTileHashTableConstIterator;
+typedef KisTileHashTableIteratorTraits<KisTile, true> KisTileHashTableIterator;
+typedef KisTileHashTableIteratorTraits<KisTile, false> KisTileHashTableConstIterator;
 
 #endif /* KIS_TILEHASHTABLE_H_ */

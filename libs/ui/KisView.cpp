@@ -145,8 +145,9 @@ public:
     bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
-    bool softProofing = KisConfig().readEntry<bool>("checkSoftProofing", false);
-    bool gamutCheck = KisConfig().readEntry<bool>("checkGamutCheck", false);
+
+    bool softProofing = false;
+    bool gamutCheck = false;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -253,8 +254,6 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
-    d->canvas.slotSoftProofing(d->softProofing);
-    d->canvas.slotGamutCheck(d->gamutCheck);
 }
 
 KisView::~KisView()
@@ -860,7 +859,6 @@ void KisView::slotSoftProofing(bool softProofing)
     }
     viewManager()->showFloatingMessage(message,QIcon());
     canvasBase()->slotSoftProofing(softProofing);
-    KisConfig().writeEntry<bool>("checkSoftProofing", softProofing);
 }
 
 void KisView::slotGamutCheck(bool gamutCheck)
@@ -884,7 +882,6 @@ void KisView::slotGamutCheck(bool gamutCheck)
     }
     viewManager()->showFloatingMessage(message,QIcon());
     canvasBase()->slotGamutCheck(gamutCheck);
-    KisConfig().writeEntry<bool>("checkGamutCheck", gamutCheck);
 }
 
 bool KisView::softProofing()

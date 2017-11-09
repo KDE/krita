@@ -554,7 +554,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
 {
     m_d->proofingConfig = this->image()->proofingConfiguration();
     if (!m_d->proofingConfig) {
-        qDebug() << "Canvas: No proofing config found, generating one.";
+        qDebug()<<"Canvas: No proofing config found, generating one.";
         KisImageConfig cfg;
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
@@ -582,6 +582,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
 
     m_d->proofingConfigUpdated = true;
     startUpdateInPatches(this->image()->bounds());
+
 }
 
 void KisCanvas2::slotSoftProofing(bool softProofing)

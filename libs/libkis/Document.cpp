@@ -213,7 +213,7 @@ void Document::setDocumentInfo(const QString &document)
 
 QString Document::fileName() const
 {
-    if (!d->document) return QString::null;
+    if (!d->document) return QString();
     return d->document->url().toLocalFile();
 }
 

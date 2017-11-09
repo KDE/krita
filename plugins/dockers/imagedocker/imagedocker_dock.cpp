@@ -40,7 +40,7 @@
 #include <QLabel>
 #include <QAbstractListModel>
 #include <QButtonGroup>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QMimeData>
 
@@ -218,9 +218,9 @@ ImageDockerDock::ImageDockerDock():
 
     installEventFilter(this);
 
-    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-pictures"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("go-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-pictures"), QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-documents"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("go-home"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
     Q_FOREACH (const QFileInfo &info, QDir::drives()) {
         m_ui->cmbPath->addItem(KisIconUtils::loadIcon("drive-harddisk"), info.absolutePath());
@@ -390,7 +390,7 @@ void ImageDockerDock::saveConfigState()
 
 void ImageDockerDock::loadConfigState()
 {
-    const QString defaultLocation = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+    const QString defaultLocation = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("referenceImageDocker");
     QString lastUsedDirectory = cfg.readEntry("lastUsedDirectory", defaultLocation);

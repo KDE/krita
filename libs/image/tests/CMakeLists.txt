@@ -138,6 +138,10 @@ ecm_add_test(kis_asl_parser_test.cpp
     TEST_NAME kritalibpsd-asl_parser_test
     LINK_LIBRARIES kritapsd kritapigment kritawidgetutils kritacommand Qt5::Xml Qt5::Test)
 
+ecm_add_test(KisPerStrokeRandomSourceTest.cpp
+    TEST_NAME KisPerStrokeRandomSourceTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
+
 # ecm_add_test(kis_dom_utils_test.cpp
 #    TEST_NAME krita-image-DomUtils-Test
 #    LINK_LIBRARIES kritaimage Qt5::Test)

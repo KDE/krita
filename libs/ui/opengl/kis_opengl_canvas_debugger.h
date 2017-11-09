@@ -20,11 +20,12 @@
 #define __KIS_OPENGL_CANVAS_DEBUGGER_H
 
 #include <QScopedPointer>
+#include <QObject>
 
 
-
-class KisOpenglCanvasDebugger
+class KisOpenglCanvasDebugger : public QObject
 {
+    Q_OBJECT
 public:
     KisOpenglCanvasDebugger();
     ~KisOpenglCanvasDebugger();
@@ -36,6 +37,9 @@ public:
     void nofityPaintRequested();
     void nofitySyncStatus(bool value);
     qreal accumulatedFps();
+
+private Q_SLOTS:
+    void slotConfigChanged();
 
 private:
     struct Private;

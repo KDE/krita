@@ -36,7 +36,7 @@ public:
 
     explicit RecentImagesModel(QObject *parent = 0);
     virtual ~RecentImagesModel();
-
+    QHash<int, QByteArray> roleNames() const;
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;

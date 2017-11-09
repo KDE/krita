@@ -76,7 +76,8 @@ Qt::ItemFlags TasksetModel::flags(const QModelIndex& /*index*/) const
 void TasksetModel::addAction(QAction* action)
 {
     m_actions.append(action);
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 QVector< QAction* > TasksetModel::actions()
@@ -95,6 +96,7 @@ QAction* TasksetModel::actionFromIndex(const QModelIndex& index)
 void TasksetModel::clear()
 {
     m_actions.clear();
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 

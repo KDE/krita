@@ -23,7 +23,7 @@
 #include <QProcessEnvironment>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QGridLayout>
 #include <QTableWidget>
 #include <QPainter>
@@ -138,7 +138,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
         m_ui->editEmail->setText(cfg.readEntry<QString>("BundleAuthorEmail", info.authorInfo("email")));
         m_ui->editWebsite->setText(cfg.readEntry<QString>("BundleWebsite", "http://"));
         m_ui->editLicense->setText(cfg.readEntry<QString>("BundleLicense", "CC-BY-SA"));
-        m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)));
+        m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     }
 
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
@@ -426,7 +426,7 @@ void DlgCreateBundle::getPreviewImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
     dialog.setCaption(i18n("Select file to use as bundle icon"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     m_previewImage = dialog.filename();
     QImage img(m_previewImage);

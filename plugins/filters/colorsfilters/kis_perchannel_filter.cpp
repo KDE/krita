@@ -80,7 +80,7 @@ QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
     return vchannels;
 }
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisConfigWidget(parent, f), m_histogram(0)
 {
     Q_ASSERT(dev);

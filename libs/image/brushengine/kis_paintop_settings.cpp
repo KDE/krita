@@ -332,6 +332,11 @@ bool KisPaintOpSettings::useSpacingUpdates() const
     return getBool(SPACING_USE_UPDATES, false);
 }
 
+bool KisPaintOpSettings::needsAsynchronousUpdates() const
+{
+    return false;
+}
+
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;

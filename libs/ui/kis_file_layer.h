@@ -61,6 +61,7 @@ public:
     void openFile() const;
 
     ScalingMethod scalingMethod() const;
+    void setScalingMethod(ScalingMethod method);
 
     KisNodeSP clone() const override;
     bool allowAsChild(KisNodeSP) const override;

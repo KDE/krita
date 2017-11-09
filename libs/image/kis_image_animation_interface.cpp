@@ -335,24 +335,38 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    const QRect &rect,
                                                    bool recursive)
 {
+    notifyNodeChanged(node, QVector<QRect>({rect}), recursive);
+}
+
+void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
+                                                   const QVector<QRect> &rects,
+                                                   bool recursive)
+{
     if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
     if (node->inherits("KisSelectionMask")) return;
 
     KisKeyframeChannel *channel =
         node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-    if (recursive) {
-        KisTimeRange affectedRange;
-        KisTimeRange::calculateTimeRangeRecursive(node, currentTime(), affectedRange, false);
+    KisTimeRange invalidateRange;
 
-        invalidateFrames(affectedRange, rect);
+    if (recursive) {
+        KisTimeRange::calculateTimeRangeRecursive(node, currentTime(), invalidateRange, false);
     } else if (channel) {
         const int currentTime = m_d->currentTime();
-
-        invalidateFrames(channel->affectedFrames(currentTime), rect);
+        invalidateRange = channel->affectedFrames(currentTime);
     } else {
-        invalidateFrames(KisTimeRange::infinite(0), rect);
+        invalidateRange = KisTimeRange::infinite(0);
     }
+
+
+    // we compress the updated rect (atm, noone uses it anyway)
+    QRect unitedRect;
+    Q_FOREACH (const QRect &rc, rects) {
+        unitedRect |= rc;
+    }
+
+    invalidateFrames(invalidateRange, unitedRect);
 }
 
 void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)

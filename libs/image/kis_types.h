@@ -133,6 +133,10 @@ class KisGroupLayer;
 typedef KisSharedPtr<KisGroupLayer> KisGroupLayerSP;
 typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 
+class KisFileLayer;
+typedef KisSharedPtr<KisFileLayer> KisFileLayerSP;
+typedef KisWeakSharedPtr<KisFileLayer> KisFileLayerWSP;
+
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
 typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;

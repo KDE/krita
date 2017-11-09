@@ -28,6 +28,7 @@
 #include "kis_async_merger.h"
 #include "kis_lock_free_lod_counter.h"
 
+#include "KisUpdaterContextSnapshotEx.h"
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -51,6 +52,8 @@ public:
      * \see lock()
      */
     void getJobsSnapshot(qint32 &numMergeJobs, qint32 &numStrokeJobs);
+
+    KisUpdaterContextSnapshotEx getContextSnapshotEx() const;
 
     /**
      * Returns the current level of detail of all the running jobs in the
@@ -184,6 +187,8 @@ public:
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();
 };
+
+
 
 
 #endif /* __KIS_UPDATER_CONTEXT_H */

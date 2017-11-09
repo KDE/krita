@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <QApplication>
 #include <QTouchEvent>
-#include <QTouchEvent>
+#include <QElapsedTimer>
 
 #include <KoToolManager.h>
 
@@ -466,6 +466,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         retval = compressMoveEventCommon(tabletEvent);
 
+        if (d->tabletLatencyTracker) {
+            d->tabletLatencyTracker->push(tabletEvent->timestamp());
+        }
+
         /**
          * The flow of tablet events means the tablet is in the
          * proximity area, so activate it even when the
@@ -481,7 +485,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 #ifdef Q_OS_MAC
         d->allowMouseEvents();
 #endif
-        if (d->touchHasBlockedPressEvents) break;
         d->debugEvent<QTabletEvent, false>(event);
 
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);

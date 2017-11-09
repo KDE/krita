@@ -660,7 +660,7 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
 
 void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
 {
-    QPointF point = event->posF();
+    QPointF point = event->localPos();
     event->accept();
 
     setToolTip(QString());
@@ -729,7 +729,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
 
 void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 {
-    QPointF point = event->posF();
+    QPointF point = event->localPos();
     event->accept();
 
     if (event->button() == Qt::LeftButton) {
@@ -823,7 +823,7 @@ void KisPopupPalette::tabletEvent(QTabletEvent* event) {
 
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
 {
-    QPointF point = event->posF();
+    QPointF point = event->localPos();
     event->accept();
 
     m_isOverCanvasRotationIndicator = false;

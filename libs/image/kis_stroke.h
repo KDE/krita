@@ -46,6 +46,7 @@ public:
     ~KisStroke();
 
     void addJob(KisStrokeJobData *data);
+    void addMutatedJobs(const QVector<KisStrokeJobData *> list);
 
     KUndo2MagicString name() const;
     bool hasJobs() const;
@@ -68,11 +69,9 @@ public:
     bool supportsWrapAroundMode() const;
     int worksOnLevelOfDetail() const;
     bool canForgetAboutMe() const;
+    qreal balancingRatioOverride() const;
 
-    bool prevJobSequential() const;
-    bool nextJobSequential() const;
-
-    bool nextJobBarrier() const;
+    KisStrokeJobData::Sequentiality nextJobSequentiality() const;
 
     void setLodBuddy(KisStrokeSP buddy);
     KisStrokeSP lodBuddy() const;
@@ -87,7 +86,7 @@ private:
     void prepend(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data,
                  int levelOfDetail,
-                 bool isCancellable);
+                 bool isOwnJob);
 
     KisStrokeJob* dequeue();
 
@@ -117,7 +116,6 @@ private:
     bool m_strokeEnded;
     bool m_strokeSuspended;
     bool m_isCancelled; // cancelled strokes are always 'ended' as well
-    bool m_prevJobSequential;
 
     int m_worksOnLevelOfDetail;
     Type m_type;

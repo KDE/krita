@@ -44,17 +44,8 @@ class KRITAPIGMENT_EXPORT KoColor : public boost::equality_comparable<KoColor>
 {
 
 public:
-    static void init();
-
     /// Create an empty KoColor. It will be valid, but also black and transparent
-    KoColor() {
-        const KoColor * const prefab = s_prefab;
-
-        // assert that KoColor::init was called and everything is set up properly.
-        KIS_ASSERT_X(prefab != nullptr, "KoColor::KoColor()", "KoColor not initialized yet.");
-
-        *this = *prefab;
-    }
+    KoColor();
 
     /// Create a null KoColor. It will be valid, but all channels will be set to 0
     explicit KoColor(const KoColorSpace * colorSpace);
@@ -230,8 +221,6 @@ private:
     const KoColorSpace *m_colorSpace;
     quint8 m_data[MAX_PIXEL_SIZE];
     quint8 m_size;
-
-    static const KoColor *s_prefab;
 };
 
 Q_DECLARE_METATYPE(KoColor)

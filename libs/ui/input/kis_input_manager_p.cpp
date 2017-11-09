@@ -153,6 +153,10 @@ KisInputManager::Private::Private(KisInputManager *qq)
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
+
+    if (cfg.trackTabletEventLatency()) {
+        tabletLatencyTracker = new TabletLatencyTracker();
+    }
 }
 
 static const int InputWidgetsThreshold = 2000;
@@ -567,4 +571,20 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
     event->setAccepted(true);
 
     return retval;
+}
+
+qint64 KisInputManager::Private::TabletLatencyTracker::currentTimestamp() const
+{
+    // on OS X, we need to compute the timestamp that compares correctly against the native event timestamp,
+    // which seems to be the msecs since system startup. On Linux with WinTab, we produce the timestamp that
+    // we compare against ourselves in QWindowSystemInterface.
+
+    QElapsedTimer elapsed;
+    elapsed.start();
+    return elapsed.msecsSinceReference();
+}
+
+void KisInputManager::Private::TabletLatencyTracker::print(const QString &message)
+{
+    dbgTablet << qUtf8Printable(message);
 }

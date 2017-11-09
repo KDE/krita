@@ -502,30 +502,30 @@ QTabletEvent makeProximityTabletEvent(const QEvent::Type eventType, const POINTE
     );
 }
 
-void rotateTiltAngles(int &tiltX, int &tiltY, const DISPLAYCONFIG_ROTATION orientation) {
-    int newTiltX, newTiltY;
-    switch (orientation) {
-    case DISPLAYCONFIG_ROTATION_ROTATE90:
-        newTiltX = -tiltY;
-        newTiltY = tiltX;
-        break;
-    case DISPLAYCONFIG_ROTATION_ROTATE180:
-        newTiltX = -tiltX;
-        newTiltY = -tiltY;
-        break;
-    case DISPLAYCONFIG_ROTATION_ROTATE270:
-        newTiltX = tiltY;
-        newTiltY = -tiltX;
-        break;
-    case DISPLAYCONFIG_ROTATION_IDENTITY:
-    default:
-        newTiltX = tiltX;
-        newTiltY = tiltY;
-        break;
-    }
-    tiltX = newTiltX;
-    tiltY = newTiltY;
-}
+// void rotateTiltAngles(int &tiltX, int &tiltY, const DISPLAYCONFIG_ROTATION orientation) {
+//     int newTiltX, newTiltY;
+//     switch (orientation) {
+//     case DISPLAYCONFIG_ROTATION_ROTATE90:
+//         newTiltX = -tiltY;
+//         newTiltY = tiltX;
+//         break;
+//     case DISPLAYCONFIG_ROTATION_ROTATE180:
+//         newTiltX = -tiltX;
+//         newTiltY = -tiltY;
+//         break;
+//     case DISPLAYCONFIG_ROTATION_ROTATE270:
+//         newTiltX = tiltY;
+//         newTiltY = -tiltX;
+//         break;
+//     case DISPLAYCONFIG_ROTATION_IDENTITY:
+//     default:
+//         newTiltX = tiltX;
+//         newTiltY = tiltY;
+//         break;
+//     }
+//     tiltX = newTiltX;
+//     tiltY = newTiltY;
+// }
 
 QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &deviceItem, const PenPointerItem &penPointerItem)
 {
@@ -582,7 +582,7 @@ QTabletEvent makePositionalTabletEvent(const QWidget *targetWidget, const QEvent
     if (penMask.tiltYValid()) {
         tiltY = qBound(-60, penInfo.tiltY, 60);
     }
-    rotateTiltAngles(tiltX, tiltY, deviceItem.deviceOrientation);
+    // rotateTiltAngles(tiltX, tiltY, deviceItem.deviceOrientation);
 
     int rotation = 0;
     if (penMask.rotationValid()) {
@@ -756,7 +756,7 @@ bool handlePenUpdateMsg(const POINTER_PEN_INFO &penInfo)
 {
     auto currentPointerIt = penPointers.find(penInfo.pointerInfo.pointerId);
     if (currentPointerIt == penPointers.end()) {
-        dbgTablet << "Pointer" << penInfo.pointerInfo.pointerId << "wasn't being handled";
+        // dbgTablet << "Pointer" << penInfo.pointerInfo.pointerId << "wasn't being handled";
         return false;
     }
 
@@ -912,7 +912,7 @@ bool handlePointerMsg(const MSG &msg)
         return false;
     }
     if (pointerType != PT_PEN) {
-        dbgTablet << "pointerType" << pointerType << "is not PT_PEN";
+        // dbgTablet << "pointerType" << pointerType << "is not PT_PEN";
         return false;
     }
 

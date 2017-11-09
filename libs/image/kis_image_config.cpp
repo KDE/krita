@@ -247,8 +247,12 @@ QString KisImageConfig::swapDir(bool requestDefault)
 #else
     QString swap = QDir::tempPath();
 #endif
-    return !requestDefault ?
+    QString configuredSwap = !requestDefault ?
             m_config.readEntry("swaplocation", swap) : swap;
+    if (configuredSwap.isEmpty()) {
+        configuredSwap = swap;
+    }
+    return swap;
 }
 
 void KisImageConfig::setSwapDir(const QString &swapDir)
@@ -443,7 +447,7 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
     if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
         proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     } else {
-                proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+        proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     }
     QColor def(Qt::green);
     m_config.readEntry("defaultProofingGamutwarning", def);
@@ -502,4 +506,14 @@ int KisImageConfig::frameRenderingClones(bool defaultValue) const
 void KisImageConfig::setFrameRenderingClones(int value)
 {
     m_config.writeEntry("frameRenderingClones", value);
+}
+
+int KisImageConfig::fpsLimit(bool defaultValue) const
+{
+    return defaultValue ? 100 : m_config.readEntry("fpsLimit", 100);
+}
+
+void KisImageConfig::setFpsLimit(int value)
+{
+    m_config.writeEntry("fpsLimit", value);
 }

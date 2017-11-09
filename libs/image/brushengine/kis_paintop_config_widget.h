@@ -36,7 +36,7 @@ class KRITAIMAGE_EXPORT KisPaintOpConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0);
+    KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~KisPaintOpConfigWidget() override;
 
     void writeConfigurationSafe(KisPropertiesConfigurationSP config) const;

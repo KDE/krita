@@ -60,6 +60,18 @@ KoCompositeOp::ParameterInfo& KoCompositeOp::ParameterInfo::operator=(const Para
     return *this;
 }
 
+void KoCompositeOp::ParameterInfo::setOpacityAndAverage(float _opacity, float _averageOpacity)
+{
+    if (qFuzzyCompare(_opacity, _averageOpacity)) {
+        opacity = _opacity;
+        lastOpacity = &opacity;
+    } else {
+        opacity = _opacity;
+        _lastOpacityData = _averageOpacity;
+        lastOpacity = &_lastOpacityData;
+    }
+}
+
 void KoCompositeOp::ParameterInfo::copy(const ParameterInfo &rhs)
 {
     dstRowStart = rhs.dstRowStart;

@@ -35,7 +35,7 @@ KisSensorsTest::KisSensorsTest()
 
 void KisSensorsTest::testDrawingAngle()
 {
-    KisDynamicSensorSP sensor = KisDynamicSensor::id2Sensor(DrawingAngleId);
+    KisDynamicSensorSP sensor = KisDynamicSensor::id2Sensor(DrawingAngleId, "testname");
     testBound(sensor);
 }
 

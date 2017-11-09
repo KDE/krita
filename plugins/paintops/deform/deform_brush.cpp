@@ -174,10 +174,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     // clear
     if (dab->bounds().width() != dstWidth || dab->bounds().height() != dstHeight) {
         dab->setRect(m_maskRect.toRect());
-        dab->initialize();
-    }
-    else {
-        dab->clear(m_maskRect.toRect());
+        dab->lazyGrowBufferWithoutInitialization();
     }
 
     qreal const centerX = dstWidth  * 0.5  + subPixelX;
@@ -201,7 +198,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     }
 
     mask->setRect(dab->bounds());
-    mask->initialize();
+    mask->lazyGrowBufferWithoutInitialization();
     quint8* maskPointer = mask->data();
     qint8 maskPixelSize = mask->pixelSize();
 

@@ -104,6 +104,7 @@ KisLayerCompositionSP CompositionModel::compositionFromIndex(const QModelIndex& 
 void CompositionModel::setCompositions(QList< KisLayerCompositionSP > compositions)
 {
     m_compositions = compositions;
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 

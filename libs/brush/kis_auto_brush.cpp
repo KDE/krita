@@ -251,28 +251,13 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
-
-        // old bounds
-        QRect oldBounds = dst->bounds();
-
         // new bounds. we don't care if there is some extra memory occcupied.
         dst->setRect(QRect(0, 0, dstWidth, dstHeight));
-
-        if (dstWidth * dstHeight <= oldBounds.width() * oldBounds.height()) {
-            // just clear the data in dst,
-            memset(dst->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight * dst->pixelSize());
-        }
-        else {
-            // enlarge the data
-            dst->initialize();
-        }
+        dst->lazyGrowBufferWithoutInitialization();
     }
     else {
-        if (dst->data() == 0 || dst->bounds().isEmpty()) {
-            warnKrita << "Creating a default black dab: no coloring info and no initialized paint device to mask";
-            dst->clear(QRect(0, 0, dstWidth, dstHeight));
-        }
-        Q_ASSERT(dst->bounds().width() >= dstWidth && dst->bounds().height() >= dstHeight);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(dst->bounds().width() >= dstWidth &&
+                                       dst->bounds().height() >= dstHeight);
     }
 
     quint8* dabPointer = dst->data();
@@ -317,7 +302,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     applicator->initializeData(&data);
 
     int jobs = d->idealThreadCountCached;
-    if (dstHeight > 100 && jobs >= 4) {
+    if (threadingAllowed() && dstHeight > 100 && jobs >= 4) {
         int splitter = dstHeight / jobs;
         QVector<QRect> rects;
         for (int i = 0; i < jobs - 1; i++) {

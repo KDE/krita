@@ -140,9 +140,8 @@ void KisSplashScreen::displayLinks() {
                            "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
                            "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
 
-                           "<p><a href=\"https://quickgit.kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+                           "<p><a href=\"https://phabricator.kde.org/source/krita/\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
 
-                           "<p><a href=\"https://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>", color));
 
@@ -173,7 +172,7 @@ QString KisSplashScreen::colorString() const
 void KisSplashScreen::repaint()
 {
     QWidget::repaint();
-    QApplication::flush();
+    qApp->sendPostedEvents();
 }
 
 void KisSplashScreen::show()

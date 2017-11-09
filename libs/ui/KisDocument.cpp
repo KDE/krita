@@ -57,7 +57,7 @@
 #include <QTextBrowser>
 #include <QApplication>
 #include <QBuffer>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
@@ -1221,16 +1221,15 @@ QString KisDocument::prettyPathOrUrl() const
 QString KisDocument::caption() const
 {
     QString c;
-    if (documentInfo()) {
-        c = documentInfo()->aboutInfo("title");
-    }
     const QString _url(url().fileName());
-    if (!c.isEmpty() && !_url.isEmpty()) {
-        c = QString("%1 - %2").arg(c).arg(_url);
-    }
-    else if (c.isEmpty()) {
+
+    // if URL is empty...it is probably an unsaved file
+    if (_url.isEmpty()) {
+        c = " [" + i18n("Not Saved") + "] ";
+    } else {
         c = _url; // Fall back to document URL
     }
+
     return c;
 }
 
@@ -1517,7 +1516,7 @@ bool KisDocument::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
+        setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("abstract", description);
 

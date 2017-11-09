@@ -19,7 +19,7 @@
 #include "kis_image_manager.h"
 
 #include <QString>
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <QAction>
 #include <QUrl>
@@ -116,7 +116,7 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
     if (urlArg.isEmpty()) {
         KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setCaption(i18n("Import Image"));
-        dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+        dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
         dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
         QStringList fileNames = dialog.filenames();
         Q_FOREACH (const QString &fileName, fileNames) {

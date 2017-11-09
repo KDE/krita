@@ -33,10 +33,10 @@ public:
     enum Roles {
         TextRole = Qt::UserRole + 1,
     };
-    
+
     explicit ColorProfileModel(QObject* parent = 0);
     virtual ~ColorProfileModel();
-
+    QHash<int, QByteArray> roleNames() const;
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
 

@@ -37,15 +37,20 @@ PaletteColorsModel::PaletteColorsModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    QHash<int, QByteArray> roles;
-    roles[ImageRole] = "image";
-    roles[TextRole] = "text";
-    setRoleNames(roles);
 }
 
 PaletteColorsModel::~PaletteColorsModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> PaletteColorsModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[ImageRole] = "image";
+    roles[TextRole] = "text";
+
+    return roles;
 }
 
 int PaletteColorsModel::rowCount(const QModelIndex &parent) const
@@ -103,7 +108,8 @@ QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation
 void PaletteColorsModel::setColorSet(QObject *newColorSet)
 {
     d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
-    reset();
+    beginResetModel();
+    endResetModel();
     emit colorSetChanged();
 }
 

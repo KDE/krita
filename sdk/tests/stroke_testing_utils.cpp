@@ -32,6 +32,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include <KisViewManager.h>
 
 #include "testutil.h"
 
@@ -63,6 +64,7 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
                                                 const QString &presetFileName)
 {
     KoCanvasResourceManager *manager = new KoCanvasResourceManager();
+    KisViewManager::initializeResourceManager(manager);
 
     QVariant i;
 
@@ -146,6 +148,11 @@ void utils::StrokeTester::setBaseFuzziness(int value)
 void utils::StrokeTester::testSimpleStroke()
 {
     testOneStroke(false, true, false, true);
+}
+
+int utils::StrokeTester::lastStrokeTime() const
+{
+    return m_strokeTime;
 }
 
 void utils::StrokeTester::test()
@@ -271,6 +278,9 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
         initImage(image, resources->currentNode(), i);
 
+        QElapsedTimer strokeTime;
+        strokeTime.start();
+
         KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, image);
         m_strokeId = image->startStroke(stroke);
         addPaintingJobs(image, resources, i);
@@ -283,6 +293,8 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
         }
 
         image->waitForDone();
+
+        m_strokeTime = strokeTime.elapsed();
         currentNode = resources->currentNode();
     }
 

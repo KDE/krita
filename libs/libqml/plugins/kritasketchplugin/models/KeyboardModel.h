@@ -59,6 +59,8 @@ public:
     explicit KeyboardModel(QObject* parent = 0);
     virtual ~KeyboardModel();
 
+    QHash<int, QByteArray> roleNames() const;
+
     virtual void classBegin();
     virtual void componentComplete();
 

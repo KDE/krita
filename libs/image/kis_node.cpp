@@ -587,8 +587,8 @@ void KisNode::setDirty()
 
 void KisNode::setDirty(const QVector<QRect> &rects)
 {
-    Q_FOREACH (const QRect &rc, rects) {
-        setDirty(rc);
+    if(m_d->graphListener) {
+        m_d->graphListener->requestProjectionUpdate(this, rects, true);
     }
 }
 
@@ -600,15 +600,13 @@ void KisNode::setDirty(const QRegion &region)
 void KisNode::setDirtyDontResetAnimationCache()
 {
     if(m_d->graphListener) {
-        m_d->graphListener->requestProjectionUpdate(this, extent(), false);
+        m_d->graphListener->requestProjectionUpdate(this, {extent()}, false);
     }
 }
 
 void KisNode::setDirty(const QRect & rect)
 {
-    if(m_d->graphListener) {
-        m_d->graphListener->requestProjectionUpdate(this, rect, true);
-    }
+    setDirty(QVector<QRect>({rect}));
 }
 
 void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)

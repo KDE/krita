@@ -582,7 +582,7 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *w, const QPointF &local,
                                                qreal tangentialPressure, qreal rotation, int z, qint64 uid,
                                                Qt::KeyboardModifiers modifiers)
 {
-    qint64 timestamp = g_eventTimer.elapsed();
+    qint64 timestamp = g_eventTimer.msecsSinceReference() + g_eventTimer.elapsed();
 
     QWindowSystemInterfacePrivate::TabletEvent *e =
         new QWindowSystemInterfacePrivate::TabletEvent(w, timestamp, local, global, device, pointerType, buttons, pressure,
@@ -682,7 +682,7 @@ void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e)
 
 void QWindowSystemInterface::handleTabletEnterProximityEvent(int device, int pointerType, qint64 uid)
 {
-    qint64 timestamp = g_eventTimer.elapsed();
+    qint64 timestamp = g_eventTimer.msecsSinceReference() + g_eventTimer.elapsed();
 
     QTabletEvent ev(QEvent::TabletEnterProximity, QPointF(), QPointF(),
                     device, pointerType, 0, 0, 0,
@@ -694,7 +694,7 @@ void QWindowSystemInterface::handleTabletEnterProximityEvent(int device, int poi
 
 void QWindowSystemInterface::handleTabletLeaveProximityEvent(int device, int pointerType, qint64 uid)
 {
-    qint64 timestamp = g_eventTimer.elapsed();
+    qint64 timestamp = g_eventTimer.msecsSinceReference() + g_eventTimer.elapsed();
 
     QTabletEvent ev(QEvent::TabletLeaveProximity, QPointF(), QPointF(),
                     device, pointerType, 0, 0, 0,

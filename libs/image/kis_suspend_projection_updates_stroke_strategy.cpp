@@ -55,11 +55,15 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         {
         }
 
-        bool filter(KisImage *image, KisNode *node, const QRect &rect,  bool resetAnimationCache) override {
+        bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects,  bool resetAnimationCache) override {
             if (image->currentLevelOfDetail() > 0) return false;
 
             QMutexLocker l(&m_mutex);
-            m_requestsHash[KisNodeSP(node)].append(Request(rect, resetAnimationCache));
+
+            Q_FOREACH(const QRect &rc, rects) {
+                m_requestsHash[KisNodeSP(node)].append(Request(rc, resetAnimationCache));
+            }
+
             return true;
         }
 
@@ -97,10 +101,8 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     resetAnimationCache |= req.resetAnimationCache;
                 }
 
-                Q_FOREACH (const QRect &rc, region.rects()) {
-                    // FIXME: constness: port rPU to SP
-                    listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), rc, resetAnimationCache);
-                }
+                // FIXME: constness: port rPU to SP
+                listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), region.rects(), resetAnimationCache);
             }
         }
 

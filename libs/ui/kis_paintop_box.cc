@@ -202,6 +202,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     // create horizontal and vertical mirror buttons
 
     m_hMirrorButton = new KisHighlightedToolButton(this);
+    int menuPadding = 10;
+    m_hMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
     m_hMirrorButton->setCheckable(true);
     m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
@@ -209,6 +211,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setPopupMode(QToolButton::MenuButtonPopup);
 
     m_vMirrorButton = new KisHighlightedToolButton(this);
+    m_vMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
     m_vMirrorButton->setCheckable(true);
     m_vMirrorAction = m_viewManager->actionManager()->createAction("vmirror_action");
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
@@ -875,6 +878,10 @@ void KisPaintopBox::slotSetupDefaultPreset()
     KisPaintOpPresetSP preset = defaultPreset(m_resourceProvider->currentPreset()->paintOp());
     preset->setOptionsWidget(m_optionWidget);
     m_resourceProvider->setPaintOpPreset(preset);
+
+    // tell the brush editor that the resource has changed
+    // so it can update everything
+    m_presetsPopup->resourceSelected(preset.data());
 }
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)

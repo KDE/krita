@@ -24,6 +24,8 @@
 #include <QTouchEvent>
 #include <QScopedPointer>
 #include <QPointer>
+#include <QQueue>
+#include <QElapsedTimer>
 
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"
@@ -34,7 +36,7 @@
 #include "input/kis_tablet_debugger.h"
 #include "kis_timed_signal_threshold.h"
 #include "kis_signal_auto_connection.h"
-
+#include "kis_latency_tracker.h"
 
 class KisToolInvocationAction;
 
@@ -146,4 +148,12 @@ public:
     bool containsPointer = true;
 
     int accumulatedScrollDelta = 0;
+
+    class TabletLatencyTracker : public KisLatencyTracker {
+    protected:
+        virtual qint64 currentTimestamp() const;
+        virtual void print(const QString &message);
+    };
+
+    KisSharedPtr<TabletLatencyTracker> tabletLatencyTracker;
 };

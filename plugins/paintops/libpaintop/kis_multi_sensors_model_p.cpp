@@ -79,7 +79,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
             KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::id2Type(KisDynamicSensor::sensorsIds()[index.row()].id()), false);
 
             if (!sensor) {
-                sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id());
+                sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), "NOT_VALID_NAME");
                 m_curveOption->replaceSensor(sensor);
             }
 
@@ -119,7 +119,6 @@ QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensorSP arg1)
 void KisMultiSensorsModel::resetCurveOption()
 {
     beginResetModel();
-    reset();
     endResetModel();
 }
 

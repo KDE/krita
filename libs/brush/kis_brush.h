@@ -234,10 +234,35 @@ public:
      * Having got this notification the brush can update the counters
      * of dabs, generate some new random values if needed.
      *
+     * * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
+     *
      * Currently, this is used by pipe'd brushes to implement
      * incremental and random parasites
      */
     virtual void notifyCachedDabPainted(const KisPaintInformation& info);
+
+    /**
+     * Is called by the multithreaded queue to prepare a specific brush
+     * tip for the particular seqNo.
+     *
+     * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
+     *
+     * Currently, this is used by pipe'd brushes to implement
+     * incremental and random parasites
+     */
+    virtual void prepareForSeqNo(const KisPaintInformation& info, int seqNo);
+
+    /**
+     * Notify the brush if it can use QtConcurrent's threading capabilities in its
+     * internal routines. By default it is allowed, but some paintops (who do their
+     * own multithreading) may ask the brush to avoid internal threading.
+     */
+    void setThreadingAllowed(bool value);
+
+    /**
+     * \see setThreadingAllowed() for details
+     */
+    bool threadingAllowed() const;
 
     /**
      * Return a fixed paint device that contains a correctly scaled image dab.
@@ -246,14 +271,6 @@ public:
             KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const;
-
-    /**
-     * Apply the brush mask to the pixels in dst. Dst should be big enough!
-     */
-    void mask(KisFixedPaintDeviceSP dst,
-              KisDabShape const& shape,
-              const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
      * clear dst fill it with a mask colored with KoColor

@@ -72,6 +72,8 @@ bool KisNodeFilterProxyModel::setData(const QModelIndex &index, const QVariant &
 
 bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex srcIndex)
 {
+    if (!srcIndex.isValid()) return false;
+
     KisNodeSP node = nodeModel->nodeFromIndex(srcIndex);
     if (node == activeNode ||
         acceptedLabels.contains(node->colorLabelIndex())) {
@@ -83,7 +85,7 @@ bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex 
 
     const int numChildren = srcIndex.model()->rowCount(srcIndex);
     for (int i = 0; i < numChildren; i++) {
-        QModelIndex child = srcIndex.child(i, 0);
+        QModelIndex child = nodeModel->index(i, 0, srcIndex);
         if (checkIndexAllowedRecursively(child)) {
             result = true;
             break;

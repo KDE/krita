@@ -60,7 +60,7 @@ void writeVarString(const QString &value, QIODevice *device)
     quint32 lenTag = value.length() != 4 ? value.length() : 0;
     SAFE_WRITE_EX(device, lenTag);
 
-    if (!device->write(value.toAscii().data(), value.length())) {
+    if (!device->write(value.toLatin1().data(), value.length())) {
         warnKrita << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
         return;
     }
@@ -71,7 +71,7 @@ void writePascalString(const QString &value, QIODevice *device)
     quint8 lenTag = value.length();
     SAFE_WRITE_EX(device, lenTag);
 
-    if (!device->write(value.toAscii().data(), value.length())) {
+    if (!device->write(value.toLatin1().data(), value.length())) {
         warnKrita << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
         return;
     }
@@ -81,7 +81,7 @@ void writeFixedString(const QString &value, QIODevice *device)
 {
     KIS_ASSERT_RECOVER_RETURN(value.length() == 4);
 
-    if (!device->write(value.toAscii().data(), value.length())) {
+    if (!device->write(value.toLatin1().data(), value.length())) {
         warnKrita << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
         return;
     }

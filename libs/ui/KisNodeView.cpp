@@ -522,6 +522,11 @@ int KisNodeView::cursorPageIndex() const
 void KisNodeView::dragEnterEvent(QDragEnterEvent *ev)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
+
+    QVariant data = qVariantFromValue(
+        static_cast<void*>(const_cast<QMimeData*>(ev->mimeData())));
+    model()->setData(QModelIndex(), data, KisNodeModel::DropEnabled);
+
     QTreeView::dragEnterEvent(ev);
 }
 

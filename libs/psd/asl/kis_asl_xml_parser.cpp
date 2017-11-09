@@ -343,7 +343,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 }
 
                 QDomCDATASection dataSection = dataNode.toCDATASection();
-                QByteArray data = dataSection.data().toAscii();
+                QByteArray data = dataSection.data().toLatin1();
                 data = QByteArray::fromBase64(data);
                 data = qUncompress(data);
 

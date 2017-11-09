@@ -35,7 +35,7 @@
 #define MARGIN 5
 #define HANDLE_SIZE 10
 
-KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WFlags f)
+KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WindowFlags f)
         : QWidget(parent, f),
         m_currentSegment(0),
         m_selectedSegment(0),

@@ -31,12 +31,13 @@
 #include <QLabel>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QStandardPaths>
 #include <QDebug>
 #include <QTextEdit>
+#include <QDesktopServices>
 
 #include <kaboutdata.h>
 #include <kconfig.h>

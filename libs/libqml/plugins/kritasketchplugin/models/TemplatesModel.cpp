@@ -54,16 +54,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames[NameRole] = "name";
-    roleNames[DescriptionRole] = "description";
-    roleNames[FileRole] = "file";
-    roleNames[IconRole] = "icon";
-    roleNames[GroupName] = "groupName";
-    roleNames[GroupFolded] = "groupFolded";
-    setRoleNames(roleNames);
-
-    // Prefill a couple of 
+    // Prefill a couple of
     ItemData* customItem = new ItemData();
     customItem->name = "Custom Image";
     customItem->file = "custom";
@@ -96,6 +87,18 @@ TemplatesModel::TemplatesModel(QObject* parent)
 TemplatesModel::~TemplatesModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> TemplatesModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames[NameRole] = "name";
+    roleNames[DescriptionRole] = "description";
+    roleNames[FileRole] = "file";
+    roleNames[IconRole] = "icon";
+    roleNames[GroupName] = "groupName";
+    roleNames[GroupFolded] = "groupFolded";
+    return roleNames;
 }
 
 QVariant TemplatesModel::data(const QModelIndex& index, int role) const

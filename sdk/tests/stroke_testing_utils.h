@@ -50,6 +50,8 @@ namespace utils {
         void setNumIterations(int value);
         void setBaseFuzziness(int value);
 
+        int lastStrokeTime() const;
+
     protected:
         KisStrokeId strokeId() {
             return m_strokeId;
@@ -101,6 +103,7 @@ namespace utils {
         QString m_presetFilename;
         int m_numIterations;
         int m_baseFuzziness;
+        int m_strokeTime = 0;
     };
 }
 

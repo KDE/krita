@@ -71,7 +71,7 @@ public:
     };
     explicit LayerModel(QObject* parent = 0);
     virtual ~LayerModel();
-
+    QHash<int, QByteArray> roleNames() const;
     QObject* view() const;
     void setView(QObject* newView);
     QObject* engine() const;

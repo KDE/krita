@@ -32,20 +32,23 @@
 
 
 #include <KoColorSpace.h>
-#include "KoColorProfile.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorConversionTransformation.h"
-#include "KoColorPopupAction.h"
-#include "kis_icon_utils.h"
-#include "KoID.h"
-#include "kis_image.h"
-#include "kis_annotation.h"
-#include "kis_config.h"
-#include "kis_signal_compressor.h"
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
+#include <KoColorConversionTransformation.h>
+#include <KoColorPopupAction.h>
+#include <kis_icon_utils.h>
+#include <KoID.h>
+#include <kis_image.h>
+#include <kis_annotation.h>
+#include <kis_config.h>
+#include <kis_signal_compressor.h>
+#include <kis_image_config.h>
+
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 #include "kis_layer_utils.h"
+
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent, const char *name)
     : KoDialog(parent)
@@ -86,10 +89,16 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     //set the proofing space
     m_proofingConfig = m_image->proofingConfiguration();
+    if (!m_proofingConfig) {
+        m_page->chkSaveProofing->setChecked(false);
+        m_proofingConfig = KisImageConfig().defaultProofingconfiguration();
+    }
+    else {
+        m_page->chkSaveProofing->setChecked(true);
+    }
+
     m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel, m_proofingConfig->proofingDepth, m_proofingConfig->proofingProfile));
-
     m_page->cmbIntent->setCurrentIndex((int)m_proofingConfig->intent);
-
     m_page->ckbBlackPointComp->setChecked(m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
     m_page->gamutAlarm->setColor(m_proofingConfig->warningColor);
@@ -148,16 +157,33 @@ void KisDlgImageProperties::setCurrentColor()
 
 void KisDlgImageProperties::setProofingConfig()
 {
-    m_proofingConfig->conversionFlags = KoColorConversionTransformation::HighQuality;
-    if (m_page->ckbBlackPointComp) m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    m_proofingConfig->intent = (KoColorConversionTransformation::Intent)m_page->cmbIntent->currentIndex();
-    m_proofingConfig->proofingProfile = m_page->proofSpaceSelector->currentColorSpace()->profile()->name();
-    m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();
-    m_proofingConfig->proofingDepth = "U8";//default to this
-    m_proofingConfig->warningColor = m_page->gamutAlarm->color();
-    m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
-    qDebug()<<"set proofing config in properties: "<<m_proofingConfig->proofingProfile;
-    m_image->setProofingConfiguration(m_proofingConfig);
+    if (m_firstProofingConfigChange) {
+        m_page->chkSaveProofing->setChecked(true);
+        m_firstProofingConfigChange = false;
+    }
+    if (m_page->chkSaveProofing->isChecked()) {
+
+        m_proofingConfig->conversionFlags = KoColorConversionTransformation::HighQuality;
+#if QT_VERSION >= 0x07000
+        m_proofingConfig->conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->ckbBlackPointComp->isChecked());
+#else
+        m_page->chkBlackPointComp->isChecked() ?
+            m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation
+            : m_proofingConfig->conversionFlags = m_proofingConfig->conversionFlags & ~KoColorConversionTransformation::BlackpointCompensation;
+
+#endif
+        m_proofingConfig->intent = (KoColorConversionTransformation::Intent)m_page->cmbIntent->currentIndex();
+        m_proofingConfig->proofingProfile = m_page->proofSpaceSelector->currentColorSpace()->profile()->name();
+        m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();
+        m_proofingConfig->proofingDepth = "U8";//default to this
+        m_proofingConfig->warningColor = m_page->gamutAlarm->color();
+        m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
+
+        m_image->setProofingConfiguration(m_proofingConfig);
+    }
+    else {
+        m_image->setProofingConfiguration(0);
+    }
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

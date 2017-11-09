@@ -228,6 +228,9 @@ private:
     typedef KisSignalCompressorWithParam<PickingJob> PickingCompressor;
     QScopedPointer<PickingCompressor> m_colorPickingCompressor;
 
+    qreal m_localOpacity {1.0};
+    qreal m_oldOpacity {1.0};
+
 Q_SIGNALS:
     void sigPaintingFinished();
 };

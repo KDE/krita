@@ -82,10 +82,22 @@ void KisFlowOpacityOption::setOpacity(qreal opacity)
 
 void KisFlowOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info)
 {
-    if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport)
-        painter->setOpacityUpdateAverage(quint8(getDynamicOpacity(info) * 255.0));
-    else
-        painter->setOpacityUpdateAverage(quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0));
+    quint8 opacity = OPACITY_OPAQUE_U8;
+    quint8 flow = OPACITY_OPAQUE_U8;
 
-    painter->setFlow(quint8(getFlow() * 255.0));
+    apply(info, &opacity, &flow);
+
+    painter->setOpacityUpdateAverage(opacity);
+    painter->setFlow(flow);
+}
+
+void KisFlowOpacityOption::apply(const KisPaintInformation &info, quint8 *opacity, quint8 *flow)
+{
+    if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport) {
+        *opacity = quint8(getDynamicOpacity(info) * 255.0);
+    } else {
+        *opacity = quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0);
+    }
+
+    *flow = quint8(getFlow() * 255.0);
 }

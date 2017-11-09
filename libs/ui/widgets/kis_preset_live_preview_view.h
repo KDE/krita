@@ -33,6 +33,7 @@
 #include "kis_painting_information_builder.h"
 #include <kis_image.h>
 #include <kis_types.h>
+#include <KoColor.h>
 
 /**
  * Widget for displaying a live brush preview of your
@@ -67,19 +68,6 @@ public:
     void updateStroke();
 
 
-public Q_SLOTS:
-    /**
-     * @brief scales the view to fit the brush stroke and moves it back to the center position
-     */
-    void slotResetViewZoom();
-
-    /**
-     * @brief sets the zoom level to full size to get a close up of larger brushes
-     */
-    void slotZoomToOneHundredPercent();
-
-
-
 private:
 
     /// internally sets the image area for brush preview
@@ -91,8 +79,8 @@ private:
     /// internally sets the color space for brush preview
     const KoColorSpace *m_colorSpace;
 
-    /// painter that actually paints the stroke
-    KisPainter *m_brushPreviewPainter;
+    /// the color which is used for rendering the stroke
+    KoColor m_paintColor;
 
     /// the scene that can add items like text and the brush stroke image
     QGraphicsScene *m_brushPreviewScene;
@@ -146,12 +134,6 @@ private:
 
 
     /**
-     * @brief reads the brush size and scales the view out to fit it
-     * used internally when resetting the views or changing brush sizes
-     */
-    void zoomToBrushSize();
-
-    /**
      * @brief works as both clearing the previous stroke, providing
      * striped backgrounds for smudging brushes, and text if there is no preview
      */
@@ -162,7 +144,6 @@ private:
      * this is internally and should always be called after the paintBackground()
      */
     void setupAndPaintStroke();
-
 
 };
 

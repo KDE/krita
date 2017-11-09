@@ -105,10 +105,10 @@ TouchDockerDock::TouchDockerDock()
 
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-    
+
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-    
+
     Settings *settings = new Settings(this);
     DocumentManager::instance()->setSettingsManager(settings);
     m_quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);
@@ -192,7 +192,7 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
                                0,
                                Qt::ShiftModifier);
             QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
-            d->shiftOn == !d->shiftOn;
+            d->shiftOn = !d->shiftOn;
         }
         else if (id == "ctrl") {
             // set ctrl state for the next pointer event, somehow
@@ -200,7 +200,7 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
                                0,
                                Qt::ControlModifier);
             QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
-            d->ctrlOn == !d->ctrlOn;
+            d->ctrlOn = !d->ctrlOn;
         }
         else if (id == "alt") {
             // set alt state for the next pointer event, somehow
@@ -208,7 +208,7 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
                                0,
                                Qt::AltModifier);
             QApplication::sendEvent(KisPart::instance()->currentMainwindow(), &event);
-            d->altOn == !d->altOn;
+            d->altOn = !d->altOn;
 
         }
     }
@@ -320,7 +320,7 @@ KoDialog *TouchDockerDock::createDialog(const QString qml)
     quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
-    
+
     Settings *settings = new Settings(this);
     DocumentManager::instance()->setSettingsManager(settings);
     quickWidget->engine()->rootContext()->setContextProperty("Settings", settings);

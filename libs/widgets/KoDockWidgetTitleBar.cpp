@@ -180,12 +180,12 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     titleOpt.initFrom(q);
 
     QSize collapseButtonSize(0,0);
-    if (d->collapsable) {
+    if (d->collapsable && d->collapseButton->isVisible()) {
         collapseButtonSize = d->collapseButton->size();
     }
 
     QSize lockButtonSize(0,0);
-    if (d->lockable) {
+    if (d->lockable && d->lockButton->isVisible()) {
         lockButtonSize = d->lockButton->size();
     }
 
@@ -241,15 +241,9 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         size = d->floatButton->size();
     }
 
-    int offset = 0;
+    const QSize lockRectSize = size;
 
-    if (d->collapsable) {
-        offset = collapseRect.width();
-    }
-    QRect lockRect = QRect(QPoint(fw + 2 + offset, top), size);
-    d->lockButton->setGeometry(lockRect);
-
-    if (width() < (closeRect.width() + lockRect.width()) + 50) {
+    if (q->isFloating() || (width() < (closeRect.width() + lockRectSize.width()) + 50)) {
         d->collapsable = false;
         d->collapseButton->setVisible(false);
         d->lockButton->setVisible(false);
@@ -260,6 +254,14 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         d->lockButton->setVisible(true);
         d->lockable = true;
     }
+
+    int offset = 0;
+
+    if (d->collapsable) {
+        offset = collapseRect.width();
+    }
+    QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
+    d->lockButton->setGeometry(lockRect);
 }
 
 void KoDockWidgetTitleBar::setCollapsed(bool collapsed)
@@ -321,11 +323,13 @@ void KoDockWidgetTitleBar::Private::toggleFloating()
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
 
     q->setFloating(!q->isFloating());
+    updateIcons();
 }
 
 void KoDockWidgetTitleBar::Private::topLevelChanged(bool topLevel)
 {
     lockButton->setEnabled(!topLevel);
+    updateIcons();
 }
 
 void KoDockWidgetTitleBar::Private::toggleCollapsed()

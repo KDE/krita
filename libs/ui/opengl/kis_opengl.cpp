@@ -28,7 +28,7 @@
 
 #include <QDir>
 #include <QFile>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QStringList>
@@ -79,9 +79,7 @@ namespace
         bool isSupportedVersion() const {
             return
 #ifdef Q_OS_OSX
-                    ((glMajorVersion * 100 + glMinorVersion) >= 302
-                     && !rendererString.toLower().contains("amd")
-                     && !rendererString.toLower().contains("radeon"))
+                    ((glMajorVersion * 100 + glMinorVersion) >= 302)
 #else
                     (glMajorVersion >= 3 && (supportsDeprecatedFunctions || isOpenGLES)) ||
                     ((glMajorVersion * 100 + glMinorVersion) == 201)
@@ -473,7 +471,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     QOpenGLFunctions *f = ctx->functions();
     f->initializeOpenGLFunctions();
 
-    QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+    QFile log(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/krita-opengl.txt");
     log.open(QFile::WriteOnly);
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());

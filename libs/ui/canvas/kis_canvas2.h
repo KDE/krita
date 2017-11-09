@@ -232,6 +232,12 @@ public Q_SLOTS:
 
     void slotTrySwitchShapeManager();
 
+    /**
+     * Called whenever the configuration settings change.
+     */
+    void slotConfigChanged();
+
+
 private Q_SLOTS:
 
     /// The image projection has changed, now start an update
@@ -247,11 +253,6 @@ private Q_SLOTS:
      * @param documentOffset the offset in widget pixels
      */
     void documentOffsetMoved(const QPoint &documentOffset);
-
-    /**
-     * Called whenever the configuration settings change.
-     */
-    void slotConfigChanged();
 
     void slotSelectionChanged();
 
@@ -293,6 +294,8 @@ private:
     // (to be defined what that means) for things KisCanvas2 expects from KisView
     // TODO: see to avoid that
     void setup();
+
+    void initializeFpsDecoration();
 
 private:
     friend class KisView; // calls setup()

@@ -86,6 +86,8 @@ public:
     void hideAllStatusBarItems();
     void showAllStatusBarItems();
 
+    static QString formatSize(qint64 size);
+
     KoProgressUpdater *progressUpdater();
 
 public Q_SLOTS:
@@ -104,6 +106,10 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void sigCancellationRequested();
+
+    /// tell the listener that the memory usage has changed
+    /// and it needs to update its stats
+    void memoryStatusUpdated();
 
 private:
    void updateMemoryStatus();

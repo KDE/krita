@@ -117,6 +117,9 @@ public:
     int frameRenderingClones(bool defaultValue = false) const;
     void setFrameRenderingClones(int value);
 
+    int fpsLimit(bool defaultValue = false) const;
+    void setFpsLimit(int value);
+
 private:
     Q_DISABLE_COPY(KisImageConfig)
 

@@ -26,17 +26,15 @@
 #include <QHBoxLayout>
 
 
-KisDynamicSensorFuzzy::KisDynamicSensorFuzzy(bool fuzzyPerStroke)
+KisDynamicSensorFuzzy::KisDynamicSensorFuzzy(bool fuzzyPerStroke, const QString &parentOptionName)
     : KisDynamicSensor(fuzzyPerStroke ? FUZZY_PER_STROKE : FUZZY_PER_DAB),
       m_fuzzyPerStroke(fuzzyPerStroke),
-      m_isInitialized(false),
-      m_savedValue(0.0)
+      m_perStrokeRandomSourceKey(parentOptionName + "FuzzyStroke")
 {
 }
 
 void KisDynamicSensorFuzzy::reset()
 {
-    m_isInitialized = false;
 }
 
 bool KisDynamicSensorFuzzy::isAdditive() const
@@ -46,18 +44,13 @@ bool KisDynamicSensorFuzzy::isAdditive() const
 
 qreal KisDynamicSensorFuzzy::value(const KisPaintInformation &info)
 {
-    if (m_fuzzyPerStroke && m_isInitialized) {
-        return m_savedValue;
-    }
-
     qreal result = 0.0;
 
     if (!info.isHoveringMode()) {
-        result = info.randomSource()->generateNormalized();
+        result = m_fuzzyPerStroke ?
+            info.perStrokeRandomSource()->generateNormalized(m_perStrokeRandomSourceKey) :
+            info.randomSource()->generateNormalized();
         result = 2.0 * result - 1.0;
-
-        m_isInitialized = true;
-        m_savedValue = result;
     }
 
     return result;

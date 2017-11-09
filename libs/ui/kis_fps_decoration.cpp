@@ -22,6 +22,7 @@
 #include "kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "opengl/kis_opengl_canvas_debugger.h"
+#include <KisStrokeSpeedMonitor.h>
 
 const QString KisFpsDecoration::idTag = "fps_decoration";
 
@@ -38,7 +39,7 @@ KisFpsDecoration::~KisFpsDecoration()
 void KisFpsDecoration::drawDecoration(QPainter& gc, const QRectF& /*updateRect*/, const KisCoordinatesConverter */*converter*/, KisCanvas2* /*canvas*/)
 {
 #ifdef Q_OS_OSX
-    QPixmap pixmap(256, 64);
+    QPixmap pixmap(320, 128);
     pixmap.fill(Qt::transparent);
     {
         QPainter painter(&pixmap);
@@ -50,15 +51,49 @@ void KisFpsDecoration::drawDecoration(QPainter& gc, const QRectF& /*updateRect*/
 #endif
 }
 
+
+
 void KisFpsDecoration::draw(QPainter& gc)
 {
-    const qreal value = KisOpenglCanvasDebugger::instance()->accumulatedFps();
-    const QString text = QString("FPS: %1").arg(QString::number(value, 'f', 1));
+    QStringList lines;
+
+    if (KisOpenglCanvasDebugger::instance()->showFpsOnCanvas()) {
+        const qreal value = KisOpenglCanvasDebugger::instance()->accumulatedFps();
+        lines << QString("Canvas FPS: %1").arg(QString::number(value, 'f', 1));
+    }
+
+    KisStrokeSpeedMonitor *monitor = KisStrokeSpeedMonitor::instance();
+
+    if (monitor->haveStrokeSpeedMeasurement()) {
+        lines << QString("Last cursor/brush speed (px/ms): %1/%2%3")
+                     .arg(monitor->lastCursorSpeed(), 0, 'f', 1)
+                     .arg(monitor->lastRenderingSpeed(), 0, 'f', 1)
+                     .arg(monitor->lastStrokeSaturated() ? " (!)" : "");
+        lines << QString("Last brush framerate: %1 fps")
+                     .arg(monitor->lastFps(), 0, 'f', 1);
+
+        lines << QString("Average cursor/brush speed (px/ms): %1/%2")
+                     .arg(monitor->avgCursorSpeed(), 0, 'f', 1)
+                     .arg(monitor->avgRenderingSpeed(), 0, 'f', 1);
+        lines << QString("Average brush framerate: %1 fps")
+                     .arg(monitor->avgFps(), 0, 'f', 1);
+    }
+
+
+    QPoint startPoint(20,30);
+    const int lineSpacing = QFontMetrics(gc.font()).lineSpacing();
+
 
     gc.save();
-    gc.setPen(QPen(Qt::white));
-    gc.drawText(QPoint(21, 31), text);
-    gc.setPen(QPen(Qt::black));
-    gc.drawText(QPoint(20, 30), text);
+
+    Q_FOREACH (const QString &line, lines) {
+        gc.setPen(QPen(Qt::white));
+        gc.drawText(startPoint + QPoint(1,1), line);
+        gc.setPen(QPen(Qt::black));
+        gc.drawText(startPoint, line);
+
+        startPoint += QPoint(0, lineSpacing);
+    }
+
     gc.restore();
 }

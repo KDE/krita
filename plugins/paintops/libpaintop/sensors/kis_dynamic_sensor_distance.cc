@@ -26,7 +26,6 @@
 
 KisDynamicSensorDistance::KisDynamicSensorDistance()
     : KisDynamicSensor(DISTANCE)
-    , m_measuredDistance(0.0)
     , m_periodic(true)
 {
     setLength(30);
@@ -36,18 +35,13 @@ qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
 {
     if (pi.isHoveringMode()) return 1.0;
 
-    m_measuredDistance += pi.drawingDistance();
 
-    m_measuredDistance = m_periodic ?
-                         fmod(m_measuredDistance, m_length) :
-                         qMin(m_measuredDistance, (qreal)m_length);
+    const qreal distance =
+        m_periodic ?
+        fmod(pi.totalStrokeLength(), m_length) :
+        qMin(pi.totalStrokeLength(), (qreal)m_length);
 
-    return m_measuredDistance / m_length;
-}
-
-void KisDynamicSensorDistance::reset()
-{
-    m_measuredDistance = 0;
+    return distance / m_length;
 }
 
 void KisDynamicSensorDistance::setPeriodic(bool periodic)

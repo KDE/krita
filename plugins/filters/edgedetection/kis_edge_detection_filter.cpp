@@ -124,6 +124,7 @@ KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration() const
 
 KisConfigWidget *KisEdgeDetectionFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
+    Q_UNUSED(dev);
     return new KisWdgEdgeDetection(parent);
 }
 

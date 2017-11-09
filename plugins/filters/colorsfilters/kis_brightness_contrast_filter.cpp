@@ -186,7 +186,7 @@ KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const K
     return adjustment;
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisConfigWidget(parent, f)
 {
     int i;

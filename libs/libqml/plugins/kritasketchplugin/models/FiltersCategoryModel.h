@@ -36,6 +36,7 @@ public:
     };
     explicit FiltersCategoryModel(QObject* parent = 0);
     virtual ~FiltersCategoryModel();
+    QHash<int, QByteArray> roleNames() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 

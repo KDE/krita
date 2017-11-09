@@ -53,6 +53,8 @@ class KoPattern;
 class KisPaintInformation;
 class KisPaintOp;
 class KisDistanceInformation;
+class KisRenderedDab;
+class KisRunnableStrokeJobsInterface;
 
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
@@ -294,6 +296,14 @@ public:
                   const KisFixedPaintDeviceSP srcDev,
                   qint32 srcX, qint32 srcY,
                   qint32 srcWidth, qint32 srcHeight);
+
+
+    /**
+     * Render the area \p rc from \p srcDevices on the destination device.
+     * If \p rc doesn't cross the device's rect, then the device is not
+     * rendered at all.
+     */
+    void bltFixed(const QRect &rc, const QList<KisRenderedDab> allSrcDevices);
 
     /**
      * Convenience method that uses QPoint and QRect.
@@ -620,15 +630,32 @@ public:
     void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontally, bool mirrorVertically);
 
     /**
-     * copy the mirror information to other painter
-     */
-    void copyMirrorInformation(KisPainter * painter);
-
-    /**
      * Returns whether the mirroring methods will do any
      * work when called
      */
     bool hasMirroring() const;
+
+    /**
+     * Indicates if horizontal mirroring mode is activated
+     */
+    bool hasHorizontalMirroring() const;
+
+    /**
+     * Indicates if vertical mirroring mode is activated
+     */
+    bool hasVerticalMirroring() const;
+
+    /**
+     * Mirror \p rc in the requested \p direction around the center point defined
+     * in the painter.
+     */
+    void mirrorRect(Qt::Orientation direction, QRect *rc) const;
+
+    /**
+     * Mirror \p dab in the requested direction around the center point defined
+     * in the painter. The dab's offset is adjusted automatically.
+     */
+    void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const;
 
     /// Set the current pattern
     void setPattern(const KoPattern * pattern);
@@ -706,6 +733,16 @@ public:
      */
     void setOpacityUpdateAverage(quint8 opacity);
 
+    /**
+     * Sets average opacity, that is used to make ALPHA_DARKEN painting look correct
+     */
+    void setAverageOpacity(qreal averageOpacity);
+
+    /**
+     * Calculate average opacity value after painting a single dab with \p opacity
+     */
+    static qreal blendAverageOpacity(qreal opacity, qreal averageOpacity);
+
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);
 
@@ -763,6 +800,20 @@ public:
      * set the conversion flags in case pixels need to be converted before painting
      */
     void setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+    /**
+     * Set interface for running asynchronous jobs by paintops.
+     *
+     * NOTE: the painter does *not* own the interface device. It is the responsibility
+     *       of the caller to ensure that the interface object is alive during the lifetime
+     *       of the painter.
+     */
+    void setRunnableStrokeJobsInterface(KisRunnableStrokeJobsInterface *interface);
+
+    /**
+     * Get the interface for running asynchronous jobs. It is used by paintops mostly.
+     */
+    KisRunnableStrokeJobsInterface* runnableStrokeJobsInterface() const;
 
 protected:
     /// Initialize, set everything to '0' or defaults

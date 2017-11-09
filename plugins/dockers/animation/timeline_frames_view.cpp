@@ -59,7 +59,7 @@
 
 #include <KoFileDialog.h>
 #include <KoIconToolTip.h>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QWidgetAction>
 
 #include "config-qtmultimedia.h"
@@ -400,7 +400,7 @@ void TimelineFramesView::slotSelectAudioChannelFile()
 {
     if (!m_d->model) return;
 
-    QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
+    QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
 
     const QString currentFile = m_d->model->audioChannelFileName();
     QDir baseDir = QFileInfo(currentFile).absoluteDir();

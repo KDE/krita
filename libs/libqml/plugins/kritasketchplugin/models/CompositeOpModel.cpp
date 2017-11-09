@@ -100,7 +100,7 @@ public:
         {
             // IMPORTANT: set the PaintOp size before setting the other properties
             //            it wont work the other way
-            qreal sizeDiff = size - currentPreset->settings()->paintOpSize();
+            //qreal sizeDiff = size - currentPreset->settings()->paintOpSize();
             //currentPreset->settings()->changePaintOpSize(sizeDiff, 0);
 
             if (currentPreset->settings()->hasProperty("OpacityValue"))
@@ -125,15 +125,19 @@ CompositeOpModel::CompositeOpModel(QObject* parent)
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             this, SLOT(slotToolChanged(KoCanvasController*,int)));
 
-    QHash<int,QByteArray> roles;
-    roles[TextRole] = "text";
-    roles[IsCategoryRole] = "isCategory";
-    setRoleNames(roles);
 }
 
 CompositeOpModel::~CompositeOpModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> CompositeOpModel::roleNames() const
+{
+    QHash<int,QByteArray> roles;
+    roles[TextRole] = "text";
+    roles[IsCategoryRole] = "isCategory";
+    return roles;
 }
 
 QVariant CompositeOpModel::data(const QModelIndex& index, int role) const

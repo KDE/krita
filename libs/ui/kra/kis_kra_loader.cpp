@@ -381,14 +381,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             proofingData.resize(store->size());
             bool proofingProfileRes = (store->read(proofingData.data(), store->size())>-1);
             store->close();
-            if (proofingProfileRes)
-            {
-                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(image->proofingConfiguration()->proofingModel, image->proofingConfiguration()->proofingDepth, proofingData);
-                if (proofingProfile->valid()){
 
-                    //if (KoColorSpaceEngineRegistry::instance()->get("icc")) {
-                    //    KoColorSpaceEngineRegistry::instance()->get("icc")->addProfile(proofingProfile->fileName());
-                    //}
+            KisProofingConfigurationSP proofingConfig = image->proofingConfiguration();
+            if (!proofingConfig) {
+                proofingConfig = KisImageConfig().defaultProofingconfiguration();
+            }
+
+            if (proofingProfileRes) {
+                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(proofingConfig->proofingModel, proofingConfig->proofingDepth, proofingData);
+                if (proofingProfile->valid()){
                     KoColorSpaceRegistry::instance()->addProfile(proofingProfile);
                 }
             }

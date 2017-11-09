@@ -289,6 +289,7 @@ void KisImageTest::testCloneImage()
         QVERIFY(newAnnotation);
         QVERIFY(newAnnotation != annotation);
 
+
         KisProofingConfigurationSP newProofing = newImage->proofingConfiguration();
         QVERIFY(newProofing);
         QVERIFY(newProofing != proofing);

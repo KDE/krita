@@ -164,7 +164,14 @@ void KisDlgImageProperties::setProofingConfig()
     if (m_page->chkSaveProofing->isChecked()) {
 
         m_proofingConfig->conversionFlags = KoColorConversionTransformation::HighQuality;
-        if (m_page->ckbBlackPointComp) m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+#if QT_VERSION >= 0x07000
+        m_proofingConfig->conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->ckbBlackPointComp->isChecked());
+#else
+        m_page->chkBlackPointComp->isChecked() ?
+            m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation
+            : m_proofingConfig->conversionFlags = m_proofingConfig->conversionFlags & ~KoColorConversionTransformation::BlackpointCompensation;
+
+#endif
         m_proofingConfig->intent = (KoColorConversionTransformation::Intent)m_page->cmbIntent->currentIndex();
         m_proofingConfig->proofingProfile = m_page->proofSpaceSelector->currentColorSpace()->profile()->name();
         m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();

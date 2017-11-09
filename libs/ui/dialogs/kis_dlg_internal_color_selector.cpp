@@ -278,3 +278,9 @@ void KisDlgInternalColorSelector::slotSetColorFromHex()
     slotColorUpdated(m_d->sRGB);
 }
 
+void KisDlgInternalColorSelector::showEvent(QShowEvent *event)
+{
+    updateAllElements(0);
+    QDialog::showEvent(event);
+}
+

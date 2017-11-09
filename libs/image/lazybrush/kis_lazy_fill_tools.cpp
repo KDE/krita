@@ -67,6 +67,27 @@ void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
                                    });
 }
 
+void normalizeAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
+{
+    quint8 maxPixel = std::numeric_limits<quint8>::min();
+    quint8 minPixel = std::numeric_limits<quint8>::max();
+    KritaUtils::applyToAlpha8Device(dev, rect,
+                                    [&minPixel, &maxPixel](quint8 pixel) {
+                                        if (pixel > maxPixel) {
+                                            maxPixel = pixel;
+                                        }
+                                        if (pixel < minPixel) {
+                                            minPixel = pixel;
+                                        }
+                                    });
+
+    const qreal scale = 255.0 / (maxPixel - minPixel);
+    KritaUtils::filterAlpha8Device(dev, rect,
+                                   [minPixel, scale](quint8 pixel) {
+                                       return (quint8((pixel - minPixel) * scale));
+                                   });
+}
+
 void cutOneWay(const KoColor &color,
                KisPaintDeviceSP src,
                KisPaintDeviceSP colorScribble,

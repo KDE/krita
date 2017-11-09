@@ -127,6 +127,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_min_cut_worker.cpp
    lazybrush/kis_lazy_fill_tools.cpp
    lazybrush/kis_multiway_cut.cpp
+   lazybrush/KisWatershedWorker.cpp
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
    KisDelayedUpdateNodeInterface.cpp

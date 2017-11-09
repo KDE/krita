@@ -34,6 +34,9 @@ namespace KisLazyFillTools
     KRITAIMAGE_EXPORT
     void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect);
 
+    KRITAIMAGE_EXPORT
+    void normalizeAlpha8Device(KisPaintDeviceSP dev, const QRect &rect);
+
     /**
      * Uses Boykov-Kolmogorov Max-Flow/Min-Cut algorithm to split the
      * device \src into two parts. The first part is defined by \p

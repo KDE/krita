@@ -20,7 +20,6 @@
 
 #include <QBitArray>
 
-#include "kis_multiway_cut.h"
 #include "kis_paint_device.h"
 #include "kis_lazy_fill_tools.h"
 #include "kis_gaussian_kernel.h"
@@ -29,6 +28,7 @@
 #include "kis_lod_transform.h"
 #include "kis_node.h"
 #include "kis_image_config.h"
+#include "KisWatershedWorker.h"
 
 using namespace KisLazyFillTools;
 
@@ -106,20 +106,19 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
         //                             1.0,
         //                             QBitArray(), 0);
 
-        normalizeAndInvertAlpha8Device(filteredMainDev, m_d->boundingRect);
+        normalizeAlpha8Device(filteredMainDev, m_d->boundingRect);
 
         KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
         m_d->filteredSource->makeCloneFrom(filteredMainDev, m_d->boundingRect);
         m_d->filteredSource->setDefaultBounds(oldBounds);
     }
 
-    KisMultiwayCut cut(m_d->filteredSource, m_d->dst, m_d->boundingRect);
-
+    KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-        cut.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
+        worker.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
     }
+    worker.run();
 
-    cut.run();
 
     m_d->dirtyNode->setDirty(m_d->boundingRect);
     emit sigFinished();

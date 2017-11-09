@@ -37,14 +37,14 @@
 class Q_DECL_HIDDEN KoColor::Private
 {
 public:
-    Private() : data(0), colorSpace(0) {}
+    Private() {}
 
     ~Private() {
         delete [] data;
     }
 
-    quint8 * data;
-    const KoColorSpace * colorSpace;
+    quint8 *data {0};
+    const KoColorSpace *colorSpace {0};
 };
 
 KoColor::KoColor()

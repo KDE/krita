@@ -182,7 +182,7 @@ void KisDlgImageProperties::setProofingConfig()
         m_image->setProofingConfiguration(m_proofingConfig);
     }
     else {
-        m_image->setProofingConfiguration(0);
+        m_image->setProofingConfiguration(KisProofingConfigurationSP());
     }
 }
 

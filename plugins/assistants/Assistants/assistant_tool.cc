@@ -33,13 +33,13 @@
 #include "FisheyePointAssistant.h"
 //#include "mesh_assistant.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(RulerAssistantToolFactory, "kritarulerassistanttool.json", registerPlugin<RulerAssistantToolPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(AssistantToolFactory, "kritarulerassistanttool.json", registerPlugin<AssistantToolPlugin>();)
 
 
-RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVariantList &)
+AssistantToolPlugin::AssistantToolPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new KisRulerAssistantToolFactory());
+    KoToolRegistry::instance()->add(new KisAssistantToolFactory());
 
     KisPaintingAssistantFactoryRegistry::instance()->add(new RulerAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new EllipseAssistantFactory);
@@ -53,8 +53,8 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVaria
 //    KisPaintingAssistantFactoryRegistry::instance()->add(new MeshAssistantFactory);
 }
 
-RulerAssistantToolPlugin::~RulerAssistantToolPlugin()
+AssistantToolPlugin::~AssistantToolPlugin()
 {
 }
 
-#include "ruler_assistant_tool.moc"
+#include "assistant_tool.moc"

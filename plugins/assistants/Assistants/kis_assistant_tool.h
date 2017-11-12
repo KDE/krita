@@ -30,7 +30,7 @@
 
 #include "ui_AssistantsToolOptions.h"
 
-class KisRulerAssistantTool : public KisTool
+class KisAssistantTool : public KisTool
 {
     Q_OBJECT
     enum PerspectiveAssistantEditionMode {
@@ -40,8 +40,8 @@ class KisRulerAssistantTool : public KisTool
         MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
 public:
-    KisRulerAssistantTool(KoCanvasBase * canvas);
-    ~KisRulerAssistantTool() override;
+    KisAssistantTool(KoCanvasBase * canvas);
+    ~KisAssistantTool() override;
 
     virtual quint32 priority() {
         return 3;
@@ -103,10 +103,10 @@ private:
 };
 
 
-class KisRulerAssistantToolFactory : public KoToolFactoryBase
+class KisAssistantToolFactory : public KoToolFactoryBase
 {
 public:
-    KisRulerAssistantToolFactory()
+    KisAssistantToolFactory()
             : KoToolFactoryBase("KisRulerAssistantTool") {
         setToolTip(i18n("Assistant Tool"));
         setSection(TOOL_TYPE_VIEW);
@@ -116,10 +116,10 @@ public:
     };
 
 
-    ~KisRulerAssistantToolFactory() override {}
+    ~KisAssistantToolFactory() override {}
 
     KoToolBase * createTool(KoCanvasBase * canvas) override {
-        return new KisRulerAssistantTool(canvas);
+        return new KisAssistantTool(canvas);
     }
 
 };

@@ -1,5 +1,5 @@
 set(kritarulerassistanttool_SOURCES
-    RulerAssistant.cc
+    Assistant.cc
     EllipseAssistant.cc
     Ellipse.cc
     SplineAssistant.cc
@@ -9,16 +9,16 @@ set(kritarulerassistanttool_SOURCES
     ParallelRulerAssistant.cc
     ConcentricEllipseAssistant.cc
     ruler_assistant_tool.cc
-    kis_ruler_assistant_tool.cc
+    kis_assistant_tool.cc
     FisheyePointAssistant.cc
     )
 
-ki18n_wrap_ui(kritarulerassistanttool_SOURCES AssistantsToolOptions.ui )
+ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )
 
-add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_SOURCES})
+add_library(kritaassistanttool MODULE ${kritaassistanttool_SOURCES})
 
-target_link_libraries(kritarulerassistanttool kritaui kritaflake   )
+target_link_libraries(kritaassistanttool kritaui kritaflake   )
 
-install(TARGETS kritarulerassistanttool  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaassistanttool  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES krita_tool_ruler_assistant.png dark_krita_tool_ruler_assistant.png light_krita_tool_ruler_assistant.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)

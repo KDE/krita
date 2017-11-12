@@ -48,7 +48,7 @@
 
 #include <math.h>
 
-KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
+KisAssistantTool::KisAssistantTool(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
       m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0), m_handleSize(32), m_handleHalfSize(16)
 {
@@ -56,7 +56,7 @@ KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
     setObjectName("tool_rulerassistanttool");
 }
 
-KisRulerAssistantTool::~KisRulerAssistantTool()
+KisAssistantTool::~KisAssistantTool()
 {
 }
 
@@ -65,7 +65,7 @@ QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
     return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
 }
 
-void KisRulerAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     // Add code here to initialize your tool when it got activated
     KisTool::activate(toolActivation, shapes);
@@ -79,20 +79,20 @@ void KisRulerAssistantTool::activate(ToolActivation toolActivation, const QSet<K
 
 }
 
-void KisRulerAssistantTool::deactivate()
+void KisAssistantTool::deactivate()
 {
     // Add code here to initialize your tool when it got deactivated
     m_canvas->updateCanvas();
     KisTool::deactivate();
 }
 
-bool KisRulerAssistantTool::mouseNear(const QPointF& mousep, const QPointF& point)
+bool KisAssistantTool::mouseNear(const QPointF& mousep, const QPointF& point)
 {
     QRectF handlerect(point-QPointF(m_handleHalfSize,m_handleHalfSize), QSizeF(m_handleSize, m_handleSize));
     return handlerect.contains(mousep);
 }
 
-KisPaintingAssistantHandleSP KisRulerAssistantTool::nodeNearPoint(KisPaintingAssistantSP grid, QPointF point)
+KisPaintingAssistantHandleSP KisAssistantTool::nodeNearPoint(KisPaintingAssistantSP grid, QPointF point)
 {
     if (mouseNear(point, pixelToView(*grid->topLeft()))) {
         return grid->topLeft();
@@ -111,7 +111,7 @@ inline double norm2(const QPointF& p)
     return p.x() * p.x() + p.y() * p.y();
 }
 
-void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
+void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
     bool newAssistantAllowed = true;
@@ -350,7 +350,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_canvas->updateCanvas();
 }
 
-void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
+void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_handleDrag) {
         *m_handleDrag = event->point;
@@ -467,7 +467,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
     }
 }
 
-void KisRulerAssistantTool::endPrimaryAction(KoPointerEvent *event)
+void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
 
@@ -492,7 +492,7 @@ void KisRulerAssistantTool::endPrimaryAction(KoPointerEvent *event)
     }
 }
 
-void KisRulerAssistantTool::addAssistant()
+void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
@@ -504,7 +504,7 @@ void KisRulerAssistantTool::addAssistant()
 }
 
 
-void KisRulerAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
+void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
     if (grid) {
@@ -514,29 +514,29 @@ void KisRulerAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 }
 
-void KisRulerAssistantTool::snappingOn(KisPaintingAssistantSP assistant)
+void KisAssistantTool::snappingOn(KisPaintingAssistantSP assistant)
 {
     assistant->setSnapping(true);
 }
 
-void KisRulerAssistantTool::snappingOff(KisPaintingAssistantSP assistant)
+void KisAssistantTool::snappingOff(KisPaintingAssistantSP assistant)
 {
     assistant->setSnapping(false);
 }
 
-void KisRulerAssistantTool::outlineOn(KisPaintingAssistantSP assistant)
+void KisAssistantTool::outlineOn(KisPaintingAssistantSP assistant)
 {
     assistant->setOutline(true);
 }
 
-void KisRulerAssistantTool::outlineOff(KisPaintingAssistantSP assistant)
+void KisAssistantTool::outlineOff(KisPaintingAssistantSP assistant)
 {
     assistant->setOutline(false);
 }
 
 #include <KoSnapGuide.h>
 
-QPointF KisRulerAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+QPointF KisAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
 {
     if (!m_canvas->currentImage())
         return e->point;
@@ -548,7 +548,7 @@ QPointF KisRulerAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &off
     return pos;
 }
 
-QPointF KisRulerAssistantTool::snapToGuide(const QPointF& pt, const QPointF &offset)
+QPointF KisAssistantTool::snapToGuide(const QPointF& pt, const QPointF &offset)
 {
     if (!m_canvas)
         return pt;
@@ -559,7 +559,7 @@ QPointF KisRulerAssistantTool::snapToGuide(const QPointF& pt, const QPointF &off
     return pos;
 }
 
-void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
+void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
         *m_newAssistant->handles().back() = event->point;
@@ -573,7 +573,7 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
-void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
+void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
 
     QPixmap iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
@@ -716,7 +716,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
   }
 }
 
-void KisRulerAssistantTool::removeAllAssistants()
+void KisAssistantTool::removeAllAssistants()
 {
     m_canvas->viewManager()->resourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
@@ -724,7 +724,7 @@ void KisRulerAssistantTool::removeAllAssistants()
     m_canvas->updateCanvas();
 }
 
-void KisRulerAssistantTool::loadAssistants()
+void KisAssistantTool::loadAssistants()
 {
     KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenAssistant");
     dialog.setCaption(i18n("Select an Assistant"));
@@ -826,7 +826,7 @@ void KisRulerAssistantTool::loadAssistants()
 
 }
 
-void KisRulerAssistantTool::saveAssistants()
+void KisAssistantTool::saveAssistants()
 {
     if (m_handles.isEmpty()) return;
 
@@ -878,7 +878,7 @@ void KisRulerAssistantTool::saveAssistants()
 
 
 
-QWidget *KisRulerAssistantTool::createOptionWidget()
+QWidget *KisAssistantTool::createOptionWidget()
 {
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;

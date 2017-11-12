@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>312</height>
+    <width>457</width>
+    <height>332</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -151,6 +151,13 @@
           <widget class="QPushButton" name="loadImageIntoThumbnailButton">
            <property name="text">
             <string>Load Image</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="loadIconLibraryThumbnailButton">
+           <property name="text">
+            <string>Load from Icon Library</string>
            </property>
           </widget>
          </item>

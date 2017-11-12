@@ -230,6 +230,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_paintop_presets_save.cpp
+    widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
     widgets/kis_popup_button.cc
@@ -478,6 +479,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui
+    forms/wdgpreseticonlibrary.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui

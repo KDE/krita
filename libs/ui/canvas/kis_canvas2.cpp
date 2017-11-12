@@ -577,7 +577,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     } else {
         conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
     }
-#endif;
+#endif
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
     m_d->proofingConfigUpdated = true;

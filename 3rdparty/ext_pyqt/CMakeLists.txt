@@ -25,6 +25,7 @@ elseif(MINGW)
         --verbose
         --sipdir ${PREFIX_ext_pyqt}/share/sip
         --destdir ${PREFIX_ext_pyqt}/share/krita/pykrita
+        --stubsdir ${PREFIX_ext_pyqt}/share/krita/pykrita/PyQt5
         --no-qml-plugin --no-python-dbus --no-qsci-api --no-tools
         --disable QtSql --disable QtTest --disable QtWinExtras
     )

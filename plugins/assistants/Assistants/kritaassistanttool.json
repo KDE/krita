@@ -1,7 +1,7 @@
 {
-    "Id": "RulerAssistantTool",
+    "Id": "AssistantTool",
     "Type": "Service",
-    "X-KDE-Library": "kritarulerassistanttool",
+    "X-KDE-Library": "kritaassistanttool",
     "X-KDE-ServiceTypes": [
         "Krita/Tool"
     ],

@@ -167,7 +167,7 @@ void KisDlgImageProperties::setProofingConfig()
 #if QT_VERSION >= 0x050700
         m_proofingConfig->conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->ckbBlackPointComp->isChecked());
 #else
-        m_page->chkBlackPointComp->isChecked() ?
+        m_page->ckbBlackPointComp->isChecked() ?
             m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation
             : m_proofingConfig->conversionFlags = m_proofingConfig->conversionFlags & ~KoColorConversionTransformation::BlackpointCompensation;
 

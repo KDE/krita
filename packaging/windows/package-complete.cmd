@@ -318,6 +318,9 @@ if not "%HAVE_FXC_EXE%" == "1" (
     echo If Qt was built with ANGLE ^(dynamic OpenGL^) support, the package might not work properly on some systems!
 ) else echo Windows SDK 10 with fxc.exe found on %WindowsSdkDir%
 
+if not "%ARG_SRC_DIR%" == "" (
+    set "KRITA_SRC_DIR=%ARG_SRC_DIR%"
+)
 if "%KRITA_SRC_DIR%" == "" (
     :: Check whether this looks like to be in the source tree
 	set "_temp=%~dp0"

@@ -677,6 +677,10 @@ set "BUILDDIR_KRITA_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
 set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
 
+if not "%GETTEXT_SEARCH_PATH%" == "" (
+	set PATH=%PATH%;%GETTEXT_SEARCH_PATH%
+)
+
 if "%ARG_SKIP_DEPS%" == "1" goto skip_build_deps
 
 pushd %DEPS_BUILD_DIR%

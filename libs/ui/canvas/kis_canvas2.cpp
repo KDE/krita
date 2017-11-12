@@ -610,7 +610,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
-#if QT_VERSION >= 0x07000
+#if QT_VERSION >= 0x050700
     if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, softProof);
         if (softProof) {

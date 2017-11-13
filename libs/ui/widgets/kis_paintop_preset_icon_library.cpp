@@ -111,6 +111,10 @@ KisPaintopPresetIconLibrary::KisPaintopPresetIconLibrary(QWidget *parent): QWidg
 KisPaintopPresetIconLibrary::~KisPaintopPresetIconLibrary()
 {
     delete ui;
+    m_optionalModel->clear();
+    delete m_optionalModel;
+    m_baseModel->clear();
+    delete m_baseModel;
 }
 
 QImage KisPaintopPresetIconLibrary::getImage()

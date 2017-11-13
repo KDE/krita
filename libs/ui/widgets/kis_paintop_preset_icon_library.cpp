@@ -86,8 +86,8 @@ KisPaintopPresetIconLibrary::KisPaintopPresetIconLibrary(QWidget *parent): QWidg
         m_optionalModel->appendRow(image);
     }
 
-    connect(ui->vwBase, SIGNAL(clicked(const QModelIndex)), this, SLOT(updateIcon()));
-    connect(ui->vwOptional, SIGNAL(clicked(const QModelIndex)), this, SLOT(updateIcon()));
+    connect(ui->vwBase->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)), this, SLOT(updateIcon()));
+    connect(ui->vwOptional->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)), this, SLOT(updateIcon()));
     connect(ui->sldHue, SIGNAL(valueChanged(qreal)), this, SLOT(updateIcon()));
     connect(ui->sldSat, SIGNAL(valueChanged(qreal)), this, SLOT(updateIcon()));
     connect(ui->sldLevels, SIGNAL(valueChanged(qreal)), this, SLOT(updateIcon()));

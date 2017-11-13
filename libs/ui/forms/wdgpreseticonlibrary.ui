@@ -43,92 +43,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" rowspan="6">
-      <widget class="QTableView" name="vwBase">
-       <property name="toolTip">
-        <string>Base tool image to base this preset on.</string>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>75</width>
-         <height>75</height>
-        </size>
-       </property>
-       <property name="showGrid">
-        <bool>false</bool>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="horizontalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>77</number>
-       </attribute>
-       <attribute name="horizontalHeaderHighlightSections">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderDefaultSectionSize">
-        <number>77</number>
-       </attribute>
-       <attribute name="verticalHeaderStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QTableView" name="vwOptional">
-       <property name="toolTip">
-        <string>Upper left emblem indicating a special feature of the brush.</string>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>40</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="showGrid">
-        <bool>false</bool>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="horizontalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>40</number>
-       </attribute>
-       <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>24</number>
-       </attribute>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderDefaultSectionSize">
-        <number>40</number>
-       </attribute>
-       <attribute name="verticalHeaderStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-      </widget>
-     </item>
      <item row="4" column="1">
       <widget class="QLabel" name="label">
        <property name="toolTip">
@@ -166,6 +80,65 @@
          <width>0</width>
          <height>20</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" rowspan="6">
+      <widget class="QListView" name="vwBase">
+       <property name="toolTip">
+        <string>Base tool image to base this preset on.</string>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="movement">
+        <enum>QListView::Static</enum>
+       </property>
+       <property name="resizeMode">
+        <enum>QListView::Adjust</enum>
+       </property>
+       <property name="gridSize">
+        <size>
+         <width>77</width>
+         <height>77</height>
+        </size>
+       </property>
+       <property name="viewMode">
+        <enum>QListView::IconMode</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QListView" name="vwOptional">
+       <property name="toolTip">
+        <string>Upper left emblem indicating a special feature of the brush.</string>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>40</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="resizeMode">
+        <enum>QListView::Adjust</enum>
+       </property>
+       <property name="gridSize">
+        <size>
+         <width>42</width>
+         <height>42</height>
+        </size>
+       </property>
+       <property name="viewMode">
+        <enum>QListView::IconMode</enum>
        </property>
       </widget>
      </item>

@@ -63,42 +63,27 @@ KisPaintopPresetIconLibrary::KisPaintopPresetIconLibrary(QWidget *parent): QWidg
 
     QImage empty = QImage(200, 200, QImage::Format_ARGB32);
     empty.fill(Qt::transparent);
-    QList<QStandardItem*> row;
-    row.append(new QStandardItem(QIcon(QPixmap::fromImage(empty)), QString("")));
+    m_baseModel->appendRow(new QStandardItem(QIcon(QPixmap::fromImage(empty)), NULL));
 
     QStringList toolIcon_paths = KoResourcePaths::findAllResources("data", "preset_icons/tool_icons/*.png");
     for (int i=0; i<toolIcon_paths.size(); i++) {
         QImage pix;
         pix.load(toolIcon_paths.at(i));
-        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(pix)), QString(""));
-        row.append(image);
-        if (row.size()>2) {
-            m_baseModel->appendRow(row);
-            row.clear();
-        }
+        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(pix)), NULL);
+        m_baseModel->appendRow(image);
     }
-    if (row.size()>0) {
-        m_baseModel->appendRow(row);
-    }
+
 
     empty = QImage(40, 40, QImage::Format_ARGB32);
     empty.fill(Qt::transparent);
-    row.clear();
-    row.append(new QStandardItem(QIcon(QPixmap::fromImage(empty)), QString("")));
+    m_optionalModel->appendRow(new QStandardItem(QIcon(QPixmap::fromImage(empty)), NULL));
 
     QStringList emblemIcon_paths = KoResourcePaths::findAllResources("data", "preset_icons/emblem_icons/*.png");
     for (int i=0; i<emblemIcon_paths.size(); i++) {
         QImage pix;
         pix.load(emblemIcon_paths.at(i));
-        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(pix)), QString(""));
-        row.append(image);
-        if (row.size()>4) {
-            m_optionalModel->appendRow(row);
-            row.clear();
-        }
-    }
-    if (row.size()>0) {
-        m_optionalModel->appendRow(row);
+        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(pix)), NULL);
+        m_optionalModel->appendRow(image);
     }
 
     connect(ui->vwBase, SIGNAL(clicked(const QModelIndex)), this, SLOT(updateIcon()));

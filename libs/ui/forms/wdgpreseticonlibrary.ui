@@ -19,7 +19,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Base image:</string>
+        <string>Tool image:</string>
        </property>
       </widget>
      </item>
@@ -131,8 +131,11 @@
      </item>
      <item row="4" column="1">
       <widget class="QLabel" name="label">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the optional emblem icon that indicates extra information, such as the preset being a special effects brush, or just using tilt, or angled in some way.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
-        <string>Extra icon:</string>
+        <string>Emblem icon:</string>
        </property>
       </widget>
      </item>

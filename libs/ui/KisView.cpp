@@ -54,6 +54,7 @@
 #include <QStatusBar>
 #include <QMoveEvent>
 #include <QTemporaryFile>
+#include <QMdiSubWindow>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -145,6 +146,7 @@ public:
     bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
+    QMdiSubWindow *subWindow{nullptr};
 
     bool softProofing = false;
     bool gamutCheck = false;
@@ -633,6 +635,11 @@ KisMainWindow * KisView::mainWindow() const
     return dynamic_cast<KisMainWindow *>(window());
 }
 
+void KisView::setSubWindow(QMdiSubWindow *subWindow)
+{
+    d->subWindow = subWindow;
+}
+
 QStatusBar * KisView::statusBar() const
 {
     KisMainWindow *mw = mainWindow();
@@ -797,6 +804,33 @@ void KisView::syncLastActiveNodeToDocument()
     if (doc) {
         doc->setPreActivatedNode(d->currentNode);
     }
+}
+
+void KisView::saveViewState(KConfigGroup config) const
+{
+    config.writeEntry("file", d->document->url());
+    config.writeEntry("window", mainWindow()->windowStateConfig().name());
+
+    if (d->subWindow) {
+        config.writeEntry("geometry", d->subWindow->saveGeometry().toBase64());
+    }
+
+    config.writeEntry("zoomMode", (int)zoomController()->zoomMode());
+    config.writeEntry("zoom", d->zoomManager.zoom());
+    d->canvasController.saveCanvasState(config);
+}
+
+void KisView::restoreViewState(const KConfigGroup &config)
+{
+    if (d->subWindow) {
+        QByteArray geometry = config.readEntry("geometry", QByteArray());
+        d->subWindow->restoreGeometry(QByteArray::fromBase64(geometry));
+    }
+
+    qreal zoom = config.readEntry("zoom", 1.0f);
+    int zoomMode = config.readEntry("zoomMode", (int)KoZoomMode::ZOOM_PAGE);
+    d->zoomManager.zoomController()->setZoom((KoZoomMode::Mode)zoomMode, zoom);
+    d->canvasController.restoreCanvasState(config);
 }
 
 void KisView::setCurrentNode(KisNodeSP node)

@@ -335,3 +335,27 @@ bool KisCanvasController::levelOfDetailMode() const
 
     return kritaCanvas->lodAllowedInCanvas();
 }
+
+void KisCanvasController::saveCanvasState(KConfigGroup config) const
+{
+    config.writeEntry("pan", preferredCenter());
+    config.writeEntry("rotation", rotation());
+    config.writeEntry("mirror", m_d->coordinatesConverter->xAxisMirrored());
+    config.writeEntry("wrapAround", wrapAroundMode());
+    config.writeEntry("enableInstantPreview", levelOfDetailMode());
+}
+
+void KisCanvasController::restoreCanvasState(const KConfigGroup &config)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    mirrorCanvas(config.readEntry("mirror", false));
+    rotateCanvas(config.readEntry("rotation", 0.0f));
+
+    QPointF pan = config.readEntry("pan", preferredCenter());
+    setPreferredCenter(pan);
+
+    slotToggleWrapAroundMode(config.readEntry("wrapAround", false));
+    kritaCanvas->setLodAllowedInCanvas(config.readEntry("enableInstantPreview", false));
+}

@@ -142,6 +142,36 @@ public:
 
         return windows;
     }
+
+    void restoreViews(const KConfigGroup &session, const QMap<QString, KisMainWindow*> windows) {
+        QMap<QUrl, KisDocument*> documents;
+
+        Q_FOREACH(auto viewCfgGroup, session.readEntry("openViews", QStringList())) {
+            KConfigGroup viewConfig = session.group(viewCfgGroup);
+            QUrl url = viewConfig.readEntry("file", QUrl());
+            QString windowId = viewConfig.readEntry("window", QString());
+
+            KisMainWindow *window = windows.value(windowId);
+
+            if (!window) {
+                qDebug() << "Warning: configuration file contains inconsistent session data.";
+            } else {
+                auto document = documents.value(url);
+
+                if (!document) {
+                    document = part->createDocument();
+                    part->addDocument(document);
+                    documents.insert(url, document);
+
+                    bool ok = document->openUrl(url);
+                    // TODO: warn if failing to re-open document
+                }
+
+                KisView *view = window->addViewAndNotifyLoadingCompleted(document);
+                view->restoreViewState(viewConfig);
+            }
+        }
+    }
 };
 
 
@@ -359,6 +389,7 @@ void KisPart::saveSession()
     session.deleteGroup();
 
     QStringList openWindows;
+    QStringList openViews;
     QString activeWindow;
 
     if (!d->mainWindows.isEmpty()) {
@@ -368,9 +399,17 @@ void KisPart::saveSession()
         }
 
         activeWindow = currentMainwindow()->windowStateConfig().name();
+
+        int nextViewId = 1;
+        Q_FOREACH(auto view, d->views) {
+            QString viewId = QString("view ") + QString::number(nextViewId++);
+            view->saveViewState(session.group(viewId));
+            openViews.append(viewId);
+        }
     }
 
     session.writeEntry("openWindows", openWindows);
+    session.writeEntry("openViews", openViews);
     session.writeEntry("activeWindow", activeWindow);
 }
 
@@ -380,7 +419,8 @@ void KisPart::restoreSession()
     if (cfg->hasGroup("session")) {
         KConfigGroup session = cfg->group("session");
 
-        d->restoreWindows(session);
+        QMap<QString, KisMainWindow*> windows = d->restoreWindows(session);
+        d->restoreViews(session, windows);
     }
 
     if (d->mainWindows.isEmpty()) {

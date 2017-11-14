@@ -557,6 +557,7 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();
 
         QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
+        imageView->setSubWindow(subwin);
         subwin->setAttribute(Qt::WA_DeleteOnClose, true);
         connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
 

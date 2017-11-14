@@ -431,10 +431,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
         // show a mainWindow asap, if we want that
         setSplashScreenLoadingText(i18n("Loading Main Window..."));
         processEvents();
-        m_mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
-            m_mainWindow->initializeGeometry();
+            KisPart::instance()->restoreSession();
+            m_mainWindow = KisPart::instance()->currentMainwindow();
 
             if (!args.workspace().isEmpty()) {
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
@@ -451,9 +451,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
             if (args.fullScreen()) {
                 m_mainWindow->showFullScreen();
             }
-            else {
-                m_mainWindow->show();
-            }
+        } else {
+            m_mainWindow = KisPart::instance()->createMainWindow();
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open

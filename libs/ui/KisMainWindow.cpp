@@ -270,7 +270,7 @@ public:
     }
 };
 
-KisMainWindow::KisMainWindow()
+KisMainWindow::KisMainWindow(KConfigGroup windowStateConfig)
     : KXmlGuiWindow()
     , d(new Private(this))
 {
@@ -285,7 +285,7 @@ KisMainWindow::KisMainWindow()
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager = new Digikam::ThemeManager(group.readEntry("Theme", "Krita dark"), this);
 
-    d->windowStateConfig = KSharedConfig::openConfig()->group("krita");
+    d->windowStateConfig = windowStateConfig;
 
     setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
@@ -1184,13 +1184,24 @@ void KisMainWindow::redo()
 
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
-    d->mdiArea->closeAllSubWindows();
+    if (!KisPart::instance()->closingSession()) {
+        QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
+        if ((action) && (action->isChecked())) {
+            action->setChecked(false);
+        }
 
-    QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
+        // Save session when last window is closed
+        if (KisPart::instance()->mainwindowCount() == 1) {
+            bool closeAllowed = KisPart::instance()->closeSession();
 
-    if ((action) && (action->isChecked())) {
-        action->setChecked(false);
+            if (!closeAllowed) {
+                e->setAccepted(false);
+            }
+            return;
+        }
     }
+
+    d->mdiArea->closeAllSubWindows();
 
     QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
 
@@ -1438,9 +1449,20 @@ int KisMainWindow::viewCount() const
     return d->mdiArea->subWindowList().size();
 }
 
+const KConfigGroup &KisMainWindow::windowStateConfig() const
+{
+    return d->windowStateConfig;
+}
+
 void KisMainWindow::saveWindowState(bool restoreNormalState)
 {
     if (restoreNormalState) {
+        QAction *showCanvasOnly = d->viewManager->actionCollection()->action("view_show_canvas_only");
+
+        if (showCanvasOnly && showCanvasOnly->isChecked()) {
+            showCanvasOnly->setChecked(false);
+        }
+
         KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
         cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
         cfg.writeEntry("ko_windowstate", saveState().toBase64());
@@ -1538,19 +1560,7 @@ bool KisMainWindow::slotFileCloseAll()
 
 void KisMainWindow::slotFileQuit()
 {
-    if(!slotFileCloseAll())
-        return;
-
-    close();
-
-    Q_FOREACH (QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
-        if (mainWin != this) {
-            if(!mainWin->slotFileCloseAll())
-                return;
-
-            mainWin->close();
-        }
-    }
+    KisPart::instance()->closeSession();
 }
 
 void KisMainWindow::slotFilePrint()

@@ -29,6 +29,7 @@
 #include <QUrl>
 
 #include "kritaui_export.h"
+#include <KConfigCore/kconfiggroup.h>
 #include <KoConfig.h>
 #include <KisMainWindow.h>
 
@@ -105,10 +106,11 @@ public:
 
     // ----------------- MainWindow management -----------------
 
+
     /**
      * Create a new main window.
      */
-    KisMainWindow *createMainWindow();
+    KisMainWindow *createMainWindow(KConfigGroup stateConfig = KConfigGroup());
 
     /**
      * Removes a main window from the list of managed windows.
@@ -241,6 +243,29 @@ public:
      */
     int viewCount(KisDocument *doc) const;
 
+    //------------------ Session management ------------------
+
+    /**
+     * Serializes the current session into configuration.
+     */
+    void saveSession();
+
+    /**
+     * Restores previous session saved in configuration.
+     */
+    void restoreSession();
+
+    /**
+     * Attempts to save the session and close all windows.
+     * This may involve asking the user to save open files.
+     * @return false, if closing was cancelled by the user
+     */
+    bool closeSession();
+
+    /**
+     * Are we in the process of closing the application through closeSession().
+     */
+    bool closingSession() const;
 
 private Q_SLOTS:
 

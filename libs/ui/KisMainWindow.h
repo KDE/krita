@@ -75,7 +75,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow();
+    explicit KisMainWindow(KConfigGroup windowStateConfig);
 
     /**
      *  Destructor.
@@ -140,6 +140,8 @@ public:
     int viewCount() const;
 
     void saveWindowState(bool restoreNormalState =false);
+
+    const KConfigGroup &windowStateConfig() const;
 
     /**
      * A wrapper around restoreState
@@ -395,6 +397,7 @@ public Q_SLOTS:
 private:
 
     friend class KisApplication;
+    friend class KisPart;
 
 
     /**

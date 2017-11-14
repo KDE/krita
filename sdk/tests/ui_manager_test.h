@@ -21,6 +21,7 @@
 
 #include "testutil.h"
 #include "qimage_based_test.h"
+#include "ksharedconfig.h"
 #include <kis_filter_configuration.h>
 #include <resources/KoPattern.h>
 #include "kis_resource_server_provider.h"
@@ -57,8 +58,7 @@ public:
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
 
-
-        mainWindow = new KisMainWindow();
+        mainWindow = new KisMainWindow(KSharedConfig::openConfig()->group("krita"));
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 

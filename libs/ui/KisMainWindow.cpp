@@ -198,7 +198,6 @@ public:
     bool firstTime {true};
     bool windowSizeDirty {false};
     bool readOnly {false};
-    bool noCleanup {false};
 
     KisAction *showDocumentInfo {0};
     KisAction *saveAction {0};
@@ -237,7 +236,6 @@ public:
     QString lastExportLocation;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
-    QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     QByteArray dockerStateBeforeHiding;
     KoToolDocker *toolOptionsDocker {0};
 
@@ -484,11 +482,6 @@ KisMainWindow::KisMainWindow()
     }
 }
 
-void KisMainWindow::setNoCleanup(bool noCleanup)
-{
-    d->noCleanup = noCleanup;
-}
-
 KisMainWindow::~KisMainWindow()
 {
 //    Q_FOREACH (QAction *ac, actionCollection()->actions()) {
@@ -515,9 +508,6 @@ KisMainWindow::~KisMainWindow()
 
     // The doc and view might still exist (this is the case when closing the window)
     KisPart::instance()->removeMainWindow(this);
-
-    if (d->noCleanup)
-        return;
 
     delete d->viewManager;
     delete d;
@@ -1219,14 +1209,6 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         menuBar()->setVisible(true);
 
         saveWindowSettings();
-
-        if (d->noCleanup)
-            return;
-
-        if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-            Q_FOREACH (QDockWidget* dockWidget, d->dockWidgetsMap)
-                dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
-        }
     } else {
         e->setAccepted(false);
     }

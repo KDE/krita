@@ -82,11 +82,6 @@ public:
      */
     ~KisMainWindow() override;
 
-
-    // If noCleanup is set, KisMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
-
     /**
      * @brief showView shows the given view. Override this if you want to show
      * the view in a different way than by making it the central widget, for instance

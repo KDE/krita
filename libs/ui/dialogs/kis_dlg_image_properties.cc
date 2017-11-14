@@ -164,7 +164,8 @@ void KisDlgImageProperties::setProofingConfig()
     if (m_page->chkSaveProofing->isChecked()) {
 
         m_proofingConfig->conversionFlags = KoColorConversionTransformation::HighQuality;
-#if QT_VERSION >= 0x070000
+
+#if QT_VERSION >= 0x050700
         m_proofingConfig->conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->ckbBlackPointComp->isChecked());
 #else
         m_page->ckbBlackPointComp->isChecked() ?

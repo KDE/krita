@@ -1712,7 +1712,10 @@ void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfi
 
 KisProofingConfigurationSP KisImage::proofingConfiguration() const
 {
-    return m_d->proofingConfig;
+    if (m_d->proofingConfig) {
+        return m_d->proofingConfig;
+    }
+    return KisProofingConfigurationSP();
 }
 
 QPointF KisImage::mirrorAxesCenter() const

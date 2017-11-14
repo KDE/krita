@@ -139,6 +139,8 @@ public:
 
     int viewCount() const;
 
+    void saveWindowState(bool restoreNormalState =false);
+
     /**
      * A wrapper around restoreState
      * @param state the saved state

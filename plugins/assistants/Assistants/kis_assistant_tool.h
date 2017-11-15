@@ -98,9 +98,19 @@ protected:
     bool m_snapIsRadial;
     QPointF m_dragEnd;
 
+    // anchor point handle display
+    QColor m_handlesColor;
+    int m_handleSize;
+
+    // move, visibility, delete icons for each assistant
+    QPixmap m_iconDelete;
+    QPixmap m_iconSnapOn;
+    QPixmap m_iconSnapOff;
+    QPixmap m_iconMove;
+
+
 private:
     PerspectiveAssistantEditionMode m_internalMode;
-    qint32 m_handleSize, m_handleHalfSize;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     int m_assistantHelperYOffset;
 

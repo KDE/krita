@@ -155,7 +155,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
     QPainterPath path;
     path.moveTo(pts[0]);
     path.cubicTo(pts[2], pts[3], pts[1]);
-    drawPath(gc, path, snapping());
+    drawPath(gc, path, isSnappingActive());
 }
 
 QPointF SplineAssistant::buttonPosition() const

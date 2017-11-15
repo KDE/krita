@@ -129,7 +129,7 @@ void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConver
     QPainterPath path;
     path.moveTo(QPointF(p0.x() - 10.0, p0.y() - 10.0)); path.lineTo(QPointF(p0.x() + 10.0, p0.y() + 10.0));
     path.moveTo(QPointF(p0.x() - 10.0, p0.y() + 10.0)); path.lineTo(QPointF(p0.x() + 10.0, p0.y() - 10.0));
-    drawPath(gc, path, snapping());
+    drawPath(gc, path, isSnappingActive());
     
 }
 

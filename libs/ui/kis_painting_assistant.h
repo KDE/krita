@@ -82,8 +82,8 @@ public:
     virtual ~KisPaintingAssistant();
     const QString& id() const;
     const QString& name() const;
-    bool snapping() const;//this returns whether or not the snapping is/should be active.
-    void setSnapping(bool set);
+    bool isSnappingActive() const;//this returns whether or not the snapping is/should be active.
+    void setSnappingActive(bool set);
     bool outline() const;//this returns whether or not the preview is/should be active.
     void setOutline(bool set);
     /**

@@ -118,7 +118,7 @@ void KisPaintingAssistantHandle::uncache()
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
-    bool snapping;
+    bool isSnappingActive;
     bool outlineVisible;
     QList<KisPaintingAssistantHandleSP> handles,sideHandles;
     QPixmapCache::Key cached;
@@ -138,18 +138,18 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 {
     d->id = id;
     d->name = name;
-    d->snapping=true;
-    d->outlineVisible=true;
+    d->isSnappingActive = true;
+    d->outlineVisible = true;
 }
 
-bool KisPaintingAssistant::snapping() const
+bool KisPaintingAssistant::isSnappingActive() const
 {
-    return d->snapping;
+    return d->isSnappingActive;
 }
 
-void KisPaintingAssistant::setSnapping(bool set)
+void KisPaintingAssistant::setSnappingActive(bool set)
 {
-    d->snapping=set;
+    d->isSnappingActive = set;
 }
 
 bool KisPaintingAssistant::outline() const

@@ -27,6 +27,7 @@
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
+#include <KColorButton>
 #include <QMessageBox>
 
 #include <KoIcon.h>
@@ -45,6 +46,7 @@
 #include <kis_painting_assistants_decoration.h>
 
 #include "kis_global.h"
+
 
 #include <math.h>
 
@@ -591,9 +593,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
         }
     }
 
-    // TODO: too  many Q_FOREACH loops going through all assistants. Condense this to one to be a little more performant
-
-    // Draw corner and middle perspective nodes
+    // Draw corner and middle perspective handles
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
             QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
@@ -651,9 +651,12 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
             QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
 
-            _gc.setPen(QColor(0, 0, 0, 75));
+
+
             // Draw control lines
-            QPen penStyle(QColor(120, 120, 120, 60), 2.0, Qt::DashDotDotLine);
+            // setting it here updates the vanishing point lines to correct color
+            // this should probably move to vanishing point assistant class where everything else is done
+            QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::DashDotDotLine);
             _gc.setPen(penStyle);
             _gc.drawLine(p0, p1);
             _gc.drawLine(p0, p3);
@@ -663,7 +666,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
         }
     }
 
-    // Draw the assistant widget
+    // Draw the assistant widget with move, active, delete
     Q_FOREACH (const KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
 
@@ -907,7 +910,40 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.saveAssistantButton, SIGNAL(clicked()), SLOT(saveAssistants()));
         connect(m_options.loadAssistantButton, SIGNAL(clicked()), SLOT(loadAssistants()));
         connect(m_options.deleteAllAssistantsButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
+
+        connect(m_options.assistantsColor, SIGNAL(changed(const QColor&)), SLOT(slotAssistantsColorChanged(const QColor&)));
+        connect(m_options.assistantsOpacitySlider, SIGNAL(sliderReleased()), SLOT(slotAssistantOpacityChanged()));
+
+        // what color and opacity will the assistants have
+
+        // converts 10% to 0-255 range
+        // todo: replace 1000 with opacity slider value
+        m_options.assistantsOpacitySlider->setValue(50); // 50%
+        m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01; // storing as 0-1 for the display, but QColor will eventually need 0-255
+
+        QColor newColor = m_options.assistantsColor->color();
+        newColor.setAlpha(m_assistantsOpacity*255);
+        m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
     }
     return m_optionsWidget;
+}
+
+void KisAssistantTool::slotAssistantsColorChanged(const QColor& setColor)
+{
+    // color and alpha are stored separately, so we need to merge the values before sending it on
+    QColor newColor = setColor;
+    newColor.setAlpha(m_assistantsOpacity*255);
+    m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
+    m_canvas->canvasWidget()->update();
+}
+
+void KisAssistantTool::slotAssistantOpacityChanged()
+{
+    QColor newColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
+    m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01;
+    newColor.setAlpha(m_assistantsOpacity*255);
+
+    m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
+    m_canvas->canvasWidget()->update();
 }
 

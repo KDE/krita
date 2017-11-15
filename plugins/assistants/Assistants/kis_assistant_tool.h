@@ -74,6 +74,8 @@ private Q_SLOTS:
     void removeAllAssistants();
     void saveAssistants();
     void loadAssistants();
+    void slotAssistantsColorChanged(const QColor&);
+    void slotAssistantOpacityChanged();
 
 protected:
 
@@ -101,6 +103,12 @@ private:
     qint32 m_handleSize, m_handleHalfSize;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     int m_assistantHelperYOffset;
+
+    // what color and opacity will the assistants have
+    // all assistant types will share this setting
+    QColor m_assistantColor;
+    float m_assistantsOpacity;
+
 };
 
 

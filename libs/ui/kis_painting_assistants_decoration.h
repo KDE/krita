@@ -20,7 +20,7 @@
 #define _KIS_PAINTING_ASSISTANTS_MANAGER_H_
 
 #include <QPointF>
-
+#include <QColor>
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_painting_assistant.h"
 
@@ -47,23 +47,36 @@ public:
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants();
+
     /*sets whether the main assistant is visible*/
     void setAssistantVisible(bool set);
+
     /*sets whether the preview is visible*/
     void setOutlineVisible(bool set);
+
     /*sets whether we snap to only one assistant*/
     void setOnlyOneAssistantSnap(bool assistant);
+
     /*returns assistant visibility*/
     bool assistantVisibility();
+
     /*returns preview visibility*/
     bool outlineVisibility();
+
     /*uncache all assistants*/
     void uncache();
+
+    /* retrieves the assistants color specified in the tool options
+     * all assistants will share the same color
+     */
+    QColor assistantsColor();
+
 Q_SIGNALS:
     void assistantChanged();
 public Q_SLOTS:
     void toggleAssistantVisible();
     void toggleOutlineVisible();
+    void setAssistantsColor(QColor color);
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 

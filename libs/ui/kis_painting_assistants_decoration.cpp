@@ -44,6 +44,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool snapOnlyOneAssistant;
     KisPaintingAssistantSP firstAssistant;
     bool aFirstStroke;
+    QColor m_assistantsColor;
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
@@ -239,4 +240,13 @@ void KisPaintingAssistantsDecoration::toggleAssistantVisible()
 void KisPaintingAssistantsDecoration::toggleOutlineVisible()
 {
     setOutlineVisible(!outlineVisibility());
+}
+
+QColor KisPaintingAssistantsDecoration::assistantsColor() {
+    return d->m_assistantsColor;
+}
+
+void KisPaintingAssistantsDecoration::setAssistantsColor(QColor color)
+{
+    d->m_assistantsColor = color;
 }

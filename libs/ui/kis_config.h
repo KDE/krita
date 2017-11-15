@@ -251,6 +251,9 @@ public:
     bool hideSplashScreen(bool defaultValue = false) const;
     void setHideSplashScreen(bool hideSplashScreen) const;
 
+    bool restoreDocumentsOnStartup(bool defaultValue = false) const;
+    void setRestoreDocumentsOnStartup(bool restoreDocuments) const;
+
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 

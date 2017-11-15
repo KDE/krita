@@ -74,6 +74,7 @@ public:
     int undoStackSize();
     bool showOutlineWhilePainting();
     bool hideSplashScreen();
+    bool restoreDocumentsOnStartup();
     int mdiMode();
     int favoritePresets();
     bool showCanvasMessages();

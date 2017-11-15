@@ -420,7 +420,11 @@ void KisPart::restoreSession()
         KConfigGroup session = cfg->group("session");
 
         QMap<QString, KisMainWindow*> windows = d->restoreWindows(session);
-        d->restoreViews(session, windows);
+
+        KisConfig cfg;
+        if (cfg.restoreDocumentsOnStartup()) {
+            d->restoreViews(session, windows);
+        }
     }
 
     if (d->mainWindows.isEmpty()) {

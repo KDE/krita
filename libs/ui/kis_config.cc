@@ -972,6 +972,16 @@ void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
     cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
+bool KisConfig::restoreDocumentsOnStartup(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("restoreDocumentsOnStartup", false));
+}
+
+void KisConfig::setRestoreDocumentsOnStartup(bool restoreDocuments) const
+{
+    m_cfg.writeEntry("restoreDocumentsOnStartup", restoreDocuments);
+}
+
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
 {
     return (defaultValue ? 1.0 : m_cfg.readEntry("OutlineSizeMinimum", 1.0));

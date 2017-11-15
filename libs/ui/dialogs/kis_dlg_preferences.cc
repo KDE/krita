@@ -121,6 +121,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
+    chkRestoreDocuments->setChecked(cfg.restoreDocumentsOnStartup());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", true));
@@ -170,6 +171,7 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
+    chkRestoreDocuments->setChecked(cfg.restoreDocumentsOnStartup(true));
     m_chkNativeFileDialog->setChecked(false);
     intMaxBrushSize->setValue(1000);
 
@@ -231,6 +233,11 @@ bool GeneralTab::showOutlineWhilePainting()
 bool GeneralTab::hideSplashScreen()
 {
     return m_hideSplashScreen->isChecked();
+}
+
+bool GeneralTab::restoreDocumentsOnStartup()
+{
+    return chkRestoreDocuments->isChecked();
 }
 
 int GeneralTab::mdiMode()
@@ -1147,6 +1154,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
+        cfg.setRestoreDocumentsOnStartup(dialog->m_general->restoreDocumentsOnStartup());
         cfg.setCalculateAnimationCacheInBackground(dialog->m_general->calculateAnimationCacheInBackground());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");

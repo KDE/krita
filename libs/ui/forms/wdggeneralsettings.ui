@@ -601,13 +601,6 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="1">
-        <widget class="QCheckBox" name="m_hideSplashScreen">
-         <property name="text">
-          <string>Hide splash screen on startup</string>
-         </property>
-        </widget>
-       </item>
        <item row="13" column="1">
         <widget class="QCheckBox" name="m_chkNativeFileDialog">
          <property name="toolTip">
@@ -661,6 +654,13 @@
          </item>
         </layout>
        </item>
+       <item row="16" column="1">
+        <widget class="QCheckBox" name="m_chkCacheAnimatioInBackground">
+         <property name="text">
+          <string>Recalculate animation cache in background</string>
+         </property>
+        </widget>
+       </item>
        <item row="17" column="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
@@ -674,10 +674,20 @@
          </property>
         </spacer>
        </item>
-       <item row="16" column="1">
-        <widget class="QCheckBox" name="m_chkCacheAnimatioInBackground">
+       <item row="11" column="1">
+        <widget class="QCheckBox" name="m_hideSplashScreen">
          <property name="text">
-          <string>Recalculate animation cache in background</string>
+          <string>Hide splash screen on startup</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="QCheckBox" name="chkRestoreDocuments">
+         <property name="text">
+          <string>Restore open documents on startup</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

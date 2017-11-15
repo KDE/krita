@@ -35,7 +35,15 @@ public:
     ~KisWatershedWorker();
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
-    void run();
+    void run(bool doCleanUp = false);
+
+    int testingGroupPositiveEdge(qint32 group, quint8 level);
+    int testingGroupNegativeEdge(qint32 group, quint8 level);
+    int testingGroupForeignEdge(qint32 group, quint8 level);
+    int testingGroupAllyEdge(qint32 group, quint8 level);
+    int testingGroupConflicts(qint32 group, quint8 level, qint32 withGroup);
+
+    void testingTryRemoveGroup(qint32 group, quint8 level);
 
 private:
     struct Private;

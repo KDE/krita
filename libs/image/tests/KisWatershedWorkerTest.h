@@ -26,6 +26,10 @@ class KisWatershedWorkerTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testWorker();
+
+    void testWorkerSmall();
+    void testWorkerSmallWithAllies();
+    void testWorkerSmallWithAscending();
 };
 
 #endif // KISWATERSHEDWORKERTEST_H

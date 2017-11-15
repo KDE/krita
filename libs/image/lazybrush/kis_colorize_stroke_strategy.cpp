@@ -117,7 +117,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
         worker.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
     }
-    worker.run();
+    worker.run(true);
 
 
     m_d->dirtyNode->setDirty(m_d->boundingRect);

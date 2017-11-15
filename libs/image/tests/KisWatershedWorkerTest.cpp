@@ -69,8 +69,144 @@ void KisWatershedWorkerTest::testWorker()
     KisWatershedWorker worker(filteredMainDev, resultColoring, filterRect);
     worker.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
     worker.addKeyStroke(bLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
+    worker.run(true);
+
+}
+
+void KisWatershedWorkerTest::testWorkerSmall()
+{
+    KisPaintDeviceSP mainDev = loadTestImage("fill5_main.png", false);
+    KisPaintDeviceSP aLabelDev = loadTestImage("fill5_a.png", true);
+    KisPaintDeviceSP bLabelDev = loadTestImage("fill5_b.png", true);
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    const QRect filterRect = filteredMainDev->exactBounds();
+//    KisGaussianKernel::applyLoG(filteredMainDev,
+//                                filterRect,
+//                                2,
+//                                QBitArray(), 0);
+
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+
+    KIS_DUMP_DEVICE_2(filteredMainDev, filterRect, "main", "dd");
+    KIS_DUMP_DEVICE_2(aLabelDev, filterRect, "alabel", "dd");
+    KIS_DUMP_DEVICE_2(bLabelDev, filterRect, "blabel", "dd");
+
+    KisWatershedWorker worker(filteredMainDev, resultColoring, filterRect);
+    worker.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
+    worker.addKeyStroke(bLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
     worker.run();
 
+    QCOMPARE(worker.testingGroupPositiveEdge(1, 0), 31);
+    QCOMPARE(worker.testingGroupNegativeEdge(1, 0), 0);
+    QCOMPARE(worker.testingGroupForeignEdge(1, 0), 9);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(1, 255), 2);
+    QCOMPARE(worker.testingGroupNegativeEdge(1, 255), 11);
+    QCOMPARE(worker.testingGroupForeignEdge(1, 255), 5);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(2, 0), 21);
+    QCOMPARE(worker.testingGroupNegativeEdge(2, 0), 0);
+    QCOMPARE(worker.testingGroupForeignEdge(2, 0), 7);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(2, 255), 2);
+    QCOMPARE(worker.testingGroupNegativeEdge(2, 255), 5);
+    QCOMPARE(worker.testingGroupForeignEdge(2, 255), 7);
+}
+
+void KisWatershedWorkerTest::testWorkerSmallWithAllies()
+{
+    KisPaintDeviceSP mainDev = loadTestImage("fill5_main.png", false);
+    KisPaintDeviceSP aLabelDev = loadTestImage("fill5_a_extra.png", true);
+    KisPaintDeviceSP bLabelDev = loadTestImage("fill5_b.png", true);
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    const QRect filterRect = filteredMainDev->exactBounds();
+//    KisGaussianKernel::applyLoG(filteredMainDev,
+//                                filterRect,
+//                                2,
+//                                QBitArray(), 0);
+
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+
+    KIS_DUMP_DEVICE_2(filteredMainDev, filterRect, "main", "dd");
+    KIS_DUMP_DEVICE_2(aLabelDev, filterRect, "alabel", "dd");
+    KIS_DUMP_DEVICE_2(bLabelDev, filterRect, "blabel", "dd");
+
+    KisWatershedWorker worker(filteredMainDev, resultColoring, filterRect);
+    worker.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
+    worker.addKeyStroke(bLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
+    worker.run();
+
+    QCOMPARE(worker.testingGroupPositiveEdge(1, 0), 25);
+    QCOMPARE(worker.testingGroupNegativeEdge(1, 0), 0);
+    QCOMPARE(worker.testingGroupForeignEdge(1, 0), 4);
+    QCOMPARE(worker.testingGroupAllyEdge(1, 0), 1);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(1, 255), 1);
+    QCOMPARE(worker.testingGroupNegativeEdge(1, 255), 7);
+    QCOMPARE(worker.testingGroupForeignEdge(1, 255), 2);
+    QCOMPARE(worker.testingGroupAllyEdge(1, 255), 4);
+    QCOMPARE(worker.testingGroupConflicts(1, 255, 3), 2);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(2, 0), 15);
+    QCOMPARE(worker.testingGroupNegativeEdge(2, 0), 0);
+    QCOMPARE(worker.testingGroupForeignEdge(2, 0), 4);
+    QCOMPARE(worker.testingGroupAllyEdge(2, 0), 1);
+    QCOMPARE(worker.testingGroupConflicts(2, 0, 3), 4);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(2, 255), 1);
+    QCOMPARE(worker.testingGroupNegativeEdge(2, 255), 6);
+    QCOMPARE(worker.testingGroupForeignEdge(2, 255), 1);
+    QCOMPARE(worker.testingGroupAllyEdge(2, 255), 4);
+    QCOMPARE(worker.testingGroupConflicts(2, 255, 3), 1);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(3, 0), 14);
+    QCOMPARE(worker.testingGroupNegativeEdge(3, 0), 0);
+    QCOMPARE(worker.testingGroupForeignEdge(3, 0), 4);
+    QCOMPARE(worker.testingGroupAllyEdge(3, 0), 0);
+    QCOMPARE(worker.testingGroupConflicts(3, 0, 2), 4);
+
+    QCOMPARE(worker.testingGroupPositiveEdge(3, 255), 2);
+    QCOMPARE(worker.testingGroupNegativeEdge(3, 255), 5);
+    QCOMPARE(worker.testingGroupForeignEdge(3, 255), 7);
+    QCOMPARE(worker.testingGroupAllyEdge(3, 255), 0);
+    QCOMPARE(worker.testingGroupConflicts(3, 255, 1), 2);
+    QCOMPARE(worker.testingGroupConflicts(3, 255, 2), 1);
+
+    worker.testingTryRemoveGroup(2, 0);
+    // TODO:verify numbers!
+}
+
+void KisWatershedWorkerTest::testWorkerSmallWithAscending()
+{
+    KisPaintDeviceSP mainDev = loadTestImage("fill5_main.png", false);
+    KisPaintDeviceSP aLabelDev = loadTestImage("fill5_a_extra_fuzzy.png", true);
+    KisPaintDeviceSP bLabelDev = loadTestImage("fill5_b.png", true);
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    const QRect filterRect = filteredMainDev->exactBounds();
+//    KisGaussianKernel::applyLoG(filteredMainDev,
+//                                filterRect,
+//                                2,
+//                                QBitArray(), 0);
+
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+
+    KIS_DUMP_DEVICE_2(filteredMainDev, filterRect, "main", "dd");
+    KIS_DUMP_DEVICE_2(aLabelDev, filterRect, "alabel", "dd");
+    KIS_DUMP_DEVICE_2(bLabelDev, filterRect, "blabel", "dd");
+
+    KisWatershedWorker worker(filteredMainDev, resultColoring, filterRect);
+    worker.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
+    worker.addKeyStroke(bLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
+    worker.run();
+
+    worker.testingTryRemoveGroup(3, 0);
+    // TODO:verify numbers!
 }
 
 QTEST_MAIN(KisWatershedWorkerTest)

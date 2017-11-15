@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_ruler_assistant_tool.h>
+#include <kis_assistant_tool.h>
 
 #include <QPainter>
 #include <QXmlStreamReader>
@@ -53,7 +53,7 @@ KisAssistantTool::KisAssistantTool(KoCanvasBase * canvas)
       m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0), m_handleSize(32), m_handleHalfSize(16)
 {
     Q_ASSERT(m_canvas);
-    setObjectName("tool_rulerassistanttool");
+    setObjectName("tool_assistanttool");
 }
 
 KisAssistantTool::~KisAssistantTool()
@@ -330,7 +330,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         }
     }
     if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visiblity//
-        QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+        QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
@@ -890,9 +890,9 @@ QWidget *KisAssistantTool::createOptionWidget()
         specialSpacer->setFixedSize(0, 0);
         m_optionsWidget->layout()->addWidget(specialSpacer);
 
-        m_options.loadButton->setIcon(KisIconUtils::loadIcon("document-open"));
-        m_options.saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
-        m_options.deleteButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_options.loadAssistantButton->setIcon(KisIconUtils::loadIcon("document-open"));
+        m_options.saveAssistantButton->setIcon(KisIconUtils::loadIcon("document-save"));
+        m_options.deleteAllAssistantsButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
         QList<KoID> assistants;
         Q_FOREACH (const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
@@ -901,12 +901,12 @@ QWidget *KisAssistantTool::createOptionWidget()
         }
         std::sort(assistants.begin(), assistants.end(), KoID::compareNames);
         Q_FOREACH(const KoID &id, assistants) {
-            m_options.comboBox->addItem(id.name(), id.id());
+            m_options.availableAssistantsComboBox->addItem(id.name(), id.id());
         }
 
-        connect(m_options.saveButton, SIGNAL(clicked()), SLOT(saveAssistants()));
-        connect(m_options.loadButton, SIGNAL(clicked()), SLOT(loadAssistants()));
-        connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
+        connect(m_options.saveAssistantButton, SIGNAL(clicked()), SLOT(saveAssistants()));
+        connect(m_options.loadAssistantButton, SIGNAL(clicked()), SLOT(loadAssistants()));
+        connect(m_options.deleteAllAssistantsButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;
 }

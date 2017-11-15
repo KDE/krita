@@ -134,12 +134,12 @@ QImage KisPaintopPresetIconLibrary::hueTransform(QImage img)
     //just darker or lighter.
     QVector<int> values(256);
     values.fill(255);
-    int level = qMax(qMin( 28 + ( ((int)ui->sldLevels->value() + 50) * 2), 255), 0);
+    int level = qMax(qMin( 28 + ( (int(ui->sldLevels->value()) + 50) * 2), 255), 0);
     for (int v=0; v<level; v++) {
-        values[v] = (int)((128.0/(qreal)level)*v);
+        values[v] = int((128.0/qreal(level))*v);
     }
     for (int v=level; v<255; v++) {
-        values[v] = qMax(qMin((int)( (128.0/ (qreal)(255-level)) *(v-level)+128.0), 255), 0);
+        values[v] = qMax(qMin(int( (128.0/ qreal(255-level)) *(v-level)+128.0), 255), 0);
     }
 
     //This is very slow by Krita standards, but we cannot get hsv transforms, ad the image is only 200x200.
@@ -150,7 +150,7 @@ QImage KisPaintopPresetIconLibrary::hueTransform(QImage img)
             if (hue>360) {
                 hue-=360;
             }
-            int sat = qMax(qMin(c.hslSaturation()+(int)(ui->sldSat->value()*(255/100)), 255), 0);
+            int sat = qMax(qMin(c.hslSaturation()+int(ui->sldSat->value()*(255/100)), 255), 0);
             c.setHsl(hue, sat, values.at(c.lightness()), c.alpha());
             img.setPixelColor(x, y, c);
         }

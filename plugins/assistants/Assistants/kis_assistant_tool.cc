@@ -52,7 +52,7 @@
 
 KisAssistantTool::KisAssistantTool(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
-      m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0), m_handleSize(32), m_handleHalfSize(16)
+      m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_assistanttool");
@@ -79,6 +79,12 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_internalMode = MODE_CREATION;
     m_assistantHelperYOffset = 10;
 
+    m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
+    m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
+    m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
+    m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
+    m_handlesColor = QColor(60, 60, 60, 125); // maybe this could be loaded/saved in config?
+    m_handleSize = 12;
 }
 
 void KisAssistantTool::deactivate()
@@ -90,7 +96,7 @@ void KisAssistantTool::deactivate()
 
 bool KisAssistantTool::mouseNear(const QPointF& mousep, const QPointF& point)
 {
-    QRectF handlerect(point-QPointF(m_handleHalfSize,m_handleHalfSize), QSizeF(m_handleSize, m_handleSize));
+    QRectF handlerect(point - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
     return handlerect.contains(mousep);
 }
 
@@ -578,68 +584,60 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
 
-    QPixmap iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
-    QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
-    QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
-    QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
-    QColor handlesColor(0, 0, 0, 125);
-
+    // show special display while a new assistant is in the process of being created
     if (m_newAssistant) {
         m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas, true, false);
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
-            path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
+            path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
             KisPaintingAssistant::drawPath(_gc, path);
         }
     }
 
-    // Draw corner and middle perspective handles
+
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+
+        // Draw corner and middle handles
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
+            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
 
             // render handles when they are being dragged and moved
             if (handle == m_handleDrag || handle == m_handleCombine) {
                 _gc.save();
                 _gc.setPen(Qt::transparent);
-                _gc.setBrush(handlesColor);
+                _gc.setBrush(m_handlesColor);
                 _gc.drawEllipse(ellipse);
                 _gc.restore();
             }
 
             if ( assistant->id() =="vanishing point") {
-
                 if (assistant->handles().at(0) == handle )  { // vanishing point handle
                      ellipse = QRectF(_converter.documentToView(*handle) -  QPointF(10, 10), QSizeF(20, 20));
-                     // TODO: change this to be smaller, but fill in with a color
                 }
-
-                //TODO: render outside handles a little bigger than rotation anchor handles
             }
 
             QPainterPath path;
             path.addEllipse(ellipse);
             KisPaintingAssistant::drawPath(_gc, path);
-
         }
-    }
 
 
-
-    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         // Draw middle perspective handles
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
+
             QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
             topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;
             bottomMiddle = (_converter.documentToView(*assistant->bottomLeft()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
             rightMiddle = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
             leftMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft()))*0.5;
+
             QPainterPath path;
-            path.addEllipse(QRectF(leftMiddle-QPointF(6,6),QSizeF(12,12)));
-            path.addEllipse(QRectF(topMiddle-QPointF(6,6),QSizeF(12,12)));
-            path.addEllipse(QRectF(rightMiddle-QPointF(6,6),QSizeF(12,12)));
-            path.addEllipse(QRectF(bottomMiddle-QPointF(6,6),QSizeF(12,12)));
+            path.addEllipse(QRectF(leftMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
+            path.addEllipse(QRectF(topMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
+            path.addEllipse(QRectF(rightMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
+            path.addEllipse(QRectF(bottomMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
+
             KisPaintingAssistant::drawPath(_gc, path);
         }
         if(assistant->id()=="vanishing point") {
@@ -664,59 +662,55 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             _gc.drawLine(p3, p4);
             }
         }
-    }
-
-    // Draw the assistant widget with move, active, delete
-    Q_FOREACH (const KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
 
-       // We are going to put all of the assistant actions below the bounds of the assistant
-       // so they are out of the way
-        // assistant->buttonPosition() gets the center X/Y position point
-        QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
-
-        QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
-        QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
-        QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
-
-
-
-        // Background container for helpers
-        QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
-        QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
-
-        _gc.setRenderHint(QPainter::Antialiasing);
-
-        QPainterPath bgPath;
-        bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
-        QPen stroke(QColor(60, 60, 60, 80), 2);
-        _gc.setPen(stroke);
-        _gc.fillPath(bgPath, backgroundColor);
-        _gc.drawPath(bgPath);
-
-
-        QPainterPath movePath;  // render circle behind by move helper
-        _gc.setPen(stroke);
-        movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
-        _gc.fillPath(movePath, backgroundColor);
-        _gc.drawPath(movePath);
-
-        // Preview/Snap Tool helper
-        _gc.drawPixmap(iconDeletePosition, iconDelete);
-        if (assistant->snapping()==true) {
-            _gc.drawPixmap(iconSnapPosition, iconSnapOn);
-        }
-        else
+        // Draw the assistant widget with move, active, delete
         {
-            _gc.drawPixmap(iconSnapPosition, iconSnapOff);
+            // We are going to put all of the assistant actions below the bounds of the assistant
+            // so they are out of the way
+             // assistant->buttonPosition() gets the center X/Y position point
+             QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+
+             QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
+             QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
+             QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
+
+
+
+             // Background container for helpers
+             QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
+             QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
+
+             _gc.setRenderHint(QPainter::Antialiasing);
+
+             QPainterPath bgPath;
+             bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
+             QPen stroke(QColor(60, 60, 60, 80), 2);
+             _gc.setPen(stroke);
+             _gc.fillPath(bgPath, backgroundColor);
+             _gc.drawPath(bgPath);
+
+
+             QPainterPath movePath;  // render circle behind by move helper
+             _gc.setPen(stroke);
+             movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
+             _gc.fillPath(movePath, backgroundColor);
+             _gc.drawPath(movePath);
+
+             // Preview/Snap Tool helper
+             _gc.drawPixmap(iconDeletePosition, m_iconDelete);
+             if (assistant->snapping()==true) {
+                 _gc.drawPixmap(iconSnapPosition, m_iconSnapOn);
+             }
+             else
+             {
+                 _gc.drawPixmap(iconSnapPosition, m_iconSnapOff);
+             }
+
+             // Move Assistant Tool helper
+             _gc.drawPixmap(iconMovePosition, m_iconMove);
         }
-
-
-        // Move Assistant Tool helper
-        _gc.drawPixmap(iconMovePosition, iconMove);
-
-
-  }
+    }
 }
 
 void KisAssistantTool::removeAllAssistants()
@@ -879,8 +873,6 @@ void KisAssistantTool::saveAssistants()
     file.write(data);
 }
 
-
-
 QWidget *KisAssistantTool::createOptionWidget()
 {
     if (!m_optionsWidget) {
@@ -946,4 +938,3 @@ void KisAssistantTool::slotAssistantOpacityChanged()
     m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
     m_canvas->canvasWidget()->update();
 }
-

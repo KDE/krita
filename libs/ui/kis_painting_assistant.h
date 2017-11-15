@@ -45,6 +45,15 @@ typedef KisSharedPtr<KisPaintingAssistantHandle> KisPaintingAssistantHandleSP;
 class KisPaintingAssistant;
 class QPainterPath;
 
+enum HandleType {
+    NORMAL,
+    SIDE,
+    CORNER,
+    VANISHING_POINT,
+    ANCHOR
+};
+
+
 /**
   * Represent an handle of the assistant, used to edit the parameters
   * of an assistants. Handles can be shared between assistants.
@@ -96,8 +105,8 @@ public:
     virtual QPointF buttonPosition() const = 0;
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
-    void addHandle(KisPaintingAssistantHandleSP handle);
-    void addSideHandle(KisPaintingAssistantHandleSP handle);
+    void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
+
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;

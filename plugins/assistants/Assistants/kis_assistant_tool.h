@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RULER_ASSISTANT_TOOL_H_
-#define _KIS_RULER_ASSISTANT_TOOL_H_
+#ifndef _KIS_ASSISTANT_TOOL_H_
+#define _KIS_ASSISTANT_TOOL_H_
 
 #include <QPointer>
 
@@ -29,6 +29,7 @@
 #include <kis_canvas2.h>
 
 #include "ui_AssistantsToolOptions.h"
+
 
 class KisAssistantTool : public KisTool
 {
@@ -107,10 +108,10 @@ class KisAssistantToolFactory : public KoToolFactoryBase
 {
 public:
     KisAssistantToolFactory()
-            : KoToolFactoryBase("KisRulerAssistantTool") {
+            : KoToolFactoryBase("KisAssistantTool") {
         setToolTip(i18n("Assistant Tool"));
         setSection(TOOL_TYPE_VIEW);
-        setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
+        setIconName(koIconNameCStr("krita_tool_assistant"));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };

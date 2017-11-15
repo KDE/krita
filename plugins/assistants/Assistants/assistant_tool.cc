@@ -14,8 +14,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "ruler_assistant_tool.h"
-#include "kis_ruler_assistant_tool.h"
+#include "assistant_tool.h"
+#include "kis_assistant_tool.h"
 
 #include <kpluginfactory.h>
 #include <kis_canvas2.h>
@@ -33,7 +33,7 @@
 #include "FisheyePointAssistant.h"
 //#include "mesh_assistant.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(AssistantToolFactory, "kritarulerassistanttool.json", registerPlugin<AssistantToolPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(AssistantToolFactory, "kritaassistanttool.json", registerPlugin<AssistantToolPlugin>();)
 
 
 AssistantToolPlugin::AssistantToolPlugin(QObject *parent, const QVariantList &)

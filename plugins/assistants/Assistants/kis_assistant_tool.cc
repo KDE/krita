@@ -130,7 +130,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
         } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         }
         m_canvas->updateCanvas();
         return;
@@ -185,10 +185,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
                 m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant());
-                m_newAssistant->addHandle(assistant->topLeft());
-                m_newAssistant->addHandle(m_selectedNode1);
-                m_newAssistant->addHandle(m_selectedNode2);
-                m_newAssistant->addHandle(assistant->bottomLeft());
+                m_newAssistant->addHandle(assistant->topLeft(), HandleType::NORMAL );
+                m_newAssistant->addHandle(m_selectedNode1, HandleType::NORMAL);
+                m_newAssistant->addHandle(m_selectedNode2, HandleType::NORMAL);
+                m_newAssistant->addHandle(assistant->bottomLeft(), HandleType::NORMAL);
                 m_dragEnd = event->point;
                 m_handleDrag = 0;
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -200,10 +200,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
                 m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant());
-                m_newAssistant->addHandle(assistant->topRight());
-                m_newAssistant->addHandle(m_selectedNode1);
-                m_newAssistant->addHandle(m_selectedNode2);
-                m_newAssistant->addHandle(assistant->bottomRight());
+                m_newAssistant->addHandle(assistant->topRight(), HandleType::NORMAL);
+                m_newAssistant->addHandle(m_selectedNode1, HandleType::NORMAL);
+                m_newAssistant->addHandle(m_selectedNode2, HandleType::NORMAL);
+                m_newAssistant->addHandle(assistant->bottomRight(), HandleType::NORMAL);
                 m_dragEnd = event->point;
                 m_handleDrag = 0;
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -215,10 +215,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
                 m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant());
-                m_newAssistant->addHandle(m_selectedNode1);
-                m_newAssistant->addHandle(m_selectedNode2);
-                m_newAssistant->addHandle(assistant->topRight());
-                m_newAssistant->addHandle(assistant->topLeft());
+                m_newAssistant->addHandle(m_selectedNode1, HandleType::NORMAL);
+                m_newAssistant->addHandle(m_selectedNode2, HandleType::NORMAL);
+                m_newAssistant->addHandle(assistant->topRight(), HandleType::NORMAL);
+                m_newAssistant->addHandle(assistant->topLeft(), HandleType::NORMAL);
                 m_dragEnd = event->point;
                 m_handleDrag = 0;
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -230,10 +230,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
                 m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant());
-                m_newAssistant->addHandle(assistant->bottomLeft());
-                m_newAssistant->addHandle(assistant->bottomRight());
-                m_newAssistant->addHandle(m_selectedNode2);
-                m_newAssistant->addHandle(m_selectedNode1);
+                m_newAssistant->addHandle(assistant->bottomLeft(), HandleType::NORMAL);
+                m_newAssistant->addHandle(assistant->bottomRight(), HandleType::NORMAL);
+                m_newAssistant->addHandle(m_selectedNode2, HandleType::NORMAL);
+                m_newAssistant->addHandle(m_selectedNode1, HandleType::NORMAL);
                 m_dragEnd = event->point;
                 m_handleDrag = 0;
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -341,17 +341,17 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;
-        m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
+        m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         if (m_newAssistant->numHandles() <= 1) {
             if (key == "vanishing point"){
-                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(-70,0)));
-                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(-140,0)));
-                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(70,0)));
-                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(140,0)));
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(-70,0)), HandleType::SIDE);
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(-140,0)), HandleType::SIDE);
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(70,0)), HandleType::SIDE);
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(140,0)), HandleType::SIDE);
                 }
             addAssistant();
         } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         }
     }
 
@@ -745,7 +745,7 @@ void KisAssistantTool::loadAssistants()
                 if (assistant && !xml.attributes().value("ref").isEmpty()) {
                     KisPaintingAssistantHandleSP handle = handleMap.value(xml.attributes().value("ref").toString().toInt());
                     if (handle) {
-                       assistant->addHandle(handle);
+                       assistant->addHandle(handle, HandleType::NORMAL);
                     } else {
                         errors = true;
                     }
@@ -786,10 +786,10 @@ void KisAssistantTool::loadAssistants()
                         if (assistant->id() == "vanishing point"){
                         //ideally we'd save and load side-handles as well, but this is all I've got//
                             QPointF pos = *assistant->handles()[0];
-                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(-70,0)));
-                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(-140,0)));
-                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(70,0)));
-                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(140,0)));
+                            assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-70,0)), HandleType::SIDE);
+                            assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-140,0)), HandleType::SIDE);
+                            assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(70,0)), HandleType::SIDE);
+                            assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(140,0)), HandleType::SIDE);
                         }
                         m_canvas->paintingAssistantsDecoration()->addAssistant(assistant);
                         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());

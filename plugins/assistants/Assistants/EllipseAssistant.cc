@@ -98,7 +98,7 @@ void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *co
         QPainterPath path;
         path.moveTo(*handles()[0]);
         path.lineTo(*handles()[1]);
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());
         return;
     }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
@@ -111,7 +111,7 @@ void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *co
         path.moveTo(QPointF(0, -e.semiMinor())); path.lineTo(QPointF(0, e.semiMinor()));
         // Draw the ellipse
         path.addEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());
     }
 }
 

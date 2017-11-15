@@ -101,7 +101,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 
     if (assistants.empty()) return point;
     if (assistants.count() == 1) {
-        if(assistants.first()->snapping()==true){
+        if(assistants.first()->isSnappingActive() == true){
             QPointF newpoint = assistants.first()->adjustPosition(point, strokeBegin);
             // check for NaN
             if (newpoint.x() != newpoint.x()) return point;
@@ -113,7 +113,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
     if(!d->snapOnlyOneAssistant){
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-            if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+            if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
@@ -125,7 +125,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         }
     } else if (d->aFirstStroke==false) {
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-            if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+            if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());

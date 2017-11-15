@@ -127,7 +127,7 @@ void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conv
     QPainterPath path;
     path.moveTo(p1);
     path.lineTo(p2);
-    drawPath(gc, path, snapping());
+    drawPath(gc, path, isSnappingActive());
 }
 
 QPointF RulerAssistant::buttonPosition() const

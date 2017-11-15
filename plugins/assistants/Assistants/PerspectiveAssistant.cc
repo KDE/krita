@@ -281,7 +281,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
         } else {
             QPainterPath path;
             path.addPolygon(poly);
-            drawPath(gc, path, snapping());
+            drawPath(gc, path, isSnappingActive());
         }
     } else {
         gc.setPen(QColor(0, 0, 0, 125));
@@ -297,7 +297,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
             path.moveTo(QPointF(x * 0.125, 0.0));
             path.lineTo(QPointF(x * 0.125, 1.0));
         }
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());
     }
     
 }

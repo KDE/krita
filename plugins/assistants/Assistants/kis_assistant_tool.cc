@@ -325,7 +325,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         }
         if (visibleRect.contains(mousePos)) {
             newAssistantAllowed = false;
-            if (assistant->snapping()==true){
+            if (assistant->isSnappingActive()==true){
 
             snappingOff(assistant);
             outlineOff(assistant);
@@ -524,12 +524,12 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 
 void KisAssistantTool::snappingOn(KisPaintingAssistantSP assistant)
 {
-    assistant->setSnapping(true);
+    assistant->setSnappingActive(true);
 }
 
 void KisAssistantTool::snappingOff(KisPaintingAssistantSP assistant)
 {
-    assistant->setSnapping(false);
+    assistant->setSnappingActive(false);
 }
 
 void KisAssistantTool::outlineOn(KisPaintingAssistantSP assistant)
@@ -699,11 +699,10 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
              // Preview/Snap Tool helper
              _gc.drawPixmap(iconDeletePosition, m_iconDelete);
-             if (assistant->snapping()==true) {
+             if (assistant->isSnappingActive() == true) {
                  _gc.drawPixmap(iconSnapPosition, m_iconSnapOn);
              }
-             else
-             {
+             else {
                  _gc.drawPixmap(iconSnapPosition, m_iconSnapOff);
              }
 

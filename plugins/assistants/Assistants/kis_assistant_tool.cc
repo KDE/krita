@@ -594,6 +594,8 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
     // show special display while a new assistant is in the process of being created
     if (m_newAssistant) {
+
+        m_newAssistant->setAssistantColor(assistantColor);
         m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas, true, false);
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
@@ -929,11 +931,11 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsOpacitySlider, SIGNAL(sliderReleased()), SLOT(slotAssistantOpacityChanged()));
 
 
-        m_options.assistantsColor->setColor(QColor(0, 185, 188, 255));
+        m_options.assistantsColor->setColor(QColor(95, 228, 230, 255));
 
         // converts 10% to 0-255 range
         // todo: replace 1000 with opacity slider value
-        m_options.assistantsOpacitySlider->setValue(30); // 30%
+        m_options.assistantsOpacitySlider->setValue(100); // 30%
         m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01; // storing as 0-1 for the display, but QColor will eventually need 0-255
 
         QColor newColor = m_options.assistantsColor->color();

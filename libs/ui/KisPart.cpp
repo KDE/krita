@@ -273,8 +273,16 @@ void KisPart::removeDocument(KisDocument *document)
 KisMainWindow *KisPart::createMainWindow(KConfigGroup stateConfig)
 {
     if (!stateConfig.isValid()) {
+        // Fall back to default or legacy configuration
+
+        KSharedConfig::Ptr cfg = KSharedConfig::openConfig();
+
         QString id = QUuid::createUuid().toString();
-        stateConfig = KSharedConfig::openConfig()->group("session").group(QString("window ") + id);
+        stateConfig = cfg->group("session").group(QString("window ") + id);
+
+        if (cfg->hasGroup("krita")) {
+            cfg->group("krita").copyTo(&stateConfig);
+        }
     }
 
     KisMainWindow *mw = new KisMainWindow(stateConfig);

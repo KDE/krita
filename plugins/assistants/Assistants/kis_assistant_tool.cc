@@ -83,8 +83,7 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
     m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
     m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
-    m_handlesColor = QColor(60, 60, 60, 125); // maybe this could be loaded/saved in config?
-    m_handleSize = 12;
+    m_handleSize = 17;
 }
 
 void KisAssistantTool::deactivate()
@@ -583,6 +582,9 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
+    QColor assistantColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
+    QBrush fillAssistantColorBrush;
+    fillAssistantColorBrush.setColor(m_canvas->paintingAssistantsDecoration()->assistantsColor());
 
     // show special display while a new assistant is in the process of being created
     if (m_newAssistant) {
@@ -590,7 +592,13 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
-            KisPaintingAssistant::drawPath(_gc, path);
+
+            _gc.save();
+            _gc.setPen(Qt::NoPen);
+            _gc.setBrush(assistantColor);
+            _gc.drawPath(path);
+            _gc.restore();
+            //m_newAssistant->drawPath(_gc, path);
         }
     }
 
@@ -604,8 +612,8 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             // render handles when they are being dragged and moved
             if (handle == m_handleDrag || handle == m_handleCombine) {
                 _gc.save();
-                _gc.setPen(Qt::transparent);
-                _gc.setBrush(m_handlesColor);
+                _gc.setPen(Qt::NoPen);
+                _gc.setBrush(assistantColor);
                 _gc.drawEllipse(ellipse);
                 _gc.restore();
             }
@@ -617,8 +625,15 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             }
 
             QPainterPath path;
+
             path.addEllipse(ellipse);
-            KisPaintingAssistant::drawPath(_gc, path);
+
+            _gc.save();
+            _gc.setPen(Qt::NoPen);
+            _gc.setBrush(assistantColor);
+            _gc.drawPath(path);
+            //assistant->drawPath(_gc, path);
+            _gc.restore();
         }
 
 
@@ -638,7 +653,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             path.addEllipse(QRectF(rightMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
             path.addEllipse(QRectF(bottomMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
 
-            KisPaintingAssistant::drawPath(_gc, path);
+            assistant->drawPath(_gc, path);
         }
         if(assistant->id()=="vanishing point") {
             if (assistant->sideHandles().size() == 4) {
@@ -654,12 +669,14 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             // Draw control lines
             // setting it here updates the vanishing point lines to correct color
             // this should probably move to vanishing point assistant class where everything else is done
-            QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::DashDotDotLine);
+            QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
+            _gc.save();
             _gc.setPen(penStyle);
             _gc.drawLine(p0, p1);
             _gc.drawLine(p0, p3);
             _gc.drawLine(p1, p2);
             _gc.drawLine(p3, p4);
+            _gc.restore();
             }
         }
 
@@ -905,11 +922,12 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsColor, SIGNAL(changed(const QColor&)), SLOT(slotAssistantsColorChanged(const QColor&)));
         connect(m_options.assistantsOpacitySlider, SIGNAL(sliderReleased()), SLOT(slotAssistantOpacityChanged()));
 
-        // what color and opacity will the assistants have
+
+        m_options.assistantsColor->setColor(QColor(0, 185, 188, 255));
 
         // converts 10% to 0-255 range
         // todo: replace 1000 with opacity slider value
-        m_options.assistantsOpacitySlider->setValue(50); // 50%
+        m_options.assistantsOpacitySlider->setValue(30); // 30%
         m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01; // storing as 0-1 for the display, but QColor will eventually need 0-255
 
         QColor newColor = m_options.assistantsColor->color();

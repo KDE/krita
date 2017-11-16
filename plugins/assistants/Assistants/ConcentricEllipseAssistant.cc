@@ -125,7 +125,7 @@ void ConcentricEllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesCon
         QPainterPath path;
         path.moveTo(*handles()[0]);
         path.lineTo(*handles()[1]);
-        drawPath(gc, path, isSnappingActive());
+        drawPath(gc, path, isSnappingActive());       
         return;
     }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {

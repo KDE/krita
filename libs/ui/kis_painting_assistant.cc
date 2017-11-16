@@ -72,7 +72,6 @@ char KisPaintingAssistantHandle::handleType()
     return d->handle_type;
 }
 
-
 KisPaintingAssistantHandle::~KisPaintingAssistantHandle()
 {
     Q_ASSERT(d->assistants.empty());
@@ -132,7 +131,14 @@ struct KisPaintingAssistant::Private {
             return m11 == b.m11 && m12 == b.m12 && m21 == b.m21 && m22 == b.m22;
         }
     } cachedTransform;
+
+    QColor assistantColor = QColor(60, 60, 60, 255);
 };
+
+void KisPaintingAssistant::setAssistantColor(QColor color)
+{
+    d->assistantColor = color;
+}
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
 {
@@ -162,20 +168,17 @@ void KisPaintingAssistant::setOutline(bool set)
     d->outlineVisible=set;
 }
 
-void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool drawActive)
+void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
-    int alpha=100;
-    if (!drawActive) {
-        alpha=20;
+    int alpha = d->assistantColor.alpha();
+    if (!isSnappingOn) {
+        alpha = d->assistantColor.alpha() *0.2;
     }
     painter.save();
-    QPen pen_a(QColor(0, 0, 0, alpha), 2);
+
+    QPen pen_a(QColor(d->assistantColor.red(), d->assistantColor.green(), d->assistantColor.blue(), alpha), 2);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
-    painter.drawPath(path);
-    QPen pen_b(QColor(255, 255, 255, alpha), 0.9);
-    pen_b.setCosmetic(true);
-    painter.setPen(pen_b);
     painter.drawPath(path);
     painter.restore();
 }
@@ -183,15 +186,10 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
 void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
 {
     painter.save();
-    QPen pen_a(QColor(0, 0, 0, 50), 1);
+    QPen pen_a(d->assistantColor, 1);
     pen_a.setStyle(Qt::SolidLine);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
-    painter.drawPath(path);
-    QPen pen_b(QColor(255, 255, 255, 50), 1);
-    pen_b.setStyle(Qt::DotLine);
-    pen_b.setCosmetic(true);
-    painter.setPen(pen_b);
     painter.drawPath(path);
     painter.restore();
 }

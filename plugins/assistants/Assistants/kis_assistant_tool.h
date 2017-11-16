@@ -97,9 +97,6 @@ protected:
     QLineF m_radius;
     bool m_snapIsRadial;
     QPointF m_dragEnd;
-
-    // anchor point handle display
-    QColor m_handlesColor;
     int m_handleSize;
 
     // move, visibility, delete icons for each assistant

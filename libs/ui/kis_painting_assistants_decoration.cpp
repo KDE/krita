@@ -170,6 +170,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+        assistant->setAssistantColor(assistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
     }
 }

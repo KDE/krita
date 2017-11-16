@@ -24,6 +24,7 @@
 #include <QRect>
 #include <QFile>
 #include <QObject>
+#include <QColor>
 
 #include <kritaui_export.h>
 #include <kis_shared.h>
@@ -61,6 +62,7 @@ enum HandleType {
 class KRITAUI_EXPORT KisPaintingAssistantHandle : public QPointF, public KisShared
 {
     friend class KisPaintingAssistant;
+
 public:
     KisPaintingAssistantHandle(double x, double y);
     explicit KisPaintingAssistantHandle(QPointF p);
@@ -71,10 +73,12 @@ public:
     KisPaintingAssistantHandle& operator=(const QPointF&);
     void setType(char type);
     char handleType();
+
 private:
     void registerAssistant(KisPaintingAssistant*);
     void unregisterAssistant(KisPaintingAssistant*);
     bool containsAssistant(KisPaintingAssistant*);
+
 private:
     struct Private;
     Private* const d;
@@ -106,6 +110,10 @@ public:
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
+
+    /// grabs the assistant color/opacity specified from the tool options
+    /// each assistant might have to use this differently, so just save a reference
+    void setAssistantColor(QColor color);
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
@@ -143,13 +151,15 @@ public:
     /**
      * This will paint a path using a white and black colors.
      */
-    static void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
-    static void drawPreview(QPainter& painter, const QPainterPath& path);
+    void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
+    void drawPreview(QPainter& painter, const QPainterPath& path);
+
 protected:
     virtual QRect boundingRect() const;
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;
+
 private:
     struct Private;
     Private* const d;

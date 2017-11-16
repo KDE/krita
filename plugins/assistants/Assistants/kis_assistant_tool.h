@@ -99,6 +99,10 @@ protected:
     QPointF m_dragEnd;
     int m_handleSize;
 
+    /// When we are adding and editing assistants, we don't need to have the preview on
+    /// temporarily hide it while editing. restore the preview state when we go back to drawing
+    bool m_temporaryPreviewState;
+
     // move, visibility, delete icons for each assistant
     QPixmap m_iconDelete;
     QPixmap m_iconSnapOn;

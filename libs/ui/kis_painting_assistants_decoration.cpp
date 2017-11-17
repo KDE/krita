@@ -27,6 +27,7 @@
 #include <ktoggleaction.h>
 #include "kis_debug.h"
 #include "KisDocument.h"
+#include "kis_canvas2.h"
 
 #include <QPainter>
 
@@ -45,6 +46,9 @@ struct KisPaintingAssistantsDecoration::Private {
     KisPaintingAssistantSP firstAssistant;
     bool aFirstStroke;
     QColor m_assistantsColor;
+    bool m_isEditingAssistants = false;
+
+    KisCanvas2 * m_canvas = 0;
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
@@ -53,7 +57,7 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
-    d->snapOnlyOneAssistant=true;//turn on by default.
+    d->snapOnlyOneAssistant = true; //turn on by default.
 }
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
@@ -165,13 +169,24 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 {
     if (!canvas) {
         dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
+    } else {
+        d->m_canvas = canvas;
     }
 
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
         assistant->setAssistantColor(assistantsColor());
-        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
+
+        // forcing to do a clean draw helps when we go from editing to painting
+        bool useCache = true;
+        if (d->m_isEditingAssistants) {
+            useCache = false;
+        }
+
+        assistant->drawAssistant(gc, updateRect, converter, useCache, canvas, assistantVisibility(), outlineVisibility());
+
+
     }
 }
 //drawPreview//
@@ -238,6 +253,7 @@ void KisPaintingAssistantsDecoration::toggleAssistantVisible()
     setAssistantVisible(!assistantVisibility());
     uncache();
 }
+
 void KisPaintingAssistantsDecoration::toggleOutlineVisible()
 {
     setOutlineVisible(!outlineVisibility());
@@ -251,3 +267,31 @@ void KisPaintingAssistantsDecoration::setAssistantsColor(QColor color)
 {
     d->m_assistantsColor = color;
 }
+
+void KisPaintingAssistantsDecoration::activateAssistantsEditor()
+{
+    setVisible(true); // this turns on the decorations in general. we leave it on at this point
+    d->m_isEditingAssistants = true;
+}
+
+void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()
+{
+    if (!d->m_canvas) {
+        return;
+    }
+
+    d->m_isEditingAssistants = false; // some elements are hidden when we aren't editing
+
+    // draw decoration again in case some elements need to be show or hidden
+    QPainter painter;
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(assistantsColor());
+    QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(d->m_canvas->image()->size()));
+    drawDecoration(painter, canvasSize, d->m_canvas->coordinatesConverter(), d->m_canvas );
+}
+
+bool KisPaintingAssistantsDecoration::isEditingAssistants()
+{
+    return d->m_isEditingAssistants;
+}
+

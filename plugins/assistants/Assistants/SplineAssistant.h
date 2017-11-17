@@ -34,6 +34,9 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt) const;
+
+    /// used for getting the decoration so the bezier handles aren't drawn while editing
+    KisCanvas2* m_canvas;
 };
 
 class SplineAssistantFactory : public KisPaintingAssistantFactory

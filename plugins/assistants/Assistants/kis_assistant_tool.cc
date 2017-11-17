@@ -72,14 +72,14 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     // Add code here to initialize your tool when it got activated
     KisTool::activate(toolActivation, shapes);
 
+    m_canvas->paintingAssistantsDecoration()->activateAssistantsEditor();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
-    m_canvas->paintingAssistantsDecoration()->setVisible(true);
 
     // turn off preview while we are managing assistants. it gets in the way with all the lines it generates
     m_temporaryPreviewState = m_canvas->paintingAssistantsDecoration()->outlineVisibility();
     m_canvas->paintingAssistantsDecoration()->setOutlineVisible(false);
+    repaintDecorations();
 
-    m_canvas->updateCanvas();
     m_handleDrag = 0;
     m_internalMode = MODE_CREATION;
     m_assistantHelperYOffset = 10;
@@ -94,8 +94,10 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
 void KisAssistantTool::deactivate()
 {
     // Add code here to initialize your tool when it got deactivated
+    m_canvas->paintingAssistantsDecoration()->deactivateAssistantsEditor();
     m_canvas->paintingAssistantsDecoration()->setOutlineVisible(m_temporaryPreviewState);
-    m_canvas->updateCanvas();
+    repaintDecorations(); // helps with updating assistant decoration a non-editor look
+
     KisTool::deactivate();
 }
 
@@ -568,6 +570,7 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
+    QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size()));
     QColor assistantColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
     QBrush fillAssistantColorBrush;
     fillAssistantColorBrush.setColor(m_canvas->paintingAssistantsDecoration()->assistantsColor());
@@ -576,7 +579,8 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
     if (m_newAssistant) {
 
         m_newAssistant->setAssistantColor(assistantColor);
-        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas, true, false);
+        m_newAssistant->drawAssistant(_gc, canvasSize, m_canvas->coordinatesConverter(), false,m_canvas, true, false);
+
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
@@ -586,7 +590,6 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             _gc.setBrush(assistantColor);
             _gc.drawPath(path);
             _gc.restore();
-            //m_newAssistant->drawPath(_gc, path);
         }
     }
 
@@ -620,7 +623,6 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             _gc.setPen(Qt::NoPen);
             _gc.setBrush(assistantColor);
             _gc.drawPath(path);
-            //assistant->drawPath(_gc, path);
             _gc.restore();
         }
 
@@ -715,6 +717,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
              _gc.drawPixmap(iconMovePosition, m_iconMove);
         }
     }
+
 }
 
 void KisAssistantTool::removeAllAssistants()

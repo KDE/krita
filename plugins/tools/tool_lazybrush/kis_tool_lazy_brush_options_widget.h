@@ -50,6 +50,12 @@ private Q_SLOTS:
     void slotSetShowKeyStrokes(bool value);
     void slotSetShowOutput(bool value);
 
+    void slotUseEdgeDetectionChanged(bool value);
+    void slotEdgeDetectionSizeChanged(int value);
+    void slotRadiusChanged(int value);
+    void slotCleanUpChanged(int value);
+
+
     void slotUpdateNodeProperties();
 
 protected:

@@ -59,6 +59,7 @@ void KisWatershedWorkerTest::testWorker()
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 filterRect,
                                 2,
+                                -1.0,
                                 QBitArray(), 0);
 
     KisLazyFillTools::normalizeAlpha8Device(filteredMainDev, filterRect);
@@ -69,7 +70,7 @@ void KisWatershedWorkerTest::testWorker()
     KisWatershedWorker worker(filteredMainDev, resultColoring, filterRect);
     worker.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
     worker.addKeyStroke(bLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
-    worker.run(true);
+    worker.run(0.7);
 
 }
 

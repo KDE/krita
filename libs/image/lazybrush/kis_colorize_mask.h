@@ -101,6 +101,19 @@ public:
     QVector<KisPaintDeviceSP> allPaintDevices() const;
     void resetCache();
 
+    void setUseEdgeDetection(bool value);
+    bool useEdgeDetection() const;
+
+    void setEdgeDetectionSize(qreal value);
+    qreal edgeDetectionSize() const;
+
+    void setFuzzyRadius(qreal value);
+    qreal fuzzyRadius() const;
+
+    void setCleanUpAmount(qreal value);
+    qreal cleanUpAmount() const;
+
+
     void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
     void testingRegenerateMask();
     KisPaintDeviceSP testingFilteredSource() const;

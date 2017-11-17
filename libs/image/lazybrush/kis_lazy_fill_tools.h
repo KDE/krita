@@ -79,6 +79,20 @@ namespace KisLazyFillTools
         KoColor color;
         bool isTransparent;
     };
+
+    struct KRITAIMAGE_EXPORT FilteringOptions : public boost::equality_comparable<FilteringOptions>
+    {
+        FilteringOptions() = default;
+        FilteringOptions(bool _useEdgeDetection, qreal _edgeDetectionSize, qreal _fuzzyRadius, qreal _cleanUpAmount);
+
+        friend bool operator==(const FilteringOptions &t1, const FilteringOptions &t2);
+
+        // default values for filtering: disabled
+        bool useEdgeDetection = false;
+        qreal edgeDetectionSize = 4;
+        qreal fuzzyRadius = 0;
+        qreal cleanUpAmount = 0.0;
+    };
 };
 
 #endif /* __KIS_LAZY_FILL_TOOLS_H */

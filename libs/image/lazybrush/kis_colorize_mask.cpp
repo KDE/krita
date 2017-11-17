@@ -60,7 +60,8 @@ struct KisColorizeMask::Private
           showColoring(true),
           needsUpdate(true),
           originalSequenceNumber(-1),
-          updateCompressor(1, KisSignalCompressor::POSTPONE, q)
+          updateCompressor(1, KisSignalCompressor::POSTPONE, q),
+          filteringOptions(false, 4.0, 15, 0.7)
     {
     }
 
@@ -74,7 +75,8 @@ struct KisColorizeMask::Private
           needsUpdate(false),
           originalSequenceNumber(-1),
           updateCompressor(1000, KisSignalCompressor::POSTPONE, q),
-          offset(rhs.offset)
+          offset(rhs.offset),
+          filteringOptions(rhs.filteringOptions)
     {
         Q_FOREACH (const KeyStroke &stroke, rhs.keyStrokes) {
             keyStrokes << KeyStroke(KisPaintDeviceSP(new KisPaintDevice(*stroke.dev)), stroke.color, stroke.isTransparent);
@@ -101,6 +103,9 @@ struct KisColorizeMask::Private
 
     KisSignalCompressor updateCompressor;
     QPoint offset;
+
+    FilteringOptions filteringOptions;
+    bool filteringDirty = true;
 };
 
 KisColorizeMask::KisColorizeMask()
@@ -254,8 +259,9 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 
-    bool filteredSourceValid = m_d->originalSequenceNumber == src->sequenceNumber();
+    bool filteredSourceValid = m_d->originalSequenceNumber == src->sequenceNumber() && !m_d->filteringDirty;
     m_d->originalSequenceNumber = src->sequenceNumber();
+    m_d->filteringDirty = false;
     m_d->coloringProjection->clear();
 
     KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
@@ -270,6 +276,8 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
                                           filteredSourceValid,
                                           image->bounds(),
                                           KisColorizeMaskSP(this));
+
+        strategy->setFilteringOptions(m_d->filteringOptions);
 
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             const KoColor color =
@@ -815,6 +823,49 @@ void KisColorizeMask::resetCache()
     m_d->originalSequenceNumber = -1;
 
     rerenderFakePaintDevice();
+}
+
+void KisColorizeMask::setUseEdgeDetection(bool value)
+{
+    m_d->filteringOptions.useEdgeDetection = value;
+    m_d->filteringDirty = true;
+}
+
+bool KisColorizeMask::useEdgeDetection() const
+{
+    return m_d->filteringOptions.useEdgeDetection;
+}
+
+void KisColorizeMask::setEdgeDetectionSize(qreal value)
+{
+    m_d->filteringOptions.edgeDetectionSize = value;
+    m_d->filteringDirty = true;
+}
+
+qreal KisColorizeMask::edgeDetectionSize() const
+{
+    return m_d->filteringOptions.edgeDetectionSize;
+}
+
+void KisColorizeMask::setFuzzyRadius(qreal value)
+{
+    m_d->filteringOptions.fuzzyRadius = value;
+    m_d->filteringDirty = true;
+}
+
+qreal KisColorizeMask::fuzzyRadius() const
+{
+    return m_d->filteringOptions.fuzzyRadius;
+}
+
+void KisColorizeMask::setCleanUpAmount(qreal value)
+{
+    m_d->filteringOptions.cleanUpAmount = value;
+}
+
+qreal KisColorizeMask::cleanUpAmount() const
+{
+    return m_d->filteringOptions.cleanUpAmount;
 }
 
 

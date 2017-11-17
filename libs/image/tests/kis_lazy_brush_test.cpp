@@ -1229,6 +1229,7 @@ void KisLazyBrushTest::testCutOnGraphDeviceMulti()
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 filterRect,
                                 2,
+                                1.0,
                                 QBitArray(), 0);
 
     KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
@@ -1272,6 +1273,7 @@ void KisLazyBrushTest::testLoG()
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 rect,
                                 4.0,
+                                1.0,
                                 QBitArray(), 0);
 
     KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, rect);

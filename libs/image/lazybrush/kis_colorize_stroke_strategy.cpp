@@ -20,6 +20,7 @@
 
 #include <QBitArray>
 
+#include "krita_utils.h"
 #include "kis_paint_device.h"
 #include "kis_lazy_fill_tools.h"
 #include "kis_gaussian_kernel.h"
@@ -55,6 +56,9 @@ struct KisColorizeStrokeStrategy::Private
 
     QVector<KeyStroke> keyStrokes;
     KisNodeSP dirtyNode;
+
+    // default values: disabled
+    FilteringOptions filteringOptions;
 };
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
@@ -87,6 +91,16 @@ KisColorizeStrokeStrategy::~KisColorizeStrokeStrategy()
 {
 }
 
+void KisColorizeStrokeStrategy::setFilteringOptions(const FilteringOptions &value)
+{
+    m_d->filteringOptions = value;
+}
+
+FilteringOptions KisColorizeStrokeStrategy::filteringOptions() const
+{
+    return m_d->filteringOptions;
+}
+
 void KisColorizeStrokeStrategy::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 {
     KoColor convertedColor(color);
@@ -100,11 +114,36 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     if (!m_d->filteredSourceValid) {
         KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
 
-        // optional filtering
-        // KisGaussianKernel::applyLoG(filteredMainDev,
-        //                             m_d->boundingRect,
-        //                             1.0,
-        //                             QBitArray(), 0);
+        if (m_d->filteringOptions.useEdgeDetection &&
+            m_d->filteringOptions.edgeDetectionSize > 0.0) {
+
+            KisGaussianKernel::applyLoG(filteredMainDev,
+                                        m_d->boundingRect,
+                                        0.5 * m_d->filteringOptions.edgeDetectionSize,
+                                        -1.0,
+                                        QBitArray(), 0);
+
+            normalizeAlpha8Device(filteredMainDev, m_d->boundingRect);
+
+            KisGaussianKernel::applyGaussian(filteredMainDev,
+                                             m_d->boundingRect,
+                                             m_d->filteringOptions.edgeDetectionSize,
+                                             m_d->filteringOptions.edgeDetectionSize,
+                                             QBitArray(), 0);
+        }
+
+        if (m_d->filteringOptions.fuzzyRadius > 0) {
+            KisPaintDeviceSP filteredMainDevCopy = new KisPaintDevice(*filteredMainDev);
+
+            KisGaussianKernel::applyGaussian(filteredMainDev,
+                                             m_d->boundingRect,
+                                             m_d->filteringOptions.fuzzyRadius,
+                                             m_d->filteringOptions.fuzzyRadius,
+                                             QBitArray(), 0);
+
+            KisPainter gc(filteredMainDev);
+            gc.bitBlt(m_d->boundingRect.topLeft(), filteredMainDevCopy, m_d->boundingRect);
+        }
 
         normalizeAlpha8Device(filteredMainDev, m_d->boundingRect);
 
@@ -117,7 +156,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
         worker.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
     }
-    worker.run(true);
+    worker.run(m_d->filteringOptions.cleanUpAmount);
 
 
     m_d->dirtyNode->setDirty(m_d->boundingRect);

@@ -148,13 +148,13 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
 }
 
 Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
-KisGaussianKernel::createLoGMatrix(qreal radius)
+KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff)
 {
     int kernelSize = 4 * std::ceil(radius) + 1;
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, kernelSize);
 
     const qreal sigma = radius/* / sqrt(2)*/;
-    const qreal multiplicand = -1 / (M_PI * pow2(pow2(sigma)));
+    const qreal multiplicand = -1.0 / (M_PI * pow2(pow2(sigma)));
     const qreal exponentMultiplicand = 1 / (2 * pow2(sigma));
 
     /**
@@ -200,7 +200,7 @@ KisGaussianKernel::createLoGMatrix(qreal radius)
     }
 
 
-    const qreal scale = 2.0 / positiveSum;
+    const qreal scale = coeff * 2.0 / positiveSum;
     matrix *= scale;
     positiveSum *= scale;
     sideSum *= scale;
@@ -215,7 +215,7 @@ KisGaussianKernel::createLoGMatrix(qreal radius)
 
 void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
                                  const QRect& rect,
-                                 qreal radius,
+                                 qreal radius, qreal coeff,
                                  const QBitArray &channelFlags,
                                  KoUpdater *progressUpdater)
 {
@@ -225,8 +225,7 @@ void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
 
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createLoGMatrix(radius);
-    qDebug() << ppVar(matrix.sum());
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createLoGMatrix(radius, coeff);
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(matrix,
                                          0,

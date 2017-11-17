@@ -1029,11 +1029,22 @@ KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& e
 {
     Q_UNUSED(parent);
     KisColorizeMaskSP mask = new KisColorizeMask();
-    bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
-    bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
+    const bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
+    const bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
 
     KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
     KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
+
+    const bool useEdgeDetection = KisDomUtils::toInt(element.attribute(COLORIZE_USE_EDGE_DETECTION, "0"));
+    const qreal edgeDetectionSize = KisDomUtils::toDouble(element.attribute(COLORIZE_EDGE_DETECTION_SIZE, "4"));
+    const qreal radius = KisDomUtils::toDouble(element.attribute(COLORIZE_FUZZY_RADIUS, "0"));
+    const int cleanUp = KisDomUtils::toInt(element.attribute(COLORIZE_CLEANUP, "0"));
+
+    mask->setUseEdgeDetection(useEdgeDetection);
+    mask->setEdgeDetectionSize(edgeDetectionSize);
+    mask->setFuzzyRadius(radius);
+    mask->setCleanUpAmount(qreal(cleanUp) / 100.0);
+
     delete mask->setColorSpace(colorSpace);
     mask->setImage(image);
 

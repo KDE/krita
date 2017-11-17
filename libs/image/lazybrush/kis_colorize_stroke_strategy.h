@@ -27,6 +27,10 @@
 
 class KoColor;
 
+namespace KisLazyFillTools {
+struct FilteringOptions;
+}
+
 
 class KisColorizeStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
@@ -40,6 +44,9 @@ public:
                               const QRect &boundingRect, KisNodeSP dirtyNode);
     KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail);
     ~KisColorizeStrokeStrategy() override;
+
+    void setFilteringOptions(const KisLazyFillTools::FilteringOptions &value);
+    KisLazyFillTools::FilteringOptions filteringOptions() const;
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 

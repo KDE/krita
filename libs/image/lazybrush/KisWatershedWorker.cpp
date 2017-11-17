@@ -151,13 +151,13 @@ struct CompareTaskPoints {
 void mergeHeightmapOntoStroke(KisPaintDeviceSP stroke, KisPaintDeviceSP heightMap, const QRect &rc)
 {
     KisSequentialIterator dstIt(stroke, rc);
-    KisSequentialIterator mapIt(heightMap, rc);
+    KisSequentialConstIterator mapIt(heightMap, rc);
 
     do {
         quint8 *dstPtr = dstIt.rawData();
 
         if (*dstPtr > 0) {
-            quint8 *mapPtr = mapIt.rawData();
+            const quint8 *mapPtr = mapIt.rawDataConst();
             *dstPtr = qMax(quint8(1), *mapPtr);
         } else {
             *dstPtr = 0;
@@ -241,7 +241,7 @@ struct KisWatershedWorker::Private
     void updateNarrowRegionMetrics();
 
     QVector<GroupLevelPair> calculateConflictingPairs();
-    void cleanupForeignEdgeGroups();
+    void cleanupForeignEdgeGroups(qreal cleanUpAmount);
 
     void dumpGroupMaps();
     void calcNumGroupMaps();
@@ -281,7 +281,7 @@ void KisWatershedWorker::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color
     m_d->keyStrokes << KeyStroke(dev, color);
 }
 
-void KisWatershedWorker::run(bool doCleanUp)
+void KisWatershedWorker::run(qreal cleanUpAmount)
 {
     if (!m_d->heightMap) return;
 
@@ -306,8 +306,8 @@ void KisWatershedWorker::run(bool doCleanUp)
 //    m_d->dumpGroupMaps();
 //    m_d->calcNumGroupMaps();
 
-    if (doCleanUp) {
-        m_d->cleanupForeignEdgeGroups();
+    if (cleanUpAmount > 0) {
+        m_d->cleanupForeignEdgeGroups(cleanUpAmount);
     }
 
     m_d->writeColoring();
@@ -509,8 +509,9 @@ void KisWatershedWorker::Private::visitNeighbour(const QPoint &currPt, const QPo
         pt.y = currPt.y();
         pt.group = prevGroupId;
         pt.level = newLevel;
-        pt.distance = prevDistance + 1;
+        pt.distance = newLevel == prevLevel ? prevDistance + 1 : 0;
         pt.prevDirection = fromDirection;
+
         pointsQueue.push(pt);
     }
 
@@ -781,8 +782,13 @@ QVector<GroupLevelPair> KisWatershedWorker::Private::calculateConflictingPairs()
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/min.hpp>
 
-void KisWatershedWorker::Private::cleanupForeignEdgeGroups()
+void KisWatershedWorker::Private::cleanupForeignEdgeGroups(qreal cleanUpAmount)
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cleanUpAmount > 0.0);
+
+    // convert into the threshold range [0.05...0.5]
+    const qreal foreignEdgePortionThreshold = 0.05 + 0.45 * (1.0 - qBound(0.0, cleanUpAmount, 1.0));
+
     QVector<GroupLevelPair> conflicts = calculateConflictingPairs();
 
     // sort the pairs by the total edge size
@@ -828,7 +834,7 @@ void KisWatershedWorker::Private::cleanupForeignEdgeGroups()
 //                 << ppVar(minMetric)
 //                 << ppVar(meanMetric);
 
-        if (thisForeignPortion < 0.35) continue;
+        if (!(thisForeignPortion > foreignEdgePortionThreshold)) continue;
 
         if (minMetric > 1.0 && meanMetric > 1.2) {
             //qDebug() << "   * removing...";

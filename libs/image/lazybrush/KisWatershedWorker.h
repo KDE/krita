@@ -29,13 +29,32 @@ class KoColor;
 class KRITAIMAGE_EXPORT KisWatershedWorker
 {
 public:
-    KisWatershedWorker(KisPaintDeviceSP src,
+    /**
+     * Creates an empty watershed worker withouth any strokes attached. The strokes
+     * should be attached manually with addKeyStroke() call.
+     *
+     * @param heightMap prefiltered height map in alpha8 colorspace, with "0" meaning
+     *                  background color and "255" meaning line art. Heightmap is *never*
+     *                  modified by the worker!
+     * @param dst destination device where the result will be written
+     * @param boundingRect the worker refuses to fill outside the bounding rect, considering
+     *                     that outer area as having +inf height
+     */
+    KisWatershedWorker(KisPaintDeviceSP heightMap,
                        KisPaintDeviceSP dst,
                        const QRect &boundingRect);
     ~KisWatershedWorker();
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
-    void run(bool doCleanUp = false);
+
+    /**
+     * @brief run the filling process using the passes height map, strokes, and write
+     *        the result coloring into the destination device
+     * @param cleanUpAmount shows how agressively we should try to clean up the filnal
+     *                      coloring. Should be in range [0.0...1.0]
+     */
+
+    void run(qreal cleanUpAmount = 0.0);
 
     int testingGroupPositiveEdge(qint32 group, quint8 level);
     int testingGroupNegativeEdge(qint32 group, quint8 level);

@@ -493,6 +493,15 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
+    int kineticScrollingGesture(bool defaultValue = false) const;
+    void setKineticScrollingGesture(int kineticScroll);
+
+    int kineticScrollingSensitivity(bool defaultValue = false) const;
+    void setKineticScrollingSensitivity(int sensitivity);
+
+    bool kineticScrollingScrollbar(bool defaultValue = false) const;
+    void setKineticScrollingScrollbar(bool scrollbar);
+
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 

@@ -29,6 +29,7 @@
 #include <QSortFilterProxyModel>
 #include <QApplication>
 
+#include <kis_config.h>
 #include <klocalizedstring.h>
 
 
@@ -213,6 +214,11 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
     layout->addWidget(m_chooser);
+
+    KisConfig cfg;
+    m_chooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));

@@ -51,6 +51,8 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
 
+    void explicitUserStrokeEndRequest() override;
+
 protected Q_SLOTS:
     void resetCursorStyle() override;
 
@@ -63,6 +65,7 @@ Q_SIGNALS:
 private:
     bool colorizeMaskActive() const;
     bool canCreateColorizeMask() const;
+    void tryCreateColorizeMask();
 
 private:
     struct Private;

@@ -58,13 +58,12 @@ struct FillGroup {
         int negativeEdgeSize = 0;
         int foreignEdgeSize = 0;
         int allyEdgeSize = 0;
-        int openEdgeSize = 0;
         int numFilledPixels = 0;
 
         bool narrowRegion = false;
 
         int totalEdgeSize() const {
-            return positiveEdgeSize + negativeEdgeSize + foreignEdgeSize + allyEdgeSize + openEdgeSize;
+            return positiveEdgeSize + negativeEdgeSize + foreignEdgeSize + allyEdgeSize;
         }
 
         int lastDistance = 0;
@@ -309,6 +308,8 @@ void KisWatershedWorker::run(qreal cleanUpAmount)
     if (cleanUpAmount > 0) {
         m_d->cleanupForeignEdgeGroups(cleanUpAmount);
     }
+
+//    m_d->calcNumGroupMaps();
 
     m_d->writeColoring();
 
@@ -837,14 +838,14 @@ void KisWatershedWorker::Private::cleanupForeignEdgeGroups(qreal cleanUpAmount)
         if (!(thisForeignPortion > foreignEdgePortionThreshold)) continue;
 
         if (minMetric > 1.0 && meanMetric > 1.2) {
-            //qDebug() << "   * removing...";
+//            qDebug() << "   * removing...";
 
             QVector<TaskPoint> taskPoints =
                 tryRemoveConflictingPlane(groupIndex, levelIndex);
 
             if (!taskPoints.isEmpty()) {
                 // dump before
-                //dumpGroupInfo(groupIndex, levelIndex);
+                // dumpGroupInfo(groupIndex, levelIndex);
 
                 Q_FOREACH (const TaskPoint &pt, taskPoints) {
                     pointsQueue.push(pt);
@@ -852,9 +853,12 @@ void KisWatershedWorker::Private::cleanupForeignEdgeGroups(qreal cleanUpAmount)
                 processQueue(groupIndex);
 
                 // dump after: should become empty!
-                //dumpGroupInfo(groupIndex, levelIndex);
+                // dumpGroupInfo(groupIndex, levelIndex);
 
-                KIS_SAFE_ASSERT_RECOVER_NOOP(level.totalEdgeSize() == 0);
+                // the areas might be disjoint, so that removing one "conflicting"
+                // part will not remove the whole group+level pair
+
+                // KIS_SAFE_ASSERT_RECOVER_NOOP(level.totalEdgeSize() == 0);
             }
 
             //dumpGroupMaps();

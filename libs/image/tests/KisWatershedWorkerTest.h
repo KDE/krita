@@ -29,7 +29,6 @@ private Q_SLOTS:
 
     void testWorkerSmall();
     void testWorkerSmallWithAllies();
-    void testWorkerSmallWithAscending();
 };
 
 #endif // KISWATERSHEDWORKERTEST_H

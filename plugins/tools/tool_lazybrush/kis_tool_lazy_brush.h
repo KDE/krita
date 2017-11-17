@@ -51,6 +51,13 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
 
+    void activateAlternateAction(AlternateAction action) override;
+    void deactivateAlternateAction(AlternateAction action) override;
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+
     void explicitUserStrokeEndRequest() override;
 
 protected Q_SLOTS:

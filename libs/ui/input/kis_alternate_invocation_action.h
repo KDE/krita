@@ -39,6 +39,7 @@ public:
     enum Shortcut {
         PrimaryAlternateModeShortcut, ///< Toggle Primary mode.
         SecondaryAlternateModeShortcut, ///< Toggle Secondary mode.
+        TertiaryAlternateModeShortcut, ///< Toggle Tertiary mode.
         PickColorFgLayerModeShortcut,
         PickColorBgLayerModeShortcut,
         PickColorFgImageModeShortcut,

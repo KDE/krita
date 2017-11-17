@@ -154,7 +154,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
     KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-        worker.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
+        worker.addKeyStroke(stroke.dev, stroke.color);
     }
     worker.run(m_d->filteringOptions.cleanUpAmount);
 

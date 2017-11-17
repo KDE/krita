@@ -275,9 +275,29 @@ KisWatershedWorker::~KisWatershedWorker()
 
 void KisWatershedWorker::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 {
+    m_d->keyStrokes << KeyStroke(new KisPaintDevice(*dev), color);
 
-    // TODO: make it clear about mutability of the stroke devices
-    m_d->keyStrokes << KeyStroke(dev, color);
+    KisPaintDeviceSP lastDev = m_d->keyStrokes.back().dev;
+
+    for (auto it = m_d->keyStrokes.begin(); it != m_d->keyStrokes.end() - 1; ++it) {
+        KisPaintDeviceSP dev = it->dev;
+        const QRect rc = dev->exactBounds() & lastDev->exactBounds();
+        if (rc.isEmpty()) continue;
+
+        KisSequentialIterator devIt(dev, rc);
+        KisSequentialConstIterator lastDevIt(lastDev, rc);
+
+        do {
+            quint8 *devPtr = devIt.rawData();
+            const quint8 *lastDevPtr = lastDevIt.rawDataConst();
+
+            if (*devPtr > 0 && *lastDevPtr > 0) {
+                *devPtr = 0;
+            }
+
+        } while (devIt.nextPixel() &&
+                 lastDevIt.nextPixel());
+    }
 }
 
 void KisWatershedWorker::run(qreal cleanUpAmount)

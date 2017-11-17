@@ -48,6 +48,20 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants();
 
+    /// called when assistant editor is activated
+    /// right now this happens when the assistants tool is selected
+    void activateAssistantsEditor();
+
+
+    /// called when assistant editor is deactivated
+    /// right now this happens when the assistants tool is un-selected
+    void deactivateAssistantsEditor();
+
+    /// brings back if we are currently editing assistants or not
+    /// useful for some assistants (like spline) that draw bezier curves
+    bool isEditingAssistants();
+
+
     /*sets whether the main assistant is visible*/
     void setAssistantVisible(bool set);
 

@@ -54,13 +54,13 @@ inline QPointF B(qreal t, const QPointF& P0, const QPointF& P1, const QPointF& P
 inline qreal D(qreal t, const QPointF& P0, const QPointF& P1, const QPointF& P2, const QPointF& P3, const QPointF& p)
 {
     const qreal
-        tp = 1 - t,
+        tp =  1 - t,
         tp2 = tp * tp,
-        t2 = t * t,
-        a =     tp2 * tp,
-        b = 3 * tp2 * t,
-        c = 3 * tp  * t2,
-        d =     t   * t2,
+        t2 =  t * t,
+        a =   tp2 * tp,
+        b =   3 * tp2 * t,
+        c =   3 * tp  * t2,
+        d =   t   * t2,
         x_dist = a*P0.x() + b*P1.x() + c*P2.x() + d*P3.x() - p.x(),
         y_dist = a*P0.y() + b*P1.y() + c*P2.y() + d*P3.y() - p.y();
     return x_dist * x_dist + y_dist * y_dist;
@@ -97,6 +97,7 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     if (canvas){
         //simplest, cheapest way to get the mouse-position//
         mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+        m_canvas = canvas;
     }
     else {
         //...of course, you need to have access to a canvas-widget for that.//
@@ -129,7 +130,6 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     gc.restore();
     
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
-
 }
 
 void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
@@ -147,10 +147,20 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 
     gc.setTransform(initialTransform);
     gc.setPen(QColor(0, 0, 0, 75));
-    // Draw control lines
-    gc.drawLine(pts[0], pts[2]);
-    if (handles().size() >= 4) gc.drawLine(pts[1], pts[3]);
-    gc.setPen(QColor(0, 0, 0, 125));
+
+    // Draw control lines only if we are editing the assistant
+
+    if (m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
+        gc.drawLine(pts[0], pts[2]);
+
+        if (handles().size() >= 4) {
+            gc.drawLine(pts[1], pts[3]);
+        }
+
+        gc.setPen(QColor(0, 0, 0, 125));
+    }
+
+
     // Draw the spline
     QPainterPath path;
     path.moveTo(pts[0]);

@@ -123,6 +123,7 @@ struct KisPaintingAssistant::Private {
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
     KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
+
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
         TranslationInvariantTransform() { }
@@ -252,8 +253,8 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle, Handle
 void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     Q_UNUSED(updateRect);
-    Q_UNUSED(canvas);
     Q_UNUSED(previewVisible);
+
     findHandleLocation();
     if (!useCache) {
         gc.save();
@@ -261,6 +262,7 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         gc.restore();
         return;
     }
+
     const QRect bound = boundingRect();
     if (bound.isEmpty()) return;
     const QTransform transform = converter->documentToWidgetTransform();
@@ -291,6 +293,8 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         d->cached = QPixmapCache::insert(cached);
     }
     gc.drawPixmap(paintRect, cached, paintRect.translated(-widgetBound.topLeft() - d->cachedRect.topLeft()));
+
+    canvas->updateCanvas(paintRect);
 }
 
 void KisPaintingAssistant::uncache()

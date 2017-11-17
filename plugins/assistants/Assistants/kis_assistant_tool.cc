@@ -330,14 +330,14 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         }
         if (visibleRect.contains(mousePos)) {
             newAssistantAllowed = false;
-            if (assistant->isSnappingActive()==true){
 
-            snappingOff(assistant);
-            outlineOff(assistant);
+            if (assistant->isSnappingActive() == true){
+                assistant->setSnappingActive(false);
+                assistant->setOutline(false);
             }
             else{
-            snappingOn(assistant);
-            outlineOn(assistant);
+                assistant->setSnappingActive(true);
+                assistant->setOutline(true);
             }
             assistant->uncache();//this updates the chache of the assistant, very important.
         }
@@ -525,26 +525,6 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
-}
-
-void KisAssistantTool::snappingOn(KisPaintingAssistantSP assistant)
-{
-    assistant->setSnappingActive(true);
-}
-
-void KisAssistantTool::snappingOff(KisPaintingAssistantSP assistant)
-{
-    assistant->setSnappingActive(false);
-}
-
-void KisAssistantTool::outlineOn(KisPaintingAssistantSP assistant)
-{
-    assistant->setOutline(true);
-}
-
-void KisAssistantTool::outlineOff(KisPaintingAssistantSP assistant)
-{
-    assistant->setOutline(false);
 }
 
 #include <KoSnapGuide.h>

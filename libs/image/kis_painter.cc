@@ -1059,13 +1059,13 @@ void KisPainter::paintLine(const KisPaintInformation &pi1,
 void KisPainter::paintPolyline(const vQPointF &points,
                                int index, int numPoints)
 {
-    if (index >= (int) points.count())
+    if (index >= points.count())
         return;
 
     if (numPoints < 0)
         numPoints = points.count();
 
-    if (index + numPoints > (int) points.count())
+    if (index + numPoints > points.count())
         numPoints = points.count() - index;
 
     if (numPoints > 1) {
@@ -1784,9 +1784,9 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
     if (yd == 0) {
         /* Horizontal line */
         int incr = (x1 < x2) ? 1 : -1;
-        ix1 = (int)x1;
-        ix2 = (int)x2;
-        iy1 = (int)y1;
+        ix1 = x1;
+        ix2 = x2;
+        iy1 = y1;
         while (ix1 != ix2) {
             ix1 = ix1 + incr;
 
@@ -1803,9 +1803,9 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
     if (xd == 0) {
         /* Vertical line */
         int incr = (y1 < y2) ? 1 : -1;
-        iy1 = (int)y1;
-        iy2 = (int)y2;
-        ix1 = (int)x1;
+        iy1 = y1;
+        iy2 = y2;
+        ix1 = x1;
         while (iy1 != iy2) {
             iy1 = iy1 + incr;
 

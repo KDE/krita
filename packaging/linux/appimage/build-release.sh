@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RELEASE=3.1.2.0
+RELEASE=3.3.2.1
 
 # Enter a CentOS 6 chroot (you could use other methods)
 # git clone https://github.com/probonopd/AppImageKit.git
@@ -29,6 +29,8 @@ grep -r "CentOS release 6" /etc/redhat-release || exit 1
 rm -rf /out/*
 rm -rf /krita.appdir
 rm -rf /krita_build
+rm -rf /gmic-qt-build
+mkdir gmic-qt-build
 mkdir /krita_build
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
@@ -61,12 +63,40 @@ ln -s lib lib64
 # Use the new compiler
 . /opt/rh/devtoolset-3/enable
 
+cd /
+
+git_pull_rebase_helper()
+{
+	git reset --hard HEAD
+        git pull
+
+}
+# fetch and build gmic
+if [ ! -d /gmic ] ; then
+	git clone  --depth 1 https://github.com/dtschump/gmic.git
+fi
+
+cd /gmic/
+git_pull_rebase_helper
+cd /
+make -C gmic/src CImg.h gmic_stdlib.h
+
+# fetch and build gmic-qt
+if [ ! -d /gmic-qt ] ; then
+	git clone  --depth 1 https://github.com/c-koi/gmic-qt.git
+fi
+
+cd /gmic-qt/
+git_pull_rebase_helper
+
+cd /gmic-qt-build
+cmake3 ../gmic-qt -DGMIC_QT_HOST=krita -DCMAKE_BUILD_TYPE=Release
+make -j4
+cp gmic_krita_qt /krita.appdir/usr/bin
+
 # fetch and build krita
 cd /
-#wget http://files.kde.org/krita/krita-$RELEASE.tar.gz
-#wget http://www.valdyas.org/~boud/krita-$RELEASE.tar.gz
-wget http://download.kde.org/unstable/krita/$RELEASE/krita-$RELEASE.tar.gz
-tar -xf krita-$RELEASE.tar.gz
+tar -xf krita-$RELEASE.tar.xz
 cd /krita_build
 cmake3 ../krita-$RELEASE \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
@@ -99,7 +129,9 @@ cp $(ldconfig -p | grep libEGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # Othe
 #cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ 
 cp $(ldconfig -p | grep libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/ # For Fedora 20
 
+
 ldd usr/bin/krita | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
+ldd usr/bin/gmic_krita_qt | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 #ldd usr/lib64/krita/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 #ldd usr/lib64/plugins/imageformats/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 
@@ -157,7 +189,7 @@ rm -f usr/lib/libpthread.so.0 || true
 rm -f usr/lib/libresolv.so.2 || true
 rm -f usr/lib/libroken.so.18 || true
 rm -f usr/lib/librt.so.1 || true
-rm -f usr/lib/libsasl2.so.2 || true
+#rm -f usr/lib/libsasl2.so.2 || true
 rm -f usr/lib/libSM.so.6 || true
 rm -f usr/lib/libusb-1.0.so.0 || true
 rm -f usr/lib/libuuid.so.1 || true

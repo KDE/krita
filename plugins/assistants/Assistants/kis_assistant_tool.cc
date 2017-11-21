@@ -31,20 +31,19 @@
 #include <QMessageBox>
 
 #include <KoIcon.h>
-#include <kis_icon.h>
 #include <KoFileDialog.h>
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
+#include <KoSnapGuide.h>
 
 #include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <KisViewManager.h>
-
+#include <kis_icon.h>
 #include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_decoration.h>
-
 #include "kis_global.h"
 
 
@@ -60,11 +59,6 @@ KisAssistantTool::KisAssistantTool(KoCanvasBase * canvas)
 
 KisAssistantTool::~KisAssistantTool()
 {
-}
-
-QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
-{
-    return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
 }
 
 void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -93,31 +87,6 @@ void KisAssistantTool::deactivate()
     m_canvas->paintingAssistantsDecoration()->deactivateAssistantsEditor();
     repaintDecorations(); // helps with updating assistant decoration to a non-editor look
     KisTool::deactivate();
-}
-
-bool KisAssistantTool::mouseNear(const QPointF& mousep, const QPointF& point)
-{
-    QRectF handlerect(point - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
-    return handlerect.contains(mousep);
-}
-
-KisPaintingAssistantHandleSP KisAssistantTool::nodeNearPoint(KisPaintingAssistantSP grid, QPointF point)
-{
-    if (mouseNear(point, pixelToView(*grid->topLeft()))) {
-        return grid->topLeft();
-    } else if (mouseNear(point, pixelToView(*grid->topRight()))) {
-        return grid->topRight();
-    } else if (mouseNear(point, pixelToView(*grid->bottomLeft()))) {
-        return grid->bottomLeft();
-    } else if (mouseNear(point, pixelToView(*grid->bottomRight()))) {
-        return grid->bottomRight();
-    }
-    return 0;
-}
-
-inline double norm2(const QPointF& p)
-{
-    return p.x() * p.x() + p.y() * p.y();
 }
 
 void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
@@ -529,7 +498,6 @@ void KisAssistantTool::addAssistant()
     m_newAssistant.clear();
 }
 
-
 void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
@@ -538,31 +506,6 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
-}
-
-#include <KoSnapGuide.h>
-
-QPointF KisAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
-{
-    if (!m_canvas->currentImage())
-        return e->point;
-
-    KoSnapGuide *snapGuide = m_canvas->snapGuide();
-    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
-
-    //return m_canvas->currentImage()->documentToPixel(pos);
-    return pos;
-}
-
-QPointF KisAssistantTool::snapToGuide(const QPointF& pt, const QPointF &offset)
-{
-    if (!m_canvas)
-        return pt;
-
-    KoSnapGuide *snapGuide = m_canvas->snapGuide();
-    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
-
-    return pos;
 }
 
 void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
@@ -638,8 +581,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             _gc.restore();
         }
 
-
-        // Draw middle perspective handles
+        // Draw middle perspective handles (this should probably be moved)
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
 
@@ -657,77 +599,34 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
             assistant->drawPath(_gc, path);
         }
+
+        // draw editor specific controls for the assistant (this probably should be moved)
         if(assistant->id()=="vanishing point") {
             if (assistant->sideHandles().size() == 4) {
-            // Draw the line
-            QPointF p0 = _converter.documentToView(*assistant->handles()[0]);
-            QPointF p1 = _converter.documentToView(*assistant->sideHandles()[0]);
-            QPointF p2 = _converter.documentToView(*assistant->sideHandles()[1]);
-            QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
-            QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
+                // Draw the line
+                QPointF p0 = _converter.documentToView(*assistant->handles()[0]);
+                QPointF p1 = _converter.documentToView(*assistant->sideHandles()[0]);
+                QPointF p2 = _converter.documentToView(*assistant->sideHandles()[1]);
+                QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
+                QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
 
 
 
-            // Draw control lines
-            // setting it here updates the vanishing point lines to correct color
-            // this should probably move to vanishing point assistant class where everything else is done
-            QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
-            _gc.save();
-            _gc.setPen(penStyle);
-            _gc.drawLine(p0, p1);
-            _gc.drawLine(p0, p3);
-            _gc.drawLine(p1, p2);
-            _gc.drawLine(p3, p4);
-            _gc.restore();
+                // Draw control lines
+                // setting it here updates the vanishing point lines to correct color
+                // this should probably move to vanishing point assistant class where everything else is done
+                QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
+                _gc.save();
+                _gc.setPen(penStyle);
+                _gc.drawLine(p0, p1);
+                _gc.drawLine(p0, p3);
+                _gc.drawLine(p1, p2);
+                _gc.drawLine(p3, p4);
+                _gc.restore();
             }
-        }
+        }       
 
-
-        // Draw the assistant widget with move, active, delete
-        {
-            // We are going to put all of the assistant actions below the bounds of the assistant
-            // so they are out of the way
-             // assistant->buttonPosition() gets the center X/Y position point
-             QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
-
-             QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
-             QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
-             QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
-
-
-
-             // Background container for helpers
-             QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
-             QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
-
-             _gc.setRenderHint(QPainter::Antialiasing);
-
-             QPainterPath bgPath;
-             bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
-             QPen stroke(QColor(60, 60, 60, 80), 2);
-             _gc.setPen(stroke);
-             _gc.fillPath(bgPath, backgroundColor);
-             _gc.drawPath(bgPath);
-
-
-             QPainterPath movePath;  // render circle behind by move helper
-             _gc.setPen(stroke);
-             movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
-             _gc.fillPath(movePath, backgroundColor);
-             _gc.drawPath(movePath);
-
-             // Preview/Snap Tool helper
-             _gc.drawPixmap(iconDeletePosition, m_iconDelete);
-             if (assistant->isSnappingActive() == true) {
-                 _gc.drawPixmap(iconSnapPosition, m_iconSnapOn);
-             }
-             else {
-                 _gc.drawPixmap(iconSnapPosition, m_iconSnapOff);
-             }
-
-             // Move Assistant Tool helper
-             _gc.drawPixmap(iconMovePosition, m_iconMove);
-        }
+        drawEditorWidget(assistant, _gc);
     }
 
 }
@@ -958,3 +857,109 @@ void KisAssistantTool::slotAssistantOpacityChanged()
     m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
     m_canvas->canvasWidget()->update();
 }
+
+
+/*
+ * functions only used interally in this class
+ * we potentially could make some of these inline to speed up performance
+*/
+
+void KisAssistantTool::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc)
+{
+    // We are going to put all of the assistant actions below the bounds of the assistant
+    // so they are out of the way
+    // assistant->buttonPosition() gets the center X/Y position point
+    QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+
+    QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
+    QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
+    QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
+
+
+
+    // Background container for helpers
+    QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
+    QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
+
+    _gc.setRenderHint(QPainter::Antialiasing);
+
+    QPainterPath bgPath;
+    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
+    QPen stroke(QColor(60, 60, 60, 80), 2);
+    _gc.setPen(stroke);
+    _gc.fillPath(bgPath, backgroundColor);
+    _gc.drawPath(bgPath);
+
+
+    QPainterPath movePath;  // render circle behind by move helper
+    _gc.setPen(stroke);
+    movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
+    _gc.fillPath(movePath, backgroundColor);
+    _gc.drawPath(movePath);
+
+    // Preview/Snap Tool helper
+    _gc.drawPixmap(iconDeletePosition, m_iconDelete);
+    if (assistant->isSnappingActive() == true) {
+        _gc.drawPixmap(iconSnapPosition, m_iconSnapOn);
+    }
+    else {
+        _gc.drawPixmap(iconSnapPosition, m_iconSnapOff);
+    }
+
+    // Move Assistant Tool helper
+    _gc.drawPixmap(iconMovePosition, m_iconMove);
+}
+
+QPointF KisAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+{
+    if (!m_canvas->currentImage())
+        return e->point;
+
+    KoSnapGuide *snapGuide = m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
+
+    //return m_canvas->currentImage()->documentToPixel(pos);
+    return pos;
+}
+
+QPointF KisAssistantTool::snapToGuide(const QPointF& pt, const QPointF &offset)
+{
+    if (!m_canvas)
+        return pt;
+
+    KoSnapGuide *snapGuide = m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return pos;
+}
+
+double KisAssistantTool::norm2(const QPointF& p)
+{
+    return p.x() * p.x() + p.y() * p.y();
+}
+
+bool KisAssistantTool::mouseNear(const QPointF& mousep, const QPointF& point)
+{
+    QRectF handlerect(point - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
+    return handlerect.contains(mousep);
+}
+
+QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
+{
+    return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
+}
+
+KisPaintingAssistantHandleSP KisAssistantTool::nodeNearPoint(KisPaintingAssistantSP grid, QPointF point)
+{
+    if (mouseNear(point, pixelToView(*grid->topLeft()))) {
+        return grid->topLeft();
+    } else if (mouseNear(point, pixelToView(*grid->topRight()))) {
+        return grid->topRight();
+    } else if (mouseNear(point, pixelToView(*grid->bottomLeft()))) {
+        return grid->bottomLeft();
+    } else if (mouseNear(point, pixelToView(*grid->bottomRight()))) {
+        return grid->bottomRight();
+    }
+    return 0;
+}
+

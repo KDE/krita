@@ -100,7 +100,7 @@ void KoGlobal::createListOfLanguages()
             + KoResourcePaths::findAllResources("locale",
                                                 QString::fromLatin1("*/kf5_entry.desktop"));;
     translationList.removeDuplicates();
-    for (QStringList::ConstIterator it = translationList.begin();
+    for (QStringList::Iterator it = translationList.begin();
             it != translationList.end(); ++it) {
         // Extract the language tag from the directory name
         QString tag = *it;

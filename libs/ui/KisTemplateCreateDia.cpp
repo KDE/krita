@@ -207,7 +207,8 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
         }
         fileName = tempFile.fileName();
     }
-    bool retval = document->exportDocumentSync(QUrl::fromLocalFile(fileName), document->mimeType());
+
+    bool retval = document->exportDocumentSync(QUrl::fromLocalFile(fileName), KisDocument::nativeFormatMimeType());
     if (!retval) {
         qWarning("Could not save template");
         return;
@@ -221,8 +222,7 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
     d.remove(fileName);
 }
 
-static void
-saveAsQuadraticPng(const QPixmap &pixmap, const QString &fileName)
+static void saveAsQuadraticPng(const QPixmap &pixmap, const QString &fileName)
 {
     QImage icon = pixmap.toImage();
     icon = icon.convertToFormat(QImage::Format_ARGB32);

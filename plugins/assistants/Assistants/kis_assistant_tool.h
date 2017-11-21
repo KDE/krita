@@ -94,6 +94,8 @@ private:
 
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
+    double norm2(const QPointF& p);
+
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
@@ -152,6 +154,8 @@ protected:
 
 
 private:
+    void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);
+
     PerspectiveAssistantEditionMode m_internalMode;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     int m_assistantHelperYOffset; // used by the assistant editor icons for placement on the canvas.

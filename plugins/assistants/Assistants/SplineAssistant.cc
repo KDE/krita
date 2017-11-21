@@ -124,7 +124,7 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
         path.cubicTo(pts[2], pts[3], pts[1]);
         
         //then we use this path to check the bounding rectangle//
-        if (outline()==true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
+        if (isSnappingActive() && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
             drawPreview(gc, path);//and we draw the preview.
         }
     }

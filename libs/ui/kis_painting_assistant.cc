@@ -163,24 +163,14 @@ void KisPaintingAssistant::setSnappingActive(bool set)
     d->isSnappingActive = set;
 }
 
-bool KisPaintingAssistant::outline() const
-{
-    return d->outlineVisible;
-}
-
-void KisPaintingAssistant::setOutline(bool set)
-{
-    d->outlineVisible=set;
-}
-
 void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
     int alpha = d->assistantColor.alpha();
     if (!isSnappingOn) {
         alpha = d->assistantColor.alpha() *0.2;
     }
-    painter.save();
 
+    painter.save();
     QPen pen_a(QColor(d->assistantColor.red(), d->assistantColor.green(), d->assistantColor.blue(), alpha), 2);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);

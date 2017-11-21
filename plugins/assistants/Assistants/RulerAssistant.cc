@@ -102,7 +102,7 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
         path.moveTo(p1);
         path.lineTo(p2);
         //then we use this path to check the bounding rectangle//
-        if (outline()==true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
+        if (isSnappingActive() && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
             drawPreview(gc, path);//and we draw the preview.
         }
     }

@@ -98,10 +98,6 @@ public:
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
 
-    // TODO: this probably should be renamed to isPreviewActive or something
-    bool outline() const; //this returns whether or not the preview is/should be active.
-    void setOutline(bool set);
-
     /**
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference

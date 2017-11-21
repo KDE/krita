@@ -89,7 +89,7 @@ void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updat
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    if (outline()==true && previewVisible==true){
+    if (isSnappingActive() && previewVisible==true){
         if (handles().size() > 2){    
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 QPointF initial = e.project(initialTransform.inverted().map(mousePos));

@@ -295,15 +295,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         }
         if (visibleRect.contains(mousePos)) {
             newAssistantAllowed = false;
-
-            if (assistant->isSnappingActive() == true){
-                assistant->setSnappingActive(false);
-                assistant->setOutline(false);
-            }
-            else{
-                assistant->setSnappingActive(true);
-                assistant->setOutline(true);
-            }
+            assistant->setSnappingActive(!assistant->isSnappingActive()); // toggle
             assistant->uncache();//this updates the chache of the assistant, very important.
         }
     }

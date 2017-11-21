@@ -97,7 +97,7 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
     
     QTransform initialTransform = converter->documentToWidgetTransform();
     
-    if (outline()==true && previewVisible==true){
+    if (isSnappingActive() && previewVisible==true){
         if (handles().size() > 2){
         
         

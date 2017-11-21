@@ -33,7 +33,7 @@
 #include <math.h>
 
 VanishingPointAssistant::VanishingPointAssistant()
-        : KisPaintingAssistant("vanishing point", i18n("Vanishing Point assistant"))
+    : KisPaintingAssistant("vanishing point", i18n("Vanishing Point assistant"))
 {
 }
 
@@ -41,28 +41,30 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
 {
     //Q_ASSERT(handles().size() == 1 || handles().size() == 5);
     //code nicked from the perspective ruler.
-    qreal
-            dx = pt.x() - strokeBegin.x(),
-            dy = pt.y() - strokeBegin.y();
-        if (dx * dx + dy * dy < 4.0) {
-            // allow some movement before snapping
-            return strokeBegin;
-        }
+    qreal dx = pt.x() - strokeBegin.x();
+    qreal dy = pt.y() - strokeBegin.y();
+
+    if (dx * dx + dy * dy < 4.0) {
+        // allow some movement before snapping
+        return strokeBegin;
+    }
+
     //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
     QLineF snapLine = QLineF(*handles()[0], strokeBegin);
     
     
-        dx = snapLine.dx();
-        dy = snapLine.dy();
-    const qreal
-        dx2 = dx * dx,
-        dy2 = dy * dy,
-        invsqrlen = 1.0 / (dx2 + dy2);
+    dx = snapLine.dx();
+    dy = snapLine.dy();
+
+    const qreal dx2 = dx * dx;
+    const qreal dy2 = dy * dy;
+    const qreal invsqrlen = 1.0 / (dx2 + dy2);
+
     QPointF r(dx2 * pt.x() + dy2 * snapLine.x1() + dx * dy * (pt.y() - snapLine.y1()),
               dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
+
     r *= invsqrlen;
     return r;
-    //return pt;
 }
 
 QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
@@ -101,27 +103,35 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         QRect bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
         
         QPainterPath path;
+
         if (bounds.contains(startPoint.toPoint())){
-        path.moveTo(startPoint);
-        path.lineTo(snapLine.p1());
+            path.moveTo(startPoint);
+            path.lineTo(snapLine.p1());
         }
         else
-        {path.moveTo(snapLine.p1());
-        path.lineTo(snapLine.p2());}
+        {
+            path.moveTo(snapLine.p1());
+            path.lineTo(snapLine.p2());
+        }
         
         drawPreview(gc, path);//and we draw the preview.
     }
+
     gc.restore();
     
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
-
 }
 
 void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 1) return;
-    
+    if (assistantVisible == false){
+        return;
+    }
+
+    if (handles().size() < 1) {
+        return;
+    }
+
     QTransform initialTransform = converter->documentToWidgetTransform();
     gc.setTransform(initialTransform);
     QPointF p0 = *handles()[0];

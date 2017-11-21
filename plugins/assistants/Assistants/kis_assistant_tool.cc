@@ -434,45 +434,62 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         //this following bit sets the translations for the vanishing-point handles.
         if(m_handleDrag && assistant->id() == "vanishing point" && assistant->sideHandles().size()==4) {
             //for inner handles, the outer handle gets translated.
-            if (m_handleDrag == assistant->sideHandles()[0]){
-            QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
+            if (m_handleDrag == assistant->sideHandles()[0]) {
+                QLineF perspectiveline = QLineF(*assistant->handles()[0],
+                                                *assistant->sideHandles()[0]);
 
-            qreal length = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]).length();
-            if (length<2.0){length=2.0;}
-            length +=perspectiveline.length();
-            perspectiveline.setLength(length);
-            *assistant->sideHandles()[1] = perspectiveline.p2();
-            }
+                qreal length = QLineF(*assistant->sideHandles()[0],
+                                      *assistant->sideHandles()[1]).length();
+
+                if (length < 2.0){
+                    length = 2.0;
+                }
+
+                length += perspectiveline.length();
+                perspectiveline.setLength(length);
+                *assistant->sideHandles()[1] = perspectiveline.p2();
+            }            
             else if (m_handleDrag == assistant->sideHandles()[2]){
-            QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
+                QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
+                qreal length = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
 
-            qreal length = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
-            if (length<2.0){length=2.0;}
-            length +=perspectiveline.length();
-            perspectiveline.setLength(length);
-            *assistant->sideHandles()[3] = perspectiveline.p2();
-            }
-            //for outer handles, only the vanishing point is translated, but only if there's an intersection.
+                if (length<2.0){
+                    length=2.0;
+                }
+
+                length += perspectiveline.length();
+                perspectiveline.setLength(length);
+                *assistant->sideHandles()[3] = perspectiveline.p2();
+            } // for outer handles, only the vanishing point is translated, but only if there's an intersection.
             else if (m_handleDrag == assistant->sideHandles()[1]|| m_handleDrag == assistant->sideHandles()[3]){
-            QPointF vanishingpoint(0,0);
-            QLineF perspectiveline = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]);
-            QLineF perspectiveline2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]);
-            if (QLineF(perspectiveline2).intersect(QLineF(perspectiveline), &vanishingpoint) != QLineF::NoIntersection){
-            *assistant->handles()[0] = vanishingpoint;}
-            }//and for the vanishing point itself, only the outer handles get translated.
+                QPointF vanishingpoint(0,0);
+                QLineF perspectiveline = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]);
+                QLineF perspectiveline2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]);
+
+                if (QLineF(perspectiveline2).intersect(QLineF(perspectiveline), &vanishingpoint) != QLineF::NoIntersection){
+                    *assistant->handles()[0] = vanishingpoint;
+                }
+            }// and for the vanishing point itself, only the outer handles get translated.
             else if (m_handleDrag == assistant->handles()[0]){
-            QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
-            QLineF perspectiveline2 = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
-            qreal length =  QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]).length();
-            qreal length2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
-            if (length<2.0){length=2.0;}
-            if (length2<2.0){length2=2.0;}
-            length +=perspectiveline.length();
-            length2 +=perspectiveline2.length();
-            perspectiveline.setLength(length);
-            perspectiveline2.setLength(length2);
-            *assistant->sideHandles()[1] = perspectiveline.p2();
-            *assistant->sideHandles()[3] = perspectiveline2.p2();
+                QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
+                QLineF perspectiveline2 = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
+                qreal length =  QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]).length();
+                qreal length2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
+
+                if (length < 2.0) {
+                    length = 2.0;
+                }
+
+                if (length2 < 2.0) {
+                    length2=2.0;
+                }
+
+                length += perspectiveline.length();
+                length2 += perspectiveline2.length();
+                perspectiveline.setLength(length);
+                perspectiveline2.setLength(length2);
+                *assistant->sideHandles()[1] = perspectiveline.p2();
+                *assistant->sideHandles()[3] = perspectiveline2.p2();
             }
 
         }
@@ -562,7 +579,7 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         QPointF translate = event->point - m_dragEnd;;
         m_dragEnd = event->point;
-        m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
+        m_selectedNode1.data()->operator = (QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
         m_canvas->updateCanvas();
     }
@@ -598,7 +615,8 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
         // Draw corner and middle handles
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
+            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5),
+                           QSizeF(m_handleSize, m_handleSize));
 
             // render handles when they are being dragged and moved
             if (handle == m_handleDrag || handle == m_handleCombine) {
@@ -611,7 +629,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
             if ( assistant->id() =="vanishing point") {
                 if (assistant->handles().at(0) == handle )  { // vanishing point handle
-                     ellipse = QRectF(_converter.documentToView(*handle) -  QPointF(10, 10), QSizeF(20, 20));
+                     ellipse = QRectF(_converter.documentToView(*handle) - QPointF(10, 10), QSizeF(20, 20));
                 }
             }
 

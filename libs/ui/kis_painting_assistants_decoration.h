@@ -33,6 +33,12 @@ typedef KisSharedPtr<KisPaintingAssistantsDecoration> KisPaintingAssistantsDecor
 
 /**
  * This class hold a list of painting assistants.
+ * In the application flow, each canvas holds one of these classes to manage the assistants
+ * There is an assistants manager, but that is higher up in the flow and makes sure each view gets one of these
+ * Since this is off the canvas level, the decoration can be seen across all tools. The contents from here will be in
+ * front of the kis_assistant_tool, which hold and displays the editor controls.
+ *
+ * Many of the events this recieves such as adding and removing assistants comes from kis_assistant_tool
  */
 class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoration
 {
@@ -62,27 +68,26 @@ public:
     bool isEditingAssistants();
 
 
-    /*sets whether the main assistant is visible*/
+    /// sets whether the main assistant is visible
     void setAssistantVisible(bool set);
 
-    /*sets whether the preview is visible*/
+    /// sets whether the preview is visible
     void setOutlineVisible(bool set);
 
-    /*sets whether we snap to only one assistant*/
+    /// sets whether we snap to only one assistant
     void setOnlyOneAssistantSnap(bool assistant);
 
-    /*returns assistant visibility*/
+    /// returns assistant visibility
     bool assistantVisibility();
 
-    /*returns preview visibility*/
+    /// returns preview visibility
     bool outlineVisibility();
 
-    /*uncache all assistants*/
+    /// uncache all assistants
     void uncache();
 
-    /* retrieves the assistants color specified in the tool options
-     * all assistants will share the same color
-     */
+    /// retrieves the assistants color specified in the tool options
+    /// all assistants will share the same color
     QColor assistantsColor();
 
 Q_SIGNALS:

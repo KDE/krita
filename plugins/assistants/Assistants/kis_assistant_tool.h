@@ -30,7 +30,17 @@
 
 #include "ui_AssistantsToolOptions.h"
 
-
+/* The assistant tool allows artists to create special guides on the canvas
+ * to help them with things like perspective and parallel lines
+ * This tool has its own canvas decoration on it that only appears when the tool
+ * is active. This decoration allows people to edit assistant points as well as delete assistants
+ * Many of the operations here are forwarded on to another class (kis_painting_assistant_decoration)
+ * that stores the assistant information as well as the decoration information with lines
+ *
+ * Drawing in two separate classes creates an issue where the editor controls in this class
+ * are covered by the kis_painting_assistant_decoration class. In the future, we probably need to
+ * do all the drawing in one class so we have better control of what is in front
+ */
 class KisAssistantTool : public KisTool
 {
     Q_OBJECT
@@ -47,7 +57,17 @@ public:
     virtual quint32 priority() {
         return 3;
     }
+
+
+    /* this is a very big function that has to figure out if we are adding a new assistant,
+     * or editing an existing one when we click on the canvas. There is also a lot of logic
+     * in here that is specific to certain assistants and how they should be handled.
+     * The editor widget is not a UI file, so the move, delete, preview areas have manual
+     * hitbox regions specified to know if a click is doing any of those actions.
+     */
     void beginPrimaryAction(KoPointerEvent *event) override;
+
+
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
@@ -55,10 +75,23 @@ public:
     QWidget *createOptionWidget() override;
 
 private:
+    // adds and removes assistant.
+    // this is event is forwarded to the kis_painting_decoration class
+    // perspective grids seem to be managed in two places with these calls
     void addAssistant();
     void removeAssistant(KisPaintingAssistantSP assistant);
-    bool mouseNear(const QPointF& mousep, const QPointF& point);
+
+
+    // calculates whether a point is near one of the corner points of the assistant
+    // returns: a corner point from the perspective assistant if the given node is close
+    // only called once in code when calculating the perspective assistant
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistantSP grid, QPointF point);
+
+    // calculates if the mouse is near a given point
+    // only used by the nodeNearPoint function (perspective grid assistant).
+    bool mouseNear(const QPointF& mousep, const QPointF& point);
+
+
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
@@ -70,21 +103,36 @@ private Q_SLOTS:
     void removeAllAssistants();
     void saveAssistants();
     void loadAssistants();
+
+    /// send the color and opacity information from the UI to the kis_painting_decoration
+    /// which manages the assistants
     void slotAssistantsColorChanged(const QColor&);
     void slotAssistantOpacityChanged();
 
 protected:
-
+    /// Draws the editor widget controls with move, activate, and delete
+    /// This also creates a lot of assistant specific stuff for vanishing points and perspective grids
+    /// Whatever is painted here will be underneath the content painted in the kis_painting_assistant_decoration
+    /// The kis_painting_assistant_decoration paints the final assistant, so this is more of just editor controls
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
 protected:
+    /// this class manipulates the kis_painting_assistant_decorations a lot, so this class is a helper
+    ///  to get a reference to it and call "updateCanvas" which refreshes the display
     QPointer<KisCanvas2> m_canvas;
+
+    /// the handles are retrieved from the kis_painting_decoration originally
+    /// They are used here to generate and manipulate editor handles with the tool's primary action
     QList<KisPaintingAssistantHandleSP> m_handles;
     QList<KisPaintingAssistantHandleSP> m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
     KisPaintingAssistantSP m_assistantDrag;
+
+    /// Used while a new assistant is being created. Most assistants need multiple points to exist
+    /// so this helps manage the visual state while this creation process is going on
     KisPaintingAssistantSP m_newAssistant;
+
     QPointF m_cursorStart;
     QPointF m_currentAdjustment;
     Ui::AssistantsToolOptions m_options;
@@ -93,13 +141,14 @@ protected:
     QLineF m_radius;
     bool m_snapIsRadial;
     QPointF m_dragEnd;
-    int m_handleSize;
+    int m_handleSize; // how large the editor handles will appear
 
     /// When we are adding and editing assistants, we don't need to have the preview on
-    /// temporarily hide it while editing. restore the preview state when we go back to drawing
+    /// temporarily hide the preview while editing. restore the preview state when we go back to drawing
     bool m_temporaryPreviewState;
 
-    // move, visibility, delete icons for each assistant
+    // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
+    // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
     QPixmap m_iconDelete;
     QPixmap m_iconSnapOn;
     QPixmap m_iconSnapOff;
@@ -109,7 +158,7 @@ protected:
 private:
     PerspectiveAssistantEditionMode m_internalMode;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
-    int m_assistantHelperYOffset;
+    int m_assistantHelperYOffset; // used by the assistant editor icons for placement on the canvas.
 
     // what color and opacity will the assistants have
     // all assistant types will share this setting
@@ -129,7 +178,7 @@ public:
         setIconName(koIconNameCStr("krita_tool_assistant"));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-    };
+    }
 
 
     ~KisAssistantToolFactory() override {}

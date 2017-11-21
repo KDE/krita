@@ -95,10 +95,13 @@ public:
     virtual ~KisPaintingAssistant();
     const QString& id() const;
     const QString& name() const;
-    bool isSnappingActive() const;//this returns whether or not the snapping is/should be active.
+    bool isSnappingActive() const;
     void setSnappingActive(bool set);
-    bool outline() const;//this returns whether or not the preview is/should be active.
+
+    // TODO: this probably should be renamed to isPreviewActive or something
+    bool outline() const; //this returns whether or not the preview is/should be active.
     void setOutline(bool set);
+
     /**
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference
@@ -129,6 +132,7 @@ public:
 
     /**
       * Get the topLeft, bottomLeft, topRight and BottomRight corners of the assistant
+      * Some assistants like the perspective grid have custom logic built around certain handles
       */
     const KisPaintingAssistantHandleSP topLeft() const;
     KisPaintingAssistantHandleSP topLeft();
@@ -149,13 +153,15 @@ public:
 
 public:
     /**
-     * This will paint a path using a white and black colors.
+     * This will render the final output. The drawCache does rendering most of the time so be sure to check that
      */
     void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
     void drawPreview(QPainter& painter, const QPainterPath& path);
 
 protected:
     virtual QRect boundingRect() const;
+
+    /// performance layer where the graphics can be drawn from a cache instead of generated every render update
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;

@@ -33,7 +33,7 @@
 #include <math.h>
 
 ParallelRulerAssistant::ParallelRulerAssistant()
-        : KisPaintingAssistant("parallel ruler", i18n("Parallel Ruler assistant"))
+    : KisPaintingAssistant("parallel ruler", i18n("Parallel Ruler assistant"))
 {
 }
 
@@ -41,25 +41,25 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
 {
     Q_ASSERT(handles().size() == 2);
     //code nicked from the perspective ruler.
-    qreal
-            dx = pt.x() - strokeBegin.x(),
-            dy = pt.y() - strokeBegin.y();
-        if (dx * dx + dy * dy < 4.0) {
-            // allow some movement before snapping
-            return strokeBegin;
-        }
+    qreal dx = pt.x() - strokeBegin.x();
+    qreal dy = pt.y() - strokeBegin.y();
+
+    if (dx * dx + dy * dy < 4.0) {
+        return strokeBegin; // allow some movement before snapping
+    }
+
     //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
     QLineF snapLine = QLineF(*handles()[0], *handles()[1]);
     QPointF translation = (*handles()[0]-strokeBegin)*-1.0;
-    snapLine= snapLine.translated(translation);
-    
-    
-        dx = snapLine.dx();
-        dy = snapLine.dy();
+    snapLine = snapLine.translated(translation);
+        
+    dx = snapLine.dx();
+    dy = snapLine.dy();
+
     const qreal
-        dx2 = dx * dx,
-        dy2 = dy * dy,
-        invsqrlen = 1.0 / (dx2 + dy2);
+            dx2 = dx * dx,
+            dy2 = dy * dy,
+            invsqrlen = 1.0 / (dx2 + dy2);
     QPointF r(dx2 * pt.x() + dy2 * snapLine.x1() + dx * dy * (pt.y() - snapLine.y1()),
               dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
     r *= invsqrlen;
@@ -96,7 +96,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
         QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
         snapLine= snapLine.translated(translation);
-            
+
         QRect viewport= gc.viewport();
         KisAlgebra2D::intersectLineRect(snapLine, viewport);
         
@@ -115,8 +115,13 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
+    if (assistantVisible==false){
+        return;
+    }
+
+    if (handles().size() < 2) {
+        return;
+    }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 

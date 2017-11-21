@@ -142,7 +142,9 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
 
 void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
+    if (assistantVisible == false){
+        return;
+    }
     
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -178,7 +180,10 @@ void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverte
 
 QRect FisheyePointAssistant::boundingRect() const
 {
-    if (handles().size() != 3) return KisPaintingAssistant::boundingRect();
+    if (handles().size() != 3) {
+        return KisPaintingAssistant::boundingRect();
+    }
+
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         return e.boundingRect().adjusted(-(e.semiMajor()*2), -2, (e.semiMajor()*2), 2).toAlignedRect();
     } else {

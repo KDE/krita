@@ -143,10 +143,6 @@ protected:
     QPointF m_dragEnd;
     int m_handleSize; // how large the editor handles will appear
 
-    /// When we are adding and editing assistants, we don't need to have the preview on
-    /// temporarily hide the preview while editing. restore the preview state when we go back to drawing
-    bool m_temporaryPreviewState;
-
     // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
     // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
     QPixmap m_iconDelete;

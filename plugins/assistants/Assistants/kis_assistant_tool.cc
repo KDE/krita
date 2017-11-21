@@ -75,9 +75,6 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_canvas->paintingAssistantsDecoration()->activateAssistantsEditor();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 
-    // turn off preview while we are managing assistants. it gets in the way with all the lines it generates
-    m_temporaryPreviewState = m_canvas->paintingAssistantsDecoration()->outlineVisibility();
-    m_canvas->paintingAssistantsDecoration()->setOutlineVisible(false);
     repaintDecorations();
 
     m_handleDrag = 0;
@@ -93,11 +90,8 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
 
 void KisAssistantTool::deactivate()
 {
-    // Add code here to initialize your tool when it got deactivated
     m_canvas->paintingAssistantsDecoration()->deactivateAssistantsEditor();
-    m_canvas->paintingAssistantsDecoration()->setOutlineVisible(m_temporaryPreviewState);
-    repaintDecorations(); // helps with updating assistant decoration a non-editor look
-
+    repaintDecorations(); // helps with updating assistant decoration to a non-editor look
     KisTool::deactivate();
 }
 

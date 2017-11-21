@@ -215,7 +215,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         }
     }
 
-    if (outline()==true && getTransform(poly, transform) && previewVisible==true){
+    if (isSnappingActive() && getTransform(poly, transform) && previewVisible==true){
         //find vanishing point, find mouse, draw line between both.
         QPainterPath path2;
         QPointF intersection(0, 0);//this is the position of the vanishing point.

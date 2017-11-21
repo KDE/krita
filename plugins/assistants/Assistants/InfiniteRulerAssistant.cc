@@ -87,8 +87,10 @@ void InfiniteRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         mousePos = QCursor::pos();//this'll give an offset//
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
+
+
     
-    if (handles().size() > 1 && outline()==true && previewVisible==true) {
+    if (handles().size() > 1 && isSnappingActive() && previewVisible == true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));

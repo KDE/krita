@@ -90,7 +90,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
     
-    if (handles().size() > 0 && outline()==true && previewVisible==true) {
+    if (handles().size() > 0 && isSnappingActive() && previewVisible == true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QPointF startPoint = initialTransform.map(*handles()[0]);
@@ -137,8 +137,11 @@ void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConver
     QPointF p0 = *handles()[0];
     
     QPainterPath path;
-    path.moveTo(QPointF(p0.x() - 10.0, p0.y() - 10.0)); path.lineTo(QPointF(p0.x() + 10.0, p0.y() + 10.0));
-    path.moveTo(QPointF(p0.x() - 10.0, p0.y() + 10.0)); path.lineTo(QPointF(p0.x() + 10.0, p0.y() - 10.0));
+    path.moveTo(QPointF(p0.x() - 10.0, p0.y() - 10.0));
+    path.lineTo(QPointF(p0.x() + 10.0, p0.y() + 10.0));
+
+    path.moveTo(QPointF(p0.x() - 10.0, p0.y() + 10.0));
+    path.lineTo(QPointF(p0.x() + 10.0, p0.y() - 10.0));
     drawPath(gc, path, isSnappingActive());
     
 }

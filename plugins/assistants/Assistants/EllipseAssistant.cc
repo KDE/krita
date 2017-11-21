@@ -65,7 +65,7 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    if (outline()==true && boundingRect().contains(initialTransform.inverted().map(mousePos), false) && previewVisible==true){
+    if (isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos), false) && previewVisible==true){
         if (handles().size() > 2){    
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 // valid ellipse

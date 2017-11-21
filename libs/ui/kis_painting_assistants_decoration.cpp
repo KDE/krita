@@ -47,6 +47,8 @@ struct KisPaintingAssistantsDecoration::Private {
     bool aFirstStroke;
     QColor m_assistantsColor;
     bool m_isEditingAssistants = false;
+    bool m_useCache = false;
+    bool m_outlineVisible = false;
 
     KisCanvas2 * m_canvas = 0;
 };
@@ -175,18 +177,23 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
 
+
+    if (d->m_isEditingAssistants) {
+        d->m_outlineVisible = false;
+        d->m_useCache = true;
+    }
+    else {
+        d->m_outlineVisible = outlineVisibility();
+
+        // don't use cache for now since the cache isn't clearing at the right time.
+        // if you turn this to 'true' you will notice the spline assistant keeps its bezier handles when painting
+        d->m_useCache = false;
+    }
+
+
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
         assistant->setAssistantColor(assistantsColor());
-
-        // forcing to do a clean draw helps when we go from editing to painting
-        bool useCache = true;
-        if (d->m_isEditingAssistants) {
-            useCache = false;
-        }
-
-        assistant->drawAssistant(gc, updateRect, converter, useCache, canvas, assistantVisibility(), outlineVisibility());
-
-
+        assistant->drawAssistant(gc, updateRect, converter, d->m_useCache, canvas, assistantVisibility(), d->m_outlineVisible);
     }
 }
 //drawPreview//
@@ -272,6 +279,7 @@ void KisPaintingAssistantsDecoration::activateAssistantsEditor()
 {
     setVisible(true); // this turns on the decorations in general. we leave it on at this point
     d->m_isEditingAssistants = true;
+    d->m_useCache = false; // force the assistants to update with cleared cache
 }
 
 void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()
@@ -281,13 +289,7 @@ void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()
     }
 
     d->m_isEditingAssistants = false; // some elements are hidden when we aren't editing
-
-    // draw decoration again in case some elements need to be show or hidden
-    QPainter painter;
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(assistantsColor());
-    QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(d->m_canvas->image()->size()));
-    drawDecoration(painter, canvasSize, d->m_canvas->coordinatesConverter(), d->m_canvas );
+    d->m_useCache = false; // force the assistants to update with cleared cache
 }
 
 bool KisPaintingAssistantsDecoration::isEditingAssistants()

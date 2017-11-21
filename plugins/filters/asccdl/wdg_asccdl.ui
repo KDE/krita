@@ -10,9 +10,6 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0">
     <widget class="KisColorButton" name="btnSlope">

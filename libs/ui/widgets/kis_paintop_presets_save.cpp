@@ -21,12 +21,15 @@
 #include <QDebug>
 #include <QDate>
 #include <QTime>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
 
 
 #include <KoFileDialog.h>
 #include "KisImportExportManager.h"
 #include "QDesktopServices"
 #include "kis_resource_server_provider.h"
+#include <kis_paintop_preset_icon_library.h>
 
 
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
@@ -44,6 +47,7 @@ KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
 
     connect(loadScratchPadThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadScratchpadThumbnail()));
     connect(loadExistingThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadExistingThumbnail()));
+    connect(loadIconLibraryThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromLibrary()));
 
     connect(savePresetButton, SIGNAL(clicked(bool)), this, SLOT(savePreset()));
     connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
@@ -124,6 +128,28 @@ void KisPresetSaveWidget::loadScratchpadThumbnail()
 void KisPresetSaveWidget::loadExistingThumbnail()
 {
     brushPresetThumbnailWidget->paintPresetImage();
+}
+
+void KisPresetSaveWidget::loadImageFromLibrary()
+{
+    //add dialog code here.
+    QDialog *dlg = new QDialog(this);
+    dlg->setWindowTitle(i18n("Preset Icon Library"));
+    QVBoxLayout *layout = new QVBoxLayout();
+    dlg->setLayout(layout);
+    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(dlg);
+    layout->addWidget(libWidget);
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, dlg);
+    connect(buttons, SIGNAL(accepted()), dlg, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), dlg, SLOT(reject()));
+    layout->addWidget(buttons);
+
+    //if dialog accepted, get image.
+    if (dlg->exec()==QDialog::Accepted) {
+
+        QImage presetImage = libWidget->getImage();
+        brushPresetThumbnailWidget->paintCustomImage(presetImage);
+    }
 }
 
 void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager * favManager)

@@ -67,6 +67,7 @@ public Q_SLOTS:
     void savePreset();
     void loadScratchpadThumbnail();
     void loadExistingThumbnail();
+    void loadImageFromLibrary();
 
 
 private:

@@ -1712,6 +1712,36 @@ void KisConfig::setToolOptionsInDocker(bool inDocker)
     m_cfg.writeEntry("ToolOptionsInDocker", inDocker);
 }
 
+int KisConfig::kineticScrollingGesture(bool defaultValue) const
+{
+    return (defaultValue ? 0 : m_cfg.readEntry("KineticScrollingGesture", 0));
+}
+
+void KisConfig::setKineticScrollingGesture(int gesture)
+{
+    m_cfg.writeEntry("KineticScrollingGesture", gesture);
+}
+
+int KisConfig::kineticScrollingSensitivity(bool defaultValue) const
+{
+    return (defaultValue ? 75 : m_cfg.readEntry("KineticScrollingSensitivity", 75));
+}
+
+void KisConfig::setKineticScrollingSensitivity(int sensitivity)
+{
+    m_cfg.writeEntry("KineticScrollingSensitivity", sensitivity);
+}
+
+bool KisConfig::kineticScrollingScrollbar(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("KineticScrollingScrollbar", true));
+}
+
+void KisConfig::setKineticScrollingScrollbar(bool scrollbar)
+{
+    m_cfg.writeEntry("KineticScrollingScrollbar", scrollbar);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const
 {
     const KoColorSpace *cs = 0;

@@ -1220,7 +1220,7 @@ void KisMainWindow::saveWindowSettings()
 
     if (d->windowSizeDirty ) {
         dbgUI << "KisMainWindow::saveWindowSettings";
-        KConfigGroup group = config->group("MainWindow");
+        KConfigGroup group = d->windowStateConfig;
         KWindowConfig::saveWindowSize(windowHandle(), group);
         config->sync();
         d->windowSizeDirty = false;
@@ -1464,9 +1464,8 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
             showCanvasOnly->setChecked(false);
         }
 
-        KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
-        cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
-        cfg.writeEntry("ko_windowstate", saveState().toBase64());
+        d->windowStateConfig.writeEntry("ko_geometry", saveGeometry().toBase64());
+        d->windowStateConfig.writeEntry("ko_windowstate", saveState().toBase64());
 
         if (!d->dockerStateBeforeHiding.isEmpty()) {
             restoreState(d->dockerStateBeforeHiding);
@@ -2422,7 +2421,7 @@ void KisMainWindow::initializeGeometry()
 {
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
-    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
+    KConfigGroup cfg = d->windowStateConfig;
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
         const int scnum = QApplication::desktop()->screenNumber(parentWidget());

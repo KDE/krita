@@ -128,6 +128,7 @@ public:
         if (!openWindows.isEmpty()) {
             Q_FOREACH(auto windowConfigGroup, openWindows) {
                  KisMainWindow *window = part->createMainWindow(session.group(windowConfigGroup));
+                 window->initializeGeometry();
                  window->show();
 
                  windows.insert(windowConfigGroup, window);
@@ -279,6 +280,10 @@ KisMainWindow *KisPart::createMainWindow(KConfigGroup stateConfig)
 
         QString id = QUuid::createUuid().toString();
         stateConfig = cfg->group("session").group(QString("window ") + id);
+
+        if (cfg->hasGroup("MainWindow")) {
+            cfg->group("MainWindow").copyTo(&stateConfig);
+        }
 
         if (cfg->hasGroup("krita")) {
             cfg->group("krita").copyTo(&stateConfig);

@@ -157,9 +157,12 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
     brush->setWidth(w);
     brush->setHeight(h);
 
-    brush->saveToDevice(io);
-
-    return KisImportExportFilter::OK;
+    if (brush->saveToDevice(io)) {
+        return KisImportExportFilter::OK;
+    }
+    else {
+        return KisImportExportFilter::CreationError;
+    }
 }
 
 KisPropertiesConfigurationSP KisBrushExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const

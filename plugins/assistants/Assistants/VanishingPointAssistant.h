@@ -53,6 +53,7 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    KisCanvas2 *m_canvas;
 };
 
 class VanishingPointAssistantFactory : public KisPaintingAssistantFactory

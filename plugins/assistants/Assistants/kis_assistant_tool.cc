@@ -830,7 +830,7 @@ void KisAssistantTool::slotAssistantsColorChanged(const QColor& setColor)
 {
     // color and alpha are stored separately, so we need to merge the values before sending it on
     QColor newColor = setColor;
-    newColor.setAlpha(m_assistantsOpacity*255);
+    newColor.setAlpha(m_assistantsOpacity * 255);
     m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
     m_canvas->canvasWidget()->update();
 }
@@ -840,7 +840,6 @@ void KisAssistantTool::slotAssistantOpacityChanged()
     QColor newColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
     m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01;
     newColor.setAlpha(m_assistantsOpacity*255);
-
     m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
     m_canvas->canvasWidget()->update();
 }

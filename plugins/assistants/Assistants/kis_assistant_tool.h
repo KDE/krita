@@ -81,17 +81,6 @@ private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistantSP assistant);
 
-
-    // calculates whether a point is near one of the corner points of the assistant
-    // returns: a corner point from the perspective assistant if the given node is close
-    // only called once in code when calculating the perspective assistant
-    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistantSP grid, QPointF point);
-
-    // calculates if the mouse is near a given point
-    // only used by the nodeNearPoint function (perspective grid assistant).
-    bool mouseNear(const QPointF& mousep, const QPointF& point);
-
-
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
     double norm2(const QPointF& p);

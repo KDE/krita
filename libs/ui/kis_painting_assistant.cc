@@ -24,6 +24,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
 #include <kis_canvas2.h>
+#include "kis_tool.h"
 
 #include <KoStore.h>
 
@@ -127,6 +128,8 @@ struct KisPaintingAssistant::Private {
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
     KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
+    KisCanvas2* m_canvas = 0;
+
 
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
@@ -290,7 +293,12 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     }
     gc.drawPixmap(paintRect, cached, paintRect.translated(-widgetBound.topLeft() - d->cachedRect.topLeft()));
 
-    canvas->updateCanvas(paintRect);
+
+    if (canvas) {
+        d->m_canvas = canvas;
+    }
+
+    d->m_canvas->updateCanvas(paintRect);
 }
 
 void KisPaintingAssistant::uncache()
@@ -650,6 +658,49 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::sideHandles()
 {
     return d->sideHandles;
 }
+
+
+
+bool KisPaintingAssistant::areTwoPointsClose(const QPointF& pointOne, const QPointF& pointTwo)
+{
+    int m_handleSize = 16;
+
+    QRectF handlerect(pointTwo - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
+    return handlerect.contains(pointOne);
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::closestCornerHandleFromPoint(QPointF point)
+{
+    if (!d->m_canvas) {
+        return 0;
+    }
+
+
+    if (areTwoPointsClose(point, pixelToView(topLeft()->toPoint()))) {
+        return topLeft();
+    } else if (areTwoPointsClose(point, pixelToView(topRight()->toPoint()))) {
+        return topRight();
+    } else if (areTwoPointsClose(point, pixelToView(bottomLeft()->toPoint()))) {
+        return bottomLeft();
+    } else if (areTwoPointsClose(point, pixelToView(bottomRight()->toPoint()))) {
+        return bottomRight();
+    }
+    return 0;
+}
+
+
+QPointF KisPaintingAssistant::pixelToView(const QPoint pixelCoords) const
+{
+    QPointF documentCoord = d->m_canvas->image()->pixelToDocument(pixelCoords);
+    return d->m_canvas->viewConverter()->documentToView(documentCoord);
+}
+
+
+
+
+/*
+ * KisPaintingAssistantFactory classes
+*/
 
 KisPaintingAssistantFactory::KisPaintingAssistantFactory()
 {

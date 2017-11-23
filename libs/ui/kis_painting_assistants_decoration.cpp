@@ -178,23 +178,21 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 
     if (d->m_isEditingAssistants) {
         d->m_outlineVisible = false;
+
+        // TODO: the uncache method takes care of this state. can probably remove this as well as
+        // references in the drawAssistant function
         d->m_useCache = true;
     }
     else {
         d->m_outlineVisible = outlineVisibility();
-
-        // don't use cache for now since the cache isn't clearing at the right time.
-        // if you turn this to 'true' you will notice the spline assistant keeps its bezier handles when painting
-        d->m_useCache = false;
     }
-
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->setAssistantColor(assistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, d->m_useCache, canvas, assistantVisibility(), d->m_outlineVisible);
     }
 }
-//drawPreview//
+
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
@@ -267,6 +265,7 @@ QColor KisPaintingAssistantsDecoration::assistantsColor() {
 void KisPaintingAssistantsDecoration::setAssistantsColor(QColor color)
 {
     d->m_assistantsColor = color;
+    uncache();
 }
 
 void KisPaintingAssistantsDecoration::activateAssistantsEditor()
@@ -283,7 +282,7 @@ void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()
     }
 
     d->m_isEditingAssistants = false; // some elements are hidden when we aren't editing
-    d->m_useCache = false; // force the assistants to update with cleared cache
+    uncache(); // updates visuals when not editing
 }
 
 bool KisPaintingAssistantsDecoration::isEditingAssistants()

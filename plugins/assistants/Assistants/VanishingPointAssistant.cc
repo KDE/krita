@@ -83,6 +83,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
     if (canvas){
         //simplest, cheapest way to get the mouse-position//
         mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+        m_canvas = canvas;
     }
     else {
         //...of course, you need to have access to a canvas-widget for that.//
@@ -151,14 +152,13 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
 void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible == false){
+    if (!m_canvas || handles().size() < 1) {
         return;
     }
 
-    if (handles().size() < 1) {
+    if (assistantVisible == false ||   m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
         return;
     }
-
 
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPointF p0 = initialTransform.map(*handles()[0]);

@@ -556,12 +556,6 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
                 _gc.restore();
             }
 
-            if ( assistant->id() =="vanishing point") {
-                if (assistant->handles().at(0) == handle )  { // vanishing point handle
-                     ellipse = QRectF(_converter.documentToView(*handle) - QPointF(10, 10), QSizeF(20, 20));
-                }
-            }
-
             QPainterPath path;
 
             path.addEllipse(ellipse);
@@ -575,7 +569,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
         // Draw middle perspective handles (this should probably be moved)
         if(assistant->id()=="perspective") {
-            assistant->findHandleLocation();
+            assistant->findPerspectiveAssistantHandleLocation();
 
             QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
             topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;

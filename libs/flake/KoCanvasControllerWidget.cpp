@@ -248,7 +248,6 @@ void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
 
 void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 {
-    Q_ASSERT(canvas); // param is not null
     if (d->canvas) {
         d->unsetCanvas();
         proxyObject->emitCanvasRemoved(this);

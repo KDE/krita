@@ -147,6 +147,17 @@ public:
     const KisPaintingAssistantHandleSP bottomMiddle() const;
     KisPaintingAssistantHandleSP bottomMiddle();
 
+
+    // calculates whether a point is near one of the corner points of the assistant
+    // returns: a corner point from the perspective assistant if the given node is close
+    // only called once in code when calculating the perspective assistant
+    KisPaintingAssistantHandleSP closestCornerHandleFromPoint(QPointF point);
+
+    // determines if two points are close to each other
+    // only used by the nodeNearPoint function (perspective grid assistant).
+    bool areTwoPointsClose(const QPointF& pointOne, const QPointF& pointTwo);
+
+
 public:
     /**
      * This will render the final output. The drawCache does rendering most of the time so be sure to check that
@@ -161,6 +172,8 @@ protected:
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;
+
+    QPointF pixelToView(const QPoint pixelCoords) const;
 
 private:
     struct Private;

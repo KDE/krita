@@ -374,9 +374,10 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
     bool wasHiglightedNode = m_higlightedNode != 0;
     QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
     QList <KisPaintingAssistantSP> pAssistant= m_canvas->paintingAssistantsDecoration()->assistants();
-    Q_FOREACH (KisPaintingAssistantSP  assistant, pAssistant) {
+
+    Q_FOREACH (KisPaintingAssistantSP assistant, pAssistant) {
         if(assistant->id() == "perspective") {
-            if ((m_higlightedNode = nodeNearPoint(assistant, mousep))) {
+            if ((m_higlightedNode = assistant->closestCornerHandleFromPoint(mousep))) {
                 if (m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2) {
                     m_higlightedNode = 0;
                 } else {
@@ -924,28 +925,8 @@ double KisAssistantTool::norm2(const QPointF& p)
     return p.x() * p.x() + p.y() * p.y();
 }
 
-bool KisAssistantTool::mouseNear(const QPointF& mousep, const QPointF& point)
-{
-    QRectF handlerect(point - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
-    return handlerect.contains(mousep);
-}
 
 QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
 {
     return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
 }
-
-KisPaintingAssistantHandleSP KisAssistantTool::nodeNearPoint(KisPaintingAssistantSP grid, QPointF point)
-{
-    if (mouseNear(point, pixelToView(*grid->topLeft()))) {
-        return grid->topLeft();
-    } else if (mouseNear(point, pixelToView(*grid->topRight()))) {
-        return grid->topRight();
-    } else if (mouseNear(point, pixelToView(*grid->bottomLeft()))) {
-        return grid->bottomLeft();
-    } else if (mouseNear(point, pixelToView(*grid->bottomRight()))) {
-        return grid->bottomRight();
-    }
-    return 0;
-}
-

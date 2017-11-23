@@ -249,7 +249,8 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     Q_UNUSED(updateRect);
     Q_UNUSED(previewVisible);
 
-    findHandleLocation();
+    findPerspectiveAssistantHandleLocation();
+
     if (!useCache) {
         gc.save();
         drawCache(gc, converter, assistantVisible);
@@ -422,7 +423,7 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
     }
 }
 
-void KisPaintingAssistant::findHandleLocation() {
+void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
     QList<KisPaintingAssistantHandleSP> hHandlesList;
     QList<KisPaintingAssistantHandleSP> vHandlesList;
     uint vHole = 0,hHole = 0;

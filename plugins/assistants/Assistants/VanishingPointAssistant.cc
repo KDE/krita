@@ -90,36 +90,63 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
     
-    if (handles().size() > 0 && isSnappingActive() && previewVisible == true) {
-        //don't draw if invalid.
-        QTransform initialTransform = converter->documentToWidgetTransform();
-        QPointF startPoint = initialTransform.map(*handles()[0]);
-        
-        QLineF snapLine= QLineF(startPoint, mousePos);
-        QRect viewport= gc.viewport();
-        
-        KisAlgebra2D::intersectLineRect(snapLine, viewport);
-        
-        QRect bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
-        
-        QPainterPath path;
 
-        if (bounds.contains(startPoint.toPoint())){
-            path.moveTo(startPoint);
-            path.lineTo(snapLine.p1());
-        }
-        else
-        {
-            path.moveTo(snapLine.p1());
-            path.lineTo(snapLine.p2());
-        }
-        
-        drawPreview(gc, path);//and we draw the preview.
+
+     // draw controls when we are not editing
+     if (canvas->paintingAssistantsDecoration()->isEditingAssistants() == false) {
+
+         if (handles().size() > 0 && isSnappingActive() && previewVisible == true) {
+             //don't draw if invalid.
+             QTransform initialTransform = converter->documentToWidgetTransform();
+             QPointF startPoint = initialTransform.map(*handles()[0]);
+
+             QLineF snapLine= QLineF(startPoint, mousePos);
+             QRect viewport= gc.viewport();
+
+             KisAlgebra2D::intersectLineRect(snapLine, viewport);
+
+             QRect bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+
+             QPainterPath path;
+
+             if (bounds.contains(startPoint.toPoint())){
+                 path.moveTo(startPoint);
+                 path.lineTo(snapLine.p1());
+             }
+             else
+             {
+                 path.moveTo(snapLine.p1());
+                 path.lineTo(snapLine.p2());
+             }
+
+             drawPreview(gc, path);//and we draw the preview.
+         }
+
+
+     }
+
+
+
+
+    // draws a circle around the vanishing point node while editing
+    if (canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
+        QTransform initialTransform = converter->documentToWidgetTransform();
+        QPointF startPoint2 = initialTransform.map(*handles()[0]);
+
+        QPainterPath pathCenter;
+
+        QRectF ellipse = QRectF(QPointF(startPoint2.x() -15, startPoint2.y() -15), QSizeF(30, 30));;
+        pathCenter.addEllipse(ellipse);
+        drawPath(gc, pathCenter, isSnappingActive());
     }
 
+
     gc.restore();
-    
+
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+
+
+
 }
 
 void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
@@ -132,18 +159,20 @@ void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConver
         return;
     }
 
+
     QTransform initialTransform = converter->documentToWidgetTransform();
-    gc.setTransform(initialTransform);
-    QPointF p0 = *handles()[0];
-    
+    QPointF p0 = initialTransform.map(*handles()[0]);
+
+    // draws an "X"
     QPainterPath path;
     path.moveTo(QPointF(p0.x() - 10.0, p0.y() - 10.0));
     path.lineTo(QPointF(p0.x() + 10.0, p0.y() + 10.0));
 
     path.moveTo(QPointF(p0.x() - 10.0, p0.y() + 10.0));
     path.lineTo(QPointF(p0.x() + 10.0, p0.y() - 10.0));
+
+
     drawPath(gc, path, isSnappingActive());
-    
 }
 
 QPointF VanishingPointAssistant::buttonPosition() const

@@ -23,18 +23,20 @@
 #include <QStatusBar>
 #include <klocalizedstring.h>
 
-#include "kis_canvas2.h"
+#include <kis_canvas2.h>
 #include <KisViewManager.h>
 #include <kis_zoom_manager.h>
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_signal_compressor.h"
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_signal_compressor.h>
+#include <kis_grid_manager.h>
+#include <kis_grid_config.h>
+#include <kis_guides_manager.h>
+#include <kis_guides_config.h>
+#include <kis_action.h>
+#include <KisDocument.h>
+
 #include "grid_config_widget.h"
-#include "kis_grid_manager.h"
-#include "kis_grid_config.h"
-#include "kis_guides_manager.h"
-#include "kis_guides_config.h"
-#include "kis_action.h"
 
 
 GridDockerDock::GridDockerDock( )
@@ -73,6 +75,8 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
             this,
             SLOT(slotGridConfigUpdateRequested(const KisGridConfig&)));
 
+        slotGridConfigUpdateRequested(m_canvas->viewManager()->document()->gridConfig());
+
         KisAction* action = m_canvas->viewManager()->actionManager()->actionByName("view_ruler");
 
         m_canvasConnections.addConnection(m_configWidget,SIGNAL(showRulersChanged(bool)),action,SLOT(setChecked(bool)));
@@ -84,7 +88,7 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
             SIGNAL(sigRequestUpdateGuidesConfig(const KisGuidesConfig&)),
             this,
             SLOT(slotGuidesConfigUpdateRequested(const KisGuidesConfig&)));
-
+        slotGuidesConfigUpdateRequested(m_canvas->viewManager()->document()->guidesConfig());
         QRect rc = m_canvas->image()->bounds();
         m_configWidget->setGridDivision(rc.width() / 2, rc.height() / 2);
     }

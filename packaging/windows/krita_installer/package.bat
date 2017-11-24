@@ -69,7 +69,6 @@ cp %CALLIGRA_INST%\lib\kde4/kritabigbrother.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritablurfilter.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritabmpexport.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritabmpimport.dll %C2WINSTALL_INPUT%\lib\kde4
-cp %CALLIGRA_INST%\lib\kde4/kritachalkpaintop.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritachanneldocker.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritacolorgenerator.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritacolorrange.dll %C2WINSTALL_INPUT%\lib\kde4

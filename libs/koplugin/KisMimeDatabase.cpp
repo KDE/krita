@@ -42,20 +42,20 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
     }
 
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
-    if (mime.name() != "application/octet-stream" && mime.name() != "application/zip") {
-        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
-        return mime.name();
-    }
-
-    if (mime.name() == "application/octet-stream" || mime.name() == "application/zip") {
-        mime = db.mimeTypeForFile(file);
-        if (mime.name() != "application/octet-stream") {
+    QMimeType mime;
+    if (fi.size() > 0) {
+        mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
+        if (mime.name() != "application/octet-stream" && mime.name() != "application/zip") {
             debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
             return mime.name();
         }
     }
 
+    mime = db.mimeTypeForFile(file);
+    if (mime.name() != "application/octet-stream") {
+        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
+        return mime.name();
+    }
     return "";
 }
 

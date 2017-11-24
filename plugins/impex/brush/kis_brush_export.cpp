@@ -144,7 +144,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
         parasite.ncells = devices.at(0).count();
         parasite.rank[0] = parasite.ncells; // ### This can mask some bugs, be careful here in the future
         parasite.selection[0] = modes.at(0);
-        // XXX needsmovement!
+        // XXX needs movement!
         parasite.setBrushesCount();
         pipeBrush->setParasite(parasite);
         pipeBrush->setDevices(devices, rc.width(), rc.height());

@@ -52,7 +52,7 @@ KoShapeContainerPrivate::KoShapeContainerPrivate(const KoShapeContainerPrivate &
 }
 
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
-        : KoShape(new KoShapeContainerPrivate(this))
+    : KoShape(new KoShapeContainerPrivate(this))
 {
     Q_D(KoShapeContainer);
     d->model = model;
@@ -68,7 +68,10 @@ KoShapeContainer::KoShapeContainer(KoShapeContainerPrivate *dd)
     //             hierarchy here!
     if (d->model) {
         Q_FOREACH (KoShape *shape, d->model->shapes()) {
-            shape->setParent(this);
+            if (shape) { // Note: shape can be 0 because not all shapes
+                //       implement cloneShape, e.g. the text shape.
+                shape->setParent(this);
+            }
         }
     }
 }
@@ -149,7 +152,7 @@ void KoShapeContainer::shapeChanged(ChangeType type, KoShape* shape)
     if (d->model == 0)
         return;
     if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged
-            || type == SizeChanged || type == PositionChanged || type == GenericMatrixChange))
+          || type == SizeChanged || type == PositionChanged || type == GenericMatrixChange))
         return;
     d->model->containerChanged(this, type);
     Q_FOREACH (KoShape *shape, d->model->shapes())

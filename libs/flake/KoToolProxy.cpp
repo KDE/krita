@@ -405,7 +405,6 @@ bool KoToolProxy::paste()
         if (!image.isNull()) {
             imageList << image;
         }
-        // QT5TODO: figure out how to download data synchronously, which is deprecated in frameworks.
         else if (data->hasUrls()) {
             QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
             foreach (const QUrl &url, urls) {

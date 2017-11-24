@@ -120,9 +120,10 @@ namespace KisAnimationUtils {
                 Q_FOREACH (const FrameItem &item, frames) {
                     const int time = item.time;
                     KisNodeSP node = item.node;
-
-                    KisKeyframeChannel *channel = node->getKeyframeChannel(item.channel);
-
+                    KisKeyframeChannel *channel;
+                    if (node) {
+                        channel = node->getKeyframeChannel(item.channel);
+                    }
                     if (!channel) continue;
 
                     KisKeyframeSP keyframe = channel->keyframeAt(time);

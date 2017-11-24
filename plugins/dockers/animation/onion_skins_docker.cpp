@@ -177,7 +177,7 @@ void OnionSkinsDocker::loadSettings()
                         ui->btnForwardColor,
                         m_equalizerWidget);
 
-    ui->doubleTintFactor->setValue(config.onionSkinTintFactor() * 100.0 / 255);
+    ui->doubleTintFactor->setValue(qRound(config.onionSkinTintFactor() * 100.0 / 255));
     KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
     bcol.fromQColor(config.onionSkinTintColorBackward());
     ui->btnBackwardColor->setColor(bcol);
@@ -188,7 +188,7 @@ void OnionSkinsDocker::loadSettings()
     v.maxDistance = 10;
 
     for (int i = -v.maxDistance; i <= v.maxDistance; i++) {
-        v.value.insert(i, config.onionSkinOpacity(i) * 100.0 / 255.0);
+        v.value.insert(i, qRound(config.onionSkinOpacity(i) * 100.0 / 255.0));
         v.state.insert(i, config.onionSkinState(i));
     }
 

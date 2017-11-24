@@ -890,6 +890,7 @@ QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
             // For radial and conical gradients such conversion is not possible
 
             resultGradient = KoFlake::cloneGradient(gradient->gradient());
+            resultGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
             *transform = gradient->transform() * gc->matrix * shape->transformation().inverted();
         }
     }

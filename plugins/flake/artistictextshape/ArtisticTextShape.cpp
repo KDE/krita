@@ -67,6 +67,26 @@ ArtisticTextShape::~ArtisticTextShape()
     }
 }
 
+KoShape *ArtisticTextShape::cloneShape() const
+{
+    ArtisticTextShape *clone = new ArtisticTextShape();
+    clone->m_ranges = m_ranges;
+    if (m_path) {
+        clone->m_path = static_cast<KoPathShape*>(m_path->cloneShape());
+    }
+    clone->m_charOutlines = m_charOutlines;
+    clone->m_startOffset = m_startOffset;
+    clone->m_outlineOrigin = m_outlineOrigin;
+    clone->m_outline = m_outline;
+    clone->m_baseline = m_baseline;
+    clone->m_textAnchor = m_textAnchor;
+    clone->m_charOffsets = m_charOffsets;
+    clone->m_charPositions = m_charPositions;
+    clone->m_textUpdateCounter = m_textUpdateCounter;
+    clone->m_defaultFont = m_defaultFont;
+    return clone;
+}
+
 void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     KisQPainterStateSaver saver(&painter);

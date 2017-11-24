@@ -348,13 +348,6 @@ public:
     QRectF documentToPixel(const QRectF &documentRect) const;
 
     /**
-     * Convert a document rectangle to an integer pixel rectangle.
-     *
-     * @param documentRect PostScript Pt rectangle to convert.
-     */
-    QRect documentToIntPixel(const QRectF &documentRect) const;
-
-    /**
      * Convert a pixel coordinate to a document coordinate.
      *
      * @param pixelCoord pixel coordinate to convert.

@@ -249,7 +249,7 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
                 QVector<KisRunnableStrokeJobData*> jobs;
                 m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate(jobs);
 
-                if (!jobs.isEmpty()) {
+                if (!jobs.isEmpty() || info->painter->hasDirtyRegion()) {
                     jobs.append(new KisRunnableStrokeJobData(
                                     [this] () {
                                         this->issueSetDirtySignals();

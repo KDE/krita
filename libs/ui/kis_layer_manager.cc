@@ -865,7 +865,7 @@ void KisLayerManager::saveGroupLayers()
 
     QFileInfo f(path);
 
-    QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
+    QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName(), false);
     if (mimeType.isEmpty()) {
         mimeType = "image/png";
     }

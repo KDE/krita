@@ -282,7 +282,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
 
     QString typeName = mimeType;
     if (typeName.isEmpty()) {
-        typeName = KisMimeDatabase::mimeTypeForFile(location);
+        typeName = KisMimeDatabase::mimeTypeForFile(location, direction == KisImportExportManager::Export ? false : true);
     }
 
     QSharedPointer<KisImportExportFilter> filter;
@@ -353,7 +353,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         } else {
             result = doImport(location, filter);
         }
-    } 
+    }
     else /* if (direction == Export) */ {
         if (!exportConfiguration) {
             exportConfiguration = filter->lastSavedConfiguration(from, to);

@@ -28,7 +28,7 @@
 QList<KisMimeDatabase::KisMimeType> KisMimeDatabase::s_mimeDatabase;
 
 
-QString KisMimeDatabase::mimeTypeForFile(const QString &file)
+QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExistingFiles)
 {
     fillMimeData();
 
@@ -43,7 +43,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
 
     QMimeDatabase db;
     QMimeType mime;
-    if (fi.size() > 0) {
+    if (checkExistingFiles && fi.size() > 0) {
         mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
         if (mime.name() != "application/octet-stream" && mime.name() != "application/zip") {
             debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;

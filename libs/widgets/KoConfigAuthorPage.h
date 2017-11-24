@@ -23,6 +23,7 @@
 #define KOCONFIGAUTHORPAGE_H
 
 #include <QWidget>
+#include <QStyledItemDelegate>
 
 #include "kritawidgets_export.h"
 
@@ -40,10 +41,29 @@ private Q_SLOTS:
     void profileChanged(int i);
     void addUser();
     void deleteUser();
+    void addContactEntry();
+    void removeContactEntry();
 
 private:
     class Private;
     Private * const d;
 };
+
+/**
+ * @brief The KoContactInfoDelegate class
+ *
+ * quick delegate subclass to allow a qcombobox for the type.
+ */
+class KoContactInfoDelegate : public QStyledItemDelegate
+{
+public:
+    KoContactInfoDelegate(QWidget *parent, QStringList contactModes);
+    ~KoContactInfoDelegate() override;
+
+public:
+    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QStringList m_contactModes;
+};
+
 
 #endif // KOCONFIGAUTHORPAGE_H

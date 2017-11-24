@@ -207,19 +207,19 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    d->authorUi->fullName->setText(d->info->authorInfo("creator"));
+    d->authorUi->nickName->setText(d->info->authorInfo("creator"));
+    d->authorUi->firstName->setText(d->info->authorInfo("creator-first-name"));
+    d->authorUi->lastName->setText(d->info->authorInfo("creator-last-name"));
     d->authorUi->initials->setText(d->info->authorInfo("initial"));
     d->authorUi->title->setText(d->info->authorInfo("author-title"));
     d->authorUi->company->setText(d->info->authorInfo("company"));
-    d->authorUi->email->setText(d->info->authorInfo("email"));
-    d->authorUi->phoneWork->setText(d->info->authorInfo("telephone-work"));
-    d->authorUi->phoneHome->setText(d->info->authorInfo("telephone"));
-    d->authorUi->fax->setText(d->info->authorInfo("fax"));
-    d->authorUi->country->setText(d->info->authorInfo("country"));
-    d->authorUi->postal->setText(d->info->authorInfo("postal-code"));
-    d->authorUi->city->setText(d->info->authorInfo("city"));
-    d->authorUi->street->setText(d->info->authorInfo("street"));
     d->authorUi->position->setText(d->info->authorInfo("position"));
+    QListWidget *contact = d->authorUi->leContact;
+    Q_FOREACH(QString contactMode, d->info->authorContactInfo()) {
+        if (!contactMode.isEmpty()) {
+            contact->addItem(contactMode);
+        }
+    }
 }
 
 void KoDocumentInfoDlg::saveAboutData()

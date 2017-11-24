@@ -825,6 +825,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
             d->savingUpdater->cancel();
         }
         d->savingImage.clear();
+        emit sigBackgroundSavingFinished(KisImportExportFilter::InternalError, this->errorMessage());
         return false;
     }
 

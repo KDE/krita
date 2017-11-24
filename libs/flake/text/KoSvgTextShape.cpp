@@ -135,7 +135,7 @@ void KoSvgTextShape::resetTextShape()
 
 struct TextChunk {
     QString text;
-    QList<QTextLayout::FormatRange> formats;
+    QVector<QTextLayout::FormatRange> formats;
     Qt::LayoutDirection direction = Qt::LeftToRight;
     Qt::Alignment alignment = Qt::AlignLeading;
 
@@ -228,7 +228,7 @@ void KoSvgTextShape::relayout()
 
         layout->setText(chunk.text);
         layout->setTextOption(option);
-        layout->setFormats(chunk.formats.toVector());
+        layout->setFormats(chunk.formats);
         layout->setCacheEnabled(true);
 
         layout->beginLayout();
@@ -345,7 +345,7 @@ QTextDocument *KoSvgTextShape::textDocument()
     Q_D(KoSvgTextShape);
 
     QTextDocument *doc = new QTextDocument();
-    QTextCursor cursor(doc);
+    //QTextCursor cursor(doc);
 
     QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
 
@@ -361,9 +361,9 @@ QTextDocument *KoSvgTextShape::textDocument()
 
         qDebug() << chunk.text;
 
-        cursor.beginEditBlock();
-        cursor.insertText(chunk.text);
-        cursor.endEditBlock();;
+//        cursor.beginEditBlock();
+//        cursor.insertText(chunk.text);
+//        cursor.endEditBlock();;
 
 //        layout->setText(chunk.text);
 //        layout->setTextOption(option);
@@ -376,18 +376,18 @@ QTextDocument *KoSvgTextShape::textDocument()
 
 void KoSvgTextShape::setTextDocument(QTextDocument *textDocument)
 {
-    QTextBlock *block = textDocument->firstBlock();
-    while (block) {
-        //
-        QTextBlock::iterator it;
-        for (it = block.begin(); !(it.atEnd()); ++it) {
-            QTextFragment currentFragment = it.fragment();
-            if (currentFragment.isValid()) {
-                // Create a KoSvgTextChunkShape
-            }
-        }
-        block = block->next();
-    }
+//    QTextBlock *block = textDocument->firstBlock();
+//    while (block) {
+//        //
+//        QTextBlock::iterator it;
+//        for (it = block.begin(); !(it.atEnd()); ++it) {
+//            QTextFragment currentFragment = it.fragment();
+//            if (currentFragment.isValid()) {
+//                // Create a KoSvgTextChunkShape
+//            }
+//        }
+//        block = block->next();
+//    }
 }
 
 void KoSvgTextShapePrivate::clearAssociatedOutlines(KoShape *rootShape)

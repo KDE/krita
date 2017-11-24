@@ -55,7 +55,6 @@ extern "C" int main(int argc, char **argv)
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
-    KoColor::init();
     SvgTextEditor *mainWindow = new SvgTextEditor();
     mainWindow->show();
     return app.exec();

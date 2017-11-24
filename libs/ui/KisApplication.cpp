@@ -477,7 +477,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             }
             else {
                 if (exportAs) {
-                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName);
+                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName, false);
                     if (outputMimetype == "application/octetstream") {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;

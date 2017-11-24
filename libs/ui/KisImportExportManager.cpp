@@ -191,7 +191,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         }
     }
     else {
-        QString t = KisMimeDatabase::mimeTypeForFile(m_importFileName);
+        QString t = KisMimeDatabase::mimeTypeForFile(m_importFileName, false);
         m_graph.setSourceMimeType(t.toLatin1());
     }
 

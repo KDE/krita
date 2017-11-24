@@ -61,7 +61,7 @@ void KisExrTest::testRoundTrip()
 
     QString savedFileName(savedFile.fileName());
 
-    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileName);
+    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileName, false);
 
     QByteArray mimeType(typeName.toLatin1());
     status = manager.exportDocument(savedFileName, mimeType);

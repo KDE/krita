@@ -982,7 +982,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (url.isEmpty()) return;
 
-    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
+    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename, false);
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
     d->prepareForImport();

@@ -292,7 +292,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
             store->close();
             // TODO error handling
             if (ok) {
-                const QString mimetype = KisMimeDatabase::mimeTypeForFile(it.key());
+                const QString mimetype = KisMimeDatabase::mimeTypeForFile(it.key(), false);
                 manifestWriter->addManifestEntry(it.key(), mimetype);
             }
             else {

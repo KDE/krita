@@ -1031,7 +1031,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         QByteArray outputFormat = _native_format;
 
-        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile(), false);
         outputFormat = outputFormatString.toLatin1();
 
         if (!isExporting()) {

@@ -19,6 +19,9 @@
 #include "KoSvgTextShape.h"
 
 #include <QTextLayout>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
 
 #include <klocalizedstring.h>
 
@@ -143,7 +146,6 @@ struct TextChunk {
 
     QVector<SubChunkOffset> offsets;
 
-
     boost::optional<qreal> xStartPos;
     boost::optional<qreal> yStartPos;
 
@@ -226,7 +228,7 @@ void KoSvgTextShape::relayout()
 
         layout->setText(chunk.text);
         layout->setTextOption(option);
-        layout->setAdditionalFormats(chunk.formats);
+        layout->setFormats(chunk.formats.toVector());
         layout->setCacheEnabled(true);
 
         layout->beginLayout();
@@ -308,7 +310,7 @@ void KoSvgTextShape::relayout()
         QVector<AssociatedShapeWrapper> shapeMap;
         shapeMap.resize(layout.text().size());
 
-        Q_FOREACH (const QTextLayout::FormatRange &range, layout.additionalFormats()) {
+        Q_FOREACH (const QTextLayout::FormatRange &range, layout.formats()) {
             for (int k = range.start; k < range.start + range.length; k++) {
                 KIS_SAFE_ASSERT_RECOVER_BREAK(k >= 0 && k < shapeMap.size());
 
@@ -335,6 +337,56 @@ void KoSvgTextShape::relayout()
                 wrapper.addCharacterRect(rect.translated(layoutOffset));
             }
         }
+    }
+}
+
+QTextDocument *KoSvgTextShape::textDocument()
+{
+    Q_D(KoSvgTextShape);
+
+    QTextDocument *doc = new QTextDocument();
+    QTextCursor cursor(doc);
+
+    QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
+
+    Q_FOREACH (const TextChunk &chunk, textChunks) {
+//        QTextOption option;
+
+//        // WARNING: never activate this option! It breaks the RTL text layout!
+//        //option.setFlags(QTextOption::ShowTabsAndSpaces);
+
+//        option.setWrapMode(QTextOption::WrapAnywhere);
+//        option.setUseDesignMetrics(true); // TODO: investigate if it is needed?
+//        option.setTextDirection(chunk.direction);
+
+        qDebug() << chunk.text;
+
+        cursor.beginEditBlock();
+        cursor.insertText(chunk.text);
+        cursor.endEditBlock();;
+
+//        layout->setText(chunk.text);
+//        layout->setTextOption(option);
+//        layout->setAdditionalFormats(chunk.formats);
+//        layout->setCacheEnabled(true);
+
+    }
+    return doc;
+}
+
+void KoSvgTextShape::setTextDocument(QTextDocument *textDocument)
+{
+    QTextBlock *block = textDocument->firstBlock();
+    while (block) {
+        //
+        QTextBlock::iterator it;
+        for (it = block.begin(); !(it.atEnd()); ++it) {
+            QTextFragment currentFragment = it.fragment();
+            if (currentFragment.isValid()) {
+                // Create a KoSvgTextChunkShape
+            }
+        }
+        block = block->next();
     }
 }
 

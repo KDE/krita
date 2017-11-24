@@ -89,9 +89,12 @@ QWidget *SvgTextTool::createOptionWidget()
     return optionWidget;
 }
 
-void SvgTextTool::showEditor() const
+void SvgTextTool::showEditor()
 {
     if (!m_shape) return;
+    if (!m_editor) {
+        m_editor = new SvgTextEditor(0);
+    }
     m_editor->setShape(m_shape);
     m_editor->show();
 }

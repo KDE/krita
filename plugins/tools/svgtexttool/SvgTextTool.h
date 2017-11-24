@@ -56,12 +56,12 @@ protected:
 
 private Q_SLOTS:
 
-    void showEditor() const;
+    void showEditor();
     void textUpdated(const QString &svg, const QString &defs);
 
 private:
     KoSvgTextShape *m_shape;
-    SvgTextEditor *m_editor;
+    QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit;
 };
 

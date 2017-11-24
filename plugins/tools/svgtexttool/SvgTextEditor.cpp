@@ -20,6 +20,7 @@
 
 #include "SvgTextEditor.h"
 
+#include <QPainter>
 #include <QVBoxLayout>
 #include <QUrl>
 #include <QPushButton>
@@ -31,6 +32,9 @@
 #include <QFontComboBox>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QBuffer>
+#include <QSvgGenerator>
+#include <QTextEdit>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -48,6 +52,7 @@
 #include <KoSvgTextShapeMarkupConverter.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorPopupAction.h>
+#include <svg/SvgUtil.h>
 
 #include <kis_icon.h>
 #include <kis_config.h>
@@ -124,16 +129,60 @@ SvgTextEditor::~SvgTextEditor()
     g.writeEntry("windowState", ba.toBase64());
 }
 
+
+QString svgToHtml(const QString &svg)
+{
+    qDebug() << ">>>>>>>>>>>>> svg to html" << svg;
+
+//    QDomDocument svgDoc;
+//    svgDoc.setContent(svg.toUtf8());
+//    QDomElement docEl = svgDoc.documentElement();
+//    QDomNode n = docEl.firstChild();
+//    while (!n.isNull()) {
+//        QDomElement e = n.toElement();
+//        if (!e.isNull()) {
+//            qDebug() << e.tagName() << e.text();
+//        }
+//        n = n.nextSibling();
+//    }
+
+
+    return svg;
+}
+
+QString htmlToSvg(const QString &html)
+{
+//    qDebug() << ">>>>>>>>>>>>> html to svg" << html;
+
+//    QDomDocument htmlDoc;
+//    htmlDoc.setContent(html.toUtf8());
+//    QDomElement docEl = htmlDoc.documentElement();
+//    QDomNode n = docEl.firstChild();
+//    while (!n.isNull()) {
+//        QDomElement e = n.toElement();
+//        if (!e.isNull()) {
+//            qDebug() << e.tagName() << e.text();
+//        }
+//        n = n.nextSibling();
+//    }
+
+    return html;
+}
+
 void SvgTextEditor::setShape(KoSvgTextShape *shape)
 {
     m_shape = shape;
     if (m_shape) {
+        QTextDocument *doc = m_shape->textDocument();
+        m_textEditorWidget.richTextEdit->setHtml(doc->toHtml());
+        delete doc;
         KoSvgTextShapeMarkupConverter converter(m_shape);
         QString svg;
         QString styles;
         if (converter.convertToSvg(&svg, &styles)) {
-            //widget.svgTextEdit->setPlainText(QString("%1\n%2").arg(defs).arg(svg));
+            //m_textEditorWidget.svgTextEdit->setPlainText(QString("%1\n%2").arg(defs).arg(svg));
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
+
         }
         else {
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
@@ -144,8 +193,7 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
 void SvgTextEditor::save()
 {
     //    // We don't do defs or styles yet...
-    //    emit textUpdated(m_textEditorWidget.svgTextEdit->document()->toPlainText(), "");
-    //    hide();
+    emit textUpdated(m_textEditorWidget.svgTextEdit->document()->toPlainText(), "");
 }
 
 void SvgTextEditor::switchTextEditorTab()
@@ -155,14 +203,15 @@ void SvgTextEditor::switchTextEditorTab()
         enableRichTextActions(true);
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
+        //m_textEditorWidget.richTextEdit->setHtml(svgToHtml(m_textEditorWidget.svgTextEdit->document()->toPlainText()));
         m_currentEditor = m_textEditorWidget.richTextEdit;
-        //XXX: implement svg to richtext here.
     } else {
         //first, make buttons uncheckable
         enableRichTextActions(false);
         disconnect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
+
+        //m_textEditorWidget.svgTextEdit->setPlainText(htmlToSvg(m_textEditorWidget.richTextEdit->document()->toHtml()));
         m_currentEditor = m_textEditorWidget.svgTextEdit;
-        //XXX: implement richtext to svg here.
     }
 }
 
@@ -204,12 +253,6 @@ void SvgTextEditor::saveAs()
 {
 
 }
-
-void SvgTextEditor::close()
-{
-
-}
-
 
 void SvgTextEditor::undo()
 {
@@ -296,31 +339,31 @@ void SvgTextEditor::insertCharacter(const QChar &c)
 
 void SvgTextEditor::setTextBold(QFont::Weight weight)
 {
-    //    if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
-    //        QTextCharFormat format;
-    //        if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight()>QFont::Normal && weight==QFont::Bold) {
-    //            format.setFontWeight(QFont::Normal);
-    //        } else {
-    //            format.setFontWeight(weight);
-    //        }
-    //        m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
-    //    } else {
-    //        QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
-    //        if (cursor.hasSelection()) {
-    //            QString selectionModified = "<tspan style=\"font-weight:700;\">" + cursor.selectedText() + "</tspan>";
-    //            cursor.removeSelectedText();
-    //            cursor.insertText(selectionModified);
-    //        }
-    //    }
+    if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCharFormat format;
+        if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight() > QFont::Normal && weight==QFont::Bold) {
+            format.setFontWeight(QFont::Normal);
+        } else {
+            format.setFontWeight(weight);
+        }
+        m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+    } else {
+        QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
+        if (cursor.hasSelection()) {
+            QString selectionModified = "<tspan style=\"font-weight:700;\">" + cursor.selectedText() + "</tspan>";
+            cursor.removeSelectedText();
+            cursor.insertText(selectionModified);
+        }
+    }
 }
 
 void SvgTextEditor::setTextWeightLight()
 {
-    //    if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight()<QFont::Normal) {
-    //        setTextBold(QFont::Normal);
-    //    } else {
-    //        setTextBold(QFont::Light);
-    //    }
+    if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight() < QFont::Normal) {
+        setTextBold(QFont::Normal);
+    } else {
+        setTextBold(QFont::Light);
+    }
 }
 
 void SvgTextEditor::setTextWeightNormal()
@@ -746,7 +789,6 @@ void SvgTextEditor::createActions()
     connect(bgColor, SIGNAL(colorChanged(KoColor)), SLOT(setBackgroundColor(KoColor)));
     actionCollection()->addAction("background_color", bgColor);
     m_richTextActions << bgColor;
-
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

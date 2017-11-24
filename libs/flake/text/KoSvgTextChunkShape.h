@@ -48,7 +48,7 @@ class KoSvgTextChunkShapeLayoutInterface;
  * KoSvgTextChunkShape! The chunk shape is **not** a "text chunk" in SVG's
  * definition. Accrding to SVG, "text chunk" is a set of characters anchored to
  * a specific absolute position on canvas. And KoSvgTextChunkShape is just one
- * <tspan> or <text> element. Obviously, one <tsan> can contain multiple "text
+ * <tspan> or <text> element. Obviously, one <tspan> can contain multiple "text
  * chunks" and, vice versa, a "text chunk" can spread onto multiple <span>'s.
  */
 class KRITAFLAKE_EXPORT KoSvgTextChunkShape : public KoShapeContainer, public SvgShape

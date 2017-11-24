@@ -64,7 +64,6 @@ private Q_SLOTS:
     void open();
     void save();
     void saveAs();
-    void close();
 
     void undo();
     void redo();

@@ -42,7 +42,6 @@
 struct KisDlgInternalColorSelector::Private
 {
     bool allowUpdates = true;
-    KoColor originalColor;
     KoColor currentColor;
     KoColor previousColor;
     KoColor sRGB = KoColor(KoColorSpaceRegistry::instance()->rgb8());
@@ -65,7 +64,6 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
 
     setWindowTitle(caption);
 
-    m_d->originalColor = color;
     m_d->currentColor = color;
     m_d->currentColorSpace = m_d->currentColor.colorSpace();
     m_d->displayRenderer = displayRenderer;
@@ -227,7 +225,7 @@ void KisDlgInternalColorSelector::setPreviousColor(KoColor c)
 
 void KisDlgInternalColorSelector::reject()
 {
-    slotColorUpdated(m_d->originalColor);
+    slotColorUpdated(m_d->previousColor);
     QDialog::reject();
 }
 

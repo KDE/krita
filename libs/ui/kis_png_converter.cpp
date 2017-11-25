@@ -1082,24 +1082,42 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 #endif
     }
 
-    // read comments from the document information
+    // save comments from the document information
     // warning: according to the official png spec, the keys need to be capitalised!
     if (m_doc) {
-        png_text texts[3];
+        png_text texts[4];
         int nbtexts = 0;
         KoDocumentInfo * info = m_doc->documentInfo();
         QString title = info->aboutInfo("title");
-        if (!title.isEmpty()) {
+        if (!title.isEmpty() && options.storeMetaData) {
             fillText(texts + nbtexts, "Title", title);
             nbtexts++;
         }
-        QString abstract = info->aboutInfo("comment");
-        if (!abstract.isEmpty()) {
+        QString abstract = info->aboutInfo("subject");
+        if (abstract.isEmpty()) {
+            abstract = info->aboutInfo("abstract");
+        }
+        if (!abstract.isEmpty() && options.storeMetaData) {
+            QString keywords = info->aboutInfo("keywords");
+            if (!keywords.isEmpty()) {
+                abstract = abstract + "keywords: " + keywords;
+            }
             fillText(texts + nbtexts, "Description", abstract);
             nbtexts++;
         }
+
+        QString license = info->aboutInfo("license");
+        if (!license.isEmpty() && options.storeMetaData) {
+            fillText(texts + nbtexts, "Copyright", license);
+            nbtexts++;
+        }
+
         QString author = info->authorInfo("creator");
-        if (!author.isEmpty()) {
+        if (!author.isEmpty() && options.storeAuthor) {
+            QString contact = info->authorContactInfo().at(0);
+            if (!contact.isEmpty()) {
+                author = author+"("+contact+")";
+            }
             fillText(texts + nbtexts, "Author", author);
             nbtexts++;
         }

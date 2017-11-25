@@ -45,7 +45,7 @@ KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
 {
     m_aboutTags << "title" << "description" << "subject" << "abstract"
     << "keyword" << "initial-creator" << "editing-cycles" << "editing-time"
-    << "date" << "creation-date" << "language";
+    << "date" << "creation-date" << "language" << "license";
 
     m_authorTags << "creator" << "creator-first-name" << "creator-last-name" << "initial" << "author-title" << "position" << "company";
     m_contactTags << "email" << "telephone" << "telephone-work" << "fax" << "country" << "postal-code" << "city" << "street";

@@ -35,7 +35,7 @@
 #include <kmainwindow.h>
 #include <KoDialog.h>
 #include <QUrl>
-
+#include <QCompleter>
 #include <QLineEdit>
 #include <QDateTime>
 #include <KisMimeDatabase.h>
@@ -93,6 +93,12 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->aboutUi->setupUi(infodlg);
     d->aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
     d->aboutUi->cbLanguage->setCurrentIndex(-1);
+    QStringList licenseExamples;
+    licenseExamples << "CC-BY 4.0" << "CC-BY-SA 4.0" << "CC-BY-SA-NC 4.0" << "CC-0";
+    QCompleter *examples = new QCompleter(licenseExamples);
+    examples->setCaseSensitivity(Qt::CaseInsensitive);
+    examples->setCompletionMode(QCompleter::PopupCompletion);
+    d->aboutUi->leLicense->setCompleter(examples);
 
     KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
@@ -179,6 +185,9 @@ void KoDocumentInfoDlg::initAboutTab()
     if (!d->info->aboutInfo("keyword").isEmpty())
         d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
 
+    if (!d->info->aboutInfo("license").isEmpty()) {
+        d->aboutUi->leLicense->setText(d->info->aboutInfo("license"));
+    }
     d->aboutUi->meDescription->setPlainText(d->info->aboutInfo("abstract"));
     if (doc && !doc->mimeType().isEmpty()) {
         d->aboutUi->lblType->setText(KisMimeDatabase::descriptionForMimeType(doc->mimeType()));
@@ -228,6 +237,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->info->setAboutInfo("title", d->aboutUi->leTitle->text());
     d->info->setAboutInfo("subject", d->aboutUi->leSubject->text());
     d->info->setAboutInfo("abstract", d->aboutUi->meDescription->toPlainText());
+    d->info->setAboutInfo("license", d->aboutUi->leLicense->text());
     d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
 }
 

@@ -2,6 +2,7 @@
    Copyright (c) 2000 Simon Hausmann <hausmann@kde.org>
                  2006 Martin Pfeiffer <hubipete@gmx.net>
                  2012 C. Boemann <cbo@boemann.dk>
+                 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -108,7 +109,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
 
     Ui::KoConfigAuthorPage *aUi = new Ui::KoConfigAuthorPage();
     QWidget *w = new QWidget;
-    d->defaultAuthor = i18n("Default Author Profile");
+    d->defaultAuthor = i18n("Anonymous");
 
     QStringList profilesNew;
     QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";

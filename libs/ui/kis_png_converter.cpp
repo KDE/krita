@@ -650,7 +650,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             } else if (key == "description") {
                 info->setAboutInfo("comment", text_ptr[i].text);
             } else if (key == "author") {
-        qDebug()<<"Author:"<<text_ptr[i].text;
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);

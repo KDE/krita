@@ -326,7 +326,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QCheckBox" name="chkMetaData">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Store document meta data that is in the document information. This will override any layer metadata.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Store document metadata that is in the document information. This will override any layer metadata.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Store Document Metadata</string>
@@ -348,7 +348,7 @@
        <item row="3" column="0" colspan="2">
         <widget class="QCheckBox" name="chkAuthor">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add the author nick name and the first contact of the author profile. This is overriden by the anonymizer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add the author nickname and the first contact of the author profile. This is overridden by the anonymizer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Sign with Author Profile Data</string>

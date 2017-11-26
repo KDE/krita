@@ -91,7 +91,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Store information like keywords, title and subject and license, if possible.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
-        <string>Store Meta-data</string>
+        <string>Store Metadata</string>
        </property>
       </widget>
      </item>

@@ -23,6 +23,7 @@
 
 #include <string.h>
 
+
 struct DefaultMemoryAllocator : KisOptimizedByteArray::MemoryAllocator
 {
     KisOptimizedByteArray::MemoryChunk alloc(int size) override {
@@ -44,6 +45,11 @@ DefaultMemoryAllocator *DefaultMemoryAllocator::instance()
     return s_instance;
 }
 
+KisOptimizedByteArray::PooledMemoryAllocator::PooledMemoryAllocator()
+    : m_meanSize(500)
+{
+}
+
 KisOptimizedByteArray::PooledMemoryAllocator::~PooledMemoryAllocator()
 {
     Q_FOREACH (const MemoryChunk &chunk, m_chunks) {
@@ -61,11 +67,17 @@ KisOptimizedByteArray::PooledMemoryAllocator::alloc(int size)
         if (!m_chunks.isEmpty()) {
             chunk = m_chunks.takeLast();
         }
+
+        m_meanSize(size);
     }
 
     if (chunk.second < size) {
         delete[] chunk.first;
-        chunk = KisOptimizedByteArray::MemoryChunk(new quint8[size], size);
+
+        // we alloc a bit more memory for the dabs to let the chunks
+        // be more reusable
+        const int allocSize = 1.2 * size;
+        chunk = KisOptimizedByteArray::MemoryChunk(new quint8[allocSize], allocSize);
     }
 
     return chunk;
@@ -75,7 +87,14 @@ void KisOptimizedByteArray::PooledMemoryAllocator::free(KisOptimizedByteArray::M
 {
     if (chunk.first) {
         QMutexLocker l(&m_mutex);
-        m_chunks.append(chunk);
+
+        // keep bigger chunks for ourselves and return the
+        // smaller ones to the system
+        if (chunk.second > 0.8 * m_meanSize.rollingMean()) {
+            m_chunks.append(chunk);
+        } else {
+            delete[] chunk.first;
+        }
     }
 }
 

@@ -26,6 +26,8 @@
 
 #include "kritaimage_export.h"
 
+#include "KisRollingMeanAccumulatorWrapper.h"
+
 
 class KRITAIMAGE_EXPORT KisOptimizedByteArray
 {
@@ -39,6 +41,7 @@ public:
     };
 
     struct KRITAIMAGE_EXPORT PooledMemoryAllocator : public MemoryAllocator {
+        PooledMemoryAllocator();
         ~PooledMemoryAllocator();
 
         MemoryChunk alloc(int size) override;
@@ -47,6 +50,7 @@ public:
     private:
         QMutex m_mutex;
         QVector<MemoryChunk> m_chunks;
+        KisRollingMeanAccumulatorWrapper m_meanSize;
     };
 
 public:
@@ -65,6 +69,8 @@ public:
      int size() const;
 
      bool isEmpty() const;
+
+     MemoryAllocator* memoryAllocator() const;
 
 private:
      struct Private;

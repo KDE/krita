@@ -21,6 +21,7 @@
 
 #include <utility>
 #include <QSharedDataPointer>
+#include <QSharedPointer>
 #include <QMutex>
 #include <QVector>
 
@@ -40,6 +41,8 @@ public:
         virtual void free(MemoryChunk chunk) = 0;
     };
 
+    typedef QSharedPointer<MemoryAllocator> MemoryAllocatorSP;
+
     struct KRITAIMAGE_EXPORT PooledMemoryAllocator : public MemoryAllocator {
         PooledMemoryAllocator();
         ~PooledMemoryAllocator();
@@ -54,7 +57,7 @@ public:
     };
 
 public:
-    KisOptimizedByteArray(MemoryAllocator *allocator = 0);
+    KisOptimizedByteArray(MemoryAllocatorSP allocator = MemoryAllocatorSP());
     KisOptimizedByteArray(const KisOptimizedByteArray &rhs);
     KisOptimizedByteArray& operator=(const KisOptimizedByteArray &rhs);
 
@@ -70,7 +73,7 @@ public:
 
      bool isEmpty() const;
 
-     MemoryAllocator* memoryAllocator() const;
+     MemoryAllocatorSP customMemoryAllocator() const;
 
 private:
      struct Private;

@@ -41,7 +41,8 @@ class KRITAIMAGE_EXPORT KisFixedPaintDevice : public KisShared
 
 public:
 
-    KisFixedPaintDevice(const KoColorSpace* colorSpace, KisOptimizedByteArray::MemoryAllocator *allocator = 0);
+    KisFixedPaintDevice(const KoColorSpace* colorSpace,
+                        KisOptimizedByteArray::MemoryAllocatorSP allocator = KisOptimizedByteArray::MemoryAllocatorSP());
     virtual ~KisFixedPaintDevice();
 
     /**

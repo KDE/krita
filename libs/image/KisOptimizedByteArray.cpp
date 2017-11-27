@@ -100,15 +100,21 @@ void KisOptimizedByteArray::PooledMemoryAllocator::free(KisOptimizedByteArray::M
 
 struct KisOptimizedByteArray::Private : public QSharedData
 {
-    Private(MemoryAllocator *allocator)
-        : allocator(allocator ? allocator : DefaultMemoryAllocator::instance())
+    Private(MemoryAllocatorSP _allocator)
     {
+        if (_allocator) {
+            storedAllocator = _allocator;
+            allocator = _allocator.data();
+        } else {
+            allocator = DefaultMemoryAllocator::instance();
+        }
     }
 
     Private(const Private &rhs)
         : QSharedData(rhs)
     {
         allocator = rhs.allocator;
+        storedAllocator = rhs.storedAllocator;
         dataSize = rhs.dataSize;
         if (dataSize) {
             data = allocator->alloc(dataSize);
@@ -120,13 +126,18 @@ struct KisOptimizedByteArray::Private : public QSharedData
         allocator->free(data);
     }
 
-    MemoryAllocator *allocator = 0;
+    MemoryAllocator *allocator;
+
+    // stored allocator shared pointer is used only for keeping
+    // the lifetime of the allocator until the deatch of the last
+    // allocated chunk
+    MemoryAllocatorSP storedAllocator;
 
     MemoryChunk data;
     int dataSize = 0;
 };
 
-KisOptimizedByteArray::KisOptimizedByteArray(MemoryAllocator *allocator)
+KisOptimizedByteArray::KisOptimizedByteArray(MemoryAllocatorSP allocator)
     : m_d(new Private(allocator))
 {
 }
@@ -183,8 +194,8 @@ bool KisOptimizedByteArray::isEmpty() const
     return m_d->dataSize;
 }
 
-KisOptimizedByteArray::MemoryAllocator* KisOptimizedByteArray::memoryAllocator() const
+KisOptimizedByteArray::MemoryAllocatorSP KisOptimizedByteArray::customMemoryAllocator() const
 {
-    return m_d->allocator;
+    return m_d->storedAllocator;
 }
 

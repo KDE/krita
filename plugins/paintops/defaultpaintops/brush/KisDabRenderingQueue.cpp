@@ -69,9 +69,8 @@ struct KisDabRenderingQueue::Private
     }
 
     ~Private() {
-        // we should be made sure that **no** references to the allocated
-        // paint devices are still valid at the time of the allocator's
-        // destruction
+        // clear the jobs, so that they would not keep references to any
+        // paint devices anymore
         jobs.clear();
 
         qDeleteAll(cachedResources);
@@ -89,7 +88,7 @@ struct KisDabRenderingQueue::Private
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
 
     QList<KisDabCacheUtils::DabRenderingResources*> cachedResources;
-    QScopedPointer<KisOptimizedByteArray::MemoryAllocator> paintDeviceAllocator;
+    QSharedPointer<KisOptimizedByteArray::MemoryAllocator> paintDeviceAllocator;
 
     QMutex mutex;
 
@@ -375,11 +374,8 @@ KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
     /**
      * We create a special type of a fixed paint device that
      * uses a custom allocator for better efficiency.
-     *
-     * WARNING: all these paint devices **must** be released before
-     *          teh allocator is destroyed
      */
-    return new KisFixedPaintDevice(m_d->colorSpace, m_d->paintDeviceAllocator.data());
+    return new KisFixedPaintDevice(m_d->colorSpace, m_d->paintDeviceAllocator);
 }
 
 int KisDabRenderingQueue::averageExecutionTime() const

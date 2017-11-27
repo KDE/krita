@@ -23,7 +23,7 @@
 #include <KoColorModelStandardIds.h>
 #include "kis_debug.h"
 
-KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace, KisOptimizedByteArray::MemoryAllocator *allocator)
+KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace, KisOptimizedByteArray::MemoryAllocatorSP allocator)
         : m_colorSpace(colorSpace),
           m_data(allocator)
 {
@@ -129,7 +129,7 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace,
         return;
     }
     quint32 size = m_bounds.width() * m_bounds.height();
-    KisOptimizedByteArray dstData(m_data.memoryAllocator());
+    KisOptimizedByteArray dstData(m_data.customMemoryAllocator());
 
     // make sure that we are not initializing the destination pixels!
     dstData.resize(size * dstColorSpace->pixelSize());

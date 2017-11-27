@@ -53,8 +53,6 @@ public:
     int averageDabRenderingTime() const; // usecs
     int averageDabSize() const;
 
-    void recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices);
-
 private:
     KisDabRenderingExecutor(const KisDabRenderingExecutor &rhs) = delete;
 

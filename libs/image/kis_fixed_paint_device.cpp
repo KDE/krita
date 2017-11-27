@@ -23,11 +23,11 @@
 #include <KoColorModelStandardIds.h>
 #include "kis_debug.h"
 
-KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace)
-        : m_colorSpace(colorSpace)
+KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace, KisOptimizedByteArray::MemoryAllocator *allocator)
+        : m_colorSpace(colorSpace),
+          m_data(allocator)
 {
 }
-
 
 KisFixedPaintDevice::~KisFixedPaintDevice()
 {
@@ -50,7 +50,7 @@ KisFixedPaintDevice& KisFixedPaintDevice::operator=(const KisFixedPaintDevice& r
     const int referenceSize = m_bounds.height() * m_bounds.width() * pixelSize();
 
     if (m_data.size() >= referenceSize) {
-        memcpy(m_data.data(), rhs.m_data.data(), referenceSize);
+        memcpy(m_data.data(), rhs.m_data.constData(), referenceSize);
     } else {
         m_data = rhs.m_data;
     }
@@ -118,7 +118,7 @@ const quint8 *KisFixedPaintDevice::constData() const
 
 quint8* KisFixedPaintDevice::data() const
 {
-    return const_cast<quint8*>((quint8*)m_data.data());
+    return const_cast<quint8*>(m_data.constData());
 }
 
 void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace,
@@ -129,7 +129,7 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace,
         return;
     }
     quint32 size = m_bounds.width() * m_bounds.height();
-    QByteArray dstData;
+    KisOptimizedByteArray dstData(m_data.memoryAllocator());
 
     // make sure that we are not initializing the destination pixels!
     dstData.resize(size * dstColorSpace->pixelSize());

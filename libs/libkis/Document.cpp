@@ -558,7 +558,7 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     return node;
 }
 
-PaintLayer *Document::createNode(const QString &name)
+PaintLayer *Document::createPaintLayer(const QString &name)
 {
     if (!d->document) return 0;
     if (!d->document->image()) return 0;
@@ -566,6 +566,16 @@ PaintLayer *Document::createNode(const QString &name)
 
     return new PaintLayer(image, name);
 }
+
+GroupLayer *Document::createGroupLayer(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new GroupLayer(image, name);
+}
+
 
 QImage Document::projection(int x, int y, int w, int h) const
 {

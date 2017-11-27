@@ -24,6 +24,7 @@
 #include "libkis.h"
 
 #include "nodes/PaintLayer.h"
+#include "nodes/GroupLayer.h"
 
 class KisDocument;
 
@@ -529,9 +530,9 @@ public Q_SLOTS:
      */
     Node* createNode(const QString &name, const QString &nodeType);
 
-    PaintLayer* createNode(const QString &name);
+    PaintLayer* createPaintLayer(const QString &name);
 
-    //GroupLayer* createNode(const QString &name);
+    GroupLayer* createGroupLayer(const QString &name);
 
     //FileLayer* createNode(const QString &name);
 

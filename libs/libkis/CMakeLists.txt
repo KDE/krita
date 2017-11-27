@@ -20,6 +20,7 @@ set(kritalibkis_LIB_SRCS
     Extension.cpp
     Window.cpp
     nodes/PaintLayer.cpp
+    nodes/GroupLayer.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

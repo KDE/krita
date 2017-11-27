@@ -251,20 +251,21 @@ if "%ARG_PACKAGE_NAME%" == "" (
 
 if "%SEVENZIP_EXE%" == "" (
     call :find_on_path SEVENZIP_EXE 7z.exe
-    if "!SEVENZIP_EXE!" == "" (
-        set "SEVENZIP_EXE=%ProgramFiles%\7-Zip\7z.exe"
-        if "!SEVENZIP_EXE!" == "" (
-            set "SEVENZIP_EXE=%ProgramFiles(x86)%\7-Zip\7z.exe"
-        )
-        if "!SEVENZIP_EXE!" == "" (
-            echo 7-Zip not found! 1>&2
-			exit /b 102
-        )
-    )
 )
 if "%SEVENZIP_EXE%" == "" (
-    echo 7-Zip: %SEVENZIP_EXE%
+    call :find_on_path SEVENZIP_EXE 7za.exe
 )
+if "!SEVENZIP_EXE!" == "" (
+    set "SEVENZIP_EXE=%ProgramFiles%\7-Zip\7z.exe"
+    if not exist "!SEVENZIP_EXE!" (
+        set "SEVENZIP_EXE=%ProgramFiles(x86)%\7-Zip\7z.exe"
+    )
+    if not exist "!SEVENZIP_EXE!" (
+        echo 7-Zip not found! 1>&2
+        exit /b 102
+    )
+)
+echo 7-Zip: %SEVENZIP_EXE%
 
 if "%MINGW_BIN_DIR%" == "" (
     call :find_on_path MINGW_BIN_DIR_MAKE_EXE mingw32-make.exe

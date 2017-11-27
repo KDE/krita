@@ -715,6 +715,12 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
                                                            job.flags & KritaUtils::SaveShowWarnings,
                                                            exportConfiguration);
 
+    if (!started) {
+        d->backgroundSaveDocument.take()->deleteLater();
+        d->savingMutex.unlock();
+        d->backgroundSaveJob = KritaUtils::ExportFileJob();
+    }
+
     return started;
 }
 
@@ -814,7 +820,14 @@ bool KisDocument::startExportInBackground(const QString &actionName,
                                                    showWarnings,
                                                    exportConfiguration);
 
-    if (d->childSavingFuture.isCanceled()) return false;
+    if (d->childSavingFuture.isCanceled()) {
+        if (d->savingUpdater) {
+            d->savingUpdater->cancel();
+        }
+        d->savingImage.clear();
+        emit sigBackgroundSavingFinished(KisImportExportFilter::InternalError, this->errorMessage());
+        return false;
+    }
 
     typedef QFutureWatcher<KisImportExportFilter::ConversionStatus> StatusWatcher;
     StatusWatcher *watcher = new StatusWatcher();

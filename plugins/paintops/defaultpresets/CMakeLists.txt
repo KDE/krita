@@ -1,5 +1,4 @@
 install( FILES
-    chalkbrush.kpp  
     curvebrush.kpp   
     duplicate.kpp  
     eraser.kpp           

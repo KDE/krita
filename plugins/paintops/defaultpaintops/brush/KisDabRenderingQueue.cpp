@@ -173,6 +173,7 @@ KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabReq
                job->type == KisDabRenderingJob::Copy) {
 
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastDabJobIndex >= 0, KisDabRenderingJobSP());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastDabJobIndex < m_d->jobs.size(), KisDabRenderingJobSP());
 
         if (m_d->jobs[lastDabJobIndex]->status == KisDabRenderingJob::Completed) {
             if (job->type == KisDabRenderingJob::Postprocess) {
@@ -280,13 +281,14 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
                 // cache unique 'original' devices
                 if (job->type == KisDabRenderingJob::Dab &&
                     job->postprocessedDevice != job->originalDevice) {
+
                     cachedPaintDevices << job->originalDevice;
                     job->originalDevice = 0;
                 }
 
                 it = jobs.erase(it);
                 numRemovedJobs++;
-                if (i < lastSourceJob) {
+                if (i < lastDabJobInQueue) {
                     numRemovedJobsBeforeLastSource++;
                 }
 

@@ -123,6 +123,9 @@ public Q_SLOTS:
      * set the previous color.
      */
     void setPreviousColor(KoColor c);
+
+    void reject() override;
+
 private Q_SLOTS:
 
     /**

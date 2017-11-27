@@ -55,6 +55,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_compositeop_option.cpp
     kis_texture_option.cpp
     kis_texture_chooser.cpp 
+    KisTextureMaskInfo.cpp
     kis_pressure_texture_strength_option.cpp
     kis_embedded_pattern_manager.cpp
     sensors/kis_dynamic_sensors.cc

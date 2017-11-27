@@ -99,6 +99,10 @@ struct KisImportExportManager::ConversionResult {
     }
 
     QFuture<KisImportExportFilter::ConversionStatus> futureStatus() const {
+        // if the result is not async, then it means some failure happened,
+        // just return a cancelled future
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_isAsync || m_status != KisImportExportFilter::OK);
+
         return m_futureStatus;
     }
 
@@ -143,7 +147,8 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
 QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(result.isAsync(), QFuture<KisImportExportFilter::ConversionStatus>());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(result.isAsync() ||
+                                         result.status() != KisImportExportFilter::OK, QFuture<KisImportExportFilter::ConversionStatus>());
 
     return result.futureStatus();
 }
@@ -277,7 +282,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
 
     QString typeName = mimeType;
     if (typeName.isEmpty()) {
-        typeName = KisMimeDatabase::mimeTypeForFile(location);
+        typeName = KisMimeDatabase::mimeTypeForFile(location, direction == KisImportExportManager::Export ? false : true);
     }
 
     QSharedPointer<KisImportExportFilter> filter;
@@ -348,7 +353,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         } else {
             result = doImport(location, filter);
         }
-    } 
+    }
     else /* if (direction == Export) */ {
         if (!exportConfiguration) {
             exportConfiguration = filter->lastSavedConfiguration(from, to);

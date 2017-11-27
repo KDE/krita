@@ -109,8 +109,8 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
     brush->setSpacing(exportOptions.spacing);
     brush->setUseColorAsMask(exportOptions.mask);
 
-    int w = document->savingImage()->width();
-    int h = document->savingImage()->height();
+
+
 
     KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
     if (pipeBrush) {
@@ -144,18 +144,20 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
         parasite.ncells = devices.at(0).count();
         parasite.rank[0] = parasite.ncells; // ### This can mask some bugs, be careful here in the future
         parasite.selection[0] = modes.at(0);
-        // XXX needsmovement!
+        // XXX needs movement!
         parasite.setBrushesCount();
         pipeBrush->setParasite(parasite);
-        pipeBrush->setDevices(devices, w, h);
+        pipeBrush->setDevices(devices, rc.width(), rc.height());
     }
     else {
         QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        image.save("~/bla.png");
         brush->setImage(image);
+        brush->setBrushTipImage(image);
     }
 
-    brush->setWidth(w);
-    brush->setHeight(h);
+    brush->setWidth(rc.width());
+    brush->setHeight(rc.height());
 
     if (brush->saveToDevice(io)) {
         return KisImportExportFilter::OK;

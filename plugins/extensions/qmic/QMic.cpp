@@ -131,6 +131,7 @@ void QMic::slotQMic(bool again)
     m_localServer->listen(m_key);
     connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
     m_pluginProcess = new QProcess(this);
+    connect(m_view, SIGNAL(destroyed(QObject *o)), m_pluginProcess, SLOT(terminate()));
     m_pluginProcess->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
     connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
@@ -146,6 +147,7 @@ void QMic::slotQMic(bool again)
 void QMic::connected()
 {
     qDebug() << "connected";
+    if (!m_view) return;
 
     QLocalSocket *socket = m_localServer->nextPendingConnection();
     if (!socket) { return; }
@@ -328,7 +330,7 @@ void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &
 void QMic::slotStartApplicator(QStringList gmicImages)
 {
     qDebug() << "slotStartApplicator();" << gmicImages;
-
+    if (!m_view) return;
     // Create a vector of gmic images
 
     QVector<gmic_image<float> *> images;
@@ -388,6 +390,8 @@ void QMic::slotStartApplicator(QStringList gmicImages)
 
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 {
+    if (!m_view) return false;
+
     m_view->image()->lock();
 
     m_inputMode = (InputLayerMode)inputMode;

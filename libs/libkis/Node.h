@@ -273,7 +273,7 @@ public Q_SLOTS:
      * If the Node object isn't wrapping a valid Krita layer or mask object, and
      * empty string is returned.
      */
-    QString type() const;
+    virtual QString type() const;
 
     /**
      * Check whether the current Node is visible in the layer stack

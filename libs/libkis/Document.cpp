@@ -59,6 +59,7 @@
 
 #include <InfoObject.h>
 #include <Node.h>
+#include <nodes/PaintLayer.h>
 #include <Selection.h>
 
 struct Document::Private {
@@ -555,6 +556,15 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
         node = new Node(image, new KisSelectionMask(image));
     }
     return node;
+}
+
+PaintLayer *Document::createNode(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new PaintLayer(image, name);
 }
 
 QImage Document::projection(int x, int y, int w, int h) const

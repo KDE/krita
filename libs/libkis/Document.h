@@ -23,6 +23,8 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
+#include "nodes/PaintLayer.h"
+
 class KisDocument;
 
 /**
@@ -526,6 +528,29 @@ public Q_SLOTS:
      * @return the new Node.
      */
     Node* createNode(const QString &name, const QString &nodeType);
+
+    PaintLayer* createNode(const QString &name);
+
+    //GroupLayer* createNode(const QString &name);
+
+    //FileLayer* createNode(const QString &name);
+
+    //FilterLayer* createNode(const QString &name, const QString filterName, const InfoObject configuration);
+
+    //FillLayer* createNode(const QString &name, const QString filterName, const InfoObject configuration);
+
+    //CloneLayer* createNode(const QString &name, const Node* source);
+
+    //VectorLayer* createNode(const QString &name);
+
+    //TransparencyMask* createNode(const QString &name);
+
+    //FilterMask* createNode(const QString &name, const QString filterName, const InfoObject configuration);
+
+    //TransformMask* createNode(const QString &name);
+
+    //SelectionMask* createNode(const QString &name);
+
 
     /**
      * @brief projection creates a QImage from the rendered image or

@@ -19,6 +19,7 @@ set(kritalibkis_LIB_SRCS
     View.cpp
     Extension.cpp
     Window.cpp
+    nodes/PaintLayer.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

@@ -25,6 +25,7 @@
 
 #include "nodes/PaintLayer.h"
 #include "nodes/GroupLayer.h"
+#include "nodes/CloneLayer.h"
 
 class KisDocument;
 
@@ -540,7 +541,7 @@ public Q_SLOTS:
 
     //FillLayer* createNode(const QString &name, const QString filterName, const InfoObject configuration);
 
-    //CloneLayer* createNode(const QString &name, const Node* source);
+    CloneLayer* createCloneLayer(const QString &name, const Node* source);
 
     //VectorLayer* createNode(const QString &name);
 

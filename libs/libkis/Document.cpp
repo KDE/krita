@@ -576,6 +576,16 @@ GroupLayer *Document::createGroupLayer(const QString &name)
     return new GroupLayer(image, name);
 }
 
+CloneLayer *Document::createCloneLayer(const QString &name, const Node *source)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+    KisLayerSP layer = qobject_cast<KisLayer*>(source->node().data());
+
+    return new CloneLayer(image, name, layer);
+}
+
 
 QImage Document::projection(int x, int y, int w, int h) const
 {

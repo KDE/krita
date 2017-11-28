@@ -429,6 +429,12 @@ public:
     void renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP dab);
 
     /**
+     * @return true if the painter has some rects marked as dirty
+     * @see takeDirtyRegion(), addDirtyRect()
+     */
+    bool hasDirtyRegion() const;
+
+    /**
       * The methods in this class do not tell the paintdevice to update, but they calculate the
       * dirty area. This method returns this dirty area and resets it.
       */

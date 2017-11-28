@@ -33,10 +33,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <kis_resource_server_provider.h>
 #include <kis_pattern_chooser.h>
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
@@ -48,11 +44,10 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_gradient_slider.h>
 #include "kis_embedded_pattern_manager.h"
-#include "kis_algebra_2d.h"
-#include "kis_lod_transform.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"
 #include <time.h>
+
 
 
 KisTextureOption::KisTextureOption()
@@ -195,83 +190,15 @@ void KisTextureOption::resetGUI(KoResource* res)
     m_textureOptions->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
 }
 
+/**********************************************************************/
+/*       KisTextureProperties                                         */
+/**********************************************************************/
+
+
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
-    : m_pattern(0),
-      m_levelOfDetail(levelOfDetail)
+    : m_levelOfDetail(levelOfDetail)
 {
 }
-
-void KisTextureProperties::recalculateMask()
-{
-    if (!m_pattern) return;
-
-    m_mask = 0;
-
-    QImage mask = m_pattern->pattern();
-
-    if ((mask.format() != QImage::Format_RGB32) |
-        (mask.format() != QImage::Format_ARGB32)) {
-
-        mask = mask.convertToFormat(QImage::Format_ARGB32);
-    }
-
-    qreal scale = m_scale * KisLodTransform::lodToScale(m_levelOfDetail);
-
-    if (!qFuzzyCompare(scale, 0.0)) {
-        QTransform tf;
-        tf.scale(scale, scale);
-        QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
-        mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-    const QRgb* pixel = reinterpret_cast<const QRgb*>(mask.constBits());
-    int width = mask.width();
-    int height = mask.height();
-
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
-    m_mask = new KisPaintDevice(cs);
-
-    KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
-
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
-            const QRgb currentPixel = pixel[row * width + col];
-
-            const int red = qRed(currentPixel);
-            const int green = qGreen(currentPixel);
-            const int blue = qBlue(currentPixel);
-            float alpha = qAlpha(currentPixel) / 255.0;
-
-            const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
-            float maskValue = (grayValue / 255.0) * alpha + (1 - alpha);
-
-            maskValue = maskValue - m_brightness;
-
-            maskValue = ((maskValue - 0.5)*m_contrast)+0.5;
-
-            if (maskValue > 1.0) {maskValue = 1;}
-            else if (maskValue < 0) {maskValue = 0;}
-
-            if (m_invert) {
-                maskValue = 1 - maskValue;
-            }
-
-            if (m_cutoffPolicy == 1 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                // mask out the dab if it's outside the pattern's cuttoff points
-                maskValue = OPACITY_TRANSPARENT_F;
-            }
-            else if (m_cutoffPolicy == 2 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                maskValue = OPACITY_OPAQUE_F;
-            }
-
-            cs->setOpacity(iter->rawData(), maskValue, 1);
-            iter->nextPixel();
-        }
-        iter->nextRow();
-    }
-
-    m_maskBounds = QRect(0, 0, width, height);
-}
-
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting)
 {
@@ -281,30 +208,22 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
         return;
     }
 
-    m_pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
-
-    if (!m_pattern) {
+    m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail));
+    if (!m_maskInfo->fillProperties(setting)) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";
         m_enabled = false;
         return;
     }
 
+    m_maskInfo = KisTextureMaskInfoCache::instance()->fetchCachedTextureInfo(m_maskInfo);
+
     m_enabled = setting->getBool("Texture/Pattern/Enabled", false);
-    m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
-    m_brightness = setting->getDouble("Texture/Pattern/Brightness");
-    m_contrast = setting->getDouble("Texture/Pattern/Contrast", 1.0);
     m_offsetX = setting->getInt("Texture/Pattern/OffsetX");
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
     m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
-    m_invert = setting->getBool("Texture/Pattern/Invert");
-    m_cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
-    m_cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
-    m_cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
 
     m_strengthOption.readOptionSetting(setting);
     m_strengthOption.resetAllSensors();
-
-    recalculateMask();
 }
 
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
@@ -314,11 +233,17 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();
 
-    int x = offset.x() % m_maskBounds.width() - m_offsetX;
-    int y = offset.y() % m_maskBounds.height() - m_offsetY;
+    KisPaintDeviceSP mask = m_maskInfo->mask();
+    const QRect maskBounds = m_maskInfo->maskBounds();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
+
+    int x = offset.x() % maskBounds.width() - m_offsetX;
+    int y = offset.y() % maskBounds.height() - m_offsetY;
+
 
     KisFillPainter fillPainter(fillDevice);
-    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, m_maskBounds);
+    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
     fillPainter.end();
 
     qreal pressure = m_strengthOption.apply(info);
@@ -346,4 +271,3 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
         iter->nextRow();
     }
 }
-

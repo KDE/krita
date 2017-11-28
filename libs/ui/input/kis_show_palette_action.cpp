@@ -52,7 +52,7 @@ void KisShowPaletteAction::begin(int, QEvent *event)
     m_menu = inputManager()->toolProxy()->popupActionsMenu();
 
     if (m_menu) {
-        m_requestedWithStylus = event->type() == QEvent::TabletPress;
+        m_requestedWithStylus = event && event->type() == QEvent::TabletPress;
 
         /**
          * Opening a menu changes the focus of the windows, so we should not open it

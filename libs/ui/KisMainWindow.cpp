@@ -221,6 +221,7 @@ public:
     KisAction *mdiPreviousWindow {0};
     KisAction *toggleDockers {0};
     KisAction *toggleDockerTitleBars {0};
+    KisAction *fullScreenMode {0};
 
     KisAction *expandingSpacers[2];
 
@@ -1086,7 +1087,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         QByteArray outputFormat = nativeFormat;
 
-        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile(), false);
         outputFormat = outputFormatString.toLatin1();
 
 
@@ -2302,7 +2303,7 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
-    actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
+    d->fullScreenMode = actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
@@ -2456,6 +2457,8 @@ void KisMainWindow::initializeGeometry()
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
     restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+
+    d->fullScreenMode->setChecked(isFullScreen());
 }
 
 void KisMainWindow::showManual()

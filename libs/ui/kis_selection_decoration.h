@@ -48,6 +48,7 @@ protected:
 
 private Q_SLOTS:
     void slotStartUpdateSelection();
+    void slotConfigChanged();
 
 public Q_SLOTS:
     void selectionChanged();
@@ -66,6 +67,9 @@ private:
     QPen m_antsPen;
     QPen m_outlinePen;
     Mode m_mode;
+
+    QColor m_maskColor;
+    bool m_antialiasSelectionOutline;
 };
 
 #endif

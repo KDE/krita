@@ -381,6 +381,8 @@ KisTransaction* KisPainter::takeTransaction()
     return temp;
 }
 
+
+
 QVector<QRect> KisPainter::takeDirtyRegion()
 {
     QVector<QRect> vrect = d->dirtyRects;
@@ -2887,6 +2889,11 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
     Q_FOREACH (const QRect &rc, rects) {
         renderMirrorMask(rc, dab);
     }
+}
+
+bool KisPainter::hasDirtyRegion() const
+{
+    return !d->dirtyRects.isEmpty();
 }
 
 void KisPainter::mirrorRect(Qt::Orientation direction, QRect *rc) const

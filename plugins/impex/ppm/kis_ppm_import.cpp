@@ -229,6 +229,10 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
     char c; device->getChar(&c);
     if (!isspace(c)) return KisImportExportFilter::CreationError; // Invalid file, it should have a separator now
 
+    while (device->peek(1) == "#") {
+        device->readLine();
+    }
+
     // Read width
     int width = readNumber(device);
     int height = readNumber(device);

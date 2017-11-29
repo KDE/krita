@@ -96,7 +96,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
      // draw controls when we are not editing
      if (canvas->paintingAssistantsDecoration()->isEditingAssistants() == false) {
 
-         if (handles().size() > 0 && isSnappingActive() && previewVisible == true) {
+         if (isAssistantComplete() && isSnappingActive() && previewVisible == true) {
              //don't draw if invalid.
              QTransform initialTransform = converter->documentToWidgetTransform();
              QPointF startPoint = initialTransform.map(*handles()[0]);
@@ -152,7 +152,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
 void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (!m_canvas || handles().size() < 1) {
+    if (!m_canvas || !isAssistantComplete()) {
         return;
     }
 
@@ -179,6 +179,12 @@ QPointF VanishingPointAssistant::buttonPosition() const
 {
     return (*handles()[0]);
 }
+
+bool VanishingPointAssistant::isAssistantComplete() const
+{
+    return handles().size() > 0; // only need one point to be ready
+}
+
 
 VanishingPointAssistantFactory::VanishingPointAssistantFactory()
 {

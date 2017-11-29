@@ -68,7 +68,7 @@ inline qreal D(qreal t, const QPointF& P0, const QPointF& P1, const QPointF& P2,
 
 QPointF SplineAssistant::project(const QPointF& pt) const
 {
-    Q_ASSERT(handles().size() == 4);
+    Q_ASSERT(isAssistantComplete());
     // minimize d(t), but keep t in the same neighbourhood as before (unless starting a new stroke)
     // (this is a rather inefficient method)
     qreal min_t = std::numeric_limits<qreal>::max();
@@ -135,8 +135,9 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
 
 void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
+    if (assistantVisible == false || handles().size() < 2 ){
+        return;
+    }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -153,7 +154,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
     if (m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
         gc.drawLine(pts[0], pts[2]);
 
-        if (handles().size() >= 4) {
+        if (isAssistantComplete()) {
             gc.drawLine(pts[1], pts[3]);
         }
 
@@ -171,6 +172,11 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 QPointF SplineAssistant::buttonPosition() const
 {
     return B(0.5, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);
+}
+
+bool SplineAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 4; // specify 4 corners to make assistant complete
 }
 
 SplineAssistantFactory::SplineAssistantFactory()

@@ -164,12 +164,19 @@ public:
      */
     void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
     void drawPreview(QPainter& painter, const QPainterPath& path);
+    static double norm2(const QPointF& p);
 
 protected:
     virtual QRect boundingRect() const;
 
     /// performance layer where the graphics can be drawn from a cache instead of generated every render update
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
+
+    /// determines if the assistant has enough handles to be considered created
+    /// new assistants get in a "creation" phase where they are currently being made on the canvas
+    /// it will return false if we are in the middle of creating the assistant.
+    virtual bool isAssistantComplete() const;
+
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;
 

@@ -290,3 +290,24 @@ bool KisPaintingAssistantsDecoration::isEditingAssistants()
     return d->m_isEditingAssistants;
 }
 
+QPointF KisPaintingAssistantsDecoration::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+{
+    if (!d->m_canvas->currentImage())
+        return e->point;
+
+    KoSnapGuide *snapGuide = d->m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
+
+    return pos;
+}
+
+QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QPointF &offset)
+{
+    if (!d->m_canvas)
+        return pt;
+
+    KoSnapGuide *snapGuide = d->m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return pos;
+}

@@ -39,7 +39,8 @@ ParallelRulerAssistant::ParallelRulerAssistant()
 
 QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
-    Q_ASSERT(handles().size() == 2);
+    Q_ASSERT(isAssistantComplete());
+
     //code nicked from the perspective ruler.
     qreal dx = pt.x() - strokeBegin.x();
     qreal dy = pt.y() - strokeBegin.y();
@@ -90,7 +91,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
     
-    if (handles().size() > 1 && isSnappingActive() && previewVisible==true) {
+    if (isAssistantComplete() > 1 && isSnappingActive() && previewVisible==true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
@@ -115,11 +116,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){
-        return;
-    }
-
-    if (handles().size() < 2) {
+    if (assistantVisible == false || !isAssistantComplete()){
         return;
     }
 
@@ -140,6 +137,11 @@ void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
 QPointF ParallelRulerAssistant::buttonPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
+}
+
+bool ParallelRulerAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 2;
 }
 
 ParallelRulerAssistantFactory::ParallelRulerAssistantFactory()

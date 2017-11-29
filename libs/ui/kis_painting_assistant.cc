@@ -315,6 +315,11 @@ QRect KisPaintingAssistant::boundingRect() const
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
 }
 
+bool KisPaintingAssistant::isAssistantComplete() const
+{
+    return true;
+}
+
 QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
 {
     QByteArray data;
@@ -695,6 +700,10 @@ QPointF KisPaintingAssistant::pixelToView(const QPoint pixelCoords) const
     return d->m_canvas->viewConverter()->documentToView(documentCoord);
 }
 
+double KisPaintingAssistant::norm2(const QPointF& p)
+{
+    return p.x() * p.x() + p.y() * p.y();
+}
 
 
 

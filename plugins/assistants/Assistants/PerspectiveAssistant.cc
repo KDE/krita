@@ -52,7 +52,9 @@ inline qreal distsqr(const QPointF& pt, const QLineF& line)
 QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
-    Q_ASSERT(handles().size() == 4);
+
+    Q_ASSERT(isAssistantComplete());
+
     if (m_snapLine.isNull()) {
         QPolygonF poly;
         QTransform transform;
@@ -295,7 +297,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
 
     if (!getTransform(poly, transform)) {
         // color red for an invalid transform, but not for an incomplete one
-        if(handles().size() == 4) {
+        if(isAssistantComplete()) {
             gc.setPen(QColor(255, 0, 0, 125));
             gc.drawPolygon(poly);
         } else {
@@ -344,9 +346,11 @@ inline qreal pdot(const QPointF& a, const QPointF& b)
 
 bool PerspectiveAssistant::quad(QPolygonF& poly) const
 {
-    for (int i = 0; i < handles().size(); ++i)
+    for (int i = 0; i < handles().size(); ++i) {
         poly.push_back(*handles()[i]);
-    if (handles().size() != 4) {
+    }
+
+    if (!isAssistantComplete()) {
         return false;
     }
 
@@ -393,7 +397,7 @@ bool PerspectiveAssistant::quad(QPolygonF& poly) const
 
 bool PerspectiveAssistant::getTransform(QPolygonF& poly, QTransform& transform) const
 {
-    if (m_cachedPolygon.size() != 0 && handles().size() == 4) {
+    if (m_cachedPolygon.size() != 0 && isAssistantComplete()) {
         for (int i = 0; i <= 4; ++i) {
             if (i == 4) {
                 poly = m_cachedPolygon;
@@ -426,6 +430,13 @@ bool PerspectiveAssistant::getTransform(QPolygonF& poly, QTransform& transform) 
     m_cacheValid = true;
     return true;
 }
+
+bool PerspectiveAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 4; // specify 4 corners to make assistant complete
+}
+
+
 
 PerspectiveAssistantFactory::PerspectiveAssistantFactory()
 {

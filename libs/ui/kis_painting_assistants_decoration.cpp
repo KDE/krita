@@ -49,6 +49,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool m_isEditingAssistants = false;
     bool m_useCache = false;
     bool m_outlineVisible = false;
+    int m_handleSize = 14; // size of editor handles on assistants
 
     KisCanvas2 * m_canvas = 0;
 };
@@ -190,9 +191,42 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->setAssistantColor(assistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, d->m_useCache, canvas, assistantVisibility(), d->m_outlineVisible);
+
+        if (isEditingAssistants()) {
+            drawHandles(assistant, gc, converter);
+        }
     }
 }
 
+void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
+{
+        QTransform initialTransform = converter->documentToWidgetTransform();
+
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+
+            QPointF transformedHandle = initialTransform.map(*handle);
+            QRectF ellipse(transformedHandle -  QPointF(handleSize() * 0.5, handleSize() * 0.5), QSizeF(handleSize(), handleSize()));
+
+            QPainterPath path;
+            path.addEllipse(ellipse);
+
+            gc.save();
+            gc.setPen(Qt::NoPen);
+            gc.setBrush(assistantsColor());
+            gc.drawPath(path);
+            gc.restore();
+        }
+}
+
+int KisPaintingAssistantsDecoration::handleSize()
+{
+    return  d->m_handleSize;
+}
+
+void KisPaintingAssistantsDecoration::setHandleSize(int handleSize)
+{
+    d->m_handleSize = handleSize;
+}
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {

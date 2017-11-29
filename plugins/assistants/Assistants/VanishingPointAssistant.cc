@@ -94,9 +94,9 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
 
      // draw controls when we are not editing
-     if (canvas->paintingAssistantsDecoration()->isEditingAssistants() == false) {
+     if (canvas->paintingAssistantsDecoration()->isEditingAssistants() == false && isAssistantComplete()) {
 
-         if (isAssistantComplete() && isSnappingActive() && previewVisible == true) {
+         if (isSnappingActive() && previewVisible == true) {
              //don't draw if invalid.
              QTransform initialTransform = converter->documentToWidgetTransform();
              QPointF startPoint = initialTransform.map(*handles()[0]);
@@ -122,15 +122,15 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
              drawPreview(gc, path);//and we draw the preview.
          }
-
-
      }
 
 
 
 
-    // draws a circle around the vanishing point node while editing
+    // editor specific controls display
     if (canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
+
+        // draws a circle around the vanishing point node while editing
         QTransform initialTransform = converter->documentToWidgetTransform();
         QPointF startPoint2 = initialTransform.map(*handles()[0]);
 
@@ -139,6 +139,24 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         QRectF ellipse = QRectF(QPointF(startPoint2.x() -15, startPoint2.y() -15), QSizeF(30, 30));;
         pathCenter.addEllipse(ellipse);
         drawPath(gc, pathCenter, isSnappingActive());
+
+
+
+        // draw the lines connecting the different nodes
+        QPointF p0 = initialTransform.map(*handles()[0]);
+        QPointF p1 = initialTransform.map(*sideHandles()[0]);
+        QPointF p2 = initialTransform.map(*sideHandles()[1]);
+        QPointF p3 = initialTransform.map(*sideHandles()[2]);
+        QPointF p4 = initialTransform.map(*sideHandles()[3]);
+
+        QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
+        gc.save();
+        gc.setPen(penStyle);
+        gc.drawLine(p0, p1);
+        gc.drawLine(p0, p3);
+        gc.drawLine(p1, p2);
+        gc.drawLine(p3, p4);
+        gc.restore();
     }
 
 

@@ -36,7 +36,7 @@ EllipseAssistant::EllipseAssistant()
 
 QPointF EllipseAssistant::project(const QPointF& pt) const
 {
-    Q_ASSERT(handles().size() == 3);
+    Q_ASSERT(isAssistantComplete());
     e.set(*handles()[0], *handles()[1], *handles()[2]);
     return e.project(pt);
 }
@@ -66,7 +66,8 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
     QTransform initialTransform = converter->documentToWidgetTransform();
 
     if (isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos), false) && previewVisible==true){
-        if (handles().size() > 2){    
+
+        if (isAssistantComplete()){
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 // valid ellipse
                 gc.setTransform(initialTransform);
@@ -89,9 +90,12 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
 void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
 
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
-        QTransform initialTransform = converter->documentToWidgetTransform();
+    if (assistantVisible == false || handles().size() < 2){
+        return;
+    }
+
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
     if (handles().size() == 2) {
         // just draw the axis
         gc.setTransform(initialTransform);
@@ -117,7 +121,10 @@ void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *co
 
 QRect EllipseAssistant::boundingRect() const
 {
-    if (handles().size() != 3) return KisPaintingAssistant::boundingRect();
+    if (!isAssistantComplete()) {
+        return KisPaintingAssistant::boundingRect();
+    }
+
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         return e.boundingRect().adjusted(-2, -2, 2, 2).toAlignedRect();
     } else {
@@ -129,6 +136,13 @@ QPointF EllipseAssistant::buttonPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }
+
+bool EllipseAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 3;
+}
+
+
 
 EllipseAssistantFactory::EllipseAssistantFactory()
 {

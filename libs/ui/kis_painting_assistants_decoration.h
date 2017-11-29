@@ -21,9 +21,12 @@
 
 #include <QPointF>
 #include <QColor>
+
+#include "KoPointerEvent.h"
+#include "KoSnapGuide.h"
+
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_painting_assistant.h"
-
 #include <kritaui_export.h>
 
 class KisView;
@@ -96,6 +99,9 @@ public Q_SLOTS:
     void toggleAssistantVisible();
     void toggleOutlineVisible();
     void setAssistantsColor(QColor color);
+    QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
+    QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
+
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 

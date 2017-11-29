@@ -41,7 +41,7 @@ FisheyePointAssistant::FisheyePointAssistant()
 QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
-    Q_ASSERT(handles().size() == 3);
+    Q_ASSERT(isAssistantComplete());
     e.set(*handles()[0], *handles()[1], *handles()[2]);
 
     qreal
@@ -97,10 +97,10 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
     
     QTransform initialTransform = converter->documentToWidgetTransform();
     
-    if (isSnappingActive() && previewVisible==true){
-        if (handles().size() > 2){
-        
-        
+    if (isSnappingActive() && previewVisible == true ) {
+
+        if (isAssistantComplete()){
+                
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 if (extraE.set(*handles()[0], *handles()[1], initialTransform.inverted().map(mousePos))){
                     gc.setTransform(initialTransform);
@@ -180,7 +180,7 @@ void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverte
 
 QRect FisheyePointAssistant::boundingRect() const
 {
-    if (handles().size() != 3) {
+    if (!isAssistantComplete()) {
         return KisPaintingAssistant::boundingRect();
     }
 
@@ -196,6 +196,10 @@ QPointF FisheyePointAssistant::buttonPosition() const
     return (*handles()[0] + *handles()[1]) * 0.5;
 }
 
+bool FisheyePointAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 3;
+}
 
 
 FisheyePointAssistantFactory::FisheyePointAssistantFactory()

@@ -81,11 +81,6 @@ private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistantSP assistant);
 
-    QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
-    QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
-    double norm2(const QPointF& p);
-
-
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;

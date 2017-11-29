@@ -39,7 +39,7 @@ InfiniteRulerAssistant::InfiniteRulerAssistant()
 
 QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
-    Q_ASSERT(handles().size() == 2);
+    Q_ASSERT(isAssistantComplete());
     //code nicked from the perspective ruler.
     qreal
             dx = pt.x() - strokeBegin.x(),
@@ -90,7 +90,7 @@ void InfiniteRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 
     
-    if (handles().size() > 1 && isSnappingActive() && previewVisible == true) {
+    if (isAssistantComplete() && isSnappingActive() && previewVisible == true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
@@ -109,8 +109,9 @@ void InfiniteRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 void InfiniteRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
+    if (assistantVisible == false || !isAssistantComplete()){
+        return;
+    }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -129,6 +130,11 @@ void InfiniteRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
 QPointF InfiniteRulerAssistant::buttonPosition() const
 {
     return (*handles()[0]);
+}
+
+bool InfiniteRulerAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 2;
 }
 
 InfiniteRulerAssistantFactory::InfiniteRulerAssistantFactory()

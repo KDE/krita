@@ -94,13 +94,15 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::PAINT_MODE);
     bool newAssistantAllowed = true;
 
+    KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
+
     if (m_newAssistant) {
         m_internalMode = MODE_CREATION;
-        *m_newAssistant->handles().back() = snapToGuide(event, QPointF(), false);
+        *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
         } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         }
         m_canvas->updateCanvas();
         return;
@@ -108,41 +110,49 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_handleDrag = 0;
     double minDist = 81.0;
 
-    QPointF mousePos = m_canvas->viewConverter()->documentToView(snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
+
+    QPointF mousePos = m_canvas->viewConverter()->documentToView(canvasDecoration->snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
+
+
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+
+        // find out which handle on all assistants is closes to the mouse position
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-            double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+            double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
             if (dist < minDist) {
                 minDist = dist;
                 m_handleDrag = handle;
             }
         }
+
+
         if(m_handleDrag && assistant->id() == "perspective") {
             // Look for the handle which was pressed
 
+
             if (m_handleDrag == assistant->topLeft()) {
-                double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                 if (dist < minDist) {
                     minDist = dist;
                 }
                 m_dragStart = QPointF(assistant->topRight().data()->x(),assistant->topRight().data()->y());
                 m_internalMode = MODE_DRAGGING_NODE;
             } else if (m_handleDrag == assistant->topRight()) {
-                double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                 if (dist < minDist) {
                     minDist = dist;
                 }
                 m_internalMode = MODE_DRAGGING_NODE;
                 m_dragStart = QPointF(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
             } else if (m_handleDrag == assistant->bottomLeft()) {
-                double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                 if (dist < minDist) {
                     minDist = dist;
                 }
                 m_internalMode = MODE_DRAGGING_NODE;
                 m_dragStart = QPointF(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
             } else if (m_handleDrag == assistant->bottomRight()) {
-                double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                 if (dist < minDist) {
                     minDist = dist;
                 }
@@ -303,7 +313,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;
-        m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
+        m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         if (m_newAssistant->numHandles() <= 1) {
             if (key == "vanishing point"){
                 m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(-70,0)), HandleType::SIDE);
@@ -313,7 +323,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 }
             addAssistant();
         } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         }
     }
 
@@ -322,6 +332,8 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
 void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 {
+    KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
+
     if (m_handleDrag) {
         *m_handleDrag = event->point;
         //ported from the gradient tool... we need to think about this more in the future.
@@ -333,7 +345,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             QPointF move = snapToClosestAxis(event->point - m_dragStart);
             *m_handleDrag = m_dragStart + move;
         } else {
-            *m_handleDrag = snapToGuide(event, QPointF(), false);
+            *m_handleDrag = canvasDecoration->snapToGuide(event, QPointF(), false);
         }
         m_handleDrag->uncache();
 
@@ -342,8 +354,11 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             double minDist = 49.0;
             QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
             Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-                if (handle == m_handleDrag) continue;
-                double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+                if (handle == m_handleDrag)
+                    continue;
+
+
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
                 if (dist < minDist) {
                     minDist = dist;
                     m_handleCombine = handle;
@@ -352,7 +367,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         }
         m_canvas->updateCanvas();
     } else if (m_assistantDrag) {
-        QPointF newAdjustment = snapToGuide(event, QPointF(), false) - m_cursorStart;
+        QPointF newAdjustment = canvasDecoration->snapToGuide(event, QPointF(), false) - m_cursorStart;
         if (event->modifiers() == Qt::ShiftModifier ) {
             newAdjustment = snapToClosestAxis(newAdjustment);
         }
@@ -894,38 +909,4 @@ void KisAssistantTool::drawEditorWidget(KisPaintingAssistantSP assistant, QPaint
 
     // Move Assistant Tool helper
     _gc.drawPixmap(iconMovePosition, m_iconMove);
-}
-
-QPointF KisAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
-{
-    if (!m_canvas->currentImage())
-        return e->point;
-
-    KoSnapGuide *snapGuide = m_canvas->snapGuide();
-    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
-
-    //return m_canvas->currentImage()->documentToPixel(pos);
-    return pos;
-}
-
-QPointF KisAssistantTool::snapToGuide(const QPointF& pt, const QPointF &offset)
-{
-    if (!m_canvas)
-        return pt;
-
-    KoSnapGuide *snapGuide = m_canvas->snapGuide();
-    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
-
-    return pos;
-}
-
-double KisAssistantTool::norm2(const QPointF& p)
-{
-    return p.x() * p.x() + p.y() * p.y();
-}
-
-
-QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
-{
-    return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
 }

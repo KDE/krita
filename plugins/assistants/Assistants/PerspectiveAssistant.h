@@ -39,6 +39,10 @@ public:
 
     bool contains(const QPointF& point) const override;
     qreal distance(const QPointF& point) const override;
+
+
+    bool isAssistantComplete() const;
+
 protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:

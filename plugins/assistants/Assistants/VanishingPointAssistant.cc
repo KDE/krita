@@ -132,23 +132,20 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
         // draws a circle around the vanishing point node while editing
         QTransform initialTransform = converter->documentToWidgetTransform();
-        QPointF startPoint2 = initialTransform.map(*handles()[0]);
-
-        QPainterPath pathCenter;
-
-        QRectF ellipse = QRectF(QPointF(startPoint2.x() -15, startPoint2.y() -15), QSizeF(30, 30));;
-        pathCenter.addEllipse(ellipse);
-        drawPath(gc, pathCenter, isSnappingActive());
-
-
-
-        // draw the lines connecting the different nodes
-        QPointF p0 = initialTransform.map(*handles()[0]);
+        QPointF p0 = initialTransform.map(*handles()[0]); // main vanishing point
         QPointF p1 = initialTransform.map(*sideHandles()[0]);
         QPointF p2 = initialTransform.map(*sideHandles()[1]);
         QPointF p3 = initialTransform.map(*sideHandles()[2]);
         QPointF p4 = initialTransform.map(*sideHandles()[3]);
 
+
+        QRectF ellipse = QRectF(QPointF(p0.x() -15, p0.y() -15), QSizeF(30, 30));
+
+        QPainterPath pathCenter;
+        pathCenter.addEllipse(ellipse);
+        drawPath(gc, pathCenter, isSnappingActive());
+
+        // draw the lines connecting the different nodes
         QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
         gc.save();
         gc.setPen(penStyle);

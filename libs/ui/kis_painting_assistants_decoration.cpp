@@ -28,6 +28,8 @@
 #include "kis_debug.h"
 #include "KisDocument.h"
 #include "kis_canvas2.h"
+#include "kis_icon_utils.h"
+#include "KisViewManager.h"
 
 #include <QPainter>
 
@@ -50,6 +52,13 @@ struct KisPaintingAssistantsDecoration::Private {
     bool m_useCache = false;
     bool m_outlineVisible = false;
     int m_handleSize = 14; // size of editor handles on assistants
+
+    // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
+    // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
+    QPixmap m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
+    QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
+    QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
+    QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
 
     KisCanvas2 * m_canvas = 0;
 };
@@ -196,6 +205,14 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
             drawHandles(assistant, gc, converter);
         }
     }
+
+    // draw editor controls on top of all assistant lines (why this code is last)
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+        drawEditorWidget(assistant, gc, converter);
+    }
+
+
+
 }
 
 void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
@@ -344,4 +361,58 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QP
     QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
 
     return pos;
+}
+
+/*
+ * functions only used interally in this class
+ * we potentially could make some of these inline to speed up performance
+*/
+
+void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
+{
+    QTransform initialTransform = converter->documentToWidgetTransform();
+    int m_assistantHelperYOffset = 10;
+
+
+    // We are going to put all of the assistant actions below the bounds of the assistant
+    // so they are out of the way
+    // assistant->buttonPosition() gets the center X/Y position point
+    QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
+
+    QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
+    QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
+    QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
+
+
+    // Background container for helpers
+    QBrush backgroundColor = d->m_canvas->viewManager()->mainWindow()->palette().window();
+    QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
+
+    gc.setRenderHint(QPainter::Antialiasing);
+
+    QPainterPath bgPath;
+    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
+    QPen stroke(QColor(60, 60, 60, 80), 2);
+    gc.setPen(stroke);
+    gc.fillPath(bgPath, backgroundColor);
+    gc.drawPath(bgPath);
+
+
+    QPainterPath movePath;  // render circle behind by move helper
+    gc.setPen(stroke);
+    movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
+    gc.fillPath(movePath, backgroundColor);
+    gc.drawPath(movePath);
+
+    // Preview/Snap Tool helper
+    gc.drawPixmap(iconDeletePosition, d->m_iconDelete);
+    if (assistant->isSnappingActive() == true) {
+        gc.drawPixmap(iconSnapPosition, d->m_iconSnapOn);
+    }
+    else {
+        gc.drawPixmap(iconSnapPosition, d->m_iconSnapOff);
+    }
+
+    // Move Assistant Tool helper
+    gc.drawPixmap(iconMovePosition, d->m_iconMove);
 }

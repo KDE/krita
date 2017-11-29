@@ -129,13 +129,6 @@ protected:
     QPointF m_dragEnd;
     int m_handleSize; // how large the editor handles will appear
 
-    // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
-    // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
-    QPixmap m_iconDelete;
-    QPixmap m_iconSnapOn;
-    QPixmap m_iconSnapOff;
-    QPixmap m_iconMove;
-
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);

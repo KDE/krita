@@ -232,6 +232,21 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
             gc.drawPath(path);
             gc.restore();
         }
+
+         // some assistants have side handles like the vanishing point assistant
+         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+             QPointF transformedHandle = initialTransform.map(*handle);
+             QRectF ellipse(transformedHandle -  QPointF(handleSize() * 0.5, handleSize() * 0.5), QSizeF(handleSize(), handleSize()));
+
+             QPainterPath path;
+             path.addEllipse(ellipse);
+
+             gc.save();
+             gc.setPen(Qt::NoPen);
+             gc.setBrush(assistantsColor());
+             gc.drawPath(path);
+             gc.restore();
+         }
 }
 
 int KisPaintingAssistantsDecoration::handleSize()

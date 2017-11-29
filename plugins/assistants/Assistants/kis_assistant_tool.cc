@@ -583,51 +583,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             _gc.restore();
         }
 
-        // Draw middle perspective handles (this should probably be moved)
-        if(assistant->id()=="perspective") {
-            assistant->findPerspectiveAssistantHandleLocation();
-
-            QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
-            topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;
-            bottomMiddle = (_converter.documentToView(*assistant->bottomLeft()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
-            rightMiddle = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
-            leftMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft()))*0.5;
-
-            QPainterPath path;
-            path.addEllipse(QRectF(leftMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
-            path.addEllipse(QRectF(topMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
-            path.addEllipse(QRectF(rightMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
-            path.addEllipse(QRectF(bottomMiddle - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));
-
-            assistant->drawPath(_gc, path);
-        }
-
-        // draw editor specific controls for the assistant (this probably should be moved)
-        if(assistant->id()=="vanishing point") {
-            if (assistant->sideHandles().size() == 4) {
-                // Draw the line
-                QPointF p0 = _converter.documentToView(*assistant->handles()[0]);
-                QPointF p1 = _converter.documentToView(*assistant->sideHandles()[0]);
-                QPointF p2 = _converter.documentToView(*assistant->sideHandles()[1]);
-                QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
-                QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
-
-
-
-                // Draw control lines
-                // setting it here updates the vanishing point lines to correct color
-                // this should probably move to vanishing point assistant class where everything else is done
-                QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
-                _gc.save();
-                _gc.setPen(penStyle);
-                _gc.drawLine(p0, p1);
-                _gc.drawLine(p0, p3);
-                _gc.drawLine(p1, p2);
-                _gc.drawLine(p3, p4);
-                _gc.restore();
-            }
-        }       
-
+        // draws move/activate/delete controls
         drawEditorWidget(assistant, _gc);
     }
 

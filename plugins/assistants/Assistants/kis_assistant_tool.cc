@@ -272,16 +272,17 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         // This code contains the click event behavior. The actual display of the icons are done at the bottom
         // of the paint even. Make sure the rectangles positions are the same between the two.
 
-        // TODO: These 6 lines are duplicated below in the paint layer. It shouldn't be done like this.
+        // TODO: The positions are also done in the painting decoration where they are rendered
+        // need to condense these some way so they don't accidently get out of sync
         QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
 
-        QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
-        QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
-        QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset));
+        QPointF iconMovePosition(actionsPosition + QPointF(15, 15 ));
+        QPointF iconSnapPosition(actionsPosition + QPointF(54, 20));
+        QPointF iconDeletePosition(actionsPosition + QPointF(83, 18));
 
 
-        QRectF deleteRect(iconDeletePosition, QSizeF(16, 16));
-        QRectF visibleRect(iconSnapPosition, QSizeF(16, 16));
+        QRectF deleteRect(iconDeletePosition, QSizeF(24, 24));
+        QRectF visibleRect(iconSnapPosition, QSizeF(20, 20));
         QRectF moveRect(iconMovePosition, QSizeF(32, 32));
 
         if (moveRect.contains(mousePos)) {

@@ -75,11 +75,6 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_internalMode = MODE_CREATION;
     m_assistantHelperYOffset = 10;
 
-    m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
-    m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
-    m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
-    m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
-
     m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
     m_handleSize = 17;
 
@@ -577,9 +572,6 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
             }
 
         }
-
-        // draws move/activate/delete controls
-        drawEditorWidget(assistant, _gc);
     }
 }
 
@@ -807,56 +799,4 @@ void KisAssistantTool::slotAssistantOpacityChanged()
     newColor.setAlpha(m_assistantsOpacity*255);
     m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
     m_canvas->canvasWidget()->update();
-}
-
-
-/*
- * functions only used interally in this class
- * we potentially could make some of these inline to speed up performance
-*/
-
-void KisAssistantTool::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc)
-{
-    // We are going to put all of the assistant actions below the bounds of the assistant
-    // so they are out of the way
-    // assistant->buttonPosition() gets the center X/Y position point
-    QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
-
-    QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
-    QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
-    QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
-
-
-
-    // Background container for helpers
-    QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
-    QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
-
-    _gc.setRenderHint(QPainter::Antialiasing);
-
-    QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
-    QPen stroke(QColor(60, 60, 60, 80), 2);
-    _gc.setPen(stroke);
-    _gc.fillPath(bgPath, backgroundColor);
-    _gc.drawPath(bgPath);
-
-
-    QPainterPath movePath;  // render circle behind by move helper
-    _gc.setPen(stroke);
-    movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
-    _gc.fillPath(movePath, backgroundColor);
-    _gc.drawPath(movePath);
-
-    // Preview/Snap Tool helper
-    _gc.drawPixmap(iconDeletePosition, m_iconDelete);
-    if (assistant->isSnappingActive() == true) {
-        _gc.drawPixmap(iconSnapPosition, m_iconSnapOn);
-    }
-    else {
-        _gc.drawPixmap(iconSnapPosition, m_iconSnapOff);
-    }
-
-    // Move Assistant Tool helper
-    _gc.drawPixmap(iconMovePosition, m_iconMove);
 }

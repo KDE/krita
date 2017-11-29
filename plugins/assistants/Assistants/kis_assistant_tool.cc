@@ -79,7 +79,10 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
     m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
     m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
+
+    m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
     m_handleSize = 17;
+
 }
 
 void KisAssistantTool::deactivate()
@@ -558,35 +561,26 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
-        // Draw corner and middle handles
+
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
             QRectF ellipse(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5),
                            QSizeF(m_handleSize, m_handleSize));
 
-            // render handles when they are being dragged and moved
+            // render handles differently if it is the one being dragged.
             if (handle == m_handleDrag || handle == m_handleCombine) {
+                QPen stroke(QColor(assistantColor.red(), assistantColor.green(), assistantColor.blue(), 80), 4);
                 _gc.save();
-                _gc.setPen(Qt::NoPen);
-                _gc.setBrush(assistantColor);
+                _gc.setPen(stroke);
+                _gc.setBrush(Qt::NoBrush);
                 _gc.drawEllipse(ellipse);
                 _gc.restore();
             }
 
-            QPainterPath path;
-
-            path.addEllipse(ellipse);
-
-            _gc.save();
-            _gc.setPen(Qt::NoPen);
-            _gc.setBrush(assistantColor);
-            _gc.drawPath(path);
-            _gc.restore();
         }
 
         // draws move/activate/delete controls
         drawEditorWidget(assistant, _gc);
     }
-
 }
 
 void KisAssistantTool::removeAllAssistants()

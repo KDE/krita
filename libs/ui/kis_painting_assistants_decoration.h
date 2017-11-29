@@ -93,6 +93,10 @@ public:
     /// all assistants will share the same color
     QColor assistantsColor();
 
+    int handleSize();
+    void setHandleSize(int handleSize);
+
+
 Q_SIGNALS:
     void assistantChanged();
 public Q_SLOTS:
@@ -104,6 +108,7 @@ public Q_SLOTS:
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
+    void drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);
 
 private:
     struct Private;

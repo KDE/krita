@@ -207,12 +207,11 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     }
 
     // draw editor controls on top of all assistant lines (why this code is last)
-    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-        drawEditorWidget(assistant, gc, converter);
-    }
-
-
-
+    if (isEditingAssistants()) {
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+            drawEditorWidget(assistant, gc, converter);
+        }
+     }
 }
 
 void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)

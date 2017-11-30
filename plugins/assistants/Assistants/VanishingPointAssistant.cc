@@ -147,6 +147,14 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
         // draw the lines connecting the different nodes
         QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
+
+        if (!isSnappingActive()) {
+            penStyle.setColor(QColor(m_canvas->paintingAssistantsDecoration()->assistantsColor().red(),
+                                     m_canvas->paintingAssistantsDecoration()->assistantsColor().green(),
+                                     m_canvas->paintingAssistantsDecoration()->assistantsColor().blue(),
+                                     m_canvas->paintingAssistantsDecoration()->assistantsColor().alpha()*.2));
+        }
+
         gc.save();
         gc.setPen(penStyle);
         gc.drawLine(p0, p1);

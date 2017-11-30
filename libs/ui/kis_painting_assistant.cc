@@ -263,7 +263,10 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     }
 
     const QRect bound = boundingRect();
-    if (bound.isEmpty()) return;
+    if (bound.isEmpty()) {
+        return;
+    }
+
     const QTransform transform = converter->documentToWidgetTransform();
     const QRect widgetBound = transform.mapRect(bound);
 
@@ -292,6 +295,7 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         d->cachedRect = cacheRect.translated(-widgetBound.topLeft());
         d->cached = QPixmapCache::insert(cached);
     }
+
     gc.drawPixmap(paintRect, cached, paintRect.translated(-widgetBound.topLeft() - d->cachedRect.topLeft()));
 
 

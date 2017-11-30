@@ -63,13 +63,10 @@ KisAssistantTool::~KisAssistantTool()
 
 void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    // Add code here to initialize your tool when it got activated
     KisTool::activate(toolActivation, shapes);
 
     m_canvas->paintingAssistantsDecoration()->activateAssistantsEditor();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
-
-    repaintDecorations();
 
     m_handleDrag = 0;
     m_internalMode = MODE_CREATION;
@@ -83,7 +80,6 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
 void KisAssistantTool::deactivate()
 {
     m_canvas->paintingAssistantsDecoration()->deactivateAssistantsEditor();
-    repaintDecorations(); // helps with updating assistant decoration to a non-editor look
     KisTool::deactivate();
 }
 
@@ -478,18 +474,18 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
             m_handles = m_canvas->paintingAssistantsDecoration()->handles();
         }
         m_handleDrag = m_handleCombine = 0;
-        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+
     } else if (m_assistantDrag) {
         m_assistantDrag.clear();
-        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         addAssistant();
         m_internalMode = MODE_CREATION;
-        m_canvas->updateCanvas();
     }
     else {
         event->ignore();
     }
+
+    m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
 }
 
 void KisAssistantTool::addAssistant()
@@ -517,14 +513,15 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
         *m_newAssistant->handles().back() = event->point;
-        m_canvas->updateCanvas();
+
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         QPointF translate = event->point - m_dragEnd;;
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator = (QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
-        m_canvas->updateCanvas();
     }
+
+     m_canvas->updateCanvas();
 }
 
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
@@ -769,11 +766,8 @@ QWidget *KisAssistantTool::createOptionWidget()
 
 
         m_options.assistantsColor->setColor(QColor(95, 228, 230, 255));
-
-        // converts 10% to 0-255 range
-        // todo: replace 1000 with opacity slider value
-        m_options.assistantsOpacitySlider->setValue(100); // 30%
-        m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01; // storing as 0-1 for the display, but QColor will eventually need 0-255
+        m_options.assistantsOpacitySlider->setValue(100); // 100%
+        m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01;
 
         QColor newColor = m_options.assistantsColor->color();
         newColor.setAlpha(m_assistantsOpacity*255);

@@ -605,6 +605,15 @@ CloneLayer *Document::createCloneLayer(const QString &name, const Node *source)
     return new CloneLayer(image, name, layer);
 }
 
+VectorLayer *Document::createVectorLayer(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new VectorLayer(d->document->shapeController(), image, name);
+}
+
 
 QImage Document::projection(int x, int y, int w, int h) const
 {

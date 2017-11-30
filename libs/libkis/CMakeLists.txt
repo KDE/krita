@@ -24,6 +24,10 @@ set(kritalibkis_LIB_SRCS
     nodes/CloneLayer.cpp
     nodes/FileLayer.cpp
     nodes/FilterLayer.cpp
+    nodes/VectorLayer.cpp
+
+    vector/Shape.cpp
+    vector/GroupShape.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

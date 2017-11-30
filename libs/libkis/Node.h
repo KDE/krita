@@ -509,6 +509,7 @@ private:
     friend class GroupLayer;
     friend class FileLayer;
     friend class FilterLayer;
+    friend class VectorLayer;
     /**
      * @brief paintDevice gives access to the internal paint device of this Node
      * @return the paintdevice or 0 if the node does not have an editable paint device.

@@ -28,6 +28,7 @@
 #include "nodes/CloneLayer.h"
 #include "nodes/FileLayer.h"
 #include "nodes/FilterLayer.h"
+#include "nodes/FillLayer.h"
 #include "nodes/VectorLayer.h"
 
 class KisDocument;
@@ -547,7 +548,7 @@ public Q_SLOTS:
 
     FilterLayer* createFilterLayer(const QString &name, Filter &filter, Selection &selection);
 
-    //FillLayer* createNode(const QString &name, const QString filterName, const InfoObject configuration);
+    FillLayer* createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection);
 
     CloneLayer* createCloneLayer(const QString &name, const Node* source);
 

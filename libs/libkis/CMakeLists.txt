@@ -24,6 +24,7 @@ set(kritalibkis_LIB_SRCS
     nodes/CloneLayer.cpp
     nodes/FileLayer.cpp
     nodes/FilterLayer.cpp
+    nodes/FillLayer.cpp
     nodes/VectorLayer.cpp
 
     vector/Shape.cpp

@@ -107,6 +107,7 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
         dbgFile<<"canvas does not exist in spline, you may have passed arguments incorrectly:"<<canvas;
     }
     
+
     if (handles().size() > 1) {
 
         QTransform initialTransform = converter->documentToWidgetTransform();
@@ -130,8 +131,12 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
         }
     }
     gc.restore();
-    
-    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+
+   // there is some odd rectangle that is getting rendered when there is only one point, so don't start rendering the line until after 2
+   // this issue only exists with this spline assistant...none of the others
+   if (handles().size() > 2) {
+      KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+   }
 }
 
 void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
@@ -170,8 +175,6 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
             if (isAssistantComplete()) {
                 gc.drawLine(pts[1], pts[3]);
             }
-
-
             gc.setPen(QColor(0, 0, 0, 125));
         }
         gc.restore();

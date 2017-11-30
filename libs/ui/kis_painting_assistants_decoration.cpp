@@ -384,6 +384,10 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QP
 
 void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
 {
+    if (!assistant->isAssistantComplete()) {
+        return;
+    }
+
     QTransform initialTransform = converter->documentToWidgetTransform();
 
     // We are going to put all of the assistant actions below the bounds of the assistant

@@ -34,6 +34,16 @@ class KisView;
 class KisPaintingAssistantsDecoration;
 typedef KisSharedPtr<KisPaintingAssistantsDecoration> KisPaintingAssistantsDecorationSP;
 
+/// data for editor widget. This is shared between the decoration and assistant tool which needs hit box information
+struct AssistantEditorData {
+    const int moveIconSize = 32;
+    const int deleteIconSize = 24;
+    const int snapIconSize = 20;
+    const QPointF moveIconPosition = QPointF(15, 15);
+    const QPointF snapIconPosition = QPointF(54, 20);
+    const QPointF deleteIconPosition = QPointF(83, 18);
+};
+
 /**
  * This class hold a list of painting assistants.
  * In the application flow, each canvas holds one of these classes to manage the assistants

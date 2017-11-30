@@ -269,21 +269,18 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_assistantDrag.clear();
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
-        // This code contains the click event behavior. The actual display of the icons are done at the bottom
-        // of the paint even. Make sure the rectangles positions are the same between the two.
-
-        // TODO: The positions are also done in the painting decoration where they are rendered
-        // need to condense these some way so they don't accidently get out of sync
+        // This code contains the click event behavior.
         QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
 
-        QPointF iconMovePosition(actionsPosition + QPointF(15, 15 ));
-        QPointF iconSnapPosition(actionsPosition + QPointF(54, 20));
-        QPointF iconDeletePosition(actionsPosition + QPointF(83, 18));
+        AssistantEditorData editorShared; // shared position data between assistant tool and decoration
 
+        QPointF iconMovePosition(actionsPosition + editorShared.moveIconPosition);
+        QPointF iconSnapPosition(actionsPosition + editorShared.snapIconPosition);
+        QPointF iconDeletePosition(actionsPosition + editorShared.deleteIconPosition);
 
-        QRectF deleteRect(iconDeletePosition, QSizeF(24, 24));
-        QRectF visibleRect(iconSnapPosition, QSizeF(20, 20));
-        QRectF moveRect(iconMovePosition, QSizeF(32, 32));
+        QRectF deleteRect(iconDeletePosition, QSizeF(editorShared.deleteIconSize, editorShared.deleteIconSize));
+        QRectF visibleRect(iconSnapPosition, QSizeF(editorShared.snapIconSize, editorShared.snapIconSize));
+        QRectF moveRect(iconMovePosition, QSizeF(editorShared.moveIconSize, editorShared.moveIconSize));
 
         if (moveRect.contains(mousePos)) {
             m_assistantDrag = assistant;
@@ -292,6 +289,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_internalMode = MODE_EDITING;
             return;
         }
+
         if (deleteRect.contains(mousePos)) {
             removeAssistant(assistant);
             if(m_canvas->paintingAssistantsDecoration()->assistants().isEmpty()) {

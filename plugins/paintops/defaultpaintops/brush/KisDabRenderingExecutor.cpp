@@ -86,9 +86,3 @@ int KisDabRenderingExecutor::averageDabSize() const
 {
     return m_d->renderingQueue->averageDabSize();
 }
-
-void KisDabRenderingExecutor::recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices)
-{
-    m_d->renderingQueue->recyclePaintDevicesForCache(devices);
-}
-

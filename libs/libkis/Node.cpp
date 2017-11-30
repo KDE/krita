@@ -469,7 +469,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     KisPaintDeviceSP projection = d->node->projection();
     QRect bounds = d->node->exactBounds();
 
-    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename);
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename, false);
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     KisImageSP dst = new KisImage(doc->createUndoStore(),

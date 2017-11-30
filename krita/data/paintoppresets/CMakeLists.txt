@@ -27,7 +27,6 @@ Bristles_textured.kpp
 Bristles_wet.kpp
 Brush_dotted.kpp
 Brush_textured.kpp
-Chalk_brush.kpp
 Clone_tool.kpp
 Curve_curvy.kpp
 Curve_ink.kpp

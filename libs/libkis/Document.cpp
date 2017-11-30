@@ -433,7 +433,7 @@ bool Document::exportImage(const QString &filename, const InfoObject &exportConf
 {
     if (!d->document) return false;
 
-    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
 
     return d->document->exportDocumentSync(QUrl::fromLocalFile(filename), outputFormat, exportConfiguration.configuration());
@@ -504,7 +504,7 @@ bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
 
-    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename);
+    const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
 
     bool retval = d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);

@@ -110,7 +110,8 @@ public:
     }
 
     inline void runMergeJob() {
-        Q_ASSERT(m_atomicType == Type::MERGE);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_atomicType == Type::MERGE);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
         // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);

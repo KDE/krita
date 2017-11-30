@@ -29,10 +29,10 @@ class QVariant;
  * \class KoDerivedResourceConverter
  *
  * Defines the abstraction of a derived resource. It should be
- * uploaded to the KoResourceManager during loading phase. The manager
- * will use it to convert values to/from the source resource.
+ * uploaded to the KoResourceManager during the loading phase.
+ * The manager will use it to convert values to/from the source
+ * resource.
  */
-
 class KRITAFLAKE_EXPORT KoDerivedResourceConverter
 {
 public:

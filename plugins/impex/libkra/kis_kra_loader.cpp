@@ -850,11 +850,25 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
     QString attr;
     KisAdjustmentLayer* layer;
     QString filtername;
+    QString legacy = filtername;
 
     if ((filtername = element.attribute(FILTER_NAME)).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
         warnFile << "No filter in adjustment layer";
         return 0;
+    }
+
+    //get deprecated filters.
+    if (filtername=="brightnesscontrast") {
+        legacy = filtername;
+        filtername = "perchannel";
+    }
+    if (filtername=="left edge detections"
+            || filtername=="right edge detections"
+            || filtername=="top edge detections"
+            || filtername=="bottom edge detections") {
+        legacy = filtername;
+        filtername = "edge detection";
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
@@ -864,6 +878,10 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
     }
 
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    kfc->setProperty("legacy", legacy);
+    if (legacy=="brightnesscontrast") {
+        kfc->setProperty("colorModel", cs->colorModelId().id());
+    }
 
     // We'll load the configuration and the selection later.
     layer = new KisAdjustmentLayer(image, name, kfc, 0);

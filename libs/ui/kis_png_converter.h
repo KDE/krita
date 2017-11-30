@@ -53,6 +53,8 @@ struct KisPNGOptions {
         , tryToSaveAsIndexed(true)
         , saveSRGBProfile(false)
         , forceSRGB(false)
+        , storeMetaData(false)
+        , storeAuthor(false)
         , transparencyFillColor(Qt::white)
     {}
 
@@ -65,6 +67,8 @@ struct KisPNGOptions {
     bool tryToSaveAsIndexed;
     bool saveSRGBProfile;
     bool forceSRGB;
+    bool storeMetaData;
+    bool storeAuthor;
     QList<const KisMetaData::Filter*> filters;
     QColor transparencyFillColor;
 

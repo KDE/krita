@@ -48,7 +48,7 @@ KisPropertiesConfigurationSP  KisCurvePaintOpSettingsWidget::configuration() con
 {
     KisCurvePaintOpSettings* config = new KisCurvePaintOpSettings();
     config->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));
-    config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
+    config->setProperty("paintop", "curvebrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
 }

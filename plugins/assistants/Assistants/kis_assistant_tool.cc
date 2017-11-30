@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -762,11 +763,13 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.deleteAllAssistantsButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
 
         connect(m_options.assistantsColor, SIGNAL(changed(const QColor&)), SLOT(slotAssistantsColorChanged(const QColor&)));
-        connect(m_options.assistantsOpacitySlider, SIGNAL(sliderReleased()), SLOT(slotAssistantOpacityChanged()));
+        connect(m_options.assistantsOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotAssistantOpacityChanged()));
 
 
         m_options.assistantsColor->setColor(QColor(95, 228, 230, 255));
         m_options.assistantsOpacitySlider->setValue(100); // 100%
+        m_options.assistantsOpacitySlider->setSuffix(" %");
+
         m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01;
 
         QColor newColor = m_options.assistantsColor->color();

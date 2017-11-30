@@ -60,18 +60,21 @@
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Opacity:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="assistantsOpacitySlider">
-       <property name="maximum">
+      <widget class="KisSliderSpinBox" name="assistantsOpacitySlider" native="true">
+       <property name="maximum" stdset="0">
         <number>100</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -130,6 +133,12 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2008,2011 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

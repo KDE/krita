@@ -21,7 +21,7 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 
@@ -77,6 +77,25 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
     }
     else {
         return KisFileLayer::ToImagePPI;
+    }
+}
+
+void KisDlgFileLayer::setFileName(QString fileName)
+{
+    dlgWidget.wdgUrlRequester->setFileName(fileName);
+}
+
+void KisDlgFileLayer::setScalingMethod(KisFileLayer::ScalingMethod method)
+{
+    dlgWidget.radioDontScale->setChecked(false);
+    dlgWidget.radioScaleToImageSize->setChecked(false);
+    dlgWidget.radioScalePPI->setChecked(false);
+    if (method == KisFileLayer::None) {
+        dlgWidget.radioDontScale->setChecked(true);
+    } else if (method == KisFileLayer::ToImageSize) {
+        dlgWidget.radioScaleToImageSize->setChecked(true);
+    } else {
+        dlgWidget.radioScalePPI->setChecked(true);
     }
 }
 

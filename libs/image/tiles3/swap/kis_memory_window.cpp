@@ -27,17 +27,31 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
     : m_readWindowEx(writeWindowSize / 4),
       m_writeWindowEx(writeWindowSize)
 {
-    QString swapFileTemplate = (swapDir.isEmpty() ? QDir::tempPath() : swapDir) + QDir::separator() + SWP_PREFIX;
-    QDir d(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
+    m_valid = true;
+
+    // swapDir will never be empty, as KisImageConfig::swapDir() always provides
+    // us with a (platform specific) default directory, even if none is explicity
+    // configured by the user; also we do not want any logic that determines the
+    // default swap dir here.
+    Q_ASSERT(!swapDir.isEmpty());
+
+    QDir d(swapDir);
     if (!d.exists()) {
-        d.mkpath(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
+        m_valid = d.mkpath(swapDir);
     }
-    m_file.setFileTemplate(swapFileTemplate);
-    bool res = m_file.open();
-    Q_ASSERT(res);
-    Q_ASSERT(!m_file.fileName().isEmpty());
-    if (!res || m_file.fileName().isEmpty()) {
-        qWarning() << "Could not create or open swapfile";
+
+    const QString swapFileTemplate = swapDir + QDir::separator() + SWP_PREFIX;
+
+    if (m_valid) {
+        m_file.setFileTemplate(swapFileTemplate);
+        bool res = m_file.open();
+        if (!res || m_file.fileName().isEmpty()) {
+            m_valid = false;
+        }
+    }
+
+    if (!m_valid) {
+        qWarning() << "Could not create or open swapfile; disabling swapfile" << swapFileTemplate;
     }
 }
 
@@ -47,19 +61,23 @@ KisMemoryWindow::~KisMemoryWindow()
 
 quint8* KisMemoryWindow::getReadChunkPtr(const KisChunkData &readChunk)
 {
-    adjustWindow(readChunk, &m_readWindowEx, &m_writeWindowEx);
+    if (!adjustWindow(readChunk, &m_readWindowEx, &m_writeWindowEx)) {
+        return nullptr;
+    }
 
     return m_readWindowEx.calculatePointer(readChunk);
 }
 
 quint8* KisMemoryWindow::getWriteChunkPtr(const KisChunkData &writeChunk)
 {
-    adjustWindow(writeChunk, &m_writeWindowEx, &m_readWindowEx);
+    if (!adjustWindow(writeChunk, &m_writeWindowEx, &m_readWindowEx)) {
+        return nullptr;
+    }
 
     return m_writeWindowEx.calculatePointer(writeChunk);
 }
 
-void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
+bool KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
                                    MappingWindow *adjustingWindow,
                                    MappingWindow *otherWindow)
 {
@@ -103,7 +121,9 @@ void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
             Q_UNUSED(otherWindow);
 #endif
 
-            m_file.resize(newSize);
+            if (!m_file.resize(newSize)) {
+                return false;
+            }
 
 #ifdef Q_OS_WIN32
             if (otherWindow->chunk.size()) {
@@ -120,5 +140,11 @@ void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
 
         adjustingWindow->window = m_file.map(adjustingWindow->chunk.m_begin,
                                              adjustingWindow->chunk.size());
+
+        if (!adjustingWindow->window) {
+            return false;
+        }
     }
+
+	return true;
 }

@@ -34,7 +34,7 @@
 #include <KoConfig.h>
 #include <kis_icon.h>
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <KoResourcePaths.h>
 
@@ -224,7 +224,7 @@ void KisColorSpaceSelector::installProfile()
     QStringList mime;
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/vnd.iccprofile", "application/vnd.iccprofile");
 
     QStringList profileNames = dialog.filenames();

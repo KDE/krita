@@ -24,7 +24,6 @@
 #include <QPointer>
 
 #include <KisMainWindow.h>
-#include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
 #include <kritaui_export.h>
@@ -53,12 +52,11 @@ class KisPaintopBox;
 class KisActionManager;
 class KisScriptManager;
 class KisInputManager;
+class KoUpdater;
+class KoProgressUpdater;
 
 /**
- * Krita view class
- *
- * Following the broad model-view-controller idea this class shows you one view on the document.
- * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc.
+ * KisViewManager manages the collection of views shown in a single mainwindow.
  */
 class KRITAUI_EXPORT KisViewManager : public QObject
 {
@@ -90,16 +88,16 @@ public:  // Krita specific interfaces
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
-    KisCanvasResourceProvider * resourceProvider();
+    KisCanvasResourceProvider *resourceProvider();
 
     /// Return the canvasbase class
-    KisCanvas2 * canvasBase() const;
+    KisCanvas2 *canvasBase() const;
 
     /// Return the actual widget that is displaying the current image
     QWidget* canvas() const;
 
     /// Return the wrapper class around the statusbar
-    KisStatusBar * statusBar() const;
+    KisStatusBar *statusBar() const;
 
     /**
       * This adds a widget to the statusbar for this view.
@@ -118,7 +116,8 @@ public:  // Krita specific interfaces
     KisPaintopBox* paintOpBox() const;
 
     /// create a new progress updater
-    KoProgressUpdater *createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
+    QPointer<KoUpdater> createUnthreadedUpdater(const QString &name);
+    QPointer<KoUpdater> createThreadedUpdater(const QString &name);
 
     /// The selection manager handles everything action related to
     /// selections.
@@ -212,6 +211,8 @@ public:
     /// The mainWindow function will return the shell() value, unless this function is called
     /// with a non-null value. To make it return shell() again, simply pass null to this function.
     void setQtMainWindow(QMainWindow* newMainWindow);
+
+    static void initializeResourceManager(KoCanvasResourceManager *resourceManager);
 
 public Q_SLOTS:
 

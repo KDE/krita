@@ -140,6 +140,7 @@ QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &p
 
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
+    s << "hires: " << qSetFieldWidth(8) << ev.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.screenPos().y() << qSetFieldWidth(0) << " ";
     s << "Source:" << ev.source();
 
     return string;

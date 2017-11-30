@@ -24,7 +24,7 @@
 
 #include <QToolButton>
 #include <QGridLayout>
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 
@@ -88,7 +88,7 @@ void VectorTool::changeUrlPressed()
     }
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Select a Vector Image"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QString("image/x-emf,image/x-wmf,image/x-svm,image/svg+xml").split(','));
     QString fn = dialog.filename();
     if (!fn.isEmpty()) {

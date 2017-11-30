@@ -40,7 +40,7 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     ui->shortcutsView->setItemDelegateForColumn(0, new KisInputTypeDelegate(ui->shortcutsView));
     ui->shortcutsView->setItemDelegateForColumn(1, new KisInputEditorDelegate(ui->shortcutsView));
     ui->shortcutsView->setItemDelegateForColumn(2, new KisInputModeDelegate(ui->shortcutsView));
-    ui->shortcutsView->header()->setResizeMode(QHeaderView::Stretch);
+    ui->shortcutsView->header()->setSectionResizeMode(QHeaderView::Stretch);
     setExpanded(false);
 
     QAction *deleteAction = new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);

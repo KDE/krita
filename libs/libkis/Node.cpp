@@ -469,7 +469,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     KisPaintDeviceSP projection = d->node->projection();
     QRect bounds = d->node->exactBounds();
 
-    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename, false);
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     KisImageSP dst = new KisImage(doc->createUndoStore(),
@@ -484,9 +484,8 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     paintLayer->paintDevice()->makeCloneFrom(projection, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
     dst->initialRefreshGraph();
-    doc->setOutputMimeType(mimefilter.toLatin1());
 
-    bool r = doc->exportDocument(QUrl::fromLocalFile(filename));
+    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());
     if (!r) {
         qWarning() << doc->errorMessage();
     }

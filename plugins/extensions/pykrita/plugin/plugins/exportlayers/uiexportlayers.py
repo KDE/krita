@@ -33,7 +33,6 @@ class UIExportLayers(object):
         self.yResSpinBox = QSpinBox()
         self.formatsComboBox = QComboBox()
 
-
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
@@ -106,9 +105,9 @@ class UIExportLayers(object):
 
     def confirmButton(self):
         selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
-        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path==document.fileName()]
+        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path == document.fileName()]
 
-        self.msgBox  = QMessageBox(self.mainDialog)
+        self.msgBox = QMessageBox(self.mainDialog)
         if not selectedDocuments:
             self.msgBox.setText("Select one document.")
         elif not self.directoryTextField.text():
@@ -144,7 +143,7 @@ class UIExportLayers(object):
             if node.type() == 'grouplayer':
                 newDir = parentDir + '/' + node.name()
                 self.mkdir(newDir)
-            elif not self.exportFilterLayersCheckBox.isChecked() and  'filter' in node.type():
+            elif not self.exportFilterLayersCheckBox.isChecked() and 'filter' in node.type():
                 continue
             elif self.ignoreInvisibleLayersCheckBox.isChecked() and not node.visible():
                 continue

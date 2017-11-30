@@ -54,6 +54,8 @@ struct KisJPEGOptions {
     QColor transparencyFillColor;
     bool forceSRGB;
     bool saveProfile;
+    bool storeDocumentMetaData; //this is for getting the metadata from the document info.
+    bool storeAuthor; //this is for storing author data from the document info.
 };
 
 namespace KisMetaData

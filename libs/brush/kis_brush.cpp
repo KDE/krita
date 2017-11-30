@@ -108,6 +108,7 @@ struct KisBrush::Private {
         , brushType(INVALID)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
+        , threadingAllowed(true)
     {}
 
     ~Private() {
@@ -131,6 +132,8 @@ struct KisBrush::Private {
 
     bool autoSpacingActive;
     qreal autoSpacingCoeff;
+
+    bool threadingAllowed;
 };
 
 KisBrush::KisBrush()
@@ -161,6 +164,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->scale = rhs.d->scale;
     d->autoSpacingActive = rhs.d->autoSpacingActive;
     d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
+    d->threadingAllowed = rhs.d->threadingAllowed;
     setFilename(rhs.filename());
 
     /**
@@ -302,7 +306,6 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 
 void KisBrush::setBrushTipImage(const QImage& image)
 {
-    //Q_ASSERT(!image.isNull());
     d->brushTipImage = image;
 
     if (!image.isNull()) {
@@ -435,6 +438,22 @@ void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
     Q_UNUSED(info);
 }
 
+void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
+{
+    Q_UNUSED(info);
+    Q_UNUSED(seqNo);
+}
+
+void KisBrush::setThreadingAllowed(bool value)
+{
+    d->threadingAllowed = value;
+}
+
+bool KisBrush::threadingAllowed() const
+{
+    return d->threadingAllowed;
+}
+
 void KisBrush::prepareBrushPyramid() const
 {
     if (!d->brushPyramid) {
@@ -445,11 +464,6 @@ void KisBrush::prepareBrushPyramid() const
 void KisBrush::clearBrushPyramid()
 {
     d->brushPyramid.clear();
-}
-
-void KisBrush::mask(KisFixedPaintDeviceSP dst, KisDabShape const& shape, const KisPaintInformation& info , double subPixelX, double subPixelY, qreal softnessFactor) const
-{
-    generateMaskAndApplyMaskOrCreateDab(dst, 0, shape, info, subPixelX, subPixelY, softnessFactor);
 }
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
@@ -485,7 +499,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     qint32 maskHeight = outputImage.height();
 
     dst->setRect(QRect(0, 0, maskWidth, maskHeight));
-    dst->initialize();
+    dst->lazyGrowBufferWithoutInitialization();
 
     quint8* color = 0;
 

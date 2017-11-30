@@ -96,6 +96,10 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , KisShared()
     , m_d(new Private(*rhs.m_d))
 {
+    if (rhs.m_d->opacityChannel) {
+        m_d->opacityChannel.reset(new KisScalarKeyframeChannel(*rhs.m_d->opacityChannel, 0));
+        m_d->keyframeChannels.insert(m_d->opacityChannel->id(), m_d->opacityChannel.data());
+    }
 }
 
 KisBaseNode::~KisBaseNode()
@@ -128,9 +132,8 @@ void KisBaseNode::setOpacity(quint8 val)
 
     if (opacity() == val) return;
 
-    nodeProperties().setProperty("opacity", val);
+    setNodeProperty("opacity", val);
 
-    baseNodeChangedCallback();
     baseNodeInvalidateAllFramesCallback();
 }
 
@@ -173,9 +176,15 @@ void KisBaseNode::setSectionModelProperties(const KisBaseNode::PropertyList &pro
     setUserLocked(properties.at(1).state.toBool());
 }
 
-KoProperties & KisBaseNode::nodeProperties() const
+const KoProperties & KisBaseNode::nodeProperties() const
 {
     return m_d->properties;
+}
+
+void KisBaseNode::setNodeProperty(const QString & name, const QVariant & value)
+{
+    m_d->properties.setProperty(name, value);
+    baseNodeChangedCallback();
 }
 
 void KisBaseNode::mergeNodeProperties(const KoProperties & properties)
@@ -227,7 +236,7 @@ bool KisBaseNode::visible(bool recursive) const
     KisBaseNodeSP parentNode = parentCallback();
 
     return recursive && isVisible && parentNode ?
-        parentNode->visible() : isVisible;
+        parentNode->visible(recursive) : isVisible;
 }
 
 void KisBaseNode::setVisible(bool visible, bool loading)

@@ -103,16 +103,24 @@ public:
         m_format = format;
     }
 
+    void setAutoNestedName(const QString &name) {
+        m_autoNestedName = name;
+        KoProgressProxy::setAutoNestedName(name);
+    }
+
     int min() { return m_min; }
     int max() { return m_max; }
     int value() { return m_value; }
     QString format() { return m_format; }
+    QString autoNestedName() { return m_autoNestedName; }
+
 
 private:
     int m_min;
     int m_max;
     int m_value;
     QString m_format;
+    QString m_autoNestedName;
 };
 
 inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
@@ -409,6 +417,71 @@ private:
     qint64 m_val;
     qint64 m_total;
     qint64 m_cycles;
+};
+
+struct MeasureDistributionStats {
+    MeasureDistributionStats(int numBins, const QString &name = QString())
+        : m_numBins(numBins),
+          m_name(name)
+    {
+        reset();
+    }
+
+    void reset() {
+        m_values.clear();
+        m_values.resize(m_numBins);
+    }
+
+    void addValue(int value) {
+        addValue(value, 1);
+    }
+
+    void addValue(int value, int increment) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(value >= 0);
+
+        if (value >= m_numBins) {
+            m_values[m_numBins - 1] += increment;
+        } else {
+            m_values[value] += increment;
+        }
+    }
+
+    void print() {
+        qCritical() << "============= Stats ==============";
+
+        if (!m_name.isEmpty()) {
+            qCritical() << "Name:" << m_name;
+        }
+
+        int total = 0;
+
+        for (int i = 0; i < m_numBins; i++) {
+            total += m_values[i];
+        }
+
+        for (int i = 0; i < m_numBins; i++) {
+            if (!m_values[i]) continue;
+
+            const QString lastMarker = i == m_numBins - 1 ? "> " : "  ";
+
+            const QString line =
+                QString("  %1%2: %3 (%4%)")
+                    .arg(lastMarker)
+                    .arg(i, 3)
+                    .arg(m_values[i], 5)
+                    .arg(qreal(m_values[i]) / total * 100.0, 7, 'g', 2);
+
+            qCritical() << qPrintable(line);
+        }
+        qCritical() << "----                          ----";
+        qCritical() << qPrintable(QString("Total: %1").arg(total));
+        qCritical() << "==================================";
+    }
+
+private:
+    QVector<int> m_values;
+    int m_numBins = 0;
+    QString m_name;
 };
 
 QStringList getHierarchy(KisNodeSP root, const QString &prefix = "");

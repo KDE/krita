@@ -85,11 +85,25 @@ void KisPanAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
 
+    bool overrideCursor = true;
+
     switch (shortcut) {
         case PanModeShortcut: {
             QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
-            if(tevent)
+            if (tevent) {
                 d->lastPosition = d->averagePoint(tevent);
+                break;
+            }
+
+            // Some QT wheel events are actually be touch pad pan events. From the QT docs:
+            // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
+            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
+            if (wheelEvent) {
+                inputManager()->canvas()->canvasController()->pan(-wheelEvent->pixelDelta());
+                overrideCursor = false;
+                break;
+            }
+
             break;
         }
         case PanLeftShortcut:
@@ -105,7 +119,10 @@ void KisPanAction::begin(int shortcut, QEvent *event)
             inputManager()->canvas()->canvasController()->pan(QPoint(0, -d->panDistance));
             break;
     }
-    QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+
+    if (overrideCursor) {
+        QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+    }
 }
 
 void KisPanAction::end(QEvent *event)

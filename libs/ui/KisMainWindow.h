@@ -30,7 +30,6 @@
 #include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
-
 #include "KisView.h"
 
 class QCloseEvent;
@@ -61,6 +60,15 @@ class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSuperv
     Q_OBJECT
 
 public:
+    enum OpenFlag {
+        None = 0,
+        Import = 0x1,
+        BatchMode = 0x2,
+        RecoveryFile = 0x4
+    };
+    Q_DECLARE_FLAGS(OpenFlags, OpenFlag)
+
+public:
 
     /**
      *  Constructor.
@@ -73,12 +81,6 @@ public:
      *  Destructor.
      */
     ~KisMainWindow() override;
-
-    /**
-     * Update caption from document info - call when document info
-     * (title in the about page) changes.
-     */
-    void updateCaption();
 
 
     // If noCleanup is set, KisMainWindow will not delete the root document
@@ -113,7 +115,20 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const QUrl &url);
+    bool openDocument(const QUrl &url, OpenFlags flags);
+
+    /**
+     * Saves the document, asking for a filename if necessary.
+     *
+     * @param saveas if set to TRUE the user is always prompted for a filename
+     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
+     *
+     * @return TRUE on success, false on error or cancel
+     *         (don't display anything in this case, the error dialog box is also implemented here
+     *         but restore the original URL in slotFileSaveAs)
+     */
+    bool saveDocument(KisDocument *document, bool saveas, bool isExporting);
+
 
     void setReadWrite(bool readwrite);
 
@@ -138,9 +153,9 @@ public:
 
     KisViewManager *viewManager() const;
 
-    void addViewAndNotifyLoadingCompleted(KisDocument *document);
+    KisView *addViewAndNotifyLoadingCompleted(KisDocument *document);
 
-    QStringList showOpenFileDialog();
+    QStringList showOpenFileDialog(bool isImporting);
 
     /**
      * Shows if the main window is saving anything right now. If the
@@ -177,9 +192,6 @@ Q_SIGNALS:
 
     void guiLoadingFinished();
 
-    /// This signal is emitted when the user clicked on the progressbar cancel
-    void sigProgressCanceled();
-
 public Q_SLOTS:
 
     /**
@@ -196,7 +208,7 @@ public Q_SLOTS:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new mainwindow will be opened for showing the opened file.
      */
-    void slotFileOpen();
+    void slotFileOpen(bool isImporting = false);
 
     /**
      *  Slot for opening a file among the recently opened files.
@@ -212,6 +224,14 @@ public Q_SLOTS:
     void slotPreferences();
 
     /**
+     * Update caption from document info - call when document info
+     * (title in the about page) changes.
+     */
+    void updateCaption();
+
+
+
+    /**
      *  Saves the current document with the current name.
      */
     void slotFileSave();
@@ -219,25 +239,14 @@ public Q_SLOTS:
     // XXX: disabled
     KisPrintJob* exportToPdf(QString pdfFileName = QString());
 
-    void slotProgress(int value);
-
-    /**
-     * Saves the document, asking for a filename if necessary.
-     *
-     * @param saveas if set to TRUE the user is always prompted for a filename
-     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @return TRUE on success, false on error or cancel
-     *         (don't display anything in this case, the error dialog box is also implemented here
-     *         but restore the original URL in slotFileSaveAs)
-     */
-    bool saveDocument(KisDocument *document, bool saveas = false);
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
     void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
+    KisView *newView(QObject *document);
+
+    void notifyChildViewDestroyed(KisView *view);
 
 private Q_SLOTS:
     /**
@@ -251,12 +260,10 @@ private Q_SLOTS:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
-    void slotProgressCanceled();
-
     /**
      * @internal
      */
-    void slotDocumentTitleModified(const QString &caption, bool mod);
+    void slotDocumentTitleModified();
 
     /**
      *  Prints the actual document.
@@ -352,7 +359,7 @@ private Q_SLOTS:
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
-    void newView(QObject *document);
+
     void newWindow();
     void closeCurrentWindow();
     void checkSanity();
@@ -370,10 +377,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
-    void setToolbarList(QList<QAction*> toolbarList);
 
-
-public Q_SLOTS:
+private:
 
     /**
      * Add a the given view to the list of views of this mainwindow.
@@ -381,6 +386,8 @@ public Q_SLOTS:
      * newView() and addViewAndNotifyLoadingCompleted().
      */
     void addView(KisView *view);
+
+public Q_SLOTS:
 
     /// Set the active view, this will update the undo/redo actions
     void setActiveView(KisView *view);
@@ -401,7 +408,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const QUrl &url, KisDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
 
     /**
      * Reloads the recent documents list.
@@ -455,5 +462,7 @@ private:
     bool m_dieOnError;
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)
 
 #endif

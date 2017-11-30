@@ -57,6 +57,7 @@ public:
      * @param parent a pointer to the parent object
      */
     explicit KoDocumentInfo(QObject *parent = 0);
+    explicit KoDocumentInfo(const KoDocumentInfo &rhs, QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentInfo() override;
@@ -90,6 +91,12 @@ public:
      * @return a QString with the information
      */
     QString authorInfo(const QString& info) const;
+
+    /**
+     * @brief authorContactInfo
+     * @return returns list of contact info for author.
+     */
+    QStringList authorContactInfo() const;
 
     /**
      * Set information about the document
@@ -197,6 +204,10 @@ private:
     QStringList m_aboutTags;
     /** A QStringList containing all tags for the author information */
     QStringList m_authorTags;
+    /** A QStringList containing all valid contact tags */
+    QStringList m_contactTags;
+    /** A QMap with the contact modes and their type in the second string */
+    QMap <QString, QString> m_contact;
     /** The map containing information about the author */
     QMap<QString, QString> m_authorInfo;
     /** The map containing information about the author set programatically*/

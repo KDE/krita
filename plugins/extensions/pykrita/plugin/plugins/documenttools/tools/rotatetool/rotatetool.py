@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (QWidget, QSpinBox, QHBoxLayout,
                              QVBoxLayout, QFormLayout)
 import math
 
+
 class RotateTool(QWidget):
 
     def __init__(self, mainDialog, parent=None):

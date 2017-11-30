@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QSpinBox, QHBoxLayout,
                              QVBoxLayout, QFormLayout)
 
+
 class CanvasSizeTool(QWidget):
 
     def __init__(self, mainDialog, parent=None):

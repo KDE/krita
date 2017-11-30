@@ -44,6 +44,7 @@ SvgGraphicsContext::SvgGraphicsContext()
 
     display = true;
     visible = true;
+    isResolutionFrame = false;
 
     clipRule = Qt::WindingFill;
     preserveWhitespace = false;

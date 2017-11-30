@@ -126,7 +126,13 @@ void KisQueuesProgressUpdater::timerTicked()
 {
     QMutexLocker locker(&m_d->mutex);
 
-    m_d->progressProxy->setRange(0, m_d->initialQueueSizeMetric);
-    m_d->progressProxy->setValue(m_d->initialQueueSizeMetric - m_d->queueSizeMetric);
-    m_d->progressProxy->setFormat(m_d->jobName);
+    if (!m_d->initialQueueSizeMetric) {
+        m_d->progressProxy->setRange(0, 100);
+        m_d->progressProxy->setValue(100);
+        m_d->progressProxy->setFormat("%p%");
+    } else {
+        m_d->progressProxy->setRange(0, m_d->initialQueueSizeMetric);
+        m_d->progressProxy->setValue(m_d->initialQueueSizeMetric - m_d->queueSizeMetric);
+        m_d->progressProxy->setFormat(m_d->jobName);
+    }
 }

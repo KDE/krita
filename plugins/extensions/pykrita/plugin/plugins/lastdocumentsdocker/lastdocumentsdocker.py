@@ -6,7 +6,7 @@ from lastdocumentsdocker import lastdocumentslistmodel
 class LastDocumentsDocker(krita.DockWidget):
 
     def __init__(self):
-       super(LastDocumentsDocker, self).__init__()
+        super(LastDocumentsDocker, self).__init__()
 
        self.baseWidget = QWidget()
        self.layout = QVBoxLayout()
@@ -20,8 +20,8 @@ class LastDocumentsDocker(krita.DockWidget):
        self.layout.addWidget(self.listView)
        self.layout.addWidget(self.loadButton)
 
-       self.baseWidget.setLayout(self.layout)
-       self.setWidget(self.baseWidget)
+        self.baseWidget.setLayout(self.layout)
+        self.setWidget(self.baseWidget)
 
        self.loadButton.clicked.connect(self.refreshRecentDocuments)
        self.setWindowTitle("Last Documents Docker")

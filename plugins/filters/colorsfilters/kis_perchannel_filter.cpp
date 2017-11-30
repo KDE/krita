@@ -80,7 +80,7 @@ QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
     return vchannels;
 }
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisConfigWidget(parent, f), m_histogram(0)
 {
     Q_ASSERT(dev);
@@ -414,6 +414,24 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
         e = e.nextSiblingElement();
     }
 
+    //prepend empty curves for the brightness contrast filter.
+    if(getString("legacy") == "brightnesscontrast") {
+        if (getString("colorModel") == LABAColorModelID.id()) {
+            curves.append(KisCubicCurve());
+            curves.append(KisCubicCurve());
+            curves.append(KisCubicCurve());
+        } else {
+            int extraChannels = 5;
+            if (getString("colorModel") == CMYKAColorModelID.id()) {
+                extraChannels = 6;
+            } else if (getString("colorModel") == GrayAColorModelID.id()) {
+                extraChannels = 0;
+            }
+            for(int c = 0; c < extraChannels; c ++) {
+                curves.insert(0, KisCubicCurve());
+            }
+        }
+    }
     if (!numTransfers)
         return;
 

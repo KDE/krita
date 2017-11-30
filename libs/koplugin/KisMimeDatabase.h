@@ -34,7 +34,7 @@ class KRITAPLUGIN_EXPORT KisMimeDatabase
 public:
 
     /// Find the mimetype for the given filename. The filename must include a suffix.
-    static QString mimeTypeForFile(const QString &file);
+    static QString mimeTypeForFile(const QString &file, bool checkExistingFiles = true);
     /// Find the mimetype for a given extension. The extension may have the form "*.xxx" or "xxx"
     static QString mimeTypeForSuffix(const QString &suffix);
     /// Find the mimetype through analyzing the contents. This does not work for Krita's

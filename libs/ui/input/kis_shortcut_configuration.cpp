@@ -345,6 +345,10 @@ QString KisShortcutConfiguration::wheelToText(KisShortcutConfiguration::MouseWhe
         return i18n("Mouse Wheel Right");
         break;
 
+    case KisShortcutConfiguration::WheelTrackpad:
+        return i18n("Trackpad Pan");
+        break;
+
     default:
         return i18nc("No mouse wheel buttons for shortcut", "None");
         break;

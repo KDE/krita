@@ -208,13 +208,16 @@ public:
 
     bool canvasIsMirrored() const;
 
+    void syncLastActiveNodeToDocument();
+
 public Q_SLOTS:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
      * @todo rename to something more generic
+     * @param value determines autosaving
      */
-    void slotActionStatusText(const QString &text);
+    void slotSavingStatusMessage(const QString &text, int timeout, bool isAutoSaving = false);
 
     /**
      * End of the message in the status bar (calls QStatusBar::clear())

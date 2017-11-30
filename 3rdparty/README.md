@@ -34,7 +34,11 @@ Note: on all operating systems the entire procedure is done in a terminal window
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.
 
-4. On Windows, you will also need Python 3.6.2 (technically any versions of 3.6 is fine, but it's not tested): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module. Make sure the version you download is exactly python-3.6.2. Make sure that specific version of Python comes first in your path.
+4. On Windows, you will also need Python 3.6.2 (technically any versions of 3.6 is fine, but it's not tested): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module. Make sure the version you download is exactly python-3.6.2. Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
+
+Make sure that your Python will have the correct architecture for the version you are trying to build: https://www.python.org/downloads/windows/ 
+
+5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
 
 == Setup your environment ==
 
@@ -82,13 +86,15 @@ Note: on all operating systems the entire procedure is done in a terminal window
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
     set PATH=%BUILDROOT%\i\bin\;%BUILDROOT%\i\lib;%PATH%
-    set PYTHONHOME=%BUILDROOT%/i (only if you want to build your own python)
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
 - If you want to build Qt and some other dependencies with parallel jobs, add
   `-DSUBMAKE_JOBS=<n>` to the cmake command where <n> is the number of jobs to
   run (if your PC has 4 CPU cores, you might want to set it to 5).
+
+- If you don't have Windows 10 SDK and don't want to build Qt with ANGLE, add
+  `-DQT_ENABLE_DYNAMIC_OPENGL=OFF` to the CMake command line args.
 
 3. build the packages:
 
@@ -162,13 +168,16 @@ On Windows, if you want to include Python scripting:
     cmake --build . --config RelWithDebInfo --target ext_sip
     cmake --build . --config RelWithDebInfo --target ext_pyqt
 
+On Windows and Linux, if you want to build gmic-qt:
+
+    cmake --build . --config RelWithDebInfo --target ext_gmic
+
 Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on
 Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
-Note 2: libcurl still isn't available.
+Note 2: if you want to build a release, you need to get the binary gettext
 
-Note 3: if you want to build a release, you need to get the binary gettext
 archives from files.kde.org/krita/build/dependencies:
 
   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
@@ -239,4 +248,3 @@ On OSX
 If you want to create a stripped down version of Krita to distribute, after building everything just copy the package_2.cmd file from the "windows" folder inside krita root source folder to BUILDROOT and run it (most likely C:\dev\).
 
 That script will copy the necessary files into the specified folder and leave out developer related files. After the script runs there will be two new ZIP files that contain a small portable version of Krita and a separate portable debug version.
->>>>>>> origin/master

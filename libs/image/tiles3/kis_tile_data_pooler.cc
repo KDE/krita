@@ -221,6 +221,31 @@ void KisTileDataPooler::run()
     }
 }
 
+void KisTileDataPooler::forceUpdateMemoryStats()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!isRunning());
+
+    KisTileDataStoreReverseIterator *iter = m_store->beginReverseIteration();
+    QList<KisTileData*> beggers;
+    QList<KisTileData*> donors;
+    qint32 memoryOccupied;
+
+    qint32 statRealMemory;
+    qint32 statHistoricalMemory;
+
+
+    getLists(iter, beggers, donors,
+             memoryOccupied,
+             statRealMemory,
+             statHistoricalMemory);
+
+    m_lastPoolMemoryMetric = memoryOccupied;
+    m_lastRealMemoryMetric = statRealMemory;
+    m_lastHistoricalMemoryMetric = statHistoricalMemory;
+
+    m_store->endIteration(iter);
+}
+
 qint64 KisTileDataPooler::lastPoolMemoryMetric() const
 {
     return m_lastPoolMemoryMetric;

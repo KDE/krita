@@ -42,7 +42,7 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
     ~KisNodeProgressProxy() override;
 
 public:
-    int maximum() const override ;
+    int maximum() const override;
     void setValue(int value) override;
     void setRange(int minimum, int maximum) override;
     void setFormat(const QString & format) override;

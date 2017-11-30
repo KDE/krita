@@ -26,7 +26,8 @@
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_strategy_factory.h"
 #include "kis_strokes_queue_undo_result.h"
-
+#include "KisStrokesQueueMutatedJobInterface.h"
+#include "KisUpdaterContextSnapshotEx.h"
 
 
 class KisUpdaterContext;
@@ -36,7 +37,7 @@ class KisStrokeJobData;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITAIMAGE_EXPORT KisStrokesQueue
+class KRITAIMAGE_EXPORT KisStrokesQueue : public KisStrokesQueueMutatedJobInterface
 {
 public:
     KisStrokesQueue();
@@ -62,6 +63,7 @@ public:
     bool hasOpenedStrokes() const;
 
     bool wrapAroundModeSupported() const;
+    qreal balancingRatioOverride() const;
 
     void setDesiredLevelOfDetail(int lod);
     void explicitRegenerateLevelOfDetail();
@@ -79,14 +81,17 @@ public:
 
     void debugDumpAllStrokes();
 
+    // interface for KisStrokeStrategy only!
+    void addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobData*> list) final;
+
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,
                        bool externalJobsPending);
     bool checkStrokeState(bool hasStrokeJobsRunning,
                           int runningLevelOfDetail);
-    bool checkExclusiveProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
-    bool checkSequentialProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
-    bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
+    bool checkExclusiveProperty(bool hasMergeJobs, bool hasStrokeJobs);
+    bool checkSequentialProperty(KisUpdaterContextSnapshotEx snapshot, bool externalJobsPending);
+    bool checkBarrierProperty(bool hasMergeJobs, bool hasStrokeJobs,
                               bool externalJobsPending);
     bool checkLevelOfDetailProperty(int runningLevelOfDetail);
 

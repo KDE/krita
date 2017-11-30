@@ -23,19 +23,19 @@ class TestAction(unittest.TestCase):
 
     def testEqualOperator(self):
         new_action = self.instance
-        self.assertEqual(new_action==self.instance, True)
+        self.assertEqual(new_action == self.instance, True)
 
     def testInequalityOperator(self):
         new_action = Action()
-        self.assertEqual(new_action!=self.instance, True)
+        self.assertEqual(new_action != self.instance, True)
 
     def testTextProperties(self):
         self.instance.setText("test")
-        self.assertEqual(self.instance.text()=="test", True)
+        self.assertEqual(self.instance.text() == "test", True)
 
     def testNameProperties(self):
         self.instance.setName("test")
-        self.assertEqual(self.instance.name()=="test", True)
+        self.assertEqual(self.instance.name() == "test", True)
 
     def testCheckableInitialState(self):
         self.assertEqual(self.instance.isCheckable(), False)
@@ -79,6 +79,6 @@ class TestAction(unittest.TestCase):
         self.instance.trigger()
         self.assertEqual(self.triggered, True)
 
-    #helper method
+    # helper method
     def slotTriggered(self):
         self.triggered = True

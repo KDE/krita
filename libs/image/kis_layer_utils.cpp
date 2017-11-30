@@ -39,6 +39,7 @@
 #include "commands/kis_image_layer_move_command.h"
 #include "commands/kis_image_change_layers_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
+#include "commands/kis_image_change_visibility_command.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_processing_applicator.h"
 #include "kis_image_animation_interface.h"
@@ -50,6 +51,7 @@
 #include "lazybrush/kis_colorize_mask.h"
 #include "commands/kis_node_property_list_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
+#include "krita_utils.h"
 
 
 namespace KisLayerUtils {
@@ -682,7 +684,18 @@ namespace KisLayerUtils {
                                            m_info->selectionMasks);
                 }
 
-                safeRemoveMultipleNodes(m_info->allSrcNodes(), m_info->image);
+                KisNodeList safeNodesToDelete = m_info->allSrcNodes();
+                for (KisNodeList::iterator it = safeNodesToDelete.begin(); it != safeNodesToDelete.end(); ++it) {
+                    KisNodeSP node = *it;
+                    if (node->userLocked() && node->visible()) {
+                        addCommand(new KisImageChangeVisibilityCommand(false, node));
+                    }
+                }
+
+                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [this](KisNodeSP node) {
+                  return !node->userLocked();
+                });
+                safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
             }
 
 
@@ -1048,7 +1061,7 @@ namespace KisLayerUtils {
         int putAfterIndex = -1;
 
         Q_FOREACH(KisNodeSP node, nodes) {
-            if (node->visible()) {
+            if (node->visible() || node->userLocked()) {
                 visibleNodes << node;
             } else {
                 *invisibleNodes << node;

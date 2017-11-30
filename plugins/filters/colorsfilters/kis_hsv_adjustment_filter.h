@@ -62,7 +62,7 @@ class KisHSVConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisHSVConfigWidget(QWidget * parent, Qt::WFlags f = 0);
+    KisHSVConfigWidget(QWidget * parent, Qt::WindowFlags f = 0);
     ~KisHSVConfigWidget() override;
 
     KisPropertiesConfigurationSP  configuration() const override;
@@ -72,6 +72,7 @@ public:
 private Q_SLOTS:
 
     void configureSliderLimitsAndLabels();
+    void resetFilter();
 };
 
 #endif

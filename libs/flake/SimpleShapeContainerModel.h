@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +36,11 @@ public:
           m_clipped(rhs.m_clipped)
     {
         Q_FOREACH (KoShape *shape, rhs.m_members) {
-            m_members << shape->cloneShape();
+            KoShape *clone = shape->cloneShape();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(clone && "Copying this shape is not implemented!");
+            if (clone) {
+                m_members << clone;
+            }
         }
 
         KIS_ASSERT_RECOVER(m_members.size() == m_inheritsTransform.size() &&

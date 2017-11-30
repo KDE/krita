@@ -238,15 +238,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     bool useCache = true;
 #endif
 
-#ifdef VECTORSHAPE_PAINT_UNTHREADED
-    bool asynchronous = false;
-#else
-    // Since the backends may use QPainter::drawText we need to make sure to only
-    // use threads if the font-backend supports that what is in most cases.
-    bool asynchronous = QFontDatabase::supportsThreadedFontRendering();
-#endif
-
-    QImage *cache = render(converter, asynchronous, useCache);
+    QImage *cache = render(converter, true, useCache);
     if (cache) { // paint cached image
         Q_ASSERT(!cache->isNull());
         QVector<QRect> clipRects = KisPaintingTweaks::safeClipRegion(painter).rects();

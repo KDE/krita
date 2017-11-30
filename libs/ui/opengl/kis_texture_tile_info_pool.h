@@ -26,10 +26,12 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QSharedPointer>
+#include <QApplication>
 
 #include "kis_assert.h"
 #include "kis_debug.h"
 #include "kis_global.h"
+#include "kis_signal_compressor.h"
 
 const int minPoolChunk = 32; // 8 MiB (default, with tilesize 256)
 const int maxPoolChunk = 128; // 32 MiB (default, with tilesize 256)
@@ -54,7 +56,8 @@ public:
         : m_chunkSize(tileWidth * tileHeight * pixelSize),
           m_pool(m_chunkSize, minPoolChunk, maxPoolChunk),
           m_numAllocations(0),
-          m_maxAllocations(0)
+          m_maxAllocations(0),
+          m_numFrees(0)
     {
     }
 
@@ -65,21 +68,31 @@ public:
         return (quint8*)m_pool.malloc();
     }
 
-    void free(quint8 *ptr) {
+    bool free(quint8 *ptr) {
         m_numAllocations--;
+        m_numFrees++;
         m_pool.free(ptr);
 
         KIS_ASSERT_RECOVER_NOOP(m_numAllocations >= 0);
 
-        if (!m_numAllocations && m_maxAllocations > freeThreshold) {
-            // qDebug() << "Purging memory" << ppVar(m_maxAllocations);
-            m_pool.purge_memory();
-            m_maxAllocations = 0;
-        }
+        return !m_numAllocations && m_maxAllocations > freeThreshold;
     }
 
     int chunkSize() const {
         return m_chunkSize;
+    }
+
+    int numFrees() const {
+        return m_numFrees;
+    }
+
+    void tryPurge(int numFrees) {
+        // checking numFrees here is asserting that there were no frees
+        // between the time we originally indicated the purge and now.
+        if (numFrees == m_numFrees && !m_numAllocations) {
+            m_pool.purge_memory();
+            m_maxAllocations = 0;
+        }
     }
 
 private:
@@ -87,6 +100,25 @@ private:
     boost::pool<boost::default_user_allocator_new_delete> m_pool;
     int m_numAllocations;
     int m_maxAllocations;
+    int m_numFrees;
+};
+
+class KisTextureTileInfoPool;
+
+class KisTextureTileInfoPoolWorker : public QObject
+{
+    Q_OBJECT
+public:
+    KisTextureTileInfoPoolWorker(KisTextureTileInfoPool *pool);
+
+public Q_SLOTS:
+    void slotPurge(int pixelSize, int numFrees);
+    void slotDelayedPurge();
+
+private:
+    KisTextureTileInfoPool *m_pool;
+    KisSignalCompressor m_compressor;
+    QMap<int, int> m_purge;
 };
 
 /**
@@ -94,16 +126,21 @@ private:
  * sizes.  The underlying pools are created for each pixel size on
  * demand.
  */
-class KisTextureTileInfoPool
+class KisTextureTileInfoPool : public QObject
 {
+    Q_OBJECT
 public:
     KisTextureTileInfoPool(int tileWidth, int tileHeight)
         : m_tileWidth(tileWidth),
           m_tileHeight(tileHeight)
     {
+        m_worker = new KisTextureTileInfoPoolWorker(this);
+        m_worker->moveToThread(QApplication::instance()->thread());
+        connect(this, SIGNAL(purge(int, int)), m_worker, SLOT(slotPurge(int, int)));
     }
 
     ~KisTextureTileInfoPool() {
+        delete m_worker;
         qDeleteAll(m_pools);
     }
 
@@ -130,7 +167,10 @@ public:
      */
     void free(quint8 *ptr, int pixelSize) {
         QMutexLocker l(&m_mutex);
-        m_pools[pixelSize]->free(ptr);
+        KisTextureTileInfoPoolSingleSize *pool = m_pools[pixelSize];
+        if (pool->free(ptr)) {
+            emit purge(pixelSize, pool->numFrees());
+        }
     }
 
     /**
@@ -141,11 +181,20 @@ public:
         return m_pools[pixelSize]->chunkSize();
     }
 
+    void tryPurge(int pixelSize, int numFrees) {
+        QMutexLocker l(&m_mutex);
+        m_pools[pixelSize]->tryPurge(numFrees);
+    }
+
+Q_SIGNALS:
+    void purge(int pixelSize, int numFrees);
+
 private:
     mutable QMutex m_mutex;
     const int m_tileWidth;
     const int m_tileHeight;
     QVector<KisTextureTileInfoPoolSingleSize*> m_pools;
+    KisTextureTileInfoPoolWorker *m_worker;
 };
 
 typedef QSharedPointer<KisTextureTileInfoPool> KisTextureTileInfoPoolSP;

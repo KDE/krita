@@ -32,7 +32,6 @@ KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle()
       m_fanCornersEnabled(false),
       m_fanCornersStep(30),
       m_angleOffset(0),
-      m_dabIndex(0),
       m_lockedAngle(0),
       m_lockedAngleMode(false)
 {
@@ -40,26 +39,16 @@ KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle()
 
 void KisDynamicSensorDrawingAngle::reset()
 {
-    m_dabIndex = 0;
 }
 
 qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
 {
     /* so that we are in 0.0..1.0 */
-    qreal ret = 0.5 + info.drawingAngle() / (2.0 * M_PI) + m_angleOffset/360.0;
+    qreal ret = 0.5 + info.drawingAngle(m_lockedAngleMode) / (2.0 * M_PI) + m_angleOffset/360.0;
 
     // check if m_angleOffset pushed us out of bounds
     if (ret > 1.0)
         ret -= 1.0;
-
-    if (!info.isHoveringMode() && m_lockedAngleMode) {
-        if (!m_dabIndex) {
-            info.lockCurrentDrawingAngle(1.0);
-        } else {
-            info.lockCurrentDrawingAngle(0.5);
-        }
-        m_dabIndex++;
-    }
 
     return ret;
 }

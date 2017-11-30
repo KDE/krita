@@ -96,6 +96,12 @@ KisTileDataStore* KisTileDataStore::instance()
 
 KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 {
+    // in case the pooler is disabled, we should force it
+    // to update the stats
+    if (!m_pooler.isRunning()) {
+        m_pooler.forceUpdateMemoryStats();
+    }
+
     QMutexLocker lock(&m_listLock);
 
     MemoryStatistics stats;
@@ -253,8 +259,12 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
 
     if(td->data()) {
         unregisterTileDataImp(td);
-        m_swappedStore.swapOutTileData(td);
-        result = true;
+        if (m_swappedStore.trySwapOutTileData(td)) {
+            result = true;
+        } else {
+            result = false;
+            registerTileDataImp(td);
+        }
     }
     td->m_swapLock.unlock();
 

@@ -50,7 +50,7 @@ class UITenBrushes(object):
             button.presetChooser = self.presetChooser
 
             if self.tentbrushes.actions[index] and self.tentbrushes.actions[index].preset and self.tentbrushes.actions[index].preset in allPresets:
-                p = allPresets[self.tentbrushes.actions[index].preset];
+                p = allPresets[self.tentbrushes.actions[index].preset]
                 button.preset = p.name()
                 button.setIcon(QIcon(QPixmap.fromImage(p.image())))
 

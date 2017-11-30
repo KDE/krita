@@ -34,8 +34,9 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QMenu>
@@ -84,6 +85,7 @@
 #include "kis_canvas_controls_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_composite_progress_proxy.h"
+#include <KoProgressUpdater.h>
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
@@ -93,6 +95,7 @@
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
 #include <kis_image.h>
+#include <kis_image_barrier_locker.h>
 #include "kis_image_manager.h"
 #include <kis_layer.h>
 #include "kis_mainwindow_observer.h"
@@ -108,7 +111,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include "KisPrintJob.h"
-#include "kis_progress_widget.h"
+#include <KoUpdater.h>
 #include "kis_resource_server_provider.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
@@ -129,6 +132,7 @@
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
+#include <kis_image.h>
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -188,15 +192,9 @@ public:
         , inputManager(_q)
         , scriptManager(_q)
         , actionAuthor(0)
+        , showPixelGrid(0)
     {
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
-        canvasResourceManager.addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+        KisViewManager::initializeResourceManager(&canvasResourceManager);
     }
 
 public:
@@ -222,6 +220,10 @@ public:
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
     KisStatusBar statusBar;
+    QPointer<KoUpdater> persistentImageProgressUpdater;
+
+    QScopedPointer<KoProgressUpdater> persistentUnthreadedProgressUpdaterRouter;
+    QPointer<KoUpdater> persistentUnthreadedProgressUpdater;
 
     KisControlFrame controlFrame;
     KisNodeManager nodeManager;
@@ -245,6 +247,7 @@ public:
     KisSignalAutoConnectionsStore viewConnections;
     KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
+    KisAction *showPixelGrid;
 
     QByteArray canvasState;
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
@@ -253,7 +256,6 @@ public:
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
-
 
 KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate(this, _actionCollection, parent))
@@ -268,6 +270,23 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     // These initialization functions must wait until KisViewManager ctor is complete.
     d->statusBar.setup();
+    d->persistentImageProgressUpdater =
+        d->statusBar.progressUpdater()->startSubtask(1, "", true);
+    // reset state to "completed"
+    d->persistentImageProgressUpdater->setRange(0,100);
+    d->persistentImageProgressUpdater->setValue(100);
+
+    d->persistentUnthreadedProgressUpdater =
+        d->statusBar.progressUpdater()->startSubtask(1, "", true);
+        // reset state to "completed"
+    d->persistentUnthreadedProgressUpdater->setRange(0,100);
+    d->persistentUnthreadedProgressUpdater->setValue(100);
+
+    d->persistentUnthreadedProgressUpdaterRouter.reset(
+        new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
+                              KoProgressUpdater::Unthreaded));
+    d->persistentUnthreadedProgressUpdaterRouter->setAutoNestNames(true);
+
     d->controlFrame.setup(parent);
 
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
@@ -318,6 +337,18 @@ KisViewManager::~KisViewManager()
     delete d;
 }
 
+void KisViewManager::initializeResourceManager(KoCanvasResourceManager *resourceManager)
+{
+    resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+    resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+}
+
 KActionCollection *KisViewManager::actionCollection() const
 {
     return d->actionCollection;
@@ -325,7 +356,9 @@ KActionCollection *KisViewManager::actionCollection() const
 
 void KisViewManager::slotViewAdded(KisView *view)
 {
-    d->inputManager.addTrackedCanvas(view->canvasBase());
+    // WARNING: this slot is called even when a view from another main windows is added!
+    //          Don't expect \p view be a child of this view manager!
+    Q_UNUSED(view);
 
     if (viewCount() == 0) {
         d->statusBar.showAllStatusBarItems();
@@ -334,7 +367,9 @@ void KisViewManager::slotViewAdded(KisView *view)
 
 void KisViewManager::slotViewRemoved(KisView *view)
 {
-    d->inputManager.removeTrackedCanvas(view->canvasBase());
+    // WARNING: this slot is called even when a view from another main windows is removed!
+    //          Don't expect \p view be a child of this view manager!
+    Q_UNUSED(view);
 
     if (viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
@@ -351,6 +386,7 @@ void KisViewManager::setCurrentView(KisView *view)
         first = false;
         KisDocument* doc = d->currentImageView->document();
         if (doc) {
+            doc->image()->compositeProgressProxy()->removeProxy(d->persistentImageProgressUpdater);
             doc->disconnect(this);
         }
         d->currentImageView->canvasController()->proxyObject->disconnect(&d->statusBar);
@@ -358,17 +394,17 @@ void KisViewManager::setCurrentView(KisView *view)
     }
 
 
-    d->softProof->setChecked(view->softProofing());
-    d->gamutCheck->setChecked(view->gamutCheck());
-
-    QPointer<KisView>imageView = qobject_cast<KisView*>(view);
+    QPointer<KisView> imageView = qobject_cast<KisView*>(view);
+    d->currentImageView = imageView;
 
     if (imageView) {
+        d->softProof->setChecked(imageView->softProofing());
+        d->gamutCheck->setChecked(imageView->gamutCheck());
+
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
-        d->currentImageView = imageView;
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisConfig cfg;
@@ -417,6 +453,12 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
 
+        // set up progrress reporting
+        doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
+        d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
+
+        d->viewConnections.addUniqueConnection(d->showPixelGrid, SIGNAL(toggled(bool)), canvasController, SLOT(slotTogglePixelGrid(bool)));
+
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
 
@@ -439,30 +481,30 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
+
+        d->viewConnections.addUniqueConnection(
+            image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+            resourceProvider(), SLOT(slotImageSizeChanged()));
+
+        d->viewConnections.addUniqueConnection(
+            image(), SIGNAL(sigResolutionChanged(double,double)),
+            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
+        d->viewConnections.addUniqueConnection(
+            image(), SIGNAL(sigNodeChanged(KisNodeSP)),
+            this, SLOT(updateGUI()));
+
+        d->viewConnections.addUniqueConnection(
+            d->currentImageView->zoomManager()->zoomController(),
+            SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
     }
 
     d->actionManager.updateGUI();
 
-    d->viewConnections.addUniqueConnection(
-        image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
-        resourceProvider(), SLOT(slotImageSizeChanged()));
-
-    d->viewConnections.addUniqueConnection(
-        image(), SIGNAL(sigResolutionChanged(double,double)),
-        resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
-    d->viewConnections.addUniqueConnection(
-        image(), SIGNAL(sigNodeChanged(KisNodeSP)),
-        this, SLOT(updateGUI()));
-
-    d->viewConnections.addUniqueConnection(
-        view->zoomManager()->zoomController(),
-        SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-        resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
-
 
     Q_EMIT viewChanged();
 }
@@ -525,9 +567,14 @@ KisPaintopBox* KisViewManager::paintOpBox() const
     return d->controlFrame.paintopBox();
 }
 
-KoProgressUpdater* KisViewManager::createProgressUpdater(KoProgressUpdater::Mode mode)
+QPointer<KoUpdater> KisViewManager::createUnthreadedUpdater(const QString &name)
 {
-    return new KisProgressUpdater(d->statusBar.progress(), document()->progressProxy(), mode);
+    return d->persistentUnthreadedProgressUpdaterRouter->startSubtask(1, name, false);
+}
+
+QPointer<KoUpdater> KisViewManager::createThreadedUpdater(const QString &name)
+{
+    return d->statusBar.progressUpdater()->startSubtask(1, name, false);
 }
 
 KisSelectionManager * KisViewManager::selectionManager()
@@ -676,6 +723,9 @@ void KisViewManager::createActions()
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
 
+    d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
+    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
+
 }
 
 void KisViewManager::setupManagers()
@@ -786,19 +836,25 @@ void KisViewManager::slotCreateTemplate()
 
 void KisViewManager::slotCreateCopy()
 {
-    if (!document()) return;
-    KisDocument *doc = KisPart::instance()->createDocument();
+    KisDocument *srcDoc = document();
+    if (!srcDoc) return;
 
-    QString name = document()->documentInfo()->aboutInfo("name");
+    if (!this->blockUntilOperationsFinished(srcDoc->image())) return;
+
+    KisDocument *doc = 0;
+    {
+        KisImageBarrierLocker l(srcDoc->image());
+        doc = srcDoc->clone();
+    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(doc);
+
+    QString name = srcDoc->documentInfo()->aboutInfo("name");
     if (name.isEmpty()) {
         name = document()->url().toLocalFile();
     }
     name = i18n("%1 (Copy)", name);
     doc->documentInfo()->setAboutInfo("title", name);
-    KisImageWSP image = document()->image();
-    KisImageSP newImage = new KisImage(doc->createUndoStore(), image->width(), image->height(), image->colorSpace(), name);
-    newImage->setRootLayer(dynamic_cast<KisGroupLayer*>(image->rootLayer()->clone().data()));
-    doc->setCurrentImage(newImage);
+
     KisPart::instance()->addDocument(doc);
     KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
     mw->addViewAndNotifyLoadingCompleted(doc);
@@ -822,7 +878,6 @@ void KisViewManager::setQtMainWindow(QMainWindow* newMainWindow)
 {
     d->mainWindow = newMainWindow;
 }
-
 
 void KisViewManager::slotDocumentSaved()
 {
@@ -870,6 +925,7 @@ void KisViewManager::slotSaveIncremental()
         }
         version.remove(0, 1);            //  Trim "_"
     } else {
+        // TODO: this will not work with files extensions like jp2
         // ...else, simply add a version to it so the next loop works
         QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
         regex2.indexIn(fileName);
@@ -916,7 +972,7 @@ void KisViewManager::slotSaveIncremental()
         return;
     }
     document()->setFileBatchMode(true);
-    document()->saveAs(QUrl::fromUserInput(fileName));
+    document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
     document()->setFileBatchMode(false);
 
     if (mainWindow()) {
@@ -987,7 +1043,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             return;
         }
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName));
+        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1025,7 +1081,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Save both as backup and on current file for interapplication workflow
         document()->setFileBatchMode(true);
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName));
+        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
         document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();
@@ -1275,10 +1331,8 @@ void KisViewManager::setShowFloatingMessage(bool show)
 void KisViewManager::changeAuthorProfile(const QString &profileName)
 {
     KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
-    if (profileName.isEmpty()) {
+    if (profileName.isEmpty() || profileName == i18nc("choice for author profile", "Anonymous")) {
         appAuthorGroup.writeEntry("active-profile", "");
-    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
-        appAuthorGroup.writeEntry("active-profile", "anonymous");
     } else {
         appAuthorGroup.writeEntry("active-profile", profileName);
     }
@@ -1295,11 +1349,20 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         return;
     }
     d->actionAuthor->clear();
-    d->actionAuthor->addAction(i18n("Default Author Profile"));
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
     KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QStringList filters = QStringList() << "*.authorinfo";
+    QDir dir(authorInfo);
+    Q_FOREACH(QString entry, dir.entryList(filters)) {
+        int ln = QString(".authorinfo").size();
+        entry.chop(ln);
+        if (!profiles.contains(entry)) {
+            profiles.append(entry);
+        }
+    }
     Q_FOREACH (const QString &profile , profiles) {
         d->actionAuthor->addAction(profile);
     }
@@ -1307,11 +1370,9 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
 
-    if (profileName == "anonymous") {
-        d->actionAuthor->setCurrentItem(1);
+    if (profileName == "anonymous" || profileName.isEmpty()) {
+        d->actionAuthor->setCurrentItem(0);
     } else if (profiles.contains(profileName)) {
         d->actionAuthor->setCurrentAction(profileName);
-    } else {
-        d->actionAuthor->setCurrentItem(0);
     }
 }

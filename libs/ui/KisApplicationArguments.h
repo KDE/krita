@@ -24,6 +24,7 @@
 class QApplication;
 class QByteArray;
 class QStringList;
+class KisDocument;
 
 #include "kritaui_export.h"
 
@@ -48,6 +49,13 @@ public:
     bool exportAs() const;
     bool exportAsPdf() const;
     QString exportFileName() const;
+    QString workspace() const;
+    bool canvasOnly() const;
+    bool noSplash() const;
+    bool fullScreen() const;
+    bool doNewImage() const;
+    KisDocument *image() const;
+
 
 private:
 

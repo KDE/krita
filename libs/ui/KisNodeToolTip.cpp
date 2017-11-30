@@ -60,11 +60,16 @@ QTextDocument *KisNodeToolTip::createDocument(const QModelIndex &index)
 
     const QString image = QString("<table border=\"1\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>");
     const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name)
-                       + QString("<table><tr><td>%1</td><td>%2</td></tr></table>").arg(image).arg(rows);
+                       + QString("<p><table><tr><td>%1</td><td>%2</td></tr></table></p>").arg(image).arg(rows);
     const QString html = QString("<html><body>%1</body></html>").arg(body);
 
     doc->setHtml(html);
-    doc->setTextWidth(qMin(doc->size().width(), qreal(500.0)));
+
+    const int margin = 16;
+    doc->setTextWidth(qMin(doc->size().width() + 2 * margin, qreal(500.0)));
+
+    doc->setDocumentMargin(margin);
+    doc->setUseDesignMetrics(true);
 
     return doc;
 }

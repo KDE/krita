@@ -37,7 +37,7 @@ public:
 
     struct EqualizerValues {
         int maxDistance;
-        QMap<int, int> value;
+        QMap<int, qreal> value;
         QMap<int, bool> state;
     };
 

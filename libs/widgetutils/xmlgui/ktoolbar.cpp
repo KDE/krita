@@ -784,18 +784,6 @@ void KToolBar::Private::slotLockToolBars(bool lock)
     q->setToolBarsLocked(lock);
 }
 
-KToolBar::KToolBar(QWidget *parent, bool isMainToolBar, bool readConfig)
-    : QToolBar(parent),
-      d(new Private(this))
-{
-    d->init(readConfig, isMainToolBar);
-
-    // KToolBar is auto-added to the top area of the main window if parent is a QMainWindow
-    if (QMainWindow *mw = qobject_cast<QMainWindow *>(parent)) {
-        mw->addToolBar(this);
-    }
-}
-
 KToolBar::KToolBar(const QString &objectName, QWidget *parent, bool readConfig)
     : QToolBar(parent),
       d(new Private(this))
@@ -808,25 +796,6 @@ KToolBar::KToolBar(const QString &objectName, QWidget *parent, bool readConfig)
     // KToolBar is auto-added to the top area of the main window if parent is a QMainWindow
     if (QMainWindow *mw = qobject_cast<QMainWindow *>(parent)) {
         mw->addToolBar(this);
-    }
-}
-
-KToolBar::KToolBar(const QString &objectName, QMainWindow *parent, Qt::ToolBarArea area,
-                   bool newLine, bool isMainToolBar, bool readConfig)
-    : QToolBar(parent),
-      d(new Private(this))
-{
-    setObjectName(objectName);
-    d->init(readConfig, isMainToolBar);
-
-    if (newLine) {
-        mainWindow()->addToolBarBreak(area);
-    }
-
-    mainWindow()->addToolBar(area, this);
-
-    if (newLine) {
-        mainWindow()->addToolBarBreak(area);
     }
 }
 

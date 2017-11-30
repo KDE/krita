@@ -56,6 +56,7 @@ public: // KisAbstractCanvasWidget
     void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const override;
 
     void addDecoration(KisCanvasDecorationSP deco) override;
+    void removeDecoration(const QString& id) override;
     KisCanvasDecorationSP decoration(const QString& id) const override;
 
     void setDecorations(const QList<KisCanvasDecorationSP > &) override;

@@ -130,7 +130,7 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
     }
 
 
-    KisTileHashTableIterator iter(m_hashTable);
+    KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     KisAbstractTileCompressorSP compressor =
@@ -142,7 +142,7 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
             warnFile << "Failed to write tile";
             break;
         }
-        ++iter;
+        iter.next();
     }
 
     return retval;
@@ -289,7 +289,7 @@ void KisTiledDataManager::purge(const QRect& area)
         tileData->blockSwapping();
         const quint8 *defaultData = tileData->data();
 
-        KisTileHashTableIterator iter(m_hashTable);
+        KisTileHashTableConstIterator iter(m_hashTable);
         KisTileSP tile;
 
         while ((tile = iter.tile())) {
@@ -300,7 +300,7 @@ void KisTiledDataManager::purge(const QRect& area)
                 }
                 tile->unlock();
             }
-            ++iter;
+            iter.next();
         }
 
         tileData->unblockSwapping();
@@ -385,7 +385,13 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
             if (clearTileRect == tileRect) {
                  // Clear whole tile
                  m_hashTable->deleteTile(column, row);
-                 needsRecalculateExtent = true;
+
+                 if (!needsRecalculateExtent &&
+                     (m_extentMinX == tileRect.left() || m_extentMaxX == tileRect.right() ||
+                      m_extentMinY == tileRect.top() || m_extentMaxY == tileRect.bottom())) {
+
+                     needsRecalculateExtent = true;
+                 }
 
                  if (!pixelBytesAreDefault) {
                      KisTileSP clearedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
@@ -608,7 +614,7 @@ void KisTiledDataManager::setExtent(QRect newRect)
             tileRect = tile->extent();
             if (newRect.contains(tileRect)) {
                 //do nothing
-                ++iter;
+                iter.next();
             } else if (newRect.intersects(tileRect)) {
                 QRect intersection = newRect & tileRect;
                 intersection.translate(- tileRect.topLeft());
@@ -629,7 +635,7 @@ void KisTiledDataManager::setExtent(QRect newRect)
                     }
                 }
                 tile->unlock();
-                ++iter;
+                iter.next();
             } else {
                 iter.deleteCurrent();
             }
@@ -646,12 +652,12 @@ void KisTiledDataManager::recalculateExtent()
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
 
-    KisTileHashTableIterator iter(m_hashTable);
+    KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     while ((tile = iter.tile())) {
         updateExtent(tile->col(), tile->row());
-        ++iter;
+        iter.next();
     }
 }
 
@@ -694,12 +700,12 @@ QRegion KisTiledDataManager::region() const
 {
     QRegion region;
 
-    KisTileHashTableIterator iter(m_hashTable);
+    KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     while ((tile = iter.tile())) {
         region += tile->extent();
-        ++iter;
+        iter.next();
     }
     return region;
 }

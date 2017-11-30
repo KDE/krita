@@ -45,6 +45,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
 
+#include <KisPart.h>
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kis_config.h>
@@ -62,7 +63,6 @@
 #include <PluginSettings.h>
 
 #include "kis_qmic_applicator.h"
-#include "kis_qmic_progress_manager.h"
 
 static const char ack[] = "ack";
 
@@ -71,11 +71,11 @@ K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>()
 QMic::QMic(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
     , m_gmicApplicator(0)
-    , m_progressManager(0)
 {
-    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
-    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
+#ifndef Q_OS_MAC
+//    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+//    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
+//    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
     m_qmicAction = createAction("QMic");
     m_qmicAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -89,7 +89,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
 
     m_gmicApplicator = new KisQmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
-
+#endif
 }
 
 QMic::~QMic()
@@ -106,7 +106,6 @@ QMic::~QMic()
     }
 
     delete m_gmicApplicator;
-    delete m_progressManager;
     delete m_localServer;
 }
 
@@ -120,32 +119,11 @@ void QMic::slotQMic(bool again)
     m_qmicAction->setEnabled(false);
     m_againAction->setEnabled(false);
 
-    if (m_pluginProcess) {
-        qDebug() << "Plugin is already started" << m_pluginProcess->state();
-        return;
-    }
-
-    delete m_progressManager;
-    m_progressManager = new KisQmicProgressManager(m_view);
-    connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
-
     // find the krita-gmic-qt plugin
-    KisConfig cfg;
-    QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-
-    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-        KoDialog dlg;
-        dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
-        QWidget *w = new QWidget(&dlg);
-        dlg.setMainWidget(w);
-        QVBoxLayout *l = new QVBoxLayout(w);
-        l->addWidget(new PluginSettings(w));
-        dlg.setButtons(KoDialog::Ok);
-        dlg.exec();
-        pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
-        if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-            return;
-        }
+    QString pluginPath = PluginSettings::gmicQtPath();
+    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists() || !QFileInfo(pluginPath).isFile()) {
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin."));
+        return;
     }
 
     m_key = QUuid::createUuid().toString();
@@ -153,10 +131,11 @@ void QMic::slotQMic(bool again)
     m_localServer->listen(m_key);
     connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
     m_pluginProcess = new QProcess(this);
+    connect(m_view, SIGNAL(destroyed(QObject *o)), m_pluginProcess, SLOT(terminate()));
     m_pluginProcess->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
     connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
-    m_pluginProcess->start(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString::null));
+    m_pluginProcess->start(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString()));
 
     bool r = m_pluginProcess->waitForStarted();
     while (m_pluginProcess->waitForFinished(10)) {
@@ -168,6 +147,7 @@ void QMic::slotQMic(bool again)
 void QMic::connected()
 {
     qDebug() << "connected";
+    if (!m_view) return;
 
     QLocalSocket *socket = m_localServer->nextPendingConnection();
     if (!socket) { return; }
@@ -230,6 +210,7 @@ void QMic::connected()
     }
 
     QByteArray ba;
+    QString messageBoxWarningText;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
         KisSelectionSP selection = m_view->image()->globalSelection();
@@ -265,7 +246,7 @@ void QMic::connected()
         QStringList layers = messageMap.values("layer");
         m_outputMode = (OutputMode)mode;
         if (m_outputMode != IN_PLACE) {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented yet."));
+            messageBoxWarningText = i18n("Sorry, this output mode is not implemented yet.");
             m_outputMode = IN_PLACE;
         }
         slotStartApplicator(layers);
@@ -310,6 +291,12 @@ void QMic::connected()
         }
     }
 
+    if (!messageBoxWarningText.isEmpty()) {
+        // Defer the message box to the event loop
+        QTimer::singleShot(0, [messageBoxWarningText]() {
+            QMessageBox::warning(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita"), messageBoxWarningText);
+        });
+    }
 }
 
 void QMic::pluginStateChanged(QProcess::ProcessState state)
@@ -324,29 +311,8 @@ void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
     m_pluginProcess = 0;
     delete m_localServer;
     m_localServer = 0;
-    delete m_progressManager;
-    m_progressManager = 0;
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);
-}
-
-void QMic::slotUpdateProgress()
-{
-    if (!m_gmicApplicator) {
-        qWarning() << "G'Mic applicator already deleted!";
-        return;
-    }
-    qDebug() << "slotUpdateProgress" << m_gmicApplicator->getProgress();
-    m_progressManager->updateProgress(m_gmicApplicator->getProgress());
-}
-
-void QMic::slotStartProgressReporting()
-{
-    qDebug() << "slotStartProgressReporting();";
-    if (m_progressManager->inProgress()) {
-        m_progressManager->finishProgress();
-    }
-    m_progressManager->initProgress();
 }
 
 void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &msg)
@@ -364,7 +330,7 @@ void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &
 void QMic::slotStartApplicator(QStringList gmicImages)
 {
     qDebug() << "slotStartApplicator();" << gmicImages;
-
+    if (!m_view) return;
     // Create a vector of gmic images
 
     QVector<gmic_image<float> *> images;
@@ -424,6 +390,8 @@ void QMic::slotStartApplicator(QStringList gmicImages)
 
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 {
+    if (!m_view) return false;
+
     m_view->image()->lock();
 
     m_inputMode = (InputLayerMode)inputMode;
@@ -439,7 +407,7 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     for (int i = 0; i < nodes->size(); ++i) {
         KisNodeSP node = nodes->at(i);
-        if (node->paintDevice()) {
+        if (node && node->paintDevice()) {
             QRect cropRect;
 
             KisSelectionSP selection = m_view->image()->globalSelection();
@@ -473,8 +441,6 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
             message->append(m->key().toUtf8());
 
             m->unlock();
-
-            qDebug() << "size" << m->size();
 
             message->append(",");
             message->append(node->name().toUtf8().toHex());

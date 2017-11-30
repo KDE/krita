@@ -165,6 +165,21 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+
+
+    <Action name="buginfo">
+      <icon></icon>
+      <text>Show system information for bug reports.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show system information for bug reports.</toolTip>
+      <iconText>Show system information for bug reports.</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
     <Action name="rename_composition">
       <icon></icon>
       <text>Rename Composition...</text>
@@ -194,7 +209,7 @@
   <Actions category="Painting">
     <text>Painting</text>
     <Action name="make_brush_color_lighter">
-      <icon></icon>
+      <icon>lightness-increase</icon>
       <text>Make brush color lighter</text>
       <whatsThis></whatsThis>
       <toolTip>Make brush color lighter</toolTip>
@@ -206,7 +221,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="make_brush_color_darker">
-      <icon></icon>
+      <icon>lightness-decrease</icon>
       <text>Make brush color darker</text>
       <whatsThis></whatsThis>
       <toolTip>Make brush color darker</toolTip>
@@ -298,7 +313,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="increase_opacity">
-      <icon></icon>
+      <icon>opacity-increase</icon>
       <text>Increase opacity</text>
       <whatsThis></whatsThis>
       <toolTip>Increase opacity</toolTip>
@@ -310,7 +325,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="decrease_opacity">
-      <icon></icon>
+      <icon>opacity-decrease</icon>
       <text>Decrease opacity</text>
       <whatsThis></whatsThis>
       <toolTip>Decrease opacity</toolTip>
@@ -388,6 +403,72 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="mirrorX-hideDecorations">
+      <icon></icon>
+      <text>Hide Mirror X Line</text>
+      <whatsThis></whatsThis>
+      <toolTip>Hide Mirror X Line</toolTip>
+      <iconText>Hide Mirror X Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorY-hideDecorations">
+      <icon></icon>
+      <text>Hide Mirror Y Line</text>
+      <whatsThis></whatsThis>
+      <toolTip>Hide Mirror Y Line</toolTip>
+      <iconText>Hide Mirror Y Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+   <Action name="mirrorX-lock">
+      <icon></icon>
+      <text>Lock</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock X Line</toolTip>
+      <iconText>Lock X Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+   <Action name="mirrorY-lock">
+      <icon></icon>
+      <text>Lock Y Line</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock Y Line</toolTip>
+      <iconText>Lock Y Line</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+   <Action name="mirrorX-moveToCenter">
+      <icon></icon>
+      <text>Move to Canvas Center</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move to Canvas Center X</toolTip>
+      <iconText>Move to Canvas Center X</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorY-moveToCenter">
+      <icon></icon>
+      <text>Move to Canvas Center Y</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move to Canvas Center Y</toolTip>
+      <iconText>Move to Canvas Center Y</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="invert">
       <icon></icon>
       <text>&amp;Invert Selection</text>
@@ -397,42 +478,6 @@
       <activationFlags>10000000000</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut>Ctrl+Shift+I</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="fill_selection_foreground_color_opacity">
-      <icon></icon>
-      <text>Fill with Foreground Color (Opacity)</text>
-      <whatsThis></whatsThis>
-      <toolTip>Fill with Foreground Color (Opacity)</toolTip>
-      <iconText>Fill with Foreground Color (Opacity)</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut>Ctrl+Shift+Backspace</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="fill_selection_background_color_opacity">
-      <icon></icon>
-      <text>Fill with Background Color (Opacity)</text>
-      <whatsThis></whatsThis>
-      <toolTip>Fill with Background Color (Opacity)</toolTip>
-      <iconText>Fill with Background Color (Opacity)</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut>Ctrl+Backspace</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="fill_selection_pattern_opacity">
-      <icon></icon>
-      <text>Fill with Pattern (Opacity)</text>
-      <whatsThis></whatsThis>
-      <toolTip>Fill with Pattern (Opacity)</toolTip>
-      <iconText>Fill with Pattern (Opacity)</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -539,7 +584,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="decrease_brush_size">
-      <icon></icon>
+      <icon>brushsize-decrease</icon>
       <text>Decrease Brush Size</text>
       <whatsThis></whatsThis>
       <toolTip>Decrease Brush Size</toolTip>
@@ -561,7 +606,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="increase_brush_size">
-      <icon></icon>
+      <icon>brushsize-increase</icon>
       <text>Increase Brush Size</text>
       <whatsThis></whatsThis>
       <toolTip>Increase Brush Size</toolTip>
@@ -1258,6 +1303,33 @@
       <iconText>Multibrush Tool</iconText>
       <shortcut>Q</shortcut>
       <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="KritaShape/KisToolLazyBrush">
+      <icon></icon>
+      <text>Lazy Brush Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lazy Brush Tool</toolTip>
+      <iconText>Lazy Brush Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="KritaShape/KisToolSmartPatch">
+      <icon></icon>
+      <text>Smart Patch Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Smart Patch Tool</toolTip>
+      <iconText>Smart Patch Tool</iconText>
+      <shortcut></shortcut>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="PanTool">
+      <icon></icon>
+      <text>Pan Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Pan Tool</toolTip>
+      <iconText>Pan Tool</iconText>
+      <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>
     <Action name="InteractionTool">
@@ -2264,10 +2336,10 @@
     </Action>
     <Action name="toggle_layer_lock">
       <icon>layer-locked</icon>
-      <text>&amp;Lock/unlock layer</text>
+      <text>&amp;Toggle layer lock</text>
       <whatsThis></whatsThis>
-      <toolTip>Lock/unlock layer</toolTip>
-      <iconText>Lock/unlock layer</iconText>
+      <toolTip>Toggle layer lock</toolTip>
+      <iconText>Toggle layer lock</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -2288,10 +2360,10 @@
     </Action>
     <Action name="toggle_layer_alpha_lock">
       <icon>transparency-locked</icon>
-      <text>Lock/unlock layer &amp;alpha</text>
+      <text>Toggle layer &amp;alpha</text>
       <whatsThis></whatsThis>
-      <toolTip>Lock/unlock layer's alpha</toolTip>
-      <iconText>Lock/unlock layer's alpha</iconText>
+      <toolTip>Toggle layer alpha</toolTip>
+      <iconText>Toggle layer alpha</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -2376,7 +2448,7 @@
       <whatsThis></whatsThis>
       <toolTip>Copy layer to clipboard</toolTip>
       <iconText>Copy layer to clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2388,7 +2460,7 @@
       <whatsThis></whatsThis>
       <toolTip>Cut layer to clipboard</toolTip>
       <iconText>Cut layer to clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2400,7 +2472,7 @@
       <whatsThis></whatsThis>
       <toolTip>Paste layer from clipboard</toolTip>
       <iconText>Paste layer from clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2532,6 +2604,18 @@
       <whatsThis></whatsThis>
       <toolTip>Convert child layers into animation frames</toolTip>
       <iconText>Convert child layers into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_layer_to_file_layer">
+      <icon>fileLayer</icon>
+      <text>to &amp;File Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
+      <iconText>Convert to File Layer</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

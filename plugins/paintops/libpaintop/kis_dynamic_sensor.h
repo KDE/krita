@@ -128,9 +128,9 @@ public:
     /**
      * Creates a sensor from its identifiant.
      */
-    static KisDynamicSensorSP id2Sensor(const KoID& id);
-    static KisDynamicSensorSP id2Sensor(const QString& s) {
-        return id2Sensor(KoID(s));
+    static KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
+    static KisDynamicSensorSP id2Sensor(const QString& s, const QString &parentOptionName) {
+        return id2Sensor(KoID(s), parentOptionName);
     }
 
     static DynamicSensorType id2Type(const KoID& id);
@@ -141,13 +141,13 @@ public:
     /**
      * type2Sensor creates a new sensor for the give type
      */
-    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType);
+    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
 
     static QString minimumLabel(DynamicSensorType sensorType);
     static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
 
-    static KisDynamicSensorSP createFromXML(const QString&);
-    static KisDynamicSensorSP createFromXML(const QDomElement&);
+    static KisDynamicSensorSP createFromXML(const QString&, const QString &parentOptionName);
+    static KisDynamicSensorSP createFromXML(const QDomElement&, const QString &parentOptionName);
 
     /**
      * @return the list of sensors

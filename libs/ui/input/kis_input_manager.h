@@ -20,11 +20,14 @@
 #define KIS_INPUTMANAGER_H
 
 #include <QObject>
+#include <QPointer>
+
 #include <kritaui_export.h>
+
+#include <kis_tool_proxy.h>
 
 class QPointF;
 class QTouchEvent;
-class KisToolProxy;
 class KisCanvas2;
 /**
  * \brief Central object to manage canvas input.
@@ -99,7 +102,7 @@ public:
     /**
      * The tool proxy of the current application.
      */
-    KisToolProxy *toolProxy() const;
+    QPointer<KisToolProxy> toolProxy() const;
 
 public Q_SLOTS:
     void stopIgnoringEvents();
@@ -111,6 +114,9 @@ private Q_SLOTS:
     void slotCompressedMoveEvent();
 
 private:
+    bool startTouch(bool &retval);
+    void endTouch();
+
     bool eventFilterImpl(QEvent * event);
     template <class Event>
         bool compressMoveEventCommon(Event *event);

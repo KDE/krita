@@ -415,7 +415,7 @@ bool QWindowsWinTab32DLL::init()
         return true;
     QLibrary library(QStringLiteral("wintab32"));
     if (!library.load()) {
-        qWarning() << "Could not load wintab32 dll";
+        qWarning() << QString("Could not load wintab32 dll: %1").arg(library.errorString());
         return false;
     }
     wTOpen         = (PtrWTOpen)         library.resolve("WTOpenW");
@@ -536,7 +536,7 @@ QString QWindowsTabletSupport::description() const
     const unsigned size = m_winTab32DLL.wTInfo(WTI_INTERFACE, IFC_WINTABID, 0);
     if (!size)
         return QString();
-    QScopedPointer<TCHAR> winTabId(new TCHAR[size + 1]);
+    QVarLengthArray<TCHAR> winTabId(size + 1);
     m_winTab32DLL.wTInfo(WTI_INTERFACE, IFC_WINTABID, winTabId.data());
     WORD implementationVersion = 0;
     m_winTab32DLL.wTInfo(WTI_INTERFACE, IFC_IMPLVERSION, &implementationVersion);
@@ -682,9 +682,10 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
         result.virtualDesktopArea = dlg.screenRect();
         dialogOpen = false;
     } else {
-        // this branch is really improbable and most probably means
-        // a bug in the tablet driver. Anyway, we just shouldn't show
-        // hundreds of tablet initialization dialogs
+        // This branch should've been explicitly prevented.
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!dialogOpen);
+        warnTablet << "Trying to init a WinTab device while screen resolution dialog is active, this should not happen!";
+        warnTablet << "Tablet coordinates could be wrong as a result.";
         result.virtualDesktopArea = qtDesktopRect;
     }
 
@@ -696,7 +697,12 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
 
 bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, LPARAM lParam)
 {
-
+    if (dialogOpen) {
+        // tabletInit(...) may show the screen resolution dialog and is blocking.
+        // During this period, don't process any tablet events at all.
+        dbgTablet << "WinTab screen resolution dialog is active, ignoring WinTab proximity event";
+        return false;
+    }
     auto sendProximityEvent = [&](QEvent::Type type) {
         QPointF emptyPos;
         qreal zero = 0.0;

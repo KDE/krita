@@ -14,7 +14,7 @@ class ClearAction(QAction):
 
         self.setText('Clear')
         # path to the icon
-        #self.setIcon(QIcon(':/icons/clear.svg'))
+        # self.setIcon(QIcon(':/icons/clear.svg'))
 
     def clear(self):
         self.toolbar.outputtextedit.clear()

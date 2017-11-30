@@ -74,20 +74,20 @@ void KisRoundHudButton::paintEvent(QPaintEvent */*event*/)
 
         QPixmap pixmap = icon().pixmap(size, mode, state);
 
-        QPointF iconOffset(0.5 * (width() - pixmap.width()),
-                           0.5 * (height() - pixmap.height()));
+        QPointF iconOffset(0.5 * (width() - size.width()),
+                           0.5 * (height() - size.height()));
 
         painter.drawPixmap(iconOffset, pixmap);
     }
 
-    if (!m_d->onIcon.isNull() && !m_d->onIcon.isNull()) {
+    if (!m_d->onIcon.isNull()) {
         const QIcon::Mode mode = isEnabled() ? QIcon::Normal : QIcon::Disabled;
         const QIcon icon = isCheckable() && isChecked() ? m_d->onIcon : m_d->offIcon;
         const QSize size = iconSize();
 
         QPixmap pixmap = icon.pixmap(size, mode);
-        QPointF iconOffset(0.5 * (width() - pixmap.width()),
-                           0.5 * (height() - pixmap.height()));
+        QPointF iconOffset(0.5 * (width() - size.width()),
+                           0.5 * (height() - size.height()));
 
         painter.drawPixmap(iconOffset, pixmap);
     }

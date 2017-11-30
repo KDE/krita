@@ -59,7 +59,7 @@
 
 #include <KoFileDialog.h>
 #include <KoIconToolTip.h>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QWidgetAction>
 
 #include "config-qtmultimedia.h"
@@ -183,13 +183,6 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::addExistingLayerActionName);
     m_d->layerEditingMenu->addSeparator();
 
-    m_d->showHideLayerAction = new KisAction(KisAnimationUtils::showLayerActionName, this);
-    m_d->showHideLayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
-    connect(m_d->showHideLayerAction, SIGNAL(triggered()), SLOT(slotHideLayerFromTimeline()));
-    m_d->showHideLayerAction->setCheckable(true);
-    m_d->globalActions.insert("show_in_timeline", m_d->showHideLayerAction);
-    m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
-
     m_d->layerEditingMenu->addAction(KisAnimationUtils::removeLayerActionName, this, SLOT(slotRemoveLayer()));
 
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
@@ -290,6 +283,12 @@ TimelineFramesView::~TimelineFramesView()
 QMap<QString, KisAction*> TimelineFramesView::globalActions() const
 {
     return m_d->globalActions;
+}
+
+void TimelineFramesView::setShowInTimeline(KisAction* action)
+{
+    m_d->showHideLayerAction = action;
+    m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
 }
 
 void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
@@ -401,7 +400,7 @@ void TimelineFramesView::slotSelectAudioChannelFile()
 {
     if (!m_d->model) return;
 
-    QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
+    QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
 
     const QString currentFile = m_d->model->audioChannelFileName();
     QDir baseDir = QFileInfo(currentFile).absoluteDir();
@@ -620,15 +619,12 @@ void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int 
         if (newFps != m_d->fps) {
             setFramesPerSecond(newFps);
         }
-    } else /* if (orientation == Qt::Vertical) */ {
-        updateShowInTimeline();
     }
 }
 
 void TimelineFramesView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
     QTableView::rowsInserted(parent, start, end);
-    updateShowInTimeline();
 }
 
 
@@ -1016,13 +1012,6 @@ void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)
     m_d->layerEditingMenu->exec(globalPos);
 }
 
-void TimelineFramesView::updateShowInTimeline()
-{
-    const int row = m_d->model->activeLayerRow();
-    const bool status = m_d->model->headerData(row, Qt::Vertical, TimelineFramesModel::LayerUsedInTimelineRole).toBool();
-    m_d->showHideLayerAction->setChecked(status);
-}
-
 void TimelineFramesView::slotAddNewLayer()
 {
     QModelIndex index = currentIndex();
@@ -1048,13 +1037,6 @@ void TimelineFramesView::slotRemoveLayer()
     if (!index.isValid()) return;
 
     model()->removeRow(index.row());
-}
-
-void TimelineFramesView::slotHideLayerFromTimeline()
-{
-    const int row = m_d->model->activeLayerRow();
-    const bool status = m_d->model->headerData(row, Qt::Vertical, TimelineFramesModel::LayerUsedInTimelineRole).toBool();
-    m_d->model->setHeaderData(row, Qt::Vertical, !status, TimelineFramesModel::LayerUsedInTimelineRole);
 }
 
 void TimelineFramesView::slotNewFrame()

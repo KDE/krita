@@ -32,7 +32,6 @@ class QLocalServer;
 class QSharedMemory;
 
 class KisQmicApplicator;
-class KisQmicProgressManager;
 
 class QMic : public KisViewPlugin
 {
@@ -48,8 +47,6 @@ private Q_SLOTS:
     void connected();
     void pluginStateChanged(QProcess::ProcessState);
     void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void slotUpdateProgress();
-    void slotStartProgressReporting();
     void slotGmicFinished(bool successfully, int milliseconds = -1, const QString& msg = QString());
     void slotStartApplicator(QStringList gmicImages);
 
@@ -63,10 +60,7 @@ private:
     KisAction *m_qmicAction {0};
     KisAction *m_againAction {0};
     QVector<QSharedMemory *> m_sharedMemorySegments;
-
     KisQmicApplicator *m_gmicApplicator {0};
-    KisQmicProgressManager *m_progressManager {0};
-
     InputLayerMode m_inputMode {ACTIVE_LAYER};
     OutputMode m_outputMode {IN_PLACE};
 

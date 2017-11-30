@@ -57,6 +57,8 @@ public:
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisGbrBrush(const QImage& image, const QString& name = QString());
 
+    KisGbrBrush(const KisGbrBrush& rhs);
+
     ~KisGbrBrush() override;
 
     bool load() override;
@@ -100,9 +102,7 @@ protected:
      * save the content of this brush to an IO device
      */
     friend class KisImageBrushesPipe;
-
-
-    KisGbrBrush(const KisGbrBrush& rhs);
+    friend class KisBrushExport;
 
     void setBrushType(enumBrushType type) override;
     void setBrushTipImage(const QImage& image) override;

@@ -60,7 +60,7 @@ class UIDocumentTools(object):
         modules = []
 
         for classPath in toolsModule.ToolClasses:
-            _module, _klass =  classPath.rsplit('.', maxsplit=1)
+            _module, _klass = classPath.rsplit('.', maxsplit=1)
             modules.append(dict(module='{0}.{1}'.format(modulePath, _module),
                                 klass=_klass))
 
@@ -83,9 +83,9 @@ class UIDocumentTools(object):
 
     def confirmButton(self):
         selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
-        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path==document.fileName()]
+        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path == document.fileName()]
 
-        self.msgBox  = QMessageBox(self.mainDialog)
+        self.msgBox = QMessageBox(self.mainDialog)
         if selectedDocuments:
             widget = self.tabTools.currentWidget()
             widget.adjust(selectedDocuments)

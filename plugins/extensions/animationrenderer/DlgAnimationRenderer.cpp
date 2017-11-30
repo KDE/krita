@@ -75,7 +75,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
-    m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
+   //m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end()); // animators sometimes want to export after end frame
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
     QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());
@@ -99,8 +99,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     setMainWidget(m_page);
 
-    KoJsonTrader trader;
-    QList<QPluginLoader *>list = trader.query("Krita/AnimationExporter", "");
+    QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/AnimationExporter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
         QStringList mimetypes = json.value("X-KDE-Export").toString().split(",");
@@ -321,9 +320,11 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     return cfg;
 }
 
-void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP /*cfg*/)
+void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP cfg)
 {
-
+    if (m_encoderConfigWidget) {
+        m_encoderConfigWidget->setConfiguration(cfg);
+    }
 }
 
 QSharedPointer<KisImportExportFilter> DlgAnimationRenderer::encoderFilter() const
@@ -369,6 +370,8 @@ void DlgAnimationRenderer::selectRenderOptions()
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {
                 m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+            } else {
+                KisConfig().setExportConfiguration(mimetype.toLatin1(), m_encoderConfigWidget->configuration());
             }
             dlg.setMainWidget(0);
             m_encoderConfigWidget->hide();
@@ -474,7 +477,9 @@ QString DlgAnimationRenderer::findFFMpeg()
 
         QProcess testProcess;
         testProcess.start(path, QStringList() << "-version");
-        testProcess.waitForFinished(1000);
+        if (testProcess.waitForStarted(1000)) {
+            testProcess.waitForFinished(1000);
+        }
 
         const bool successfulStart =
             testProcess.state() == QProcess::NotRunning &&

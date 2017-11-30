@@ -152,7 +152,7 @@ void writeFileImpl(QIODevice *device, const QDomDocument &doc)
 
     {
         QString signature("8BSL");
-        if (!device->write(signature.toAscii().data(), 4)) {
+        if (!device->write(signature.toLatin1().data(), 4)) {
             throw ASLWriteException("Failed to write ASL signature");
         }
     }

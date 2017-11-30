@@ -52,6 +52,7 @@
 #include "kis_pixel_selection.h"
 #include "tiles3/kis_hline_iterator.h"
 
+
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     : KisToolSelectBase<KisTool>(canvas,
                                  KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
@@ -242,4 +243,14 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
 void KisToolSelectContiguous::setSelectionAction(int action)
 {
     changeSelectionAction(action);
+}
+
+
+QMenu* KisToolSelectContiguous::popupActionsMenu()
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+
+
+    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
 }

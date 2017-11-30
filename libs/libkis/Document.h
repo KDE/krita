@@ -42,6 +42,32 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+    /**
+     * @brief horizontalGuides
+     * The horizontal guides.
+     * @return a list of the horizontal positions of guides.
+     */
+    QList<qreal> horizontalGuides() const;
+    /**
+     * @brief verticalGuides
+     * The vertical guide lines.
+     * @return a list of vertical guides.
+     */
+    QList<qreal> verticalGuides() const;
+
+    /**
+     * @brief guidesVisible
+     * Returns guide visiiblity.
+     * @return whether the guides are visible.
+     */
+    bool guidesVisible() const;
+    /**
+     * @brief guidesLocked
+     * Returns guide lockedness.
+     * @return whether the guides are locked.
+     */
+    bool guidesLocked() const;
+
 public Q_SLOTS:
 
     /**
@@ -552,6 +578,32 @@ public Q_SLOTS:
      * wait until the image is fully recomputed.
      */
     void refreshProjection();
+    /**
+     * @brief setHorizontalGuides
+     * replace all existing horizontal guides with the entries in the list.
+     * @param list a list of floats containing the new guides.
+     */
+    void setHorizontalGuides(const QList<qreal> &lines);
+    /**
+     * @brief setVerticalGuides
+     * replace all existing horizontal guides with the entries in the list.
+     * @param list a list of floats containing the new guides.
+     */
+    void setVerticalGuides(const QList<qreal> &lines);
+
+    /**
+     * @brief setGuidesVisible
+     * set guides visible on this document.
+     * @param visible whether or not the guides are visible.
+     */
+    void setGuidesVisible(bool visible);
+
+    /**
+     * @brief setGuidesLocked
+     * set guides locked on this document
+     * @param locked wether or not to lock the guides on this document.
+     */
+    void setGuidesLocked(bool locked);
 
 private:
 

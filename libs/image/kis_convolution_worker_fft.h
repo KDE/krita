@@ -67,7 +67,7 @@ public:
         // Make the area we cover as small as possible
         if (this->m_painter->selection())
         {
-            QRect r = this->m_painter->selection()->selectedRect().intersect(QRect(srcPos, areaSize));
+            QRect r = this->m_painter->selection()->selectedRect().intersected(QRect(srcPos, areaSize));
             dstPos += r.topLeft() - srcPos;
             srcPos = r.topLeft();
             areaSize = r.size();

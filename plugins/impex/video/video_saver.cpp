@@ -35,7 +35,6 @@
 #include <kis_time_range.h>
 
 #include "kis_config.h"
-#include "kis_animation_exporter.h"
 
 #include <QFileSystemWatcher>
 #include <QProcess>

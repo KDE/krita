@@ -17,10 +17,10 @@
  */
 
 #include "kis_meta_data_value.h"
-#include <QDate>
 #include <QPoint>
 #include <QPointF>
 #include <QRegExp>
+#include <QTime>
 #include <QVariant>
 #include <QStringList>
 
@@ -296,22 +296,14 @@ Value& Value::operator+=(const Value & v)
             Q_ASSERT(v2.canConvert(v1.type()));
             switch (v1.type()) {
             default:
+                warnImage << "KisMetaData: Merging metadata of type" << v1.type() << "is unsupported!";
                 break;
-            case QVariant::Date: {
-                QDate date;
-                date.fromJulianDay(v1.toDate().toJulianDay()
-                                   + v2.toDate().toJulianDay());
-                *d->value.variant = date;
-            }
-            break;
-            case QVariant::DateTime: {
-                QDateTime dt;
-                dt.fromTime_t(
-                    v1.toDateTime().toTime_t()
-                    + v2.toDateTime().toTime_t());
-                *d->value.variant = dt;
-            }
-            break;
+            case QVariant::Date:
+                *d->value.variant = qMax(v1.toDate(), v2.toDate());
+                break;
+            case QVariant::DateTime:
+                *d->value.variant = qMax(v1.toDate(), v2.toDate());
+                break;
             case QVariant::Double:
                 *d->value.variant = v1.toDouble() + v2.toDouble();
                 break;

@@ -148,6 +148,12 @@ public:
     bool showRulers(bool defaultValue = false) const;
     void setShowRulers(bool rulers) const;
 
+    bool forceShowSaveMessages(bool defaultValue = true) const;
+    void setForceShowSaveMessages(bool value) const;
+
+    bool forceShowAutosaveMessages(bool defaultValue = true) const;
+    void setForceShowAutosaveMessages(bool ShowAutosaveMessages) const;
+
     bool rulersTrackMouse(bool defaultValue = false) const;
     void setRulersTrackMouse(bool value) const;
 
@@ -176,9 +182,6 @@ public:
     int numMipmapLevels(bool defaultValue = false) const;
     int openGLTextureSize(bool defaultValue = false) const;
     int textureOverlapBorder() const;
-
-    qint32 maxNumberOfThreads(bool defaultValue = false) const;
-    void setMaxNumberOfThreads(qint32 numberOfThreads);
 
     quint32 getGridMainStyle(bool defaultValue = false) const;
     void setGridMainStyle(quint32 v) const;
@@ -278,6 +281,9 @@ public:
 
     QString pressureTabletCurve(bool defaultValue = false) const;
     void setPressureTabletCurve(const QString& curveString) const;
+
+    bool useWin8PointerInput(bool defaultValue = false) const;
+    void setUseWin8PointerInput(bool value) const;
 
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
@@ -447,6 +453,9 @@ public:
     int tabletEventsDelay(bool defaultValue = false) const;
     void setTabletEventsDelay(int value);
 
+    bool trackTabletEventLatency(bool defaultValue = false) const;
+    void setTrackTabletEventLatency(bool value);
+
     bool testingAcceptCompressedTabletEvents(bool defaultValue = false) const;
     void setTestingAcceptCompressedTabletEvents(bool value);
 
@@ -473,8 +482,6 @@ public:
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;
 
-    bool useVerboseOpenGLDebugOutput(bool defaultValue = false) const;
-
     int workaroundX11SmoothPressureSteps(bool defaultValue = false) const;
 
     bool showCanvasMessages(bool defaultValue = false) const;
@@ -486,8 +493,20 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
-    void setEnableOpenGLDebugging(bool value) const;
-    bool enableOpenGLDebugging(bool defaultValue = false) const;
+    int kineticScrollingGesture(bool defaultValue = false) const;
+    void setKineticScrollingGesture(int kineticScroll);
+
+    int kineticScrollingSensitivity(bool defaultValue = false) const;
+    void setKineticScrollingSensitivity(int sensitivity);
+
+    bool kineticScrollingScrollbar(bool defaultValue = false) const;
+    void setKineticScrollingScrollbar(bool scrollbar);
+
+    void setEnableOpenGLFramerateLogging(bool value) const;
+    bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
+
+    void setEnableBrushSpeedLogging(bool value) const;
+    bool enableBrushSpeedLogging(bool defaultValue = false) const;
 
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;

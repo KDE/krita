@@ -94,6 +94,8 @@ protected: // XXX: make private!
 
 private:
     KisTextureProperties m_textureProperties;
+
+protected:
     KisPressureMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
 };

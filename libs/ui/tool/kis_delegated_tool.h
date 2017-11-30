@@ -27,6 +27,7 @@
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_delegated_tool_policies.h"
+#include "kis_tool.h"
 
 #define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
@@ -113,6 +114,8 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override
     {
         if (this->mode() == KisTool::PAINT_MODE && event->button() == Qt::LeftButton) {
+            this->setMode(KisTool::HOVER_MODE);
+
             Q_ASSERT(m_localTool);
             m_localTool->mouseReleaseEvent(event);
         }

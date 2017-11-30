@@ -19,6 +19,8 @@
 #ifndef __KIS_UPDATE_JOB_ITEM_H
 #define __KIS_UPDATE_JOB_ITEM_H
 
+#include <atomic>
+
 #include <QRunnable>
 #include <QReadWriteLock>
 
@@ -32,8 +34,9 @@ class KisUpdateJobItem :  public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    enum Type {
-        EMPTY,
+    enum class Type : int {
+        EMPTY = 0,
+        WAITING,
         MERGE,
         STROKE,
         SPONTANEOUS
@@ -42,10 +45,11 @@ public:
 public:
     KisUpdateJobItem(QReadWriteLock *exclusiveJobLock)
         : m_exclusiveJobLock(exclusiveJobLock),
-          m_type(EMPTY),
+          m_atomicType(Type::EMPTY),
           m_runnableJob(0)
     {
         setAutoDelete(false);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_atomicType.is_lock_free());
     }
     ~KisUpdateJobItem() override
     {
@@ -53,31 +57,61 @@ public:
     }
 
     void run() override {
-        if(m_exclusive) {
-            m_exclusiveJobLock->lockForWrite();
-        } else {
-            m_exclusiveJobLock->lockForRead();
+        if (!isRunning()) return;
+
+        /**
+         * Here we break the idea of QThreadPool a bit. Ideally, we should split the
+         * jobs into distinct QRunnable objects and pass all of them to QThreadPool.
+         * That is a nice idea, but it doesn't work well when the jobs are small enough
+         * and the number of available cores is high (>4 cores). It this case the
+         * threads just tend to execute the job very quickly and go to sleep, which is
+         * an expensive operation.
+         *
+         * To overcome this problem we try to bulk-process the jobs. In sigJobFinished()
+         * signal (which is DirectConnection), the context may add the job to ourselves(!!!),
+         * so we switch from "done" state into "running" again.
+         */
+
+        while (1) {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(isRunning());
+
+            if(m_exclusive) {
+                m_exclusiveJobLock->lockForWrite();
+            } else {
+                m_exclusiveJobLock->lockForRead();
+            }
+
+            if(m_atomicType == Type::MERGE) {
+                runMergeJob();
+            } else {
+                KIS_ASSERT(m_atomicType == Type::STROKE ||
+                           m_atomicType == Type::SPONTANEOUS);
+
+                m_runnableJob->run();
+            }
+
+            setDone();
+
+
+            emit sigDoSomeUsefulWork();
+
+            // may flip the current state from Waiting -> Running again
+            emit sigJobFinished();
+
+            m_exclusiveJobLock->unlock();
+
+            // try to exit the loop. Please note, that noone can flip the state from
+            // WAITING to EMPTY except ourselves!
+            Type expectedValue = Type::WAITING;
+            if (m_atomicType.compare_exchange_strong(expectedValue, Type::EMPTY)) {
+                break;
+            }
         }
-
-        if(m_type == MERGE) {
-            runMergeJob();
-        } else {
-            Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
-            m_runnableJob->run();
-            delete m_runnableJob;
-            m_runnableJob = 0;
-        }
-
-        setDone();
-
-        emit sigDoSomeUsefulWork();
-        emit sigJobFinished();
-
-        m_exclusiveJobLock->unlock();
     }
 
     inline void runMergeJob() {
-        Q_ASSERT(m_type == MERGE);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_atomicType == Type::MERGE);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
         // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);
@@ -86,46 +120,63 @@ public:
         emit sigContinueUpdate(changeRect);
     }
 
-    inline void setWalker(KisBaseRectsWalkerSP walker) {
-        m_type = MERGE;
+    // return true if the thread should actually be started
+    inline bool setWalker(KisBaseRectsWalkerSP walker) {
+        KIS_ASSERT(m_atomicType <= Type::WAITING);
+
         m_accessRect = walker->accessRect();
         m_changeRect = walker->changeRect();
         m_walker = walker;
 
         m_exclusive = false;
         m_runnableJob = 0;
+
+        const Type oldState = m_atomicType.exchange(Type::MERGE);
+        return oldState == Type::EMPTY;
     }
 
-    inline void setStrokeJob(KisStrokeJob *strokeJob) {
-        m_type = STROKE;
+    // return true if the thread should actually be started
+    inline bool setStrokeJob(KisStrokeJob *strokeJob) {
+        KIS_ASSERT(m_atomicType <= Type::WAITING);
+
         m_runnableJob = strokeJob;
+        m_strokeJobSequentiality = strokeJob->sequentiality();
 
         m_exclusive = strokeJob->isExclusive();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
+
+        const Type oldState = m_atomicType.exchange(Type::STROKE);
+        return oldState == Type::EMPTY;
     }
 
-    inline void setSpontaneousJob(KisSpontaneousJob *spontaneousJob) {
-        m_type = SPONTANEOUS;
+    // return true if the thread should actually be started
+    inline bool setSpontaneousJob(KisSpontaneousJob *spontaneousJob) {
+        KIS_ASSERT(m_atomicType <= Type::WAITING);
+
         m_runnableJob = spontaneousJob;
 
         m_exclusive = false;
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
+
+        const Type oldState = m_atomicType.exchange(Type::SPONTANEOUS);
+        return oldState == Type::EMPTY;
     }
 
     inline void setDone() {
         m_walker = 0;
+        delete m_runnableJob;
         m_runnableJob = 0;
-        m_type = EMPTY;
+        m_atomicType = Type::WAITING;
     }
 
     inline bool isRunning() const {
-        return m_type != EMPTY;
+        return m_atomicType >= Type::MERGE;
     }
 
     inline Type type() const {
-        return m_type;
+        return m_atomicType;
     }
 
     inline const QRect& accessRect() const {
@@ -134,6 +185,10 @@ public:
 
     inline const QRect& changeRect() const {
         return m_changeRect;
+    }
+
+    inline KisStrokeJobData::Sequentiality strokeJobSequentiality() const {
+        return m_strokeJobSequentiality;
     }
 
 Q_SIGNALS:
@@ -163,9 +218,6 @@ private:
     }
 
     inline void testingSetDone() {
-        if(m_type == STROKE) {
-            delete m_runnableJob;
-        }
         setDone();
     }
 
@@ -177,7 +229,9 @@ private:
 
     bool m_exclusive;
 
-    volatile Type m_type;
+    std::atomic<Type> m_atomicType;
+
+    volatile KisStrokeJobData::Sequentiality m_strokeJobSequentiality;
 
     /**
      * Runnable jobs part

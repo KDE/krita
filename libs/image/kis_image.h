@@ -92,7 +92,7 @@ public: // KisNodeGraphListener implementation
     void nodeChanged(KisNode * node) override;
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
-    void requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache) override;
+    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
     void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
 
@@ -100,6 +100,16 @@ public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc) override;
 
 public:
+
+    /**
+     * Set the number of threads used by the image's working threads
+     */
+    void setWorkingThreadsLimit(int value);
+
+    /**
+     * Return the number of threads available to the image's working threads
+     */
+    int workingThreadsLimit() const;
 
     /**
      * Makes a copy of the image with all the layers. If possible, shallow
@@ -336,13 +346,6 @@ public:
      * @param documentRect PostScript Pt rectangle to convert.
      */
     QRectF documentToPixel(const QRectF &documentRect) const;
-
-    /**
-     * Convert a document rectangle to an integer pixel rectangle.
-     *
-     * @param documentRect PostScript Pt rectangle to convert.
-     */
-    QRect documentToIntPixel(const QRectF &documentRect) const;
 
     /**
      * Convert a pixel coordinate to a document coordinate.
@@ -941,7 +944,7 @@ private:
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
 
     void requestProjectionUpdateImpl(KisNode *node,
-                                     const QRect& rect,
+                                     const QVector<QRect> &rects,
                                      const QRect &cropRect);
 
     friend class KisImageResizeCommand;

@@ -123,6 +123,9 @@ public Q_SLOTS:
      * set the previous color.
      */
     void setPreviousColor(KoColor c);
+
+    void reject() override;
+
 private Q_SLOTS:
 
     /**
@@ -159,10 +162,16 @@ private Q_SLOTS:
     void slotSetColorFromHex();
 
 
+protected:
+
+    void showEvent(QShowEvent *event);
+
 private:
     Ui_WdgDlgInternalColorSelector *m_ui; //the UI
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer
+
+
 
     /**
      * @brief updateAllElements

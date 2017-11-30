@@ -49,7 +49,6 @@ struct KisPaintingAssistantsDecoration::Private {
     bool aFirstStroke;
     QColor m_assistantsColor;
     bool m_isEditingAssistants = false;
-    bool m_useCache = false;
     bool m_outlineVisible = false;
     int m_handleSize = 14; // size of editor handles on assistants
 
@@ -193,10 +192,6 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 
     if (d->m_isEditingAssistants) {
         d->m_outlineVisible = false;
-
-        // TODO: the uncache method takes care of this state. can probably remove this as well as
-        // references in the drawAssistant function
-        d->m_useCache = true;
     }
     else {
         d->m_outlineVisible = outlineVisibility();
@@ -204,7 +199,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->setAssistantColor(assistantsColor());
-        assistant->drawAssistant(gc, updateRect, converter, d->m_useCache, canvas, assistantVisibility(), d->m_outlineVisible);
+        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
 
         if (isEditingAssistants()) {
             drawHandles(assistant, gc, converter);
@@ -342,7 +337,6 @@ void KisPaintingAssistantsDecoration::activateAssistantsEditor()
 {
     setVisible(true); // this turns on the decorations in general. we leave it on at this point
     d->m_isEditingAssistants = true;
-    d->m_useCache = false; // force the assistants to update with cleared cache
 }
 
 void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()

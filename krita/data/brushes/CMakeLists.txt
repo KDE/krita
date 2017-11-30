@@ -14,7 +14,9 @@ A_sparkle3.gbr
 A_splat2.gih
 A_starfield2.gbr
 A_wall-texture.gih
+double_special6.gih
 Flat_textured1.gih
+knife3.gbr
 M_Pipe_1.gbr
 MZ_leaves.gbr
 oil_bristle.gbr
@@ -25,6 +27,8 @@ R_Rake4.gbr
 Rect_textured1.gih
 Rect_textured2.gih
 Rect_textured3.gih
+round_textured1.gbr
 S_splats_02.gih
+w_hearts.gih
 z_study_pencil_2H.gih
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

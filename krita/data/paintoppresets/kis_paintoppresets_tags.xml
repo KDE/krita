@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tags>
 <tags>
+    <!-- don't worry about tags until we have the full list of presets and tags figured out
  <resource md5="WYb3P2m6yAPzCP6UcZ9OFg==" identifier="Eraser_hard.kpp">
   <tag>ink</tag>
  </resource>
@@ -59,5 +60,5 @@
  <resource identifier="pixel_one.kpp" >
   <tag>PixelArt</tag>
  </resource>
-
+    -->
 </tags>

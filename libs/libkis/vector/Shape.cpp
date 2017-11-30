@@ -38,7 +38,7 @@ QString Shape::name() const
     return d->shape->name();
 }
 
-void Shape::setName(const QString name)
+void Shape::setName(const QString &name)
 {
     d->shape->setName(name);
 }

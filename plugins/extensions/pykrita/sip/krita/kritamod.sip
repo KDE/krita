@@ -23,6 +23,17 @@
 %Include Window.sip
 %Include Krita.sip
 %Include Node.sip
+
+%Include PaintLayer.sip
+%Include GroupLayer.sip
+%Include CloneLayer.sip
+%Include FilterLayer.sip
+%Include FillLayer.sip
+%Include VectorLayer.sip
+
+%Include Shape.sip
+%Include GroupShape.sip
+
 %Include Notifier.sip
 %Include Resource.sip
 %Include Selection.sip

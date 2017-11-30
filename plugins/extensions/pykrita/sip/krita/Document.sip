@@ -60,6 +60,12 @@ public Q_SLOTS:
     bool save();
     bool saveAs(const QString & filename);
     Node *createNode(const QString & name, const QString & nodeType)  /Factory/;
+    PaintLayer *createPaintLayer(const QString &name) /Factory/;
+    GroupLayer *createGroupLayer(const QString &name) /Factory/;
+    CloneLayer *createCloneLayer(const QString &name, const Node *source) /Factory/;
+    FilterLayer *createFilterLayer(const QString &name, Filter &filter, Selection &selection) /Factory/;
+    FillLayer *createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection) /Factory/;
+    VectorLayer *createVectorLayer(const QString &name) /Factory/;
     QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
     QImage thumbnail(int w, int h) const;
     void lock();

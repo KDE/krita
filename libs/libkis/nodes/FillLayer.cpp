@@ -40,7 +40,7 @@ QString FillLayer::filterName()
     return layer->filter()->name();
 }
 
-InfoObject *FillLayer::filterConfig()
+InfoObject * FillLayer::filterConfig()
 {
     const KisGeneratorLayer *layer = qobject_cast<const KisGeneratorLayer*>(this->node());
     return new InfoObject(layer->filter());
@@ -51,14 +51,14 @@ QString FillLayer::type() const
     return "filllayer";
 }
 
-void FillLayer::setFilter(QString name, InfoObject &config)
+void FillLayer::setFilter(QString &filterName, InfoObject *config)
 {
     KisGeneratorLayer *layer = dynamic_cast<KisGeneratorLayer*>(this->node().data());
     //getting the default configuration here avoids trouble with versioning.
-    KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(name);
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(filterName);
     KisFilterConfigurationSP cfg = generator->defaultConfiguration();
-    Q_FOREACH(const QString property, config.properties().keys()) {
-        cfg->setProperty(property, config.property(property));
+    Q_FOREACH(const QString property, config->properties().keys()) {
+        cfg->setProperty(property, config->property(property));
     }
     layer->setFilter(cfg);
 }

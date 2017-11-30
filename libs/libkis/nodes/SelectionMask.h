@@ -15,55 +15,60 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef LIBKIS_FILTERLAYER_H
-#define LIBKIS_FILTERLAYER_H
+#ifndef LIBKIS_SELECTIONMASK_H
+#define LIBKIS_SELECTIONMASK_H
 
 #include <QObject>
 #include "Node.h"
-#include <Filter.h>
-#include <Selection.h>
 
 #include <kis_types.h>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
+
 /**
- * @brief The FilterLayer class
- * A filter layer will, when compositing, take the composited
- * image up to the point of the loction of the filter layer
- * in the stack, create a copy and apply a filter.
+ * @brief The SelectionMask class
+ * A selection mask is a mask type node that can be used
+ * to store selections. In the gui, these are refered to
+ * as local selections.
  *
- * This means you can use blending modes on the filter layers,
- * which will be used to blend the filtered image with the original.
- *
- * Similarly, you can activate things like alpha inheritance, or
- * you can set grayscale pixeldata on the filter layer to act as
- * a mask.
- *
- * Filter layers can be animated.
+ * A selection mask can hold both raster and vector selections.
  */
-class KRITALIBKIS_EXPORT FilterLayer : public Node
+class KRITALIBKIS_EXPORT SelectionMask : public Node
 {
     Q_OBJECT
-    Q_DISABLE_COPY(FilterLayer)
+    Q_DISABLE_COPY(SelectionMask)
 
 public:
-    explicit FilterLayer(KisImageSP image, QString name, Filter &filter, Selection &selection, QObject *parent = 0);
-    ~FilterLayer() override;
+    explicit SelectionMask(KisImageSP image, KisNodeSP node, QObject *parent = 0);
+    ~SelectionMask() override;
 public Q_SLOTS:
 
     /**
      * @brief type Krita has several types of nodes, split in layers and masks. Group
      * layers can contain other layers, any layer can contain masks.
      *
-     * @return "filterlayer"
+     * @return The type of the node. Valid types are:
+     * <ul>
+     *  <li>paintlayer
+     *  <li>grouplayer
+     *  <li>filelayer
+     *  <li>filterlayer
+     *  <li>filllayer
+     *  <li>clonelayer
+     *  <li>vectorlayer
+     *  <li>transparencymask
+     *  <li>filtermask
+     *  <li>transformmask
+     *  <li>selectionmask
+     *  <li>colorizemask
+     * </ul>
+     *
+     * If the Node object isn't wrapping a valid Krita layer or mask object, and
+     * empty string is returned.
      */
-    QString type() const override;
-
-    void setFilter(Filter &filter);
-
-    Filter * filter();
+    QString type();
 };
 
-#endif // LIBKIS_FILTERLAYER_H
+#endif // LIBKIS_SELECTIONMASK_H
 

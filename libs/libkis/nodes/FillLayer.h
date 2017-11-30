@@ -68,10 +68,10 @@ public Q_SLOTS:
      */
     virtual QString type() const override;
 
-    void setFilter(QString filterName, InfoObject &filterConfig);
+    void setFilter(QString &filterName, InfoObject *filterConfig);
 
     QString filterName();
-    InfoObject *filterConfig();
+    InfoObject * filterConfig();
 };
 
 #endif // LIBKIS_FILLLAYER_H

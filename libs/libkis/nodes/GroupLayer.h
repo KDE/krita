@@ -52,24 +52,7 @@ public Q_SLOTS:
      * @brief type Krita has several types of nodes, split in layers and masks. Group
      * layers can contain other layers, any layer can contain masks.
      *
-     * @return The type of the node. Valid types are:
-     * <ul>
-     *  <li>paintlayer
-     *  <li>grouplayer
-     *  <li>filelayer
-     *  <li>filterlayer
-     *  <li>filllayer
-     *  <li>clonelayer
-     *  <li>vectorlayer
-     *  <li>transparencymask
-     *  <li>filtermask
-     *  <li>transformmask
-     *  <li>selectionmask
-     *  <li>colorizemask
-     * </ul>
-     *
-     * If the Node object isn't wrapping a valid Krita layer or mask object, and
-     * empty string is returned.
+     * @return grouplayer
      */
     virtual QString type() const override;
 
@@ -87,6 +70,10 @@ public Q_SLOTS:
      */
     void setPassThroughMode(bool passthrough);
 
+    /**
+     * @brief passThroughMode
+     * @return returns whether or not this layer is in passthrough mode. @see setPassThroughMode
+     */
     bool passThroughMode() const;
 };
 

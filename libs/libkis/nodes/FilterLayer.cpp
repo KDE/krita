@@ -46,7 +46,7 @@ void FilterLayer::setFilter(Filter &filter)
     layer->setFilter(filter.filterConfig());
 }
 
-Filter *FilterLayer::filter()
+Filter * FilterLayer::filter()
 {
     Filter* filter = new Filter();
     const KisAdjustmentLayer *layer = qobject_cast<const KisAdjustmentLayer*>(this->node());

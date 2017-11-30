@@ -48,7 +48,7 @@ public Q_SLOTS:
      * @brief setName
      * @param name which name the shape should have.
      */
-    void setName(const QString name);
+    void setName(const QString &name);
 
     /**
      * @brief type

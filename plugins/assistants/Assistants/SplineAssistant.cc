@@ -148,17 +148,32 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
     pts[3] = (handles().size() >= 4) ? (*handles()[3]) : (handles().size() >= 3) ? (*handles()[2]) : (*handles()[1]);
 
     gc.setTransform(initialTransform);
-    gc.setPen(QColor(0, 0, 0, 75));
 
-    // Draw control lines only if we are editing the assistant
-    if (m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
-        gc.drawLine(pts[0], pts[2]);
 
-        if (isAssistantComplete()) {
-            gc.drawLine(pts[1], pts[3]);
+    {  // Draw bezier handles control lines only if we are editing the assistant
+        gc.save();
+        QColor assistantColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
+        QPen bezierlinePen(assistantColor);
+        bezierlinePen.setStyle(Qt::DotLine);
+        bezierlinePen.setWidth(1);
+
+        if (m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
+
+            if (!isSnappingActive()) {
+                bezierlinePen.setColor(QColor(assistantColor.red(), assistantColor.green(), assistantColor.blue(), assistantColor.alpha()*.2));
+            }
+
+            gc.setPen(bezierlinePen);
+            gc.drawLine(pts[0], pts[2]);
+
+            if (isAssistantComplete()) {
+                gc.drawLine(pts[1], pts[3]);
+            }
+
+
+            gc.setPen(QColor(0, 0, 0, 125));
         }
-
-        gc.setPen(QColor(0, 0, 0, 125));
+        gc.restore();
     }
 
 
@@ -167,6 +182,8 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
     path.moveTo(pts[0]);
     path.cubicTo(pts[2], pts[3], pts[1]);
     drawPath(gc, path, isSnappingActive());
+
+
 }
 
 QPointF SplineAssistant::buttonPosition() const

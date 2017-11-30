@@ -22,6 +22,7 @@ set(kritalibkis_LIB_SRCS
     nodes/PaintLayer.cpp
     nodes/GroupLayer.cpp
     nodes/CloneLayer.cpp
+    nodes/FileLayer.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

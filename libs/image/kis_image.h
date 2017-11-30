@@ -334,11 +334,11 @@ public:
     QPointF documentToPixel(const QPointF &documentCoord) const;
 
     /**
-     * Convert a document coordinate to an integer pixel coordinate.
+     * Convert a document coordinate to an integer pixel coordinate rounded down.
      *
      * @param documentCoord PostScript Pt coordinate to convert.
      */
-    QPoint documentToIntPixel(const QPointF &documentCoord) const;
+    QPoint documentToImagePixelFloored(const QPointF &documentCoord) const;
 
     /**
      * Convert a document rectangle to a pixel rectangle.

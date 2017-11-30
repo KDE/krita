@@ -45,6 +45,7 @@
 #include <kis_generator_layer.h>
 #include <kis_shape_layer.h>
 #include <kis_filter_configuration.h>
+#include <kis_filter_registry.h>
 #include <kis_selection.h>
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
@@ -583,6 +584,15 @@ FileLayer *Document::createFileLayer(const QString &name, const QString FileName
     KisImageSP image = d->document->image();
 
     return new FileLayer(image, name, fileName(), FileName, ScalingMethod);
+}
+
+FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FilterLayer(image, name, filter, selection);
 }
 
 CloneLayer *Document::createCloneLayer(const QString &name, const Node *source)

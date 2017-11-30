@@ -27,6 +27,7 @@
 #include "nodes/GroupLayer.h"
 #include "nodes/CloneLayer.h"
 #include "nodes/FileLayer.h"
+#include "nodes/FilterLayer.h"
 
 class KisDocument;
 
@@ -543,7 +544,7 @@ public Q_SLOTS:
 
     FileLayer* createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod);
 
-    //FilterLayer* createNode(const QString &name, const QString filterName, const InfoObject configuration);
+    FilterLayer* createFilterLayer(const QString &name, Filter &filter, Selection &selection);
 
     //FillLayer* createNode(const QString &name, const QString filterName, const InfoObject configuration);
 

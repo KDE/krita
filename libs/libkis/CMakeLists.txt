@@ -23,6 +23,7 @@ set(kritalibkis_LIB_SRCS
     nodes/GroupLayer.cpp
     nodes/CloneLayer.cpp
     nodes/FileLayer.cpp
+    nodes/FilterLayer.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

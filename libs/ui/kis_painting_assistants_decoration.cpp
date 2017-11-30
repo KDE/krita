@@ -55,13 +55,18 @@ struct KisPaintingAssistantsDecoration::Private {
 
     // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
     // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
-    QPixmap m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(24, 24);
-    QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(20, 20);
-    QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(20, 20);
-    QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
+
+    AssistantEditorData toolData;
+
+    QPixmap m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(toolData.deleteIconSize, toolData.deleteIconSize);
+    QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
+    QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
+    QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(toolData.moveIconSize, toolData.moveIconSize);
 
     KisCanvas2 * m_canvas = 0;
 };
+
+
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
     KisCanvasDecoration("paintingAssistantsDecoration", parent),
@@ -391,10 +396,11 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     // assistant->buttonPosition() gets the center X/Y position point
     QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
 
-    QPointF iconMovePosition(actionsPosition + QPointF(15, 15 ));
-    QPointF iconSnapPosition(actionsPosition + QPointF(54, 20));
-    QPointF iconDeletePosition(actionsPosition + QPointF(83, 18));
+    AssistantEditorData toolData; // shared const data for positioning and sizing
 
+    QPointF iconMovePosition(actionsPosition + toolData.moveIconPosition);
+    QPointF iconSnapPosition(actionsPosition + toolData.snapIconPosition);
+    QPointF iconDeletePosition(actionsPosition + toolData.deleteIconPosition);
 
     // Background container for helpers
     QBrush backgroundColor = d->m_canvas->viewManager()->mainWindow()->palette().window();

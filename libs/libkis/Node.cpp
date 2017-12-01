@@ -56,6 +56,15 @@
 #include "Filter.h"
 #include "Selection.h"
 
+#include "nodes/PaintLayer.h"
+#include "nodes/GroupLayer.h"
+#include "nodes/CloneLayer.h"
+#include "nodes/FilterLayer.h"
+#include "nodes/FillLayer.h"
+#include "nodes/VectorLayer.h"
+
+
+
 
 struct Node::Private {
     Private() {}
@@ -143,7 +152,27 @@ QList<Node*> Node::childNodes() const
     if (d->node) {
         int childCount = d->node->childCount();
         for (int i = 0; i < childCount; ++i) {
-            nodes << new Node(d->image, d->node->at(i));
+            if (qobject_cast<const KisPaintLayer*>(d->node->at(i))) {
+                nodes << new PaintLayer(KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(d->node->at(i).data())));
+
+            } else if (qobject_cast<const KisGroupLayer*>(d->node->at(i))) {
+                nodes << new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisCloneLayer*>(d->node->at(i))) {
+                nodes << new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisAdjustmentLayer*>(d->node->at(i))) {
+                nodes << new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisGeneratorLayer*>(d->node->at(i))) {
+                nodes << new FillLayer(KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisShapeLayer*>(d->node->at(i))) {
+                nodes << new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(d->node->at(i).data())));
+
+            } else {
+                nodes << new Node(d->image, d->node->at(i));
+            }
         }
     }
     return nodes;
@@ -340,7 +369,7 @@ QString Node::type() const
         return "clonelayer";
     }
     if (qobject_cast<const KisShapeLayer*>(d->node)) {
-        return "shapelayer";
+        return "vectorlayer";
     }
     if (qobject_cast<const KisTransparencyMask*>(d->node)) {
         return "transparencymask";

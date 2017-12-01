@@ -7,7 +7,7 @@ class VectorLayer : Node
 public:
     virtual ~VectorLayer();
     virtual QString type() const;
-    QList<Shape*> shapes();
+    QList<Shape*> shapes() const;
 Q_SIGNALS:
 private:
 };

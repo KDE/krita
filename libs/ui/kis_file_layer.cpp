@@ -242,4 +242,3 @@ KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
     warnKrita << "WARNING: File Layer does not support transformations!" << name();
     return 0;
 }
-

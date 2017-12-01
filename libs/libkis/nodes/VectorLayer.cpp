@@ -25,6 +25,12 @@ VectorLayer::VectorLayer(KoShapeBasedDocumentBase* shapeController, KisImageSP i
 
 }
 
+VectorLayer::VectorLayer(KisShapeLayerSP layer, QObject *parent):
+    Node(layer->image(), layer, parent)
+{
+
+}
+
 VectorLayer::~VectorLayer()
 {
 
@@ -35,12 +41,17 @@ QString VectorLayer::type() const
     return "vectorlayer";
 }
 
-QList<Shape *> VectorLayer::shapes()
+QList<Shape *> VectorLayer::shapes() const
 {
-    const KisShapeLayer *vector = qobject_cast<const KisShapeLayer*>(this->node());
-    QList <Shape*> shapes;
-    Q_FOREACH(KoShape* shape, vector->shapes()) {
-        shapes.append(new Shape(shape));
+    QList<Shape*> shapes;
+    KisShapeLayerSP vector = KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(this->node().data()));
+    if (vector) {
+        qDebug()<<"shape layer exsts";
+        qDebug()<<vector->shapes().size();
+        for (int i=0; i<vector->shapeCount(); i++) {
+            shapes << new Shape(vector->shapes().at(i));
+        }
+        qDebug()<<"shapeslenght"<<shapes.length();
     }
     return shapes;
 }

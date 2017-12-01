@@ -25,6 +25,12 @@ GroupLayer::GroupLayer(KisImageSP image, QString name, QObject *parent) :
 
 }
 
+GroupLayer::GroupLayer(KisGroupLayerSP layer, QObject *parent):
+    Node(layer->image(), layer, parent)
+{
+
+}
+
 GroupLayer::~GroupLayer()
 {
 

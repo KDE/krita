@@ -32,6 +32,7 @@
 class KRITALIBKIS_EXPORT Shape : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Shape)
 
 public:
     explicit Shape(KoShape *shape, QObject *parent = 0);

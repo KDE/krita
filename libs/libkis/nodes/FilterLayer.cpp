@@ -29,6 +29,12 @@ FilterLayer::FilterLayer(KisImageSP image, QString name, Filter &filter, Selecti
 
 }
 
+FilterLayer::FilterLayer(KisAdjustmentLayerSP layer, QObject *parent):
+    Node(layer->image(), layer, parent)
+{
+
+}
+
 FilterLayer::~FilterLayer()
 {
 

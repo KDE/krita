@@ -41,6 +41,7 @@ class KRITALIBKIS_EXPORT PaintLayer : public Node
 
 public:
     explicit PaintLayer(KisImageSP image, QString name, QObject *parent = 0);
+    explicit PaintLayer(KisPaintLayerSP layer, QObject *parent = 0);
     ~PaintLayer() override;
 public Q_SLOTS:
     /**

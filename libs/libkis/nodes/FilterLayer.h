@@ -49,6 +49,7 @@ class KRITALIBKIS_EXPORT FilterLayer : public Node
 
 public:
     explicit FilterLayer(KisImageSP image, QString name, Filter &filter, Selection &selection, QObject *parent = 0);
+    explicit FilterLayer(KisAdjustmentLayerSP layer, QObject *parent = 0);
     ~FilterLayer() override;
 public Q_SLOTS:
 

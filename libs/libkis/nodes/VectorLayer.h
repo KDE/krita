@@ -42,6 +42,7 @@ class KRITALIBKIS_EXPORT VectorLayer : public Node
 
 public:
     explicit VectorLayer(KoShapeBasedDocumentBase* shapeController, KisImageSP image, QString name, QObject *parent = 0);
+    explicit VectorLayer(KisShapeLayerSP layer, QObject *parent = 0);
     ~VectorLayer() override;
 public Q_SLOTS:
 
@@ -57,7 +58,7 @@ public Q_SLOTS:
      * @brief shapes
      * @return the list of top-level shapes in this vector layer.
      */
-    QList<Shape *> shapes();
+    QList<Shape *> shapes() const;
 };
 
 #endif // LIBKIS_VECTORLAYER_H

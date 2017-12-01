@@ -47,6 +47,7 @@ public:
                         const QString fileName=QString(),
                         const QString scalingMethod=QString(),
                         QObject *parent = 0);
+    explicit FileLayer(KisFileLayerSP layer, QObject *parent = 0);
     ~FileLayer() override;
 public Q_SLOTS:
 

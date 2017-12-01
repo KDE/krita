@@ -8,7 +8,7 @@ public:
     virtual ~GroupLayer();
     virtual QString type() const;
     void setPassThroughMode(bool passthrough);
-    bool passThroughMode();
+    bool passThroughMode() const;
 Q_SIGNALS:
 private:
 };

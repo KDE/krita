@@ -41,6 +41,14 @@ class KRITALIBKIS_EXPORT CloneLayer : public Node
 
 public:
     explicit CloneLayer(KisImageSP image, QString name, KisLayerSP source, QObject *parent = 0);
+
+    /**
+     * @brief CloneLayer
+     * function for wrapping a preexisting node into a clonelayer object.
+     * @param clone
+     * @param parent
+     */
+    explicit CloneLayer(KisCloneLayerSP layer, QObject *parent = 0);
     ~CloneLayer() override;
 public Q_SLOTS:
 

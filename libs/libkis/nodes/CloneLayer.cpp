@@ -26,6 +26,12 @@ CloneLayer::CloneLayer(KisImageSP image, QString name, KisLayerSP source, QObjec
 
 }
 
+CloneLayer::CloneLayer(KisCloneLayerSP layer, QObject *parent):
+    Node(layer->image(), layer, parent)
+{
+
+}
+
 CloneLayer::~CloneLayer()
 {
 

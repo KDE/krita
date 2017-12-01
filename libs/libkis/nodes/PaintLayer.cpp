@@ -25,6 +25,12 @@ PaintLayer::PaintLayer(KisImageSP image, QString name, QObject *parent) :
 
 }
 
+PaintLayer::PaintLayer(KisPaintLayerSP layer, QObject *parent):
+    Node(layer->image(), layer, parent)
+{
+
+}
+
 PaintLayer::~PaintLayer()
 {
 

@@ -45,6 +45,7 @@ class KRITALIBKIS_EXPORT GroupLayer : public Node
 
 public:
     explicit GroupLayer(KisImageSP image, QString name, QObject *parent = 0);
+    explicit GroupLayer(KisGroupLayerSP layer, QObject *parent = 0);
     ~GroupLayer() override;
 public Q_SLOTS:
 

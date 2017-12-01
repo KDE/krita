@@ -34,6 +34,12 @@ FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseNam
     file->setFileName(baseName, fileName);
 }
 
+FileLayer::FileLayer(KisFileLayerSP layer, QObject *parent)
+    : Node(layer->image(), layer, parent)
+{
+
+}
+
 FileLayer::~FileLayer()
 {
 

@@ -40,6 +40,7 @@ class KRITALIBKIS_EXPORT FillLayer : public Node
 
 public:
     explicit FillLayer(KisImageSP image, QString name,KisFilterConfigurationSP filter, Selection &selection, QObject *parent = 0);
+    explicit FillLayer(KisGeneratorLayerSP layer, QObject *parent = 0);
     ~FillLayer() override;
 public Q_SLOTS:
 

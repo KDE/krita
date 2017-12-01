@@ -29,6 +29,12 @@ FillLayer::FillLayer(KisImageSP image, QString name, KisFilterConfigurationSP fi
 
 }
 
+FillLayer::FillLayer(KisGeneratorLayerSP layer, QObject *parent):
+    Node(layer->image(), layer, parent)
+{
+
+}
+
 FillLayer::~FillLayer()
 {
 

@@ -32,7 +32,8 @@
  * to store selections. In the gui, these are refered to
  * as local selections.
  *
- * A selection mask can hold both raster and vector selections.
+ * A selection mask can hold both raster and vector selections, though
+ * the API only supports raster selections.
  */
 class KRITALIBKIS_EXPORT SelectionMask : public Node
 {
@@ -40,7 +41,8 @@ class KRITALIBKIS_EXPORT SelectionMask : public Node
     Q_DISABLE_COPY(SelectionMask)
 
 public:
-    explicit SelectionMask(KisImageSP image, KisNodeSP node, QObject *parent = 0);
+    explicit SelectionMask(KisImageSP image, QString name, QObject *parent = 0);
+    explicit SelectionMask(KisImageSP image, KisSelectionMaskSP mask, QObject *parent = 0);
     ~SelectionMask() override;
 public Q_SLOTS:
 
@@ -48,26 +50,16 @@ public Q_SLOTS:
      * @brief type Krita has several types of nodes, split in layers and masks. Group
      * layers can contain other layers, any layer can contain masks.
      *
-     * @return The type of the node. Valid types are:
-     * <ul>
-     *  <li>paintlayer
-     *  <li>grouplayer
-     *  <li>filelayer
-     *  <li>filterlayer
-     *  <li>filllayer
-     *  <li>clonelayer
-     *  <li>vectorlayer
-     *  <li>transparencymask
-     *  <li>filtermask
-     *  <li>transformmask
-     *  <li>selectionmask
-     *  <li>colorizemask
-     * </ul>
+     * @return selectionmask
      *
      * If the Node object isn't wrapping a valid Krita layer or mask object, and
      * empty string is returned.
      */
-    QString type();
+    virtual QString type() const override;
+
+    Selection *selection() const;
+
+    void setSelection(Selection *selection);
 };
 
 #endif // LIBKIS_SELECTIONMASK_H

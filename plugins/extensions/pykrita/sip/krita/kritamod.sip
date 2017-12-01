@@ -30,6 +30,9 @@
 %Include FilterLayer.sip
 %Include FillLayer.sip
 %Include VectorLayer.sip
+%Include TransparencyMask.sip
+%Include FilterMask.sip
+%Include SelectionMask.sip
 
 %Include Shape.sip
 %Include GroupShape.sip

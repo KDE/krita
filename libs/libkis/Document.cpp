@@ -629,6 +629,33 @@ VectorLayer *Document::createVectorLayer(const QString &name)
     return new VectorLayer(d->document->shapeController(), image, name);
 }
 
+TransparencyMask *Document::createTransparencyMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new TransparencyMask(image, name);
+}
+
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FilterMask(image, name, filter);
+}
+
+SelectionMask *Document::createSelectionMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new SelectionMask(image, name);
+}
+
 
 QImage Document::projection(int x, int y, int w, int h) const
 {

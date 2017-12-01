@@ -233,6 +233,7 @@ private:
     friend class Document;
     friend class FilterLayer;
     friend class FillLayer;
+    friend class SelectionMask;
 
     KisSelectionSP selection() const;
 

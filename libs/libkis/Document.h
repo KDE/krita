@@ -30,6 +30,9 @@
 #include "nodes/FilterLayer.h"
 #include "nodes/FillLayer.h"
 #include "nodes/VectorLayer.h"
+#include "nodes/TransparencyMask.h"
+#include "nodes/FilterMask.h"
+#include "nodes/SelectionMask.h"
 
 class KisDocument;
 
@@ -554,13 +557,11 @@ public Q_SLOTS:
 
     VectorLayer* createVectorLayer(const QString &name);
 
-    //TransparencyMask* createNode(const QString &name);
+    TransparencyMask* createTransparencyMask(const QString &name);
 
-    //FilterMask* createNode(const QString &name, const QString filterName, const InfoObject configuration);
+    FilterMask* createFilterMask(const QString &name, Filter &filter);
 
-    //TransformMask* createNode(const QString &name);
-
-    //SelectionMask* createNode(const QString &name);
+    SelectionMask* createSelectionMask(const QString &name);
 
 
     /**

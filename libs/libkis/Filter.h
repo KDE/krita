@@ -102,6 +102,7 @@ public Q_SLOTS:
 
 private:
     friend class FilterLayer;
+    friend class FilterMask;
 
     struct Private;
     Private *const d;

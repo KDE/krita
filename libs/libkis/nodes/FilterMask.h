@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include "Node.h"
+#include "Filter.h"
 
 #include <kis_types.h>
 
@@ -42,7 +43,8 @@ class KRITALIBKIS_EXPORT FilterMask : public Node
     Q_DISABLE_COPY(FilterMask)
 
 public:
-    explicit FilterMask(KisImageSP image, KisNodeSP node, QObject *parent = 0);
+    explicit FilterMask(KisImageSP image, QString name, Filter &filter, QObject *parent = 0);
+    explicit FilterMask(KisImageSP image, KisFilterMaskSP mask, QObject *parent=0);
     ~FilterMask() override;
 public Q_SLOTS:
 
@@ -71,10 +73,8 @@ public Q_SLOTS:
      */
     QString type() const override;
 
-    void setFilter(QString filterName, InfoObject filterConfig);
-
-    QString filterName();
-    InfoObject filterConfig();
+    void setFilter(Filter &filter);
+    Filter *filter();
 };
 
 #endif // LIBKIS_FILTERMASK_H

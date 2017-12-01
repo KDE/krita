@@ -26,6 +26,9 @@ set(kritalibkis_LIB_SRCS
     nodes/FilterLayer.cpp
     nodes/FillLayer.cpp
     nodes/VectorLayer.cpp
+    nodes/TransparencyMask.cpp
+    nodes/FilterMask.cpp
+    nodes/SelectionMask.cpp
 
     vector/Shape.cpp
     vector/GroupShape.cpp

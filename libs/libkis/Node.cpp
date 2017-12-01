@@ -62,6 +62,9 @@
 #include "nodes/FilterLayer.h"
 #include "nodes/FillLayer.h"
 #include "nodes/VectorLayer.h"
+#include "nodes/TransparencyMask.h"
+#include "nodes/FilterMask.h"
+#include "nodes/SelectionMask.h"
 
 
 
@@ -169,6 +172,15 @@ QList<Node*> Node::childNodes() const
 
             } else  if (qobject_cast<const KisShapeLayer*>(d->node->at(i))) {
                 nodes << new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisTransparencyMask*>(d->node->at(i))) {
+                nodes << new TransparencyMask(d->image, KisTransparencyMaskSP(dynamic_cast<KisTransparencyMask*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisFilterMask*>(d->node->at(i))) {
+                nodes << new FilterMask(d->image, KisFilterMaskSP(dynamic_cast<KisFilterMask*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisSelectionMask*>(d->node->at(i))) {
+                nodes << new SelectionMask(d->image, KisSelectionMaskSP(dynamic_cast<KisSelectionMask*>(d->node->at(i).data())));
 
             } else {
                 nodes << new Node(d->image, d->node->at(i));

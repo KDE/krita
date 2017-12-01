@@ -4,4 +4,4 @@ ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=tenscripts
 X-Python-2-Compatible=false
 Name=Ten Scripts
-Comment=A Python-based plugin for create ten actions and assign then to Python scripts
+Comment=A Python-based plugin for creating ten actions and assign them to Python scripts

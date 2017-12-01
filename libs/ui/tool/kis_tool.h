@@ -211,10 +211,10 @@ protected:
     QPointF convertDocumentToWidget(const QPointF& pt);
 
     /// Convert from native (postscript points) to integer image pixel
-    /// coordinates. This truncates the floating point components and
+    /// coordinates. This rounds down (not truncate) the pixel coordinates and
     /// should be used in preference to QPointF::toPoint(), which rounds,
     /// to ensure the cursor acts on the pixel it is visually over.
-    QPoint convertToIntPixelCoord(KoPointerEvent *e);
+    QPoint convertToImagePixelCoordFloored(KoPointerEvent *e);
 
     QRectF convertToPt(const QRectF &rect);
 

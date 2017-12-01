@@ -21,6 +21,7 @@
 #include "KisDabRenderingJob.h"
 #include "KisRenderedDab.h"
 #include "kis_painter.h"
+#include "KisOptimizedByteArray.h"
 
 #include <QSet>
 #include <QMutex>
@@ -60,6 +61,7 @@ struct KisDabRenderingQueue::Private
         : cacheInterface(new DumbCacheInterface),
           colorSpace(_colorSpace),
           resourcesFactory(_resourcesFactory),
+          paintDeviceAllocator(new KisOptimizedByteArray::PooledMemoryAllocator()),
           avgExecutionTime(50),
           avgDabSize(50)
     {
@@ -67,6 +69,10 @@ struct KisDabRenderingQueue::Private
     }
 
     ~Private() {
+        // clear the jobs, so that they would not keep references to any
+        // paint devices anymore
+        jobs.clear();
+
         qDeleteAll(cachedResources);
         cachedResources.clear();
     }
@@ -82,7 +88,7 @@ struct KisDabRenderingQueue::Private
     KisDabCacheUtils::ResourcesFactory resourcesFactory;
 
     QList<KisDabCacheUtils::DabRenderingResources*> cachedResources;
-    QSet<KisFixedPaintDeviceSP> cachedPaintDevices;
+    QSharedPointer<KisOptimizedByteArray::MemoryAllocator> paintDeviceAllocator;
 
     QMutex mutex;
 
@@ -92,6 +98,7 @@ struct KisDabRenderingQueue::Private
     int calculateLastDabJobIndex(int startSearchIndex);
     void cleanPaintedDabs();
     bool dabsHaveSeparateOriginal();
+    bool hasPreparedDabsImpl() const;
 
     KisDabCacheUtils::DabRenderingResources* fetchResourcesFromCache();
     void putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources);
@@ -183,6 +190,7 @@ KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabReq
                 job->status = KisDabRenderingJob::Completed;
                 job->originalDevice = m_d->jobs[lastDabJobIndex]->originalDevice;
                 job->postprocessedDevice = m_d->jobs[lastDabJobIndex]->postprocessedDevice;
+                m_d->avgExecutionTime(0);
             }
         }
     }
@@ -246,6 +254,7 @@ QList<KisDabRenderingJobSP> KisDabRenderingQueue::notifyJobFinished(int seqNo, i
                 j->originalDevice = finishedJob->originalDevice;
                 j->postprocessedDevice = finishedJob->postprocessedDevice;
                 j->status = KisDabRenderingJob::Completed;
+                m_d->avgExecutionTime(0);
 
             } else if (j->type == KisDabRenderingJob::Postprocess) {
 
@@ -278,13 +287,7 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
 
             if (i < lastSourceJob || job->type != KisDabRenderingJob::Dab){
 
-                // cache unique 'original' devices
-                if (job->type == KisDabRenderingJob::Dab &&
-                    job->postprocessedDevice != job->originalDevice) {
-
-                    cachedPaintDevices << job->originalDevice;
-                    job->originalDevice = 0;
-                }
+                KIS_ASSERT_RECOVER_NOOP(job->originalDevice);
 
                 it = jobs.erase(it);
                 numRemovedJobs++;
@@ -304,7 +307,9 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
     }
 }
 
-QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs)
+QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs,
+                                                          int oneTimeLimit,
+                                                          bool *someDabsLeft)
 {
     QMutexLocker l(&m_d->mutex);
 
@@ -320,7 +325,11 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
             m_d->lastDabJobInQueue :
             std::numeric_limits<int>::max();
 
-    for (int i = 0; i < m_d->jobs.size(); i++) {
+    if (oneTimeLimit < 0) {
+        oneTimeLimit = std::numeric_limits<int>::max();
+    }
+
+    for (int i = 0; i < m_d->jobs.size() && oneTimeLimit > 0; i++, oneTimeLimit--) {
         KisDabRenderingJobSP j = m_d->jobs[i];
 
         if (j->status != KisDabRenderingJob::Completed) break;
@@ -349,19 +358,29 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
     }
 
     m_d->cleanPaintedDabs();
+
+    if (someDabsLeft) {
+        *someDabsLeft = m_d->hasPreparedDabsImpl();
+    }
+
     return renderedDabs;
 }
+
+bool KisDabRenderingQueue::Private::hasPreparedDabsImpl() const
+{
+    const int nextToBePainted = lastPaintedJob + 1;
+
+    return
+        nextToBePainted >= 0 &&
+        nextToBePainted < jobs.size() &&
+            jobs[nextToBePainted]->status == KisDabRenderingJob::Completed;
+}
+
 
 bool KisDabRenderingQueue::hasPreparedDabs() const
 {
     QMutexLocker l(&m_d->mutex);
-
-    const int nextToBePainted = m_d->lastPaintedJob + 1;
-
-    return
-        nextToBePainted >= 0 &&
-        nextToBePainted < m_d->jobs.size() &&
-            m_d->jobs[nextToBePainted]->status == KisDabRenderingJob::Completed;
+    return m_d->hasPreparedDabsImpl();
 }
 
 void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterface *interface)
@@ -371,36 +390,17 @@ void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterfac
 
 KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
 {
-    QMutexLocker l(&m_d->mutex);
-
-    KisFixedPaintDeviceSP result;
-
-    if (m_d->cachedPaintDevices.isEmpty()) {
-        result = new KisFixedPaintDevice(m_d->colorSpace);
-    } else {
-        // there is no difference from which side to take elements from QSet
-        auto it = m_d->cachedPaintDevices.begin();
-        result = *it;
-        m_d->cachedPaintDevices.erase(it);
-    }
-
-    return result;
+    /**
+     * We create a special type of a fixed paint device that
+     * uses a custom allocator for better efficiency.
+     */
+    return new KisFixedPaintDevice(m_d->colorSpace, m_d->paintDeviceAllocator);
 }
 
-void KisDabRenderingQueue::recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices)
+qreal KisDabRenderingQueue::averageExecutionTime() const
 {
     QMutexLocker l(&m_d->mutex);
-
-    Q_FOREACH (KisFixedPaintDeviceSP device, devices) {
-        // the set automatically checks if the device is unique in the set
-        m_d->cachedPaintDevices << device;
-    }
-}
-
-int KisDabRenderingQueue::averageExecutionTime() const
-{
-    QMutexLocker l(&m_d->mutex);
-    return qRound(m_d->avgExecutionTime.rollingMean());
+    return m_d->avgExecutionTime.rollingMean() / 1000.0;
 }
 
 int KisDabRenderingQueue::averageDabSize() const

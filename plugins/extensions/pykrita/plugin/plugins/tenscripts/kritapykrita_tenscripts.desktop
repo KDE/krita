@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=tenscripts
+X-Python-2-Compatible=false
+Name=Ten Scripts
+Comment=A Python-based plugin for creating ten actions and assign them to Python scripts

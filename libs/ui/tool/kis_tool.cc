@@ -273,12 +273,12 @@ QPointF KisTool::convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &of
     return image()->documentToPixel(pos);
 }
 
-QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)
+QPoint KisTool::convertToImagePixelCoordFloored(KoPointerEvent *e)
 {
     if (!image())
         return e->point.toPoint();
 
-    return image()->documentToIntPixel(e->point);
+    return image()->documentToImagePixelFloored(e->point);
 }
 
 QPointF KisTool::viewToPixel(const QPointF &viewCoord) const

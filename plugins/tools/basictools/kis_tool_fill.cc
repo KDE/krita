@@ -110,7 +110,7 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    m_startPos = convertToIntPixelCoord(event);
+    m_startPos = convertToImagePixelCoordFloored(event);
 }
 
 void KisToolFill::endPrimaryAction(KoPointerEvent *event)

@@ -53,6 +53,17 @@ qreal KisRollingMeanAccumulatorWrapper::rollingMean() const
     return boost::accumulators::rolling_mean(m_d->accumulator);
 }
 
+qreal KisRollingMeanAccumulatorWrapper::rollingMeanSafe() const
+{
+    return boost::accumulators::rolling_count(m_d->accumulator) > 0 ?
+        boost::accumulators::rolling_mean(m_d->accumulator) : 0;
+}
+
+int KisRollingMeanAccumulatorWrapper::rollingCount() const
+{
+    return boost::accumulators::rolling_count(m_d->accumulator);
+}
+
 void KisRollingMeanAccumulatorWrapper::reset(int windowSize)
 {
     m_d->accumulator =

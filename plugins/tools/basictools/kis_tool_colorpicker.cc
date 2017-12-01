@@ -203,7 +203,7 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
         }
     }
 
-    QPoint pos = convertToIntPixelCoord(event);
+    QPoint pos = convertToImagePixelCoordFloored(event);
     // the color picking has to start in the visible part of the layer
     if (!currentImage()->bounds().contains(pos) &&
         !currentImage()->wrapAroundModePermitted()) {
@@ -220,7 +220,7 @@ void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    QPoint pos = convertToIntPixelCoord(event);
+    QPoint pos = convertToImagePixelCoordFloored(event);
     pickColor(pos);
     displayPickedColor();
 }

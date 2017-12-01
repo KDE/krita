@@ -61,7 +61,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     , m_avgNumDabs(50)
     , m_avgUpdateTimePerDab(50)
     , m_idealNumRects(KisImageConfig().maxNumberOfThreads())
-    , m_minUpdatePeriod(20)
+    , m_minUpdatePeriod(10)
     , m_maxUpdatePeriod(100)
 {
     Q_UNUSED(image);

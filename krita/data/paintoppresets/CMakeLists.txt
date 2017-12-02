@@ -9,7 +9,12 @@ Blender_Textured.kpp
 Blender_Water.kpp
 Clone_Tool.kpp
 Clone_Tool_Textured.kpp
+Distort_Grow.kpp
+Distort_Move.kpp
+Distort_Shrink.kpp
 Dry_Bristles.kpp
+Dry_Bristles_Smooth.kpp
+Dry_Marker.kpp
 Dry_Textured_Rough.kpp
 Dry_Textured_Soft.kpp
 Eraser_Airbrush.kpp
@@ -20,26 +25,36 @@ Eraser_Soft.kpp
 Fill_Large_Quick.kpp
 Fill_Screentones.kpp
 Fill_Shape.kpp
-FX_Blur_Light.kpp
 FX_Glow_Add.kpp
-FX_Hearts.kpp
-FX_Shoujo_Bubbles.kpp
+FX_Image_Blur.kpp
+FX_Image_Sharpen.kpp
 FX_Smoke_Particles.kpp
 FX_Starfield.kpp
+FX_Value_Burn.kpp
+FX_Value_Dodge.kpp
 Ink_Brush.kpp
 Ink_Brush_Rough.kpp
 Ink_Fineliner.kpp
 Ink_Precision.kpp
 Ink_Tough.kpp
-Move_Tool.kpp
+kis_paintoppresets_tags.xml
 Normal_Map.kpp
 Pixel_Art.kpp
 Sketch_2B.kpp
 Sketch_Chrome.kpp
 Sketch_Hatch_Noisy.kpp
+Stamp_Clouds.kpp
+Stamp_Freckles.kpp
+Stamp_Hearts.kpp
+Stamp_Ink_Smear.kpp
+Stamp_Scales.kpp
+Stamp_Shoujo_Bubbles.kpp
+Stamp_Spines.kpp
+Stamp_Watercolor.kpp
 Wet_Bristles.kpp
 Wet_Bristles_Rough.kpp
 Wet_Circle.kpp
+
 
 
 

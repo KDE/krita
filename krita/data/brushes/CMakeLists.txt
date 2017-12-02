@@ -14,6 +14,13 @@ A_sparkle3.gbr
 A_splat2.gih
 A_starfield2.gbr
 A_wall-texture.gih
+cazu-chalk.gbr
+cazu-freckles.gbr
+cazu-reptile.gbr
+cazu-smear-ink.gih
+cazu-smear-paint.gbr
+cazu-spines.gbr
+cazu_watercolor2.gih
 double_special6.gih
 Flat_textured1.gih
 knife3.gbr

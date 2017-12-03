@@ -21,6 +21,7 @@
 #include <QtGlobal>
 #include <QString>
 
+class QDebug;
 class QOpenGLContext;
 
 namespace KisOpenGLPrivate
@@ -94,6 +95,13 @@ public:
     }
 #endif
 };
+
+void appendPlatformOpenGLDebugText(QDebug &debugOut);
+#ifndef Q_OS_WIN
+void appendPlatformOpenGLDebugText(QDebug &debugOut) {}
+#endif
+
+bool isDefaultFormatSet();
 
 } // namespace KisOpenGLPrivate
 

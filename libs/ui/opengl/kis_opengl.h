@@ -20,15 +20,13 @@
 
 /** @file */
 
-#include <KoConfig.h>
-
 #include <QtGlobal>
 #include <QFlags>
-class QOpenGLContext;
-class QString;
 
 #include "kritaui_export.h"
 
+class QOpenGLContext;
+class QString;
 
 /**
  * This class manages a shared OpenGL context and provides utility

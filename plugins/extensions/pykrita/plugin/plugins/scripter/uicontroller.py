@@ -130,7 +130,8 @@ class UIController(object):
     def setDocumentEditor(self, document):
         self.editor.clear()
         self.editor.moveCursor(QTextCursor.Start)
-        self.editor.insertPlainText(document.data)
+        self.editor._documentModified = False
+        self.editor.setPlainText(document.data)
         self.editor.moveCursor(QTextCursor.End)
 
     def setStatusBar(self, value='untitled'):

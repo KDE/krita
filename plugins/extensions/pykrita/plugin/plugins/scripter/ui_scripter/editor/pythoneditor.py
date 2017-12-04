@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QRect, QSize, QPoint
+from PyQt5.QtCore import Qt, QRect, QSize, QPoint, pyqtSlot
 from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
 from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QFontInfo, QTextCursor, QPalette
 from scripter.ui_scripter.editor import linenumberarea, debugarea
@@ -29,6 +29,9 @@ class CodeEditor(QPlainTextEdit):
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
         self.setCornerWidget(QLabel(str()))
+        
+        self.undoAvailable.connect(self.setDocumentModified)
+        
 
     def debugAreaWidth(self):
         return self.DEBUG_AREA_WIDTH
@@ -166,3 +169,7 @@ class CodeEditor(QPlainTextEdit):
 
     def repaintDebugArea(self):
         self.debugArea.repaint()
+
+    @pyqtSlot(bool)
+    def setDocumentModified(self, changed = False):
+        self._documentModified = changed

@@ -25,6 +25,7 @@ class CodeEditor(QPlainTextEdit):
         self.updateMarginsWidth()
         self.highlightCurrentLine()
         self.font = "Monospace"
+        self.setTabStopWidth(self.fontMetrics().width(' ')*4)
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
 

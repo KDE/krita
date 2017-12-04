@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QRect, QSize, QPoint
-from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit
+from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
 from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor, QPalette
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 from scripter import resources_rc
@@ -28,6 +28,7 @@ class CodeEditor(QPlainTextEdit):
         self.setTabStopWidth(self.fontMetrics().width(' ')*4)
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
+        self.setCornerWidget(QLabel(str()))
 
     def debugAreaWidth(self):
         return self.DEBUG_AREA_WIDTH

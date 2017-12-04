@@ -56,13 +56,11 @@
 #include "Filter.h"
 #include "Selection.h"
 
-#include "nodes/PaintLayer.h"
 #include "nodes/GroupLayer.h"
 #include "nodes/CloneLayer.h"
 #include "nodes/FilterLayer.h"
 #include "nodes/FillLayer.h"
 #include "nodes/VectorLayer.h"
-#include "nodes/TransparencyMask.h"
 #include "nodes/FilterMask.h"
 #include "nodes/SelectionMask.h"
 
@@ -155,10 +153,7 @@ QList<Node*> Node::childNodes() const
     if (d->node) {
         int childCount = d->node->childCount();
         for (int i = 0; i < childCount; ++i) {
-            if (qobject_cast<const KisPaintLayer*>(d->node->at(i))) {
-                nodes << new PaintLayer(KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(d->node->at(i).data())));
-
-            } else if (qobject_cast<const KisGroupLayer*>(d->node->at(i))) {
+            if (qobject_cast<const KisGroupLayer*>(d->node->at(i))) {
                 nodes << new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(d->node->at(i).data())));
 
             } else  if (qobject_cast<const KisCloneLayer*>(d->node->at(i))) {
@@ -172,9 +167,6 @@ QList<Node*> Node::childNodes() const
 
             } else  if (qobject_cast<const KisShapeLayer*>(d->node->at(i))) {
                 nodes << new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisTransparencyMask*>(d->node->at(i))) {
-                nodes << new TransparencyMask(d->image, KisTransparencyMaskSP(dynamic_cast<KisTransparencyMask*>(d->node->at(i).data())));
 
             } else  if (qobject_cast<const KisFilterMask*>(d->node->at(i))) {
                 nodes << new FilterMask(d->image, KisFilterMaskSP(dynamic_cast<KisFilterMask*>(d->node->at(i).data())));

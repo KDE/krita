@@ -24,13 +24,11 @@
 %Include Krita.sip
 %Include Node.sip
 
-%Include PaintLayer.sip
 %Include GroupLayer.sip
 %Include CloneLayer.sip
 %Include FilterLayer.sip
 %Include FillLayer.sip
 %Include VectorLayer.sip
-%Include TransparencyMask.sip
 %Include FilterMask.sip
 %Include SelectionMask.sip
 

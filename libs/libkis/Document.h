@@ -23,14 +23,12 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
-#include "nodes/PaintLayer.h"
 #include "nodes/GroupLayer.h"
 #include "nodes/CloneLayer.h"
 #include "nodes/FileLayer.h"
 #include "nodes/FilterLayer.h"
 #include "nodes/FillLayer.h"
 #include "nodes/VectorLayer.h"
-#include "nodes/TransparencyMask.h"
 #include "nodes/FilterMask.h"
 #include "nodes/SelectionMask.h"
 
@@ -537,30 +535,75 @@ public Q_SLOTS:
      * @return the new Node.
      */
     Node* createNode(const QString &name, const QString &nodeType);
-
     /**
-     * @brief createPaintLayer
-     * @param name the name of the node.
-     * @return a paintlayer object.
+     * @brief createGroupLayer
+     * Returns a grouplayer object. Grouplayers are nodes that can have
+     * other layers as children and have the passthrough mode.
+     * @param name the name of the layer.
+     * @return a GroupLayer object.
      */
-    PaintLayer* createPaintLayer(const QString &name);
-
     GroupLayer* createGroupLayer(const QString &name);
-
+    /**
+     * @brief createFileLayer returns a layer that shows an external image.
+     * @param name name of the file layer.
+     * @param FileName
+     * @param ScalingMethod how the dimensions of the file are interpreted
+     *        can be either "None", "ImageToSize" or "ImageToPPI"
+     * @return a FileLayer
+     */
     FileLayer* createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod);
 
+    /**
+     * @brief createFilterLayer creates a filter layer, which is a layer that represents a filter
+     * applied non-destructively.
+     * @param name name of the filterLayer
+     * @param filter the filter that this filter layer will us.
+     * @param selection the selection.
+     * @return a filter layer object.
+     */
     FilterLayer* createFilterLayer(const QString &name, Filter &filter, Selection &selection);
 
+    /**
+     * @brief createFillLayer creates a fill layer object, which is a layer
+     * @param name
+     * @param filterName - name of the generation filter.
+     * @param configuration - the configuration for the generation filter.
+     * @param selection - the selection.
+     * @return a filllayer object.
+     */
     FillLayer* createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection);
 
+    /**
+     * @brief createCloneLayer
+     * @param name
+     * @param source
+     * @return
+     */
     CloneLayer* createCloneLayer(const QString &name, const Node* source);
 
+    /**
+     * @brief createVectorLayer
+     * Creates a vector layer that can contain vector shapes.
+     * @param name the name of this layer.
+     * @return a VectorLayer.
+     */
     VectorLayer* createVectorLayer(const QString &name);
 
-    TransparencyMask* createTransparencyMask(const QString &name);
-
+    /**
+     * @brief createFilterMask
+     * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
+     * @param name the name of the layer.
+     * @param filter the filter assigned.
+     * @return a FilterMask
+     */
     FilterMask* createFilterMask(const QString &name, Filter &filter);
 
+    /**
+     * @brief createSelectionMask
+     * Creates a selection mask, which can be used to store selections.
+     * @param name - the name of the layer.
+     * @return a SelectionMask
+     */
     SelectionMask* createSelectionMask(const QString &name);
 
 

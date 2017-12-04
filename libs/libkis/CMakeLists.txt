@@ -19,14 +19,12 @@ set(kritalibkis_LIB_SRCS
     View.cpp
     Extension.cpp
     Window.cpp
-    nodes/PaintLayer.cpp
     nodes/GroupLayer.cpp
     nodes/CloneLayer.cpp
     nodes/FileLayer.cpp
     nodes/FilterLayer.cpp
     nodes/FillLayer.cpp
     nodes/VectorLayer.cpp
-    nodes/TransparencyMask.cpp
     nodes/FilterMask.cpp
     nodes/SelectionMask.cpp
 

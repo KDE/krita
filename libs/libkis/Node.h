@@ -511,7 +511,6 @@ private:
     friend class FilterLayer;
     friend class FillLayer;
     friend class VectorLayer;
-    friend class TransparencyMask;
     friend class FilterMask;
     friend class SelectionMask;
     /**

@@ -61,7 +61,6 @@
 
 #include <InfoObject.h>
 #include <Node.h>
-#include <nodes/PaintLayer.h>
 #include <Selection.h>
 
 struct Document::Private {
@@ -560,15 +559,6 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     return node;
 }
 
-PaintLayer *Document::createPaintLayer(const QString &name)
-{
-    if (!d->document) return 0;
-    if (!d->document->image()) return 0;
-    KisImageSP image = d->document->image();
-
-    return new PaintLayer(image, name);
-}
-
 GroupLayer *Document::createGroupLayer(const QString &name)
 {
     if (!d->document) return 0;
@@ -627,15 +617,6 @@ VectorLayer *Document::createVectorLayer(const QString &name)
     KisImageSP image = d->document->image();
 
     return new VectorLayer(d->document->shapeController(), image, name);
-}
-
-TransparencyMask *Document::createTransparencyMask(const QString &name)
-{
-    if (!d->document) return 0;
-    if (!d->document->image()) return 0;
-    KisImageSP image = d->document->image();
-
-    return new TransparencyMask(image, name);
 }
 
 FilterMask *Document::createFilterMask(const QString &name, Filter &filter)

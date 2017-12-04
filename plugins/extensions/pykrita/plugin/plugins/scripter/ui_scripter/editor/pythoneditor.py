@@ -74,11 +74,11 @@ class CodeEditor(QPlainTextEdit):
 
     def lineNumberAreaPaintEvent(self, event):
         """This method draws the current lineNumberArea for while"""
-        blockColor = QColor(self.palette().base().color()).darker(250)
+        blockColor = QColor(self.palette().base().color()).darker(120)
         if (self.palette().base().color().lightness()<128):
-            blockColor = QColor(self.palette().base().color()).lighter(250)
+            blockColor = QColor(self.palette().base().color()).lighter(120)
         if (self.palette().base().color().lightness()<1):
-            blockColor = QColor(100, 100, 100)
+            blockColor = QColor(43, 43, 43)
         painter = QPainter(self.lineNumberArea)
         painter.fillRect(event.rect(), blockColor)
 
@@ -89,7 +89,7 @@ class CodeEditor(QPlainTextEdit):
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
-                painter.setPen(self.palette().base().color())
+                painter.setPen(self.palette().text().color())
                 painter.drawText(0, top, self.lineNumberArea.width(), self.fontMetrics().height(),
                                  Qt.AlignRight, number)
 

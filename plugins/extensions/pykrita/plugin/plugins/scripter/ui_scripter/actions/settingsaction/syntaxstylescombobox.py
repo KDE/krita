@@ -10,7 +10,7 @@ class SyntaxStylesComboBox(QComboBox):
 
         self.highlight = highlight
         self.editor = editor
-        self.styleClasses = [syntaxstyles.DefaultSyntaxStyle, syntaxstyles.PythonVimSyntaxStyle]
+        self.styleClasses = [syntaxstyles.DefaultSyntaxStyle, syntaxstyles.PythonVimSyntaxStyle, syntaxstyles.BreezeLightSyntaxStyle, syntaxstyles.BreezeDarkSyntaxStyle, syntaxstyles.BlenderSyntaxStyle, syntaxstyles.SolarizedDarkSyntaxStyle, syntaxstyles.SolarizedLightSyntaxStyle]
 
         for styleClass in self.styleClasses:
             className = styleClass.__name__

@@ -25,7 +25,6 @@ class CodeEditor(QPlainTextEdit):
         self.updateMarginsWidth()
         self.highlightCurrentLine()
         self.font = "Monospace"
-        self.setTabStopWidth(self.fontMetrics().width(' ')*4)
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
         self.setCornerWidget(QLabel(str()))
@@ -151,7 +150,12 @@ class CodeEditor(QPlainTextEdit):
                 self.zoomIn()
         else:
             super(CodeEditor, self).wheelEvent(e)
-
+    def keyPressEvent(self, e):
+        if (e.key() == Qt.Key_Tab):
+            self.textCursor().insertText("    ")
+        else:
+            super(CodeEditor, self).keyPressEvent(e)
+        
     @property
     def font(self):
         return self._font

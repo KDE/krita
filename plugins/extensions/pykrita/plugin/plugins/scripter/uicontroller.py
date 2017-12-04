@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QTextCursor
+from PyQt5.QtGui import QTextCursor, QPalette
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
                              QSplitter)
@@ -31,6 +31,10 @@ class UIController(object):
         self.splitter = QSplitter()
         self.splitter.setOrientation(Qt.Vertical)
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
+        p = self.editor.palette()
+        p.setColor(QPalette.Base, syntaxstyles.DefaultSyntaxStyle()['background'].foreground().color());
+        p.setColor(QPalette.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color());
+        self.editor.setPalette(p)
 
         self.scripter = scripter
 

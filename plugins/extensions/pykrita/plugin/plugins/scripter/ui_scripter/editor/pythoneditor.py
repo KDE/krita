@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QRect, QSize, QPoint
 from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit
-from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
+from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor, QPalette
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 from scripter import resources_rc
 
@@ -74,8 +74,13 @@ class CodeEditor(QPlainTextEdit):
 
     def lineNumberAreaPaintEvent(self, event):
         """This method draws the current lineNumberArea for while"""
+        blockColor = QColor(self.palette().base().color()).darker(250)
+        if (self.palette().base().color().lightness()<128):
+            blockColor = QColor(self.palette().base().color()).lighter(250)
+        if (self.palette().base().color().lightness()<1):
+            blockColor = QColor(100, 100, 100)
         painter = QPainter(self.lineNumberArea)
-        painter.fillRect(event.rect(), QColor(Qt.lightGray).darker(300))
+        painter.fillRect(event.rect(), blockColor)
 
         block = self.firstVisibleBlock()
         blockNumber = block.blockNumber()
@@ -84,7 +89,7 @@ class CodeEditor(QPlainTextEdit):
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
-                painter.setPen(QColor(Qt.lightGray))
+                painter.setPen(self.palette().base().color())
                 painter.drawText(0, top, self.lineNumberArea.width(), self.fontMetrics().height(),
                                  Qt.AlignRight, number)
 
@@ -114,7 +119,12 @@ class CodeEditor(QPlainTextEdit):
         """Highlight current line under cursor"""
         currentSelection = QTextEdit.ExtraSelection()
 
-        lineColor = QColor(Qt.gray).darker(250)
+        lineColor = QColor(self.palette().base().color()).darker(120)
+        if (self.palette().base().color().lightness()<128):
+            lineColor = QColor(self.palette().base().color()).lighter(120)
+        if (self.palette().base().color().lightness()<1):
+            lineColor = QColor(43, 43, 43)
+        
         currentSelection.format.setBackground(lineColor)
         currentSelection.format.setProperty(QTextFormat.FullWidthSelection, True)
         currentSelection.cursor = self.textCursor()

@@ -31,6 +31,8 @@ class DefaultSyntaxStyle(object):
         'comment': format('darkGreen', 'italic'),
         'self': format('black', 'italic'),
         'numbers': format('brown'),
+        'background' : format('white'),
+        'foreground' : format('black'),
     }
 
     def __getitem__(self, key):
@@ -51,6 +53,8 @@ class PythonVimSyntaxStyle(object):
         'comment': format('gray', 'italic'),
         'self': format('blue', lighter=170),
         'numbers': format('yellow', lighter=130),
+        'background' : format('black'),
+        'foreground' : format('white'),
     }
 
     def __getitem__(self, key):

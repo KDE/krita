@@ -62,7 +62,7 @@ public Q_SLOTS:
     /**
      * @brief setProperties
      * Change the properties of the file layer.
-     * @param FileName - A String containing the filename relative to the document name.
+     * @param FileName - A String containing the absolute file name.
      * @param ScalingMethod - a string with the scaling method, defaults to "None",
      *  other options are "ToImageSize" and "ToImagePPI"
      */
@@ -85,6 +85,15 @@ public Q_SLOTS:
     QString scalingMethod() const;
 
 private:
+    /**
+     * @brief getFileNameFromAbsolute
+     * referenced from the fileLayer dialog, this will jumps through all the hoops
+     * to ensure that an appropriate filename will be gotten.
+     * @param baseName the location of the document.
+     * @param absolutePath the absolute location of the file referenced.
+     * @return the appropriate relative path.
+     */
+    QString getFileNameFromAbsolute(QString baseName, QString absolutePath);
     QString m_baseName;
 };
 

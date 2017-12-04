@@ -546,7 +546,7 @@ public Q_SLOTS:
     /**
      * @brief createFileLayer returns a layer that shows an external image.
      * @param name name of the file layer.
-     * @param FileName
+     * @param FileName the absolute filename of the file referenced. Symlinks will be resolved.
      * @param ScalingMethod how the dimensions of the file are interpreted
      *        can be either "None", "ImageToSize" or "ImageToPPI"
      * @return a FileLayer

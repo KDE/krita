@@ -19,6 +19,7 @@
 #include <kis_file_layer.h>
 #include <kis_image.h>
 #include <QFileInfo>
+#include <QDir>
 
 FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseName, const QString fileName, const QString scalingMethod, QObject *parent)
     : Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8), parent)
@@ -31,7 +32,7 @@ FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseNam
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
-    file->setFileName(baseName, fileName);
+    file->setFileName(baseName, getFileNameFromAbsolute(baseName, fileName));
 }
 
 FileLayer::FileLayer(KisFileLayerSP layer, QObject *parent)
@@ -60,7 +61,7 @@ void FileLayer::setProperties(QString FileName, QString ScalingMethod)
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
-    file->setFileName(QFileInfo(file->path()).baseName(), FileName);
+    file->setFileName(QFileInfo(file->path()).baseName(), getFileNameFromAbsolute(QFileInfo(file->path()).baseName(), FileName));
 }
 
 QString FileLayer::path() const
@@ -81,6 +82,20 @@ QString FileLayer::scalingMethod() const
         method = "ToImagePPI";
     }
     return method;
+}
+
+QString FileLayer::getFileNameFromAbsolute(QString baseName, QString absolutePath)
+{
+    QFileInfo fi(absolutePath);
+    if (fi.isSymLink()) {
+        absolutePath = fi.symLinkTarget();
+        fi = QFileInfo(absolutePath);
+    }
+    if (!baseName.isEmpty() && fi.isAbsolute()) {
+        QDir directory(baseName);
+        absolutePath = directory.relativeFilePath(absolutePath);
+    }
+    return absolutePath;
 }
 
 

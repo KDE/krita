@@ -27,6 +27,7 @@
 %Include GroupLayer.sip
 %Include CloneLayer.sip
 %Include FilterLayer.sip
+%Include FileLayer.sip
 %Include FillLayer.sip
 %Include VectorLayer.sip
 %Include FilterMask.sip

@@ -60,6 +60,7 @@
 #include "nodes/CloneLayer.h"
 #include "nodes/FilterLayer.h"
 #include "nodes/FillLayer.h"
+#include "nodes/FileLayer.h"
 #include "nodes/VectorLayer.h"
 #include "nodes/FilterMask.h"
 #include "nodes/SelectionMask.h"
@@ -158,6 +159,9 @@ QList<Node*> Node::childNodes() const
 
             } else  if (qobject_cast<const KisCloneLayer*>(d->node->at(i))) {
                 nodes << new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisFileLayer*>(d->node->at(i))) {
+                nodes << new FileLayer(KisFileLayerSP(dynamic_cast<KisFileLayer*>(d->node->at(i).data())));
 
             } else  if (qobject_cast<const KisAdjustmentLayer*>(d->node->at(i))) {
                 nodes << new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(d->node->at(i).data())));

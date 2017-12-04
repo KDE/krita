@@ -52,11 +52,14 @@ class CodeEditor(QPlainTextEdit):
                                          qRect.top(),
                                          self.debugAreaWidth(),
                                          qRect.height()))
+        scrollBarHeight = 0
+        if (self.horizontalScrollBar().isVisible()):
+            scrollBarHeight = self.horizontalScrollBar().height()
 
         self.lineNumberArea.setGeometry(QRect(qRect.left() + self.debugAreaWidth(),
                                               qRect.top(),
                                               self.lineNumberAreaWidth(),
-                                              qRect.height()))
+                                              qRect.height()-scrollBarHeight))
 
     def updateMarginsWidth(self):
         self.setViewportMargins(self.lineNumberAreaWidth() + self.debugAreaWidth(), 0, 0, 0)

@@ -40,7 +40,7 @@ class CodeEditor(QPlainTextEdit):
             max_ /= 10
             digits += 1
 
-        space = 3 + self.fontMetrics().width('9') * digits
+        space = 3 + self.fontMetrics().width('9') * digits + 3
 
         return space
 
@@ -91,7 +91,7 @@ class CodeEditor(QPlainTextEdit):
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
                 painter.setPen(self.palette().text().color())
-                painter.drawText(0, top, self.lineNumberArea.width(), self.fontMetrics().height(),
+                painter.drawText(0, top, self.lineNumberArea.width()-3, self.fontMetrics().height(),
                                  Qt.AlignRight, number)
 
             block = block.next()

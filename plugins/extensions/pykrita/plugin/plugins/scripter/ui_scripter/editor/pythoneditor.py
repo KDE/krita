@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QRect, QSize, QPoint
 from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
-from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor, QPalette
+from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QFontInfo, QTextCursor, QPalette
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 from scripter import resources_rc
 
@@ -154,9 +154,12 @@ class CodeEditor(QPlainTextEdit):
         return self._font
 
     @font.setter
-    def font(self, font):
+    def font(self, font = "Monospace"):
         self._font = font
-        self.setFont(QFont(font, 10))
+        self.setFont(QFont(font, self.fontInfo().pointSize()))
+    
+    def setFontSize(self, size=10):
+        self.setFont( QFont( self._font, size) )
 
     def setStepped(self, status):
         self._stepped = status

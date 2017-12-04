@@ -1,8 +1,8 @@
-from PyQt5.QtGui import QTextCursor, QPalette
+from PyQt5.QtGui import QTextCursor, QPalette, QFontInfo
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
                              QSplitter)
-from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtCore import Qt, QObject, QFileInfo
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
 from scripter import scripterdialog
@@ -164,6 +164,10 @@ class UIController(object):
         document = self.scripter.documentcontroller.activeDocument
         if document:
             self.scripter.settings.setValue('activeDocumentPath', document.filePath)
+        else:
+            self.scripter.settings.setValue('activeDocumentPath', '')
+            
+        self.scripter.settings.setValue('editorFontSize', self.editor.fontInfo().pointSize())
 
         for action in self.actions:
             writeSettings = getattr(action['action'], "writeSettings", None)
@@ -180,14 +184,18 @@ class UIController(object):
         activeDocumentPath = self.scripter.settings.value('activeDocumentPath', '')
 
         if activeDocumentPath:
-            document = self.scripter.documentcontroller.openDocument(activeDocumentPath)
-            self.setStatusBar(document.filePath)
-            self.setDocumentEditor(document)
-
+            if QFileInfo(activeDocumentPath).exists():
+                document = self.scripter.documentcontroller.openDocument(activeDocumentPath)
+                self.setStatusBar(document.filePath)
+                self.setDocumentEditor(document)
+        
         for action in self.actions:
             readSettings = getattr(action['action'], "readSettings", None)
             if callable(readSettings):
                 readSettings()
+                
+        pointSize = self.scripter.settings.value('editorFontSize', str(self.editor.fontInfo().pointSize()))
+        self.editor.setFontSize(int(pointSize))
 
         self.scripter.settings.endGroup()
 

@@ -65,7 +65,7 @@ class BreezeDarkSyntaxStyle(object):
     """ Based on KDE Breeze widget style """
     # A dark syntax style.
     STYLES = {
-        'keyword': format('#eff0f1'),
+        'keyword': format('#eff0f1', 'bold'),
         'operator': format('#eff0f1'),
         'brace': format('#eff0f1'),
         'defclass': format('#27ae60', 'bold'),
@@ -86,7 +86,7 @@ class BreezeLightSyntaxStyle(object):
     """ Based on KDE Breeze widget style """
     # A light syntax style.
     STYLES = {
-        'keyword': format('#31363b'),
+        'keyword': format('#31363b', 'bold'),
         'operator': format('#31363b'),
         'brace': format('#31363b'),
         'defclass': format('#27ae60', 'bold'),

@@ -47,4 +47,5 @@ class SaveAction(QAction):
         else:
             self.scripter.uicontroller.setStatusBar('untitled')
         self.editor._documentModified = False
+        self.scripter.uicontroller.setStatusModified()
         return document

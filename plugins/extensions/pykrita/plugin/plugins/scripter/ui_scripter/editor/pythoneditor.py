@@ -6,6 +6,7 @@ from scripter import resources_rc
 
 
 class CodeEditor(QPlainTextEdit):
+    
 
     DEBUG_AREA_WIDTH = 20
 
@@ -28,6 +29,7 @@ class CodeEditor(QPlainTextEdit):
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
         self.setCornerWidget(QLabel(str()))
+        self._documentChanged = False
         
         self.undoAvailable.connect(self.setDocumentModified)
         

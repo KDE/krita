@@ -1,16 +1,35 @@
 from PyQt5.QtGui import QTextCursor, QPalette, QFontInfo
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
-                             QSplitter)
-from PyQt5.QtCore import Qt, QObject, QFileInfo
+                             QSplitter, QSizePolicy)
+from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
 from scripter import scripterdialog
 import os
 import importlib
 
+class Elided_Text_Label(QLabel):
+    mainText = str()
+
+    def __init__(self, parent=None):
+        super(QLabel, self).__init__(parent)
+        self.setMinimumWidth(self.fontMetrics().width("..."))
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+    def setMainText(self, text=str()):
+        self.mainText = text
+        self.elideText()
+
+    def elideText(self):
+        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.ElideRight, self.width()))
+
+    def resizeEvent(self, event):
+        self.elideText()
 
 class UIController(object):
+    documentModifiedText = ""
+    documentStatusBarText = "untitled"
 
     def __init__(self):
         self.mainWidget = scripterdialog.ScripterDialog(self)
@@ -27,7 +46,8 @@ class UIController(object):
     def initialize(self, scripter):
         self.editor = pythoneditor.CodeEditor(scripter)
         self.tabWidget = QTabWidget()
-        self.statusBar = QLabel('untitled')
+        self.statusBar = Elided_Text_Label()
+        self.statusBar.setMainText('untitled')
         self.splitter = QSplitter()
         self.splitter.setOrientation(Qt.Vertical)
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
@@ -56,6 +76,8 @@ class UIController(object):
         self.mainWidget.setSizeGripEnabled(True)
         self.mainWidget.show()
         self.mainWidget.activateWindow()
+        
+        self.editor.undoAvailable.connect(self.setStatusModified)
 
     def loadMenus(self):
         self.addMenu('File', 'File')
@@ -135,7 +157,14 @@ class UIController(object):
         self.editor.moveCursor(QTextCursor.End)
 
     def setStatusBar(self, value='untitled'):
-        self.statusBar.setText(value)
+        self.documentStatusBarText = value;
+        self.statusBar.setMainText(self.documentStatusBarText+self.documentModifiedText)
+
+    def setStatusModified(self):
+        self.documentModifiedText = ""
+        if (self.editor._documentModified is True):
+            self.documentModifiedText = " [Modified]"
+        self.statusBar.setMainText(self.documentStatusBarText+self.documentModifiedText)
 
     def setActiveWidget(self, widgetName):
         widget = self.findTabWidget(widgetName)

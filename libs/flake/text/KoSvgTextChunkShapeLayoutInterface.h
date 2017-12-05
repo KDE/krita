@@ -68,7 +68,7 @@ public:
     virtual bool isTextNode() const = 0;
 
     /**
-     * @return the text contained in this **leaf** node. For inntermediate nodes always returns false.
+     * @return the text contained in this **leaf** node. For intermediate nodes always returns false.
      */
     virtual QString nodeText() const = 0;
 

@@ -544,8 +544,6 @@ bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &cont
         }
     }
 
-    Q_UNUSED(e);
-    Q_UNUSED(context);
     return true;
 }
 

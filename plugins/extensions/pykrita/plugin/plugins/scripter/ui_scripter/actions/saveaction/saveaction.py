@@ -46,5 +46,5 @@ class SaveAction(QAction):
             self.scripter.uicontroller.setStatusBar(document.filePath)
         else:
             self.scripter.uicontroller.setStatusBar('untitled')
-
+        self.editor._documentModified = False
         return document

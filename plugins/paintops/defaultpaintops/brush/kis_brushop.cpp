@@ -53,6 +53,8 @@
 #include <QSharedPointer>
 #include <QThread>
 #include "kis_image_config.h"
+#include "kis_wrapped_rect.h"
+
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
@@ -252,8 +254,53 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
         const qreal spacing = m_avgSpacing.rollingMean();
 
         const int idealNumRects = m_idealNumRects;
-        QVector<QRect> rects =
-                KisPaintOpUtils::splitDabsIntoRects(state->dabsQueue,
+
+        QVector<QRect> rects;
+
+        // wrap the dabs if needed
+        if (painter()->device()->defaultBounds()->wrapAroundMode()) {
+            /**
+             * In WA mode we do two things:
+             *
+             * 1) We ensure that the parallel threads do not access the same are on
+             *    the image. For normal updates that is ensured by the code in KisImage
+             *    and the scheduler. Here we should do that manually by adjusting 'rects'
+             *    so that they would not intersect in the wrapped space.
+             *
+             * 2) We duplicate dabs, to ensure that all the pieces of dabs are painted
+             *    inside the wraped rect. No pieces are dabs are painted twice, because
+             *    we paint only the parts intersecting the wrap rect.
+             */
+
+            const QRect wrapRect = painter()->device()->defaultBounds()->bounds();
+
+            QList<KisRenderedDab> wrappedDabs;
+
+            Q_FOREACH (const KisRenderedDab &dab, state->dabsQueue) {
+                const QVector<QPoint> normalizationOrigins =
+                    KisWrappedRect::normalizationOriginsForRect(dab.realBounds(), wrapRect);
+
+                Q_FOREACH(const QPoint &pt, normalizationOrigins) {
+                    KisRenderedDab newDab = dab;
+
+                    newDab.offset = pt;
+
+                    rects.append(newDab.realBounds() & wrapRect);
+                    wrappedDabs.append(newDab);
+                }
+            }
+
+            state->dabsQueue = wrappedDabs;
+
+        } else {
+            // just get all rects
+            Q_FOREACH (const KisRenderedDab &dab, state->dabsQueue) {
+                rects.append(dab.realBounds());
+            }
+        }
+
+        // split/merge rects into non-overlapping areas
+        rects = KisPaintOpUtils::splitDabsIntoRects(rects,
                                                     idealNumRects, diameter, spacing);
 
         state->allDirtyRects = rects;

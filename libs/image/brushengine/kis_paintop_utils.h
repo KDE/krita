@@ -193,10 +193,10 @@ KisTimingInformation effectiveTiming(bool timingEnabled,
                                      qreal rateExtraScale);
 
 KRITAIMAGE_EXPORT
-QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QList<KisRenderedDab> &dabs, int idealPatchSize);
+QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QVector<QRect> &dabRects, int idealPatchSize);
 
 KRITAIMAGE_EXPORT
-QVector<QRect> splitDabsIntoRects(const QList<KisRenderedDab> &dabs, int idealNumRects, int diameter, qreal spacing);
+QVector<QRect> splitDabsIntoRects(const QVector<QRect> &dabRects, int idealNumRects, int diameter, qreal spacing);
 
 }
 

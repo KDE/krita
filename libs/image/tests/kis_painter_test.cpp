@@ -710,6 +710,12 @@ void benchmarkMassiveBltFixedImpl(int numDabs, int size, qreal spacing, int idea
         dst->clear();
     }
 
+
+    QVector<QRect> dabRects;
+    Q_FOREACH (const KisRenderedDab &dab, devices) {
+        dabRects.append(dab.realBounds());
+    }
+
     QElapsedTimer t;
 
     qint64 massiveTime = 0;
@@ -718,7 +724,7 @@ void benchmarkMassiveBltFixedImpl(int numDabs, int size, qreal spacing, int idea
     int avgPatchSize = 0;
 
     for (int i = 0; i < 50 || massiveTime > 5000000; i++) {
-        QVector<QRect> rects = KisPaintOpUtils::splitDabsIntoRects(devices, idealNumPatches, size, spacing);
+        QVector<QRect> rects = KisPaintOpUtils::splitDabsIntoRects(dabRects, idealNumPatches, size, spacing);
         numRects = rects.size();
 
         // HACK: please calculate real *average*!

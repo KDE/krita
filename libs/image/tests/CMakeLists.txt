@@ -23,7 +23,6 @@ include_directories(
 
 include_Directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 if(HAVE_VC)

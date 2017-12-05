@@ -2,8 +2,6 @@ if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
 endif()
 
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-
 set(kritatooltransform_SOURCES
     tool_transform.cc
     tool_transform_args.cc

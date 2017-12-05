@@ -21,7 +21,6 @@ include_directories(
 
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 if(FFTW3_FOUND)

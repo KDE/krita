@@ -91,8 +91,9 @@ bool SvgWriter::save(const QString &filename, const QSizeF &pageSize, bool write
 
 bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
 {
-    if (m_toplevelShapes.isEmpty())
+    if (m_toplevelShapes.isEmpty()) {
         return false;
+    }
 
     QTextStream svgStream(&outputDevice);
     svgStream.setCodec("UTF-8");

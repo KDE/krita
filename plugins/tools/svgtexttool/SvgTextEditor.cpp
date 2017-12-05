@@ -130,58 +130,24 @@ SvgTextEditor::~SvgTextEditor()
 }
 
 
-QString svgToHtml(const QString &svg)
-{
-    qDebug() << ">>>>>>>>>>>>> svg to html" << svg;
-
-//    QDomDocument svgDoc;
-//    svgDoc.setContent(svg.toUtf8());
-//    QDomElement docEl = svgDoc.documentElement();
-//    QDomNode n = docEl.firstChild();
-//    while (!n.isNull()) {
-//        QDomElement e = n.toElement();
-//        if (!e.isNull()) {
-//            qDebug() << e.tagName() << e.text();
-//        }
-//        n = n.nextSibling();
-//    }
-
-
-    return svg;
-}
-
-QString htmlToSvg(const QString &html)
-{
-//    qDebug() << ">>>>>>>>>>>>> html to svg" << html;
-
-//    QDomDocument htmlDoc;
-//    htmlDoc.setContent(html.toUtf8());
-//    QDomElement docEl = htmlDoc.documentElement();
-//    QDomNode n = docEl.firstChild();
-//    while (!n.isNull()) {
-//        QDomElement e = n.toElement();
-//        if (!e.isNull()) {
-//            qDebug() << e.tagName() << e.text();
-//        }
-//        n = n.nextSibling();
-//    }
-
-    return html;
-}
-
 void SvgTextEditor::setShape(KoSvgTextShape *shape)
 {
     m_shape = shape;
     if (m_shape) {
-        QTextDocument *doc = m_shape->textDocument();
-        m_textEditorWidget.richTextEdit->setHtml(doc->toHtml());
-        delete doc;
         KoSvgTextShapeMarkupConverter converter(m_shape);
+
         QString svg;
         QString styles;
+        QString html;
+
+        if (converter.convertToHtml(&html)) {
+            m_textEditorWidget.richTextEdit->document()->clear();
+            m_textEditorWidget.richTextEdit->document()->setHtml(html);
+        }
+
         if (converter.convertToSvg(&svg, &styles)) {
-            //m_textEditorWidget.svgTextEdit->setPlainText(QString("%1\n%2").arg(defs).arg(svg));
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
+            m_textEditorWidget.svgStylesEdit->setPlainText(styles);
 
         }
         else {
@@ -192,25 +158,70 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
 
 void SvgTextEditor::save()
 {
-    //    // We don't do defs or styles yet...
-    emit textUpdated(m_textEditorWidget.svgTextEdit->document()->toPlainText(), "");
+    if (m_shape) {
+        if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+            KoSvgTextShape shape;
+            KoSvgTextShapeMarkupConverter converter(&shape);
+            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml())) {
+                qWarning() << "Eeeek";
+            }
+            QString svg;
+            QString styles;
+            if (!converter.convertToSvg(&svg, &styles)) {
+                qDebug() << "Eeeek 2";
+            }
+            emit textUpdated(svg, styles);
+        }
+        else {
+            emit textUpdated(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
+        }
+    }
 }
 
 void SvgTextEditor::switchTextEditorTab()
 {
+    KoSvgTextShape shape;
+    KoSvgTextShapeMarkupConverter converter(&shape);
+
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         //first, make buttons checkable
         enableRichTextActions(true);
+
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
-        //m_textEditorWidget.richTextEdit->setHtml(svgToHtml(m_textEditorWidget.svgTextEdit->document()->toPlainText()));
+        if (m_shape) {
+
+            // Convert the svg text to html XXX: Fix resolution!
+            if (!converter.convertFromSvg(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(),
+                                          m_shape->boundingRect(), 72.0)) {
+                qDebug() << "Eeek 3";
+            }
+            QString html;
+            if (!converter.convertToHtml(&html)) {
+                qDebug() << "Eeek 4";
+            }
+            m_textEditorWidget.richTextEdit->document()->setHtml(html);
+        }
         m_currentEditor = m_textEditorWidget.richTextEdit;
-    } else {
+    }
+    else {
         //first, make buttons uncheckable
         enableRichTextActions(false);
         disconnect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
-        //m_textEditorWidget.svgTextEdit->setPlainText(htmlToSvg(m_textEditorWidget.richTextEdit->document()->toHtml()));
+        // Convert the richt text to svg and styles strings
+        if (m_shape) {
+            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml())) {
+                qWarning() << "Eeeek";
+            }
+            QString svg;
+            QString styles;
+            if (!converter.convertToSvg(&svg, &styles)) {
+                qDebug() << "Eeeek 2";
+            }
+            m_textEditorWidget.svgTextEdit->setPlainText(svg);
+            m_textEditorWidget.svgStylesEdit->setPlainText(styles);
+        }
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }
 }

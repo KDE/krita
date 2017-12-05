@@ -27,6 +27,8 @@
 
 #include <SvgWriter.h>
 #include <SvgSavingContext.h>
+#include <html/HtmlSavingContext.h>
+#include <html/HtmlWriter.h>
 
 #include <KoXmlReader.h>
 #include <SvgParser.h>
@@ -85,17 +87,17 @@ bool KoSvgTextShapeMarkupConverter::convertToSvg(QString *svgText, QString *styl
 bool KoSvgTextShapeMarkupConverter::convertFromSvg(const QString &svgText, const QString &stylesText,
                                                    const QRectF &boundsInPixels, qreal pixelsPerInch)
 {
-    m_d->clearErrors();
 
-    const QString fullText = QString("<svg>\n%1\n%2\n</svg>\n").arg(stylesText).arg(svgText);
+    m_d->clearErrors();
 
     KoXmlDocument doc;
     QString errorMessage;
     int errorLine = 0;
     int errorColumn = 0;
 
-    const bool xmlResult = doc.setContent(fullText, &errorMessage, &errorLine, &errorColumn);
-    if (!xmlResult) {
+    const QString fullText = QString("<svg>\n%1\n%2\n</svg>\n").arg(stylesText).arg(svgText);
+
+    if (!doc.setContent(fullText, &errorMessage, &errorLine, &errorColumn)) {
         m_d->errors << QString("line %1, col %2: %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
         return false;
     }
@@ -140,6 +142,50 @@ bool KoSvgTextShapeMarkupConverter::convertFromSvg(const QString &svgText, const
     }
 
     return true;
+
+}
+
+bool KoSvgTextShapeMarkupConverter::convertToHtml(QString *htmlText)
+{
+    m_d->clearErrors();
+
+    QBuffer shapesBuffer;
+    shapesBuffer.open(QIODevice::WriteOnly);
+    {
+        HtmlWriter writer({m_d->shape});
+        if (!writer.save(shapesBuffer)) {
+            m_d->errors = writer.errors();
+            m_d->warnings = writer.warnings();
+            return false;
+        }
+    }
+
+    shapesBuffer.close();
+
+    *htmlText = QString(shapesBuffer.data());
+
+    return true;
+}
+
+bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText)
+{
+    m_d->clearErrors();
+
+    KoXmlDocument doc;
+    QString errorMessage;
+    int errorLine = 0;
+    int errorColumn = 0;
+
+    const bool xmlResult = doc.setContent(htmlText, &errorMessage, &errorLine, &errorColumn);
+    if (!xmlResult) {
+        m_d->errors << QString("line %1, col %2: %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
+        return false;
+    }
+
+    m_d->shape->resetTextShape();
+    KoXmlElement root = doc.documentElement();
+
+    return m_d->shape->loadHtml(root);
 }
 
 QStringList KoSvgTextShapeMarkupConverter::errors() const

@@ -19,10 +19,6 @@
 #include "KoSvgTextShape.h"
 
 #include <QTextLayout>
-#include <QTextDocument>
-#include <QTextCursor>
-#include <QTextBlock>
-
 #include <klocalizedstring.h>
 
 #include "KoSvgText.h"
@@ -338,56 +334,6 @@ void KoSvgTextShape::relayout()
             }
         }
     }
-}
-
-QTextDocument *KoSvgTextShape::textDocument()
-{
-    Q_D(KoSvgTextShape);
-
-    QTextDocument *doc = new QTextDocument();
-    //QTextCursor cursor(doc);
-
-    QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
-
-    Q_FOREACH (const TextChunk &chunk, textChunks) {
-//        QTextOption option;
-
-//        // WARNING: never activate this option! It breaks the RTL text layout!
-//        //option.setFlags(QTextOption::ShowTabsAndSpaces);
-
-//        option.setWrapMode(QTextOption::WrapAnywhere);
-//        option.setUseDesignMetrics(true); // TODO: investigate if it is needed?
-//        option.setTextDirection(chunk.direction);
-
-        qDebug() << chunk.text;
-
-//        cursor.beginEditBlock();
-//        cursor.insertText(chunk.text);
-//        cursor.endEditBlock();;
-
-//        layout->setText(chunk.text);
-//        layout->setTextOption(option);
-//        layout->setAdditionalFormats(chunk.formats);
-//        layout->setCacheEnabled(true);
-
-    }
-    return doc;
-}
-
-void KoSvgTextShape::setTextDocument(QTextDocument *textDocument)
-{
-//    QTextBlock *block = textDocument->firstBlock();
-//    while (block) {
-//        //
-//        QTextBlock::iterator it;
-//        for (it = block.begin(); !(it.atEnd()); ++it) {
-//            QTextFragment currentFragment = it.fragment();
-//            if (currentFragment.isValid()) {
-//                // Create a KoSvgTextChunkShape
-//            }
-//        }
-//        block = block->next();
-//    }
 }
 
 void KoSvgTextShapePrivate::clearAssociatedOutlines(KoShape *rootShape)

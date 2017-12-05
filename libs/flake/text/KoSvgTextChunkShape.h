@@ -24,6 +24,7 @@
 #include <KoShapeContainer.h>
 #include <SvgShape.h>
 
+class HtmlSavingContext;
 class KoSvgTextProperties;
 class KoSvgTextChunkShapePrivate;
 class KoSvgTextChunkShapeLayoutInterface;
@@ -68,6 +69,9 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     void saveOdf(KoShapeSavingContext &Context) const override;
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
+
+    bool saveHtml(HtmlSavingContext &context) const;
+    bool loadHtml(const KoXmlElement &e);
 
     /**
      * Reset the text shape into initial state, removing all the child shapes.

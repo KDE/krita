@@ -35,16 +35,30 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QTextEdit" name="svgTextEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
          </property>
-         <property name="acceptRichText">
-          <bool>false</bool>
-         </property>
+         <widget class="QWidget" name="tabSvgTextEdit">
+          <attribute name="title">
+           <string>SVG</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QTextEdit" name="svgTextEdit"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tabSvgStylesEdit">
+          <attribute name="title">
+           <string>Styles</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QTextEdit" name="svgStylesEdit"/>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>

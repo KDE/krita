@@ -74,7 +74,7 @@ public:
     bool strippedTextMode() const;
 
 private:
-    Q_DISABLE_COPY(SvgSavingContext);
+    Q_DISABLE_COPY(SvgSavingContext)
 
 private:
     class Private;

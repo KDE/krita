@@ -27,7 +27,6 @@
 
 class KoSvgTextProperties;
 class KoSvgTextShapePrivate;
-class QTextDocument;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
@@ -59,16 +58,6 @@ public:
      * in the text shapes hierarchy.
      */
     void relayout();
-
-    /**
-     * Create a QTextDocument that represents the shape.
-     */
-    QTextDocument *textDocument();
-
-    /**
-     * Replace the contents of the text shape with the given text document
-     */
-    void setTextDocument(QTextDocument *textDocument);
 
 protected:
     /**

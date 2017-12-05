@@ -43,7 +43,7 @@ public:
 
     /**
      * Convert the text shape into two strings: text and styles. Styles string
-     * is nonempty only when the text has some gradient/pattern attached. It is
+     * is non-empty only when the text has some gradient/pattern attached. It is
      * intended to be places into a separate tab in the GUI.
      *
      * @return true on success
@@ -60,6 +60,14 @@ public:
      * @return true if the text was parsed successfully. Check `errors()` and `warnings()` for details.
      */
     bool convertFromSvg(const QString &svgText, const QString &stylesText, const QRectF &boundsInPixels, qreal pixelsPerInch);
+
+    /**
+     * @brief convertToHtml convert the text in the text shape to html
+     * @param htmlText will be filled with correct html representing the text in the shape
+     * @return true om success
+     */
+    bool convertToHtml(QString *htmlText);
+    bool convertFromHtml(const QString &htmlText);
 
     /**
      * A list of errors happened during loading the user's text

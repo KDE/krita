@@ -118,6 +118,7 @@ set(kritaflake_SRCS
     KoClipMask.cpp
     KoClipMaskPainter.cpp
     KoCurveFit.cpp
+
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -163,6 +164,10 @@ set(kritaflake_SRCS
     commands/KoMultiPathPointMergeCommand.cpp
     commands/KoMultiPathPointJoinCommand.cpp
     commands/KoKeepShapesSelectedCommand.cpp
+
+    html/HtmlSavingContext.cpp
+    html/HtmlWriter.cpp
+
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -202,6 +207,7 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
     text/KoSvgTextChunkShape.cpp

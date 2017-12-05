@@ -101,8 +101,6 @@ void SvgTextTool::showEditor()
 
 void SvgTextTool::textUpdated(const QString &svg, const QString &defs)
 {
-    qDebug() << "text updated" << svg;
-
     SvgTextChangeCommand *cmd = new SvgTextChangeCommand(m_shape, svg, defs);
     canvas()->addCommand(cmd);
 }

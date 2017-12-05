@@ -39,6 +39,8 @@
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
 #include <commands/KoShapeUngroupCommand.h>
 
+#include <html/HtmlSavingContext.h>
+
 namespace {
 QVector<qreal> parseListAttributeX(const QString &value, SvgLoadingContext &context)
 {
@@ -343,6 +345,16 @@ bool KoSvgTextChunkShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 {
     Q_UNUSED(element);
     Q_UNUSED(context);
+    return false;
+}
+
+bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context) const
+{
+    return false;
+}
+
+bool KoSvgTextChunkShape::loadHtml(const KoXmlElement &e)
+{
     return false;
 }
 

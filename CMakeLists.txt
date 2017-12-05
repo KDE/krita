@@ -399,6 +399,13 @@ if(WIN32)
     endif()
 endif()
 
+# KDECompilerSettings adds the `--export-all-symbols` linker flag.
+# We don't really need it.
+if(MINGW)
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif(MINGW)
+
 # enable exceptions globally
 kde_enable_exceptions()
 

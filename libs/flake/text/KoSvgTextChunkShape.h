@@ -70,7 +70,7 @@ public:
     void saveOdf(KoShapeSavingContext &Context) const override;
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
 
-    bool saveHtml(HtmlSavingContext &context) const;
+    bool saveHtml(HtmlSavingContext &context);
     bool loadHtml(const KoXmlElement &e);
 
     /**

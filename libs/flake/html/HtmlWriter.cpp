@@ -52,7 +52,7 @@ bool HtmlWriter::save(QIODevice &outputDevice)
     // header
     htmlStream << "<html><head/><body>";
 
-    HtmlSavingContext savingContext(outputDevice);
+    HtmlSavingContext savingContext(&outputDevice);
     saveShapes(m_toplevelShapes, savingContext);
     htmlStream << endl << "</body></html>" << endl;
 

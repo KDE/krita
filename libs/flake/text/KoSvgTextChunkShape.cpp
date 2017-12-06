@@ -348,8 +348,37 @@ bool KoSvgTextChunkShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
     return false;
 }
 
-bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context) const
+bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
 {
+    Q_D(KoSvgTextChunkShape);
+
+    if (isRootTextNode()) {
+        context.shapeWriter().startElement("p", false);
+        // XXX: Save the style?
+
+    }
+    else {
+        context.shapeWriter().startElement("span", false);
+        // XXX: Save the style?
+    }
+
+    // XXX: Save the transforms?
+
+    // XXX: text length is always auto?
+
+    // XXX: properties
+
+    if (layoutInterface()->isTextNode()) {
+        qDebug() << this << d->text;
+        context.shapeWriter().addTextNode(d->text);
+    } else {
+        Q_FOREACH (KoShape *child, this->shapes()) {
+            KoSvgTextChunkShape *childText = dynamic_cast<KoSvgTextChunkShape*>(child);
+            KIS_SAFE_ASSERT_RECOVER(childText) { continue; }
+            childText->saveHtml(context);
+        }
+    }
+    context.shapeWriter().endElement();
     return false;
 }
 
@@ -438,8 +467,6 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
         parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
 
     KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
-    QMap<QString,QString> attributes = ownProperties.convertToSvgTextAttributes();
-
 
     // we write down stroke/fill iff they are different from the parent's value
     if (!isRootTextNode()) {
@@ -452,6 +479,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
         }
     }
 
+    QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
     for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
         context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
     }
@@ -469,7 +497,6 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 
     context.shapeWriter().endElement();
 
-    Q_UNUSED(context);
     return true;
 }
 

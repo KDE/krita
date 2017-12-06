@@ -254,7 +254,7 @@ void KisColorizeMask::setNeedsUpdate(bool value)
     }
 }
 
-void KisColorizeMask::slotUpdateRegenerateFilling()
+void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 {
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
@@ -262,7 +262,10 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
     bool filteredSourceValid = m_d->originalSequenceNumber == src->sequenceNumber() && !m_d->filteringDirty;
     m_d->originalSequenceNumber = src->sequenceNumber();
     m_d->filteringDirty = false;
-    m_d->coloringProjection->clear();
+
+    if (!prefilterOnly) {
+        m_d->coloringProjection->clear();
+    }
 
     KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
@@ -275,7 +278,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
                                           m_d->filteredSource,
                                           filteredSourceValid,
                                           image->bounds(),
-                                          KisColorizeMaskSP(this));
+                                          prefilterOnly);
 
         strategy->setFilteringOptions(m_d->filteringOptions);
 
@@ -297,6 +300,14 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
 void KisColorizeMask::slotRegenerationFinished()
 {
     setNeedsUpdate(true);
+
+    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
+    if (!parentLayer) return;
+
+    KisImageSP image = parentLayer->image();
+    if (image) {
+        setDirty(image->bounds());
+    }
 }
 
 KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const
@@ -334,7 +345,7 @@ void KisColorizeMask::setSectionModelProperties(const KisBaseNode::PropertyList 
 
 KisPaintDeviceSP KisColorizeMask::paintDevice() const
 {
-    return m_d->showKeyStrokes ? m_d->fakePaintDevice : KisPaintDeviceSP();
+    return m_d->showKeyStrokes && m_d->needsUpdate ? m_d->fakePaintDevice : KisPaintDeviceSP();
 }
 
 KisPaintDeviceSP KisColorizeMask::coloringProjection() const
@@ -371,7 +382,8 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     {
         KisPainter gc(dst);
 
-        if (m_d->showKeyStrokes &&
+        if (m_d->needsUpdate &&
+            m_d->showKeyStrokes &&
             m_d->filteredSource &&
             !m_d->filteredSource->extent().isEmpty()) {
 
@@ -383,7 +395,10 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
             gc.bitBlt(rect.topLeft(), src, rect);
         }
 
-        if (m_d->showColoring && m_d->coloringProjection) {
+        if (m_d->needsUpdate &&
+            m_d->showColoring &&
+            m_d->coloringProjection) {
+
             gc.setOpacity(opacity());
             gc.setCompositeOp(compositeOpId());
             gc.bitBlt(rect.topLeft(), m_d->coloringProjection, rect);
@@ -823,6 +838,7 @@ void KisColorizeMask::resetCache()
     m_d->originalSequenceNumber = -1;
 
     rerenderFakePaintDevice();
+    slotUpdateRegenerateFilling(true);
 }
 
 void KisColorizeMask::setUseEdgeDetection(bool value)

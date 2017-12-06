@@ -41,7 +41,8 @@ public:
                               KisPaintDeviceSP dst,
                               KisPaintDeviceSP filteredSource,
                               bool filteredSourceValid,
-                              const QRect &boundingRect, KisNodeSP dirtyNode);
+                              const QRect &boundingRect,
+                              bool prefilterOnly = false);
     KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail);
     ~KisColorizeStrokeStrategy() override;
 

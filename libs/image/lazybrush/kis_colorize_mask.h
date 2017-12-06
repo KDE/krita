@@ -129,7 +129,7 @@ public:
     KisPaintDeviceList getLodCapableDevices() const override;
 
 private Q_SLOTS:
-    void slotUpdateRegenerateFilling();
+    void slotUpdateRegenerateFilling(bool prefilterOnly = false);
     void slotRegenerationFinished();
 
 Q_SIGNALS:

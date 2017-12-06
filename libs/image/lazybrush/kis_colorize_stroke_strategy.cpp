@@ -51,7 +51,7 @@ struct KisColorizeStrokeStrategy::Private
           filteredSourceValid(rhs.filteredSourceValid),
           boundingRect(rhs.boundingRect),
           keyStrokes(rhs.keyStrokes),
-          dirtyNode(rhs.dirtyNode)
+          prefilterOnly(rhs.prefilterOnly)
     {}
 
     KisPaintDeviceSP src;
@@ -61,8 +61,9 @@ struct KisColorizeStrokeStrategy::Private
     bool filteredSourceValid;
     QRect boundingRect;
 
+    bool prefilterOnly = false;
+
     QVector<KeyStroke> keyStrokes;
-    KisNodeSP dirtyNode;
 
     // default values: disabled
     FilteringOptions filteringOptions;
@@ -73,7 +74,7 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
                                                      KisPaintDeviceSP filteredSource,
                                                      bool filteredSourceValid,
                                                      const QRect &boundingRect,
-                                                     KisNodeSP dirtyNode)
+                                                     bool prefilterOnly)
     : KisRunnableBasedStrokeStrategy("colorize-stroke", kundo2_i18n("Colorize")),
       m_d(new Private)
 {
@@ -82,7 +83,7 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
     m_d->filteredSource = filteredSource;
     m_d->boundingRect = boundingRect;
     m_d->filteredSourceValid = filteredSourceValid;
-    m_d->dirtyNode = dirtyNode;
+    m_d->prefilterOnly = prefilterOnly;
 
     enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
     enableJob(JOB_DOSTROKE, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -215,14 +216,17 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
         });
     }
 
-    addJobSequential(jobs, [this] () {
-        KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
-        Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-            worker.addKeyStroke(stroke.dev, stroke.color);
-        }
-        worker.run(m_d->filteringOptions.cleanUpAmount);
+    if (!m_d->prefilterOnly) {
+        addJobSequential(jobs, [this] () {
+            KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
+            Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+                worker.addKeyStroke(stroke.dev, stroke.color);
+            }
+            worker.run(m_d->filteringOptions.cleanUpAmount);
+        });
+    }
 
-        m_d->dirtyNode->setDirty(m_d->boundingRect);
+    addJobSequential(jobs, [this] () {
         emit sigFinished();
     });
 

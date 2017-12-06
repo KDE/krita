@@ -233,8 +233,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
 
     } else if (command == "font-weight") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        ENTER_FUNCTION() << ppVar(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
-
+        //ENTER_FUNCTION() << ppVar(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
         gc->font.setWeight(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
     } else if (command == "font-size-adjust") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);

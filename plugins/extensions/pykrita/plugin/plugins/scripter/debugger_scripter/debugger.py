@@ -74,26 +74,30 @@ class Debugger(bdb.Bdb):
     def user_exception(self, frame, exception):
         self.applicationq.put({"exception": str(exception[1])})
 
-    async def display(self):
+    @asyncio.coroutine
+    def display(self):
         """Coroutine for updating the UI"""
 
         while True:
             if self.applicationq.empty():
-                await asyncio.sleep(0.3)
+                yield from asyncio.sleep(0.3)
             else:
                 while not self.applicationq.empty():
                     self.application_data.update(self.applicationq.get())
                     self.scripter.uicontroller.repaintDebugArea()
                     return
 
-    async def start(self):
-        await self.display()
+    @asyncio.coroutine
+    def start(self):
+        yield from self.display()
 
-    async def step(self):
+    @asyncio.coroutine
+    def step(self):
         self.debugq.put("step")
-        await self.display()
+        yield from self.display()
 
-    async def stop(self):
+    @asyncio.coroutine
+    def stop(self):
         self.debugq.put("stop")
         self.applicationq.put({"quit": True})
-        await self.display()
+        yield from self.display()

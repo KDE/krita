@@ -117,9 +117,9 @@ public:
      * call this method with a desured frame rate. The jobs that should be run to prepare the update
      * are returned via \p jobs
      *
-     * @return the desired FPS rate (period of updates)
+     * @return a pair of <the desired FPS rate (period of updates); are there any unprocessed update jobs left?>
      */
-    virtual int doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
+    virtual std::pair<int, bool> doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
 
 protected:
     friend class KisPaintInformation;

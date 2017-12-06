@@ -1,5 +1,8 @@
 from PyQt5.QtCore import QAbstractListModel, Qt
+from PyQt5.QtGui import QImage
 import krita
+import zipfile
+from pathlib import Path
 
 
 class LastDocumentsListModel(QAbstractListModel):
@@ -10,8 +13,6 @@ class LastDocumentsListModel(QAbstractListModel):
         self.rootItem = ('Path',)
         self.kritaInstance = krita.Krita.instance()
         self.recentDocuments = []
-
-        self._loadRecentDocuments()
 
     def data(self, index, role):
         if not index.isValid():
@@ -34,11 +35,19 @@ class LastDocumentsListModel(QAbstractListModel):
 
         return None
 
-    def _loadRecentDocuments(self):
+    def loadRecentDocuments(self):
+        self.recentDocuments = []
         recentDocumentsPaths = self.kritaInstance.recentDocuments()
 
-        #for path in recentDocumentsPaths:
-        #    document = self.kritaInstance.openDocument(path)
-        #    if document:
-        #        self.recentDocuments.append(document.thumbnail(70, 60))
-        #        document.close()
+        for path in recentDocumentsPaths:
+            if path:
+                thumbnail = None
+                extension = Path(path).suffix
+                if extension == '.kra':
+                    page = zipfile.ZipFile(path, "r")
+                    thumbnail = QImage.fromData(page.read("preview.png"))
+                else:
+                    thumbnail = QImage(path)
+                thumbnail = thumbnail.scaled(200, 150, Qt.KeepAspectRatio)
+                self.recentDocuments.append(thumbnail)
+        self.modelReset.emit()

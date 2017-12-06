@@ -42,6 +42,50 @@ struct KisWrappedRect : public QVector<QRect> {
         return pt;
     }
 
+    /**
+     * Return origins at which we should paint \p rc with crop rect set to \p wrapRect,
+     * so that the final image would look "wrapped".
+     */
+    static inline QVector<QPoint> normalizationOriginsForRect(const QRect &rc, const QRect &wrapRect) {
+        QVector<QPoint> result;
+
+        if (wrapRect.contains(rc)) {
+            result.append(rc.topLeft());
+        } else {
+            int x = xToWrappedX(rc.x(), wrapRect);
+            int y = yToWrappedY(rc.y(), wrapRect);
+            int w = qMin(rc.width(), wrapRect.width());
+            int h = qMin(rc.height(), wrapRect.height());
+
+            // we ensure that the topleft of the rect belongs to the
+            // visible rectangle
+            Q_ASSERT(x >= 0 && x < wrapRect.width());
+            Q_ASSERT(y >= 0 && y < wrapRect.height());
+
+            QRect newRect(x, y, w, h);
+
+            if (!(newRect & wrapRect).isEmpty()) { // tl
+                result.append(QPoint(x, y));
+            }
+
+            if (!(newRect.translated(-wrapRect.width(), 0) & wrapRect).isEmpty()) { // tr
+                result.append(QPoint(x - wrapRect.width(), y));
+            }
+
+            if (!(newRect.translated(0, -wrapRect.height()) & wrapRect).isEmpty()) { // bl
+                result.append(QPoint(x, y - wrapRect.height()));
+            }
+
+            if (!(newRect.translated(-wrapRect.width(), -wrapRect.height()) & wrapRect).isEmpty()) { // br
+                result.append(QPoint(x - wrapRect.width(), y - wrapRect.height()));
+            }
+        }
+
+        return result;
+    }
+
+public:
+
     enum {
         TOPLEFT = 0,
         TOPRIGHT,

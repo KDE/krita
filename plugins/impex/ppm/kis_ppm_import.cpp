@@ -194,6 +194,10 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
     char c; io->getChar(&c);
     if (!isspace(c)) return KisImportExportFilter::CreationError; // Invalid file, it should have a separator now
 
+    while (io->peek(1) == "#") {
+        io->readLine();
+    }
+
     // Read width
     int width = readNumber(io);
     int height = readNumber(io);

@@ -247,14 +247,30 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
 
                 // TODO: well, we should count all N simultaneous painters for FPS rate!
                 QVector<KisRunnableStrokeJobData*> jobs;
-                m_d->currentUpdatePeriod = paintop->doAsyncronousUpdate(jobs);
 
-                if (!jobs.isEmpty() || info->painter->hasDirtyRegion()) {
+                bool needsMoreUpdates = false;
+
+                std::tie(m_d->currentUpdatePeriod, needsMoreUpdates) =
+                    paintop->doAsyncronousUpdate(jobs);
+
+                if (!jobs.isEmpty() ||
+                    info->painter->hasDirtyRegion() ||
+                    (forceEnd && needsMoreUpdates)) {
+
                     jobs.append(new KisRunnableStrokeJobData(
                                     [this] () {
                                         this->issueSetDirtySignals();
                                     },
                                     KisStrokeJobData::SEQUENTIAL));
+
+                    if (forceEnd && needsMoreUpdates) {
+                        jobs.append(new KisRunnableStrokeJobData(
+                                        [this] () {
+                                            this->tryDoUpdate(true);
+                                        },
+                                        KisStrokeJobData::SEQUENTIAL));
+                    }
+
 
                     runnableJobsInterface()->addRunnableJobs(jobs);
                     m_d->efficiencyMeasurer.notifyFrameRenderingStarted();

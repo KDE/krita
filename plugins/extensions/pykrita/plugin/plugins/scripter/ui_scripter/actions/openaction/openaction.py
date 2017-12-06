@@ -32,6 +32,7 @@ class OpenAction(QAction):
                     document = self.scripter.documentcontroller.openDocument(selectedFile)
                     self.scripter.uicontroller.setDocumentEditor(document)
                     self.scripter.uicontroller.setStatusBar(document.filePath)
+                    print("open is run")
             except:
                 QMessageBox.information(self.scripter.uicontroller.mainWidget,
                                         'Invalid File',

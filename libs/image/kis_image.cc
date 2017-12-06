@@ -938,10 +938,10 @@ QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
     return QPointF(documentCoord.x() * xRes(), documentCoord.y() * yRes());
 }
 
-QPoint KisImage::documentToIntPixel(const QPointF &documentCoord) const
+QPoint KisImage::documentToImagePixelFloored(const QPointF &documentCoord) const
 {
     QPointF pixelCoord = documentToPixel(documentCoord);
-    return QPoint((int)pixelCoord.x(), (int)pixelCoord.y());
+    return QPoint(qFloor(pixelCoord.x()), qFloor(pixelCoord.y()));
 }
 
 QRectF KisImage::documentToPixel(const QRectF &documentRect) const

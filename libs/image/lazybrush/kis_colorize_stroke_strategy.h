@@ -23,7 +23,7 @@
 #include <QObject>
 
 #include "kis_types.h"
-#include <kis_simple_stroke_strategy.h>
+#include "KisRunnableBasedStrokeStrategy.h"
 
 class KoColor;
 
@@ -32,7 +32,7 @@ struct FilteringOptions;
 }
 
 
-class KisColorizeStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
+class KisColorizeStrokeStrategy : public QObject, public KisRunnableBasedStrokeStrategy
 {
     Q_OBJECT
 

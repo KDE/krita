@@ -31,6 +31,13 @@
 #include "kis_image_config.h"
 #include "KisWatershedWorker.h"
 
+#include "kis_transaction.h"
+#include "krita_utils.h"
+
+#include <KisRunnableStrokeJobData.h>
+#include <KisRunnableStrokeJobUtils.h>
+#include <KisRunnableStrokeJobsInterface.h>
+
 using namespace KisLazyFillTools;
 
 struct KisColorizeStrokeStrategy::Private
@@ -67,7 +74,8 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
                                                      bool filteredSourceValid,
                                                      const QRect &boundingRect,
                                                      KisNodeSP dirtyNode)
-    : m_d(new Private)
+    : KisRunnableBasedStrokeStrategy("colorize-stroke", kundo2_i18n("Colorize")),
+      m_d(new Private)
 {
     m_d->src = src;
     m_d->dst = dst;
@@ -77,10 +85,11 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
     m_d->dirtyNode = dirtyNode;
 
     enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    enableJob(JOB_DOSTROKE, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail)
-    : KisSimpleStrokeStrategy(rhs),
+    : KisRunnableBasedStrokeStrategy(rhs),
       m_d(new Private(*rhs.m_d))
 {
     KisLodTransform t(levelOfDetail);
@@ -111,56 +120,113 @@ void KisColorizeStrokeStrategy::addKeyStroke(KisPaintDeviceSP dev, const KoColor
 
 void KisColorizeStrokeStrategy::initStrokeCallback()
 {
+    using namespace KritaUtils;
+
+    QVector<KisRunnableStrokeJobData*> jobs;
+
     if (!m_d->filteredSourceValid) {
+        const QVector<QRect> patchRects =
+            splitRectIntoPatches(m_d->boundingRect, optimalPatchSize());
+
+        // TODO: make this conversion concurrent!!!
         KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
+
+        struct PrefilterSharedState {
+            QRect boundingRect;
+            KisPaintDeviceSP filteredMainDev;
+            KisPaintDeviceSP filteredMainDevSavedCopy;
+            QScopedPointer<KisTransaction> activeTransaction;
+            FilteringOptions filteringOptions;
+        };
+
+        QSharedPointer<PrefilterSharedState> state(new PrefilterSharedState());
+        state->boundingRect = m_d->boundingRect;
+        state->filteredMainDev = filteredMainDev;
+        state->filteringOptions = m_d->filteringOptions;
 
         if (m_d->filteringOptions.useEdgeDetection &&
             m_d->filteringOptions.edgeDetectionSize > 0.0) {
 
-            KisGaussianKernel::applyLoG(filteredMainDev,
-                                        m_d->boundingRect,
-                                        0.5 * m_d->filteringOptions.edgeDetectionSize,
-                                        -1.0,
-                                        QBitArray(), 0);
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset(new KisTransaction(state->filteredMainDev));
+            });
 
-            normalizeAlpha8Device(filteredMainDev, m_d->boundingRect);
+            Q_FOREACH (const QRect &rc, patchRects) {
+                addJobConcurrent(jobs, [state, rc] () {
+                    KisGaussianKernel::applyLoG(state->filteredMainDev,
+                                                rc,
+                                                0.5 * state->filteringOptions.edgeDetectionSize,
+                                                -1.0,
+                                                QBitArray(), 0);
+                });
+            }
 
-            KisGaussianKernel::applyGaussian(filteredMainDev,
-                                             m_d->boundingRect,
-                                             m_d->filteringOptions.edgeDetectionSize,
-                                             m_d->filteringOptions.edgeDetectionSize,
-                                             QBitArray(), 0);
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset();
+                normalizeAlpha8Device(state->filteredMainDev, state->boundingRect);
+                state->activeTransaction.reset(new KisTransaction(state->filteredMainDev));
+            });
+
+            Q_FOREACH (const QRect &rc, patchRects) {
+                addJobConcurrent(jobs, [state, rc] () {
+                    KisGaussianKernel::applyGaussian(state->filteredMainDev,
+                                                     rc,
+                                                     state->filteringOptions.edgeDetectionSize,
+                                                     state->filteringOptions.edgeDetectionSize,
+                                                     QBitArray(), 0);
+                });
+            }
+
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset();
+            });
         }
 
         if (m_d->filteringOptions.fuzzyRadius > 0) {
-            KisPaintDeviceSP filteredMainDevCopy = new KisPaintDevice(*filteredMainDev);
 
-            KisGaussianKernel::applyGaussian(filteredMainDev,
-                                             m_d->boundingRect,
-                                             m_d->filteringOptions.fuzzyRadius,
-                                             m_d->filteringOptions.fuzzyRadius,
-                                             QBitArray(), 0);
+            addJobSequential(jobs, [state] () {
+                state->filteredMainDevSavedCopy = new KisPaintDevice(*state->filteredMainDev);
+                state->activeTransaction.reset(new KisTransaction(state->filteredMainDev));
+            });
 
-            KisPainter gc(filteredMainDev);
-            gc.bitBlt(m_d->boundingRect.topLeft(), filteredMainDevCopy, m_d->boundingRect);
+            Q_FOREACH (const QRect &rc, patchRects) {
+                addJobConcurrent(jobs, [state, rc] () {
+                    KisGaussianKernel::applyGaussian(state->filteredMainDev,
+                                                     rc,
+                                                     state->filteringOptions.fuzzyRadius,
+                                                     state->filteringOptions.fuzzyRadius,
+                                                     QBitArray(), 0);
+                    KisPainter gc(state->filteredMainDev);
+                    gc.bitBlt(rc.topLeft(), state->filteredMainDevSavedCopy, rc);
+                });
+            }
+
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset();
+            });
         }
 
-        normalizeAlpha8Device(filteredMainDev, m_d->boundingRect);
+        addJobSequential(jobs, [this, state] () {
+            normalizeAlpha8Device(state->filteredMainDev, state->boundingRect);
 
-        KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
-        m_d->filteredSource->makeCloneFrom(filteredMainDev, m_d->boundingRect);
-        m_d->filteredSource->setDefaultBounds(oldBounds);
+            KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
+            m_d->filteredSource->makeCloneFrom(state->filteredMainDev, m_d->boundingRect);
+            m_d->filteredSource->setDefaultBounds(oldBounds);
+        });
     }
 
-    KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
-    Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-        worker.addKeyStroke(stroke.dev, stroke.color);
-    }
-    worker.run(m_d->filteringOptions.cleanUpAmount);
+    addJobSequential(jobs, [this] () {
+        KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
+        Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+            worker.addKeyStroke(stroke.dev, stroke.color);
+        }
+        worker.run(m_d->filteringOptions.cleanUpAmount);
 
+        m_d->dirtyNode->setDirty(m_d->boundingRect);
+        emit sigFinished();
+    });
 
-    m_d->dirtyNode->setDirty(m_d->boundingRect);
-    emit sigFinished();
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)

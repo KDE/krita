@@ -988,6 +988,10 @@ void KisColorizeMask::setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStrok
 {
     m_d->keyStrokes = strokes;
 
+    for (auto it = m_d->keyStrokes.begin(); it != m_d->keyStrokes.end(); ++it) {
+        it->dev->setParentNode(this);
+    }
+
     KisImageSP image = fetchImage();
     KIS_SAFE_ASSERT_RECOVER_RETURN(image);
     setImage(image);

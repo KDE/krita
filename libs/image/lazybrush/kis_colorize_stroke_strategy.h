@@ -58,7 +58,8 @@ public:
     KisStrokeStrategy *createLodClone(int levelOfDetail) override;
 
 Q_SIGNALS:
-    void sigFinished(bool isSuccessful);
+    void sigFinished(bool prefilterOnly);
+    void sigCancelled();
 
 private:
     struct Private;

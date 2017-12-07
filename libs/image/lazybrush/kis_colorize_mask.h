@@ -130,9 +130,11 @@ public:
 
 private Q_SLOTS:
     void slotUpdateRegenerateFilling(bool prefilterOnly = false);
-    void slotRegenerationFinished(bool isSuccessful);
+    void slotRegenerationFinished(bool prefilterOnly);
+    void slotRegenerationCancelled();
 
     void slotUpdateOnDirtyParent();
+    void slotRecalculatePrefilteredImage();
 
 Q_SIGNALS:
     void sigKeyStrokesListChanged();

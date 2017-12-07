@@ -63,6 +63,7 @@ struct KisColorizeMask::Private
           originalSequenceNumber(-1),
           updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
           dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
+          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
           updateIsRunning(false),
           filteringOptions(false, 4.0, 15, 0.7)
     {
@@ -80,6 +81,7 @@ struct KisColorizeMask::Private
           originalSequenceNumber(-1),
           updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
           dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
+          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
           offset(rhs.offset),
           updateIsRunning(false),
           filteringOptions(rhs.filteringOptions)
@@ -111,6 +113,7 @@ struct KisColorizeMask::Private
 
     KisSignalCompressor updateCompressor;
     KisSignalCompressor dirtyParentUpdateCompressor;
+    KisSignalCompressor prefilterRecalculationCompressor;
     QPoint offset;
 
     bool updateIsRunning;
@@ -139,6 +142,11 @@ KisColorizeMask::KisColorizeMask()
     connect(&m_d->dirtyParentUpdateCompressor,
             SIGNAL(timeout()),
             SLOT(slotUpdateOnDirtyParent()));
+
+    connect(&m_d->prefilterRecalculationCompressor,
+            SIGNAL(timeout()),
+            SLOT(slotRecalculatePrefilteredImage()));
+
 
     m_d->updateCompressor.moveToThread(qApp->thread());
 }
@@ -332,6 +340,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
         }
 
         connect(strategy, SIGNAL(sigFinished(bool)), SLOT(slotRegenerationFinished(bool)));
+        connect(strategy, SIGNAL(sigCancelled()), SLOT(slotRegenerationCancelled()));
         KisStrokeId id = image->startStroke(strategy);
         image->endStroke(id);
     }
@@ -353,13 +362,26 @@ void KisColorizeMask::slotUpdateOnDirtyParent()
         if (image) {
             setDirty(image->bounds());
         }
+
+        if (m_d->showKeyStrokes) {
+            // update the prefilter preview if the key strokes are visible
+            m_d->prefilterRecalculationCompressor.start();
+        }
     }
 }
 
-void KisColorizeMask::slotRegenerationFinished(bool isSuccessful)
+void KisColorizeMask::slotRecalculatePrefilteredImage()
+{
+    slotUpdateRegenerateFilling(true);
+}
+
+void KisColorizeMask::slotRegenerationFinished(bool prefilterOnly)
 {
     m_d->updateIsRunning = false;
-    m_d->setNeedsUpdateImpl(!isSuccessful, false);
+
+    if (!prefilterOnly) {
+        m_d->setNeedsUpdateImpl(false, false);
+    }
 
     KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
@@ -368,6 +390,11 @@ void KisColorizeMask::slotRegenerationFinished(bool isSuccessful)
     if (image) {
         setDirty(image->bounds());
     }
+}
+
+void KisColorizeMask::slotRegenerationCancelled()
+{
+    slotRegenerationFinished(true);
 }
 
 KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const
@@ -790,6 +817,9 @@ void KisColorizeMask::setShowKeyStrokes(bool value)
     if (!savedExtent.isEmpty()) {
         setDirty(savedExtent);
     }
+
+    // update the prefiltered source if needed
+    slotUpdateRegenerateFilling(true);
 }
 
 KisColorizeMask::KeyStrokeColors KisColorizeMask::keyStrokesColors() const

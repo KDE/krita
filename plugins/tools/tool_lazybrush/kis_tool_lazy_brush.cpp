@@ -36,13 +36,19 @@
 #include "kis_node_manager.h"
 #include "kis_layer_properties_icons.h"
 
+#include "kis_canvas_resource_provider.h"
 #include "kis_tool_lazy_brush_options_widget.h"
+
+#include "kis_layer_properties_icons.h"
+
 
 struct KisToolLazyBrush::Private
 {
     bool activateMaskMode = false;
     bool oldShowKeyStrokesValue = false;
     bool oldShowColoringValue = false;
+
+    KisNodeSP manuallyActivatedNode;
 };
 
 
@@ -53,11 +59,24 @@ KisToolLazyBrush::KisToolLazyBrush(KoCanvasBase * canvas)
       m_d(new Private)
 {
     setObjectName("tool_lazybrush");
+
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    connect(kiscanvas->viewManager()->resourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
+            this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
 }
 
 KisToolLazyBrush::~KisToolLazyBrush()
 {
 }
+
+void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
+{
+    if (m_d->manuallyActivatedNode) {
+        KisLayerPropertiesIcons::setNodeProperty(m_d->manuallyActivatedNode, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image());
+        m_d->manuallyActivatedNode = 0;
+    }
+}
+
 
 void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
@@ -66,7 +85,15 @@ void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> 
 
 void KisToolLazyBrush::deactivate()
 {
+    tryDisableKeyStrokesOnMask();
     KisToolFreehand::deactivate();
+}
+
+void KisToolLazyBrush::slotCurrentNodeChanged(KisNodeSP node)
+{
+    if (node != m_d->manuallyActivatedNode) {
+        tryDisableKeyStrokesOnMask();
+    }
 }
 
 void KisToolLazyBrush::resetCursorStyle()
@@ -84,6 +111,16 @@ bool KisToolLazyBrush::canCreateColorizeMask() const
 {
     KisNodeSP node = currentNode();
     return node && node->inherits("KisLayer");
+}
+
+bool KisToolLazyBrush::shouldActivateKeyStrokes() const
+{
+    KisNodeSP node = currentNode();
+
+    return node && node->inherits("KisColorizeMask") &&
+        !KisLayerPropertiesIcons::nodeProperty(node,
+                                               KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                               true).toBool();
 }
 
 void KisToolLazyBrush::tryCreateColorizeMask()
@@ -112,7 +149,9 @@ void KisToolLazyBrush::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
 
-    if (!colorizeMaskActive() && canCreateColorizeMask()) {
+    if (shouldActivateKeyStrokes() ||
+        (!colorizeMaskActive() && canCreateColorizeMask())) {
+
         useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
         setOutlineEnabled(false);
@@ -133,7 +172,19 @@ void KisToolLazyBrush::deactivatePrimaryAction()
 void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
 {
     if (m_d->activateMaskMode) {
-        tryCreateColorizeMask();
+        if (!colorizeMaskActive() && canCreateColorizeMask()) {
+            tryCreateColorizeMask();
+        } else if (shouldActivateKeyStrokes()) {
+            KisNodeSP node = currentNode();
+
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->manuallyActivatedNode ||
+                                         m_d->manuallyActivatedNode == node);
+
+            KisLayerPropertiesIcons::setNodeProperty(node,
+                                                     KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                     true, image());
+            m_d->manuallyActivatedNode = node;
+        }
     } else {
         KisToolFreehand::beginPrimaryAction(event);
     }

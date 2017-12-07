@@ -67,12 +67,18 @@ public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
+private Q_SLOTS:
+    void slotCurrentNodeChanged(KisNodeSP node);
+
 Q_SIGNALS:
 
 private:
     bool colorizeMaskActive() const;
     bool canCreateColorizeMask() const;
+    bool shouldActivateKeyStrokes() const;
     void tryCreateColorizeMask();
+
+    void tryDisableKeyStrokesOnMask();
 
 private:
     struct Private;

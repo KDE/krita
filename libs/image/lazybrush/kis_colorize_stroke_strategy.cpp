@@ -245,7 +245,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     }
 
     addJobSequential(jobs, [this] () {
-        emit sigFinished(true);
+        emit sigFinished(m_d->prefilterOnly);
     });
 
     runnableJobsInterface()->addRunnableJobs(jobs);
@@ -253,7 +253,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
 void KisColorizeStrokeStrategy::cancelStrokeCallback()
 {
-    emit sigFinished(false);
+    emit sigCancelled();
 }
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)

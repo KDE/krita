@@ -58,6 +58,7 @@ struct KisColorizeStrokeStrategy::Private
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP filteredSource;
+    KisPaintDeviceSP heightMap;
     KisPaintDeviceSP internalFilteredSource;
     bool filteredSourceValid;
     QRect boundingRect;
@@ -128,10 +129,10 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
     QVector<KisRunnableStrokeJobData*> jobs;
 
-    if (!m_d->filteredSourceValid) {
-        const QVector<QRect> patchRects =
-            splitRectIntoPatches(m_d->boundingRect, optimalPatchSize());
+    const QVector<QRect> patchRects =
+        splitRectIntoPatches(m_d->boundingRect, optimalPatchSize());
 
+    if (!m_d->filteredSourceValid) {
         // TODO: make this conversion concurrent!!!
         KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
 
@@ -211,7 +212,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
         }
 
         addJobSequential(jobs, [this, state] () {
-            normalizeAlpha8Device(state->filteredMainDev, state->boundingRect);
+            normalizeAndInvertAlpha8Device(state->filteredMainDev, state->boundingRect);
 
             KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
             m_d->filteredSource->makeCloneFrom(state->filteredMainDev, m_d->boundingRect);
@@ -222,7 +223,20 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
     if (!m_d->prefilterOnly) {
         addJobSequential(jobs, [this] () {
-            KisWatershedWorker worker(m_d->filteredSource, m_d->dst, m_d->boundingRect);
+            m_d->heightMap = new KisPaintDevice(*m_d->filteredSource);
+        });
+
+        Q_FOREACH (const QRect &rc, patchRects) {
+            addJobConcurrent(jobs, [this, rc] () {
+                KritaUtils::filterAlpha8Device(m_d->heightMap, rc,
+                                               [](quint8 pixel) {
+                                                   return quint8(255 - pixel);
+                                               });
+            });
+        }
+
+        addJobSequential(jobs, [this] () {
+            KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect);
             Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
                 worker.addKeyStroke(stroke.dev, stroke.color);
             }

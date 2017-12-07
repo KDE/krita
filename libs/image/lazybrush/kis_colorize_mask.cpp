@@ -857,6 +857,8 @@ void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
             newList, &m_d->keyStrokes, KisColorizeMaskSP(this)));
 
     applicator.end();
+
+    setNeedsUpdate(true);
 }
 
 void KisColorizeMask::removeKeyStroke(const KoColor &_color)

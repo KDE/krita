@@ -766,7 +766,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotAssistantOpacityChanged()));
 
 
-        m_options.assistantsColor->setColor(QColor(95, 228, 230, 255));
+        m_options.assistantsColor->setColor(QColor(176, 176, 176, 255)); // grey default for all assistants
         m_options.assistantsOpacitySlider->setValue(100); // 100%
         m_options.assistantsOpacitySlider->setSuffix(" %");
 

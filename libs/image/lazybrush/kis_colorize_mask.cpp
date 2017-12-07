@@ -60,7 +60,9 @@ struct KisColorizeMask::Private
           showColoring(true),
           needsUpdate(true),
           originalSequenceNumber(-1),
-          updateCompressor(1, KisSignalCompressor::POSTPONE, q),
+          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, q),
+          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, q),
+          updateIsRunning(false),
           filteringOptions(false, 4.0, 15, 0.7)
     {
     }
@@ -74,8 +76,10 @@ struct KisColorizeMask::Private
           showColoring(rhs.showColoring),
           needsUpdate(false),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::POSTPONE, q),
+          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, q),
+          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, q),
           offset(rhs.offset),
+          updateIsRunning(false),
           filteringOptions(rhs.filteringOptions)
     {
         Q_FOREACH (const KeyStroke &stroke, rhs.keyStrokes) {
@@ -102,10 +106,17 @@ struct KisColorizeMask::Private
     int originalSequenceNumber;
 
     KisSignalCompressor updateCompressor;
+    KisSignalCompressor dirtyParentUpdateCompressor;
     QPoint offset;
+
+    bool updateIsRunning;
 
     FilteringOptions filteringOptions;
     bool filteringDirty = true;
+
+    bool filteredSourceValid(KisPaintDeviceSP parentDevice) {
+        return !filteringDirty && originalSequenceNumber == parentDevice->sequenceNumber();
+    }
 };
 
 KisColorizeMask::KisColorizeMask()
@@ -114,6 +125,13 @@ KisColorizeMask::KisColorizeMask()
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
             SLOT(slotUpdateRegenerateFilling()));
+
+    connect(this, SIGNAL(sigUpdateOnDirtyParent()),
+            &m_d->dirtyParentUpdateCompressor, SLOT(start()));
+
+    connect(&m_d->dirtyParentUpdateCompressor,
+            SIGNAL(timeout()),
+            SLOT(slotUpdateOnDirtyParent()));
 
     m_d->updateCompressor.moveToThread(qApp->thread());
 }
@@ -129,6 +147,13 @@ KisColorizeMask::KisColorizeMask(const KisColorizeMask& rhs)
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
             SLOT(slotUpdateRegenerateFilling()));
+
+    connect(this, SIGNAL(sigUpdateOnDirtyParent()),
+            &m_d->dirtyParentUpdateCompressor, SLOT(start()));
+
+    connect(&m_d->dirtyParentUpdateCompressor,
+            SIGNAL(timeout()),
+            SLOT(slotUpdateOnDirtyParent()));
 
     m_d->updateCompressor.moveToThread(qApp->thread());
 }
@@ -259,7 +284,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 
-    bool filteredSourceValid = m_d->originalSequenceNumber == src->sequenceNumber() && !m_d->filteringDirty;
+    const bool filteredSourceValid = m_d->filteredSourceValid(src);
     m_d->originalSequenceNumber = src->sequenceNumber();
     m_d->filteringDirty = false;
 
@@ -272,6 +297,8 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 
     KisImageSP image = parentLayer->image();
     if (image) {
+        m_d->updateIsRunning = true;
+
         KisColorizeStrokeStrategy *strategy =
             new KisColorizeStrokeStrategy(src,
                                           m_d->coloringProjection,
@@ -291,15 +318,35 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
             strategy->addKeyStroke(stroke.dev, color);
         }
 
-        connect(strategy, SIGNAL(sigFinished()), SLOT(slotRegenerationFinished()));
+        connect(strategy, SIGNAL(sigFinished(bool)), SLOT(slotRegenerationFinished(bool)));
         KisStrokeId id = image->startStroke(strategy);
         image->endStroke(id);
     }
 }
 
-void KisColorizeMask::slotRegenerationFinished()
+void KisColorizeMask::slotUpdateOnDirtyParent()
 {
-    setNeedsUpdate(true);
+    KisPaintDeviceSP src = parent()->original();
+    KIS_ASSERT_RECOVER_RETURN(src);
+
+    if (!m_d->filteredSourceValid(src)) {
+        setNeedsUpdate(true);
+        m_d->filteringDirty = true;
+
+        KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
+        if (!parentLayer) return;
+
+        KisImageSP image = parentLayer->image();
+        if (image) {
+            setDirty(image->bounds());
+        }
+    }
+}
+
+void KisColorizeMask::slotRegenerationFinished(bool isSuccessful)
+{
+    m_d->updateIsRunning = false;
+    setNeedsUpdate(!isSuccessful);
 
     KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
@@ -326,7 +373,7 @@ void KisColorizeMask::setSectionModelProperties(const KisBaseNode::PropertyList 
 
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.id == KisLayerPropertiesIcons::colorizeNeedsUpdate.id()) {
-            if (m_d->needsUpdate != property.state.toBool()) {
+            if (m_d->needsUpdate && m_d->needsUpdate != property.state.toBool()) {
                 setNeedsUpdate(property.state.toBool());
             }
         }
@@ -345,7 +392,7 @@ void KisColorizeMask::setSectionModelProperties(const KisBaseNode::PropertyList 
 
 KisPaintDeviceSP KisColorizeMask::paintDevice() const
 {
-    return m_d->showKeyStrokes && m_d->needsUpdate ? m_d->fakePaintDevice : KisPaintDeviceSP();
+    return m_d->showKeyStrokes && !m_d->updateIsRunning ? m_d->fakePaintDevice : KisPaintDeviceSP();
 }
 
 KisPaintDeviceSP KisColorizeMask::coloringProjection() const
@@ -376,15 +423,24 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 {
     Q_UNUSED(maskPos);
 
+    if (maskPos == N_ABOVE_FILTHY) {
+        // the source layer has changed, we should update the filtered cache!
+
+        if (!m_d->filteringDirty) {
+            emit sigUpdateOnDirtyParent();
+        }
+    }
+
     KIS_ASSERT(dst != src);
 
     // Draw the filling and the original layer
     {
         KisPainter gc(dst);
 
-        if (m_d->needsUpdate &&
+        if (!m_d->updateIsRunning &&
             m_d->showKeyStrokes &&
             m_d->filteredSource &&
+            !m_d->filteringDirty &&
             !m_d->filteredSource->extent().isEmpty()) {
 
             // TODO: the filtered source should be converted back into alpha!
@@ -395,7 +451,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
             gc.bitBlt(rect.topLeft(), src, rect);
         }
 
-        if (m_d->needsUpdate &&
+        if (!m_d->updateIsRunning &&
             m_d->showColoring &&
             m_d->coloringProjection) {
 
@@ -836,6 +892,7 @@ void KisColorizeMask::resetCache()
 {
     m_d->filteredSource->clear();
     m_d->originalSequenceNumber = -1;
+    m_d->filteringDirty = true;
 
     rerenderFakePaintDevice();
     slotUpdateRegenerateFilling(true);
@@ -845,6 +902,7 @@ void KisColorizeMask::setUseEdgeDetection(bool value)
 {
     m_d->filteringOptions.useEdgeDetection = value;
     m_d->filteringDirty = true;
+    setNeedsUpdate(true);
 }
 
 bool KisColorizeMask::useEdgeDetection() const
@@ -856,6 +914,7 @@ void KisColorizeMask::setEdgeDetectionSize(qreal value)
 {
     m_d->filteringOptions.edgeDetectionSize = value;
     m_d->filteringDirty = true;
+    setNeedsUpdate(true);
 }
 
 qreal KisColorizeMask::edgeDetectionSize() const
@@ -867,6 +926,7 @@ void KisColorizeMask::setFuzzyRadius(qreal value)
 {
     m_d->filteringOptions.fuzzyRadius = value;
     m_d->filteringDirty = true;
+    setNeedsUpdate(true);
 }
 
 qreal KisColorizeMask::fuzzyRadius() const
@@ -877,6 +937,7 @@ qreal KisColorizeMask::fuzzyRadius() const
 void KisColorizeMask::setCleanUpAmount(qreal value)
 {
     m_d->filteringOptions.cleanUpAmount = value;
+    setNeedsUpdate(true);
 }
 
 qreal KisColorizeMask::cleanUpAmount() const

@@ -50,8 +50,9 @@ struct KisColorizeStrokeStrategy::Private
           internalFilteredSource(rhs.internalFilteredSource),
           filteredSourceValid(rhs.filteredSourceValid),
           boundingRect(rhs.boundingRect),
+          prefilterOnly(rhs.prefilterOnly),
           keyStrokes(rhs.keyStrokes),
-          prefilterOnly(rhs.prefilterOnly)
+          filteringOptions(rhs.filteringOptions)
     {}
 
     KisPaintDeviceSP src;
@@ -87,6 +88,8 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
 
     enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
     enableJob(JOB_DOSTROKE, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    enableJob(JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    setNeedsExplicitCancel(true);
 }
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail)
@@ -213,6 +216,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
             KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
             m_d->filteredSource->makeCloneFrom(state->filteredMainDev, m_d->boundingRect);
             m_d->filteredSource->setDefaultBounds(oldBounds);
+            m_d->filteredSourceValid = true;
         });
     }
 
@@ -227,10 +231,15 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     }
 
     addJobSequential(jobs, [this] () {
-        emit sigFinished();
+        emit sigFinished(true);
     });
 
     runnableJobsInterface()->addRunnableJobs(jobs);
+}
+
+void KisColorizeStrokeStrategy::cancelStrokeCallback()
+{
+    emit sigFinished(false);
 }
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)

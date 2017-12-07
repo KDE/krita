@@ -235,9 +235,8 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
 
     bool value = false;
 
-    value = m_d->activeMask && !KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, true).toBool();
-    m_d->ui->btnUpdate->setEnabled(m_d->activeMask && !m_d->ui->chkAutoUpdates->isChecked());
-    m_d->ui->btnUpdate->setChecked(value);
+    value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, true).toBool();
+    m_d->ui->btnUpdate->setEnabled(m_d->activeMask && !m_d->ui->chkAutoUpdates->isChecked() && value);
 
     value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool();
     m_d->ui->chkShowKeyStrokes->setEnabled(m_d->activeMask);

@@ -130,10 +130,13 @@ public:
 
 private Q_SLOTS:
     void slotUpdateRegenerateFilling(bool prefilterOnly = false);
-    void slotRegenerationFinished();
+    void slotRegenerationFinished(bool isSuccessful);
+
+    void slotUpdateOnDirtyParent();
 
 Q_SIGNALS:
     void sigKeyStrokesListChanged();
+    void sigUpdateOnDirtyParent() const;
 
 private:
     // NOTE: please access this methods using model properties only!

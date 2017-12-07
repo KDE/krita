@@ -52,11 +52,13 @@ public:
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
     void initStrokeCallback() override;
+    void cancelStrokeCallback() override;
+    // TODO: suspend/resume
 
     KisStrokeStrategy *createLodClone(int levelOfDetail) override;
 
 Q_SIGNALS:
-    void sigFinished();
+    void sigFinished(bool isSuccessful);
 
 private:
     struct Private;

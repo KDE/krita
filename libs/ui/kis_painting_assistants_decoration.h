@@ -111,7 +111,11 @@ public:
 Q_SIGNALS:
     void assistantChanged();
 public Q_SLOTS:
+
+    /// toggles whether the assistant is active or not
     void toggleAssistantVisible();
+
+    /// toggles whether there will be a preview of the assistant result when painting
     void toggleOutlineVisible();
     void setAssistantsColor(QColor color);
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);

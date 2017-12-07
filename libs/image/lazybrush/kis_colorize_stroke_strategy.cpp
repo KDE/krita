@@ -238,7 +238,11 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
         addJobSequential(jobs, [this] () {
             KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect);
             Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-                worker.addKeyStroke(stroke.dev, stroke.color);
+                KoColor color =
+                    !stroke.isTransparent ?
+                        stroke.color : KoColor(Qt::transparent, m_d->dst->colorSpace());
+
+                worker.addKeyStroke(stroke.dev, color);
             }
             worker.run(m_d->filteringOptions.cleanUpAmount);
         });

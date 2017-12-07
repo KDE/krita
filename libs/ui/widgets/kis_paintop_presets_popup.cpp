@@ -709,7 +709,7 @@ void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
     // settings and save a new copy with the same name.
     // there is a dialog with save options, but we don't need to show it in this situation
 
-    saveDialog->isSavingNewBrush(false); // this mostly just makes sure we keep the existing brush preset name when saving
+    saveDialog->useNewBrushDialog(false); // this mostly just makes sure we keep the existing brush preset name when saving
     saveDialog->loadExistingThumbnail(); // This makes sure we use the existing preset icon when updating the existing brush preset
     saveDialog->savePreset();
 
@@ -718,7 +718,7 @@ void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
 }
 
 void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
-    saveDialog->isSavingNewBrush(true);
+    saveDialog->useNewBrushDialog(true);
     saveDialog->saveScratchPadThumbnailArea(m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay());
     saveDialog->showDialog();
 }

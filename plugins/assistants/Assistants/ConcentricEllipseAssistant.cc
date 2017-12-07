@@ -117,7 +117,7 @@ void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updat
 
 void ConcentricEllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible == false || !isAssistantComplete()) {
+    if (assistantVisible == false || handles().size() < 2) { // 2 points means a line, so we can continue after 1 point
         return;
     }
 

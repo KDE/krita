@@ -11,9 +11,6 @@ endif ()
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/compositeops)
-include_directories(SYSTEM
-    ${Boost_INCLUDE_DIRS}
-)
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)

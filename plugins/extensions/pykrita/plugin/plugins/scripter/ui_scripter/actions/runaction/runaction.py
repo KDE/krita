@@ -41,14 +41,18 @@ class RunAction(QAction):
         stdout = sys.stdout
         stderr = sys.stderr
         output = docwrapper.DocWrapper(self.output.document())
-        output.write("======================================\n")
+        if (self.editor._documentModified is True):
+            output.write("==== Warning: Script not saved! ====\n")
+        else:
+            output.write("======================================\n")
         sys.stdout = output
         sys.stderr = output
+        
         script = self.editor.document().toPlainText()
         document = self.scripter.documentcontroller.activeDocument
 
         try:
-            if document:
+            if document and self.editor._documentModified is False:
                 spec = importlib.util.spec_from_file_location("users_script", document.filePath)
                 users_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(users_module)

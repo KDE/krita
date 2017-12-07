@@ -57,7 +57,7 @@ public:
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
-    int doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
+    std::pair<int, bool> doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
@@ -96,8 +96,12 @@ private:
     qreal m_currentUpdatePeriod = 20.0;
     KisRollingMeanAccumulatorWrapper m_avgSpacing;
     KisRollingMeanAccumulatorWrapper m_avgNumDabs;
+    KisRollingMeanAccumulatorWrapper m_avgUpdateTimePerDab;
 
     const int m_idealNumRects;
+
+    const int m_minUpdatePeriod;
+    const int m_maxUpdatePeriod;
 };
 
 #endif // KIS_BRUSHOP_H_

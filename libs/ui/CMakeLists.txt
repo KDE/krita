@@ -6,7 +6,6 @@ include_directories(
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 add_subdirectory( tests )
@@ -396,6 +395,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         input/wintab/kis_tablet_support_win8.cpp
+        opengl/kis_opengl_win.cpp
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()

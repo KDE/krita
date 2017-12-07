@@ -1,8 +1,4 @@
-include_directories(${Boost_INCLUDE_DIRS})
-
 # export
-
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(kritavideoexport_SOURCES
     kis_video_export.cpp

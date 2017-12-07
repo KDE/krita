@@ -369,7 +369,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
 
     KIS_ASSERT_RECOVER_RETURN(isPickingAction(pickingJob.action));
 
-    const QPoint imagePoint = image()->documentToIntPixel(pickingJob.documentPixel);
+    const QPoint imagePoint = image()->documentToImagePixelFloored(pickingJob.documentPixel);
     const bool fromCurrentNode = pickingJob.action == PickFgNode || pickingJob.action == PickBgNode;
     m_pickingResource = colorPreviewResourceId(pickingJob.action);
 

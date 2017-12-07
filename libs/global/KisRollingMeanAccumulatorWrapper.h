@@ -43,9 +43,21 @@ public:
     void operator()(qreal value);
 
     /**
-     * Get rolling mean of the numbers passed to the operator
+     * Get rolling mean of the numbers passed to the operator. If there are no elements
+     * in the rolling window, returns NaN.
      */
     qreal rollingMean() const;
+
+    /**
+     * Get rolling mean of the numbers passed to the operator. If there are no elements
+     * in the rolling window, returns 0.
+     */
+    qreal rollingMeanSafe() const;
+
+    /**
+     * Get the number of elements in the rolling window
+     */
+    int rollingCount() const;
 
     /**
      * Reset  accumulator and any stored value

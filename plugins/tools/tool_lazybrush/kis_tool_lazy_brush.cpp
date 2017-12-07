@@ -40,6 +40,8 @@
 #include "kis_tool_lazy_brush_options_widget.h"
 
 #include "kis_layer_properties_icons.h"
+#include "lazybrush/kis_colorize_mask.h"
+#include "kis_signal_auto_connection.h"
 
 
 struct KisToolLazyBrush::Private
@@ -49,6 +51,7 @@ struct KisToolLazyBrush::Private
     bool oldShowColoringValue = false;
 
     KisNodeSP manuallyActivatedNode;
+    KisSignalAutoConnectionsStore toolConnections;
 };
 
 
@@ -59,10 +62,6 @@ KisToolLazyBrush::KisToolLazyBrush(KoCanvasBase * canvas)
       m_d(new Private)
 {
     setObjectName("tool_lazybrush");
-
-    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
-    connect(kiscanvas->viewManager()->resourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
-            this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
 }
 
 KisToolLazyBrush::~KisToolLazyBrush()
@@ -80,19 +79,36 @@ void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
 
 void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    m_d->toolConnections.addUniqueConnection(
+        kiscanvas->viewManager()->resourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
+        this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+
+    KisColorizeMask *mask = qobject_cast<KisColorizeMask*>(currentNode().data());
+    if (mask) {
+        mask->regeneratePrefilteredDeviceIfNeeded();
+    }
+
     KisToolFreehand::activate(activation, shapes);
 }
 
 void KisToolLazyBrush::deactivate()
 {
-    tryDisableKeyStrokesOnMask();
     KisToolFreehand::deactivate();
+    tryDisableKeyStrokesOnMask();
+    m_d->toolConnections.clear();
 }
 
 void KisToolLazyBrush::slotCurrentNodeChanged(KisNodeSP node)
 {
     if (node != m_d->manuallyActivatedNode) {
         tryDisableKeyStrokesOnMask();
+
+        KisColorizeMask *mask = qobject_cast<KisColorizeMask*>(node.data());
+        if (mask) {
+            mask->regeneratePrefilteredDeviceIfNeeded();
+        }
     }
 }
 

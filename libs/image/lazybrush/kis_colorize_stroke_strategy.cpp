@@ -77,7 +77,7 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
                                                      bool filteredSourceValid,
                                                      const QRect &boundingRect,
                                                      bool prefilterOnly)
-    : KisRunnableBasedStrokeStrategy("colorize-stroke", kundo2_i18n("Colorize")),
+    : KisRunnableBasedStrokeStrategy("colorize-stroke", prefilterOnly ? kundo2_i18n("Prefilter Colorize Mask") : kundo2_i18n("Colorize")),
       m_d(new Private)
 {
     m_d->src = src;

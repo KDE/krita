@@ -362,11 +362,6 @@ void KisColorizeMask::slotUpdateOnDirtyParent()
         if (image) {
             setDirty(image->bounds());
         }
-
-        if (m_d->showKeyStrokes) {
-            // update the prefilter preview if the key strokes are visible
-            m_d->prefilterRecalculationCompressor.start();
-        }
     }
 }
 
@@ -818,8 +813,7 @@ void KisColorizeMask::setShowKeyStrokes(bool value)
         setDirty(savedExtent);
     }
 
-    // update the prefiltered source if needed
-    slotUpdateRegenerateFilling(true);
+    regeneratePrefilteredDeviceIfNeeded();
 }
 
 KisColorizeMask::KeyStrokeColors KisColorizeMask::keyStrokesColors() const
@@ -1080,6 +1074,18 @@ KisPaintDeviceList KisColorizeMask::getLodCapableDevices() const
     list << m_d->filteredSource;
 
     return list;
+}
+
+void KisColorizeMask::regeneratePrefilteredDeviceIfNeeded()
+{
+    // TODO: remove accessing to 'src'
+    KisPaintDeviceSP src = parent()->original();
+    KIS_ASSERT_RECOVER_RETURN(src);
+
+    if (!m_d->filteredSourceValid(src)) {
+        // update the prefiltered source if needed
+        slotUpdateRegenerateFilling(true);
+    }
 }
 
 void KisColorizeMask::moveAllInternalDevices(const QPoint &diff)

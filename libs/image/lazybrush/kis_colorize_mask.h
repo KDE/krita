@@ -128,6 +128,8 @@ public:
 
     KisPaintDeviceList getLodCapableDevices() const override;
 
+    void regeneratePrefilteredDeviceIfNeeded();
+
 private Q_SLOTS:
     void slotUpdateRegenerateFilling(bool prefilterOnly = false);
     void slotRegenerationFinished(bool prefilterOnly);

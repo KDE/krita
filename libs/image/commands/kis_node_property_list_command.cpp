@@ -44,14 +44,16 @@ KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNo
 
 void KisNodePropertyListCommand::redo()
 {
+    const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
     m_node->setSectionModelProperties(m_newPropertyList);
-    doUpdate(m_oldPropertyList, m_newPropertyList);
+    doUpdate(propsBefore, m_node->sectionModelProperties());
 }
 
 void KisNodePropertyListCommand::undo()
 {
+    const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
     m_node->setSectionModelProperties(m_oldPropertyList);
-    doUpdate(m_newPropertyList, m_oldPropertyList);
+    doUpdate(propsBefore, m_node->sectionModelProperties());
 }
 
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
@@ -81,6 +83,14 @@ bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
 void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
                                           const KisBaseNode::PropertyList &newPropertyList)
 {
+    /**
+     * Sometimes the node might refuse to change the property, e.g. needs-update for colorize
+     * mask. In this case we should avoid issuing the update and set-modified call.
+     */
+    if (oldPropertyList == newPropertyList) {
+        return;
+    }
+
     bool oldPassThroughValue = false;
     bool newPassThroughValue = false;
 

@@ -162,6 +162,10 @@ private:
     template <class DeviceMetricPolicy>
     QRect calculateMaskBounds(DeviceMetricPolicy policy) const;
 
+    friend class SetKeyStrokesColorSpaceCommand;
+    friend class KeyStrokeAddRemoveCommand;
+    friend class SetKeyStrokeColorsCommand;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

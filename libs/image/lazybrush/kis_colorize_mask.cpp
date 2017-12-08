@@ -45,7 +45,6 @@
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 #include "krita_utils.h"
-#include "kis_command_utils.h"
 
 
 using namespace KisLazyFillTools;
@@ -218,6 +217,8 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         for (int i = 0; i < m_list->size(); i++) {
             (*m_list)[i].color = m_oldColors[i];
         }
+
+        m_node->setNeedsUpdate(true);
     }
 
     void redo() override {
@@ -234,6 +235,8 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         for (int i = 0; i < m_list->size(); i++) {
             (*m_list)[i].color = m_newColors[i];
         }
+
+        m_node->setNeedsUpdate(true);
     }
 
 private:
@@ -684,12 +687,14 @@ struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
 
     void init() override {
         m_list->insert(m_index, m_stroke);
+        m_node->setNeedsUpdate(true);
         emit m_node->sigKeyStrokesListChanged();
     }
 
     void end() override {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
+        m_node->setNeedsUpdate(true);
         emit m_node->sigKeyStrokesListChanged();
     }
 
@@ -858,6 +863,7 @@ struct SetKeyStrokeColorsCommand : public KUndo2Command {
     void redo() override {
         *m_list = m_newList;
 
+        m_node->setNeedsUpdate(true);
         emit m_node->sigKeyStrokesListChanged();
         m_node->setDirty();
     }
@@ -865,6 +871,7 @@ struct SetKeyStrokeColorsCommand : public KUndo2Command {
     void undo() override {
         *m_list = m_oldList;
 
+        m_node->setNeedsUpdate(true);
         emit m_node->sigKeyStrokesListChanged();
         m_node->setDirty();
     }
@@ -897,8 +904,6 @@ void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
             newList, &m_d->keyStrokes, KisColorizeMaskSP(this)));
 
     applicator.end();
-
-    setNeedsUpdate(true);
 }
 
 void KisColorizeMask::removeKeyStroke(const KoColor &_color)

@@ -80,6 +80,7 @@ public:
     void setCurrentColor(const KoColor &color) override;
     void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID) override;
     void writeMergeData(KisPainter *painter, KisPaintDeviceSP src) override;
+    bool supportsNonIndirectPainting() const override;
 
     QRect exactBounds() const override;
     QRect extent() const override;

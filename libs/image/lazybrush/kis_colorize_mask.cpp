@@ -797,6 +797,11 @@ void KisColorizeMask::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
     }
 }
 
+bool KisColorizeMask::supportsNonIndirectPainting() const
+{
+    return false;
+}
+
 bool KisColorizeMask::showColoring() const
 {
     return m_d->showColoring;

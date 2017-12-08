@@ -155,12 +155,9 @@ void KisToolLazyBrushOptionsWidget::hideEvent(QHideEvent *event)
 
 void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
 {
-    qDebug()<<"triggered";
     if (!index.isValid()) return;
 
-    qDebug()<<index;
     const int i = m_d->colorModel->idFromIndex(index);
-    qDebug()<<i;
 
     if (i >= 0 && i < (int)m_d->colorSet.nColors()) {
         KoColorSetEntry entry = m_d->colorModel->colorSetEntryFromIndex(index);
@@ -192,7 +189,9 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
         m_d->ui->btnTransparent->setChecked(false);
     }
 
-    QModelIndex newIndex = m_d->colorModel->indexFromId(selectedIndex);
+    QModelIndex newIndex =
+        selectedIndex >= 0 ?
+        m_d->colorModel->indexFromId(selectedIndex) : QModelIndex();
 
     if (newIndex != m_d->ui->colorView->currentIndex()) {
         m_d->ui->colorView->setCurrentIndex(newIndex);

@@ -231,6 +231,12 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
                     groupLayer = groupStack.pop();
                 }
 
+                const QDomDocument &styleXml = layerRecord->infoBlocks.layerStyleXml;
+
+                if (!styleXml.isNull()) {
+                    allStylesXml << LayerStyleMapping(styleXml, groupLayer);
+                }
+
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
 

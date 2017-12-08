@@ -19,6 +19,7 @@
 #include "kis_colorize_mask.h"
 
 #include <QCoreApplication>
+#include <QStack>
 
 #include <KoColorSpaceRegistry.h>
 #include "kis_pixel_selection.h"
@@ -117,6 +118,7 @@ struct KisColorizeMask::Private
     QPoint offset;
 
     bool updateIsRunning;
+    QStack<QRect> extentBeforeUpdateStart;
 
     FilteringOptions filteringOptions;
     bool filteringDirty = true;
@@ -126,6 +128,9 @@ struct KisColorizeMask::Private
     }
 
     void setNeedsUpdateImpl(bool value, bool requestedByUser);
+
+    bool shouldShowFilteredSource() const;
+    bool shouldShowColoring() const;
 
 };
 
@@ -299,7 +304,6 @@ void KisColorizeMask::Private::setNeedsUpdateImpl(bool value, bool requestedByUs
     }
 }
 
-
 void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 {
     KisPaintDeviceSP src = parent()->original();
@@ -339,6 +343,8 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
             strategy->addKeyStroke(stroke.dev, color);
         }
 
+        m_d->extentBeforeUpdateStart.push(extent());
+
         connect(strategy, SIGNAL(sigFinished(bool)), SLOT(slotRegenerationFinished(bool)));
         connect(strategy, SIGNAL(sigCancelled()), SLOT(slotRegenerationCancelled()));
         KisStrokeId id = image->startStroke(strategy);
@@ -352,16 +358,12 @@ void KisColorizeMask::slotUpdateOnDirtyParent()
     KIS_ASSERT_RECOVER_RETURN(src);
 
     if (!m_d->filteredSourceValid(src)) {
+        const QRect &oldExtent = extent();
+
         m_d->setNeedsUpdateImpl(true, false);
         m_d->filteringDirty = true;
 
-        KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
-        if (!parentLayer) return;
-
-        KisImageSP image = parentLayer->image();
-        if (image) {
-            setDirty(image->bounds());
-        }
+        setDirty(oldExtent | extent());
     }
 }
 
@@ -378,13 +380,15 @@ void KisColorizeMask::slotRegenerationFinished(bool prefilterOnly)
         m_d->setNeedsUpdateImpl(false, false);
     }
 
-    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
-    if (!parentLayer) return;
+    QRect oldExtent;
 
-    KisImageSP image = parentLayer->image();
-    if (image) {
-        setDirty(image->bounds());
+    if (!m_d->extentBeforeUpdateStart.isEmpty()) {
+        oldExtent = m_d->extentBeforeUpdateStart.pop();
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->extentBeforeUpdateStart.isEmpty()); // always fail!
     }
+
+    setDirty(oldExtent | extent());
 }
 
 void KisColorizeMask::slotRegenerationCancelled()
@@ -451,6 +455,23 @@ void KisColorizeMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undo
     return visitor.visit(this, undoAdapter);
 }
 
+bool KisColorizeMask::Private::shouldShowFilteredSource() const
+{
+    return !updateIsRunning &&
+            showKeyStrokes &&
+            !filteringDirty &&
+            filteredSource &&
+            !filteredSource->extent().isEmpty();
+}
+
+bool KisColorizeMask::Private::shouldShowColoring() const
+{
+    return !updateIsRunning &&
+            showColoring &&
+            coloringProjection;
+}
+
+
 QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
                                     KisPaintDeviceSP &dst,
                                     const QRect &rect,
@@ -472,13 +493,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     {
         KisPainter gc(dst);
 
-        if (!m_d->updateIsRunning &&
-            m_d->showKeyStrokes &&
-            m_d->filteredSource &&
-            !m_d->filteringDirty &&
-            !m_d->filteredSource->extent().isEmpty()) {
-
-            // TODO: the filtered source should be converted back into alpha!
+        if (m_d->shouldShowFilteredSource()) {
             gc.setOpacity(128);
             gc.bitBlt(rect.topLeft(), m_d->filteredSource, rect);
         } else {
@@ -486,9 +501,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
             gc.bitBlt(rect.topLeft(), src, rect);
         }
 
-        if (!m_d->updateIsRunning &&
-            m_d->showColoring &&
-            m_d->coloringProjection) {
+        if (m_d->shouldShowColoring()) {
 
             gc.setOpacity(opacity());
             gc.setCompositeOp(compositeOpId());
@@ -547,55 +560,58 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     return rect;
 }
 
-QRect KisColorizeMask::extent() const
+struct DeviceExtentPolicy
+{
+    inline QRect operator() (const KisPaintDevice *dev) {
+        return dev->extent();
+    }
+};
+
+struct DeviceExactBoundsPolicy
+{
+    inline QRect operator() (const KisPaintDevice *dev) {
+        return dev->exactBounds();
+    }
+};
+
+template <class DeviceMetricPolicy>
+QRect KisColorizeMask::calculateMaskBounds(DeviceMetricPolicy boundsPolicy) const
 {
     QRect rc;
 
-    // TODO: take care about the filtered device, which can be painted
-    //       semi-transparent sometimes
+    if (m_d->shouldShowFilteredSource()) {
+        rc |= boundsPolicy(m_d->filteredSource);
+    }
 
-    if (m_d->showColoring && m_d->coloringProjection) {
-        rc |= m_d->coloringProjection->extent();
+    if (m_d->shouldShowColoring()) {
+        rc |= boundsPolicy(m_d->coloringProjection);
     }
 
     if (m_d->showKeyStrokes) {
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-            rc |= stroke.dev->extent();
+            rc |= boundsPolicy(stroke.dev);
         }
 
         KisIndirectPaintingSupport::ReadLocker locker(this);
 
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         if (temporaryTarget) {
-            rc |= temporaryTarget->extent();
+            rc |= boundsPolicy(temporaryTarget);
         }
     }
 
     return rc;
 }
 
+
+QRect KisColorizeMask::extent() const
+{
+    return calculateMaskBounds(DeviceExtentPolicy());
+}
+
 QRect KisColorizeMask::exactBounds() const
 {
-    QRect rc;
-
-    if (m_d->showColoring && m_d->coloringProjection) {
-        rc |= m_d->coloringProjection->exactBounds();
-    }
-
-    if (m_d->showKeyStrokes) {
-        Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-            rc |= stroke.dev->exactBounds();
-        }
-
-        KisIndirectPaintingSupport::ReadLocker locker(this);
-        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
-        if (temporaryTarget) {
-            rc |= temporaryTarget->exactBounds();
-        }
-    }
-
-    return rc;
-
+    return calculateMaskBounds(DeviceExactBoundsPolicy());
 }
 
 QRect KisColorizeMask::nonDependentExtent() const

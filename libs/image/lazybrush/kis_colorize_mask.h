@@ -154,11 +154,13 @@ private:
     bool showKeyStrokes() const;
     void setShowKeyStrokes(bool value);
 
-
 private:
     void rerenderFakePaintDevice();
     KisImageSP fetchImage() const;
     void moveAllInternalDevices(const QPoint &diff);
+
+    template <class DeviceMetricPolicy>
+    QRect calculateMaskBounds(DeviceMetricPolicy policy) const;
 
 private:
     struct Private;

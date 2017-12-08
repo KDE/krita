@@ -45,15 +45,17 @@ KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNo
 void KisNodePropertyListCommand::redo()
 {
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
+    const QRect oldExtent = m_node->extent();
     m_node->setSectionModelProperties(m_newPropertyList);
-    doUpdate(propsBefore, m_node->sectionModelProperties());
+    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->extent());
 }
 
 void KisNodePropertyListCommand::undo()
 {
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
+    const QRect oldExtent = m_node->extent();
     m_node->setSectionModelProperties(m_oldPropertyList);
-    doUpdate(propsBefore, m_node->sectionModelProperties());
+    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->extent());
 }
 
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
@@ -81,7 +83,8 @@ bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
 
 
 void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
-                                          const KisBaseNode::PropertyList &newPropertyList)
+                                          const KisBaseNode::PropertyList &newPropertyList,
+                                          const QRect &totalUpdateExtent)
 {
     /**
      * Sometimes the node might refuse to change the property, e.g. needs-update for colorize
@@ -131,9 +134,9 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
             image->refreshGraphAsync(layer);
         }
     } else if (checkOnionSkinChanged(oldPropertyList, newPropertyList)) {
-        m_node->setDirtyDontResetAnimationCache();
+        m_node->setDirtyDontResetAnimationCache(totalUpdateExtent);
     } else {
-        m_node->setDirty(); // TODO check if visibility was changed or not
+        m_node->setDirty(totalUpdateExtent); // TODO check if visibility was actually changed or not
     }
 }
 

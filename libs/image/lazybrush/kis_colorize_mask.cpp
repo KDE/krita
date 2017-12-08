@@ -1094,7 +1094,6 @@ KisPaintDeviceList KisColorizeMask::getLodCapableDevices() const
 
 void KisColorizeMask::regeneratePrefilteredDeviceIfNeeded()
 {
-    // TODO: remove accessing to 'src'
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 

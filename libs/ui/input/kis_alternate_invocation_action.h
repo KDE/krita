@@ -39,11 +39,11 @@ public:
     enum Shortcut {
         PrimaryAlternateModeShortcut, ///< Toggle Primary mode.
         SecondaryAlternateModeShortcut, ///< Toggle Secondary mode.
-        TertiaryAlternateModeShortcut, ///< Toggle Tertiary mode.
         PickColorFgLayerModeShortcut,
         PickColorBgLayerModeShortcut,
         PickColorFgImageModeShortcut,
         PickColorBgImageModeShortcut,
+        TertiaryAlternateModeShortcut ///< Warning: don't reorder the items of this enum, it breaks user configs!
     };
 
     explicit KisAlternateInvocationAction();

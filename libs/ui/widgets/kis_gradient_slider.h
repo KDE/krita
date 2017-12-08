@@ -76,6 +76,8 @@ public:
 
     void enableWhite(bool b);
 
+    void setInverted(bool b);
+
 private:
     int m_leftmost;
     int m_rightmost;
@@ -93,6 +95,7 @@ private:
     bool m_gammaEnabled;
     bool m_whiteEnabled;
     bool m_feedback;
+    bool m_inverted;
 };
 
 #endif /* KIS_GRADIENT_SLIDER_H */

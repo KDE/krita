@@ -216,6 +216,8 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
+    if (processRect.isEmpty()) return dst;
+
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
@@ -237,6 +239,8 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     const KoColorSpace *srcCS = src->colorSpace();
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
+
+    if (processRect.isEmpty()) return dst;
 
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);

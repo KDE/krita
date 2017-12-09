@@ -452,6 +452,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgbookmarkedconfigurationseditor.ui
     forms/wdgapplyprofile.ui
     forms/wdgcustompattern.ui
+    forms/wdgfreehandbrushoptions.ui
     forms/wdglayerproperties.ui
     forms/wdgcolorsettings.ui
     forms/wdgtabletsettings.ui

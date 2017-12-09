@@ -39,7 +39,6 @@
 #include <brushengine/kis_paintop_settings.h>
 
 #include <resources/KoPattern.h>
-
 #include "kis_tool.h"
 #include <QCheckBox>
 

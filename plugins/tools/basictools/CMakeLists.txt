@@ -6,6 +6,7 @@ set(kritadefaulttools_SOURCES
     default_tools.cc
     kis_tool_colorpicker.cc
     kis_tool_brush.cc
+    kis_tool_brush_tooloptionswidget.cpp
     kis_tool_line.cc
     kis_tool_line_helper.cpp
     kis_tool_fill.cc

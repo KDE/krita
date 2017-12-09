@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2016  Scott Petrovic <scottpetrovic@gmail.com>
+    Copyright (C) 2017  Scott Petrovic <scottpetrovic@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,20 +17,20 @@
 */
 
 
-#ifndef KISTOOLMULTIHANDCONFIG_H
-#define KISTOOLMULTIHANDCONFIG_H
+#ifndef KISTOOLBRUSHOPTIONSCONFIG_H
+#define KISTOOLBRUSHOPTIONSCONFIG_H
 
-#include "ui_wdgmultihandtool.h"
+#include "ui_wdgfreehandbrushoptions.h"
 
 
-class KisToolMultiHandConfigWidget : public QWidget, public Ui::WdgMultiHandTool
+class KisToolBrushToolOptionsWidget : public QWidget, public Ui::WdgFreehandBrushOptions
 {
     Q_OBJECT
 
 public:
-    KisToolMultiHandConfigWidget(QWidget *parent=0);
-    ~KisToolMultiHandConfigWidget() override;
+    KisToolBrushToolOptionsWidget(QWidget *parent=0);
+    ~KisToolBrushToolOptionsWidget() override;
 
 };
 
-#endif // KISTOOLMULTIHANDCONFIG_H
+#endif // KISTOOLBRUSHOPTIONSCONFIG_H

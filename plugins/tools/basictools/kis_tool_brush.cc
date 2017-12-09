@@ -39,6 +39,7 @@
 #include "kis_slider_spin_box.h"
 #include "kundo2magicstring.h"
 
+
 #define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
 
@@ -307,6 +308,15 @@ void KisToolBrush::updateSettingsViews()
 QWidget * KisToolBrush::createOptionWidget()
 {
     QWidget *optionsWidget = KisToolFreehand::createOptionWidget();
+   //optionsWidget = new KisToolBrushToolOptionsWidget();
+   // optionsWidget->setupUi(this);
+
+    // brush smoothing option.
+   // optionsWidget->layout()->addWidget(widget);
+
+    //widget->deleteLater();
+
+
     optionsWidget->setObjectName(toolId() + "option widget");
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -314,6 +324,13 @@ QWidget * KisToolBrush::createOptionWidget()
     specialSpacer->setObjectName("SpecialSpacer");
     specialSpacer->setFixedSize(0, 0);
     optionsWidget->layout()->addWidget(specialSpacer);
+
+    /// slider preset for stabilizer settings
+    m_smoothnessPesetSlider = new QSlider(optionsWidget);
+    m_smoothnessPesetSlider->setOrientation(Qt::Horizontal);
+    addOptionWidgetOption(m_smoothnessPesetSlider, new QLabel(i18n("Stabilizer:")));
+
+
 
     // Line smoothing configuration
     m_cmbSmoothingType = new QComboBox(optionsWidget);
@@ -323,7 +340,7 @@ QWidget * KisToolBrush::createOptionWidget()
             << i18n("Weighted")
             << i18n("Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
-    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
+    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Smoothing Type:")));
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
@@ -464,6 +481,8 @@ QWidget * KisToolBrush::createOptionWidget()
     slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;
+
+    //return static_cast<QWidget*>(optionsWidget);
 }
 
 

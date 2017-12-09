@@ -32,6 +32,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KoIcon.h>
+#include <QSlider>
+#include "kis_tool_brush_tooloptionswidget.h"
 
 class QCheckBox;
 class QComboBox;
@@ -117,6 +119,7 @@ private:
     void addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection);
 
 private:
+    QSlider *m_smoothnessPesetSlider;
     QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;

@@ -184,13 +184,18 @@ void KisPaintingAssistantsDecoration::endStroke()
 }
 
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
-{
+{    
+    if(assistants().length() == 0) {
+        return; // no assistants to worry about, ok to exit
+    }
+
     if (!canvas) {
         dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
     } else {
         d->m_canvas = canvas;
     }
 
+    // the preview functionality for assistants. do not show while editing
     if (d->m_isEditingAssistants) {
         d->m_outlineVisible = false;
     }
@@ -357,8 +362,10 @@ bool KisPaintingAssistantsDecoration::isEditingAssistants()
 
 QPointF KisPaintingAssistantsDecoration::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
 {
-    if (!d->m_canvas->currentImage())
+    if (!d->m_canvas || !d->m_canvas->currentImage()) {
         return e->point;
+    }
+
 
     KoSnapGuide *snapGuide = d->m_canvas->snapGuide();
     QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
@@ -368,8 +375,10 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(KoPointerEvent *e, const QP
 
 QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QPointF &offset)
 {
-    if (!d->m_canvas)
-        return pt;
+    if (!d->m_canvas) {
+         return pt;
+    }
+
 
     KoSnapGuide *snapGuide = d->m_canvas->snapGuide();
     QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);

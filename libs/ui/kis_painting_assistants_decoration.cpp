@@ -48,7 +48,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool snapOnlyOneAssistant;
     KisPaintingAssistantSP firstAssistant;
     bool aFirstStroke;
-    QColor m_assistantsColor;
+    QColor m_assistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
     bool m_isEditingAssistants = false;
     bool m_outlineVisible = false;
     int m_handleSize = 14; // size of editor handles on assistants
@@ -204,6 +204,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     }
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+
         assistant->setAssistantColor(assistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
 

@@ -141,7 +141,7 @@ struct KisPaintingAssistant::Private {
         }
     } cachedTransform;
 
-    QColor assistantColor = QColor(60, 60, 60, 255);
+    QColor assistantColor;
 };
 
 void KisPaintingAssistant::setAssistantColor(QColor color)

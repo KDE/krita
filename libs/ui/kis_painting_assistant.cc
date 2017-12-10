@@ -302,8 +302,6 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     if (canvas) {
         d->m_canvas = canvas;
     }
-
-    d->m_canvas->updateCanvas(paintRect);
 }
 
 void KisPaintingAssistant::uncache()

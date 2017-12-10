@@ -344,6 +344,7 @@ void KisPaintingAssistantsDecoration::activateAssistantsEditor()
 {
     setVisible(true); // this turns on the decorations in general. we leave it on at this point
     d->m_isEditingAssistants = true;
+    uncache(); // updates visuals when editing
 }
 
 void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()

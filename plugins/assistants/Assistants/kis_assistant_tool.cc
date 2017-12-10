@@ -76,11 +76,13 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
     m_handleSize = 17;
 
+    m_canvas->updateCanvas();
 }
 
 void KisAssistantTool::deactivate()
 {
     m_canvas->paintingAssistantsDecoration()->deactivateAssistantsEditor();
+    m_canvas->updateCanvas();
     KisTool::deactivate();
 }
 

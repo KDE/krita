@@ -66,8 +66,6 @@ struct FillGroup {
             return positiveEdgeSize + negativeEdgeSize + foreignEdgeSize + allyEdgeSize;
         }
 
-        int lastDistance = 0;
-
         QMap<qint32, std::multiset<QPoint, CompareQPoints>> conflictWithGroup;
     };
 
@@ -622,15 +620,6 @@ void KisWatershedWorker::Private::visitNeighbour(const QPoint &currPt, const QPo
     }
 }
 
-void KisWatershedWorker::Private::updateGroupLastDistance(FillGroup::LevelData &levelData, int distance)
-{
-    if (levelData.lastDistance > distance) {
-        //qDebug() << ppVar(levelData.lastDistance)  << ppVar(distance);
-    }
-
-    levelData.lastDistance = distance;
-}
-
 #include <QElapsedTimer>
 
 void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
@@ -688,10 +677,6 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
             }
 
             *groupPtr = pt.group;
-
-            if (pt.prevDirection != FROM_NOWHERE) {
-                updateGroupLastDistance(currLevelData, pt.distance);
-            }
 
         } else {
             // nothing to do?

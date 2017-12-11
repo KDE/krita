@@ -22,6 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoAlwaysInline.h>
+#include <KoUpdater.h>
 
 #include "kis_lazy_fill_tools.h"
 
@@ -226,6 +227,11 @@ struct KisWatershedWorker::Private
     int backgroundGroupColor = -1;
     bool recolorMode = false;
 
+    quint64 totalPixelsToFill = 0;
+    quint64 numFilledPixels = 0;
+
+    KoUpdater *progressUpdater = 0;
+
     void initializeQueueFromGroupMap(const QRect &rc);
 
     ALWAYS_INLINE void visitNeighbour(const QPoint &currPt, const QPoint &prevPt, quint8 fromDirection, int prevDistance, quint8 prevLevel, qint32 prevGroupId, FillGroup &prevGroup, FillGroup::LevelData &prevLevelData, qint32 prevPrevGroupId, FillGroup &prevPrevGroup, bool statsOnly = false);
@@ -253,11 +259,12 @@ struct KisWatershedWorker::Private
 
 
 
-KisWatershedWorker::KisWatershedWorker(KisPaintDeviceSP heightMap, KisPaintDeviceSP dst, const QRect &boundingRect)
+KisWatershedWorker::KisWatershedWorker(KisPaintDeviceSP heightMap, KisPaintDeviceSP dst, const QRect &boundingRect, KoUpdater *progress)
     : m_d(new Private)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(heightMap->colorSpace()->pixelSize() == 1);
 
+    m_d->progressUpdater = progress;
     m_d->heightMap = heightMap;
     m_d->dstDevice = dst;
     m_d->boundingRect = boundingRect;
@@ -635,6 +642,11 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
     backgroundGroupColor = groups[backgroundGroupId].colorIndex;
     recolorMode = backgroundGroupId > 1;
 
+    totalPixelsToFill = boundingRect.width() * boundingRect.height();
+    numFilledPixels = 0;
+    const int progressReportingMask = (1 << 18) - 1; // report every 512x512 patch
+
+
     if (recolorMode) {
         updateNarrowRegionMetrics();
     }
@@ -660,6 +672,8 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
             if (prevGroupId > 0) {
                 FillGroup::LevelData &prevLevelData = prevGroup.levels[pt.level];
                 prevLevelData.numFilledPixels--;
+            } else {
+                numFilledPixels++;
             }
 
             const NeighbourStaticOffset *offsets = staticOffsets[pt.prevDirection];
@@ -677,6 +691,12 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
             }
 
             *groupPtr = pt.group;
+
+            if (progressUpdater && !(numFilledPixels & progressReportingMask)) {
+                const int progressPercent =
+                    qBound(0, qRound(100.0 * numFilledPixels / totalPixelsToFill), 100);
+                progressUpdater->setProgress(progressPercent);
+            }
 
         } else {
             // nothing to do?

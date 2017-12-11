@@ -333,6 +333,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
                                           m_d->filteredSource,
                                           filteredSourceValid,
                                           image->bounds(),
+                                          this,
                                           prefilterOnly);
 
         strategy->setFilteringOptions(m_d->filteringOptions);

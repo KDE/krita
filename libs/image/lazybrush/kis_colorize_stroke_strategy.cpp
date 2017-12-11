@@ -30,6 +30,7 @@
 #include "kis_node.h"
 #include "kis_image_config.h"
 #include "KisWatershedWorker.h"
+#include "kis_processing_visitor.h"
 
 #include "kis_transaction.h"
 #include "krita_utils.h"
@@ -44,7 +45,8 @@ struct KisColorizeStrokeStrategy::Private
 {
     Private() : filteredSourceValid(false) {}
     Private(const Private &rhs)
-        : src(rhs.src),
+        : progressNode(rhs.progressNode),
+          src(rhs.src),
           dst(rhs.dst),
           filteredSource(rhs.filteredSource),
           internalFilteredSource(rhs.internalFilteredSource),
@@ -55,6 +57,7 @@ struct KisColorizeStrokeStrategy::Private
           filteringOptions(rhs.filteringOptions)
     {}
 
+    KisNodeSP progressNode;
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP filteredSource;
@@ -76,10 +79,12 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
                                                      KisPaintDeviceSP filteredSource,
                                                      bool filteredSourceValid,
                                                      const QRect &boundingRect,
+                                                     KisNodeSP progressNode,
                                                      bool prefilterOnly)
     : KisRunnableBasedStrokeStrategy("colorize-stroke", prefilterOnly ? kundo2_i18n("Prefilter Colorize Mask") : kundo2_i18n("Colorize")),
       m_d(new Private)
 {
+    m_d->progressNode = progressNode;
     m_d->src = src;
     m_d->dst = dst;
     m_d->filteredSource = filteredSource;
@@ -236,7 +241,9 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
         }
 
         addJobSequential(jobs, [this] () {
-            KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect);
+            KisProcessingVisitor::ProgressHelper helper(m_d->progressNode);
+
+            KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect, helper.updater());
             Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
                 KoColor color =
                     !stroke.isTransparent ?

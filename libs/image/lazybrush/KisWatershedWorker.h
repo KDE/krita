@@ -42,7 +42,8 @@ public:
      */
     KisWatershedWorker(KisPaintDeviceSP heightMap,
                        KisPaintDeviceSP dst,
-                       const QRect &boundingRect);
+                       const QRect &boundingRect,
+                       KoUpdater *progress = 0);
     ~KisWatershedWorker();
 
     /**

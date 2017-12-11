@@ -104,6 +104,7 @@ const QString COLORIZE_USE_EDGE_DETECTION = "use-edge-detection";
 const QString COLORIZE_EDGE_DETECTION_SIZE = "edge-detection-size";
 const QString COLORIZE_FUZZY_RADIUS = "fuzzy-radius";
 const QString COLORIZE_CLEANUP = "cleanup";
+const QString COLORIZE_LIMIT_TO_DEVICE = "limit-to-device";
 const QString TRANSFORM_MASK = "transformmask";
 const QString UUID = "uuid";
 const QString VISIBLE = "visible";

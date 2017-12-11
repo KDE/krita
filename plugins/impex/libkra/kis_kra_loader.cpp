@@ -1039,11 +1039,13 @@ KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& e
     const qreal edgeDetectionSize = KisDomUtils::toDouble(element.attribute(COLORIZE_EDGE_DETECTION_SIZE, "4"));
     const qreal radius = KisDomUtils::toDouble(element.attribute(COLORIZE_FUZZY_RADIUS, "0"));
     const int cleanUp = KisDomUtils::toInt(element.attribute(COLORIZE_CLEANUP, "0"));
+    const bool limitToDevice = KisDomUtils::toInt(element.attribute(COLORIZE_LIMIT_TO_DEVICE, "0"));
 
     mask->setUseEdgeDetection(useEdgeDetection);
     mask->setEdgeDetectionSize(edgeDetectionSize);
     mask->setFuzzyRadius(radius);
     mask->setCleanUpAmount(qreal(cleanUp) / 100.0);
+    mask->setLimitToDeviceBounds(limitToDevice);
 
     delete mask->setColorSpace(colorSpace);
     mask->setImage(image);

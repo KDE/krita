@@ -44,6 +44,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkLimitToDevice">
+     <property name="text">
+      <string>Limit to layer bounds</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

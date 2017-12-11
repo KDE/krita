@@ -424,6 +424,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
             el.setAttribute(COLORIZE_EDGE_DETECTION_SIZE, KisDomUtils::toString(colorizeMask->edgeDetectionSize()));
             el.setAttribute(COLORIZE_FUZZY_RADIUS, KisDomUtils::toString(colorizeMask->fuzzyRadius()));
             el.setAttribute(COLORIZE_CLEANUP, int(100 * colorizeMask->cleanUpAmount()));
+            el.setAttribute(COLORIZE_LIMIT_TO_DEVICE, colorizeMask->limitToDeviceBounds());
         }
     }
 

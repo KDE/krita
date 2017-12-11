@@ -72,6 +72,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     connect(m_d->ui->intEdgeDetectionSize, SIGNAL(valueChanged(int)), SLOT(slotEdgeDetectionSizeChanged(int)));
     connect(m_d->ui->intRadius, SIGNAL(valueChanged(int)), SLOT(slotRadiusChanged(int)));
     connect(m_d->ui->intCleanUp, SIGNAL(valueChanged(int)), SLOT(slotCleanUpChanged(int)));
+    connect(m_d->ui->chkLimitToDevice, SIGNAL(toggled(bool)), SLOT(slotLimitToDeviceChanged(bool)));
 
     m_d->ui->intEdgeDetectionSize->setRange(0, 100);
     m_d->ui->intEdgeDetectionSize->setExponentRatio(2.0);
@@ -226,7 +227,8 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
     KisSignalsBlocker b2(m_d->ui->chkUseEdgeDetection,
                          m_d->ui->intEdgeDetectionSize,
                          m_d->ui->intRadius,
-                         m_d->ui->intCleanUp);
+                         m_d->ui->intCleanUp,
+                         m_d->ui->chkLimitToDevice);
 
     // not implemented yet!
     //m_d->ui->chkAutoUpdates->setEnabled(m_d->activeMask);
@@ -254,6 +256,9 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
     m_d->ui->intRadius->setValue(2 * (m_d->activeMask ? m_d->activeMask->fuzzyRadius() : 15));
     m_d->ui->intCleanUp->setEnabled(m_d->activeMask);
     m_d->ui->intCleanUp->setValue(100 * (m_d->activeMask ? m_d->activeMask->cleanUpAmount() : 0.7));
+
+    m_d->ui->chkLimitToDevice->setEnabled(m_d->activeMask);
+    m_d->ui->chkLimitToDevice->setChecked(m_d->activeMask && m_d->activeMask->limitToDeviceBounds());
 }
 
 void KisToolLazyBrushOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
@@ -360,5 +365,11 @@ void KisToolLazyBrushOptionsWidget::slotCleanUpChanged(int value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
     m_d->activeMask->setCleanUpAmount(qreal(value) / 100.0);
+}
+
+void KisToolLazyBrushOptionsWidget::slotLimitToDeviceChanged(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
+    m_d->activeMask->setLimitToDeviceBounds(value);
 }
 

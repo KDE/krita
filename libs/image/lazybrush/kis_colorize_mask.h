@@ -114,6 +114,8 @@ public:
     void setCleanUpAmount(qreal value);
     qreal cleanUpAmount() const;
 
+    void setLimitToDeviceBounds(bool value);
+    bool limitToDeviceBounds() const;
 
     void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
     void testingRegenerateMask();

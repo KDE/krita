@@ -54,6 +54,7 @@ private Q_SLOTS:
     void slotEdgeDetectionSizeChanged(int value);
     void slotRadiusChanged(int value);
     void slotCleanUpChanged(int value);
+    void slotLimitToDeviceChanged(bool value);
 
 
     void slotUpdateNodeProperties();

@@ -65,7 +65,8 @@ struct KisColorizeMask::Private
           dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
           prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
           updateIsRunning(false),
-          filteringOptions(false, 4.0, 15, 0.7)
+          filteringOptions(false, 4.0, 15, 0.7),
+          limitToDeviceBounds(false)
     {
     }
 
@@ -74,6 +75,7 @@ struct KisColorizeMask::Private
           coloringProjection(new KisPaintDevice(*rhs.coloringProjection)),
           fakePaintDevice(new KisPaintDevice(*rhs.fakePaintDevice)),
           filteredSource(new KisPaintDevice(*rhs.filteredSource)),
+          filteredDeviceBounds(rhs.filteredDeviceBounds),
           needAddCurrentKeyStroke(rhs.needAddCurrentKeyStroke),
           showKeyStrokes(rhs.showKeyStrokes),
           showColoring(rhs.showColoring),
@@ -84,7 +86,8 @@ struct KisColorizeMask::Private
           prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
           offset(rhs.offset),
           updateIsRunning(false),
-          filteringOptions(rhs.filteringOptions)
+          filteringOptions(rhs.filteringOptions),
+          limitToDeviceBounds(rhs.limitToDeviceBounds)
     {
         Q_FOREACH (const KeyStroke &stroke, rhs.keyStrokes) {
             keyStrokes << KeyStroke(KisPaintDeviceSP(new KisPaintDevice(*stroke.dev)), stroke.color, stroke.isTransparent);
@@ -97,6 +100,7 @@ struct KisColorizeMask::Private
     KisPaintDeviceSP coloringProjection;
     KisPaintDeviceSP fakePaintDevice;
     KisPaintDeviceSP filteredSource;
+    QRect filteredDeviceBounds;
 
     KoColor currentColor;
     KisPaintDeviceSP currentKeyStrokeDevice;
@@ -122,6 +126,8 @@ struct KisColorizeMask::Private
     FilteringOptions filteringOptions;
     bool filteringDirty = true;
 
+    bool limitToDeviceBounds = false;
+
     bool filteredSourceValid(KisPaintDeviceSP parentDevice) {
         return !filteringDirty && originalSequenceNumber == parentDevice->sequenceNumber();
     }
@@ -130,7 +136,6 @@ struct KisColorizeMask::Private
 
     bool shouldShowFilteredSource() const;
     bool shouldShowColoring() const;
-
 };
 
 KisColorizeMask::KisColorizeMask()
@@ -327,12 +332,26 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
     if (image) {
         m_d->updateIsRunning = true;
 
+        QRect fillBounds;
+
+        if (m_d->limitToDeviceBounds) {
+            fillBounds |= src->exactBounds();
+            Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+                fillBounds |= stroke.dev->exactBounds();
+            }
+            fillBounds &= image->bounds();
+        } else {
+            fillBounds = image->bounds();
+        }
+
+        m_d->filteredDeviceBounds = fillBounds;
+
         KisColorizeStrokeStrategy *strategy =
             new KisColorizeStrokeStrategy(src,
                                           m_d->coloringProjection,
                                           m_d->filteredSource,
                                           filteredSourceValid,
-                                          image->bounds(),
+                                          fillBounds,
                                           this,
                                           prefilterOnly);
 
@@ -475,7 +494,6 @@ bool KisColorizeMask::Private::shouldShowColoring() const
             coloringProjection;
 }
 
-
 QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
                                     KisPaintDeviceSP &dst,
                                     const QRect &rect,
@@ -498,8 +516,10 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter gc(dst);
 
         if (m_d->shouldShowFilteredSource()) {
+            const QRect drawRect = rect & m_d->filteredDeviceBounds;
+
             gc.setOpacity(128);
-            gc.bitBlt(rect.topLeft(), m_d->filteredSource, rect);
+            gc.bitBlt(drawRect.topLeft(), m_d->filteredSource, drawRect);
         } else {
             gc.setOpacity(255);
             gc.bitBlt(rect.topLeft(), src, rect);
@@ -1011,6 +1031,17 @@ qreal KisColorizeMask::cleanUpAmount() const
     return m_d->filteringOptions.cleanUpAmount;
 }
 
+void KisColorizeMask::setLimitToDeviceBounds(bool value)
+{
+    m_d->limitToDeviceBounds = value;
+    m_d->filteringDirty = true;
+    setNeedsUpdate(true);
+}
+
+bool KisColorizeMask::limitToDeviceBounds() const
+{
+    return m_d->limitToDeviceBounds;
+}
 
 void KisColorizeMask::rerenderFakePaintDevice()
 {

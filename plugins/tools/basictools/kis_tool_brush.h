@@ -136,6 +136,7 @@ private:
 
     QCheckBox *m_chkFinishStabilizedCurve;
     QSignalMapper m_signalMapper;
+    KisToolBrushToolOptionsWidget *m_toolBrushOptions;
 };
 
 

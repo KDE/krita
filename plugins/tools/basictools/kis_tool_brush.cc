@@ -308,13 +308,10 @@ void KisToolBrush::updateSettingsViews()
 QWidget * KisToolBrush::createOptionWidget()
 {
     QWidget *optionsWidget = KisToolFreehand::createOptionWidget();
-   //optionsWidget = new KisToolBrushToolOptionsWidget();
-   // optionsWidget->setupUi(this);
 
-    // brush smoothing option.
-   // optionsWidget->layout()->addWidget(widget);
+    m_toolBrushOptions = new KisToolBrushToolOptionsWidget();
+    optionsWidget->layout()->addWidget(m_toolBrushOptions);
 
-    //widget->deleteLater();
 
 
     optionsWidget->setObjectName(toolId() + "option widget");

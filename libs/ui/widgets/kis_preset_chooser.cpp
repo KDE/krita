@@ -116,8 +116,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             brushSizeText = QString::number(brushSize, 'f', 0);
         }
 
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText);
-        painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, preset->name().append(dirtyPresetIndicator));
+        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
+
+        QString presetDisplayName = preset->name().replace("_", " "); // don't need underscores that might be part of the file name
+        painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {

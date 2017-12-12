@@ -836,6 +836,7 @@ void KisColorizeMask::setShowColoring(bool value)
     }
 
     m_d->showColoring = value;
+    baseNodeChangedCallback();
 
     if (!savedExtent.isEmpty()) {
         setDirty(savedExtent);
@@ -855,6 +856,7 @@ void KisColorizeMask::setShowKeyStrokes(bool value)
     }
 
     m_d->showKeyStrokes = value;
+    baseNodeChangedCallback();
 
     if (!savedExtent.isEmpty()) {
         setDirty(savedExtent);

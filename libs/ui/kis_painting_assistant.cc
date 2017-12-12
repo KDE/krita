@@ -313,28 +313,28 @@ QRect KisPaintingAssistant::boundingRect() const
 
 QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
 {
-        QByteArray data;
-        QXmlStreamWriter xml(&data);
-            xml.writeStartDocument();
-            xml.writeStartElement("assistant");
-            xml.writeAttribute("type",d->id);
-            xml.writeStartElement("handles");
-            Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
-                int id = handleMap.size();
-                if (!handleMap.contains(handle)){
-                    handleMap.insert(handle, id);
-                }
-                id = handleMap.value(handle);
-                xml.writeStartElement("handle");
-                xml.writeAttribute("id", QString::number(id));
-                xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
-                xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
-                xml.writeEndElement();
-            }
-            xml.writeEndElement();
-            xml.writeEndElement();
-            xml.writeEndDocument();
-            return data;
+    QByteArray data;
+    QXmlStreamWriter xml(&data);
+    xml.writeStartDocument();
+    xml.writeStartElement("assistant");
+    xml.writeAttribute("type",d->id);
+    xml.writeStartElement("handles");
+    Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
+        int id = handleMap.size();
+        if (!handleMap.contains(handle)){
+            handleMap.insert(handle, id);
+        }
+        id = handleMap.value(handle);
+        xml.writeStartElement("handle");
+        xml.writeAttribute("id", QString::number(id));
+        xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+        xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+        xml.writeEndElement();
+    }
+    xml.writeEndElement();
+    xml.writeEndElement();
+    xml.writeEndDocument();
+    return data;
 }
 
 void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
@@ -347,6 +347,10 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
     while (!xml.atEnd()) {
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
+            if (xml.name() == "assistant") {
+                QStringRef active = xml.attributes().value("active");
+            }
+
             if (xml.name() == "handle") {
                 QString strId = xml.attributes().value("id").toString(),
                 strX = xml.attributes().value("x").toString(),

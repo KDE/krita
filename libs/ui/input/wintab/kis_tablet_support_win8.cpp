@@ -294,6 +294,7 @@ struct PenPointerItem
     qreal oneOverDpr; // 1 / devicePixelRatio of activeWidget
     bool widgetIsCaptured; // Current widget is capturing a pen cown event
     bool widgetIsIgnored; // Pen events should be ignored until pen up
+    bool widgetAcceptsPenEvent; // Whether the widget accepts pen events
 
     bool isCaptured() const {
         return widgetIsCaptured;
@@ -624,7 +625,57 @@ bool sendProximityTabletEvent(const QEvent::Type eventType, const POINTER_PEN_IN
     return ev.isAccepted();
 }
 
-bool sendPositionalTabletEvent(QWidget *target, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &device, const PenPointerItem &penPointerItem)
+void synthesizeMouseEvent(const QTabletEvent &ev, const POINTER_PEN_INFO &penInfo)
+{
+    // Update the cursor position
+    BOOL result = SetCursorPos(penInfo.pointerInfo.ptPixelLocationRaw.x, penInfo.pointerInfo.ptPixelLocationRaw.y);
+    if (!result) {
+        dbgInput << "SetCursorPos failed, err" << GetLastError();
+        return;
+    }
+    // Send mousebutton down/up events. Windows stores the button state.
+    DWORD inputDataFlags = 0;
+    switch (ev.type()) {
+    case QEvent::TabletPress:
+        switch (ev.button()) {
+        case Qt::LeftButton:
+            inputDataFlags = MOUSEEVENTF_LEFTDOWN;
+            break;
+        case Qt::RightButton:
+            inputDataFlags = MOUSEEVENTF_RIGHTDOWN;
+            break;
+        default:
+            return;
+        }
+        break;
+    case QEvent::TabletRelease:
+        switch (ev.button()) {
+        case Qt::LeftButton:
+            inputDataFlags = MOUSEEVENTF_LEFTUP;
+            break;
+        case Qt::RightButton:
+            inputDataFlags = MOUSEEVENTF_RIGHTUP;
+            break;
+        default:
+            return;
+        }
+        break;
+    case QEvent::TabletMove:
+    default:
+        return;
+    }
+    INPUT inputData = {};
+    inputData.type = INPUT_MOUSE;
+    inputData.mi.dwFlags = inputDataFlags;
+    inputData.mi.dwExtraInfo = 0xFF515700 | 0x01; // https://msdn.microsoft.com/en-us/library/windows/desktop/ms703320%28v=vs.85%29.aspx
+    UINT result2 = SendInput(1, &inputData, sizeof(inputData));
+    if (result2 != 1) {
+        dbgInput << "SendInput failed, err" << GetLastError();
+        return;
+    }
+}
+
+bool sendPositionalTabletEvent(QWidget *target, const QEvent::Type eventType, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &device, const PenPointerItem &penPointerItem, const bool shouldSynthesizeMouseEvent)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
         eventType == QEvent::TabletMove || eventType == QEvent::TabletPress || eventType == QEvent::TabletRelease,
@@ -634,7 +685,43 @@ bool sendPositionalTabletEvent(QWidget *target, const QEvent::Type eventType, co
     ev.setAccepted(false);
     ev.setTimestamp(penInfo.pointerInfo.dwTime);
     QCoreApplication::sendEvent(target, &ev);
-    return ev.isAccepted();
+    if (!shouldSynthesizeMouseEvent) {
+        // For pen update with multiple updates, only the last update should
+        // be used to synthesize a mouse event.
+        return false;
+    }
+    // This is some specialized code to handle synthesizing of mouse events from
+    // the pen events. Issues being:
+    // 1. We must accept the pointer down/up and the intermediate update events
+    //    to indicate that we want all the pen pointer events for painting,
+    //    otherwise Windows may do weird stuff and skip passing pointer events.
+    // 2. Some Qt and Krita code uses QCursor::pos() which calls GetCursorPos to
+    //    get the cursor position. This doesn't work nicely before ver 1709 and
+    //    doesn't work at all on ver 1709 if the pen events are handled, so we
+    //    need some way to nudge the cursor on the OS level.
+    // It appears that using the same way (as in synthesizeMouseEvent) to nudge
+    // the cursor does work fine for when painting on canvas (which handles
+    // the QTabletEvent), but not for other widgets because it introduces a lag
+    // with mouse move events on move start and immediately after mouse down.
+    // The resolution is to simulate mouse movement with our own code only for
+    // handled pen events, which is what the following code does.
+    if (ev.type() == QEvent::TabletMove && ev.buttons() == Qt::NoButton) {
+        // Let Windows synthesize mouse hover events
+        return false;
+    }
+    if (ev.type() == QEvent::TabletPress && !ev.isAccepted()) {
+        // On pen down event, if the widget doesn't handle the event, let
+        // Windows translate the event to touch, mouse or whatever
+        return false;
+    }
+    if (ev.type() != QEvent::TabletPress && !penPointerItem.widgetAcceptsPenEvent) {
+        // For other events, if the previous pen down event wasn't handled by
+        // the widget, continue to let Windows translate the event
+        return false;
+    }
+    // Otherwise, we synthesize our mouse events
+    synthesizeMouseEvent(ev, penInfo);
+    return true; // and tell Windows that we do want the pen events.
 }
 
 bool handlePenEnterMsg(const POINTER_PEN_INFO &penInfo)
@@ -666,6 +753,7 @@ bool handlePenEnterMsg(const POINTER_PEN_INFO &penInfo)
     penPointerItem.oneOverDpr = 1.0;
     penPointerItem.widgetIsCaptured = false;
     penPointerItem.widgetIsIgnored = false;
+    penPointerItem.widgetAcceptsPenEvent = false;
     // penPointerItem.pointerId = pointerId;
 
     penPointers.insert(pointerId, penPointerItem);
@@ -698,7 +786,7 @@ bool handlePenLeaveMsg(const POINTER_PEN_INFO &penInfo)
     return false;
 }
 
-bool handleSinglePenUpdate(PenPointerItem &penPointerItem, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &device)
+bool handleSinglePenUpdate(PenPointerItem &penPointerItem, const POINTER_PEN_INFO &penInfo, const PointerDeviceItem &device, const bool shouldSynthesizeMouseEvent)
 {
     QWidget *targetWidget;
     if (penPointerItem.isCaptured()) {
@@ -745,10 +833,7 @@ bool handleSinglePenUpdate(PenPointerItem &penPointerItem, const POINTER_PEN_INF
         // penPointerItem.activeWidget = targetWidget;
     }
 
-    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletMove, penInfo, device, penPointerItem);
-    if (!handled) {
-        // dbgTablet << "Target widget doesn't want pen events";
-    }
+    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletMove, penInfo, device, penPointerItem, shouldSynthesizeMouseEvent);
     return handled;
 }
 
@@ -773,6 +858,7 @@ bool handlePenUpdateMsg(const POINTER_PEN_INFO &penInfo)
     // }
     UINT32 entriesCount = penInfo.pointerInfo.historyCount;
     // dbgTablet << "entriesCount:" << entriesCount;
+    bool handled = false;
     if (entriesCount != 1) {
         QVector<POINTER_PEN_INFO> penInfoArray(entriesCount);
         if (!api.GetPointerPenInfoHistory(penInfo.pointerInfo.pointerId, &entriesCount, penInfoArray.data())) {
@@ -783,13 +869,14 @@ bool handlePenUpdateMsg(const POINTER_PEN_INFO &penInfo)
         // The returned array is in reverse chronological order
         const auto rbegin = penInfoArray.rbegin();
         const auto rend = penInfoArray.rend();
+        const auto rlast = rend - 1; // Only synthesize mouse event for the last one
         for (auto it = rbegin; it != rend; ++it) {
-            handled |= handleSinglePenUpdate(*currentPointerIt, *it, *devIt); // Bitwise OR doesn't short circuit
+            handled |= handleSinglePenUpdate(*currentPointerIt, *it, *devIt, it == rlast); // Bitwise OR doesn't short circuit
         }
-        return handled;
     } else {
-        return handleSinglePenUpdate(*currentPointerIt, penInfo, *devIt);
+        handled = handleSinglePenUpdate(*currentPointerIt, penInfo, *devIt, true);
     }
+    return handled;
 }
 
 bool handlePenDownMsg(const POINTER_PEN_INFO &penInfo)
@@ -851,7 +938,8 @@ bool handlePenDownMsg(const POINTER_PEN_INFO &penInfo)
         return false;
     }
 
-    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletPress, penInfo, *devIt, *currentPointerIt);
+    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletPress, penInfo, *devIt, *currentPointerIt, true);
+    currentPointerIt->widgetAcceptsPenEvent = handled;
     if (!handled) {
         // dbgTablet << "QWidget did not handle tablet down event";
     }
@@ -891,10 +979,11 @@ bool handlePenUpMsg(const POINTER_PEN_INFO &penInfo)
         return false;
     }
 
-    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletRelease, penInfo, *devIt, penPointerItem);
+    bool handled = sendPositionalTabletEvent(targetWidget, QEvent::TabletRelease, penInfo, *devIt, penPointerItem, true);
 
     // dbgTablet << "QWidget" << currentPointerIt->activeWidget->windowTitle() << "is releasing capture to pointer" << penInfo.pointerInfo.pointerId;
     penPointerItem.widgetIsCaptured = false;
+    penPointerItem.widgetAcceptsPenEvent = false;
     return handled;
 }
 
@@ -979,9 +1068,7 @@ bool handlePointerMsg(const MSG &msg)
     case WM_POINTERLEAVE:
         return handlePenLeaveMsg(penInfo);
     case WM_POINTERUPDATE:
-        // HACK: Force further processing to force Windows to generate mouse move events
-        handlePenUpdateMsg(penInfo);
-        return false;
+        return handlePenUpdateMsg(penInfo);
     case WM_POINTERCAPTURECHANGED:
         // TODO: Should this event be handled?
         dbgTablet << "FIXME: WM_POINTERCAPTURECHANGED isn't handled";

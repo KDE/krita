@@ -516,7 +516,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter gc(dst);
 
         if (m_d->shouldShowFilteredSource()) {
-            const QRect drawRect = rect & m_d->filteredDeviceBounds;
+            const QRect drawRect = m_d->limitToDeviceBounds ? rect & m_d->filteredDeviceBounds : rect;
 
             gc.setOpacity(128);
             gc.bitBlt(drawRect.topLeft(), m_d->filteredSource, drawRect);

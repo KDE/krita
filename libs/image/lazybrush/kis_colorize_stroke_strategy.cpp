@@ -44,7 +44,7 @@ using namespace KisLazyFillTools;
 struct KisColorizeStrokeStrategy::Private
 {
     Private() : filteredSourceValid(false) {}
-    Private(const Private &rhs)
+    Private(const Private &rhs, int _levelOfDetail)
         : progressNode(rhs.progressNode),
           src(rhs.src),
           dst(rhs.dst),
@@ -54,7 +54,8 @@ struct KisColorizeStrokeStrategy::Private
           boundingRect(rhs.boundingRect),
           prefilterOnly(rhs.prefilterOnly),
           keyStrokes(rhs.keyStrokes),
-          filteringOptions(rhs.filteringOptions)
+          filteringOptions(rhs.filteringOptions),
+          levelOfDetail(_levelOfDetail)
     {}
 
     KisNodeSP progressNode;
@@ -67,6 +68,7 @@ struct KisColorizeStrokeStrategy::Private
     QRect boundingRect;
 
     bool prefilterOnly = false;
+    int levelOfDetail = 0;
 
     QVector<KeyStroke> keyStrokes;
 
@@ -100,7 +102,7 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail)
     : KisRunnableBasedStrokeStrategy(rhs),
-      m_d(new Private(*rhs.m_d))
+      m_d(new Private(*rhs.m_d, levelOfDetail))
 {
     KisLodTransform t(levelOfDetail);
     m_d->boundingRect = t.map(rhs.m_d->boundingRect);
@@ -140,6 +142,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     if (!m_d->filteredSourceValid) {
         // TODO: make this conversion concurrent!!!
         KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
+        filteredMainDev->setDefaultBounds(m_d->src->defaultBounds());
 
         struct PrefilterSharedState {
             QRect boundingRect;
@@ -163,9 +166,10 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
             Q_FOREACH (const QRect &rc, patchRects) {
                 addJobConcurrent(jobs, [state, rc] () {
+                    KisLodTransformScalar t(state->filteredMainDev);
                     KisGaussianKernel::applyLoG(state->filteredMainDev,
                                                 rc,
-                                                0.5 * state->filteringOptions.edgeDetectionSize,
+                                                t.scale(0.5 * state->filteringOptions.edgeDetectionSize),
                                                 -1.0,
                                                 QBitArray(), 0);
                 });
@@ -179,10 +183,11 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
             Q_FOREACH (const QRect &rc, patchRects) {
                 addJobConcurrent(jobs, [state, rc] () {
+                    KisLodTransformScalar t(state->filteredMainDev);
                     KisGaussianKernel::applyGaussian(state->filteredMainDev,
                                                      rc,
-                                                     state->filteringOptions.edgeDetectionSize,
-                                                     state->filteringOptions.edgeDetectionSize,
+                                                     t.scale(state->filteringOptions.edgeDetectionSize),
+                                                     t.scale(state->filteringOptions.edgeDetectionSize),
                                                      QBitArray(), 0);
                 });
             }
@@ -201,10 +206,11 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
             Q_FOREACH (const QRect &rc, patchRects) {
                 addJobConcurrent(jobs, [state, rc] () {
+                    KisLodTransformScalar t(state->filteredMainDev);
                     KisGaussianKernel::applyGaussian(state->filteredMainDev,
                                                      rc,
-                                                     state->filteringOptions.fuzzyRadius,
-                                                     state->filteringOptions.fuzzyRadius,
+                                                     t.scale(state->filteringOptions.fuzzyRadius),
+                                                     t.scale(state->filteringOptions.fuzzyRadius),
                                                      QBitArray(), 0);
                     KisPainter gc(state->filteredMainDev);
                     gc.bitBlt(rc.topLeft(), state->filteredMainDevSavedCopy, rc);

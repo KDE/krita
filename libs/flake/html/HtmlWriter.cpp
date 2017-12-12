@@ -50,13 +50,18 @@ bool HtmlWriter::save(QIODevice &outputDevice)
     htmlStream.setCodec("UTF-8");
 
     // header
-    htmlStream << "<html><head/><body>";
-
-    HtmlSavingContext savingContext(&outputDevice);
-    saveShapes(m_toplevelShapes, savingContext);
+    htmlStream << QLatin1String("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "
+                                "\"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                "<html><head><meta name=\"Krita Svg Text\">"
+                                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+    htmlStream.flush();
+    {
+        HtmlSavingContext savingContext(outputDevice);
+        saveShapes(m_toplevelShapes, savingContext);
+    }
     htmlStream << endl << "</body></html>" << endl;
-
-    return false;
+    htmlStream.flush();
+    return true;
 }
 
 QStringList HtmlWriter::errors() const
@@ -93,5 +98,4 @@ void HtmlWriter::saveShapes(const QList<KoShape *> shapes, HtmlSavingContext &sa
             }
         }
     }
-
 }

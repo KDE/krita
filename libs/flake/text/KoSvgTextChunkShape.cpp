@@ -41,7 +41,22 @@
 
 #include <html/HtmlSavingContext.h>
 
+
 namespace {
+
+void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, qreal defaultValue)
+{
+    if (!value) return;
+    if (value && *value == defaultValue && list->isEmpty()) return;
+
+    while (list->size() < iteration) {
+        list->append(defaultValue);
+    }
+
+    list->append(*value);
+}
+
+
 QVector<qreal> parseListAttributeX(const QString &value, SvgLoadingContext &context)
 {
     QVector<qreal> result;
@@ -353,6 +368,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
     Q_D(KoSvgTextChunkShape);
 
     if (isRootTextNode()) {
+        context.shapeWriter().startElement("body");
         context.shapeWriter().startElement("p", false);
         // XXX: Save the style?
 
@@ -362,24 +378,68 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         // XXX: Save the style?
     }
 
-    // XXX: Save the transforms?
-
-    // XXX: text length is always auto?
-
-    // XXX: properties
-
     if (layoutInterface()->isTextNode()) {
-        qDebug() << this << d->text;
+
+        KoSvgTextChunkShape *parent = !isRootTextNode() ? dynamic_cast<KoSvgTextChunkShape*>(this->parent()) : 0;
+        // Should we add a newline? Check for vertical movement if we're using rtl or ltr text
+        // XXX: if vertical text, check horizontal movement.
+        QVector<qreal> xPos;
+        QVector<qreal> yPos;
+        QVector<qreal> dxPos;
+        QVector<qreal> dyPos;
+        for (int i = 0; i < d->localTransformations.size(); i++) {
+            const KoSvgText::CharTransformation &t = d->localTransformations[i];
+
+            appendLazy(&xPos, t.xPos, i, 0.0);
+            appendLazy(&yPos, t.yPos, i, 0.0);
+            appendLazy(&dxPos, t.dxPos, i, 0.0);
+            appendLazy(&dyPos, t.dyPos, i, 0.0);
+        }
+
+        qDebug() << this << d->text << xPos << yPos << dxPos << dyPos;
+
+        if (!dyPos.isEmpty()) {
+            context.shapeWriter().startElement("br");
+            context.shapeWriter().endElement();
+        }
+
+        KoSvgTextProperties parentProperties =
+            parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
+
+        // XXX: we don't save fill, stroke, text length, length adjust or spacing and glyphs.
+        KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+        QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+
+        if (attributes.count() > 0) {
+            QString styleString;
+            for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
+                styleString.append(it.key().toLatin1().data())
+                        .append(": ")
+                        .append(it.value())
+                        .append(";" );
+            }
+            context.shapeWriter().addAttribute("style", styleString);
+        }
+
+        // After adding all the styling to the <p> element, add the text
         context.shapeWriter().addTextNode(d->text);
-    } else {
+
+
+    }
+    else {
         Q_FOREACH (KoShape *child, this->shapes()) {
             KoSvgTextChunkShape *childText = dynamic_cast<KoSvgTextChunkShape*>(child);
             KIS_SAFE_ASSERT_RECOVER(childText) { continue; }
             childText->saveHtml(context);
         }
     }
-    context.shapeWriter().endElement();
-    return false;
+
+    if (isRootTextNode()) {
+        context.shapeWriter().endElement(); // body
+    }
+    context.shapeWriter().endElement(); // p or span
+
+    return true;
 }
 
 bool KoSvgTextChunkShape::loadHtml(const KoXmlElement &e)
@@ -395,17 +455,6 @@ void writeTextListAttribute(const QString &attribute, const QVector<qreal> &valu
     }
 }
 
-void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, qreal defaultValue)
-{
-    if (!value) return;
-    if (value && *value == defaultValue && list->isEmpty()) return;
-
-    while (list->size() < iteration) {
-        list->append(defaultValue);
-    }
-
-    list->append(*value);
-}
 
 bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 {

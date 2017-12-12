@@ -36,8 +36,8 @@ struct HtmlSavingContext::Private {
     QScopedPointer<KoXmlWriter> shapeWriter;
 };
 
-HtmlSavingContext::HtmlSavingContext(QIODevice *shapeDevice)
-    : d(new Private(shapeDevice))
+HtmlSavingContext::HtmlSavingContext(QIODevice &shapeDevice)
+    : d(new Private(&shapeDevice))
 {
 }
 

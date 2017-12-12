@@ -26,6 +26,8 @@
 #include <KoShapeContainer_p.h>
 #include <text/KoSvgTextChunkShape_p.h>
 #include <text/KoSvgTextShapeMarkupConverter.h>
+#include <KoDocumentResourceManager.h>
+#include <KoShapeController.h>
 
 #include "kis_debug.h"
 
@@ -368,7 +370,7 @@ KoSvgTextShapeFactory::KoSvgTextShapeFactory()
     addTemplate(t);
 }
 
-KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const
+KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     qDebug() << "Create default svg text shape";
 
@@ -379,7 +381,7 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager */*
     converter.convertFromSvg("<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>",
                              "<defs/>",
                              QRectF(0, 0, 200, 60),
-                             72.0);
+                             documentResources->shapeController()->pixelsPerInch());
     qDebug() << converter.errors() << converter.warnings();
 
     return shape;

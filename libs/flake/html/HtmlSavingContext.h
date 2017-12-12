@@ -37,7 +37,7 @@ class QImage;
 class HtmlSavingContext
 {
 public:
-    HtmlSavingContext(QIODevice *shapeDevice);
+    HtmlSavingContext(QIODevice &shapeDevice);
     virtual ~HtmlSavingContext();
     /// Provides access to the shape writer
     KoXmlWriter &shapeWriter();

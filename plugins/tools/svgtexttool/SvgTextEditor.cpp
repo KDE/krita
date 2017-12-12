@@ -141,6 +141,9 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
         QString html;
 
         if (converter.convertToHtml(&html)) {
+
+            qDebug() << "html:" << html;
+
             m_textEditorWidget.richTextEdit->document()->clear();
             m_textEditorWidget.richTextEdit->document()->setHtml(html);
         }

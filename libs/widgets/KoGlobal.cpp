@@ -95,9 +95,12 @@ void KoGlobal::createListOfLanguages()
     // Many of them are already in all_languages but all_languages doesn't
     // currently have en_GB or en_US etc.
 
-    const QStringList translationList = KoResourcePaths::findAllResources("locale",
-                                        QString::fromLatin1("*/entry.desktop"));
-    for (QStringList::ConstIterator it = translationList.begin();
+    QStringList translationList = KoResourcePaths::findAllResources("locale",
+                                        QString::fromLatin1("*/entry.desktop"))
+            + KoResourcePaths::findAllResources("locale",
+                                                QString::fromLatin1("*/kf5_entry.desktop"));;
+    translationList.removeDuplicates();
+    for (QStringList::Iterator it = translationList.begin();
             it != translationList.end(); ++it) {
         // Extract the language tag from the directory name
         QString tag = *it;

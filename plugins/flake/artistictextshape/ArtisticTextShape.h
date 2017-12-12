@@ -52,6 +52,7 @@ public:
 
     ArtisticTextShape();
     ~ArtisticTextShape() override;
+    virtual KoShape *cloneShape() const;
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;

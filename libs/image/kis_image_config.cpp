@@ -447,7 +447,7 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
     if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
         proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     } else {
-                proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+        proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     }
     QColor def(Qt::green);
     m_config.readEntry("defaultProofingGamutwarning", def);

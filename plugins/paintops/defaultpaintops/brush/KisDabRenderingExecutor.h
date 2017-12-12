@@ -46,14 +46,12 @@ public:
     void addDab(const KisDabCacheUtils::DabRequestInfo &request,
                 qreal opacity, qreal flow);
 
-    QList<KisRenderedDab> takeReadyDabs(bool returnMutableDabs = false);
+    QList<KisRenderedDab> takeReadyDabs(bool returnMutableDabs = false, int oneTimeLimit = -1, bool *someDabsLeft = 0);
 
     bool hasPreparedDabs() const;
 
-    int averageDabRenderingTime() const; // usecs
+    qreal averageDabRenderingTime() const; // msecs
     int averageDabSize() const;
-
-    void recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices);
 
 private:
     KisDabRenderingExecutor(const KisDabRenderingExecutor &rhs) = delete;

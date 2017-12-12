@@ -49,7 +49,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
             filenamePrefix = baseFilename;
         }
 
-        outputMimeType = KisMimeDatabase::mimeTypeForFile(baseFilename).toLatin1();
+        outputMimeType = KisMimeDatabase::mimeTypeForFile(baseFilename, false).toLatin1();
     }
 
     KisImageSP originalImage;

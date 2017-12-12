@@ -3,9 +3,7 @@ project( lcmsengine )
 add_subdirectory(tests)
 
 include_directories(SYSTEM
-    ${LCMS2_INCLUDE_DIR} 
-    ${Boost_INCLUDE_DIRS} 
-    
+    ${LCMS2_INCLUDE_DIR}
 )
 
 include_directories( 

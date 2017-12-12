@@ -479,19 +479,19 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     int bitSize = 8*cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize*cs->pixelSize();
     QString byte = "bytes";
-    if (layerSize>1000) {
-        layerSize/=1000;
-        byte = "kB";
+    if (layerSize>1024) {
+        layerSize/=1024;
+        byte = "KB";
     }
-    if (layerSize>1000) {
-        layerSize/=1000;
-        byte = "mB";
+    if (layerSize>1024) {
+        layerSize/=1024;
+        byte = "MB";
     }
-    if (layerSize>1000) {
-        layerSize/=1000;
-        byte = "gB";
+    if (layerSize>1024) {
+        layerSize/=1024;
+        byte = "GB";
     }
-    QString text = QString("This document will be %1x%2 px %4, which means the pixel size is %3 bit, a single paint layer will thus take up %5 %6 of ram.")
+    QString text = QString("This document will be %1x%2 px %4, which means the pixel size is %3 bit, a single paint layer will thus take up %5 %6 of RAM.")
             .arg(doubleWidth->value())
             .arg(doubleHeight->value())
             .arg(bitSize)

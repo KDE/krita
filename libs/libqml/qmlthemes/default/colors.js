@@ -26,9 +26,9 @@ var values = {
 
     components: {
         button: {
-            base: "transparent",
+            base: "gray",
             text: "#ffffff",
-            highlight: "transparent",
+            highlight: "lightgray",
             checked: Qt.rgba(1.0, 1.0, 1.0, 0.7),
         },
         colorSwatch: {

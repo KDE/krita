@@ -938,20 +938,15 @@ QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
     return QPointF(documentCoord.x() * xRes(), documentCoord.y() * yRes());
 }
 
-QPoint KisImage::documentToIntPixel(const QPointF &documentCoord) const
+QPoint KisImage::documentToImagePixelFloored(const QPointF &documentCoord) const
 {
     QPointF pixelCoord = documentToPixel(documentCoord);
-    return QPoint((int)pixelCoord.x(), (int)pixelCoord.y());
+    return QPoint(qFloor(pixelCoord.x()), qFloor(pixelCoord.y()));
 }
 
 QRectF KisImage::documentToPixel(const QRectF &documentRect) const
 {
     return QRectF(documentToPixel(documentRect.topLeft()), documentToPixel(documentRect.bottomRight()));
-}
-
-QRect KisImage::documentToIntPixel(const QRectF &documentRect) const
-{
-    return documentToPixel(documentRect).toAlignedRect();
 }
 
 QPointF KisImage::pixelToDocument(const QPointF &pixelCoord) const
@@ -1712,11 +1707,10 @@ void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfi
 
 KisProofingConfigurationSP KisImage::proofingConfiguration() const
 {
-    if (!m_d->proofingConfig) {
-        KisImageConfig cfg;
-        m_d->proofingConfig = cfg.defaultProofingconfiguration();
+    if (m_d->proofingConfig) {
+        return m_d->proofingConfig;
     }
-    return m_d->proofingConfig;
+    return KisProofingConfigurationSP();
 }
 
 QPointF KisImage::mirrorAxesCenter() const

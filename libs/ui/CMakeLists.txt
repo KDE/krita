@@ -6,7 +6,6 @@ include_directories(
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 add_subdirectory( tests )
@@ -230,6 +229,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_paintop_presets_save.cpp
+    widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
     widgets/kis_popup_button.cc
@@ -395,6 +395,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         input/wintab/kis_tablet_support_win8.cpp
+        opengl/kis_opengl_win.cpp
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
@@ -478,6 +479,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui
+    forms/wdgpreseticonlibrary.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui

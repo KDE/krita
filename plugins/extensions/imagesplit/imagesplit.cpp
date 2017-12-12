@@ -184,7 +184,7 @@ void Imagesplit::slotImagesplit()
 
                     QUrl url = QUrl::fromUserInput(dialog.filename());
 
-                    QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                    QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile(), false);
 
                     if (url.isEmpty())
                         return;

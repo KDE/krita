@@ -90,7 +90,7 @@ public:
      * hard-to-tack-down bugs when the dirty state will not be
      * restored on jumps like 'return', 'break' or exception.
      */
-    class DirtyStateSaver {
+    class KRITAIMAGE_EXPORT DirtyStateSaver {
     public:
         DirtyStateSaver(KisPaintOpPreset *preset)
             : m_preset(preset), m_isDirty(preset->isPresetDirty())
@@ -110,7 +110,7 @@ public:
      * @brief The UpdatedPostponer class
      * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
      */
-    class UpdatedPostponer{
+    class KRITAIMAGE_EXPORT UpdatedPostponer{
     public:
         UpdatedPostponer(KisPaintOpPreset *preset);
 

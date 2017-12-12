@@ -3,7 +3,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_BINARY_DIR}/..
     ${CMAKE_SOURCE_DIR}/sdk/tests
-    ${Boost_INCLUDE_DIRS}
 )
 
 macro_add_unittest_definitions()

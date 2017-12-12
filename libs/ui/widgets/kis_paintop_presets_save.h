@@ -49,7 +49,8 @@ public:
 
     void showDialog();
 
-    void isSavingNewBrush(bool newBrush);
+    /// determines if we should show the save as dialog (true) or save in the background (false)
+    void useNewBrushDialog(bool show);
 
     void scratchPadSetup(KisCanvasResourceProvider* resourceProvider);
     void saveScratchPadThumbnailArea(const QImage image);
@@ -67,10 +68,11 @@ public Q_SLOTS:
     void savePreset();
     void loadScratchpadThumbnail();
     void loadExistingThumbnail();
+    void loadImageFromLibrary();
 
 
 private:
-    bool m_isSavingNewBrush;
+    bool m_useNewBrushDialog;
     KisFavoriteResourceManager * m_favoriteResourceManager;
     QImage scratchPadThumbnailArea;
 };

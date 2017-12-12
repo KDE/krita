@@ -64,11 +64,12 @@ public:
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+private Q_SLOTS:
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
-
+    void setOpacity(qreal opacity);
 protected Q_SLOTS:
     void resetCursorStyle() override;
 
@@ -102,7 +103,6 @@ private:
     QLabel *m_lbAntiAliasThreshold;
     KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
     KConfigGroup m_configGroup;
-
 };
 
 class KisToolGradientFactory : public KoToolFactoryBase

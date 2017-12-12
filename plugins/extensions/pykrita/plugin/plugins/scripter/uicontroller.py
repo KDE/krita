@@ -1,16 +1,35 @@
-from PyQt5.QtGui import QTextCursor
+from PyQt5.QtGui import QTextCursor, QPalette, QFontInfo
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
-                             QSplitter)
-from PyQt5.QtCore import Qt, QObject
+                             QSplitter, QSizePolicy)
+from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
 from scripter import scripterdialog
 import os
 import importlib
 
+class Elided_Text_Label(QLabel):
+    mainText = str()
+
+    def __init__(self, parent=None):
+        super(QLabel, self).__init__(parent)
+        self.setMinimumWidth(self.fontMetrics().width("..."))
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+    def setMainText(self, text=str()):
+        self.mainText = text
+        self.elideText()
+
+    def elideText(self):
+        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.ElideRight, self.width()))
+
+    def resizeEvent(self, event):
+        self.elideText()
 
 class UIController(object):
+    documentModifiedText = ""
+    documentStatusBarText = "untitled"
 
     def __init__(self):
         self.mainWidget = scripterdialog.ScripterDialog(self)
@@ -27,10 +46,15 @@ class UIController(object):
     def initialize(self, scripter):
         self.editor = pythoneditor.CodeEditor(scripter)
         self.tabWidget = QTabWidget()
-        self.statusBar = QLabel('untitled')
+        self.statusBar = Elided_Text_Label()
+        self.statusBar.setMainText('untitled')
         self.splitter = QSplitter()
         self.splitter.setOrientation(Qt.Vertical)
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
+        p = self.editor.palette()
+        p.setColor(QPalette.Base, syntaxstyles.DefaultSyntaxStyle()['background'].foreground().color());
+        p.setColor(QPalette.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color());
+        self.editor.setPalette(p)
 
         self.scripter = scripter
 
@@ -52,6 +76,8 @@ class UIController(object):
         self.mainWidget.setSizeGripEnabled(True)
         self.mainWidget.show()
         self.mainWidget.activateWindow()
+        
+        self.editor.undoAvailable.connect(self.setStatusModified)
 
     def loadMenus(self):
         self.addMenu('File', 'File')
@@ -126,11 +152,19 @@ class UIController(object):
     def setDocumentEditor(self, document):
         self.editor.clear()
         self.editor.moveCursor(QTextCursor.Start)
-        self.editor.insertPlainText(document.data)
+        self.editor._documentModified = False
+        self.editor.setPlainText(document.data)
         self.editor.moveCursor(QTextCursor.End)
 
     def setStatusBar(self, value='untitled'):
-        self.statusBar.setText(value)
+        self.documentStatusBarText = value;
+        self.statusBar.setMainText(self.documentStatusBarText+self.documentModifiedText)
+
+    def setStatusModified(self):
+        self.documentModifiedText = ""
+        if (self.editor._documentModified is True):
+            self.documentModifiedText = " [Modified]"
+        self.statusBar.setMainText(self.documentStatusBarText+self.documentModifiedText)
 
     def setActiveWidget(self, widgetName):
         widget = self.findTabWidget(widgetName)
@@ -160,6 +194,10 @@ class UIController(object):
         document = self.scripter.documentcontroller.activeDocument
         if document:
             self.scripter.settings.setValue('activeDocumentPath', document.filePath)
+        else:
+            self.scripter.settings.setValue('activeDocumentPath', '')
+            
+        self.scripter.settings.setValue('editorFontSize', self.editor.fontInfo().pointSize())
 
         for action in self.actions:
             writeSettings = getattr(action['action'], "writeSettings", None)
@@ -176,14 +214,18 @@ class UIController(object):
         activeDocumentPath = self.scripter.settings.value('activeDocumentPath', '')
 
         if activeDocumentPath:
-            document = self.scripter.documentcontroller.openDocument(activeDocumentPath)
-            self.setStatusBar(document.filePath)
-            self.setDocumentEditor(document)
-
+            if QFileInfo(activeDocumentPath).exists():
+                document = self.scripter.documentcontroller.openDocument(activeDocumentPath)
+                self.setStatusBar(document.filePath)
+                self.setDocumentEditor(document)
+        
         for action in self.actions:
             readSettings = getattr(action['action'], "readSettings", None)
             if callable(readSettings):
                 readSettings()
+                
+        pointSize = self.scripter.settings.value('editorFontSize', str(self.editor.fontInfo().pointSize()))
+        self.editor.setFontSize(int(pointSize))
 
         self.scripter.settings.endGroup()
 

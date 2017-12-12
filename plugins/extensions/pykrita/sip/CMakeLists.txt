@@ -10,7 +10,7 @@ message( ${SIP_DEFAULT_SIP_DIR} " - default SIP dir" )
 
 set(SIP_INCLUDES 
     ${SIP_DEFAULT_SIP_DIR}
-    ${SIP_DEFAULT_SIP_DIR}/PyQt5
+    ${PYQT5_SIP_DIR}
     ${PYQT_SIP_DIR_OVERRIDE}
      ./krita)
 

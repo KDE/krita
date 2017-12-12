@@ -340,7 +340,7 @@ void OutputPainterStrategy::setMetaRgn()
 // transform was supposed to be recalculated. But in this file, it
 // destroys the world transform. The question is which of the
 // following alternatives is true:
-// 
+//
 // 1. The world transform should only be recalculated if the
 //    Set{Window,Viewport}{Org,Ext} record actually changes anything.
 //
@@ -503,7 +503,7 @@ void OutputPainterStrategy::modifyWorldTransform( quint32 mode, float M11, float
     } else if ( mode == MWT_SET ) {
         m_worldTransform = matrix;
     } else {
-	warnVectorImage << "Unimplemented transform mode" << mode;
+    warnVectorImage << "Unimplemented transform mode" << mode;
     }
 
     // Apply the output transform.
@@ -546,9 +546,9 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
     pen.setColor( QColor( red, green, blue ) );
 
     if ( penStyle & PS_GEOMETRIC ) {
-	pen.setCosmetic( false );
+    pen.setCosmetic( false );
     } else {
-	pen.setCosmetic( true );
+    pen.setCosmetic( true );
     }
 
     switch ( penStyle & 0xF ) {
@@ -623,37 +623,37 @@ void OutputPainterStrategy::createBrushIndirect( quint32 ihBrush, quint32 brushS
 
     switch ( brushStyle ) {
     case BS_SOLID:
-	brush.setStyle( Qt::SolidPattern );
-	break;
+    brush.setStyle( Qt::SolidPattern );
+    break;
     case BS_NULL:
-	brush.setStyle( Qt::NoBrush );
-	break;
+    brush.setStyle( Qt::NoBrush );
+    break;
     case BS_HATCHED:
-	brush.setStyle( Qt::CrossPattern );
-	break;
+    brush.setStyle( Qt::CrossPattern );
+    break;
     case BS_PATTERN:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     case BS_INDEXED:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     case BS_DIBPATTERN:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     case BS_DIBPATTERNPT:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     case BS_PATTERN8X8:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     case BS_DIBPATTERN8X8:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     case BS_MONOPATTERN:
-	Q_ASSERT( 0 );
-	break;
+    Q_ASSERT( 0 );
+    break;
     default:
-	Q_ASSERT( 0 );
+    Q_ASSERT( 0 );
     }
 
     brush.setColor( QColor( red, green, blue ) );
@@ -680,18 +680,18 @@ void OutputPainterStrategy::extCreateFontIndirectW( const ExtCreateFontIndirectW
     font.setWeight( convertFontWeight( extCreateFontIndirectW.weight() ) );
 
     if ( extCreateFontIndirectW.height() < 0 ) {
-	font.setPixelSize( -1 * extCreateFontIndirectW.height() );
+    font.setPixelSize( -1 * extCreateFontIndirectW.height() );
     } else if ( extCreateFontIndirectW.height() > 0 ) {
         font.setPixelSize( extCreateFontIndirectW.height() );
     } // zero is "use a default size" which is effectively no-op here.
 
     // .snp files don't always provide 0x01 for italics
     if ( extCreateFontIndirectW.italic() != 0x00 ) {
-	font.setItalic( true );
+    font.setItalic( true );
     }
 
     if ( extCreateFontIndirectW.underline() != 0x00 ) {
-	font.setUnderline( true );
+    font.setUnderline( true );
     }
 
     m_objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
@@ -705,32 +705,32 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 
     switch ( ihObject ) {
     case WHITE_BRUSH:
-	m_painter->setBrush( QBrush( Qt::white ) );
-	break;
+    m_painter->setBrush( QBrush( Qt::white ) );
+    break;
     case LTGRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::lightGray ) );
-	break;
+    m_painter->setBrush( QBrush( Qt::lightGray ) );
+    break;
     case GRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::gray ) );
-	break;
+    m_painter->setBrush( QBrush( Qt::gray ) );
+    break;
     case DKGRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::darkGray ) );
-	break;
+    m_painter->setBrush( QBrush( Qt::darkGray ) );
+    break;
     case BLACK_BRUSH:
-	m_painter->setBrush( QBrush( Qt::black ) );
-	break;
+    m_painter->setBrush( QBrush( Qt::black ) );
+    break;
     case NULL_BRUSH:
-	m_painter->setBrush( QBrush() );
-	break;
+    m_painter->setBrush( QBrush() );
+    break;
     case WHITE_PEN:
-	m_painter->setPen( QPen( Qt::white ) );
-	break;
+    m_painter->setPen( QPen( Qt::white ) );
+    break;
     case BLACK_PEN:
-	m_painter->setPen( QPen( Qt::black ) );
-	break;
+    m_painter->setPen( QPen( Qt::black ) );
+    break;
     case NULL_PEN:
-	m_painter->setPen( QPen( Qt::NoPen ) );
-	break;
+    m_painter->setPen( QPen( Qt::NoPen ) );
+    break;
     case OEM_FIXED_FONT:
     case ANSI_FIXED_FONT:
     case SYSTEM_FIXED_FONT:
@@ -746,23 +746,23 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
             m_painter->setFont(font);
             break;
         }
-	break;
+    break;
     case SYSTEM_FONT:
-	// TODO: handle this
-	break;
+    // TODO: handle this
+    break;
     case DEVICE_DEFAULT_FONT:
-	// TODO: handle this
-	break;
+    // TODO: handle this
+    break;
     case DEFAULT_PALETTE:
-	break;
+    break;
     case DC_BRUSH:
         // FIXME
-	break;
+    break;
     case DC_PEN:
         // FIXME
-	break;
+    break;
     default:
-	warnVectorImage << "Unexpected stock object:" << ( ihObject & 0x8000000 );
+    warnVectorImage << "Unexpected stock object:" << ( ihObject & 0x8000000 );
     }
 }
 
@@ -773,23 +773,23 @@ void OutputPainterStrategy::selectObject( const quint32 ihObject )
 #endif
 
     if ( ihObject & 0x80000000 ) {
-	selectStockObject( ihObject );
+    selectStockObject( ihObject );
     } else {
-	QVariant obj = m_objectTable.value( ihObject );
+    QVariant obj = m_objectTable.value( ihObject );
 
-	switch ( obj.type() ) {
-	case QVariant::Pen :
-	    m_painter->setPen( obj.value<QPen>() );
-	    break;
-	case QVariant::Brush :
-	    m_painter->setBrush( obj.value<QBrush>() );
-	    break;
-	case QVariant::Font :
-	    m_painter->setFont( obj.value<QFont>() );
-	    break;
-	default:
-	    debugVectorImage << "Unexpected type:" << obj.typeName();
-	}
+    switch ( obj.type() ) {
+    case QVariant::Pen :
+        m_painter->setPen( obj.value<QPen>() );
+        break;
+    case QVariant::Brush :
+        m_painter->setBrush( obj.value<QBrush>() );
+        break;
+    case QVariant::Font :
+        m_painter->setFont( obj.value<QFont>() );
+        break;
+    default:
+        debugVectorImage << "Unexpected type:" << obj.typeName();
+    }
     }
 }
 
@@ -893,12 +893,12 @@ void OutputPainterStrategy::setPolyFillMode( const quint32 polyFillMode )
 #endif
 
     if ( polyFillMode == ALTERNATE ) {
-	m_fillRule = Qt::OddEvenFill;
+    m_fillRule = Qt::OddEvenFill;
     } else if ( polyFillMode == WINDING ) {
-	m_fillRule = Qt::WindingFill;
+    m_fillRule = Qt::WindingFill;
     } else {
-	debugVectorImage << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
-	Q_ASSERT( 0 );
+    debugVectorImage << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
+    Q_ASSERT( 0 );
     }
 }
 
@@ -1163,7 +1163,7 @@ void OutputPainterStrategy::polyLineTo16( const QRect &bounds, const QList<QPoin
 #endif
 
     for ( int i = 0; i < points.count(); ++i ) {
-	m_path->lineTo( points[i] );
+    m_path->lineTo( points[i] );
     }
 }
 
@@ -1177,7 +1177,7 @@ void OutputPainterStrategy::polyBezier16( const QRect &bounds, const QList<QPoin
     QPainterPath path;
     path.moveTo( points[0] );
     for ( int i = 1; i < points.count(); i+=3 ) {
-	path.cubicTo( points[i], points[i+1], points[i+2] );
+    path.cubicTo( points[i], points[i+1], points[i+2] );
     }
     m_painter->drawPath( path );
 }
@@ -1190,7 +1190,7 @@ void OutputPainterStrategy::polyBezierTo16( const QRect &bounds, const QList<QPo
 
     Q_UNUSED( bounds );
     for ( int i = 0; i < points.count(); i+=3 ) {
-	m_path->cubicTo( points[i], points[i+1], points[i+2] );
+    m_path->cubicTo( points[i], points[i+1], points[i+2] );
     }
 }
 
@@ -1234,10 +1234,6 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
     case RGN_AND:
         m_painter->setClipPath( *m_path, Qt::IntersectClip );
         break;
-    // QT5TODO: T477 Qt::UniteClip got removed, see https://bugreports.qt.io/browse/QTBUG-20140
-//     case RGN_OR:
-//         m_painter->setClipPath( *m_path, Qt::UniteClip );
-//         break;
     case RGN_COPY:
         m_painter->setClipPath( *m_path, Qt::ReplaceClip );
         break;

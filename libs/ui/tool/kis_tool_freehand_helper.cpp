@@ -40,6 +40,8 @@
 #include "KisStabilizerDelayedPaintHelper.h"
 #include "kis_config.h"
 
+#include "kis_random_source.h"
+#include "KisPerStrokeRandomSource.h"
 
 #include <math.h>
 
@@ -83,6 +85,10 @@ struct KisToolFreehandHelper::Private
 
     KisSmoothingOptionsSP smoothingOptions;
 
+    // fake random sources for hovering outline *only*
+    KisRandomSourceSP fakeDabRandomSource;
+    KisPerStrokeRandomSourceSP fakeStrokeRandomSource;
+
     // Timer used to generate paint updates periodically even without input events. This is only
     // used for paintops that depend on timely updates even when the cursor is not moving, e.g. for
     // airbrushing effects.
@@ -122,6 +128,9 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->smoothingOptions = KisSmoothingOptionsSP(
                 smoothingOptions ? smoothingOptions : new KisSmoothingOptions());
     m_d->canvasRotation = 0;
+
+    m_d->fakeDabRandomSource = new KisRandomSource();
+    m_d->fakeStrokeRandomSource = new KisPerStrokeRandomSource();
 
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
@@ -206,9 +215,10 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     KisPaintInformation::DistanceInformationRegistrar registrar =
         info.registerDistanceInformation(&distanceInfo);
 
+    info.setRandomSource(m_d->fakeDabRandomSource);
+    info.setPerStrokeRandomSource(m_d->fakeStrokeRandomSource);
+
     QPainterPath outline = settings->brushOutline(info, mode);
-
-
 
     if (m_d->resources &&
         m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER &&

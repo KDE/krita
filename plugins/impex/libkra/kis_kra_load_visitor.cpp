@@ -534,6 +534,7 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
             } else {
                 kfc->fromXML(e);
             }
+            kfc = loadDeprecatedFilter(kfc);
             return true;
         }
     }
@@ -661,4 +662,38 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
             channel->loadXML(child);
         }
     }
+}
+
+KisFilterConfigurationSP KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfigurationSP cfg)
+{
+    if (cfg->getString("legacy") == "left edge detections") {
+        cfg->setProperty("horizRadius", 1);
+        cfg->setProperty("vertRadius", 1);
+        cfg->setProperty("type", "prewitt");
+        cfg->setProperty("output", "yFall");
+        cfg->setProperty("lockAspect", true);
+        cfg->setProperty("transparency", false);
+    } else if (cfg->getString("legacy") == "right edge detections") {
+        cfg->setProperty("horizRadius", 1);
+        cfg->setProperty("vertRadius", 1);
+        cfg->setProperty("type", "prewitt");
+        cfg->setProperty("output", "yGrowth");
+        cfg->setProperty("lockAspect", true);
+        cfg->setProperty("transparency", false);
+    } else if (cfg->getString("legacy") == "top edge detections") {
+        cfg->setProperty("horizRadius", 1);
+        cfg->setProperty("vertRadius", 1);
+        cfg->setProperty("type", "prewitt");
+        cfg->setProperty("output", "xGrowth");
+        cfg->setProperty("lockAspect", true);
+        cfg->setProperty("transparency", false);
+    } else if (cfg->getString("legacy") == "bottom edge detections") {
+        cfg->setProperty("horizRadius", 1);
+        cfg->setProperty("vertRadius", 1);
+        cfg->setProperty("type", "prewitt");
+        cfg->setProperty("output", "xFall");
+        cfg->setProperty("lockAspect", true);
+        cfg->setProperty("transparency", false);
+    }
+    return cfg;
 }

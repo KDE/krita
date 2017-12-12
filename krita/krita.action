@@ -1622,12 +1622,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisRulerAssistantTool">
+    <Action name="KisAssistantTool">
       <icon></icon>
-      <text>Ruler assistant editor tool</text>
+      <text>Assistant Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Ruler assistant editor tool</toolTip>
-      <iconText>Ruler assistant editor tool</iconText>
+      <toolTip>Assistant Tool</toolTip>
+      <iconText>Assistant Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

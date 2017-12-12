@@ -81,6 +81,14 @@ private:
     QString getLocation(const QString &filename, const QString &suffix = QString());
     void loadNodeKeyframes(KisNode *node);
 
+    /**
+     * Load deprecated filters.
+     * Most deprecated filters can be handled by this, but the brightnesscontact to perchannels
+     * conversion needs to be handled in the perchannel class because those filters
+     * have their own xml loading functionality.
+     */
+    KisFilterConfigurationSP loadDeprecatedFilter(KisFilterConfigurationSP cfg);
+
 private:
     KisImageSP m_image;
     KoStore *m_store;

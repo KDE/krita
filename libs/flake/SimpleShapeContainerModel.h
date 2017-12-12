@@ -36,7 +36,11 @@ public:
           m_clipped(rhs.m_clipped)
     {
         Q_FOREACH (KoShape *shape, rhs.m_members) {
-            m_members << shape->cloneShape();
+            KoShape *clone = shape->cloneShape();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(clone && "Copying this shape is not implemented!");
+            if (clone) {
+                m_members << clone;
+            }
         }
 
         KIS_ASSERT_RECOVER(m_members.size() == m_inheritsTransform.size() &&

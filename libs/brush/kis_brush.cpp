@@ -306,7 +306,6 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 
 void KisBrush::setBrushTipImage(const QImage& image)
 {
-    //Q_ASSERT(!image.isNull());
     d->brushTipImage = image;
 
     if (!image.isNull()) {

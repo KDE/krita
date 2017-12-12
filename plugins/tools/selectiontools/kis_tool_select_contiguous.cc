@@ -93,7 +93,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
 
-    QPoint pos = convertToIntPixelCoord(event);
+    QPoint pos = convertToImagePixelCoordFloored(event);
     QRect rc = currentImage()->bounds();
     KisFillPainter fillpainter(dev);
     fillpainter.setHeight(rc.height());

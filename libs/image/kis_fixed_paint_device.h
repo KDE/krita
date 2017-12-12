@@ -25,7 +25,7 @@
 
 #include <QRect>
 #include <QImage>
-#include <QVector>
+#include "KisOptimizedByteArray.h"
 
 class KoColor;
 
@@ -41,7 +41,8 @@ class KRITAIMAGE_EXPORT KisFixedPaintDevice : public KisShared
 
 public:
 
-    KisFixedPaintDevice(const KoColorSpace* colorSpace);
+    KisFixedPaintDevice(const KoColorSpace* colorSpace,
+                        KisOptimizedByteArray::MemoryAllocatorSP allocator = KisOptimizedByteArray::MemoryAllocatorSP());
     virtual ~KisFixedPaintDevice();
 
     /**
@@ -195,8 +196,7 @@ private:
 
     const KoColorSpace* m_colorSpace;
     QRect m_bounds;
-    QByteArray m_data;
-
+    KisOptimizedByteArray m_data;
 };
 
 #endif

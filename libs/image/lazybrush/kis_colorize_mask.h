@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisColorizeMask : public KisEffectMask
 public:
     struct KeyStrokeColors {
         QVector<KoColor> colors;
-        int transparentIndex;
+        int transparentIndex = -1;
     };
 
 public:

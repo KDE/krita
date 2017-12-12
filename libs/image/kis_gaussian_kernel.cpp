@@ -211,8 +211,6 @@ KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff)
     return matrix;
 }
 
-#include "kis_transaction.h"
-
 void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
                                  const QRect& rect,
                                  qreal radius, qreal coeff,
@@ -231,8 +229,5 @@ void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
                                          0,
                                          0);
 
-    // TODO: move applying transaction to a higher level!
-    KisTransaction t(device);
     painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
-    t.end();
 }

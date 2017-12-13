@@ -112,7 +112,7 @@ public:
 
     static QString mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element);
 
-    struct PreserveAspectRatioParser
+    struct KRITAFLAKE_EXPORT PreserveAspectRatioParser
     {
         PreserveAspectRatioParser(const QString &str);
 

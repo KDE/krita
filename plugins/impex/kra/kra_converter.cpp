@@ -253,8 +253,7 @@ bool KraConverter::oldLoadAndParse(KoStore *store, const QString &filename, KoXm
               << " Error message: " << errorMsg << endl;
         m_doc->setErrorMessage(i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
                                    , filename  , errorLine, errorColumn ,
-                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
-                                                               QCoreApplication::UnicodeUTF8)));
+                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0)));
         return false;
     }
     dbgUI << "File" << filename << " loaded and parsed";

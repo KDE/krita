@@ -165,9 +165,9 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    
-    
-    
+
+
+
     <Action name="buginfo">
       <icon></icon>
       <text>Show system information for bug reports.</text>
@@ -178,8 +178,8 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    
-    
+
+
     <Action name="rename_composition">
       <icon></icon>
       <text>Rename Composition...</text>
@@ -202,6 +202,18 @@
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="ruler_pixel_multiple2">
+      <icon></icon>
+      <text>Use multiple of 2 for pixel scale</text>
+      <whatsThis>Use multiple of 2 for pixel scale</whatsThis>
+      <toolTip>Use multiple of 2 for pixel scale</toolTip>
+      <iconText>Use multiple of 2 for pixel scale</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
   </Actions>
@@ -1622,12 +1634,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisRulerAssistantTool">
+    <Action name="KisAssistantTool">
       <icon></icon>
-      <text>Ruler assistant editor tool</text>
+      <text>Assistant Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Ruler assistant editor tool</toolTip>
-      <iconText>Ruler assistant editor tool</iconText>
+      <toolTip>Assistant Tool</toolTip>
+      <iconText>Assistant Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -2448,7 +2460,7 @@
       <whatsThis></whatsThis>
       <toolTip>Copy layer to clipboard</toolTip>
       <iconText>Copy layer to clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2460,7 +2472,7 @@
       <whatsThis></whatsThis>
       <toolTip>Cut layer to clipboard</toolTip>
       <iconText>Cut layer to clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2472,7 +2484,7 @@
       <whatsThis></whatsThis>
       <toolTip>Paste layer from clipboard</toolTip>
       <iconText>Paste layer from clipboard</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -2604,6 +2616,18 @@
       <whatsThis></whatsThis>
       <toolTip>Convert child layers into animation frames</toolTip>
       <iconText>Convert child layers into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_layer_to_file_layer">
+      <icon>fileLayer</icon>
+      <text>to &amp;File Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
+      <iconText>Convert to File Layer</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

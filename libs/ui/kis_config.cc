@@ -570,6 +570,26 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::forceShowSaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowSaveMessages", false));
+}
+
+void KisConfig::setForceShowSaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowSaveMessages", value);
+}
+
+bool KisConfig::forceShowAutosaveMessages(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceShowAutosaveMessages", false));
+}
+
+void KisConfig::setForceShowAutosaveMessages(bool value) const
+{
+    m_cfg.writeEntry("forceShowAutosaveMessages", value);
+}
+
 bool KisConfig::rulersTrackMouse(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
@@ -1068,6 +1088,7 @@ bool KisConfig::useWin8PointerInput(bool defaultValue) const
 #ifdef Q_OS_WIN
     return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
 #else
+    Q_UNUSED(defaultValue);
     return false;
 #endif
 }
@@ -1080,6 +1101,8 @@ void KisConfig::setUseWin8PointerInput(bool value) const
     if (useWin8PointerInput() != value) {
         m_cfg.writeEntry("useWin8PointerInput", value);
     }
+#else
+    Q_UNUSED(value)
 #endif
 }
 
@@ -1619,6 +1642,16 @@ void KisConfig::setTabletEventsDelay(int value)
     m_cfg.writeEntry("tabletEventsDelay", value);
 }
 
+bool KisConfig::trackTabletEventLatency(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("trackTabletEventLatency", false));
+}
+
+void KisConfig::setTrackTabletEventLatency(bool value)
+{
+    m_cfg.writeEntry("trackTabletEventLatency", value);
+}
+
 bool KisConfig::testingAcceptCompressedTabletEvents(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("testingAcceptCompressedTabletEvents", false));
@@ -1679,6 +1712,36 @@ void KisConfig::setToolOptionsInDocker(bool inDocker)
     m_cfg.writeEntry("ToolOptionsInDocker", inDocker);
 }
 
+int KisConfig::kineticScrollingGesture(bool defaultValue) const
+{
+    return (defaultValue ? 0 : m_cfg.readEntry("KineticScrollingGesture", 0));
+}
+
+void KisConfig::setKineticScrollingGesture(int gesture)
+{
+    m_cfg.writeEntry("KineticScrollingGesture", gesture);
+}
+
+int KisConfig::kineticScrollingSensitivity(bool defaultValue) const
+{
+    return (defaultValue ? 75 : m_cfg.readEntry("KineticScrollingSensitivity", 75));
+}
+
+void KisConfig::setKineticScrollingSensitivity(int sensitivity)
+{
+    m_cfg.writeEntry("KineticScrollingSensitivity", sensitivity);
+}
+
+bool KisConfig::kineticScrollingScrollbar(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("KineticScrollingScrollbar", true));
+}
+
+void KisConfig::setKineticScrollingScrollbar(bool scrollbar)
+{
+    m_cfg.writeEntry("KineticScrollingScrollbar", scrollbar);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const
 {
     const KoColorSpace *cs = 0;
@@ -1720,6 +1783,16 @@ bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const
 void KisConfig::setEnableOpenGLFramerateLogging(bool value) const
 {
     m_cfg.writeEntry("enableOpenGLFramerateLogging", value);
+}
+
+bool KisConfig::enableBrushSpeedLogging(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("enableBrushSpeedLogging", false));
+}
+
+void KisConfig::setEnableBrushSpeedLogging(bool value) const
+{
+    m_cfg.writeEntry("enableBrushSpeedLogging", value);
 }
 
 void KisConfig::setEnableAmdVectorizationWorkaround(bool value)
@@ -1850,7 +1923,7 @@ void KisConfig::setShowBrushHud(bool value)
 
 QString KisConfig::brushHudSetting(bool defaultValue) const
 {
-    QString defaultDoc = "<!DOCTYPE hud_properties>\n<hud_properties>\n <version value=\"1\" type=\"value\"/>\n <paintbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"angle\" type=\"value\"/>\n  </properties_list>\n </paintbrush>\n <colorsmudge>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"smudge_mode\" type=\"value\"/>\n   <item_3 value=\"smudge_length\" type=\"value\"/>\n   <item_4 value=\"smudge_color_rate\" type=\"value\"/>\n  </properties_list>\n </colorsmudge>\n <sketchbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"size\" type=\"value\"/>\n  </properties_list>\n </sketchbrush>\n <hairybrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </hairybrush>\n <experimentbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"shape_windingfill\" type=\"value\"/>\n  </properties_list>\n </experimentbrush>\n <spraybrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"spray_particlecount\" type=\"value\"/>\n   <item_3 value=\"spray_density\" type=\"value\"/>\n  </properties_list>\n </spraybrush>\n <hatchingbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"hatching_angle\" type=\"value\"/>\n   <item_3 value=\"hatching_thickness\" type=\"value\"/>\n   <item_4 value=\"hatching_separation\" type=\"value\"/>\n  </properties_list>\n </hatchingbrush>\n <gridbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"grid_divisionlevel\" type=\"value\"/>\n  </properties_list>\n </gridbrush>\n <curvebrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"curve_historysize\" type=\"value\"/>\n   <item_2 value=\"curve_linewidth\" type=\"value\"/>\n   <item_3 value=\"curve_lineopacity\" type=\"value\"/>\n   <item_4 value=\"curve_connectionline\" type=\"value\"/>\n  </properties_list>\n </curvebrush>\n <dynabrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"dyna_diameter\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"dyna_mass\" type=\"value\"/>\n   <item_3 value=\"dyna_drag\" type=\"value\"/>\n  </properties_list>\n </dynabrush>\n <particlebrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"particle_particles\" type=\"value\"/>\n   <item_2 value=\"particle_opecityweight\" type=\"value\"/>\n   <item_3 value=\"particle_iterations\" type=\"value\"/>\n  </properties_list>\n </particlebrush>\n <duplicate>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"clone_healing\" type=\"value\"/>\n   <item_3 value=\"clone_movesource\" type=\"value\"/>\n  </properties_list>\n </duplicate>\n <deformbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"deform_amount\" type=\"value\"/>\n   <item_3 value=\"deform_mode\" type=\"value\"/>\n  </properties_list>\n </deformbrush>\n <tangentnormal>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </tangentnormal>\n <filter>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </filter>\n <chalkbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </chalkbrush>\n <roundmarker>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"size\" type=\"value\"/>\n  </properties_list>\n </roundmarker>\n</hud_properties>\n";
+    QString defaultDoc = "<!DOCTYPE hud_properties>\n<hud_properties>\n <version value=\"1\" type=\"value\"/>\n <paintbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"angle\" type=\"value\"/>\n  </properties_list>\n </paintbrush>\n <colorsmudge>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"smudge_mode\" type=\"value\"/>\n   <item_3 value=\"smudge_length\" type=\"value\"/>\n   <item_4 value=\"smudge_color_rate\" type=\"value\"/>\n  </properties_list>\n </colorsmudge>\n <sketchbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"size\" type=\"value\"/>\n  </properties_list>\n </sketchbrush>\n <hairybrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </hairybrush>\n <experimentbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"shape_windingfill\" type=\"value\"/>\n  </properties_list>\n </experimentbrush>\n <spraybrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"spray_particlecount\" type=\"value\"/>\n   <item_3 value=\"spray_density\" type=\"value\"/>\n  </properties_list>\n </spraybrush>\n <hatchingbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"hatching_angle\" type=\"value\"/>\n   <item_3 value=\"hatching_thickness\" type=\"value\"/>\n   <item_4 value=\"hatching_separation\" type=\"value\"/>\n  </properties_list>\n </hatchingbrush>\n <gridbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"grid_divisionlevel\" type=\"value\"/>\n  </properties_list>\n </gridbrush>\n <curvebrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"curve_historysize\" type=\"value\"/>\n   <item_2 value=\"curve_linewidth\" type=\"value\"/>\n   <item_3 value=\"curve_lineopacity\" type=\"value\"/>\n   <item_4 value=\"curve_connectionline\" type=\"value\"/>\n  </properties_list>\n </curvebrush>\n <dynabrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"dyna_diameter\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"dyna_mass\" type=\"value\"/>\n   <item_3 value=\"dyna_drag\" type=\"value\"/>\n  </properties_list>\n </dynabrush>\n <particlebrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"particle_particles\" type=\"value\"/>\n   <item_2 value=\"particle_opecityweight\" type=\"value\"/>\n   <item_3 value=\"particle_iterations\" type=\"value\"/>\n  </properties_list>\n </particlebrush>\n <duplicate>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"clone_healing\" type=\"value\"/>\n   <item_3 value=\"clone_movesource\" type=\"value\"/>\n  </properties_list>\n </duplicate>\n <deformbrush>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n   <item_2 value=\"deform_amount\" type=\"value\"/>\n   <item_3 value=\"deform_mode\" type=\"value\"/>\n  </properties_list>\n </deformbrush>\n <tangentnormal>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </tangentnormal>\n <filter>\n  <properties_list type=\"array\">\n   <item_0 value=\"size\" type=\"value\"/>\n   <item_1 value=\"opacity\" type=\"value\"/>\n  </properties_list>\n </filter>\n <roundmarker>\n  <properties_list type=\"array\">\n   <item_0 value=\"opacity\" type=\"value\"/>\n   <item_1 value=\"size\" type=\"value\"/>\n  </properties_list>\n </roundmarker>\n</hud_properties>\n";
     return defaultValue ? defaultDoc : m_cfg.readEntry("brushHudSettings", defaultDoc);
 }
 

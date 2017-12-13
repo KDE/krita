@@ -938,20 +938,15 @@ QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
     return QPointF(documentCoord.x() * xRes(), documentCoord.y() * yRes());
 }
 
-QPoint KisImage::documentToIntPixel(const QPointF &documentCoord) const
+QPoint KisImage::documentToImagePixelFloored(const QPointF &documentCoord) const
 {
     QPointF pixelCoord = documentToPixel(documentCoord);
-    return QPoint((int)pixelCoord.x(), (int)pixelCoord.y());
+    return QPoint(qFloor(pixelCoord.x()), qFloor(pixelCoord.y()));
 }
 
 QRectF KisImage::documentToPixel(const QRectF &documentRect) const
 {
     return QRectF(documentToPixel(documentRect.topLeft()), documentToPixel(documentRect.bottomRight()));
-}
-
-QRect KisImage::documentToIntPixel(const QRectF &documentRect) const
-{
-    return documentToPixel(documentRect).toAlignedRect();
 }
 
 QPointF KisImage::pixelToDocument(const QPointF &pixelCoord) const
@@ -1524,24 +1519,24 @@ void KisImage::notifySelectionChanged()
 }
 
 void KisImage::requestProjectionUpdateImpl(KisNode *node,
-                                           const QRect &rect,
+                                           const QVector<QRect> &rects,
                                            const QRect &cropRect)
 {
-    if (rect.isEmpty()) return;
+    if (rects.isEmpty()) return;
 
-    m_d->scheduler.updateProjection(node, rect, cropRect);
+    m_d->scheduler.updateProjection(node, rects, cropRect);
 }
 
-void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache)
+void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache)
 {
     if (m_d->projectionUpdatesFilter
-        && m_d->projectionUpdatesFilter->filter(this, node, rect, resetAnimationCache)) {
+        && m_d->projectionUpdatesFilter->filter(this, node, rects, resetAnimationCache)) {
 
         return;
     }
 
     if (resetAnimationCache) {
-        m_d->animationInterface->notifyNodeChanged(node, rect, false);
+        m_d->animationInterface->notifyNodeChanged(node, rects, false);
     }
 
     /**
@@ -1551,17 +1546,21 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect, bool re
      * supporting the wrap-around mode will not make much harm.
      */
     if (m_d->wrapAroundModePermitted) {
-        const QRect boundRect = effectiveLodBounds();
-        KisWrappedRect splitRect(rect, boundRect);
+        QVector<QRect> allSplitRects;
 
-        Q_FOREACH (const QRect &rc, splitRect) {
-            requestProjectionUpdateImpl(node, rc, boundRect);
+        const QRect boundRect = effectiveLodBounds();
+        Q_FOREACH (const QRect &rc, rects) {
+            KisWrappedRect splitRect(rc, boundRect);
+            allSplitRects.append(splitRect);
         }
+
+        requestProjectionUpdateImpl(node, allSplitRects, boundRect);
+
     } else {
-        requestProjectionUpdateImpl(node, rect, bounds());
+        requestProjectionUpdateImpl(node, rects, bounds());
     }
 
-    KisNodeGraphListener::requestProjectionUpdate(node, rect, resetAnimationCache);
+    KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 }
 
 void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
@@ -1708,11 +1707,10 @@ void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfi
 
 KisProofingConfigurationSP KisImage::proofingConfiguration() const
 {
-    if (!m_d->proofingConfig) {
-        KisImageConfig cfg;
-        m_d->proofingConfig = cfg.defaultProofingconfiguration();
+    if (m_d->proofingConfig) {
+        return m_d->proofingConfig;
     }
-    return m_d->proofingConfig;
+    return KisProofingConfigurationSP();
 }
 
 QPointF KisImage::mirrorAxesCenter() const

@@ -25,6 +25,8 @@
 #include <QMultiMap>
 #include <QBitArray>
 
+#include <boost/optional.hpp>
+
 #include "kritapigment_export.h"
 
 class KoColorSpace;
@@ -69,6 +71,8 @@ public:
         float         _lastOpacityData;
         float*        lastOpacity;
         QBitArray     channelFlags;
+
+        void setOpacityAndAverage(float _opacity, float _averageOpacity);
 
         void updateOpacityAndAverage(float value);
     private:

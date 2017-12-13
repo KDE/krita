@@ -29,6 +29,9 @@ public:
 
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas) override;
     static const QString idTag;
+
+private:
+    void draw(QPainter& gc);
 };
 
 #endif /* __KIS_FPS_DECORATION_H */

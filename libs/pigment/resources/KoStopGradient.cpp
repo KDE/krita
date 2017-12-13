@@ -654,6 +654,7 @@ void KoStopGradient::toXML(QDomDocument &doc, QDomElement &gradientElt) const
         QDomElement stopElt = doc.createElement("stop");
         stopElt.setAttribute("offset", stop.first);
         stopElt.setAttribute("bitdepth", stop.second.colorSpace()->colorDepthId().id());
+        stopElt.setAttribute("alpha", stop.second.opacityF());
         stop.second.toXML(doc, stopElt);
         gradientElt.appendChild(stopElt);
     }
@@ -668,6 +669,7 @@ KoStopGradient KoStopGradient::fromXML(const QDomElement &elt)
         qreal offset = stopElt.attribute("offset", "0").toDouble();
         QString bitDepth = stopElt.attribute("bitdepth", Integer8BitsColorDepthID.id());
         KoColor color = KoColor::fromXML(stopElt.firstChildElement(), bitDepth);
+        color.setOpacity(stopElt.attribute("alpha", "1.0").toDouble());
         stops.append(KoGradientStop(offset, color));
         stopElt = stopElt.nextSiblingElement("stop");
     }

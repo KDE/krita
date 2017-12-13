@@ -25,6 +25,10 @@
 #include "kis_spacing_information.h"
 #include "kis_timing_information.h"
 
+#include "kritaimage_export.h"
+
+class KisRenderedDab;
+
 namespace KisPaintOpUtils {
 
 template <class PaintOp>
@@ -118,7 +122,7 @@ void paintLine(PaintOp &op,
  * this the class stores two previosly requested points instead of the
  * last one.
  */
-class PositionHistory
+class KRITAIMAGE_EXPORT PositionHistory
 {
 public:
     /**
@@ -152,7 +156,7 @@ private:
     QPointF m_second;
 };
 
-bool checkSizeTooSmall(qreal scale, qreal width, qreal height)
+inline bool checkSizeTooSmall(qreal scale, qreal width, qreal height)
 {
     return scale * width < 0.01 || scale * height < 0.01;
 }
@@ -162,7 +166,7 @@ inline qreal calcAutoSpacing(qreal value, qreal coeff)
     return coeff * (value < 1.0 ? value : sqrt(value));
 }
 
-QPointF calcAutoSpacing(const QPointF &pt, qreal coeff, qreal lodScale)
+inline QPointF calcAutoSpacing(const QPointF &pt, qreal coeff, qreal lodScale)
 {
     const qreal invLodScale = 1.0 / lodScale;
     const QPointF lod0Point = invLodScale * pt;
@@ -170,6 +174,7 @@ QPointF calcAutoSpacing(const QPointF &pt, qreal coeff, qreal lodScale)
     return lodScale * QPointF(calcAutoSpacing(lod0Point.x(), coeff), calcAutoSpacing(lod0Point.y(), coeff));
 }
 
+KRITAIMAGE_EXPORT
 KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal dabHeight,
                                        qreal extraScale,
@@ -180,48 +185,18 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal spacingVal,
                                        bool autoSpacingActive,
                                        qreal autoSpacingCoeff,
-                                       qreal lodScale)
-{
-    QPointF spacing;
+                                       qreal lodScale);
 
-    if (!isotropicSpacing) {
-        if (autoSpacingActive) {
-            spacing = calcAutoSpacing(QPointF(dabWidth, dabHeight), autoSpacingCoeff, lodScale);
-        } else {
-            spacing = QPointF(dabWidth, dabHeight);
-            spacing *= spacingVal;
-        }
-    }
-    else {
-        qreal significantDimension = qMax(dabWidth, dabHeight);
-        if (autoSpacingActive) {
-            significantDimension = calcAutoSpacing(significantDimension, autoSpacingCoeff);
-        } else {
-            significantDimension *= spacingVal;
-        }
-        spacing = QPointF(significantDimension, significantDimension);
-        rotation = 0.0;
-        axesFlipped = false;
-    }
-
-    spacing *= extraScale;
-
-    return KisSpacingInformation(distanceSpacingEnabled, spacing, rotation, axesFlipped);
-}
-
+KRITAIMAGE_EXPORT
 KisTimingInformation effectiveTiming(bool timingEnabled,
                                      qreal timingInterval,
-                                     qreal rateExtraScale)
-{
+                                     qreal rateExtraScale);
 
-    if (!timingEnabled) {
-        return KisTimingInformation();
-    }
-    else {
-        qreal scaledInterval = rateExtraScale <= 0.0 ? LONG_TIME : timingInterval / rateExtraScale;
-        return KisTimingInformation(scaledInterval);
-    }
-}
+KRITAIMAGE_EXPORT
+QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QVector<QRect> &dabRects, int idealPatchSize);
+
+KRITAIMAGE_EXPORT
+QVector<QRect> splitDabsIntoRects(const QVector<QRect> &dabRects, int idealNumRects, int diameter, qreal spacing);
 
 }
 

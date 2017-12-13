@@ -59,7 +59,6 @@ private:
     bool m_fanCornersEnabled;
     int m_fanCornersStep;
     int m_angleOffset; // in degrees
-    int m_dabIndex;
     qreal m_lockedAngle;
     bool m_lockedAngleMode;
 

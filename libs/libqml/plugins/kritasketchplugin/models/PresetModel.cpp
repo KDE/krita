@@ -80,16 +80,21 @@ PresetModel::PresetModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    QHash<int, QByteArray> roles;
-    roles[ImageRole] = "image";
-    roles[TextRole] = "text";
-    roles[NameRole] = "name";
-    setRoleNames(roles);
 }
 
 PresetModel::~PresetModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> PresetModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[ImageRole] = "image";
+    roles[TextRole] = "text";
+    roles[NameRole] = "name";
+
+    return roles;
 }
 
 int PresetModel::rowCount(const QModelIndex &parent) const

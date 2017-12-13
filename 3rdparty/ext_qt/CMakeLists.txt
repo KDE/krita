@@ -29,11 +29,12 @@ if (WIN32)
     else (QT_ENABLE_DYNAMIC_OPENGL)
         list(APPEND _QT_conf -opengl desktop -no-angle)
     endif (QT_ENABLE_DYNAMIC_OPENGL)
+    
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/archive/qt/5.9/5.9.1/single/qt-everywhere-opensource-src-5.9.1.zip
-      URL_MD5 3f2e538ccc468d28bcfdefac96d1e975
+      URL https://download.qt.io/archive/qt/5.9/5.9.3/single/qt-everywhere-opensource-src-5.9.3.zip
+      URL_HASH SHA1=2d3c53cd9dc76a479873548921a20d3d9b6fb9ac
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-wintab.diff
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtgui-private-headers.diff
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Don-t-request-the-MIME-image-every-time-Windows-asks.patch
@@ -41,6 +42,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Hack-for-fullscreen-workaround.patch
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qopengldebug-gles.patch
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-189539-ANGLE-mingw-fix.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-212811_qtbase-angle-d3d11-warp-crash-fix.patch
 
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
@@ -160,17 +162,16 @@ else( APPLE )
         # Fix Xcode xcrun related issue.
         # NOTE: This should be fixed by Qt 5.7.1 see here: http://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=77a71c32c9d19b87f79b208929e71282e8d8b5d9
         # NOTE: but no one's holding their breath.
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
-                COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
-                COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/qtbase-configure.patch
-                COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch)
+        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
+                #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/qtbase-configure.patch
+                #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
+            )
         message(STATUS "${EXTPREFIX_qt}:Additional patches injected.")
       else()
         # No extra patches will be applied
         # NOTE: defaults for some untested scenarios like xcrun fails and xcode_version < 8.
         # NOTE: that is uncharted territory and (hopefully) a very unlikely scenario...
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
-                COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff)
+        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff)
       endif()
 
       # Qt is big - try and parallelize if at all possible
@@ -187,6 +188,7 @@ else( APPLE )
         set(PARALLEL_MAKE "make")
       endif()
 
+      
       ExternalProject_Add(ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
@@ -196,15 +198,17 @@ else( APPLE )
         LOG_BUILD           ON
         LOG_TEST            ON
         LOG_INSTALL         ON
-        BUILD_IN_SOURCE 		ON
+        BUILD_IN_SOURCE     ON
 
-        URL https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
-        URL_MD5 9a46cce61fc64c20c3ac0a0e0fa41b42
+        URL https://download.qt.io/development_releases/qt/5.10/5.10.0-beta3/single/qt-everywhere-src-5.10.0.tar.xz
+        URL_MD5 e809bf33732fb68d531e609979ba529f
 
         PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
         INSTALL_DIR ${EXTPREFIX_qt}
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt}
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure 
+        -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
+            -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -opensource -confirm-license  -prefix ${EXTPREFIX_qt}
         BUILD_COMMAND ${PARALLEL_MAKE}
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""

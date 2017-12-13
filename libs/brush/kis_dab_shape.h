@@ -36,6 +36,14 @@ public:
         , m_ratio(ratio)
         , m_rotation(rotation)
     {}
+
+    bool operator==(const KisDabShape &rhs) const {
+        return
+            qFuzzyCompare(m_scale, rhs.m_scale) &&
+            qFuzzyCompare(m_ratio, rhs.m_ratio) &&
+            qFuzzyCompare(m_rotation, rhs.m_rotation);
+    }
+
     qreal scale()    const { return m_scale; }
     qreal scaleX()   const { return scale(); }
     qreal scaleY()   const { return m_scale * m_ratio; }

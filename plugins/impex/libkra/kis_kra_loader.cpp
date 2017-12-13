@@ -384,14 +384,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             proofingData.resize(store->size());
             bool proofingProfileRes = (store->read(proofingData.data(), store->size())>-1);
             store->close();
-            if (proofingProfileRes)
-            {
-                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(image->proofingConfiguration()->proofingModel, image->proofingConfiguration()->proofingDepth, proofingData);
-                if (proofingProfile->valid()){
 
-                    //if (KoColorSpaceEngineRegistry::instance()->get("icc")) {
-                    //    KoColorSpaceEngineRegistry::instance()->get("icc")->addProfile(proofingProfile->fileName());
-                    //}
+            KisProofingConfigurationSP proofingConfig = image->proofingConfiguration();
+            if (!proofingConfig) {
+                proofingConfig = KisImageConfig().defaultProofingconfiguration();
+            }
+
+            if (proofingProfileRes) {
+                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(proofingConfig->proofingModel, proofingConfig->proofingDepth, proofingData);
+                if (proofingProfile->valid()){
                     KoColorSpaceRegistry::instance()->addProfile(proofingProfile);
                 }
             }
@@ -509,6 +510,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);
+
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){
                 m_d->assistants.append(toQShared(assistant));
@@ -722,6 +724,9 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
         }
     }
 
+    const bool timelineEnabled = element.attribute(VISIBLE_IN_TIMELINE, "0") == "0" ? false : true;
+    node->setUseInTimeline(timelineEnabled);
+
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node.data());
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
@@ -729,9 +734,6 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
 
         bool onionEnabled = element.attribute(ONION_SKIN_ENABLED, "0") == "0" ? false : true;
         layer->setOnionSkinEnabled(onionEnabled);
-
-        bool timelineEnabled = element.attribute(VISIBLE_IN_TIMELINE, "0") == "0" ? false : true;
-        layer->setUseInTimeline(timelineEnabled);
     }
 
     if (element.attribute(FILE_NAME).isNull()) {
@@ -849,11 +851,25 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
     QString attr;
     KisAdjustmentLayer* layer;
     QString filtername;
+    QString legacy = filtername;
 
     if ((filtername = element.attribute(FILTER_NAME)).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
         warnFile << "No filter in adjustment layer";
         return 0;
+    }
+
+    //get deprecated filters.
+    if (filtername=="brightnesscontrast") {
+        legacy = filtername;
+        filtername = "perchannel";
+    }
+    if (filtername=="left edge detections"
+            || filtername=="right edge detections"
+            || filtername=="top edge detections"
+            || filtername=="bottom edge detections") {
+        legacy = filtername;
+        filtername = "edge detection";
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
@@ -863,6 +879,10 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
     }
 
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    kfc->setProperty("legacy", legacy);
+    if (legacy=="brightnesscontrast") {
+        kfc->setProperty("colorModel", cs->colorModelId().id());
+    }
 
     // We'll load the configuration and the selection later.
     layer = new KisAdjustmentLayer(image, name, kfc, 0);

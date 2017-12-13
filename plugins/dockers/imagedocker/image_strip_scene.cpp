@@ -191,7 +191,7 @@ void ImageStripScene::slotItemContentChanged(ImageItem* item)
 
 void ImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-    ImageItem* item = static_cast<ImageItem*>(itemAt(event->scenePos()));
+    ImageItem* item = static_cast<ImageItem*>(itemAt(event->scenePos().x(), event->scenePos().y(), QTransform()));
 
     if (item)
         emit sigImageActivated(item->path());

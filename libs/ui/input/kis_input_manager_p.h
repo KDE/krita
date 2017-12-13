@@ -24,6 +24,8 @@
 #include <QTouchEvent>
 #include <QScopedPointer>
 #include <QPointer>
+#include <QQueue>
+#include <QElapsedTimer>
 
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"
@@ -34,7 +36,7 @@
 #include "input/kis_tablet_debugger.h"
 #include "kis_timed_signal_threshold.h"
 #include "kis_signal_auto_connection.h"
-
+#include "kis_latency_tracker.h"
 
 class KisToolInvocationAction;
 
@@ -47,6 +49,7 @@ public:
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
     void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
+    bool addNativeGestureShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
@@ -145,4 +148,12 @@ public:
     bool containsPointer = true;
 
     int accumulatedScrollDelta = 0;
+
+    class TabletLatencyTracker : public KisLatencyTracker {
+    protected:
+        virtual qint64 currentTimestamp() const;
+        virtual void print(const QString &message);
+    };
+
+    KisSharedPtr<TabletLatencyTracker> tabletLatencyTracker;
 };

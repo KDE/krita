@@ -779,6 +779,18 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="view_pixel_grid">
+      <icon></icon>
+      <text>Show Pixel Grid</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Pixel Grid</toolTip>
+      <iconText>Show Pixel Grid</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="view_grid">
       <icon>view-grid</icon>
       <text>Show &amp;Grid</text>

@@ -50,7 +50,7 @@ void KisDynamicSensor::reset()
 {
 }
 
-KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
+KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id, const QString &parentOptionName)
 {
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
@@ -86,10 +86,10 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorTime();
     }
     else if (id.id() == FuzzyPerDabId.id()) {
-        return new KisDynamicSensorFuzzy(false);
+        return new KisDynamicSensorFuzzy(false, parentOptionName);
     }
     else if (id.id() == FuzzyPerStrokeId.id()) {
-        return new KisDynamicSensorFuzzy(true);
+        return new KisDynamicSensorFuzzy(true, parentOptionName);
     }
     else if (id.id() == FadeId.id()) {
         return new KisDynamicSensorFade();
@@ -157,13 +157,13 @@ DynamicSensorType KisDynamicSensor::id2Type(const KoID &id)
     return UNKNOWN;
 }
 
-KisDynamicSensorSP KisDynamicSensor::type2Sensor(DynamicSensorType sensorType)
+KisDynamicSensorSP KisDynamicSensor::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
 {
     switch (sensorType) {
     case FUZZY_PER_DAB:
-        return new KisDynamicSensorFuzzy(false);
+        return new KisDynamicSensorFuzzy(false, parentOptionName);
     case FUZZY_PER_STROKE:
-        return new KisDynamicSensorFuzzy(true);
+        return new KisDynamicSensorFuzzy(true, parentOptionName);
     case SPEED:
         return new KisDynamicSensorSpeed();
     case FADE:
@@ -283,18 +283,18 @@ QString KisDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
 }
 
 
-KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s, const QString &parentOptionName)
 {
     QDomDocument doc;
     doc.setContent(s);
     QDomElement e = doc.documentElement();
-    return createFromXML(e);
+    return createFromXML(e, parentOptionName);
 }
 
-KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement& e)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement& e, const QString &parentOptionName)
 {
     QString id = e.attribute("id", "");
-    KisDynamicSensorSP sensor = id2Sensor(id);
+    KisDynamicSensorSP sensor = id2Sensor(id, parentOptionName);
     if (sensor) {
         sensor->fromXML(e);
     }

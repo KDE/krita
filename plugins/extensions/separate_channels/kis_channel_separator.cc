@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -236,14 +236,14 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             else {
                 KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
-                dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+                dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
                 dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
                 QUrl url = QUrl::fromUserInput(dialog.filename());
 
                 if (url.isEmpty())
                     return;
 
-                const QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                const QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile(), false);
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();

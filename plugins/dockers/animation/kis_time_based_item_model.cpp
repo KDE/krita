@@ -57,9 +57,11 @@ struct KisTimeBasedItemModel::Private
     QScopedPointer<KisSignalCompressorWithParam<int> > scrubbingCompressor;
 
     int baseNumFrames() const {
-        if (image.isNull()) return 0;
 
-        KisImageAnimationInterface *i = image->animationInterface();
+        auto imageSP = image.toStrongRef();
+        if (!imageSP) return 0;
+
+        KisImageAnimationInterface *i = imageSP->animationInterface();
         if (!i) return 1;
 
         return i->totalLength();
@@ -109,7 +111,8 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
     }
 
     if (image != oldImage) {
-        reset();
+        beginResetModel();
+        endResetModel();
     }
 }
 

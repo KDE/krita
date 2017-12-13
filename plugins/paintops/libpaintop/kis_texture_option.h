@@ -27,8 +27,11 @@
 #include "kis_paintop_option.h"
 #include "kis_pressure_texture_strength_option.h"
 
+#include "KisTextureMaskInfo.h"
+
 #include <QRect>
 
+class KisTextureChooser;
 class KisTextureOptionWidget;
 class KoPattern;
 class KoResource;
@@ -54,8 +57,8 @@ private Q_SLOTS:
     void resetGUI(KoResource*); /// called when a new pattern is selected
 
 private:
-    KisTextureOptionWidget *m_optionWidget;
-
+    /// UI Widget that stores all the texture options
+    KisTextureChooser* m_textureOptions;
 
 };
 
@@ -81,25 +84,15 @@ public:
 
 private:
 
-    qreal m_scale;
     int m_offsetX;
     int m_offsetY;
-    qreal m_brightness;
-    qreal m_contrast;
     TexturingMode m_texturingMode;
-    bool m_invert;
-    KoPattern *m_pattern;
-    int m_cutoffLeft;
-    int m_cutoffRight;
-    int m_cutoffPolicy;
 
     int m_levelOfDetail;
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;
-    QRect m_maskBounds; // this can be different from the extent if we mask out too many pixels in a big mask!
-    KisPaintDeviceSP m_mask;
-    void recalculateMask();
+    KisTextureMaskInfoSP m_maskInfo;
 };
 
 #endif // KIS_TEXTURE_OPTION_H

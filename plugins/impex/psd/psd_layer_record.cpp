@@ -446,7 +446,8 @@ void PSDLayerRecord::write(QIODevice* io,
                            KisNodeSP onlyTransparencyMask,
                            const QRect &maskRect,
                            psd_section_type sectionType,
-                           const QDomDocument &stylesXmlDoc)
+                           const QDomDocument &stylesXmlDoc,
+                           bool useLfxsLayerStyleFormat)
 {
     dbgFile << "writing layer info record" << "at" << io->pos();
 
@@ -568,7 +569,7 @@ void PSDLayerRecord::write(QIODevice* io,
 
             // write 'lfx2' data block
             if (!stylesXmlDoc.isNull()) {
-                additionalInfoBlock.writeLfx2BlockEx(io, stylesXmlDoc);
+                additionalInfoBlock.writeLfx2BlockEx(io, stylesXmlDoc, useLfxsLayerStyleFormat);
             }
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {

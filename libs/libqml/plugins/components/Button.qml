@@ -129,7 +129,7 @@ Item {
         anchors.fill: parent;
         hoverEnabled: true;
         acceptedButtons: Qt.LeftButton | Qt.RightButton;
-        
+
         onClicked: {
             if(mouse.button == Qt.LeftButton && base.enabled) {
                 base.clicked();
@@ -170,15 +170,19 @@ Item {
         when: (mouse.pressed || base.checked) && enabled;
 
         PropertyChanges {
-            target: mouse
+            target: fill
+            color: base.highlightColor
             anchors.topMargin: 0
         }
     }
 
     transitions: Transition {
+        from: "";
+        to: "down";
+        reversible: true;
         ParallelAnimation {
-            NumberAnimation { properties: "size"; duration: 50; }
-            ColorAnimation { duration: 50; }
+            NumberAnimation { properties: "size"; duration: 150; }
+            ColorAnimation { duration: 150; }
         }
     }
 }

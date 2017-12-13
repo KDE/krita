@@ -51,7 +51,7 @@ void KisColorHistory::setCanvas(KisCanvas2 *canvas)
 
 
     connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
-            this,                               SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
+            this, SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
 }
 
 KisColorSelectorBase* KisColorHistory::createPopup() const
@@ -72,8 +72,9 @@ void KisColorHistory::addColorToHistory(const KoColor& color)
     m_colorHistory.prepend(color);
 
     //the history holds 200 colors, but not all are displayed
-    if(m_colorHistory.size()>200)
+    if (m_colorHistory.size()>200)  {
         m_colorHistory.removeLast();
+    }
 
     setColors(m_colorHistory);
 }

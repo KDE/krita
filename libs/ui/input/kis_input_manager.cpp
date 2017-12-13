@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <QApplication>
 #include <QTouchEvent>
-#include <QTouchEvent>
+#include <QElapsedTimer>
 
 #include <KoToolManager.h>
 
@@ -330,6 +330,21 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::Wheel: {
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+
+#ifdef Q_OS_OSX
+        // Some QT wheel events are actually touch pad pan events. From the QT docs:
+        // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
+
+        // We differentiate between touchpad events and real mouse wheels by inspecting the
+        // event source.
+
+        if (wheelEvent->source() == Qt::MouseEventSource::MouseEventSynthesizedBySystem) {
+            KisAbstractInputAction::setInputManager(this);
+            retval = d->matcher.wheelEvent(KisSingleActionShortcut::WheelTrackpad, wheelEvent);
+            break;
+        }
+#endif
+
         d->accumulatedScrollDelta += wheelEvent->delta();
         KisSingleActionShortcut::WheelAction action;
 
@@ -451,6 +466,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         retval = compressMoveEventCommon(tabletEvent);
 
+        if (d->tabletLatencyTracker) {
+            d->tabletLatencyTracker->push(tabletEvent->timestamp());
+        }
+
         /**
          * The flow of tablet events means the tablet is in the
          * proximity area, so activate it even when the
@@ -466,7 +485,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 #ifdef Q_OS_MAC
         d->allowMouseEvents();
 #endif
-        if (d->touchHasBlockedPressEvents) break;
         d->debugEvent<QTabletEvent, false>(event);
 
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
@@ -478,13 +496,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchBegin:
     {
-        QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-        d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
-        // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
-        if (KisConfig().disableTouchOnCanvas()) d->eatOneMousePress();
-        if (d->tryHidePopupPalette()) {
-            retval = true;
-        } else {
+        if (startTouch(retval)) {
+            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchBeginEvent(tevent);
             event->accept();
@@ -518,17 +531,69 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchEnd:
     {
+        endTouch();
         QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-        d->touchHasBlockedPressEvents = false;
         retval = d->matcher.touchEndEvent(tevent);
         event->accept();
         break;
     }
+
+    case QEvent::NativeGesture:
+    {
+        QNativeGestureEvent *gevent = static_cast<QNativeGestureEvent*>(event);
+        switch (gevent->gestureType()) {
+            case Qt::BeginNativeGesture:
+            {
+                if (startTouch(retval)) {
+                    KisAbstractInputAction::setInputManager(this);
+                    retval = d->matcher.nativeGestureBeginEvent(gevent);
+                    event->accept();
+                }
+                break;
+            }
+            case Qt::EndNativeGesture:
+            {
+                endTouch();
+                retval = d->matcher.nativeGestureEndEvent(gevent);
+                event->accept();
+                break;
+            }
+            default:
+            {
+                KisAbstractInputAction::setInputManager(this);
+                retval = d->matcher.nativeGestureEvent(gevent);
+                event->accept();
+                break;
+            }
+        }
+        break;
+    }
+
     default:
         break;
     }
 
     return !retval ? d->processUnhandledEvent(event) : true;
+}
+
+bool KisInputManager::startTouch(bool &retval)
+{
+    d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
+    // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
+    if (KisConfig().disableTouchOnCanvas()) {
+        d->eatOneMousePress();
+    }
+    if (d->tryHidePopupPalette()) {
+        retval = true;
+        return false;
+    } else {
+        return true;
+    }
+}
+
+void KisInputManager::endTouch()
+{
+    d->touchHasBlockedPressEvents = false;
 }
 
 void KisInputManager::slotCompressedMoveEvent()
@@ -601,7 +666,9 @@ void KisInputManager::profileChanged()
                 d->addWheelShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->wheel());
                 break;
             case KisShortcutConfiguration::GestureType:
-                d->addTouchShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture());
+                if (!d->addNativeGestureShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture())) {
+                    d->addTouchShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture());
+                }
                 break;
             default:
                 break;

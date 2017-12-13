@@ -133,7 +133,7 @@ public:
 
 
     QStringList resourceTypes() const;
-    QList<KoResource*> resources(const QString &resType = QString::null) const;
+    QList<KoResource*> resources(const QString &resType = QString()) const;
     int resourceCount() const;
 private:
 

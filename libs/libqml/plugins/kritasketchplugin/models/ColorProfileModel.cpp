@@ -40,14 +40,19 @@ public:
 ColorProfileModel::ColorProfileModel(QObject* parent)
     : QAbstractListModel(parent), d(new Private(this))
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(TextRole, "text");
-    setRoleNames(roleNames);
 }
 
 ColorProfileModel::~ColorProfileModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> ColorProfileModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(TextRole, "text");
+
+    return roleNames;
 }
 
 int ColorProfileModel::rowCount(const QModelIndex& parent) const

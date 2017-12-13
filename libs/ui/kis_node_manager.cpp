@@ -18,7 +18,7 @@
 
 #include "kis_node_manager.h"
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QMessageBox>
 #include <QSignalMapper>
 
@@ -346,6 +346,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_animated", "animated");
 
+    CONVERT_NODE_ACTION_2("convert_layer_to_file_layer", "KisFileLayer", QStringList()<< "KisFileLayer" << "KisCloneLayer");
+
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 
@@ -589,7 +591,8 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
         m_d->commandsAdapter.removeNode(activeNode);
         m_d->commandsAdapter.endMacro();
-
+    } else if (nodeType == "KisFileLayer") {
+            m_d->layerManager.convertLayerToFileLayer(activeNode);
     } else {
         warnKrita << "Unsupported node conversion type:" << nodeType;
     }
@@ -994,7 +997,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 {
     KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
     QString filename = dialog.filename();
 
@@ -1004,7 +1007,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (url.isEmpty()) return;
 
-    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
+    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename, false);
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 

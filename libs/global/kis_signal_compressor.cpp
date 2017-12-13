@@ -16,14 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+/**
+ * KisSignalCompressor will never trigger timeout more often than every \p delay ms,
+ * i.e. \p delay ms is a given lower limit defining the highest frequency.
+ *
+ * The current implementation uses a long-running monitor timer to eliminate the
+ * overhead incurred by restarting and stopping timers with each signal. The
+ * consequence of this is that the given \p delay ms is not always exactly followed.
+ *
+ * KisSignalCompressor makes the following callback guarantees (0 < err <= 1, with
+ * err == 0 if this is the first signal after a while):
+ *
+ * POSTPONE:
+ *   - timeout after <= (1 + err) * \p delay ms.
+ * FIRST_ACTIVE_POSTPONE_NEXT:
+ *   - first timeout immediately
+ *   - postponed timeout after (1 + err) * \p delay ms
+ * FIRST_ACTIVE:
+ *   - first timeout immediately
+ *   - second timeout after (1 + err) * \p delay ms
+ *   - after that: \p delay ms
+ * FIRST_INACTIVE:
+ *   - timeout after (1 + err) * \p delay ms
+ */
+
 #include "kis_signal_compressor.h"
-
-#include <QTimer>
-
+#include "kis_relaxed_timer.h"
 
 KisSignalCompressor::KisSignalCompressor()
     : QObject(0)
-    , m_timer(new QTimer(this))
+    , m_timer(new KisRelaxedTimer(this))
     , m_mode(UNDEFINED)
     , m_gotSignals(false)
 {
@@ -33,7 +55,7 @@ KisSignalCompressor::KisSignalCompressor()
 
 KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
     : QObject(parent),
-      m_timer(new QTimer(this)),
+      m_timer(new KisRelaxedTimer(this)),
       m_mode(mode),
       m_gotSignals(false)
 {
@@ -65,6 +87,10 @@ void KisSignalCompressor::start()
             m_gotSignals = true;
             if (m_mode == FIRST_ACTIVE_POSTPONE_NEXT) {
                 m_timer->start();
+            } else if (m_mode == FIRST_ACTIVE && m_timer->remainingTime() == 0) {
+                // overdue, swamped by other events
+                m_timer->stop();
+                slotTimerExpired();
             }
         }
         break;

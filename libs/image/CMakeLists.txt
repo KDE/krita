@@ -21,7 +21,6 @@ include_directories(
 
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 if(FFTW3_FOUND)
@@ -56,10 +55,12 @@ set(kritaimage_LIB_SRCS
     tiles3/swap/kis_tile_data_swapper.cpp
    kis_distance_information.cpp
    kis_painter.cc
+   kis_painter_blt_multi_fixed.cpp
    kis_marker_painter.cpp
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
    brushengine/kis_random_source.cpp
+   brushengine/KisPerStrokeRandomSource.cpp
    brushengine/kis_stroke_random_source.cpp
    brushengine/kis_paintop.cc
    brushengine/kis_paintop_factory.cpp
@@ -67,6 +68,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
    brushengine/kis_paintop_settings_update_proxy.cpp
+   brushengine/kis_paintop_utils.cpp
    brushengine/kis_no_size_paintop_settings.cpp
    brushengine/kis_locked_properties.cc
    brushengine/kis_locked_properties_proxy.cpp
@@ -76,8 +78,10 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_combo_based_paintop_property.cpp
    brushengine/kis_slider_based_paintop_property.cpp
    brushengine/kis_standard_uniform_properties_factory.cpp
+   brushengine/KisStrokeSpeedMeasurer.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
+   commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
    commands/kis_image_set_projection_color_space_command.cpp
    commands/kis_image_layer_add_command.cpp
@@ -139,6 +143,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
    kis_gaussian_kernel.cpp
+   kis_edge_detection_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
    kis_default_bounds_base.cpp
@@ -164,10 +169,15 @@ set(kritaimage_LIB_SRCS
    kis_update_job_item.cpp
    kis_stroke_strategy_undo_command_based.cpp
    kis_simple_stroke_strategy.cpp
+   KisRunnableBasedStrokeStrategy.cpp
+   KisRunnableStrokeJobData.cpp
+   KisRunnableStrokeJobsInterface.cpp
+   KisFakeRunnableStrokeJobsExecutor.cpp
    kis_stroke_job_strategy.cpp
    kis_stroke_strategy.cpp
    kis_stroke.cpp
    kis_strokes_queue.cpp
+   KisStrokesQueueMutatedJobInterface.cpp
    kis_simple_update_queue.cpp
    kis_update_scheduler.cpp
    kis_queues_progress_updater.cpp
@@ -220,6 +230,7 @@ set(kritaimage_LIB_SRCS
    kis_paint_device.cc
    kis_paint_device_debug_utils.cpp
    kis_fixed_paint_device.cpp
+   KisOptimizedByteArray.cpp
    kis_paint_layer.cc
    kis_perspective_math.cpp
    kis_pixel_selection.cpp

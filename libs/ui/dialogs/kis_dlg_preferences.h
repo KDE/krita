@@ -79,6 +79,9 @@ public:
     bool showCanvasMessages();
     bool compressKra();
     bool toolOptionsInDocker();
+    int kineticScrollingGesture();
+    int kineticScrollingSensitivity();
+    bool kineticScrollingScrollbar();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
 

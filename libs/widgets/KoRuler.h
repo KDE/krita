@@ -239,6 +239,8 @@ public Q_SLOTS:
      */
     void createGuideToolConnection(KoCanvasBase *canvas);
 
+    void setUnitPixelMultiple2(bool enabled);
+
 Q_SIGNALS:
     /**
      * emitted when any of the indents is moved by the user.

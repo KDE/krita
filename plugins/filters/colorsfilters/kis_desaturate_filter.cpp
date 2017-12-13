@@ -87,7 +87,7 @@ KisFilterConfigurationSP KisDesaturateFilter::factoryConfiguration() const
     return config;
 }
 
-KisDesaturateConfigWidget::KisDesaturateConfigWidget(QWidget * parent, Qt::WFlags f) : KisConfigWidget(parent, f)
+KisDesaturateConfigWidget::KisDesaturateConfigWidget(QWidget * parent, Qt::WindowFlags f) : KisConfigWidget(parent, f)
 {
     m_page = new Ui_WdgDesaturate();
     m_page->setupUi(this);

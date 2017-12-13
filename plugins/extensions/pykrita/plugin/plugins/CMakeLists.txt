@@ -83,8 +83,10 @@ install_pykrita_plugin(filtermanager)
 install_pykrita_plugin(exportlayers)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
+install_pykrita_plugin(tenscripts)
 install( FILES
     tenbrushes/tenbrushes.action
+    tenscripts/tenscripts.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 
 install_pykrita_plugin(palette_docker)

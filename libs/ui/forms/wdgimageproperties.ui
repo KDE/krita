@@ -193,8 +193,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true">
-        </widget>
+        <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
        </item>
        <item>
         <widget class="QLabel" name="label_2">
@@ -215,51 +214,18 @@
       <attribute name="title">
        <string>Softproofing</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="0">
-        <widget class="QLabel" name="lblGamutWarning">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QCheckBox" name="chkSaveProofing">
          <property name="text">
-          <string>Gamut Warning:</string>
+          <string>Store Softproofing configuration in the image</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lblAdaptationState">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Adaptation State:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="3">
-        <widget class="QSlider" name="sldAdaptationState">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set how much you wish to correct the adaptation state. This will affect how &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt; changes the whites of your image. In Layman's terms: how much do you wish to have the color management correct the paper-color to screen white while using &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt;?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2" colspan="2">
-        <widget class="QCheckBox" name="ckbBlackPointComp">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Black Point compensation matches the darkest color of the source device to the darkest color of the destination device. Relative Colorimetric without Black Point Compensation will show the difference between the darkest values. With blackpoint compensation, black is black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string>Black Point Compensation</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="4">
+       <item>
         <widget class="KisColorSpaceSelector" name="proofSpaceSelector" native="true"/>
        </item>
-       <item row="1" column="0" colspan="4">
+       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Rendering Intent</string>
@@ -295,12 +261,73 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="KisColorButton" name="gamutAlarm">
-         <property name="text">
-          <string/>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="lblAdaptationState">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text">
+            <string>Adaptation State:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="sldAdaptationState">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set how much you wish to correct the adaptation state. This will affect how &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt; changes the whites of your image. In Layman's terms: how much do you wish to have the color management correct the paper-color to screen white while using &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt;?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="lblGamutWarning">
+           <property name="text">
+            <string>Gamut Warning:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KisColorButton" name="gamutAlarm">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="ckbBlackPointComp">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Black Point compensation matches the darkest color of the source device to the darkest color of the destination device. Relative Colorimetric without Black Point Compensation will show the difference between the darkest values. With blackpoint compensation, black is black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Black Point Compensation</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

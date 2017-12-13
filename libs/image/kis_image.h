@@ -92,7 +92,7 @@ public: // KisNodeGraphListener implementation
     void nodeChanged(KisNode * node) override;
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
-    void requestProjectionUpdate(KisNode *node, const QRect& rect, bool resetAnimationCache) override;
+    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
     void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
 
@@ -334,11 +334,11 @@ public:
     QPointF documentToPixel(const QPointF &documentCoord) const;
 
     /**
-     * Convert a document coordinate to an integer pixel coordinate.
+     * Convert a document coordinate to an integer pixel coordinate rounded down.
      *
      * @param documentCoord PostScript Pt coordinate to convert.
      */
-    QPoint documentToIntPixel(const QPointF &documentCoord) const;
+    QPoint documentToImagePixelFloored(const QPointF &documentCoord) const;
 
     /**
      * Convert a document rectangle to a pixel rectangle.
@@ -346,13 +346,6 @@ public:
      * @param documentRect PostScript Pt rectangle to convert.
      */
     QRectF documentToPixel(const QRectF &documentRect) const;
-
-    /**
-     * Convert a document rectangle to an integer pixel rectangle.
-     *
-     * @param documentRect PostScript Pt rectangle to convert.
-     */
-    QRect documentToIntPixel(const QRectF &documentRect) const;
 
     /**
      * Convert a pixel coordinate to a document coordinate.
@@ -951,7 +944,7 @@ private:
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
 
     void requestProjectionUpdateImpl(KisNode *node,
-                                     const QRect& rect,
+                                     const QVector<QRect> &rects,
                                      const QRect &cropRect);
 
     friend class KisImageResizeCommand;

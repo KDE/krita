@@ -385,7 +385,13 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
             if (clearTileRect == tileRect) {
                  // Clear whole tile
                  m_hashTable->deleteTile(column, row);
-                 needsRecalculateExtent = true;
+
+                 if (!needsRecalculateExtent &&
+                     (m_extentMinX == tileRect.left() || m_extentMaxX == tileRect.right() ||
+                      m_extentMinY == tileRect.top() || m_extentMaxY == tileRect.bottom())) {
+
+                     needsRecalculateExtent = true;
+                 }
 
                  if (!pixelBytesAreDefault) {
                      KisTileSP clearedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));

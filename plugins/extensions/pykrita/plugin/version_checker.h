@@ -233,7 +233,7 @@ public:
 
         bool lookup_next_char = false;
         int strip_lead_pos = 0;
-        switch (version_info.at(0).toAscii()) {
+        switch (version_info.at(0).toLatin1()) {
         case '<':
             checker.m_op = less;
             lookup_next_char = true;
@@ -252,7 +252,7 @@ public:
             break;
         }
         if (lookup_next_char) {
-            if (version_info.at(1).toAscii() == '=') {
+            if (version_info.at(1).toLatin1() == '=') {
                 // NOTE Shift state
                 checker.m_op = operation(int(checker.m_op) + 1);
                 strip_lead_pos = 2;

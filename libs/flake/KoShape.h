@@ -1132,7 +1132,7 @@ public:
 
 public:
 
-    struct ShapeChangeListener {
+    struct KRITAFLAKE_EXPORT ShapeChangeListener {
         virtual ~ShapeChangeListener();
         virtual void notifyShapeChanged(ChangeType type, KoShape *shape) = 0;
 

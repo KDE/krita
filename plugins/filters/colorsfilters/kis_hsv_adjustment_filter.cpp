@@ -134,7 +134,7 @@ KisFilterConfigurationSP KisHSVAdjustmentFilter::factoryConfiguration() const
     return config;
 }
 
-KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConfigWidget(parent, f)
+KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WindowFlags f) : KisConfigWidget(parent, f)
 {
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);

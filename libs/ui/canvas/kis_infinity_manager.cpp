@@ -218,7 +218,7 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
      * event filter whin this canvas is not active, but for now we can
      * just check the destination of the event, if it is correct.
      */
-    if (obj != m_canvas->canvasWidget()) return false;
+    if (m_canvas == NULL || obj != m_canvas->canvasWidget()) return false;
 
     KIS_ASSERT_RECOVER_NOOP(m_filteringEnabled);
 

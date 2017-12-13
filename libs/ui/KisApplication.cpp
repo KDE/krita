@@ -1,23 +1,22 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2009 Thomas Zander <zander@kde.org>
-   Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/*
+ * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+ * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #include "KisApplication.h"
 
@@ -31,7 +30,7 @@
 #include "osx.h"
 #endif
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFile>
@@ -257,6 +256,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("templates", "data", "/templates");
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
     KoResourcePaths::addResourceType("symbols", "data", "/symbols");
+    KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -282,6 +282,12 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
+
+    // Indicate that it is now safe for users of KoResourcePaths to load resources
+    KoResourcePaths::setReady();
 }
 
 void KisApplication::loadResources()
@@ -381,6 +387,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     initializeGlobals(args);
 
+    const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
     const bool print = args.print();
     const bool exportAs = args.exportAs();
@@ -394,7 +401,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");// &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
+    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -468,6 +475,16 @@ bool KisApplication::start(const KisApplicationArguments &args)
     connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
+
+    // Create a new image, if needed
+    if (doNewImage) {
+        KisDocument *doc = args.image();
+        if (doc) {
+            KisPart::instance()->addDocument(doc);
+            m_mainWindow->addViewAndNotifyLoadingCompleted(doc);
+        }
+    }
+
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
@@ -487,9 +504,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 // now try to load
             }
             else {
-
                 if (exportAs) {
-                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName);
+                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName, false);
                     if (outputMimetype == "application/octetstream") {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;

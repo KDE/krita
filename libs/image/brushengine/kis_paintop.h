@@ -34,6 +34,7 @@ class KoColorSpace;
 
 class KisPainter;
 class KisPaintInformation;
+class KisRunnableStrokeJobData;
 
 /**
  * KisPaintOp are use by tools to draw on a paint device. A paintop takes settings
@@ -110,6 +111,15 @@ public:
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
     static void splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction);
+
+    /**
+     * If the preset supports asynchronous updates, then the stroke execution core will
+     * call this method with a desured frame rate. The jobs that should be run to prepare the update
+     * are returned via \p jobs
+     *
+     * @return a pair of <the desired FPS rate (period of updates); are there any unprocessed update jobs left?>
+     */
+    virtual std::pair<int, bool> doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
 
 protected:
     friend class KisPaintInformation;

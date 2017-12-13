@@ -1,0 +1,9 @@
+{
+    "Id": "ASC CDL Color Balance",
+    "Type": "Service",
+    "X-KDE-Library": "kritaasccdl",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "40"
+}

@@ -37,6 +37,8 @@ public:
     DocumentListModel(QObject *parent = 0);
     ~DocumentListModel();
 
+    QHash<int, QByteArray> roleNames() const;
+
     enum CustomRoles {
         FileNameRole = Qt::UserRole + 1,
         FilePathRole,

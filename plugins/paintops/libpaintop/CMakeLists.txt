@@ -19,6 +19,8 @@ set(kritalibpaintop_LIB_SRCS
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
+    KisDabCacheUtils.cpp
+    kis_dab_cache_base.cpp
     kis_dab_cache.cpp
     kis_filter_option.cpp
     kis_multi_sensors_model_p.cpp
@@ -52,6 +54,8 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_based_paintop_settings.cpp
     kis_compositeop_option.cpp
     kis_texture_option.cpp
+    kis_texture_chooser.cpp 
+    KisTextureMaskInfo.cpp
     kis_pressure_texture_strength_option.cpp
     kis_embedded_pattern_manager.cpp
     sensors/kis_dynamic_sensors.cc
@@ -76,6 +80,7 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgcoloroptions.ui
     forms/wdgbrushchooser.ui
     forms/wdgpredefinedbrushchooser.ui
+    forms/wdgtexturechooser.ui
     forms/wdgCompositeOpOption.ui
     forms/wdgflowopacityoption.ui
     sensors/SensorDistanceConfiguration.ui

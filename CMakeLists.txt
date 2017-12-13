@@ -190,15 +190,31 @@ include(MacroJPEG)
 ## so we should request the correct  version in advance  ##
 ###########################################################
 
+function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
+    set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
+    if (MINGW)
+        set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
+    endif (MINGW)
+    unset(${OUTPUT_VARNAME} CACHE)
+    CHECK_CXX_SOURCE_COMPILES("
+#include <Python.h>
+int main(int argc, char *argv[]) {
+    Py_InitializeEx(0);
+}" ${OUTPUT_VARNAME})
+endfunction()
+
 if(MINGW)
-    # Special check: Building on Windows and ext_python is used
-    find_package(PythonInterp 3.6)
-    if(PYTHONINTERP_FOUND)
+    find_package(PythonInterp 3.6 EXACT)
+    find_package(PythonLibs 3.6 EXACT)
+    if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
         find_package(PythonLibrary 3.6)
-        if(PYTHONLIBS_FOUND)
-            include("${CMAKE_CURRENT_SOURCE_DIR}/PythonWindowsCheck.cmake")
-        endif(PYTHONLIBS_FOUND)
-    endif(PYTHONINTERP_FOUND)
+        TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
+        if (NOT CAN_USE_PYTHON_LIBS)
+            message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
+        endif (NOT CAN_USE_PYTHON_LIBS)
+    endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 else(MINGW)
     find_package(PythonInterp 3.0)
     find_package(PythonLibrary 3.0)
@@ -350,8 +366,17 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
   -DQT_USE_FAST_CONCATENATION
   -DQT_NO_URL_CAST_FROM_STRING
-  -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
+
+if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
+elseif(${Qt5_VERSION} VERSION_GREATER "5.7.0" )
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50800)
+elseif(${Qt5_VERSION} VERSION_GREATER "5.6.0" )
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
+else()
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50600)
+endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 
@@ -373,6 +398,13 @@ if(WIN32)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
     endif()
 endif()
+
+# KDECompilerSettings adds the `--export-all-symbols` linker flag.
+# We don't really need it.
+if(MINGW)
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif(MINGW)
 
 # enable exceptions globally
 kde_enable_exceptions()
@@ -423,7 +455,7 @@ endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost 1.55 REQUIRED COMPONENTS system) # for pigment and stage
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
 ##
@@ -574,9 +606,15 @@ if(HAVE_VC)
     include (VcMacros)
 
     if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
+        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+        if(NOT WIN32)
+            set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
+        endif()
     elseif (NOT MSVC)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
+        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        if(NOT WIN32)
+            set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
+        endif()
     endif()
 
     #Handle Vc master

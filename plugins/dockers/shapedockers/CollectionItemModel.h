@@ -67,6 +67,8 @@ public:
 
     const KoProperties *properties(const QModelIndex &index) const;
 
+    Qt::DropActions supportedDragActions() const;
+
 private:
     QList<KoCollectionItem> m_shapeTemplateList;
     QString m_family;

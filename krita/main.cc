@@ -25,7 +25,7 @@
 #include <kis_debug.h>
 #include <QProcess>
 #include <QProcessEnvironment>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 #include <QDate>
 #include <QLocale>
@@ -102,7 +102,7 @@ extern "C" int main(int argc, char **argv)
     KisLoggingManager::initialize();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
+    QString key = "Krita3" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
@@ -185,9 +185,10 @@ extern "C" int main(int argc, char **argv)
             // And if there isn't one, check the one set by the system.
             // XXX: This doesn't work, for some !@#$% reason.
             QLocale locale = QLocale::system();
-            if (locale.bcp47Name() != QStringLiteral("en")) {
-                qputenv("LANG", locale.bcp47Name().toLatin1());
-                KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+            if (locale.name() != QStringLiteral("en")) {
+                qDebug() << "Setting Krita's language to:" << locale;
+                qputenv("LANG", locale.name().toLatin1());
+                KLocalizedString::setLanguages(QStringList() << locale.name());
             }
         }
 

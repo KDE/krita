@@ -39,7 +39,8 @@ public:
 
     void processQueue(KisUpdaterContext &updaterContext);
 
-    void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail);
+    void addUpdateJob(KisNodeSP node, const QVector<QRect> &rects, const QRect& cropRect, int levelOfDetail);
+    void addUpdateJob(KisNodeSP node, const QRect &rc, const QRect& cropRect, int levelOfDetail);
     void addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail);
     void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
@@ -55,7 +56,7 @@ public:
     int overrideLevelOfDetail() const;
 
 protected:
-    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail, KisBaseRectsWalker::UpdateType type);
+    void addJob(KisNodeSP node, const QVector<QRect> &rects, const QRect& cropRect, int levelOfDetail, KisBaseRectsWalker::UpdateType type);
 
     bool processOneJob(KisUpdaterContext &updaterContext);
 

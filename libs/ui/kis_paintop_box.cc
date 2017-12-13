@@ -430,8 +430,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
-    m_presetsChooserPopup->setMinimumHeight(450);
-    m_presetsChooserPopup->setMinimumWidth(350);
+    m_presetsChooserPopup->setMinimumHeight(550);
+    m_presetsChooserPopup->setMinimumWidth(450);
     m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -702,7 +702,7 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         if (compositeOpID != m_currCompositeOpID) {
             m_currCompositeOpID = compositeOpID;
         }
-        if (compositeOpID == COMPOSITE_ERASE) {
+        if (compositeOpID == COMPOSITE_ERASE || m_resourceProvider->eraserMode()) {
             m_eraseModeButton->setChecked(true);
         }
         else {
@@ -878,6 +878,10 @@ void KisPaintopBox::slotSetupDefaultPreset()
     KisPaintOpPresetSP preset = defaultPreset(m_resourceProvider->currentPreset()->paintOp());
     preset->setOptionsWidget(m_optionWidget);
     m_resourceProvider->setPaintOpPreset(preset);
+
+    // tell the brush editor that the resource has changed
+    // so it can update everything
+    m_presetsPopup->resourceSelected(preset.data());
 }
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)

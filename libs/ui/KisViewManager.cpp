@@ -34,8 +34,9 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QMenu>
@@ -191,15 +192,9 @@ public:
         , inputManager(_q)
         , scriptManager(_q)
         , actionAuthor(0)
+        , showPixelGrid(0)
     {
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
-        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
-        canvasResourceManager.addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+        KisViewManager::initializeResourceManager(&canvasResourceManager);
     }
 
 public:
@@ -252,6 +247,7 @@ public:
     KisSignalAutoConnectionsStore viewConnections;
     KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
+    KisAction *showPixelGrid;
 
     QByteArray canvasState;
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
@@ -260,7 +256,6 @@ public:
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
-
 
 KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate(this, _actionCollection, parent))
@@ -340,6 +335,18 @@ KisViewManager::~KisViewManager()
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     delete d;
+}
+
+void KisViewManager::initializeResourceManager(KoCanvasResourceManager *resourceManager)
+{
+    resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+    resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
 }
 
 KActionCollection *KisViewManager::actionCollection() const
@@ -449,6 +456,8 @@ void KisViewManager::setCurrentView(KisView *view)
         // set up progrress reporting
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
+
+        d->viewConnections.addUniqueConnection(d->showPixelGrid, SIGNAL(toggled(bool)), canvasController, SLOT(slotTogglePixelGrid(bool)));
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -696,6 +705,7 @@ void KisViewManager::createActions()
     a = actionManager()->createAction("edit_blacklist_cleanup");
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
+    actionManager()->createAction("ruler_pixel_multiple2");
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
     connect(d->showRulersAction, SIGNAL(toggled(bool)), SLOT(slotSaveShowRulersState(bool)));
@@ -713,6 +723,9 @@ void KisViewManager::createActions()
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
+
+    d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
+    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
 
 }
 
@@ -866,7 +879,6 @@ void KisViewManager::setQtMainWindow(QMainWindow* newMainWindow)
 {
     d->mainWindow = newMainWindow;
 }
-
 
 void KisViewManager::slotDocumentSaved()
 {
@@ -1320,10 +1332,8 @@ void KisViewManager::setShowFloatingMessage(bool show)
 void KisViewManager::changeAuthorProfile(const QString &profileName)
 {
     KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
-    if (profileName.isEmpty()) {
+    if (profileName.isEmpty() || profileName == i18nc("choice for author profile", "Anonymous")) {
         appAuthorGroup.writeEntry("active-profile", "");
-    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
-        appAuthorGroup.writeEntry("active-profile", "anonymous");
     } else {
         appAuthorGroup.writeEntry("active-profile", profileName);
     }
@@ -1340,11 +1350,20 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         return;
     }
     d->actionAuthor->clear();
-    d->actionAuthor->addAction(i18n("Default Author Profile"));
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
     KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QStringList filters = QStringList() << "*.authorinfo";
+    QDir dir(authorInfo);
+    Q_FOREACH(QString entry, dir.entryList(filters)) {
+        int ln = QString(".authorinfo").size();
+        entry.chop(ln);
+        if (!profiles.contains(entry)) {
+            profiles.append(entry);
+        }
+    }
     Q_FOREACH (const QString &profile , profiles) {
         d->actionAuthor->addAction(profile);
     }
@@ -1352,11 +1371,9 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
 
-    if (profileName == "anonymous") {
-        d->actionAuthor->setCurrentItem(1);
+    if (profileName == "anonymous" || profileName.isEmpty()) {
+        d->actionAuthor->setCurrentItem(0);
     } else if (profiles.contains(profileName)) {
         d->actionAuthor->setCurrentAction(profileName);
-    } else {
-        d->actionAuthor->setCurrentItem(0);
     }
 }

@@ -25,25 +25,27 @@
 
 #include "kis_brush_based_paintop.h"
 #include <kis_airbrush_option.h>
-#include <kis_pressure_darken_option.h>
 #include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_ratio_option.h>
 #include <kis_pressure_flow_option.h>
 #include <kis_pressure_rotation_option.h>
-#include <kis_pressure_mix_option.h>
-#include <kis_pressure_hsv_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
-#include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_brush_based_paintop_settings.h>
 
+#include <KisRollingMeanAccumulatorWrapper.h>
+
+#include <QElapsedTimer>
+
 class KisPainter;
 class KisColorSource;
-
+class KisDabRenderingExecutor;
+class KisRenderedDab;
+class KisRunnableStrokeJobData;
 
 class KisBrushOp : public KisBrushBasedPaintOp
 {
@@ -55,6 +57,8 @@ public:
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
+    std::pair<int, bool> doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
+
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
@@ -62,8 +66,18 @@ protected:
 
     KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
+    struct UpdateSharedState;
+    typedef QSharedPointer<UpdateSharedState> UpdateSharedStateSP;
+
+    void addMirroringJobs(Qt::Orientation direction,
+                          QVector<QRect> &rects,
+                          UpdateSharedStateSP state,
+                          QVector<KisRunnableStrokeJobData*> &jobs);
+
+    UpdateSharedStateSP m_updateSharedState;
+
+
 private:
-    KisColorSource *m_colorSource;
     KisAirbrushOption m_airbrushOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRatioOption m_ratioOption;
@@ -73,15 +87,21 @@ private:
     KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
-    KisPressureDarkenOption m_darkenOption;
     KisPressureRotationOption m_rotationOption;
-    KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
-    QList<KisPressureHSVOption*> m_hsvOptions;
 
-    KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_lineCacheDevice;
-    KisPaintDeviceSP m_colorSourceDevice;
+
+    QScopedPointer<KisDabRenderingExecutor> m_dabExecutor;
+    qreal m_currentUpdatePeriod = 20.0;
+    KisRollingMeanAccumulatorWrapper m_avgSpacing;
+    KisRollingMeanAccumulatorWrapper m_avgNumDabs;
+    KisRollingMeanAccumulatorWrapper m_avgUpdateTimePerDab;
+
+    const int m_idealNumRects;
+
+    const int m_minUpdatePeriod;
+    const int m_maxUpdatePeriod;
 };
 
 #endif // KIS_BRUSHOP_H_

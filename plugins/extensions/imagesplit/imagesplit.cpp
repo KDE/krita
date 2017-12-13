@@ -23,7 +23,7 @@
 
 #include <QStringList>
 #include <QDir>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QMessageBox>
 
 #include <klocalizedstring.h>
@@ -138,7 +138,7 @@ void Imagesplit::slotImagesplit()
         if (dlgImagesplit->autoSave()) {
             KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
             dialog.setCaption(i18n("Save Image on Split"));
-            dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+            dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
             QStringList mimeFilter = m_view->document()->importExportManager()->mimeFilter(KisImportExportManager::Export);
             QString defaultMime = QString::fromLatin1(m_view->document()->mimeType());
             dialog.setMimeTypeFilters(mimeFilter, defaultMime);
@@ -179,12 +179,12 @@ void Imagesplit::slotImagesplit()
                 for (int j = 0; j < (numHorizontalLines + 1); j++) {
                     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                     dialog.setCaption(i18n("Save Image on Split"));
-                    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+                    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter, defaultMime);
 
                     QUrl url = QUrl::fromUserInput(dialog.filename());
 
-                    QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                    QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile(), false);
 
                     if (url.isEmpty())
                         return;

@@ -91,6 +91,42 @@
 
 #include "ui_wdglayerbox.h"
 
+#include <QProxyStyle>
+#include <QPainter>
+
+class KisLayerBoxStyle : public QProxyStyle
+{
+public:
+    KisLayerBoxStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
+                       QPainter *painter, const QWidget *widget) const
+    {
+        if (element == QStyle::PE_IndicatorItemViewItemDrop)
+        {
+            QColor color(widget->palette().color(QPalette::Highlight).lighter());
+
+            if (option->rect.height() == 0) {
+                QBrush brush(color);
+
+                QRect r(option->rect);
+                r.setTop(r.top() - 2);
+                r.setBottom(r.bottom() + 2);
+
+                painter->fillRect(r, brush);
+            } else {
+                color.setAlpha(200);
+                QBrush brush(color);
+                painter->fillRect(option->rect, brush);
+            }
+        }
+        else
+        {
+            QProxyStyle::drawPrimitive(element, option, painter, widget);
+        }
+    }
+};
+
 inline void KisLayerBox::connectActionToButton(KisViewManager* viewManager, QAbstractButton *button, const QString &id)
 {
     if (!viewManager || !button) return;
@@ -124,6 +160,8 @@ KisLayerBox::KisLayerBox()
     m_opacityDelayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
+
+    m_wdgLayerBox->listLayers->setStyle(new KisLayerBoxStyle(m_wdgLayerBox->listLayers->style()));
 
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
@@ -583,6 +621,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 addActionToMenu(convertToMenu, "convert_to_transparency_mask");
                 addActionToMenu(convertToMenu, "convert_to_filter_mask");
                 addActionToMenu(convertToMenu, "convert_to_selection_mask");
+                addActionToMenu(convertToMenu, "convert_layer_to_file_layer");
 
                 QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
                 addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");

@@ -33,7 +33,7 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_global.h"
 #include <brushengine/kis_paintop_registry.h>
-#include "kis_brush_based_paintop_settings.h"
+#include "KisBrushOpSettings.h"
 #include "kis_brush_server.h"
 #include "kis_duplicateop_settings_widget.h"
 
@@ -44,7 +44,7 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18nc("Pixel paintbrush", "Pixel"), KisPaintOpFactory::categoryStable(), "krita-paintbrush.png", QString(), QStringList(), 1));
+    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18nc("Pixel paintbrush", "Pixel"), KisPaintOpFactory::categoryStable(), "krita-paintbrush.png", QString(), QStringList(), 1));
     r->add(new KisSimplePaintOpFactory<KisDuplicateOp, KisDuplicateOpSettings, KisDuplicateOpSettingsWidget>("duplicate", i18nc("clone paintbrush (previously \"Duplicate\")", "Clone"), KisPaintOpFactory::categoryStable(), "krita-duplicate.png", QString(), QStringList(COMPOSITE_COPY), 15));
 
     KisBrushServer::instance();

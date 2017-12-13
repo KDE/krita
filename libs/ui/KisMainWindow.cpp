@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QCloseEvent>
+#include <QStandardPaths>
+#include <QDesktopServices>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
@@ -125,6 +127,7 @@
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
+#include "kis_memory_statistics_server.h"
 #include "kis_node.h"
 #include "KisOpenPane.h"
 #include "kis_paintop_box.h"
@@ -132,6 +135,7 @@
 #include "KisPrintJob.h"
 #include "kis_resource_server_provider.h"
 #include "kis_signal_compressor_with_param.h"
+#include "kis_statusbar.h"
 #include "KisView.h"
 #include "KisViewManager.h"
 #include "thememanager.h"
@@ -217,6 +221,7 @@ public:
     KisAction *mdiPreviousWindow {0};
     KisAction *toggleDockers {0};
     KisAction *toggleDockerTitleBars {0};
+    KisAction *fullScreenMode {0};
 
     KisAction *expandingSpacers[2];
 
@@ -537,6 +542,7 @@ void KisMainWindow::addView(KisView *view)
 
     if (d->activeView) {
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
+        connect(d->viewManager->statusBar(), SIGNAL(memoryStatusUpdated()), this, SLOT(updateCaption()));
     }
 }
 
@@ -728,19 +734,38 @@ void KisMainWindow::updateCaption()
     if (!d->mdiArea->activeSubWindow()) {
         updateCaption(QString(), false);
     }
-    else if (d->activeView && d->activeView->document()){
+    else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
         QString caption(doc->caption());
         if (d->readOnly) {
-            caption += ' ' + i18n("(write protected)");
+            caption += " [" + i18n("Write Protected") + "] ";
         }
 
         if (doc->isRecovered()) {
-            caption += ' ' + i18n("[RECOVERED]");
+            caption += " [" + i18n("Recovered") + "] ";
         }
 
-        caption += "[*]";
+
+        // new documents aren't saved yet, so we don't need to say it is modified
+        // new files don't have a URL, so we are using that for the check
+        if (!doc->url().isEmpty()) {
+
+            if ( doc->isModified()) {
+                caption += " [" + i18n("Modified") + "] ";
+            }
+        }
+
+        // show the file size for the document
+
+
+        KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
+
+
+        if (m_fileSizeStats.imageSize) {
+            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+        }
+
 
         d->activeView->setWindowTitle(caption);
         d->activeView->setWindowModified(doc->isModified());
@@ -847,7 +872,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 QStringList KisMainWindow::showOpenFileDialog(bool isImporting)
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setCaption(isImporting ? i18n("Import Images") : i18n("Open Images"));
 
@@ -1029,7 +1054,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             }
             // If that is empty, too, use the Pictures location.
             if (proposedPath.isEmpty()) {
-                proposedPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+                proposedPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
             }
             // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
             // open the location where the document currently is.
@@ -1062,7 +1087,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         QByteArray outputFormat = nativeFormat;
 
-        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile(), false);
         outputFormat = outputFormatString.toLatin1();
 
 
@@ -1600,7 +1625,7 @@ KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
         KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
-            defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+            defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
         QUrl startUrl = QUrl::fromLocalFile(defaultDir);
         KisDocument* pDoc = d->activeView->document();
         /** if document has a file name, take file name and replace extension with .pdf */
@@ -2278,7 +2303,7 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
-    actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
+    d->fullScreenMode = actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
@@ -2432,6 +2457,8 @@ void KisMainWindow::initializeGeometry()
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
     restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+
+    d->fullScreenMode->setChecked(isFullScreen());
 }
 
 void KisMainWindow::showManual()

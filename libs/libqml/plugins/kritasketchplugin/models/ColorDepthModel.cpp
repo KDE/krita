@@ -32,14 +32,18 @@ public:
 ColorDepthModel::ColorDepthModel(QObject* parent)
     : QAbstractListModel(parent), d(new Private)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(TextRole, "text");
-    setRoleNames(roleNames);
 }
 
 ColorDepthModel::~ColorDepthModel()
 {
     delete d;
+}
+
+QHash<int, QByteArray> ColorDepthModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(TextRole, "text");
+    return roleNames;
 }
 
 int ColorDepthModel::rowCount(const QModelIndex& parent) const

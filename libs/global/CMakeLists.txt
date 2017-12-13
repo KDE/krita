@@ -1,3 +1,5 @@
+add_subdirectory( tests )
+
 include(CheckFunctionExists)
 check_function_exists(backtrace HAVE_BACKTRACE)
 configure_file(config-debug.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-debug.h)
@@ -16,10 +18,15 @@ set(kritaglobal_LIB_SRCS
     kis_painting_tweaks.cpp
     KisHandlePainterHelper.cpp
     KisHandleStyle.cpp
+    kis_relaxed_timer.cpp
     kis_signal_compressor.cpp
     kis_signal_compressor_with_param.cpp
     kis_acyclic_signal_connector.cpp
+    kis_latency_tracker.cpp
     KisQPainterStateSaver.cpp
+    KisSharedThreadPoolAdapter.cpp
+    KisSharedRunnable.cpp
+    KisRollingMeanAccumulatorWrapper.cpp
     KisLoggingManager.cpp
 )
 

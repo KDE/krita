@@ -26,7 +26,7 @@ class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
     Q_OBJECT
 
 public:
-    struct AddKeyframeCommand : public KisReplaceKeyframeCommand
+    struct KRITAIMAGE_EXPORT AddKeyframeCommand : public KisReplaceKeyframeCommand
     {
         AddKeyframeCommand(KisScalarKeyframeChannel *channel, int time, qreal value, KUndo2Command *parentCommand);
     };

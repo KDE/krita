@@ -30,6 +30,7 @@ public Q_SLOTS:
     QMap<QString, Resource *> resources(const QString &type) const /Factory/;
     QStringList recentDocuments() const;
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
+    QList<Extension*> extensions() /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
     Action * createAction(const QString &id, const QString & text);

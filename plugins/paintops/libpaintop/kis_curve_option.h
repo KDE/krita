@@ -74,12 +74,15 @@ public:
     bool isSameCurveUsed() const;
     bool isRandom() const;
 
+    int getCurveMode() const;
+
     void setSeparateCurveValue(bool separateCurveValue);
 
     void setChecked(bool checked);
     void setCurveUsed(bool useCurve);
     void setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
+    void setCurveMode(int mode);
 
     struct ValueComponents {
 
@@ -185,6 +188,8 @@ protected:
     bool m_useCurve;
     bool m_useSameCurve;
     bool m_separateCurveValue;
+
+    int m_curveMode;
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
     QMap<DynamicSensorType, KisCubicCurve> m_curveCache;

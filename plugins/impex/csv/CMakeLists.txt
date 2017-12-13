@@ -1,9 +1,5 @@
 add_subdirectory(tests)
 
-include_directories(SYSTEM
-    ${Boost_INCLUDE_DIRS}
-)
-
 # import
 
 set(kritacsvimport_SOURCES

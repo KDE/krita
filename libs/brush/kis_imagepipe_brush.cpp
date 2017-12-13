@@ -78,12 +78,13 @@ protected:
 
     static int selectPost(KisParasite::SelectionMode mode,
                           int index, int rank,
-                          const KisPaintInformation& info) {
+                          const KisPaintInformation& info,
+                          int seqNo) {
 
         switch (mode) {
         case KisParasite::Constant: break;
         case KisParasite::Incremental:
-            index = (index + 1) % rank;
+            index = (seqNo >= 0 ? seqNo : (index + 1)) % rank;
             break;
         case KisParasite::Random:
             index = info.randomSource()->generate(0, rank);
@@ -113,7 +114,7 @@ protected:
             for (int i = 0; i < m_parasite.dim; i++) {
                 m_parasite.index[i] = 0;
             }
-            updateBrushIndexes(info);
+            updateBrushIndexes(info, 0);
             m_isInitialized = true;
         }
 
@@ -128,12 +129,13 @@ protected:
         return brushIndex;
     }
 
-    void updateBrushIndexes(const KisPaintInformation& info) override {
+    void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
                                              m_parasite.index[i],
                                              m_parasite.rank[i],
-                                             info);
+                                             info,
+                                             seqNo);
         }
     }
 
@@ -357,6 +359,11 @@ void KisImagePipeBrush::notifyStrokeStarted()
 void KisImagePipeBrush::notifyCachedDabPainted(const KisPaintInformation& info)
 {
     m_d->brushesPipe.notifyCachedDabPainted(info);
+}
+
+void KisImagePipeBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
+{
+    m_d->brushesPipe.prepareForSeqNo(info, seqNo);
 }
 
 void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,

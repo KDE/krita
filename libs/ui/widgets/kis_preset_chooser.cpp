@@ -29,6 +29,7 @@
 #include <QSortFilterProxyModel>
 #include <QApplication>
 
+#include <kis_config.h>
 #include <klocalizedstring.h>
 
 
@@ -105,7 +106,21 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             dirtyPresetIndicator = QString("*");
         }
 
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name().append(dirtyPresetIndicator));
+        qreal brushSize = preset->settings()->paintOpSize();
+        QString brushSizeText;
+
+        // Disable displayed decimal precision beyond a certain brush size
+        if (brushSize < 100) {
+            brushSizeText = QString::number(brushSize, 'g', 3);
+        } else {
+            brushSizeText = QString::number(brushSize, 'f', 0);
+        }
+
+        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
+
+        QString presetDisplayName = preset->name().replace("_", " "); // don't need underscores that might be part of the file name
+        painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
+
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
@@ -201,6 +216,11 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
     layout->addWidget(m_chooser);
+
+    KisConfig cfg;
+    m_chooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));

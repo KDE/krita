@@ -144,7 +144,7 @@ bool KisPaletteView::addGroupWithDialog()
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
     bool keepColors = true;
-    if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         KoDialog *window = new KoDialog();
         window->setWindowTitle(i18nc("@title:window","Removing Group"));
         QFormLayout *editableItems = new QFormLayout();
@@ -232,7 +232,7 @@ void KisPaletteView::updateRows()
     if (m_d->model) {
         for (int r=0; r<=m_d->model->rowCount(); r++) {
             QModelIndex index = m_d->model->index(r, 0);
-            if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+            if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
                 setSpan(r, 0, 1, m_d->model->columnCount());
                 setRowHeight(r, this->fontMetrics().lineSpacing()+6);
             } else {
@@ -256,12 +256,14 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
         int curSize = horizontalHeader()->sectionSize(0);
         int setSize = numSteps + curSize;
 
-        if ( setSize >= 12 ) {
-            horizontalHeader()->setDefaultSectionSize(setSize);
-            verticalHeader()->setDefaultSectionSize(setSize);
-            KisConfig cfg;
-            cfg.setPaletteDockerPaletteViewSectionSize(setSize);
-        }
+       if ( (event->delta() <= 0) && (setSize <= 8) ) {
+           // Ignore scroll-zooming down below a certain size
+       } else {
+           horizontalHeader()->setDefaultSectionSize(setSize);
+           verticalHeader()->setDefaultSectionSize(setSize);
+           KisConfig cfg;
+           cfg.setPaletteDockerPaletteViewSectionSize(setSize);
+       }
 
         event->accept();
     } else {
@@ -281,7 +283,7 @@ void KisPaletteView::entrySelection(bool foreground) {
     } else {
         return;
     }
-    if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
         KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
         if (foreground) {
             emit(entrySelected(entry));
@@ -303,8 +305,8 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
         KisColorButton *bnColor = new KisColorButton();
         QCheckBox *chkSpot = new QCheckBox();
 
-        if (qVariantValue<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
-            QString groupName = qVariantValue<QString>(index.data(Qt::DisplayRole));
+        if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+            QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
             editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
             lnGroupName->setText(groupName);
             if (group->exec() == KoDialog::Accepted) {
@@ -315,7 +317,7 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
             //rename the group.
         } else {
             KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-            QStringList entryList = qVariantValue<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
+            QStringList entryList = qvariant_cast<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
             chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
             editableItems->addRow(i18n("ID"), lnIDName);
             editableItems->addRow(i18n("Name"), lnGroupName);

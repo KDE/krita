@@ -414,7 +414,7 @@ bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
 {
     KisGuidesConfig guides = m_d->doc->guidesConfig();
 
-    if (guides.hasGuides()) {
+    if (!guides.isDefault()) {
         QDomElement guidesElement = guides.saveToXml(doc, "guides");
         element.appendChild(guidesElement);
     }

@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ * Copyright (c) 2014 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -16,34 +18,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _ELLIPSE_ASSISTANT_H_
-#define _ELLIPSE_ASSISTANT_H_
+#ifndef _PARALLELRULER_ASSISTANT_H_
+#define _PARALLELRULER_ASSISTANT_H_
 
 #include "kis_painting_assistant.h"
-#include "Ellipse.h"
 #include <QObject>
+#include <QPolygonF>
+#include <QLineF>
+#include <QTransform>
+/* Design:
+ */
+class ParallelRuler;
 
-class EllipseAssistant : public KisPaintingAssistant
+class ParallelRulerAssistant : public KisPaintingAssistant
 {
 public:
-    EllipseAssistant();
+    ParallelRulerAssistant();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    //virtual void endStroke();
     QPointF buttonPosition() const override;
-    int numHandles() const override { return 3; }
+    int numHandles() const override { return 2; }
+    bool isAssistantComplete() const;
+
 protected:
-    QRect boundingRect() const override;
-    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
+    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt) const;
-    mutable Ellipse e;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
 };
 
-class EllipseAssistantFactory : public KisPaintingAssistantFactory
+class ParallelRulerAssistantFactory : public KisPaintingAssistantFactory
 {
 public:
-    EllipseAssistantFactory();
-    ~EllipseAssistantFactory() override;
+    ParallelRulerAssistantFactory();
+    ~ParallelRulerAssistantFactory() override;
     QString id() const override;
     QString name() const override;
     KisPaintingAssistant* createPaintingAssistant() const override;

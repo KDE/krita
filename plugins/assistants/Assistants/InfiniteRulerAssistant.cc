@@ -2,6 +2,7 @@
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  * Copyright (c) 2014 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ParallelRulerAssistant.h"
+#include "InfiniteRulerAssistant.h"
 
 #include "kis_debug.h"
 #include <klocalizedstring.h>
@@ -32,14 +33,14 @@
 
 #include <math.h>
 
-ParallelRulerAssistant::ParallelRulerAssistant()
-        : KisPaintingAssistant("parallel ruler", i18n("Parallel Ruler assistant"))
+InfiniteRulerAssistant::InfiniteRulerAssistant()
+        : KisPaintingAssistant("infinite ruler", i18n("Infinite Ruler assistant"))
 {
 }
 
-QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
-    Q_ASSERT(handles().size() == 2);
+    Q_ASSERT(isAssistantComplete());
     //code nicked from the perspective ruler.
     qreal
             dx = pt.x() - strokeBegin.x(),
@@ -50,8 +51,6 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
         }
     //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
     QLineF snapLine = QLineF(*handles()[0], *handles()[1]);
-    QPointF translation = (*handles()[0]-strokeBegin)*-1.0;
-    snapLine= snapLine.translated(translation);
     
     
         dx = snapLine.dx();
@@ -67,16 +66,16 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     //return pt;
 }
 
-QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF InfiniteRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
 {
     return project(pt, strokeBegin);
 }
 
-void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
+void InfiniteRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();
     gc.resetTransform();
-    QPointF delta(0,0);//this is the difference between the vanishing point and the mouse-position//
+    QPointF delta(0,0);//this is the difference between the window and the widget//
     QPointF mousePos(0,0);
     QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
     
@@ -89,22 +88,18 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         mousePos = QCursor::pos();//this'll give an offset//
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
+
+
     
-    if (handles().size() > 1 && outline()==true && previewVisible==true) {
+    if (isAssistantComplete() && isSnappingActive() && previewVisible == true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
-        QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
-        snapLine= snapLine.translated(translation);
-            
         QRect viewport= gc.viewport();
         KisAlgebra2D::intersectLineRect(snapLine, viewport);
-        
-        
         QPainterPath path;
         path.moveTo(snapLine.p1());
         path.lineTo(snapLine.p2());
-        
         drawPreview(gc, path);//and we draw the preview.
     }
     gc.restore();
@@ -113,10 +108,11 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 }
 
-void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
+void InfiniteRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
+    if (assistantVisible == false || !isAssistantComplete()){
+        return;
+    }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -128,34 +124,39 @@ void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
     QPainterPath path;
     path.moveTo(p1);
     path.lineTo(p2);
-    drawPath(gc, path, snapping());
+    drawPath(gc, path, isSnappingActive());
     
 }
 
-QPointF ParallelRulerAssistant::buttonPosition() const
+QPointF InfiniteRulerAssistant::buttonPosition() const
 {
-    return (*handles()[0] + *handles()[1]) * 0.5;
+    return (*handles()[0]);
 }
 
-ParallelRulerAssistantFactory::ParallelRulerAssistantFactory()
+bool InfiniteRulerAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 2;
+}
+
+InfiniteRulerAssistantFactory::InfiniteRulerAssistantFactory()
 {
 }
 
-ParallelRulerAssistantFactory::~ParallelRulerAssistantFactory()
+InfiniteRulerAssistantFactory::~InfiniteRulerAssistantFactory()
 {
 }
 
-QString ParallelRulerAssistantFactory::id() const
+QString InfiniteRulerAssistantFactory::id() const
 {
-    return "parallel ruler";
+    return "infinite ruler";
 }
 
-QString ParallelRulerAssistantFactory::name() const
+QString InfiniteRulerAssistantFactory::name() const
 {
-    return i18n("Parallel Ruler");
+    return i18n("Infinite Ruler");
 }
 
-KisPaintingAssistant* ParallelRulerAssistantFactory::createPaintingAssistant() const
+KisPaintingAssistant* InfiniteRulerAssistantFactory::createPaintingAssistant() const
 {
-    return new ParallelRulerAssistant;
+    return new InfiniteRulerAssistant;
 }

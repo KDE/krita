@@ -2,6 +2,7 @@
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  * Copyright (c) 2014 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +42,7 @@ FisheyePointAssistant::FisheyePointAssistant()
 QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
-    Q_ASSERT(handles().size() == 3);
+    Q_ASSERT(isAssistantComplete());
     e.set(*handles()[0], *handles()[1], *handles()[2]);
 
     qreal
@@ -97,10 +98,10 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
     
     QTransform initialTransform = converter->documentToWidgetTransform();
     
-    if (outline()==true && previewVisible==true){
-        if (handles().size() > 2){
-        
-        
+    if (isSnappingActive() && previewVisible == true ) {
+
+        if (isAssistantComplete()){
+                
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 if (extraE.set(*handles()[0], *handles()[1], initialTransform.inverted().map(mousePos))){
                     gc.setTransform(initialTransform);
@@ -142,7 +143,9 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
 
 void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
+    if (assistantVisible == false){
+        return;
+    }
     
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -152,7 +155,7 @@ void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverte
         QPainterPath path;
         path.moveTo(*handles()[0]);
         path.lineTo(*handles()[1]);
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());
         return;
     }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
@@ -171,14 +174,17 @@ void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverte
         //path.moveTo(QPointF(0, -e.semiMinor())); path.lineTo(QPointF(0, e.semiMinor()));
         // Draw the ellipse
         path.addEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());
     }
     
 }
 
 QRect FisheyePointAssistant::boundingRect() const
 {
-    if (handles().size() != 3) return KisPaintingAssistant::boundingRect();
+    if (!isAssistantComplete()) {
+        return KisPaintingAssistant::boundingRect();
+    }
+
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         return e.boundingRect().adjusted(-(e.semiMajor()*2), -2, (e.semiMajor()*2), 2).toAlignedRect();
     } else {
@@ -191,6 +197,10 @@ QPointF FisheyePointAssistant::buttonPosition() const
     return (*handles()[0] + *handles()[1]) * 0.5;
 }
 
+bool FisheyePointAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 3;
+}
 
 
 FisheyePointAssistantFactory::FisheyePointAssistantFactory()

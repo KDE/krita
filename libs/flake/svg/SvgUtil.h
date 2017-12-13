@@ -121,7 +121,7 @@ public:
 
     static QStringList simplifyList(const QString &str);
 
-    struct PreserveAspectRatioParser
+    struct KRITAFLAKE_EXPORT PreserveAspectRatioParser
     {
         PreserveAspectRatioParser(const QString &str);
 

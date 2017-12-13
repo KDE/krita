@@ -22,12 +22,12 @@
 #include <QVariant>
 
 
-class RulerAssistantToolPlugin : public QObject
+class AssistantToolPlugin : public QObject
 {
     Q_OBJECT
 public:
-    RulerAssistantToolPlugin(QObject *parent, const QVariantList &);
-    ~RulerAssistantToolPlugin() override;
+    AssistantToolPlugin(QObject *parent, const QVariantList &);
+    ~AssistantToolPlugin() override;
 
 };
 

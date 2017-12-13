@@ -399,6 +399,13 @@ if(WIN32)
     endif()
 endif()
 
+# KDECompilerSettings adds the `--export-all-symbols` linker flag.
+# We don't really need it.
+if(MINGW)
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif(MINGW)
+
 # enable exceptions globally
 kde_enable_exceptions()
 
@@ -448,7 +455,7 @@ endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost 1.55 REQUIRED COMPONENTS system) # for pigment and stage
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
 ##
@@ -599,9 +606,15 @@ if(HAVE_VC)
     include (VcMacros)
 
     if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
+        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+        if(NOT WIN32)
+            set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
+        endif()
     elseif (NOT MSVC)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
+        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        if(NOT WIN32)
+            set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
+        endif()
     endif()
 
     #Handle Vc master

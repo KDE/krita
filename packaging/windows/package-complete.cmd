@@ -116,6 +116,11 @@ echo                                 the script location
 echo --deps-install-dir ^<dir_path^>   Specify deps install dir
 echo --krita-install-dir ^<dir_path^>  Specify Krita install dir
 echo.
+echo Special options:
+echo --pre-zip-hook ^<script_path^>    Specify a script to be called before
+echo                                 packaging the zip archive, can be used to
+echo                                 sign the binaries
+echo.
 goto :EOF
 :usage_and_exit
 call :usage
@@ -138,6 +143,7 @@ set ARG_PACKAGE_NAME=
 set ARG_SRC_DIR=
 set ARG_DEPS_INSTALL_DIR=
 set ARG_KRITA_INSTALL_DIR=
+set ARG_PRE_ZIP_HOOK=
 :args_parsing_loop
 set CURRENT_MATCHED=
 if not "%1" == "" (
@@ -202,6 +208,21 @@ if not "%1" == "" (
             goto usage_and_fail
         )
         call :get_dir_path ARG_KRITA_INSTALL_DIR "%~f2\"
+        shift /2
+        set CURRENT_MATCHED=1
+    )
+    if "%1" == "--pre-zip-hook" (
+        if not "%ARG_PRE_ZIP_HOOK%" == "" (
+            echo ERROR: Arg --pre-zip-hook specified more than once 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        if "%~f2" == "" (
+            echo ERROR: Arg --pre-zip-hook does not point to a valid path 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        call :get_full_path ARG_PRE_ZIP_HOOK "%~f2"
         shift /2
         set CURRENT_MATCHED=1
     )
@@ -655,6 +676,17 @@ for /r "%pkg_root%\share\krita\pykrita\" %%F in (*.pyd) do (
 	call :split-debug "%%F" !relpath!
 )
 endlocal
+
+if not "%ARG_PRE_ZIP_HOOK%" == "" (
+    echo Running pre-zip-hook...
+    setlocal
+    cmd /c "%ARG_PRE_ZIP_HOOK%" "%pkg_root%\"
+    if errorlevel 1 (
+        echo ERROR: Got exit code !errorlevel! from pre-zip-hook! 1>&2
+        exit /b 1
+    )
+    endlocal
+)
 
 echo.
 echo Packaging stripped binaries...

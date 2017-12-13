@@ -268,7 +268,7 @@ public:
 
     void writeLuniBlockEx(QIODevice* io, const QString &layerName);
     void writeLsctBlockEx(QIODevice* io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey);
-    void writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc);
+    void writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat);
     void writePattBlockEx(QIODevice* io, const QDomDocument &patternsXmlDoc);
 
 

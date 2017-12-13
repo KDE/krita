@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -36,7 +37,7 @@ ConcentricEllipseAssistant::ConcentricEllipseAssistant()
 
 QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const
 {
-    Q_ASSERT(handles().size() == 3);
+    Q_ASSERT(isAssistantComplete());
     e.set(*handles()[0], *handles()[1], *handles()[2]);
 
     qreal
@@ -89,8 +90,9 @@ void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updat
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    if (outline()==true && previewVisible==true){
-        if (handles().size() > 2){    
+    if (isSnappingActive() && previewVisible == true){
+
+        if (isAssistantComplete()){
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 QPointF initial = e.project(initialTransform.inverted().map(mousePos));
                 QPointF center = e.boundingRect().center();
@@ -115,19 +117,22 @@ void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updat
 
 void ConcentricEllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
+    if (assistantVisible == false || handles().size() < 2) { // 2 points means a line, so we can continue after 1 point
+        return;
+    }
 
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
-        QTransform initialTransform = converter->documentToWidgetTransform();
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
     if (handles().size() == 2) {
         // just draw the axis
         gc.setTransform(initialTransform);
         QPainterPath path;
         path.moveTo(*handles()[0]);
         path.lineTo(*handles()[1]);
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());       
         return;
     }
+
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         // valid ellipse
 
@@ -138,13 +143,16 @@ void ConcentricEllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesCon
         path.moveTo(QPointF(0, -e.semiMinor())); path.lineTo(QPointF(0, e.semiMinor()));
         // Draw the ellipse
         path.addEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
-        drawPath(gc, path, snapping());
+        drawPath(gc, path, isSnappingActive());
     }
 }
 
 QRect ConcentricEllipseAssistant::boundingRect() const
 {
-    if (handles().size() != 3) return KisPaintingAssistant::boundingRect();
+    if (!isAssistantComplete()) {
+        return KisPaintingAssistant::boundingRect();
+    }
+
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         return e.boundingRect().adjusted(-2, -2, 2, 2).toAlignedRect();
     } else {
@@ -156,6 +164,12 @@ QPointF ConcentricEllipseAssistant::buttonPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }
+
+bool ConcentricEllipseAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 3;
+}
+
 
 ConcentricEllipseAssistantFactory::ConcentricEllipseAssistantFactory()
 {

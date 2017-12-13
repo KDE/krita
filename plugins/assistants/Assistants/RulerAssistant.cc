@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -36,7 +37,7 @@ RulerAssistant::RulerAssistant()
 
 QPointF RulerAssistant::project(const QPointF& pt) const
 {
-    Q_ASSERT(handles().size() == 2);
+    Q_ASSERT(isAssistantComplete());
     QPointF pt1 = *handles()[0];
     QPointF pt2 = *handles()[1];
     
@@ -89,8 +90,8 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
     
-    if (handles().size() > 1) {
-    //don't draw if invalid.
+    // don't draw if invalid
+    if (isAssistantComplete()) {
         QTransform initialTransform = converter->documentToWidgetTransform();
 
         // first we find the path that our point create.
@@ -102,7 +103,7 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
         path.moveTo(p1);
         path.lineTo(p2);
         //then we use this path to check the bounding rectangle//
-        if (outline()==true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
+        if (isSnappingActive() && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
             drawPreview(gc, path);//and we draw the preview.
         }
     }
@@ -114,8 +115,9 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
 
 void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
+    if (assistantVisible == false || !isAssistantComplete()){
+        return;
+    }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -127,12 +129,17 @@ void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conv
     QPainterPath path;
     path.moveTo(p1);
     path.lineTo(p2);
-    drawPath(gc, path, snapping());
+    drawPath(gc, path, isSnappingActive());
 }
 
 QPointF RulerAssistant::buttonPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
+}
+
+bool RulerAssistant::isAssistantComplete() const
+{
+    return handles().size() >= 2;
 }
 
 RulerAssistantFactory::RulerAssistantFactory()

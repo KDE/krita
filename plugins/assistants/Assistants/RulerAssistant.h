@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +30,8 @@ public:
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     QPointF buttonPosition() const override;
     int numHandles() const override { return 2; }
+    bool isAssistantComplete() const;
+
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;

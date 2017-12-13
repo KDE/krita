@@ -6,7 +6,6 @@ include_directories(
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 add_subdirectory( tests )

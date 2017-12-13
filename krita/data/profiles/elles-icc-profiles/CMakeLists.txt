@@ -16,9 +16,6 @@ install(FILES
     Gray-D50-elle-V2-rec709.icc
     Gray-D50-elle-V4-rec709.icc
 
-    Lab-D50-Identity-elle-V2.icc
-    Lab-D50-Identity-elle-V4.icc
-
     sRGB-elle-V2-g10.icc
     sRGB-elle-V2-srgbtrc.icc
 

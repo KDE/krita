@@ -716,7 +716,6 @@ for %%a in (%EXT_TARGETS%) do (
         echo ERROR: Building of ext_%%a failed! 1>&2
         exit /b 105
     )
-    echo.
 )
 echo.
 

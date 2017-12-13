@@ -110,6 +110,9 @@ struct KisImportExportManager::ConversionResult {
         return m_status;
     }
 
+    void setStatus(KisImportExportFilter::ConversionStatus value) {
+        m_status = value;
+    }
 private:
     bool m_isAsync = false;
     QFuture<KisImportExportFilter::ConversionStatus> m_futureStatus;
@@ -144,12 +147,13 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     return result.status();
 }
 
-QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType, KisImportExportFilter::ConversionStatus &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(result.isAsync() ||
                                          result.status() != KisImportExportFilter::OK, QFuture<KisImportExportFilter::ConversionStatus>());
 
+    status = result.status();
     return result.futureStatus();
 }
 
@@ -386,6 +390,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         }
     }
 
+    result.setStatus(KisImportExportFilter::OK);
     return result;
 }
 

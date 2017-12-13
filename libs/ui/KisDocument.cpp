@@ -592,6 +592,9 @@ QByteArray KisDocument::serializeToNativeByteArray()
 
 void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
+    if (status == KisImportExportFilter::UserCancelled)
+        return;
+
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (status != KisImportExportFilter::OK) {
@@ -813,19 +816,21 @@ bool KisDocument::startExportInBackground(const QString &actionName,
         }
     }
 
+    KisImportExportFilter::ConversionStatus initializationStatus;
     d->childSavingFuture =
         d->importExportManager->exportDocumentAsyc(location,
                                                    realLocation,
                                                    mimeType,
+                                                   initializationStatus,
                                                    showWarnings,
                                                    exportConfiguration);
 
-    if (d->childSavingFuture.isCanceled()) {
+    if (initializationStatus != KisImportExportFilter::ConversionStatus::OK) {
         if (d->savingUpdater) {
             d->savingUpdater->cancel();
         }
         d->savingImage.clear();
-        emit sigBackgroundSavingFinished(KisImportExportFilter::InternalError, this->errorMessage());
+        emit sigBackgroundSavingFinished(initializationStatus, this->errorMessage());
         return false;
     }
 

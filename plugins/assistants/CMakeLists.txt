@@ -1,5 +1,5 @@
-add_subdirectory( RulerAssistant )
+add_subdirectory( Assistants )
 install( FILES
-    RulerAssistant/KisRulerAssistantTool.action
+    Assistants/KisAssistantTool.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 

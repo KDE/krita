@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +40,10 @@ public:
 
     bool contains(const QPointF& point) const override;
     qreal distance(const QPointF& point) const override;
+
+
+    bool isAssistantComplete() const;
+
 protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:

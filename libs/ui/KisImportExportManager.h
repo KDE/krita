@@ -88,7 +88,7 @@ public:
      */
     KisImportExportFilter::ConversionStatus exportDocument(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
-    QFuture<KisImportExportFilter::ConversionStatus> exportDocumentAsyc(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
+    QFuture<KisImportExportFilter::ConversionStatus> exportDocumentAsyc(const QString &location, const QString& realLocation, const QByteArray &mimeType, KisImportExportFilter::ConversionStatus &status, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     ///@name Static API
     //@{

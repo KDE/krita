@@ -83,6 +83,7 @@ protected:
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
+    void slotCustomSettingsChecked(bool checked);
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
@@ -125,18 +126,9 @@ private:
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
     QCheckBox *m_chkOnlyOneAssistant;
-    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
-    KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
-    QCheckBox *m_chkSmoothPressure;
-    QCheckBox *m_chkUseScalableDistance;
 
-    QCheckBox *m_chkStabilizeSensors;
-    QCheckBox *m_chkDelayDistance;
-    KisDoubleSliderSpinBox *m_sliderDelayDistance;
-
-    QCheckBox *m_chkFinishStabilizedCurve;
     QSignalMapper m_signalMapper;
-    KisToolBrushToolOptionsWidget *m_toolBrushOptions;
+    KisToolBrushToolOptionsWidget *m_toolBrushOptions = 0;
 };
 
 

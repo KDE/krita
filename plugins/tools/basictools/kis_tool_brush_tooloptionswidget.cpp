@@ -29,5 +29,4 @@ KisToolBrushToolOptionsWidget::KisToolBrushToolOptionsWidget(QWidget* parent)
 
 KisToolBrushToolOptionsWidget::~KisToolBrushToolOptionsWidget()
 {
-
 }

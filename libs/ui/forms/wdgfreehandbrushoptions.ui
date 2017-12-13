@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>243</width>
+    <width>269</width>
     <height>378</height>
    </rect>
   </property>
@@ -14,26 +14,32 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="stabilizerStrengthLabel">
        <property name="text">
         <string>Stabilizer Strength:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="horizontalSlider">
+      <widget class="QSlider" name="stabilizerStrengthSlider">
+       <property name="maximum">
+        <number>5</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="chkAntiAliasing">
+      <widget class="QCheckBox" name="customStabilizerSettingsCheckbox">
        <property name="text">
         <string>Custom Settings</string>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -45,14 +51,14 @@
       <widget class="QDoubleSpinBox" name="strokeEndingInputbox"/>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="distanceLabel">
        <property name="text">
         <string>Distance:</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="strokeEndingLabel">
        <property name="text">
         <string>Stroke Ending:</string>
        </property>
@@ -62,7 +68,7 @@
       <widget class="QDoubleSpinBox" name="distanceInputbox"/>
      </item>
      <item row="6" column="1">
-      <widget class="QCheckBox" name="chkAntiAliasing_5">
+      <widget class="QCheckBox" name="finishLineCheckbox">
        <property name="text">
         <string>Finish Line</string>
        </property>
@@ -72,7 +78,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QCheckBox" name="chkAntiAliasing_2">
+      <widget class="QCheckBox" name="smoothPressureCheckbox">
        <property name="text">
         <string>Smooth Pressure</string>
        </property>
@@ -82,7 +88,7 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QCheckBox" name="chkAntiAliasing_3">
+      <widget class="QCheckBox" name="scalableDistanceCheckbox">
        <property name="text">
         <string>Scalable Distance</string>
        </property>
@@ -92,7 +98,7 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QCheckBox" name="chkAntiAliasing_6">
+      <widget class="QCheckBox" name="stabilizeSensorsCheckbox">
        <property name="text">
         <string>Stabilize Sensors</string>
        </property>
@@ -102,7 +108,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="smoothTypeLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -110,15 +116,15 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Smooth Type:</string>
+        <string>Type:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="smoothingTypeCombobox"/>
      </item>
      <item row="3" column="0">
-      <widget class="QCheckBox" name="chkAntiAliasing_4">
+      <widget class="QCheckBox" name="enableStabilizerDelay">
        <property name="text">
         <string>Delay</string>
        </property>
@@ -128,7 +134,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QDoubleSpinBox" name="distanceInputbox_2"/>
+      <widget class="QDoubleSpinBox" name="stabilizerDelayInput"/>
      </item>
     </layout>
    </item>

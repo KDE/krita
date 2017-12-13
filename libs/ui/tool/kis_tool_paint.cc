@@ -533,24 +533,6 @@ QWidget* findLabelWidget(QGridLayout *layout, QWidget *control)
     return result;
 }
 
-void KisToolPaint::showControl(QWidget *control, bool value)
-{
-    control->setVisible(value);
-    QWidget *label = findLabelWidget(m_optionsWidgetLayout, control);
-    if (label) {
-        label->setVisible(value);
-    }
-}
-
-void KisToolPaint::enableControl(QWidget *control, bool value)
-{
-    control->setEnabled(value);
-    QWidget *label = findLabelWidget(m_optionsWidgetLayout, control);
-    if (label) {
-        label->setEnabled(value);
-    }
-}
-
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
     Q_ASSERT(m_optionsWidgetLayout != 0);

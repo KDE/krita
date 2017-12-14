@@ -413,6 +413,9 @@ void KisShapeLayer::forceUpdateTimedNode()
     m_d->canvas->forceRepaint();
 }
 
+#include "SvgWriter.h"
+#include "SvgParser.h"
+
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {
     if (!store->open("content.svg")) {

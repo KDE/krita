@@ -47,6 +47,18 @@ public:
     KisToolMove(KoCanvasBase * canvas);
     ~KisToolMove() override;
 
+    /**
+     * @brief wantsAutoScroll
+     * reimplemented from KoToolBase
+     * there's an issue where autoscrolling with this tool never makes the
+     * stroke end, so we return false here so that users don't get stuck with
+     * the tool. See bug 362659
+     * @return false
+     */
+    bool wantsAutoScroll() const {
+        return false;
+    }
+
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;

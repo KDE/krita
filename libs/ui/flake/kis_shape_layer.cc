@@ -411,7 +411,6 @@ void KisShapeLayer::forceUpdateTimedNode()
 
 #include "SvgWriter.h"
 #include "SvgParser.h"
-#include <QXmlStreamReader>
 
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {

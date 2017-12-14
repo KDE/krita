@@ -29,7 +29,6 @@
 #include <SvgParser.h>
 #include <QFileInfo>
 #include <KoDocumentResourceManager.h>
-#include <QXmlStreamReader>
 
 #include "kis_debug.h"
 

@@ -38,12 +38,10 @@
 #include "kis_config.h"
 #include "kis_slider_spin_box.h"
 #include "kundo2magicstring.h"
-
 #include "ui_wdgfreehandbrushoptions.h"
 
 #define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
-
 
 void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection)
 {
@@ -79,6 +77,38 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing", i18nc("@action", "Brush Smoothing: Weighted"), KisIconUtils::loadIcon("smoothing-weighted"), collection);
     addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing", i18nc("@action", "Brush Smoothing: Stabilizer"), KisIconUtils::loadIcon("smoothing-stabilizer"), collection);
 
+
+    // add stabilizer preset options from 0 - 5
+    BrushStabilizerSetting setting;
+
+    // setting of 0 -- weakest stabilizer settings
+    setting.smoothingType = 1; // basic
+    stabilizerSettings.append(setting);
+
+    // setting of 1
+    setting.smoothingType = 2; // weighted smoothing
+    setting.distance = 1.0;
+    stabilizerSettings.append(setting);
+
+    // setting of 2
+    setting.smoothingType = 2;
+    setting.distance = 3.0;
+    stabilizerSettings.append(setting);
+
+    // setting of 3
+    setting.smoothingType = 3; // stabilizer
+    setting.distance = 8.0;
+    setting.hasDelay = true;
+    setting.hasStabilizerSensors = false;
+    stabilizerSettings.append(setting);
+
+
+    // setting of 4 - strongest stabilizer settings
+    setting.smoothingType = 3;
+    setting.distance = 15.0;
+    setting.hasDelay = true;
+    setting.hasStabilizerSensors = true;
+    stabilizerSettings.append(setting);
 }
 
 KisToolBrush::~KisToolBrush()
@@ -129,72 +159,22 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_toolBrushOptions->smoothingTypeCombobox->setCurrentIndex(index);
     }
 
-
     switch (index) {
-    case 0:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
-
-        m_toolBrushOptions->distanceLabel->setVisible(false);
-        m_toolBrushOptions->distanceInputbox->setVisible(false);
-        m_toolBrushOptions->strokeEndingLabel->setVisible(false);
-        m_toolBrushOptions->strokeEndingInputbox->setVisible(false);
-        m_toolBrushOptions->enableStabilizerDelay->setVisible(false);
-        m_toolBrushOptions->stabilizerDelayInput->setVisible(false);
-
-        m_toolBrushOptions->smoothPressureCheckbox->setVisible(false);
-        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
-        m_toolBrushOptions->finishLineCheckbox->setVisible(false);
-        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
-
-        break;
-    case 1:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
-
-        m_toolBrushOptions->distanceLabel->setVisible(false);
-        m_toolBrushOptions->distanceInputbox->setVisible(false);
-        m_toolBrushOptions->strokeEndingLabel->setVisible(false);
-        m_toolBrushOptions->strokeEndingInputbox->setVisible(false);
-        m_toolBrushOptions->enableStabilizerDelay->setVisible(false);
-        m_toolBrushOptions->stabilizerDelayInput->setVisible(false);
-
-        m_toolBrushOptions->smoothPressureCheckbox->setVisible(false);
-        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
-        m_toolBrushOptions->finishLineCheckbox->setVisible(false);
-        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
-
-        break;
-    case 2:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
-
-        m_toolBrushOptions->distanceLabel->setVisible(true);
-        m_toolBrushOptions->distanceInputbox->setVisible(true);
-        m_toolBrushOptions->strokeEndingLabel->setVisible(true);
-        m_toolBrushOptions->strokeEndingInputbox->setVisible(true);
-        m_toolBrushOptions->enableStabilizerDelay->setVisible(false);
-        m_toolBrushOptions->stabilizerDelayInput->setVisible(false);
-
-        m_toolBrushOptions->smoothPressureCheckbox->setVisible(true);
-        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(true);
-        m_toolBrushOptions->finishLineCheckbox->setVisible(false);
-        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
-
-        break;
-    case 3:
-    default:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
-
-        m_toolBrushOptions->distanceLabel->setVisible(true);
-        m_toolBrushOptions->distanceInputbox->setVisible(true);
-        m_toolBrushOptions->strokeEndingLabel->setVisible(false);
-        m_toolBrushOptions->strokeEndingInputbox->setVisible(false);
-        m_toolBrushOptions->enableStabilizerDelay->setVisible(true);
-        m_toolBrushOptions->stabilizerDelayInput->setVisible(true);
-
-        m_toolBrushOptions->smoothPressureCheckbox->setVisible(true);
-        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
-        m_toolBrushOptions->finishLineCheckbox->setVisible(true);
-        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(true);
+        case 0:
+            smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
+            break;
+        case 1:
+            smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
+            break;
+        case 2:
+            smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
+            break;
+        case 3:
+        default:
+            smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
     }
+
+    updateStabilizerSettingsVisibility(index);
 
 
     emit smoothingTypeChanged();
@@ -210,6 +190,25 @@ void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 {
     smoothingOptions()->setTailAggressiveness(argh_rhhrr);
     emit smoothnessFactorChanged();
+}
+
+void KisToolBrush::slotStabilizerPresetChanged(int value)
+{
+    blockSignals(true);
+    m_toolBrushOptions->smoothingTypeCombobox->setCurrentIndex(stabilizerSettings[value].smoothingType);
+    m_toolBrushOptions->distanceInputbox->setValue(stabilizerSettings[value].distance);
+    m_toolBrushOptions->strokeEndingInputbox->setValue(stabilizerSettings[value].strokeEnding);
+    m_toolBrushOptions->enableStabilizerDelay->setChecked(stabilizerSettings[value].hasDelay);
+    m_toolBrushOptions->stabilizerDelayInput->setValue(stabilizerSettings[value].delayDistance);
+    m_toolBrushOptions->smoothPressureCheckbox->setChecked(stabilizerSettings[value].hasSmoothPressure);
+    m_toolBrushOptions->scalableDistanceCheckbox->setChecked(stabilizerSettings[value].hasScalableDistance);
+    m_toolBrushOptions->finishLineCheckbox->setChecked(stabilizerSettings[value].hasFinishLine);
+    m_toolBrushOptions->stabilizeSensorsCheckbox->setChecked(stabilizerSettings[value].hasStabilizerSensors);
+    blockSignals(false);
+
+    // changing the UI fields causes their visibility to change
+    // force hide them all since we are done changing values
+    hideAllStabilizerUIFields();
 }
 
 // used with weighted smoothing
@@ -340,6 +339,9 @@ QWidget * KisToolBrush::createOptionWidget()
 
     connect(m_toolBrushOptions->customStabilizerSettingsCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotCustomSettingsChecked(bool)));
 
+    m_toolBrushOptions->stabilizerStrengthSlider->setRange(0, 4);
+    //m_toolBrushOptions->stabilizerStrengthSlider->setTracking(false); // don't send signals while scrubbing, only on release
+    connect(m_toolBrushOptions->stabilizerStrengthSlider, SIGNAL(valueChanged(int)), this, SLOT(slotStabilizerPresetChanged(int)));
 
 
     optionsWidget->setObjectName(toolId() + "option widget");
@@ -487,12 +489,38 @@ void KisToolBrush::slotCustomSettingsChecked(bool checked)
     m_toolBrushOptions->smoothingTypeCombobox->setVisible(checked);
     m_toolBrushOptions->stabilizerStrengthSlider->setEnabled(!checked);
 
-    // TODO: get the current slider value's definition and find out type
-
-    // depending on the type, show the respective fields
-    if (checked) {
-        slotSetSmoothingType(3); // default to stabilizer for now
+    // hide all settings if we are not using custom settings
+    if (!checked) {
+        hideAllStabilizerUIFields();
     } else {
+        updateStabilizerSettingsVisibility(m_toolBrushOptions->smoothingTypeCombobox->currentIndex());
+    }
+
+}
+
+void KisToolBrush::hideAllStabilizerUIFields()
+{
+    m_toolBrushOptions->distanceLabel->setVisible(false);
+    m_toolBrushOptions->distanceInputbox->setVisible(false);
+    m_toolBrushOptions->strokeEndingLabel->setVisible(false);
+    m_toolBrushOptions->strokeEndingInputbox->setVisible(false);
+    m_toolBrushOptions->enableStabilizerDelay->setVisible(false);
+    m_toolBrushOptions->stabilizerDelayInput->setVisible(false);
+
+    m_toolBrushOptions->smoothPressureCheckbox->setVisible(false);
+    m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
+    m_toolBrushOptions->finishLineCheckbox->setVisible(false);
+    m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
+}
+
+void KisToolBrush::updateStabilizerSettingsVisibility(int smoothingTypeIndex) {
+
+    if (!m_toolBrushOptions) {
+        return;
+    }
+
+    switch (smoothingTypeIndex) {
+    case 0:
         m_toolBrushOptions->distanceLabel->setVisible(false);
         m_toolBrushOptions->distanceInputbox->setVisible(false);
         m_toolBrushOptions->strokeEndingLabel->setVisible(false);
@@ -504,6 +532,48 @@ void KisToolBrush::slotCustomSettingsChecked(bool checked)
         m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
         m_toolBrushOptions->finishLineCheckbox->setVisible(false);
         m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
-    }
 
+        break;
+    case 1:
+        m_toolBrushOptions->distanceLabel->setVisible(false);
+        m_toolBrushOptions->distanceInputbox->setVisible(false);
+        m_toolBrushOptions->strokeEndingLabel->setVisible(false);
+        m_toolBrushOptions->strokeEndingInputbox->setVisible(false);
+        m_toolBrushOptions->enableStabilizerDelay->setVisible(false);
+        m_toolBrushOptions->stabilizerDelayInput->setVisible(false);
+
+        m_toolBrushOptions->smoothPressureCheckbox->setVisible(false);
+        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
+        m_toolBrushOptions->finishLineCheckbox->setVisible(false);
+        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
+
+        break;
+    case 2:
+        m_toolBrushOptions->distanceLabel->setVisible(true);
+        m_toolBrushOptions->distanceInputbox->setVisible(true);
+        m_toolBrushOptions->strokeEndingLabel->setVisible(true);
+        m_toolBrushOptions->strokeEndingInputbox->setVisible(true);
+        m_toolBrushOptions->enableStabilizerDelay->setVisible(false);
+        m_toolBrushOptions->stabilizerDelayInput->setVisible(false);
+
+        m_toolBrushOptions->smoothPressureCheckbox->setVisible(true);
+        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(true);
+        m_toolBrushOptions->finishLineCheckbox->setVisible(false);
+        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(false);
+
+        break;
+    case 3:
+    default:
+        m_toolBrushOptions->distanceLabel->setVisible(true);
+        m_toolBrushOptions->distanceInputbox->setVisible(true);
+        m_toolBrushOptions->strokeEndingLabel->setVisible(false);
+        m_toolBrushOptions->strokeEndingInputbox->setVisible(false);
+        m_toolBrushOptions->enableStabilizerDelay->setVisible(true);
+        m_toolBrushOptions->stabilizerDelayInput->setVisible(true);
+
+        m_toolBrushOptions->smoothPressureCheckbox->setVisible(true);
+        m_toolBrushOptions->scalableDistanceCheckbox->setVisible(false);
+        m_toolBrushOptions->finishLineCheckbox->setVisible(true);
+        m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(true);
+    }
 }

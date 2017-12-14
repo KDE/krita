@@ -44,6 +44,23 @@ class KoCanvasBase;
 class KisSliderSpinBox;
 class KisDoubleSliderSpinBox;
 
+/**
+  The stabilizer will have certain presets that range from none to strong
+  This is the data structure that will help creating these presets
+  */
+typedef struct BrushStabilizerSetting {
+    // list options a seting type can have
+    int smoothingType = 1; // 0 = none, 1 = basic, 2 = weighted, 3 = stabilizer
+    float distance = 0.0;
+    float strokeEnding  = 0.0;
+    float delayDistance  = 0.0;
+    bool hasSmoothPressure = false;
+    bool hasScalableDistance = false;
+    bool hasDelay = false;
+    bool hasFinishLine = false;
+    bool hasStabilizerSensors = false;
+} BrushStabilizerSetting;
+
 class KisToolBrush : public KisToolFreehand
 {
     Q_OBJECT
@@ -78,11 +95,17 @@ public:
     bool finishStabilizedCurve() const;
     bool stabilizeSensors() const;
 
+    /// each smoothing/stabilizer type has its own set of settings. This will show/hide UI
+    /// element based off whatever smoothing type is selected
+    void updateStabilizerSettingsVisibility(int smoothingTypeIndex);
+
 protected:
     KConfigGroup m_configGroup; // only used in the multihand tool for now
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
+
+    /// toggles whethe we are using stabilizer presets or manually setting values
     void slotCustomSettingsChecked(bool checked);
 
 public Q_SLOTS:
@@ -94,6 +117,10 @@ public Q_SLOTS:
     void slotSetTailAgressiveness(qreal argh_rhhrr);
     void setSmoothPressure(bool value);
     void setUseScalableDistance(bool value);
+
+    /// the stabilizer slider that determines the
+    /// stabilizer preset we are using
+    void slotStabilizerPresetChanged(int value);
 
     void setUseDelayDistance(bool value);
     void setDelayDistance(qreal value);
@@ -120,8 +147,8 @@ private:
     void addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection);
 
 private:
-    QSlider *m_smoothnessPesetSlider;
-    QComboBox *m_cmbSmoothingType;
+    QList<BrushStabilizerSetting> stabilizerSettings;
+    void hideAllStabilizerUIFields();
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
@@ -130,7 +157,6 @@ private:
     QSignalMapper m_signalMapper;
     KisToolBrushToolOptionsWidget *m_toolBrushOptions = 0;
 };
-
 
 class KisToolBrushFactory : public KoToolFactoryBase
 {

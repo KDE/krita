@@ -115,6 +115,9 @@ public Q_SLOTS:
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
     void slotSetTailAgressiveness(qreal argh_rhhrr);
+
+    /// toggled we enable or disable using assistants on the canvas to paint with
+    void slotUseAssistants(bool isUsing);
     void setSmoothPressure(bool value);
     void setUseScalableDistance(bool value);
 
@@ -146,13 +149,11 @@ Q_SIGNALS:
 private:
     void addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection);
 
-private:
-    QList<BrushStabilizerSetting> stabilizerSettings;
+    /// internal function for modifying the GUI display. It is paired with using custom settings for the stabilizer
     void hideAllStabilizerUIFields();
 
-    QCheckBox *m_chkAssistant;
-    KisSliderSpinBox *m_sliderMagnetism;
-    QCheckBox *m_chkOnlyOneAssistant;
+private:
+    QList<BrushStabilizerSetting> stabilizerSettings;
 
     QSignalMapper m_signalMapper;
     KisToolBrushToolOptionsWidget *m_toolBrushOptions = 0;

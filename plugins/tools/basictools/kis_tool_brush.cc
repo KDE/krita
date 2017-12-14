@@ -413,59 +413,28 @@ QWidget * KisToolBrush::createOptionWidget()
 
 
     // Drawing assistant configuration
-    QWidget* assistantWidget = new QWidget(optionsWidget);
-    QGridLayout* assistantLayout = new QGridLayout(assistantWidget);
-    assistantLayout->setContentsMargins(10,0,0,0);
-    assistantLayout->setSpacing(5);
 
-
-    m_chkAssistant = new QCheckBox(optionsWidget);
-    m_chkAssistant->setText(i18n("Snap to Assistants"));
-
-    assistantWidget->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    addOptionWidgetOption(assistantWidget, m_chkAssistant);
-
-    m_sliderMagnetism = new KisSliderSpinBox(optionsWidget);
-    m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
-    m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
-
-    m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
-    connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
-
+    // allow  snapping to assistants be assigned to a shortcut
     QAction *toggleaction =  KisActionRegistry::instance()->makeQAction("toggle_assistant", this);
     addAction("toggle_assistant", toggleaction);
     toggleaction->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
-    connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
+    connect(toggleaction, SIGNAL(triggered(bool)), m_toolBrushOptions->useAssistantsCheckbox, SLOT(toggle()));
 
-    QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"));
-    addOptionWidgetOption(m_sliderMagnetism, magnetismLabel);
+    m_toolBrushOptions->magnetismInputbox->setToolTip(i18n("Assistant Magnetism"));
+    m_toolBrushOptions->magnetismInputbox->setRange(0, MAXIMUM_MAGNETISM);
 
-    QLabel* snapSingleLabel = new QLabel(i18n("Snap Single:"));
+     m_toolBrushOptions->magnetismInputbox->setValue(m_magnetism * MAXIMUM_MAGNETISM);
+    connect( m_toolBrushOptions->magnetismInputbox, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
-    m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
-    m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant, prevents snapping mess while using the infinite assistants."));
-    m_chkOnlyOneAssistant->setCheckState(Qt::Checked);//turn on by default.
-    connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
-    addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
+    m_toolBrushOptions->snapSingleCheckbox->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant, prevents snapping mess while using the infinite assistants."));
+    m_toolBrushOptions->snapSingleCheckbox->setCheckState(Qt::Checked);//turn on by default.
+    connect(m_toolBrushOptions->snapSingleCheckbox, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
 
 
-    // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
-    m_sliderMagnetism->setVisible(false);
-    m_chkOnlyOneAssistant->setVisible(false);
-    snapSingleLabel->setVisible(false);
-    magnetismLabel->setVisible(false);
-
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setVisible(bool)));
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkOnlyOneAssistant, SLOT(setVisible(bool)));
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), magnetismLabel, SLOT(setVisible(bool)));
-
+    connect(m_toolBrushOptions->useAssistantsCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotUseAssistants(bool)));
 
     KisConfig cfg;
     slotSetSmoothingType(cfg.lineSmoothingType());
-
-
 
 
     // add a line spacer so we know that the next set of options are for different settings
@@ -477,7 +446,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     // hide all the custom stabilizer settings by default
     slotCustomSettingsChecked(false);
-
+    slotUseAssistants(false); // initialize to not snap to assistants
 
     return optionsWidget;
 }
@@ -576,4 +545,15 @@ void KisToolBrush::updateStabilizerSettingsVisibility(int smoothingTypeIndex) {
         m_toolBrushOptions->finishLineCheckbox->setVisible(true);
         m_toolBrushOptions->stabilizeSensorsCheckbox->setVisible(true);
     }
+}
+
+void KisToolBrush::slotUseAssistants(bool isUsing)
+{
+    // hide UI elements if we are not snapping to assistants
+    m_toolBrushOptions->magnetismLabel->setVisible(isUsing);
+    m_toolBrushOptions->magnetismInputbox->setVisible(isUsing);
+    m_toolBrushOptions->snapSingleCheckbox->setVisible(isUsing);
+
+    setAssistant(isUsing);
+
 }

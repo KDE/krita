@@ -48,6 +48,8 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_lod_transform.h"
 #include "kis_snap_line_strategy.h"
+#include "kis_guides_config.h"
+#include "kis_guides_manager.h"
 
 
 class KisZoomController : public KoZoomController
@@ -133,11 +135,18 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_verticalRuler->setVisible(false);
 
 
+    QAction *rulerAction = actionCollection->action("ruler_pixel_multiple2");
+    if (m_view->document()->guidesConfig().rulersMultiple2()) {
+        m_horizontalRuler->setUnitPixelMultiple2(true);
+        m_verticalRuler->setUnitPixelMultiple2(true);
+    }
     QList<QAction*> unitActions = m_view->createChangeUnitActions(true);
+    unitActions.append(rulerAction);
     m_horizontalRuler->setPopupActionList(unitActions);
     m_verticalRuler->setPopupActionList(unitActions);
 
     connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), SLOT(applyRulersUnit(const KoUnit&)));
+    connect(rulerAction, SIGNAL(toggled(bool)), SLOT(setRulersPixelMultiple2(bool)));
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);
@@ -251,6 +260,18 @@ void KisZoomManager::applyRulersUnit(const KoUnit &baseUnit)
     if (m_view && m_view->image()) {
         m_horizontalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->xRes()));
         m_verticalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->yRes()));
+    }
+    if (m_view->viewManager()) {
+        m_view->viewManager()->guidesManager()->setUnitType(baseUnit.type());
+    }
+}
+
+void KisZoomManager::setRulersPixelMultiple2(bool enabled)
+{
+    m_horizontalRuler->setUnitPixelMultiple2(enabled);
+    m_verticalRuler->setUnitPixelMultiple2(enabled);
+    if (m_view->viewManager()) {
+        m_view->viewManager()->guidesManager()->setRulersMultiple2(enabled);
     }
 }
 

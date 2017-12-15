@@ -531,11 +531,13 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
         }
     }
 
-    QString selectedBrush = resource->name();
+    // brush names have underscores as part of the file name (to help with building). We don't really need underscores
+    // when viewing the names, so replace them with spaces
+    QString formattedBrushName = resource->name().replace("_", " ");
 
-    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(currentBrushEngineName.append(" ").append("Engine"));
-    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name());
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
 
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor

@@ -170,7 +170,11 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    if (currentPaintOpPreset()) emit statusTextChanged(currentPaintOpPreset()->name());
+    if (currentPaintOpPreset()) {
+        QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
+        emit statusTextChanged(formattedBrushName);
+    }
+
     KisTool::activate(toolActivation, shapes);
     connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
     connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);

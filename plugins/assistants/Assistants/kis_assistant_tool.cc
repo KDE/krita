@@ -76,11 +76,13 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
     m_handleSize = 17;
 
+    m_canvas->updateCanvas();
 }
 
 void KisAssistantTool::deactivate()
 {
     m_canvas->paintingAssistantsDecoration()->deactivateAssistantsEditor();
+    m_canvas->updateCanvas();
     KisTool::deactivate();
 }
 
@@ -308,13 +310,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
-        if (m_newAssistant->numHandles() <= 1) {
-            if (key == "vanishing point"){
-                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(-70,0)), HandleType::SIDE);
-                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(-140,0)), HandleType::SIDE);
-                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(70,0)), HandleType::SIDE);
-                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point+QPointF(140,0)), HandleType::SIDE);
-                }
+        if (m_newAssistant->numHandles() <= 1) {          
             addAssistant();
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);

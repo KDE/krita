@@ -92,7 +92,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
     
-    if (isAssistantComplete() > 1 && isSnappingActive() && previewVisible==true) {
+    if (isAssistantComplete() && isSnappingActive() && previewVisible==true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));

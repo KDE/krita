@@ -510,6 +510,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);
+
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){
                 m_d->assistants.append(toQShared(assistant));

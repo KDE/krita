@@ -35,15 +35,15 @@ public:
     explicit SvgTextTool(KoCanvasBase *canvas);
     ~SvgTextTool() override;
     /// reimplemented from KoToolBase
-    void paint(QPainter &, const KoViewConverter &) override;
+    void paint(QPainter &gc, const KoViewConverter &converter) override;
     /// reimplemented from KoToolBase
-    void mousePressEvent(KoPointerEvent *) override;
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from KoToolBase
-    void mouseMoveEvent(KoPointerEvent *) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented from KoToolBase
-    void mouseReleaseEvent(KoPointerEvent *) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
     /// reimplemented from KoToolBase
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
@@ -63,6 +63,9 @@ private:
     KoSvgTextShape *m_shape;
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit;
+    QPointF m_dragStart;
+    QPointF m_dragEnd;
+    bool m_dragging;
 };
 
 #endif

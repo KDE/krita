@@ -36,6 +36,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
+#include <KoProperties.h>
+#include <KoColorBackground.h>
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -382,7 +384,35 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *do
                              "<defs/>",
                              QRectF(0, 0, 200, 60),
                              documentResources->shapeController()->pixelsPerInch());
+
     qDebug() << converter.errors() << converter.warnings();
+
+    return shape;
+}
+
+KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
+{
+    KoSvgTextShape *shape = new KoSvgTextShape();
+    shape->setShapeId(KoSvgTextShape_SHAPEID);
+
+    QString svgText = params->stringProperty("svgText", "<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>");
+    QString defs = params->stringProperty("defs" , "<defs/>");
+    QRectF shapeRect = QRectF(0, 0, 200, 60);
+    QVariant var = params->property("shapeRect");
+
+    if (var.type()==QVariant::RectF) {
+        shapeRect = var.toRectF();
+    }
+
+    KoSvgTextShapeMarkupConverter converter(shape);
+    converter.convertFromSvg(svgText,
+                             defs,
+                             shapeRect,
+                             documentResources->shapeController()->pixelsPerInch());
+    qDebug() << converter.errors() << converter.warnings();
+
+    shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(QColor(Qt::black))));
+    shape->setPosition(shapeRect.topLeft());
 
     return shape;
 }

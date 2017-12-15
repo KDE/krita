@@ -31,6 +31,7 @@
 #include <klocalizedstring.h>
 
 #include <KisPart.h>
+#include <kis_canvas2.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -38,7 +39,11 @@
 #include <KoImageCollection.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoShapeController.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
 #include <KoPointerEvent.h>
+#include <KoProperties.h>
 
 #include "SvgTextEditor.h"
 
@@ -46,6 +51,9 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
     , m_editor(new SvgTextEditor(0))
+    , m_dragStart( 0, 0)
+    , m_dragEnd( 0, 0)
+    , m_dragging(false)
 {
     connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
 }
@@ -63,10 +71,6 @@ void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &sha
         if (m_shape) {
             break;
         }
-    }
-    if (!m_shape) {
-        emit done();
-        return;
     }
     useCursor(Qt::ArrowCursor);
 }
@@ -105,24 +109,69 @@ void SvgTextTool::textUpdated(const QString &svg, const QString &defs)
     canvas()->addCommand(cmd);
 }
 
-void SvgTextTool::paint(QPainter &, const KoViewConverter &)
+void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
-
+    if (m_dragging) {
+        gc.save();
+        gc.setPen(Qt::black);
+        QRectF rect = converter.documentToView(QRectF(m_dragStart, m_dragEnd));
+        gc.drawRect(rect);
+        gc.restore();
+    }
 }
 
-void SvgTextTool::mousePressEvent(KoPointerEvent *)
+void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 {
+    if (canvas()->shapeManager()->shapeAt(event->point) != m_shape || !m_shape) {
+        KoSvgTextShape *shape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
 
+        if (shape) {
+            canvas()->shapeManager()->selection()->deselectAll();
+            canvas()->shapeManager()->selection()->select(shape);
+            m_shape = shape;
+        } else {
+            m_dragStart = event->point;
+            m_dragging = true;
+        }
+
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
-void SvgTextTool::mouseMoveEvent(KoPointerEvent *)
+void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-
+    if (m_dragging) {
+        m_dragEnd = event->point;
+        canvas()->updateCanvas(QRectF(m_dragStart, m_dragEnd).normalized().adjusted(-100, -100, 100, 100));
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
-void SvgTextTool::mouseReleaseEvent(KoPointerEvent *)
+void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    if (m_dragging) {
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
+        KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
+        if (m_dragging) {
+            m_dragEnd = event->point;
+            m_dragging = false;
+            params->setProperty("shapeRect", QVariant(QRectF(m_dragStart, m_dragEnd).normalized()));
+        }
+        KoShape *textShape = factory->createShape( params, canvas()->shapeController()->resourceManager());
 
+
+        KUndo2Command *cmd = canvas()->shapeController()->addShape(textShape, 0);
+        canvas()->addCommand(cmd);
+        canvas()->shapeManager()->selection()->deselectAll();
+        canvas()->shapeManager()->selection()->select(textShape);
+        m_shape = dynamic_cast<KoSvgTextShape *>(textShape);
+    }
+    event->accept();
+    showEditor();
 }
 
 

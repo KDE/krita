@@ -98,6 +98,7 @@ void SvgTextTool::showEditor()
     if (!m_shape) return;
     if (!m_editor) {
         m_editor = new SvgTextEditor(0);
+        connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
     }
     m_editor->setShape(m_shape);
     m_editor->show();

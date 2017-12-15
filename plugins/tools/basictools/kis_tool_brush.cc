@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
+ *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,7 +79,7 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing", i18nc("@action", "Brush Smoothing: Stabilizer"), KisIconUtils::loadIcon("smoothing-stabilizer"), collection);
 
 
-    // add stabilizer preset options from 0 - 5
+    // add stabilizer preset options from 0 - 4
     BrushStabilizerSetting setting;
 
     // setting of 0 -- weakest stabilizer settings
@@ -87,27 +88,37 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
 
     // setting of 1
     setting.smoothingType = 2; // weighted smoothing
-    setting.distance = 1.0;
+    setting.distance = 20.0;
+    setting.strokeEnding = 0.3;
+    setting.hasSmoothPressure = false;
+    setting.hasScalableDistance = false;
     stabilizerSettings.append(setting);
 
     // setting of 2
     setting.smoothingType = 2;
-    setting.distance = 3.0;
+    setting.distance = 60.0;
+    setting.strokeEnding = 0.4;
+    setting.hasSmoothPressure = false;
+    setting.hasScalableDistance = true;
     stabilizerSettings.append(setting);
 
     // setting of 3
     setting.smoothingType = 3; // stabilizer
-    setting.distance = 8.0;
+    setting.distance = 26.0;
     setting.hasDelay = true;
+    setting.delayDistance = 4;
     setting.hasStabilizerSensors = false;
+    setting.hasSmoothPressure = true;
     stabilizerSettings.append(setting);
 
 
     // setting of 4 - strongest stabilizer settings
     setting.smoothingType = 3;
-    setting.distance = 15.0;
+    setting.distance = 30.0;
     setting.hasDelay = true;
+    setting.delayDistance = 40;
     setting.hasStabilizerSensors = true;
+    setting.hasSmoothPressure = true;
     stabilizerSettings.append(setting);
 }
 
@@ -340,7 +351,6 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_toolBrushOptions->customStabilizerSettingsCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotCustomSettingsChecked(bool)));
 
     m_toolBrushOptions->stabilizerStrengthSlider->setRange(0, 4);
-    //m_toolBrushOptions->stabilizerStrengthSlider->setTracking(false); // don't send signals while scrubbing, only on release
     connect(m_toolBrushOptions->stabilizerStrengthSlider, SIGNAL(valueChanged(int)), this, SLOT(slotStabilizerPresetChanged(int)));
 
 
@@ -367,6 +377,11 @@ QWidget * KisToolBrush::createOptionWidget()
     m_toolBrushOptions->distanceInputbox->setValue(smoothingOptions()->smoothnessDistance());
 
 
+    m_toolBrushOptions->stabilizerDelayInput->setRange(0, 500);
+    m_toolBrushOptions->stabilizerDelayInput->setSuffix(i18n(" px"));
+    m_toolBrushOptions->stabilizerDelayInput->setExponentRatio(3.0);
+    connect(m_toolBrushOptions->stabilizerDelayInput, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
+
     // Finish stabilizer curve
     connect(m_toolBrushOptions->finishLineCheckbox, SIGNAL(toggled(bool)), this, SLOT(setFinishStabilizedCurve(bool)));
     m_toolBrushOptions->finishLineCheckbox->setChecked(smoothingOptions()->finishStabilizedCurve());
@@ -377,8 +392,9 @@ QWidget * KisToolBrush::createOptionWidget()
 
 
     m_toolBrushOptions->distanceInputbox->setToolTip(i18n("Radius where the brush is blocked"));
-    m_toolBrushOptions->distanceInputbox->setRange(0, 500);
-    m_toolBrushOptions->distanceInputbox->setSuffix(i18n(" px"));
+    m_toolBrushOptions->distanceInputbox->setRange(3, 1000, 1);
+    m_toolBrushOptions->distanceInputbox->setExponentRatio(3.0);
+
     connect(m_toolBrushOptions->distanceInputbox, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
     m_toolBrushOptions->distanceInputbox->setValue(smoothingOptions()->delayDistance());
@@ -391,7 +407,8 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_toolBrushOptions->stabilizeSensorsCheckbox, SIGNAL(toggled(bool)), this, SLOT(setStabilizeSensors(bool)));
     m_toolBrushOptions->stabilizeSensorsCheckbox->setChecked(smoothingOptions()->stabilizeSensors());
 
-    m_toolBrushOptions->strokeEndingInputbox->setRange(0.0, 1.0);
+    m_toolBrushOptions->strokeEndingInputbox->setRange(0.0, 1.0, 2);
+    m_toolBrushOptions->strokeEndingInputbox->setSingleStep(0.01);
     m_toolBrushOptions->strokeEndingInputbox->setEnabled(true);
     connect(m_toolBrushOptions->strokeEndingInputbox, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
     m_toolBrushOptions->strokeEndingInputbox->setValue(smoothingOptions()->tailAggressiveness());

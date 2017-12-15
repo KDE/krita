@@ -21,15 +21,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="stabilizerStrengthSlider">
-       <property name="maximum">
+      <widget class="KisSliderSpinBox" name="stabilizerStrengthSlider" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximum" stdset="0">
         <number>5</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksBelow</enum>
        </property>
       </widget>
      </item>
@@ -48,7 +48,14 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="strokeEndingInputbox"/>
+      <widget class="KisDoubleSliderSpinBox" name="strokeEndingInputbox" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="distanceLabel">
@@ -65,7 +72,14 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="distanceInputbox"/>
+      <widget class="KisDoubleSliderSpinBox" name="distanceInputbox" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item row="6" column="1">
       <widget class="QCheckBox" name="finishLineCheckbox">
@@ -123,18 +137,22 @@
      <item row="0" column="1">
       <widget class="QComboBox" name="smoothingTypeCombobox"/>
      </item>
+     <item row="3" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="stabilizerDelayInput" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="0">
       <widget class="QCheckBox" name="enableStabilizerDelay">
        <property name="text">
         <string>Delay</string>
        </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
       </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QDoubleSpinBox" name="stabilizerDelayInput"/>
      </item>
     </layout>
    </item>
@@ -155,7 +173,14 @@
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="1">
-      <widget class="QSpinBox" name="magnetismInputbox"/>
+      <widget class="KisSliderSpinBox" name="magnetismInputbox" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="magnetismLabel">
@@ -194,6 +219,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

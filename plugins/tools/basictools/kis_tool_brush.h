@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +54,7 @@ typedef struct BrushStabilizerSetting {
     int smoothingType = 1; // 0 = none, 1 = basic, 2 = weighted, 3 = stabilizer
     float distance = 0.0;
     float strokeEnding  = 0.0;
-    float delayDistance  = 0.0;
+    int delayDistance  = 0;
     bool hasSmoothPressure = false;
     bool hasScalableDistance = false;
     bool hasDelay = false;

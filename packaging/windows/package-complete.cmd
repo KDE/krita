@@ -223,6 +223,11 @@ if not "%1" == "" (
             goto usage_and_fail
         )
         call :get_full_path ARG_PRE_ZIP_HOOK "%~f2"
+        if "!ARG_PRE_ZIP_HOOK!" == "" (
+            echo ERROR: Arg --pre-zip-hook does not point to a valid file 1>&2
+            echo.
+            goto usage_and_fail
+        )
         shift /2
         set CURRENT_MATCHED=1
     )
@@ -240,7 +245,7 @@ if not "%1" == "" (
 
 if "%ARG_NO_INTERACTIVE%" == "1" (
     if "%ARG_PACKAGE_NAME%" == "" (
-        echo ERROR: Required arg --package-name not specified1>&2
+        echo ERROR: Required arg --package-name not specified! 1>&2
         echo.
         goto usage_and_fail
     )

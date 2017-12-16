@@ -685,7 +685,7 @@ endlocal
 if not "%ARG_PRE_ZIP_HOOK%" == "" (
     echo Running pre-zip-hook...
     setlocal
-    cmd /c "%ARG_PRE_ZIP_HOOK%" "%pkg_root%\"
+    cmd /c ""%ARG_PRE_ZIP_HOOK%" "%pkg_root%\""
     if errorlevel 1 (
         echo ERROR: Got exit code !errorlevel! from pre-zip-hook! 1>&2
         exit /b 1

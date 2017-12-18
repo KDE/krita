@@ -49,6 +49,10 @@ protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
 
+    bool isValidForCurrentLayer() const override;
+    KoShapeManager *shapeManager() const override;
+    KoSelection *koSelection() const override;
+
 public:
 
     void addReferenceImage();

@@ -33,11 +33,11 @@
 #include <math.h>
 #include <klocalizedstring.h>
 
-ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons)
+ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, Qt::MouseButtons buttons)
     : KoInteractionStrategy(tool)
     , m_start(clicked)
 {
-    m_selectedShapes = tool->canvas()->shapeManager()->selection()->selectedEditableShapes();
+    m_selectedShapes = selection->selectedEditableShapes();
     Q_FOREACH (KoShape *shape, m_selectedShapes) {
         m_oldTransforms << shape->transformation();
     }
@@ -46,7 +46,7 @@ ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicke
                 KoFlake::Center :
                 KoFlake::AnchorPosition(tool->canvas()->resourceManager()->resource(KoFlake::HotPosition).toInt());
 
-    m_rotationCenter = tool->canvas()->shapeManager()->selection()->absolutePosition(anchor);
+    m_rotationCenter = selection->absolutePosition(anchor);
 
     tool->setStatusText(i18n("Press ALT to rotate in 45 degree steps."));
 }

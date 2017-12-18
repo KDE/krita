@@ -108,6 +108,17 @@ void ToolReferenceImages::addReferenceImage()
 {
 }
 
+bool ToolReferenceImages::isValidForCurrentLayer() const
+{
+    return true;
+}
+
+KoShapeManager *ToolReferenceImages::shapeManager() const
+{
+    auto layer = referenceImagesLayer();
+    return layer ? referenceImagesLayer()->shapeManager() : nullptr;
+}
+
 KisReferenceImagesLayer *ToolReferenceImages::referenceImagesLayer() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -122,4 +133,10 @@ KisReferenceImagesLayer *ToolReferenceImages::getOrCreteReferenceImagesLayer()
     KisDocument *document = kisCanvas->imageView()->document();
 
     return  document->createReferenceImagesLayer();
+}
+
+KoSelection *ToolReferenceImages::koSelection() const
+{
+    auto manager = shapeManager();
+    return manager ? manager->selection() : nullptr;
 }

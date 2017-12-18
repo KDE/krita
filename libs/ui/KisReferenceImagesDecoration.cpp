@@ -20,6 +20,7 @@
 #include "KisReferenceImagesDecoration.h"
 
 #include "KisDocument.h"
+#include "KisReferenceImagesLayer.h"
 
 struct KisReferenceImagesDecoration::Private {
 
@@ -39,21 +40,22 @@ KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImageSP referenceImage)
 {
-    QList<KisReferenceImageSP> images = view()->document()->referenceImages();
-    images.append(referenceImage);
-    view()->document()->setReferenceImages(images);
-    setVisible(!images.isEmpty());
-    emit referenceImagesChanged();
+    KisReferenceImagesLayer *layer = view()->document()->createReferenceImagesLayer();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
+
+    layer->addReferenceImage(referenceImage);
 }
 
-QList<KisReferenceImageSP> KisReferenceImagesDecoration::referenceImages() const
+bool KisReferenceImagesDecoration::documentHasReferenceImages() const
 {
-    return view()->document()->referenceImages();
+    return view()->document()->referenceImagesLayer() != nullptr;
 }
 
 void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
+    /*
     Q_FOREACH(KisReferenceImageSP image, view()->document()->referenceImages()) {
         image->draw(gc, updateRect, converter, canvas);
     }
+    */
 }

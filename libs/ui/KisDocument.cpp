@@ -114,7 +114,7 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
-#include "KisReferenceImage.h"
+#include "KisReferenceImagesLayer.h"
 
 #include <mutex>
 #include "kis_config_notifier.h"
@@ -317,7 +317,7 @@ public:
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
     QList<KisPaintingAssistantSP> assistants;
-    QList<KisReferenceImageSP> referenceImages;
+    KisReferenceImagesLayer *referenceImagesLayer = nullptr;
 
     KisGridConfig gridConfig;
 
@@ -1616,14 +1616,19 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     d->assistants = value;
 }
 
-QList<KisReferenceImageSP> KisDocument::referenceImages() const
+KisReferenceImagesLayer *KisDocument::createReferenceImagesLayer()
 {
-    return d->referenceImages;
+    if (!d->referenceImagesLayer) {
+        d->referenceImagesLayer = new KisReferenceImagesLayer(shapeController(), image());
+        d->image->addNode(d->referenceImagesLayer, d->image->root());
+    }
+
+    return d->referenceImagesLayer;
 }
 
-void KisDocument::setReferenceImages(const QList<KisReferenceImageSP> &referenceImages)
+KisReferenceImagesLayer *KisDocument::referenceImagesLayer() const
 {
-    d->referenceImages = referenceImages;
+    return d->referenceImagesLayer;
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

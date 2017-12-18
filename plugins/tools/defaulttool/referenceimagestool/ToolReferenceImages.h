@@ -28,10 +28,12 @@
 #include <kis_icon.h>
 #include <kis_canvas2.h>
 
+#include <defaulttool/DefaultTool.h>
+
 class ToolReferenceImagesWidget;
+class KisReferenceImagesLayer;
 
-
-class ToolReferenceImages : public KisTool
+class ToolReferenceImages : public DefaultTool
 {
     Q_OBJECT
 
@@ -42,12 +44,14 @@ public:
     virtual quint32 priority() {
         return 3;
     }
-    void beginPrimaryAction(KoPointerEvent *event) override;
-    void continuePrimaryAction(KoPointerEvent *event) override;
-    void endPrimaryAction(KoPointerEvent *event) override;
-    void mouseMoveEvent(KoPointerEvent *event) override;
 
+protected:
+    QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
+
+public:
+
+    void addReferenceImage();
 
 public Q_SLOTS:
 
@@ -60,13 +64,11 @@ private Q_SLOTS:
     void saveReferenceImages();
     void loadReferenceImages();
 
-protected:
-
-    void paint(QPainter& gc, const KoViewConverter &converter) override;
-
 private:
+    ToolReferenceImagesWidget *m_optionsWidget = nullptr;
 
-    ToolReferenceImagesWidget *m_optionsWidget;
+    KisReferenceImagesLayer *referenceImagesLayer() const;
+    KisReferenceImagesLayer *getOrCreteReferenceImagesLayer();
 };
 
 
@@ -74,7 +76,7 @@ class ToolReferenceImagesFactory : public KoToolFactoryBase
 {
 public:
     ToolReferenceImagesFactory()
-            : KoToolFactoryBase("ToolReferenceImages") {
+    : KoToolFactoryBase("ToolReferenceImages") {
         setToolTip(i18n("Reference Images Tool"));
         setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_reference_images"));

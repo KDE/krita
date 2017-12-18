@@ -27,25 +27,35 @@
 #include <resources/KoColorSet.h>
 #include "kis_canvas_resource_provider.h"
 
+#include "ToolReferenceImages.h"
 
 struct ToolReferenceImagesWidget::Private {
-    Private()
+    Private(ToolReferenceImages *tool)
+    : tool(tool)
     {
     }
 
     Ui_WdgToolOptions *ui;
-
+    ToolReferenceImages *tool;
 };
 
-ToolReferenceImagesWidget::ToolReferenceImagesWidget(KisCanvasResourceProvider *provider, QWidget *parent)
+ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent),
-      d(new Private)
+      d(new Private(tool))
 {
     d->ui = new Ui_WdgToolOptions();
     d->ui->setupUi(this);
+
+    connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), this, SLOT(slotAddReferenceImage()));
+
 
 }
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
 {
+}
+
+void ToolReferenceImagesWidget::slotAddReferenceImage()
+{
+    d->tool->addReferenceImage();
 }

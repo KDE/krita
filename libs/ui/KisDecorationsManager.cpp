@@ -106,7 +106,7 @@ void KisDecorationsManager::updateAction()
     }
 
     if (referenceImagesDecoration()) {
-       m_toggleReferenceImages->setEnabled(!referenceImagesDecoration()->referenceImages().isEmpty());
+       m_toggleReferenceImages->setEnabled(referenceImagesDecoration()->documentHasReferenceImages());
        m_toggleReferenceImages->setChecked(referenceImagesDecoration()->visible());
     }
 }

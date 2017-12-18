@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PLUGIN_H_
-#define PLUGIN_H_
+#ifndef __TOOL_REFERENCE_IMAGES_WIDGET_H
+#define __TOOL_REFERENCE_IMAGES_WIDGET_H
 
-#include <QObject>
-#include <QVariant>
+#include <QScopedPointer>
+#include <QWidget>
+#include <QModelIndex>
 
-class Plugin : public QObject
+#include "kis_types.h"
+
+class KisCanvasResourceProvider;
+class KoColor;
+class ToolReferenceImages;
+
+class ToolReferenceImagesWidget : public QWidget
 {
     Q_OBJECT
 public:
-    Plugin(QObject *parent, const QVariantList &);
-    ~Plugin() override;
+    ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider *provider = 0, QWidget *parent = 0);
+    ~ToolReferenceImagesWidget() override;
 
+private Q_SLOTS:
+    void slotAddReferenceImage();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 #endif

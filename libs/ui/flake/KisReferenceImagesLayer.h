@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+/*
+ * Copyright (C) 2017 Jouni Pentikäinen <joupent@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,23 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "defaulttool/DefaultToolFactory.h"
-#include "connectionTool/ConnectionToolFactory.h"
-#include "referenceimagestool/ToolReferenceImages.h"
 
-#include <KoToolRegistry.h>
+#ifndef KRITA_KISREFERENCEIMAGESLAYER_H
+#define KRITA_KISREFERENCEIMAGESLAYER_H
 
-#include <kpluginfactory.h>
+#include "kis_shape_layer.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_tool_defaults.json", registerPlugin<Plugin>();)
+#include <kis_types.h>
 
-Plugin::Plugin(QObject *parent, const QVariantList &)
-    : QObject(parent)
+class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 {
-    KoToolRegistry::instance()->add(new DefaultToolFactory());
-    KoToolRegistry::instance()->add(new ConnectionToolFactory());
-    KoToolRegistry::instance()->add(new ToolReferenceImagesFactory());
-}
+    Q_OBJECT
 
-#include <Plugin.moc>
+public:
+    KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image);
+
+    void addReferenceImage(KisReferenceImageSP referenceImage);
+
+    bool allowAsChild(KisNodeSP) const override;
+
+    bool accept(KisNodeVisitor&) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
+
+};
+
+
+#endif //KRITA_KISREFERENCEIMAGESLAYER_H

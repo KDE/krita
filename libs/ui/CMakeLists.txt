@@ -385,6 +385,8 @@ set(kritaui_LIB_SRCS
 
     KisReferenceImagesDecoration.cpp
     KisReferenceImage.cpp
+    flake/KisReferenceImagesLayer.cpp
+    flake/KisReferenceImagesLayer.h
 )
 
 if(WIN32)

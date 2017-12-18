@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -16,40 +15,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <ToolReferenceImages.h>
+#include "ToolReferenceImages.h"
 
-#include <QPainter>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
 #include <QDesktopServices>
-#include <QFile>
-#include <QLineF>
 #include <QLayout>
 
-#include <kis_debug.h>
-#include <klocalizedstring.h>
-#include <QMessageBox>
-
-#include <KoIcon.h>
-#include <kis_icon.h>
-#include <KoFileDialog.h>
-#include <KoViewConverter.h>
-#include <KoPointerEvent.h>
 
 #include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <KisViewManager.h>
+#include <KisDocument.h>
 
 #include "kis_global.h"
 
 #include <math.h>
+#include <libs/ui/flake/KisReferenceImagesLayer.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeManager.h>
 
-#include <ToolReferenceImagesWidget.h>
+#include "ToolReferenceImagesWidget.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::arrowCursor())
+    : DefaultTool(canvas)
 {
     setObjectName("ToolReferenceImages");
 }
@@ -61,35 +50,12 @@ ToolReferenceImages::~ToolReferenceImages()
 void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     // Add code here to initialize your tool when it got activated
-    KisTool::activate(toolActivation, shapes);
+    DefaultTool::activate(toolActivation, shapes);
 }
 
 void ToolReferenceImages::deactivate()
 {
-    KisTool::deactivate();
-}
-
-void ToolReferenceImages::beginPrimaryAction(KoPointerEvent *event)
-{
-}
-
-void ToolReferenceImages::continuePrimaryAction(KoPointerEvent *event)
-{
-}
-
-void ToolReferenceImages::endPrimaryAction(KoPointerEvent *event)
-{
-    setMode(KisTool::HOVER_MODE);
-    event->ignore();
-}
-
-void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
-{
-}
-
-void ToolReferenceImages::paint(QPainter& _gc, const KoViewConverter &_converter)
-{
-
+    DefaultTool::deactivate();
 }
 
 void ToolReferenceImages::removeAllReferenceImages()
@@ -119,11 +85,16 @@ void ToolReferenceImages::saveReferenceImages()
 }
 
 
+QList<QPointer<QWidget>> ToolReferenceImages::createOptionWidgets()
+{
+    // Instead of inheriting DefaultTool's multi-tab implementation, inherit straight from KoToolBase
+    return KoToolBase::createOptionWidgets();
+}
 
 QWidget *ToolReferenceImages::createOptionWidget()
 {
     if (!m_optionsWidget) {
-        m_optionsWidget = new ToolReferenceImagesWidget();
+        m_optionsWidget = new ToolReferenceImagesWidget(this);
         // See https://bugs.kde.org/show_bug.cgi?id=316896
         QWidget *specialSpacer = new QWidget(m_optionsWidget);
         specialSpacer->setObjectName("SpecialSpacer");
@@ -133,3 +104,22 @@ QWidget *ToolReferenceImages::createOptionWidget()
     return m_optionsWidget;
  }
 
+void ToolReferenceImages::addReferenceImage()
+{
+}
+
+KisReferenceImagesLayer *ToolReferenceImages::referenceImagesLayer() const
+{
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisDocument *document = kisCanvas->imageView()->document();
+
+    return document->referenceImagesLayer();
+}
+
+KisReferenceImagesLayer *ToolReferenceImages::getOrCreteReferenceImagesLayer()
+{
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisDocument *document = kisCanvas->imageView()->document();
+
+    return  document->createReferenceImagesLayer();
+}

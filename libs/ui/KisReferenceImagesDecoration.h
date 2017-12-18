@@ -46,11 +46,7 @@ public:
 
     void addReferenceImage(KisReferenceImageSP referenceImage);
 
-    QList<KisReferenceImageSP> referenceImages() const;
-
-Q_SIGNALS:
-
-    void referenceImagesChanged();
+    bool documentHasReferenceImages() const;
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas) override;

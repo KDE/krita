@@ -60,8 +60,7 @@ class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
 class QDomDocument;
-
-class KisPart;
+class KisReferenceImagesLayer;
 
 #define KIS_MIME_TYPE "application/x-krita"
 
@@ -552,8 +551,15 @@ public:
     /// @replace the current list of assistants with @param value
     void setAssistants(const QList<KisPaintingAssistantSP> &value);
 
-    QList<KisReferenceImageSP> referenceImages() const;
-    void setReferenceImages(const QList<KisReferenceImageSP> &referenceImages);
+    /**
+     * Get existing reference images layer or create new if none exists.
+     */
+    KisReferenceImagesLayer *createReferenceImagesLayer();
+
+    /**
+     * Get existing reference images layer or null if none exists.
+     */
+    KisReferenceImagesLayer *referenceImagesLayer() const;
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 

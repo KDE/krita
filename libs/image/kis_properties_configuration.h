@@ -96,7 +96,7 @@ public:
     /**
      * @return true if the map contains a property with the specified name
      */
-    bool hasProperty(const QString& name) const;
+    virtual bool hasProperty(const QString& name) const;
 
     /**
      * Set the property with name to value.
@@ -143,6 +143,33 @@ public:
     void setPropertyNotSaved(const QString & name);
 
     void removeProperty(const QString & name);
+
+    /**
+     * Get the keys of all the properties in the object
+     */
+    virtual QList<QString> getPropertiesKeys() const;
+
+    /**
+     * Get a set of properties, which keys are prefixed with \p prefix. The settings object
+     * \p config will have all these properties with the prefix stripped from them.
+     */
+    void getPrefixedProperties(const QString &prefix, KisPropertiesConfiguration *config) const;
+
+    /**
+     * A convenience override
+     */
+    void getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const;
+
+    /**
+     * Takes all the properties from \p config, adds \p prefix to all their keys and puths them
+     * into this properties object
+     */
+    void setPrefixedProperties(const QString &prefix, const KisPropertiesConfiguration *config);
+
+    /**
+     * A convenience override
+     */
+    void setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config);
 
 public:
 

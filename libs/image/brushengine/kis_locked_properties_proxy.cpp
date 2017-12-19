@@ -83,7 +83,33 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
     m_parent->setProperty(name, value);
 }
 
+bool KisLockedPropertiesProxy::hasProperty(const QString &name) const
+{
+    KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
+    if (!t->preset()) return m_parent->hasProperty(name);
 
+    return (m_lockedProperties->lockedProperties() &&
+            m_lockedProperties->lockedProperties()->hasProperty(name)) ||
+            m_parent->hasProperty(name);
+
+}
+
+QList<QString> KisLockedPropertiesProxy::getPropertiesKeys() const
+{
+    KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
+    if (!t->preset()) return m_parent->getPropertiesKeys();
+
+    QList<QString> result = m_parent->getPropertiesKeys();
+
+    if (m_lockedProperties->lockedProperties()) {
+        QSet<QString> properties = QSet<QString>::fromList(result);
+        properties += QSet<QString>::fromList(m_lockedProperties->lockedProperties()->getPropertiesKeys());
+
+        result = properties.toList();
+    }
+
+    return result;
+}
 
 
 

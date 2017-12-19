@@ -303,6 +303,41 @@ void KisPropertiesConfiguration::removeProperty(const QString & name)
     d->properties.remove(name);
 }
 
+QList<QString> KisPropertiesConfiguration::getPropertiesKeys() const
+{
+    return d->properties.keys();
+}
+
+void KisPropertiesConfiguration::getPrefixedProperties(const QString &prefix, KisPropertiesConfiguration *config) const
+{
+    const int prefixSize = prefix.size();
+
+    const QList<QString> keys = getPropertiesKeys();
+    Q_FOREACH (const QString &key, keys) {
+        if (key.startsWith(prefix)) {
+            config->setProperty(key.mid(prefixSize), getProperty(key));
+        }
+    }
+}
+
+void KisPropertiesConfiguration::getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const
+{
+    getPrefixedProperties(prefix, config.data());
+}
+
+void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, const KisPropertiesConfiguration *config)
+{
+    const QList<QString> keys = config->getPropertiesKeys();
+    Q_FOREACH (const QString &key, keys) {
+        this->setProperty(prefix + key, config->getProperty(key));
+    }
+}
+
+void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config)
+{
+    setPrefixedProperties(prefix, config.data());
+}
+
 // --- factory ---
 
 struct Q_DECL_HIDDEN KisPropertiesConfigurationFactory::Private {

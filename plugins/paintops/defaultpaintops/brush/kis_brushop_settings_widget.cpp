@@ -45,7 +45,7 @@
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
-
+#include <KisMaskingBrushOption.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
@@ -81,6 +81,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+
+    addPaintOpOption(new KisMaskingBrushOption(), i18n("Masking Brush"));
 
 }
 

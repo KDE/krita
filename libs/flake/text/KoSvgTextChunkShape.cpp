@@ -459,11 +459,6 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
     return true;
 }
 
-bool KoSvgTextChunkShape::loadHtml(const KoXmlElement &e)
-{
-    return false;
-}
-
 void writeTextListAttribute(const QString &attribute, const QVector<qreal> &values, KoXmlWriter &writer)
 {
     const QString value = convertListAttribute(values);

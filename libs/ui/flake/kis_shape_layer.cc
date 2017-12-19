@@ -70,7 +70,6 @@
 
 #include "SvgWriter.h"
 #include "SvgParser.h"
-#include <QXmlStreamReader>
 
 #include <kis_types.h>
 #include <kis_image.h>

@@ -398,18 +398,18 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     QString svgText = params->stringProperty("svgText", "<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>");
     QString defs = params->stringProperty("defs" , "<defs/>");
     QRectF shapeRect = QRectF(0, 0, 200, 60);
-    QVariant var = params->property("shapeRect");
+    QVariant rect = params->property("shapeRect");
 
-    if (var.type()==QVariant::RectF) {
-        shapeRect = var.toRectF();
+    if (rect.type()==QVariant::RectF) {
+        shapeRect = rect.toRectF();
     }
+
 
     KoSvgTextShapeMarkupConverter converter(shape);
     converter.convertFromSvg(svgText,
                              defs,
                              shapeRect,
                              documentResources->shapeController()->pixelsPerInch());
-    qDebug() << converter.errors() << converter.warnings();
 
     shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(QColor(Qt::black))));
     shape->setPosition(shapeRect.topLeft());

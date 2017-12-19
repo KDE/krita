@@ -23,6 +23,7 @@
 #include "SvgParserTestingUtils.h"
 #include <text/KoSvgText.h>
 #include <text/KoSvgTextProperties.h>
+#include "KoSvgTextShapeMarkupConverter.h"
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -1037,6 +1038,41 @@ void TestSvgText::testEmptyTextChunk()
     // it just shouldn't assert or fail when seeing an empty text block
     t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
     t.run();
+}
+
+void TestSvgText::testConvertHtmlToSvg()
+{
+    const QString html =
+            "<?xml version=\"1.0\"?>"
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">"
+            "<html>"
+              "<head>"
+                "<meta name=\"qrichtext\" content=\"1\"/>"
+                "<style type=\"text/css\">p, li { white-space: pre-wrap; }</style>"
+              "</head>"
+              "<body style=\" font-family:'Droid Sans'; font-size:9pt; font-weight:400; font-style:normal;\">"
+                "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+                "  <span style=\" font-family:'Times'; font-size:20pt;\">Lorem ipsum dolor</span>"
+                "</p>"
+                "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">sit am"
+                "<span style=\" font-weight:600;\">et, consectetur adipis</span>cing </p>"
+                "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+                "  <span style=\" font-style:italic;\">elit. </span>"
+                "</p>"
+              "</body>"
+            "</html>";
+
+    KoSvgTextShape shape;
+    KoSvgTextShapeMarkupConverter converter(&shape);
+    converter.convertFromHtml(html, QRectF(0.0, 0.0, 200.0, 200.0), 72.0);
+
+    QString svg;
+    QString defs;
+
+    bool r = converter.convertToSvg(&svg, &defs);
+
+    qDebug() << r << svg << defs;
+
 }
 
 

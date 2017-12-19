@@ -71,8 +71,6 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
 
     bool saveHtml(HtmlSavingContext &context);
-    bool loadHtml(const KoXmlElement &e);
-
     /**
      * Reset the text shape into initial state, removing all the child shapes.
      * This method is used by text-updating code to upload the updated text

@@ -67,7 +67,8 @@ public:
      * @return true om success
      */
     bool convertToHtml(QString *htmlText);
-    bool convertFromHtml(const QString &htmlText);
+    bool convertFromHtml(const QString &htmlText, const QRectF &boundsInPixels, qreal pixelsPerInch);
+
 
     /**
      * A list of errors happened during loading the user's text
@@ -81,7 +82,7 @@ public:
 
 private:
     struct Private;
-    const QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> d;
 };
 
 #endif // KOSVGTEXTSHAPEMARKUPCONVERTER_H

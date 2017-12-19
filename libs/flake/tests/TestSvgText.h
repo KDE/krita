@@ -53,6 +53,9 @@ private Q_SLOTS:
     void testConvertFromIncorrectStrippedSvg();
 
     void testEmptyTextChunk();
+
+    void testConvertHtmlToSvg();
+
 };
 
 #endif // TESTSVGTEXT_H

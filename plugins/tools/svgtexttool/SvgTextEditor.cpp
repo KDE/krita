@@ -165,7 +165,7 @@ void SvgTextEditor::save()
         if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
             KoSvgTextShape shape;
             KoSvgTextShapeMarkupConverter converter(&shape);
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml())) {
+            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), m_shape->boundingRect(), 72.0)) {
                 qWarning() << "Eeeek";
             }
             QString svg;
@@ -212,9 +212,9 @@ void SvgTextEditor::switchTextEditorTab()
         enableRichTextActions(false);
         disconnect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
-        // Convert the richt text to svg and styles strings
+        // Convert the rich text to svg and styles strings
         if (m_shape) {
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml())) {
+            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), m_shape->boundingRect(), 72.0)) {
                 qWarning() << "Eeeek";
             }
             QString svg;

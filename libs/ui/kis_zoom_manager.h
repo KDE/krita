@@ -82,6 +82,7 @@ public Q_SLOTS:
     void zoomTo100();
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();
+    void setRulersPixelMultiple2(bool enabled);
 
 
 private:

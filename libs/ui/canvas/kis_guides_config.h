@@ -26,6 +26,7 @@
 #include <QScopedPointer>
 #include <QList>
 #include <boost/operators.hpp>
+#include <KoUnit.h>
 
 class QDomElement;
 class QDomDocument;
@@ -89,6 +90,12 @@ public:
     bool snapToGuides() const;
     void setSnapToGuides(bool value);
 
+    bool rulersMultiple2() const;
+    void setRulersMultiple2(bool value);
+
+    KoUnit::Type unitType() const;
+    void setUnitType(KoUnit::Type type);
+
     LineTypeInternal guidesLineType() const;
     void setGuidesLineType(LineTypeInternal value);
 
@@ -110,6 +117,8 @@ public:
 
     QDomElement saveToXml(QDomDocument& doc, const QString &tag) const;
     bool loadFromXml(const QDomElement &parent);
+
+    bool isDefault() const;
 
 private:
     class Private;

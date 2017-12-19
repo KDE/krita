@@ -45,6 +45,8 @@
 #include <brushengine/kis_locked_properties_server.h>
 #include <brushengine/kis_locked_properties_proxy.h>
 
+#include "KisPaintopSettingsIds.h"
+
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private()
@@ -145,6 +147,22 @@ void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInforma
 
 }
 
+bool KisPaintOpSettings::hasMaskingSettings() const
+{
+    return getBool(KisPaintOpUtils::MaskingBrushEnabledTag, false);
+}
+
+KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
+{
+    if (!hasMaskingSettings()) return KisPaintOpSettingsSP();
+
+    const KoID pixelBrushId(KisPaintOpUtils::MaskingBrushPaintOpId, QString());
+
+    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->settings(pixelBrushId);
+    this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
+
+    return maskingSettings;
+}
 
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {

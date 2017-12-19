@@ -81,7 +81,7 @@ public:
     /**
      *
      */
-    virtual void setOptionsWidget(KisPaintOpConfigWidget* widget);
+    void setOptionsWidget(KisPaintOpConfigWidget* widget);
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -302,6 +302,18 @@ public:
      *
      */
     virtual void setRandomOffset(const KisPaintInformation &paintInformation);
+
+    /**
+     * @return true if this preset demands a secondary masking brush running
+     *         alongside it
+     */
+    bool hasMaskingSettings() const;
+
+    /**
+     * @return a newly created settings object representing a preset of the masking
+     *         brush that should be run alongside the current brush
+     */
+    KisPaintOpSettingsSP createMaskingSettings() const;
 
 protected:
 

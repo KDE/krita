@@ -19,6 +19,8 @@
 #ifndef __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 #define __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 
+#include <QVector>
+
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "kis_resources_snapshot.h"
 #include "kis_selection.h"
@@ -26,48 +28,22 @@
 class KisPainter;
 class KisDistanceInformation;
 class KisTransaction;
+class KisFreehandStrokeInfo;
+class KisMaskedFreehandStrokePainter;
 
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
-    /**
-     * The distance information should be associated with each
-     * painter individually, so we strore and manipulate with
-     * them together using the structure PainterInfo
-     */
-    class KRITAUI_EXPORT PainterInfo {
-    public:
-        PainterInfo();
-        PainterInfo(const KisDistanceInformation &startDist);
-        PainterInfo(PainterInfo *rhs, int levelOfDetail);
-        ~PainterInfo();
-
-        KisPainter *painter;
-        KisDistanceInformation *dragDistance;
-
-        /**
-         * The distance inforametion of the associated LodN
-         * stroke. Returns zero if LodN stroke has already finished
-         * execution or does not exist.
-         */
-        KisDistanceInformation* buddyDragDistance();
-
-    private:
-        PainterInfo *m_parentPainterInfo;
-        PainterInfo *m_childPainterInfo;
-    };
-
-public:
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  QVector<PainterInfo*> painterInfos,bool useMergeID = false);
+                                  QVector<KisFreehandStrokeInfo*> strokeInfos, bool useMergeID = false);
 
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  PainterInfo *painterInfo,bool useMergeID = false);
+                                  KisFreehandStrokeInfo *strokeInfo,bool useMergeID = false);
 
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
@@ -80,7 +56,9 @@ protected:
     KisNodeSP targetNode() const;
     KisPaintDeviceSP targetDevice() const;
     KisSelectionSP activeSelection() const;
-    const QVector<PainterInfo*> painterInfos() const;
+
+    KisMaskedFreehandStrokePainter* maskedPainter(int strokeInfoId);
+    int numMaskedPainters() const;
 
     void setUndoEnabled(bool value);
 
@@ -100,7 +78,10 @@ private:
 
 private:
     KisResourcesSnapshotSP m_resources;
-    QVector<PainterInfo*> m_painterInfos;
+    QVector<KisFreehandStrokeInfo*> m_strokeInfos;
+    QVector<KisFreehandStrokeInfo*> m_maskStrokeInfos;
+    QVector<KisMaskedFreehandStrokePainter*> m_maskedPainters;
+
     KisTransaction *m_transaction;
 
     KisPaintDeviceSP m_targetDevice;

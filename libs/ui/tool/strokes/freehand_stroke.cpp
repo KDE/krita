@@ -35,6 +35,9 @@
 
 #include "KisStrokeEfficiencyMeasurer.h"
 #include <KisStrokeSpeedMonitor.h>
+#include <strokes/KisFreehandStrokeInfo.h>
+#include <strokes/KisMaskedFreehandStrokePainter.h>
+
 
 struct FreehandStrokeStrategy::Private
 {
@@ -72,10 +75,10 @@ struct FreehandStrokeStrategy::Private
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
-                                               PainterInfo *painterInfo,
+                                               KisFreehandStrokeInfo *strokeInfo,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfo),
+                                    resources, strokeInfo),
       m_d(new Private(resources))
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
@@ -84,10 +87,10 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
-                                               QVector<PainterInfo*> painterInfos,
+                                               QVector<KisFreehandStrokeInfo*> strokeInfos,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfos),
+                                    resources, strokeInfos),
       m_d(new Private(resources))
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
@@ -145,16 +148,14 @@ void FreehandStrokeStrategy::finishStrokeCallback()
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    PainterInfo *info = 0;
-
     if (UpdateData *d = dynamic_cast<UpdateData*>(data)) {
         // this job is lod-clonable in contrast to FreehandStrokeRunnableJobDataWithUpdate!
         tryDoUpdate(d->forceUpdate);
 
     } else if (Data *d = dynamic_cast<Data*>(data)) {
-        info = painterInfos()[d->painterInfoId];
+        KisMaskedFreehandStrokePainter *maskedPainter = this->maskedPainter(d->strokeInfoId);
 
-        KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
+        KisUpdateTimeMonitor::instance()->reportPaintOpPreset(maskedPainter->preset());
         KisRandomSourceSP rnd = m_d->randomSource.source();
         KisPerStrokeRandomSourceSP strokeRnd = m_d->randomSource.perStrokeSource();
 
@@ -162,7 +163,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         case Data::POINT:
             d->pi1.setRandomSource(rnd);
             d->pi1.setPerStrokeRandomSource(strokeRnd);
-            info->painter->paintAt(d->pi1, info->dragDistance);
+            maskedPainter->paintAt(d->pi1);
             m_d->efficiencyMeasurer.addSample(d->pi1.pos());
             break;
         case Data::LINE:
@@ -170,7 +171,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             d->pi2.setRandomSource(rnd);
             d->pi1.setPerStrokeRandomSource(strokeRnd);
             d->pi2.setPerStrokeRandomSource(strokeRnd);
-            info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
+            maskedPainter->paintLine(d->pi1, d->pi2);
             m_d->efficiencyMeasurer.addSample(d->pi2.pos());
             break;
         case Data::CURVE:
@@ -178,43 +179,40 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             d->pi2.setRandomSource(rnd);
             d->pi1.setPerStrokeRandomSource(strokeRnd);
             d->pi2.setPerStrokeRandomSource(strokeRnd);
-            info->painter->paintBezierCurve(d->pi1,
-                                            d->control1,
-                                            d->control2,
-                                            d->pi2,
-                                            info->dragDistance);
+            maskedPainter->paintBezierCurve(d->pi1,
+                                         d->control1,
+                                         d->control2,
+                                         d->pi2);
             m_d->efficiencyMeasurer.addSample(d->pi2.pos());
             break;
         case Data::POLYLINE:
-            info->painter->paintPolyline(d->points, 0, d->points.size());
+            maskedPainter->paintPolyline(d->points, 0, d->points.size());
             m_d->efficiencyMeasurer.addSamples(d->points);
             break;
         case Data::POLYGON:
-            info->painter->paintPolygon(d->points);
+            maskedPainter->paintPolygon(d->points);
             m_d->efficiencyMeasurer.addSamples(d->points);
             break;
         case Data::RECT:
-            info->painter->paintRect(d->rect);
+            maskedPainter->paintRect(d->rect);
             m_d->efficiencyMeasurer.addSample(d->rect.topLeft());
             m_d->efficiencyMeasurer.addSample(d->rect.topRight());
             m_d->efficiencyMeasurer.addSample(d->rect.bottomRight());
             m_d->efficiencyMeasurer.addSample(d->rect.bottomLeft());
             break;
         case Data::ELLIPSE:
-            info->painter->paintEllipse(d->rect);
+            maskedPainter->paintEllipse(d->rect);
             // TODO: add speed measures
             break;
         case Data::PAINTER_PATH:
-            info->painter->paintPainterPath(d->path);
+            maskedPainter->paintPainterPath(d->path);
             // TODO: add speed measures
             break;
         case Data::QPAINTER_PATH:
-            info->painter->drawPainterPath(d->path, d->pen);
+            maskedPainter->drawPainterPath(d->path, d->pen);
             break;
-        case Data::QPAINTER_PATH_FILL: {
-            info->painter->setBackgroundColor(d->customColor);
-            info->painter->fillPainterPath(d->path);}
-            info->painter->drawPainterPath(d->path, d->pen);
+        case Data::QPAINTER_PATH_FILL:
+            maskedPainter->drawAndFillPainterPath(d->path, d->pen, d->customColor);
             break;
         };
 
@@ -241,9 +239,8 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
         if (forceEnd || m_d->timeSinceLastUpdate.elapsed() > m_d->currentUpdatePeriod) {
             m_d->timeSinceLastUpdate.restart();
 
-            Q_FOREACH (PainterInfo *info, painterInfos()) {
-                KisPaintOp *paintop = info->painter->paintOp();
-                KIS_SAFE_ASSERT_RECOVER_RETURN(paintop);
+            for (int i = 0; i < numMaskedPainters(); i++) {
+                KisMaskedFreehandStrokePainter *maskedPainter = this->maskedPainter(i);
 
                 // TODO: well, we should count all N simultaneous painters for FPS rate!
                 QVector<KisRunnableStrokeJobData*> jobs;
@@ -251,10 +248,10 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
                 bool needsMoreUpdates = false;
 
                 std::tie(m_d->currentUpdatePeriod, needsMoreUpdates) =
-                    paintop->doAsyncronousUpdate(jobs);
+                    maskedPainter->doAsyncronousUpdate(jobs);
 
                 if (!jobs.isEmpty() ||
-                    info->painter->hasDirtyRegion() ||
+                    maskedPainter->hasDirtyRegion() ||
                     (forceEnd && needsMoreUpdates)) {
 
                     jobs.append(new KisRunnableStrokeJobData(
@@ -289,9 +286,12 @@ void FreehandStrokeStrategy::issueSetDirtySignals()
 {
     QVector<QRect> dirtyRects;
 
-    Q_FOREACH (PainterInfo *info, painterInfos()) {
-        dirtyRects.append(info->painter->takeDirtyRegion());
+    for (int i = 0; i < numMaskedPainters(); i++) {
+        KisMaskedFreehandStrokePainter *maskedPainter = this->maskedPainter(i);
+        dirtyRects.append(maskedPainter->takeDirtyRegion());
     }
+
+    // TODO: optimize the rects!
 
     //KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
     targetNode()->setDirty(dirtyRects);

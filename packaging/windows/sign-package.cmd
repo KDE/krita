@@ -27,7 +27,7 @@ if "%SIGNTOOL%" == "" (
 
 :skip_find_signtool
 
-if "%SIGNTOOL_SIGN_FLAGS%" == "" (
+if "!SIGNTOOL_SIGN_FLAGS!" == "" (
     echo ERROR: Please set environment variable SIGNTOOL_SIGN_FLAGS 1>&2
     exit /b 1
     :: This is what I used for testing:

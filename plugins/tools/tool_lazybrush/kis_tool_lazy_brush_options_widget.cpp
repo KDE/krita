@@ -91,7 +91,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->ui->intRadius->setToolTip(
         i18nc("@info:tooltip",
               "The mask will try to close non-closed contours "
-              "if the gas is smaller than \"Gap close hint\" value"));
+              "if the gap is smaller than \"Gap close hint\" value"));
 
     m_d->ui->intCleanUp->setRange(0, 100);
     m_d->ui->intCleanUp->setSuffix(i18n(" %"));
@@ -99,7 +99,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->ui->intCleanUp->setToolTip(
         i18nc("@info:tooltip",
               "The mask will try to remove parts of the key strokes "
-              "that are places outside the closed contours. 0% - no effect, 100% - max effect"));
+              "that are placed outside the closed contours. 0% - no effect, 100% - max effect"));
 
 
     connect(m_d->ui->colorView, SIGNAL(indexEntrySelected(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));

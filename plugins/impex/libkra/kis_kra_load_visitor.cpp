@@ -391,6 +391,7 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
     mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
 
     loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+    mask->resetCache();
 
     m_store->popDirectory();
     return true;

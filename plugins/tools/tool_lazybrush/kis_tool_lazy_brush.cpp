@@ -34,12 +34,24 @@
 
 #include "KoProperties.h"
 #include "kis_node_manager.h"
+#include "kis_layer_properties_icons.h"
 
+#include "kis_canvas_resource_provider.h"
 #include "kis_tool_lazy_brush_options_widget.h"
+
+#include "kis_layer_properties_icons.h"
+#include "lazybrush/kis_colorize_mask.h"
+#include "kis_signal_auto_connection.h"
+
 
 struct KisToolLazyBrush::Private
 {
     bool activateMaskMode = false;
+    bool oldShowKeyStrokesValue = false;
+    bool oldShowColoringValue = false;
+
+    KisNodeSP manuallyActivatedNode;
+    KisSignalAutoConnectionsStore toolConnections;
 };
 
 
@@ -56,14 +68,48 @@ KisToolLazyBrush::~KisToolLazyBrush()
 {
 }
 
+void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
+{
+    if (m_d->manuallyActivatedNode) {
+        KisLayerPropertiesIcons::setNodeProperty(m_d->manuallyActivatedNode, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image());
+        m_d->manuallyActivatedNode = 0;
+    }
+}
+
+
 void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    m_d->toolConnections.addUniqueConnection(
+        kiscanvas->viewManager()->resourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
+        this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+
+    KisColorizeMask *mask = qobject_cast<KisColorizeMask*>(currentNode().data());
+    if (mask) {
+        mask->regeneratePrefilteredDeviceIfNeeded();
+    }
+
     KisToolFreehand::activate(activation, shapes);
 }
 
 void KisToolLazyBrush::deactivate()
 {
     KisToolFreehand::deactivate();
+    tryDisableKeyStrokesOnMask();
+    m_d->toolConnections.clear();
+}
+
+void KisToolLazyBrush::slotCurrentNodeChanged(KisNodeSP node)
+{
+    if (node != m_d->manuallyActivatedNode) {
+        tryDisableKeyStrokesOnMask();
+
+        KisColorizeMask *mask = qobject_cast<KisColorizeMask*>(node.data());
+        if (mask) {
+            mask->regeneratePrefilteredDeviceIfNeeded();
+        }
+    }
 }
 
 void KisToolLazyBrush::resetCursorStyle()
@@ -83,11 +129,45 @@ bool KisToolLazyBrush::canCreateColorizeMask() const
     return node && node->inherits("KisLayer");
 }
 
+bool KisToolLazyBrush::shouldActivateKeyStrokes() const
+{
+    KisNodeSP node = currentNode();
+
+    return node && node->inherits("KisColorizeMask") &&
+        !KisLayerPropertiesIcons::nodeProperty(node,
+                                               KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                               true).toBool();
+}
+
+void KisToolLazyBrush::tryCreateColorizeMask()
+{
+    KisNodeSP node = currentNode();
+    if (!node) return;
+
+    KoProperties properties;
+    properties.setProperty("visible", true);
+    properties.setProperty("locked", false);
+
+    QList<KisNodeSP> masks = node->childNodes(QStringList("KisColorizeMask"), properties);
+
+    if (!masks.isEmpty()) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisViewManager* viewManager = kiscanvas->viewManager();
+        viewManager->nodeManager()->slotNonUiActivatedNode(masks.first());
+    } else {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisViewManager* viewManager = kiscanvas->viewManager();
+        viewManager->nodeManager()->createNode("KisColorizeMask");
+    }
+}
+
 void KisToolLazyBrush::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
 
-    if (!colorizeMaskActive() && canCreateColorizeMask()) {
+    if (shouldActivateKeyStrokes() ||
+        (!colorizeMaskActive() && canCreateColorizeMask())) {
+
         useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
         setOutlineEnabled(false);
@@ -108,23 +188,18 @@ void KisToolLazyBrush::deactivatePrimaryAction()
 void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
 {
     if (m_d->activateMaskMode) {
-        KisNodeSP node = currentNode();
-        if (!node) return;
+        if (!colorizeMaskActive() && canCreateColorizeMask()) {
+            tryCreateColorizeMask();
+        } else if (shouldActivateKeyStrokes()) {
+            KisNodeSP node = currentNode();
 
-        KoProperties properties;
-        properties.setProperty("visible", true);
-        properties.setProperty("locked", false);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->manuallyActivatedNode ||
+                                         m_d->manuallyActivatedNode == node);
 
-        QList<KisNodeSP> masks = node->childNodes(QStringList("KisColorizeMask"), properties);
-
-        if (!masks.isEmpty()) {
-            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-            KisViewManager* viewManager = kiscanvas->viewManager();
-            viewManager->nodeManager()->slotNonUiActivatedNode(masks.first());
-        } else {
-            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-            KisViewManager* viewManager = kiscanvas->viewManager();
-            viewManager->nodeManager()->createNode("KisColorizeMask");
+            KisLayerPropertiesIcons::setNodeProperty(node,
+                                                     KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                     true, image());
+            m_d->manuallyActivatedNode = node;
         }
     } else {
         KisToolFreehand::beginPrimaryAction(event);
@@ -141,6 +216,109 @@ void KisToolLazyBrush::endPrimaryAction(KoPointerEvent *event)
 {
     if (m_d->activateMaskMode) return;
     KisToolFreehand::endPrimaryAction(event);
+}
+
+void KisToolLazyBrush::activateAlternateAction(KisTool::AlternateAction action)
+{
+    if (action == KisTool::Secondary && !m_d->activateMaskMode) {
+        KisNodeSP node = currentNode();
+        if (!node) return;
+
+        m_d->oldShowKeyStrokesValue =
+            KisLayerPropertiesIcons::nodeProperty(node,
+                                                  KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                  true).toBool();
+
+        KisLayerPropertiesIcons::setNodeProperty(node,
+                                                 KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                 !m_d->oldShowKeyStrokesValue, image());
+
+        KisToolFreehand::activatePrimaryAction();
+
+    } else if (action == KisTool::Third && !m_d->activateMaskMode) {
+        KisNodeSP node = currentNode();
+        if (!node) return;
+
+        m_d->oldShowColoringValue =
+                KisLayerPropertiesIcons::nodeProperty(node,
+                                                      KisLayerPropertiesIcons::colorizeShowColoring,
+                                                      true).toBool();
+
+        KisLayerPropertiesIcons::setNodeProperty(node,
+                                                 KisLayerPropertiesIcons::colorizeShowColoring,
+                                                 !m_d->oldShowColoringValue, image());
+
+        KisToolFreehand::activatePrimaryAction();
+
+    } else {
+        KisToolFreehand::activateAlternateAction(action);
+    }
+}
+
+void KisToolLazyBrush::deactivateAlternateAction(KisTool::AlternateAction action)
+{
+    if (action == KisTool::Secondary && !m_d->activateMaskMode) {
+        KisNodeSP node = currentNode();
+        if (!node) return;
+
+        KisLayerPropertiesIcons::setNodeProperty(node,
+                                                 KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                 m_d->oldShowKeyStrokesValue, image());
+
+        KisToolFreehand::deactivatePrimaryAction();
+
+    } else if (action == KisTool::Third && !m_d->activateMaskMode) {
+        KisNodeSP node = currentNode();
+        if (!node) return;
+
+        KisLayerPropertiesIcons::setNodeProperty(node,
+                                                 KisLayerPropertiesIcons::colorizeShowColoring,
+                                                 m_d->oldShowColoringValue, image());
+
+        KisToolFreehand::deactivatePrimaryAction();
+
+    } else {
+        KisToolFreehand::deactivateAlternateAction(action);
+    }
+}
+
+void KisToolLazyBrush::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    if (!m_d->activateMaskMode && (action == KisTool::Secondary || action == KisTool::Third)) {
+        beginPrimaryAction(event);
+    } else {
+        KisToolFreehand::beginAlternateAction(event, action);
+    }
+}
+
+void KisToolLazyBrush::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    if (!m_d->activateMaskMode && (action == KisTool::Secondary || action == KisTool::Third)) {
+        continuePrimaryAction(event);
+    } else {
+        KisToolFreehand::continueAlternateAction(event, action);
+    }
+}
+
+void KisToolLazyBrush::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    if (!m_d->activateMaskMode && (action == KisTool::Secondary || action == KisTool::Third)) {
+        endPrimaryAction(event);
+    } else {
+        KisToolFreehand::endAlternateAction(event, action);
+    }
+}
+
+void KisToolLazyBrush::explicitUserStrokeEndRequest()
+{
+    if (m_d->activateMaskMode) {
+        tryCreateColorizeMask();
+    } else if (colorizeMaskActive()) {
+        KisNodeSP node = currentNode();
+        if (!node) return;
+
+        KisLayerPropertiesIcons::setNodeProperty(node, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, image());
+    }
 }
 
 QWidget * KisToolLazyBrush::createOptionWidget()

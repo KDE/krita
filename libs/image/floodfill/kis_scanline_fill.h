@@ -58,6 +58,16 @@ public:
     void clearNonZeroComponent();
 
     /**
+     * A special filler algorithm for the Watershed initialization routine:
+     *
+     * 1) Clear the contiguous area in the destination device
+     * 2) At the same time, fill the corresponding area of \p groupMapDevice with
+     *    value \p groupIndex
+     * 3) \p groupMapDevice **must** store 4 bytes per pixel
+     */
+    void fillContiguousGroup(KisPaintDeviceSP groupMapDevice, qint32 groupIndex);
+
+    /**
      * Set the threshold of the filling operation
      *
      * Used in all functions except clearNonZeroComponent()

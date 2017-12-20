@@ -23,12 +23,16 @@
 #include <QObject>
 
 #include "kis_types.h"
-#include <kis_simple_stroke_strategy.h>
+#include "KisRunnableBasedStrokeStrategy.h"
 
 class KoColor;
 
+namespace KisLazyFillTools {
+struct FilteringOptions;
+}
 
-class KisColorizeStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
+
+class KisColorizeStrokeStrategy : public QObject, public KisRunnableBasedStrokeStrategy
 {
     Q_OBJECT
 
@@ -37,18 +41,26 @@ public:
                               KisPaintDeviceSP dst,
                               KisPaintDeviceSP filteredSource,
                               bool filteredSourceValid,
-                              const QRect &boundingRect, KisNodeSP dirtyNode);
+                              const QRect &boundingRect,
+                              KisNodeSP progressNode,
+                              bool prefilterOnly = false);
     KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail);
     ~KisColorizeStrokeStrategy() override;
+
+    void setFilteringOptions(const KisLazyFillTools::FilteringOptions &value);
+    KisLazyFillTools::FilteringOptions filteringOptions() const;
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
     void initStrokeCallback() override;
+    void cancelStrokeCallback() override;
+    // TODO: suspend/resume
 
     KisStrokeStrategy *createLodClone(int levelOfDetail) override;
 
 Q_SIGNALS:
-    void sigFinished();
+    void sigFinished(bool prefilterOnly);
+    void sigCancelled();
 
 private:
     struct Private;

@@ -17,12 +17,13 @@ Qt vs STD vs Boost:
 
 C++11 and C++14
 
-    Yes, but. Avoid lambdas. Avoid the new sig/slot connection syntax _unless_
-    you are porting all of Krita to the new syntax. Sure, it has some advantages,
-    but having two different ways of doing the same thing is begging for trouble
-    and comprehension problems. For now, keep using Q_FOREACH, we're using it all
-    over the place. auto is fine, when using in for loops. Don't go overboard
-    using it in other places. 
+    Yes, but. Avoid lambdas (except when replacing the use of
+    QSignalMapper. Sigh.).  Avoid the new sig/slot connection syntax
+    _unless_ you are porting all of Krita to the new syntax. Sure, it
+    has some advantages, but having two different ways of doing the same
+    thing is begging for trouble and comprehension problems. For now,
+    keep using Q_FOREACH, we're using it all over the place. auto is fine,
+    when using in for loops. Don't go use it in other places.
 
     Before using other new features, discuss on #krita so we can expand this list.
 

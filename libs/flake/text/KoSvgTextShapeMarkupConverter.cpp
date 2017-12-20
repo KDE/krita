@@ -175,43 +175,6 @@ bool KoSvgTextShapeMarkupConverter::convertToHtml(QString *htmlText)
     return true;
 }
 
-void convertCSSToSvgStyle(KoXmlWriter *svgWriter, const QString &styleDefinition)
-{
-    Q_FOREACH(const QString def, styleDefinition.split(";", QString::SkipEmptyParts)) {
-        QStringList kv = def.split(":", QString::SkipEmptyParts);
-        if (kv.size() != 2) continue;
-        svgWriter->addAttribute(kv[0].toLatin1(), kv[1]);
-    }
-}
-
-
-//bool convertBodyToSvgText(KoXmlWriter *svgWriter, KoXmlElement &e, const QRectF &boundsInPixels, qreal pixelsPerInch)
-//{
-//    qDebug() << "convertBodyToSvgText()" << e.tagName() << e.text() << e.isText() << e.isNull();
-
-//    if (e.tagName() == "p" || e.tagName() == "span" || e.tagName() == "br") {
-//        svgWriter->startElement("tspan");
-//        if (e.hasAttribute("style")) {
-//            convertCSSToSvgStyle(svgWriter, e.attribute("style"));
-//        }
-//        svgWriter->addTextNode(e.text());
-//    }
-//    if (e.hasChildNodes()) {
-//        KoXmlNode node = e.firstChild();
-//        for(; !node.isNull(); node = node.nextSibling()) {
-//            KoXmlElement el = node.toElement();
-//            qDebug() << el.tagName();
-//            convertBodyToSvgText(svgWriter, el, boundsInPixels, pixelsPerInch);
-//        }
-//    }
-//    if (e.tagName() == "p" || e.tagName() == "span" || e.tagName() == "br") {
-//        svgWriter->endElement();
-//    }
-
-//    return true;
-//}
-
-
 bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText,
                                                     const QRectF &boundsInPixels, qreal pixelsPerInch)
 {
@@ -228,11 +191,14 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText,
     int lineHeight = 0; // for the dY instruction
     QVector<int> lines;
     QStringRef elementName;
+
+    QString styles;
+
     while (!htmlReader.atEnd()) {
         QXmlStreamReader::TokenType token = htmlReader.readNext();
         switch (token) {
 //        case QXmlStreamReader::StartDocument:
-//            svgWriter.writeStartDocument();
+//            svgWriter.writeStartElement("svg");
 //            break;
 //        case QXmlStreamReader::EndDocument:
 //            svgWriter.writeEndDocument();
@@ -240,18 +206,26 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText,
         case QXmlStreamReader::StartElement:
         {
             elementName = htmlReader.name();
+            bool newLine = false;
             qDebug() << "start Element" << elementName;
-
             if (elementName == "body") {
                 svgWriter.writeStartElement("text");
             }
             else if (elementName == "p" || elementName == "br") {
                 // new line
                 svgWriter.writeStartElement("tspan");
-                svgWriter.writeAttribute("dy", "0");
+                newLine = true;
             }
             else if (elementName == "span") {
                 svgWriter.writeStartElement("tspan");
+            }
+
+            QXmlStreamAttributes attributes = htmlReader.attributes();
+            if (attributes.hasAttribute("style")) {
+                svgWriter.writeAttribute("style", attributes.value("style").toString());
+            }
+            if (newLine) {
+                svgWriter.writeAttribute("dx", "100");
             }
             break;
         }
@@ -268,8 +242,12 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText,
         case QXmlStreamReader::Characters:
             qDebug() << htmlReader.text();
             if (elementName == "p" || elementName == "span") {
-                svgWriter.writeCharacters(htmlReader.text().toUtf8());
+                svgWriter.writeCharacters(htmlReader.text().toString());
             }
+            else if (elementName == "style") {
+                styles = htmlReader.text().toString();
+            }
+
             break;
         default:
             qDebug() << "Default:" << htmlReader.name() << token;
@@ -282,45 +260,6 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText,
     if (svgWriter.hasError()) {
         d->errors << i18n("Unknown error writing SVG text element");
     }
-
-//    KoXmlDocument doc;
-//    QString errorMessage;
-//    int errorLine = 0;
-//    int errorColumn = 0;
-//    if (!doc.setContent(htmlText, &errorMessage, &errorLine, &errorColumn)) {
-//        d->errors << QString("line %1, col %2: %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
-//        return false;
-//    }
-
-//    qDebug() << htmlText;
-
-//    KoXmlWriter svgWriter(&svgBuffer);
-
-//    // Convert html to svg
-//    KoXmlElement root = doc.documentElement();
-//    KoXmlNode node = root.firstChild();
-//    for(; !node.isNull(); node = node.nextSibling()) {
-//        KoXmlElement el = node.toElement();
-//        qDebug() << el.tagName();
-//        if (el.tagName() == "body") {
-
-//            svgWriter.startElement("text");
-//            if (el.hasAttribute("style")) {
-//                convertCSSToSvgStyle(&svgWriter, el.attribute("style"));
-//            }
-//            // Start parsting body
-//            if (!convertBodyToSvgText(&svgWriter, el, boundsInPixels, pixelsPerInch)) {
-//                   return false;
-//            }
-
-//            svgWriter.endElement();
-//        }
-//    }
-
-//    svgBuffer.close();
-
-    QString styles;
-
     return convertFromSvg(QString::fromUtf8(svgBuffer.data()), styles, boundsInPixels, pixelsPerInch);
 }
 

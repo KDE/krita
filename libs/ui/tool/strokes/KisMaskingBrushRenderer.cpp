@@ -27,6 +27,11 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
+namespace {
+// should be the same as the tile size in KisTileData::WIDTH
+static const int maskBufferSize = 64;
+}
+
 
 KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice)
     : m_dstDevice(dstDevice)
@@ -38,6 +43,10 @@ KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice)
 
     m_strokeDevice->setDefaultBounds(dstDevice->defaultBounds());
     m_maskDevice->setDefaultBounds(dstDevice->defaultBounds());
+}
+
+KisMaskingBrushRenderer::~KisMaskingBrushRenderer()
+{
 }
 
 KisPaintDeviceSP KisMaskingBrushRenderer::strokeDevice() const
@@ -62,18 +71,36 @@ void KisMaskingBrushRenderer::updateProjection(const QRect &rc)
     using MaskPixel = KoGrayU8Traits::Pixel;
     const KoColorSpace *dstCs = m_dstDevice->colorSpace();
 
+    QByteArray buffer;
+
+    if (!m_bufferCache.pop(buffer)) {
+        buffer.resize(maskBufferSize * m_maskDevice->pixelSize());
+    }
+
+    quint8 *bufferStartPtr = reinterpret_cast<quint8*>(buffer.data());
+    int numContiguousColumns = 0;
+
     do {
-        const MaskPixel *maskPtr = reinterpret_cast<const MaskPixel*>(maskIt.rawDataConst());
+        numContiguousColumns = std::min({maskIt.nConseqPixels(), dstIt.nConseqPixels(), buffer.size()});
+
+        // create premultiplied buffer
+        {
+            const MaskPixel *maskPtr = reinterpret_cast<const MaskPixel*>(maskIt.rawDataConst());
+            quint8 *bufferPtr = bufferStartPtr;
+
+            for (int i = 0; i < numContiguousColumns; i++) {
+                *bufferPtr = KoColorSpaceMaths<quint8>::multiply(maskPtr->gray, maskPtr->alpha);
+
+                bufferPtr++;
+                maskPtr++;
+            }
+        }
+
         quint8 *dstPtr = reinterpret_cast<quint8*>(dstIt.rawData());
+        dstCs->applyAlphaU8Mask(dstPtr, bufferStartPtr, numContiguousColumns);
 
-        const quint8 maskValue = KoColorSpaceMaths<quint8>::multiply(maskPtr->gray, maskPtr->alpha);
+    } while (dstIt.nextPixels(numContiguousColumns) && maskIt.nextPixels(numContiguousColumns));
 
-        // TODO: bunch-processing!
-        dstCs->applyAlphaU8Mask(dstPtr, &maskValue, 1);
-
-
-    } while (dstIt.nextPixel() && maskIt.nextPixel());
-
-
+    m_bufferCache.push(buffer);
 }
 

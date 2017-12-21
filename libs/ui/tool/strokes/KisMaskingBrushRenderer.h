@@ -20,12 +20,14 @@
 #define KISMASKINGBRUSHRENDERER_H
 
 #include "kis_types.h"
-
+#include "tiles3/kis_lockless_stack.h"
+#include <QByteArray>
 
 class KisMaskingBrushRenderer
 {
 public:
     KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice);
+    ~KisMaskingBrushRenderer();
 
     KisPaintDeviceSP strokeDevice() const;
     KisPaintDeviceSP maskDevice() const;
@@ -37,6 +39,7 @@ private:
     KisPaintDeviceSP m_strokeDevice;
     KisPaintDeviceSP m_maskDevice;
     KisPaintDeviceSP m_dstDevice;
+    KisLocklessStack<QByteArray> m_bufferCache;
 };
 
 #endif // KISMASKINGBRUSHRENDERER_H

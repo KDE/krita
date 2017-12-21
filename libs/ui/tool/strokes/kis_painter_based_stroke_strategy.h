@@ -30,6 +30,8 @@ class KisDistanceInformation;
 class KisTransaction;
 class KisFreehandStrokeInfo;
 class KisMaskedFreehandStrokePainter;
+class KisMaskingBrushRenderer;
+class KisRunnableStrokeJobData;
 
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisRunnableBasedStrokeStrategy
@@ -44,6 +46,8 @@ public:
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
                                   KisFreehandStrokeInfo *strokeInfo,bool useMergeID = false);
+
+    ~KisPainterBasedStrokeStrategy();
 
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
@@ -62,12 +66,48 @@ protected:
 
     void setUndoEnabled(bool value);
 
+    /**
+     * Return true if the descendant should execute a few more jobs before issuing setDirty()
+     * call on the layer.
+     *
+     * If the returned value is true, then the stroke actually paints **not** on the
+     * layer's paint device, but on some intermediate device owned by
+     * KisPainterBasedStrokeStrategy and one should merge it first before asking the
+     * update.
+     *
+     * The value can be true only when the stroke is declared to support masking brush!
+     * \see supportsMaskingBrush()
+     */
+    bool needsMaskingUpdates() const;
+
+    /**
+     * Create a list of update jobs that should be run before issuing the setDirty()
+     * call on the node
+     *
+     * \see needsMaskingUpdates()
+     */
+    QVector<KisRunnableStrokeJobData*> doMaskingBrushUpdates(const QVector<QRect> &rects);
+
+protected:
+
+    /**
+     * The descendants may declare if this stroke should support auto-creation
+     * of the masking brush. Default value: false
+     */
+    void setSupportsMaskingBrush(bool value);
+
+    /**
+     * Return if the stroke should auto-create a masking brush from the provided
+     * paintop preset or not
+     */
+    bool supportsMaskingBrush() const;
+
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail);
 
 private:
     void init();
-    void initPainters(KisPaintDeviceSP targetDevice,
+    void initPainters(KisPaintDeviceSP targetDevice, KisPaintDeviceSP maskingDevice,
                       KisSelectionSP selection,
                       bool hasIndirectPainting,
                       const QString &indirectPaintingCompositeOp);
@@ -84,9 +124,13 @@ private:
 
     KisTransaction *m_transaction;
 
+    QScopedPointer<KisMaskingBrushRenderer> m_maskingBrushRenderer;
+
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
     bool m_useMergeID;
+
+    bool m_supportsMaskingBrush;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

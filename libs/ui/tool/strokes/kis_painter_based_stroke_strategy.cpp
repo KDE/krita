@@ -30,7 +30,8 @@
 #include "kis_undo_stores.h"
 #include "KisFreehandStrokeInfo.h"
 #include "KisMaskedFreehandStrokePainter.h"
-
+#include "KisMaskingBrushRenderer.h"
+#include "KisRunnableStrokeJobData.h"
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const KUndo2MagicString &name,
@@ -40,7 +41,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
       m_resources(resources),
       m_strokeInfos(strokeInfos),
       m_transaction(0),
-      m_useMergeID(useMergeID)
+      m_useMergeID(useMergeID),
+      m_supportsMaskingBrush(false)
 {
     init();
 }
@@ -53,9 +55,14 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
       m_resources(resources),
       m_strokeInfos(QVector<KisFreehandStrokeInfo*>() <<  strokeInfo),
       m_transaction(0),
-      m_useMergeID(useMergeID)
+      m_useMergeID(useMergeID),
+      m_supportsMaskingBrush(false)
 {
     init();
+}
+
+KisPainterBasedStrokeStrategy::~KisPainterBasedStrokeStrategy()
+{
 }
 
 void KisPainterBasedStrokeStrategy::init()
@@ -72,7 +79,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
     : KisRunnableBasedStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
       m_transaction(rhs.m_transaction),
-      m_useMergeID(rhs.m_useMergeID)
+      m_useMergeID(rhs.m_useMergeID),
+      m_supportsMaskingBrush(rhs.m_supportsMaskingBrush)
 {
     Q_FOREACH (KisFreehandStrokeInfo *info, rhs.m_strokeInfos) {
         m_strokeInfos.append(new KisFreehandStrokeInfo(info, levelOfDetail));
@@ -106,7 +114,39 @@ int KisPainterBasedStrokeStrategy::numMaskedPainters() const
     return m_maskedPainters.size();
 }
 
+bool KisPainterBasedStrokeStrategy::needsMaskingUpdates() const
+{
+    return m_maskingBrushRenderer;
+}
+
+QVector<KisRunnableStrokeJobData *> KisPainterBasedStrokeStrategy::doMaskingBrushUpdates(const QVector<QRect> &rects)
+{
+    QVector<KisRunnableStrokeJobData *> jobs;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_maskingBrushRenderer, jobs);
+
+    Q_FOREACH (const QRect &rc, rects) {
+        jobs.append(new KisRunnableStrokeJobData(
+            [this, rc] () {
+                this->m_maskingBrushRenderer->updateProjection(rc);
+            },
+            KisStrokeJobData::CONCURRENT));
+    }
+
+    return jobs;
+}
+
+void KisPainterBasedStrokeStrategy::setSupportsMaskingBrush(bool value)
+{
+    m_supportsMaskingBrush = value;
+}
+
+bool KisPainterBasedStrokeStrategy::supportsMaskingBrush() const
+{
+    return m_supportsMaskingBrush;
+}
+
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
+                                                 KisPaintDeviceSP maskingDevice,
                                                  KisSelectionSP selection,
                                                  bool hasIndirectPainting,
                                                  const QString &indirectPaintingCompositeOp)
@@ -125,13 +165,26 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
         }
     }
 
-    // TODO: initialize masking strokes!
+    if (maskingDevice) {
+        for (int i = 0; i < m_strokeInfos.size(); i++) {
+            KisFreehandStrokeInfo *maskingInfo =
+                new KisFreehandStrokeInfo(*m_strokeInfos[i]->dragDistance);
+
+            KisPainter *painter = maskingInfo->painter;
+
+            painter->begin(maskingDevice, 0);
+            m_resources->setupMaskingBrushPainter(painter);
+
+            KIS_SAFE_ASSERT_RECOVER_NOOP(hasIndirectPainting);
+            m_maskStrokeInfos.append(maskingInfo);
+        }
+    }
 
     for (int i = 0; i < m_strokeInfos.size(); i++) {
         m_maskedPainters.append(
             new KisMaskedFreehandStrokePainter(m_strokeInfos[i],
-                                            !m_maskStrokeInfos.isEmpty() ?
-                                                m_maskStrokeInfos[i] : 0));
+                                               !m_maskStrokeInfos.isEmpty() ?
+                                                   m_maskStrokeInfos[i] : 0));
     }
 }
 
@@ -194,8 +247,25 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     }
 
 
+    // WARNING: masking brush cannot work without indirect painting mode!
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
+                                   m_resources->needsMaskingBrushRendering()) || hasIndirectPainting);
 
-    initPainters(targetDevice, selection, hasIndirectPainting, indirectPaintingCompositeOp());
+    if (hasIndirectPainting &&
+        supportsMaskingBrush() &&
+        m_resources->needsMaskingBrushRendering()) {
+
+        m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice));
+
+        initPainters(m_maskingBrushRenderer->strokeDevice(),
+                     m_maskingBrushRenderer->maskDevice(),
+                     selection,
+                     hasIndirectPainting,
+                     indirectPaintingCompositeOp());
+
+    } else {
+        initPainters(targetDevice, 0, selection, hasIndirectPainting, indirectPaintingCompositeOp());
+    }
 
     m_targetDevice = targetDevice;
     m_activeSelection = selection;

@@ -38,6 +38,8 @@
 #include <strokes/KisFreehandStrokeInfo.h>
 #include <strokes/KisMaskedFreehandStrokePainter.h>
 
+#include "brushengine/kis_paintop_utils.h"
+
 
 struct FreehandStrokeStrategy::Private
 {
@@ -119,6 +121,7 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
     setNeedsIndirectPainting(needsIndirectPainting);
     setIndirectPaintingCompositeOp(indirectPaintingCompositeOp);
     setSupportsWrapAroundMode(true);
+    setSupportsMaskingBrush(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     if (m_d->needsAsynchronousUpdates) {
@@ -291,10 +294,45 @@ void FreehandStrokeStrategy::issueSetDirtySignals()
         dirtyRects.append(maskedPainter->takeDirtyRegion());
     }
 
-    // TODO: optimize the rects!
+    if (needsMaskingUpdates()) {
+
+        // optimize the rects so that they would never intersect with each other!
+        // that is a mandatory step for the multithreaded execution of merging jobs
+
+        // sanity check: updates from the brush should have already been normalized
+        //               to the wrapping rect
+        const KisDefaultBoundsBaseSP defaultBounds = targetNode()->projection()->defaultBounds();
+        if (defaultBounds->wrapAroundMode()) {
+            const QRect wrapRect = defaultBounds->bounds();
+            for (auto it = dirtyRects.begin(); it != dirtyRects.end(); ++it) {
+                KIS_SAFE_ASSERT_RECOVER(wrapRect.contains(*it)) {
+                    ENTER_FUNCTION() << ppVar(*it) << ppVar(wrapRect);
+                    *it = *it & wrapRect;
+                }
+            }
+        }
+
+        const int maxPatchSizeForMaskingUpdates = 64;
+        const QRect totalRect =
+            std::accumulate(dirtyRects.constBegin(), dirtyRects.constEnd(), QRect(), std::bit_or<QRect>());
+
+        dirtyRects = KisPaintOpUtils::splitAndFilterDabRect(totalRect, dirtyRects, maxPatchSizeForMaskingUpdates);
+
+        QVector<KisRunnableStrokeJobData*> jobs = doMaskingBrushUpdates(dirtyRects);
+
+        jobs.append(new KisRunnableStrokeJobData(
+            [this, dirtyRects] () {
+                this->targetNode()->setDirty(dirtyRects);
+            },
+            KisStrokeJobData::SEQUENTIAL));
+
+        runnableJobsInterface()->addRunnableJobs(jobs);
+
+    } else {
+        targetNode()->setDirty(dirtyRects);
+    }
 
     //KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
-    targetNode()->setDirty(dirtyRects);
 }
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)

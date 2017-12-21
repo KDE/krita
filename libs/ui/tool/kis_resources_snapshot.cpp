@@ -198,6 +198,30 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
     painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->currentNode, m_d->image);
 }
 
+void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(painter->device());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->currentPaintOpPreset->hasMaskingPreset());
+
+    painter->setPaintColor(KoColor(Qt::white, painter->device()->colorSpace()));
+    painter->setBackgroundColor(KoColor(Qt::black, painter->device()->colorSpace()));
+
+    painter->setOpacity(OPACITY_OPAQUE_U8);
+    painter->setChannelFlags(QBitArray());
+
+    // masking brush always paints in indirect mode
+    painter->setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+
+    painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
+
+    /**
+     * The paintOp should be initialized the last, because it may
+     * ask the painter for some options while initialization
+     */
+    painter->setPaintOpPreset(m_d->currentPaintOpPreset->createMaskingPreset(),
+                              m_d->currentNode, m_d->image);
+}
+
 void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
 {
     action->setPaintOpPreset(m_d->currentPaintOpPreset);
@@ -262,6 +286,11 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
 QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
 {
     return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+}
+
+bool KisResourcesSnapshot::needsMaskingBrushRendering() const
+{
+    return m_d->currentPaintOpPreset && m_d->currentPaintOpPreset->hasMaskingPreset();
 }
 
 KisSelectionSP KisResourcesSnapshot::activeSelection() const

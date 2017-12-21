@@ -67,7 +67,15 @@ public:
      * @return true om success
      */
     bool convertToHtml(QString *htmlText);
-    bool convertFromHtml(const QString &htmlText, const QRectF &boundsInPixels, qreal pixelsPerInch);
+
+    /**
+     * @brief convertFromHtml converted Qt rich text html (and no other: http://doc.qt.io/qt-5/richtext-html-subset.html) to SVG
+     * @param htmlText the input html
+     * @param svgText the converted svg text element
+     * @param styles
+     * @return true if the conversion was succesful
+     */
+    bool convertFromHtml(const QString &htmlText, QString *svgText, QString *styles);
 
 
     /**

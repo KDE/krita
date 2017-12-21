@@ -163,15 +163,13 @@ void SvgTextEditor::save()
 {
     if (m_shape) {
         if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
-            KoSvgTextShape shape;
-            KoSvgTextShapeMarkupConverter converter(&shape);
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), m_shape->boundingRect(), 72.0)) {
-                qWarning() << "Eeeek";
-            }
+
             QString svg;
             QString styles;
-            if (!converter.convertToSvg(&svg, &styles)) {
-                qDebug() << "Eeeek 2";
+            KoSvgTextShapeMarkupConverter converter(m_shape);
+
+            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
+                qWarning() << "Eeeek";
             }
             emit textUpdated(svg, styles);
         }
@@ -194,7 +192,7 @@ void SvgTextEditor::switchTextEditorTab()
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
         if (m_shape) {
 
-            // Convert the svg text to html XXX: Fix resolution!
+            // Convert the svg text to html XXX: Fix resolution! Also, the rect should be the image rect, not the shape rect.
             if (!converter.convertFromSvg(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(),
                                           m_shape->boundingRect(), 72.0)) {
                 qDebug() << "Eeek 3";
@@ -214,11 +212,12 @@ void SvgTextEditor::switchTextEditorTab()
 
         // Convert the rich text to svg and styles strings
         if (m_shape) {
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), m_shape->boundingRect(), 72.0)) {
-                qWarning() << "Eeeek";
-            }
             QString svg;
             QString styles;
+
+            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
+                qWarning() << "Eeeek";
+            }
             if (!converter.convertToSvg(&svg, &styles)) {
                 qDebug() << "Eeeek 2";
             }

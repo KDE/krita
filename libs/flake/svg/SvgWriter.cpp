@@ -238,7 +238,6 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
-    abort();
     const QRectF bbox = shape->boundingRect();
 
     // paint shape to the image

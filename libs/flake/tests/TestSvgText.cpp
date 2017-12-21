@@ -1064,10 +1064,12 @@ void TestSvgText::testConvertHtmlToSvg()
 
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
-    converter.convertFromHtml(html, QRectF(0.0, 0.0, 200.0, 200.0), 72.0);
 
     QString svg;
     QString defs;
+
+    converter.convertFromHtml(html, &svg, &defs);
+
 
     bool r = converter.convertToSvg(&svg, &defs);
 

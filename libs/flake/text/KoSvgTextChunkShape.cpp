@@ -413,7 +413,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
             appendLazy(&dyPos, t.dyPos, i, 0.0);
         }
 
-        qDebug() << this << d->text << xPos << yPos << dxPos << dyPos;
+        qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
 
         if (!dyPos.isEmpty()) {
             context.shapeWriter().startElement("br");

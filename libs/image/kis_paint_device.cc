@@ -100,6 +100,8 @@ public:
     KisDefaultBoundsBaseSP defaultBounds;
     QScopedPointer<KisPaintDeviceStrategy> basicStrategy;
     QScopedPointer<KisPaintDeviceWrappedStrategy> wrappedStrategy;
+    QMutex m_wrappedStrategyMutex;
+
     QScopedPointer<KisPaintDeviceFramesInterface> framesInterface;
     bool isProjectionDevice;
 
@@ -592,9 +594,16 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
         return basicStrategy.data();
     }
 
-    QRect wrapRect = defaultBounds->bounds();
+    const QRect wrapRect = defaultBounds->bounds();
+
     if (!wrappedStrategy || wrappedStrategy->wrapRect() != wrapRect) {
-        wrappedStrategy.reset(new KisPaintDeviceWrappedStrategy(wrapRect, q, this));
+        QMutexLocker locker(&m_wrappedStrategyMutex);
+
+        if (!wrappedStrategy) {
+            wrappedStrategy.reset(new KisPaintDeviceWrappedStrategy(wrapRect, q, this));
+        }  else if (wrappedStrategy->wrapRect() != wrapRect) {
+            wrappedStrategy->setWrapRect(wrapRect);
+        }
     }
 
     return wrappedStrategy.data();

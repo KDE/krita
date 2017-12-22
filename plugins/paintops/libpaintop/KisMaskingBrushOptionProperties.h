@@ -19,13 +19,13 @@
 #ifndef KISMASKINGBRUSHOPTIONPROPERTIES_H
 #define KISMASKINGBRUSHOPTIONPROPERTIES_H
 
-#include "kritaimage_export.h"
+#include "kritapaintop_export.h"
 #include <kis_types.h>
 
 class KisBrush;
 typedef KisSharedPtr<KisBrush> KisBrushSP;
 
-struct KRITAIMAGE_EXPORT KisMaskingBrushOptionProperties
+struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {
     bool isEnabled = false;
     KisBrushSP brush;

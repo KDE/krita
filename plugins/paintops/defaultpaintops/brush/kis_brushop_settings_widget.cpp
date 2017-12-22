@@ -47,6 +47,9 @@
 #include "kis_pressure_texture_strength_option.h"
 #include <KisMaskingBrushOption.h>
 
+#include <KisPrefixedPaintOpOptionWrapper.h>
+#include <KisPaintopSettingsIds.h>
+
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
@@ -82,8 +85,37 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
-    addPaintOpOption(new KisMaskingBrushOption(), i18n("Masking Brush"));
 
+    addPaintOpOption(new KisMaskingBrushOption(), i18n("Brush Tip"));
+
+
+    {
+        KisCurveOption *maskingSizeOption = new KisPressureSizeOption();
+        maskingSizeOption->setChecked(false);
+
+        addPaintOpOption(
+                    new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
+                        KisPaintOpUtils::MaskingBrushPresetPrefix,
+                        maskingSizeOption,
+                        i18n("0%"), i18n("100%")),
+                    i18n("Size"), KisPaintOpOption::MASKING_BRUSH);
+    }
+
+    addPaintOpOption(
+        new KisPrefixedPaintOpOptionWrapper<KisPressureMirrorOptionWidget>(
+            KisPaintOpUtils::MaskingBrushPresetPrefix),
+        i18n("Mirror"), KisPaintOpOption::MASKING_BRUSH);
+
+    addPaintOpOption(
+        new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
+            KisPaintOpUtils::MaskingBrushPresetPrefix,
+            new KisPressureRotationOption(), i18n("-180°"), i18n("180°")),
+        i18n("Rotation"), KisPaintOpOption::MASKING_BRUSH);
+
+    addPaintOpOption(
+        new KisPrefixedPaintOpOptionWrapper<KisPressureScatterOptionWidget>(
+            KisPaintOpUtils::MaskingBrushPresetPrefix),
+        i18n("Scatter"), KisPaintOpOption::MASKING_BRUSH);
 }
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()

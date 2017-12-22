@@ -48,7 +48,8 @@ public:
         GENERAL,
         COLOR,
         TEXTURE,
-        FILTER
+        FILTER,
+        MASKING_BRUSH
     };
 
     KisPaintOpOption(KisPaintOpOption::PaintopCategory category, bool checked);

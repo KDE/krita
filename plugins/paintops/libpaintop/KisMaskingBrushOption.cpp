@@ -48,7 +48,7 @@ struct KisMaskingBrushOption::Private
 };
 
 KisMaskingBrushOption::KisMaskingBrushOption()
-    : KisPaintOpOption(KisPaintOpOption::TEXTURE, false),
+    : KisPaintOpOption(KisPaintOpOption::MASKING_BRUSH, false),
       m_d(new Private())
 {
     setObjectName("KisMaskingBrushOption");

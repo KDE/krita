@@ -74,28 +74,24 @@ struct FreehandStrokeStrategy::Private
     std::mutex updateEntryMutex;
 };
 
-FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
-                                               const QString &indirectPaintingCompositeOp,
-                                               KisResourcesSnapshotSP resources,
+FreehandStrokeStrategy::FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                                                KisFreehandStrokeInfo *strokeInfo,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, strokeInfo),
       m_d(new Private(resources))
 {
-    init(needsIndirectPainting, indirectPaintingCompositeOp);
+    init();
 }
 
-FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
-                                               const QString &indirectPaintingCompositeOp,
-                                               KisResourcesSnapshotSP resources,
+FreehandStrokeStrategy::FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                                                QVector<KisFreehandStrokeInfo*> strokeInfos,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, strokeInfos),
       m_d(new Private(resources))
 {
-    init(needsIndirectPainting, indirectPaintingCompositeOp);
+    init();
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail)
@@ -115,13 +111,11 @@ FreehandStrokeStrategy::~FreehandStrokeStrategy()
     KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
-void FreehandStrokeStrategy::init(bool needsIndirectPainting,
-                                  const QString &indirectPaintingCompositeOp)
+void FreehandStrokeStrategy::init()
 {
-    setNeedsIndirectPainting(needsIndirectPainting);
-    setIndirectPaintingCompositeOp(indirectPaintingCompositeOp);
     setSupportsWrapAroundMode(true);
     setSupportsMaskingBrush(true);
+    setSupportsIndirectPainting(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     if (m_d->needsAsynchronousUpdates) {

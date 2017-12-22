@@ -314,9 +314,7 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     }
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(m_d->resources->needsIndirectPainting(),
-                                   m_d->resources->indirectPaintingCompositeOp(),
-                                   m_d->resources, m_d->strokeInfos, m_d->transactionText);
+        new FreehandStrokeStrategy(m_d->resources, m_d->strokeInfos, m_d->transactionText);
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 

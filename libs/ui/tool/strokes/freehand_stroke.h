@@ -200,15 +200,11 @@ public:
     };
 
 public:
-    FreehandStrokeStrategy(bool needsIndirectPainting,
-                           const QString &indirectPaintingCompositeOp,
-                           KisResourcesSnapshotSP resources,
+    FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                            KisFreehandStrokeInfo *strokeInfo,
                            const KUndo2MagicString &name);
 
-    FreehandStrokeStrategy(bool needsIndirectPainting,
-                           const QString &indirectPaintingCompositeOp,
-                           KisResourcesSnapshotSP resources,
+    FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                            QVector<KisFreehandStrokeInfo*> strokeInfos,
                            const KUndo2MagicString &name);
 
@@ -228,7 +224,7 @@ protected:
     FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);
 
 private:
-    void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
+    void init();
 
     void tryDoUpdate(bool forceEnd = false);
     void issueSetDirtySignals();

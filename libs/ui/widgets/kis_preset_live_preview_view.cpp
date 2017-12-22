@@ -195,9 +195,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(resources->needsIndirectPainting(),
-                                   resources->indirectPaintingCompositeOp(),
-                                   resources, strokeInfo, kundo2_noi18n("temp_stroke"));
+        new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("temp_stroke"));
 
     KisStrokeId strokeId = m_image->startStroke(stroke);
 

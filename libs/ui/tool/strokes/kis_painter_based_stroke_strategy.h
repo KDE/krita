@@ -102,6 +102,9 @@ protected:
      */
     bool supportsMaskingBrush() const;
 
+    void setSupportsIndirectPainting(bool value);
+    bool supportsIndirectPainting() const;
+
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail);
 
@@ -131,6 +134,7 @@ private:
     bool m_useMergeID;
 
     bool m_supportsMaskingBrush;
+    bool m_supportsIndirectPainting;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

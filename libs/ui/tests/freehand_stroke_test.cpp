@@ -87,15 +87,14 @@ protected:
         }
     }
 
-    KisStrokeStrategy* createStroke(bool indirectPainting,
-                                    KisResourcesSnapshotSP resources,
+    KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,
                                     KisImageWSP image) override {
         Q_UNUSED(image);
 
         KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
         QScopedPointer<FreehandStrokeStrategy> stroke(
-            new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, strokeInfo, kundo2_noi18n("Freehand Stroke")));
+            new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("Freehand Stroke")));
 
         return stroke.take();
     }

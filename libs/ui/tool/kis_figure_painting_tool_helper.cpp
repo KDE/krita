@@ -47,9 +47,7 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(m_resources->needsIndirectPainting(),
-                                   m_resources->indirectPaintingCompositeOp(),
-                                   m_resources, strokeInfo, name);
+        new FreehandStrokeStrategy(m_resources, strokeInfo, name);
 
     m_strokeId = m_strokesFacade->startStroke(stroke);
 }

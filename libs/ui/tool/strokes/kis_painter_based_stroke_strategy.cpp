@@ -42,7 +42,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
       m_strokeInfos(strokeInfos),
       m_transaction(0),
       m_useMergeID(useMergeID),
-      m_supportsMaskingBrush(false)
+      m_supportsMaskingBrush(false),
+      m_supportsIndirectPainting(false)
 {
     init();
 }
@@ -56,7 +57,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
       m_strokeInfos(QVector<KisFreehandStrokeInfo*>() <<  strokeInfo),
       m_transaction(0),
       m_useMergeID(useMergeID),
-      m_supportsMaskingBrush(false)
+      m_supportsMaskingBrush(false),
+      m_supportsIndirectPainting(false)
 {
     init();
 }
@@ -80,7 +82,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
       m_resources(rhs.m_resources),
       m_transaction(rhs.m_transaction),
       m_useMergeID(rhs.m_useMergeID),
-      m_supportsMaskingBrush(rhs.m_supportsMaskingBrush)
+      m_supportsMaskingBrush(rhs.m_supportsMaskingBrush),
+      m_supportsIndirectPainting(rhs.m_supportsIndirectPainting)
 {
     Q_FOREACH (KisFreehandStrokeInfo *info, rhs.m_strokeInfos) {
         m_strokeInfos.append(new KisFreehandStrokeInfo(info, levelOfDetail));
@@ -143,6 +146,16 @@ void KisPainterBasedStrokeStrategy::setSupportsMaskingBrush(bool value)
 bool KisPainterBasedStrokeStrategy::supportsMaskingBrush() const
 {
     return m_supportsMaskingBrush;
+}
+
+void KisPainterBasedStrokeStrategy::setSupportsIndirectPainting(bool value)
+{
+    m_supportsIndirectPainting = value;
+}
+
+bool KisPainterBasedStrokeStrategy::supportsIndirectPainting() const
+{
+    return m_supportsIndirectPainting;
 }
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
@@ -214,7 +227,9 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     KisNodeSP node = m_resources->currentNode();
     KisPaintDeviceSP paintDevice = node->paintDevice();
     KisPaintDeviceSP targetDevice = paintDevice;
-    bool hasIndirectPainting = needsIndirectPainting();
+    bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
+    const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
+
 
     KisSelectionSP selection = m_resources->activeSelection();
 
@@ -261,10 +276,10 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                      m_maskingBrushRenderer->maskDevice(),
                      selection,
                      hasIndirectPainting,
-                     indirectPaintingCompositeOp());
+                     indirectCompositeOp);
 
     } else {
-        initPainters(targetDevice, 0, selection, hasIndirectPainting, indirectPaintingCompositeOp());
+        initPainters(targetDevice, 0, selection, hasIndirectPainting, indirectCompositeOp);
     }
 
     m_targetDevice = targetDevice;

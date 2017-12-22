@@ -621,6 +621,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="cancelNewDocumentButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="createButton">
        <property name="text">
         <string>&amp;Create</string>

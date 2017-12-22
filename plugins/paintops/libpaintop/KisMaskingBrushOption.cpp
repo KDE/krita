@@ -88,3 +88,12 @@ void KisMaskingBrushOption::setImage(KisImageWSP image)
     m_d->brushChooser->setImage(image);
 }
 
+void KisMaskingBrushOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    KisBrushSP brush = m_d->brushChooser->brush();
+
+    if (brush) {
+        brush->lodLimitations(l);
+    }
+}
+

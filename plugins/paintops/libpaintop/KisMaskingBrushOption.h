@@ -37,6 +37,8 @@ public:
 
     void setImage(KisImageWSP image) override;
 
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

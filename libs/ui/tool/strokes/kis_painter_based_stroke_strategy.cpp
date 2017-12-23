@@ -381,6 +381,7 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
 
     if(indirect) {
         // todo: don't ask about paint device
+        // todo:change to an assert
         if (node->paintDevice() != m_targetDevice) {
             indirect->setTemporaryTarget(m_targetDevice);
             indirect->setTemporaryCompositeOp(m_resources->compositeOpId());

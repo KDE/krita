@@ -22,10 +22,18 @@
 #include "kis_paint_device.h"
 #include "kis_sequential_iterator.h"
 
+#include "KisMaskingBrushCompositeOp.h"
+#include "KoCompositeOpFunctions.h"
+
 #include <KoGrayColorSpaceTraits.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include <KoChannelInfo.h>
+#include "kis_random_accessor_ng.h"
+
+#include "KisMaskingBrushCompositeOpFactory.h"
+#include <KoCompositeOpRegistry.h>
 
 namespace {
 // should be the same as the tile size in KisTileData::WIDTH
@@ -43,6 +51,30 @@ KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice)
 
     m_strokeDevice->setDefaultBounds(dstDevice->defaultBounds());
     m_maskDevice->setDefaultBounds(dstDevice->defaultBounds());
+
+    const KoColorSpace *dstCs = m_dstDevice->colorSpace();
+    const int pixelSize = dstCs->pixelSize();
+
+    KoChannelInfo::enumChannelValueType alphaChannelType = KoChannelInfo::UINT8;
+    int alphaChannelOffset = -1;
+
+    QList<KoChannelInfo *> channels = dstCs->channels();
+    for (int i = 0; i < pixelSize; i++) {
+        if (channels[i]->channelType() == KoChannelInfo::ALPHA) {
+            // TODO: check correctness for 16bits!
+            alphaChannelOffset = channels[i]->pos()/* * channels[i]->size()*/;
+            alphaChannelType = channels[i]->channelValueType();
+            break;
+        }
+    }
+
+    KIS_SAFE_ASSERT_RECOVER (alphaChannelOffset >= 0) {
+        alphaChannelOffset = 0;
+    }
+
+    m_compositeOp.reset(
+        KisMaskingBrushCompositeOpFactory::create(
+                    COMPOSITE_MULT, alphaChannelType, pixelSize, alphaChannelOffset));
 }
 
 KisMaskingBrushRenderer::~KisMaskingBrushRenderer()
@@ -65,42 +97,44 @@ void KisMaskingBrushRenderer::updateProjection(const QRect &rc)
 
     KisPainter::copyAreaOptimized(rc.topLeft(), m_strokeDevice, m_dstDevice, rc);
 
-    KisSequentialIterator dstIt(m_dstDevice, rc);
-    KisSequentialConstIterator maskIt(m_maskDevice, rc);
+    KisRandomAccessorSP dstIt = m_dstDevice->createRandomAccessorNG(rc.left(), rc.top());
+    KisRandomConstAccessorSP maskIt = m_maskDevice->createRandomConstAccessorNG(rc.left(), rc.top());
 
-    using MaskPixel = KoGrayU8Traits::Pixel;
-    const KoColorSpace *dstCs = m_dstDevice->colorSpace();
+    qint32 dstY = rc.y();
+    qint32 rowsRemaining = rc.height();
 
-    QByteArray buffer;
+    while (rowsRemaining > 0) {
+        qint32 dstX = rc.x();
 
-    if (!m_bufferCache.pop(buffer)) {
-        buffer.resize(maskBufferSize * m_maskDevice->pixelSize());
-    }
+        const qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
+        const qint32 numContiguousMaskRows = maskIt->numContiguousRows(dstY);
 
-    quint8 *bufferStartPtr = reinterpret_cast<quint8*>(buffer.data());
-    int numContiguousColumns = 0;
+        const qint32 rows = std::min({rowsRemaining, numContiguousDstRows, numContiguousMaskRows});
 
-    do {
-        numContiguousColumns = std::min({maskIt.nConseqPixels(), dstIt.nConseqPixels(), buffer.size()});
+        qint32 columnsRemaining = rc.width();
 
-        // create premultiplied buffer
-        {
-            const MaskPixel *maskPtr = reinterpret_cast<const MaskPixel*>(maskIt.rawDataConst());
-            quint8 *bufferPtr = bufferStartPtr;
+        while (columnsRemaining > 0) {
 
-            for (int i = 0; i < numContiguousColumns; i++) {
-                *bufferPtr = KoColorSpaceMaths<quint8>::multiply(maskPtr->gray, maskPtr->alpha);
+            const qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
+            const qint32 numContiguousMaskColumns = maskIt->numContiguousColumns(dstX);
+            const qint32 columns = std::min({columnsRemaining, numContiguousDstColumns, numContiguousMaskColumns});
 
-                bufferPtr++;
-                maskPtr++;
-            }
+            const qint32 dstRowStride = dstIt->rowStride(dstX, dstY);
+            const qint32 maskRowStride = maskIt->rowStride(dstX, dstY);
+
+            dstIt->moveTo(dstX, dstY);
+            maskIt->moveTo(dstX, dstY);
+
+            m_compositeOp->composite(maskIt->rawDataConst(), maskRowStride,
+                                     dstIt->rawData(), dstRowStride,
+                                     columns, rows);
+
+            dstX += columns;
+            columnsRemaining -= columns;
         }
 
-        quint8 *dstPtr = reinterpret_cast<quint8*>(dstIt.rawData());
-        dstCs->applyAlphaU8Mask(dstPtr, bufferStartPtr, numContiguousColumns);
-
-    } while (dstIt.nextPixels(numContiguousColumns) && maskIt.nextPixels(numContiguousColumns));
-
-    m_bufferCache.push(buffer);
+        dstY += rows;
+        rowsRemaining -= rows;
+    }
 }
 

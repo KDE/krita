@@ -16,32 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISMASKINGBRUSHRENDERER_H
-#define KISMASKINGBRUSHRENDERER_H
+#ifndef KISMASKINGBRUSHCOMPOSITEOPBASE_H
+#define KISMASKINGBRUSHCOMPOSITEOPBASE_H
 
-#include "kis_types.h"
-
-class KisMaskingBrushCompositeOpBase;
+#include <QtGlobal>
 
 
-class KisMaskingBrushRenderer
+class KisMaskingBrushCompositeOpBase
 {
 public:
-    KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice);
-    ~KisMaskingBrushRenderer();
-
-    KisPaintDeviceSP strokeDevice() const;
-    KisPaintDeviceSP maskDevice() const;
-
-    void updateProjection(const QRect &rc);
-
-
-private:
-    KisPaintDeviceSP m_strokeDevice;
-    KisPaintDeviceSP m_maskDevice;
-    KisPaintDeviceSP m_dstDevice;
-
-    QScopedPointer<KisMaskingBrushCompositeOpBase> m_compositeOp;
+    virtual ~KisMaskingBrushCompositeOpBase() {}
+    virtual void composite(const quint8 *srcRowStart, int srcRowStride,
+                           quint8 *dstRowStart, int dstRowStride,
+                           int columns, int rows) = 0;
 };
 
-#endif // KISMASKINGBRUSHRENDERER_H
+#endif // KISMASKINGBRUSHCOMPOSITEOPBASE_H

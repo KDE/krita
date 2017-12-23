@@ -203,6 +203,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisFreehandStrokeInfo.cpp
     tool/strokes/KisMaskedFreehandStrokePainter.cpp
     tool/strokes/KisMaskingBrushRenderer.cpp
+    tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp

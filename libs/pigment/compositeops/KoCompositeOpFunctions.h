@@ -238,11 +238,13 @@ inline T cfHardLight(T src, T dst) {
     if(src > halfValue<T>()) {
         // screen(src*2.0 - 1.0, dst)
         src2 -= unitValue<T>();
-        return T((src2+dst) - (src2*dst / unitValue<T>()));
+
+        // src2 is guaranteed to be smaller than unitValue<T>() now
+        return Arithmetic::unionShapeOpacity(T(src2), dst);
     }
     
-    // multiply(src*2.0, dst)
-    return clamp<T>(src2*dst / unitValue<T>());
+    // src2 is guaranteed to be smaller than unitValue<T>() due to 'if'
+    return Arithmetic::mul(T(src2), dst);
 }
 
 template<class T>

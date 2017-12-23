@@ -21,8 +21,10 @@
 #ifndef SVG_TEXT_TOOL
 #define SVG_TEXT_TOOL
 
+#include <KConfigGroup>
 #include <KoToolBase.h>
 #include <QPushButton>
+#include <QFontComboBox>
 #include <QPointer>
 
 class SvgTextEditor;
@@ -59,6 +61,21 @@ private Q_SLOTS:
     void showEditor();
     void textUpdated(const QString &svg, const QString &defs);
 
+    /**
+     * @brief generateDefs
+     * This generates a defs section with the appropriate
+     * css and css strings assigned. This allows the artist
+     * to select settings that new texts will be created with.
+     * @return a string containing the defs.
+     */
+    QString generateDefs();
+
+    /**
+     * @brief storeDefaults
+     * store default font and point size when they change.
+     */
+    void storeDefaults();
+
 private:
     KoSvgTextShape *m_shape;
     QPointer<SvgTextEditor> m_editor;
@@ -66,6 +83,9 @@ private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     bool m_dragging;
+    QFontComboBox *m_defFont;
+    QComboBox *m_defPointSize;
+    KConfigGroup m_configGroup;
 };
 
 #endif

@@ -25,13 +25,17 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QGridLayout>
+#include <QVBoxLayout>
 #include <QDesktopServices>
 #include <QApplication>
+#include <QGroupBox>
+#include <QFontDatabase>
 
 #include <klocalizedstring.h>
 
 #include <KisPart.h>
 #include <kis_canvas2.h>
+#include <KSharedConfig>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -85,6 +89,25 @@ QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
+    m_configGroup = KSharedConfig::openConfig()->group(toolId());
+
+    QGroupBox *defsOptions = new QGroupBox(i18n("Create new texts with..."));
+    defsOptions->setLayout(new QVBoxLayout());
+    m_defFont = new QFontComboBox();
+    QString storedFont = m_configGroup.readEntry<QString>("defaultFont", QApplication::font().family());
+    m_defFont->setCurrentFont(QFont(storedFont));
+    defsOptions->layout()->addWidget(m_defFont);
+    m_defPointSize = new QComboBox();
+    Q_FOREACH (int size, QFontDatabase::standardSizes()) {
+        m_defPointSize->addItem(QString::number(size)+" pt");
+    }
+    defsOptions->layout()->addWidget(m_defPointSize);
+    int storedSize = m_configGroup.readEntry<int>("defaultPointSize", QApplication::font().pointSize());
+    m_defPointSize->setCurrentIndex(QFontDatabase::standardSizes().indexOf(storedSize));
+    layout->addWidget(defsOptions);
+    connect(m_defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
+    connect(m_defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
+
     m_edit = new QPushButton(optionWidget);
     m_edit->setText(i18n("Edit Text"));
     connect(m_edit, SIGNAL(clicked(bool)), SLOT(showEditor()));
@@ -108,6 +131,21 @@ void SvgTextTool::textUpdated(const QString &svg, const QString &defs)
 {
     SvgTextChangeCommand *cmd = new SvgTextChangeCommand(m_shape, svg, defs);
     canvas()->addCommand(cmd);
+}
+
+QString SvgTextTool::generateDefs()
+{
+    QString font = m_defFont->currentFont().family();
+    QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex()));
+
+    return QString("<defs>\n <style>\n  text {\n   font-family:%1;\n   font-size:%2;\n  }\n </style>\n</defs>").arg(font, size);
+}
+
+void SvgTextTool::storeDefaults()
+{
+    m_configGroup = KSharedConfig::openConfig()->group(toolId());
+    m_configGroup.writeEntry("defaultFont", m_defFont->currentFont().family());
+    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex()));
 }
 
 void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
@@ -157,6 +195,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
     if (m_dragging) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
         KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
+        params->setProperty("defs", QVariant(generateDefs()));
         if (m_dragging) {
             m_dragEnd = event->point;
             m_dragging = false;

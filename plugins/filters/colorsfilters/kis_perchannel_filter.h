@@ -111,6 +111,8 @@ public:
 private Q_SLOTS:
     virtual void setActiveChannel(int ch);
     void logHistView();
+    void resetCurve();
+
 
 private:
 
@@ -131,6 +133,7 @@ private:
     // scales for displaying color numbers
     double m_scale;
     double m_shift;
+    bool checkReset;
 };
 
 #endif

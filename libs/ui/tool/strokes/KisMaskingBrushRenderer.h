@@ -27,7 +27,7 @@ class KisMaskingBrushCompositeOpBase;
 class KisMaskingBrushRenderer
 {
 public:
-    KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice);
+    KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice, const QString &compositeOpId);
     ~KisMaskingBrushRenderer();
 
     KisPaintDeviceSP strokeDevice() const;

@@ -164,6 +164,11 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
     return maskingSettings;
 }
 
+QString KisPaintOpSettings::maskingBrushCompositeOp() const
+{
+    return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
+}
+
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {
     QString paintopID = getString("paintop");

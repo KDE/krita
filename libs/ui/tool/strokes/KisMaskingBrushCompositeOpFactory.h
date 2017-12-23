@@ -22,9 +22,11 @@
 #include <QtGlobal>
 #include <KoChannelInfo.h>
 
+#include "kritaui_export.h"
+
 class KisMaskingBrushCompositeOpBase;
 
-class KisMaskingBrushCompositeOpFactory
+class KRITAUI_EXPORT KisMaskingBrushCompositeOpFactory
 {
 public:
     static KisMaskingBrushCompositeOpBase* create(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset);

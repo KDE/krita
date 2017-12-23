@@ -21,9 +21,19 @@
 #include "kis_brush_option.h"
 #include <brushengine/KisPaintopSettingsIds.h>
 
+#include <KoCompositeOpRegistry.h>
+
+
+KisMaskingBrushOptionProperties::KisMaskingBrushOptionProperties()
+    : isEnabled(false),
+      compositeOpId(COMPOSITE_MULT)
+{
+}
+
 void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(KisPaintOpUtils::MaskingBrushEnabledTag, isEnabled);
+    setting->setProperty(KisPaintOpUtils::MaskingBrushCompositeOpTag, compositeOpId);
 
     // TODO: skip saving in some cases?
     // if (!isEnabled) return;
@@ -53,6 +63,7 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting)
 void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting)
 {
     isEnabled = setting->getBool(KisPaintOpUtils::MaskingBrushEnabledTag);
+    compositeOpId = setting->getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
 
     KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
     setting->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);

@@ -33,6 +33,9 @@
 #include "KisMaskingBrushRenderer.h"
 #include "KisRunnableStrokeJobData.h"
 
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings.h"
+
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
@@ -270,7 +273,10 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         supportsMaskingBrush() &&
         m_resources->needsMaskingBrushRendering()) {
 
-        m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice));
+        const QString compositeOpId =
+            m_resources->currentPaintOpPreset()->settings()->maskingBrushCompositeOp();
+
+        m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice, compositeOpId));
 
         initPainters(m_maskingBrushRenderer->strokeDevice(),
                      m_maskingBrushRenderer->maskDevice(),

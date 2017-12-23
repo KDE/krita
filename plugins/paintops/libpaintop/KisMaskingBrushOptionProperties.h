@@ -22,13 +22,17 @@
 #include "kritapaintop_export.h"
 #include <kis_types.h>
 
+
 class KisBrush;
 typedef KisSharedPtr<KisBrush> KisBrushSP;
 
 struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {
+    KisMaskingBrushOptionProperties();
+
     bool isEnabled = false;
     KisBrushSP brush;
+    QString compositeOpId;
 
     void write(KisPropertiesConfiguration *setting) const;
     void read(const KisPropertiesConfiguration *setting);

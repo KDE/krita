@@ -22,6 +22,8 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QComboBox>
 
 #include <QDomDocument>
 #include "kis_brush.h"
@@ -29,7 +31,8 @@
 #include "kis_brush_option.h"
 
 #include "KisMaskingBrushOptionProperties.h"
-
+#include <strokes/KisMaskingBrushCompositeOpFactory.h>
+#include <KoCompositeOpRegistry.h>
 
 struct KisMaskingBrushOption::Private
 {
@@ -38,13 +41,30 @@ struct KisMaskingBrushOption::Private
     {
         QVBoxLayout *l  = new QVBoxLayout(ui.data());
 
+        QHBoxLayout *compositeOpLayout = new QHBoxLayout(ui.data());
+        compositeSelector = new QComboBox(ui.data());
+
+        const QStringList supportedComposites = KisMaskingBrushCompositeOpFactory::supportedCompositeOpIds();
+        Q_FOREACH (const QString &id, supportedComposites) {
+            const QString name = KoCompositeOpRegistry::instance().getKoID(id).name();
+            compositeSelector->addItem(name, id);
+        }
+        compositeSelector->setCurrentIndex(0);
+
+        compositeOpLayout->addWidget(new QLabel(i18n("Blending Mode:")), 0);
+        compositeOpLayout->addWidget(compositeSelector, 1);
+
+        l->addLayout(compositeOpLayout, 0);
+
+
         brushChooser = new KisPredefinedBrushChooser(ui.data(), "MaskingBrushChooser");
-        l->addWidget(brushChooser);
+        l->addWidget(brushChooser, 1);
         ui->setLayout(l);
     }
 
     QScopedPointer<QWidget> ui;
     KisPredefinedBrushChooser *brushChooser = 0;
+    QComboBox *compositeSelector = 0;
 };
 
 KisMaskingBrushOption::KisMaskingBrushOption()
@@ -55,6 +75,7 @@ KisMaskingBrushOption::KisMaskingBrushOption()
     setConfigurationPage(m_d->ui.data());
 
     connect(m_d->brushChooser, SIGNAL(sigBrushChanged()), SLOT(emitSettingChanged()));
+    connect(m_d->compositeSelector, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
 }
 
 KisMaskingBrushOption::~KisMaskingBrushOption()
@@ -68,6 +89,7 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     props.isEnabled = isChecked();
     props.brush = m_d->brushChooser->brush();
+    props.compositeOpId = m_d->compositeSelector->currentData().toString();
 
     props.write(setting.data());
 }
@@ -78,6 +100,10 @@ void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP
     props.read(setting.data());
 
     setChecked(props.isEnabled);
+
+    const int selectedIndex = qMax(0, m_d->compositeSelector->findData(props.compositeOpId));
+    m_d->compositeSelector->setCurrentIndex(selectedIndex);
+
     if (props.brush) {
         m_d->brushChooser->setBrush(props.brush);
     }

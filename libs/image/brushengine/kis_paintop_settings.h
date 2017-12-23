@@ -315,6 +315,14 @@ public:
      */
     KisPaintOpSettingsSP createMaskingSettings() const;
 
+    /**
+     * @return a composite op id of the masking brush rendering algorithm.
+     *
+     * Please take into account that the brush itself always paints in alpha-
+     * darken mode, but the final result is combined with this composite op.
+     */
+    QString maskingBrushCompositeOp() const;
+
 protected:
 
     /**

@@ -18,36 +18,27 @@
 
 #include "KisMaskingBrushRenderer.h"
 
-#include "kis_painter.h"
-#include "kis_paint_device.h"
-#include "kis_sequential_iterator.h"
-
-#include "KisMaskingBrushCompositeOp.h"
-#include "KoCompositeOpFunctions.h"
-
-#include <KoGrayColorSpaceTraits.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoChannelInfo.h>
-#include "kis_random_accessor_ng.h"
-
-#include "KisMaskingBrushCompositeOpFactory.h"
 #include <KoCompositeOpRegistry.h>
 
-namespace {
-// should be the same as the tile size in KisTileData::WIDTH
-static const int maskBufferSize = 64;
-}
+#include "kis_painter.h"
+#include "kis_paint_device.h"
+#include "kis_random_accessor_ng.h"
+
+#include "KisMaskingBrushCompositeOpBase.h"
+#include "KisMaskingBrushCompositeOpFactory.h"
 
 
-KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice)
+KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice, const QString &compositeOpId)
     : m_dstDevice(dstDevice)
 {
     m_strokeDevice = new KisPaintDevice(dstDevice->colorSpace());
     m_maskDevice = new KisPaintDevice(
-        KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(),
-                                                     Integer8BitsColorDepthID.id()));
+                KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(),
+                                                             Integer8BitsColorDepthID.id()));
 
     m_strokeDevice->setDefaultBounds(dstDevice->defaultBounds());
     m_maskDevice->setDefaultBounds(dstDevice->defaultBounds());
@@ -74,7 +65,7 @@ KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice)
 
     m_compositeOp.reset(
         KisMaskingBrushCompositeOpFactory::create(
-                    COMPOSITE_MULT, alphaChannelType, pixelSize, alphaChannelOffset));
+            compositeOpId, alphaChannelType, pixelSize, alphaChannelOffset));
 }
 
 KisMaskingBrushRenderer::~KisMaskingBrushRenderer()

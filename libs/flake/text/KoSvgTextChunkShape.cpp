@@ -45,10 +45,10 @@
 namespace {
 
 
-void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, qreal defaultValue)
+void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, bool hasDefault = true, qreal defaultValue = 0.0)
 {
     if (!value) return;
-    if (value && *value == defaultValue && list->isEmpty()) return;
+    if (value && *value == defaultValue && hasDefault == true && list->isEmpty()) return;
 
     while (list->size() < iteration) {
         list->append(defaultValue);
@@ -62,11 +62,11 @@ void fillTransforms(QVector<qreal> *xPos, QVector<qreal> *yPos, QVector<qreal> *
 {
     for (int i = 0; i < localTransformations.size(); i++) {
         const KoSvgText::CharTransformation &t = localTransformations[i];
-        appendLazy(xPos, t.xPos, i, 0.0);
-        appendLazy(yPos, t.yPos, i, 0.0);
-        appendLazy(dxPos, t.dxPos, i, 0.0);
-        appendLazy(dyPos, t.dyPos, i, 0.0);
-        appendLazy(rotate, t.rotate, i, 0.0);
+        appendLazy(xPos, t.xPos, i, false);
+        appendLazy(yPos, t.yPos, i, false);
+        appendLazy(dxPos, t.dxPos, i);
+        appendLazy(dyPos, t.dyPos, i);
+        appendLazy(rotate, t.rotate, i);
     }
 }
 
@@ -407,10 +407,10 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         for (int i = 0; i < d->localTransformations.size(); i++) {
             const KoSvgText::CharTransformation &t = d->localTransformations[i];
 
-            appendLazy(&xPos, t.xPos, i, 0.0);
-            appendLazy(&yPos, t.yPos, i, 0.0);
-            appendLazy(&dxPos, t.dxPos, i, 0.0);
-            appendLazy(&dyPos, t.dyPos, i, 0.0);
+            appendLazy(&xPos, t.xPos, i, false);
+            appendLazy(&yPos, t.yPos, i, false);
+            appendLazy(&dxPos, t.dxPos, i);
+            appendLazy(&dyPos, t.dyPos, i);
         }
 
         qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;

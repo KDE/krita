@@ -402,7 +402,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         QVector<qreal> dyPos;
         QVector<qreal> rotate;
 
-        fillTransforms(&xPos, &yPos, &dyPos, &dxPos, &rotate, d->localTransformations);
+        fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, d->localTransformations);
 
         for (int i = 0; i < d->localTransformations.size(); i++) {
             const KoSvgText::CharTransformation &t = d->localTransformations[i];
@@ -498,7 +498,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
         QVector<qreal> dyPos;
         QVector<qreal> rotate;
 
-        fillTransforms(&xPos, &yPos,&dyPos, &dxPos, &rotate, d->localTransformations);
+        fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, d->localTransformations);
 
         writeTextListAttribute("x", xPos, context.shapeWriter());
         writeTextListAttribute("y", yPos, context.shapeWriter());

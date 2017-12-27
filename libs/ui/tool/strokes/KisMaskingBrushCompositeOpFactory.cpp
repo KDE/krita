@@ -34,6 +34,23 @@
 namespace {
 
 /**
+ * A special Linear Burn variant for alpha channel
+ *
+ * The meaning of alpha channel is a bit different from the one in color. We should
+ * clamp the values around [zero, max] only to avoid the brush to **erase** the content
+ * of the layer below
+ */
+
+template<class T>
+inline T maskingLinearBurn(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
+                  composite_type(src) + dst - unitValue<T>(),
+                  composite_type(KoColorSpaceMathsTraits<T>::max));
+}
+
+/**
  * A special Linear Dodge variant for alpha channel.
  *
  * The meaning of alpha channel is a bit different from the one in color. If
@@ -70,7 +87,7 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
     } else if (id == COMPOSITE_BURN) {
         result = new KisMaskingBrushCompositeOp<channel_type, cfColorBurn>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_LINEAR_BURN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, cfLinearBurn>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, maskingLinearBurn>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_LINEAR_DODGE) {
         result = new KisMaskingBrushCompositeOp<channel_type, maskingAddition>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_HARD_MIX) {

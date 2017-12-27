@@ -182,6 +182,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
+        mdiArea->setTabsMovable(true);
     }
 
     ~Private() {

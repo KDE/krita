@@ -33,6 +33,27 @@
 
 namespace {
 
+/**
+ * A special Linear Dodge variant for alpha channel.
+ *
+ * The meaning of alpha channel is a bit different from the one in color. If
+ * alpha channel of the destination is totally null, we should try to resurrect
+ * its contents from ashes :)
+ */
+template<class T>
+inline T maskingAddition(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    using namespace Arithmetic;
+
+    if (dst == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+
+    return Arithmetic::clamp<T>(composite_type(src) + dst);
+}
+
+
+
 template <typename channel_type>
 KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, int alphaOffset)
 {
@@ -51,7 +72,7 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
     } else if (id == COMPOSITE_LINEAR_BURN) {
         result = new KisMaskingBrushCompositeOp<channel_type, cfLinearBurn>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_LINEAR_DODGE) {
-        result = new KisMaskingBrushCompositeOp<channel_type, cfAddition>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, maskingAddition>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_HARD_MIX) {
         result = new KisMaskingBrushCompositeOp<channel_type, cfHardMix>(pixelSize, alphaOffset);
     }

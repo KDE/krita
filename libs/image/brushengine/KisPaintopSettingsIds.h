@@ -26,6 +26,8 @@ namespace KisPaintOpUtils {
 KRITAIMAGE_EXPORT extern const char MaskingBrushPaintOpId[];
 KRITAIMAGE_EXPORT extern const char MaskingBrushEnabledTag[];
 KRITAIMAGE_EXPORT extern const char MaskingBrushCompositeOpTag[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushUseMasterSizeTag[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushMasterSizeCoeffTag[];
 KRITAIMAGE_EXPORT extern const char MaskingBrushPresetPrefix[];
 
 }

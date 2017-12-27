@@ -85,8 +85,10 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
+    KisMaskingBrushOption::MasterBrushSizeAdapter sizeAdapter =
+        [this] () { return this->brush()->userEffectiveSize(); };
 
-    addPaintOpOption(new KisMaskingBrushOption(), i18n("Brush Tip"));
+    addPaintOpOption(new KisMaskingBrushOption(sizeAdapter), i18n("Brush Tip"));
 
 
     {

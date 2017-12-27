@@ -25,15 +25,21 @@
 
 
 KisMaskingBrushOptionProperties::KisMaskingBrushOptionProperties()
-    : isEnabled(false),
-      compositeOpId(COMPOSITE_MULT)
+    : compositeOpId(COMPOSITE_MULT)
+
 {
 }
 
-void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting) const
+void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const
 {
     setting->setProperty(KisPaintOpUtils::MaskingBrushEnabledTag, isEnabled);
     setting->setProperty(KisPaintOpUtils::MaskingBrushCompositeOpTag, compositeOpId);
+    setting->setProperty(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, useMasterSize);
+
+    const qreal masterSizeCoeff =
+        brush && masterBrushSize > 0 ? brush->userEffectiveSize() / masterBrushSize : 1.0;
+
+    setting->setProperty(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, masterSizeCoeff);
 
     // TODO: skip saving in some cases?
     // if (!isEnabled) return;
@@ -60,10 +66,11 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting)
     }
 }
 
-void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting)
+void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting, qreal masterBrushSize)
 {
     isEnabled = setting->getBool(KisPaintOpUtils::MaskingBrushEnabledTag);
     compositeOpId = setting->getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
+    useMasterSize = setting->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
 
     KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
     setting->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
@@ -72,4 +79,9 @@ void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *set
     option.readOptionSetting(embeddedConfig);
 
     brush = option.brush();
+
+    if (brush && useMasterSize) {
+        const qreal masterSizeCoeff = setting->getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
+        brush->setUserEffectiveSize(masterSizeCoeff * masterBrushSize);
+    }
 }

@@ -56,28 +56,13 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     return element;
 }
 
-void KisBrushOption::readOptionSettingInternal(const KisPropertiesConfiguration *setting, bool forceCopy)
+void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
 {
     QDomElement element = getBrushXMLElement(setting);
 
     if (!element.isNull()) {
-        m_brush = KisBrush::fromXML(element, forceCopy);
+        m_brush = KisBrush::fromXML(element);
     }
-}
-
-void KisBrushOption::readOptionSettingForceCopy(KisPropertiesConfigurationSP setting)
-{
-    readOptionSettingInternal(setting.data(), true);
-}
-
-void KisBrushOption::readOptionSettingForceCopy(const KisPropertiesConfiguration *setting)
-{
-    readOptionSettingInternal(setting, true);
-}
-
-void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
-{
-    readOptionSettingInternal(setting, false);
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

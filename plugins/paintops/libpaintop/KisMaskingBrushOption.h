@@ -29,7 +29,10 @@
 class PAINTOP_EXPORT KisMaskingBrushOption : public KisPaintOpOption
 {
 public:
-    KisMaskingBrushOption();
+    typedef std::function<qreal()> MasterBrushSizeAdapter;
+
+public:
+    KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushSizeAdapter);
     ~KisMaskingBrushOption() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;

@@ -16,27 +16,47 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISMASKINGBRUSHOPTIONPROPERTIES_H
-#define KISMASKINGBRUSHOPTIONPROPERTIES_H
+#include "KisSharedQImagePyramid.h"
 
-#include "kritapaintop_export.h"
-#include <kis_types.h>
+#include <QMutexLocker>
+
+#include "kis_qimage_pyramid.h"
+#include "kis_brush.h"
 
 
-class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
-
-struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
+KisSharedQImagePyramid::KisSharedQImagePyramid()
 {
-    KisMaskingBrushOptionProperties();
+}
 
-    bool isEnabled = false;
-    KisBrushSP brush;
-    QString compositeOpId;
-    bool useMasterSize = true;
+KisSharedQImagePyramid::~KisSharedQImagePyramid()
+{
+}
 
-    void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
-    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize);
-};
+const KisQImagePyramid *KisSharedQImagePyramid::pyramid(const KisBrush *brush) const
+{
+    const KisQImagePyramid * result = 0;
 
-#endif // KISMASKINGBRUSHOPTIONPROPERTIES_H
+    if (m_cachedPyramidPointer) {
+        result = m_cachedPyramidPointer;
+    } else {
+        QMutexLocker l(&m_mutex);
+
+        if (!m_pyramid) {
+            m_pyramid.reset(new KisQImagePyramid(brush->brushTipImage()));
+        }
+
+        m_cachedPyramidPointer = m_pyramid.data();
+        result = m_pyramid.data();
+    }
+
+    return result;
+}
+
+
+
+bool KisSharedQImagePyramid::isNull() const
+{
+    QMutexLocker l(&m_mutex);
+    return bool(m_pyramid);
+}
+

@@ -81,7 +81,7 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
     KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
-    settings->m_savedBrush = this->brush();
+    settings->m_savedBrush = 0;
     return settings;
 }
 

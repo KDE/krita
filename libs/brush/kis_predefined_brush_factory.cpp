@@ -33,7 +33,7 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
+KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition)
 {
     KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
@@ -49,11 +49,10 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
         brush = rServer->resources().first();
     }
 
-    Q_ASSERT(brush);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
 
-    if (forceCopy) {
-        brush = brush->clone();
-    }
+    // we always return a copy of the brush!
+    brush = brush->clone();
 
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
     brush->setSpacing(spacing);

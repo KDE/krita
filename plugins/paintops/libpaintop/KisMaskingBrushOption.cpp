@@ -65,12 +65,15 @@ struct KisMaskingBrushOption::Private
     QScopedPointer<QWidget> ui;
     KisPredefinedBrushChooser *brushChooser = 0;
     QComboBox *compositeSelector = 0;
+    MasterBrushSizeAdapter masterBrushSizeAdapter;
 };
 
-KisMaskingBrushOption::KisMaskingBrushOption()
+KisMaskingBrushOption::KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushSizeAdapter)
     : KisPaintOpOption(KisPaintOpOption::MASKING_BRUSH, false),
       m_d(new Private())
 {
+    m_d->masterBrushSizeAdapter = masterBrushSizeAdapter;
+
     setObjectName("KisMaskingBrushOption");
     setConfigurationPage(m_d->ui.data());
 
@@ -91,13 +94,13 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     props.brush = m_d->brushChooser->brush();
     props.compositeOpId = m_d->compositeSelector->currentData().toString();
 
-    props.write(setting.data());
+    props.write(setting.data(), m_d->masterBrushSizeAdapter());
 }
 
 void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisMaskingBrushOptionProperties props;
-    props.read(setting.data());
+    props.read(setting.data(), m_d->masterBrushSizeAdapter());
 
     setChecked(props.isEnabled);
 

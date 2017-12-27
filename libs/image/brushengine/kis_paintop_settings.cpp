@@ -161,6 +161,12 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
     KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->settings(pixelBrushId);
     this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
 
+    const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
+    if (useMasterSize) {
+        const qreal masterSizeCoeff = getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
+        maskingSettings->setPaintOpSize(masterSizeCoeff * paintOpSize());
+    }
+
     return maskingSettings;
 }
 

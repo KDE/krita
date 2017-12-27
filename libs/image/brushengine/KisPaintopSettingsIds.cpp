@@ -23,6 +23,8 @@ namespace KisPaintOpUtils {
 const char MaskingBrushPaintOpId[] = "paintbrush";
 const char MaskingBrushEnabledTag[] = "MaskingBrush/Enabled";
 const char MaskingBrushCompositeOpTag[] = "MaskingBrush/MaskingCompositeOp";
+const char MaskingBrushUseMasterSizeTag[] = "MaskingBrush/UseMasterSize";
+const char MaskingBrushMasterSizeCoeffTag[] = "MaskingBrush/MasterSizeCoeff";
 const char MaskingBrushPresetPrefix[] = "MaskingBrush/Preset/";
 
 }

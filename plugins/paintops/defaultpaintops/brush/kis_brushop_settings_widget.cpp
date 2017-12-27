@@ -80,7 +80,10 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18n("Value"));
     addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
-    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+
+
+    KisPaintActionTypeOption *actionTypeOption = new KisPaintActionTypeOption();
+    addPaintOpOption(actionTypeOption, i18n("Painting Mode"));
 
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
@@ -88,8 +91,11 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     KisMaskingBrushOption::MasterBrushSizeAdapter sizeAdapter =
         [this] () { return this->brush()->userEffectiveSize(); };
 
-    addPaintOpOption(new KisMaskingBrushOption(sizeAdapter), i18n("Brush Tip"));
+    KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(sizeAdapter);
+    addPaintOpOption(maskingOption, i18n("Brush Tip"));
 
+    connect(maskingOption, SIGNAL(sigCheckedChanged(bool)),
+            actionTypeOption, SLOT(slotForceWashMode(bool)));
 
     {
         KisCurveOption *maskingSizeOption = new KisPressureSizeOption();

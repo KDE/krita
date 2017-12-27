@@ -99,6 +99,7 @@ protected:
 
 protected Q_SLOTS:
     void emitSettingChanged();
+    void emitCheckedChanged();
 
 Q_SIGNALS:
 
@@ -106,6 +107,12 @@ Q_SIGNALS:
      * emit this whenever a setting has changed. It will update the preview
      */
     void sigSettingChanged();
+
+    /**
+     * emit this whenever a checked state of the option has changed. It as always
+     * emitted *before* sigSettingChanged()
+     */
+    void sigCheckedChanged(bool value);
 
 protected:
 

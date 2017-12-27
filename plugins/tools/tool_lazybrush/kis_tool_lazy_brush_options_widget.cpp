@@ -195,6 +195,7 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
     // not implemented yet!
     //m_d->ui->chkAutoUpdates->setEnabled(m_d->activeMask);
     m_d->ui->chkAutoUpdates->setEnabled(false);
+    m_d->ui->chkAutoUpdates->setVisible(false);
 
     bool value = false;
 
@@ -277,6 +278,7 @@ void KisToolLazyBrushOptionsWidget::slotUpdate()
 
 void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
 {
+    // not implemented yet!
     ENTER_FUNCTION() << ppVar(value);
 }
 

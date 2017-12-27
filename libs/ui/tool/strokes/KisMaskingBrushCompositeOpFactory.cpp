@@ -47,7 +47,7 @@ inline T maskingLinearBurn(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
                   composite_type(src) + dst - unitValue<T>(),
-                  composite_type(KoColorSpaceMathsTraits<T>::max));
+                  composite_type(KoColorSpaceMathsTraits<T>::unitValue));
 }
 
 /**
@@ -66,7 +66,9 @@ inline T maskingAddition(T src, T dst) {
         return zeroValue<T>();
     }
 
-    return Arithmetic::clamp<T>(composite_type(src) + dst);
+    return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
+                  composite_type(src) + dst,
+                  composite_type(KoColorSpaceMathsTraits<T>::unitValue));
 }
 
 

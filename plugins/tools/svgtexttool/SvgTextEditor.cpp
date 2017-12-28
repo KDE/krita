@@ -59,6 +59,8 @@
 #include <kis_file_name_requester.h>
 #include <BasicXMLSyntaxHighlighter.h>
 
+#include "kis_font_family_combo_box.h"
+
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags)
     , m_page(new QWidget(this))
@@ -240,7 +242,7 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("underline")->setChecked(format.fontUnderline());
     actionCollection()->action("strike_through")->setChecked(format.fontStrikeOut());
 
-    qobject_cast<QFontComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("font"))->defaultWidget())->setCurrentFont(format.font());
+    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("font"))->defaultWidget())->setCurrentFont(format.font());
 
     QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("font_size"))->defaultWidget());
     fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(format.font().pointSize()));
@@ -583,14 +585,17 @@ void SvgTextEditor::setBackgroundColor(const KoColor &c)
 
 void SvgTextEditor::setFont(const QString &fontName)
 {
+    QFont font;
+    font.fromString(fontName);
+    font.setPointSizeF(m_textEditorWidget.richTextEdit->currentCharFormat().fontPointSize());
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         QTextCharFormat format;
-        format.setFontFamily(fontName);
+        format.setFont(font);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
     } else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
-            QString selectionModified = "<tspan style=\"font-family:"+fontName+";\">" + cursor.selectedText() + "</tspan>";
+            QString selectionModified = "<tspan style=\"font-family:"+font.family()+" "+font.styleName()+";\">" + cursor.selectedText() + "</tspan>";
             cursor.removeSelectedText();
             cursor.insertText(selectionModified);
         }
@@ -771,8 +776,8 @@ void SvgTextEditor::createActions()
 
     QWidgetAction *fontComboAction = new QWidgetAction(this);
     fontComboAction->setToolTip(i18n("Font"));
-    QFontComboBox *fontCombo = new QFontComboBox();
-    connect(fontCombo, SIGNAL(activated(QString)), SLOT(setFont(QString)));
+    KisFontComboBoxes *fontCombo = new KisFontComboBoxes();
+    connect(fontCombo, SIGNAL(fontChanged(QString)), SLOT(setFont(QString)));
     fontComboAction->setDefaultWidget(fontCombo);
     actionCollection()->addAction("font", fontComboAction);
     m_richTextActions << fontComboAction;

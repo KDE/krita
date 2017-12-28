@@ -10,6 +10,7 @@ set (SvgTextTool_SRCS
     SvgTextTool.cpp
     SvgTextToolFactory.cpp
     svgtexttool.qrc
+    kis_font_family_combo_box.cpp
 )
 
 ki18n_wrap_ui(SvgTextTool_SRCS 

@@ -153,17 +153,20 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
 
             m_textEditorWidget.richTextEdit->document()->clear();
             m_textEditorWidget.richTextEdit->document()->setHtml(html);
+            m_textEditorWidget.richTextEdit->document()->setModified(false);
         }
 
         if (converter.convertToSvg(&svg, &styles)) {
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
+            m_textEditorWidget.svgTextEdit->document()->setModified(false);
 
         }
         else {
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
         }
     }
+
 }
 
 void SvgTextEditor::save()

@@ -338,6 +338,67 @@ void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, co
     setPrefixedProperties(prefix, config.data());
 }
 
+QString KisPropertiesConfiguration::escapeString(const QString &string)
+{
+    QString result = string;
+    result.replace(";", "\\;");
+    result.replace("]", "\\]");
+    result.replace(">", "\\>");
+    return result;
+}
+
+QString KisPropertiesConfiguration::unescapeString(const QString &string)
+{
+    QString result = string;
+    result.replace("\\;", ";");
+    result.replace("\\]", "]");
+    result.replace("\\>", ">");
+    return result;
+}
+
+void KisPropertiesConfiguration::setProperty(const QString &name, const QStringList &value)
+{
+    QStringList escapedList;
+    escapedList.reserve(value.size());
+
+    Q_FOREACH (const QString &str, value) {
+        escapedList << escapeString(str);
+    }
+
+    setProperty(name, escapedList.join(';'));
+}
+
+QStringList KisPropertiesConfiguration::getStringList(const QString &name, const QStringList &defaultValue) const
+{
+    if (!hasProperty(name)) return defaultValue;
+
+    const QString joined = getString(name);
+
+    QStringList result;
+
+    int afterLastMatch = -1;
+    for (int i = 0; i < joined.size(); i++) {
+        const bool lastChunk = i == joined.size() - 1;
+        const bool matchedSplitter = joined[i] == ';' && (i == 0 || joined[i - 1] != '\\');
+
+        if (lastChunk || matchedSplitter) {
+            result << unescapeString(joined.mid(afterLastMatch, i - afterLastMatch + int(lastChunk && !matchedSplitter)));
+            afterLastMatch = i + 1;
+        }
+
+        if (lastChunk && matchedSplitter) {
+            result << QString();
+        }
+    }
+
+    return result;
+}
+
+QStringList KisPropertiesConfiguration::getPropertyLazy(const QString &name, const QStringList &defaultValue) const
+{
+    return getStringList(name, defaultValue);
+}
+
 // --- factory ---
 
 struct Q_DECL_HIDDEN KisPropertiesConfigurationFactory::Private {

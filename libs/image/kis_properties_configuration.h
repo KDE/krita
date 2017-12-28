@@ -171,6 +171,13 @@ public:
      */
     void setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config);
 
+    static QString escapeString(const QString &string);
+    static QString unescapeString(const QString &string);
+
+    void setProperty(const QString &name, const QStringList &value);
+    QStringList getStringList(const QString &name, const QStringList &defaultValue = QStringList()) const;
+    QStringList getPropertyLazy(const QString &name, const QStringList &defaultValue) const;
+
 public:
 
     void dump() const;

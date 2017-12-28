@@ -194,6 +194,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
 
     bool newLine = false;
     int lineCount = 0;
+    QString bodyEm = "1em";
     QString em;
     QString p("p");
 
@@ -207,7 +208,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 qDebug() << "\tdoing br";
                 svgWriter.writeEndElement();
                 elementName = QStringRef(&p);
-                em = "2em";
+                em = bodyEm;
             }
             else {
                 elementName = htmlReader.name();
@@ -224,7 +225,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 svgWriter.writeStartElement("tspan");
                 newLine = true;
                 if (em.isEmpty()) {
-                    em = "2.5em";
+                    em = bodyEm;
                 }
                 lineCount++;
             }
@@ -236,6 +237,24 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
             QXmlStreamAttributes attributes = htmlReader.attributes();
             if (attributes.hasAttribute("style")) {
                 svgWriter.writeAttribute("style", attributes.value("style").toString());
+
+                QStringList styles = attributes.value("style").toString().split(";");
+                for(int i=0; i<styles.size(); i++) {
+                    QStringList style = QString(styles.at(i)).split(":");
+                    if (QString(style.at(0)).contains("line-height")){
+                        if (style.at(1).contains("%")) {
+                            double percentage = QString(style.at(1)).remove("%").toDouble();
+                            em = QString::number(percentage/100.0)+"em";
+                        } else if(style.at(1).contains("em")) {
+                            em = style.at(1);
+                        } else if(style.at(1).contains("px")) {
+                            em = style.at(1);
+                        }
+                        if (elementName == "body") {
+                            bodyEm = em;
+                        }
+                    }
+                }
             }
             if (newLine && lineCount > 1) {
                 qDebug() << "\t\tAdvancing to the next line";

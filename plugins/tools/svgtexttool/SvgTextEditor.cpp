@@ -36,6 +36,7 @@
 #include <QSvgGenerator>
 #include <QTextEdit>
 #include <QDialogButtonBox>
+#include <QDoubleSpinBox>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -250,6 +251,7 @@ void SvgTextEditor::switchTextEditorTab()
 void SvgTextEditor::checkFormat()
 {
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
+    QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     if (format.fontWeight() > QFont::Normal) {
         actionCollection()->action("weight_bold")->setChecked(true);
     } else {
@@ -269,6 +271,13 @@ void SvgTextEditor::checkFormat()
 
     KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
     qobject_cast<KoColorPopupAction*>(actionCollection()->action("background_color"))->setCurrentColor(bg);
+
+    QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("line_height"))->defaultWidget());
+    if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
+        spnLineHeight->setValue(1.0);
+    } else if(blockFormat.lineHeightType()==QTextBlockFormat::ProportionalHeight) {
+        spnLineHeight->setValue(double(blockFormat.lineHeight()/100.0));
+    }
 }
 
 void SvgTextEditor::undo()
@@ -537,6 +546,13 @@ void SvgTextEditor::decreaseTextSize()
     }
     format.setFontPointSize(qMax(pointSize-1.0, 1.0));
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+}
+
+void SvgTextEditor::setLineHeight(double lineHeightEm)
+{
+    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    format.setLineHeight(lineHeightEm*100, QTextBlockFormat::ProportionalHeight);
+     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
 
@@ -854,6 +870,16 @@ void SvgTextEditor::createActions()
     connect(bgColor, SIGNAL(colorChanged(KoColor)), SLOT(setBackgroundColor(KoColor)));
     actionCollection()->addAction("background_color", bgColor);
     m_richTextActions << bgColor;
+
+    QWidgetAction *lineHeight = new QWidgetAction(this);
+    lineHeight->setToolTip(i18n("Line height"));
+    QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
+    spnLineHeight->setRange(0.0, 99.0);
+    spnLineHeight->setSuffix(i18n(" em"));//Does this need to be translated?
+    connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
+    lineHeight->setDefaultWidget(spnLineHeight);
+    actionCollection()->addAction("line_height", lineHeight);
+    m_richTextActions << lineHeight;
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

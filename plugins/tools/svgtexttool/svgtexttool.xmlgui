@@ -79,6 +79,7 @@
     <Text>Formatting</Text>
     <Action name="font"/>
     <Action name="font_size"/>
+    <Action name="line_height"/>
     <Action name="font_color"/>
     <Action name="background_color"/>
     <Action name="weight_bold"/>

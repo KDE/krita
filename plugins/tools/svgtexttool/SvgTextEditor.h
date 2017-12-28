@@ -76,7 +76,6 @@ private Q_SLOTS:
 
     void zoomOut();
     void zoomIn();
-    void zoom();
 
     void showInsertSpecialCharacterDialog();
     void insertCharacter(const QChar &c);

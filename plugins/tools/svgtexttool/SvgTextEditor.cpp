@@ -329,19 +329,13 @@ void SvgTextEditor::replace()
 
 void SvgTextEditor::zoomOut()
 {
-
+    m_currentEditor->zoomOut();
 }
 
 void SvgTextEditor::zoomIn()
 {
-
+    m_currentEditor->zoomIn();
 }
-
-void SvgTextEditor::zoom()
-{
-
-}
-
 
 void SvgTextEditor::showInsertSpecialCharacterDialog()
 {
@@ -729,7 +723,6 @@ void SvgTextEditor::createActions()
     // View
     KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
     KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
-    KStandardAction::zoom(this, SLOT(zoom()), actionCollection());
 
     // Insert:
     QAction * insertAction = createAction("insert_special_character",

@@ -28,7 +28,6 @@
       <text>&amp;View</text>
       <Action name="view_zoom_out"/>
       <Action name="view_zoom_in"/>
-      <Action name="view_zoom"/>
     </Menu>
     <Menu name="insert">
       <text>&amp;Insert</text>

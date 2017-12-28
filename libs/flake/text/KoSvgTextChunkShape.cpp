@@ -380,13 +380,33 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
 {
     Q_D(KoSvgTextChunkShape);
 
+    // Should we add a newline? Check for vertical movement if we're using rtl or ltr text
+    // XXX: if vertical text, check horizontal movement.
+    QVector<qreal> xPos;
+    QVector<qreal> yPos;
+    QVector<qreal> dxPos;
+    QVector<qreal> dyPos;
+    QVector<qreal> rotate;
+
+    fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, d->localTransformations);
+
+    for (int i = 0; i < d->localTransformations.size(); i++) {
+        const KoSvgText::CharTransformation &t = d->localTransformations[i];
+
+        appendLazy(&xPos, t.xPos, i, false);
+        appendLazy(&yPos, t.yPos, i, false);
+        appendLazy(&dxPos, t.dxPos, i);
+        appendLazy(&dyPos, t.dyPos, i);
+    }
+
     if (isRootTextNode()) {
         context.shapeWriter().startElement("body");
-        context.shapeWriter().startElement("p", false);
+        context.shapeWriter().startElement("p");
         // XXX: Save the style?
 
-    }
-    else {
+    } else if (!dyPos.isEmpty()) {
+        context.shapeWriter().startElement("p");
+    } else {
         context.shapeWriter().startElement("span", false);
         // XXX: Save the style?
     }
@@ -394,34 +414,9 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
     if (layoutInterface()->isTextNode()) {
 
         KoSvgTextChunkShape *parent = !isRootTextNode() ? dynamic_cast<KoSvgTextChunkShape*>(this->parent()) : 0;
-        // Should we add a newline? Check for vertical movement if we're using rtl or ltr text
-        // XXX: if vertical text, check horizontal movement.
-        QVector<qreal> xPos;
-        QVector<qreal> yPos;
-        QVector<qreal> dxPos;
-        QVector<qreal> dyPos;
-        QVector<qreal> rotate;
 
-        fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, d->localTransformations);
-
-        for (int i = 0; i < d->localTransformations.size(); i++) {
-            const KoSvgText::CharTransformation &t = d->localTransformations[i];
-
-            appendLazy(&xPos, t.xPos, i, false);
-            appendLazy(&yPos, t.yPos, i, false);
-            appendLazy(&dxPos, t.dxPos, i);
-            appendLazy(&dyPos, t.dyPos, i);
-        }
 
         qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
-
-        if (!dyPos.isEmpty()) {
-            context.shapeWriter().startElement("br");
-            context.shapeWriter().endElement();
-            //we can't store the following attributes in the br, so store them in a span
-            context.shapeWriter().startElement("span");
-        }
-
         KoSvgTextProperties parentProperties =
             parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
 
@@ -432,23 +427,33 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         if (attributes.count() > 0) {
             QString styleString;
             for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
-                styleString.append(it.key().toLatin1().data())
-                        .append(": ")
-                        .append(it.value())
-                        .append(";" );
+                if (QString(it.key().toLatin1().data()).contains("text-anchor")) {
+                    QString val = it.value();
+                    if (it.value()=="middle") {
+                        val = "center";
+                    }
+                    styleString.append("text-align")
+                            .append(": ")
+                            .append(val)
+                            .append(";" );
+                } else if (QString(it.key().toLatin1().data()).contains("fill")){
+                    styleString.append("color")
+                            .append(": ")
+                            .append(it.value())
+                            .append(";" );
+                } else {
+                    styleString.append(it.key().toLatin1().data())
+                            .append(": ")
+                            .append(it.value())
+                            .append(";" );
+                }
             }
             context.shapeWriter().addAttribute("style", styleString);
         }
 
+
         // After adding all the styling to the <p> element, add the text
         context.shapeWriter().addTextNode(d->text);
-
-        if (!dyPos.isEmpty()) {
-            //end span that was put after br
-            context.shapeWriter().endElement();
-        }
-
-
     }
     else {
         Q_FOREACH (KoShape *child, this->shapes()) {

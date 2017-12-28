@@ -204,6 +204,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="ruler_pixel_multiple2">
+      <icon></icon>
+      <text>Use multiple of 2 for pixel scale</text>
+      <whatsThis>Use multiple of 2 for pixel scale</whatsThis>
+      <toolTip>Use multiple of 2 for pixel scale</toolTip>
+      <iconText>Use multiple of 2 for pixel scale</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 
   <Actions category="Painting">

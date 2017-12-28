@@ -330,6 +330,7 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeStartDocument();
     xml.writeStartElement("assistant");
     xml.writeAttribute("type",d->id);
+    xml.writeAttribute("active", QString::number(d->isSnappingActive));
     xml.writeStartElement("handles");
     Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
         int id = handleMap.size();
@@ -359,6 +360,11 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
     while (!xml.atEnd()) {
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
+            if (xml.name() == "assistant") {
+                QStringRef active = xml.attributes().value("active");
+                d->isSnappingActive = (active != "0");
+            }
+
             if (xml.name() == "handle") {
                 QString strId = xml.attributes().value("id").toString(),
                         strX = xml.attributes().value("x").toString(),

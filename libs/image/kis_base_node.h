@@ -92,7 +92,7 @@ public:
         bool stateInStasis;
 
         bool operator==(const Property &rhs) const {
-            return rhs.name == name;
+            return rhs.name == name && rhs.state == state;
         }
 
         Property(): isMutable( false ) { }

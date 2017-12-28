@@ -182,6 +182,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
+        mdiArea->setTabsMovable(true);
     }
 
     ~Private() {
@@ -1351,6 +1352,8 @@ void KisMainWindow::slotFileNew()
 
     KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
+    startupWidget->setWindowTitle(i18n("Create new document"));
+
 
     KisConfig cfg;
 

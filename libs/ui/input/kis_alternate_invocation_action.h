@@ -43,6 +43,7 @@ public:
         PickColorBgLayerModeShortcut,
         PickColorFgImageModeShortcut,
         PickColorBgImageModeShortcut,
+        TertiaryAlternateModeShortcut ///< Warning: don't reorder the items of this enum, it breaks user configs!
     };
 
     explicit KisAlternateInvocationAction();

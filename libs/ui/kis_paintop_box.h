@@ -122,6 +122,11 @@ public Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
 
+    /// This should take care of creating a new brush preset from scratch
+    /// It will either load the default brush preset for the engine,
+    /// or create a new empty preset if a default preset does not exist
+    void slotCreatePresetFromScratch(QString paintop);
+
 private:
 
     void setCurrentPaintop(const KoID& paintop);

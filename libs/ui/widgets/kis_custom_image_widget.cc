@@ -108,6 +108,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
+    // parent widget contains the window
+    connect(cancelNewDocumentButton, SIGNAL(clicked(bool)), this->parentWidget(), SLOT(close()));
+    connect(cancelNewDocumentButton, SIGNAL(clicked(bool)), this->parentWidget(), SLOT(deleteLater()));
+
+
     bnPortrait->setIcon(KisIconUtils::loadIcon("portrait"));
     connect(bnPortrait, SIGNAL(clicked()), SLOT(setPortrait()));
     connect(bnLandscape, SIGNAL(clicked()), SLOT(setLandscape()));

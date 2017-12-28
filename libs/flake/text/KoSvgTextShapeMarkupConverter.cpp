@@ -268,8 +268,10 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                     QString a = attributes.value("align").toString();
                     if (a.contains("center")) {
                         filteredStyles.append(" text-anchor:middle;");
-                    } else if (!a.contains("justify")) {
-                        filteredStyles.append(" text-anchor:"+a+";");
+                    } else if (a.contains("right")) {
+                        filteredStyles.append(" text-anchor:end;");
+                    } else {
+                        filteredStyles.append(" text-anchor:start;");
                     }
                 }
                 if (!filteredStyles.isEmpty()) {

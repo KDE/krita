@@ -85,6 +85,7 @@ private:
     bool m_dragging;
     QFontComboBox *m_defFont;
     QComboBox *m_defPointSize;
+    QButtonGroup *m_defAlignment;
     KConfigGroup m_configGroup;
 };
 

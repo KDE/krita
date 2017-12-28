@@ -30,6 +30,7 @@
 #include <QApplication>
 #include <QGroupBox>
 #include <QFontDatabase>
+#include <QButtonGroup>
 
 #include <klocalizedstring.h>
 
@@ -93,7 +94,8 @@ QWidget *SvgTextTool::createOptionWidget()
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
 
     QGroupBox *defsOptions = new QGroupBox(i18n("Create new texts with..."));
-    defsOptions->setLayout(new QVBoxLayout());
+    QVBoxLayout *defOptionsLayout = new QVBoxLayout();
+    defsOptions->setLayout(defOptionsLayout);
     m_defFont = new QFontComboBox();
     QString storedFont = m_configGroup.readEntry<QString>("defaultFont", QApplication::font().family());
     m_defFont->setCurrentFont(QFont(storedFont));
@@ -102,10 +104,51 @@ QWidget *SvgTextTool::createOptionWidget()
     Q_FOREACH (int size, QFontDatabase::standardSizes()) {
         m_defPointSize->addItem(QString::number(size)+" pt");
     }
-    defsOptions->layout()->addWidget(m_defPointSize);
     int storedSize = m_configGroup.readEntry<int>("defaultPointSize", QApplication::font().pointSize());
     m_defPointSize->setCurrentIndex(QFontDatabase::standardSizes().indexOf(storedSize));
+
+    int checkedAlignment = m_configGroup.readEntry<int>("defaultAlignment", 0);
+
+    m_defAlignment = new QButtonGroup();
+    QHBoxLayout *alignButtons = new QHBoxLayout();
+    alignButtons->addWidget(m_defPointSize);
+    QToolButton *alignLeft = new QToolButton();
+    alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
+    alignLeft->setCheckable(true);
+
+    alignLeft->setToolTip(i18n("Anchor text to the left."));
+    m_defAlignment->addButton(alignLeft, 0);
+    alignButtons->addWidget(alignLeft);
+
+    QToolButton *alignCenter = new QToolButton();
+    alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
+    alignCenter->setCheckable(true);
+    m_defAlignment->addButton(alignCenter, 1);
+    alignCenter->setToolTip(i18n("Anchor text to the middle."));
+
+    alignButtons->addWidget(alignCenter);
+
+    QToolButton *alignRight = new QToolButton();
+    alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
+    alignRight->setCheckable(true);
+    m_defAlignment->addButton(alignRight, 2);
+    alignRight->setToolTip(i18n("Anchor text to the right."));
+    alignButtons->addWidget(alignRight);
+
+    m_defAlignment->setExclusive(true);
+    if (checkedAlignment<1) {
+        alignLeft->setChecked(true);
+    } else if (checkedAlignment==1) {
+        alignCenter->setChecked(true);
+    } else if (checkedAlignment==2) {
+        alignRight->setChecked(true);
+    } else {
+        alignLeft->setChecked(true);
+    }
+
+    defOptionsLayout->addLayout(alignButtons);
     layout->addWidget(defsOptions);
+    connect(m_defAlignment, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
     connect(m_defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
     connect(m_defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
 
@@ -138,8 +181,15 @@ QString SvgTextTool::generateDefs()
 {
     QString font = m_defFont->currentFont().family();
     QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex()));
+    QString textAnchor = "middle";
+    if (m_defAlignment->button(0)->isChecked()) {
+        textAnchor = "start";
+    }
+    if (m_defAlignment->button(2)->isChecked()) {
+        textAnchor = "end";
+    }
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:%1;\n   font-size:%2;\n  }\n </style>\n</defs>").arg(font, size);
+    return QString("<defs>\n <style>\n  text {\n   font-family:%1;\n   font-size:%2;   text-anchor:%3;\n  }\n </style>\n</defs>").arg(font, size, textAnchor);
 }
 
 void SvgTextTool::storeDefaults()
@@ -147,6 +197,7 @@ void SvgTextTool::storeDefaults()
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     m_configGroup.writeEntry("defaultFont", m_defFont->currentFont().family());
     m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex()));
+    m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
 }
 
 void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)

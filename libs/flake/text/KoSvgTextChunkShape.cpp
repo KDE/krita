@@ -431,6 +431,10 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
                     QString val = it.value();
                     if (it.value()=="middle") {
                         val = "center";
+                    } else if (it.value()=="end") {
+                        val = "right";
+                    } else {
+                        val = "left";
                     }
                     styleString.append("text-align")
                             .append(": ")

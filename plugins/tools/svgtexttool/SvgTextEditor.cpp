@@ -35,6 +35,7 @@
 #include <QBuffer>
 #include <QSvgGenerator>
 #include <QTextEdit>
+#include <QDialogButtonBox>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -74,6 +75,10 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     connect(charSelector, SIGNAL(currentCharChanged(QChar)), SLOT(insertCharacter(QChar)));
     m_charSelectDialog->hide();
     m_charSelectDialog->setButtons(KoDialog::Close);
+
+    connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
+    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(close()));
+
 
     KConfigGroup cg(KSharedConfig::openConfig(), "SvgTextTool");
     actionCollection()->setConfigGroup("SvgTextTool");
@@ -500,43 +505,76 @@ void SvgTextEditor::setTextStrikethrough()
 
 void SvgTextEditor::setTextSubscript()
 {
-
+    QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
+    if (format.verticalAlignment()==QTextCharFormat::AlignSubScript) {
+        format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    } else {
+        format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    }
+    m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
 
 void SvgTextEditor::setTextSuperScript()
 {
-
+    QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
+    if (format.verticalAlignment()==QTextCharFormat::AlignSuperScript) {
+        format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    } else {
+        format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    }
+    m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
 
 void SvgTextEditor::increaseTextSize()
 {
-
+    QTextCharFormat format;
+    int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
+    if (pointSize<0) {
+        pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
+    }
+    qDebug()<<pointSize;
+    format.setFontPointSize(pointSize+1.0);
+    m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
 
 void SvgTextEditor::decreaseTextSize()
 {
-
+    QTextCharFormat format;
+    int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
+    if (pointSize<1) {
+        pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
+    }
+    format.setFontPointSize(qMax(pointSize-1.0, 1.0));
+    m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
 
 
 void SvgTextEditor::alignLeft()
 {
-
+    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    format.setAlignment(Qt::AlignLeft);
+    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
 void SvgTextEditor::alignRight()
 {
-
+    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    format.setAlignment(Qt::AlignRight);
+    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
 void SvgTextEditor::alignCenter()
 {
-
+    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    format.setAlignment(Qt::AlignCenter);
+    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
 void SvgTextEditor::alignJustified()
 {
-
+    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    format.setAlignment(Qt::AlignJustify);
+    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
 void SvgTextEditor::setShapeProperties()

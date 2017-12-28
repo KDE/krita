@@ -36,11 +36,11 @@
     <Menu name="format">
       <text>&amp;Format</text>
       <Action name="weight_bold"/>
-      <Action name="italic"/>
-      <Action name="underline"/>
-      <Action name="strike_through"/>
-      <Action name="superscript"/>
-      <Action name="subscript"/>
+      <Action name="format_italic"/>
+      <Action name="format_underline"/>
+      <Action name="format_strike_through"/>
+      <Action name="format_superscript"/>
+      <Action name="format_subscript"/>
       <Menu name="weight">
         <text>&amp;Weight</text>
         <Action name="weight_light"/>
@@ -56,7 +56,7 @@
       <Action name="align_left"/>
       <Action name="align_center"/>
       <Action name="align_right"/>
-      <Action name="align_justified"/>
+      <!--Action name="align_justified"/-->
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
@@ -77,13 +77,13 @@
   </ToolBar>
   <ToolBar name="formatting" position="top">
     <Text>Formatting</Text>
-    <Action name="font"/>
-    <Action name="font_size"/>
+    <Action name="svg_font"/>
+    <Action name="svg_font_size"/>
     <Action name="line_height"/>
-    <Action name="font_color"/>
-    <Action name="background_color"/>
+    <Action name="svg_font_color"/>
+    <Action name="svg_background_color"/>
     <Action name="weight_bold"/>
-    <Action name="italic"/>
-    <Action name="underline"/>
+    <Action name="format_italic"/>
+    <Action name="format_underline"/>
   </ToolBar>
 </kpartgui>

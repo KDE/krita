@@ -60,6 +60,7 @@
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
 #include <BasicXMLSyntaxHighlighter.h>
+#include <kis_action_registry.h>
 
 #include "kis_font_family_combo_box.h"
 
@@ -259,20 +260,19 @@ void SvgTextEditor::checkFormat()
     } else {
         actionCollection()->action("weight_bold")->setChecked(false);
     }
-    actionCollection()->action("italic")->setChecked(format.fontItalic());
-    actionCollection()->action("underline")->setChecked(format.fontUnderline());
-    actionCollection()->action("strike_through")->setChecked(format.fontStrikeOut());
+    actionCollection()->action("format_italic")->setChecked(format.fontItalic());
+    actionCollection()->action("format_underline")->setChecked(format.fontUnderline());
+    actionCollection()->action("format_strike_through")->setChecked(format.fontStrikeOut());
 
-    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("font"))->defaultWidget())->setCurrentFont(format.font());
-
-    QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("font_size"))->defaultWidget());
+    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->setCurrentFont(format.font());
+    QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font_size"))->defaultWidget());
     fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(format.font().pointSize()));
 
     KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
-    qobject_cast<KoColorPopupAction*>(actionCollection()->action("font_color"))->setCurrentColor(fg);
+    qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"))->setCurrentColor(fg);
 
     KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
-    qobject_cast<KoColorPopupAction*>(actionCollection()->action("background_color"))->setCurrentColor(bg);
+    qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"))->setCurrentColor(bg);
 
     QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("line_height"))->defaultWidget());
     if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
@@ -705,19 +705,23 @@ void SvgTextEditor::wheelEvent(QWheelEvent *event)
     }
 }
 
-QAction *SvgTextEditor::createAction(const QString &name, const QString &text, const QString &icon, const char *member, const QKeySequence &shortcut)
+QAction *SvgTextEditor::createAction(const QString &name, const QString &text, const QString &icon, const char *member)
 {
     QAction *action = new QAction(KisIconUtils::loadIcon(icon), text, this);
-    actionCollection()->setDefaultShortcut(action, shortcut);
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    actionRegistry->propertizeAction(name, action);
+
     actionCollection()->addAction(name, action);
     QObject::connect(action, SIGNAL(triggered(bool)), this, member);
     return action;
 }
 
 
-
 void SvgTextEditor::createActions()
 {
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+
+
     // File: new, open, save, save as, close
     KStandardAction::openNew(this, SLOT(openNew()), actionCollection());
     KStandardAction::open(this, SLOT(open()), actionCollection());
@@ -756,27 +760,27 @@ void SvgTextEditor::createActions()
                                       "format-text-bold",
                                       SLOT(setTextBold()));
 
-    m_richTextActions << createAction("italic",
+    m_richTextActions << createAction("format_italic",
                                       i18n("Italic"),
                                       "format-text-italic",
                                       SLOT(setTextItalic()));
 
-    m_richTextActions << createAction("underline",
+    m_richTextActions << createAction("format_underline",
                                       i18n("Underline"),
                                       "format-text-underline",
                                       SLOT(setTextUnderline()));
 
-    m_richTextActions << createAction("strike_through",
+    m_richTextActions << createAction("format_strike_through",
                                       i18n("Strike-through"),
                                       "format-text-strike-through",
                                       SLOT(setTextStrikethrough()));
 
-    m_richTextActions << createAction("superscript",
+    m_richTextActions << createAction("format_superscript",
                                       i18n("Superscript"),
                                       "format-text-superscript",
                                       SLOT(setTextSuperScript()));
 
-    m_richTextActions << createAction("subscript",
+    m_richTextActions << createAction("format_subscript",
                                       i18n("Subscript"),
                                       "format-text-subscript",
                                       SLOT(setTextSubscript()));
@@ -791,7 +795,7 @@ void SvgTextEditor::createActions()
                                       "format-text-normal",
                                       SLOT(setTextWeightNormal()));
 
-    m_richTextActions << createAction("weight_Demi",
+    m_richTextActions << createAction("weight_demi",
                                       i18n("Demi"),
                                       "format-text-demi",
                                       SLOT(setTextWeightDemi()));
@@ -801,12 +805,12 @@ void SvgTextEditor::createActions()
                                       "format-text-black",
                                       SLOT(setTextWeightBlack()));
 
-    m_richTextActions << createAction("increase_text_size",
+    m_richTextActions << createAction("increase_font_size",
                                       i18n("Larger"),
                                       "increase-font-size",
                                       SLOT(increaseTextSize()));
 
-    m_richTextActions << createAction("decrease_text_size",
+    m_richTextActions << createAction("decrease_font_size",
                                       i18n("Smaller"),
                                       "decrease-font-size",
                                       SLOT(decreaseTextSize()));
@@ -826,15 +830,15 @@ void SvgTextEditor::createActions()
                                       "align-center",
                                       SLOT(alignCenter()));
 
-    m_richTextActions << createAction("align_justified",
-                                      i18n("Alight Justified"),
-                                      "align-justified",
-                                      SLOT(alignJustified()));
+//    m_richTextActions << createAction("align_justified",
+//                                      i18n("Alight Justified"),
+//                                      "align-justified",
+//                                      SLOT(alignJustified()));
 
     // Settings: configure toolbars
     m_richTextActions << createAction("options_shape_properties",
                                       i18n("Properties"),
-                                      "settings",
+                                      "svg_settings",
                                       SLOT(setShapeProperties()));
 
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbars()), actionCollection());
@@ -844,8 +848,9 @@ void SvgTextEditor::createActions()
     KisFontComboBoxes *fontCombo = new KisFontComboBoxes();
     connect(fontCombo, SIGNAL(fontChanged(QString)), SLOT(setFont(QString)));
     fontComboAction->setDefaultWidget(fontCombo);
-    actionCollection()->addAction("font", fontComboAction);
+    actionCollection()->addAction("svg_font", fontComboAction);
     m_richTextActions << fontComboAction;
+    actionRegistry->propertizeAction("svg_font", fontComboAction);
 
     QWidgetAction *fontSizeAction = new QWidgetAction(this);
     fontSizeAction->setToolTip(i18n("Size"));
@@ -856,21 +861,25 @@ void SvgTextEditor::createActions()
     fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(QApplication::font().pointSize()));
     connect(fontSizeCombo, SIGNAL(activated(QString)), SLOT(setFontSize(QString)));
     fontSizeAction->setDefaultWidget(fontSizeCombo);
-    actionCollection()->addAction("font_size", fontSizeAction);
+    actionCollection()->addAction("svg_font_size", fontSizeAction);
     m_richTextActions << fontSizeAction;
+    actionRegistry->propertizeAction("svg_font_size", fontSizeAction);
+
 
     KoColorPopupAction *fgColor = new KoColorPopupAction(this);
     fgColor->setCurrentColor(QColor(Qt::black));
     fgColor->setToolTip(i18n("Text Color"));
     connect(fgColor, SIGNAL(colorChanged(KoColor)), SLOT(setFontColor(KoColor)));
-    actionCollection()->addAction("font_color", fgColor);
+    actionCollection()->addAction("svg_format_textcolor", fgColor);
     m_richTextActions << fgColor;
+    actionRegistry->propertizeAction("svg_format_textcolor", fgColor);
 
     KoColorPopupAction *bgColor = new KoColorPopupAction(this);
     bgColor->setCurrentColor(QColor(Qt::white));
     bgColor->setToolTip(i18n("Background Color"));
     connect(bgColor, SIGNAL(colorChanged(KoColor)), SLOT(setBackgroundColor(KoColor)));
-    actionCollection()->addAction("background_color", bgColor);
+    actionCollection()->addAction("svg_background_color", bgColor);
+    actionRegistry->propertizeAction("svg_background_color", bgColor);
     m_richTextActions << bgColor;
 
     QWidgetAction *lineHeight = new QWidgetAction(this);
@@ -883,6 +892,7 @@ void SvgTextEditor::createActions()
     lineHeight->setDefaultWidget(spnLineHeight);
     actionCollection()->addAction("line_height", lineHeight);
     m_richTextActions << lineHeight;
+    actionRegistry->propertizeAction("line_height", lineHeight);
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

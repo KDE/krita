@@ -130,7 +130,15 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
 
     m_d->globalAlphaLock = resourceManager->resource(KisCanvasResourceProvider::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toDouble();
-    m_d->presetAllowsLod = resourceManager->resource(KisCanvasResourceProvider::PresetAllowsLod).toBool();
+
+
+    m_d->presetAllowsLod = true;
+
+    if (m_d->currentPaintOpPreset) {
+        m_d->presetAllowsLod =
+            KisPaintOpSettings::isLodUserAllowed(m_d->currentPaintOpPreset->settings()) &&
+            m_d->currentPaintOpPreset->settings()->lodSizeThreshold() <= m_d->currentPaintOpPreset->settings()->paintOpSize();
+    }
 }
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds)

@@ -213,6 +213,31 @@ QVariant KisLodAvailabilityResourceConverter::toSource(const QVariant &value, co
 }
 
 /*********************************************************************/
+/*          KisLodSizeThresholdResourceConverter                     */
+/*********************************************************************/
+
+KisLodSizeThresholdResourceConverter::KisLodSizeThresholdResourceConverter()
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::LodSizeThreshold,
+                                 KisCanvasResourceProvider::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisLodSizeThresholdResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->lodSizeThreshold() : QVariant();
+}
+
+QVariant KisLodSizeThresholdResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setLodSizeThreshold(value.toDouble());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
 /*          KisEraserModeResourceConverter                           */
 /*********************************************************************/
 

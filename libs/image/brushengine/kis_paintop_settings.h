@@ -290,6 +290,9 @@ public:
     static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
     static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);
 
+    qreal lodSizeThreshold() const;
+    void setLodSizeThreshold(qreal value);
+
     /**
     * @return the option widget of the paintop (can be 0 is no option widgets is set)
     */

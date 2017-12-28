@@ -468,6 +468,16 @@ void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, 
     config->setProperty("lodUserAllowed", value);
 }
 
+qreal KisPaintOpSettings::lodSizeThreshold() const
+{
+    return getDouble("lodSizeThreshold", 100.0);
+}
+
+void KisPaintOpSettings::setLodSizeThreshold(qreal value)
+{
+    setProperty("lodSizeThreshold", value);
+}
+
 #include "kis_standard_uniform_properties_factory.h"
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)

@@ -69,7 +69,8 @@ public:
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
-        UserRole
+        UserRole,
+        FrameHasContent // is it an empty frame with nothing in it?
     };
 
 protected:

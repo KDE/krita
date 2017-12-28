@@ -442,6 +442,7 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFile
         QDomElement keyframeElement = doc.createElement("keyframe");
         keyframeElement.setAttribute("time", keyframe->time());
         keyframeElement.setAttribute("color-label", keyframe->colorLabel());
+        keyframeElement.setAttribute("has-content", keyframe->hasContent());
 
         saveKeyframe(keyframe, keyframeElement, layerFilename);
 
@@ -461,6 +462,11 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
         if (keyframeNode.hasAttribute("color-label")) {
             keyframe->setColorLabel(keyframeNode.attribute("color-label").toUInt());
         }
+
+        if (keyframeNode.hasAttribute("has-content")) {
+            keyframe->setHasContent(keyframeNode.attribute("has-content").toUInt());
+        }
+
 
         m_d->keys.insert(keyframe->time(), keyframe);
     }

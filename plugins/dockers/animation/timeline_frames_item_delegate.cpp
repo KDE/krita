@@ -73,6 +73,7 @@ void TimelineFramesItemDelegate::paintActiveFrameSelector(QPainter *painter, con
 
 void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc)
 {
+
     bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     bool framePresent = index.data(TimelineFramesModel::FrameExistsRole).toBool();
     bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
@@ -105,20 +106,57 @@ void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter
 
 void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const
 {
-    bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
-    bool present = index.data(TimelineFramesModel::FrameExistsRole).toBool();
-    bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
+    /// what is the active row/layer that is selected in the timeline
+    bool hasActiveLayerRole = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
+
+    /// does keyframe exist
+    bool doesFrameExist = index.data(TimelineFramesModel::FrameExistsRole).toBool();
+
+    /// is layer editable
+    bool isEditable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
+
+    /// find out if frame is empty or has content
+    bool hasContent = index.data(TimelineFramesModel::FrameHasContent).toBool();
+
+
+
+    // assign background color for frame depending on if the frame has a color label or  not
     QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
-
     QColor color = colorLabel.isValid() ? labelColors.at(colorLabel.toInt()) :
-            TimelineColorScheme::instance()->frameColor(present, active);
+            TimelineColorScheme::instance()->frameColor(doesFrameExist, hasActiveLayerRole);
 
-    if (!editable && color.alpha() > 0) {
-        const int l = color.lightness();
-        color = QColor(l, l, l);
+
+    if (hasContent) {
+        color = TimelineColorScheme::instance()->frameColor(true, hasActiveLayerRole);
+    } else {
+        color = TimelineColorScheme::instance()->frameColor(false, hasActiveLayerRole);
     }
 
-    painter->fillRect(rc, color);
+    painter->fillRect(rc, color );
+
+
+    // draw a circle if it is the keyframe in case two key frames are next to each other
+    if (doesFrameExist) {
+
+        if (hasContent) {
+            color = TimelineColorScheme::instance()->frameColor(false, hasActiveLayerRole);
+        } else {
+            color = TimelineColorScheme::instance()->frameColor(true, hasActiveLayerRole);
+        }
+
+
+        QPen oldPen = painter->pen();
+        QBrush oldBrush(painter->brush());
+
+        painter->setPen(QPen(color, 0));
+        painter->setBrush(color);
+
+        painter->drawEllipse(rc.center(), 2,2);
+
+        painter->setBrush(oldBrush);
+        painter->setPen(oldPen);
+    }
+
 }
 
 void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
@@ -146,12 +184,13 @@ void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
 void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
-{
+{    
+    // draws background as well as fills normal keyframes
     drawBackground(painter, index, option.rect);
 
+    // creates a semi transparent orange rectangle in the frame that is actively selected on the active row
     if (option.showDecorationSelected &&
         (option.state & QStyle::State_Selected)) {
-
         QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
             ? QPalette::Normal : QPalette::Disabled;
         if (cg == QPalette::Normal && !(option.state & QStyle::State_Active))
@@ -165,13 +204,17 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
         painter->setOpacity(oldOpacity);
     }
 
+    // not sure what this is drawing
     drawFocus(painter, option, option.rect);
 
+    // opacity keyframe, but NOT normal keyframes
     bool specialKeys = index.data(TimelineFramesModel::SpecialKeyframeExists).toBool();
     if (specialKeys) {
+        qDebug() << "special key getting called";
         paintSpecialKeyframeIndicator(painter, index, option.rect);
     }
 
+    // creates a border and dot on the selected frame on the active row
     bool active = index.data(TimelineFramesModel::ActiveFrameRole).toBool();
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     if (active) {

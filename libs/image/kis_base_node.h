@@ -383,6 +383,14 @@ public:
     void setUserLocked(bool l);
 
     /**
+     * @brief setHasPixelData
+     * @param hasPixelData
+     */
+    void setHasPixelData(bool hasPixelData);
+
+    bool hasPixelData();
+
+    /**
      * @return true if the node can be edited:
      *
      * if checkVisibility is true, then the node is only editable if it is visible and not locked.
@@ -557,6 +565,11 @@ Q_SIGNALS:
      * This signal is emitted when the node is locked or unlocked with \ref setUserLocked.
      */
     void userLockingChanged(bool);
+
+    /**
+     * @brief This signal emitted when the node either contains data or the content is empty
+     */
+    void pixelDataChanged(bool);
 
     void keyframeChannelAdded(KisKeyframeChannel *channel);
 

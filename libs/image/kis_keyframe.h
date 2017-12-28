@@ -64,6 +64,8 @@ public:
 
     int colorLabel() const;
     void setColorLabel(int label);
+    bool hasContent(); // does any content exist in keyframe, or is it empty?
+    void setHasContent(bool content);
 
     KisKeyframeChannel *channel() const;
 

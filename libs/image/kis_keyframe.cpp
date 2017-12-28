@@ -41,6 +41,7 @@ struct KisKeyframe::Private
     QPointF leftTangent;
     QPointF rightTangent;
     int colorLabel{0};
+    bool hasContent = false;
 
     Private(KisKeyframeChannel *channel, int time)
         : channel(channel), time(time), interpolationMode(Constant)
@@ -62,6 +63,7 @@ KisKeyframe::KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel)
     m_d->leftTangent = rhs->m_d->leftTangent;
     m_d->rightTangent = rhs->m_d->rightTangent;
     m_d->colorLabel = rhs->m_d->colorLabel;
+    m_d->hasContent = rhs->m_d->hasContent;
 }
 
 KisKeyframe::~KisKeyframe()
@@ -121,6 +123,15 @@ int KisKeyframe::colorLabel() const
 void KisKeyframe::setColorLabel(int label)
 {
     m_d->colorLabel = label;
+}
+
+void KisKeyframe::setHasContent(bool content)
+{
+    m_d->hasContent = content ;
+}
+
+bool KisKeyframe::hasContent() {
+    return m_d->hasContent;
 }
 
 KisKeyframeChannel *KisKeyframe::channel() const

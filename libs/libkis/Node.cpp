@@ -283,6 +283,17 @@ void Node::setLocked(bool value)
     d->node->setUserLocked(value);
 }
 
+bool Node::hasExtents()
+{
+    if (d->node->extent().height() == 0 || d->node->extent().width() == 0 ) {
+        d->node->setHasPixelData(false);
+        return false;
+    }
+    else {
+        d->node->setHasPixelData(true);
+        return true;
+    }
+}
 
 QString Node::name() const
 {

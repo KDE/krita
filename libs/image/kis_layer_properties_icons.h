@@ -44,6 +44,7 @@ public:
     static const KoID colorizeEditKeyStrokes;
     static const KoID colorizeShowColoring;
     static const KoID openFileLayerFile;
+    static const KoID hasPixelData; // useful for rendering GUI in timeline
 
     static KisLayerPropertiesIcons* instance();
 

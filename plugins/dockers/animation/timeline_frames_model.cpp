@@ -99,6 +99,23 @@ struct TimelineFramesModel::Private
         return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
+    bool frameHasContent(int row, int column) {
+
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return false;
+
+        // first check if we are a key frame
+        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column); // primaryChannel->keyframeAt(column);
+        if (!frame) return false;
+
+        qDebug() << "rendering each row:" << QString::number(row) << "  column:" << QString::number(column) << " activeKeyframe:" << QString::number(frame->time())
+                 << " hasContent.." << QString::number(frame->hasContent());;
+
+        return frame->hasContent();
+    }
+
     bool specialKeyframeExists(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
@@ -134,6 +151,29 @@ struct TimelineFramesModel::Private
         if (!frame) return;
 
         frame->setColorLabel(color);
+    }
+
+    void setHasContent(int row, int column)
+    {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return;
+
+        bool valueToSet;
+        if ( dummy->node()->paintDevice()->extent().height() || dummy->node()->paintDevice()->extent().width()) {
+            valueToSet = true;
+        } else {
+            valueToSet = false;
+        }
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return;
+
+        KisKeyframeSP frame = primaryChannel->currentlyActiveKeyframe();
+        if (!frame) return;
+
+        qDebug() << "setting has content:" << QString::number(valueToSet) << "column:" << QString::number(column) <<  "  keyframe time:" << frame->time();
+
+        frame->setHasContent(valueToSet);
     }
 
     int layerColorLabel(int row) const {
@@ -330,6 +370,9 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case FrameEditableRole: {
         return m_d->layerEditable(index.row());
     }
+    case FrameHasContent: {
+        return m_d->frameHasContent(index.row(), index.column());
+    }
     case FrameExistsRole: {
         return m_d->frameExists(index.row(), index.column());
     }
@@ -398,6 +441,9 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
     }
         break;
     }
+
+    qDebug() << "updating the has content index";
+    m_d->setHasContent(index.row(), index.column());
 
     return ModelWithExternalNotifications::setData(index, value, role);
 }

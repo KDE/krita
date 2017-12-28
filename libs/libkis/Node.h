@@ -226,6 +226,13 @@ public Q_SLOTS:
     void setLocked(bool value);
 
     /**
+     * @brief does the node have any content in it?
+     * @return if node has any content in it
+     */
+    bool hasExtents();
+
+
+    /**
      * @return the user-visible name of this node.
      */
     QString name() const;

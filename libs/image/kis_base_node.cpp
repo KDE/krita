@@ -269,6 +269,28 @@ void KisBaseNode::setUserLocked(bool locked)
     baseNodeChangedCallback();
 }
 
+bool KisBaseNode::hasPixelData()
+{
+    KisBaseNodeSP parentNode = parentCallback();
+    return parentNode->hasPixelData();
+    //return m_d->properties.boolProperty(KisLayerPropertiesIcons::hasPixelData.id(), true);
+}
+
+void KisBaseNode::setHasPixelData(bool hasPixelData)
+{
+    // check for already set data
+    //const bool existingData = m_d->properties.boolProperty(KisLayerPropertiesIcons::hasPixelData.id(), true);
+    //if (existingData == hasPixelData) return;
+
+    KisBaseNodeSP parentNode = parentCallback();
+    bool hasData =  parentNode->hasPixelData();
+
+    //m_d->properties.setProperty(KisLayerPropertiesIcons::hasPixelData.id(), hasPixelData);
+    emit pixelDataChanged(hasData);
+    baseNodeChangedCallback();
+}
+
+
 bool KisBaseNode::isEditable(bool checkVisibility) const
 {
     bool editable = true;

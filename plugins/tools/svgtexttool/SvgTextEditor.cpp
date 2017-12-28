@@ -178,18 +178,25 @@ void SvgTextEditor::save()
             if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
                 qWarning() << "Eeeek";
             }
+            m_textEditorWidget.richTextEdit->document()->setModified(false);
             emit textUpdated(svg, styles);
         }
         else {
             emit textUpdated(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
+            m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
+
 }
 
 void SvgTextEditor::switchTextEditorTab()
 {
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
+
+    if (m_currentEditor) {
+        disconnect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), this, SLOT(setModified(bool)));
+    }
 
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         //first, make buttons checkable
@@ -233,6 +240,8 @@ void SvgTextEditor::switchTextEditorTab()
         }
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }
+
+    connect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), SLOT(setModified(bool)));
 }
 
 void SvgTextEditor::checkFormat()
@@ -618,6 +627,16 @@ void SvgTextEditor::setBackgroundColor(const KoColor &c)
         QString selectionModified = "<tspan stroke=\""+color.name()+"\">" + cursor.selectedText() + "</tspan>";
         cursor.removeSelectedText();
         cursor.insertText(selectionModified);
+    }
+}
+
+void SvgTextEditor::setModified(bool modified)
+{
+    if (modified) {
+        m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Discard);
+    }
+    else {
+        m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Close);
     }
 }
 

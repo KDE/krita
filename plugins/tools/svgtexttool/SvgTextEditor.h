@@ -116,6 +116,8 @@ private Q_SLOTS:
     void setFontColor(const KoColor &c);
     void setBackgroundColor(const KoColor &c);
 
+    void setModified(bool modified);
+
 Q_SIGNALS:
 
     void textUpdated(const QString &svg, const QString &defs);

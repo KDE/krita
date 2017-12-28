@@ -236,11 +236,19 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
 
             QXmlStreamAttributes attributes = htmlReader.attributes();
             if (attributes.hasAttribute("style")) {
-                svgWriter.writeAttribute("style", attributes.value("style").toString());
-
+                QString filteredStyles;
+                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-size-adjust font-stretch direction").split(" ");
                 QStringList styles = attributes.value("style").toString().split(";");
                 for(int i=0; i<styles.size(); i++) {
                     QStringList style = QString(styles.at(i)).split(":");
+
+                    if (svgStyles.contains(QString(style.at(0)).remove(" "))) {
+                        filteredStyles.append(styles.at(i)+";");
+                    }
+                    if (QString(style.at(0)).contains("color") && !QString(style.at(0)).contains("-")) {
+                        filteredStyles.append(" fill:"+style.at(1)+";");
+                    }
+
                     if (QString(style.at(0)).contains("line-height")){
                         if (style.at(1).contains("%")) {
                             double percentage = QString(style.at(1)).remove("%").toDouble();
@@ -255,6 +263,20 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                         }
                     }
                 }
+
+                if (attributes.hasAttribute("align")) {
+                    QString a = attributes.value("align").toString();
+                    if (a.contains("center")) {
+                        filteredStyles.append(" text-anchor:middle;");
+                    } else if (!a.contains("justify")) {
+                        filteredStyles.append(" text-anchor:"+a+";");
+                    }
+                }
+                if (!filteredStyles.isEmpty()) {
+                    svgWriter.writeAttribute("style", filteredStyles);
+                }
+
+
             }
             if (newLine && lineCount > 1) {
                 qDebug() << "\t\tAdvancing to the next line";

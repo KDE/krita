@@ -3,11 +3,7 @@
   <MenuBar>
     <Menu name="file">
       <text>&amp;File</text>
-      <Action name="file_new"/>
-      <Action name="file_open"/>
-      <Separator/>
       <Action name="file_save"/>
-      <Action name="file_save_as"/>
       <Separator/>
       <Action name="file_close"/>
     </Menu>
@@ -73,9 +69,6 @@
   </MenuBar>
   <ToolBar name="mainToolBar" fullWidth="false" noMerge="1">
     <Text>File</Text>
-    <Action name="file_new"/>
-    <Action name="file_open"/>
-    <Action name="file_save"/>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
     <Separator/>

@@ -60,10 +60,7 @@ private Q_SLOTS:
      */
     void checkFormat();
 
-    void openNew();
-    void open();
     void save();
-    void saveAs();
 
     void undo();
     void redo();
@@ -117,6 +114,7 @@ private Q_SLOTS:
     void setBackgroundColor(const KoColor &c);
 
     void setModified(bool modified);
+    void dialogButtonClicked(QAbstractButton *button);
 
 Q_SIGNALS:
 

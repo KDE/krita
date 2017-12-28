@@ -78,7 +78,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
 
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
     connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(close()));
-
+    connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
 
     KConfigGroup cg(KSharedConfig::openConfig(), "SvgTextTool");
     actionCollection()->setConfigGroup("SvgTextTool");
@@ -266,21 +266,6 @@ void SvgTextEditor::checkFormat()
 
     KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
     qobject_cast<KoColorPopupAction*>(actionCollection()->action("background_color"))->setCurrentColor(bg);
-}
-
-void SvgTextEditor::openNew()
-{
-
-}
-
-void SvgTextEditor::open()
-{
-
-}
-
-void SvgTextEditor::saveAs()
-{
-
 }
 
 void SvgTextEditor::undo()
@@ -637,6 +622,15 @@ void SvgTextEditor::setModified(bool modified)
     }
     else {
         m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Close);
+    }
+}
+
+void SvgTextEditor::dialogButtonClicked(QAbstractButton *button)
+{
+    if (m_textEditorWidget.buttons->standardButton(button) == QDialogButtonBox::Discard) {
+        if (QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("You have modified the text. Discard changes?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+            close();
+        }
     }
 }
 

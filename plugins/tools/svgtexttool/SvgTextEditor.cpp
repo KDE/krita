@@ -875,6 +875,7 @@ void SvgTextEditor::createActions()
     lineHeight->setToolTip(i18n("Line height"));
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
     spnLineHeight->setRange(0.0, 99.0);
+    spnLineHeight->setSingleStep(0.1);
     spnLineHeight->setSuffix(i18n(" em"));//Does this need to be translated?
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
     lineHeight->setDefaultWidget(spnLineHeight);

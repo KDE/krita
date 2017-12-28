@@ -25,6 +25,8 @@
 #include <QStringList>
 #include <QWindow>
 
+#include <klocalizedstring.h>
+
 #include <kis_debug.h>
 #include <kis_config.h>
 #include <KisLoggingManager.h>
@@ -104,18 +106,45 @@ void specialOpenGLVendorFilter(WindowsOpenGLStatus &status, const OpenGLCheckRes
     if (!status.supportsAngleD3D11) {
         return;
     }
-    // HACK: Make ANGLE the preferred renderer for Intel driver versions
-    //       between build 4636 and 4729 (exclusive) due to an UI offset bug.
-    //       See https://communities.intel.com/thread/116003
-    //       (Build 4636 is known to work from some test results)
+
+    // Special blacklisting of OpenGL/ANGLE is tracked on:
+    // https://phabricator.kde.org/T7411
+
+    // HACK: Specificly detect for Intel driver build number
+    //       See https://www.intel.com/content/www/us/en/support/articles/000005654/graphics-drivers.html
     if (checkResult.rendererString().startsWith("Intel")) {
+        KLocalizedString knownBadIntelWarning = ki18n("The Intel graphics driver in use is known to have issues with OpenGL.");
+        KLocalizedString grossIntelWarning = ki18n(
+            "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used by default. "
+            "You may manually switch to OpenGL but it is not guaranteed to work properly."
+        );
         QRegularExpression regex("\\b\\d{2}\\.\\d{2}\\.\\d{2}\\.(\\d{4})\\b");
         QRegularExpressionMatch match = regex.match(checkResult.driverVersionString());
         if (match.hasMatch()) {
             int driverBuild = match.captured(1).toInt();
             if (driverBuild > 4636 && driverBuild < 4729) {
+                // Make ANGLE the preferred renderer for Intel driver versions
+                // between build 4636 and 4729 (exclusive) due to an UI offset bug.
+                // See https://communities.intel.com/thread/116003
+                // (Build 4636 is known to work from some test results)
                 qDebug() << "Detected Intel driver build between 4636 and 4729, making ANGLE the preferred renderer";
                 status.overridePreferAngle = true;
+                appendOpenGLWarningString(knownBadIntelWarning);
+            } else if (driverBuild == 4358) {
+                // There are several reports on a bug where the canvas is not being
+                // updated properly which has debug info pointing to this build.
+                qDebug() << "Detected Intel driver build 4358, making ANGLE the preferred renderer";
+                status.overridePreferAngle = true;
+                appendOpenGLWarningString(knownBadIntelWarning);
+            } else {
+                // Intel tends to randomly break OpenGL in some of their new driver
+                // builds, therefore we just shouldn't use OpenGL by default to
+                // reduce bug report noises.
+                qDebug() << "Detected Intel driver, making ANGLE the preferred renderer";
+                status.overridePreferAngle = true;
+                if (status.supportsDesktopGL) {
+                    appendOpenGLWarningString(grossIntelWarning);
+                }
             }
         }
     }
@@ -215,9 +244,24 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv, QString userRendere
     windowsOpenGLStatus.supportsAngleD3D11 =
             checkResultAngle && checkIsSupportedAngleD3D11(*checkResultAngle);
 
+    if (!windowsOpenGLStatus.supportsDesktopGL) {
+        appendOpenGLWarningString(ki18n("The graphics driver in use does not meet the OpenGL requirements."));
+    } else if (windowsOpenGLStatus.isQtPreferAngle) {
+        appendOpenGLWarningString(ki18n("The graphics driver in use may not work well with OpenGL."));
+    }
+
     // HACK: Filter specific buggy drivers not handled by Qt OpenGL buglist
     if (checkResultDesktopGL) {
         specialOpenGLVendorFilter(windowsOpenGLStatus, *checkResultDesktopGL);
+    }
+
+    if (windowsOpenGLStatus.supportsAngleD3D11
+            && (checkResultAngle->rendererString().contains("Software Adapter")
+                    || checkResultAngle->rendererString().contains("Microsoft Basic Render Driver"))) {
+        appendOpenGLWarningString(ki18n(
+            "ANGLE is using a software Direct3D renderer, which is not hardware-accelerated and may be very slow. "
+            "This can happen if the graphics drivers are not properly installed, or when using a Remote Desktop session."
+        ));
     }
 
     userRendererConfig = convertConfigToOpenGLRenderer(userRendererConfigString);

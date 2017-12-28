@@ -56,7 +56,14 @@ class RunAction(QAction):
                 spec = importlib.util.spec_from_file_location("users_script", document.filePath)
                 users_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(users_module)
-                users_module.main()
+                
+                try: 
+                    # maybe script is to be execed, maybe main needs to be invoked
+                    # if there is a main() then execute it, otherwise don't worry...
+                    users_module.main()
+                except AttributeError:
+                    pass
+                
             else:
                 code = compile(script, '<string>', 'exec')
                 exec(script, {})

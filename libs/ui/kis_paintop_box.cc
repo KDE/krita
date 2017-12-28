@@ -454,6 +454,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsPopup       , SIGNAL(eraserBrushSizeToggled(bool))       , SLOT(slotEraserBrushSizeToggled(bool)));
     connect(m_presetsPopup       , SIGNAL(eraserBrushOpacityToggled(bool))       , SLOT(slotEraserBrushOpacityToggled(bool)));
 
+    connect(m_presetsPopup, SIGNAL(createPresetFromScratch(QString)), this, SLOT(slotCreatePresetFromScratch(QString)));
+
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_presetsChooserPopup, SIGNAL(resourceClicked(KoResource*))      , SLOT(resourceSelected(KoResource*)));
 
@@ -546,6 +548,8 @@ void KisPaintopBox::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
+    m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
+
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     if (preset && preset != m_resourceProvider->currentPreset()) {
         if (!preset->settings()->isLoadable())
@@ -563,6 +567,8 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
+
+
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
@@ -795,6 +801,15 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     }
 }
 
+void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
+{
+    slotSetPaintop(paintop);  // change the paintop settings area and update the UI
+    m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
+
+    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    m_presetsPopup->resourceSelected(preset.data());  // this helps update the UI on the brush editor
+}
+
 void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 {
     if (m_viewManager) {
@@ -842,7 +857,6 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
         sender()->blockSignals(false);
     }
 }
-
 
 void KisPaintopBox::slotUpdatePreset()
 {

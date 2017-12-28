@@ -24,6 +24,8 @@
 class QDebug;
 class QOpenGLContext;
 
+class KLocalizedString;
+
 namespace KisOpenGLPrivate
 {
 
@@ -98,6 +100,8 @@ void appendPlatformOpenGLDebugText(QDebug &debugOut);
 #ifndef Q_OS_WIN
 void appendPlatformOpenGLDebugText(QDebug &debugOut) {}
 #endif
+
+void appendOpenGLWarningString(KLocalizedString warning);
 
 bool isDefaultFormatSet();
 

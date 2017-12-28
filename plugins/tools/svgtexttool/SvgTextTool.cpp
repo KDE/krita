@@ -54,11 +54,12 @@
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
-    , m_editor(new SvgTextEditor(0))
+    , m_editor(new SvgTextEditor(qApp->activeWindow()))
     , m_dragStart( 0, 0)
     , m_dragEnd( 0, 0)
     , m_dragging(false)
 {
+    m_editor->setWindowModality(Qt::ApplicationModal);
     connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
 }
 

@@ -218,9 +218,9 @@ void SvgTextEditor::switchTextEditorTab()
             if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
                 qWarning() << "Eeeek";
             }
-            if (!converter.convertToSvg(&svg, &styles)) {
-                qDebug() << "Eeeek 2";
-            }
+            //if (!converter.convertToSvg(&svg, &styles)) {
+            //    qDebug() << "Eeeek 2";
+            //}
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
         }

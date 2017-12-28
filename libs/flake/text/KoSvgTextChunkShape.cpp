@@ -418,6 +418,8 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         if (!dyPos.isEmpty()) {
             context.shapeWriter().startElement("br");
             context.shapeWriter().endElement();
+            //we can't store the following attributes in the br, so store them in a span
+            context.shapeWriter().startElement("span");
         }
 
         KoSvgTextProperties parentProperties =
@@ -440,6 +442,11 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
 
         // After adding all the styling to the <p> element, add the text
         context.shapeWriter().addTextNode(d->text);
+
+        if (!dyPos.isEmpty()) {
+            //end span that was put after br
+            context.shapeWriter().endElement();
+        }
 
 
     }

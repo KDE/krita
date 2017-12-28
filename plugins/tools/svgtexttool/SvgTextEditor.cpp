@@ -651,10 +651,10 @@ void SvgTextEditor::setFont(const QString &fontName)
 {
     QFont font;
     font.fromString(fontName);
-    font.setPointSizeF(m_textEditorWidget.richTextEdit->currentCharFormat().fontPointSize());
+    QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
+    font.setPointSize(format.font().pointSize());
+    format.setFont(font);
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
-        QTextCharFormat format;
-        format.setFont(font);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
     } else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();

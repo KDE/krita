@@ -41,6 +41,8 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
 
     setting->setProperty(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, masterSizeCoeff);
 
+    ENTER_FUNCTION();
+
     // TODO: skip saving in some cases?
     // if (!isEnabled) return;
 
@@ -61,8 +63,14 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
 
         setting->setPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
 
-        // FIXME: the property should be able to contain multiple files
-        // setting->setProperty("requiredBrushFile", brushFileName);
+        const QString brushFileName = brush->shortFilename();
+
+        if (!brushFileName.isEmpty()) {
+            QStringList requiredFiles =
+                setting->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
+            requiredFiles << brushFileName;
+            setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
+        }
     }
 }
 

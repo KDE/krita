@@ -27,4 +27,7 @@ const char MaskingBrushUseMasterSizeTag[] = "MaskingBrush/UseMasterSize";
 const char MaskingBrushMasterSizeCoeffTag[] = "MaskingBrush/MasterSizeCoeff";
 const char MaskingBrushPresetPrefix[] = "MaskingBrush/Preset/";
 
+const char RequiredBrushFileTag[] = "requiredBrushFile";
+const char RequiredBrushFilesListTag[] = "requiredBrushFilesList";
+
 }

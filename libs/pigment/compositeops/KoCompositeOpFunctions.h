@@ -379,6 +379,16 @@ inline T cfHardMix(T src, T dst) {
 }
 
 template<class T>
+inline T cfHardMixPhotoshop(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    const composite_type sum = composite_type(src) + dst;
+
+    return sum > unitValue<T>() ? unitValue<T>() : zeroValue<T>();
+}
+
+template<class T>
 inline T cfAdditiveSubtractive(T src, T dst) {
     using namespace Arithmetic;
     // min(1,max(0,abs(sqr(CB)-sqr(CT))))

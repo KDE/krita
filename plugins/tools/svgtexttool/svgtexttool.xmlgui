@@ -60,9 +60,8 @@
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
-      <Action name="svg_options_shape_properties"/>
-      <Action name="svg_options_configure_toolbars"/>
-      <Merge name="svg_StandardToolBarMenuHandler"/>
+      <Action name="svg_settings"/>
+      <Merge name="StandardToolBarMenuHandler"/>
       <Separator/>
     </Menu>
   </MenuBar>

@@ -74,6 +74,8 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
 
+    m_textEditorWidget.chkVertical->setVisible(false);
+
     KCharSelect *charSelector = new KCharSelect(m_charSelectDialog, 0, KCharSelect::AllGuiElements);
     m_charSelectDialog->setMainWidget(charSelector);
     connect(charSelector, SIGNAL(currentCharChanged(QChar)), SLOT(insertCharacter(QChar)));
@@ -98,7 +100,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     }
 
     setAcceptDrops(true);
-    setStandardToolBarMenuEnabled(true);
+    //setStandardToolBarMenuEnabled(true);
 #ifdef Q_OS_OSX
     setUnifiedTitleAndToolBarOnMac(true);
 #endif
@@ -642,20 +644,16 @@ void SvgTextEditor::alignJustified()
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
-void SvgTextEditor::setShapeProperties()
+void SvgTextEditor::setSettings()
 {
-
-}
-
-void SvgTextEditor::slotConfigureToolbars()
-{
-
+    QMessageBox::warning(0, "bla", ":settings");
 }
 
 void SvgTextEditor::slotToolbarToggled(bool)
 {
 
 }
+
 
 void SvgTextEditor::setFontColor(const KoColor &c)
 {
@@ -854,11 +852,9 @@ void SvgTextEditor::createActions()
 //    m_richTextActions << createAction("svg_align_justified",
 //                                      SLOT(alignJustified()));
 
-    // Settings: configure toolbars
-    m_richTextActions << createAction("svg_options_shape_properties",
-                                      SLOT(setShapeProperties()));
-
-    KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbars()), actionCollection());
+    // Settings
+    m_richTextActions << createAction("svg_settings",
+                                      SLOT(setSettings()));
 
     QWidgetAction *fontComboAction = new QWidgetAction(this);
     fontComboAction->setToolTip(i18n("Font"));

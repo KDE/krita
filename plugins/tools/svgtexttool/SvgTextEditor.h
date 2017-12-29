@@ -106,8 +106,7 @@ private Q_SLOTS:
     void setFontSize(const QString &size);
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
 
-    void setShapeProperties();
-    void slotConfigureToolbars();
+    void setSettings();
     void slotToolbarToggled(bool);
 
     void setFontColor(const KoColor &c);

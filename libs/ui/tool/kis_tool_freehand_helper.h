@@ -20,6 +20,7 @@
 #define __KIS_TOOL_FREEHAND_HELPER_H
 
 #include <QObject>
+#include <QVector>
 
 #include "kis_types.h"
 #include "kritaui_export.h"
@@ -27,7 +28,8 @@
 #include "kis_default_bounds.h"
 #include <brushengine/kis_paintop_settings.h>
 #include "kis_smoothing_options.h"
-#include "strokes/freehand_stroke.h"
+#include "kundo2magicstring.h"
+
 
 class KoPointerEvent;
 class KoCanvasResourceManager;
@@ -36,15 +38,12 @@ class KisRecordingAdapter;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
+class KisFreehandStrokeInfo;
 
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
     Q_OBJECT
-
-protected:
-
-    typedef FreehandStrokeStrategy::PainterInfo PainterInfo;
 
 public:
 
@@ -107,18 +106,18 @@ protected:
 
 protected:
 
-    virtual void createPainters(QVector<PainterInfo*> &painterInfos,
+    virtual void createPainters(QVector<KisFreehandStrokeInfo*> &strokeInfos,
                                 const KisDistanceInformation &startDist);
 
     // lo-level methods for painting primitives
 
-    void paintAt(int painterInfoId, const KisPaintInformation &pi);
+    void paintAt(int strokeInfoId, const KisPaintInformation &pi);
 
-    void paintLine(int painterInfoId,
+    void paintLine(int strokeInfoId,
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(int painterInfoId,
+    void paintBezierCurve(int strokeInfoId,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,

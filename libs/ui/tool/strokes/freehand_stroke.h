@@ -48,62 +48,62 @@ public:
             QPAINTER_PATH_FILL
         };
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              const KisPaintInformation &_pi)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
               type(POINT), pi1(_pi)
         {}
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              const KisPaintInformation &_pi1,
              const KisPaintInformation &_pi2)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
               type(LINE), pi1(_pi1), pi2(_pi2)
         {}
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              const KisPaintInformation &_pi1,
              const QPointF &_control1,
              const QPointF &_control2,
              const KisPaintInformation &_pi2)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
               type(CURVE), pi1(_pi1), pi2(_pi2),
               control1(_control1), control2(_control2)
         {}
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              DabType _type,
              const vQPointF &_points)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
             type(_type), points(_points)
         {}
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              DabType _type,
              const QRectF &_rect)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
             type(_type), rect(_rect)
         {}
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              DabType _type,
              const QPainterPath &_path)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
             type(_type), path(_path)
         {}
 
-        Data(int _painterInfoId,
+        Data(int _strokeInfoId,
              DabType _type,
              const QPainterPath &_path,
              const QPen &_pen, const KoColor &_customColor)
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
-              painterInfoId(_painterInfoId),
+              strokeInfoId(_strokeInfoId),
             type(_type), path(_path),
             pen(_pen), customColor(_customColor)
         {}
@@ -115,7 +115,7 @@ public:
     private:
         Data(const Data &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
-              painterInfoId(rhs.painterInfoId),
+              strokeInfoId(rhs.strokeInfoId),
               type(rhs.type)
         {
             KisLodTransform t(levelOfDetail);
@@ -161,7 +161,7 @@ public:
             };
         }
     public:
-        int painterInfoId;
+        int strokeInfoId;
 
         DabType type;
         KisPaintInformation pi1;
@@ -200,16 +200,12 @@ public:
     };
 
 public:
-    FreehandStrokeStrategy(bool needsIndirectPainting,
-                           const QString &indirectPaintingCompositeOp,
-                           KisResourcesSnapshotSP resources,
-                           PainterInfo *painterInfo,
+    FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
+                           KisFreehandStrokeInfo *strokeInfo,
                            const KUndo2MagicString &name);
 
-    FreehandStrokeStrategy(bool needsIndirectPainting,
-                           const QString &indirectPaintingCompositeOp,
-                           KisResourcesSnapshotSP resources,
-                           QVector<PainterInfo*> painterInfos,
+    FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
+                           QVector<KisFreehandStrokeInfo*> strokeInfos,
                            const KUndo2MagicString &name);
 
     ~FreehandStrokeStrategy() override;
@@ -228,7 +224,7 @@ protected:
     FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);
 
 private:
-    void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
+    void init();
 
     void tryDoUpdate(bool forceEnd = false);
     void issueSetDirtySignals();

@@ -23,6 +23,7 @@
 #include <KoColor.h>
 #include "stroke_testing_utils.h"
 #include "strokes/freehand_stroke.h"
+#include "strokes/KisFreehandStrokeInfo.h"
 #include "kis_resources_snapshot.h"
 #include "kis_image.h"
 #include <brushengine/kis_paint_information.h>
@@ -50,16 +51,14 @@ protected:
         }
     }
 
-    KisStrokeStrategy* createStroke(bool indirectPainting,
-                                    KisResourcesSnapshotSP resources,
+    KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,
                                     KisImageWSP image) override {
         Q_UNUSED(image);
 
-        FreehandStrokeStrategy::PainterInfo *painterInfo =
-            new FreehandStrokeStrategy::PainterInfo();
+        KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
         QScopedPointer<FreehandStrokeStrategy> stroke(
-            new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, painterInfo, kundo2_noi18n("Freehand Stroke")));
+            new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("Freehand Stroke")));
 
         return stroke.take();
     }
@@ -91,7 +90,7 @@ protected:
     }
 
 private:
-    FreehandStrokeStrategy::PainterInfo *m_painterInfo;
+    KisFreehandStrokeInfo *m_strokeInfo;
     int m_cpuCoresLimit = -1;
 };
 

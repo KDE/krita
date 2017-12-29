@@ -46,6 +46,10 @@ public:
     using KisPropertiesConfiguration::setProperty;
     void setProperty(const QString & name, const QVariant & value) override;
 
+    bool hasProperty(const QString& name) const override;
+
+    QList<QString> getPropertiesKeys() const;
+
 private:
     Q_DISABLE_COPY(KisLockedPropertiesProxy)
     mutable KisLockedPropertiesSP m_lockedProperties;

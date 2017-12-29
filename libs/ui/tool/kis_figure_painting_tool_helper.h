@@ -24,15 +24,11 @@
 #include <brushengine/kis_paint_information.h>
 #include "strokes/freehand_stroke.h"
 
-
 class KoCanvasResourceManager;
 class KisStrokesFacade;
 
 class KRITAUI_EXPORT KisFigurePaintingToolHelper
 {
-protected:
-    typedef FreehandStrokeStrategy::PainterInfo PainterInfo;
-
 public:
     KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                 KisImageWSP image,

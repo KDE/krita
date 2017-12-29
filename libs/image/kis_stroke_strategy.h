@@ -72,8 +72,7 @@ public:
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
-    bool needsIndirectPainting() const;
-    QString indirectPaintingCompositeOp() const;
+
 
     /**
      * Returns true if mere start of the stroke should cancel all the
@@ -165,8 +164,6 @@ protected:
 
     void setExclusive(bool value);
     void setSupportsWrapAroundMode(bool value);
-    void setNeedsIndirectPainting(bool value);
-    void setIndirectPaintingCompositeOp(const QString &id);
     void setClearsRedoOnStart(bool value);
     void setRequestsOtherStrokesToEnd(bool value);
     void setCanForgetAboutMe(bool value);
@@ -195,8 +192,7 @@ protected:
 private:
     bool m_exclusive;
     bool m_supportsWrapAroundMode;
-    bool m_needsIndirectPainting;
-    QString m_indirectPaintingCompositeOp;
+
     bool m_clearsRedoOnStart;
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;

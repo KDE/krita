@@ -62,7 +62,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_sizeOption.resetAllSensors();
     m_rateOption.resetAllSensors();
 
-    m_brushOption.readOptionSettingForceCopy(settings);
+    m_brushOption.readOptionSetting(settings);
 
     m_colorProperties.fillProperties(settings);
     m_properties.readOptionSetting(settings);

@@ -47,6 +47,8 @@ public:
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
+    void setupMaskingBrushPainter(KisPainter *painter);
+
     // XXX: This was marked as KDE_DEPRECATED, but no althernative was
     //      given in the apidox.
     void setupPaintAction(KisRecordedPaintAction *action);
@@ -60,6 +62,8 @@ public:
     KisImageSP image() const;
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
+
+    bool needsMaskingBrushRendering() const;
 
     /**
      * \return currently active selection. Note that it will return

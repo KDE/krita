@@ -40,7 +40,6 @@
 #include <KoResourceItemChooser.h>
 
 #include <kis_icon.h>
-#include "kis_brush_registry.h"
 #include "kis_brush_server.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
@@ -133,8 +132,8 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
 
-
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser->setObjectName("brush_selector");
 
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setColumnCount(10);
@@ -184,21 +183,52 @@ KisPredefinedBrushChooser::~KisPredefinedBrushChooser()
 {
 }
 
-void KisPredefinedBrushChooser::setBrush(KisBrushSP _brush)
+void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
 {
-    m_itemChooser->setCurrentResource(_brush.data());
-    update(_brush.data());
+    /**
+     * Warning: since the brushes are always cloned after loading from XML or
+     * fetching from the server, we cannot just ask for that brush explicitly.
+     * Instead, we should search for the brush with the same filename and/or name
+     * and load it. Please take it into account that after selecting the brush
+     * explicitly in the chooser, m_itemChooser->currentResource() might be
+     * **not** the same as the value in m_brush.
+     *
+     * Ideally, if the resource is not found on the server, we should add it, but
+     * it might lead to a set of weird consequences. So for now we just
+     * select nothing.
+     */
+
+    KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
+    KoResource *resource = server->resourceByFilename(brush->shortFilename()).data();
+
+    if (!resource) {
+        resource = server->resourceByName(brush->name()).data();
+    }
+
+    if (!resource) {
+        resource = brush.data();
+    }
+
+    m_itemChooser->setCurrentResource(resource);
+    update(brush.data());
 }
 
 void KisPredefinedBrushChooser::slotResetBrush()
 {
+    /**
+     * The slot also resets the brush on the server
+     *
+     * TODO: technically, after we refactored all the brushes to be forked,
+     *       we can just re-update the brush from the server without reloading.
+     *       But it needs testing.
+     */
+
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
         brush->load();
         brush->setScale(1.0);
         brush->setAngle(0.0);
 
-        slotActivatedBrush(brush);
         update(brush);
         emit sigBrushChanged();
     }
@@ -206,35 +236,33 @@ void KisPredefinedBrushChooser::slotResetBrush()
 
 void KisPredefinedBrushChooser::slotSetItemSize(qreal sizeValue)
 {
-    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
 
-    if (brush) {
-        int brushWidth = brush->width();
+    if (m_brush) {
+        int brushWidth = m_brush->width();
 
-        brush->setScale(sizeValue / qreal(brushWidth));
-        slotActivatedBrush(brush);
+        m_brush->setScale(sizeValue / qreal(brushWidth));
         emit sigBrushChanged();
     }
 }
 
 void KisPredefinedBrushChooser::slotSetItemRotation(qreal rotationValue)
 {
-    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
-    if (brush) {
-        brush->setAngle(rotationValue / 180.0 * M_PI);
-        slotActivatedBrush(brush);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
 
+    if (m_brush) {
+        m_brush->setAngle(rotationValue / 180.0 * M_PI);
         emit sigBrushChanged();
     }
 }
 
 void KisPredefinedBrushChooser::slotSpacingChanged()
 {
-    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
-    if (brush) {
-        brush->setSpacing(brushSpacingSelectionWidget->spacing());
-        brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
-        slotActivatedBrush(brush);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
+
+    if (m_brush) {
+        m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
+        m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
 
         emit sigBrushChanged();
     }
@@ -242,11 +270,11 @@ void KisPredefinedBrushChooser::slotSpacingChanged()
 
 void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_itemChooser->currentResource());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
+
+    KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_brush.data());
     if (brush) {
         brush->setUseColorAsMask(useColorAsMask);
-        slotActivatedBrush(brush);
-
         emit sigBrushChanged();
     }
 }
@@ -284,69 +312,52 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
 
 void KisPredefinedBrushChooser::update(KoResource * resource)
 {
-    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
+    {
+        KisBrush* brush = dynamic_cast<KisBrush*>(resource);
+        m_brush = brush ? brush->clone() : 0;
+    }
 
-    if (brush) {
-
-
-        brushTipNameLabel->setText(i18n(brush->name().toUtf8().data()));
+    if (m_brush) {
+        brushTipNameLabel->setText(i18n(m_brush->name().toUtf8().data()));
 
         QString brushTypeString = "";
 
-        if (brush->brushType() == INVALID) {
+        if (m_brush->brushType() == INVALID) {
             brushTypeString = i18n("Invalid");
-        } else if (brush->brushType() == MASK) {
+        } else if (m_brush->brushType() == MASK) {
             brushTypeString = i18n("Mask");
-        } else if (brush->brushType() == IMAGE) {
+        } else if (m_brush->brushType() == IMAGE) {
             brushTypeString = i18n("GBR");
-        } else if (brush->brushType() == PIPE_MASK ) {
+        } else if (m_brush->brushType() == PIPE_MASK ) {
             brushTypeString = i18n("Animated Mask");
-        } else if (brush->brushType() == PIPE_IMAGE ) {
+        } else if (m_brush->brushType() == PIPE_IMAGE ) {
             brushTypeString = i18n("Animated Image");
         }
 
 
         QString brushDetailsText = QString("%1 (%2 x %3)")
                        .arg(brushTypeString)
-                       .arg(brush->width())
-                       .arg(brush->height());
+                       .arg(m_brush->width())
+                       .arg(m_brush->height());
 
         brushDetailsLabel->setText(brushDetailsText);
 
 
-        brushSpacingSelectionWidget->setSpacing(brush->autoSpacingActive(),
-                                brush->autoSpacingActive() ?
-                                brush->autoSpacingCoeff() : brush->spacing());
+        brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
+                                m_brush->autoSpacingActive() ?
+                                m_brush->autoSpacingCoeff() : m_brush->spacing());
 
-        brushRotationSpinBox->setValue(brush->angle() * 180 / M_PI);
-        brushSizeSpinBox->setValue(brush->width() * brush->scale());
+        brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
+        brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
         // useColorAsMask support is only in gimp brush so far
-        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
+        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());
         if (gimpBrush) {
             useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask());
         }
-        useColorAsMaskCheckbox->setEnabled(brush->hasColor() && gimpBrush);
+        useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
 
-        slotActivatedBrush(brush);
         emit sigBrushChanged();
-    }
-}
-
-void KisPredefinedBrushChooser::slotActivatedBrush(KoResource * resource)
-{
-    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
-
-    if (m_brush != brush) {
-        if (m_brush) {
-            m_brush->clearBrushPyramid();
-        }
-
-        m_brush = brush;
-
-        if (m_brush) {
-            m_brush->prepareBrushPyramid();
-        }
     }
 }
 

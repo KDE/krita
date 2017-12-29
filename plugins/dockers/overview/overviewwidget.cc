@@ -40,6 +40,7 @@
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
 #include <KoColorSpaceRegistry.h>
+#include <QApplication>
 
 const qreal oversample = 2.;
 const int thumbnailTileDim = 128;
@@ -89,8 +90,7 @@ OverviewWidget::OverviewWidget(QWidget * parent)
 {
     setMouseTracking(true);
     KisConfig cfg;
-    QRgb c = cfg.readEntry("OverviewWidgetColor", 0xFF454C);
-    m_outlineColor = QColor(c);
+    m_outlineColor = qApp->palette().color(QPalette::Highlight);
 }
 
 OverviewWidget::~OverviewWidget()

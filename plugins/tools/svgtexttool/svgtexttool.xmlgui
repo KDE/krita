@@ -81,7 +81,7 @@
     <Action name="svg_font_size"/>
     <Action name="svg_line_height"/>
     <Action name="svg_font_color"/>
-    <Action name="svg_background_color"/>
+    <Action name="svg_format_textcolor"/>
     <Action name="svg_weight_bold"/>
     <Action name="svg_format_italic"/>
     <Action name="svg_format_underline"/>

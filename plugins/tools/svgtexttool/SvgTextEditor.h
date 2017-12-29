@@ -137,6 +137,7 @@ private:
     QList<QAction*> m_richTextActions;
     KoSvgTextShape *m_shape {0};
     KoDialog *m_charSelectDialog {0};
+    QString m_searchKey;
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

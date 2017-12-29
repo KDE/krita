@@ -37,6 +37,7 @@
 #include <QTextEdit>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
+#include <QLineEdit>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -321,22 +322,62 @@ void SvgTextEditor::deselect()
 
 void SvgTextEditor::find()
 {
+    QDialog *findDialog = new QDialog(this);
+    findDialog->setWindowTitle(i18n("Find Text"));
+    findDialog->setLayout(new QVBoxLayout());
+    QLineEdit *lnSearchKey = new QLineEdit();
+    findDialog->layout()->addWidget(lnSearchKey);
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    findDialog->layout()->addWidget(buttons);
+    connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));
 
+
+    if (findDialog->exec()==QDialog::Accepted) {
+        m_searchKey = lnSearchKey->text();
+        m_currentEditor->find(m_searchKey);
+    }
 }
 
 void SvgTextEditor::findNext()
 {
-
+    if (!m_currentEditor->find(m_searchKey)) {
+        m_currentEditor->textCursor().movePosition(QTextCursor::Start);
+        m_currentEditor->find(m_searchKey);
+    }
 }
 
 void SvgTextEditor::findPrev()
 {
-
+    if (!m_currentEditor->find(m_searchKey,QTextDocument::FindBackward)) {
+        m_currentEditor->textCursor().movePosition(QTextCursor::End);
+        m_currentEditor->find(m_searchKey,QTextDocument::FindBackward);
+    }
 }
 
 void SvgTextEditor::replace()
 {
+    QDialog *findDialog = new QDialog(this);
+    findDialog->setWindowTitle(i18n("Find and Replace"));
+    findDialog->setLayout(new QVBoxLayout());
+    QLineEdit *lnSearchKey = new QLineEdit();
+    QLineEdit *lnReplaceKey = new QLineEdit();
+    findDialog->layout()->addWidget(lnSearchKey);
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    findDialog->layout()->addWidget(lnReplaceKey);
+    findDialog->layout()->addWidget(buttons);
+    connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));
 
+
+    if (findDialog->exec()==QDialog::Accepted) {
+        QString search = lnSearchKey->text();
+        QString replace = lnReplaceKey->text();
+        m_currentEditor->find(search);
+        m_currentEditor->textCursor().removeSelectedText();
+        m_currentEditor->textCursor().insertText(replace);
+
+    }
 }
 
 

@@ -137,6 +137,7 @@ inline void KisLayerBox::connectActionToButton(KisViewManager* viewManager, QAbs
 
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
+    connect(viewManager->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
 }
 
 inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
@@ -173,24 +174,16 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
 
-    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    slotUpdateIcons();
 
-    m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
-
-    m_wdgLayerBox->bnRaise->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
+    m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
+    m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
+    m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
-    m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
-
-    m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
-    m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
-
-    m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
-    m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
+    m_wdgLayerBox->bnRaise->setEnabled(false);
 
     if (cfg.sliderLabels()) {
         m_wdgLayerBox->opacityLabel->hide();
@@ -964,5 +957,18 @@ void KisLayerBox::slotImageTimeChanged(int time)
     Q_UNUSED(time);
     updateUI();
 }
+
+void KisLayerBox::slotUpdateIcons() {
+    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
+    m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
+    m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
+    m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
+    m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
+
+    // call child function about needing to update icons
+    m_wdgLayerBox->listLayers->slotUpdateIcons();
+}
+
 
 #include "moc_kis_layer_box.cpp"

@@ -73,6 +73,7 @@ KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     , d(new Private)
 {
     d->view = view;
+
     QApplication::instance()->installEventFilter(this);
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
@@ -638,6 +639,7 @@ void KisNodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, 
     }
 }
 
+
 bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     KisNodeViewColorScheme scm;
@@ -892,4 +894,9 @@ void KisNodeDelegate::slotConfigChanged()
 
     d->checkersColor1 = cfg.checkersColor1();
     d->checkersColor2 = cfg.checkersColor2();
+}
+
+void KisNodeDelegate::slotUpdateIcon()
+{
+   KisLayerPropertiesIcons::instance()->updateIcons();
 }

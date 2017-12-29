@@ -31,7 +31,7 @@
     </Menu>
     <Menu name="insert">
       <text>&amp;Insert</text>
-      <Action name="insert_special_character"/>
+      <Action name="svg_insert_special_character"/>
     </Menu>
     <Menu name="format">
       <text>&amp;Format</text>

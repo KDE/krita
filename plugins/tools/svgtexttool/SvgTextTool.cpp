@@ -55,13 +55,11 @@
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
-    , m_editor(new SvgTextEditor(qApp->activeWindow()))
+    , m_editor(0)
     , m_dragStart( 0, 0)
     , m_dragEnd( 0, 0)
     , m_dragging(false)
 {
-    m_editor->setWindowModality(Qt::ApplicationModal);
-    connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
 }
 
 SvgTextTool::~SvgTextTool()
@@ -164,7 +162,9 @@ void SvgTextTool::showEditor()
 {
     if (!m_shape) return;
     if (!m_editor) {
-        m_editor = new SvgTextEditor(0);
+        m_editor = new SvgTextEditor(qApp->activeWindow());
+        m_editor->setWindowFlag(Qt::Tool);
+        m_editor->setWindowModality(Qt::WindowModal);
         connect(m_editor, SIGNAL(textUpdated(QString,QString)), SLOT(textUpdated(QString,QString)));
     }
     m_editor->setShape(m_shape);
@@ -261,9 +261,9 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         canvas()->shapeManager()->selection()->deselectAll();
         canvas()->shapeManager()->selection()->select(textShape);
         m_shape = dynamic_cast<KoSvgTextShape *>(textShape);
+        showEditor();
     }
     event->accept();
-    showEditor();
 }
 
 

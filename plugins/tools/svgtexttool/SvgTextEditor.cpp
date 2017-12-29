@@ -317,7 +317,9 @@ void SvgTextEditor::selectAll()
 
 void SvgTextEditor::deselect()
 {
-    m_currentEditor->textCursor().clearSelection();
+    QTextCursor cursor(m_currentEditor->textCursor());
+    cursor.clearSelection();
+    m_currentEditor->setTextCursor(cursor);
 }
 
 void SvgTextEditor::find()
@@ -342,7 +344,9 @@ void SvgTextEditor::find()
 void SvgTextEditor::findNext()
 {
     if (!m_currentEditor->find(m_searchKey)) {
-        m_currentEditor->textCursor().movePosition(QTextCursor::Start);
+        QTextCursor cursor(m_currentEditor->textCursor());
+        cursor.movePosition(QTextCursor::Start);
+        m_currentEditor->setTextCursor(cursor);
         m_currentEditor->find(m_searchKey);
     }
 }
@@ -350,7 +354,9 @@ void SvgTextEditor::findNext()
 void SvgTextEditor::findPrev()
 {
     if (!m_currentEditor->find(m_searchKey,QTextDocument::FindBackward)) {
-        m_currentEditor->textCursor().movePosition(QTextCursor::End);
+        QTextCursor cursor(m_currentEditor->textCursor());
+        cursor.movePosition(QTextCursor::End);
+        m_currentEditor->setTextCursor(cursor);
         m_currentEditor->find(m_searchKey,QTextDocument::FindBackward);
     }
 }
@@ -358,7 +364,7 @@ void SvgTextEditor::findPrev()
 void SvgTextEditor::replace()
 {
     QDialog *findDialog = new QDialog(this);
-    findDialog->setWindowTitle(i18n("Find and Replace"));
+    findDialog->setWindowTitle(i18n("Find and Replace all"));
     findDialog->setLayout(new QVBoxLayout());
     QLineEdit *lnSearchKey = new QLineEdit();
     QLineEdit *lnReplaceKey = new QLineEdit();
@@ -373,9 +379,13 @@ void SvgTextEditor::replace()
     if (findDialog->exec()==QDialog::Accepted) {
         QString search = lnSearchKey->text();
         QString replace = lnReplaceKey->text();
-        m_currentEditor->find(search);
-        m_currentEditor->textCursor().removeSelectedText();
-        m_currentEditor->textCursor().insertText(replace);
+        QTextCursor cursor(m_currentEditor->textCursor());
+        cursor.movePosition(QTextCursor::Start);
+        m_currentEditor->setTextCursor(cursor);
+        while(m_currentEditor->find(search)) {
+            m_currentEditor->textCursor().removeSelectedText();
+            m_currentEditor->textCursor().insertText(replace);
+        }
 
     }
 }

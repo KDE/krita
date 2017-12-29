@@ -72,6 +72,9 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
             if (addFont && m_blacklistedFonts.contains(family)) {
                 addFont = false;
             }
+            if (addFont && !fonts.isSmoothlyScalable(family)) {
+                addFont = false;
+            }
 
             if (addFont) {
                 //now, check for all possible familyname+style name combinations, so we can avoid those.

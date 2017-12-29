@@ -131,6 +131,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     switchTextEditorTab();
 
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
+
 }
 
 SvgTextEditor::~SvgTextEditor()

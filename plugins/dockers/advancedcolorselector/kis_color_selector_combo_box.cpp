@@ -18,7 +18,6 @@
 #include "kis_color_selector_combo_box.h"
 #include <QGridLayout>
 #include <QPainter>
-#include <QApplication>
 
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"
@@ -128,8 +127,7 @@ protected:
     void paintEvent(QPaintEvent *) override
     {
         QPainter painter(this);
-        QColor bgColor = qApp->palette().color(QPalette::Base);
-        painter.fillRect(0,0,width(), height(), bgColor);
+        painter.fillRect(0,0,width(), height(), QColor(128,128,128));
         painter.fillRect(highlightArea, palette().highlight());
     }
 

@@ -25,7 +25,6 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QPushButton>
-#include <QApplication>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -168,9 +167,7 @@ void KisColorSelector::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);
     QPainter p(this);
-
-    QColor bgColor = qApp->palette().color(QPalette::Base);
-    p.fillRect(0,0,width(),height(),bgColor);
+    p.fillRect(0,0,width(),height(),QColor(128,128,128));
     p.setRenderHint(QPainter::Antialiasing);
 
     m_mainComponent->paintEvent(&p);

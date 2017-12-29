@@ -15,9 +15,9 @@
    sodipodi:docname="application-x-krita.svg"
    width="64"
    height="64"
-   inkscape:export-filename="application-x-krita-128.png"
-   inkscape:export-xdpi="180"
-   inkscape:export-ydpi="180">
+   inkscape:export-filename="/home/wolthera/krita/src/krita/pics/mimetypes/32-mimetypes-application-x-krita.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48">
   <metadata
      id="metadata84">
     <rdf:RDF>
@@ -26,7 +26,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -44,13 +44,13 @@
      id="namedview82"
      showgrid="true"
      inkscape:showpageshadow="false"
-     inkscape:zoom="11.313708"
-     inkscape:cx="24.152105"
-     inkscape:cy="35.296728"
+     inkscape:zoom="7.9999996"
+     inkscape:cx="7.4909007"
+     inkscape:cy="32.152864"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="svg2"
      showguides="true"
      inkscape:snap-global="false">
     <inkscape:grid
@@ -133,11 +133,11 @@
        inkscape:collect="always"
        id="linearGradient4351">
       <stop
-         style="stop-color:#d78ff7;stop-opacity:1"
+         style="stop-color:#e8daed;stop-opacity:1"
          offset="0"
          id="stop4353" />
       <stop
-         style="stop-color:#e7c1f9;stop-opacity:1"
+         style="stop-color:#ffffff;stop-opacity:1"
          offset="1"
          id="stop4355" />
     </linearGradient>
@@ -145,11 +145,11 @@
        inkscape:collect="always"
        id="linearGradient4300">
       <stop
-         style="stop-color:#8e44ad;stop-opacity:1"
+         style="stop-color:#faf6fc;stop-opacity:1"
          offset="0"
          id="stop4302" />
       <stop
-         style="stop-color:#9e66b8;stop-opacity:1"
+         style="stop-color:#e7d9ed;stop-opacity:1"
          offset="1"
          id="stop4304" />
     </linearGradient>
@@ -1699,7 +1699,8 @@
     <g
        transform="matrix(0.9714402,0,0,0.9714402,15.389158,-946.88385)"
        id="g4426"
-       inkscape:label="icon">
+       inkscape:label="icon"
+       sodipodi:insensitive="true">
       <path
          inkscape:label="border_shadow"
          d="m 896.99215,540.84321 a 384,384 0 1 1 -768,0 384,384 0 1 1 768,0 z"

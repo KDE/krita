@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.92.2 (unknown)"
    sodipodi:docname="application-x-krita-16.svg"
-   inkscape:export-filename="application-x-krita.png"
+   inkscape:export-filename="/home/wolthera/krita/src/krita/pics/mimetypes/16-mimetypes-application-x-krita.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -1475,8 +1475,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="24.411306"
-     inkscape:cx="1.2665895"
-     inkscape:cy="3.5297604"
+     inkscape:cx="-14.177074"
+     inkscape:cy="2.7104678"
      inkscape:document-units="px"
      inkscape:current-layer="g4714"
      showgrid="true"
@@ -1539,12 +1539,15 @@
        id="g4714"
        transform="matrix(0.27586207,0,0,0.27586207,420.8867,530.96315)">
       <rect
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#9d63b7;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#f0e8f4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          id="rect4744"
          width="43.5"
          height="58"
          x="10.250031"
-         y="3.0000136" />
+         y="3.0000136"
+         inkscape:export-filename="./rect4744.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <g
          transform="matrix(0.04385685,0,0,0.04385685,10.164201,8.8850378)"
          id="g4426"

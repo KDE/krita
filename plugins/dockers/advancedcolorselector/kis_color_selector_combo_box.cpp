@@ -18,6 +18,7 @@
 #include "kis_color_selector_combo_box.h"
 #include <QGridLayout>
 #include <QPainter>
+#include <QApplication>
 
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"
@@ -127,7 +128,11 @@ protected:
     void paintEvent(QPaintEvent *) override
     {
         QPainter painter(this);
-        painter.fillRect(0,0,width(), height(), QColor(128,128,128));
+
+        QColor bgColor = qApp->palette().color(QPalette::Base);
+        int darkenCoeff = bgColor.value() > 128 ? 180 : 50;    // same logic icons use
+
+        painter.fillRect(0,0,width(), height(), QColor(darkenCoeff,darkenCoeff,darkenCoeff));
         painter.fillRect(highlightArea, palette().highlight());
     }
 

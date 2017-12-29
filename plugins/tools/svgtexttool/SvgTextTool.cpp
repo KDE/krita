@@ -266,6 +266,16 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
     event->accept();
 }
 
+void SvgTextTool::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {
+        showEditor();
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 
 void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {

@@ -188,7 +188,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     QXmlStreamReader htmlReader(htmlText);
     QXmlStreamWriter svgWriter(&svgBuffer);
 
-    svgWriter.setAutoFormatting(false);
+    svgWriter.setAutoFormatting(true);
 
     QStringRef elementName;
 

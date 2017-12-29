@@ -197,6 +197,9 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     QString bodyEm = "1em";
     QString em;
     QString p("p");
+    //previous style string is for keeping formatting proper on linebreaks and appendstyle is for specific tags
+    QString previousStyleString;
+    QString appendStyle;
 
     while (!htmlReader.atEnd()) {
         QXmlStreamReader::TokenType token = htmlReader.readNext();
@@ -209,6 +212,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 svgWriter.writeEndElement();
                 elementName = QStringRef(&p);
                 em = bodyEm;
+                appendStyle = previousStyleString;
             }
             else {
                 elementName = htmlReader.name();
@@ -218,6 +222,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
             if (elementName == "body") {
                 qDebug() << "\tstart Element" << elementName;
                 svgWriter.writeStartElement("text");
+                appendStyle = QString();
             }
             else if (elementName == "p") {
                 // new line
@@ -226,12 +231,29 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 newLine = true;
                 if (em.isEmpty()) {
                     em = bodyEm;
+                    appendStyle = QString();
                 }
                 lineCount++;
             }
             else if (elementName == "span") {
                 qDebug() << "\tstart Element" << elementName;
                 svgWriter.writeStartElement("tspan");
+                appendStyle = QString();
+            }
+            else if (elementName == "b" || elementName == "strong") {
+                qDebug() << "\tstart Element" << elementName;
+                svgWriter.writeStartElement("tspan");
+                appendStyle = "font-weight:700;";
+            }
+            else if (elementName == "i" || elementName == "em") {
+                qDebug() << "\tstart Element" << elementName;
+                svgWriter.writeStartElement("tspan");
+                appendStyle = "font-style:italic;";
+            }
+            else if (elementName == "u") {
+                qDebug() << "\tstart Element" << elementName;
+                svgWriter.writeStartElement("tspan");
+                appendStyle = "text-decoration:underline";
             }
 
             QXmlStreamAttributes attributes = htmlReader.attributes();
@@ -274,8 +296,12 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                         filteredStyles.append(" text-anchor:start;");
                     }
                 }
+
+                filteredStyles.append(appendStyle);
+
                 if (!filteredStyles.isEmpty()) {
                     svgWriter.writeAttribute("style", filteredStyles);
+                    previousStyleString = filteredStyles;
                 }
 
 

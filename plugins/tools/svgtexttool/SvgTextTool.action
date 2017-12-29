@@ -222,14 +222,14 @@
       <isCheckable>false</isCheckable>
       <text>Line Height</text>
     </Action>
-    <Action name="svg_options_shape_properties">
-      <iconText>Text Shape Properties</iconText>
-      <shortcut>L</shortcut>
-      <toolTip>Text Shape Properties</toolTip>
+    <Action name="svg_settings">
+      <iconText>Settings</iconText>
+      <shortcut></shortcut>
+      <toolTip>Text Editor Settings</toolTip>
       <icon></icon>
       <whatsThis/>
       <statusTip/>
       <isCheckable>false</isCheckable>
-      <text>Text Shape Properties</text>
+      <text>Settings...</text>
     </Action></Actions>
 </ActionCollection>

@@ -646,7 +646,20 @@ void SvgTextEditor::alignJustified()
 
 void SvgTextEditor::setSettings()
 {
-    QMessageBox::warning(0, "bla", ":settings");
+    KoDialog settingsDialog;
+    Ui_WdgSvgTextSettings textSettings;
+    QWidget *settingsPage = new QWidget(&settingsDialog, 0);
+    settingsDialog.setMainWidget(settingsPage);
+    textSettings.setupUi(settingsPage);
+
+    // get the settings and initialize the dialog
+    KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
+
+    settingsDialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    if (settingsDialog.exec() == KoDialog::Ok) {
+        // save  and set the settings
+    }
+
 }
 
 void SvgTextEditor::slotToolbarToggled(bool)

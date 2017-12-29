@@ -15,6 +15,7 @@ set (SvgTextTool_SRCS
 
 ki18n_wrap_ui(SvgTextTool_SRCS 
     WdgSvgTextEditor.ui
+    WdgSvgTextSettings.ui
 )
 
 install( FILES

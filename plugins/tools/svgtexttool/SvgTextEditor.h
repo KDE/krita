@@ -29,6 +29,7 @@
 #include <KoSvgText.h>//for the enums
 
 #include "ui_WdgSvgTextEditor.h"
+#include "ui_WdgSvgTextSettings.h"
 
 class KoSvgTextShape;
 class KisFileNameRequester;
@@ -136,6 +137,7 @@ private:
     QList<QAction*> m_richTextActions;
     KoSvgTextShape *m_shape {0};
     KoDialog *m_charSelectDialog {0};
+
     QString m_searchKey;
 };
 

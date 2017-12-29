@@ -237,7 +237,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
             QXmlStreamAttributes attributes = htmlReader.attributes();
             if (attributes.hasAttribute("style")) {
                 QString filteredStyles;
-                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-size-adjust font-stretch direction").split(" ");
+                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction").split(" ");
                 QStringList styles = attributes.value("style").toString().split(";");
                 for(int i=0; i<styles.size(); i++) {
                     QStringList style = QString(styles.at(i)).split(":");

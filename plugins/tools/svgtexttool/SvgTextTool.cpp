@@ -55,6 +55,7 @@
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_shape(0)
+    , m_hoverShape(0)
     , m_editor(0)
     , m_dragStart( 0, 0)
     , m_dragEnd( 0, 0)
@@ -209,6 +210,24 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         gc.drawRect(rect);
         gc.restore();
     }
+    if (m_shape) {
+        gc.save();
+        gc.setPen(Qt::black);
+        QRectF rect = converter.documentToView(m_shape->boundingRect());
+        gc.drawRect(rect);
+        QPen dotted = QPen(QColor(255, 255, 255, 200));
+        dotted.setStyle(Qt::DotLine);
+        gc.setPen(dotted);
+        gc.drawRect(rect);
+        gc.restore();
+    }
+    if (m_hoverShape) {
+        gc.save();
+        gc.setPen(Qt::cyan);
+        QRectF rect = converter.documentToView(m_hoverShape->boundingRect());
+        gc.drawRect(rect);
+        gc.restore();
+    }
 }
 
 void SvgTextTool::mousePressEvent(KoPointerEvent *event)
@@ -238,6 +257,12 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         canvas()->updateCanvas(QRectF(m_dragStart, m_dragEnd).normalized().adjusted(-100, -100, 100, 100));
         event->accept();
     } else {
+        m_hoverShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
+        if (m_hoverShape) {
+            canvas()->updateCanvas(m_hoverShape->boundingRect().adjusted(-100, -100, 100, 100));
+        } else {
+            canvas()->updateCanvas(QRectF(event->point, event->point).adjusted(-100, -100, 100, 100));
+        }
         event->ignore();
     }
 }

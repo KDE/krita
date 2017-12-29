@@ -80,6 +80,7 @@ private Q_SLOTS:
 
 private:
     KoSvgTextShape *m_shape;
+    KoSvgTextShape *m_hoverShape;
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit;
     QPointF m_dragStart;

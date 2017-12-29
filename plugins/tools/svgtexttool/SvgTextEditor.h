@@ -127,8 +127,6 @@ protected:
 private:
 
     QAction *createAction(const QString &name,
-                          const QString &text,
-                          const QString &icon,
                           const char *member);
     void createActions();
     void enableRichTextActions(bool enable);

@@ -256,13 +256,13 @@ void SvgTextEditor::checkFormat()
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     if (format.fontWeight() > QFont::Normal) {
-        actionCollection()->action("weight_bold")->setChecked(true);
+        actionCollection()->action("svg_weight_bold")->setChecked(true);
     } else {
-        actionCollection()->action("weight_bold")->setChecked(false);
+        actionCollection()->action("svg_weight_bold")->setChecked(false);
     }
-    actionCollection()->action("format_italic")->setChecked(format.fontItalic());
-    actionCollection()->action("format_underline")->setChecked(format.fontUnderline());
-    actionCollection()->action("format_strike_through")->setChecked(format.fontStrikeOut());
+    actionCollection()->action("svg_format_italic")->setChecked(format.fontItalic());
+    actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
+    actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
 
     qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->setCurrentFont(format.font());
     QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font_size"))->defaultWidget());
@@ -274,7 +274,7 @@ void SvgTextEditor::checkFormat()
     KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
     qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"))->setCurrentColor(bg);
 
-    QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("line_height"))->defaultWidget());
+    QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
     if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
         spnLineHeight->setValue(1.0);
     } else if(blockFormat.lineHeightType()==QTextBlockFormat::ProportionalHeight) {
@@ -705,9 +705,9 @@ void SvgTextEditor::wheelEvent(QWheelEvent *event)
     }
 }
 
-QAction *SvgTextEditor::createAction(const QString &name, const QString &text, const QString &icon, const char *member)
+QAction *SvgTextEditor::createAction(const QString &name, const char *member)
 {
-    QAction *action = new QAction(KisIconUtils::loadIcon(icon), text, this);
+    QAction *action = new QAction(this);
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     actionRegistry->propertizeAction(name, action);
 
@@ -723,10 +723,7 @@ void SvgTextEditor::createActions()
 
 
     // File: new, open, save, save as, close
-    KStandardAction::openNew(this, SLOT(openNew()), actionCollection());
-    KStandardAction::open(this, SLOT(open()), actionCollection());
     KStandardAction::save(this, SLOT(save()), actionCollection());
-    KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
     KStandardAction::close(this, SLOT(close()), actionCollection());
 
     // Edit
@@ -747,98 +744,62 @@ void SvgTextEditor::createActions()
     KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 
     // Insert:
-    QAction * insertAction = createAction("insert_special_character",
-                                          i18n("Insert Special Character"),
-                                          "insert-special-character",
+    QAction * insertAction = createAction("svg_insert_special_character",
                                           SLOT(showInsertSpecialCharacterDialog()));
     insertAction->setCheckable(true);
     insertAction->setChecked(false);
 
     // Format:
-    m_richTextActions << createAction("weight_bold",
-                                      i18n("Bold"),
-                                      "format-text-bold",
+    m_richTextActions << createAction("svg_weight_bold",
                                       SLOT(setTextBold()));
 
-    m_richTextActions << createAction("format_italic",
-                                      i18n("Italic"),
-                                      "format-text-italic",
+    m_richTextActions << createAction("svg_format_italic",
                                       SLOT(setTextItalic()));
 
-    m_richTextActions << createAction("format_underline",
-                                      i18n("Underline"),
-                                      "format-text-underline",
+    m_richTextActions << createAction("svg_format_underline",
                                       SLOT(setTextUnderline()));
 
-    m_richTextActions << createAction("format_strike_through",
-                                      i18n("Strike-through"),
-                                      "format-text-strike-through",
+    m_richTextActions << createAction("svg_format_strike_through",
                                       SLOT(setTextStrikethrough()));
 
-    m_richTextActions << createAction("format_superscript",
-                                      i18n("Superscript"),
-                                      "format-text-superscript",
+    m_richTextActions << createAction("svg_format_superscript",
                                       SLOT(setTextSuperScript()));
 
-    m_richTextActions << createAction("format_subscript",
-                                      i18n("Subscript"),
-                                      "format-text-subscript",
+    m_richTextActions << createAction("svg_format_subscript",
                                       SLOT(setTextSubscript()));
 
-    m_richTextActions << createAction("weight_light",
-                                      i18n("Light"),
-                                      "format-text-light",
+    m_richTextActions << createAction("svg_weight_light",
                                       SLOT(setTextWeightLight()));
 
-    m_richTextActions << createAction("weight_normal",
-                                      i18n("Normal"),
-                                      "format-text-normal",
+    m_richTextActions << createAction("svg_weight_normal",
                                       SLOT(setTextWeightNormal()));
 
-    m_richTextActions << createAction("weight_demi",
-                                      i18n("Demi"),
-                                      "format-text-demi",
+    m_richTextActions << createAction("svg_weight_demi",
                                       SLOT(setTextWeightDemi()));
 
-    m_richTextActions << createAction("weight_black",
-                                      i18n("Black"),
-                                      "format-text-black",
+    m_richTextActions << createAction("svg_weight_black",
                                       SLOT(setTextWeightBlack()));
 
-    m_richTextActions << createAction("increase_font_size",
-                                      i18n("Larger"),
-                                      "increase-font-size",
+    m_richTextActions << createAction("svg_increase_font_size",
                                       SLOT(increaseTextSize()));
 
-    m_richTextActions << createAction("decrease_font_size",
-                                      i18n("Smaller"),
-                                      "decrease-font-size",
+    m_richTextActions << createAction("svg_decrease_font_size",
                                       SLOT(decreaseTextSize()));
 
-    m_richTextActions << createAction("align_left",
-                                      i18n("Align Left"),
-                                      "align-left",
+    m_richTextActions << createAction("svg_align_left",
                                       SLOT(alignLeft()));
 
-    m_richTextActions << createAction("align_right",
-                                      i18n("Alight Right"),
-                                      "align-right",
+    m_richTextActions << createAction("svg_align_right",
                                       SLOT(alignRight()));
 
-    m_richTextActions << createAction("align_center",
-                                      i18n("Align Center"),
-                                      "align-center",
+    m_richTextActions << createAction("svg_align_center",
                                       SLOT(alignCenter()));
 
-//    m_richTextActions << createAction("align_justified",
-//                                      i18n("Alight Justified"),
-//                                      "align-justified",
+//    m_richTextActions << createAction("svg_align_justified",
 //                                      SLOT(alignJustified()));
 
     // Settings: configure toolbars
-    m_richTextActions << createAction("options_shape_properties",
-                                      i18n("Properties"),
-                                      "svg_settings",
+    m_richTextActions << createAction("svg_options_shape_properties",
                                       SLOT(setShapeProperties()));
 
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbars()), actionCollection());
@@ -890,9 +851,9 @@ void SvgTextEditor::createActions()
     spnLineHeight->setSuffix(i18n(" em"));//Does this need to be translated?
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
     lineHeight->setDefaultWidget(spnLineHeight);
-    actionCollection()->addAction("line_height", lineHeight);
+    actionCollection()->addAction("svg_line_height", lineHeight);
     m_richTextActions << lineHeight;
-    actionRegistry->propertizeAction("line_height", lineHeight);
+    actionRegistry->propertizeAction("svg_line_height", lineHeight);
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

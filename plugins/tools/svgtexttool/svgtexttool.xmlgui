@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="SvgTextTool" version="1" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="svg_SvgTextTool" version="1" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
       <text>&amp;File</text>
@@ -35,34 +35,34 @@
     </Menu>
     <Menu name="format">
       <text>&amp;Format</text>
-      <Action name="weight_bold"/>
-      <Action name="format_italic"/>
-      <Action name="format_underline"/>
-      <Action name="format_strike_through"/>
-      <Action name="format_superscript"/>
-      <Action name="format_subscript"/>
+      <Action name="svg_weight_bold"/>
+      <Action name="svg_format_italic"/>
+      <Action name="svg_format_underline"/>
+      <Action name="svg_format_strike_through"/>
+      <Action name="svg_format_superscript"/>
+      <Action name="svg_format_subscript"/>
       <Menu name="weight">
         <text>&amp;Weight</text>
-        <Action name="weight_light"/>
-        <Action name="weight_normal"/>
-        <Action name="weight_bold"/>
-        <Action name="weight_demi_bold"/>
-        <Action name="weight_black"/>
+        <Action name="svg_weight_light"/>
+        <Action name="svg_weight_normal"/>
+        <Action name="svg_weight_bold"/>
+        <Action name="svg_weight_demi_bold"/>
+        <Action name="svg_weight_black"/>
       </Menu>
       <Separator/>
-      <Action name="increase_text_size"/>
-      <Action name="decrease_text_size"/>
+      <Action name="svg_increase_text_size"/>
+      <Action name="svg_decrease_text_size"/>
       <Separator/>
-      <Action name="align_left"/>
-      <Action name="align_center"/>
-      <Action name="align_right"/>
-      <!--Action name="align_justified"/-->
+      <Action name="svg_align_left"/>
+      <Action name="svg_align_center"/>
+      <Action name="svg_align_right"/>
+      <!--Action name="svg_align_justified"/-->
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
-      <Action name="options_shape_properties"/>
-      <Action name="options_configure_toolbars"/>
-      <Merge name="StandardToolBarMenuHandler"/>
+      <Action name="svg_options_shape_properties"/>
+      <Action name="svg_options_configure_toolbars"/>
+      <Merge name="svg_StandardToolBarMenuHandler"/>
       <Separator/>
     </Menu>
   </MenuBar>
@@ -79,11 +79,11 @@
     <Text>Formatting</Text>
     <Action name="svg_font"/>
     <Action name="svg_font_size"/>
-    <Action name="line_height"/>
+    <Action name="svg_line_height"/>
     <Action name="svg_font_color"/>
     <Action name="svg_background_color"/>
-    <Action name="weight_bold"/>
-    <Action name="format_italic"/>
-    <Action name="format_underline"/>
+    <Action name="svg_weight_bold"/>
+    <Action name="svg_format_italic"/>
+    <Action name="svg_format_underline"/>
   </ToolBar>
 </kpartgui>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ActionCollection version="2" name="Tools">
+<ActionCollection version="2" name="svg_Tools">
   <Actions category="Text Tool">
     <text>SVG Text Tool</text>
     <Action name="svg_format_textcolor">
@@ -42,7 +42,7 @@
       <isCheckable>false</isCheckable>
       <text>Font...</text>
     </Action>
-    <Action name="insert_special_character">
+    <Action name="svg_insert_special_character">
       <iconText>Special Character</iconText>
       <shortcut>Alt+Shift+C</shortcut>
       <toolTip>Insert one or more symbols or characters not found on the keyboard</toolTip>
@@ -52,7 +52,7 @@
       <isCheckable>false</isCheckable>
       <text>Special Character...</text>
     </Action>
-    <Action name="align_right">
+    <Action name="svg_align_right">
       <iconText>Align Right</iconText>
       <shortcut>Ctrl+Alt+R</shortcut>
       <toolTip>Align Right</toolTip>
@@ -62,7 +62,7 @@
       <isCheckable>false</isCheckable>
       <text>Align Right</text>
     </Action>
-    <Action name="align_left">
+    <Action name="svg_align_left">
       <iconText>Align Left</iconText>
       <shortcut/>
       <toolTip>Align Left</toolTip>
@@ -72,7 +72,7 @@
       <isCheckable>false</isCheckable>
       <text>Align Left</text>
     </Action>
-    <Action name="align_justified">
+    <Action name="svg_align_justified">
       <iconText>Align Block</iconText>
       <shortcut>Ctrl+Alt+R</shortcut>
       <toolTip>Align Block</toolTip>
@@ -82,7 +82,7 @@
       <isCheckable>false</isCheckable>
       <text>Align Block</text>
     </Action>
-    <Action name="align_center">
+    <Action name="svg_align_center">
       <iconText>Align Center</iconText>
       <shortcut>Ctrl+Alt+C</shortcut>
       <toolTip>Align Center</toolTip>
@@ -92,7 +92,7 @@
       <isCheckable>false</isCheckable>
       <text>Align Center</text>
     </Action>
-    <Action name="decrease_font_size">
+    <Action name="svg_decrease_font_size">
       <iconText>Decrease Font Size</iconText>
       <shortcut>Ctrl+&lt;</shortcut>
       <toolTip>Decrease Font Size</toolTip>
@@ -102,7 +102,7 @@
       <isCheckable>false</isCheckable>
       <text>Decrease Font Size</text>
     </Action>
-    <Action name="increase_font_size">
+    <Action name="svg_increase_font_size">
       <iconText>Increase Font Size</iconText>
       <shortcut>Ctrl+&gt;</shortcut>
       <toolTip>Increase Font Size</toolTip>
@@ -112,7 +112,7 @@
       <isCheckable>false</isCheckable>
       <text>Increase Font Size</text>
     </Action>
-    <Action name="format_subscript">
+    <Action name="svg_format_subscript">
       <iconText>Subscript</iconText>
       <shortcut>Ctrl+Shift+B</shortcut>
       <toolTip>Subscript</toolTip>
@@ -122,7 +122,7 @@
       <isCheckable>false</isCheckable>
       <text>Subscript</text>
     </Action>
-    <Action name="format_superscript">
+    <Action name="svg_format_superscript">
       <iconText>Superscript</iconText>
       <shortcut>Ctrl+Shift+P</shortcut>
       <toolTip>Superscript</toolTip>
@@ -132,7 +132,7 @@
       <isCheckable>false</isCheckable>
       <text>Superscript</text>
     </Action>
-    <Action name="format_underline">
+    <Action name="svg_format_underline">
       <iconText>Underline</iconText>
       <shortcut>Ctrl+U</shortcut>
       <toolTip>Underline</toolTip>
@@ -142,7 +142,7 @@
       <isCheckable>false</isCheckable>
       <text>Underline</text>
     </Action>
-    <Action name="format_strike_through">
+    <Action name="svg_format_strike_through">
       <iconText>Strikethrough</iconText>
       <shortcut/>
       <toolTip>Strikethrough</toolTip>
@@ -152,27 +152,27 @@
       <isCheckable>false</isCheckable>
       <text>Strikethrough</text>
     </Action>
-    <Action name="format_italic">
-      <iconText>Italic</iconText>
-      <shortcut>Ctrl+I</shortcut>
-      <toolTip>Italic</toolTip>
-      <icon>format-text-italic</icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Italic</text>
-    </Action>
-    <Action name="weight_bold">
+    <Action name="svg_weight_bold">
       <iconText>Bold</iconText>
       <shortcut>Ctrl+B</shortcut>
       <toolTip>Bold</toolTip>
       <icon>format-text-bold</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Bold</text>
     </Action>
-    <Action name="weight_normal">
+    <Action name="svg_format_italic">
+      <iconText>Italic</iconText>
+      <shortcut>Ctrl+I</shortcut>
+      <toolTip>Italic</toolTip>
+      <icon>format-text-italic</icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>true</isCheckable>
+      <text>Italic</text>
+    </Action>
+    <Action name="svg_weight_normal">
       <iconText>Normal</iconText>
       <shortcut>Ctrl+N</shortcut>
       <toolTip>Normal</toolTip>
@@ -182,7 +182,7 @@
       <isCheckable>false</isCheckable>
       <text>Normal</text>
     </Action>
-    <Action name="weight_demi">
+    <Action name="svg_weight_demi">
       <iconText>Demi</iconText>
       <shortcut/>
       <toolTip>Demi</toolTip>
@@ -192,7 +192,7 @@
       <isCheckable>false</isCheckable>
       <text>Demi</text>
     </Action>
-    <Action name="weight_black">
+    <Action name="svg_weight_black">
       <iconText>Black</iconText>
       <shortcut/>
       <toolTip>Black</toolTip>
@@ -202,7 +202,7 @@
       <isCheckable>false</isCheckable>
       <text>Black</text>
     </Action>
-    <Action name="weight_light">
+    <Action name="svg_weight_light">
       <iconText>Light</iconText>
       <shortcut>Ctrl+L</shortcut>
       <toolTip>Light</toolTip>
@@ -212,5 +212,24 @@
       <isCheckable>false</isCheckable>
       <text>Light</text>
     </Action>
-  </Actions>
+    <Action name="svg_line_height">
+      <iconText>Line Height</iconText>
+      <shortcut>Ctrl+H</shortcut>
+      <toolTip>Line Height in em</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      <text>Line Height</text>
+    </Action>
+    <Action name="svg_options_shape_properties">
+      <iconText>Text Shape Properties</iconText>
+      <shortcut>L</shortcut>
+      <toolTip>Text Shape Properties</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      <text>Text Shape Properties</text>
+    </Action></Actions>
 </ActionCollection>

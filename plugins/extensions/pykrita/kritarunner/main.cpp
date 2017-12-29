@@ -26,10 +26,8 @@
 #include <KoGlobal.h>
 #include <resources/KoHashGeneratorProvider.h>
 #include "kis_md5_generator.h"
+#include "PythonPluginManager.h"
 #include <opengl/kis_opengl.h>
-
-#include <engine.h>
-#include <utilities.h>
 
 extern "C" int main(int argc, char **argv)
 {
@@ -80,12 +78,26 @@ extern "C" int main(int argc, char **argv)
     qDebug() << "\tPython path:" << pythonPath;
 
     qDebug() << "Creating engine";
-    PyKrita::Engine engine;
-    QString r = engine.tryInitializeGetFailureReason();
 
-    if (!r.isEmpty()) {
-        qDebug("Could not initialize the Python engine");
-        return 1;
+    // TODO: refactor to share common parts with plugin.cpp
+
+    PyKrita::InitResult initResult = PyKrita::initialize();
+
+    switch (initResult) {
+        case PyKrita::INIT_OK:
+            break;
+        case PyKrita::INIT_CANNOT_LOAD_PYTHON_LIBRARY:
+            qWarning() << i18n("Cannot load Python library");
+            return 1;
+        case PyKrita::INIT_CANNOT_SET_PYTHON_PATHS:
+            qWarning() << i18n("Cannot set Python paths");
+            return 1;
+        case PyKrita::INIT_CANNOT_LOAD_PYKRITA_MODULE:
+            qWarning() << i18n("Cannot load built-in pykrita module");
+            return 1;
+        default:
+            qWarning() << i18n("Unexpected error initializing python plugin.");
+            return 1;
     }
 
     qDebug() << "Try to import the pykrita module";

@@ -19,23 +19,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef _PYQT_PLUGIN_H_
-#define _PYQT_PLUGIN_H_
 
-#include <QObject>
+#ifndef __PYKRITA_MODULE_H__
+#define  __PYKRITA_MODULE_H__
 
-#include <kis_view_plugin.h>
-#include "PythonPluginManager.h"
+#include <Python.h>
 
-class KritaPyQtPlugin : public KisViewPlugin
-{
-    Q_OBJECT
-public:
-    KritaPyQtPlugin(QObject *parent, const QVariantList &);
-    virtual ~KritaPyQtPlugin();
-private:
-    PythonPluginManager *pluginManager;
-    bool m_autoReload;
-};
+/**
+ * Initializer for the built-in Python module.
+ */
+PyMODINIT_FUNC PyInit_pykrita();
 
 #endif

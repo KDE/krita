@@ -25,12 +25,12 @@
 
 #include "config.h"
 #include "utilities.h"
+#include "PythonPluginManager.h"
 
 #include <algorithm>
 
 #include <cmath>
 #include <Python.h>
-
 
 #include <QDir>
 #include <QLibrary>
@@ -45,11 +45,82 @@
 
 #include <kis_debug.h>
 
+#include "PykritaModule.h"
+
 #define THREADED 1
 
 namespace PyKrita
 {
-namespace
+    static InitResult initStatus = INIT_UNINITIALIZED;
+    static QScopedPointer<PythonPluginManager> pluginManagerInstance;
+
+    InitResult initialize()
+    {
+        // Already initialized?
+        if (initStatus == INIT_OK) return INIT_OK;
+
+        dbgScript << "Initializing Python plugin for Python" << PY_MAJOR_VERSION << "," << PY_MINOR_VERSION;
+
+        if (!Python::libraryLoad()) {
+            return INIT_CANNOT_LOAD_PYTHON_LIBRARY;
+        }
+
+        // Update PYTHONPATH
+        // 0) custom plugin directories (prefer local dir over systems')
+        // 1) shipped krita module's dir
+        QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
+        dbgScript << "Plugin Directories: " << pluginDirectories;
+        if (!Python::setPath(pluginDirectories)) {
+            initStatus = INIT_CANNOT_SET_PYTHON_PATHS;
+            return initStatus;
+        }
+
+        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PyInit_pykrita)) {
+            initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;
+            return initStatus;
+        }
+
+        Python::ensureInitialized();
+        Python py = Python();
+
+        PyRun_SimpleString(
+                "import sip\n"
+                        "sip.setapi('QDate', 2)\n"
+                        "sip.setapi('QTime', 2)\n"
+                        "sip.setapi('QDateTime', 2)\n"
+                        "sip.setapi('QUrl', 2)\n"
+                        "sip.setapi('QTextStream', 2)\n"
+                        "sip.setapi('QString', 2)\n"
+                        "sip.setapi('QVariant', 2)\n"
+        );
+
+        // Initialize 'plugins' dict of module 'pykrita'
+        PyObject* plugins = PyDict_New();
+        py.itemStringSet("plugins", plugins);
+
+        pluginManagerInstance.reset(new PythonPluginManager());
+
+        // Initialize our built-in module.
+        auto pykritaModule = PyInit_pykrita();
+
+        if (!pykritaModule) {
+            initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;
+            return initStatus;
+            //return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
+        }
+
+        initStatus = INIT_OK;
+        return initStatus;
+    }
+
+    PythonPluginManager *pluginManager()
+    {
+        auto pluginManager = pluginManagerInstance.data();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(pluginManager, nullptr);
+        return pluginManager;
+    }
+
+    namespace
 {
 #ifndef Q_OS_WIN
 QLibrary* s_pythonLibrary = 0;
@@ -498,75 +569,6 @@ bool Python::isUnicode(PyObject* const string)
 #else
     return PyUnicode_Check(string);
 #endif
-}
-
-void Python::updateConfigurationFromDictionary(KConfigBase* const config, PyObject* const dictionary)
-{
-    PyObject* groupKey;
-    PyObject* groupDictionary;
-    Py_ssize_t position = 0;
-    while (PyDict_Next(dictionary, &position, &groupKey, &groupDictionary)) {
-        if (!isUnicode(groupKey)) {
-            traceback(QString("Configuration group name not a string"));
-            continue;
-        }
-        QString groupName = unicode(groupKey);
-        if (!PyDict_Check(groupDictionary)) {
-            traceback(QString("Configuration group %1 top level key not a dictionary").arg(groupName));
-            continue;
-        }
-
-        // There is a group per module.
-        KConfigGroup group = config->group(groupName);
-        PyObject* key;
-        PyObject* value;
-        Py_ssize_t x = 0;
-        while (PyDict_Next(groupDictionary, &x, &key, &value)) {
-            if (!isUnicode(key)) {
-                traceback(QString("Configuration group %1 itemKey not a string").arg(groupName));
-                continue;
-            }
-            PyObject* arguments = Py_BuildValue("(Oi)", value, 0);
-            PyObject* pickled = functionCall("dumps", "pickle", arguments);
-            if (pickled) {
-#if PY_MAJOR_VERSION < 3
-                QString ascii(unicode(pickled));
-#else
-                QString ascii(PyBytes_AsString(pickled));
-#endif
-                group.writeEntry(unicode(key), ascii);
-                Py_DECREF(pickled);
-            } else {
-                errScript << "Cannot write" << groupName << unicode(key) << unicode(PyObject_Str(value));
-            }
-        }
-    }
-}
-
-void Python::updateDictionaryFromConfiguration(PyObject* const dictionary, const KConfigBase* const config)
-{
-    qDebug() << config->groupList();
-    Q_FOREACH(QString groupName, config->groupList()) {
-        KConfigGroup group = config->group(groupName);
-        PyObject* groupDictionary = PyDict_New();
-        PyDict_SetItemString(dictionary, PQ(groupName), groupDictionary);
-        Q_FOREACH(QString key, group.keyList()) {
-            QString pickled = group.readEntry(key);
-#if PY_MAJOR_VERSION < 3
-            PyObject* arguments = Py_BuildValue("(s)", PQ(pickled));
-#else
-            PyObject* arguments = Py_BuildValue("(y)", PQ(pickled));
-#endif
-            PyObject* value = functionCall("loads", "pickle", arguments);
-            if (value) {
-                PyDict_SetItemString(groupDictionary, PQ(key), value);
-                Py_DECREF(value);
-            } else {
-                errScript << "Cannot read" << groupName << key << pickled;
-            }
-        }
-        Py_DECREF(groupDictionary);
-    }
 }
 
 bool Python::prependPythonPaths(const QString& path)

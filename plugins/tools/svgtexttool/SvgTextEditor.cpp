@@ -22,6 +22,7 @@
 
 #include <QPainter>
 #include <QVBoxLayout>
+#include <QFormLayout>
 #include <QUrl>
 #include <QPushButton>
 #include <QDebug>
@@ -326,9 +327,10 @@ void SvgTextEditor::find()
 {
     QDialog *findDialog = new QDialog(this);
     findDialog->setWindowTitle(i18n("Find Text"));
-    findDialog->setLayout(new QVBoxLayout());
+    QFormLayout *layout = new QFormLayout();
+    findDialog->setLayout(layout);
     QLineEdit *lnSearchKey = new QLineEdit();
-    findDialog->layout()->addWidget(lnSearchKey);
+    layout->addRow(i18n("Find:"), lnSearchKey);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     findDialog->layout()->addWidget(buttons);
     connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
@@ -365,12 +367,13 @@ void SvgTextEditor::replace()
 {
     QDialog *findDialog = new QDialog(this);
     findDialog->setWindowTitle(i18n("Find and Replace all"));
-    findDialog->setLayout(new QVBoxLayout());
+    QFormLayout *layout = new QFormLayout();
+    findDialog->setLayout(layout);
     QLineEdit *lnSearchKey = new QLineEdit();
     QLineEdit *lnReplaceKey = new QLineEdit();
-    findDialog->layout()->addWidget(lnSearchKey);
+    layout->addRow(i18n("Find:"), lnSearchKey);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    findDialog->layout()->addWidget(lnReplaceKey);
+    layout->addRow(i18n("Replace:"), lnReplaceKey);
     findDialog->layout()->addWidget(buttons);
     connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));

@@ -445,6 +445,15 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
                             .append(": ")
                             .append(it.value())
                             .append(";" );
+                } else if (QString(it.key().toLatin1().data()).contains("font-size")){
+                    QString val = it.value();
+                    if (QRegExp ("\\d*").exactMatch(val)) {
+                        val.append("pt");
+                    }
+                    styleString.append(it.key().toLatin1().data())
+                            .append(": ")
+                            .append(val)
+                            .append(";" );
                 } else {
                     styleString.append(it.key().toLatin1().data())
                             .append(": ")

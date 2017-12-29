@@ -104,7 +104,7 @@ QWidget *SvgTextTool::createOptionWidget()
     Q_FOREACH (int size, QFontDatabase::standardSizes()) {
         m_defPointSize->addItem(QString::number(size)+" pt");
     }
-    int storedSize = m_configGroup.readEntry<int>("defaultPointSize", QApplication::font().pointSize());
+    int storedSize = m_configGroup.readEntry<int>("defaultSize", QApplication::font().pointSize());
     m_defPointSize->setCurrentIndex(QFontDatabase::standardSizes().indexOf(storedSize));
 
     int checkedAlignment = m_configGroup.readEntry<int>("defaultAlignment", 0);
@@ -189,7 +189,7 @@ QString SvgTextTool::generateDefs()
         textAnchor = "end";
     }
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:%1;\n   font-size:%2;   text-anchor:%3;\n  }\n </style>\n</defs>").arg(font, size, textAnchor);
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ;   text-anchor:%3;\n  }\n </style>\n</defs>").arg(font, size, textAnchor);
 }
 
 void SvgTextTool::storeDefaults()

@@ -37,8 +37,8 @@ elseif(MINGW)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.9/PyQt5_gpl-5.9.zip
-        URL_MD5 d978884753df265896eda436d8f4e07b
+        URL https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.9.2/PyQt5_gpl-5.9.2.zip
+        URL_MD5 67eacf2f486f77136c9758e03fe6889e
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}

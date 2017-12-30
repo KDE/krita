@@ -20,11 +20,29 @@
 #include "WdgSvgTextSettings.h"
 #include "ui_WdgSvgTextSettings.h"
 
+#include <QFontDatabase>
+
+#include <QListView>
+#include <QStandardItem>
+#include <QStandardItemModel>
+
+#include <QDebug>
+
 WdgSvgTextSettings::WdgSvgTextSettings(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WdgSvgTextSettings)
 {
     ui->setupUi(this);
+
+    QList<QFontDatabase::WritingSystem> scripts = QFontDatabase().writingSystems();
+    QStandardItemModel *model = new QStandardItemModel(this);
+    for (int s = 0; s < scripts.size(); s ++) {
+        QStandardItem *script = new QStandardItem(QFontDatabase().writingSystemName(scripts.at(s)));
+        script->setCheckable(true);
+        script->setCheckState(Qt::Unchecked);
+        model->appendRow(script);
+    }
+    ui->lwScripts->setModel(model);
 }
 
 WdgSvgTextSettings::~WdgSvgTextSettings()

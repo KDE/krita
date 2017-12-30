@@ -52,14 +52,15 @@ bool HtmlWriter::save(QIODevice &outputDevice)
     // header
     htmlStream << QLatin1String("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "
                                 "\"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                "<html><head><meta name=\"Krita Svg Text\">"
-                                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+                                "<html><head><meta name=\"Krita Svg Text\" />"
+                                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"
+                                "</head>");
     htmlStream.flush();
     {
         HtmlSavingContext savingContext(outputDevice);
         saveShapes(m_toplevelShapes, savingContext);
     }
-    htmlStream << endl << "</body></html>" << endl;
+    htmlStream << endl << "</html>" << endl;
     htmlStream.flush();
     return true;
 }

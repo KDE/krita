@@ -32,7 +32,7 @@
  *
  * Items are mapped by QString as a unique Id.
  *
- * Exemple of use:
+ * Example of use:
  * @code
  * class KoMyClassRegistry : public KoGenericRegistry<MyClass*> {
  * public:

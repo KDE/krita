@@ -870,7 +870,7 @@ private:
 
     QString m_highlightBlendMode; // already in Krita format
     QColor m_highlightColor;
-    qint32 m_highlightOpacity; // Hightlight opacity as a percent
+    qint32 m_highlightOpacity; // Highlight opacity as a percent
 
     QString m_shadowBlendMode; // already in Krita format
     QColor m_shadowColor;

@@ -469,7 +469,7 @@ To make your own ICC profiles:
     If you run Linux, you probably already have gcc installed. Otherwise you'll need to set up a development environment.
     Install a recent version of LittleCMS version 2. As of Jun, 2015, I'm using LCMS 2.7.
 
-    As an aside, if you want LCMS transicc terminal readout that matches the Argyllcms xicclu readout, you'll need to download and modify the LCMS source code as explained in In Quest of Well Behaved Working Spaces, and compile and install the modified code. Whether or not you've modifed LCMS, the code given below will produce well behaved profiles because the primaries have been pre-quantized.
+    As an aside, if you want LCMS transicc terminal readout that matches the Argyllcms xicclu readout, you'll need to download and modify the LCMS source code as explained in In Quest of Well Behaved Working Spaces, and compile and install the modified code. Whether or not you've modified LCMS, the code given below will produce well behaved profiles because the primaries have been pre-quantized.
 
     Compiling LCMS from source requires that you install the development versions of various LCMS dependencies (according to Gentoo Portage: jpeg, tiff, zlib, and coreutils).
 

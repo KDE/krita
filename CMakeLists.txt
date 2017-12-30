@@ -649,7 +649,7 @@ if(WIN32)
 endif()
 
 ##
-## Test endianess
+## Test endianness
 ##
 include (TestBigEndian)
 test_big_endian(CMAKE_WORDS_BIGENDIAN)

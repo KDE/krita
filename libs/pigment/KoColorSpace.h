@@ -203,7 +203,7 @@ public:
 
     /**
      * User visible name which contains the name of the color model and of the color depth.
-     * For intance "RGBA (8-bits)" or "CMYKA (16-bits)".
+     * For instance "RGBA (8-bits)" or "CMYKA (16-bits)".
      */
     QString name() const;
 

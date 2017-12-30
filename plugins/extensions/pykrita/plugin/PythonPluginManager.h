@@ -112,7 +112,6 @@ class PythonPluginManager : public QObject
 
 public:
     PythonPluginManager();
-    ~PythonPluginManager() override;
 
     const QList<PythonPlugin>& plugins() const;
     PythonPlugin *plugin(int index);

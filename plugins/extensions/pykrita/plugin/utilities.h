@@ -60,6 +60,14 @@ namespace PyKrita
      */
     PythonPluginManager *pluginManager();
 
+    /**
+     * Cleanup after Python.
+     * Note: doing this as part of static/global destruction will not
+     * work. The call to Py_Finalize() would happen after the Python
+     * runtime has already been finalized, leading to a segfault.
+     */
+    void finalize();
+
 /**
  * Instantiate this class on the stack to automatically get and release the
  * GIL.

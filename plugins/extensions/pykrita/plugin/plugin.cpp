@@ -89,7 +89,7 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
 
 KritaPyQtPlugin::~KritaPyQtPlugin()
 {
-
+    PyKrita::finalize();
 }
 
 #include "plugin.moc"

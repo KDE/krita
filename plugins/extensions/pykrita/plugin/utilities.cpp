@@ -120,6 +120,23 @@ namespace PyKrita
         return pluginManager;
     }
 
+    void finalize() {
+        dbgScript << "Going to destroy the Python engine";
+
+        // Notify Python that engine going to die
+        {
+            PyKrita::Python py = PyKrita::Python();
+            py.functionCall("_pykritaUnloading");
+        }
+        pluginManagerInstance->unloadAllModules();
+
+        PyKrita::Python::maybeFinalize();
+        PyKrita::Python::libraryUnload();
+
+        pluginManagerInstance.reset();
+        initStatus = INIT_UNINITIALIZED;
+    }
+
     namespace
 {
 #ifndef Q_OS_WIN

@@ -68,24 +68,6 @@ PythonPluginManager::PythonPluginManager()
         , m_model(0, this)
 {}
 
-/// \todo More accurate shutdown required:
-/// need to keep track what exactly was broken on
-/// initialize attempt...
-PythonPluginManager::~PythonPluginManager()
-{
-    dbgScript << "Going to destroy the Python engine";
-
-    // Notify Python that engine going to die
-    {
-        PyKrita::Python py = PyKrita::Python();
-        py.functionCall("_pykritaUnloading");
-    }
-    unloadAllModules();
-
-    PyKrita::Python::maybeFinalize();
-    PyKrita::Python::libraryUnload();
-}
-
 const QList<PythonPlugin>& PythonPluginManager::plugins() const
 {
     return m_plugins;
@@ -107,7 +89,9 @@ PythonPluginsModel * PythonPluginManager::model()
 void PythonPluginManager::unloadAllModules()
 {
     Q_FOREACH(PythonPlugin plugin, m_plugins) {
-        unloadModule(plugin);
+        if (plugin.m_loaded) {
+            unloadModule(plugin);
+        }
     }
 }
 
@@ -305,7 +289,7 @@ void PythonPluginManager::scanPlugins()
 
             verifyDependenciesSetStatus(plugin);
 
-            plugin.m_enabled = pluginSettings.readEntry(QString("enable_") + plugin.moduleName(), false);
+            plugin.m_enabled = pluginSettings.readEntry(QString("enable_") + plugin.moduleName(), true);
 
             m_plugins.append(plugin);
         }
@@ -371,7 +355,7 @@ void PythonPluginManager::loadModule(PythonPlugin &plugin)
 
 void PythonPluginManager::unloadModule(PythonPlugin &plugin)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!plugin.m_loaded);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(plugin.m_loaded);
     KIS_SAFE_ASSERT_RECOVER_RETURN(!plugin.isBroken());
 
     dbgScript << "Unloading module: " << plugin.moduleName();
@@ -411,6 +395,6 @@ void PythonPluginManager::setPluginEnabled(PythonPlugin &plugin, bool enabled)
     pluginSettings.writeEntry(QString("enable_") + plugin.moduleName(), enabled);
 
     if (!wasEnabled && enabled) {
-        unloadModule(plugin);
+        loadModule(plugin);
     }
 }

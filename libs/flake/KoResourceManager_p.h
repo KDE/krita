@@ -84,56 +84,56 @@ public:
 
     /**
      * Return the resource determined by param key as a boolean.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     bool boolResource(int key) const;
 
     /**
      * Return the resource determined by param key as an integer.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     int intResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoColor.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     KoColor koColorResource(int key) const;
 
     /**
      * Return the resource determined by param key as a pointer to a KoShape.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     KoShape *koShapeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QString .
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     QString stringResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QSizeF.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     QSizeF sizeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoUnit.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     KoUnit unitResource(int key) const;
 
     /**
      * Returns true if there is a resource set with the requested key.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     bool hasResource(int key) const;

@@ -725,7 +725,7 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
         //TODO
     }
 
-    // split angles bigger than 90° so that it gives a good aproximation to the circle
+    // split angles bigger than 90° so that it gives a good approximation to the circle
     qreal parts = ceil(qAbs(sweepAngle / 90.0));
 
     qreal sa_rad = startAngle * M_PI / 180.0;

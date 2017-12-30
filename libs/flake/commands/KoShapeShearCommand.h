@@ -34,7 +34,7 @@ class KRITAFLAKE_EXPORT KoShapeShearCommand : public KUndo2Command
 {
 public:
     /**
-     * Comand to rotate a selection of shapes.  Note that it just alters the rotated
+     * Command to rotate a selection of shapes.  Note that it just alters the rotated
      * property of those shapes, and nothing more.
      * @param shapes all the shapes that should be rotated
      * @param previousShearXs a list with the same amount of items as shapes with the

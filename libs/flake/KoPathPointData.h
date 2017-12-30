@@ -30,7 +30,7 @@
 class KoPathPointData  : public boost::equality_comparable<KoPathPointData>
 {
 public:
-    /// contructor
+    /// constructor
     KoPathPointData(KoPathShape * path, const KoPathPointIndex & pointIndex)
             : pathShape(path)
             , pointIndex(pointIndex) {}

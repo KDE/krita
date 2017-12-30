@@ -2251,7 +2251,7 @@ void KoShape::saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &or
 
     debugFlake << "shape saves contour-polygon";
     if (d->clipPath && !d->clipPath->clipPathShapes().isEmpty()) {
-        // This will loose data as odf can only save one set of contour wheras
+        // This will loose data as odf can only save one set of contour whereas
         // svg loading and at least karbon editing can produce more than one
         // TODO, FIXME see if we can save more than one clipshape to odf
         d->clipPath->clipPathShapes().first()->saveContourOdf(context, originalSize);

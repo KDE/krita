@@ -204,7 +204,7 @@ public:
     KoInputDevice currentInputDevice() const;
 
     /**
-     * For the list of shapes find out which tool is the highest priorty tool that can handle it.
+     * For the list of shapes find out which tool is the highest priority tool that can handle it.
      * @returns the toolId for the shapes.
      * @param shapes a list of shapes, a selection for example, that is used to look for the tool.
      */

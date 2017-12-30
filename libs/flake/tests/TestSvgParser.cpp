@@ -492,7 +492,7 @@ void TestSvgParser::testScalingViewportTransform()
 {
     /**
      * Note: 'transform' affects all the attributes of the *current*
-     * element, while 'viewBox' affects only the decendants!
+     * element, while 'viewBox' affects only the descendants!
      */
 
     const QString data =
@@ -1097,7 +1097,7 @@ void TestSvgParser::testRenderDisplayInheritance()
     QVERIFY(shape);
 
     QCOMPARE(shape->isVisible(false), true);
-    QEXPECT_FAIL("", "TODO: Fix 'display' attribute not to be inherited in shapes heirarchy!", Continue);
+    QEXPECT_FAIL("", "TODO: Fix 'display' attribute not to be inherited in shapes hierarchy!", Continue);
     QCOMPARE(shape->isVisible(true), true);
 }
 

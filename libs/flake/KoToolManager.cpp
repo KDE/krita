@@ -848,7 +848,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     // if the 'to' is one of our canvasWidgets, then switch.
 
     // for code simplicity the current canvas will be checked again,
-    // but would have been catched already in the lines above, so no issue
+    // but would have been caught already in the lines above, so no issue
     KoCanvasController *newCanvas = 0;
     Q_FOREACH (KoCanvasController* canvas, canvasses.keys()) {
         if (canvas->canvas()->canvasWidget() == to) {

@@ -119,7 +119,7 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
         break;
     default: { // must be a dashed line
         styleStroke.addProperty("draw:stroke", "dash", KoGenStyle::GraphicType);
-        // save stroke dash (14.14.7) which is severly limited, but still
+        // save stroke dash (14.14.7) which is severely limited, but still
         KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
         dashStyle.addAttribute("draw:style", "rect");
         QVector<qreal> dashes = pen.dashPattern();
@@ -723,7 +723,7 @@ QTransform KoOdfGraphicStyles::loadTransformation(const QString &transformation)
             subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
 
         if (subtransform[0] == "rotate") {
-            // TODO find out what oo2 really does when rotating, it seems severly broken
+            // TODO find out what oo2 really does when rotating, it seems severely broken
             if (params.count() == 3) {
                 qreal x = KoUnit::parseValue(params[1]);
                 qreal y = KoUnit::parseValue(params[2]);

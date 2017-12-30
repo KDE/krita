@@ -29,7 +29,7 @@
   expose all functionality to the client.
 
   Note that all objects that are created are wrapper objects that are
-  owned by the scripting environement or the plugin.
+  owned by the scripting environment or the plugin.
 
 
   Using the functionality in this library, either through a scripting

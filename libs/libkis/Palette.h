@@ -92,7 +92,7 @@ public:
     /**
      * @brief addGroup
      * @param name of the new group
-     * @return whether adding the group was succesful.
+     * @return whether adding the group was successful.
      */
     bool addGroup(QString name);
     /**
@@ -132,7 +132,7 @@ public:
 
     /**
      * @brief colorForEntry
-     * special function to retreive a ManagedColor object from the colorsetentry.
+     * special function to retrieve a ManagedColor object from the colorsetentry.
      * @param entry the entry
      * @return the ManagedColorObject
      */
@@ -161,7 +161,7 @@ public:
      * @brief editEntry
      * Changes the entry at @param index by replacing it with @param entry.
      * @param groupName the group at which the index is.
-     * @return whether it was succesful.
+     * @return whether it was successful.
      */
     bool editEntry (int index, KoColorSetEntry entry, QString groupName = QString());
     /**
@@ -169,7 +169,7 @@ public:
      * change the group name.
      * @param oldGroupName the old groupname to change.
      * @param newGroupName the new name to change it into.
-     * @return whether succesful. Reasons for failure include not knowing have oldGroupName
+     * @return whether successful. Reasons for failure include not knowing have oldGroupName
      */
     bool changeGroupName(QString oldGroupName, QString newGroupName);
     /**
@@ -177,14 +177,14 @@ public:
      * move the group to before groupNameInsertBefore.
      * @param groupName group to move.
      * @param groupNameInsertBefore group to inset before.
-     * @return whether succesful. Reasons for failure include either group not existing.
+     * @return whether successful. Reasons for failure include either group not existing.
      */
     bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
 
     /**
      * @brief save
      * save the palette
-     * @return whether it was succesful.
+     * @return whether it was successful.
      */
     bool save();
 

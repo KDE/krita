@@ -171,7 +171,7 @@ protected:
      * may me implemented in this method.
      *
      * If \p seqNo is equal or greater than zero, then incremental iteration is
-     * overriden by this seqNo value
+     * overridden by this seqNo value
      */
     virtual void updateBrushIndexes(const KisPaintInformation& info, int seqNo) = 0;
 

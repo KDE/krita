@@ -562,7 +562,7 @@ KisGradientShapeStrategy* createPolygonShapeStrategy(const QPainterPath &path, c
 }
 
 /**
- * TODO: make this call happen asyncronously when the user does nothing
+ * TODO: make this call happen asynchronously when the user does nothing
  */
 void KisGradientPainter::precalculateShape()
 {

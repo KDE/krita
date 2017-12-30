@@ -43,7 +43,7 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaint
 
 public:
     /**
-     * Construct a paint layer with the given parameters. The default bounds of the paintdevice are overwriten.
+     * Construct a paint layer with the given parameters. The default bounds of the paintdevice are overwritten.
      * @param image this layer belongs to, or null, if it shouldn't belong to any image
      * @param name of the layer
      * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8

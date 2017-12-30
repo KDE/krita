@@ -1830,7 +1830,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             yd = (y2 - y1);
         }
         grad = yd / xd;
-        // nearest X,Y interger coordinates
+        // nearest X,Y integer coordinates
         xend = x1;
         yend = y1 + grad * (xend - x1);
 
@@ -1932,7 +1932,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         grad = xd / yd;
 
-        // nearest X,Y interger coordinates
+        // nearest X,Y integer coordinates
         yend = y1;
         xend = x1 + grad * (yend - y1);
 

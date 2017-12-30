@@ -139,7 +139,7 @@ protected:
      *
      * Requirements:
      *   * must be called *only* from within the context of the strokes
-     *     worker thread during exectution one of its jobs
+     *     worker thread during execution of one of its jobs
      *
      * Guarantees:
      *   * the added job is guaranteed to be executed in some time after

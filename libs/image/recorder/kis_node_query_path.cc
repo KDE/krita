@@ -40,7 +40,7 @@ struct PathElement {
 struct Q_DECL_HIDDEN KisNodeQueryPath::Private {
     QList<PathElement> elements;
     bool relative;
-    /// This function will remove uneeded call to parent, for instance, "1/../3/../5" => "5"
+    /// This function will remove unneeded call to parent, for instance, "1/../3/../5" => "5"
     void simplifyPath() {
         // No elements then return
         if (elements.isEmpty()) return;

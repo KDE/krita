@@ -274,7 +274,7 @@ public:
 
     /**
      * Merge the specified properties with the properties of this
-     * layer. Whereever these properties overlap, the value of the
+     * layer. Wherever these properties overlap, the value of the
      * node properties is changed. No properties on the node are
      * deleted. If there are new properties in this list, they will be
      * added on the node.

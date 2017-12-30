@@ -86,7 +86,7 @@ public Q_SLOTS:
 public:
 
     /**
-     * Start a backgroud thread that will recalculate some extra frame.
+     * Start a background thread that will recalculate some extra frame.
      * The result will be reported using two types of signals:
      *
      * 1) KisImage::sigImageUpdated() will be emitted for every chunk

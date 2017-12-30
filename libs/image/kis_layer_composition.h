@@ -29,8 +29,8 @@
 #include "kis_image.h"
 
 /**
- * Storage class for layer compositions. Layer compositions allow to have several state for visible layers
- * e.g. used in storyboarding with one background and differnt foregrounds
+ * Storage class for layer compositions. Layer compositions allow to have several states for visible layers
+ * e.g. used in storyboarding with one background and different foregrounds
  */
 class KRITAIMAGE_EXPORT KisLayerComposition
 {

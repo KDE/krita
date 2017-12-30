@@ -360,7 +360,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     }
 
 
-    // we compress the updated rect (atm, noone uses it anyway)
+    // we compress the updated rect (atm, no one uses it anyway)
     QRect unitedRect;
     Q_FOREACH (const QRect &rc, rects) {
         unitedRect |= rc;

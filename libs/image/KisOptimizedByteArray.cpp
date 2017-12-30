@@ -163,7 +163,7 @@ struct KisOptimizedByteArray::Private : public QSharedData
     MemoryAllocator *allocator;
 
     // stored allocator shared pointer is used only for keeping
-    // the lifetime of the allocator until the deatch of the last
+    // the lifetime of the allocator until the detach of the last
     // allocated chunk
     MemoryAllocatorSP storedAllocator;
 

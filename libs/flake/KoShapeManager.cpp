@@ -44,6 +44,8 @@
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
 #include "KisQPainterStateSaver.h"
+#include "KoSvgTextChunkShape.h"
+#include "KoSvgTextShape.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -53,7 +55,11 @@
 
 bool KoShapeManager::Private::shapeUsedInRenderingTree(KoShape *shape)
 {
-    return !dynamic_cast<KoShapeGroup*>(shape) && !dynamic_cast<KoShapeLayer*>(shape);
+    // FIXME: make more general!
+
+    return !dynamic_cast<KoShapeGroup*>(shape) &&
+            !dynamic_cast<KoShapeLayer*>(shape) &&
+            !(dynamic_cast<KoSvgTextChunkShape*>(shape) && !dynamic_cast<KoSvgTextShape*>(shape));
 }
 
 void KoShapeManager::Private::updateTree()
@@ -338,13 +344,18 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             shapePainter = clipMaskPainter->shapePainter();
         }
 
-        shapePainter->save();
+        /**
+         * We expect the shape to save/restore the painter's state itself. Such design was not
+         * not always here, so we need a period of sanity checks to ensure all the shapes are
+         * ported correctly.
+         */
+        const QTransform sanityCheckTransformSaved = shapePainter->transform();
+
         shape->paint(*shapePainter, converter, paintContext);
-        shapePainter->restore();
-        if (shape->stroke()) {
-            shapePainter->save();
-            shape->stroke()->paint(shape, *shapePainter, converter);
-            shapePainter->restore();
+        shape->paintStroke(*shapePainter, converter, paintContext);
+
+        KIS_SAFE_ASSERT_RECOVER(shapePainter->transform() == sanityCheckTransformSaved) {
+            shapePainter->setTransform(sanityCheckTransformSaved);
         }
 
         if (clipMask) {
@@ -390,12 +401,8 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             } else {
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
+                shape->paintStroke(imagePainter, converter, paintContext);
                 imagePainter.restore();
-                if (shape->stroke()) {
-                    imagePainter.save();
-                    shape->stroke()->paint(shape, imagePainter, converter);
-                    imagePainter.restore();
-                }
                 imagePainter.end();
             }
         }

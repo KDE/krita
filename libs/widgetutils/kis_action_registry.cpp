@@ -250,7 +250,7 @@ QList<QString> KisActionRegistry::registeredShortcutIds() const
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {
-        qDebug() << "No XML data found for action" << name;
+        qWarning() << "No XML data found for action" << name;
         return false;
     }
 

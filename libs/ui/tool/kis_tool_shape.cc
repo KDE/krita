@@ -179,7 +179,7 @@ void KisToolShape::addShape(KoShape* shape)
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
     }
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape);
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape, 0);
     canvas()->addCommand(cmd);
 }
 

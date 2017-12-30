@@ -80,7 +80,7 @@ KUndo2Command* KoCreateShapeStrategy::createCommand()
     if (newSize.width() > 1.0 && newSize.height() > 1.0)
         shape->setSize(newSize);
 
-    KUndo2Command * cmd = parent->canvas()->shapeController()->addShape(shape);
+    KUndo2Command * cmd = parent->canvas()->shapeController()->addShape(shape, 0);
     if (cmd) {
         KoSelection *selection = parent->canvas()->shapeManager()->selection();
         selection->deselectAll();

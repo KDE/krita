@@ -193,7 +193,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
                 m_shape->setUserData(new KisShapeSelectionMarker);
             }
 
-            return m_view->canvasBase()->shapeController()->addShape(m_shape);
+            return m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
         }
     };
 

@@ -196,5 +196,107 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
     </Action>
+
+    <Action name="object_transform_rotate_90_cw">
+      <text>Rotate 90° CW</text>
+      <toolTip>Rotate object 90° clockwise</toolTip>
+      <shortcut></shortcut>
+      <icon>object-rotate-right</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_rotate_90_ccw">
+      <text>Rotate 90° CCW</text>
+      <toolTip>Rotate object 90° counterclockwise</toolTip>
+      <shortcut></shortcut>
+      <icon>object-rotate-left</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_rotate_180">
+      <text>Rotate 180° CCW</text>
+      <toolTip>Rotate object 180°</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_mirror_horizontally">
+      <text>Mirror Horizontally</text>
+      <toolTip>Mirror object horizontally</toolTip>
+      <shortcut></shortcut>
+      <icon>symmetry-horizontal</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_mirror_vertically">
+      <text>Mirror Vertically</text>
+      <toolTip>Mirror object vertically</toolTip>
+      <shortcut></shortcut>
+      <icon>symmetry-vertical</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_transform_reset">
+      <text>Reset Transformations</text>
+      <toolTip>Reset object transformations</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_unite">
+      <text>Unite</text>
+      <toolTip>Create boolean onion of multiple objects</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_intersect">
+      <text>Intersect</text>
+      <toolTip>Create boolean intersection of multiple objects</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_subtract">
+      <text>Subtract</text>
+      <toolTip>Subtract multiple objects from the first selected one</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+    <Action name="object_split">
+      <text>Split</text>
+      <toolTip>Split objects with multiple subpaths into multiple objects</toolTip>
+      <shortcut></shortcut>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+    </Action>
+
+
   </Actions>
 </ActionCollection>

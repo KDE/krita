@@ -145,8 +145,8 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
 
-On All operating systems:
-    If you want to build your own SIP and PyQt instead of the system one:
+On Linux, if you want to build your own SIP and PyQt instead of the system one:
+
     cmake --build . --config RelWithDebInfo --target ext_sip
     cmake --build . --config RelWithDebInfo --target ext_pyqt
 

@@ -73,7 +73,7 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
     : KisPainterBasedStrokeStrategy("FILTER_STROKE",
                                     kundo2_i18n("Filter \"%1\"", filter->name()),
                                     resources,
-                                    QVector<PainterInfo*>(),false),
+                                    QVector<KisFreehandStrokeInfo*>(),false),
       m_d(new Private())
 {
     m_d->filter = filter;

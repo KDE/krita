@@ -432,7 +432,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
         const bool isCircle = size.width() == size.height();
         context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
         context.shapeWriter().addAttribute("id", context.getID(this));
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
 
         if (isCircle) {
             context.shapeWriter().addAttributePt("r", 0.5 * size.width());
@@ -449,7 +449,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
     } else {
         context.shapeWriter().startElement("path");
         context.shapeWriter().addAttribute("id", context.getID(this));
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
 
         context.shapeWriter().addAttribute("sodipodi:type", "arc");
 

@@ -26,6 +26,7 @@
 #include <QLineF>
 #include "kis_signals_blocker.h"
 #include "kis_brush_option.h"
+#include <KisPaintopSettingsIds.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -81,7 +82,7 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
     KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
-    settings->m_savedBrush = this->brush();
+    settings->m_savedBrush = 0;
     return settings;
 }
 
@@ -141,16 +142,20 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
 
 bool KisBrushBasedPaintOpSettings::isValid() const
 {
-    QString filename = getString("requiredBrushFile", QString());
-    if (!filename.isEmpty()) {
-        KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(filename);
-        if (!brush) {
-            return false;
+    QStringList files = getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
+    files << getString(KisPaintOpUtils::RequiredBrushFileTag);
+
+    Q_FOREACH (const QString &file, files) {
+        if (!file.isEmpty()) {
+            KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(file);
+            if (!brush) {
+                return false;
+            }
         }
     }
+
     return true;
 }
-
 bool KisBrushBasedPaintOpSettings::isLoadable()
 {
     return (KisBrushServer::instance()->brushServer()->resources().count() > 0);

@@ -39,13 +39,16 @@
 class Q_DECL_HIDDEN SvgSavingContext::Private
 {
 public:
-    Private(QIODevice &outputDevice)
-        : output(outputDevice), styleWriter(0), shapeWriter(0)
+    Private(QIODevice *_mainDevice, QIODevice *_styleDevice)
+        : mainDevice(_mainDevice)
+        , styleDevice(_styleDevice)
+        , styleWriter(0)
+        , shapeWriter(0)
         , saveInlineImages(true)
     {
-        styleWriter = new KoXmlWriter(&styleBuffer, 1);
+        styleWriter.reset(new KoXmlWriter(&styleBuffer, 1));
         styleWriter->startElement("defs");
-        shapeWriter = new KoXmlWriter(&shapeBuffer, 1);
+        shapeWriter.reset(new KoXmlWriter(&shapeBuffer, 1));
 
         const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
         userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
@@ -53,24 +56,30 @@ public:
 
     ~Private()
     {
-        delete styleWriter;
-        delete shapeWriter;
     }
 
-    QIODevice &output;
+    QIODevice *mainDevice;
+    QIODevice *styleDevice;
     QBuffer styleBuffer;
     QBuffer shapeBuffer;
-    KoXmlWriter *styleWriter;
-    KoXmlWriter *shapeWriter;
+    QScopedPointer<KoXmlWriter> styleWriter;
+    QScopedPointer<KoXmlWriter> shapeWriter;
 
     QHash<QString, int> uniqueNames;
     QHash<const KoShape*, QString> shapeIds;
     QTransform userSpaceMatrix;
     bool saveInlineImages;
+    bool strippedTextMode = false;
 };
 
 SvgSavingContext::SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages)
-    : d(new Private(outputDevice))
+    : d(new Private(&outputDevice, 0))
+{
+    d->saveInlineImages = saveInlineImages;
+}
+
+SvgSavingContext::SvgSavingContext(QIODevice &shapesDevice, QIODevice &styleDevice, bool saveInlineImages)
+    : d(new Private(&shapesDevice, &styleDevice))
 {
     d->saveInlineImages = saveInlineImages;
 }
@@ -78,9 +87,15 @@ SvgSavingContext::SvgSavingContext(QIODevice &outputDevice, bool saveInlineImage
 SvgSavingContext::~SvgSavingContext()
 {
     d->styleWriter->endElement();
-    d->output.write(d->styleBuffer.data());
-    d->output.write("\n");
-    d->output.write(d->shapeBuffer.data());
+
+    if (d->styleDevice) {
+        d->styleDevice->write(d->styleBuffer.data());
+    } else {
+        d->mainDevice->write(d->styleBuffer.data());
+        d->mainDevice->write("\n");
+    }
+
+    d->mainDevice->write(d->shapeBuffer.data());
 
     delete d;
 }
@@ -151,7 +166,7 @@ bool SvgSavingContext::isSavingInlineImages() const
 
 QString SvgSavingContext::createFileName(const QString &extension)
 {
-    QFile *file = qobject_cast<QFile*>(&d->output);
+    QFile *file = qobject_cast<QFile*>(d->mainDevice);
     if (!file)
         return QString();
 
@@ -228,4 +243,14 @@ QString SvgSavingContext::saveImage(KoImageData *image)
         }
     }
     return QString();
+}
+
+void SvgSavingContext::setStrippedTextMode(bool value)
+{
+    d->strippedTextMode = value;
+}
+
+bool SvgSavingContext::strippedTextMode() const
+{
+    return d->strippedTextMode;
 }

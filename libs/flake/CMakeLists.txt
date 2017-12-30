@@ -4,6 +4,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/flake/commands
     ${CMAKE_SOURCE_DIR}/libs/flake/tools
     ${CMAKE_SOURCE_DIR}/libs/flake/svg
+    ${CMAKE_SOURCE_DIR}/libs/flake/text
     ${CMAKE_BINARY_DIR}/libs/flake
 )
 
@@ -117,6 +118,7 @@ set(kritaflake_SRCS
     KoClipMask.cpp
     KoClipMaskPainter.cpp
     KoCurveFit.cpp
+
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -161,6 +163,11 @@ set(kritaflake_SRCS
     commands/KoShapeConnectionChangeCommand.cpp
     commands/KoMultiPathPointMergeCommand.cpp
     commands/KoMultiPathPointJoinCommand.cpp
+    commands/KoKeepShapesSelectedCommand.cpp
+
+    html/HtmlSavingContext.cpp
+    html/HtmlWriter.cpp
+
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -183,6 +190,7 @@ set(kritaflake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
+
     svg/KoShapePainter.cpp
     svg/SvgUtil.cpp
     svg/SvgGraphicContext.cpp
@@ -199,6 +207,12 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+
+    text/KoSvgText.cpp
+    text/KoSvgTextProperties.cpp
+    text/KoSvgTextChunkShape.cpp
+    text/KoSvgTextShape.cpp
+    text/KoSvgTextShapeMarkupConverter.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
 
@@ -220,6 +234,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/commands>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tools>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/svg>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
 target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritacommand KF5::WidgetsAddons Qt5::Svg)

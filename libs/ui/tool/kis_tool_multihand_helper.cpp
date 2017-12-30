@@ -21,7 +21,7 @@
 #include <QTransform>
 
 #include "kis_painter.h"
-
+#include <strokes/KisFreehandStrokeInfo.h>
 
 struct KisToolMultihandHelper::Private
 {
@@ -46,11 +46,11 @@ void KisToolMultihandHelper::setupTransformations(const QVector<QTransform> &tra
     d->transformations = transformations;
 }
 
-void KisToolMultihandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
+void KisToolMultihandHelper::createPainters(QVector<KisFreehandStrokeInfo*> &strokeInfos,
                                             const KisDistanceInformation &startDist)
 {
     for (int i = 0; i < d->transformations.size(); i++) {
-        painterInfos << new PainterInfo(startDist);
+        strokeInfos << new KisFreehandStrokeInfo(startDist);
     }
 }
 

@@ -100,7 +100,7 @@ QString compositeOpToBlendMode(const QString &compositeOp)
         mode = "linearLight";
     } else if (compositeOp == COMPOSITE_PIN_LIGHT) {
         mode = "pinLight";
-    } else if (compositeOp == COMPOSITE_HARD_MIX) {
+    } else if (compositeOp == COMPOSITE_HARD_MIX_PHOTOSHOP) {
         mode = "hardMix";
     } else if (compositeOp == COMPOSITE_DIFF) {
         mode = "Dfrn";
@@ -766,7 +766,7 @@ void convertAndSetBlendMode(const QString &mode,
     } else if (mode == "pinLight") {
         compositeOp = COMPOSITE_PIN_LIGHT;
     } else if (mode == "hardMix") {
-        compositeOp = COMPOSITE_HARD_MIX;
+        compositeOp = COMPOSITE_HARD_MIX_PHOTOSHOP;
     } else if (mode == "Dfrn") {
         compositeOp = COMPOSITE_DIFF;
     } else if (mode == "Xclu") {

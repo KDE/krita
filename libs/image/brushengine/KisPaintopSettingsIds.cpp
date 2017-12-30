@@ -1,7 +1,5 @@
 /*
- * tool_crop.cc -- Part of Krita
- *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,37 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "tool_text.h"
-#include "kis_tool_text.h"
+#include "KisPaintopSettingsIds.h"
 
-#include <stdlib.h>
-#include <vector>
+namespace KisPaintOpUtils {
 
-#include <QPoint>
+const char MaskingBrushPaintOpId[] = "paintbrush";
+const char MaskingBrushEnabledTag[] = "MaskingBrush/Enabled";
+const char MaskingBrushCompositeOpTag[] = "MaskingBrush/MaskingCompositeOp";
+const char MaskingBrushUseMasterSizeTag[] = "MaskingBrush/UseMasterSize";
+const char MaskingBrushMasterSizeCoeffTag[] = "MaskingBrush/MasterSizeCoeff";
+const char MaskingBrushPresetPrefix[] = "MaskingBrush/Preset/";
 
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
-
-#include <kis_debug.h>
-#include <kpluginfactory.h>
-
-#include <kis_global.h>
-#include <kis_types.h>
-#include <KoToolRegistry.h>
-
-K_PLUGIN_FACTORY_WITH_JSON(ToolTextFactory, "kritatooltext.json", registerPlugin<ToolText>();)
-
-
-ToolText::ToolText(QObject *parent, const QVariantList &)
-        : QObject(parent)
-{
-    KoToolRegistry::instance()->add(new KisToolTextFactory());
-
+const char RequiredBrushFileTag[] = "requiredBrushFile";
+const char RequiredBrushFilesListTag[] = "requiredBrushFilesList";
 
 }
-
-ToolText::~ToolText()
-{
-}
-
-#include "tool_text.moc"

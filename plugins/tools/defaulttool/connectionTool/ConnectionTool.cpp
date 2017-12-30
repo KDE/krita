@@ -445,7 +445,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
                 return;
             } else {
                 // finalize adding the new connection shape with an undo command
-                KUndo2Command *cmd = canvas()->shapeController()->addShape(m_currentShape);
+                KUndo2Command *cmd = canvas()->shapeController()->addShape(m_currentShape, 0);
                 canvas()->addCommand(cmd);
                 setEditMode(EditConnection, m_currentShape, KoConnectionShape::StartHandle);
             }

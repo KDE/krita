@@ -64,16 +64,24 @@
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
+    saveSvgBasicStyle(shape, context);
+
     saveSvgFill(shape, context);
     saveSvgStroke(shape, context);
+
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
     saveSvgMasking(shape, context);
     saveSvgMarkers(shape, context);
-    if (! shape->isVisible())
+}
+
+void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context)
+{
+    if (! shape->isVisible()) {
         context.shapeWriter().addAttribute("display", "none");
-    if (shape->transparency() > 0.0)
+    } if (shape->transparency() > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
+    }
 }
 
 void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
@@ -353,7 +361,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
-        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
+        SvgUtil::writeTransformAttributeLazy("gradientTransform", gradientTransform, context.styleWriter());
         context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("x1", g->start().x());
         context.styleWriter().addAttribute("y1", g->start().y());
@@ -367,7 +375,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
-        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
+        SvgUtil::writeTransformAttributeLazy("gradientTransform", gradientTransform, context.styleWriter());
         context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("cx", g->center().x());
         context.styleWriter().addAttribute("cy", g->center().y());
@@ -514,7 +522,7 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
         context.styleWriter().addAttributePt("height", rect.height());
     }
 
-    context.styleWriter().addAttribute("patternTransform", SvgUtil::transformToString(pattern->patternTransform()));
+    SvgUtil::writeTransformAttributeLazy("patternTransform", pattern->patternTransform(), context.styleWriter());
 
     if (pattern->contentCoordinates() == KoFlake::ObjectBoundingBox) {
         // TODO: move this normalization into the KoVectorPatternBackground itself

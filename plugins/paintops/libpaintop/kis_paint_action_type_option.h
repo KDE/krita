@@ -37,6 +37,7 @@ enum enumPaintActionType {
  */
 class PAINTOP_EXPORT KisPaintActionTypeOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     KisPaintActionTypeOption();
 
@@ -48,6 +49,11 @@ public:
 
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
+public Q_SLOTS:
+    void slotForceWashMode(bool value);
+
+private:
+    void updateControlsAvailability(bool value);
 
 private:
 

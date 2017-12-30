@@ -104,7 +104,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget *parent)
     m_quickView->setSelectionMode(QListView::SingleSelection);
     m_quickView->setResizeMode(QListView::Adjust);
     m_quickView->setFlow(QListView::LeftToRight);
-    m_quickView->setGridSize(QSize(128, 128));
+    m_quickView->setGridSize(QSize(50, 50));
     m_quickView->setTextElideMode(Qt::ElideNone);
     m_quickView->setWordWrap(true);
     setWidget(m_quickView);

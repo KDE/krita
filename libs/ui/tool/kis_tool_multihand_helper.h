@@ -35,7 +35,7 @@ public:
     void setupTransformations(const QVector<QTransform> &transformations);
 
 protected:
-    void createPainters(QVector<PainterInfo*> &painterInfos,
+    void createPainters(QVector<KisFreehandStrokeInfo*> &strokeInfos,
                         const KisDistanceInformation &startDist) override;
 
     void paintAt(const KisPaintInformation &pi) override;

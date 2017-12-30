@@ -32,6 +32,8 @@
 #include <KoXmlWriter.h>
 #include "kis_dom_utils.h"
 #include <QRegularExpression>
+#include "KisQPainterStateSaver.h"
+
 
 struct Q_DECL_HIDDEN ImageShape::Private
 {
@@ -72,16 +74,15 @@ KoShape *ImageShape::cloneShape() const
 void ImageShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     Q_UNUSED(paintContext);
+    KisQPainterStateSaver saver(&painter);
 
     const QRectF myrect(QPointF(), size());
     applyConversion(painter, converter);
 
-    painter.save();
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.setClipRect(QRectF(QPointF(), size()), Qt::IntersectClip);
     painter.setTransform(m_d->viewBoxTransform, true);
     painter.drawImage(QPoint(), m_d->image);
-    painter.restore();
 }
 
 void ImageShape::setSize(const QSizeF &size)
@@ -108,7 +109,7 @@ bool ImageShape::saveSvg(SvgSavingContext &context)
 
     context.shapeWriter().startElement("image");
     context.shapeWriter().addAttribute("id", uid);
-    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+    SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
     context.shapeWriter().addAttribute("width", QString("%1px").arg(KisDomUtils::toString(size().width())));
     context.shapeWriter().addAttribute("height", QString("%1px").arg(KisDomUtils::toString(size().height())));
 

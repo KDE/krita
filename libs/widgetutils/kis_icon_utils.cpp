@@ -134,7 +134,7 @@ QIcon loadIcon(const QString &name)
 
 
 bool useDarkIcons() {
-     QColor background = qApp->palette().background().color();
+    QColor background = qApp->palette().background().color();
     return  background.value() > 100;
 }
 

@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
     class StatusBarItem
     {
     public:
-        StatusBarItem() // for QValueList
+        StatusBarItem()
             : m_widget(0) {}
 
         StatusBarItem(QWidget * widget)

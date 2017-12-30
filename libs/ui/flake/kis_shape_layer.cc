@@ -68,6 +68,9 @@
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
 
+#include "SvgWriter.h"
+#include "SvgParser.h"
+
 #include <kis_types.h>
 #include <kis_image.h>
 #include "kis_default_bounds.h"

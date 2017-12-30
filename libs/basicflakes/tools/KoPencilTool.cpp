@@ -400,7 +400,7 @@ void KoPencilTool::addPathShape(KoPathShape* path, bool closePath)
         }
     }
 
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(path, 0);
     if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();

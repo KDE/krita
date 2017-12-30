@@ -213,7 +213,7 @@ void Viewport::handleDropEvent(QDropEvent *event)
     m_draggedShape->setAbsolutePosition(newPos);
 
 
-    KUndo2Command * cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape);
+    KUndo2Command * cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape, 0);
 
     if (cmd) {
         m_parent->canvas()->addCommand(cmd);

@@ -1,9 +1,0 @@
-{
-    "Id": "Text Tool",
-    "Type": "Service",
-    "X-KDE-Library": "kritatooltext",
-    "X-KDE-ServiceTypes": [
-        "Krita/Tool"
-    ],
-    "X-Krita-Version": "28"
-}

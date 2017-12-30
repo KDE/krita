@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,31 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KISPAINTOPSETTINGSIDS_H
+#define KISPAINTOPSETTINGSIDS_H
 
-#ifndef KIS_TEXT_TOOL_OPTION_WIDGET_H
-#define KIS_TEXT_TOOL_OPTION_WIDGET_H
+#include "kritaimage_export.h"
 
-#include "ui_wdgtextoptions.h"
-#include <kis_painter.h>
+namespace KisPaintOpUtils {
 
-class KisTextToolOptionWidget : public QWidget, public Ui_WdgTextOptions
-{
-    Q_OBJECT
-public:
-    KisTextToolOptionWidget(QWidget* parent = 0);
-    QButtonGroup* m_buttonGroup;
+KRITAIMAGE_EXPORT extern const char MaskingBrushPaintOpId[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushEnabledTag[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushCompositeOpTag[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushUseMasterSizeTag[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushMasterSizeCoeffTag[];
+KRITAIMAGE_EXPORT extern const char MaskingBrushPresetPrefix[];
+KRITAIMAGE_EXPORT extern const char RequiredBrushFileTag[];
+KRITAIMAGE_EXPORT extern const char RequiredBrushFilesListTag[];
 
-    enum TextMode{
-        MODE_ARTISTIC,
-        MODE_MULTILINE
-    };
-    
-    TextMode mode();
-    
-    KisPainter::FillStyle style();
-private Q_SLOTS:
-    void modeChanged(int mode);
+}
 
-};
-
-#endif // KIS_TEXT_TOOL_OPTION_WIDGET_H
+#endif // KISPAINTOPSETTINGSIDS_H

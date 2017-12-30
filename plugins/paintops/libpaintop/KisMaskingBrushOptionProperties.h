@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,22 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TOOL_TEXT_H_
-#define TOOL_TEXT_H_
+#ifndef KISMASKINGBRUSHOPTIONPROPERTIES_H
+#define KISMASKINGBRUSHOPTIONPROPERTIES_H
 
-#include <QObject>
-#include <QVariant>
+#include "kritapaintop_export.h"
+#include <kis_types.h>
 
-/**
- * A module that provides a text tool.
- */
-class ToolText : public QObject
+
+class KisBrush;
+typedef KisSharedPtr<KisBrush> KisBrushSP;
+
+struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {
-    Q_OBJECT
-public:
-    ToolText(QObject *parent, const QVariantList &);
-    ~ToolText() override;
+    KisMaskingBrushOptionProperties();
 
+    bool isEnabled = false;
+    KisBrushSP brush;
+    QString compositeOpId;
+    bool useMasterSize = true;
+
+    void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
+    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize);
 };
 
-#endif // TOOL_TEXT_H_
+#endif // KISMASKINGBRUSHOPTIONPROPERTIES_H

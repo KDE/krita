@@ -282,9 +282,9 @@ void SvgTextEditor::checkFormat()
 
     QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
     if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
-        spnLineHeight->setValue(1.0);
+        spnLineHeight->setValue(100.0);
     } else if(blockFormat.lineHeightType()==QTextBlockFormat::ProportionalHeight) {
-        spnLineHeight->setValue(double(blockFormat.lineHeight()/100.0));
+        spnLineHeight->setValue(double(blockFormat.lineHeight()));
     }
 }
 
@@ -608,10 +608,10 @@ void SvgTextEditor::decreaseTextSize()
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
 
-void SvgTextEditor::setLineHeight(double lineHeightEm)
+void SvgTextEditor::setLineHeight(double lineHeightPercentage)
 {
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
-    format.setLineHeight(lineHeightEm*100, QTextBlockFormat::ProportionalHeight);
+    format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
      m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
@@ -912,9 +912,9 @@ void SvgTextEditor::createActions()
     QWidgetAction *lineHeight = new QWidgetAction(this);
     lineHeight->setToolTip(i18n("Line height"));
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
-    spnLineHeight->setRange(0.0, 99.0);
-    spnLineHeight->setSingleStep(0.1);
-    spnLineHeight->setSuffix(i18n(" em"));//Does this need to be translated?
+    spnLineHeight->setRange(0.0, 1000.0);
+    spnLineHeight->setSingleStep(10.0);
+    spnLineHeight->setSuffix("%");
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
     lineHeight->setDefaultWidget(spnLineHeight);
     actionCollection()->addAction("svg_line_height", lineHeight);

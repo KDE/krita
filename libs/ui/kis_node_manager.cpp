@@ -21,6 +21,7 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QSignalMapper>
+#include <QApplication>
 
 #include <kactioncollection.h>
 
@@ -35,7 +36,6 @@
 #include <KoFileDialog.h>
 #include <KoToolManager.h>
 #include <KoProperties.h>
-
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -76,6 +76,7 @@
 #include "kis_mimedata.h"
 #include "kis_layer_utils.h"
 #include "krita_utils.h"
+#include "kis_shape_layer.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -264,6 +265,10 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action  = actionManager->createAction("save_node_as_image");
     connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
+
+    action  = actionManager->createAction("save_vector_node_to_svg");
+    connect(action, SIGNAL(triggered()), this, SLOT(saveVectorLayerAsImage()));
+    action->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
 
     action = actionManager->createAction("duplicatelayer");
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
@@ -1048,6 +1053,40 @@ void KisNodeManager::saveNodeAsImage()
                            saveRect,
                            image->xRes(), image->yRes(),
                            node->opacity());
+}
+
+#include "SvgWriter.h"
+
+void KisNodeManager::saveVectorLayerAsImage()
+{
+    KisShapeLayerSP shapeLayer = qobject_cast<KisShapeLayer*>(activeNode().data());
+    if (!shapeLayer) {
+        return;
+    }
+
+    KoFileDialog dialog(m_d->view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
+    dialog.setCaption(i18nc("@title:window", "Export to SVG"));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    dialog.setMimeTypeFilters(QStringList() << "image/svg+xml", "image/svg+xml");
+    QString filename = dialog.filename();
+
+    if (filename.isEmpty()) return;
+
+    QUrl url = QUrl::fromLocalFile(filename);
+
+    if (url.isEmpty()) return;
+
+    const QSizeF sizeInPx = m_d->view->image()->bounds().size();
+    const QSizeF sizeInPt(sizeInPx.width() / m_d->view->image()->xRes(),
+                          sizeInPx.height() / m_d->view->image()->yRes());
+
+    QList<KoShape*> shapes = shapeLayer->shapes();
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+    SvgWriter writer(shapes);
+    if (!writer.save(filename, sizeInPt, true)) {
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1").arg(filename));
+    }
 }
 
 void KisNodeManager::slotSplitAlphaIntoMask()

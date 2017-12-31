@@ -23,7 +23,7 @@ elseif (MINGW)
     list(APPEND _SIP_conf
         --platform win32-g++
         -b ${PREFIX_ext_sip}/bin
-        -d ${PREFIX_ext_sip}/share/krita/pykrita
+        -d ${PREFIX_ext_sip}/lib/krita-python-libs
         -e ${PREFIX_ext_sip}/include
         --sipdir ${PREFIX_ext_sip}/share/sip
         --target-py-version 3.6

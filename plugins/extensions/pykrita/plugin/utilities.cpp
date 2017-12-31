@@ -279,6 +279,33 @@ bool Python::libraryLoad()
     return true;
 }
 
+namespace
+{
+
+QString findKritaPythonLibsPath()
+{
+    QDir rootDir(KoResourcePaths::getApplicationRoot());
+    //Q_FOREACH (const QFileInfo &entry, rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs)) {
+    Q_FOREACH (const QFileInfo &entry, rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot)) {
+        QDir libDir(entry.absoluteFilePath());
+        if (libDir.cd("krita-python-libs")) {
+            return libDir.absolutePath();
+        } else {
+            // Handle cases like Linux where libs are placed in a sub-dir
+            // with the ABI name
+            Q_FOREACH (const QFileInfo &subEntry, libDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+                QDir subDir(subEntry.absoluteFilePath());
+                if (subDir.cd("krita-python-libs")) {
+                    return subDir.absolutePath();
+                }
+            }
+        }
+    }
+    return QString();
+}
+
+} // namespace
+
 bool Python::setPath(const QStringList& scriptPaths)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
@@ -291,6 +318,15 @@ bool Python::setPath(const QStringList& scriptPaths)
     QString originalPaths;
     // Start with the script paths
     QStringList paths(scriptPaths);
+
+    // Append the Krita libraries path
+    QString pythonLibsPath = findKritaPythonLibsPath();
+    if (pythonLibsPath.isEmpty()) {
+        errScript << "Cannot find krita-python-libs";
+        return false;
+    }
+    dbgScript << "Found krita-python-libs at" << pythonLibsPath;
+    paths.append(pythonLibsPath);
 
 #ifdef Q_OS_WIN
     // Find embeddable Python at <root>/python

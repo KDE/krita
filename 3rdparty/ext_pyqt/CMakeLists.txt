@@ -5,7 +5,6 @@ if (UNIX)
       message("WARNING: using system python3!")
       SET(PYTHON_EXECUTABLE_PATH python3)
     endif()
-
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.6.tar.gz
@@ -30,8 +29,8 @@ elseif(MINGW)
         --spec win32-g++
         --verbose
         --sipdir ${PREFIX_ext_pyqt}/share/sip
-        --destdir ${PREFIX_ext_pyqt}/share/krita/pykrita
-        --stubsdir ${PREFIX_ext_pyqt}/share/krita/pykrita/PyQt5
+        --destdir ${PREFIX_ext_pyqt}/lib/krita-python-libs
+        --stubsdir ${PREFIX_ext_pyqt}/lib/krita-python-libs/PyQt5
         --no-qml-plugin --no-python-dbus --no-qsci-api --no-tools
         --disable QtSql --disable QtTest --disable QtWinExtras
     )

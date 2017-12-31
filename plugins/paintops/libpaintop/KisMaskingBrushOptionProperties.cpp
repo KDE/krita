@@ -41,8 +41,6 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
 
     setting->setProperty(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, masterSizeCoeff);
 
-    ENTER_FUNCTION();
-
     // TODO: skip saving in some cases?
     // if (!isEnabled) return;
 

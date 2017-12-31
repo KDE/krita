@@ -110,7 +110,7 @@ void specialOpenGLVendorFilter(WindowsOpenGLStatus &status, const OpenGLCheckRes
     // Special blacklisting of OpenGL/ANGLE is tracked on:
     // https://phabricator.kde.org/T7411
 
-    // HACK: Specificly detect for Intel driver build number
+    // HACK: Specifically detect for Intel driver build number
     //       See https://www.intel.com/content/www/us/en/support/articles/000005654/graphics-drivers.html
     if (checkResult.rendererString().startsWith("Intel")) {
         KLocalizedString knownBadIntelWarning = ki18n("The Intel graphics driver in use is known to have issues with OpenGL.");

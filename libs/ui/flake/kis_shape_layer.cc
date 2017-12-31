@@ -94,7 +94,7 @@ public:
         SimpleShapeContainerModel::add(child);
 
         /**
-         * The shape is always added with the absolute transformation set appropiately.
+         * The shape is always added with the absolute transformation set appropriately.
          * Here we should just squeeze it into the layer's transformation.
          */
         KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));

@@ -568,7 +568,7 @@ public:
     }
 
 
-    /// get the profile the color managment system has stored for the given screen
+    /// get the profile the color management system has stored for the given screen
     static const KoColorProfile* getScreenProfile(int screen);
 
 private:

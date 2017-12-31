@@ -335,7 +335,7 @@ void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
     info->imageRect = m_d->coordinatesConverter->viewportToImage(QRectF(croppedViewRect)).toAlignedRect();
 
     /**
-     * To avoid artifacts while scaling we use machanism like
+     * To avoid artifacts while scaling we use mechanism like
      * changeRect/needRect for layers. Here we grow the rect to update
      * pixels which depend on the dirty rect (like changeRect), and
      * later we request a bit more pixels for the patch to make the

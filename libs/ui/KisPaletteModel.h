@@ -93,7 +93,7 @@ public:
     /**
      * @brief addColorSetEntry
      * proper function to handle adding entries.
-     * @return whether succesful.
+     * @return whether successful.
      */
     bool addColorSetEntry(KoColorSetEntry entry, QString groupName=QString());
     /**
@@ -103,14 +103,14 @@ public:
      * @param keepColors: This bool determines whether, when deleting a group,
      * the colors should be added to the default group. This is usually desirable,
      * so hence the default is true.
-     * @return if succesful
+     * @return if successful
      */
     bool removeEntry(QModelIndex index, bool keepColors=true);
     /**
      * @brief addGroup
      * Adds a group to the list.
      * @param groupName
-     * @return if succesful
+     * @return if successful
      */
     bool addGroup(QString groupName = QString());
 
@@ -118,7 +118,7 @@ public:
 
     /**
      * @brief dropMimeData
-     * This is an overriden function that handles dropped mimedata.
+     * This is an overridden function that handles dropped mimedata.
      * right now only colorsetentries and colorsetgroups are handled.
      * @return
      */

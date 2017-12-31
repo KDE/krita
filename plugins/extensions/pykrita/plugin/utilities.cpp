@@ -143,6 +143,7 @@ namespace PyKrita
 QLibrary* s_pythonLibrary = 0;
 #endif
 PyThreadState* s_pythonThreadState = 0;
+bool isPythonPathSet = false;
 }                                                           // anonymous namespace
 
 const char* Python::PYKRITA_ENGINE = "pykrita";
@@ -280,9 +281,8 @@ bool Python::libraryLoad()
 
 bool Python::setPath(const QStringList& paths)
 {
-    if (Py_IsInitialized()) {
-        warnScript << "Setting paths when Python interpreter is already initialized";
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
 #ifdef Q_OS_WIN
     constexpr char pathSeparator = ';';
 #else
@@ -326,6 +326,7 @@ bool Python::setPath(const QStringList& paths)
 #else
     qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
 #endif
+    isPythonPathSet = true;
     return true;
 }
 

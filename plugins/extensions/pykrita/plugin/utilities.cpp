@@ -279,7 +279,7 @@ bool Python::libraryLoad()
     return true;
 }
 
-bool Python::setPath(const QStringList& paths)
+bool Python::setPath(const QStringList& scriptPaths)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
@@ -288,37 +288,35 @@ bool Python::setPath(const QStringList& paths)
 #else
     constexpr char pathSeparator = ':';
 #endif
-    QString joinedPaths = paths.join(pathSeparator);
-    // Append the default search path
-    // TODO: Properly handle embedded Python
+    QString originalPaths;
+    // Start with the script paths
+    QStringList paths(scriptPaths);
+
 #ifdef Q_OS_WIN
-    QString currentPaths;
-    // Find embeddable Python
-    // TODO: Don't hard-code the paths
+    // Find embeddable Python at <root>/python
     QDir pythonDir(KoResourcePaths::getApplicationRoot());
     if (pythonDir.cd("python")) {
-        dbgScript << "Found embeddable Python at" << pythonDir.absolutePath();
-        currentPaths = pythonDir.absolutePath() + pathSeparator
-                     + pythonDir.absoluteFilePath("python36.zip");
+        dbgScript << "Found bundled Python at" << pythonDir.absolutePath();
+        // The default paths for Windows embeddable Python is ./python36.zip;./
+        // HACK: Assuming bundled Python is version 3.6.*
+        // FIXME: Should we read python36._pth for the paths or use Py_GetPath?
+        paths.append(pythonDir.absoluteFilePath("python36.zip"));
+        paths.append(pythonDir.absolutePath());
     } else {
-# if 1
-        // Use local Python???
-        currentPaths = QString::fromWCharArray(Py_GetPath());
-        warnScript << "Embeddable Python not found.";
-        warnScript << "Default paths:" << currentPaths;
-# else
-        // Or should we fail?
-        errScript << "Embeddable Python not found, not setting Python paths";
+        errScript << "Bundled Python not found, cannot set Python library paths";
         return false;
-# endif
     }
 #else
-    QString currentPaths = QString::fromLocal8Bit(qgetenv("PYTHONPATH"));
+    // TODO: Handle embedded Python or virtualenv
+    // If using a system Python install, respect the current PYTHONPATH
+    originalPaths = QString::fromLocal8Bit(qgetenv("PYTHONPATH"));
 #endif
-    if (!currentPaths.isEmpty()) {
-        joinedPaths = joinedPaths + pathSeparator + currentPaths;
+
+    QString joinedPaths = paths.join(pathSeparator);
+    if (!originalPaths.isEmpty()) {
+        joinedPaths = joinedPaths + pathSeparator + originalPaths;
     }
-    dbgScript << "Setting paths:" << joinedPaths;
+    infoScript << "Setting python paths:" << joinedPaths;
 #ifdef Q_OS_WIN
     QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
     joinedPaths.toWCharArray(joinedPathsWChars.data());

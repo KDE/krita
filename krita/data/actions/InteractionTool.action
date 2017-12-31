@@ -218,7 +218,7 @@
     </Action>
 
     <Action name="object_transform_rotate_180">
-      <text>Rotate 180° CCW</text>
+      <text>Rotate 180°</text>
       <toolTip>Rotate object 180°</toolTip>
       <shortcut></shortcut>
       <icon></icon>

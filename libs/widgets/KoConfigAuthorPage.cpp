@@ -91,8 +91,8 @@ KoConfigAuthorPage::KoConfigAuthorPage()
 
     //list of positions that we can use to provide useful autocompletion.
     d->positions << QString(i18nc("This is a list of suggestions for positions an artist can take, seperated by comma","Adapter,Animator,Artist,Art Director,Author,Assistant,"
-                                 "Editor,Background,Artist,Cartoonist,Colorist,Concept Artist,"
-                                 "Corrector,Cover Artist,Creator,Designer,Editor,Inker,"
+                                 "Editor,Background,Cartoonist,Colorist,Concept Artist,"
+                                 "Corrector,Cover Artist,Creator,Designer,Inker,"
                                  "Letterer,Matte Painter,Painter,Penciller,Proofreader,"
                                  "Pixel Artist,Redliner,Sprite Artist,Typographer,Texture Artist,"
                                  "Translator,Writer,Other")).split(",");

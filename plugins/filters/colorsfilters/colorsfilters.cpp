@@ -57,7 +57,6 @@
 
 
 #include "kis_hsv_adjustment_filter.h"
-#include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
 #include "kis_color_balance_filter.h"
 #include "kis_desaturate_filter.h"

@@ -68,7 +68,6 @@ ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     KisFilterRegistry * manager = KisFilterRegistry::instance();
-    manager->add(new KisBrightnessContrastFilter());
     manager->add(new KisAutoContrast());
     manager->add(new KisPerChannelFilter());
     manager->add(new KisDesaturateFilter());

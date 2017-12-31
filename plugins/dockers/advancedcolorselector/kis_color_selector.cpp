@@ -171,10 +171,8 @@ void KisColorSelector::paintEvent(QPaintEvent* e)
 
     // for selecting colors we want to keep a somewhat neutral gray to make selecting
     // a color easier in case someone uses a wacky theme color
-    QColor bgColor = qApp->palette().color(QPalette::Base);
-    int darkenCoeff = bgColor.value() > 128 ? 180 : 50;    // same logic icons use
-
-    p.fillRect(0,0,width(),height(),QColor(darkenCoeff,darkenCoeff,darkenCoeff));
+    QColor bgColor = qApp->palette().color(QPalette::AlternateBase);
+    p.fillRect(0,0,width(),height(),QColor(bgColor.value(),bgColor.value(),bgColor.value()));
     p.setRenderHint(QPainter::Antialiasing);
 
     m_mainComponent->paintEvent(&p);

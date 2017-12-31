@@ -82,7 +82,7 @@ set(KRITA_VERSION_RELEASE 0)     # 88 for pre-alpha, 89 for Alpha, increase for 
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2017) # update every year
+set(KRITA_YEAR 2018) # update every year
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
     set(KRITA_STABLE 1) # do not edit

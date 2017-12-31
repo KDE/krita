@@ -97,7 +97,7 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
         result = new KisMaskingBrushCompositeOp<channel_type, cfHardMixPhotoshop>(pixelSize, alphaOffset);
     }
 
-    KIS_SAFE_ASSERT_RECOVER (result && "Unknown composite op for masking brush!") {
+    KIS_SAFE_ASSERT_RECOVER (result && "Unknown composite op for masked brush!") {
         result = new KisMaskingBrushCompositeOp<channel_type, cfMultiply>(pixelSize, alphaOffset);
     }
 
@@ -141,7 +141,7 @@ KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::create(const 
         result = createTypedOp<qint16>(id, pixelSize, alphaOffset);
         break;
     default:
-        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Unknown channel type for masking brush!");
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Unknown channel type for masked brush!");
     }
 
     return result;

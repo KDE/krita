@@ -265,7 +265,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     }
 
 
-    // WARNING: masking brush cannot work without indirect painting mode!
+    // WARNING: masked brush cannot work without indirect painting mode!
     KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
                                    m_resources->needsMaskingBrushRendering()) || hasIndirectPainting);
 

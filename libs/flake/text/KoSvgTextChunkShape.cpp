@@ -400,12 +400,12 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
     }
 
     if (isRootTextNode()) {
-        context.shapeWriter().startElement("body");
-        context.shapeWriter().startElement("p");
+        context.shapeWriter().startElement("body", false);
+        context.shapeWriter().startElement("p", false);
         // XXX: Save the style?
 
     } else if (!dyPos.isEmpty()) {
-        context.shapeWriter().startElement("p");
+        context.shapeWriter().startElement("p", false);
     } else {
         context.shapeWriter().startElement("span", false);
         // XXX: Save the style?

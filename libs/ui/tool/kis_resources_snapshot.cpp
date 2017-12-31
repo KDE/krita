@@ -217,7 +217,7 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
     painter->setOpacity(OPACITY_OPAQUE_U8);
     painter->setChannelFlags(QBitArray());
 
-    // masking brush always paints in indirect mode
+    // masked brush always paints in indirect mode
     painter->setCompositeOp(COMPOSITE_ALPHA_DARKEN);
 
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);

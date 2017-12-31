@@ -108,7 +108,7 @@ void KisPaintActionTypeOption::updateControlsAvailability(bool value)
     m_optionWidget->label->setEnabled(value);
 
     const QString &toolTipText =
-        i18nc("@info:tooltip", "Wash Mode is explicitly set by Masking Brush feature");
+        i18nc("@info:tooltip", "Only wash mode is possible when using a masked brush.");
 
     m_optionWidget->radioBuildup->setToolTip(toolTipText);
     m_optionWidget->radioWash->setToolTip(toolTipText);

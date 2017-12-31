@@ -44,7 +44,7 @@ extern "C" int main(int argc, char **argv)
     KAboutData aboutData(QStringLiteral("svgtexttool"),
                          i18n("Svg Text Editor"),
                          QStringLiteral("1.0"),
-                         i18n("Test for the Svg Text Tomol"),
+                         i18n("Test for the Svg Text Tool"),
                          KAboutLicense::LGPL,
                          i18n("(c) 2017"));
     KAboutData::setApplicationData(aboutData);

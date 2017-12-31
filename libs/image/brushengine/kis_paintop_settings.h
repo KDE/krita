@@ -307,7 +307,7 @@ public:
     virtual void setRandomOffset(const KisPaintInformation &paintInformation);
 
     /**
-     * @return true if this preset demands a secondary masking brush running
+     * @return true if this preset demands a secondary masked brush running
      *         alongside it
      */
     bool hasMaskingSettings() const;
@@ -319,7 +319,7 @@ public:
     KisPaintOpSettingsSP createMaskingSettings() const;
 
     /**
-     * @return a composite op id of the masking brush rendering algorithm.
+     * @return a composite op id of the masked brush rendering algorithm.
      *
      * Please take into account that the brush itself always paints in alpha-
      * darken mode, but the final result is combined with this composite op.

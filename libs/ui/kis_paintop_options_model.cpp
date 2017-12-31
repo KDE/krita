@@ -46,7 +46,7 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
         category = i18nc("option category", "Filter");
         break;
     case KisPaintOpOption::MASKING_BRUSH:
-        category = i18nc("option category", "Masking Brush");
+        category = i18nc("option category", "Masked Brush");
         break;
     default:
         category = i18n("Unknown");

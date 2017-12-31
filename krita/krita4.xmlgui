@@ -180,6 +180,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="LayerImportExport">
         <text>&amp;Import/Export</text>
         <Action name="save_node_as_image"/>
+        <Action name="save_vector_node_to_svg"/>
         <Action name="save_groups_as_images"/>
         <Separator/>
         <Action name="import_layer_from_file"/>

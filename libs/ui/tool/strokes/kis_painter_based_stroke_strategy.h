@@ -75,7 +75,7 @@ protected:
      * KisPainterBasedStrokeStrategy and one should merge it first before asking the
      * update.
      *
-     * The value can be true only when the stroke is declared to support masking brush!
+     * The value can be true only when the stroke is declared to support masked brush!
      * \see supportsMaskingBrush()
      */
     bool needsMaskingUpdates() const;
@@ -92,12 +92,12 @@ protected:
 
     /**
      * The descendants may declare if this stroke should support auto-creation
-     * of the masking brush. Default value: false
+     * of the masked brush. Default value: false
      */
     void setSupportsMaskingBrush(bool value);
 
     /**
-     * Return if the stroke should auto-create a masking brush from the provided
+     * Return if the stroke should auto-create a masked brush from the provided
      * paintop preset or not
      */
     bool supportsMaskingBrush() const;

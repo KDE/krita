@@ -55,7 +55,7 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
             option.writeOptionSetting(embeddedConfig);
         }
 
-        // the masking brush should paint without any opacity or flow
+        // the masked brush should paint without any opacity or flow
         embeddedConfig->setProperty("PressureOpacity", false);
         embeddedConfig->setProperty("OpacityUseCurve", false);
         embeddedConfig->setProperty("PressureFlow", false);

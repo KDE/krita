@@ -257,21 +257,32 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
             }
 
             QXmlStreamAttributes attributes = htmlReader.attributes();
+
+            QString textAlign;
+            if (attributes.hasAttribute("align")) {
+                textAlign = attributes.value("align").toString();
+            }
+
             if (attributes.hasAttribute("style")) {
                 QString filteredStyles;
                 QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction").split(" ");
                 QStringList styles = attributes.value("style").toString().split(";");
                 for(int i=0; i<styles.size(); i++) {
                     QStringList style = QString(styles.at(i)).split(":");
-
-                    if (svgStyles.contains(QString(style.at(0)).remove(" "))) {
+                    qDebug()<<style.at(0);
+                    if (svgStyles.contains(QString(style.at(0)).trimmed())) {
                         filteredStyles.append(styles.at(i)+";");
                     }
-                    if (QString(style.at(0)).contains("color") && !QString(style.at(0)).contains("-")) {
+
+                    if (QString(style.at(0)).trimmed() == "color") {
                         filteredStyles.append(" fill:"+style.at(1)+";");
                     }
 
-                    if (QString(style.at(0)).contains("line-height")){
+                    if (QString(style.at(0)).trimmed() == "text-align") {
+                        textAlign = QString(style.at(1)).trimmed();
+                    }
+
+                    if (QString(style.at(0)).trimmed() == "line-height"){
                         if (style.at(1).contains("%")) {
                             double percentage = QString(style.at(1)).remove("%").toDouble();
                             em = QString::number(percentage/100.0)+"em";
@@ -286,15 +297,12 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                     }
                 }
 
-                if (attributes.hasAttribute("align")) {
-                    QString a = attributes.value("align").toString();
-                    if (a.contains("center")) {
-                        filteredStyles.append(" text-anchor:middle;");
-                    } else if (a.contains("right")) {
-                        filteredStyles.append(" text-anchor:end;");
-                    } else {
-                        filteredStyles.append(" text-anchor:start;");
-                    }
+                if (textAlign == "center") {
+                    filteredStyles.append(" text-anchor:middle;");
+                } else if (textAlign == "right") {
+                    filteredStyles.append(" text-anchor:end;");
+                } else if (textAlign == "left"){
+                    filteredStyles.append(" text-anchor:start;");
                 }
 
                 filteredStyles.append(appendStyle);

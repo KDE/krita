@@ -535,8 +535,18 @@ void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionVi
     const int y = option.rect.top() + (scm.rowHeight() - scm.border() - scm.visibilitySize()) / 2;
 
     QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
-    p->setOpacity(1.0);
+
+    // if we are not showing the layer, make the icon slightly transparent like other inactive icons
+    const qreal oldOpacity = p->opacity();
+    if (prop->state.toBool() == true) {
+         p->setOpacity(1.0);
+    }
+    else {
+        p->setOpacity(0.35);
+    }
+
     p->drawPixmap(x, y, icon.pixmap(scm.visibilitySize(),  QIcon::Normal));
+    p->setOpacity(oldOpacity);
 
     //// For debugging purposes only
     // p->save();

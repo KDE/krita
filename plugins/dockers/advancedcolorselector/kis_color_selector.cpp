@@ -151,6 +151,12 @@ void KisColorSelector::updateSettings()
     setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString())));
 }
 
+void KisColorSelector::updateIcons() {
+    if (m_button) {
+        m_button->setIcon(KisIconUtils::loadIcon("configure"));
+    }
+}
+
 void KisColorSelector::reset()
 {
     KisColorSelectorBase::reset();
@@ -338,6 +344,7 @@ void KisColorSelector::init()
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);
         m_button->setIcon(KisIconUtils::loadIcon("configure"));
+        m_button->setFlat(true);
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }
 

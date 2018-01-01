@@ -42,9 +42,13 @@ public:
     KisColorSelectorConfiguration configuration() const;
     void setColor(const KoColor &color) override;
 
+    /// update icons when a theme update happens
+    void updateIcons();
+
 public Q_SLOTS:
     void reset() override;
     void updateSettings() override;
+
 
 Q_SIGNALS:
     void settingsButtonClicked();

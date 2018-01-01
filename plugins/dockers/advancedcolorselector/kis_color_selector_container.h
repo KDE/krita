@@ -38,6 +38,9 @@ public:
 
     enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
 
+public Q_SLOTS:
+    void slotUpdateIcons();
+
 Q_SIGNALS:
     void openSettings();
     void settingsChanged();

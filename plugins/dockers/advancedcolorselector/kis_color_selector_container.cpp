@@ -87,6 +87,11 @@ void KisColorSelectorContainer::unsetCanvas()
     m_canvas = 0;
 }
 
+void KisColorSelectorContainer::slotUpdateIcons()
+{
+    m_colorSelector->updateIcons();
+}
+
 void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 {
     if (m_canvas) {

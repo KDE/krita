@@ -107,6 +107,8 @@ void KisColorSelectorNgDockerWidget::unsetCanvas()
     m_commonColorsWidget->unsetCanvas();
     m_colorHistoryWidget->unsetCanvas();
     m_colorSelectorContainer->unsetCanvas();
+
+    disconnect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()));
 }
 
 void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
@@ -132,6 +134,8 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 
         actionCollection->addAction("show_color_history", m_colorHistoryAction);
         actionCollection->addAction("show_common_colors", m_commonColorsAction);
+
+        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()));
     }
 
     reactOnLayerChange();

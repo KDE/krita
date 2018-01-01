@@ -27,7 +27,6 @@
 
 #include <QGridLayout>
 #include <QButtonGroup>
-#include <QPushButton>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
 #include <QLabel>
@@ -147,19 +146,18 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
     d->buttonLayout = new QGridLayout();
 
-    QPushButton *button = new QPushButton(this);
-    button->setIcon(koIcon("document-open"));
-    button->setToolTip(i18nc("@info:tooltip", "Import resource"));
-    button->setEnabled(true);
-    d->buttonGroup->addButton(button, Button_Import);
-    d->buttonLayout->addWidget(button, 0, 0);
+    importButton = new QPushButton(this);
 
-    button = new QPushButton(this);
-    button->setIcon(koIcon("trash-empty"));
-    button->setToolTip(i18nc("@info:tooltip", "Delete resource"));
-    button->setEnabled(false);
-    d->buttonGroup->addButton(button, Button_Remove);
-    d->buttonLayout->addWidget(button, 0, 1);
+    importButton->setToolTip(i18nc("@info:tooltip", "Import resource"));
+    importButton->setEnabled(true);
+    d->buttonGroup->addButton(importButton, Button_Import);
+    d->buttonLayout->addWidget(importButton, 0, 0);
+
+    deleteButton = new QPushButton(this);
+    deleteButton->setToolTip(i18nc("@info:tooltip", "Delete resource"));
+    deleteButton->setEnabled(false);
+    d->buttonGroup->addButton(deleteButton, Button_Remove);
+    d->buttonLayout->addWidget(deleteButton, 0, 1);
 
     connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
@@ -170,7 +168,6 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->buttonLayout->setMargin(0);
 
     d->viewModeButton = new QToolButton(this);
-    d->viewModeButton->setIcon(koIcon("view-choose"));
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
 
@@ -184,6 +181,9 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->addLayout(d->buttonLayout, 3, 0, 1, 2);
     layout->setMargin(0);
     layout->setSpacing(0);
+
+    updateView();
+
     updateButtonState();
     showTaggingBar(false);
     activated(d->model->index(0, 0));
@@ -606,4 +606,9 @@ void KoResourceItemChooser::updateView()
         KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
         baseLengthChanged(chooserSync->baseLength());
     }
+
+    /// helps to set icons here in case the theme is changed
+    d->viewModeButton->setIcon(koIcon("view-choose"));
+    importButton->setIcon(koIcon("document-open"));
+    deleteButton->setIcon(koIcon("trash-empty"));
 }

@@ -857,16 +857,20 @@ QStyleOptionViewItem KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, 
    return option;
 }
 
-QRect KisNodeDelegate::progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    return iconsRect(option, index);
-}
-
 void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QVariant value = index.data(KisNodeModel::ProgressRole);
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
-        const QRect r = progressBarRect(option, index);
+
+        /// The progress bar will display under the layer name area. The bars have accurate data, so we
+        /// probably don't need to also show the actualy number for % complete
+
+        KisNodeViewColorScheme scm;
+        const int width = textRect(option, index).width() + scm.iconSize()*2;
+        const int height = 5;
+        const QPoint base = option.rect.bottomLeft() - QPoint(0, height );
+        const QRect r = QRect(base.x(), base.y(), width, height);
+
         p->save();
         {
             p->setClipRect(r);
@@ -876,7 +880,7 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
             opt.minimum = 0;
             opt.maximum = 100;
             opt.progress = value.toInt();
-            opt.textVisible = true;
+            opt.textVisible = false;
             opt.textAlignment = Qt::AlignHCenter;
             opt.text = i18n("%1 %", opt.progress);
             opt.rect = r;

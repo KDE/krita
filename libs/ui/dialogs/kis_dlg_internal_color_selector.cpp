@@ -252,6 +252,8 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
         emit(signalForegroundColorChosen(m_d->currentColor));
         m_d->compressColorChanges->start();
     }
+
+    m_ui->screenColorPicker->updateIcons();
 }
 
 

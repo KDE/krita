@@ -480,14 +480,14 @@ void KisCustomImageWidget::switchPortraitLandscape()
 void KisCustomImageWidget::changeDocumentInfoLabel()
 {
 
-    qint32 width, height;
+    qint64 width, height;
     double resolution;
     resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+    width = static_cast<qint64>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
+    height = static_cast<qint64>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
 
-    int layerSize = width * height;
+    qint64 layerSize = width * height;
     const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
     int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize * cs->pixelSize();

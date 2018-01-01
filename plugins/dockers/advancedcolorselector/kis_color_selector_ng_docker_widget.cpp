@@ -107,8 +107,6 @@ void KisColorSelectorNgDockerWidget::unsetCanvas()
     m_commonColorsWidget->unsetCanvas();
     m_colorHistoryWidget->unsetCanvas();
     m_colorSelectorContainer->unsetCanvas();
-
-    disconnect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()));
 }
 
 void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)

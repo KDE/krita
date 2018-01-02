@@ -91,7 +91,7 @@ void BasicXMLSyntaxHighlighter::highlightByRegex(const QTextCharFormat & format,
 void BasicXMLSyntaxHighlighter::setRegexes()
 {
     m_xmlElementRegex.setPattern("<[\\s]*[/]?[\\s]*([^\\n]\\w*)(?=[\\s/>])");
-    m_xmlAttributeRegex.setPattern("\\w+(?=\\=)");
+    m_xmlAttributeRegex.setPattern("[\\w\\-]+(?=\\=)");
     m_xmlValueRegex.setPattern("\"[^\\n\"]+\"(?=[\\s/>])");
     m_xmlCommentRegex.setPattern("<!--[^\\n]*-->");
 

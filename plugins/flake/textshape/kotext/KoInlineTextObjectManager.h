@@ -113,7 +113,7 @@ public:
      */
     void setProperty(KoInlineObject::Property key, const QVariant &value);
 
-    /// retrieve a propery
+    /// retrieve a property
     QVariant property(KoInlineObject::Property key) const;
 
     /// retrieve an int property
@@ -166,7 +166,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * Emitted whenever a propery is set and it turns out to be changed.
+     * Emitted whenever a property is set and it turns out to be changed.
      */
     void propertyChanged(int, const QVariant &variant);
 

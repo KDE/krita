@@ -22,13 +22,13 @@ There are 3 ways to use the undo/redo framework. 1 is only accessible from withi
 ------------------------
 1. using the updateState method of the KoTextEditor::Private. (internal to KoTextEditor).
 
-    At the begining of an editing method in KoTextEditor, the updateState method should be called setting the proper state and a command title (see KoTextEditor_undo.cpp).
+    At the beginning of an editing method in KoTextEditor, the updateState method should be called setting the proper state and a command title (see KoTextEditor_undo.cpp).
     A head command which will be pushed on the stack will be created when we first receive a signal from the QTextDocument. All edtiting actions on the QTextCursor will then create UndoTextCommands (in reaction to the QTextDocument's signal), which will be parented to the head command.
     When the editing method is finished, the state of the editor should be put back to NoOp, unless the editing method is an "open ended" one (key press or delete).
     Important notices:
     - When setting the new state, both the state and the command title are used to determine if we are in a new command. If both the state and the command title are identical to the current ones, the framework will not create a new head command. Example: the current state is "Format" with a command title "Format text". setting it again to "Foramt" state with "Fornat text" title will not create a new command on the application's undo stack. Setting it to "Format" state with "Bold" title will however create a new command on the application's stack.
-    - This method should be used for low level editing methods, using QTextCursor to edit directly the document. Using KoTextEditor::addCommand or KoTextEditor::beginEditBlock from within this editing method might cause undesired behaviour (especially if no editing action occured on the QTextCursor yet).
-    - The only actions which will be undone/redone are the ones affecting the QTextDocument. Any Calligra actions will not get undone/redone here (eg. any maintenance in some high level manager like KoStyleManager, KoInlineObjectManager, shapes,....). If you need such things, this is not the method to do it, use a full blown KUndo2Command pushed with KoTextEditor::addCommand for this (see bellow).
+    - This method should be used for low level editing methods, using QTextCursor to edit directly the document. Using KoTextEditor::addCommand or KoTextEditor::beginEditBlock from within this editing method might cause undesired behaviour (especially if no editing action occurred on the QTextCursor yet).
+    - The only actions which will be undone/redone are the ones affecting the QTextDocument. Any Calligra actions will not get undone/redone here (eg. any maintenance in some high level manager like KoStyleManager, KoInlineObjectManager, shapes,....). If you need such things, this is not the method to do it, use a full blown KUndo2Command pushed with KoTextEditor::addCommand for this (see below).
 
 ------------------------
 2. using KoTextEditor::addCommand method.
@@ -36,7 +36,7 @@ There are 3 ways to use the undo/redo framework. 1 is only accessible from withi
     This method allows to push a full self contained KUndo2Command. The method will be pushed on the KoTextEditor's commandStack. This means that this method will parent all UndoTextCommands created in reaction to the QTextDocument's signal, until the redo method of the command returns. At which point, it will be removed from the KoTextEditor's commandStack. If the KUndo2Command has a parent, it will not be pushed onto the application's undo stack. Equally if the KoTextEditor's commandStack isn't empty, the pushed KUndo2Command will not be pushed onto the application's undo stack (nested commands).
     It is important to note that only while the KUndo2Command's redo method is being executed is the command on the KoTextEditor's commandStack and is therefore parenting the QTextDocument's triggered UndoTextCommands, as well as any nested pushed KUndo2Commands.
     This means that ALL actions are to be implemented in the command's redo and undo methods. This includes any creation and push of a child KUndo2Command.
-    Bellow is an example of how such a command should be constructed:
+    Below is an example of how such a command should be constructed:
 
 class MyCommand : public KUndo2Command
 {
@@ -61,7 +61,7 @@ MyCommand::MyCommand(MyCommandParameters, KUndo2Command *parent):
     m_first(true),
     m_deleteAnchors(false)
 {
-    Here you can do some initialisations, collect informations, ...
+    Here you can do some initialisations, collect information, ...
     No "active" stuff can go in the constructor because:
     - anything happening in the constructor will be called only on construction,
     - if a change to the QTextDocument happens, an UndoTextCommand will be created and get either parented to the wrong KUndo2Command, or create an unwanted command on the application's undo stack.

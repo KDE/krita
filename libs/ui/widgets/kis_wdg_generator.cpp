@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QString>
 #include <QGridLayout>
+#include <QStringList>
 
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -80,9 +81,13 @@ void KisWdgGenerator::initialize(KisViewManager *view)
     d->view = view;
     d->uiWdgGenerators.setupUi(this);
     d->widgetLayout = new QGridLayout(d->uiWdgGenerators.centralWidgetHolder);
-    QList<KisGeneratorSP> generators = KisGeneratorRegistry::instance()->values();
+    QStringList generatorNames = KisGeneratorRegistry::instance()->keys();
+    generatorNames.sort();
 
-    Q_FOREACH (const KisGeneratorSP generator, generators) {
+    Q_FOREACH (const QString &generatorName, generatorNames) {
+
+        KisGeneratorSP generator = KisGeneratorRegistry::instance()->get(generatorName);
+
         Q_ASSERT(generator);
         KisGeneratorItem * item = new KisGeneratorItem(generator->name(),
                 d->uiWdgGenerators.lstGenerators,

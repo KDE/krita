@@ -28,6 +28,8 @@
 #include <KoColor.h>
 #include <KoSvgText.h>//for the enums
 
+#include <BasicXMLSyntaxHighlighter.h>
+
 #include "ui_WdgSvgTextEditor.h"
 #include "ui_WdgSvgTextSettings.h"
 
@@ -46,6 +48,13 @@ public:
     enum Editor {
         Richtext, // 0
         SVGsource // 1
+    };
+
+    // enum to store which tabs are visible in the configuration
+    enum EditorMode {
+        RichText,
+        SvgSource,
+        Both
     };
 
     void setShape(KoSvgTextShape *shape);
@@ -126,6 +135,8 @@ protected:
 
 private:
 
+    void applySettings();
+
     QAction *createAction(const QString &name,
                           const char *member);
     void createActions();
@@ -137,6 +148,7 @@ private:
     QList<QAction*> m_richTextActions;
     KoSvgTextShape *m_shape {0};
     KoDialog *m_charSelectDialog {0};
+    BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;
 };

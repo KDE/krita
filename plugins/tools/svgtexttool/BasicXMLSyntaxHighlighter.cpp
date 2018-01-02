@@ -24,6 +24,9 @@
 #include <QApplication>
 #include <QPalette>
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 BasicXMLSyntaxHighlighter::BasicXMLSyntaxHighlighter(QObject * parent) :
     QSyntaxHighlighter(parent)
 {
@@ -99,25 +102,28 @@ void BasicXMLSyntaxHighlighter::setRegexes()
 
 void BasicXMLSyntaxHighlighter::setFormats()
 {
-    QColor background = qApp->palette().background().color();
-    if (background.value() < 100) {
-        m_xmlKeywordFormat.setForeground(Qt::cyan);
-        m_xmlElementFormat.setForeground(Qt::magenta);
-        m_xmlAttributeFormat.setForeground(Qt::green);
-        m_xmlValueFormat.setForeground(Qt::red);
-        m_xmlCommentFormat.setForeground(Qt::lightGray);
-    }
-    else {
-        m_xmlKeywordFormat.setForeground(Qt::blue);
-        m_xmlElementFormat.setForeground(Qt::darkMagenta);
-        m_xmlAttributeFormat.setForeground(Qt::darkGreen);
-        m_xmlValueFormat.setForeground(Qt::darkRed);
-        m_xmlCommentFormat.setForeground(Qt::gray);
-    }
-    m_xmlAttributeFormat.setFontItalic(true);
-    m_xmlElementFormat.setFontWeight(QFont::Bold);
-    m_xmlKeywordFormat.setFontWeight(QFont::Bold);
-    m_xmlAttributeFormat.setFontWeight(QFont::Bold);
+    KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
+    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
+
+    m_xmlKeywordFormat.setForeground(cfg.readEntry("colorKeyword", QColor(background.value() < 100 ? Qt::cyan : Qt::blue)));
+    m_xmlKeywordFormat.setFontWeight(cfg.readEntry("BoldKeyword", true) ? QFont::Bold : QFont::Normal);
+    m_xmlKeywordFormat.setFontItalic((cfg.readEntry("ItalicKeyword", false)));
+
+    m_xmlElementFormat.setForeground(cfg.readEntry("colorElement", QColor(background.value() < 100 ? Qt::magenta : Qt::darkMagenta)));
+    m_xmlElementFormat.setFontWeight(cfg.readEntry("BoldElement", true) ? QFont::Bold : QFont::Normal);
+    m_xmlElementFormat.setFontItalic((cfg.readEntry("ItalicElement", false)));
+
+    m_xmlAttributeFormat.setForeground(cfg.readEntry("colorAttribute", QColor(background.value() < 100 ? Qt::green : Qt::darkGreen)));
+    m_xmlAttributeFormat.setFontWeight(cfg.readEntry("BoldAttribute", true) ? QFont::Bold : QFont::Normal);
+    m_xmlAttributeFormat.setFontItalic((cfg.readEntry("ItalicAttribute", true)));
+
+    m_xmlValueFormat.setForeground(cfg.readEntry("colorValue", QColor(background.value() < 100 ? Qt::red: Qt::darkRed)));
+    m_xmlValueFormat.setFontWeight(cfg.readEntry("BoldValue", true) ? QFont::Bold : QFont::Normal);
+    m_xmlValueFormat.setFontItalic(cfg.readEntry("ItalicValue", false));
+
+    m_xmlCommentFormat.setForeground(cfg.readEntry("colorComment", QColor(background.value() < 100 ? Qt::lightGray : Qt::gray)));
+    m_xmlCommentFormat.setFontWeight(cfg.readEntry("BoldComment", false) ? QFont::Bold : QFont::Normal);
+    m_xmlCommentFormat.setFontItalic(cfg.readEntry("ItalicComment", false));
 
 }
 

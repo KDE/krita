@@ -32,7 +32,7 @@
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QRadioButton" name="radioRichtText">
+        <widget class="QRadioButton" name="radioRichText">
          <property name="text">
           <string>Rich Te&amp;xt Only</string>
          </property>

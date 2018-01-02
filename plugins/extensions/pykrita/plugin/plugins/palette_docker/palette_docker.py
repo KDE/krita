@@ -1,7 +1,7 @@
 # Description: A Python based docker that allows you to edit KPL color palettes.
 # By Wolthera
 
-# Importing the relevant dependancies:
+# Importing the relevant dependencies:
 import sys
 from PyQt5.QtGui import QPixmap, QIcon, QImage, QPainter, QBrush, QPalette
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QAction, QTabWidget, QLineEdit, QSpinBox, QDialogButtonBox, QToolButton, QDialog, QPlainTextEdit, QCompleter, QMenu

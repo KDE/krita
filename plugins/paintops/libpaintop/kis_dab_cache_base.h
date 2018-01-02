@@ -83,7 +83,7 @@ protected:
      * parameters of the previously generated (on a cache-miss) dab. This function
      * automatically updates this state when 'shouldUseCache == false'. Therefore, the
      * caller *must* generate the dab if and only if when 'shouldUseCache == false'.
-     * Othewise the internal state will become inconsistent.
+     * Otherwise the internal state will become inconsistent.
      *
      * @param hasDabInCache shows if the caller has something in its cache
      * @param resources rendering resources available for this dab

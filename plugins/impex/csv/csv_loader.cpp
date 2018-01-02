@@ -361,7 +361,7 @@ QString CSVLoader::convertBlending(const QString &blending)
     if (blending == "Multiply") return COMPOSITE_MULT;
     if (blending == "Screen") return COMPOSITE_SCREEN;
     // "Replace"
-    // "Subtitute"
+    // "Substitute"
     if (blending == "Difference") return COMPOSITE_DIFF;
     if (blending == "Divide") return COMPOSITE_DIVIDE;
     if (blending == "Overlay") return COMPOSITE_OVERLAY;

@@ -366,7 +366,7 @@ QString CSVSaver::convertToBlending(const QString &opid)
     if (opid == COMPOSITE_MULT) return "Multiply";
     if (opid == COMPOSITE_SCREEN) return "Screen";
     // "Replace"
-    // "Subtitute"
+    // "Substitute"
     if (opid == COMPOSITE_DIFF) return "Difference";
     if (opid == COMPOSITE_DIVIDE) return "Divide";
     if (opid == COMPOSITE_OVERLAY) return "Overlay";

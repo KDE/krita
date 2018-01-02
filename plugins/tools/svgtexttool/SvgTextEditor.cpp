@@ -910,6 +910,14 @@ void SvgTextEditor::applySettings()
     QColor foreground = cfg.readEntry("colorEditorForeground", qApp->palette().text().color());
     palette.setBrush(QPalette::Active, QPalette::Text, QBrush(foreground));
 
+    QStringList selectedWritingSystems = cfg.readEntry("selectedWritingSystems", "").split(",");
+
+    QVector<QFontDatabase::WritingSystem> writingSystems;
+    for (int i=0; i<selectedWritingSystems.size(); i++) {
+        writingSystems.append((QFontDatabase::WritingSystem)QString(selectedWritingSystems.at(i)).toInt());
+    }
+    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->refillComboBox(writingSystems);
+
     m_page->setUpdatesEnabled(true);
 }
 

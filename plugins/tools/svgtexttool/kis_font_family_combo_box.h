@@ -59,6 +59,8 @@ public:
      * @return
      */
     QFont currentFont(int pointSize = 10) const;
+
+    void refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems = QVector<QFontDatabase::WritingSystem>());
 Q_SIGNALS:
     void fontChanged(QString);
 private Q_SLOTS:

@@ -816,6 +816,31 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
 
+
+
+    // if we cannot see the "Preset label", we know it is not visible
+    // maybe this can also be stored in the config like the scratchpad?
+    if (m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->isVisible()) {
+        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::Ignored,QSizePolicy::Ignored);
+        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+    } else {
+        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    }
+
+    // we store whether the scratchpad if visible in the config.
+    KisConfig cfg;
+    if (cfg.scratchpadVisible()) {
+        m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    } else {
+        m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+    }
+
+
+
+
+
+
 }
 
 void KisPaintOpPresetsPopup::slotUpdatePresetSettings()

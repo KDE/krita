@@ -556,7 +556,7 @@ public:
 
     /**
      * Create one or more resources from a single file. By default one resource is created.
-     * Overide to create more resources from the file.
+     * Override to create more resources from the file.
      * @param filename the filename of the resource or resource collection
      */
     virtual QList<PointerType> createResources( const QString & filename )

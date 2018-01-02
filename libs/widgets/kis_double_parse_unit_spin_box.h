@@ -98,7 +98,7 @@ public:
     QString veryCleanText() const override;
 
     /**
-     * Transfrom a string into a double, while taking care of locale specific symbols.
+     * Transform a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @return the value as double
      */
@@ -123,8 +123,8 @@ private:
     QString detectUnit();
     QString makeTextClean(QString const& txt) const;
 
-    //thoses functions are usefull to sync the spinbox with it's unitmanager.
-    //! \brief change the unit, reset the spin box everytime. From the outside it's alway set unit that should be called.
+    //those functions are useful to sync the spinbox with its unitmanager.
+    //! \brief change the unit, reset the spin box everytime. From the outside it's always set unit that should be called.
     void internalUnitChange(QString const& symbol);
     void prepareUnitChange();
 

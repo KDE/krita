@@ -1124,7 +1124,7 @@ void KToolBar::dragMoveEvent(QDragMoveEvent *event)
 
 void KToolBar::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    // Want to clear this even if toolBarsEditable was changed mid-drag (unlikey)
+    // Want to clear this even if toolBarsEditable was changed mid-drag (unlikely)
     delete d->dropIndicatorAction;
     d->dropIndicatorAction = 0L;
     d->actionsBeingDragged.clear();
@@ -1148,7 +1148,7 @@ void KToolBar::dropEvent(QDropEvent *event)
         }
     }
 
-    // Want to clear this even if toolBarsEditable was changed mid-drag (unlikey)
+    // Want to clear this even if toolBarsEditable was changed mid-drag (unlikely)
     delete d->dropIndicatorAction;
     d->dropIndicatorAction = 0L;
     d->actionsBeingDragged.clear();
@@ -1218,7 +1218,7 @@ void KToolBar::mouseMoveEvent(QMouseEvent *event)
 
 void KToolBar::mouseReleaseEvent(QMouseEvent *event)
 {
-    // Want to clear this even if toolBarsEditable was changed mid-drag (unlikey)
+    // Want to clear this even if toolBarsEditable was changed mid-drag (unlikely)
     if (d->dragAction) {
         d->dragAction = 0L;
         event->accept();

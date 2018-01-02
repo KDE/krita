@@ -693,9 +693,10 @@ KisPaintDeviceSP KisNodeManager::activePaintDevice()
 
 void KisNodeManager::nodeProperties(KisNodeSP node)
 {
-    if (selectedNodes().size() > 1 || node->inherits("KisLayer")) {
+    if ((selectedNodes().size() > 1 && node->inherits("KisLayer")) || node->inherits("KisLayer")) {
         m_d->layerManager.layerProperties();
-    } else if (node->inherits("KisMask")) {
+    }
+    else if (node->inherits("KisMask")) {
         m_d->maskManager.maskProperties();
     }
 }

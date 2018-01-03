@@ -469,14 +469,9 @@ void KisLayerBox::updateUI()
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
     m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable(false));
+    m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
-        if (m_nodeManager->activePaintDevice()) {
-            slotFillCompositeOps(m_nodeManager->activeColorSpace());
-        } else {
-            slotFillCompositeOps(m_image->colorSpace());
-        }
-
         if (activeNode->inherits("KisColorizeMask") ||
                 activeNode->inherits("KisLayer")) {
 
@@ -541,11 +536,6 @@ void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
     m_wdgLayerBox->cmbComposite->blockSignals(true);
     m_wdgLayerBox->cmbComposite->selectCompositeOp(opId);
     m_wdgLayerBox->cmbComposite->blockSignals(false);
-}
-
-void KisLayerBox::slotFillCompositeOps(const KoColorSpace* colorSpace)
-{
-    m_wdgLayerBox->cmbComposite->validate(colorSpace);
 }
 
 // range: 0-100

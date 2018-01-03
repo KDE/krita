@@ -162,10 +162,12 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
         QString svg;
         QString styles;
         QString html;
-        QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
 
-        if (converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
-            m_textEditorWidget.richTextEdit->setDocument(doc);
+        if (converter.convertToHtml(&html)) {
+
+            m_textEditorWidget.richTextEdit->document()->clear();
+            m_textEditorWidget.richTextEdit->document()->setHtml(html);
+            m_textEditorWidget.richTextEdit->document()->setModified(false);
         }
 
         if (converter.convertToSvg(&svg, &styles)) {

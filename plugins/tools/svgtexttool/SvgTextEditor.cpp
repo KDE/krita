@@ -161,20 +161,15 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
 
         QString svg;
         QString styles;
-        QString html;
-
-        if (converter.convertToHtml(&html)) {
-
-            m_textEditorWidget.richTextEdit->document()->clear();
-            m_textEditorWidget.richTextEdit->document()->setHtml(html);
-            m_textEditorWidget.richTextEdit->document()->setModified(false);
-        }
+        QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
 
         if (converter.convertToSvg(&svg, &styles)) {
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
-
+            if (converter.convertSvgToDocument(svg, doc)) {
+                m_textEditorWidget.richTextEdit->setDocument(doc);
+            }
         }
         else {
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
@@ -189,7 +184,7 @@ void SvgTextEditor::save()
         if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
 
             QString svg;
-            QString styles;
+            QString styles = m_textEditorWidget.svgStylesEdit->document()->toPlainText();
             KoSvgTextShapeMarkupConverter converter(m_shape);
 
             if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
@@ -258,7 +253,6 @@ void SvgTextEditor::switchTextEditorTab()
                     qWarning()<<"new converter docToSVG doesn't work!";
             }
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
-            m_textEditorWidget.svgStylesEdit->setPlainText(styles);
         }
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }

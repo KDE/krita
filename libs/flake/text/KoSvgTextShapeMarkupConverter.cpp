@@ -376,6 +376,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     QTextBlock block = doc->begin();
 
+
     /**
      * Find the most commonly used format.
      * This is what we put into the text-style.
@@ -497,6 +498,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     doc->clear();
     QTextCursor cursor(doc);
     bool newBlock = false;
+    QString dyString;
     QTextBlockFormat mainBlockFormat = cursor.blockFormat();
     QTextCharFormat mainCharFormat = cursor.charFormat();
     QTextCharFormat oldFormat = cursor.charFormat();
@@ -517,31 +519,43 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
             }
 
-            int lineHeight = 100;
+            QString styleString;
+            QString attributes;
+            for (int a = 0; a<svgReader.attributes().size(); a++) {
+                if (svgReader.attributes().at(a).name() != "style")
+                    attributes.append(svgReader.attributes().at(a).name().toString())
+                            .append(":")
+                            .append(svgReader.attributes().at(a).value().toString())
+                            .append(";");
+            }
+            if (attributes.endsWith(";")) {
+                attributes.chop(1);
+            }
             if (svgReader.attributes().hasAttribute("style")) {
-                QString styleString = svgReader.attributes().value("style").toString();
+                styleString = svgReader.attributes().value("style").toString();
                 if (styleString.endsWith(";")) {
                     styleString.chop(1);
                 }
+            }
+            if (styleString.size()>0 || attributes.size()>0) {
+                //add attributes to parse them as part of the style.
+                styleString.append(";")
+                        .append(attributes);
                 QStringList styles = styleString.split(";");
                 QVector<QTextFormat> formats = stylesFromString(styles, cursor.charFormat(), cursor.blockFormat());
                 cursor.mergeCharFormat(formats.at(0).toCharFormat());
                 cursor.mergeBlockFormat(formats.at(1).toBlockFormat());
 
-                //This still doesn't work...
-                if (svgReader.attributes().hasAttribute("dy")) {
-                    QString dyString = svgReader.attributes().value("dy").toString().remove("em");
-                    qreal dy = dyString.trimmed().toDouble();
-                    QTextBlockFormat format = cursor.blockFormat();
-                    lineHeight = dy*100;
-                    format.setLineHeight(lineHeight, QTextBlockFormat::ProportionalHeight);
-                    cursor.setBlockFormat(format);
-                }
                 if (svgReader.name()=="text") {
                     mainBlockFormat = cursor.blockFormat();
                     mainCharFormat = cursor.charFormat();
                     oldFormat = mainCharFormat;
                 }
+            }
+            if (svgReader.attributes().hasAttribute("dy")) {
+                dyString = svgReader.attributes().value("dy").toString();
+            } else {
+                dyString.clear();
             }
 
             if (newBlock) {
@@ -562,6 +576,34 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
         {
             if (!svgReader.isWhitespace()) {
                 cursor.insertText(svgReader.text().toString());
+
+                QTextLine line = cursor.block().layout()->lineForTextPosition(cursor.positionInBlock());
+                //Can't do this until there's a first QLine.
+                int lineHeight = 100;
+                if (!dyString.isEmpty()) {
+                    QTextBlockFormat format = cursor.blockFormat();
+
+                    if(dyString.contains("em")) {
+                        qreal dy = dyString.remove("em").toDouble();
+                        lineHeight = dy*100;
+                    } else {
+                        //dy is in pts when there's no unit, but the big problem is
+                        //that QLine crashes here when calling it's ascent of all things.
+                        //This might be a QT 5.8 bug: https://bugreports.qt.io/browse/QTBUG-60853
+                        //All I really need is it's line-height.
+                        /*
+                        qreal dy = dyString.toDouble();
+                        qDebug()<<line.ascent();
+                        qDebug()<<line.descent();
+                        qDebug()<<line.leading();
+                        int lineHP = line.height();
+                        lineHeight = (dy/lineHP)*100;
+                        */
+                    }
+                    format.setLineHeight(lineHeight, QTextBlockFormat::ProportionalHeight);
+                    cursor.setBlockFormat(format);
+                }
+
             }
 
             break;

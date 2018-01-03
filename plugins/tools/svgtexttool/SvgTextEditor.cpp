@@ -881,10 +881,7 @@ void SvgTextEditor::applySettings()
     QWidget *svgTab = m_textEditorWidget.svgTab;
 
     m_page->setUpdatesEnabled(false);
-
-    for (int i = 0; i < m_textEditorWidget.textTab->count(); ++i) {
-        m_textEditorWidget.textTab->removeTab(i);
-    }
+    m_textEditorWidget.textTab->clear();
 
     switch(mode) {
     case(RichText):

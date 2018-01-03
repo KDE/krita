@@ -31,31 +31,31 @@ KoID KisCompositeOpListModel::favoriteCategory() {
     return category;
 }
 
+void KisCompositeOpListModel::initialize()
+{
+    QMap<KoID, KoID> ops = KoCompositeOpRegistry::instance().getCompositeOps();
+    QMapIterator<KoID, KoID> it(ops);
+
+    while (it.hasNext()) {
+        KoID op = *it.next();
+        KoID category = it.key();
+        BaseKoIDCategorizedListModel::DataItem *item = categoriesMapper()->addEntry(category.name(), op);
+        item->setCheckable(true);
+    }
+
+    BaseKoIDCategorizedListModel::DataItem *item = categoriesMapper()->addCategory(favoriteCategory().name());
+    item->setExpanded(true);
+
+    readFavoriteCompositeOpsFromConfig();
+}
+
 KisCompositeOpListModel* KisCompositeOpListModel::sharedInstance()
 {
     static KisCompositeOpListModel *model = 0;
 
     if (!model) {
         model = new KisCompositeOpListModel();
-
-        QMap<KoID, KoID> ops = KoCompositeOpRegistry::instance().getCompositeOps();
-        QMapIterator<KoID, KoID> it(ops);
-
-        while (it.hasNext()) {
-            KoID op = *it.next();
-            KoID category = it.key();
-
-            BaseKoIDCategorizedListModel::DataItem *item =
-                model->categoriesMapper()->addEntry(category.name(), op);
-
-            item->setCheckable(true);
-        }
-
-        BaseKoIDCategorizedListModel::DataItem *item =
-            model->categoriesMapper()->addCategory(favoriteCategory().name());
-        item->setExpanded(true);
-
-        model->readFavoriteCompositeOpsFromConfig();
+        model->initialize();
     }
 
     return model;

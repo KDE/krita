@@ -426,81 +426,59 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         int lineHeight = doc->firstBlock().blockFormat().lineHeight();
         int lineHeightType = doc->firstBlock().blockFormat().lineHeightType();
         if (blockFormatDiff.hasProperty(QTextFormat::LineHeight)) {
-                lineHeight = blockFormatDiff.lineHeight();
-                lineHeightType = blockFormatDiff.lineHeightType();
+            lineHeight = blockFormatDiff.lineHeight();
+            lineHeightType = blockFormatDiff.lineHeightType();
+        }
+        QTextLine line = layout->lineAt(0);
+
+        line.setLeadingIncluded(true);
+        qreal lineHeightEm = 1.2;
+        if (mostCommonCharFormat.fontPointSize()>0) {
+            lineHeightEm = line.height()/mostCommonCharFormat.fontPointSize();
+        }
+        if (lineHeightType==QTextBlockFormat::ProportionalHeight) {
+            lineHeightEm *= qreal(lineHeight)/100.0;
         }
 
-        for (int i=0; i<layout->lineCount();i++) {
-            QTextLine line = layout->lineAt(i);
+        svgWriter.writeStartElement("tspan");
+        if (block.blockNumber()>0) {
+            svgWriter.writeAttribute("x", "0");
+            svgWriter.writeAttribute("dy", QString::number(lineHeightEm)+"em");
+        }
 
-            line.setLeadingIncluded(true);
-            qreal lineHeightEm = 1.2;
-            if (mostCommonCharFormat.fontPointSize()>0) {
-                lineHeightEm = line.height()/mostCommonCharFormat.fontPointSize();
-            }
-            if (lineHeightType==QTextBlockFormat::ProportionalHeight) {
-                lineHeightEm *= qreal(lineHeight)/100.0;
-            }
+        QString text = block.text();
 
-            svgWriter.writeStartElement("tspan");
-            if (i>0 || block.blockNumber()>0) {
-                svgWriter.writeAttribute("x", "0");
-                svgWriter.writeAttribute("dy", QString::number(lineHeightEm)+"em");
-            }
-
-
-            int textEnd = line.textStart()+line.textLength();
-            int end = qMax(block.text().size()-textEnd, 0);
-            QString text = block.text();
-            text.chop(end);
-            text = text.remove(0, line.textStart());
-
-            QVector<QTextLayout::FormatRange> formatsInLine;
+        if (formats.size()>1) {
+            QStringList texts;
+            QVector<QTextCharFormat> charFormats;
             for (int f=0; f<formats.size(); f++) {
-                bool inLine = false;
-                if (formats.at(f).start>line.textStart() && formats.at(f).start<textEnd) {
-                    inLine = true;
+                QString chunk;
+                for (int c = 0; c<formats.at(f).length; c++) {
+                    chunk.append(text.at(formats.at(f).start+c));
                 }
-                if ((formats.at(f).start+formats.at(f).length)>line.textStart()
-                        && (formats.at(f).start+formats.at(f).length)<textEnd) {
-                    inLine = true;
-                }
-                if (inLine) {
-                    formatsInLine.append(formats.at(f));
+                texts.append(chunk);
+                charFormats.append(formats.at(f).format);
+            }
+
+            for (int c = 0; c<texts.size(); c++) {
+                QTextCharFormat diff = formatDifference(charFormats.at(c), mostCommonCharFormat).toCharFormat();
+
+                if (!diff.properties().isEmpty()) {
+                    svgWriter.writeStartElement("tspan");
+                    svgWriter.writeAttribute("style", style(diff, blockFormatDiff, mostCommonCharFormat));
+                    svgWriter.writeCharacters(texts.at(c));
+                    svgWriter.writeEndElement();
+                } else {
+                    svgWriter.writeCharacters(texts.at(c));
                 }
             }
 
-            if (formatsInLine.size()>1) {
-                QStringList texts;
-                QVector<QTextCharFormat> charFormats;
-                for (int f=0; f<formatsInLine.size(); f++) {
-                    QString chunk;
-                    for (int c = 0; c<formatsInLine.at(f).length; c++) {
-                        chunk.append(text.at(formats.at(f).start+c));
-                    }
-                    texts.append(chunk);
-                    charFormats.append(formatsInLine.at(f).format);
-                }
-
-                for (int c = 0; c<texts.size(); c++) {
-                    QTextCharFormat diff = formatDifference(charFormats.at(c), mostCommonCharFormat).toCharFormat();
-
-                    if (!diff.properties().isEmpty()) {
-                        svgWriter.writeStartElement("tspan");
-                        svgWriter.writeAttribute("style", style(diff, blockFormatDiff, mostCommonCharFormat));
-                        svgWriter.writeCharacters(texts.at(c));
-                        svgWriter.writeEndElement();
-                    } else {
-                        svgWriter.writeCharacters(texts.at(c));
-                    }
-                }
-
-            } else {
-                svgWriter.writeCharacters(text);
-                //check format against
-            }
-            svgWriter.writeEndElement();
+        } else {
+            svgWriter.writeCharacters(text);
+            //check format against
         }
+        svgWriter.writeEndElement();
+
         block = block.next();
     }
     svgWriter.writeEndElement();//text root element.

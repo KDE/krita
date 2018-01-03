@@ -43,6 +43,7 @@
 #include "kis_color_selector_container.h"
 #include "kis_canvas2.h"
 #include "kis_signal_compressor.h"
+#include "KisViewManager.h"
 
 
 KisColorSelector::KisColorSelector(KisColorSelectorConfiguration conf, QWidget* parent)
@@ -157,6 +158,11 @@ void KisColorSelector::updateIcons() {
     }
 }
 
+void KisColorSelector::hasAtLeastOneDocument(bool value)
+{
+    m_hasAtLeastOneDocumentOpen = value;
+}
+
 void KisColorSelector::reset()
 {
     KisColorSelectorBase::reset();
@@ -181,8 +187,15 @@ void KisColorSelector::paintEvent(QPaintEvent* e)
     p.fillRect(0,0,width(),height(),QColor(bgColor.value(),bgColor.value(),bgColor.value()));
     p.setRenderHint(QPainter::Antialiasing);
 
+    // this variable name isn't entirely accurate to what always happens. see definition in header file to understand it better
+    if (!m_hasAtLeastOneDocumentOpen) {
+        p.setOpacity(0.2);
+    }
+
     m_mainComponent->paintEvent(&p);
     m_subComponent->paintEvent(&p);
+
+    p.setOpacity(1.0);
 }
 
 inline int iconSize(qreal width, qreal height) {

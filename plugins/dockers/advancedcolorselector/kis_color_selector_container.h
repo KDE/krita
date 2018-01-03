@@ -35,6 +35,7 @@ public:
     explicit KisColorSelectorContainer(QWidget *parent = 0);
     void setCanvas(KisCanvas2* canvas);
     void unsetCanvas();
+    bool doesAtleastOneDocumentExist();
 
     enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
 

@@ -212,9 +212,14 @@ void KBugReportPrivate::_k_updateUrl()
     }
 
     query.addQueryItem(QStringLiteral("version"), m_strVersion);
-    url.setQuery(query);
 
     // TODO: guess and fill OS(sys_os) and Platform(rep_platform) fields
+#ifdef Q_OS_WIN
+    query.addQueryItem(QStringLiteral("op_sys"), QStringLiteral("MS Windows"));
+    query.addQueryItem(QStringLiteral("rep_platform"), QStringLiteral("MS Windows"));
+#endif
+
+    url.setQuery(query);
 }
 
 void KBugReport::accept()

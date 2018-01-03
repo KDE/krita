@@ -27,6 +27,10 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QTextLine>
+
 #include <KoSvgTextShape.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -361,6 +365,241 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     return true;
 }
 
+bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
+{
+    QBuffer svgBuffer;
+    svgBuffer.open(QIODevice::WriteOnly);
+
+    QXmlStreamWriter svgWriter(&svgBuffer);
+
+    svgWriter.setAutoFormatting(true);
+
+    QTextBlock block = doc->begin();
+
+    /**
+     * Find the most commonly used format.
+     * This is what we put into the text-style.
+     * We cannot just check the first textCharFormat we find
+     * because users might be using things like drop-caps.
+     */
+    QList<int> formatFrequency;
+    QList<QTextCharFormat> allFormats;
+    allFormats.append(QTextCharFormat());
+    formatFrequency.append(1);
+    while (block.isValid()) {
+        //copied from QTextDocument.cpp
+        for (int f=0; f<block.textFormats().size(); f++) {
+            for(int i=0; i<allFormats.size(); i++) {
+                //props should proly compare itself to the main text format...
+                QTextCharFormat diff = formatDifference(block.textFormats().at(f).format, allFormats.at(i)).toCharFormat();
+
+                if (diff.properties().isEmpty()) {
+                    formatFrequency[i] = formatFrequency.at(i) + block.textFormats().at(f).length;
+                } else {
+                    allFormats.append(block.textFormats().at(f).format);
+                    formatFrequency.append(block.textFormats().at(f).length);
+                }
+            }
+        }
+        block = block.next();
+    }
+    QTextCharFormat mostCommonCharFormat = QTextCharFormat();
+    int top = 0;
+    for(int i=0; i<formatFrequency.size(); i++) {
+        if (formatFrequency.at(i)>top) {
+            top = formatFrequency.at(i);
+            mostCommonCharFormat = allFormats.at(i);
+        }
+    }
+
+    //Okay, now the actual writing.
+
+    block = doc->begin();
+    svgWriter.writeStartElement("text");
+    svgWriter.writeAttribute("style", style(mostCommonCharFormat, block.blockFormat()));
+    //insert the style of the first block and the first block text format into the text style.
+    while (block.isValid()) {
+        QTextLayout *layout = block.layout();
+        QVector<QTextLayout::FormatRange> formats = block.textFormats();
+        QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), doc->firstBlock().blockFormat()).toBlockFormat();
+
+        int lineHeight = doc->firstBlock().blockFormat().lineHeight();
+        int lineHeightType = doc->firstBlock().blockFormat().lineHeightType();
+        if (blockFormatDiff.hasProperty(QTextFormat::LineHeight)) {
+                lineHeight = blockFormatDiff.lineHeight();
+                lineHeightType = blockFormatDiff.lineHeightType();
+        }
+
+        for (int i=0; i<layout->lineCount();i++) {
+            QTextLine line = layout->lineAt(i);
+
+            line.setLeadingIncluded(true);
+            qreal lineHeightEm = 1.2;
+            if (mostCommonCharFormat.fontPointSize()>0) {
+                lineHeightEm = line.height()/mostCommonCharFormat.fontPointSize();
+            }
+            if (lineHeightType==QTextBlockFormat::ProportionalHeight) {
+                lineHeightEm *= qreal(lineHeight)/100.0;
+            }
+
+            svgWriter.writeStartElement("tspan");
+            if (i>0 || block.blockNumber()>0) {
+                svgWriter.writeAttribute("x", "0");
+                svgWriter.writeAttribute("dy", QString::number(lineHeightEm)+"em");
+            }
+
+
+            int textEnd = line.textStart()+line.textLength();
+            int end = qMax(block.text().size()-textEnd, 0);
+            QString text = block.text();
+            text.chop(end);
+            text = text.remove(0, line.textStart());
+
+            QVector<QTextLayout::FormatRange> formatsInLine;
+            for (int f=0; f<formats.size(); f++) {
+                bool inLine = false;
+                if (formats.at(f).start>line.textStart() && formats.at(f).start<textEnd) {
+                    inLine = true;
+                }
+                if ((formats.at(f).start+formats.at(f).length)>line.textStart()
+                        && (formats.at(f).start+formats.at(f).length)<textEnd) {
+                    inLine = true;
+                }
+                if (inLine) {
+                    formatsInLine.append(formats.at(f));
+                }
+            }
+
+            if (formatsInLine.size()>1) {
+                QStringList texts;
+                QVector<QTextCharFormat> charFormats;
+                for (int f=0; f<formatsInLine.size(); f++) {
+                    QString chunk;
+                    for (int c = 0; c<formatsInLine.at(f).length; c++) {
+                        chunk.append(text.at(formats.at(f).start+c));
+                    }
+                    texts.append(chunk);
+                    charFormats.append(formatsInLine.at(f).format);
+                }
+
+                for (int c = 0; c<texts.size(); c++) {
+                    QTextCharFormat diff = formatDifference(charFormats.at(c), mostCommonCharFormat).toCharFormat();
+
+                    if (!diff.properties().isEmpty()) {
+                        svgWriter.writeStartElement("tspan");
+                        svgWriter.writeAttribute("style", style(diff, blockFormatDiff, mostCommonCharFormat));
+                        svgWriter.writeCharacters(texts.at(c));
+                        svgWriter.writeEndElement();
+                    } else {
+                        svgWriter.writeCharacters(texts.at(c));
+                    }
+                }
+
+            } else {
+                svgWriter.writeCharacters(text);
+                //check format against
+            }
+            svgWriter.writeEndElement();
+        }
+        block = block.next();
+    }
+    svgWriter.writeEndElement();//text root element.
+
+    if (svgWriter.hasError()) {
+        d->errors << i18n("Unknown error writing SVG text element");
+        return false;
+    }
+    *svgText = QString::fromUtf8(svgBuffer.data()).trimmed();
+    return true;
+}
+
+bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText, QTextDocument *doc)
+{
+    QXmlStreamReader svgReader(svgText.trimmed());
+    doc->clear();
+    QTextCursor cursor(doc);
+    bool newBlock = false;
+    QTextBlockFormat mainBlockFormat = cursor.blockFormat();
+    QTextCharFormat mainCharFormat = cursor.charFormat();
+    QTextCharFormat oldFormat = cursor.charFormat();
+
+    while (!svgReader.atEnd()) {
+        QXmlStreamReader::TokenType token = svgReader.readNext();
+        switch (token) {
+        case QXmlStreamReader::StartElement:
+        {
+            newBlock = false;
+            if (svgReader.name() == "tspan") {
+                if (svgReader.attributes().hasAttribute("dy")) {
+                    newBlock = true;
+                    oldFormat = mainCharFormat;
+                } else {
+                    oldFormat = cursor.charFormat();
+                }
+
+            }
+
+            int lineHeight = 100;
+            if (svgReader.attributes().hasAttribute("style")) {
+                QString styleString = svgReader.attributes().value("style").toString();
+                if (styleString.endsWith(";")) {
+                    styleString.chop(1);
+                }
+                QStringList styles = styleString.split(";");
+                QVector<QTextFormat> formats = stylesFromString(styles, cursor.charFormat(), cursor.blockFormat());
+                cursor.mergeCharFormat(formats.at(0).toCharFormat());
+                cursor.mergeBlockFormat(formats.at(1).toBlockFormat());
+
+                //This still doesn't work...
+                if (svgReader.attributes().hasAttribute("dy")) {
+                    QString dyString = svgReader.attributes().value("dy").toString().remove("em");
+                    qreal dy = dyString.trimmed().toDouble();
+                    QTextBlockFormat format = cursor.blockFormat();
+                    lineHeight = dy*100;
+                    format.setLineHeight(lineHeight, QTextBlockFormat::ProportionalHeight);
+                    cursor.setBlockFormat(format);
+                }
+                if (svgReader.name()=="text") {
+                    mainBlockFormat = cursor.blockFormat();
+                    mainCharFormat = cursor.charFormat();
+                    oldFormat = mainCharFormat;
+                }
+            }
+
+            if (newBlock) {
+                cursor.setBlockCharFormat(cursor.charFormat());
+                cursor.insertBlock();
+            }
+            break;
+
+        }
+        case QXmlStreamReader::EndElement:
+        {
+            if (!newBlock && svgReader.name()!="text" ) {
+                cursor.setCharFormat(oldFormat);
+            }
+            break;
+        }
+        case QXmlStreamReader::Characters:
+        {
+            if (!svgReader.isWhitespace()) {
+                cursor.insertText(svgReader.text().toString());
+            }
+
+            break;
+        }
+        default:
+            ;
+        }
+    }
+    if (svgReader.hasError()) {
+        d->errors << svgReader.errorString();
+        return false;
+    }
+    doc->setModified(false);
+    return true;
+}
+
 QStringList KoSvgTextShapeMarkupConverter::errors() const
 {
     return d->errors;
@@ -369,5 +608,329 @@ QStringList KoSvgTextShapeMarkupConverter::errors() const
 QStringList KoSvgTextShapeMarkupConverter::warnings() const
 {
     return d->warnings;
+}
+
+QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockFormat blockFormat, QTextCharFormat mostCommon)
+{
+    QStringList style;
+    for(int i=0; i<format.properties().size(); i++) {
+        QString c;
+        int propertyId = format.properties().keys().at(i);
+
+        if (propertyId == QTextCharFormat::FontFamily) {
+            c.append("font-family").append(":")
+                    .append(format.properties()[propertyId].toString());
+        }
+        if (propertyId == QTextCharFormat::FontPointSize) {
+            c.append("font-size").append(":")
+                    .append(format.properties()[propertyId].toString()+"pt");
+        }
+        if (propertyId == QTextCharFormat::FontPixelSize) {
+            c.append("font-size").append(":")
+                    .append(format.properties()[propertyId].toString()+"px");
+        }
+        if (propertyId == QTextCharFormat::FontWeight) {
+            //8 comes from QTextDocument...
+            c.append("font-weight").append(":")
+                    .append(QString::number(format.properties()[propertyId].toInt()*8));
+        }
+        if (propertyId == QTextCharFormat::FontItalic) {
+            QString val = "italic";
+            if (!format.fontItalic()) {
+                val = "normal";
+            }
+            c.append("font-style").append(":")
+                    .append(val);
+        }
+
+        if (propertyId == QTextCharFormat::FontCapitalization) {
+            QString val;
+            if (format.fontCapitalization() == QFont::SmallCaps){
+                c.append("font-variant").append(":")
+                        .append("small-caps");
+            } else if (format.fontCapitalization() == QFont::AllUppercase) {
+                c.append("text-transform").append(":")
+                        .append("uppercase");
+            } else if (format.fontCapitalization() == QFont::AllLowercase) {
+                c.append("text-transform").append(":")
+                        .append("lowercase");
+            } else if (format.fontCapitalization() == QFont::Capitalize) {
+                c.append("text-transform").append(":")
+                        .append("capitalize");
+            }
+        }
+
+        if (propertyId == QTextCharFormat::FontStretch) {
+            c.append("font-stretch").append(":")
+                    .append(format.properties()[propertyId].toString());
+        }
+        if (propertyId == QTextCharFormat::FontKerning) {
+            QString val = "normal";
+            if(!format.fontKerning()) {
+                val = "none";
+            }
+            c.append("kerning").append(":")
+                    .append(val);
+        }
+        if (propertyId == QTextCharFormat::FontWordSpacing) {
+            c.append("word-spacing").append(":")
+                    .append(format.properties()[propertyId].toString());
+        }
+        if (propertyId == QTextCharFormat::FontLetterSpacing) {
+            QString val;
+            if (format.fontLetterSpacingType()==QFont::AbsoluteSpacing) {
+                val = QString::number(format.fontLetterSpacing());
+            } else {
+                val = QString::number(((format.fontLetterSpacing()/100)*format.fontPointSize())-format.fontPointSize());
+            }
+            c.append("letter-spacing").append(":")
+                    .append(val);
+        }
+        if (propertyId == QTextCharFormat::TextOutline) {
+            if (format.textOutline().color() != mostCommon.textOutline().color()) {
+                c.append("stroke").append(":")
+                        .append(format.textOutline().color().name());
+                style.append(c);
+                c.clear();
+            }
+            if (format.textOutline().width() != mostCommon.textOutline().width()) {
+                c.append("stroke-width").append(":")
+                        .append(QString::number(format.textOutline().width()));
+            }
+        }
+
+
+        if (propertyId == QTextCharFormat::TextVerticalAlignment) {
+            QString val = "baseline";
+            if (format.verticalAlignment() == QTextCharFormat::AlignSubScript)
+                val = QLatin1String("sub");
+            else if (format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
+                val = QLatin1String("super");
+                c.append("baseline-shift").append(":")
+                        .append(val);
+        }
+
+        if (!c.isEmpty()) {
+            style.append(c);
+        }
+    }
+    //we might need a better check than 'isn't black'
+    if (format.foreground().color()!= mostCommon.foreground().color()) {
+        QString c;
+        c.append("fill").append(":")
+                .append(format.foreground().color().name());
+        if (!c.isEmpty()) {
+            style.append(c);
+        }
+    }
+
+    if (format.hasProperty(QTextCharFormat::FontUnderline)
+            || format.hasProperty(QTextCharFormat::FontOverline)
+            || format.hasProperty(QTextCharFormat::FontStrikeOut)) {
+        QStringList values;
+        QString c;
+        if (format.hasProperty(QTextCharFormat::FontUnderline)) {
+            values.append("underline");
+        } else if(format.hasProperty(QTextCharFormat::FontOverline)) {
+            values.append("overline");
+        } else {
+            values.append("strike-through");
+        }
+        c.append("text-decoration").append(":")
+                .append(values.join(" "));
+        if (!c.isEmpty()) {
+            style.append(c);
+        }
+    }
+
+    if (blockFormat.hasProperty(QTextBlockFormat::BlockAlignment)) {
+        QString c;
+        QString val;
+        if (blockFormat.alignment()==Qt::AlignRight) {
+            val = "end";
+        } else if (blockFormat.alignment()==Qt::AlignCenter) {
+            val = "middle";
+        } else {
+            val = "start";
+        }
+        c.append("text-anchor").append(":")
+                .append(val);
+        if (!c.isEmpty()) {
+            style.append(c);
+        }
+    }
+
+    return style.join("; ");
+}
+
+QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat)
+{
+    QVector<QTextFormat> formats;
+    QTextCharFormat charFormat;
+    charFormat.setTextOutline(currentCharFormat.textOutline());
+    QTextBlockFormat blockFormat;
+
+    for (int i=0; i<styles.size(); i++) {
+        if (!styles.at(i).isEmpty()){
+            QStringList style = styles.at(i).split(":");
+            QString property = style.at(0).trimmed();
+            QString value = style.at(1).trimmed();
+
+            if (property == "font-family") {
+                charFormat.setFontFamily(value);
+            }
+
+            if (property == "font-size") {
+                if (value.contains("%")) {
+                    value = value.remove("%");
+                    int fontSize = currentCharFormat.fontPointSize();
+                    if (fontSize<0) {
+                        fontSize = 10;
+                    }
+                    charFormat.setFontPointSize(qreal(value.toInt()/100*fontSize));
+                } else if (value.contains("em")) {
+                    value = value.remove("em");
+                    int fontSize = currentCharFormat.fontPointSize();
+                    if (fontSize<0) {
+                        fontSize = 10;
+                    }
+                    charFormat.setFontPointSize(qreal(value.toInt()*fontSize));
+                } else if (value.contains("px")) {
+                    value = value.remove("px");
+                    QFont font = charFormat.font();
+                    font.setPixelSize(value.toInt());
+                    charFormat.setFont(font);
+                } else {
+                    value = value.remove("pt");
+                    charFormat.setFontPointSize(value.toDouble());
+                }
+            }
+
+            if (property == "font-variant") {
+                if (value=="small-caps") {
+                    charFormat.setFontCapitalization(QFont::SmallCaps);
+                } else {
+                    charFormat.setFontCapitalization(QFont::MixedCase);
+                }
+            }
+
+            if (property == "font-style") {
+                if (value=="italic" || value=="oblique") {
+                    charFormat.setFontItalic(true);
+                } else {
+                    charFormat.setFontItalic(false);
+                }
+            }
+
+            if (property == "font-stretch") {
+                charFormat.setFontStretch(value.toInt());
+            }
+
+            if (property == "font-weight") {
+                charFormat.setFontWeight(value.toInt()/8);
+            }
+
+            if (property == "text-decoration") {
+                charFormat.setFontUnderline(false);
+                charFormat.setFontOverline(false);
+                charFormat.setFontStrikeOut(false);
+                if (value == "strike-through") {
+                    charFormat.setFontStrikeOut(true);
+                } else if (value == "overline") {
+                    charFormat.setFontOverline(true);
+                } else {
+                    charFormat.setFontUnderline(true);
+                }
+            }
+
+            if (property == "text-transform") {
+                if (value == "uppercase") {
+                    charFormat.setFontCapitalization(QFont::AllUppercase);
+                } else if (value == "lowercase") {
+                    charFormat.setFontCapitalization(QFont::AllLowercase);
+                } else if (value == "capitalize") {
+                    charFormat.setFontCapitalization(QFont::Capitalize);
+                } else{
+                    charFormat.setFontCapitalization(QFont::MixedCase);
+                }
+            }
+
+            if (property == "letter-spacing") {
+                charFormat.setFontLetterSpacing(value.toDouble());
+            }
+
+            if (property == "word-spacing") {
+                charFormat.setFontWordSpacing(value.toDouble());
+            }
+
+            if (property == "kerning") {
+                if (value=="normal") {
+                    charFormat.setFontKerning(true);
+                } else {
+                    charFormat.setFontKerning(false);
+                }
+            }
+
+            if (property == "stroke") {
+                QPen pen = charFormat.textOutline();
+                QColor color;
+                color.setNamedColor(value);
+                pen.setColor(color);
+                charFormat.setTextOutline(pen);
+            }
+
+            if (property == "stroke-width") {
+                QPen pen = charFormat.textOutline();
+                pen.setWidth(value.toInt());
+                charFormat.setTextOutline(pen);
+            }
+
+            if (property == "fill") {
+                QBrush brush = currentCharFormat.foreground();
+                QColor color;
+                color.setNamedColor(value);
+                brush.setColor(color);
+                charFormat.setForeground(brush);
+            }
+
+            if (property == "text-anchor") {
+                qDebug()<<"setting alignment"<< value;
+                if (value == "end") {
+                    blockFormat.setAlignment(Qt::AlignRight);
+                } else if (value == "middle") {
+                    blockFormat.setAlignment(Qt::AlignCenter);
+                } else {
+                    blockFormat.setAlignment(Qt::AlignLeft);
+                }
+            }
+
+            if (property == "baseline-shift") {
+                if (value == "super") {
+                    charFormat.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                } else if (value == "sub") {
+                    charFormat.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+                } else {
+                    charFormat.setVerticalAlignment(QTextCharFormat::AlignNormal);
+                }
+            }
+        }
+    }
+
+    formats.append(charFormat);
+    formats.append(blockFormat);
+    return formats;
+}
+
+QTextFormat KoSvgTextShapeMarkupConverter::formatDifference(QTextFormat test, QTextFormat reference)
+{
+    //copied from QTextDocument.cpp
+    QTextFormat diff = test;
+    //props should proly compare itself to the main text format...
+    const QMap<int, QVariant> props = reference.properties();
+    for (QMap<int, QVariant>::ConstIterator it = props.begin(), end = props.end();
+         it != end; ++it)
+        if (it.value() == test.property(it.key()))
+            diff.clearProperty(it.key());
+    return diff;
 }
 

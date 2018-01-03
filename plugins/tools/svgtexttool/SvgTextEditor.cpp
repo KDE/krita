@@ -162,14 +162,10 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
         QString svg;
         QString styles;
         QString html;
+        QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
 
-        if (converter.convertToHtml(&html)) {
-
-            qDebug() << "html:" << html;
-
-            m_textEditorWidget.richTextEdit->document()->clear();
-            m_textEditorWidget.richTextEdit->document()->setHtml(html);
-            m_textEditorWidget.richTextEdit->document()->setModified(false);
+        if (converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
+            m_textEditorWidget.richTextEdit->setDocument(doc);
         }
 
         if (converter.convertToSvg(&svg, &styles)) {
@@ -194,8 +190,8 @@ void SvgTextEditor::save()
             QString styles;
             KoSvgTextShapeMarkupConverter converter(m_shape);
 
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
-                qWarning() << "Eeeek";
+            if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
+                    qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
             emit textUpdated(svg, styles);
@@ -226,6 +222,7 @@ void SvgTextEditor::switchTextEditorTab()
         if (m_shape) {
 
             // Convert the svg text to html XXX: Fix resolution! Also, the rect should be the image rect, not the shape rect.
+            /**
             if (!converter.convertFromSvg(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(),
                                           m_shape->boundingRect(), 72.0)) {
                 qDebug() << "Eeek 3";
@@ -234,7 +231,14 @@ void SvgTextEditor::switchTextEditorTab()
             if (!converter.convertToHtml(&html)) {
                 qDebug() << "Eeek 4";
             }
+
             m_textEditorWidget.richTextEdit->document()->setHtml(html);
+            */
+            QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
+            if (!converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
+                qWarning()<<"new converter svgToDoc doesn't work!";
+            }
+            m_textEditorWidget.richTextEdit->setDocument(doc);
         }
         m_currentEditor = m_textEditorWidget.richTextEdit;
     }
@@ -248,12 +252,9 @@ void SvgTextEditor::switchTextEditorTab()
             QString svg;
             QString styles;
 
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
-                qWarning() << "Eeeek";
+            if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
+                    qWarning()<<"new converter docToSVG doesn't work!";
             }
-            //if (!converter.convertToSvg(&svg, &styles)) {
-            //    qDebug() << "Eeeek 2";
-            //}
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
         }

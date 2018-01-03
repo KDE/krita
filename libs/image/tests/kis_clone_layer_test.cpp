@@ -160,7 +160,7 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     KisNodeSP group1 = groupLayer1(image);
 
     /**
-     * We are checking that noone keeps a pointer to the
+     * We are checking that no one keeps a pointer to the
      * source layer after it is deleted. Uncomment the first
      * line to see how perfectly it crashed if removing the
      * source directly through the node facade

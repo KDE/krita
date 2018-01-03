@@ -374,7 +374,7 @@ void TestShapeReorderCommand::testMoveUpOverlapping()
 
 void TestShapeReorderCommand::testMoveDownOverlapping()
 {
-#if 0 // disable a current alogrithm does not yet support this
+#if 0 // disable a current algorithm does not yet support this
     MockShape shape1, shape2, shape3, shape4, shape5;
     
     shape1.setSize(QSizeF(100, 100));

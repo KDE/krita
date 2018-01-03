@@ -39,7 +39,7 @@ class KToolBar;
  * activated, and check or uncheck itself if the toolbar
  * is manually shown or hidden.
  *
- * If you need to perfom some additional action when the
+ * If you need to perform some additional action when the
  * toolbar is shown or hidden, connect to the toggled(bool)
  * signal. It will be emitted after the toolbar's
  * visibility has changed, whenever it changes.

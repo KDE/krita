@@ -1,7 +1,3 @@
-include_directories(SYSTEM
-    ${Boost_INCLUDE_DIRS}
-)
-
 # export
 
 set(kritaspriterexport_SOURCES

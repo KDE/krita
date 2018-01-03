@@ -11,7 +11,6 @@ include_directories(
 
 include_directories(SYSTEM
     ${ZLIB_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 set(LIB_PSD_SRCS 

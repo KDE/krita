@@ -2486,18 +2486,6 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
 
 
     QTime timer;
-
-#if 0
-    // just to test parsing speed with plain dumb handler
-    QXmlStreamReader *reader = new QXmlStreamReader(xmldevice);
-    reader->setNamespaceProcessing(true);
-    timer.start();
-    ParseError error = parseDocument(*reader, doc);
-    printf("Large spreadsheet: QXmlStreamReader parsing time is %d ms\n", timer.elapsed());
-    delete reader;
-    xmldevice.seek(0);
-#endif
-
     KoXmlDocument doc;
 
     timer.start();

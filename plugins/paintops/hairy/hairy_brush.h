@@ -107,7 +107,7 @@ private:
     void saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
     /// simulate running out of ink through opacity decreasing
     void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
-    /// fetch actaul ink status according depletion curve
+    /// fetch actual ink status according depletion curve
     qreal fetchInkDepletion(Bristle * bristle, int inkDepletionSize);
 
     void initAndCache();

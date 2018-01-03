@@ -110,7 +110,7 @@ void KisSignalCompressor::start()
 void KisSignalCompressor::slotTimerExpired()
 {
     Q_ASSERT(m_mode != UNDEFINED);
-    if (m_mode != FIRST_ACTIVE || m_gotSignals) {
+    if ((m_mode != FIRST_ACTIVE && m_mode != FIRST_ACTIVE_POSTPONE_NEXT) || m_gotSignals) {
         m_gotSignals = false;
         emit timeout();
     }

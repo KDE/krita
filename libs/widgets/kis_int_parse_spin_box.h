@@ -50,14 +50,14 @@ public:
 
 Q_SIGNALS:
 
-    //! \brief signal emmitted when the last parsed expression create an error.
+    //! \brief signal emitted when the last parsed expression create an error.
     void errorWhileParsing(QString expr) const;
-    //! \brief signal emmitted when the last parsed expression is valid.
+    //! \brief signal emitted when the last parsed expression is valid.
     void noMoreParsingError() const;
 
 public Q_SLOTS:
 
-    //! \brief useful to let the widget change it's stylesheet when an error occured in the last expression.
+    //! \brief useful to let the widget change it's stylesheet when an error occurred in the last expression.
     void setErrorStyle();
     //! \brief useful to let the widget reset it's stylesheet when there's no more error.
     void clearErrorStyle();

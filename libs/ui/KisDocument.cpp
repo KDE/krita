@@ -592,10 +592,13 @@ QByteArray KisDocument::serializeToNativeByteArray()
 
 void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
+    if (status == KisImportExportFilter::UserCancelled)
+        return;
+
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (status != KisImportExportFilter::OK) {
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
@@ -715,6 +718,12 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
                                                            job.flags & KritaUtils::SaveShowWarnings,
                                                            exportConfiguration);
 
+    if (!started) {
+        d->backgroundSaveDocument.take()->deleteLater();
+        d->savingMutex.unlock();
+        d->backgroundSaveJob = KritaUtils::ExportFileJob();
+    }
+
     return started;
 }
 
@@ -772,7 +781,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
     if (status != KisImportExportFilter::OK) {
         const int emergencyAutoSaveInterval = 10; // sec
         setAutoSaveDelay(emergencyAutoSaveInterval);
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during autosaving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
@@ -807,14 +816,23 @@ bool KisDocument::startExportInBackground(const QString &actionName,
         }
     }
 
+    KisImportExportFilter::ConversionStatus initializationStatus;
     d->childSavingFuture =
         d->importExportManager->exportDocumentAsyc(location,
                                                    realLocation,
                                                    mimeType,
+                                                   initializationStatus,
                                                    showWarnings,
                                                    exportConfiguration);
 
-    if (d->childSavingFuture.isCanceled()) return false;
+    if (initializationStatus != KisImportExportFilter::ConversionStatus::OK) {
+        if (d->savingUpdater) {
+            d->savingUpdater->cancel();
+        }
+        d->savingImage.clear();
+        emit sigBackgroundSavingFinished(initializationStatus, this->errorMessage());
+        return false;
+    }
 
     typedef QFutureWatcher<KisImportExportFilter::ConversionStatus> StatusWatcher;
     StatusWatcher *watcher = new StatusWatcher();

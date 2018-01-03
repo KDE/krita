@@ -41,17 +41,29 @@ class RunAction(QAction):
         stdout = sys.stdout
         stderr = sys.stderr
         output = docwrapper.DocWrapper(self.output.document())
-        output.write("======================================\n")
+        if (self.editor._documentModified is True):
+            output.write("==== Warning: Script not saved! ====\n")
+        else:
+            output.write("======================================\n")
         sys.stdout = output
         sys.stderr = output
+        
         script = self.editor.document().toPlainText()
         document = self.scripter.documentcontroller.activeDocument
+
         try:
-            if document:
+            if document and self.editor._documentModified is False:
                 spec = importlib.util.spec_from_file_location("users_script", document.filePath)
                 users_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(users_module)
-                users_module.main()
+                
+                try: 
+                    # maybe script is to be execed, maybe main needs to be invoked
+                    # if there is a main() then execute it, otherwise don't worry...
+                    users_module.main()
+                except AttributeError:
+                    pass
+                
             else:
                 code = compile(script, '<string>', 'exec')
                 exec(script, {})
@@ -62,5 +74,5 @@ class RunAction(QAction):
         sys.stderr = stderr
 
         # scroll to bottom of output
-        max = self.output.verticalScrollBar().maximum()
-        self.output.verticalScrollBar().setValue(max)
+        bottom = self.output.verticalScrollBar().maximum()
+        self.output.verticalScrollBar().setValue(bottom)

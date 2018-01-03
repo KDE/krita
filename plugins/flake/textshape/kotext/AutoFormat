@@ -16,7 +16,7 @@ words and kpresenter have autoformat feature:
 	-> Use auto-numbering for numbered paragraphs, when we start a paragraph
 	with a <number>+<space>+<text> and we press enter this paragraph and
 	next paragraph is replace by number style.
-	-> use list-formatting for bulletted paragraph, when we write "* kde" and
+	-> use list-formatting for bulleted paragraph, when we write "* kde" and
 	press enter style of paragraph is replaced by bullet style. We can
 	configurate bullet.
 -> Custom Quotes :

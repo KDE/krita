@@ -41,12 +41,16 @@ public:
 
 public Q_SLOTS:
     void slotUserChangedLodAvailability(bool value);
+    void slotUserChangedLodThreshold(qreal value);
+    void slotUserChangedSize(qreal value);
 
 Q_SIGNALS:
     void sigUserChangedLodAvailability(bool value);
+    void sigUserChangedLodThreshold(qreal value);
 
 private Q_SLOTS:
     void showLodToolTip();
+    void showLodThresholdWidget(const QPoint &pos);
 
 private:
     struct Private;

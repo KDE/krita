@@ -290,9 +290,9 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
     if(m_currentProjection) {
         warnImage << "BUG: The walker hasn't reached the root layer!";
         warnImage << "     Start node:" << walker.startNode() << "Requested rect:" << walker.requestedRect();
-        warnImage << "     There must be an inconsistency in the walkers happened!";
+        warnImage << "     An inconsistency in the walkers occurred!";
         warnImage << "     Please report a bug describing how you got this message.";
-        // reset projection to avoid artefacts in next merges and allow people to work further
+        // reset projection to avoid artifacts in next merges and allow people to work further
         resetProjection();
     }
 }

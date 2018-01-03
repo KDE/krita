@@ -82,7 +82,7 @@ set(KRITA_VERSION_RELEASE 0)     # 88 for pre-alpha, 89 for Alpha, increase for 
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2017) # update every year
+set(KRITA_YEAR 2018) # update every year
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
     set(KRITA_STABLE 1) # do not edit
@@ -112,13 +112,17 @@ set(KRITA_GIT_SHA1_STRING "")
 set(KRITA_GIT_BRANCH_STRING "")
 
 include(GetGitRevisionDescription)
-get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+get_git_head_hash(GIT_SHA1)
 get_git_branch(GIT_BRANCH)
 
-if(GIT_SHA1 AND GIT_BRANCH)
-    string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
-    set(KRITA_GIT_SHA1_STRING ${GIT_SHA1})
-    set(KRITA_GIT_BRANCH_STRING ${GIT_BRANCH})
+if(GIT_SHA1)
+   string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
+   set(KRITA_GIT_SHA1_STRING ${GIT_SHA1})
+   if(GIT_BRANCH)
+       set(KRITA_GIT_BRANCH_STRING ${GIT_BRANCH})
+   else()
+       set(KRITA_GIT_BRANCH_STRING "(detached HEAD)")
+   endif()
 endif()
 
 if(NOT DEFINED RELEASE_BUILD)
@@ -399,6 +403,13 @@ if(WIN32)
     endif()
 endif()
 
+# KDECompilerSettings adds the `--export-all-symbols` linker flag.
+# We don't really need it.
+if(MINGW)
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif(MINGW)
+
 # enable exceptions globally
 kde_enable_exceptions()
 
@@ -448,7 +459,7 @@ endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost 1.55 REQUIRED COMPONENTS system) # for pigment and stage
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
 ##
@@ -599,9 +610,15 @@ if(HAVE_VC)
     include (VcMacros)
 
     if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
+        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+        if(NOT WIN32)
+            set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
+        endif()
     elseif (NOT MSVC)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
+        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        if(NOT WIN32)
+            set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
+        endif()
     endif()
 
     #Handle Vc master
@@ -632,7 +649,7 @@ if(WIN32)
 endif()
 
 ##
-## Test endianess
+## Test endianness
 ##
 include (TestBigEndian)
 test_big_endian(CMAKE_WORDS_BIGENDIAN)

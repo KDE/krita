@@ -1236,7 +1236,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
         }
     }
 
-    // test rect doesn't fit the wrap rect in both dimentions
+    // test rect doesn't fit the wrap rect in both dimensions
     const QRect &rect(bounds.adjusted(-6,-6,8,8));
     KisRandomAccessorSP dstIt = dst->createRandomAccessorNG(rect.x(), rect.y());
     IteratorSP it = createIterator<IteratorSP>(dev, rect);

@@ -197,7 +197,8 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setNameFilters(d->filterList);
 
     if (!d->proposedFileName.isEmpty()) {
-        QString mime = KisMimeDatabase::mimeTypeForFile(d->proposedFileName);
+        QString mime = KisMimeDatabase::mimeTypeForFile(d->proposedFileName, d->type == KoFileDialog::SaveFile ? false : true);
+
         QString description = KisMimeDatabase::descriptionForMimeType(mime);
         Q_FOREACH(const QString &filter, d->filterList) {
             if (filter.startsWith(description)) {
@@ -245,7 +246,7 @@ QString KoFileDialog::filename()
             url = url + extension;
         }
 
-        d->mimeType = KisMimeDatabase::mimeTypeForFile(url);
+        d->mimeType = KisMimeDatabase::mimeTypeForFile(url, d->type == KoFileDialog::SaveFile ? false : true);
         saveUsedDir(url, d->dialogName);
     }
     return url;

@@ -20,15 +20,14 @@
 
 /** @file */
 
-#include <KoConfig.h>
-
 #include <QtGlobal>
 #include <QFlags>
-class QOpenGLContext;
-class QString;
 
 #include "kritaui_export.h"
 
+class QOpenGLContext;
+class QString;
+class QStringList;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -74,6 +73,8 @@ public:
     static void initializeContext(QOpenGLContext *ctx);
 
     static const QString &getDebugText();
+
+    static QStringList getOpenGLWarnings();
 
     static bool supportsLoD();
     static bool hasOpenGL3();

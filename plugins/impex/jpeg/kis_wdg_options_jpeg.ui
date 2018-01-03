@@ -169,7 +169,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string comment="the result will be artificially smoothed to hide jpeg artefacts">Smooth:</string>
+            <string comment="the result will be artificially smoothed to hide jpeg artifacts">Smooth:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -310,6 +310,29 @@
          </layout>
         </widget>
        </item>
+       <item row="4" column="0" colspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>505</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkMetaData">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Store document metadata that is in the document information. This will override any layer metadata.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Store Document Metadata</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
@@ -322,18 +345,15 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkAuthor">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add the author nickname and the first contact of the author profile. This is overridden by the anonymizer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>505</width>
-           <height>16</height>
-          </size>
+         <property name="text">
+          <string>Sign with Author Profile Data</string>
          </property>
-        </spacer>
+        </widget>
        </item>
       </layout>
      </widget>

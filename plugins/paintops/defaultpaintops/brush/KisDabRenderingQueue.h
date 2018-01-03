@@ -54,19 +54,18 @@ public:
 
     QList<KisDabRenderingJobSP> notifyJobFinished(int seqNo, int usecsTime = -1);
 
-    QList<KisRenderedDab> takeReadyDabs(bool returnMutableDabs = false);
+    QList<KisRenderedDab> takeReadyDabs(bool returnMutableDabs = false, int oneTimeLimit = -1, bool *someDabsLeft = 0);
 
     bool hasPreparedDabs() const;
 
     void setCacheInterface(CacheInterface *interface);
 
     KisFixedPaintDeviceSP fetchCachedPaintDevce();
-    void recyclePaintDevicesForCache(const QVector<KisFixedPaintDeviceSP> devices);
 
     void putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources);
     KisDabCacheUtils::DabRenderingResources* fetchResourcesFromCache();
 
-    int averageExecutionTime() const;
+    qreal averageExecutionTime() const;
     int averageDabSize() const;
 
     int testingGetQueueSize() const;

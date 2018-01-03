@@ -48,7 +48,7 @@ public:
     /// Sets the gradient transformation
     void setTransform(const QTransform &transform);
 
-    /// Assigment operator
+    /// Assignment operator
     SvgGradientHelper & operator = (const SvgGradientHelper & rhs);
 
     QGradient * adjustedGradient(const QRectF &bound) const;

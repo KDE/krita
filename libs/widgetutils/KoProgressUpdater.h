@@ -60,7 +60,7 @@ class QTime;
  * main thread. The other objects can be created in whatever thread
  * one wants.
  *
- * Also to prevent jumps in the progress-calculation and -display it is recommed
+ * Also to prevent jumps in the progress-calculation and -display it is recommend
  * to first create all the subtasks and then start to use setProgress on them.
  */
 class KRITAWIDGETUTILS_EXPORT KoProgressUpdater : public QObject
@@ -80,7 +80,7 @@ public:
     explicit KoProgressUpdater(KoProgressProxy *progressProxy, Mode mode = Threaded);
 
     /**
-     * @brief a special contructor for connecting the progress updater to a self-destructable
+     * @brief a special constructor for connecting the progress updater to a self-destructable
      * KoUpdater object.
      *
      * HACK ALERT: KoUpdater inherits KoProgressProxy, so be careful when constructing

@@ -181,7 +181,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
-    // We need to set this as QDeclarativeView sets them a bit differnt from QAbstractScrollArea
+    // We need to set this as QDeclarativeView sets them a bit different from QAbstractScrollArea
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // And then our own Viewport
@@ -197,7 +197,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
       Fixes:   apps starting at zero zoom.
       Details: Since the document is set on the mainwindow before loading commences the inial show/layout can choose
           to set the document to be very small, even to be zero pixels tall.  Setting a sane minimum size on the
-          widget means we no loger get rounding errors in zooming and we no longer end up with zero-zoom.
+          widget means we no longer get rounding errors in zooming and we no longer end up with zero-zoom.
       Note: KoPage apps should probably startup with a sane document size; for Krita that's impossible
      */
     setMinimumSize(QSize(50, 50));
@@ -248,7 +248,6 @@ void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
 
 void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 {
-    Q_ASSERT(canvas); // param is not null
     if (d->canvas) {
         d->unsetCanvas();
         proxyObject->emitCanvasRemoved(this);

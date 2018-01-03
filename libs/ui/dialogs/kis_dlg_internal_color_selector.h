@@ -81,7 +81,7 @@ public:
 
     /**
      * @brief getModalColorDialog
-     * Excecute this dialog modally. The function returns
+     * Execute this dialog modally. The function returns
      * the KoColor you want.
      * @param color - The current color. Make sure this is in the color space you want your
      * end color to be in.
@@ -123,6 +123,9 @@ public Q_SLOTS:
      * set the previous color.
      */
     void setPreviousColor(KoColor c);
+
+    void reject() override;
+
 private Q_SLOTS:
 
     /**
@@ -159,10 +162,16 @@ private Q_SLOTS:
     void slotSetColorFromHex();
 
 
+protected:
+
+    void showEvent(QShowEvent *event);
+
 private:
     Ui_WdgDlgInternalColorSelector *m_ui; //the UI
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer
+
+
 
     /**
      * @brief updateAllElements

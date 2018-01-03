@@ -204,7 +204,7 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 {
     if (!m_imageView) return;
 
-    QPoint pixelPos = m_imageView->image()->documentToIntPixel(pos);
+    QPoint pixelPos = m_imageView->image()->documentToImagePixelFloored(pos);
 
     pixelPos.setX(qBound(0, pixelPos.x(), m_view->image()->width() - 1));
     pixelPos.setY(qBound(0, pixelPos.y(), m_view->image()->height() - 1));

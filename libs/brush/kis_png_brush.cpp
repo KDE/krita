@@ -34,6 +34,21 @@ KisPngBrush::KisPngBrush(const QString& filename)
     setHasColor(false);
 }
 
+KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
+    : KisScalingSizeBrush(rhs)
+{
+    setSpacing(rhs.spacing());
+    if (brushTipImage().isGrayscale()) {
+        setBrushType(MASK);
+        setHasColor(false);
+    }
+    else {
+        setBrushType(IMAGE);
+        setHasColor(true);
+    }
+    setValid(rhs.valid());
+}
+
 KisBrush* KisPngBrush::clone() const
 {
     return new KisPngBrush(*this);
@@ -55,6 +70,7 @@ bool KisPngBrush::load()
 
 bool KisPngBrush::loadFromDevice(QIODevice *dev)
 {
+
     // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
     // fails with "libpng error: IDAT: CRC error"
     QByteArray data = dev->readAll();
@@ -63,8 +79,9 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     QImageReader reader(&buf, "PNG");
 
     if (!reader.canRead()) {
-      setValid(false);
-      return false;
+        dbgKrita << "Could not read brush" << filename() << ". Error:" << reader.errorString();
+        setValid(false);
+        return false;
     }
 
     if (reader.textKeys().contains("brush_spacing")) {
@@ -82,13 +99,13 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     QImage image = reader.read();
 
     if (image.isNull()) {
-      dbgKrita << "Could not read brush" << filename() << ". Error:" << reader.errorString();
-      setValid(false);
-      return false;
+        dbgKrita << "Could not create image for" << filename() << ". Error:" << reader.errorString();
+        setValid(false);
+        return false;
     }
 
     setBrushTipImage(image);
-    setValid(!brushTipImage().isNull());
+    setValid(true);
 
     if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
@@ -101,7 +118,8 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
 
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
-    return !brushTipImage().isNull();
+
+    return valid();
 }
 
 bool KisPngBrush::save()

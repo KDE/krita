@@ -4,7 +4,6 @@ endif()
 
 include_directories(SYSTEM
     ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 set(KRITA_LUTDOCKER_SOURCES

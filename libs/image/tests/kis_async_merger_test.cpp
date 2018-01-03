@@ -101,7 +101,7 @@ void KisAsyncMergerTest::testMerger()
     walker.collectRects(paintLayer2, testRect4);
     merger.startMerge(walker);
 
-    // Old style merging: has artefacts at x=100 and x=500
+    // Old style merging: has artifacts at x=100 and x=500
     // And should be turned on inside KisLayer
 /*    paintLayer2->setDirty(testRect1);
     QTest::qSleep(3000);

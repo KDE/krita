@@ -34,7 +34,7 @@ public:
 
     /**
      * @brief forceUpdateTimedNode forrces the node to regenerate its project. The update might
-     * be asynchronous, so you chould call image->waitForDone() after that.
+     * be asynchronous, so you should call image->waitForDone() after that.
      */
     virtual void forceUpdateTimedNode() = 0;
 };

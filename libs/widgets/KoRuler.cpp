@@ -709,7 +709,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     distancesPaintingStrategy((PaintingStrategy*)new HorizontalDistancesPaintingStrategy()),
     paintingStrategy(normalPaintingStrategy),
     ruler(parent),
-    guideCreationStarted(false)
+    guideCreationStarted(false),
+    pixelStep(100.0)
 {
 }
 
@@ -732,7 +733,7 @@ qreal KoRulerPrivate::numberStepForUnit() const
             return 10.0;
         case KoUnit::Point:
         default:
-            return 100.0;
+            return pixelStep;
     }
 }
 
@@ -1367,4 +1368,14 @@ void KoRuler::createGuideToolConnection(KoCanvasBase *canvas)
     if (!tool) return; // It's perfectly fine to have no guides tool, we don't have to warn the user about it
     connect(this, SIGNAL(guideLineCreated(Qt::Orientation,qreal)),
         tool, SLOT(createGuideLine(Qt::Orientation,qreal)));
+}
+
+void KoRuler::setUnitPixelMultiple2(bool enabled)
+{
+    if (enabled) {
+        d->pixelStep = 64.0;
+    }
+    else {
+        d->pixelStep = 100.0;
+    }
 }

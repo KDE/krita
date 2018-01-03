@@ -168,7 +168,7 @@ public:
     /**
      * setDefaultStyle(true) marks a given style as being the default style.
      * This means we expect that you will call writeStyle( ...,"style:default-style"),
-     * and its name will be ommitted in the output.
+     * and its name will be omitted in the output.
      */
     void setDefaultStyle(bool b) {
         m_defaultStyle = b;

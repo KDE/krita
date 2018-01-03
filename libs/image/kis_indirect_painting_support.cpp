@@ -104,6 +104,11 @@ KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
     return d->temporaryTarget;
 }
 
+bool KisIndirectPaintingSupport::supportsNonIndirectPainting() const
+{
+    return true;
+}
+
 QString KisIndirectPaintingSupport::temporaryCompositeOp() const
 {
     return d->compositeOp;

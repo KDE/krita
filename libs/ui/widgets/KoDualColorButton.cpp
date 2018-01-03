@@ -27,6 +27,8 @@
 #include <QColorDialog>
 #include "dialogs/kis_dlg_internal_color_selector.h"
 
+#include "kis_signals_blocker.h"
+
 #include <QBrush>
 #include <QDrag>
 #include <QDragEnterEvent>
@@ -152,7 +154,14 @@ QSize KoDualColorButton::sizeHint() const
 void KoDualColorButton::setForegroundColor( const KoColor &color )
 {
   d->foregroundColor = color;
-  d->colorSelectorDialog->slotColorUpdated(color);
+  {
+      /**
+       * The internal color selector might emit the color of a different profile, so
+       * we should break this cycling dependency somehow.
+       */
+      KisSignalsBlocker b(d->colorSelectorDialog);
+      d->colorSelectorDialog->slotColorUpdated(color);
+  }
   repaint();
 }
 
@@ -271,10 +280,12 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
   if ( foregroundRect.contains( d->dragPosition ) ) {
     d->tmpSelection = Foreground;
     d->miniCtlFlag = false;
-  } else if( backgroundRect.contains( d->dragPosition ) ) {
+  }
+  else if( backgroundRect.contains( d->dragPosition ) ) {
     d->tmpSelection = Background;
     d->miniCtlFlag = false;
-  } else if ( event->pos().x() > foregroundRect.width() ) {
+  }
+  else if ( event->pos().x() > foregroundRect.width() ) {
     // We handle the swap and reset controls as soon as the mouse is
     // is pressed and ignore further events on this click (mosfet).
 
@@ -286,7 +297,8 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
     emit foregroundColorChanged( d->foregroundColor );
 
     d->miniCtlFlag = true;
-  } else if ( event->pos().x() < backgroundRect.x() ) {
+  }
+  else if ( event->pos().x() < backgroundRect.x() ) {
     d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(Qt::black);
     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(Qt::white);
 
@@ -345,7 +357,7 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
 #endif
             }
             else {
-                emit pleasePopDialog( d->foregroundColor);
+                emit pleasePopDialog(d->foregroundColor);
             }
         }
         else {

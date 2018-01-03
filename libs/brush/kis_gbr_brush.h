@@ -102,6 +102,7 @@ protected:
      * save the content of this brush to an IO device
      */
     friend class KisImageBrushesPipe;
+    friend class KisBrushExport;
 
     void setBrushType(enumBrushType type) override;
     void setBrushTipImage(const QImage& image) override;

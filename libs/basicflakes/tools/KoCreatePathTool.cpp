@@ -445,7 +445,7 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
         }
     }
 
-    KUndo2Command *cmd = canvas()->shapeController()->addShape(pathShape);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(pathShape, 0);
     if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();

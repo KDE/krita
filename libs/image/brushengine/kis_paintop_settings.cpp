@@ -45,6 +45,8 @@
 #include <brushengine/kis_locked_properties_server.h>
 #include <brushengine/kis_locked_properties_proxy.h>
 
+#include "KisPaintopSettingsIds.h"
+
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private()
@@ -145,6 +147,33 @@ void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInforma
 
 }
 
+bool KisPaintOpSettings::hasMaskingSettings() const
+{
+    return getBool(KisPaintOpUtils::MaskingBrushEnabledTag, false);
+}
+
+KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
+{
+    if (!hasMaskingSettings()) return KisPaintOpSettingsSP();
+
+    const KoID pixelBrushId(KisPaintOpUtils::MaskingBrushPaintOpId, QString());
+
+    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->settings(pixelBrushId);
+    this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
+
+    const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
+    if (useMasterSize) {
+        const qreal masterSizeCoeff = getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
+        maskingSettings->setPaintOpSize(masterSizeCoeff * paintOpSize());
+    }
+
+    return maskingSettings;
+}
+
+QString KisPaintOpSettings::maskingBrushCompositeOp() const
+{
+    return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
+}
 
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {
@@ -437,6 +466,16 @@ bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfigurationSP con
 void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, bool value)
 {
     config->setProperty("lodUserAllowed", value);
+}
+
+qreal KisPaintOpSettings::lodSizeThreshold() const
+{
+    return getDouble("lodSizeThreshold", 100.0);
+}
+
+void KisPaintOpSettings::setLodSizeThreshold(qreal value)
+{
+    setProperty("lodSizeThreshold", value);
 }
 
 #include "kis_standard_uniform_properties_factory.h"

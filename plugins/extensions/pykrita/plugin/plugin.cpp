@@ -16,40 +16,52 @@
  */
 
 #include "plugin.h"
-#include "engine.h"
-#include "utilities.h"
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <KoResourcePaths.h>
 
 #include <kis_preference_set_registry.h>
 #include "pyqtpluginsettings.h"
 
 #include <Krita.h>
-#include <Extension.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
-    , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
     , m_autoReload(false)
 {
-
     qDebug() << "Loading Python plugin";
 
+    PyKrita::InitResult initResult = PyKrita::initialize();
+    switch (initResult) {
+        case PyKrita::INIT_OK:
+            break;
+        case PyKrita::INIT_CANNOT_LOAD_PYTHON_LIBRARY:
+            qWarning() << i18n("Cannot load Python library");
+            return;
+        case PyKrita::INIT_CANNOT_SET_PYTHON_PATHS:
+            qWarning() << i18n("Cannot set Python paths");
+            return;
+        case PyKrita::INIT_CANNOT_LOAD_PYKRITA_MODULE:
+            qWarning() << i18n("Cannot load built-in pykrita module");
+            return;
+        default:
+            qWarning() << i18n("Unexpected error initializing python plugin.");
+            return;
+    }
+
+    pluginManager = PyKrita::pluginManager();
+
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
-
-
+    PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(pluginManager);
 
     //load and save preferences
     //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.
     //this way, cfg.readEntry() in any part won't be able to set its own default
     KisPreferenceSet* settings = settingsFactory->createPreferenceSet();
-    Q_ASSERT(settings);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(settings);
     settings->loadPreferences();
     settings->savePreferences();
     delete settings;
@@ -61,24 +73,23 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     PyObject* pykritaPackage = py.moduleImport("pykrita");
     pykritaPackage = py.moduleImport("krita");
 
-    if (pykritaPackage)  {
+    if (pykritaPackage) {
         dbgScript << "Loaded pykrita, now load plugins";
-        m_engine.tryLoadEnabledPlugins();
+        pluginManager->scanPlugins();
+        pluginManager->tryLoadEnabledPlugins();
         //py.functionCall("_pykritaLoaded", PyKrita::Python::PYKRITA_ENGINE);
-    }
-    else  {
+    } else  {
         dbgScript << "Cannot load pykrita module";
-        m_engine.setBroken();
     }
-    Q_FOREACH (Extension* ext, Krita::instance()->extensions())
-    {
+
+    Q_FOREACH (Extension* ext, Krita::instance()->extensions()) {
         ext->setup();
     }
 }
 
 KritaPyQtPlugin::~KritaPyQtPlugin()
 {
-
+    PyKrita::finalize();
 }
 
 #include "plugin.moc"

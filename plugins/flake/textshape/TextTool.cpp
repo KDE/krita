@@ -2011,7 +2011,7 @@ void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
     if ((!m_oldTextEditor.isNull()) && m_oldTextEditor.data()->document() != static_cast<KoTextShapeData *>(m_textShape->userData())->document()) {
         m_oldTextEditor.data()->setPosition(m_oldTextEditor.data()->position());
-        //we need to redraw like this so we update the old textshape whereever it may be
+        //we need to redraw like this so we update the old textshape wherever it may be
         if (canvas()->canvasWidget()) {
             canvas()->canvasWidget()->update();
         }

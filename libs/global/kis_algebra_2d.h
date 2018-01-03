@@ -330,7 +330,7 @@ Size ensureSizeNotSmaller(const Size &size, const Size &bounds)
 /**
  * Attempt to intersect a line to the area of the a rectangle.
  *
- * If the line intersects the rectange, it will be modified to represent the intersecting line segment and true is returned.
+ * If the line intersects the rectangle, it will be modified to represent the intersecting line segment and true is returned.
  * If the line does not intersect the area, it remains unmodified and false will be returned.
  *
  * @param segment

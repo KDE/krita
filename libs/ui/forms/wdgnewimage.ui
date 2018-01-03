@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>431</height>
+    <height>486</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,6 +55,24 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="0">
+        <widget class="QGroupBox" name="grpMode">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Color</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QGroupBox" name="grpImage">
@@ -339,48 +357,6 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QLabel" name="lblName">
-           <property name="text">
-            <string>&amp;Name:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>txtName</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="txtName">
-           <property name="text">
-            <string>untitled-1</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="grpMode">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Color</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <item>
-           <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
@@ -439,7 +415,7 @@
        <item row="2" column="1">
         <widget class="QLabel" name="lblColor">
          <property name="text">
-          <string>&amp;Image Background Color:</string>
+          <string>Image Bac&amp;kground Color:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -500,7 +476,7 @@
          <item>
           <widget class="QRadioButton" name="radioBackgroundAsProjection">
            <property name="text">
-            <string>As ca&amp;nvas color</string>
+            <string>As can&amp;vas color</string>
            </property>
           </widget>
          </item>
@@ -565,6 +541,26 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="lblName">
+         <property name="text">
+          <string>&amp;Name:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>txtName</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="txtName">
+         <property name="text">
+          <string>untitled-1</string>
+         </property>
+        </widget>
+       </item>
       </layout>
       <zorder>label_4</zorder>
       <zorder>lblBackgroundStyle</zorder>
@@ -575,6 +571,8 @@
       <zorder>lblColor</zorder>
       <zorder>cmbColor</zorder>
       <zorder>lblOpacity</zorder>
+      <zorder>lblName</zorder>
+      <zorder>txtName</zorder>
      </widget>
     </widget>
    </item>
@@ -621,6 +619,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelNewDocumentButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="createButton">
@@ -670,7 +675,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>txtName</tabstop>
   <tabstop>cmbPredefined</tabstop>
   <tabstop>txtPredefinedName</tabstop>
   <tabstop>bnSaveAsPredefined</tabstop>

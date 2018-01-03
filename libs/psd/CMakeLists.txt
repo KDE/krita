@@ -1,5 +1,4 @@
 include_directories( ${CMAKE_BINARY_DIR}/libs/psd  #For kispsd_include.h
-                     ${Boost_INCLUDE_DIRS}
 )
 
 set(kritapsd_LIB_SRCS

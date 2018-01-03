@@ -368,7 +368,7 @@ public Q_SLOTS:
      * @param shapes the set of shapes that are selected or suggested for editing by a
      *      selected shape for the tool to work on.  Not all shapes will be meant for this
      *      tool.
-     * @param toolActivation if TemporaryActivation, this tool is only temporarily actived
+     * @param toolActivation if TemporaryActivation, this tool is only temporarily activated
      *                  and should emit done when it is done.
      * @see deactivate()
      */

@@ -47,11 +47,15 @@ public:
     /// Saves the style of the specified shape
     static void saveSvgStyle(KoShape *shape, SvgSavingContext &context);
 
-protected:
+    /// Saves only stroke, fill and transparency of the shape
+    static void saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context);
+
     /// Saves fill style of specified shape
     static void saveSvgFill(KoShape *shape, SvgSavingContext &context);
     /// Saves stroke style of specified shape
     static void saveSvgStroke(KoShape *shape, SvgSavingContext &context);
+
+protected:
     /// Saves effects of specified shape
     static void saveSvgEffects(KoShape *shape, SvgSavingContext &context);
     /// Saves clipping of specified shape

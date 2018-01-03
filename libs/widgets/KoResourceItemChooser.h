@@ -27,6 +27,7 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
+#include <QScroller>
 
 #include "kritawidgets_export.h"
 
@@ -109,6 +110,9 @@ public:
     void setSynced(bool sync);
 
     bool eventFilter(QObject *object, QEvent *event) override;
+
+    /// sets up this chooser for kinetic (drag triggered) scrolling
+    void configureKineticScrolling(int gesture, int sensitivity, bool scrollbar);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

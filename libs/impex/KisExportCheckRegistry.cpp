@@ -61,7 +61,7 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new PSDLayerStyleCheckFactory();
     add(chkFactory->id(), chkFactory);
 
-    // Check the layers for the presense of exiv info: note this is also
+    // Check the layers for the presence of exiv info: note this is also
     // done for multilayer images even though jpeg, which supports exiv,
     // only can handle one layer.
     chkFactory = new ExifCheckFactory();

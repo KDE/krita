@@ -147,9 +147,6 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
     connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
-   connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(close()));
-   connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(deleteLater()));
-
     initTemplates(templatesResourcePath);
 
     d->m_freeCustomWidgetIndex = 4;

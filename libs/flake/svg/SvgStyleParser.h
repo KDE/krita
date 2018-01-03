@@ -26,11 +26,12 @@
 #include <QMap>
 #include <QGradient>
 
+#include <KoXmlReaderForward.h>
+
 typedef QMap<QString, QString> SvgStyles;
 
 class SvgLoadingContext;
 class SvgGraphicsContext;
-#include <KoXmlReaderForward.h>
 class QColor;
 class QGradient;
 

@@ -203,7 +203,7 @@ public:
 
     /**
      * User visible name which contains the name of the color model and of the color depth.
-     * For intance "RGBA (8-bits)" or "CMYKA (16-bits)".
+     * For instance "RGBA (8-bits)" or "CMYKA (16-bits)".
      */
     QString name() const;
 
@@ -251,7 +251,7 @@ public:
      * Retrieve a single composite op from the ones this colorspace offers.
      * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
      */
-    virtual const KoCompositeOp * compositeOp(const QString & id) const;
+    const KoCompositeOp * compositeOp(const QString & id) const;
 
     /**
      * add a composite op to this colorspace.

@@ -1,11 +1,12 @@
-from PyQt5.QtCore import Qt, QRect, QSize, QPoint
-from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit
-from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
+from PyQt5.QtCore import Qt, QRect, QSize, QPoint, pyqtSlot
+from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
+from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QFontInfo, QTextCursor, QPalette
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 from scripter import resources_rc
 
 
 class CodeEditor(QPlainTextEdit):
+    
 
     DEBUG_AREA_WIDTH = 20
 
@@ -27,6 +28,11 @@ class CodeEditor(QPlainTextEdit):
         self.font = "Monospace"
         self._stepped = False
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
+        self.setCornerWidget(QLabel(str()))
+        self._documentChanged = False
+        
+        self.undoAvailable.connect(self.setDocumentModified)
+        
 
     def debugAreaWidth(self):
         return self.DEBUG_AREA_WIDTH
@@ -39,7 +45,7 @@ class CodeEditor(QPlainTextEdit):
             max_ /= 10
             digits += 1
 
-        space = 3 + self.fontMetrics().width('9') * digits
+        space = 3 + self.fontMetrics().width('9') * digits + 3
 
         return space
 
@@ -51,11 +57,14 @@ class CodeEditor(QPlainTextEdit):
                                          qRect.top(),
                                          self.debugAreaWidth(),
                                          qRect.height()))
+        scrollBarHeight = 0
+        if (self.horizontalScrollBar().isVisible()):
+            scrollBarHeight = self.horizontalScrollBar().height()
 
         self.lineNumberArea.setGeometry(QRect(qRect.left() + self.debugAreaWidth(),
                                               qRect.top(),
                                               self.lineNumberAreaWidth(),
-                                              qRect.height()))
+                                              qRect.height()-scrollBarHeight))
 
     def updateMarginsWidth(self):
         self.setViewportMargins(self.lineNumberAreaWidth() + self.debugAreaWidth(), 0, 0, 0)
@@ -74,8 +83,13 @@ class CodeEditor(QPlainTextEdit):
 
     def lineNumberAreaPaintEvent(self, event):
         """This method draws the current lineNumberArea for while"""
+        blockColor = QColor(self.palette().base().color()).darker(120)
+        if (self.palette().base().color().lightness()<128):
+            blockColor = QColor(self.palette().base().color()).lighter(120)
+        if (self.palette().base().color().lightness()<1):
+            blockColor = QColor(43, 43, 43)
         painter = QPainter(self.lineNumberArea)
-        painter.fillRect(event.rect(), QColor(Qt.lightGray).darker(300))
+        painter.fillRect(event.rect(), blockColor)
 
         block = self.firstVisibleBlock()
         blockNumber = block.blockNumber()
@@ -84,8 +98,8 @@ class CodeEditor(QPlainTextEdit):
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
-                painter.setPen(QColor(Qt.lightGray))
-                painter.drawText(0, top, self.lineNumberArea.width(), self.fontMetrics().height(),
+                painter.setPen(self.palette().text().color())
+                painter.drawText(0, top, self.lineNumberArea.width()-3, self.fontMetrics().height(),
                                  Qt.AlignRight, number)
 
             block = block.next()
@@ -114,7 +128,12 @@ class CodeEditor(QPlainTextEdit):
         """Highlight current line under cursor"""
         currentSelection = QTextEdit.ExtraSelection()
 
-        lineColor = QColor(Qt.gray).darker(250)
+        lineColor = QColor(self.palette().base().color()).darker(120)
+        if (self.palette().base().color().lightness()<128):
+            lineColor = QColor(self.palette().base().color()).lighter(120)
+        if (self.palette().base().color().lightness()<1):
+            lineColor = QColor(43, 43, 43)
+        
         currentSelection.format.setBackground(lineColor)
         currentSelection.format.setProperty(QTextFormat.FullWidthSelection, True)
         currentSelection.cursor = self.textCursor()
@@ -133,18 +152,30 @@ class CodeEditor(QPlainTextEdit):
                 self.zoomIn()
         else:
             super(CodeEditor, self).wheelEvent(e)
-
+    def keyPressEvent(self, e):
+        if (e.key() == Qt.Key_Tab):
+            self.textCursor().insertText("    ")
+        else:
+            super(CodeEditor, self).keyPressEvent(e)
+        
     @property
     def font(self):
         return self._font
 
     @font.setter
-    def font(self, font):
+    def font(self, font = "Monospace"):
         self._font = font
-        self.setFont(QFont(font, 10))
+        self.setFont(QFont(font, self.fontInfo().pointSize()))
+    
+    def setFontSize(self, size=10):
+        self.setFont( QFont( self._font, size) )
 
     def setStepped(self, status):
         self._stepped = status
 
     def repaintDebugArea(self):
         self.debugArea.repaint()
+
+    @pyqtSlot(bool)
+    def setDocumentModified(self, changed = False):
+        self._documentModified = changed

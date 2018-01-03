@@ -26,7 +26,7 @@ class BRUSH_EXPORT  KisPngBrush : public KisScalingSizeBrush
 public:
     /// Construct brush to load filename later as brush
     KisPngBrush(const QString& filename);
-
+    KisPngBrush(const KisPngBrush &rhs);
     KisBrush* clone() const override;
 
     bool load() override;
@@ -35,6 +35,7 @@ public:
     bool saveToDevice(QIODevice *dev) const override;
     QString defaultFileExtension() const override;
     void toXML(QDomDocument& d, QDomElement& e) const override;
+
 };
 
 #endif

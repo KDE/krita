@@ -186,7 +186,7 @@ public:
      * Decendands override this to create specific merged types when possible.
      * The KisLayer one creates a KisPaintLayerSP via a bitBlt, and can work on all layer types.
      *
-     * Decendants that perform there own version do NOT call KisLayer::createMergedLayer
+     * Descendants that perform their own version do NOT call KisLayer::createMergedLayer
      */
     virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
     virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);

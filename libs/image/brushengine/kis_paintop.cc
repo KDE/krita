@@ -103,10 +103,10 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
-int KisPaintOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
+std::pair<int, bool> KisPaintOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
 {
     Q_UNUSED(jobs);
-    return 40;
+    return std::make_pair(40, false);
 }
 
 static void paintBezierCurve(KisPaintOp *paintOp,

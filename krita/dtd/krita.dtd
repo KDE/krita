@@ -59,7 +59,7 @@
         Attributes:
 
         name:       The channel's name.
-        x:             The layer's horizontal positon in the image.
+        x:             The layer's horizontal position in the image.
         y:             The layer's vertical position in the image.
         width:       The layer's width in pixels OBSOLETE
         height:      The layers height in pixels OBSOLETE

@@ -22,6 +22,7 @@
 
 #include <kritaui_export.h>
 #include <QObject>
+#include <QPointer>
 
 class KisOperation;
 class KisOperationUIFactory;
@@ -53,7 +54,7 @@ protected:
 
     void addOperation(KisOperation* operation);
 
-    KisViewManager* m_view;
+    QPointer<KisViewManager> m_view;
 };
 
 #endif // KIS_VIEW_PLUGIN_H

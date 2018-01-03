@@ -101,7 +101,6 @@ void KisGbrBrushTest::testImageGeneration()
     Q_UNUSED(res);
     Q_ASSERT(res);
     QVERIFY(!brush->brushTipImage().isNull());
-    brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -128,29 +127,37 @@ void KisGbrBrushTest::testImageGeneration()
     }
 }
 
+#include "KisSharedQImagePyramid.h"
+
 void KisGbrBrushTest::benchmarkPyramidCreation()
 {
-    KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
+    QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
     brush->load();
     QVERIFY(!brush->brushTipImage().isNull());
 
     QBENCHMARK {
-        brush->prepareBrushPyramid();
-        brush->clearBrushPyramid();
+        KisSharedQImagePyramid sharedPyramid;
+        QVERIFY(sharedPyramid.pyramid(brush.data())); // avoid compiler elimination of unused code!
     }
 }
 
 void KisGbrBrushTest::benchmarkScaling()
 {
-    KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
+    QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
     brush->load();
     QVERIFY(!brush->brushTipImage().isNull());
-    brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
     KisFixedPaintDeviceSP dab;
+
+    {
+        // warm up the pyramid!
+        dab = brush->paintDevice(cs, KisDabShape(qreal(qrand()) / RAND_MAX * 2.0, 1.0, 0.0), info);
+        QVERIFY(dab); // avoid compiler elimination of unused code!
+        dab.clear();
+    }
 
     QBENCHMARK {
         dab = brush->paintDevice(cs, KisDabShape(qreal(qrand()) / RAND_MAX * 2.0, 1.0, 0.0), info);
@@ -163,7 +170,6 @@ void KisGbrBrushTest::benchmarkRotation()
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
     QVERIFY(!brush->brushTipImage().isNull());
-    brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -180,7 +186,6 @@ void KisGbrBrushTest::benchmarkMaskScaling()
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
     QVERIFY(!brush->brushTipImage().isNull());
-    brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();

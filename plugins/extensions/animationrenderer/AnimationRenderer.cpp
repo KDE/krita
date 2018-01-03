@@ -109,6 +109,7 @@ void AnimaterionRenderer::slotRenderAnimation()
                                                    dlgAnimationRenderer.getFrameExportConfiguration());
         exporter.setBatchMode(batchMode);
 
+
         KisAsyncAnimationFramesSaveDialog::Result result =
             exporter.regenerateRange(m_view->mainWindow()->viewManager());
 

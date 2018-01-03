@@ -83,6 +83,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[4], KoID(COMPOSITE_ERASE           , i18n("Erase")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_ALPHA_DARKEN    , i18n("Alpha Darken")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_MIX        , i18n("Hard Mix")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_MIX_PHOTOSHOP, i18n("Hard Mix (Photoshop)")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_MERGE     , i18n("Grain Merge")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_EXTRACT   , i18n("Grain Extract")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_PARALLEL        , i18n("Parallel")));

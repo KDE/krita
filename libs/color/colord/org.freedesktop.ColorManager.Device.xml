@@ -6,7 +6,7 @@
     <doc:doc>
       <doc:description>
         <doc:para>
-          The interface used for quering color parameters for a specific device.
+          The interface used for querying color parameters for a specific device.
         </doc:para>
       </doc:description>
     </doc:doc>
@@ -348,7 +348,7 @@
             If the profile was automatically added due to metadata in
             the profile (e.g. the profile was created for the device)
             then manually removing the profile will cause this metadata
-            add to be supressed.
+            add to be suppressed.
             This allows the user to remove old or obsolete profiles
             from any color control panel without having to delete them.
           </doc:para>

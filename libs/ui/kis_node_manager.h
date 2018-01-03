@@ -52,26 +52,26 @@ public:
 
     KisNodeManager(KisViewManager * view);
     ~KisNodeManager() override;
-    
+
     void setView(QPointer<KisView>imageView);
 
 Q_SIGNALS:
 
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
-    
+
     /// emitted whenever a different layer is selected.
     void sigLayerActivated(KisLayerSP layer);
-    
+
     /// for the layer box: this sets the current node in the layerbox
     /// without telling the node manager that the node is activated,
     /// preventing loops (I think...)
     void sigUiNeedChangeActiveNode(KisNodeSP node);
 
     void sigUiNeedChangeSelectedNodes(const KisNodeList &nodes);
-    
+
 public:
-    
+
     void setup(KActionCollection * collection, KisActionManager* actionManager);
     void updateGUI();
 
@@ -81,7 +81,7 @@ public:
     /// convenience function to get the active layer. If a mask is
     /// active, it's parent layer is the active layer.
     KisLayerSP activeLayer();
-    
+
     /// Get the paint device the user wants to paint on now
     KisPaintDeviceSP activePaintDevice();
 
@@ -197,6 +197,7 @@ public Q_SLOTS:
     void rotateRight90();
 
     void saveNodeAsImage();
+    void saveVectorLayerAsImage();
 
     void slotSplitAlphaIntoMask();
     void slotSplitAlphaWrite();
@@ -231,7 +232,7 @@ public Q_SLOTS:
 
 public:
 
-    
+
     void shear(double angleX, double angleY);
 
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);

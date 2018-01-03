@@ -121,5 +121,56 @@ void KisPropertiesConfigurationTest::testCopy()
     QCOMPARE(p2.getBool("testBool2", true), false);
 }
 
+void roundTripStringList(const QStringList &refList)
+{
+    KisPropertiesConfiguration config1;
+    config1.setProperty("testProp", refList);
+
+    const QString xmlData = config1.toXML();
+
+    KisPropertiesConfiguration config2;
+    config2.fromXML(xmlData);
+
+    const QStringList results = config2.getStringList("testProp");
+
+    QCOMPARE(results, refList);
+}
+
+void KisPropertiesConfigurationTest::testLists()
+{
+    const QString str1("str1 str2\\ str3/ str4; str5% str6& str7;; str8\\; str9]]> str10");
+    const QString str2("str1 str2\\ str3/ str4; str5% str6& str7;; str8\\; str9]]> str10;");
+
+    {
+        const QStringList refList({str1, str1});
+        roundTripStringList(refList);
+    }
+
+    {
+        const QStringList refList({str2, str2});
+        roundTripStringList(refList);
+    }
+
+    {
+        const QStringList refList({"", str2, str2});
+        roundTripStringList(refList);
+    }
+
+    {
+        const QStringList refList({str2, str2, ""});
+        roundTripStringList(refList);
+    }
+
+    {
+        const QStringList refList({str2, str2, ";"});
+        roundTripStringList(refList);
+    }
+
+    {
+        const QStringList refList({";", str2, str2});
+        roundTripStringList(refList);
+    }
+}
+
 QTEST_MAIN(KisPropertiesConfigurationTest)
 

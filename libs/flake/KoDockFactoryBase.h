@@ -51,13 +51,13 @@ public:
     /// @return the dock widget area the widget should appear in by default
     virtual DockPosition defaultDockPosition() const = 0;
 
-    /// Returns true if the dock widget should get a collapsable header.
+    /// Returns true if the dock widget should get a collapsible header.
     virtual bool isCollapsable() const {
         return true;
     }
 
     /**
-     * In case the docker is collapsable, returns true if the dock widget
+     * In case the docker is collapsible, returns true if the dock widget
      * will start collapsed by default.
      */
     virtual bool defaultCollapsed() const {

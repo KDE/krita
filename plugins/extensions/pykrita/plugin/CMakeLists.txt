@@ -7,7 +7,9 @@ set(SOURCES
     plugin.cpp 
     pyqtpluginsettings.cpp
     utilities.cpp
-    engine.cpp
+    PykritaModule.cpp
+    PythonPluginManager.cpp
+    PythonPluginsModel.cpp
 )
 
 ki18n_wrap_ui(SOURCES 

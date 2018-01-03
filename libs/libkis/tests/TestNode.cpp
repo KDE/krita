@@ -128,7 +128,7 @@ void TestNode::testThumbnail()
     thumb.save("thumb.png");
     QVERIFY(thumb.width() == 10);
     QVERIFY(thumb.height() == 10);
-    // Our thumbnail calculater in KisPaintDevice cannot make a filled 10x10 thumbnail from a 100x100 device,
+    // Our thumbnail calculator in KisPaintDevice cannot make a filled 10x10 thumbnail from a 100x100 device,
     // it makes it 10x10 empty, then puts 8x8 pixels in there... Not a bug in the Node class
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {

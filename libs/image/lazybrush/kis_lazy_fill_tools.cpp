@@ -67,6 +67,27 @@ void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
                                    });
 }
 
+void normalizeAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
+{
+    quint8 maxPixel = std::numeric_limits<quint8>::min();
+    quint8 minPixel = std::numeric_limits<quint8>::max();
+    KritaUtils::applyToAlpha8Device(dev, rect,
+                                    [&minPixel, &maxPixel](quint8 pixel) {
+                                        if (pixel > maxPixel) {
+                                            maxPixel = pixel;
+                                        }
+                                        if (pixel < minPixel) {
+                                            minPixel = pixel;
+                                        }
+                                    });
+
+    const qreal scale = 255.0 / (maxPixel - minPixel);
+    KritaUtils::filterAlpha8Device(dev, rect,
+                                   [minPixel, scale](quint8 pixel) {
+                                       return (quint8((pixel - minPixel) * scale));
+                                   });
+}
+
 void cutOneWay(const KoColor &color,
                KisPaintDeviceSP src,
                KisPaintDeviceSP colorScribble,
@@ -176,6 +197,22 @@ bool operator==(const KeyStroke& t1, const KeyStroke&t2)
         t1.dev == t2.dev &&
         t1.color == t2.color &&
         t1.isTransparent == t2.isTransparent;
+}
+
+FilteringOptions::FilteringOptions(bool _useEdgeDetection, qreal _edgeDetectionSize, qreal _fuzzyRadius, qreal _cleanUpAmount)
+    : useEdgeDetection(_useEdgeDetection),
+      edgeDetectionSize(_edgeDetectionSize),
+      fuzzyRadius(_fuzzyRadius),
+      cleanUpAmount(_cleanUpAmount)
+{
+}
+
+bool operator==(const FilteringOptions &t1, const FilteringOptions &t2)
+{
+    return t1.useEdgeDetection == t2.useEdgeDetection &&
+           qFuzzyCompare(t1.edgeDetectionSize, t2.edgeDetectionSize) &&
+           qFuzzyCompare(t1.fuzzyRadius, t2.fuzzyRadius) &&
+           qFuzzyCompare(t1.cleanUpAmount, t2.cleanUpAmount);
 }
 
 }

@@ -37,7 +37,13 @@ class KRITAUI_EXPORT KisColorInput : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
+    inline bool usePercentage() const {
+        return m_usePercentage;
+    }
+    inline void setPercentageWise(bool val) {
+        m_usePercentage = val;
+    }
 protected:
     void init();
     virtual QWidget* createInput() = 0;
@@ -48,18 +54,22 @@ protected:
     KoColor* m_color;
     KoColorSlider* m_colorSlider;
     KoColorDisplayRendererInterface *m_displayRenderer;
+    bool m_usePercentage;
 };
 
 class KRITAUI_EXPORT KisIntegerColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
 protected:
     QWidget* createInput() override;
 public Q_SLOTS:
     void setValue(int);
     void update();
+private Q_SLOTS:
+    void onColorSliderChanged(int);
+    void onNumInputChanged(int);
 private:
     KisIntParseSpinBox* m_intNumInput;
 };
@@ -69,7 +79,7 @@ class KRITAUI_EXPORT KisFloatColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
 protected:
     QWidget* createInput() override;
 public Q_SLOTS:
@@ -86,7 +96,7 @@ class KRITAUI_EXPORT KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
 protected:
     QWidget* createInput() override;
 public Q_SLOTS:

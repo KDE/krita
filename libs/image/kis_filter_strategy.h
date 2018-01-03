@@ -191,7 +191,7 @@ public:
     QList<KoID> listKeys() const;
 
     /**
-     * This function return a string formated in HTML that contains the descriptions of all objects
+     * This function return a string formatted in HTML that contains the descriptions of all objects
      * (with a non empty description) stored in the registry.
      */
     QString formattedDescriptions() const;

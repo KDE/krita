@@ -21,7 +21,6 @@ include_directories(
 
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 if(FFTW3_FOUND)
@@ -80,6 +79,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_slider_based_paintop_property.cpp
    brushengine/kis_standard_uniform_properties_factory.cpp
    brushengine/KisStrokeSpeedMeasurer.cpp
+   brushengine/KisPaintopSettingsIds.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_change_visibility_command.cpp
@@ -127,6 +127,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_min_cut_worker.cpp
    lazybrush/kis_lazy_fill_tools.cpp
    lazybrush/kis_multiway_cut.cpp
+   lazybrush/KisWatershedWorker.cpp
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
    KisDelayedUpdateNodeInterface.cpp
@@ -231,6 +232,7 @@ set(kritaimage_LIB_SRCS
    kis_paint_device.cc
    kis_paint_device_debug_utils.cpp
    kis_fixed_paint_device.cpp
+   KisOptimizedByteArray.cpp
    kis_paint_layer.cc
    kis_perspective_math.cpp
    kis_pixel_selection.cpp

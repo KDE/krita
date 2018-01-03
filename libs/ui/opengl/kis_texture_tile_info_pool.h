@@ -46,7 +46,7 @@ const int freeThreshold = 64; // 16 MiB (default, with tilesize 256)
  *
  * As soon as the number of allocations drops to zero, all the memory
  * is returned back to the operating system. Please note, that there
- * is *no way* of reclaiming even unused pool memory untill *all* the
+ * is *no way* of reclaiming even unused pool memory until *all* the
  * allocated chunks are free'd.
  */
 class KisTextureTileInfoPoolSingleSize

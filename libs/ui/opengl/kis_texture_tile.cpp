@@ -366,7 +366,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     // if (!patchLevelOfDetail &&
     //     m_currentLodPlane &&
     //     !updateInfo.isEntireTileUpdated()) {
-    //     qDebug() << "WARNING: LodN -> Lod0 switch is requested for the partial tile udpate! Flickering is possible..." << ppVar(patchSize);
+    //     qDebug() << "WARNING: LodN -> Lod0 switch is requested for the partial tile update! Flickering is possible..." << ppVar(patchSize);
     // }
 
     if (!patchLevelOfDetail) {

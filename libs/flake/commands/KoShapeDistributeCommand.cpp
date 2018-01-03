@@ -48,7 +48,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     QMap<qreal, KoShape*> sortedPos;
     QRectF bRect;
     qreal extent = 0.0;
-    // sort by position and calculate sum of objects widht/height
+    // sort by position and calculate sum of objects width/height
     Q_FOREACH (KoShape *shape, shapes) {
         bRect = shape->absoluteOutlineRect();
         switch (d->distribute) {

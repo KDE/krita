@@ -49,6 +49,7 @@ private Q_SLOTS:
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
     void rereadCurrentColorSpace(bool force = false);
+    void onChkUsePercentageChanged(bool);
 Q_SIGNALS:
     void colorChanged(const KoColor&);
     void updated();
@@ -63,6 +64,7 @@ private:
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
     QCheckBox *m_chkShowColorSpaceSelector;
+    QCheckBox *m_chkUsePercentage;
 
     KisDisplayColorConverter *m_displayConverter;
     KisSignalAutoConnectionsStore m_converterConnection;

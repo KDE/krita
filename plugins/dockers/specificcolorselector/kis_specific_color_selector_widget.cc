@@ -30,6 +30,7 @@
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_color_input.h>
 #include <KoColorProfile.h>
@@ -61,13 +62,18 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_chkShowColorSpaceSelector = new QCheckBox(i18n("Show Colorspace Selector"), this);
     connect(m_chkShowColorSpaceSelector, SIGNAL(toggled(bool)), m_colorspaceSelector, SLOT(setVisible(bool)));
 
+    m_chkUsePercentage = new QCheckBox(i18n("Use Percentage"), this);
+    connect(m_chkUsePercentage, SIGNAL(toggled(bool)), this, SLOT(onChkUsePercentageChanged(bool)));
+
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
+    m_chkUsePercentage->setChecked(cfg.readEntry("SpecificColorSelector/UsePercentage", false));
 
     m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
     m_colorspaceSelector->showColorBrowserButton(false);
 
     m_layout->addWidget(m_chkShowColorSpaceSelector);
+    m_layout->addWidget(m_chkUsePercentage);
     m_layout->addWidget(m_colorspaceSelector);
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -78,6 +84,7 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
+    cfg.writeEntry("SpecificColorSelector/UsePercentage", m_chkUsePercentage->isChecked());
 }
 
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
@@ -122,6 +129,12 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
         return;
     }
 
+    if (cs->colorDepthId() == Integer8BitsColorDepthID || cs->colorDepthId() == Integer16BitsColorDepthID) {
+        m_chkUsePercentage->setVisible(true);
+    } else {
+        m_chkUsePercentage->setVisible(false);
+    }
+
     m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     Q_ASSERT(m_colorSpace);
     Q_ASSERT(*m_colorSpace == *cs);
@@ -147,7 +160,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
             case KoChannelInfo::UINT8:
             case KoChannelInfo::UINT16:
             case KoChannelInfo::UINT32: {
-                input = new KisIntegerColorInput(this, channel, &m_color, displayRenderer);
+                input = new KisIntegerColorInput(this, channel, &m_color, displayRenderer, m_chkUsePercentage->isChecked());
             }
             break;
             case KoChannelInfo::FLOAT16:
@@ -233,4 +246,11 @@ void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *col
     setColor(m_color);
 }
 
+void KisSpecificColorSelectorWidget::onChkUsePercentageChanged(bool isChecked)
+{
+    for (auto input: m_inputs) {
+        input->setPercentageWise(isChecked);
+    }
+    emit(updated());
+}
 #include "moc_kis_specific_color_selector_widget.cpp"

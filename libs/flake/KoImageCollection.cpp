@@ -85,7 +85,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype = KisMimeDatabase::mimeTypeForFile(imagesToSaveIter.value());
+                    const QString mimetype = KisMimeDatabase::mimeTypeForFile(imagesToSaveIter.value(), false);
                     manifestWriter->addManifestEntry(imagesToSaveIter.value(), mimetype);
                 } else {
                     warnFlake << "saving image" << imagesToSaveIter.value() << "failed";

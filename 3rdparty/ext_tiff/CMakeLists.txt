@@ -1,28 +1,14 @@
-SET(EXTPREFIX_tiff "${EXTPREFIX}" )
-if (MSVC OR MINGW)
 ExternalProject_Add( ext_tiff
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/tiff-4.0.3.tar.gz
-    URL_MD5 051c1068e6a0627f461948c365290410
-        
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tiff-4.0.3-20130124.diff
+	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+	URL http://files.kde.org/krita/build/dependencies/libtiff-Release-v4-0-9-020bd2fd3b4235b2175dafa9633d2b191c50e7cd.tar.gz
+	URL_MD5 34323035fa1acf88ce027958457d6404
+
     INSTALL_DIR ${EXTPREFIX_tiff}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_tiff} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
-    UPDATE_COMMAND ""
-    DEPENDS ext_patch ext_zlib ext_jpeg
-)
-else (MSVC OR MINGW)
-ExternalProject_Add( ext_tiff
-	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.6.tar.gz
-	URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
-
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_tiff}  ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make
     INSTALL_COMMAND make install
 	
     UPDATE_COMMAND ""
 	DEPENDS ext_zlib ext_jpeg
 )
-endif (MSVC OR MINGW)

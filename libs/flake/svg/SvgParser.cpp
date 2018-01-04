@@ -122,9 +122,8 @@ struct SvgParser::DeferredUseStore {
     ~DeferredUseStore() {
         while (!m_uses.empty()) {
             const El& el = m_uses.back();
-            qDebug()
-                    << "WARNING: could not find path in <use xlink:href=\"#xxxxx\" expression. Losing data here. Key:"
-                    << el.m_key;
+            debugFlake << "WARNING: could not find path in <use xlink:href=\"#xxxxx\" expression. Losing data here. Key:"
+                       << el.m_key;
             m_uses.pop_back();
         }
     }
@@ -679,7 +678,7 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
     if (title.isEmpty()) svgSymbol->title = id;
 
     if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
-        warnFlake << "Symbol" << id << "seems to be empty, discarding";
+        debugFlake << "Symbol" << id << "seems to be empty, discarding";
         delete svgSymbol;
         return false;
     }

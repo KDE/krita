@@ -31,9 +31,7 @@
 #include <KUserFeedback/ScreenInfoSource>
 #include <KUserFeedback/provider.h>
 #include <QVariant>
-
 #include "cpu_info_source.h"
-
 #include "kritatelemetry_export.h"
 #include <QMultiMap>
 #include <QVector>
@@ -41,6 +39,10 @@
 #include <kis_telemetry_abstract.h>
 #include <memory>
 #include "kis_telemetry_tickets.h"
+
+typedef std::unique_ptr<KUserFeedback::Provider> TProvider;
+typedef std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource>> TSources;
+typedef std::unique_ptr<KUserFeedback::AbstractDataSource> TSource;
 
 class KRITATELEMETRY_EXPORT TelemetryProvider : public KisTelemetryAbstract {
 public:
@@ -58,29 +60,20 @@ protected:
 
 private:
     enum TelemetryCategory {
-        tools,
+        tools = 0,
         install,
         asserts,
         fatalAsserts,
         imageProperties,
-        actions
+        actions,
+        presets,
+        lastElement
     };
 
 private:
-    QScopedPointer<KUserFeedback::Provider> m_toolsProvider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_toolSources;
-    QScopedPointer<KUserFeedback::Provider> m_installProvider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_installSources;
-    //TODO Fatal asserts and usual asserts
-    QScopedPointer<KUserFeedback::Provider> m_assertsProvider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_assertsSources;
-    QScopedPointer<KUserFeedback::Provider> m_fatalAssertsProvider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_fatalAssertsSources;
-    QScopedPointer<KUserFeedback::Provider> m_imagePropertiesProvider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_imagePropertiesSources;
-    QScopedPointer<KUserFeedback::Provider> m_actionsInfoProvider;
-    std::vector<std::unique_ptr<KUserFeedback::AbstractDataSource> > m_actionsSources;
     QMultiMap<QString, QWeakPointer<KisTelemetryTicket> > m_tickets;
+    std::vector<TProvider> m_providers;
+    std::vector<TSources> m_sources;
 
 private:
     TelemetryCategory pathToKind(QString path);

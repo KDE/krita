@@ -43,6 +43,7 @@ public:
 
 protected:
    QString m_adress = "http://localhost:8080/";
+   QString m_apiVersion = "?v1";
    //QString m_adress = "http://akapustin.me:8080/";
 
 };

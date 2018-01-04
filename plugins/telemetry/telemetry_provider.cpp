@@ -43,90 +43,78 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <ksharedconfig.h>
+#include <presets_info_source.h>
 
 TelemetryProvider::TelemetryProvider()
 {
-    m_installProvider.reset(new KUserFeedback::Provider);
-    m_installProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+    for (int i = 0; i < lastElement - 1; i++) {
+        m_providers.emplace_back(new KUserFeedback::Provider);
+        m_sources.push_back(std::move( TSources{}));
+        m_providers[i]->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
+    }
     KConfigGroup configGroup = KSharedConfig::openConfig()->group("KisTelemetryInstall");
 
     QString isFirstStart = configGroup.readEntry("FirstStart");
     QString version = configGroup.readEntry("Version", "noversion");
     m_sendInstallInfo = false;
     qDebug() << "APP VERSION______" << qApp->applicationVersion();
-   // if (qApp->applicationVersion() != version) {
+    if (qApp->applicationVersion() != version) {
         configGroup.writeEntry("Version", qApp->applicationVersion());
-        qDebug() << "SEND INSTALL__"<<version;
-//#ifndef HAVE_BACKTRACE
-//        if (isFirstStart.isEmpty()) {
-//#endif
+        qDebug() << "SEND INSTALL__" << version;
+#ifndef HAVE_BACKTRACE
+        if (isFirstStart.isEmpty()) {
+#endif
             //don't append install source
-            std::unique_ptr<KUserFeedback::AbstractDataSource> cpu(new UserFeedback::TelemetryCpuInfoSource());
-            m_installSources.push_back(std::move(cpu));
-            std::unique_ptr<KUserFeedback::AbstractDataSource> qt(new KUserFeedback::QtVersionSource());
-            m_installSources.push_back(std::move(qt));
-            std::unique_ptr<KUserFeedback::AbstractDataSource> compiler(new KUserFeedback::CompilerInfoSource());
-            m_installSources.push_back(std::move(compiler));
-            std::unique_ptr<KUserFeedback::AbstractDataSource> opengl(new KUserFeedback::OpenGLInfoSource());
-            m_installSources.push_back(std::move(opengl));
-            std::unique_ptr<KUserFeedback::AbstractDataSource> platform(new KUserFeedback::PlatformInfoSource());
-            m_installSources.push_back(std::move(platform));
-            std::unique_ptr<KUserFeedback::AbstractDataSource> screen(new KUserFeedback::ScreenInfoSource());
-            m_installSources.push_back(std::move(screen));
-            //#ifdef HAVE_BACKTRACE
+            TSource cpu(new UserFeedback::TelemetryCpuInfoSource());
+            m_sources[install].push_back(std::move(cpu));
+            TSource qt(new KUserFeedback::QtVersionSource());
+            m_sources[install].push_back(std::move(qt));
+            TSource compiler(new KUserFeedback::CompilerInfoSource());
+            m_sources[install].push_back(std::move(compiler));
+            TSource opengl(new KUserFeedback::OpenGLInfoSource());
+            m_sources[install].push_back(std::move(opengl));
+            TSource platform(new KUserFeedback::PlatformInfoSource());
+            m_sources[install].push_back(std::move(platform));
+            TSource screen(new KUserFeedback::ScreenInfoSource());
+            m_sources[install].push_back(std::move(screen));
+#ifdef HAVE_BACKTRACE
             std::unique_ptr<KUserFeedback::AbstractDataSource> general(new UserFeedback::TelemetryGeneralInfoSource);
-            //#endif
-            m_installSources.push_back(std::move(general));
-            for (auto& source : m_installSources) {
-                m_installProvider->addDataSource(source.get());
+#endif
+            m_sources[install].push_back(std::move(general));
+            for (auto& source : m_sources[install]) {
+                m_providers[install]->addDataSource(source.get());
             }
             m_sendInstallInfo = true;
-//#ifndef HAVE_BACKTRACE
-//        }
-//#endif
-   // }
-
-    m_toolsProvider.reset(new KUserFeedback::Provider);
-    m_toolsProvider.data()->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> tools(new UserFeedback::TelemetryToolsInfoSource);
-    m_toolSources.push_back(std::move(tools));
-
-    for (auto& source : m_toolSources) {
-        m_toolsProvider->addDataSource(source.get());
+#ifndef HAVE_BACKTRACE
+        }
+#endif
     }
 
-    m_fatalAssertsProvider.reset(new KUserFeedback::Provider);
-    m_toolsProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> asserts(new UserFeedback::TelemetryFatalAssertInfoSource);
-    m_fatalAssertsSources.push_back(std::move(asserts));
-    for (auto& source : m_fatalAssertsSources) {
-        m_fatalAssertsProvider->addDataSource(source.get());
-    }
+    TSource tools1(new UserFeedback::TelemetryToolsInfoSource);
+    m_sources[tools].push_back(std::move(tools1));
 
-    m_imagePropertiesProvider.reset(new KUserFeedback::Provider);
-    m_imagePropertiesProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> imageProperties(new UserFeedback::TelemetryImagePropertiesSource);
-    m_imagePropertiesSources.push_back(std::move(imageProperties));
-    for (auto& source : m_imagePropertiesSources) {
-        m_imagePropertiesProvider.data()->addDataSource(source.get());
-    }
+    TSource asserts1(new UserFeedback::TelemetryFatalAssertInfoSource);
+    m_sources[fatalAsserts].push_back(std::move(asserts1));
 
-    m_actionsInfoProvider.reset(new KUserFeedback::Provider);
-    m_actionsInfoProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> actionsInfo(new UserFeedback::TelemetryActionsInfoSource);
-    m_actionsSources.push_back(std::move(actionsInfo));
-    for (auto& source : m_actionsSources) {
-        m_actionsInfoProvider->addDataSource(source.get());
+    TSource imageProperties1(new UserFeedback::TelemetryImagePropertiesSource);
+    m_sources[imageProperties].push_back(std::move(imageProperties1));
+
+    TSource actionsInfo(new UserFeedback::TelemetryActionsInfoSource);
+    m_sources[actions].push_back(std::move(actionsInfo));
+
+    TSource assertsInfo(new UserFeedback::TelemetryAssertInfoSource);
+    m_sources[asserts].push_back(std::move(assertsInfo));
+
+    for (int i = 0; i < lastElement - 1; i++) {
+        if (i != install) {
+            for (auto& source : m_sources[i]) {
+                m_providers[i]->addDataSource(source.get());
+            }
+        }
     }
-    //asserts
-    m_assertsProvider.reset(new KUserFeedback::Provider);
-    m_assertsProvider->setTelemetryMode(KUserFeedback::Provider::DetailedUsageStatistics);
-    std::unique_ptr<KUserFeedback::AbstractDataSource> assertsInfo(new UserFeedback::
-            TelemetryAssertInfoSource);
-    m_assertsSources.push_back(std::move(assertsInfo));
-    for (auto& source : m_assertsSources) {
-        m_assertsProvider->addDataSource(source.get());
-    }
+    //TODO
+    TSource presets(new UserFeedback::TelemetryPresetsSource());
+    //m_installSources.push_back(std::move(screen));
 }
 
 void TelemetryProvider::sendData(QString path, QString adress)
@@ -134,41 +122,42 @@ void TelemetryProvider::sendData(QString path, QString adress)
     if (!path.endsWith(QLatin1Char('/')))
         path += QLatin1Char('/');
     TelemetryCategory enumPath = pathToKind(path);
+    path += m_apiVersion;
     QString finalAdress = adress.isNull() ? m_adress : adress;
     switch (enumPath) {
     case tools: {
-        m_toolsProvider->setFeedbackServer(QUrl(finalAdress + path));
-        m_toolsProvider->submit();
+         m_providers[tools]->setFeedbackServer(QUrl(finalAdress + path));
+         m_providers[tools]->submit();
         break;
     }
     case install: {
-      //  if (m_sendInstallInfo) {
-            m_installProvider->setFeedbackServer(QUrl(finalAdress + path));
-            m_installProvider->submit();
-            m_sendInstallInfo = false;
-            break;
-     //   }
+        //  if (m_sendInstallInfo) {
+        m_providers[install]->setFeedbackServer(QUrl(finalAdress + path));
+         m_providers[install]->submit();
+        m_sendInstallInfo = false;
+        break;
+        //   }
     }
     case asserts: {
-        m_assertsProvider->setFeedbackServer(QUrl(finalAdress + path));
-        m_assertsProvider->submit();
+         m_providers[asserts]->setFeedbackServer(QUrl(finalAdress + path));
+         m_providers[asserts]->submit();
         break;
     }
     case fatalAsserts: {
-        m_fatalAssertsProvider->setFeedbackServer(QUrl(finalAdress + path));
-        m_fatalAssertsProvider->submit();
+         m_providers[fatalAsserts]->setFeedbackServer(QUrl(finalAdress + path));
+         m_providers[fatalAsserts]->submit();
         break;
     }
     case imageProperties: {
-        m_imagePropertiesProvider->setFeedbackServer(QUrl(finalAdress + path));
-        m_imagePropertiesProvider->submit();
+        m_providers[imageProperties]->setFeedbackServer(QUrl(finalAdress + path));
+         m_providers[imageProperties]->submit();
 
         break;
     }
     case actions: {
         qDebug() << "Send actions!";
-        m_actionsInfoProvider->setFeedbackServer(QUrl(finalAdress + path));
-        m_actionsInfoProvider->submit();
+         m_providers[actions]->setFeedbackServer(QUrl(finalAdress + path));
+         m_providers[actions]->submit();
         break;
     }
     default:
@@ -183,17 +172,17 @@ void TelemetryProvider::getTimeTicket(QString id)
         return;
     }
     KisTimeTicket* timeTicket = nullptr;
-    KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
-    UserFeedback::TelemetryToolsInfoSource* tools = nullptr;
+    KUserFeedback::AbstractDataSource* m_tools = m_sources[tools][0].get();
+    UserFeedback::TelemetryToolsInfoSource* tools1 = nullptr;
 
     timeTicket = dynamic_cast<KisTimeTicket*>(ticket);
-    tools = dynamic_cast<UserFeedback::TelemetryToolsInfoSource*>(m_tools);
+    tools1 = dynamic_cast<UserFeedback::TelemetryToolsInfoSource*>(m_tools);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(timeTicket);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(tools1);
     KIS_SAFE_ASSERT_RECOVER_RETURN(ticket);
 
-    tools->deactivateTool(id);
+    tools1->deactivateTool(id);
     m_tickets.remove(id);
 }
 
@@ -202,41 +191,41 @@ void TelemetryProvider::putTimeTicket(QString id)
     if (m_tickets.count(id)) {
         return;
     }
-    KUserFeedback::AbstractDataSource* m_tools = m_toolSources[0].get();
-    UserFeedback::TelemetryToolsInfoSource* tools = nullptr;
+    KUserFeedback::AbstractDataSource* m_tools =  m_sources[tools][0].get();
+    UserFeedback::TelemetryToolsInfoSource* tools1 = nullptr;
 
     QSharedPointer<KisTelemetryTicket> timeTicket = QSharedPointer<KisTimeTicket>::create(id);
 
-    tools = dynamic_cast<UserFeedback::TelemetryToolsInfoSource*>(m_tools);
+    tools1 = dynamic_cast<UserFeedback::TelemetryToolsInfoSource*>(m_tools);
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(tools);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(tools1);
 
     QWeakPointer<KisTelemetryTicket> weakTimeTicket(timeTicket);
 
     m_tickets.insert(id, weakTimeTicket);
-    tools->activateTool(timeTicket);
+    tools1->activateTool(timeTicket);
 }
 
 void TelemetryProvider::saveImageProperites(QString fileName, KisImagePropertiesTicket::ImageInfo imageInfo)
 {
-    KUserFeedback::AbstractDataSource* m_imageProperties = m_imagePropertiesSources[0].get();
-    UserFeedback::TelemetryImagePropertiesSource* imageProperties = nullptr;
+    KUserFeedback::AbstractDataSource* m_imageProperties =  m_sources[imageProperties][0].get();
+    UserFeedback::TelemetryImagePropertiesSource* imageProperties1 = nullptr;
 
     QSharedPointer<KisTelemetryTicket> imagePropertiesTicket = QSharedPointer<KisImagePropertiesTicket>::create(imageInfo, fileName);
 
-    imageProperties = dynamic_cast<UserFeedback::TelemetryImagePropertiesSource*>(m_imageProperties);
+    imageProperties1 = dynamic_cast<UserFeedback::TelemetryImagePropertiesSource*>(m_imageProperties);
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(imageProperties);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(imageProperties1);
 
     if (m_tickets.count(fileName)) {
-        imageProperties->removeDumpProperties(fileName);
+        imageProperties1->removeDumpProperties(fileName);
         return;
     }
 
     QWeakPointer<KisTelemetryTicket> weakimagePropertiesTicket(imagePropertiesTicket);
 
     m_tickets.insert(fileName, weakimagePropertiesTicket);
-    imageProperties->createNewImageProperties(imagePropertiesTicket);
+    imageProperties1->createNewImageProperties(imagePropertiesTicket);
 }
 
 void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionInfo actionInfo)
@@ -250,7 +239,7 @@ void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionIn
         isSameAction = true;
     }
     if (!isSameAction) {
-        KUserFeedback::AbstractDataSource* m_actionsInfo = m_actionsSources[0].get();
+        KUserFeedback::AbstractDataSource* m_actionsInfo = m_sources[actions][0].get();
         UserFeedback::TelemetryActionsInfoSource* actionsInfoSource = nullptr;
 
         QSharedPointer<KisTelemetryTicket> actionsInfoTicket = QSharedPointer<KisActionInfoTicket>::create(actionInfo, id);
@@ -272,7 +261,7 @@ void TelemetryProvider::saveActionInfo(QString id, KisActionInfoTicket::ActionIn
 
 void TelemetryProvider::saveAssertInfo(QString id, KisAssertInfoTicket::AssertInfo assertInfo)
 {
-    KUserFeedback::AbstractDataSource* m_assertSource = m_assertsSources[0].get();
+    KUserFeedback::AbstractDataSource* m_assertSource = m_sources[asserts][0].get();
     UserFeedback::TelemetryAssertInfoSource* assertSource = nullptr;
 
     QSharedPointer<KisTelemetryTicket> assertInfoTicket = QSharedPointer<KisAssertInfoTicket>::create(assertInfo, id);
@@ -301,5 +290,7 @@ TelemetryProvider::TelemetryCategory TelemetryProvider::pathToKind(QString path)
         return actions;
     else if (path == "asserts/")
         return asserts;
+    else if (path == "presets/")
+        return presets;
     return tools;
 }

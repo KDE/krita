@@ -204,6 +204,7 @@ void KisLodAvailabilityWidget::slotUserChangedLodThreshold(qreal value)
 
 void KisLodAvailabilityWidget::slotUserChangedSize(qreal value)
 {
+    Q_UNUSED(value);
     setLimitations(m_d->limitations);
 }
 

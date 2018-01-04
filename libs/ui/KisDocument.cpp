@@ -598,7 +598,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (status != KisImportExportFilter::OK) {
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
@@ -781,7 +781,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
     if (status != KisImportExportFilter::OK) {
         const int emergencyAutoSaveInterval = 10; // sec
         setAutoSaveDelay(emergencyAutoSaveInterval);
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during autosaving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);

@@ -79,7 +79,7 @@ public:
     virtual ~KisAsyncAnimationRenderDialogBase();
 
     /**
-     * @brief start generation of frames and (if not in batch mode) shwo the dialog
+     * @brief start generation of frames and (if not in batch mode) show the dialog
      *
      * The link to view manager is used to barrier lock with visual feedback in the
      * end of the operation
@@ -87,7 +87,7 @@ public:
     virtual Result regenerateRange(KisViewManager *viewManager);
 
     /**
-     * @brief seting batch mode to true will prevent and dialogs or message boxes from
+     * @brief setting batch mode to true will prevent any dialogs or message boxes from
      *        showing on screen. Please take it into account that using batch mode prevents
      *        some potentially dangerous recovery execution paths (e.g. delete the existing
      *        frames in the destination folder). In such case the rendering will be stopped with

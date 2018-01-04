@@ -138,7 +138,7 @@ void cutOneWay(const KoColor &color,
 
     const int pixelSize = resultDevice->pixelSize();
 
-    do {
+    while (dstIt.nextPixel() && mskIt.nextPixel()) {
         KisLazyFillGraph::vertex_descriptor v(dstIt.x(), dstIt.y());
         long vertex_idx = get(boost::vertex_index, graph, v);
         default_color_type label = groups[vertex_idx];
@@ -147,11 +147,11 @@ void cutOneWay(const KoColor &color,
             memcpy(dstIt.rawData(), color.data(), pixelSize);
             *mskIt.rawData() = 10 + (int(label) << 4);
         }
-    } while (dstIt.nextPixel() && mskIt.nextPixel());
+    }
 }
 
-    QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP dev,
-                                                 const QRect &boundingRect)
+QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP dev,
+                                             const QRect &boundingRect)
 {
     QVector<QPoint> points;
     const KoColorSpace *cs = dev->colorSpace();
@@ -167,7 +167,7 @@ void cutOneWay(const KoColor &color,
      */
     KisSequentialIterator dstIt(dev, rect);
 
-    do {
+    while (dstIt.nextPixel()) {
         if (cs->opacityU8(dstIt.rawData()) > 0) {
             const QPoint pt(dstIt.x(), dstIt.y());
             points << pt;
@@ -175,7 +175,7 @@ void cutOneWay(const KoColor &color,
             KisScanlineFill fill(dev, pt, rect);
             fill.clearNonZeroComponent();
         }
-    } while (dstIt.nextPixel());
+    }
 
     return points;
 }

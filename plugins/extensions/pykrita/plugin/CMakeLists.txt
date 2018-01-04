@@ -35,7 +35,7 @@ install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 # Install "built-in" api
 install(
     DIRECTORY krita
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita
+    DESTINATION ${LIB_INSTALL_DIR}/krita-python-libs
     FILES_MATCHING PATTERN "*.py"
 )
 

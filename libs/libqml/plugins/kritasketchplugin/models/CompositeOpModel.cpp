@@ -40,7 +40,7 @@ class CompositeOpModel::Private
 public:
     Private(CompositeOpModel* qq)
         : q(qq)
-        , model(KisCompositeOpListModel::sharedInstance())
+        , model(new KisCompositeOpListModel())
         , view(0)
         , eraserMode(0)
         , opacity(0)

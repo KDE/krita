@@ -427,7 +427,7 @@ public:
      * be applied to.
      *
      * If using a KoDialog or KMainWindow subclass, call setCaption instead and
-     * an appropraite standard caption will be created for you
+     * an appropriate standard caption will be created for you
      *
      * @param userCaption The caption string you want to display in the
      * window caption area. Do not include the application name!

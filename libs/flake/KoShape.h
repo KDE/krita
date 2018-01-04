@@ -170,7 +170,7 @@ public:
     virtual ~KoShape();
 
     /**
-     * @brief creates a deep copy of thie shape or shapes subtree
+     * @brief creates a deep copy of the shape or shape's subtree 
      * @return a cloned shape
      */
     virtual KoShape* cloneShape() const;
@@ -850,7 +850,7 @@ public:
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
-     * keep the width/hight ratio intact so as not to distort shapes that rely on that
+     * keep the width/height ratio intact so as not to distort shapes that rely on that
      * ratio.
      * @param keepAspect the new value
      */
@@ -858,7 +858,7 @@ public:
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
-     * keep the width/hight ratio intact so as not to distort shapes that rely on that
+     * keep the width/height ratio intact so as not to distort shapes that rely on that
      * ratio.
      * @return whether to keep aspect ratio of this shape
      */

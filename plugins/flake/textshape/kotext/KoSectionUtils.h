@@ -35,7 +35,7 @@ namespace KoSectionUtils {
     bool getNextBlock(QTextCursor &cur);
 
     /**
-     * Convinient function to set a list of startings to QTextBlockFormat.
+     * Convenient function to set a list of startings to QTextBlockFormat.
      * This checks that list is empty.
      *
      * @param fmt QTextBlockFormat reference to set startings.
@@ -44,7 +44,7 @@ namespace KoSectionUtils {
     KRITATEXT_EXPORT void setSectionStartings(QTextBlockFormat &fmt, const QList<KoSection *> &list);
 
     /**
-     * Convinient function to set a list of endings to QTextBlockFormat.
+     * Convenient function to set a list of endings to QTextBlockFormat.
      * This checks that list is empty.
      *
      * @param fmt QTextBlockFormat reference to set endings.
@@ -53,7 +53,7 @@ namespace KoSectionUtils {
     KRITATEXT_EXPORT void setSectionEndings(QTextBlockFormat& fmt, const QList<KoSectionEnd *> &list);
 
     /**
-     * Convinient function to get section startings from QTextBlockFormat.
+     * Convenient function to get section startings from QTextBlockFormat.
      * @param fmt QTextBlockFormat format to retrieve section startings from.
      * @return QList<KoSection *> that contains pointers to sections that start
      *                            according to QTextBlockFormat.
@@ -61,7 +61,7 @@ namespace KoSectionUtils {
     KRITATEXT_EXPORT QList<KoSection *> sectionStartings(const QTextBlockFormat &fmt);
 
     /**
-     * Convinient function to get section endings from QTextBlockFormat.
+     * Convenient function to get section endings from QTextBlockFormat.
      * @param fmt QTextBlockFormat format to retrieve section startings from.
      * @return QList<KoSectionEnd *> that contains pointers to sections that end
      *                               according to QTextBlockFormat.

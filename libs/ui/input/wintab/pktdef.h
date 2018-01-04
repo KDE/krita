@@ -27,7 +27,7 @@ How to use pktdef.h:
 	c. Include pktdef.h.
 	d. The generated structure typedef will be called
 	   <PACKETNAME>PACKET. Compare with 2.c. above and example #2 below.
-4. If using extension data for extensions that report thier data in the packet,
+4. If using extension data for extensions that report their data in the packet,
    do the following additional steps for each extension:
 	a. Before including pktdef.h, define <PACKETNAME>PACKET<EXTENSION>
 	   as either PKEXT_ABSOLUTE or PKEXT_RELATIVE.
@@ -40,12 +40,12 @@ How to use pktdef.h:
 	e. If <PACKETNAME>PACKET<EXTENSION> was PKEXT_RELATIVE, OR the
 	   packet mask bit with <PACKETNAME>PACKETMODE and use the result
 	   in the lcPktMode field of the LOGCONTEXT structure.
-5. If using extension data for extensions that report thier data in the extensions packet,
+5. If using extension data for extensions that report their data in the extensions packet,
    do the following additional steps for each extension:
 	a. Before including pktdef.h, define <PACKETNAME>PACKET<EXTENSION> as PKEXT_ABSOLUTE.
 	b. The generated extension structure typedef will contain a field for the
 	   extension data.
-	c. Call WTExtSet to activate the extention.  Use the context id in the WT_PACKETEXT
+	c. Call WTExtSet to activate the extension.  Use the context id in the WT_PACKETEXT
 	   message to retrieve the extension data <PACKETNAME>PACKETEXT.
 
 

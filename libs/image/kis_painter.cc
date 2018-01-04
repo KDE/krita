@@ -217,7 +217,7 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
@@ -225,7 +225,7 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
         const quint8 alpha = srcCS->opacityU8(srcPtr);
 
         *alpha8Ptr = KoColorSpaceMaths<quint8>::multiply(alpha, KoColorSpaceMathsTraits<quint8>::unitValue - white);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     return dst;
 }
@@ -241,12 +241,12 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
         *alpha8Ptr = srcCS->intensity8(srcPtr);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     return dst;
 }
@@ -265,11 +265,11 @@ bool KisPainter::checkDeviceHasTransparency(KisPaintDeviceSP dev)
     const KoColorSpace *cs = dev->colorSpace();
     KisSequentialConstIterator it(dev, deviceBounds);
 
-    do {
+    while(it.nextPixel()) {
         if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
             return true;
         }
-    } while(it.nextPixel());
+    }
 
     return false;
 }
@@ -1830,7 +1830,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             yd = (y2 - y1);
         }
         grad = yd / xd;
-        // nearest X,Y interger coordinates
+        // nearest X,Y integer coordinates
         xend = x1;
         yend = y1 + grad * (xend - x1);
 
@@ -1932,7 +1932,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         grad = xd / yd;
 
-        // nearest X,Y interger coordinates
+        // nearest X,Y integer coordinates
         yend = y1;
         xend = x1 + grad * (yend - y1);
 

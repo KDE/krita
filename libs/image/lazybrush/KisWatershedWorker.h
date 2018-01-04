@@ -60,7 +60,7 @@ public:
     /**
      * @brief run the filling process using the passes height map, strokes, and write
      *        the result coloring into the destination device
-     * @param cleanUpAmount shows how agressively we should try to clean up the filnal
+     * @param cleanUpAmount shows how aggressively we should try to clean up the final
      *                      coloring. Should be in range [0.0...1.0]
      */
 

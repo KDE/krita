@@ -282,7 +282,7 @@ bool KisQtWidgetsTweaker::eventFilter(QObject *receiver, QEvent *event)
                 d->decision = allShortcutOverriders[i]->handleEvent(receiver, key);
             }
         }
-        //if nothing said wether shortcutoverride to be accepted
+        //if nothing said whether shortcutoverride to be accepted
         //last widget that qt will ask will be kismainwindow or docker
         if (qobject_cast<KisMainWindow*>(receiver)!=nullptr||
             receiver->inherits(QDockWidget::staticMetaObject.className())) {

@@ -45,7 +45,7 @@ public:
     double stepInPoints;  ///< step in points
     KoUnit unit;
 
-    double previousValueInPoint; ///< allow to store the previous value in point, usefull in some cases, even if, usually, we prefere to refer to the actual value (in selected unit) and convert it, since this is not alway updated.
+    double previousValueInPoint; ///< allow to store the previous value in point, useful in some cases, even if, usually, we prefer to refer to the actual value (in selected unit) and convert it, since this is not always updated.
     QString previousSymbol;
     QString outPutSymbol;
 
@@ -130,7 +130,7 @@ connect_signals:
 
     if (d->unitManager != d->defaultUnitManager) {
         disconnect(d->unitManager, &QObject::destroyed,
-                   this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependance anymore.
+                   this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependence anymore.
     }
     disconnect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
     disconnect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);

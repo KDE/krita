@@ -98,7 +98,7 @@ public:
      * Set the Python paths by calling Py_SetPath. This should be called before
      * initialization to ensure the proper libraries get loaded.
      */
-    static bool setPath(const QStringList& paths);
+    static bool setPath(const QStringList& scriptPaths);
 
     /**
      * Make sure the Python interpreter is initialized. Ideally should be only

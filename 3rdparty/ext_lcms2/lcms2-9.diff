@@ -1,20 +1,20 @@
-commit fa73cd1733b3cf122489d2c757485db0ac7b5cd3
+commit e346c86dea71e995623f3a1702ff4ade847c16c7
 Author: Boudewijn Rempt <boud@valdyas.org>
-Date:   Tue Jul 26 10:12:27 2016 +0200
+Date:   Thu Jan 4 11:49:42 2018 +0100
 
-    ...
+    Add cmake build system to lcms 2.9
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..90cee70
+index 0000000..735dd7a
 --- /dev/null
 +++ b/CMakeLists.txt
 @@ -0,0 +1,22 @@
 +project(lcms2)
 +
-+option(BUILD_TESTS "build the test executable" ON)
-+option(BUILD_STATIC "build the static library" ON)
-+option(BUILD_UTILS "build the utilities executables" ON)
++option(BUILD_TESTS "build the test executable" OFF)
++option(BUILD_STATIC "build the static library" OFF)
++option(BUILD_UTILS "build the utilities executables" OFF)
 +
 +set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 +
@@ -33,10 +33,10 @@ index 0000000..90cee70
 +    add_subdirectory(utils)
 +endif(BUILD_UTILS)
 diff --git a/include/lcms2.h b/include/lcms2.h
-index 739e6e1..969bc3a 100644
+index 9e7ee4c..4ee1b7b 100644
 --- a/include/lcms2.h
 +++ b/include/lcms2.h
-@@ -212,15 +212,14 @@ typedef int                  cmsBool;
+@@ -215,15 +215,14 @@ typedef int                  cmsBool;
  
  #endif  // CMS_USE_BIG_ENDIAN
  
@@ -136,7 +136,7 @@ index 0000000..ca9008b
 +target_link_libraries(testcms lcms_static)
 +set_target_properties(testcms PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
 diff --git a/testbed/testcms2.c b/testbed/testcms2.c
-index 203e53c..9b37774 100644
+index 5bd5447..ff650f2 100644
 --- a/testbed/testcms2.c
 +++ b/testbed/testcms2.c
 @@ -28,7 +28,7 @@
@@ -149,7 +149,7 @@ index 203e53c..9b37774 100644
  #     include <io.h>
  #endif
 diff --git a/testbed/zoo_icc.c b/testbed/zoo_icc.c
-index b9e1efe..97e3294 100755
+index f68861c..fdd0b7c 100755
 --- a/testbed/zoo_icc.c
 +++ b/testbed/zoo_icc.c
 @@ -27,6 +27,11 @@

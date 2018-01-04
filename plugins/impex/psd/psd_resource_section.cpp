@@ -200,10 +200,10 @@ QString PSDImageResourceSection::idToString(PSDImageResourceSection::PSDResource
     case COUNT_INFO        : return "0x0438 - (Photoshop CS4) Count Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the count in the document. See the Count Tool.";
     case CS5_PRINT_INFO    : return "0x043A - (Photoshop CS5) Print Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print settings in the document. The color management options.";
     case CS5_PRINT_STYLE   : return "0x043B - (Photoshop CS5) Print Style. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print style in the document. The printing marks, labels, ornaments, etc.";
-    case CS5_NSPrintInfo   : return "0x043C - (Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommened that you do not interpret or use this data.";
-    case CS5_WIN_DEVMODE   : return "0x043D - (Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommened that you do not interpret or use this data.";
-    case CS6_AUTOSAVE_FILE_PATH : return "0x043E - (Photoshop CS6) Auto Save File Path. Unicode string. It is recommened that you do not interpret or use this data.";
-    case CS6_AUTOSAVE_FORMAT : return "0x043F - (Photoshop CS6) Auto Save Format. Unicode string. It is recommened that you do not interpret or use this data.";
+    case CS5_NSPrintInfo   : return "0x043C - (Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommended that you do not interpret or use this data.";
+    case CS5_WIN_DEVMODE   : return "0x043D - (Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommended that you do not interpret or use this data.";
+    case CS6_AUTOSAVE_FILE_PATH : return "0x043E - (Photoshop CS6) Auto Save File Path. Unicode string. It is recommended that you do not interpret or use this data.";
+    case CS6_AUTOSAVE_FORMAT : return "0x043F - (Photoshop CS6) Auto Save Format. Unicode string. It is recommended that you do not interpret or use this data.";
     case CC_PATH_SELECTION_SATE : return "0x0440 - (Photoshop CC) Path Selection State. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current path selection state.";
 
     case PATH_INFO_FIRST   : return "0x07d0 - First path info block";

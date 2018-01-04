@@ -53,13 +53,13 @@ namespace KisToolUtils {
 
             const int radiusSq = pow2(effectiveRadius);
 
-            do {
+            while (it.nextPixel()) {
                 const QPoint realPos(it.x(),  it.y());
                 const QPoint pt = realPos - pos;
                 if (pow2(pt.x()) + pow2(pt.y()) < radiusSq) {
                     pixels << it.oldRawData();
                 }
-            } while (it.nextPixel());
+            }
 
             const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
             cs->mixColorsOp()->mixColors(cpixels, pixels.size(), pickedColor.data());

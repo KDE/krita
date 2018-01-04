@@ -29,7 +29,7 @@ class KoPathSegmentBreakCommand : public KUndo2Command
 {
 public:
     /**
-     * Command to break a subpath by removing the segement
+     * Command to break a subpath by removing the segment
      *
      * The segment following the given point will be removed.
      *

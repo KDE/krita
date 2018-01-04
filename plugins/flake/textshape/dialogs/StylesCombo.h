@@ -44,7 +44,7 @@ public:
     /** Use this method to set the @param model of the combo. */
     void setStylesModel(AbstractStylesModel *model);
 
-    /** This method is an override of QComboBox setLineEdit. We need to make it public since its Qt counterpart is public. However, this method is not supposed to be used (unless you know what you are doing). The StylesCombo relies on its own internal QLineEdit subclass for quite a lot of its functionnality. There is no guarantee that the whole thing will work in case the line edit is replaced */
+    /** This method is an override of QComboBox setLineEdit. We need to make it public since its Qt counterpart is public. However, this method is not supposed to be used (unless you know what you are doing). The StylesCombo relies on its own internal QLineEdit subclass for quite a lot of its functionality. There is no guarantee that the whole thing will work in case the line edit is replaced */
     void setLineEdit(QLineEdit *lineEdit);
     /** Same as above */
     void setEditable(bool editable);
@@ -62,13 +62,13 @@ public Q_SLOTS:
     void slotUpdatePreview();
 
 Q_SIGNALS:
-    /** This is emitted when a selection is made (programatically or by user interaction). It is
+    /** This is emitted when a selection is made (programmatically or by user interaction). It is
       * to be noted that this signal is also emitted when an item is selected again.
       * @param index: the index of the selected item. */
     void selected(int index);
     void selected(const QModelIndex &index);
 
-    /** This is emitted when a selection is changed (programatically or by user interaction). It is
+    /** This is emitted when a selection is changed (programmatically or by user interaction). It is
       * to be noted that this signal is _not_ emitted when an item is selected again. Not even if it
       * had been modified.
       * @param index: the index of the selected item. */

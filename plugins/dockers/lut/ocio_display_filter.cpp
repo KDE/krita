@@ -143,13 +143,13 @@ void OcioDisplayFilter::updateProcessor()
      * As the OCIO docs will tell you, looks are a aesthetic transform that is
      * added onto the mix.
      * A view+display can have it's own assigned Look, or list of looks, and these
-     * can be overriden optionally.
+     * can be overridden optionally.
      * What the OCIO docs won't tell you is that a display transform won't use the
      * looks attached to it unless "skipColorSpaceConversions" is false...
      * I have no idea what "skipColorSpaceConversions" is beyond what it says on the
      * tin. It is not mentioned in the documentation anywhere. Or on the website.
-     * Or how to set it. Or unset it. Why it is apparantly set true to begin with.
-     * Only that, apparantly, this was done with non-color data in mind...
+     * Or how to set it. Or unset it. Why it is apparently set true to begin with.
+     * Only that, apparently, this was done with non-color data in mind...
      *
      * Until there's clear documentation on how to use this feature, I am afraid the
      * override is all we can offer.

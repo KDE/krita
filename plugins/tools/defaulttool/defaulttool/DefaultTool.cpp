@@ -1472,7 +1472,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
                 return new ShapeShearStrategy(this, event->point, handle);
             }
 
-            // rotating is allowed for rigth mouse button too
+            // rotating is allowed for right mouse button too
             if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
                     handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle) {
 

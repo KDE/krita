@@ -205,7 +205,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
 
 
-    // paint the stroke. The sketchbrush gets a differnet shape than the others to show how it works
+    // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
     if (m_currentPreset->paintOp().id() == "sketchbrush") {
 
         KisPaintInformation pointOne;

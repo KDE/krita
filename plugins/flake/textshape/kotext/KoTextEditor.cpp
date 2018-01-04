@@ -117,7 +117,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
         // a table before or we are at the beginning of a cell or a document.
         // So here is a better approach
         // 1) create block
-        // 2) select the previous block so it get's deleted and replaced
+        // 2) select the previous block so it gets deleted and replaced
         // 3) remove HiddenByTable from both new and previous block
         // 4) actually make new line replacing the block we just inserted
         // 5) set HiddenByTable on the block just before the table again
@@ -640,7 +640,7 @@ bool KoTextEditor::atEnd() const
     QTextFrame *auxFrame = cursor.currentFrame();
 
     if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
-        //auxFrame really is the auxillary frame
+        //auxFrame really is the auxiliary frame
         if (d->caret.position() == auxFrame->firstPosition() - 1) {
             return true;
         }

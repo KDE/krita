@@ -76,7 +76,7 @@ public:
     /**
      * Mark the end of a sequence of style changes, additions, and deletions.
      *
-     * Manipulation to the styles happen immidiately, but calling this method
+     * Manipulation to the styles happen immediately, but calling this method
      * will allow applications to put a command on the stack for undo, and for qtextdocments
      * to reflect the style changes.
      *

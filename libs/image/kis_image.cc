@@ -1442,7 +1442,7 @@ void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 
 void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
 {
-    // udpate filters are *not* recursive!
+    // update filters are *not* recursive!
     KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
 
     m_d->projectionUpdatesFilter = filter;

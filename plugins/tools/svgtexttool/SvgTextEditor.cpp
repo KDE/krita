@@ -20,25 +20,31 @@
 
 #include "SvgTextEditor.h"
 
-#include <QPainter>
-#include <QVBoxLayout>
-#include <QFormLayout>
-#include <QUrl>
-#include <QPushButton>
-#include <QDebug>
 #include <QAction>
-#include <QWidgetAction>
-#include <QMenu>
-#include <QTabWidget>
-#include <QFontComboBox>
-#include <QComboBox>
-#include <QMessageBox>
+#include <QApplication>
 #include <QBuffer>
-#include <QSvgGenerator>
-#include <QTextEdit>
+#include <QComboBox>
+#include <QDebug>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
+#include <QFontComboBox>
+#include <QFontDatabase>
+#include <QFormLayout>
 #include <QLineEdit>
+#include <QListView>
+#include <QMenu>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPalette>
+#include <QPushButton>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QSvgGenerator>
+#include <QTabWidget>
+#include <QTextEdit>
+#include <QUrl>
+#include <QVBoxLayout>
+#include <QWidgetAction>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -61,7 +67,6 @@
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
-#include <BasicXMLSyntaxHighlighter.h>
 #include <kis_action_registry.h>
 
 #include "kis_font_family_combo_box.h"
@@ -106,8 +111,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
 #endif
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
-    BasicXMLSyntaxHighlighter *hl = new BasicXMLSyntaxHighlighter(m_textEditorWidget.svgTextEdit);
-    Q_UNUSED(hl);
+    m_syntaxHighlighter = new BasicXMLSyntaxHighlighter(m_textEditorWidget.svgTextEdit);
     m_textEditorWidget.svgTextEdit->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
 
     createActions();
@@ -137,6 +141,8 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
 
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
 
+    applySettings();
+
 }
 
 SvgTextEditor::~SvgTextEditor()
@@ -155,22 +161,15 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
 
         QString svg;
         QString styles;
-        QString html;
-
-        if (converter.convertToHtml(&html)) {
-
-            qDebug() << "html:" << html;
-
-            m_textEditorWidget.richTextEdit->document()->clear();
-            m_textEditorWidget.richTextEdit->document()->setHtml(html);
-            m_textEditorWidget.richTextEdit->document()->setModified(false);
-        }
+        QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
 
         if (converter.convertToSvg(&svg, &styles)) {
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
-
+            if (converter.convertSvgToDocument(svg, doc)) {
+                m_textEditorWidget.richTextEdit->setDocument(doc);
+            }
         }
         else {
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
@@ -185,11 +184,11 @@ void SvgTextEditor::save()
         if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
 
             QString svg;
-            QString styles;
+            QString styles = m_textEditorWidget.svgStylesEdit->document()->toPlainText();
             KoSvgTextShapeMarkupConverter converter(m_shape);
 
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
-                qWarning() << "Eeeek";
+            if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
+                    qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
             emit textUpdated(svg, styles);
@@ -220,6 +219,7 @@ void SvgTextEditor::switchTextEditorTab()
         if (m_shape) {
 
             // Convert the svg text to html XXX: Fix resolution! Also, the rect should be the image rect, not the shape rect.
+            /**
             if (!converter.convertFromSvg(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(),
                                           m_shape->boundingRect(), 72.0)) {
                 qDebug() << "Eeek 3";
@@ -228,7 +228,14 @@ void SvgTextEditor::switchTextEditorTab()
             if (!converter.convertToHtml(&html)) {
                 qDebug() << "Eeek 4";
             }
+
             m_textEditorWidget.richTextEdit->document()->setHtml(html);
+            */
+            QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
+            if (!converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
+                qWarning()<<"new converter svgToDoc doesn't work!";
+            }
+            m_textEditorWidget.richTextEdit->setDocument(doc);
         }
         m_currentEditor = m_textEditorWidget.richTextEdit;
     }
@@ -242,14 +249,10 @@ void SvgTextEditor::switchTextEditorTab()
             QString svg;
             QString styles;
 
-            if (!converter.convertFromHtml(m_textEditorWidget.richTextEdit->document()->toHtml(), &svg, &styles)) {
-                qWarning() << "Eeeek";
+            if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
+                    qWarning()<<"new converter docToSVG doesn't work!";
             }
-            //if (!converter.convertToSvg(&svg, &styles)) {
-            //    qDebug() << "Eeeek 2";
-            //}
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
-            m_textEditorWidget.svgStylesEdit->setPlainText(styles);
         }
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }
@@ -282,9 +285,9 @@ void SvgTextEditor::checkFormat()
 
     QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
     if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
-        spnLineHeight->setValue(1.0);
+        spnLineHeight->setValue(100.0);
     } else if(blockFormat.lineHeightType()==QTextBlockFormat::ProportionalHeight) {
-        spnLineHeight->setValue(double(blockFormat.lineHeight()/100.0));
+        spnLineHeight->setValue(double(blockFormat.lineHeight()));
     }
 }
 
@@ -608,10 +611,10 @@ void SvgTextEditor::decreaseTextSize()
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
 
-void SvgTextEditor::setLineHeight(double lineHeightEm)
+void SvgTextEditor::setLineHeight(double lineHeightPercentage)
 {
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
-    format.setLineHeight(lineHeightEm*100, QTextBlockFormat::ProportionalHeight);
+    format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
      m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
@@ -655,11 +658,106 @@ void SvgTextEditor::setSettings()
     // get the settings and initialize the dialog
     KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
 
-    settingsDialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    if (settingsDialog.exec() == KoDialog::Ok) {
-        // save  and set the settings
+    QStringList selectedWritingSystems = cfg.readEntry("selectedWritingSystems", "").split(",");
+
+    QList<QFontDatabase::WritingSystem> scripts = QFontDatabase().writingSystems();
+    QStandardItemModel *writingSystemsModel = new QStandardItemModel(&settingsDialog);
+    for (int s = 0; s < scripts.size(); s ++) {
+        QString writingSystem = QFontDatabase().writingSystemName(scripts.at(s));
+        QStandardItem *script = new QStandardItem(writingSystem);
+        script->setCheckable(true);
+        script->setCheckState(selectedWritingSystems.contains(QString::number(scripts.at(s))) ? Qt::Checked : Qt::Unchecked);
+        script->setData((int)scripts.at(s));
+        writingSystemsModel->appendRow(script);
+    }
+    textSettings.lwScripts->setModel(writingSystemsModel);
+
+    EditorMode mode = (EditorMode)cfg.readEntry("EditorMode", (int)Both);
+    switch(mode) {
+    case(RichText):
+        textSettings.radioRichText->setChecked(true);
+        break;
+    case(SvgSource):
+        textSettings.radioSvgSource->setChecked(true);
+        break;
+    case(Both):
+        textSettings.radioBoth->setChecked(true);
     }
 
+    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
+    textSettings.colorEditorBackground->setColor(background);
+    textSettings.colorEditorForeground->setColor(cfg.readEntry("colorEditorForeground", qApp->palette().text().color()));
+
+    textSettings.colorKeyword->setColor(cfg.readEntry("colorKeyword", QColor(background.value() < 100 ? Qt::cyan : Qt::blue)));
+    textSettings.chkBoldKeyword->setChecked(cfg.readEntry("BoldKeyword", true));
+    textSettings.chkItalicKeyword->setChecked(cfg.readEntry("ItalicKeyword", false));
+
+    textSettings.colorElement->setColor(cfg.readEntry("colorElement", QColor(background.value() < 100 ? Qt::magenta : Qt::darkMagenta)));
+    textSettings.chkBoldElement->setChecked(cfg.readEntry("BoldElement", true));
+    textSettings.chkItalicElement->setChecked(cfg.readEntry("ItalicElement", false));
+
+    textSettings.colorAttribute->setColor(cfg.readEntry("colorAttribute", QColor(background.value() < 100 ? Qt::green : Qt::darkGreen)));
+    textSettings.chkBoldAttribute->setChecked(cfg.readEntry("BoldAttribute", true));
+    textSettings.chkItalicAttribute->setChecked(cfg.readEntry("ItalicAttribute", true));
+
+    textSettings.colorValue->setColor(cfg.readEntry("colorValue", QColor(background.value() < 100 ? Qt::red: Qt::darkRed)));
+    textSettings.chkBoldValue->setChecked(cfg.readEntry("BoldValue", true));
+    textSettings.chkItalicValue->setChecked(cfg.readEntry("ItalicValue", false));
+
+    textSettings.colorComment->setColor(cfg.readEntry("colorComment", QColor(background.value() < 100 ? Qt::lightGray : Qt::gray)));
+    textSettings.chkBoldComment->setChecked(cfg.readEntry("BoldComment", false));
+    textSettings.chkItalicComment->setChecked(cfg.readEntry("ItalicComment", false));
+
+    settingsDialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    if (settingsDialog.exec() == QDialog::Accepted) {
+        qDebug() << "saving settings";
+        // save  and set the settings
+        QStringList writingSystems;
+        for (int i = 0; i < writingSystemsModel->rowCount(); i++) {
+            QStandardItem *item = writingSystemsModel->item(i);
+            if (item->checkState() == Qt::Checked) {
+                writingSystems.append(QString::number(item->data().toInt()));
+            }
+        }
+        if (!writingSystems.isEmpty()) {
+            cfg.writeEntry("selectedWritingSystems", writingSystems.join(','));
+        }
+
+        if (textSettings.radioRichText->isChecked()) {
+            cfg.writeEntry("EditorMode", (int)Richtext);
+        }
+        else if (textSettings.radioSvgSource->isChecked()) {
+            cfg.writeEntry("EditorMode", (int)SvgSource);
+        }
+        else  if (textSettings.radioBoth->isChecked()) {
+            cfg.writeEntry("EditorMode", (int)Both);
+        }
+
+        cfg.writeEntry("colorEditorBackground", textSettings.colorEditorBackground->color());
+        cfg.writeEntry("colorEditorForeground", textSettings.colorEditorForeground->color());
+
+        cfg.writeEntry("colorKeyword", textSettings.colorKeyword->color());
+        cfg.writeEntry("BoldKeyword", textSettings.chkBoldKeyword->isChecked());
+        cfg.writeEntry("ItalicKeyWord", textSettings.chkItalicKeyword->isChecked());
+
+        cfg.writeEntry("colorElement", textSettings.colorElement->color());
+        cfg.writeEntry("BoldElement", textSettings.chkBoldElement->isChecked());
+        cfg.writeEntry("ItalicElement", textSettings.chkItalicElement->isChecked());
+
+        cfg.writeEntry("colorAttribute", textSettings.colorAttribute->color());
+        cfg.writeEntry("BoldAttribute", textSettings.chkBoldAttribute->isChecked());
+        cfg.writeEntry("ItalicAttribute", textSettings.chkItalicAttribute->isChecked());
+
+        cfg.writeEntry("colorValue", textSettings.colorValue->color());
+        cfg.writeEntry("BoldValue", textSettings.chkBoldValue->isChecked());
+        cfg.writeEntry("ItalicValue", textSettings.chkItalicValue->isChecked());
+
+        cfg.writeEntry("colorComment", textSettings.colorComment->color());
+        cfg.writeEntry("BoldComment", textSettings.chkBoldComment->isChecked());
+        cfg.writeEntry("ItalicComment", textSettings.chkItalicComment->isChecked());
+
+        applySettings();
+    }
 }
 
 void SvgTextEditor::slotToolbarToggled(bool)
@@ -771,6 +869,50 @@ void SvgTextEditor::wheelEvent(QWheelEvent *event)
         m_textEditorWidget.svgTextEdit->zoomOut(numSteps);
         event->accept();
     }
+}
+
+void SvgTextEditor::applySettings()
+{
+    KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
+
+    EditorMode mode = (EditorMode)cfg.readEntry("EditorMode", (int)RichText);
+
+    QWidget *richTab = m_textEditorWidget.richTab;
+    QWidget *svgTab = m_textEditorWidget.svgTab;
+
+    m_page->setUpdatesEnabled(false);
+    m_textEditorWidget.textTab->clear();
+
+    switch(mode) {
+    case(RichText):
+        m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
+        break;
+    case(SvgSource):
+        m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
+        break;
+    case(Both):
+        m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
+        m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
+    }
+
+    m_syntaxHighlighter->setFormats();
+
+    QPalette palette = m_textEditorWidget.svgTextEdit->palette();
+
+    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
+    palette.setBrush(QPalette::Active, QPalette::Background, QBrush(background));
+    QColor foreground = cfg.readEntry("colorEditorForeground", qApp->palette().text().color());
+    palette.setBrush(QPalette::Active, QPalette::Text, QBrush(foreground));
+
+    QStringList selectedWritingSystems = cfg.readEntry("selectedWritingSystems", "").split(",");
+
+    QVector<QFontDatabase::WritingSystem> writingSystems;
+    for (int i=0; i<selectedWritingSystems.size(); i++) {
+        writingSystems.append((QFontDatabase::WritingSystem)QString(selectedWritingSystems.at(i)).toInt());
+    }
+    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->refillComboBox(writingSystems);
+
+    m_page->setUpdatesEnabled(true);
 }
 
 QAction *SvgTextEditor::createAction(const QString &name, const char *member)
@@ -912,9 +1054,9 @@ void SvgTextEditor::createActions()
     QWidgetAction *lineHeight = new QWidgetAction(this);
     lineHeight->setToolTip(i18n("Line height"));
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
-    spnLineHeight->setRange(0.0, 99.0);
-    spnLineHeight->setSingleStep(0.1);
-    spnLineHeight->setSuffix(i18n(" em"));//Does this need to be translated?
+    spnLineHeight->setRange(0.0, 1000.0);
+    spnLineHeight->setSingleStep(10.0);
+    spnLineHeight->setSuffix("%");
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
     lineHeight->setDefaultWidget(spnLineHeight);
     actionCollection()->addAction("svg_line_height", lineHeight);

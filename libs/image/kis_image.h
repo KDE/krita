@@ -269,7 +269,7 @@ public:
      * undo stack using the adapter. This adapter is used for a backward
      * compatibility for old commands created before strokes. It blocks
      * all the porcessing at the scheduler, waits until it's finished
-     * adn executes commands exclusively.
+     * and executes commands exclusively.
      */
     KisUndoAdapter* undoAdapter() const;
 

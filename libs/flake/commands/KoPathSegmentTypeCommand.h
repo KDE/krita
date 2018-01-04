@@ -40,7 +40,7 @@ public:
 
     /**
     * Command for changing the segment type ( curve/line )
-    * @param pointData point data identifying the segement that should be changed.
+    * @param pointData point data identifying the segment that should be changed.
     * @param segmentType to which the segment should be changed to
     * @param parent the parent command used for macro commands
     */
@@ -48,7 +48,7 @@ public:
 
     /**
      * Command for changing the segment type ( curve/line )
-     * @param pointDataList List of point data identifying the segements that should be changed.
+     * @param pointDataList List of point data identifying the segments that should be changed.
      * @param segmentType to which the segments should be changed to
      * @param parent the parent command used for macro commands
      */

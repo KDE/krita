@@ -399,72 +399,69 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         appendLazy(&dyPos, t.dyPos, i);
     }
 
+    KoSvgTextChunkShape *parent = !isRootTextNode() ? dynamic_cast<KoSvgTextChunkShape*>(this->parent()) : 0;
+    KoSvgTextProperties parentProperties =
+        parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
+
+    // XXX: we don't save fill, stroke, text length, length adjust or spacing and glyphs.
+    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+
     if (isRootTextNode()) {
         context.shapeWriter().startElement("body", false);
-        context.shapeWriter().startElement("p", false);
+        if (layoutInterface()->isTextNode()) {
+            context.shapeWriter().startElement("p", false);
+        }
         // XXX: Save the style?
 
-    } else if (!dyPos.isEmpty()) {
+    } else if (parent->isRootTextNode()) {
         context.shapeWriter().startElement("p", false);
     } else {
         context.shapeWriter().startElement("span", false);
         // XXX: Save the style?
     }
 
-    if (layoutInterface()->isTextNode()) {
-
-        KoSvgTextChunkShape *parent = !isRootTextNode() ? dynamic_cast<KoSvgTextChunkShape*>(this->parent()) : 0;
-
-
-        qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
-        KoSvgTextProperties parentProperties =
-            parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
-
-        // XXX: we don't save fill, stroke, text length, length adjust or spacing and glyphs.
-        KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
-        QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
-
-        if (attributes.count() > 0) {
-            QString styleString;
-            for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
-                if (QString(it.key().toLatin1().data()).contains("text-anchor")) {
-                    QString val = it.value();
-                    if (it.value()=="middle") {
-                        val = "center";
-                    } else if (it.value()=="end") {
-                        val = "right";
-                    } else {
-                        val = "left";
-                    }
-                    styleString.append("text-align")
-                            .append(": ")
-                            .append(val)
-                            .append(";" );
-                } else if (QString(it.key().toLatin1().data()).contains("fill")){
-                    styleString.append("color")
-                            .append(": ")
-                            .append(it.value())
-                            .append(";" );
-                } else if (QString(it.key().toLatin1().data()).contains("font-size")){
-                    QString val = it.value();
-                    if (QRegExp ("\\d*").exactMatch(val)) {
-                        val.append("pt");
-                    }
-                    styleString.append(it.key().toLatin1().data())
-                            .append(": ")
-                            .append(val)
-                            .append(";" );
+    QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+    if (attributes.size() > 0) {
+        QString styleString;
+        for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
+            if (QString(it.key().toLatin1().data()).contains("text-anchor")) {
+                QString val = it.value();
+                if (it.value()=="middle") {
+                    val = "center";
+                } else if (it.value()=="end") {
+                    val = "right";
                 } else {
-                    styleString.append(it.key().toLatin1().data())
-                            .append(": ")
-                            .append(it.value())
-                            .append(";" );
+                    val = "left";
                 }
+                styleString.append("text-align")
+                        .append(": ")
+                        .append(val)
+                        .append(";" );
+            } else if (QString(it.key().toLatin1().data()).contains("fill")){
+                styleString.append("color")
+                        .append(": ")
+                        .append(it.value())
+                        .append(";" );
+            } else if (QString(it.key().toLatin1().data()).contains("font-size")){
+                QString val = it.value();
+                if (QRegExp ("\\d*").exactMatch(val)) {
+                    val.append("pt");
+                }
+                styleString.append(it.key().toLatin1().data())
+                        .append(": ")
+                        .append(val)
+                        .append(";" );
+            } else {
+                styleString.append(it.key().toLatin1().data())
+                        .append(": ")
+                        .append(it.value())
+                        .append(";" );
             }
-            context.shapeWriter().addAttribute("style", styleString);
         }
-
-
+        context.shapeWriter().addAttribute("style", styleString);
+    }
+    if (layoutInterface()->isTextNode()) {
+        qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
         // After adding all the styling to the <p> element, add the text
         context.shapeWriter().addTextNode(d->text);
     }
@@ -476,7 +473,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         }
     }
 
-    if (isRootTextNode()) {
+    if (isRootTextNode() && layoutInterface()->isTextNode()) {
         context.shapeWriter().endElement(); // body
     }
     context.shapeWriter().endElement(); // p or span

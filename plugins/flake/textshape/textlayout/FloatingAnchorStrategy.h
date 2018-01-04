@@ -52,7 +52,7 @@ private:
                                  KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
     inline void countVerticalPos(QPointF &newPosition, const QRectF &anchorBoundingRect);
 
-    //check the layout evironment and move the shape back to have it within
+    //check the layout environment and move the shape back to have it within
     inline void checkLayoutEnvironment(QPointF &newPosition, KoTextShapeData *data);
     //check the border of page and move the shape back to have it visible
     inline void checkPageBorder(QPointF &newPosition);

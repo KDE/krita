@@ -51,7 +51,7 @@
 // * Renamed KShortcutsDialog/Editor to KisShortcutsDialog/Editor
 // * Add export macro
 // * Split apart kshortcutseditor_p
-// * Copied KShortcutsEditorPrivate::itemFromIndex() implmentation from
+// * Copied KShortcutsEditorPrivate::itemFromIndex() implementation from
 //   KF5 XmlGui's kshortcutseditor.cpp to begin of KisShortcutsEditorItem.cpp
 
 /**

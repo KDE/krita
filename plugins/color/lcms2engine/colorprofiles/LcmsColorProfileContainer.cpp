@@ -139,7 +139,7 @@ bool LcmsColorProfileContainer::init()
         cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->name = QString::fromWCharArray(buffer);
 
-        //apparantly this should give us a localised string??? Not sure about this.
+        //apparently this should give us a localised string??? Not sure about this.
         cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->productDescription = QString::fromWCharArray(buffer);
 

@@ -23,6 +23,8 @@
 
 #include <QScopedPointer>
 #include <QList>
+#include <QTextDocument>
+#include <QTextCharFormat>
 
 class QRectF;
 class KoSvgTextShape;
@@ -77,6 +79,22 @@ public:
      */
     bool convertFromHtml(const QString &htmlText, QString *svgText, QString *styles);
 
+    /**
+     * @brief convertDocumentToSvg
+     * @param doc the QTextDocument to convert.
+     * @param svgText the converted svg text element
+     * @return true if the conversion was succesful
+     */
+    bool convertDocumentToSvg(const QTextDocument *doc, QString *svgText);
+
+    /**
+     * @brief convertSvgToDocument
+     * @param svgText the <text> element and it's children as a string.
+     * @param doc the QTextDocument that the conversion is written to.
+     * @return true if the conversion was succesful
+     */
+    bool convertSvgToDocument(const QString &svgText, QTextDocument *doc);
+
 
     /**
      * A list of errors happened during loading the user's text
@@ -87,6 +105,36 @@ public:
      * A list of warnings produced during loading the user's text
      */
     QStringList warnings() const;
+
+    /**
+     * @brief style
+     * creates a style string based on the blockformat and the format.
+     * @param format the textCharFormat of the current text.
+     * @param blockFormat the block format of the current text.
+     * @param mostCommon the most common format to compare the format to.
+     * @return a string that can be written into a style element.
+     */
+    QString style(QTextCharFormat format, QTextBlockFormat blockFormat, QTextCharFormat mostCommon = QTextCharFormat());
+
+    /**
+     * @brief stylesFromString
+     * returns a qvector with two textformats:
+     * at 0 is the QTextCharFormat
+     * at 1 is the QTextBlockFormat
+     * @param styles a style string split at ";"
+     * @param currentCharFormat the current charformat to compare against.
+     * @param currentBlockFormat the current blockformat to compare against.
+     * @return A QVector with at 0 a QTextCharFormat and at 1 a QBlockCharFormat.
+     */
+    QVector<QTextFormat> stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat);
+    /**
+     * @brief formatDifference
+     * A class to get the difference between two text-char formats.
+     * @param test the format to test
+     * @param reference the format to test against.
+     * @return the difference between the two.
+     */
+    QTextFormat formatDifference(QTextFormat test, QTextFormat reference);
 
 private:
     struct Private;

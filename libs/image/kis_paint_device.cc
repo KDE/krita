@@ -742,7 +742,7 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
     while (rowsRemaining > 0) {
 
         int colsRemaining = srcRect.width();
-        while (colsRemaining > 0) {
+        while (colsRemaining > 0 && srcIntIt.nextPixel()) {
 
             memcpy(blendDataPtr, srcIntIt.rawDataConst(), pixelSize);
             blendDataPtr += pixelSize;
@@ -753,7 +753,6 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
                 columnsAccumulated = 0;
             }
 
-            srcIntIt.nextPixel();
             colsRemaining--;
         }
 
@@ -763,11 +762,13 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
 
             // blend and write the final data
             blendDataPtr = blendData.data();
-            for (int i = 0; i < dstRect.width(); i++) {
-                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
 
+            int colsRemaining = dstRect.width();
+            while (colsRemaining > 0 && dstIntIt.nextPixel()) {
+                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
                 blendDataPtr += srcCellStride;
-                dstIntIt.nextPixel();
+
+                colsRemaining--;
             }
 
             // reset counters

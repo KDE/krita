@@ -1244,7 +1244,7 @@ void KisMainWindow::saveWindowSettings()
         KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
         saveMainWindowSettings(group);
 
-        // Save collapsable state of dock widgets
+        // Save collapsible state of dock widgets
         for (QMap<QString, QDockWidget*>::const_iterator i = d->dockWidgetsMap.constBegin();
              i != d->dockWidgetsMap.constEnd(); ++i) {
             if (i.value()->widget()) {
@@ -1826,7 +1826,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
 
-        // Check if the dock widget is supposed to be collapsable
+        // Check if the dock widget is supposed to be collapsible
         if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);

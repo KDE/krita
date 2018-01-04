@@ -52,7 +52,7 @@ struct AssistantEditorData {
  * Since this is off the canvas level, the decoration can be seen across all tools. The contents from here will be in
  * front of the kis_assistant_tool, which hold and displays the editor controls.
  *
- * Many of the events this recieves such as adding and removing assistants comes from kis_assistant_tool
+ * Many of the events this receives such as adding and removing assistants comes from kis_assistant_tool
  */
 class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoration
 {

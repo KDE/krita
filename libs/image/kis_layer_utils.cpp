@@ -348,7 +348,7 @@ namespace KisLayerUtils {
         CreateMergedLayer(MergeDownInfoSP info) : m_info(info) {}
 
         void populateChildCommands() override {
-            // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
+            // actual merging done by KisLayer::createMergedLayer (or specialized descendant)
             m_info->dstNode = m_info->currLayer->createMergedLayerTemplate(m_info->prevLayer);
 
             if (m_info->frames.size() > 0) {
@@ -426,7 +426,7 @@ namespace KisLayerUtils {
         MergeLayers(MergeDownInfoSP info) : m_info(info) {}
 
         void populateChildCommands() override {
-            // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
+            // actual merging done by KisLayer::createMergedLayer (or specialized descendant)
             m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer);
         }
 

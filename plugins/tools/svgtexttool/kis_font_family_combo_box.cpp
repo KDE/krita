@@ -50,6 +50,7 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
 {
     QFontDatabase fonts = QFontDatabase();
     int maxWidth = 0;
+    this->clear();
 
     QStringList duplicateFonts;
     QStringList filteredFonts;
@@ -165,6 +166,12 @@ QString KisFontComboBoxes::currentStyle() const
 QFont KisFontComboBoxes::currentFont(int pointSize) const
 {
     return QFontDatabase().font(m_family->currentText(), m_styles->currentText(), pointSize);
+}
+
+void KisFontComboBoxes::refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems)
+{
+    KisFontFamilyComboBox *cmb = qobject_cast<KisFontFamilyComboBox*>(m_family);
+    cmb->refillComboBox(writingSystems);
 }
 
 void KisFontComboBoxes::fontFamilyChanged()

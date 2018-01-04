@@ -64,7 +64,7 @@ void KisMarkerPainter::fillHalfBrushDiff(const QPointF &p1, const QPointF &p2, c
     boundRect = KisAlgebra2D::cutOffRect(boundRect, plane2);
 
     KisSequentialIterator it(m_d->device, boundRect.toAlignedRect());
-    do {
+    while (it.nextPixel()) {
         QPoint pt(it.x(), it.y());
 
         qreal value1 = plane1.value(pt);
@@ -88,7 +88,7 @@ void KisMarkerPainter::fillHalfBrushDiff(const QPointF &p1, const QPointF &p2, c
             currentColor.setOpacity(srcAlpha);
             memcpy(it.rawData(), currentColor.data(), pixelSize);
         }
-    } while(it.nextPixel());
+    }
 }
 
 void KisMarkerPainter::fillFullCircle(const QPointF &center, qreal radius)
@@ -105,7 +105,7 @@ void KisMarkerPainter::fillFullCircle(const QPointF &center, qreal radius)
     KisAlgebra2D::OuterCircle outer(center, radius);
 
     KisSequentialIterator it(m_d->device, boundRect.toAlignedRect());
-    do {
+    while (it.nextPixel()) {
         QPoint pt(it.x(), it.y());
 
         qreal value3 = outer.fadeSq(pt);
@@ -118,7 +118,7 @@ void KisMarkerPainter::fillFullCircle(const QPointF &center, qreal radius)
             currentColor.setOpacity(srcAlpha);
             memcpy(it.rawData(), currentColor.data(), pixelSize);
         }
-    } while(it.nextPixel());
+    }
 }
 
 void KisMarkerPainter::fillCirclesDiff(const QPointF &c1, qreal r1,

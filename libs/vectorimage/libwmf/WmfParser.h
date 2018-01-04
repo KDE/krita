@@ -87,7 +87,7 @@ private:
     /** Convert QINT16 points into QPointArray */
     void pointArray(QDataStream& stream, QPolygon& pa);
 
-    /** Convertion between windows color and QColor */
+    /** Conversion between windows color and QColor */
     QColor qtColor(quint32 color) const {
         return QColor(color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF);
     }

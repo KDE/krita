@@ -157,7 +157,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
     Q_ASSERT((starty + height - 1) <= bounds.bottom());
     KisSequentialConstIterator srcIt(src, QRect(startx, starty, width, height));
-    do {
+    while (srcIt.nextPixel()) {
 
         cs->normalisedChannelsValue(srcIt.rawDataConst(), channel);
 
@@ -171,7 +171,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
                 AverageChannels[I][i] += channel[i];
             }
         }
-    } while (srcIt.nextPixel());
+    }
 
     I = 0;
     int MaxInstance = 0;

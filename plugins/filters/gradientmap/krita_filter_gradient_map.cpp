@@ -79,7 +79,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     int p = 0;
     quint8 grey;
     const int pixelSize = device->colorSpace()->pixelSize();
-    do {
+    while (it.nextPixel()) {
         grey = device->colorSpace()->intensity8(it.oldRawData());
         gradient.colorAt(outColor,(qreal)grey/255);
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
@@ -87,7 +87,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
         memcpy(it.rawData(), outColor.data(), pixelSize);
         if (progressUpdater) progressUpdater->setValue(p++);
 
-    } while (it.nextPixel());
+    }
 
 }
 

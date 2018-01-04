@@ -134,7 +134,7 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     if (wrote == -1)
         return false;
 
-    wrote = dev->write(name, nameLength + 1); // Trailing 0 apparantly!
+    wrote = dev->write(name, nameLength + 1); // Trailing 0 apparently!
     if (wrote == -1)
         return false;
 

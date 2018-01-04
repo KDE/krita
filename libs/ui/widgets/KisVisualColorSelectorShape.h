@@ -54,7 +54,7 @@ class KisVisualColorSelectorShape : public QWidget
 public:
     /**
      * @brief The Dimensions enum
-     * Wether or not the shape is single or two dimensional.
+     * Whether or not the shape is single or two dimensional.
      **/
     enum Dimensions{onedimensional, twodimensional};
     enum ColorModel{Channel, HSV, HSL, HSI, HSY, YUV};

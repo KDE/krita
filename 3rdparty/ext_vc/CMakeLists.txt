@@ -1,8 +1,8 @@
 SET(PREFIX_ext_vc "${EXTPREFIX}" )
 ExternalProject_Add( ext_vc
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/VcDevel/Vc/releases/download/1.3.2/Vc-1.3.2.tar.gz
-    URL_HASH SHA1=2a87ff94dd18836cd3934b54180b15b3505bd50c
+    URL https://github.com/VcDevel/Vc/releases/download/1.3.3/Vc-1.3.3.tar.gz
+    URL_HASH SHA1=3d3ddd29eca7c2b541fd8d0f00923e57f58d5ef0
 
     INSTALL_DIR ${PREFIX_ext_vc}
 

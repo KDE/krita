@@ -222,7 +222,7 @@ public:
     QRect exactBoundsAmortized() const;
 
     /**
-     * Retuns exact rectangle of the paint device that contains
+     * Returns exact rectangle of the paint device that contains
      * non-default pixels. For paint devices with fully transparent
      * default pixel is equivalent to exactBounds().
      *
@@ -618,7 +618,7 @@ public:
      * 2) Fill it with the desired color or data
      *
      * 3) Create a KisPainter and set all the properties of the
-     *    trasaction: selection, compositeOp, opacity and etc.
+     *    transaction: selection, compositeOp, opacity and etc.
      *
      * 4) Paint a newly created paint device over the destination
      *    device.

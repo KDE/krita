@@ -52,10 +52,10 @@ namespace Acs {
 
                 KisSequentialIterator it(realPixelCache, pickRect);
 
-                do {
+                while (it.nextPixel()) {
                     color = picker->colorAt(it.x(), it.y());
                     memcpy(it.rawData(), color.data(), pixelSize);
-                } while (it.nextPixel());
+                }
 
 
                 // NOTE: toQImage() function of the converter copies exactBounds() only!

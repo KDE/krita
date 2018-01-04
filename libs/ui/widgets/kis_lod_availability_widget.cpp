@@ -30,6 +30,8 @@
 #include <QWidgetAction>
 #include <QMenu>
 
+#include "kis_signals_blocker.h"
+
 namespace {
 /**
  * These strings are added intentionally so we could relayout the threshold slider after
@@ -187,17 +189,22 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
 void KisLodAvailabilityWidget::slotUserChangedLodAvailability(bool value)
 {
+    KisSignalsBlocker b(m_d->chkLod);
+
     m_d->chkLod->setChecked(value);
 }
 
 void KisLodAvailabilityWidget::slotUserChangedLodThreshold(qreal value)
 {
+    KisSignalsBlocker b(m_d->thresholdSlider);
+
     m_d->thresholdSlider->setValue(value);
     setLimitations(m_d->limitations);
 }
 
 void KisLodAvailabilityWidget::slotUserChangedSize(qreal value)
 {
+    Q_UNUSED(value);
     setLimitations(m_d->limitations);
 }
 

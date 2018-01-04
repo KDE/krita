@@ -5,7 +5,7 @@ By Wolthera.
 '''
 
 
-# Importing the relevant dependancies:
+# Importing the relevant dependencies:
 import sys
 from PyQt5.QtXml import QDomDocument
 from PyQt5.QtWidgets import QFileDialog, QMessageBox

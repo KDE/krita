@@ -469,7 +469,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      * 2) There is no 'Quality' parameter, since the number of samples
      *    is calculated automatically
      *
-     * 3) 'Tail Aggressiveness' is used for controling the end of the
+     * 3) 'Tail Aggressiveness' is used for controlling the end of the
      *    stroke
      *
      * 4) The formila is a little bit different: 'Distance' parameter

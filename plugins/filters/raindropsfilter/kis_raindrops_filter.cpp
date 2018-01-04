@@ -72,7 +72,7 @@ KisRainDropsFilter::KisRainDropsFilter()
  * fishEyes            => FishEye coefficient
  *
  * Theory           => This functions does several math's functions and the engine
- *                     is simple to undestand, but a little hard to implement. A
+ *                     is simple to understand, but a little hard to implement. A
  *                     control will indicate if there is or not a raindrop in that
  *                     area, if not, a fisheye effect with a random size (max=DropSize)
  *                     will be applied, after this, a shadow will be applied too.
@@ -316,12 +316,12 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
 
-/* Function to free a dinamic boolean array
+/* Function to free a dynamic boolean array
  *
  * lpbArray          => Dynamic boolean array
  * Columns           => The array bidimension value
  *
- * Theory            => An easy to undestand 'for' statement
+ * Theory            => An easy to understand 'for' statement
  */
 void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
 {
@@ -331,13 +331,13 @@ void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
     free(lpbArray);
 }
 
-/* Function to create a bidimentional dinamic boolean array
+/* Function to create a bidimentional dynamic boolean array
  *
  * Columns           => Number of columns
  * Rows              => Number of rows
  *
- * Theory            => Using 'for' statement, we can alloc multiple dinamic arrays
- *                      To create more dimentions, just add some 'for's, ok?
+ * Theory            => Using 'for' statement, we can alloc multiple dynamic arrays
+ *                      To create more dimensions, just add some 'for's, ok?
  */
 bool** KisRainDropsFilter::CreateBoolArray(uint Columns, uint Rows) const
 {

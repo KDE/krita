@@ -641,15 +641,8 @@ set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
 add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
-if(WIN32)
-    set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
-                        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-                        LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
-                        ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
-endif()
-
 ##
-## Test endianess
+## Test endianness
 ##
 include (TestBigEndian)
 test_big_endian(CMAKE_WORDS_BIGENDIAN)

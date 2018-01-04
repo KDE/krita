@@ -531,7 +531,7 @@ bool KisResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
 
-                //find the resouce on the server
+                //find the resource on the server
                 KisBrushSP res2 = brushServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     brushServer->addResource(res, false);//add it!
@@ -576,7 +576,7 @@ bool KisResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
 
-                //find the resouce on the server
+                //find the resource on the server
                 KoColorSet *res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     paletteServer->addResource(res, false);//add it!

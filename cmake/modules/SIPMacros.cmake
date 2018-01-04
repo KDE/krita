@@ -61,7 +61,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
 
     # We give this target a long logical target name.
     # (This is to avoid having the library name clash with any already
-    # install library names. If that happens then cmake dependancy
+    # install library names. If that happens then cmake dependency
     # tracking get confused.)
     STRING(REPLACE "." "_" _logical_name ${MODULE_NAME})
     SET(_logical_name "python_module_${_logical_name}")
@@ -100,11 +100,11 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         DEPENDS ${_abs_module_sip} ${SIP_EXTRA_FILES_DEPEND}
     )
     # not sure if type MODULE could be uses anywhere, limit to cygwin for now
-    IF (CYGWIN)
+    IF (WIN32 OR CYGWIN)
         ADD_LIBRARY(${_logical_name} MODULE ${_sip_output_files} )
-    ELSE (CYGWIN)
+    ELSE (WIN32 OR CYGWIN)
         ADD_LIBRARY(${_logical_name} SHARED ${_sip_output_files} )
-    ENDIF (CYGWIN)
+    ENDIF (WIN32 OR CYGWIN)
     TARGET_LINK_LIBRARIES(${_logical_name} ${PYTHON_LIBRARY})
     TARGET_LINK_LIBRARIES(${_logical_name} ${EXTRA_LINK_LIBRARIES})
     SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PREFIX "" OUTPUT_NAME ${_child_module_name})

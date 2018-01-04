@@ -268,7 +268,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              *    so that they would not intersect in the wrapped space.
              *
              * 2) We duplicate dabs, to ensure that all the pieces of dabs are painted
-             *    inside the wraped rect. No pieces are dabs are painted twice, because
+             *    inside the wrapped rect. No pieces are dabs are painted twice, because
              *    we paint only the parts intersecting the wrap rect.
              */
 
@@ -322,7 +322,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
 
         /**
          * After the dab has been rendered once, we should mirror it either one
-         * (h __or__ v) or three (h __and__ v) times. This sequence of 'if's achives
+         * (h __or__ v) or three (h __and__ v) times. This sequence of 'if's achieves
          * the goal without any extra copying. Please note that it has __no__ 'else'
          * branches, which is done intentionally!
          */

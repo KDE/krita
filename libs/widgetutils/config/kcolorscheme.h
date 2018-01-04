@@ -170,7 +170,7 @@ public:
          */
         NeutralBackground = 6,
         /**
-         * Eigth color; for example, success messages, trusted content.
+         * Eighth color; for example, success messages, trusted content.
          */
         PositiveBackground = 7
     };
@@ -232,7 +232,7 @@ public:
          */
         NeutralText = 6,
         /**
-         * Eigth color; for example, additions, success messages, trusted
+         * Eighth color; for example, additions, success messages, trusted
          * content.
          */
         PositiveText = 7

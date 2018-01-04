@@ -468,6 +468,11 @@ void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, 
     config->setProperty("lodUserAllowed", value);
 }
 
+bool KisPaintOpSettings::lodSizeThresholdSupported() const
+{
+    return true;
+}
+
 qreal KisPaintOpSettings::lodSizeThreshold() const
 {
     return getDouble("lodSizeThreshold", 100.0);

@@ -102,6 +102,15 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
+class KisLodSizeThresholdSupportedResourceConverter : public KoDerivedResourceConverter
+{
+public:
+    KisLodSizeThresholdSupportedResourceConverter();
+
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
+};
+
 class KisEraserModeResourceConverter : public KoDerivedResourceConverter
 {
 public:

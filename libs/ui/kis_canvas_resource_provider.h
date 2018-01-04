@@ -62,6 +62,7 @@ public:
         CurrentEffectiveCompositeOp,
         LodAvailability, ///<-user choice
         LodSizeThreshold, ///<-user choice
+        LodSizeThresholdSupported, ///<-paintop property
         EraserMode,
         MirrorHorizontal,
         MirrorVertical,

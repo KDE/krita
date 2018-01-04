@@ -53,6 +53,7 @@ struct KisLodAvailabilityWidget::Private
     KoCanvasResourceManager *resourceManager;
 
     KisPaintopLodLimitations limitations;
+    bool thresholdSupported = true;
 
     bool sizeThresholdPassed();
 };
@@ -119,7 +120,10 @@ void KisLodAvailabilityWidget::showLodToolTip()
 void KisLodAvailabilityWidget::showLodThresholdWidget(const QPoint &pos)
 {
     Q_UNUSED(pos);
-    m_d->thresholdMenu->popup(QCursor::pos());
+
+    if (m_d->thresholdSupported) {
+        m_d->thresholdMenu->popup(QCursor::pos());
+    }
 }
 
 void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
@@ -140,7 +144,12 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
     bool isBlocked = !l.blockers.isEmpty();
     bool isLimited = !l.limitations.isEmpty();
-    bool isBlockedByThreshold = !m_d->sizeThresholdPassed();
+
+    m_d->thresholdSupported =
+        m_d->resourceManager ?
+        m_d->resourceManager->resource(KisCanvasResourceProvider::LodSizeThresholdSupported).toBool() :
+        true;
+    bool isBlockedByThreshold = !m_d->sizeThresholdPassed() && m_d->thresholdSupported;
 
     const QString text = !isBlocked && !isBlockedByThreshold && isLimited ?
         i18n("(Instant Preview)*") : i18n("Instant Preview");

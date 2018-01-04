@@ -290,6 +290,8 @@ public:
     static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
     static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);
 
+    virtual bool lodSizeThresholdSupported() const;
+
     qreal lodSizeThreshold() const;
     void setLodSizeThreshold(qreal value);
 

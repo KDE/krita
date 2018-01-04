@@ -1,3 +1,4 @@
+SET(PREFIX_ext_tiff "${EXTPREFIX}" )
 ExternalProject_Add( ext_tiff
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.9.tar.gz

@@ -2,7 +2,7 @@ SET(PREFIX_ext_png "${EXTPREFIX}" )
 ExternalProject_Add( ext_png
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/libpng-1.6.34.tar.gz
-	URL_MD5 42b801f2defaccb6b6cf1bf783ee1552
+	URL_MD5 03fbc5134830240104e96d3cda648e71
 
 	INSTALL_DIR ${PREFIX_ext_png}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_png} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DPNG_TESTS=OFF

@@ -593,19 +593,19 @@ index 0000000..47f3869
 +       )
 +
 +# Install find cmake script to the system for client applications.
-+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
-+        DESTINATION ${INSTALL_CMAKE_MODULE_PATH})
++#INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
++#        DESTINATION ${INSTALL_CMAKE_MODULE_PATH})
 +
 +# Install doc data files.
-+IF(NOT WIN32)
-+    INSTALL(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/COPYRIGHT
-+                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.CDDL
-+                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.LGPL
-+                        ${CMAKE_CURRENT_SOURCE_DIR}/Changelog.txt
-+            DESTINATION share/libraw
-+            COMPONENT main
-+           )
-+ENDIF()
++#IF(NOT WIN32)
++#    INSTALL(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/COPYRIGHT
++#                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.CDDL
++#                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.LGPL
++#                        ${CMAKE_CURRENT_SOURCE_DIR}/Changelog.txt
++#            DESTINATION share/libraw
++#            COMPONENT main
++#           )
++#ENDIF()
 +
 +# Uninstall rules
 +CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/Uninstall.cmake ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake COPYONLY)

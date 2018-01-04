@@ -1,17 +1,3 @@
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index aecd621..3d574b0 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -206,6 +206,9 @@ SET( EXIV2_HDR            exiv2app.hpp
-                           utils.hpp
- )
- 
-+IF (MINGW)
-+    TARGET_LINK_LIBRARIES( exiv2lib ws2_32 )
-+ENDIF(MINGW)
- 
- # connection test application
- SET( CONNTEST             ../samples/conntest.cpp)
 diff --git a/src/http.cpp b/src/http.cpp
 index 86b7ebb..cc8caf0 100644
 --- a/src/http.cpp

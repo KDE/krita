@@ -8,8 +8,8 @@ if (UNIX)
 
   ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://files.kde.org/krita/build/dependencies/sip-4.18.tar.gz
-        URL_MD5 78724bf2a79878201c3bc81a1d8248ea
+        URL https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.6/sip-4.19.6.tar.gz
+        URL_MD5 6be5cb2c43915ed450a9f74ec110dada
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5
         BUILD_COMMAND make

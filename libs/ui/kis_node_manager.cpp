@@ -1112,13 +1112,13 @@ void KisNodeManager::slotSplitAlphaIntoMask()
     KisSequentialIterator srcIt(srcDevice, processRect);
     KisSequentialIterator dstIt(selectionDevice, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         quint8 *srcPtr = srcIt.rawData();
         quint8 *alpha8Ptr = dstIt.rawData();
 
         *alpha8Ptr = srcCS->opacityU8(srcPtr);
         srcCS->setOpacity(srcPtr, OPACITY_OPAQUE_U8, 1);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     m_d->commandsAdapter.addExtraCommand(transaction.endAndTake());
 
@@ -1175,12 +1175,12 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     KisSequentialIterator srcIt(selectionDevice, processRect);
     KisSequentialIterator dstIt(dstDevice, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         quint8 *alpha8Ptr = srcIt.rawData();
         quint8 *dstPtr = dstIt.rawData();
 
         dstCS->setOpacity(dstPtr, *alpha8Ptr, 1);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     if (writeToLayers) {
         commandsAdapter.addExtraCommand(transaction->endAndTake());

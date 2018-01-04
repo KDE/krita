@@ -415,12 +415,12 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
     const KoColorSpace* cs = device->colorSpace();
 
     bool isThereAlpha = false;
-    do {
+    while (it.nextPixel()) {
         if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
             isThereAlpha = true;
             break;
         }
-    } while (it.nextPixel());
+    }
 
     if (!KisPNGConverter::isColorSpaceSupported(cs)) {
         device = new KisPaintDevice(*device.data());

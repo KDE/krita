@@ -89,9 +89,9 @@ void KisPaintLayerTest::testProjection()
 
     // We've inverted the mask, so now nothing is seen
     KisSequentialConstIterator it(layer->projection(), qimage.rect());
-    do {
+    while (it.nextPixel()) {
         QVERIFY(cs->opacityU8(it.oldRawData()) == OPACITY_TRANSPARENT_U8);
-    } while (it.nextPixel());
+    };
 
     // Now fill the layer with some opaque pixels
     transparencyMask->select(qimage.rect());

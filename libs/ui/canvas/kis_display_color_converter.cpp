@@ -454,7 +454,7 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
     int numChannels = cs->channelCount();
     QVector<float> normalizedChannels(numChannels);
 
-    do {
+    while (it.nextPixel()) {
         cs->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
         displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
@@ -473,7 +473,7 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
         }
 
         dstPtr += 4;
-    } while (it.nextPixel());
+    }
 
     return image;
 }

@@ -716,7 +716,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         const int rightCol = processRect.right();
         KisProgressUpdateHelper progressHelper(progressUpdater(), 100, processRect.height());
 
-        do {
+        while (it.nextPixel()) {
             double t = shapeStrategy->valueAt(it.x(), it.y());
             t = repeatStrategy->valueAt(t);
 
@@ -729,7 +729,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             if (it.x() == rightCol) {
                 progressHelper.step();
             }
-        } while (it.nextPixel());
+        }
 
         bitBlt(processRect.topLeft(), dev, processRect);
     }

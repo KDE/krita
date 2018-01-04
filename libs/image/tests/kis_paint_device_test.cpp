@@ -1420,11 +1420,11 @@ void fillGradientDevice(KisPaintDeviceSP dev, const QRect &rect, bool flat = fal
     } else {
         // fill device with a gradient
         KisSequentialIterator it(dev, rect);
-        do {
+        while (it.nextPixel()) {
             QColor c((10 * it.x()) & 0xFF, (10 * it.y()) & 0xFF, 0, 255);
             KoColor color(c, dev->colorSpace());
             memcpy(it.rawData(), color.data(), dev->pixelSize());
-        } while (it.nextPixel());
+        }
     }
 }
 #include "kis_lod_transform.h"

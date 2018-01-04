@@ -162,14 +162,16 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     if (totalCost == 0) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
-    quint32 npix;
-    do {
-        npix = it.nConseqPixels();
+    quint32 npix = it.nConseqPixels();
+    while(it.nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted())) {
+
         // adjust
+        npix = it.nConseqPixels();
         adj->transform(it.oldRawData(), it.rawData(), npix);
         pixelsProcessed += npix;
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    } while(it.nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
+    }
+
     delete[] transfer;
     delete adj;
 }

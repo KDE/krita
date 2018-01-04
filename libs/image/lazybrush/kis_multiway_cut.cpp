@@ -77,11 +77,11 @@ void KisMultiwayCut::Private::maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice,
         KisSequentialIterator dstIt(keyStrokeDevice, rc);
         KisSequentialConstIterator mskIt(mask, rc);
 
-        do {
+        while (dstIt.nextPixel() && mskIt.nextPixel()) {
             if (*mskIt.rawDataConst() > 0) {
                 *dstIt.rawData() = 0;
             }
-        } while (dstIt.nextPixel() && mskIt.nextPixel());
+        }
     }
 }
 

@@ -242,6 +242,7 @@ void ChannelModel::updateThumbnails(void)
 
         for (int y = 0; y < thumbnailSize.height(); y++) {
             for (int x = 0; x < thumbnailSize.width(); x++) {
+                it.nextPixel();
                 const quint8* pixel = it.rawDataConst();
                 for (int chan = 0; chan < m_channelCount; ++chan) {
                     QImage &img = m_thumbnails[chan];
@@ -252,7 +253,6 @@ void ChannelModel::updateThumbnails(void)
                     img.setPixel(x, y, qRgb(v, v, v));
 #endif
                 }
-                it.nextPixel();
             }
         }
     } else {

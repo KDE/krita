@@ -49,14 +49,14 @@ void KisBContrastBenchmark::initTestCase()
     int r,g,b;
 
     KisSequentialIterator it(m_device, QRect(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT));
-    do {
+    while (it.nextPixel()) {
         r = rand() % 255;
         g = rand() % 255;
         b = rand() % 255;
 
         m_color.fromQColor(QColor(r,g,b));
         memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
-    } while (it.nextPixel());
+    }
 
 }
 

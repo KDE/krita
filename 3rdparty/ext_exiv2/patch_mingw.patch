@@ -1,20 +1,22 @@
-diff a/src/CMakeLists.txt b/src/CMakeLists.txt
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index aecd621..3d574b0 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -291,6 +291,9 @@ IF (CYGWIN OR MINGW)
-     TARGET_LINK_LIBRARIES( exiv2lib psapi )
- ENDIF(CYGWIN OR MINGW)
+@@ -206,6 +206,9 @@ SET( EXIV2_HDR            exiv2app.hpp
+                           utils.hpp
+ )
  
 +IF (MINGW)
 +    TARGET_LINK_LIBRARIES( exiv2lib ws2_32 )
 +ENDIF(MINGW)
  
- INSTALL( TARGETS exiv2lib ${INSTALL_TARGET_STANDARD_ARGS} )
- 
-diff a/src/http.cpp b/src/http.cpp
+ # connection test application
+ SET( CONNTEST             ../samples/conntest.cpp)
+diff --git a/src/http.cpp b/src/http.cpp
+index 86b7ebb..cc8caf0 100644
 --- a/src/http.cpp
 +++ b/src/http.cpp
-@@ -53,7 +53,7 @@ 
+@@ -59,7 +59,7 @@
  #include <string.h>
  #include <windows.h>
  #include <io.h>

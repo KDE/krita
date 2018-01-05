@@ -26,23 +26,23 @@
 
 #include <KoIcon.h>
 
-
 #include "kis_config.h"
+#include "PythonPluginManager.h"
 
 
-PyQtPluginSettings::PyQtPluginSettings(PyKrita::Engine *engine, QWidget *parent) :
+PyQtPluginSettings::PyQtPluginSettings(PythonPluginManager *pluginManager, QWidget *parent) :
     KisPreferenceSet(parent),
     m_manager(new Ui::ManagerPage)
 {
     m_manager->setupUi(this);
 
     QSortFilterProxyModel* const proxy_model = new QSortFilterProxyModel(this);
-    proxy_model->setSourceModel(engine);
+    proxy_model->setSourceModel(pluginManager->model());
     m_manager->pluginsList->setModel(proxy_model);
     m_manager->pluginsList->resizeColumnToContents(0);
     m_manager->pluginsList->sortByColumn(0, Qt::AscendingOrder);
 
-    const bool is_enabled = bool(engine);
+    const bool is_enabled = bool(pluginManager);
     const bool is_visible = !is_enabled;
     m_manager->errorLabel->setVisible(is_visible);
     m_manager->pluginsList->setEnabled(is_enabled);

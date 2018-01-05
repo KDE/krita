@@ -116,6 +116,11 @@ echo                                 the script location
 echo --deps-install-dir ^<dir_path^>   Specify deps install dir
 echo --krita-install-dir ^<dir_path^>  Specify Krita install dir
 echo.
+echo Special options:
+echo --pre-zip-hook ^<script_path^>    Specify a script to be called before
+echo                                 packaging the zip archive, can be used to
+echo                                 sign the binaries
+echo.
 goto :EOF
 :usage_and_exit
 call :usage
@@ -138,6 +143,7 @@ set ARG_PACKAGE_NAME=
 set ARG_SRC_DIR=
 set ARG_DEPS_INSTALL_DIR=
 set ARG_KRITA_INSTALL_DIR=
+set ARG_PRE_ZIP_HOOK=
 :args_parsing_loop
 set CURRENT_MATCHED=
 if not "%1" == "" (
@@ -205,6 +211,26 @@ if not "%1" == "" (
         shift /2
         set CURRENT_MATCHED=1
     )
+    if "%1" == "--pre-zip-hook" (
+        if not "%ARG_PRE_ZIP_HOOK%" == "" (
+            echo ERROR: Arg --pre-zip-hook specified more than once 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        if "%~f2" == "" (
+            echo ERROR: Arg --pre-zip-hook does not point to a valid path 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        call :get_full_path ARG_PRE_ZIP_HOOK "%~f2"
+        if "!ARG_PRE_ZIP_HOOK!" == "" (
+            echo ERROR: Arg --pre-zip-hook does not point to a valid file 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        shift /2
+        set CURRENT_MATCHED=1
+    )
     if "%1" == "--help" (
         goto usage_and_exit
     )
@@ -219,7 +245,7 @@ if not "%1" == "" (
 
 if "%ARG_NO_INTERACTIVE%" == "1" (
     if "%ARG_PACKAGE_NAME%" == "" (
-        echo ERROR: Required arg --package-name not specified1>&2
+        echo ERROR: Required arg --package-name not specified! 1>&2
         echo.
         goto usage_and_fail
     )
@@ -567,6 +593,7 @@ for /f "delims=" %%F in ('dir /b "%DEPS_INSTALL_DIR%\translations\qt_*.qm"') do 
 endlocal
 :: Krita plugins
 xcopy /Y %KRITA_INSTALL_DIR%\lib\kritaplugins\*.dll %pkg_root%\lib\kritaplugins\
+xcopy /Y /S /I %KRITA_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 
 :: Share
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\color %pkg_root%\share\color
@@ -654,7 +681,23 @@ for /r "%pkg_root%\share\krita\pykrita\" %%F in (*.pyd) do (
 	set relpath=!relpath:~%pkg_root_len_plus_one%!
 	call :split-debug "%%F" !relpath!
 )
+for /r "%pkg_root%\lib\krita-python-libs\" %%F in (*.pyd) do (
+	set relpath=%%F
+	set relpath=!relpath:~%pkg_root_len_plus_one%!
+	call :split-debug "%%F" !relpath!
+)
 endlocal
+
+if not "%ARG_PRE_ZIP_HOOK%" == "" (
+    echo Running pre-zip-hook...
+    setlocal
+    cmd /c ""%ARG_PRE_ZIP_HOOK%" "%pkg_root%\""
+    if errorlevel 1 (
+        echo ERROR: Got exit code !errorlevel! from pre-zip-hook! 1>&2
+        exit /b 1
+    )
+    endlocal
+)
 
 echo.
 echo Packaging stripped binaries...

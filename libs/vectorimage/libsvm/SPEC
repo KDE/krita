@@ -587,7 +587,7 @@ polygon         The polygon to draw
 
 penInfos        The pen style to apply
 
-polygonFlags    Indicate the presence of extra polygon informations
+polygonFlags    Indicate the presence of extra polygon information
 ....... FIXME: next part is complicated...
 
 
@@ -613,7 +613,7 @@ polygon         The polygon to draw
 
 penInfos        The pen style to apply
 
-polygonFlags    Indicate the presence of extra polygon informations
+polygonFlags    Indicate the presence of extra polygon information
 ....... FIXME: next part is complicated...
 
 

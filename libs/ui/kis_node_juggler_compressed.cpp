@@ -44,7 +44,7 @@
  *        we store it separately.
  *
  *     2) This objects allows merging (compressing) multiple moves of
- *        a layer into a signle action. This behavior is implemented
+ *        a layer into a single action. This behavior is implemented
  *        in tryMerge() method.
  */
 struct MoveNodeStruct {
@@ -244,7 +244,7 @@ public:
         } else {
             /**
              * When being executed by real undo/redo operations, we
-             * should emit all the update signals. Noone else will do
+             * should emit all the update signals. No one else will do
              * that for us (juggler, which did it in the previous
              * case, might have already died).
              */

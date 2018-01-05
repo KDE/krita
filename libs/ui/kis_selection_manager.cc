@@ -2,7 +2,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  The outline algorith uses the limn algorithm of fontutils by
+ *  The outline algorithm uses the limn algorithm of fontutils by
  *  Karl Berry <karl@cs.umb.edu> and Kathryn Hargreaves <letters@cs.umb.edu>
  *
  *  This program is free software; you can redistribute it and/or modify

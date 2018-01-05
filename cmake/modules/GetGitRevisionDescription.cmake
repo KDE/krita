@@ -53,12 +53,16 @@ function(get_git_head_revision _refspecvar _hashvar)
 		endif()
 		set(GIT_DIR "${GIT_PARENT_DIR}/.git")
 	endwhile()
-	# check if this is a submodule
+	# check if this is a linked working tree (e.g. submodule or git-worktree)
 	if(NOT IS_DIRECTORY ${GIT_DIR})
-		file(READ ${GIT_DIR} submodule)
-		string(REGEX REPLACE "gitdir: (.*)\n$" "\\1" GIT_DIR_RELATIVE ${submodule})
-		get_filename_component(SUBMODULE_DIR ${GIT_DIR} PATH)
-		get_filename_component(GIT_DIR ${SUBMODULE_DIR}/${GIT_DIR_RELATIVE} ABSOLUTE)
+		file(READ ${GIT_DIR} gitdirfile)
+		string(REGEX REPLACE "gitdir: (.*)\n$" "\\1" GIT_DIR_PATH ${gitdirfile})
+		if(IS_ABSOLUTE ${GIT_DIR_PATH})
+			get_filename_component(GIT_DIR ${GIT_DIR_PATH} ABSOLUTE)
+		else()
+			get_filename_component(LINKED_DIR ${GIT_DIR} PATH)
+			get_filename_component(GIT_DIR ${LINKED_DIR}/${GIT_DIR_PATH} ABSOLUTE)
+		endif()
 	endif()
 	set(GIT_DATA "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/git-data")
 	if(NOT EXISTS "${GIT_DATA}")
@@ -109,6 +113,33 @@ function(git_describe _var)
 		describe
 		${hash}
 		${ARGN}
+		WORKING_DIRECTORY
+		"${CMAKE_SOURCE_DIR}"
+		RESULT_VARIABLE
+		res
+		OUTPUT_VARIABLE
+		out
+		ERROR_QUIET
+		OUTPUT_STRIP_TRAILING_WHITESPACE)
+	if(NOT res EQUAL 0)
+		set(out "${out}-${res}-NOTFOUND")
+	endif()
+
+	set(${_var} "${out}" PARENT_SCOPE)
+endfunction()
+
+function(get_git_head_hash _var)
+	if(NOT GIT_FOUND)
+		find_package(Git QUIET)
+	endif()
+	if(NOT GIT_FOUND)
+		set(${_var} "GIT-NOTFOUND" PARENT_SCOPE)
+		return()
+	endif()
+
+	execute_process(COMMAND
+		"${GIT_EXECUTABLE}"
+		rev-parse --verify HEAD
 		WORKING_DIRECTORY
 		"${CMAKE_SOURCE_DIR}"
 		RESULT_VARIABLE

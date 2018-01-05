@@ -601,7 +601,7 @@ public Q_SLOTS:
     /**
      * @brief setGuidesLocked
      * set guides locked on this document
-     * @param locked wether or not to lock the guides on this document.
+     * @param locked whether or not to lock the guides on this document.
      */
     void setGuidesLocked(bool locked);
 

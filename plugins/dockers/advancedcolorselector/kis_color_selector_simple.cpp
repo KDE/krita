@@ -131,7 +131,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     Gamma = cfg.readEntry("gamma", 2.2);
     m_parent->converter()->getHsvF(color, &hsvH, &hsvS, &hsvV);
     m_parent->converter()->getHslF(color, &hslH, &hslS, &hslL);
-    //here we add our convertor options
+    //here we add our converter options
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
 

@@ -44,8 +44,8 @@
  * This class implements a R-tree as described in
  * "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antomn Guttman
  *
- * It only supports 2 dimensional bounding boxes which are repesented by a QRectF.
- * For node splitting the Quadratic-Cost Algorithm is used as descibed by Guttman.
+ * It only supports 2 dimensional bounding boxes which are represented by a QRectF.
+ * For node splitting the Quadratic-Cost Algorithm is used as described by Guttman.
  */
 template <typename T>
 class KoRTree
@@ -737,7 +737,7 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
             /**
              * WARNING: here we leave the tree in an inconsistent state! 'reinsert'
              *          nodes may still be kept in m_leafMap structure, but we will
-             *          *not* remove them for the efficiency reasons. They are guarenteed
+             *          *not* remove them for the efficiency reasons. They are guaranteed
              *          to be readded in remove().
              */
 

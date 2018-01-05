@@ -132,7 +132,7 @@ void KoTextEditor::Private::documentCommandAdded()
         debugText << "commandStack count is now: " << commandStack.count();
     }
     else if ((editorState == KeyPress || editorState == Delete) && !commandStack.isEmpty() && commandStack.top()->childCount()) {
-        //QTextDocument emits a signal on the first key press (or delte) and "merges" the subsequent ones, until an incompatible one is done. In which case it re-emit a signal.
+        //QTextDocument emits a signal on the first key press (or delete) and "merges" the subsequent ones, until an incompatible one is done. In which case it re-emit a signal.
         //Here we are in KeyPress (or Delete) state. The fact that the commandStack isn't empty and its top command has children means that we just received such a signal. We therefore need to pop the previous headCommand (which were either key press or delete) and create a new one to parent the UndoTextCommands. This command also need to be pushed on the application's stack.
         debugText << "we are in subsequent keyPress/delete state and still received a signal. we need to create a new headCommand: " << commandTitle;
         debugText << "so we pop the current one and push the new one on both the commandStack and the application's stack";

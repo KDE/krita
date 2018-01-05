@@ -28,8 +28,6 @@
 
 #include "KoOdfStylesReader.h"
 
-#include <QXmlStreamReader>
-
 class Q_DECL_HIDDEN KoOdfReadStore::Private
 {
 public:

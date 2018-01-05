@@ -36,6 +36,8 @@ public:
         : showGuides(false)
         , snapToGuides(false)
         , lockGuides(false)
+        , rulersMultiple2(false)
+        , unitType(KoUnit::Pixel)
     {}
 
     bool operator==(const Private &rhs) {
@@ -45,7 +47,9 @@ public:
             snapToGuides == rhs.snapToGuides &&
             lockGuides == rhs.lockGuides &&
             guidesColor == rhs.guidesColor &&
-            guidesLineType == rhs.guidesLineType;
+            guidesLineType == rhs.guidesLineType &&
+            rulersMultiple2 == rhs.rulersMultiple2 &&
+            unitType == rhs.unitType;
     }
 
     QList<qreal> horzGuideLines;
@@ -54,6 +58,9 @@ public:
     bool showGuides;
     bool snapToGuides;
     bool lockGuides;
+    bool rulersMultiple2;
+
+    KoUnit::Type unitType;
 
     QColor guidesColor;
     LineTypeInternal guidesLineType;
@@ -149,6 +156,26 @@ void KisGuidesConfig::setSnapToGuides(bool value)
     d->snapToGuides = value;
 }
 
+bool KisGuidesConfig::rulersMultiple2() const
+{
+    return d->rulersMultiple2;
+}
+
+void KisGuidesConfig::setRulersMultiple2(bool value)
+{
+    d->rulersMultiple2 = value;
+}
+
+KoUnit::Type KisGuidesConfig::unitType() const
+{
+    return d->unitType;
+}
+
+void KisGuidesConfig::setUnitType(const KoUnit::Type type)
+{
+    d->unitType = type;
+}
+
 KisGuidesConfig::LineTypeInternal
 KisGuidesConfig::guidesLineType() const
 {
@@ -222,6 +249,10 @@ QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) co
     KisDomUtils::saveValue(&guidesElement, "horizontalGuides", d->horzGuideLines.toVector());
     KisDomUtils::saveValue(&guidesElement, "verticalGuides", d->vertGuideLines.toVector());
 
+    KisDomUtils::saveValue(&guidesElement, "rulersMultiple2", d->rulersMultiple2);
+    KoUnit tmp(d->unitType);
+    KisDomUtils::saveValue(&guidesElement, "unit", tmp.symbol());
+
     return guidesElement;
 }
 
@@ -242,5 +273,24 @@ bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
     d->horzGuideLines = QList<qreal>::fromVector(hGuides);
     d->vertGuideLines = QList<qreal>::fromVector(vGuides);
 
+    result &= KisDomUtils::loadValue(parent, "rulersMultiple2", &d->rulersMultiple2);
+    QString unit;
+    result &= KisDomUtils::loadValue(parent, "unit", &unit);
+    bool ok = false;
+    KoUnit tmp = KoUnit::fromSymbol(unit, &ok);
+    if (ok) {
+        d->unitType = tmp.type();
+    }
+    result &= ok;
+
+
     return result;
+}
+
+bool KisGuidesConfig::isDefault() const
+{
+    KisGuidesConfig defaultObject;
+    defaultObject.loadStaticData();
+
+    return *this == defaultObject;
 }

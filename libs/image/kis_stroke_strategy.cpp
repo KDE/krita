@@ -25,8 +25,6 @@
 KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
     : m_exclusive(false),
       m_supportsWrapAroundMode(false),
-      m_needsIndirectPainting(false),
-      m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_clearsRedoOnStart(true),
       m_requestsOtherStrokesToEnd(true),
       m_canForgetAboutMe(false),
@@ -41,8 +39,6 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
 KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
     : m_exclusive(rhs.m_exclusive),
       m_supportsWrapAroundMode(rhs.m_supportsWrapAroundMode),
-      m_needsIndirectPainting(rhs.m_needsIndirectPainting),
-      m_indirectPaintingCompositeOp(rhs.m_indirectPaintingCompositeOp),
       m_clearsRedoOnStart(rhs.m_clearsRedoOnStart),
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
       m_canForgetAboutMe(rhs.m_canForgetAboutMe),
@@ -139,16 +135,6 @@ bool KisStrokeStrategy::supportsWrapAroundMode() const
     return m_supportsWrapAroundMode;
 }
 
-bool KisStrokeStrategy::needsIndirectPainting() const
-{
-    return m_needsIndirectPainting;
-}
-
-QString KisStrokeStrategy::indirectPaintingCompositeOp() const
-{
-    return m_indirectPaintingCompositeOp;
-}
-
 QString KisStrokeStrategy::id() const
 {
     return m_id;
@@ -187,16 +173,6 @@ void KisStrokeStrategy::setExclusive(bool value)
 void KisStrokeStrategy::setSupportsWrapAroundMode(bool value)
 {
     m_supportsWrapAroundMode = value;
-}
-
-void KisStrokeStrategy::setNeedsIndirectPainting(bool value)
-{
-    m_needsIndirectPainting = value;
-}
-
-void KisStrokeStrategy::setIndirectPaintingCompositeOp(const QString &id)
-{
-    m_indirectPaintingCompositeOp = id;
 }
 
 bool KisStrokeStrategy::clearsRedoOnStart() const

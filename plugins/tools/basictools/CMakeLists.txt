@@ -2,8 +2,6 @@ if (NOT APPLE)
     add_subdirectory(tests)
 endif ()
 
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-
 set(kritadefaulttools_SOURCES
     default_tools.cc
     kis_tool_colorpicker.cc

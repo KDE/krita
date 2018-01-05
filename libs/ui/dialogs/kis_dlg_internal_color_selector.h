@@ -81,7 +81,7 @@ public:
 
     /**
      * @brief getModalColorDialog
-     * Excecute this dialog modally. The function returns
+     * Execute this dialog modally. The function returns
      * the KoColor you want.
      * @param color - The current color. Make sure this is in the color space you want your
      * end color to be in.

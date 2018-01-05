@@ -240,10 +240,10 @@ void KisLayerManager::layerProperties()
     if (!m_view->document()) return;
 
     KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     const bool multipleLayersSelected = selectedNodes.size() > 1;
-
-    if (!layer) return;
 
     KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()));
     KisGeneratorLayerSP glayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));

@@ -109,7 +109,7 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     QTest::qWait(2000);
     p.image->waitForDone();
 
-    // check whether the defalt bounds of the file layer are
+    // check whether the default bounds of the file layer are
     // initialized properly
     QCOMPARE(flayer->original()->defaultBounds()->bounds(), p.image->bounds());
 

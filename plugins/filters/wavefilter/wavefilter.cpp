@@ -155,13 +155,13 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     
     KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
-    do {
+    while (dstIt.nextPixel()) {
         double xv = horizontalcurve->valueAt(dstIt.y(), dstIt.x());
         double yv = verticalcurve->valueAt(dstIt.x(), dstIt.y());
         srcRSA->moveTo(QPointF(xv, yv));
         srcRSA->sampledOldRawData(dstIt.rawData());
         if (progressUpdater) progressUpdater->setProgress((++count) / cost);
-    } while (dstIt.nextPixel());
+    }
     delete horizontalcurve;
     delete verticalcurve;
 }

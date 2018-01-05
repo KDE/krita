@@ -158,6 +158,11 @@ void KisCurveWidget::reset(void)
     emit pointSelectedChanged();
     d->m_guideVisible = false;
 
+    //remove total - 2 points.
+    while (d->m_curve.points().count() - 2 ) {
+        d->m_curve.removePoint(d->m_curve.points().count() - 2);
+    }
+
     d->setCurveModified();
 }
 

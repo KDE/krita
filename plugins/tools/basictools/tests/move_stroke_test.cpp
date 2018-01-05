@@ -44,11 +44,8 @@ protected:
         activeNode->original()->convertFromQImage(src, 0);
     }
 
-    KisStrokeStrategy* createStroke(bool indirectPainting,
-                                    KisResourcesSnapshotSP resources,
+    KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,
                                     KisImageWSP image) override {
-
-        Q_UNUSED(indirectPainting);
 
         KisNodeSP node = resources->currentNode();
         return new MoveStrokeStrategy({node}, image.data(), image.data());

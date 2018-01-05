@@ -215,7 +215,7 @@ public Q_SLOTS:
     void setInheritAlpha(bool value);
 
     /**
-     * @brief locked checkes whether the Node is locked. A locked node cannot be changed.
+     * @brief locked checks whether the Node is locked. A locked node cannot be changed.
      * @return true if the Node is locked, false if it hasn't been locked.
      */
     bool locked() const;
@@ -437,7 +437,7 @@ public Q_SLOTS:
     Node* duplicate();
 
     /**
-     * @brief save exports the given node with this filename. The extension of the filename determins the filetype.
+     * @brief save exports the given node with this filename. The extension of the filename determines the filetype.
      * @param filename the filename including extension
      * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)

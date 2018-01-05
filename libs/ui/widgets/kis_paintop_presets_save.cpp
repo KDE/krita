@@ -73,7 +73,7 @@ void KisPresetSaveWidget::showDialog()
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
     // UI will look a bit different if we are saving a new brush
-    if (m_isSavingNewBrush) {
+    if (m_useNewBrushDialog) {
            setWindowTitle(i18n("Save New Brush Preset"));
            newBrushNameTexField->setVisible(true);
            clearBrushPresetThumbnailButton->setVisible(true);
@@ -165,18 +165,18 @@ void KisPresetSaveWidget::savePreset()
 
     m_favoriteResourceManager->setBlockUpdates(true);
 
-    KisPaintOpPresetSP oldPreset = curPreset->clone();
+    KisPaintOpPresetSP oldPreset = curPreset->clone(); // tags are not cloned with this
     oldPreset->load();
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
 
     // if we are saving a new brush, use what we type in for the input
-    QString presetName = m_isSavingNewBrush ? newBrushNameTexField->text() : curPreset->name();
-
+    QString presetName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
     QString currentPresetFileName = saveLocation + presetName + curPreset->defaultFileExtension();
+    bool isSavingOverExistingPreset = rServer->resourceByName(presetName);
 
-    // if the preset already exists, make a back up of it
-    if (rServer->resourceByName(presetName)) {
+    // make a back up of the existing preset if we are saving over it
+    if (isSavingOverExistingPreset) {
         QString currentDate = QDate::currentDate().toString(Qt::ISODate);
         QString currentTime = QTime::currentTime().toString(Qt::ISODate);
         QString presetFilename = saveLocation + presetName + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
@@ -185,9 +185,10 @@ void KisPresetSaveWidget::savePreset()
         oldPreset->setPresetDirty(false);
         oldPreset->setValid(true);
 
-        // add resource to the blacklist
+        // add backup resource to the blacklist
         rServer->addResource(oldPreset);
         rServer->removeResourceAndBlacklist(oldPreset.data());
+
 
         QStringList tags;
         tags = rServer->assignedTagsList(curPreset.data());
@@ -196,7 +197,8 @@ void KisPresetSaveWidget::savePreset()
         }
     }
 
-    if (m_isSavingNewBrush) {
+
+    if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone();
         newPreset->setFilename(currentPresetFileName);
         newPreset->setName(presetName);
@@ -204,14 +206,24 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setPresetDirty(false);
         newPreset->setValid(true);
 
+
+        // keep tags if we are saving over existing preset
+        if (isSavingOverExistingPreset) {
+            QStringList tags;
+            tags = rServer->assignedTagsList(curPreset.data());
+            Q_FOREACH (const QString & tag, tags) {
+                rServer->addTag(newPreset.data(), tag);
+            }
+        }
+
         rServer->addResource(newPreset);
 
         // trying to get brush preset to load after it is created
         emit resourceSelected(newPreset.data());
+    }
+    else { // saving a preset that is replacing an existing one
 
-    } else {
-
-        if (curPreset->filename().contains(saveLocation)==false || curPreset->filename().contains(presetName)==false) {
+        if (curPreset->filename().contains(saveLocation) == false || curPreset->filename().contains(presetName) == false) {
             rServer->removeResourceAndBlacklist(curPreset.data());
             curPreset->setFilename(currentPresetFileName);
             curPreset->setName(presetName);
@@ -239,15 +251,17 @@ void KisPresetSaveWidget::savePreset()
 
 }
 
+
+
 void KisPresetSaveWidget::saveScratchPadThumbnailArea(QImage image)
 {
     scratchPadThumbnailArea = image;
 }
 
 
-void KisPresetSaveWidget::isSavingNewBrush(bool newBrush)
+void KisPresetSaveWidget::useNewBrushDialog(bool show)
 {
-    m_isSavingNewBrush = newBrush;
+    m_useNewBrushDialog = show;
 }
 
 

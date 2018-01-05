@@ -113,7 +113,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
 
     KisSequentialConstIterator srcIt(srcLAB, applyRect);
 
-    do {
+    while (srcIt.nextPixel() && !(progressUpdater && progressUpdater->interrupted())) {
         const quint16* data = reinterpret_cast<const quint16*>(srcIt.oldRawData());
         quint32 L = data[0];
         quint32 A = data[1];
@@ -125,7 +125,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
         sigmaA_src += A * A;
         sigmaB_src += B * B;
         if (progressUpdater) progressUpdater->setValue(++count);
-    } while (srcIt.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
+    }
     
     double totalSize = 1. / (applyRect.width() * applyRect.height());
     meanL_src *= totalSize;

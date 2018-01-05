@@ -297,7 +297,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
     delegates << this;
     KoShape *textShape = 0;
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get("TextShapeID");
-    if (factory) { // not installed, thats too bad, but allowed
+    if (factory) { // not installed, that's too bad, but allowed
         textShape = factory->createDefaultShape(documentResources);
         Q_ASSERT(textShape); // would be a bug in the text shape;
         if (d->resizeBehavior == TextFollowsPreferredTextRect) {

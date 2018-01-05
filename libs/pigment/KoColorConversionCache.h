@@ -64,7 +64,7 @@ private:
 /**
  * This class hold a cached color conversion. It can only be created
  * by the cache and when it's deleted it return the transformation to
- * the pool of available color convertion transformation.
+ * the pool of available color conversion transformation.
  *
  * This class is not part of public API, and can be changed without notice.
  */

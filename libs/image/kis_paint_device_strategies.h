@@ -212,6 +212,10 @@ public:
         return m_wrapRect;
     }
 
+    void setWrapRect(const QRect &rc) {
+        m_wrapRect = rc;
+    }
+
     void move(const QPoint& pt) override {
         QPoint offset (pt.x() - m_device->x(), pt.y() - m_device->y());
 

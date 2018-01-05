@@ -111,7 +111,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
     connect((QObject*)(m_page->chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(logHistView()));
-
+    connect((QObject*)(m_page->resetButton), SIGNAL(clicked()), this, SLOT(resetCurve()));
 
     // create the horizontal and vertical gradient labels
     m_page->hgradient->setPixmap(createGradient(Qt::Horizontal));
@@ -193,11 +193,13 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
 
     const VirtualChannelInfo &info = m_virtualChannels[m_activeVChannel];
 
+
     if (m_histogram && info.type() == VirtualChannelInfo::REAL)
     {
         m_histogram->setChannel(info.pixelIndex());
 
         double highest = (double)m_histogram->calculations().getHighest();
+
         qint32 bins = m_histogram->producer()->numberOfBins();
 
         if (m_histogram->getHistogramType() == LINEAR) {
@@ -628,4 +630,9 @@ bool KisPerChannelFilter::needsTransparentPixels(const KisFilterConfigurationSP 
 void KisPerChannelConfigWidget::logHistView()
 {
     m_page->curveWidget->setPixmap(getHistogram());
+}
+
+void KisPerChannelConfigWidget::resetCurve()
+{
+        m_page->curveWidget->reset();
 }

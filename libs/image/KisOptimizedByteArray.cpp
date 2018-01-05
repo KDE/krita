@@ -23,6 +23,11 @@
 
 #include <string.h>
 
+namespace {
+
+/*****************************************************************/
+/*         DefaultMemoryAllocator                                */
+/*****************************************************************/
 
 struct DefaultMemoryAllocator : KisOptimizedByteArray::MemoryAllocator
 {
@@ -34,16 +39,42 @@ struct DefaultMemoryAllocator : KisOptimizedByteArray::MemoryAllocator
         // chunk.first might be null
         delete[] chunk.first;
     }
-
-    static DefaultMemoryAllocator* instance();
 };
 
-Q_GLOBAL_STATIC(DefaultMemoryAllocator, s_instance);
 
-DefaultMemoryAllocator *DefaultMemoryAllocator::instance()
+/*****************************************************************/
+/*         DefaultMemoryAllocatorStore                           */
+/*****************************************************************/
+
+struct DefaultMemoryAllocatorStore {
+    static DefaultMemoryAllocatorStore* instance();
+
+    DefaultMemoryAllocatorStore()
+        : m_allocator(new DefaultMemoryAllocator())
+    {
+    }
+
+    inline KisOptimizedByteArray::MemoryAllocatorSP allocator() const {
+        return m_allocator;
+    }
+
+private:
+    KisOptimizedByteArray::MemoryAllocatorSP m_allocator;
+};
+
+Q_GLOBAL_STATIC(DefaultMemoryAllocatorStore, s_instance);
+
+DefaultMemoryAllocatorStore *DefaultMemoryAllocatorStore::instance()
 {
     return s_instance;
 }
+
+} // namespace
+
+
+/*****************************************************************/
+/*         KisOptimizedByteArray::PooledMemoryAllocator          */
+/*****************************************************************/
 
 KisOptimizedByteArray::PooledMemoryAllocator::PooledMemoryAllocator()
     : m_meanSize(500)
@@ -98,16 +129,19 @@ void KisOptimizedByteArray::PooledMemoryAllocator::free(KisOptimizedByteArray::M
     }
 }
 
+
+/*****************************************************************/
+/*         KisOptimizedByteArray::Private                        */
+/*****************************************************************/
+
 struct KisOptimizedByteArray::Private : public QSharedData
 {
     Private(MemoryAllocatorSP _allocator)
     {
-        if (_allocator) {
-            storedAllocator = _allocator;
-            allocator = _allocator.data();
-        } else {
-            allocator = DefaultMemoryAllocator::instance();
-        }
+        storedAllocator =
+            _allocator ? _allocator : DefaultMemoryAllocatorStore::instance()->allocator();
+
+        allocator = storedAllocator.data();
     }
 
     Private(const Private &rhs)
@@ -129,13 +163,18 @@ struct KisOptimizedByteArray::Private : public QSharedData
     MemoryAllocator *allocator;
 
     // stored allocator shared pointer is used only for keeping
-    // the lifetime of the allocator until the deatch of the last
+    // the lifetime of the allocator until the detach of the last
     // allocated chunk
     MemoryAllocatorSP storedAllocator;
 
     MemoryChunk data;
     int dataSize = 0;
 };
+
+
+/*****************************************************************/
+/*         KisOptimizedByteArray                                 */
+/*****************************************************************/
 
 KisOptimizedByteArray::KisOptimizedByteArray(MemoryAllocatorSP allocator)
     : m_d(new Private(allocator))

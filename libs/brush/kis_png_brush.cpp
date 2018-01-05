@@ -38,7 +38,6 @@ KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
     : KisScalingSizeBrush(rhs)
 {
     setSpacing(rhs.spacing());
-    setBrushTipImage(rhs.brushTipImage());
     if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);

@@ -177,7 +177,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
         else if (key == "lyid") {
 
         }
-        else if (key == "lfx2") {
+        else if (key == "lfx2" || key == "lfxs") {
+            // lfxs is a special variant of layer styles for group layers
+
             KisAslReader reader;
             layerStyleXml = reader.readLfx2PsdSection(io);
         }
@@ -376,10 +378,11 @@ void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice* io, psd_section_ty
     KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
 }
 
-void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc)
+void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat)
 {
     KisAslWriterUtils::writeFixedString("8BIM", io);
-    KisAslWriterUtils::writeFixedString("lfx2", io);
+    // 'lfxs' format is used for Group layers in PS
+    KisAslWriterUtils::writeFixedString(!useLfxsLayerStyleFormat ? "lfx2" : "lfxs", io);
     KisAslWriterUtils::OffsetStreamPusher<quint32> lfx2SizeTag(io, 2);
 
     try {

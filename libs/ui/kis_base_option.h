@@ -32,7 +32,7 @@
  * Motivation:
  * In quite a lot of places we call some options from the KisPaintOpSettings
  * class itself with patting 'this' as a parameter into
- * read/writeOptionSetting(). Convertion of 'this' into a shared pointer is
+ * read/writeOptionSetting(). Conversion of 'this' into a shared pointer is
  * extremely dangerous, and, ideally, should be prohibited. We cannot prohibit
  * it atm, but we still can create a special interface for accepting raw pointers,
  * which will be used automatically, when 'this' is passed.

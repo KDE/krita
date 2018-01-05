@@ -447,7 +447,7 @@ void KisCompositeOpComboBox::slotPinLight()
 
 void KisCompositeOpComboBox::slotHardMix()
 {
-    selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX));
+    selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_PHOTOSHOP));
 }
 
 void KisCompositeOpComboBox::slotDifference()

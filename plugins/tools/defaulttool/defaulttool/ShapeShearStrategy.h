@@ -64,7 +64,7 @@ private:
     QTransform m_shearMatrix;
     bool m_isMirrored;
     QList<QTransform> m_oldTransforms;
-    QList<KoShape *> m_selectedShapes;
+    QList<KoShape *> m_transformedShapesAndSelection;
 };
 
 #endif

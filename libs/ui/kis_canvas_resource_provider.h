@@ -61,6 +61,8 @@ public:
         CurrentCompositeOp,
         CurrentEffectiveCompositeOp,
         LodAvailability, ///<-user choice
+        LodSizeThreshold, ///<-user choice
+        LodSizeThresholdSupported, ///<-paintop property
         EraserMode,
         MirrorHorizontal,
         MirrorVertical,
@@ -76,7 +78,6 @@ public:
         DisablePressure,
         PreviousPaintOpPreset,
         EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
-        PresetAllowsLod, ///<-combination of the user choice and thechnical abilities of the preset
         SelectionAction,
         SelectionMode
     };

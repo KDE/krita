@@ -27,6 +27,8 @@
 #include <QColorDialog>
 #include "dialogs/kis_dlg_internal_color_selector.h"
 
+#include "kis_signals_blocker.h"
+
 #include <QBrush>
 #include <QDrag>
 #include <QDragEnterEvent>
@@ -152,7 +154,14 @@ QSize KoDualColorButton::sizeHint() const
 void KoDualColorButton::setForegroundColor( const KoColor &color )
 {
   d->foregroundColor = color;
-  d->colorSelectorDialog->slotColorUpdated(color);
+  {
+      /**
+       * The internal color selector might emit the color of a different profile, so
+       * we should break this cycling dependency somehow.
+       */
+      KisSignalsBlocker b(d->colorSelectorDialog);
+      d->colorSelectorDialog->slotColorUpdated(color);
+  }
   repaint();
 }
 

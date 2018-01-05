@@ -148,11 +148,11 @@ void mapPixelValues(KisPixelSelectionSP srcSelection,
     KisSequentialConstIterator srcIt(srcSelection, applyRect);
     KisSequentialIterator dstIt(dstSelection, applyRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *dstPtr = dstIt.rawData();
         *dstPtr = mapTable[*srcPtr];
-    } while(srcIt.nextPixel() && dstIt.nextPixel());
+    }
 }
 
 template <class MapOp>
@@ -173,10 +173,10 @@ void mapPixelValues(KisPixelSelectionSP dstSelection,
 
     KisSequentialIterator dstIt(dstSelection, applyRect);
 
-    do {
+    while (dstIt.nextPixel()) {
         quint8 *dstPtr = dstIt.rawData();
         *dstPtr = mapTable[*dstPtr];
-    } while(dstIt.nextPixel());
+    }
 }
 
 struct BevelEmbossRectCalculator

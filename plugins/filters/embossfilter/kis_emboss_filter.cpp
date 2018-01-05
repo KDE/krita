@@ -107,7 +107,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     QColor color1;
     QColor color2;
     KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
-    do {
+    while (it.nextPixel()) {
     
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
         device->colorSpace()->toQColor(it.oldRawData(), &color1);
@@ -123,7 +123,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
 
         device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it.rawData());
         if (progressUpdater) { progressUpdater->setValue(it.y()); if(progressUpdater->interrupted()) return; }
-    } while(it.nextPixel());
+    }
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -23,7 +23,6 @@ include_directories(
 
 include_Directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 if(HAVE_VC)
@@ -141,6 +140,11 @@ ecm_add_test(kis_asl_parser_test.cpp
 ecm_add_test(KisPerStrokeRandomSourceTest.cpp
     TEST_NAME KisPerStrokeRandomSourceTest
     LINK_LIBRARIES kritaimage Qt5::Test)
+
+ecm_add_test(KisWatershedWorkerTest.cpp
+    TEST_NAME KisWatershedWorkerTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
+
 
 # ecm_add_test(kis_dom_utils_test.cpp
 #    TEST_NAME krita-image-DomUtils-Test

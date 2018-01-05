@@ -52,12 +52,12 @@ struct ReadOnlyIteratorPolicy {
     typedef KisHLineConstIteratorSP IteratorTypeSP;
 
     ReadOnlyIteratorPolicy(SourcePolicy source, const QRect &rect) {
-        m_iter = source.createConstIterator(rect);
+        m_iter = !rect.isEmpty() ? source.createConstIterator(rect) : 0;
     }
 
     ALWAYS_INLINE void updatePointersCache() {
-        m_rawDataConst = m_iter->rawDataConst();
-        m_oldRawData = m_iter->oldRawData();
+        m_rawDataConst = m_iter ? m_iter->rawDataConst() : 0;
+        m_oldRawData = m_iter ? m_iter->oldRawData() : 0;
     }
 
     ALWAYS_INLINE const quint8* rawDataConst() const {
@@ -80,12 +80,12 @@ struct WritableIteratorPolicy {
     typedef KisHLineIteratorSP IteratorTypeSP;
 
     WritableIteratorPolicy(SourcePolicy source, const QRect &rect) {
-        m_iter = source.createIterator(rect);
+        m_iter = !rect.isEmpty() ? source.createIterator(rect) : 0;
     }
 
     ALWAYS_INLINE void updatePointersCache() {
-        m_rawData = m_iter->rawData();
-        m_oldRawData = m_iter->oldRawData();
+        m_rawData = m_iter ? m_iter->rawData() : 0;
+        m_oldRawData = m_iter ? m_iter->oldRawData() : 0;
     }
 
     ALWAYS_INLINE quint8* rawData() {
@@ -117,6 +117,49 @@ private:
  * pixel-by-pixel processing it is about twice faster(!)  than a usual
  * hline iterator.
  *
+ * The follows the "java-style" iterators rules. Before requesting the
+ * first pixel from the iterator you should call nextPixel() to "jump over"
+ * this first pixel. After the jump is accomplished, you can easily request
+ * the "jumped over" pixel data.
+ *
+ * The modified rules apply when the user wants accesses censequent pixels
+ * in one go. The user first asks the iterator for the number of available
+ * consequent pixels, and then calls nextPixels(numConseqPixels). In this
+ * case, iterator inserts a "virtual" pixel that one should jump over before
+ * doing any real iteration.
+ *
+ * Iteration in pixel-by-pixel manner:
+ *
+ * \code{.cpp}
+ * KisSequentialConstIterator it(dev, rect);
+ * while (it.nextPixel()) {
+ *     quint *ptr = it.rawDataConst();
+ *     // work with ptr...
+ * }
+ * \endcode
+ *
+ * Iteration with strides:
+ *
+ * \code{.cpp}
+ * KisSequentialConstIterator it(dev, rect);
+ *
+ * // Here we jump over the first "virtual" pixel,
+ * // which helps us to avoid an empty rect problem
+ *
+ * int numConseqPixels = it.nConseqPixels();
+ * while (it.nextPixels(numConseqPixels)) {
+ *
+ *     // get real number of conseq pixels
+ *
+ *     numConseqPixels = it.nConseqPixels();
+ *     quint *ptr = it.rawDataConst();
+ *
+ *     // process the data
+ *     processPixelData(tr, numConseqPixels);
+ * }
+ * \endcode
+ *
+ *
  * Implementation:
  *
  * The iterator is implemented using a policy pattern. The class
@@ -137,16 +180,19 @@ public:
           m_rowsLeft(rect.height() - 1),
           m_columnOffset(0),
           m_iteratorX(0),
-          m_iteratorY(0)
+          m_iteratorY(0),
+          m_isStarted(false)
     {
-        m_columnsLeft = m_numConseqPixels = m_policy.m_iter->nConseqPixels();
+        m_columnsLeft = m_numConseqPixels =
+            m_policy.m_iter ? m_policy.m_iter->nConseqPixels() : 0;
+
         m_policy.updatePointersCache();
-        m_iteratorX = m_policy.m_iter->x();
-        m_iteratorY = m_policy.m_iter->y();
+        m_iteratorX = m_policy.m_iter ? m_policy.m_iter->x() : 0;
+        m_iteratorY = m_policy.m_iter ? m_policy.m_iter->y() : 0;
     }
 
     inline int nConseqPixels() const {
-        return m_columnsLeft;
+        return m_isStarted ? m_columnsLeft : 1;
     }
 
     inline bool nextPixels(int numPixels) {
@@ -160,9 +206,14 @@ public:
     }
 
     inline bool nextPixel() {
+        if (!m_isStarted) {
+            m_isStarted = true;
+            return m_policy.m_iter;
+        }
+
         m_columnsLeft--;
 
-        if (m_columnsLeft) {
+        if (m_columnsLeft > 0) {
             m_columnOffset += m_pixelSize;
             return true;
         } else {
@@ -219,6 +270,8 @@ private:
     int m_columnOffset;
     int m_iteratorX;
     int m_iteratorY;
+
+    bool m_isStarted;
 };
 
 typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<> > KisSequentialConstIterator;

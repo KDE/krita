@@ -43,7 +43,7 @@ public:
 
 private:
     void doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
-                  const KisBaseNode::PropertyList &newPropertyList);
+                  const KisBaseNode::PropertyList &newPropertyList, const QRect &totalUpdateExtent);
 
 private:
     KisBaseNode::PropertyList m_newPropertyList;

@@ -117,8 +117,8 @@ bool KisXi2EventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
 
 #if QT_VERSION >= 0x050500
         /**
-         * I know we must be fed to crocodiles for the hacks like this
-         * one, but is is the best thing we can do after Qt 5.5
+         * I know we must be fed to crocodiles for hacks like this
+         * one, but it is the best thing we can do after Qt 5.5
          * started to process all the events using XInput 2.2. It
          * means that Qt is not longer subscribed to the emulated
          * mouse events that usually go after the tablet. Instead of

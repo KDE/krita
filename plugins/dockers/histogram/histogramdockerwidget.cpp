@@ -173,14 +173,16 @@ void HistogramComputationThread::run()
     if (bounds.isEmpty())
         return;
 
-    KisSequentialConstIterator it(m_dev, m_dev->exactBounds());
-    int i;
     quint32 toSkip = nSkip;
 
-    do {
-        i = it.nConseqPixels();
+    KisSequentialConstIterator it(m_dev, m_dev->exactBounds());
+
+    int numConseqPixels = it.nConseqPixels();
+    while (it.nextPixels(numConseqPixels)) {
+
+        numConseqPixels = it.nConseqPixels();
         const quint8* pixel = it.rawDataConst();
-        for (int k = 0; k < i; ++k) {
+        for (int k = 0; k < numConseqPixels; ++k) {
             if (--toSkip == 0) {
                 for (int chan = 0; chan < (int)channelCount; ++chan) {
                     bins[chan][cs->scaleToU8(pixel, chan)]++;
@@ -189,7 +191,7 @@ void HistogramComputationThread::run()
             }
             pixel += pixelSize;
         }
-    } while (it.nextPixels(i));
+    }
 
     emit resultReady(&bins);
 }

@@ -67,9 +67,11 @@ void KisDabRenderingExecutor::addDab(const KisDabCacheUtils::DabRequestInfo &req
     }
 }
 
-QList<KisRenderedDab> KisDabRenderingExecutor::takeReadyDabs(bool returnMutableDabs)
+QList<KisRenderedDab> KisDabRenderingExecutor::takeReadyDabs(bool returnMutableDabs,
+                                                             int oneTimeLimit,
+                                                             bool *someDabsLeft)
 {
-    return m_d->renderingQueue->takeReadyDabs(returnMutableDabs);
+    return m_d->renderingQueue->takeReadyDabs(returnMutableDabs, oneTimeLimit, someDabsLeft);
 }
 
 bool KisDabRenderingExecutor::hasPreparedDabs() const
@@ -77,7 +79,7 @@ bool KisDabRenderingExecutor::hasPreparedDabs() const
     return m_d->renderingQueue->hasPreparedDabs();
 }
 
-int KisDabRenderingExecutor::averageDabRenderingTime() const
+qreal KisDabRenderingExecutor::averageDabRenderingTime() const
 {
     return m_d->renderingQueue->averageExecutionTime();
 }

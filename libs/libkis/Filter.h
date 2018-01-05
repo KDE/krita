@@ -83,7 +83,7 @@ public Q_SLOTS:
      * @params x, y, w, h: describe the rectangle the filter should be apply.
      * This is always in image pixel coordinates and not relative to the x, y
      * of the node.
-     * @return true if the filter was applied succesfully, or
+     * @return true if the filter was applied successfully, or
      * false if the filter could not be applied because the node is locked or
      * does not have an editable paint device.
      */

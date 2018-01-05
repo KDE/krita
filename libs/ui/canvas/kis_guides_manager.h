@@ -22,6 +22,7 @@
 #include <QScopedPointer>
 #include <QObject>
 #include "kritaui_export.h"
+#include <KoUnit.h>
 
 class KisView;
 class KisActionManager;
@@ -42,6 +43,9 @@ public:
     bool showGuides() const;
     bool lockGuides() const;
     bool snapToGuides() const;
+    bool rulersMultiple2() const;
+
+    KoUnit::Type unitType() const;
 
     bool eventFilter(QObject *obj, QEvent *event) override;
 
@@ -55,6 +59,8 @@ public Q_SLOTS:
     void setShowGuides(bool value);
     void setLockGuides(bool value);
     void setSnapToGuides(bool value);
+    void setRulersMultiple2(bool value);
+    void setUnitType(KoUnit::Type type);
 
     void slotGuideCreationInProgress(Qt::Orientation orientation, const QPoint &globalPos);
     void slotGuideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);

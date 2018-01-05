@@ -68,10 +68,6 @@
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
 #define BEZIER_FLATNESS_THRESHOLD 0.5
-#define trunc(x) ((int)(x))
-#ifndef Q_OS_WIN
-
-#endif
 
 #include "kis_painter_p.h"
 
@@ -216,10 +212,12 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
+    if (processRect.isEmpty()) return dst;
+
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
@@ -227,7 +225,7 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
         const quint8 alpha = srcCS->opacityU8(srcPtr);
 
         *alpha8Ptr = KoColorSpaceMaths<quint8>::multiply(alpha, KoColorSpaceMathsTraits<quint8>::unitValue - white);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     return dst;
 }
@@ -238,15 +236,17 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
+    if (processRect.isEmpty()) return dst;
+
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
         *alpha8Ptr = srcCS->intensity8(srcPtr);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     return dst;
 }
@@ -265,11 +265,11 @@ bool KisPainter::checkDeviceHasTransparency(KisPaintDeviceSP dev)
     const KoColorSpace *cs = dev->colorSpace();
     KisSequentialConstIterator it(dev, deviceBounds);
 
-    do {
+    while(it.nextPixel()) {
         if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
             return true;
         }
-    } while(it.nextPixel());
+    }
 
     return false;
 }
@@ -1518,10 +1518,10 @@ inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
 
 /**/
 void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width, bool antialias){
-    int x1 = start.x();
-    int y1 = start.y();
-    int x2 = end.x();
-    int y2 = end.y();
+    int x1 = qFloor(start.x());
+    int y1 = qFloor(start.y());
+    int x2 = qFloor(end.x());
+    int y2 = qFloor(end.y());
 
     if ((x2 == x1 ) && (y2 == y1)) return;
 
@@ -1607,11 +1607,11 @@ void KisPainter::drawLine(const QPointF & start, const QPointF & end)
 
 void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 {
-    int x = int(start.x());
-    int y = int(start.y());
+    int x = qFloor(start.x());
+    int y = qFloor(start.y());
 
-    int x2 = int(end.x());
-    int y2 = int(end.y());
+    int x2 = qFloor(end.x());
+    int y2 = qFloor(end.y());
 
     // Width and height of the line
     int xd = x2 - x;
@@ -1673,18 +1673,18 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
 void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 {
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(start.x(), start.y());
-    KisRandomConstAccessorSP selectionAccessor;
-    if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
-    }
-
     KoColor mycolor(d->paintColor);
 
-    int x1 = start.x();
-    int y1 = start.y();
-    int x2 = end.x();
-    int y2 = end.y();
+    int x1 = qFloor(start.x());
+    int y1 = qFloor(start.y());
+    int x2 = qFloor(end.x());
+    int y2 = qFloor(end.y());
+
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x1, y1);
+    KisRandomConstAccessorSP selectionAccessor;
+    if (d->selection) {
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(x1, y1);
+    }
 
     // Width and height of the line
     int xd = (x2 - x1);
@@ -1706,8 +1706,8 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
             y = y + inc;
             x = qRound(fx);
 
-            float br1 = int(fx + 1) - fx;
-            float br2 = fx - (int)fx;
+            float br1 = qFloor(fx + 1) - fx;
+            float br2 = fx - qFloor(fx);
 
             accessor->moveTo(x, y);
             if (selectionAccessor) selectionAccessor->moveTo(x, y);
@@ -1733,8 +1733,8 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
             x = x + inc;
             y = qRound(fy);
 
-            float br1 = int(fy + 1) - fy;
-            float br2 = fy - (int)fy;
+            float br1 = qFloor(fy + 1) - fy;
+            float br2 = fy - qFloor(fy);
 
             accessor->moveTo(x, y);
             if (selectionAccessor) selectionAccessor->moveTo(x, y);
@@ -1758,19 +1758,18 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
 void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 {
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(start.x(), start.y());
-    KisRandomConstAccessorSP selectionAccessor;
-    if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
-    }
-
     KoColor lineColor(d->paintColor);
 
-    int x1 = start.x();
-    int y1 = start.y();
-    int x2 = end.x();
-    int y2 = end.y();
+    int x1 = qFloor(start.x());
+    int y1 = qFloor(start.y());
+    int x2 = qFloor(end.x());
+    int y2 = qFloor(end.y());
 
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x1, y1);
+    KisRandomConstAccessorSP selectionAccessor;
+    if (d->selection) {
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(x1, y1);
+    }
 
     float grad, xd, yd;
     float xgap, ygap, xend, yend, yf, xf;
@@ -1825,21 +1824,20 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         // horizontal line
         // line have to be paint from left to right
         if (x1 > x2) {
-            float tmp;
-            tmp = x1; x1 = x2; x2 = tmp;
-            tmp = y1; y1 = y2; y2 = tmp;
+            std::swap(x1, x2);
+            std::swap(y1, y2);
             xd = (x2 - x1);
             yd = (y2 - y1);
         }
         grad = yd / xd;
-        // nearest X,Y interger coordinates
-        xend = static_cast<int>(x1 + 0.5f);
+        // nearest X,Y integer coordinates
+        xend = x1;
         yend = y1 + grad * (xend - x1);
 
         xgap = invertFrac(x1 + 0.5f);
 
-        ix1 = static_cast<int>(xend);
-        iy1 = static_cast<int>(yend);
+        ix1 = x1;
+        iy1 = qFloor(yend);
 
         // calc the intensity of the other end point pixel pair.
         brightness1 = invertFrac(yend) * xgap;
@@ -1867,13 +1865,13 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         // calc first Y-intersection for main loop
         yf = yend + grad;
 
-        xend = trunc(x2 + 0.5f);
+        xend = x2;
         yend = y2 + grad * (xend - x2);
 
         xgap = invertFrac(x2 - 0.5f);
 
-        ix2 = static_cast<int>(xend);
-        iy2 = static_cast<int>(yend);
+        ix2 = x2;
+        iy2 = qFloor(yend);
 
         brightness1 = invertFrac(yend) * xgap;
         brightness2 =    frac(yend) * xgap;
@@ -1904,16 +1902,16 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
             c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
-            accessor->moveTo(x, int (yf));
-            if (selectionAccessor) selectionAccessor->moveTo(x, int (yf));
+            accessor->moveTo(x, qFloor(yf));
+            if (selectionAccessor) selectionAccessor->moveTo(x, qFloor(yf));
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c1);
                 compositeOnePixel(accessor->rawData(), lineColor);
             }
 
-            accessor->moveTo(x, int (yf) + 1);
-            if (selectionAccessor) selectionAccessor->moveTo(x, int (yf) + 1);
+            accessor->moveTo(x, qFloor(yf) + 1);
+            if (selectionAccessor) selectionAccessor->moveTo(x, qFloor(yf) + 1);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c2);
@@ -1926,23 +1924,22 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         //vertical
         // line have to be painted from left to right
         if (y1 > y2) {
-            float tmp;
-            tmp = x1; x1 = x2; x2 = tmp;
-            tmp = y1; y1 = y2; y2 = tmp;
+            std::swap(x1, x2);
+            std::swap(y1, y2);
             xd = (x2 - x1);
             yd = (y2 - y1);
         }
 
         grad = xd / yd;
 
-        // nearest X,Y interger coordinates
-        yend = static_cast<int>(y1 + 0.5f);
+        // nearest X,Y integer coordinates
+        yend = y1;
         xend = x1 + grad * (yend - y1);
 
-        ygap = invertFrac(y1 + 0.5f);
+        ygap = y1;
 
-        ix1 = static_cast<int>(xend);
-        iy1 = static_cast<int>(yend);
+        ix1 = qFloor(xend);
+        iy1 = y1;
 
         // calc the intensity of the other end point pixel pair.
         brightness1 = invertFrac(xend) * ygap;
@@ -1970,13 +1967,13 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         // calc first Y-intersection for main loop
         xf = xend + grad;
 
-        yend = trunc(y2 + 0.5f);
+        yend = y2;
         xend = x2 + grad * (yend - y2);
 
         ygap = invertFrac(y2 - 0.5f);
 
-        ix2 = static_cast<int>(xend);
-        iy2 = static_cast<int>(yend);
+        ix2 = qFloor(xend);
+        iy2 = y2;
 
         brightness1 = invertFrac(xend) * ygap;
         brightness2 =    frac(xend) * ygap;
@@ -2007,16 +2004,16 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
             c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
-            accessor->moveTo(int (xf), y);
-            if (selectionAccessor) selectionAccessor->moveTo(int (xf), y);
+            accessor->moveTo(qFloor(xf), y);
+            if (selectionAccessor) selectionAccessor->moveTo(qFloor(xf), y);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c1);
                 compositeOnePixel(accessor->rawData(), lineColor);
             }
 
-            accessor->moveTo(int (xf) + 1, y);
-            if (selectionAccessor) selectionAccessor->moveTo(int (xf) + 1, y);
+            accessor->moveTo(qFloor(xf) + 1, y);
+            if (selectionAccessor) selectionAccessor->moveTo(qFloor(xf) + 1, y);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c2);
@@ -2206,11 +2203,11 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         yfb = y0b + gradb;
 
         for (x = ix1 + 1; x <= ix2 - 1; x++) {
-            fraca = yfa - int (yfa);
+            fraca = yfa - qFloor(yfa);
             b1a = 1 - fraca;
             b2a = fraca;
 
-            fracb = yfb - int (yfb);
+            fracb = yfb - qFloor(yfb);
             b1b = 1 - fracb;
             b2b = fracb;
 
@@ -2218,8 +2215,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             opacity = ((x - ix1) / dstX) * c2.opacityF() + (1 - (x - ix1) / dstX) * c1.opacityF();
             c3.setOpacity(opacity);
 
-            accessor->moveTo(x, (int)yfa);
-            if (selectionAccessor) selectionAccessor->moveTo(x, (int)yfa);
+            accessor->moveTo(x, qFloor(yfa));
+            if (selectionAccessor) selectionAccessor->moveTo(x, qFloor(yfa));
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 qreal alpha = cs->opacityF(accessor->rawData());
@@ -2230,8 +2227,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
 
             // color first pixel of top line
             if (!(startWidth == 1 && endWidth == 1)) {
-                accessor->moveTo(x, (int)yfb);
-                if (selectionAccessor) selectionAccessor->moveTo(x, (int)yfb);
+                accessor->moveTo(x, qFloor(yfb));
+                if (selectionAccessor) selectionAccessor->moveTo(x, qFloor(yfb));
 
                 if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                     qreal alpha = cs->opacityF(accessor->rawData());
@@ -2244,8 +2241,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // color second pixel of bottom line
             if (grada != 0 && grada != 1) { // if not flat or exact diagonal
 
-                accessor->moveTo(x, int (yfa) + 1);
-                if (selectionAccessor) selectionAccessor->moveTo(x, int (yfa) + 1);
+                accessor->moveTo(x, qFloor(yfa) + 1);
+                if (selectionAccessor) selectionAccessor->moveTo(x, qFloor(yfa) + 1);
 
                 if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                     qreal alpha = cs->opacityF(accessor->rawData());
@@ -2259,8 +2256,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // color second pixel of top line
             if (gradb != 0 && gradb != 1 && !(startWidth == 1 && endWidth == 1)) {
 
-                accessor->moveTo(x, int (yfb) + 1);
-                if (selectionAccessor) selectionAccessor->moveTo(x, int (yfb) + 1);
+                accessor->moveTo(x, qFloor(yfb) + 1);
+                if (selectionAccessor) selectionAccessor->moveTo(x, qFloor(yfb) + 1);
 
                 if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                     qreal alpha = cs->opacityF(accessor->rawData());
@@ -2274,7 +2271,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // fill remaining pixels
             if (!(startWidth == 1 && endWidth == 1)) {
                 if (yfa < yfb)
-                    for (int i = yfa + 1; i <= yfb; i++) {
+                    for (int i = qFloor(yfa) + 1; i <= qFloor(yfb); i++) {
 
                         accessor->moveTo(x, i);
                         if (selectionAccessor) selectionAccessor->moveTo(x, i);
@@ -2284,7 +2281,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                         }
                     }
                 else
-                    for (int i = yfa + 1; i >= yfb; i--) {
+                    for (int i = qFloor(yfa) + 1; i >= qFloor(yfb); i--) {
 
                         accessor->moveTo(x, i);
                         if (selectionAccessor) selectionAccessor->moveTo(x, i);
@@ -2324,11 +2321,11 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         xfb = x0b + gradb;
 
         for (y = iy1 + 1; y <= iy2 - 1; y++) {
-            fraca = xfa - int (xfa);
+            fraca = xfa - qFloor(xfa);
             b1a = 1 - fraca;
             b2a = fraca;
 
-            fracb = xfb - int (xfb);
+            fracb = xfb - qFloor(xfb);
             b1b = 1 - fracb;
             b2b = fracb;
 
@@ -2336,8 +2333,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             opacity = ((y - iy1) / dstY) * c2.opacityF() + (1 - (y - iy1) / dstY) * c1.opacityF();
             c3.setOpacity(opacity);
 
-            accessor->moveTo(int (xfa), y);
-            if (selectionAccessor) selectionAccessor->moveTo(int (xfa), y);
+            accessor->moveTo(qFloor(xfa), y);
+            if (selectionAccessor) selectionAccessor->moveTo(qFloor(xfa), y);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 qreal alpha = cs->opacityF(accessor->rawData());
@@ -2349,8 +2346,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // color first pixel of right line
             if (!(startWidth == 1 && endWidth == 1)) {
 
-                accessor->moveTo(int(xfb), y);
-                if (selectionAccessor) selectionAccessor->moveTo(int(xfb), y);
+                accessor->moveTo(qFloor(xfb), y);
+                if (selectionAccessor) selectionAccessor->moveTo(qFloor(xfb), y);
 
                 if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                     qreal alpha = cs->opacityF(accessor->rawData());
@@ -2363,8 +2360,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // color second pixel of left line
             if (grada != 0 && grada != 1) { // if not flat or exact diagonal
 
-                accessor->moveTo(int(xfa) + 1, y);
-                if (selectionAccessor) selectionAccessor->moveTo(int(xfa) + 1, y);
+                accessor->moveTo(qFloor(xfa) + 1, y);
+                if (selectionAccessor) selectionAccessor->moveTo(qFloor(xfa) + 1, y);
 
                 if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                     qreal alpha = cs->opacityF(accessor->rawData());
@@ -2378,8 +2375,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // color second pixel of right line
             if (gradb != 0 && gradb != 1 && !(startWidth == 1 && endWidth == 1)) {
 
-                accessor->moveTo(int(xfb) + 1, y);
-                if (selectionAccessor) selectionAccessor->moveTo(int(xfb) + 1, y);
+                accessor->moveTo(qFloor(xfb) + 1, y);
+                if (selectionAccessor) selectionAccessor->moveTo(qFloor(xfb) + 1, y);
 
                 if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                     qreal alpha = cs->opacityF(accessor->rawData());
@@ -2392,7 +2389,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             // fill remaining pixels between current xfa,xfb
             if (!(startWidth == 1 && endWidth == 1)) {
                 if (xfa < xfb)
-                    for (int i = (int) xfa + 1; i <= (int) xfb; i++) {
+                    for (int i = qFloor(xfa) + 1; i <= qFloor(xfb); i++) {
 
                         accessor->moveTo(i, y);
                         if (selectionAccessor) selectionAccessor->moveTo(i, y);
@@ -2402,7 +2399,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                         }
                     }
                 else
-                    for (int i = (int) xfb; i <= (int) xfa + 1; i++) {
+                    for (int i = qFloor(xfb); i <= qFloor(xfa) + 1; i++) {
 
                         accessor->moveTo(i, y);
                         if (selectionAccessor) selectionAccessor->moveTo(i, y);

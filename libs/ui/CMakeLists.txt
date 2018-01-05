@@ -6,7 +6,6 @@ include_directories(
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 add_subdirectory( tests )
@@ -201,6 +200,10 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     tool/strokes/kis_color_picker_stroke_strategy.cpp
+    tool/strokes/KisFreehandStrokeInfo.cpp
+    tool/strokes/KisMaskedFreehandStrokePainter.cpp
+    tool/strokes/KisMaskingBrushRenderer.cpp
+    tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
@@ -396,6 +399,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         input/wintab/kis_tablet_support_win8.cpp
+        opengl/kis_opengl_win.cpp
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()

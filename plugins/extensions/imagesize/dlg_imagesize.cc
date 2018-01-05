@@ -78,7 +78,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     KisConfig cfg;
 
-    /// configure the unit to image length, default unit is pixel and printing units are forbiden.
+    /// configure the unit to image length, default unit is pixel and printing units are forbidden.
     m_widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
     m_heightUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
 

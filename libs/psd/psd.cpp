@@ -111,7 +111,7 @@ QString psd_blendmode_to_composite_op(const QString& blendmode)
     // 'pLit' = pin light
     if (blendmode == "pLit") return COMPOSITE_PIN_LIGHT;
     // 'hMix' = hard mix
-    if (blendmode == "hMix") return COMPOSITE_HARD_MIX;
+    if (blendmode == "hMix") return COMPOSITE_HARD_MIX_PHOTOSHOP;
     // 'diff' = difference
     if (blendmode == "diff") return COMPOSITE_DIFF;
     // 'smud' = exclusion
@@ -175,7 +175,7 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
     // 'pLit' = pin light
     if (compositeop == COMPOSITE_PIN_LIGHT) return "pLit";
     // 'hMix' = hard mix
-    if (compositeop == COMPOSITE_HARD_MIX) return "hMix";
+    if (compositeop == COMPOSITE_HARD_MIX_PHOTOSHOP) return "hMix";
     // 'diff' = difference
     if (compositeop == COMPOSITE_DIFF) return "diff";
     // 'smud' = exclusion

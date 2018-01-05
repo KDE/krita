@@ -1,15 +1,20 @@
---- a/configure.py	2017-07-03 18:25:14.000000000 +0800
-+++ b/configure.py	2017-07-15 01:19:44.622435500 +0800
-@@ -2168,10 +2168,8 @@
-     if source is None:
-         for disabled in run_test_program(mname, test, verbose):
-             if disabled:
--                inform("Disabled %s features: %s" % (mname,
--                        ', '.join(disabled)))
--
--            target_config.pyqt_disabled_features.extend(disabled)
-+                inform("Disabled %s features: %s" % (mname, disabled))
-+                target_config.pyqt_disabled_features.append(disabled)
+--- a/configure.py
++++ b/configure.py
+@@ -965,7 +965,7 @@ class TargetConfiguration:
+         # it where it is.
+         if not self.static:
+             pro_lines.extend(['win32 {',
+-                    '    LIBS += ' + self.get_pylib_link_arguments(name=False),
++                    '    LIBS += ' + self.get_pylib_link_arguments(),
+                     '}'])
  
-     # Include the module in the build.
-     target_config.pyqt_modules.append(mname)
+     @staticmethod
+@@ -1977,7 +1977,7 @@ def run_make(target_config, verbose, exe, makefile_name):
+ 
+     remove_file(platform_exe)
+ 
+-    args = [make, '-f', makefile_name]
++    args = [make, '-f', makefile_name, 'CXXFLAGS=-D_hypot=hypot']
+ 
+     if makefile_target != '':
+         args.append(makefile_target)

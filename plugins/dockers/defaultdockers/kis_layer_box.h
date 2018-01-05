@@ -91,7 +91,6 @@ private Q_SLOTS:
     // From the node manager to the layerbox
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
-    void slotFillCompositeOps(const KoColorSpace * colorSpace);
     void updateUI();
     void setCurrentNode(KisNodeSP node);
     void slotModelReset();

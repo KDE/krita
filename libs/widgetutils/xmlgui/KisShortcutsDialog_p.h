@@ -109,7 +109,7 @@ public:
  * viewport of the itemview it belongs to. The widget is destroyed when the user
  * selects another shortcut or explicitly issues a contractItem event. But when
  * the user clears the model the delegate misses that event and doesn't delete
- * the KShortcutseditor. And remains as a visible artefact in your treeview.
+ * the KShortcutseditor. And remains as a visible artifact in your treeview.
  * Additionally when closing your application you get an assertion failure from
  * KExtendableItemDelegate.
  *
@@ -151,7 +151,7 @@ private Q_SLOTS:
 
     /**
      * When the user collapses a hole subtree of shortcuts then remove eventually
-     * extended items. Else we get that artefact bug. See above.
+     * extended items. Else we get that artifact bug. See above.
      */
     void itemCollapsed(QModelIndex index);
 

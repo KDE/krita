@@ -6,7 +6,7 @@
     <doc:doc>
       <doc:description>
         <doc:para>
-          The interface used for quering color sensors.
+          The interface used for querying color sensors.
         </doc:para>
       </doc:description>
     </doc:doc>

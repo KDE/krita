@@ -28,6 +28,11 @@
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
 
+#include "kis_dom_utils.h"
+
+#include <text/KoSvgText.h>
+#include <text/KoSvgTextProperties.h>
+
 #include <QStringList>
 #include <QColor>
 #include <QGradientStops>
@@ -38,9 +43,12 @@ public:
     Private(SvgLoadingContext &loadingContext)
         : context(loadingContext)
     {
+        textAttributes << KoSvgTextProperties::supportedXmlAttributes();
+
         // the order of the font attributes is important, don't change without reason !!!
-        fontAttributes << "font-family" << "font-size" << "font-weight";
-        fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
+        fontAttributes << "font-family" << "font-size" << "font-weight" << "font-style"
+                       << "font-variant" << "font-stretch" << "font-size-adjust" << "font"
+                       << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -51,6 +59,7 @@ public:
     }
 
     SvgLoadingContext &context;
+    QStringList textAttributes; ///< text related attributes
     QStringList fontAttributes; ///< font related attributes
     QStringList styleAttributes; ///< style related attributes
 };
@@ -94,8 +103,15 @@ void SvgStyleParser::parseFont(const SvgStyles &styles)
             continue;
         parsePA(gc, command, params);
     }
-}
 
+    Q_FOREACH (const QString & command, d->textAttributes) {
+        const QString &params = styles.value(command);
+        if (params.isEmpty())
+            continue;
+        parsePA(gc, command, params);
+    }
+}
+#include <kis_debug.h>
 void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QString &params)
 {
     QColor fillcolor = gc->fillColor;
@@ -188,94 +204,55 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "opacity") {
         gc->opacity = SvgUtil::fromPercentage(params);
     } else if (command == "font-family") {
-        QString family = params;
-        family.replace('\'' , ' ');
-        gc->font.setFamily(family);
-    } else if (command == "font-size") {
-        float pointSize = SvgUtil::parseUnitY(gc, params);
-        if (pointSize > 0.0f)
-            gc->font.setPointSizeF(pointSize);
-    } else if (command == "font-weight") {
-        int weight = QFont::Normal;
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        QStringList familiesList =
+            gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontFamiliesId).toStringList();
 
-        // map svg weight to qt weight
-        // svg value        qt value
-        // 100,200,300      1, 17, 33
-        // 400              50          (normal)
-        // 500,600          58,66
-        // 700              75          (bold)
-        // 800,900          87,99
-
-        if (params == "bold")
-            weight = QFont::Bold;
-        else if (params == "lighter") {
-            weight = gc->font.weight();
-            if (weight <= 17)
-                weight = 1;
-            else if (weight <= 33)
-                weight = 17;
-            else if (weight <= 50)
-                weight = 33;
-            else if (weight <= 58)
-                weight = 50;
-            else if (weight <= 66)
-                weight = 58;
-            else if (weight <= 75)
-                weight = 66;
-            else if (weight <= 87)
-                weight = 75;
-            else if (weight <= 99)
-                weight = 87;
-        } else if (params == "bolder") {
-            weight = gc->font.weight();
-            if (weight >= 87)
-                weight = 99;
-            else if (weight >= 75)
-                weight = 87;
-            else if (weight >= 66)
-                weight = 75;
-            else if (weight >= 58)
-                weight = 66;
-            else if (weight >= 50)
-                weight = 58;
-            else if (weight >= 33)
-                weight = 50;
-            else if (weight >= 17)
-                weight = 50;
-            else if (weight >= 1)
-                weight = 17;
-        } else {
-            bool ok;
-            // try to read numerical weight value
-            weight = params.toInt(&ok, 10);
-
-            if (!ok)
-                return;
-
-            switch (weight) {
-            case 100: weight = 1; break;
-            case 200: weight = 17; break;
-            case 300: weight = 33; break;
-            case 400: weight = 50; break;
-            case 500: weight = 58; break;
-            case 600: weight = 66; break;
-            case 700: weight = 75; break;
-            case 800: weight = 87; break;
-            case 900: weight = 99; break;
-            }
+        if (!familiesList.isEmpty()) {
+            gc->font.setFamily(familiesList.first());
+            gc->fontFamiliesList = familiesList;
         }
-        gc->font.setWeight(weight);
+    } else if (command == "font-size") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->font.setPointSizeF(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
+    } else if (command == "font-style") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        const QFont::Style style =
+            QFont::Style(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+        gc->font.setStyle(style);
+
+    } else if (command == "font-variant") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+
+        gc->font.setCapitalization(
+            gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontIsSmallCapsId).toBool() ?
+                QFont::SmallCaps : QFont::MixedCase);
+    } else if (command == "font-stretch") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->font.setStretch(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+
+    } else if (command == "font-weight") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        //ENTER_FUNCTION() << ppVar(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
+        gc->font.setWeight(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
+    } else if (command == "font-size-adjust") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
+    } else if (command == "font") {
+        warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
     } else if (command == "text-decoration") {
-        if (params == "line-through")
-            gc->font.setStrikeOut(true);
-        else if (params == "underline")
-            gc->font.setUnderline(true);
-    } else if (command == "letter-spacing") {
-        gc->letterSpacing = SvgUtil::parseUnitX(gc, params);
-    } else if (command == "baseline-shift") {
-        gc->baselineShift = params;
-    } else if (command == "word-spacing") {
-        gc->wordSpacing = SvgUtil::parseUnitX(gc, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+
+        using namespace KoSvgText;
+
+        TextDecorations deco =
+            gc->textProperties.propertyOrDefault(KoSvgTextProperties::TextDecorationId)
+                .value<KoSvgText::TextDecorations>();
+
+        gc->font.setStrikeOut(deco & DecorationLineThrough);
+        gc->font.setUnderline(deco & DecorationUnderline);
+        gc->font.setOverline(deco & DecorationOverline);
+
     } else if (command == "color") {
         QColor color;
         parseColor(color, params);
@@ -337,6 +314,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         }
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";
+    } else if (d->textAttributes.contains(command)) {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     }
 
     gc->fillColor = fillcolor;
@@ -357,17 +336,17 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
 
         if (r.contains('%')) {
             r = r.left(r.length() - 1);
-            r = QString::number(int((double(255 * r.toDouble()) / 100.0)));
+            r = QString::number(int((double(255 * KisDomUtils::toDouble(r)) / 100.0)));
         }
 
         if (g.contains('%')) {
             g = g.left(g.length() - 1);
-            g = QString::number(int((double(255 * g.toDouble()) / 100.0)));
+            g = QString::number(int((double(255 * KisDomUtils::toDouble(g)) / 100.0)));
         }
 
         if (b.contains('%')) {
             b = b.left(b.length() - 1);
-            b = QString::number(int((double(255 * b.toDouble()) / 100.0)));
+            b = QString::number(int((double(255 * KisDomUtils::toDouble(b)) / 100.0)));
         }
 
         color = QColor(r.toInt(), g.toInt(), b.toInt());
@@ -433,7 +412,7 @@ void SvgStyleParser::parseColorStops(QGradient *gradient,
             }
 
             if (!stopOpacityStr.isEmpty() && stopOpacityStr != "inherit") {
-                color.setAlphaF(qBound(0.0, stopOpacityStr.toDouble(), 1.0));
+                color.setAlphaF(qBound(0.0, KisDomUtils::toDouble(stopOpacityStr), 1.0));
             }
 
             stops.append(QPair<qreal, QColor>(offset, color));
@@ -476,12 +455,18 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
 
     // collect individual presentation style attributes which have the priority 0
     // according to SVG standard
+    // NOTE: font attributes should be parsed the first, because they defines 'em' and 'ex'
+    Q_FOREACH (const QString & command, d->fontAttributes) {
+        const QString attribute = e.attribute(command);
+        if (!attribute.isEmpty())
+            styleMap[command] = attribute;
+    }
     Q_FOREACH (const QString &command, d->styleAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
     }
-    Q_FOREACH (const QString & command, d->fontAttributes) {
+    Q_FOREACH (const QString & command, d->textAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
@@ -506,8 +491,12 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
             command.replace("|", ":");
 
             // only use style and font attributes
-            if (d->styleAttributes.contains(command) || d->fontAttributes.contains(command))
+            if (d->styleAttributes.contains(command) ||
+                d->fontAttributes.contains(command) ||
+                d->textAttributes.contains(command)) {
+
                 styleMap[command] = params;
+            }
         }
     }
 

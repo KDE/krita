@@ -1,0 +1,11 @@
+{
+    "Id": "SvgTextTool",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_tool_svgtext",
+    "X-KDE-PluginInfo-Name": "svgtexttool",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Tool"
+    ]
+}

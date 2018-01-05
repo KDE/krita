@@ -134,6 +134,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.outgradient, SIGNAL(sigModifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
 
     connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel(void)));
+    connect(m_page.butinvert, SIGNAL(clicked(bool)), this, SLOT(slotInvert(void)));
 
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
@@ -141,6 +142,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     m_histogram.reset( new KisHistogram(dev, dev->exactBounds(), producer, LINEAR) );
     m_histlog = false;
     m_page.histview->resize(288,100);
+    m_inverted = false;
     slotDrawHistogram();
 
 }
@@ -207,12 +209,20 @@ void KisLevelConfigWidget::slotModifyInWhiteLimit(int limit)
 
 void KisLevelConfigWidget::slotModifyOutBlackLimit(int limit)
 {
-    m_page.outblackspin->setMaximum(limit - 1);
+    if (m_inverted) {
+        m_page.outblackspin->setMinimum(limit + 1);
+    } else {
+        m_page.outblackspin->setMaximum(limit - 1);
+    }
 }
 
 void KisLevelConfigWidget::slotModifyOutWhiteLimit(int limit)
 {
-    m_page.outwhitespin->setMinimum(limit + 1);
+    if (m_inverted) {
+        m_page.outwhitespin->setMaximum(limit - 1);
+    } else {
+        m_page.outwhitespin->setMinimum(limit + 1);
+    }
 }
 
 void KisLevelConfigWidget::slotAutoLevel(void)
@@ -273,6 +283,18 @@ void KisLevelConfigWidget::slotAutoLevel(void)
     }
 }
 
+void KisLevelConfigWidget::slotInvert(void)
+{
+    m_inverted = !m_inverted;
+    int white = m_page.outwhitespin->value();
+    int black = m_page.outblackspin->value();
+
+    resetOutSpinLimit();
+    m_page.outgradient->setInverted(m_inverted);
+    m_page.outwhitespin->setValue(black);
+    m_page.outblackspin->setValue(white);
+}
+
 KisPropertiesConfigurationSP  KisLevelConfigWidget::configuration() const
 {
     KisColorTransformationConfiguration * config = new KisColorTransformationConfiguration(KisLevelFilter::id().id(), 1);
@@ -308,5 +330,15 @@ void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  
     if (config->getProperty("outwhitevalue", value)) {
         m_page.outwhitespin->setValue(value.toUInt());
         m_page.outgradient->slotModifyWhite(value.toUInt());
+    }
+}
+
+void KisLevelConfigWidget::resetOutSpinLimit() {
+    if (m_inverted) {
+        m_page.outblackspin->setMaximum(255);
+        m_page.outwhitespin->setMinimum(0);
+    } else {
+        m_page.outblackspin->setMinimum(0);
+        m_page.outwhitespin->setMaximum(255);
     }
 }

@@ -440,7 +440,7 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
 
-    ap->applyCommand(view->canvasBase()->shapeController()->addShape(shape),
+    ap->applyCommand(view->canvasBase()->shapeController()->addShape(shape, 0),
                      KisStrokeJobData::SEQUENTIAL,
                      KisStrokeJobData::EXCLUSIVE);
 

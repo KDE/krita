@@ -68,7 +68,11 @@ void KisAnimationExporterTest::testAnimationExport()
     KisAsyncAnimationFramesSaveDialog exporter(document->image(),
                                                KisTimeRange::fromTime(0,2),
                                                "export-test.png",
-                                               0, 0);
+                                               0,
+                                               0);
+
+
+
     exporter.setBatchMode(true);
     exporter.regenerateRange(0);
 

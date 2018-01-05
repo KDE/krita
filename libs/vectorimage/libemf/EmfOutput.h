@@ -358,7 +358,7 @@ public:
        Handler for the EMR_MOVETOEX record type
 
        \param x the X coordinate of the point to move to
-       \param y the Y coordiante of the point to move to
+       \param y the Y coordinate of the point to move to
     */
     virtual void moveToEx( const qint32 x, const qint32 y ) = 0;
 

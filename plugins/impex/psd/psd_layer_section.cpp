@@ -562,7 +562,8 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
                                    onlyTransparencyMask,
                                    maskRect,
                                    sectionType,
-                                   stylesXmlDoc);
+                                   stylesXmlDoc,
+                                   node->inherits("KisGroupLayer"));
             }
 
             dbgFile << "start writing layer pixel data" << io->pos();

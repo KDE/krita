@@ -170,10 +170,16 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    if (currentPaintOpPreset()) emit statusTextChanged(currentPaintOpPreset()->name());
+    if (currentPaintOpPreset()) {
+        QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
+        emit statusTextChanged(formattedBrushName);
+    }
+
     KisTool::activate(toolActivation, shapes);
-    connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
-    connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
+    if (flags() & KisTool::FLAG_USES_CUSTOM_SIZE) {
+        connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
+        connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
+    }
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider();
     m_oldOpacity = provider->opacity();
@@ -182,9 +188,10 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 void KisToolPaint::deactivate()
 {
-
-    disconnect(action("increase_brush_size"), 0, this, 0);
-    disconnect(action("decrease_brush_size"), 0, this, 0);
+    if (flags() & KisTool::FLAG_USES_CUSTOM_SIZE) {
+        disconnect(action("increase_brush_size"), 0, this, 0);
+        disconnect(action("decrease_brush_size"), 0, this, 0);
+    }
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider();
     m_localOpacity = provider->opacity();
@@ -369,7 +376,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
 
     KIS_ASSERT_RECOVER_RETURN(isPickingAction(pickingJob.action));
 
-    const QPoint imagePoint = image()->documentToIntPixel(pickingJob.documentPixel);
+    const QPoint imagePoint = image()->documentToImagePixelFloored(pickingJob.documentPixel);
     const bool fromCurrentNode = pickingJob.action == PickFgNode || pickingJob.action == PickBgNode;
     m_pickingResource = colorPreviewResourceId(pickingJob.action);
 

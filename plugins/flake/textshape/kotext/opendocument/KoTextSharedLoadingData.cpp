@@ -306,7 +306,7 @@ void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context,
             if (parent) {
                 // an auto style with a parent.
                 // let's set the styleId of that one on the auto-style too.
-                // this will have the effect that whereever the autostyle is applied, it will
+                // this will have the effect that wherever the autostyle is applied, it will
                 // cause the parent style-id to be applied. So we don't loose this info.
                 odfStyle.style->setStyleId(parent->styleId());
             }

@@ -123,6 +123,8 @@ KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
       userData(rhs.userData ? rhs.userData->clone() : 0),
       stroke(rhs.stroke),
       fill(rhs.fill),
+      inheritBackground(rhs.inheritBackground),
+      inheritStroke(rhs.inheritStroke),
       dependees(), // FIXME: how to initialize them?
       shadow(0), // WARNING: not implemented in Krita
       border(0), // WARNING: not implemented in Krita
@@ -304,6 +306,7 @@ KoShape::~KoShape()
 {
     Q_D(KoShape);
     d->shapeChanged(Deleted);
+    d->listeners.clear();
     delete d_ptr;
 }
 
@@ -312,6 +315,15 @@ KoShape *KoShape::cloneShape() const
     KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "not implemented!");
     qWarning() << shapeId() << "cannot be cloned";
     return 0;
+}
+
+void KoShape::paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+{
+    Q_UNUSED(paintcontext);
+
+    if (stroke()) {
+        stroke()->paint(this, painter, converter);
+    }
 }
 
 void KoShape::scale(qreal sx, qreal sy)
@@ -718,7 +730,7 @@ QRectF KoShape::outlineRect() const
 QPainterPath KoShape::shadowOutline() const
 {
     Q_D(const KoShape);
-    if (d->fill) {
+    if (background()) {
         return outline();
     }
 
@@ -798,10 +810,9 @@ KoShapeUserData *KoShape::userData() const
 bool KoShape::hasTransparency() const
 {
     Q_D(const KoShape);
-    if (! d->fill)
-        return true;
-    else
-        return d->fill->hasTransparency() || d->transparency > 0.0;
+    QSharedPointer<KoShapeBackground> bg = background();
+
+    return !bg || bg->hasTransparency() || d->transparency > 0.0;
 }
 
 void KoShape::setTransparency(qreal transparency)
@@ -1064,6 +1075,7 @@ void KoShape::setTextRunAroundContour(KoShape::TextRunAroundContour contour)
 void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 {
     Q_D(KoShape);
+    d->inheritBackground = false;
     d->fill = fill;
     d->shapeChanged(BackgroundChanged);
     notifyChanged();
@@ -1072,7 +1084,32 @@ void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 QSharedPointer<KoShapeBackground> KoShape::background() const
 {
     Q_D(const KoShape);
-    return d->fill;
+
+    QSharedPointer<KoShapeBackground> bg;
+
+    if (!d->inheritBackground) {
+        bg = d->fill;
+    } else if (parent()) {
+        bg = parent()->background();
+    }
+
+    return bg;
+}
+
+void KoShape::setInheritBackground(bool value)
+{
+    Q_D(KoShape);
+
+    d->inheritBackground = value;
+    if (d->inheritBackground) {
+        d->fill.clear();
+    }
+}
+
+bool KoShape::inheritBackground() const
+{
+    Q_D(const KoShape);
+    return d->inheritBackground;
 }
 
 void KoShape::setZIndex(int zIndex)
@@ -1220,16 +1257,41 @@ bool KoShape::collisionDetection()
 KoShapeStrokeModelSP KoShape::stroke() const
 {
     Q_D(const KoShape);
-    return d->stroke;
+
+    KoShapeStrokeModelSP stroke;
+
+    if (!d->inheritStroke) {
+        stroke = d->stroke;
+    } else if (parent()) {
+        stroke = parent()->stroke();
+    }
+
+    return stroke;
 }
 
 void KoShape::setStroke(KoShapeStrokeModelSP stroke)
 {
     Q_D(KoShape);
 
+    d->inheritStroke = false;
     d->stroke = stroke;
     d->shapeChanged(StrokeChanged);
     notifyChanged();
+}
+
+void KoShape::setInheritStroke(bool value)
+{
+    Q_D(KoShape);
+    d->inheritStroke = value;
+    if (d->inheritStroke) {
+        d->stroke.clear();
+    }
+}
+
+bool KoShape::inheritStroke() const
+{
+    Q_D(const KoShape);
+    return d->inheritStroke;
 }
 
 void KoShape::setShadow(KoShapeShadow *shadow)
@@ -2189,7 +2251,7 @@ void KoShape::saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &or
 
     debugFlake << "shape saves contour-polygon";
     if (d->clipPath && !d->clipPath->clipPathShapes().isEmpty()) {
-        // This will loose data as odf can only save one set of contour wheras
+        // This will loose data as odf can only save one set of contour whereas
         // svg loading and at least karbon editing can produce more than one
         // TODO, FIXME see if we can save more than one clipshape to odf
         d->clipPath->clipPathShapes().first()->saveContourOdf(context, originalSize);

@@ -12,11 +12,6 @@
 # PYTHON_LONG_VERSION - The version of the Python interpreter found as a human
 #     readable string.
 #
-# PYTHON_SITE_PACKAGES_INSTALL_DIR - this cache variable can be used for installing
-#                              own python modules. You may want to adjust this to be the
-#                              same as ${PYTHON_SITE_PACKAGES_DIR}, but then admin
-#                              privileges may be required for installation.
-#
 # PYTHON_SITE_PACKAGES_DIR - Location of the Python site-packages directory.
 #
 # PYTHON_INCLUDE_PATH - Directory holding the python.h include file.
@@ -33,8 +28,6 @@ include(FindPackageHandleStandardArgs)
 find_package(PythonInterp)
 
 if (PYTHONINTERP_FOUND)
-
-    option(INSTALL_PYTHON_FILES_IN_PYTHON_PREFIX "Install the Python files in the Python packages dir" FALSE)
 
     # Set the Python libraries to what we actually found for interpreters
     set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
@@ -55,18 +48,6 @@ if (PYTHONINTERP_FOUND)
                    )
 
     message(STATUS "Python system site-packages directory: ${PYTHON_SITE_PACKAGES_DIR}")
-    if(INSTALL_PYTHON_FILES_IN_PYTHON_PREFIX)
-        set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${PYTHON_SITE_PACKAGES_DIR})
-    else()
-        execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(True, prefix='${CMAKE_INSTALL_PREFIX}'))"
-                        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_INSTALL_DIR
-                        OUTPUT_STRIP_TRAILING_WHITESPACE
-                       )
-    endif()
-
-    if(NOT PYTHON_SITE_PACKAGES_INSTALL_DIR STREQUAL PYTHON_SITE_PACKAGES_DIR)
-        message(STATUS "The Python files will be installed to ${PYTHON_SITE_PACKAGES_INSTALL_DIR}. Make sure to add them to the Python search path (e.g. by setting PYTHONPATH)")
-    endif()
 
 endif(PYTHONINTERP_FOUND)
 

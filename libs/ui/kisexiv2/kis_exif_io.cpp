@@ -42,7 +42,7 @@
 struct KisExifIO::Private {
 };
 
-// ---- Exception convertion functions ---- //
+// ---- Exception conversion functions ---- //
 
 // convert ExifVersion and FlashpixVersion to a KisMetaData value
 KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)

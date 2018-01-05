@@ -80,7 +80,7 @@ void applyToIterator(const int numChannels, const int *channelIndex,
     quint8 *baseColorData_uint8 = baseColor.data();
     channel_type *baseColorData = reinterpret_cast<channel_type*>(baseColorData_uint8);
 
-    do {
+    while (it.nextPixel()) {
         channel_type *dst = reinterpret_cast<channel_type*>(it.rawData());
         quint8 *dst_uint8 = it.rawData();
 
@@ -97,7 +97,7 @@ void applyToIterator(const int numChannels, const int *channelIndex,
                                                   newOpacity);
 
         progressHelper.step();
-    } while(it.nextPixel());
+    }
 }
 
 void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,

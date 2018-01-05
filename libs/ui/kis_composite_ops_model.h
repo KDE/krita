@@ -49,28 +49,39 @@ public:
 
     static KoID favoriteCategory();
 
+    void initialize();
+
 private:
     void addFavoriteEntry(const KoID &entry);
     void removeFavoriteEntry(const KoID &entry);
 };
 
+/**
+ * @brief The KisSortedCompositeOpListModel class provides a model for the composite op combobox.
+ *
+ * It intentionally does NOT use the shared instance of KisCompositeOpListModel because it is
+ * perfect valid for two composite comboboboxes to show a different set of valid composite ops.
+ */
 class KRITAUI_EXPORT KisSortedCompositeOpListModel : public KisSortedCategorizedListModel<KisCompositeOpListModel>
 {
 public:
     KisSortedCompositeOpListModel(QObject *parent)
         : KisSortedCategorizedListModel<KisCompositeOpListModel>(parent)
     {
-        initializeModel(KisCompositeOpListModel::sharedInstance());
+        m_model.initialize();
+        initializeModel(&m_model);
     }
 
     void validate(const KoColorSpace *cs) {
-        KisCompositeOpListModel::sharedInstance()->validate(cs);
+        m_model.validate(cs);
     }
 
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override {
         return lessThanPriority(left, right, KisCompositeOpListModel::favoriteCategory().name());
     }
+private:
+    KisCompositeOpListModel m_model;
 };
 
 #endif

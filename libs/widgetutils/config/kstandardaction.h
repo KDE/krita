@@ -42,7 +42,7 @@ class KToggleFullScreenAction;
  *
  * All of the documentation for QAction holds for KStandardAction
  * also.  When in doubt on how things work, check the QAction
- * documention first.
+ * documentation first.
  * Please note that calling any of these methods automatically adds the action
  * to the actionCollection() of the QObject given by the 'parent' parameter.
  *
@@ -197,7 +197,7 @@ inline KRITAWIDGETUTILS_DEPRECATED const char *stdName(StandardAction act_enum)
 
 /**
  * Returns a list of all standard names. Used by KAccelManager
- * to give those heigher weight.
+ * to give those higher weight.
  */
 KRITAWIDGETUTILS_EXPORT QStringList stdNames();
 

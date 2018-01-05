@@ -28,11 +28,11 @@ KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
 {
 }
 
-void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label)
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, KisPaintOpOption::PaintopCategory categoryType)
 {
 
     QString category;
-    switch(option->category()) {
+    switch(categoryType) {
     case KisPaintOpOption::GENERAL:
         category = i18nc("option category", "General");
         break;
@@ -44,6 +44,9 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
         break;
     case KisPaintOpOption::FILTER:
         category = i18nc("option category", "Filter");
+        break;
+    case KisPaintOpOption::MASKING_BRUSH:
+        category = i18nc("option category", "Masked Brush");
         break;
     default:
         category = i18n("Unknown");

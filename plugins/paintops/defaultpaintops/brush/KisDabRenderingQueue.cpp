@@ -98,6 +98,7 @@ struct KisDabRenderingQueue::Private
     int calculateLastDabJobIndex(int startSearchIndex);
     void cleanPaintedDabs();
     bool dabsHaveSeparateOriginal();
+    bool hasPreparedDabsImpl() const;
 
     KisDabCacheUtils::DabRenderingResources* fetchResourcesFromCache();
     void putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources);
@@ -189,6 +190,7 @@ KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabReq
                 job->status = KisDabRenderingJob::Completed;
                 job->originalDevice = m_d->jobs[lastDabJobIndex]->originalDevice;
                 job->postprocessedDevice = m_d->jobs[lastDabJobIndex]->postprocessedDevice;
+                m_d->avgExecutionTime(0);
             }
         }
     }
@@ -252,6 +254,7 @@ QList<KisDabRenderingJobSP> KisDabRenderingQueue::notifyJobFinished(int seqNo, i
                 j->originalDevice = finishedJob->originalDevice;
                 j->postprocessedDevice = finishedJob->postprocessedDevice;
                 j->status = KisDabRenderingJob::Completed;
+                m_d->avgExecutionTime(0);
 
             } else if (j->type == KisDabRenderingJob::Postprocess) {
 
@@ -304,7 +307,9 @@ void KisDabRenderingQueue::Private::cleanPaintedDabs()
     }
 }
 
-QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs)
+QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs,
+                                                          int oneTimeLimit,
+                                                          bool *someDabsLeft)
 {
     QMutexLocker l(&m_d->mutex);
 
@@ -320,7 +325,11 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
             m_d->lastDabJobInQueue :
             std::numeric_limits<int>::max();
 
-    for (int i = 0; i < m_d->jobs.size(); i++) {
+    if (oneTimeLimit < 0) {
+        oneTimeLimit = std::numeric_limits<int>::max();
+    }
+
+    for (int i = 0; i < m_d->jobs.size() && oneTimeLimit > 0; i++, oneTimeLimit--) {
         KisDabRenderingJobSP j = m_d->jobs[i];
 
         if (j->status != KisDabRenderingJob::Completed) break;
@@ -349,19 +358,29 @@ QList<KisRenderedDab> KisDabRenderingQueue::takeReadyDabs(bool returnMutableDabs
     }
 
     m_d->cleanPaintedDabs();
+
+    if (someDabsLeft) {
+        *someDabsLeft = m_d->hasPreparedDabsImpl();
+    }
+
     return renderedDabs;
 }
+
+bool KisDabRenderingQueue::Private::hasPreparedDabsImpl() const
+{
+    const int nextToBePainted = lastPaintedJob + 1;
+
+    return
+        nextToBePainted >= 0 &&
+        nextToBePainted < jobs.size() &&
+            jobs[nextToBePainted]->status == KisDabRenderingJob::Completed;
+}
+
 
 bool KisDabRenderingQueue::hasPreparedDabs() const
 {
     QMutexLocker l(&m_d->mutex);
-
-    const int nextToBePainted = m_d->lastPaintedJob + 1;
-
-    return
-        nextToBePainted >= 0 &&
-        nextToBePainted < m_d->jobs.size() &&
-            m_d->jobs[nextToBePainted]->status == KisDabRenderingJob::Completed;
+    return m_d->hasPreparedDabsImpl();
 }
 
 void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterface *interface)
@@ -378,10 +397,10 @@ KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
     return new KisFixedPaintDevice(m_d->colorSpace, m_d->paintDeviceAllocator);
 }
 
-int KisDabRenderingQueue::averageExecutionTime() const
+qreal KisDabRenderingQueue::averageExecutionTime() const
 {
     QMutexLocker l(&m_d->mutex);
-    return qRound(m_d->avgExecutionTime.rollingMean());
+    return m_d->avgExecutionTime.rollingMean() / 1000.0;
 }
 
 int KisDabRenderingQueue::averageDabSize() const

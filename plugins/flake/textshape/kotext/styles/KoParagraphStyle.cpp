@@ -1619,7 +1619,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     // Borders
     // The border attribute is actually three attributes in one string, all optional
-    // and with no given order. Also there is a hierachy, first the common for all
+    // and with no given order. Also there is a hierarchy, first the common for all
     // sides and then overwrites per side, while in the code only the sides are stored.
     // So first the common data border is fetched, then this is overwritten per
     // side and the result stored.

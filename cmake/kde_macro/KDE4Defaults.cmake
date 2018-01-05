@@ -22,7 +22,7 @@ set(KDE_NON_GENERIC_LIB_SOVERSION "5")
 
 # windows does not support LD_LIBRARY_PATH or similar
 # all searchable directories has to be defined by the PATH environment var
-# to reduce the number of required pathes executables are placed into
+# to reduce the number of required paths executables are placed into
 # the build bin dir
 if (WIN32)
  set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)

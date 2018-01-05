@@ -938,10 +938,10 @@ QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
     return QPointF(documentCoord.x() * xRes(), documentCoord.y() * yRes());
 }
 
-QPoint KisImage::documentToIntPixel(const QPointF &documentCoord) const
+QPoint KisImage::documentToImagePixelFloored(const QPointF &documentCoord) const
 {
     QPointF pixelCoord = documentToPixel(documentCoord);
-    return QPoint((int)pixelCoord.x(), (int)pixelCoord.y());
+    return QPoint(qFloor(pixelCoord.x()), qFloor(pixelCoord.y()));
 }
 
 QRectF KisImage::documentToPixel(const QRectF &documentRect) const
@@ -1442,7 +1442,7 @@ void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 
 void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
 {
-    // udpate filters are *not* recursive!
+    // update filters are *not* recursive!
     KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
 
     m_d->projectionUpdatesFilter = filter;

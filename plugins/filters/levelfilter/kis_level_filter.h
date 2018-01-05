@@ -75,10 +75,14 @@ protected Q_SLOTS:
     void slotModifyOutWhiteLimit(int);
 
     void slotAutoLevel(void);
+    void slotInvert(void);
+
+    void resetOutSpinLimit();
 
 protected:
     QScopedPointer<KisHistogram> m_histogram;
     bool m_histlog;
+    bool m_inverted;
 };
 
 #endif

@@ -22,6 +22,8 @@
 #include "krita_container_utils.h"
 #include <KisRenderedDab.h>
 
+#include <functional>
+
 namespace KisPaintOpUtils {
 
 
@@ -66,14 +68,14 @@ KisTimingInformation effectiveTiming(bool timingEnabled, qreal timingInterval, q
     }
 }
 
-QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QList<KisRenderedDab> &dabs, int idealPatchSize)
+QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QVector<QRect> &dabRects, int idealPatchSize)
 {
     QVector<QRect> rects = KritaUtils::splitRectIntoPatches(totalRect, QSize(idealPatchSize,idealPatchSize));
 
     KritaUtils::filterContainer(rects,
-        [dabs] (const QRect &rc) {
-            Q_FOREACH (const KisRenderedDab &dab, dabs) {
-                if (dab.realBounds().intersects(rc)) {
+        [dabRects] (const QRect &rc) {
+            Q_FOREACH (const QRect &dab, dabRects) {
+                if (dab.intersects(rc)) {
                     return true;
                 }
             }
@@ -82,14 +84,10 @@ QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QList<KisRend
     return rects;
 }
 
-QVector<QRect> splitDabsIntoRects(const QList<KisRenderedDab> &dabs, int idealNumRects, int diameter, qreal spacing)
+QVector<QRect> splitDabsIntoRects(const QVector<QRect> &dabRects, int idealNumRects, int diameter, qreal spacing)
 {
-    QRect totalRect;
-
-    Q_FOREACH (const KisRenderedDab &dab, dabs) {
-        const QRect rc = dab.realBounds();
-        totalRect |= rc;
-    }
+    const QRect totalRect =
+        std::accumulate(dabRects.begin(), dabRects.end(), QRect(), std::bit_or<QRect>());
 
     constexpr int minPatchSize = 128;
     constexpr int maxPatchSize = 512;
@@ -102,11 +100,11 @@ QVector<QRect> splitDabsIntoRects(const QList<KisRenderedDab> &dabs, int idealNu
                                 maxPatchSize);
 
 
-    QVector<QRect> rects = splitAndFilterDabRect(totalRect, dabs, idealPatchSize);
+    QVector<QRect> rects = splitAndFilterDabRect(totalRect, dabRects, idealPatchSize);
 
     while (rects.size() < idealNumRects && idealPatchSize >minPatchSize) {
         idealPatchSize = qMax(minPatchSize, idealPatchSize - patchStep);
-        rects = splitAndFilterDabRect(totalRect, dabs, idealPatchSize);
+        rects = splitAndFilterDabRect(totalRect, dabRects, idealPatchSize);
     }
 
     return rects;

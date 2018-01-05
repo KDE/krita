@@ -34,11 +34,13 @@
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
 #include "kis_smudge_radius_option.h"
+#include "KisPrecisePaintDeviceWrapper.h"
 
 class QPointF;
 class KoAbstractGradient;
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
+class KoColorSpace;
 
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
@@ -60,10 +62,13 @@ private:
 private:
     bool                      m_firstRun;
     KisImageWSP               m_image;
+    KisPrecisePaintDeviceWrapper m_preciseWrapper;
+    KoColor                   m_paintColor;
     KisPaintDeviceSP          m_tempDev;
-    KisPainter*               m_backgroundPainter;
-    KisPainter*               m_smudgePainter;
-    KisPainter*               m_colorRatePainter;
+    QScopedPointer<KisPainter> m_backgroundPainter;
+    QScopedPointer<KisPainter> m_smudgePainter;
+    QScopedPointer<KisPainter> m_colorRatePainter;
+    QScopedPointer<KisPainter> m_finalPainter;
     const KoAbstractGradient* m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
@@ -78,6 +83,8 @@ private:
     QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
     QPointF                   m_lastPaintPos;
+
+    const KoCompositeOp *m_preciseColorRateCompositeOp = 0;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

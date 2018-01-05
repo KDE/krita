@@ -399,6 +399,18 @@ void KisPainter::addDirtyRect(const QRect & rc)
     }
 }
 
+void KisPainter::addDirtyRects(const QVector<QRect> &rects)
+{
+    d->dirtyRects.reserve(d->dirtyRects.size() + rects.size());
+
+    Q_FOREACH (const QRect &rc, rects) {
+        const QRect r = rc.normalized();
+        if (r.isValid()) {
+            d->dirtyRects.append(rc);
+        }
+    }
+}
+
 inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDev,
                                                      QRect *srcRect,
                                                      qint32 *srcX,
@@ -2640,6 +2652,13 @@ void KisPainter::setMirrorInformation(const QPointF& axesCenter, bool mirrorHori
     d->mirrorVertically = mirrorVertically;
 }
 
+void KisPainter::copyMirrorInformationFrom(const KisPainter *other)
+{
+    d->axesCenter = other->d->axesCenter;
+    d->mirrorHorizontally = other->d->mirrorHorizontally;
+    d->mirrorVertically = other->d->mirrorVertically;
+}
+
 bool KisPainter::hasMirroring() const
 {
     return d->mirrorHorizontally || d->mirrorVertically;
@@ -2907,4 +2926,32 @@ void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
     QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
+}
+
+const QVector<QRect> KisPainter::calculateAllMirroredRects(const QRect &rc)
+{
+    QVector<QRect> rects;
+
+    KisLodTransform t(d->device);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+
+    QRect baseRect = rc;
+    rects << baseRect;
+
+    if (d->mirrorHorizontally && d->mirrorVertically){
+        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+    } else if (d->mirrorHorizontally) {
+        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+    } else if (d->mirrorVertically) {
+        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+    }
+
+    return rects;
 }

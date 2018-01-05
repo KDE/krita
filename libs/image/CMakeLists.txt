@@ -57,6 +57,7 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_painter_blt_multi_fixed.cpp
    kis_marker_painter.cpp
+   KisPrecisePaintDeviceWrapper.cpp
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
    brushengine/kis_random_source.cpp

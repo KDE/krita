@@ -1443,7 +1443,7 @@ void KisPaintDevice::clear(const QRect & rc)
 
 void KisPaintDevice::fill(const QRect & rc, const KoColor &color)
 {
-    Q_ASSERT(*color.colorSpace() == *colorSpace());
+    KIS_ASSERT_RECOVER_RETURN(*color.colorSpace() == *colorSpace());
     m_d->currentStrategy()->fill(rc, color.data());
 }
 

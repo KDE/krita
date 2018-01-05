@@ -209,7 +209,7 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
             QVector<KoSvgText::CharTransformation> transforms = q->d_func()->localTransformations;
 
             /**
-             * Sometimes SVG can contain the X,Y offets for the pieces for the pieses of text that
+             * Sometimes SVG can contain the X,Y offsets for the pieces of text that
              * do not exist, just skip them.
              */
             if (text.size() <= transforms.size()) {

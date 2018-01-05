@@ -85,9 +85,9 @@ public:
      * split into multiple "SVG text chunks" or just messed up with
      * unicode-bidi algorithm.
      *
-     * To let the shape know, where its text is places, the layout engine
+     * To let the shape know, where its text is placed, the layout engine
      * notifies the shape by calling `addAssociatedOutline()` for every
-     * characted of the shape. The shape aggregates these values to understand
+     * character of the shape. The shape aggregates these values to understand
      * its `outline()`.
      */
     virtual void addAssociatedOutline(const QRectF &rect) = 0;

@@ -38,12 +38,12 @@ class SvgLoadingContext;
  * the properties of the two shapes and distinguish, which properties were
  * inherited by text shape, and which are its own. It is needed to generate a
  * correct and clean SVG/markup code that can be edited by the user easily.
- * Otherwise, every <tspan> block will contain the full list of 20+ atributes,
+ * Otherwise, every <tspan> block will contain the full list of 20+ attributes,
  * which are not interesting for the user, since they are inherited or default.
  *
- * To achive the goal, KoSvgTextProperties wraps all the SVG attributes into a
+ * To achieve the goal, KoSvgTextProperties wraps all the SVG attributes into a
  * map of QVariants. When the user need to find a set of unique properties
- * ofthe shape, it iterates through the map and compares values with standard
+ * of the shape, it iterates through the map and compares values with standard
  * QVariant-based comparison operator. If the property value in a child and a
  * parent is not the same, then it is not inherited.
  */

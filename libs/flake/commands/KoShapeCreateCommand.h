@@ -34,7 +34,7 @@ public:
     /**
      * Command used on creation of new shapes
      * @param controller the controller used to add/remove the shape from
-     * @param shape the shape thats just been created.
+     * @param shape the shape that's just been created.
      * @param parent the parent command used for macro commands
      */
     KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape,

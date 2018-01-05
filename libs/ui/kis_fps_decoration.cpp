@@ -18,6 +18,7 @@
 
 #include "kis_fps_decoration.h"
 
+#include <QApplication>
 #include <QPainter>
 #include "kis_canvas2.h"
 #include "kis_coordinates_converter.h"

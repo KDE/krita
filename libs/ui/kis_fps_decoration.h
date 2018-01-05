@@ -21,6 +21,12 @@
 
 #include "canvas/kis_canvas_decoration.h"
 
+#include <QFont>
+
+class QGraphicsScene;
+class QGraphicsPixmapItem;
+class QGraphicsDropShadowEffect;
+
 class KisFpsDecoration : public KisCanvasDecoration
 {
 public:
@@ -31,7 +37,15 @@ public:
     static const QString idTag;
 
 private:
-    void draw(QPainter& gc);
+    bool draw(const QString &text, QSize &outSize);
+	QString getText() const;
+
+    QFont m_font;
+    QPixmap m_pixmap;
+
+    QGraphicsScene *m_scene;
+    QGraphicsPixmapItem *m_pixmapItem;
+    QGraphicsDropShadowEffect *m_shadow;
 };
 
 #endif /* __KIS_FPS_DECORATION_H */

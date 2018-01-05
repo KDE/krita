@@ -1,4 +1,4 @@
-commit fae3af9e1b46ea0b7c5821727b880d6006624870
+commit 73e9c36556eac2fd74dec9453ca187aee5ae77b2
 Author: Boudewijn Rempt <boud@valdyas.org>
 Date:   Fri Jan 5 10:26:04 2018 +0100
 
@@ -14,10 +14,10 @@ index 0000000..7324e79
 +*orig
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..cbba752
+index 0000000..3f5839a
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,315 @@
+@@ -0,0 +1,317 @@
 +# This file is copyrighted under the BSD-license for buildsystem files of KDE
 +# copyright 2010, Patrick Spendrin <ps_ml@gmx.de>
 +
@@ -63,8 +63,10 @@ index 0000000..cbba752
 +
 +if(ENABLE_THREADS)
 +    set(WITH_THREADS 1)
++    set(WITH_THREAD_ALLOC 1)
 +else()
 +    set(WITH_THREADS 0)
++    set(WITH_THREAD_ALLOC 0)
 +endif()    
 +set(WITH_TREE 1)
 +set(WITH_OUTPUT 1)

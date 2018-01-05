@@ -413,15 +413,6 @@ endif(MINGW)
 # enable exceptions globally
 kde_enable_exceptions()
 
-
-# only with this definition will all the FOO_TEST_EXPORT macro do something
-# TODO: check if this can be moved to only those places which make use of it,
-# to reduce global compiler definitions that would trigger a recompile of
-# everything on a change (like adding/removing tests to/from the build)
-if(BUILD_TESTING)
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
 macro(macro_add_unittest_definitions)
   add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")

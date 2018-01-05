@@ -186,7 +186,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
     QString formattedBrushName;
     if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
-         QString formattedBrushName = v.value<KisPaintOpPresetSP>()->name().replace("_", " ");
+         formattedBrushName = v.value<KisPaintOpPresetSP>()->name().replace("_", " ");
     }
 
     switch (key) {

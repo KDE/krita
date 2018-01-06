@@ -280,7 +280,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     painter()->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, m_maskDab, m_dstDabRect.width(), m_dstDabRect.height());
     painter()->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab, !m_dabCache->needSeparateOriginal());
 
-    // restore orginal opacy and composite mode values
+    // restore original opacity and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldCompositeOpId);
 

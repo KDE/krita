@@ -165,7 +165,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
     int bristleCount = m_bristles.size();
     int bristlePathSize;
-    qreal treshold = 1.0 - pi2.pressure();
+    qreal threshold = 1.0 - pi2.pressure();
     for (int i = 0; i < bristleCount; i++) {
 
         if (!m_bristles.at(i)->enabled()) continue;
@@ -205,7 +205,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         fx2 += x2;
         fy2 += y2;
 
-        if (m_properties->threshold && (bristle->length() < treshold)) continue;
+        if (m_properties->threshold && (bristle->length() < threshold)) continue;
         // paint between first and last dab
         const QVector<QPointF> bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();

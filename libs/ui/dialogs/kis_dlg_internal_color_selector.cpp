@@ -105,7 +105,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         connect(m_ui->paletteBox, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(slotColorUpdated(KoColor)));
         m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     } else {
-        m_ui->paletteBox->hide();
+        m_ui->paletteBox->setEnabled(false);
     }
 
     if (config.prevNextButtons) {

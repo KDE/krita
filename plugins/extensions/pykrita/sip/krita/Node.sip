@@ -9,6 +9,7 @@ public:
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
 public Q_SLOTS:
+    Node *clone() const /Factory/;
     bool alphaLocked() const;
     void setAlphaLocked(bool value);
     QString blendingMode() const;

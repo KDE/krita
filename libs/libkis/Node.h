@@ -41,6 +41,12 @@ public:
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
 public Q_SLOTS:
+
+    /**
+     * @brief clone clone the current node. The node is not associated with any image.
+     */
+    Node *clone() const;
+
     /**
      * @brief alphaLocked checks whether the node is a paint layer and returns whether it is alpha locked
      * @return whether the paint layer is alpha locked, or false if the node is not a paint layer

@@ -87,6 +87,13 @@ bool Node::operator!=(const Node &other) const
     return !(operator==(other));
 }
 
+Node *Node::clone() const
+{
+    KisNodeSP clone = d->node->clone();
+    Node *node = new Node(0, clone);
+    return node;
+}
+
 
 bool Node::alphaLocked() const
 {

@@ -51,6 +51,7 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 
+#include <KisMimeDatabase.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -220,9 +221,10 @@ QString Document::fileName() const
 void Document::setFileName(QString value)
 {
     if (!d->document) return;
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(value, false);
+    d->document->setMimeType(mimeType.toLatin1());
     d->document->setUrl(QUrl::fromLocalFile(value));
 }
-
 
 int Document::height() const
 {
@@ -494,6 +496,8 @@ void Document::shearImage(double angleX, double angleY)
 bool Document::save()
 {
     if (!d->document) return false;
+    if (d->document->url().isEmpty()) return false;
+
     bool retval = d->document->save(true, 0);
     d->document->waitForSavingToComplete();
 

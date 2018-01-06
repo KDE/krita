@@ -73,6 +73,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
+    m_wdgPaletteDock->bnAddDialog->setVisible(false);
     m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
     m_wdgPaletteDock->bnAddGroup->setIconSize(QSize(16, 16));
 

@@ -62,12 +62,6 @@ void KisGridManager::setGridConfigImpl(const KisGridConfig &config, bool emitMod
     config.saveStaticData();
     m_imageView->document()->setGridConfig(config);
 
-    if (emitModified) {
-        // TODO: make editing guides undoable, so that no
-        //       setModified() will be needed
-        m_imageView->document()->setModified(true);
-    }
-
     m_gridDecoration->setGridConfig(config);
     m_gridDecoration->setVisible(config.showGrid());
 

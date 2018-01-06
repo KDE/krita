@@ -33,7 +33,7 @@ KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
     setEditable(true);
     completer()->setCompletionMode(QCompleter::InlineCompletion);
     completer()->setCaseSensitivity(Qt::CaseInsensitive);
-    //The following are all helper fonts for LaTeX that noone but LaTeX would use
+    //The following are all helper fonts for LaTeX that no one but LaTeX would use
     //but because many people use LaTeX, they do show up on quite a few systems.
     m_blacklistedFonts << "bbold10" << "cmbsy10" << "cmmib10"
                        << "cmss10"  << "cmex10"  << "cmmi10"

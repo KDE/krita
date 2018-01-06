@@ -646,6 +646,15 @@ bool Document::guidesLocked() const
     return d->document->guidesConfig().showGuides();
 }
 
+Document *Document::clone() const
+{
+    if (!d->document) return 0;
+    QPointer<KisDocument> clone = d->document->clone();
+    Document * d = new Document(clone);
+    clone->setParent(d); // It's owned by the document, not KisPart
+    return d;
+}
+
 void Document::setHorizontalGuides(const QList<qreal> &lines)
 {
     if (!d->document) return;

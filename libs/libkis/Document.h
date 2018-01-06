@@ -71,6 +71,12 @@ public:
 public Q_SLOTS:
 
     /**
+     * @brief clone create a shallow clone of this document.
+     * @return a new Document that should be identical to this one in every respect.
+     */
+    Document *clone() const;
+
+    /**
      * Batchmode means that no actions on the document should show dialogs or popups.
      * @return true if the document is in batchmode.
      */

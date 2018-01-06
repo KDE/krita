@@ -14,6 +14,7 @@ public:
     bool guidesLocked() const;
 public Q_SLOTS:
 
+    Document *clone() const /Factory/;
     Node * activeNode() const  /Factory/;
     void setActiveNode(Node*  value);
     QList<Node*> topLevelNodes() const  /Factory/;

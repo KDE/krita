@@ -25,6 +25,8 @@
 #include <QHeaderView>
 #include <QWheelEvent>
 #include <QColorDialog>
+#include <QCompleter>
+#include <QComboBox>
 
 #include <klocalizedstring.h>
 
@@ -100,6 +102,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 
+    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList()));
     KisConfig cfg;
     QString defaultPalette = cfg.defaultPalette();
     KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
@@ -176,6 +179,39 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_model->setColorSet(colorSet);
     m_wdgPaletteDock->paletteView->updateView();
     m_wdgPaletteDock->paletteView->updateRows();
+    m_wdgPaletteDock->cmbNameList->clear();
+    for (quint32 i = 0; i< colorSet->nColors(); i++) {
+        KoColorSetEntry entry = colorSet->getColorGlobal(i);
+        QPixmap colorSquare = QPixmap(32, 32);
+        if (entry.spotColor) {
+            QImage img = QImage(32, 32, QImage::Format_ARGB32);
+            QPainter circlePainter;
+            img.fill(Qt::transparent);
+            circlePainter.begin(&img);
+            QBrush brush = QBrush(Qt::SolidPattern);
+            brush.setColor(entry.color.toQColor());
+            circlePainter.setBrush(brush);
+            QPen pen = circlePainter.pen();
+            pen.setColor(Qt::transparent);
+            pen.setWidth(0);
+            circlePainter.setPen(pen);
+            circlePainter.drawEllipse(0, 0, 32, 32);
+            circlePainter.end();
+            colorSquare = QPixmap::fromImage(img);
+        } else {
+            colorSquare.fill(entry.color.toQColor());
+        }
+        QString name = entry.name;
+        if (!entry.id.isEmpty()){
+            name = entry.id + " - " + entry.name;
+        }
+        m_wdgPaletteDock->cmbNameList->addItem(QIcon(colorSquare), name);
+    }
+    QCompleter *completer = new QCompleter(m_wdgPaletteDock->cmbNameList->model());
+    completer->setCompletionMode(QCompleter::PopupCompletion);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setFilterMode(Qt::MatchContains);
+    m_wdgPaletteDock->cmbNameList->setCompleter(completer);
     if (colorSet && colorSet->removable()) {
         m_wdgPaletteDock->bnAdd->setEnabled(true);
         m_wdgPaletteDock->bnRemove->setEnabled(true);
@@ -184,6 +220,18 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
         m_wdgPaletteDock->bnRemove->setEnabled(false);
     }
     m_currentColorSet = colorSet;
+}
+
+void PaletteDockerDock::setColorFromNameList()
+{
+    int index  = m_wdgPaletteDock->cmbNameList->currentIndex();
+    if (m_model && m_currentColorSet) {
+        entrySelected(m_currentColorSet->getColorGlobal(index));
+        m_wdgPaletteDock->paletteView->blockSignals(true);
+        m_wdgPaletteDock->paletteView->selectionModel()->clearSelection();
+        m_wdgPaletteDock->paletteView->selectionModel()->setCurrentIndex(m_model->indexFromId(index), QItemSelectionModel::Select);
+        m_wdgPaletteDock->paletteView->blockSignals(false);
+    }
 }
 
 void PaletteDockerDock::addColorForeground()
@@ -225,13 +273,10 @@ void PaletteDockerDock::removeColor()
 
 void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
 {
-    quint32 index = 0;
-    QString groupName = m_currentColorSet->findGroupByColorName(entry.name, &index);
-    QString seperator;
-    if (groupName != QString()) {
-        seperator = " - ";
+    if (m_wdgPaletteDock->paletteView->currentIndex().isValid()) {
+        quint32 index = m_model->idFromIndex(m_wdgPaletteDock->paletteView->currentIndex());
+        m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
     }
-    m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
     if (m_resourceProvider) {
         m_resourceProvider->setFGColor(entry.color);
     }
@@ -242,13 +287,10 @@ void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
 
 void PaletteDockerDock::entrySelectedBack(KoColorSetEntry entry)
 {
-    quint32 index = 0;
-    QString groupName = m_currentColorSet->findGroupByColorName(entry.name, &index);
-    QString seperator;
-    if (groupName != QString()) {
-        seperator = " - ";
+    if (m_wdgPaletteDock->paletteView->currentIndex().isValid()) {
+        quint32 index = m_model->idFromIndex(m_wdgPaletteDock->paletteView->currentIndex());
+        m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
     }
-    m_wdgPaletteDock->lblColorName->setText(groupName+seperator+entry.name);
     if (m_resourceProvider) {
         m_resourceProvider->setBGColor(entry.color);
     }

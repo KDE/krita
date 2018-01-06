@@ -68,6 +68,8 @@ private Q_SLOTS:
     void entrySelectedBack(KoColorSetEntry entry);
     void setColorSet(KoColorSet* colorSet);
 
+    void setColorFromNameList();
+
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 

@@ -57,7 +57,7 @@ void TestXmlReader::testNode()
     xmlstream << "  <europe/>";
     xmlstream << "  <america/>";
     xmlstream << "  <australia/>";
-    xmlstream << "  <antartic/>";
+    xmlstream << "  <antarctic/>";
     xmlstream << " </continents>";
     xmlstream << " <oceans>";
     xmlstream << "  <pacific/>";
@@ -1088,7 +1088,7 @@ void TestXmlReader::testUnload()
     xmlstream << "<europe/>";
     xmlstream << "<america/>";
     xmlstream << "<australia/>";
-    xmlstream << "<antartic/>";
+    xmlstream << "<antarctic/>";
     xmlstream << "</continents>";
     xmlstream << "<oceans>";
     xmlstream << "<pacific/>";

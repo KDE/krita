@@ -12,6 +12,7 @@ Clone_Tool_Textured.kpp
 Distort_Grow.kpp
 Distort_Move.kpp
 Distort_Shrink.kpp
+Dry_Bristles_Eroded.kpp
 Dry_Bristles.kpp
 Dry_Bristles_Smooth.kpp
 Dry_Marker.kpp
@@ -37,7 +38,6 @@ Ink_Brush_Rough.kpp
 Ink_Fineliner.kpp
 Ink_Precision.kpp
 Ink_Tough.kpp
-kis_paintoppresets_tags.xml
 Normal_Map.kpp
 Pixel_Art.kpp
 Sketch_2B.kpp
@@ -45,15 +45,21 @@ Sketch_Chrome.kpp
 Sketch_Hatch_Noisy.kpp
 Stamp_Clouds.kpp
 Stamp_Freckles.kpp
+Stamp_Grass.kpp
+Stamp_Grass_Patch.kpp
 Stamp_Hearts.kpp
 Stamp_Ink_Smear.kpp
+Stamp_Leaves.kpp
+Stamp_Mountains_Distant.kpp
 Stamp_Scales.kpp
 Stamp_Shoujo_Bubbles.kpp
 Stamp_Spines.kpp
 Stamp_Watercolor.kpp
+Stamp_Water.kpp
 Wet_Bristles.kpp
 Wet_Bristles_Rough.kpp
 Wet_Circle.kpp
+
 
 
 

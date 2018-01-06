@@ -39,7 +39,7 @@ public:
     /// Constructs a new command from the given command type
     EnhancedPathCommand(const QChar &command, EnhancedPathShape *parent);
     ~EnhancedPathCommand();
-    /// Excutes the command on the specified path shape
+    /// Executes the command on the specified path shape
     bool execute();
     /// Adds a new parameter to the command
     void addParameter(EnhancedPathParameter *parameter);

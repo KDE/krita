@@ -37,7 +37,7 @@ public:
     /**
      * Moves the subject to it's right position.
      *
-     * @return true if subject was moved to a new position (or it it couldn't be calculated yet)
+     * @return true if subject was moved to a new position (or if it couldn't be calculated yet)
      */
     virtual bool moveSubject() = 0;
 

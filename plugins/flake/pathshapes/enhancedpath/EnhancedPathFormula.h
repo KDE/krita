@@ -159,7 +159,7 @@ public:
         return m_error;
     }
 
-    /// returns string representaion of the formula
+    /// returns string representation of the formula
     QString toString() const;
 private:
     /// Separates the given formula text into tokens.

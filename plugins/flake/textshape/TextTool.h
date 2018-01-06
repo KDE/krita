@@ -274,7 +274,7 @@ private Q_SLOTS:
     /// Enable or disable shrink-to-fit-text.
     void setShrinkToFit(bool enabled);
     /// set Paragraph style of current selection. Existing style will be completely overridden.
-    void setStyle(KoParagraphStyle *syle);
+    void setStyle(KoParagraphStyle *style);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);
     /// set the level of current selected list

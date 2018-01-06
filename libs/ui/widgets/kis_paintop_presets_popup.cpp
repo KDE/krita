@@ -640,7 +640,7 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
         for (int j = 0; j < sortedBrushEnginesList.length(); j++) {
             KisAction * newEngineAction = static_cast<KisAction*>( newPresetBrushEnginesMenu->addAction(sortedBrushEnginesList[j].name));
             newEngineAction->setObjectName(sortedBrushEnginesList[j].id); // we need the ID for changing the paintop when action triggered
-
+            newEngineAction->setIcon(sortedBrushEnginesList[j].icon);
             newBrushEngineOptions.append(newEngineAction);
             connect(newEngineAction, SIGNAL(triggered()), this, SLOT(slotCreateNewBrushPresetEngine()));
         }

@@ -110,6 +110,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
     QPointF mousePos = m_canvas->viewConverter()->documentToView(canvasDecoration->snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
 
+    // syncs the assistant handles to the handles reference we store in this tool
+    // they can get out of sync with the way the actions and paintevents occur
+    // we probably need to stop storing a reference in m_handles and call the assistants directly
+    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 

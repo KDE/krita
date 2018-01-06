@@ -62,7 +62,6 @@ public: // KoResourceServerObserver
 
 private Q_SLOTS:
     void addColorForeground();
-    void addColor();
     void removeColor();
     void entrySelected(KoColorSetEntry entry);
     void entrySelectedBack(KoColorSetEntry entry);

@@ -69,8 +69,6 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->setupUi(mainWidget);
     m_wdgPaletteDock->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnAddDialog->setIcon(KisIconUtils::loadIcon("document-new"));
-    m_wdgPaletteDock->bnAddDialog->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnRemove->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
@@ -83,7 +81,6 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
     connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
-    connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
     connect(m_wdgPaletteDock->bnAddGroup, SIGNAL(clicked(bool)), m_wdgPaletteDock->paletteView, SLOT(addGroupWithDialog()));
 
@@ -239,26 +236,6 @@ void PaletteDockerDock::addColorForeground()
     if (m_resourceProvider) {
         //setup dialog
         m_wdgPaletteDock->paletteView->addEntryWithDialog(m_resourceProvider->fgColor());
-    }
-}
-
-void PaletteDockerDock::addColor()
-{
-    if (m_currentColorSet && m_resourceProvider) {
-
-        const KoColorDisplayRendererInterface *displayRenderer =
-            m_canvas->displayColorConverter()->displayRendererInterface();
-
-        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
-        QColor color = QColorDialog::getColor(displayRenderer->toQColor(currentFgColor));
-
-        if (color.isValid()) {
-            KoColorSetEntry newEntry;
-            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
-            m_currentColorSet->add(newEntry);
-            m_currentColorSet->save();
-            setColorSet(m_currentColorSet); // update model
-        }
     }
 }
 

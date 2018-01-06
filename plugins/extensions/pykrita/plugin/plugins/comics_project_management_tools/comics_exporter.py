@@ -855,9 +855,9 @@ class comicsExporter():
                 root.append(volume)
 
         if "publisherName" in self.configDictionary.keys():
-            pubisher = ET.Element("publisher")
-            pubisher.text = self.configDictionary["publisherName"]
-            root.append(pubisher)
+            publisher = ET.Element("publisher")
+            publisher.text = self.configDictionary["publisherName"]
+            root.append(publisher)
 
         if "publishingDate" in self.configDictionary.keys():
             date = ET.Element("date")

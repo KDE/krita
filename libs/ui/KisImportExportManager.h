@@ -111,12 +111,6 @@ public:
     static KisImportExportFilter *filterForMimeType(const QString &mimetype, Direction direction);
 
     /**
-     * Set the filter manager is batch mode (no dialog shown)
-     * instead of the interactive mode (dialog shown)
-     */
-    void setBatchMode(const bool batch);
-
-    /**
      * Get if the filter manager is batch mode (true)
      * or in interactive mode (true)
      */
@@ -125,9 +119,6 @@ public:
     void setUpdater(KoUpdaterPtr updater);
 
     static QString askForAudioFileName(const QString &defaultDir, QWidget *parent);
-
-private Q_SLOTS:
-
 
 
 private:

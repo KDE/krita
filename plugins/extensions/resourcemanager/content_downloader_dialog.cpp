@@ -22,7 +22,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "content_dowloader_dialog.h"
+#include "content_downloader_dialog.h"
 
 #include <QCoreApplication>
 #include <QtCore/QTimer>
@@ -38,8 +38,8 @@
 #include <kauthorized.h>
 #include <kmessagebox.h>
 
-#include "dlg_content_downloader.h"
-#include "dlg_content_downloader_p.h"
+#include "ContentDownloaderWidget.h"
+#include "ContentDownloaderWidget_p.h"
 #include "widgetquestionlistener.h"
 
 using namespace KNSCore;
@@ -48,7 +48,7 @@ class ContentDownloaderDialogPrivate
 {
 public:
 
-    DlgContentDownloader *downloadWidget;
+    ContentDownloaderWidget *downloadWidget;
 
     ~ContentDownloaderDialogPrivate()
     {
@@ -83,7 +83,7 @@ void ContentDownloaderDialog::init(const QString &configFile)
     setWindowTitle(i18n("Krita's content downloader"));
 
     QVBoxLayout *layout = new QVBoxLayout;
-    d->downloadWidget = new DlgContentDownloader(configFile, this);
+    d->downloadWidget = new ContentDownloaderWidget(configFile, this);
     layout->addWidget(d->downloadWidget);
     setLayout(layout);
 

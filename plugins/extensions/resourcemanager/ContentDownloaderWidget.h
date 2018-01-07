@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "dlg_content_downloader_p.h"
+#include "ContentDownloaderWidget_p.h"
 
 //KNS Includes
 
@@ -69,7 +69,7 @@ class DlgContentDownloaderPrivate;
  *
  */
 
-class DlgContentDownloader: public QWidget
+class ContentDownloaderWidget: public QWidget
 {
 Q_OBJECT
 public:
@@ -80,7 +80,7 @@ public:
      *
      * @param parent the parent of the dialog
      */
-    explicit DlgContentDownloader(QWidget *parent = nullptr);
+    explicit ContentDownloaderWidget(QWidget *parent = nullptr);
 
     /**
      * Create a Content Downloader Widget that lets the user install, update and uninstall
@@ -90,12 +90,12 @@ public:
      * @param knsrc the name of the configuration file
      * @param parent the parent of the dialog
      */
-    explicit DlgContentDownloader(const QString &knsrc, QWidget *parent = nullptr);
+    explicit ContentDownloaderWidget(const QString &knsrc, QWidget *parent = nullptr);
 
     /**
      * destructor
      */
-    ~DlgContentDownloader();
+    ~ContentDownloaderWidget();
 
     /**
      * The list of entries with changed status (installed/uninstalled)
@@ -127,7 +127,7 @@ private:
     void init(const QString &knsrc); //knsrc is the configfile
 
     DlgContentDownloaderPrivate *const d;
-    Q_DISABLE_COPY(DlgContentDownloader)
+    Q_DISABLE_COPY(ContentDownloaderWidget)
 
     Q_PRIVATE_SLOT(d, void slotListViewListMode())
     Q_PRIVATE_SLOT(d, void slotListViewIconMode())

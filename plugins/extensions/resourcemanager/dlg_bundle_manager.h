@@ -107,6 +107,9 @@ private:
 #ifdef HAVE_NEWSTUFF
     QString m_knsrcFile;
 #endif
+
+    bool importResource(const QString &fileName, const QString &category);
+
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

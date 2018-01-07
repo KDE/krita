@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "dlg_content_downloader.h"
-#include "dlg_content_downloader_p.h"
+#include "ContentDownloaderWidget.h"
+#include "ContentDownloaderWidget_p.h"
 
 #include "itemsviewbasedelegate_p.h"
 #include "itemsviewdelegate_p.h"
@@ -39,7 +39,7 @@
 
 using namespace KNSCore;
 
-DlgContentDownloader::DlgContentDownloader(QWidget *parent)
+ContentDownloaderWidget::ContentDownloaderWidget(QWidget *parent)
     : QWidget(parent)
     , d(new DlgContentDownloaderPrivate(this))
 {
@@ -47,7 +47,7 @@ DlgContentDownloader::DlgContentDownloader(QWidget *parent)
     init(name + ".knsrc");
 }
 
-DlgContentDownloader::DlgContentDownloader(const QString &knsrc, QWidget *parent)
+ContentDownloaderWidget::ContentDownloaderWidget(const QString &knsrc, QWidget *parent)
     : QWidget(parent)
     , d(new DlgContentDownloaderPrivate(this))
 {
@@ -55,32 +55,32 @@ DlgContentDownloader::DlgContentDownloader(const QString &knsrc, QWidget *parent
 
 }
 
-void DlgContentDownloader::init(const QString &knsrc)
+void ContentDownloaderWidget::init(const QString &knsrc)
 {
     d->init(knsrc);
 }
 
-DlgContentDownloader::~DlgContentDownloader()
+ContentDownloaderWidget::~ContentDownloaderWidget()
 {
     delete d;
 }
 
-void DlgContentDownloader::setTitle(const QString &title)
+void ContentDownloaderWidget::setTitle(const QString &title)
 {
     d->ui.m_titleWidget->setText(title);
 }
 
-QString DlgContentDownloader::title() const
+QString ContentDownloaderWidget::title() const
 {
     return d->ui.m_titleWidget->text();
 }
 
-KNSCore::Engine *DlgContentDownloader::engine()
+KNSCore::Engine *ContentDownloaderWidget::engine()
 {
     return d->engine;
 }
 
-EntryInternal::List DlgContentDownloader::changedEntries()
+EntryInternal::List ContentDownloaderWidget::changedEntries()
 {
     EntryInternal::List entries;
     foreach (const KNSCore::EntryInternal &e, d->changedEntries) {
@@ -89,7 +89,7 @@ EntryInternal::List DlgContentDownloader::changedEntries()
     return entries;
 }
 
-EntryInternal::List DlgContentDownloader::installedEntries()
+EntryInternal::List ContentDownloaderWidget::installedEntries()
 {
     EntryInternal::List entries;
     foreach (const KNSCore::EntryInternal &e, d->changedEntries) {
@@ -100,7 +100,7 @@ EntryInternal::List DlgContentDownloader::installedEntries()
     return entries;
 }
 
-DlgContentDownloaderPrivate::DlgContentDownloaderPrivate(DlgContentDownloader *q)
+DlgContentDownloaderPrivate::DlgContentDownloaderPrivate(ContentDownloaderWidget *q)
     : q(q)
     , engine(new KNSCore::Engine)
     , model(new KNSCore::ItemsModel(engine))
@@ -423,6 +423,3 @@ void DlgContentDownloaderPrivate::slotShowOverview()
 
     ui.m_titleWidget->setText(titleText);
 }
-
-
-#include "moc_dlg_content_downloader.cpp"

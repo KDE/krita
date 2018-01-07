@@ -68,7 +68,7 @@
      <item>
       <widget class="QPushButton" name="bnShareResources">
        <property name="text">
-        <string>Share Resources</string>
+        <string>Download Bundles</string>
        </property>
       </widget>
      </item>
@@ -106,20 +106,20 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="activenessLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Active</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string> Bundle Name</string>
-            </property>
-           </widget>
-          </item>
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Active</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string> Bundle Name</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

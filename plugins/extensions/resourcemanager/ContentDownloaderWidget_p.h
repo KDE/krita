@@ -38,13 +38,13 @@ namespace Ui {
 class WdgDlgContentDownloader;
 }
 
-class DlgContentDownloader;
+class ContentDownloaderWidget;
 
 class DlgContentDownloaderPrivate : public QObject
 {
     Q_OBJECT
 public:
-    DlgContentDownloader *q;
+    ContentDownloaderWidget *q;
     EntryDetails *details;
 
     // The engine that does all the work
@@ -67,7 +67,7 @@ public:
     QString m_configFile;
     bool dialogMode;
 
-    explicit DlgContentDownloaderPrivate(DlgContentDownloader *q);
+    explicit DlgContentDownloaderPrivate(ContentDownloaderWidget *q);
     ~DlgContentDownloaderPrivate();
 
     void init(const QString &knsrc);

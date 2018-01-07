@@ -23,8 +23,8 @@ set(kritaresourcemanager_SOURCES
 if (HAVE_NEWSTUFF)
     set(kritaresourcemanager_SOURCES
         ${kritaresourcemanager_SOURCES}
-        dlg_content_downloader.cpp
-        content_dowloader_dialog.cpp
+        ContentDownloaderWidget.cpp
+        content_downloader_dialog.cpp
         widgetquestionlistener.cpp
         entrydetailsdialog.cpp
         imagepreviewwidget.cpp
@@ -47,6 +47,8 @@ if (HAVE_NEWSTUFF)
     )    
     install( FILES
         data/kritaresourcebundles.knsrc
+        data/kritatemplates.knsrc
+        data/kritaprofiles.knsrc
         DESTINATION ${CONFIG_INSTALL_DIR} 
     )
 endif()

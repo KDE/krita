@@ -32,6 +32,7 @@
 #include <QMenu>
 #include <QFileInfo>
 
+#include <kis_brush_server.h>
 #include <kis_icon.h>
 #include "kis_action.h"
 #include <kis_resource_server_provider.h>
@@ -40,7 +41,7 @@
 #include "KoResourceServer.h"
 
 #ifdef HAVE_NEWSTUFF
-#include "content_dowloader_dialog.h"
+#include "content_downloader_dialog.h"
 #endif
 
 #define ICON_SIZE 48
@@ -383,20 +384,39 @@ void DlgBundleManager::slotOpenResourceFolder() {
     }
 }
 
+bool DlgBundleManager::importResource(const QString &fileName, const QString &category)
+{
+    qDebug() << fileName << category;
+    if (category == "Krita Color Profiles") {
+
+    }
+    else if (category == "Krita Resource Bundles"){
+        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
+        return bundleServer->importResourceFile(fileName);
+    }
+    else if (category == "Krita Templates"){
+
+    }
+    return true;
+}
+
+
+
 void DlgBundleManager::slotShareResources()
 {
 #ifdef HAVE_NEWSTUFF
+
     ContentDownloaderDialog dialog(m_knsrcFile, this);
     dialog.exec();
 
     foreach (const KNSCore::EntryInternal& e, dialog.changedEntries()) {
 
-        qDebug() << e.name() << e.category() << e.installedFiles();
+        qDebug() << "name" << e.name() << "category" << e.category() << "file names" << e.installedFiles();
 
         foreach(const QString &file, e.installedFiles()) {
             QFileInfo fi(file);
             if (fi.exists()) {
-                //d->model->importResourceFile(fi.absoluteFilePath() , false );
+                importResource(file, e.category());
             }
             else {
                 qWarning() << "Failed to install resource file" << fi.absolutePath()+'/'+fi.fileName() << "as the file info does not exist";

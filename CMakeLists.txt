@@ -688,6 +688,10 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
+if(WIN32)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/ConfigureInstallerNsis.cmake)
+endif()
+
 message("\nBroken tests:")
 foreach(tst ${KRITA_BROKEN_TESTS})
     message("    * ${tst}")

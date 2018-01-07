@@ -1,0 +1,6 @@
+[KNewStuff3]
+Name-"Templates"
+ProvidersUrl=https://share.krita.org/ocs/providers.xml
+Categories=Templates
+XdgTargetDir=krita/templates
+Uncompress=archive

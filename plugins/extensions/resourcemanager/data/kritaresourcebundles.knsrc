@@ -1,5 +1,6 @@
 [KNewStuff3]
+Name="Bundles"
 ProvidersUrl=https://share.krita.org/ocs/providers.xml
-Categories=Krita Color Profiles,Krita Resource Bundles,Krita Templates
-XdgTargetDir=krita/DownloadedResources
+Categories=Krita Resource Bundles
+XdgTargetDir=krita/bundles
 Uncompress=never

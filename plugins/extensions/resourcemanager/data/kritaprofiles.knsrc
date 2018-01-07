@@ -1,0 +1,6 @@
+[KNewStuff3]
+Name-"Color Profiles"
+ProvidersUrl=https://share.krita.org/ocs/providers.xml
+Categories=:Profiles
+XdgTargetDir=krita/icc
+Uncompress=archive

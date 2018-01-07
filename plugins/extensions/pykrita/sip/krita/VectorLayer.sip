@@ -1,9 +1,21 @@
+%ModuleHeaderCode
+#include "VectorLayer.h"
+%End
+
 class VectorLayer : Node
 {
 %TypeHeaderCode
 #include "VectorLayer.h"
 %End
-   VectorLayer(const VectorLayer & __0);
+
+%ConvertToSubClassCode
+    if(qobject_cast<VectorLayer*>(sipCpp))
+        sipType = sipType_VectorLayer;
+    else
+        sipType = nullptr;
+%End
+
+    VectorLayer(const VectorLayer & __0);
 public:
     virtual ~VectorLayer();
 public Q_SLOTS:

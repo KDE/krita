@@ -1,8 +1,20 @@
+%ModuleHeaderCode
+#include "FileLayer.h"
+%End
+
 class FileLayer : Node
 {
 %TypeHeaderCode
 #include "FileLayer.h"
 %End
+
+%ConvertToSubClassCode
+    if(qobject_cast<FileLayer*>(sipCpp))
+        sipType = sipType_FileLayer;
+    else
+        sipType = nullptr;
+%End
+
     FileLayer(const FileLayer & __0);
 public:
     virtual ~FileLayer();

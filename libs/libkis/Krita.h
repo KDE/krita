@@ -264,7 +264,7 @@ public Q_SLOTS:
      * @param text the user-visible text
      * @return the Action you can connect a slot to.
      */
-    Action *createAction(const QString &name, const QString &text);
+    Action *createAction(const QString &name, const QString &text, bool addToScriptMenu = true);
 
     /**
      * @brief addExtension add the given plugin to Krita. There will be a single instance of each Extension in the Krita process.

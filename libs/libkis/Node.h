@@ -40,6 +40,7 @@ public:
     ~Node() override;
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
+
 public Q_SLOTS:
 
     /**
@@ -279,7 +280,7 @@ public Q_SLOTS:
      * If the Node object isn't wrapping a valid Krita layer or mask object, and
      * empty string is returned.
      */
-    QString type() const;
+    virtual QString type() const;
 
     /**
      * Check whether the current Node is visible in the layer stack
@@ -512,6 +513,13 @@ private:
     friend class Filter;
     friend class Document;
     friend class Selection;
+    friend class GroupLayer;
+    friend class FileLayer;
+    friend class FilterLayer;
+    friend class FillLayer;
+    friend class VectorLayer;
+    friend class FilterMask;
+    friend class SelectionMask;
     /**
      * @brief paintDevice gives access to the internal paint device of this Node
      * @return the paintdevice or 0 if the node does not have an editable paint device.

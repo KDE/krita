@@ -347,7 +347,7 @@ Window* Krita::openWindow()
     return new Window(mw);
 }
 
-Action *Krita::createAction(const QString &id, const QString &text)
+Action *Krita::createAction(const QString &id, const QString &text, bool addToScriptMenu)
 {
     KisAction *action = new KisAction(text, this);
     action->setObjectName(id);
@@ -360,7 +360,9 @@ Action *Krita::createAction(const QString &id, const QString &text)
     action->setActivationFlags((KisAction::ActivationFlags) activationFlags);
     action->setActivationConditions((KisAction::ActivationConditions) activationConditions);
 
-    KisPart::instance()->addScriptAction(action);
+    if (addToScriptMenu) {
+        KisPart::instance()->addScriptAction(action);
+    }
     return new Action(action->objectName(), action);
 }
 

@@ -56,6 +56,17 @@
 #include "Filter.h"
 #include "Selection.h"
 
+#include "GroupLayer.h"
+#include "CloneLayer.h"
+#include "FilterLayer.h"
+#include "FillLayer.h"
+#include "FileLayer.h"
+#include "VectorLayer.h"
+#include "FilterMask.h"
+#include "SelectionMask.h"
+
+
+
 
 struct Node::Private {
     Private() {}
@@ -150,7 +161,33 @@ QList<Node*> Node::childNodes() const
     if (d->node) {
         int childCount = d->node->childCount();
         for (int i = 0; i < childCount; ++i) {
-            nodes << new Node(d->image, d->node->at(i));
+            if (qobject_cast<const KisGroupLayer*>(d->node->at(i))) {
+                nodes << new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisCloneLayer*>(d->node->at(i))) {
+                nodes << new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisFileLayer*>(d->node->at(i))) {
+                nodes << new FileLayer(KisFileLayerSP(dynamic_cast<KisFileLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisAdjustmentLayer*>(d->node->at(i))) {
+                nodes << new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisGeneratorLayer*>(d->node->at(i))) {
+                nodes << new FillLayer(KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisShapeLayer*>(d->node->at(i))) {
+                nodes << new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisFilterMask*>(d->node->at(i))) {
+                nodes << new FilterMask(d->image, KisFilterMaskSP(dynamic_cast<KisFilterMask*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisSelectionMask*>(d->node->at(i))) {
+                nodes << new SelectionMask(d->image, KisSelectionMaskSP(dynamic_cast<KisSelectionMask*>(d->node->at(i).data())));
+
+            } else {
+                nodes << new Node(d->image, d->node->at(i));
+            }
         }
     }
     return nodes;
@@ -347,7 +384,7 @@ QString Node::type() const
         return "clonelayer";
     }
     if (qobject_cast<const KisShapeLayer*>(d->node)) {
-        return "shapelayer";
+        return "vectorlayer";
     }
     if (qobject_cast<const KisTransparencyMask*>(d->node)) {
         return "transparencymask";

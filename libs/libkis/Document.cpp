@@ -43,8 +43,10 @@
 #include <kis_effect_mask.h>
 #include <kis_paint_layer.h>
 #include <kis_generator_layer.h>
+#include <kis_generator_registry.h>
 #include <kis_shape_layer.h>
 #include <kis_filter_configuration.h>
+#include <kis_filter_registry.h>
 #include <kis_selection.h>
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
@@ -560,6 +562,85 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     }
     return node;
 }
+
+GroupLayer *Document::createGroupLayer(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new GroupLayer(image, name);
+}
+
+FileLayer *Document::createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FileLayer(image, name, fileName(), FileName, ScalingMethod);
+}
+
+FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FilterLayer(image, name, filter, selection);
+}
+
+FillLayer *Document::createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    KisFilterConfigurationSP config = KisGeneratorRegistry::instance()->value(filterName)->defaultConfiguration();
+    Q_FOREACH(const QString property, configuration.properties().keys()) {
+        config->setProperty(property, configuration.property(property));
+    }
+
+    return new FillLayer(image, name, config, selection);
+}
+
+CloneLayer *Document::createCloneLayer(const QString &name, const Node *source)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+    KisLayerSP layer = qobject_cast<KisLayer*>(source->node().data());
+
+    return new CloneLayer(image, name, layer);
+}
+
+VectorLayer *Document::createVectorLayer(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new VectorLayer(d->document->shapeController(), image, name);
+}
+
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FilterMask(image, name, filter);
+}
+
+SelectionMask *Document::createSelectionMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new SelectionMask(image, name);
+}
+
 
 QImage Document::projection(int x, int y, int w, int h) const
 {

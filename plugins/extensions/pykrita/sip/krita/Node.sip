@@ -9,13 +9,14 @@ public:
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
 public Q_SLOTS:
+    //QList<Shape *> shapes() const /Factory/;
     Node *clone() const /Factory/;
     bool alphaLocked() const;
     void setAlphaLocked(bool value);
     QString blendingMode() const;
     void setBlendingMode(QString value);
-    QList<Channel *> channels() const;
-    QList<Node *> childNodes() const;
+    QList<Channel *> channels() const /Factory/;
+    QList<Node *> childNodes() const /Factory/;
     bool addChildNode(Node *child, Node *above);
     bool removeChildNode(Node *child);
     void setChildNodes(QList<Node *> nodes);

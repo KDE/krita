@@ -100,7 +100,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 
-    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList()));
+    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList(int)));
     KisConfig cfg;
     QString defaultPalette = cfg.defaultPalette();
     KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
@@ -220,15 +220,17 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_currentColorSet = colorSet;
 }
 
-void PaletteDockerDock::setColorFromNameList()
+void PaletteDockerDock::setColorFromNameList(int index)
 {
-    int index  = m_wdgPaletteDock->cmbNameList->currentIndex();
     if (m_model && m_currentColorSet) {
         entrySelected(m_currentColorSet->getColorGlobal(index));
         m_wdgPaletteDock->paletteView->blockSignals(true);
+        m_wdgPaletteDock->cmbNameList->blockSignals(true);
+        m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
         m_wdgPaletteDock->paletteView->selectionModel()->clearSelection();
         m_wdgPaletteDock->paletteView->selectionModel()->setCurrentIndex(m_model->indexFromId(index), QItemSelectionModel::Select);
         m_wdgPaletteDock->paletteView->blockSignals(false);
+        m_wdgPaletteDock->cmbNameList->blockSignals(false);
     }
 }
 

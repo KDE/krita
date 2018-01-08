@@ -34,6 +34,10 @@
  * @brief The VectorLayer class
  * A vector layer is a special layer that stores
  * and shows vector shapes.
+ *
+ * Vector shapes all have their coordinates in points, which
+ * is a unit that represents 1/72th of an inch. Keep this in
+ * mind wen parsing the bounding box and position data.
  */
 
 class KRITALIBKIS_EXPORT VectorLayer : public Node

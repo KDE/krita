@@ -41,6 +41,7 @@ public Q_SLOTS:
     void setOpacity(int value);
     Node * parentNode() const  /Factory/;
     QString type() const;
+    QIcon icon() const;
     bool visible() const;
     void setVisible(bool value);
     QByteArray pixelData(int x, int y, int w, int h) const;

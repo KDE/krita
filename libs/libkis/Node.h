@@ -283,6 +283,12 @@ public Q_SLOTS:
     virtual QString type() const;
 
     /**
+     * @brief icon
+     * @return the icon associated with the layer.
+     */
+    QIcon icon() const;
+
+    /**
      * Check whether the current Node is visible in the layer stack
      */
     bool visible() const;

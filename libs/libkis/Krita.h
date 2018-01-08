@@ -306,6 +306,14 @@ public Q_SLOTS:
     QString readSetting(const QString &group, const QString &name, const QString &defaultValue);
 
     /**
+     * @brief icon
+     * This allows you to get icons from Krita's internal icons.
+     * @param iconName name of the icon.
+     * @return the icon related to this name.
+     */
+    QIcon icon(QString &iconName) const;
+
+    /**
      * @brief instance retrieve the singleton instance of the Application object.
      */
     static Krita* instance();

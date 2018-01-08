@@ -404,6 +404,15 @@ QString Node::type() const
     return QString();
 }
 
+QIcon Node::icon() const
+{
+    QIcon icon;
+    if (d->node) {
+        icon = d->node->icon();
+    }
+    return icon;
+}
+
 bool Node::visible() const
 {
     if (!d->node) return false;

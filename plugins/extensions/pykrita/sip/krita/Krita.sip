@@ -35,6 +35,7 @@ public Q_SLOTS:
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
     Action * createAction(const QString &id, const QString & text, bool addToScriptMenu = true);
+    QIcon icon(QString &iconName) const;
 
     void addExtension(Extension* _extension /GetWrapper/);
 %MethodCode

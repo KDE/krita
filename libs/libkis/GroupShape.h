@@ -22,6 +22,7 @@
 #include "libkis.h"
 #include "Shape.h"
 #include <kis_types.h>
+#include <KoShapeGroup.h>
 
 /**
  * @brief The GroupShape class
@@ -34,8 +35,16 @@ class KRITALIBKIS_EXPORT GroupShape : public Shape
 
 public:
     explicit GroupShape(QObject *parent = 0);
+    GroupShape(KoShapeGroup *shape, QObject *parent = 0);
     ~GroupShape();
 public Q_SLOTS:
+
+    /**
+     * @brief type returns the type.
+     * @return "groupshape"
+     */
+    QString type() const override;
+
     /**
      * @brief children
      * @return the child shapes of this group shape.

@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "Shape.h"
+#include <kis_icon_utils.h>
 struct Shape::Private {
     Private() {}
     KoShape *shape;
@@ -56,6 +57,21 @@ bool Shape::visible()
 void Shape::setVisible(bool visible)
 {
     d->shape->setVisible(visible);
+}
+
+QRectF Shape::boundingBox() const
+{
+    return d->shape->boundingRect();
+}
+
+QPointF Shape::position() const
+{
+    return d->shape->position();
+}
+
+void Shape::setPosition(QPointF point)
+{
+    d->shape->setPosition(point);
 }
 
 KoShape *Shape::shape()

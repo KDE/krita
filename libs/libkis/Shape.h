@@ -69,6 +69,24 @@ public Q_SLOTS:
      */
     void setVisible(bool visible);
 
+    /**
+     * @brief boundingBox the bounding box of the shape in points
+     * @return RectF containing the bounding box.
+     */
+    QRectF boundingBox() const;
+
+    /**
+     * @brief position the position of the shape in points.
+     * @return the position of the shape in points.
+     */
+    QPointF position() const;
+
+    /**
+     * @brief setPosition set the position of the shape.
+     * @param point the new position in points
+     */
+    void setPosition(QPointF point);
+
 private:
     friend class GroupShape;
     friend class VectorLayer;

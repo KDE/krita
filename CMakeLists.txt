@@ -7,14 +7,14 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.3.2")
+set(KRITA_VERSION_STRING "3.3.3")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 3) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 2)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(KRITA_VERSION_RELEASE 3)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2017) # update every year
+set(KRITA_YEAR 2018) # update every year
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)

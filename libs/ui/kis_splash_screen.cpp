@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPixmap>
+#include <QPainter>
 #include <QCheckBox>
 #include <kis_debug.h>
 #include <QFile>
@@ -47,13 +48,38 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
-    // Maintain the aspect ratio on high DPI screens when scaling
-    lblSplash->setPixmap(pixmap);
-    setFixedWidth(pixmap.width());
+    QImage img = pixmap.toImage();
+    QFont font = this->font();
+    font.setPointSize(9);
+    font.setBold(true);
+    QFontMetrics metrics(font);
 
-    QString color = colorString();
-    lblVersion->setText(i18n("Version: %1", version));
-    lblVersion->setStyleSheet("color:" + color);
+    QPainter p(&img);
+    p.setFont(font);
+    p.setRenderHint(QPainter::Antialiasing);
+
+    // positioning of the text over the image (version)
+    // also see setLoadingText() for positiong (loading progress text)
+    int leftEdge = 525-metrics.width(version);
+    int topEdge = 58+metrics.ascent();
+
+    //draw shadow
+    QPen pen(QColor(0, 0, 0, 80));
+    p.setPen(pen);
+    p.drawText(leftEdge+1, topEdge+1, version);
+    //draw main text
+    p.setPen(QPen(QColor(255, 255, 255, 255)));
+    p.drawText(leftEdge, topEdge, version);
+    p.end();
+
+
+    //get this to have the loading text painted on later.
+    m_splashImage = img;
+    m_textTop = topEdge+metrics.height();
+
+    // Maintain the aspect ratio on high DPI screens when scaling
+    lblSplash->setPixmap(QPixmap::fromImage(img));
+    setFixedWidth(pixmap.width());
 
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -68,9 +94,8 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     connect(&m_timer, SIGNAL(timeout()), SLOT(raise()));
 
     // hide these labels by default
-    lblLinks->setVisible(false);
-    lblRecent->setVisible(false);
-    line->setVisible(false);
+    displayLinks(false);
+    displayRecentFiles(false);
 
     m_timer.setSingleShot(true);
     m_timer.start(10);
@@ -124,36 +149,73 @@ void KisSplashScreen::updateText()
     lblRecent->setText(recent);
 }
 
-void KisSplashScreen::displayLinks() {
+void KisSplashScreen::displayLinks(bool show) {
 
-    QString color = colorString();
-    lblLinks->setTextFormat(Qt::RichText);
-    lblLinks->setText(i18n("<html>"
-                           "<head/>"
-                           "<body>"
-                           "<p><span style=\" color:%1;\"><b>Links</b></span></p>"
+    if (show) {
+        QString color = colorString();
+        lblLinks->setTextFormat(Qt::RichText);
+        lblLinks->setText(i18n("<html>"
+                               "<head/>"
+                               "<body>"
+                               "<p><span style=\" color:%1;\"><b>Links</b></span></p>"
 
-                           "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
+                               "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 
-                           "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
-                           "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
-                           "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
-                           "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
+                               "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                               "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
+                               "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
+                               "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
 
-                           "<p><a href=\"https://phabricator.kde.org/source/krita/\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+                               "<p><a href=\"https://phabricator.kde.org/source/krita/\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
 
-                           "</body>"
-                           "</html>", color));
+                               "</body>"
+                               "</html>", color));
 
-    lblLinks->setVisible(true);
+        filesLayout->setContentsMargins(10,10,10,10);
+        actionControlsLayout->setContentsMargins(5,5,5,5);
+
+    } else {
+        // eliminating margins here allows for the splash screen image to take the entire area with nothing underneath
+        filesLayout->setContentsMargins(0,0,0,0);
+        actionControlsLayout->setContentsMargins(0,0,0,0);
+    }
+
+    lblLinks->setVisible(show);
 
     updateText();
 }
 
 
-void KisSplashScreen::displayRecentFiles() {
-    lblRecent->setVisible(true);
-    line->setVisible(true);
+void KisSplashScreen::displayRecentFiles(bool show) {
+    lblRecent->setVisible(show);
+    line->setVisible(show);
+}
+
+void KisSplashScreen::setLoadingText(QString text)
+{
+    QFont font = this->font();
+    font.setPointSize(8);
+    font.setItalic(true);
+
+    QImage img = m_splashImage;
+    QPainter p(&img);
+    QFontMetrics metrics(font);
+    p.setFont(font);
+    p.setRenderHint(QPainter::Antialiasing);
+
+    // position text for loading text
+    int leftEdge = 525-metrics.width(text);
+    int topEdge = m_textTop;
+
+    //draw shadow
+    QPen pen(QColor(0, 0, 0, 80));
+    p.setPen(pen);
+    p.drawText(leftEdge+1, topEdge+1, text);
+    //draw main text
+    p.setPen(QPen(QColor(255, 255, 255, 255)));
+    p.drawText(leftEdge, topEdge, text);
+    p.end();
+    lblSplash->setPixmap(QPixmap::fromImage(img));
 }
 
 

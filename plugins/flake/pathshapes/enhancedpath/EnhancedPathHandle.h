@@ -53,7 +53,7 @@ public:
     QPointF position();
 
     /**
-     * Attemps to changes the position of the handle.
+     * Attempts to changes the position of the handle.
      * Only the coordinates of the handle which reference a modifier
      * can be changed. The new position is automatically stored into
      * the modifier of the given enhanced path.

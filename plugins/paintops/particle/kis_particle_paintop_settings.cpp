@@ -37,6 +37,11 @@ KisParticlePaintOpSettings::~KisParticlePaintOpSettings()
 {
 }
 
+bool KisParticlePaintOpSettings::lodSizeThresholdSupported() const
+{
+    return false;
+}
+
 bool KisParticlePaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;

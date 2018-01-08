@@ -29,25 +29,31 @@ else ()
 		PATH_SUFFIXES gsl
 	)
 
-	FIND_PROGRAM (GSL_CONFIG gsl-config)
+	if (NOT WIN32)
+		FIND_PROGRAM (GSL_CONFIG gsl-config)
 
-	IF (GSL_CONFIG)
-		EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
-	#	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE gsl_include_dir)
-	#	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE gsl_libraries)
-	
-	#	STRING (REGEX REPLACE "-I([^ ]*)" "\\1" GSL_INCLUDE_DIR "${gsl_include_dir}")
-	#	STRING (REGEX REPLACE "-L([^ ]*)" "\\1" GSL_LIBRARIES "${gsl_libraries}")
+		IF (GSL_CONFIG)
+			EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
+		#	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE gsl_include_dir)
+		#	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE gsl_libraries)
+
+		#	STRING (REGEX REPLACE "-I([^ ]*)" "\\1" GSL_INCLUDE_DIR "${gsl_include_dir}")
+		#	STRING (REGEX REPLACE "-L([^ ]*)" "\\1" GSL_LIBRARIES "${gsl_libraries}")
+			SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
+			# TODO check version! 1.6 suffices?
+		ENDIF (GSL_CONFIG)
+	else ()
+		file(STRINGS ${GSL_INCLUDE_DIR}/gsl_version.h gsl_version REGEX "^#define GSL_VERSION \"(.+)\"$")
+		string(REGEX REPLACE "^#define GSL_VERSION \"(.+)\"$" "\\1" gsl_version "${gsl_version}")
 		SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
-		# TODO check version! 1.6 suffices?
-	ENDIF (GSL_CONFIG)
+	endif ()
 
-	IF (NOT GSL_INCLUDE_DIR OR NOT GSL_CONFIG)
+	IF (NOT GSL_INCLUDE_DIR OR NOT GSL_VERSION)
 		# Try pkg-config instead, but only for the
 		# include directory, since we really need
 		# the *LIBRARIES to point to the actual .so's.
 		PKGCONFIG(gsl GSL_INCLUDE_DIR dummy dummy dummy)
-	ENDIF (NOT GSL_INCLUDE_DIR OR NOT GSL_CONFIG)
+	ENDIF (NOT GSL_INCLUDE_DIR OR NOT GSL_VERSION)
 	#
 	# everything necessary found?
 	#

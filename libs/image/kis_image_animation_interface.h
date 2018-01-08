@@ -130,7 +130,7 @@ public:
     QString audioChannelFileName() const;
 
     /**
-     * Sets **absolute** file name of the audio channel file. Dont' try to pass
+     * Sets **absolute** file name of the audio channel file. Don't try to pass
      * a relative path, it'll assert!
      */
     void setAudioChannelFileName(const QString &fileName);

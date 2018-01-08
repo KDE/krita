@@ -362,11 +362,11 @@ bool** KisRainDropsFilter::CreateBoolArray(uint Columns, uint Rows) const
 
 /* This function limits the RGB values
  *
- * ColorValue        => Here, is an RGB value to be analized
+ * ColorValue        => Here, is an RGB value to be analyzed
  *
  * Theory            => A color is represented in RGB value (e.g. 0xFFFFFF is
- *                      white color). But R, G and B values has 256 values to be used
- *                      so, this function analize the value and limits to this range
+ *                      white color). But R, G and B values have 256 values to be used
+ *                      so, this function analyzes the value and limits to this range
  */
 
 uchar KisRainDropsFilter::LimitValues(int ColorValue) const

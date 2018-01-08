@@ -47,6 +47,7 @@ public:
     KoColor m_defaultColor;
     bool m_bdefaultColor : 1;
     bool m_alphaChannel : 1;
+    bool m_palette : 1;
 
     KoColor col;
     QPoint mPos;
@@ -116,6 +117,7 @@ KisColorButton::KisColorButtonPrivate::KisColorButtonPrivate(KisColorButton *q)
 {
     m_bdefaultColor = false;
     m_alphaChannel = false;
+    m_palette = true;
     q->setAcceptDrops(true);
 
     connect(q, SIGNAL(clicked()), q, SLOT(_k_chooseColor()));
@@ -167,6 +169,16 @@ void KisColorButton::setAlphaChannelEnabled(bool alpha)
 bool KisColorButton::isAlphaChannelEnabled() const
 {
     return d->m_alphaChannel;
+}
+
+void KisColorButton::setPaletteViewEnabled(bool enable)
+{
+    d->m_palette = enable;
+}
+
+bool KisColorButton::paletteViewEnabled() const
+{
+    return d->m_palette;
 }
 
 KoColor KisColorButton::defaultColor() const
@@ -327,6 +339,7 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
     }
 
     KisDlgInternalColorSelector::Config cfg;
+    cfg.paletteBox = q->paletteViewEnabled();
 #ifndef Q_OS_OSX
     dialog = new KisDlgInternalColorSelector(q,
                                           q->color(),

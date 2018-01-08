@@ -94,7 +94,7 @@ void KisPaintActionTypeOption::slotForceWashMode(bool value)
     }
 
     // TODO: We do not restore the state of the painting
-    //       mode before masking was activated! Hope noone
+    //       mode before masking was activated! Hope no one
     //       will notice it, since BuildUp mode is not used
     //       too often :)
 

@@ -6,13 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>291</width>
+    <height>288</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="SqueezedComboBox" name="cmbCollections"/>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="SqueezedComboBox" name="cmbCollections"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="vectorPresetsConfigureButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QListView" name="listCollection"/>

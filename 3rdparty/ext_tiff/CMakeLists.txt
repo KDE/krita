@@ -6,9 +6,6 @@ ExternalProject_Add( ext_tiff
 
     INSTALL_DIR ${EXTPREFIX_tiff}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_tiff} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
-
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install
 	
     UPDATE_COMMAND ""
 	DEPENDS ext_zlib ext_jpeg

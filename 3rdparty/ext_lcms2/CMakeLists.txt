@@ -2,7 +2,7 @@ SET(PREFIX_ext_lcms2 "${EXTPREFIX}" )
 if (MSVC OR MINGW)
 ExternalProject_Add( ext_lcms2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/lcms2-2.9.tar.gz
+	URL http://files.kde.org/krita/build/dependencies/lcms2-2.9.tar.gz
     URL_MD5 8de1b7724f578d2995c8fdfa35c3ad0e
 		
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lcms2-9.diff

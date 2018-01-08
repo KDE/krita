@@ -65,7 +65,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
             KisImportExportManager manager(doc);
-            manager.setBatchMode(true);
+            doc->setFileBatchMode(true);
 
             KisImportExportFilter::ConversionStatus status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
             Q_UNUSED(status);

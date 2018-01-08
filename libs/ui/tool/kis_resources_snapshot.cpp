@@ -137,7 +137,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     if (m_d->currentPaintOpPreset) {
         m_d->presetAllowsLod =
             KisPaintOpSettings::isLodUserAllowed(m_d->currentPaintOpPreset->settings()) &&
-            m_d->currentPaintOpPreset->settings()->lodSizeThreshold() <= m_d->currentPaintOpPreset->settings()->paintOpSize();
+            (!m_d->currentPaintOpPreset->settings()->lodSizeThresholdSupported() ||
+             m_d->currentPaintOpPreset->settings()->lodSizeThreshold() <= m_d->currentPaintOpPreset->settings()->paintOpSize());
     }
 }
 

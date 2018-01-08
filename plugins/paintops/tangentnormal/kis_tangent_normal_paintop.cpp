@@ -164,7 +164,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     painter()->bltFixed(m_dstDabRect.topLeft(), m_maskDab, m_maskDab->bounds());
     painter()->renderMirrorMaskSafe(m_dstDabRect, m_maskDab, !m_dabCache->needSeparateOriginal());
 
-    // restore orginal opacity and composite mode values
+    // restore original opacity and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldCompositeOpId);
 

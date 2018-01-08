@@ -487,17 +487,15 @@ class comicsExporter():
                 page.flatten()
                 while page.isIdle() is False:
                     page.waitForDone()
-
+                batchsave = Application.batchmode()
+                Application.setBatchmode(True)
                 # Start making the format specific copy.
                 if page.isIdle():
                     for key in sizesList.keys():
                         w = sizesList[key]
                         # copy over data
-                        projection = Application.createDocument(page.width(), page.height(), page.name(), page.colorModel(), page.colorDepth(), page.colorProfile())
-                        batchsave = Application.batchmode()
-                        Application.setBatchmode(True)
-                        projection.activeNode().setPixelData(page.pixelData(0, 0, page.width(), page.height()), 0, 0, page.width(), page.height())
-
+                        projection = page.clone()
+                        projection.setBatchmode(True)
                         # Crop. Cropping per guide only happens if said guides have been found.
                         if w["Crop"] is True:
                             listHGuides = page.horizontalGuides()
@@ -550,15 +548,16 @@ class comicsExporter():
                         # Finally save and add the page to a list of pages. This will make it easy for the packaging function to
                         # find the pages and store them.
                         if projection.isIdle():
-                            projection.activeNode().save(fn, projection.resolution(), projection.resolution())
+                            projection.exportImage(fn, InfoObject())
                             projection.waitForDone()
                         self.pagesLocationList[key].append(fn)
 
                         # close
-                        Application.setBatchmode(batchsave)
+                        
                         projection.close()
                     page.close()
             progress.setValue(len(pagesList))
+            Application.setBatchmode(batchsave)
             # TODO: Check what or whether memory leaks are still caused and otherwise remove the entry below.
             print("CPMT: Export has finished. There are memory leaks, but the source is not obvious due wild times on git master. Last attempt to fix was august 2017")
             return True
@@ -856,9 +855,9 @@ class comicsExporter():
                 root.append(volume)
 
         if "publisherName" in self.configDictionary.keys():
-            pubisher = ET.Element("publisher")
-            pubisher.text = self.configDictionary["publisherName"]
-            root.append(pubisher)
+            publisher = ET.Element("publisher")
+            publisher.text = self.configDictionary["publisherName"]
+            root.append(publisher)
 
         if "publishingDate" in self.configDictionary.keys():
             date = ET.Element("date")

@@ -157,7 +157,7 @@ private:
         loop.connect(&watcher, SIGNAL(sigProgressChanged(int)), &progress, SLOT(setValue(int)));
         loop.exec();
 
-        // wait for some errorneous case
+        // wait for some erroneous case
         ffmpegProcess.waitForFinished(5000);
 
         KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;

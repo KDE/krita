@@ -75,7 +75,7 @@ public:
      * @param htmlText the input html
      * @param svgText the converted svg text element
      * @param styles
-     * @return true if the conversion was succesful
+     * @return true if the conversion was successful
      */
     bool convertFromHtml(const QString &htmlText, QString *svgText, QString *styles);
 
@@ -83,7 +83,7 @@ public:
      * @brief convertDocumentToSvg
      * @param doc the QTextDocument to convert.
      * @param svgText the converted svg text element
-     * @return true if the conversion was succesful
+     * @return true if the conversion was successful
      */
     bool convertDocumentToSvg(const QTextDocument *doc, QString *svgText);
 
@@ -91,7 +91,7 @@ public:
      * @brief convertSvgToDocument
      * @param svgText the <text> element and it's children as a string.
      * @param doc the QTextDocument that the conversion is written to.
-     * @return true if the conversion was succesful
+     * @return true if the conversion was successful
      */
     bool convertSvgToDocument(const QString &svgText, QTextDocument *doc);
 

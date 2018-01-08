@@ -64,12 +64,25 @@ KisPropertiesConfigurationSP KisASCCDLConfigWidget::configuration() const
 
 void KisASCCDLConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    m_page->btnSlope->setColor (config->getColor( "slope", KoColor(Qt::white, m_cs)));
-    m_page->slopeSelector->slotSetColor(config->getColor("slope", KoColor(Qt::white, m_cs)));
-    m_page->btnOffset->setColor(config->getColor("offset", KoColor(Qt::black, m_cs)));
-    m_page->offsetSelector->slotSetColor(config->getColor("offset", KoColor(Qt::white, m_cs)));
-    m_page->btnPower->setColor (config->getColor( "power", KoColor(Qt::white, m_cs)));
-    m_page->powerSelector->slotSetColor(config->getColor("power", KoColor(Qt::white, m_cs)));
+    KoColor white(m_cs);
+    QVector<float> channels(m_cs->channelCount());
+    m_cs->normalisedChannelsValue(white.data(), channels);
+    channels.fill(1.0);
+    m_cs->fromNormalisedChannelsValue(white.data(), channels);
+    KoColor black(Qt::black, m_cs);
+    KoColor slope = config->getColor("slope", white);
+    slope.convertTo(m_cs);
+    KoColor offset = config->getColor("offset", black);
+    offset.convertTo(m_cs);
+    KoColor power = config->getColor("power", white);
+    power.convertTo(m_cs);
+
+    m_page->btnSlope->setColor(slope);
+    m_page->slopeSelector->slotSetColor(slope);
+    m_page->btnOffset->setColor(offset);
+    m_page->offsetSelector->slotSetColor(offset);
+    m_page->btnPower->setColor (power);
+    m_page->powerSelector->slotSetColor(power);
 }
 
 void KisASCCDLConfigWidget::slopeColorChanged(const KoColor &c)

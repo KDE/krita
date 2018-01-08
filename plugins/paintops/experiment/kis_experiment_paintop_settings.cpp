@@ -33,6 +33,10 @@ KisExperimentPaintOpSettings::~KisExperimentPaintOpSettings()
 {
 }
 
+bool KisExperimentPaintOpSettings::lodSizeThresholdSupported() const
+{
+    return false;
+}
 
 bool KisExperimentPaintOpSettings::paintIncremental()
 {

@@ -231,6 +231,9 @@ public Q_SLOTS:
 
 private:
     friend class Document;
+    friend class FilterLayer;
+    friend class FillLayer;
+    friend class SelectionMask;
 
     KisSelectionSP selection() const;
 

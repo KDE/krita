@@ -820,8 +820,10 @@ void SvgTextEditor::setFont(const QString &fontName)
     font.fromString(fontName);
     QTextCharFormat curFormat = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     font.setPointSize(curFormat.font().pointSize());
+
     QTextCharFormat format;
-    format.setFont(font);
+    //This disables the style being set from the font-comboboxes too, so we need to rethink how we use that.
+    format.setFontFamily(font.family());
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
     } else {

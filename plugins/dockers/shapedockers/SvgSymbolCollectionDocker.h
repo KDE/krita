@@ -77,11 +77,12 @@ public:
 private Q_SLOTS:
 
     void collectionActivated(int index);
-
+    void slotSetIconSize();
 private:
 
     Ui_WdgSvgCollection *m_wdgSvgCollection;
     QVector<SvgCollectionModel*> m_models;
+    QSlider* m_iconSizeSlider;
 };
 
 #endif //KOSHAPECOLLECTIONDOCKER_H

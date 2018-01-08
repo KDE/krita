@@ -682,14 +682,14 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         }
         if (propertyId == QTextCharFormat::FontWordSpacing) {
             c.append("word-spacing").append(":")
-                    .append(format.properties()[propertyId].toString());
+                    .append(QString::number(format.fontWordSpacing()));
         }
         if (propertyId == QTextCharFormat::FontLetterSpacing) {
             QString val;
             if (format.fontLetterSpacingType()==QFont::AbsoluteSpacing) {
                 val = QString::number(format.fontLetterSpacing());
             } else {
-                val = QString::number(((format.fontLetterSpacing()/100)*format.fontPointSize())-format.fontPointSize());
+                val = QString::number(((format.fontLetterSpacing()/100)*format.fontPointSize()));
             }
             c.append("letter-spacing").append(":")
                     .append(val);
@@ -735,17 +735,23 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
     if (format.hasProperty(QTextCharFormat::FontUnderline)
             || format.hasProperty(QTextCharFormat::FontOverline)
             || format.hasProperty(QTextCharFormat::FontStrikeOut)) {
-        QStringList values;
         QString c;
-        if (format.hasProperty(QTextCharFormat::FontUnderline)) {
-            values.append("underline");
-        } else if(format.hasProperty(QTextCharFormat::FontOverline)) {
-            values.append("overline");
-        } else {
-            values.append("strike-through");
+        if (format.underlineStyle()!=QTextCharFormat::NoUnderline ||
+                format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
+            QStringList values;
+
+            if (format.hasProperty(QTextCharFormat::FontUnderline)) {
+
+                values.append("underline");
+
+            } else if(format.hasProperty(QTextCharFormat::FontOverline)) {
+                values.append("overline");
+            } else {
+                values.append("strike-through");
+            }
+            c.append("text-decoration").append(":")
+                    .append(values.join(" "));
         }
-        c.append("text-decoration").append(":")
-                .append(values.join(" "));
         if (!c.isEmpty()) {
             style.append(c);
         }

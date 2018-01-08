@@ -181,7 +181,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         for (int i = 0; i < KoUnit::TypeCount; i++) {
 
             if (KoUnit::Type(i) == KoUnit::Pixel) {
-                continue; //skip pixel, which is a document relative unit, in the base classe.
+                continue; //skip pixel, which is a document relative unit, in the base class.
             }
 
             if (withName) {

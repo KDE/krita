@@ -502,9 +502,9 @@ void KoResourceItemChooser::baseLengthChanged(int length)
     if (d->synced) {
         int resourceCount = d->model->resourcesCount();
         int width = d->view->width();
-        int maxColums = width / length;
+        int maxColumns = width / length;
         int cols = width / (2 * length) + 1;
-        while (cols <= maxColums) {
+        while (cols <= maxColumns) {
             int size = width / cols;
             int rows = ceil(resourceCount / (double)cols);
             if (rows * size < (d->view->height() - 5)) {

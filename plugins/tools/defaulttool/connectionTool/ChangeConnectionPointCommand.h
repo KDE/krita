@@ -30,7 +30,7 @@ class KoShape;
 class ChangeConnectionPointCommand : public KUndo2Command
 {
 public:
-    /// Creates new comand to change connection point of shape
+    /// Creates new command to change connection point of shape
     ChangeConnectionPointCommand(KoShape *shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, KUndo2Command *parent = 0);
     ~ChangeConnectionPointCommand() override;
     /// reimplemented from KUndo2Command

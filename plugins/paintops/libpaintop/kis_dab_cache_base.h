@@ -90,7 +90,7 @@ protected:
      * @param color current painting color
      * @param cursorPoint cursor point at which the dab should be painted
      * @param shape dab shape requested by the caller. It will be modified before
-     *              generation to accomodate the mirroring and rotation options.
+     *              generation to accommodate the mirroring and rotation options.
      * @param info painting info associated with the dab
      * @param softnessFactor softness factor
      * @param di (OUT) calculated dab generation information

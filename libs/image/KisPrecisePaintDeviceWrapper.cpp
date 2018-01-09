@@ -146,9 +146,13 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
 {
     if (m_d->precDevice == m_d->srcDevice) return;
 
+    const QRect srcExtent = m_d->srcDevice->extent();
+
     QRegion requestedRects;
     Q_FOREACH (const QRect &rc, rects) {
-        requestedRects += rc;
+        const QRect croppedRect = rc & srcExtent;
+
+        requestedRects += croppedRect;
     }
 
     QRegion diff(requestedRects);

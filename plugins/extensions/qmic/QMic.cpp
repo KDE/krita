@@ -73,9 +73,9 @@ QMic::QMic(QObject *parent, const QVariantList &)
     , m_gmicApplicator(0)
 {
 #ifndef Q_OS_MAC
-//    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-//    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
-//    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
+    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
+    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
     m_qmicAction = createAction("QMic");
     m_qmicAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -95,7 +95,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
 QMic::~QMic()
 {
     Q_FOREACH(QSharedMemory *memorySegment, m_sharedMemorySegments) {
-        qDebug() << "detaching" << memorySegment->key();
+//        qDebug() << "detaching" << memorySegment->key();
         memorySegment->detach();
     }
     qDeleteAll(m_sharedMemorySegments);

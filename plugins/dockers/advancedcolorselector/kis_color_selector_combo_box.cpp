@@ -128,11 +128,7 @@ protected:
     void paintEvent(QPaintEvent *) override
     {
         QPainter painter(this);
-
-        QColor bgColor = qApp->palette().color(QPalette::Base);
-        int darkenCoeff = bgColor.value() > 128 ? 180 : 50;    // same logic icons use
-
-        painter.fillRect(0,0,width(), height(), QColor(darkenCoeff,darkenCoeff,darkenCoeff));
+        painter.fillRect(0,0,width(), height(), QColor(128,128,128));
         painter.fillRect(highlightArea, palette().highlight());
     }
 

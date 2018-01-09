@@ -22,6 +22,7 @@
 #include "kis_paint_device.h"
 #include "KisFastDeviceProcessingUtils.h"
 
+#include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
@@ -55,6 +56,10 @@ KisPrecisePaintDeviceWrapper::KisPrecisePaintDeviceWrapper(KisPaintDeviceSP devi
                 Integer16BitsColorDepthID.id(),
                 baseSpace->profile());
         m_d->precDevice = new KisPaintDevice(m_d->precColorSpace);
+        m_d->precDevice->setDefaultPixel(device->defaultPixel().convertedTo(m_d->precColorSpace));
+        m_d->precDevice->setDefaultBounds(device->defaultBounds());
+        m_d->precDevice->moveTo(device->offset());
+
     } else {
         // just use source device as a precise operation device
         m_d->precDevice = device;

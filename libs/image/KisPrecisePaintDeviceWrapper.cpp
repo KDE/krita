@@ -20,8 +20,7 @@
 
 #include <QRegion>
 #include "kis_paint_device.h"
-#include "kis_painter.h"
-#include "kis_sequential_iterator.h"
+#include "KisFastDeviceProcessingUtils.h"
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -99,20 +98,43 @@ void KisPrecisePaintDeviceWrapper::readRect(const QRect &rect)
 
 void KisPrecisePaintDeviceWrapper::writeRect(const QRect &rc)
 {
-    if (m_d->precDevice == m_d->srcDevice) return;
-    const int channelCount = m_d->precColorSpace->channelCount();
+    writeRects({rc});
+}
 
-    KisSequentialIterator srcIt(m_d->srcDevice, rc);
-    KisSequentialConstIterator precIt(m_d->precDevice, rc);
+namespace {
 
-    while (srcIt.nextPixel() && precIt.nextPixel()) {
-        quint8 *srcPtr = reinterpret_cast<quint8*>(srcIt.rawData());
-        const quint16 *precPtr = reinterpret_cast<const quint16*>(precIt.rawDataConst());
+struct WriteProcessor {
+    WriteProcessor(int _channelCount) : channelCount(_channelCount) {}
 
-        for (int i = 0; i < channelCount; i++) {
-            *(srcPtr + i) = KoColorSpaceMaths<quint16, quint8>::scaleToA(*(precPtr + i));
+    ALWAYS_INLINE
+    void operator()(const quint8 *srcPtr, quint8 *dstPtr) {
+        const quint16 *srcChannel = reinterpret_cast<const quint16*>(srcPtr);
+        quint8 *dstChannel = reinterpret_cast<quint8*>(dstPtr);
+
+        for (int k = 0; k < channelCount; k++) {
+            *(dstChannel + k) = KoColorSpaceMaths<quint16, quint8>::scaleToA(*(srcChannel + k));
         }
     }
+
+    const int channelCount;
+};
+
+struct ReadProcessor {
+    ReadProcessor(int _channelCount) : channelCount(_channelCount) {}
+
+    ALWAYS_INLINE
+    void operator()(const quint8 *srcPtr, quint8 *dstPtr) {
+        const quint8 *srcChannel = reinterpret_cast<const quint8*>(srcPtr);
+        quint16 *dstChannel = reinterpret_cast<quint16*>(dstPtr);
+
+        for (int k = 0; k < channelCount; k++) {
+            *(dstChannel + k) = KoColorSpaceMaths<quint8, quint16>::scaleToA(*(srcChannel + k));
+        }
+    }
+
+    const int channelCount;
+};
+
 }
 
 void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
@@ -127,20 +149,19 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     QRegion diff(requestedRects);
     diff -= m_d->preparedRegion;
 
+    if (rects.isEmpty()) return;
+    const QPoint firstPoint = rects.first().topLeft();
     const int channelCount = m_d->precColorSpace->channelCount();
 
+    KisRandomConstAccessorSP srcIt = m_d->srcDevice->createRandomConstAccessorNG(firstPoint.x(), firstPoint.y());
+    KisRandomAccessorSP dstIt = m_d->precDevice->createRandomAccessorNG(firstPoint.x(), firstPoint.y());
+
     Q_FOREACH (const QRect &rc, diff.rects()) {
-        KisSequentialConstIterator srcIt(m_d->srcDevice, rc);
-        KisSequentialIterator precIt(m_d->precDevice, rc);
-
-        while (srcIt.nextPixel() && precIt.nextPixel()) {
-            const quint8 *srcPtr = reinterpret_cast<const quint8*>(srcIt.rawDataConst());
-            quint16 *precPtr = reinterpret_cast<quint16*>(precIt.rawData());
-
-            for (int i = 0; i < channelCount; i++) {
-                *(precPtr + i) = KoColorSpaceMaths<quint8, quint16>::scaleToA(*(srcPtr + i));
-            }
-        }
+        KritaUtils::processTwoDevices(rc,
+                                      srcIt, dstIt,
+                                      m_d->srcDevice->pixelSize(),
+                                      m_d->precDevice->pixelSize(),
+                                      ReadProcessor(channelCount));
     }
 
     /**
@@ -158,8 +179,19 @@ void KisPrecisePaintDeviceWrapper::writeRects(const QVector<QRect> &rects)
 {
     if (m_d->precDevice == m_d->srcDevice) return;
 
+    if (rects.isEmpty()) return;
+    const QPoint firstPoint = rects.first().topLeft();
+    const int channelCount = m_d->precColorSpace->channelCount();
+
+    KisRandomConstAccessorSP srcIt = m_d->precDevice->createRandomConstAccessorNG(firstPoint.x(), firstPoint.y());
+    KisRandomAccessorSP dstIt = m_d->srcDevice->createRandomAccessorNG(firstPoint.x(), firstPoint.y());
+
     Q_FOREACH (const QRect &rc, rects) {
-        writeRect(rc);
+        KritaUtils::processTwoDevices(rc,
+                                      srcIt, dstIt,
+                                      m_d->precDevice->pixelSize(),
+                                      m_d->srcDevice->pixelSize(),
+                                      WriteProcessor(channelCount));
     }
 }
 

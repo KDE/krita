@@ -264,8 +264,8 @@ class comic_meta_data_editor(QDialog):
         # The page for the authors.
         authorPage = QWidget()
         authorPage.setLayout(QVBoxLayout())
-        explaination = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
-        explaination.setWordWrap(True)
+        explanation = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
+        explanation.setWordWrap(True)
         self.authorModel = QStandardItemModel(0, 7)
         labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage"), i18n("Language")]
         self.authorModel.setHorizontalHeaderLabels(labels)
@@ -287,7 +287,7 @@ class comic_meta_data_editor(QDialog):
         btn_remove_author.clicked.connect(self.slot_remove_author)
         author_button_layout.layout().addWidget(btn_add_author)
         author_button_layout.layout().addWidget(btn_remove_author)
-        authorPage.layout().addWidget(explaination)
+        authorPage.layout().addWidget(explanation)
         authorPage.layout().addWidget(self.authorTable)
         authorPage.layout().addWidget(author_button_layout)
         mainWidget.addTab(authorPage, i18n("Authors"))

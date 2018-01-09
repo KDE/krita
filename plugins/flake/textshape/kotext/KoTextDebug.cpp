@@ -262,7 +262,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             value = properties[id].toString();
             break;
         case KoCharacterStyle::HasHyphenation:
-            key = "hypenation";
+            key = "hyphenation";
             value = properties[id].toBool();
             break;
         case KoCharacterStyle::StrikeOutText:

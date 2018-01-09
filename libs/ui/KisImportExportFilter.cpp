@@ -247,7 +247,7 @@ void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > su
                     KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
 
             if(!colorModelCheckFactory || !colorModelPerLayerCheckFactory) {
-                qDebug() << "No factory for" << colorModelID << colorDepthID;
+                qWarning() << "No factory for" << colorModelID << colorDepthID;
                 continue;
             }
 

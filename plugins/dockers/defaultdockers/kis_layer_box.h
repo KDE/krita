@@ -119,10 +119,12 @@ private Q_SLOTS:
     void selectionChanged(const QModelIndexList selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);
+    void slotUpdateIcons();
 
     void updateThumbnail();
     void updateAvailableLabels();
     void updateLayerFiltering();
+
 
     // Opacity keyframing
     void slotKeyframeChannelAdded(KisKeyframeChannel *channel);

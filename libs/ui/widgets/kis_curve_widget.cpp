@@ -266,17 +266,22 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     int    wWidth = width() - 1;
     int    wHeight = height() - 1;
 
-    QPainter p(this);
 
-    QPalette appPalette = QApplication::palette();
+    QPainter p(this);
 
     // Antialiasing is not a good idea here, because
     // the grid will drift one pixel to any side due to rounding of int
     // FIXME: let's user tell the last word (in config)
     //p.setRenderHint(QPainter::Antialiasing);
+     QPalette appPalette = QApplication::palette();
+     p.fillRect(rect(), appPalette.color(QPalette::Base)); // clear out previous paint call results
 
-    // fill with color to show widget bounds
-     p.fillRect(rect(), appPalette.color(QPalette::Base));
+     // make the entire widget greyed out if it is disabled
+     if (!this->isEnabled()) {
+        p.setOpacity(0.2);
+     }
+
+
 
     //  draw background
     if (!d->m_pix.isNull()) {
@@ -359,6 +364,9 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     QPainterPath widgetBoundsPath;
     widgetBoundsPath.addRect(rect());
     p.strokePath(widgetBoundsPath, appPalette.color(QPalette::Text));
+
+
+    p.setOpacity(1.0); // reset to 1.0 in case we were drawing a disabled widget before
 }
 
 void KisCurveWidget::mousePressEvent(QMouseEvent * e)

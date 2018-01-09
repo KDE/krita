@@ -34,6 +34,7 @@ public:
     void unsetCanvas() override { m_canvas = 0; setEnabled(false);}
 public Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant& v);
+
 private Q_SLOTS:
 private:
     QPointer<KisCanvas2> m_canvas;

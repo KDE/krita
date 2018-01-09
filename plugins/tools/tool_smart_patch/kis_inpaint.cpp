@@ -114,7 +114,7 @@ public:
         return *this;
     }
 
-    //move assignement operator
+    //move assignment operator
     ImageView& operator=(ImageView&& other) noexcept
     {
         if (this != &other) {
@@ -522,7 +522,7 @@ private:
         return rand() % range;
     }
 
-    //compute intial value of the distance term
+    //compute initial value of the distance term
     void initialize(void)
     {
         for (int y = 0; y < imSize.height(); y++) {
@@ -977,7 +977,7 @@ QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev
     QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
 
-    float scale = 1 + (accuracy / 25); //higher accuracy means we include more surrouding area around the patch. Minimum 2x padding.
+    float scale = 1 + (accuracy / 25); //higher accuracy means we include more surrounding area around the patch. Minimum 2x padding.
     int dx = maskRect.width() * scale;
     int dy = maskRect.height() * scale;
     maskRect.adjust(-dx, -dy, dx, dy);

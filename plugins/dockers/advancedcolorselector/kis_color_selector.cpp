@@ -25,6 +25,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QPushButton>
+#include <QApplication>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -42,6 +43,7 @@
 #include "kis_color_selector_container.h"
 #include "kis_canvas2.h"
 #include "kis_signal_compressor.h"
+#include "KisViewManager.h"
 
 
 KisColorSelector::KisColorSelector(KisColorSelectorConfiguration conf, QWidget* parent)
@@ -150,6 +152,17 @@ void KisColorSelector::updateSettings()
     setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString())));
 }
 
+void KisColorSelector::updateIcons() {
+    if (m_button) {
+        m_button->setIcon(KisIconUtils::loadIcon("configure"));
+    }
+}
+
+void KisColorSelector::hasAtLeastOneDocument(bool value)
+{
+    m_hasAtLeastOneDocumentOpen = value;
+}
+
 void KisColorSelector::reset()
 {
     KisColorSelectorBase::reset();
@@ -167,11 +180,18 @@ void KisColorSelector::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);
     QPainter p(this);
-    p.fillRect(0,0,width(),height(),QColor(128,128,128));
+    p.fillRect(0,0,width(), height(), QColor(128,128,128));
     p.setRenderHint(QPainter::Antialiasing);
+
+    // this variable name isn't entirely accurate to what always happens. see definition in header file to understand it better
+    if (!m_hasAtLeastOneDocumentOpen) {
+        p.setOpacity(0.2);
+    }
 
     m_mainComponent->paintEvent(&p);
     m_subComponent->paintEvent(&p);
+
+    p.setOpacity(1.0);
 }
 
 inline int iconSize(qreal width, qreal height) {
@@ -333,6 +353,7 @@ void KisColorSelector::init()
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);
         m_button->setIcon(KisIconUtils::loadIcon("configure"));
+        m_button->setFlat(true);
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }
 

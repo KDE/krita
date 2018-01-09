@@ -27,7 +27,7 @@ class KisDistanceInformation;
 
 /**
  * The distance information should be associated with each
- * painting stroke individually, so we strore and manipulate
+ * painting stroke individually, so we store and manipulate
  * with them together using KisPaintingStrokeInfo structure
  */
 class KRITAUI_EXPORT KisFreehandStrokeInfo {

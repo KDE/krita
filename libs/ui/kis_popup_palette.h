@@ -157,6 +157,9 @@ Q_SIGNALS:
     void sigEnableChangeFGColor(bool);
     void sigTriggerTimer();
 
+public Q_SLOTS:
+    void slotUpdateIcons();
+
 private Q_SLOTS:
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();

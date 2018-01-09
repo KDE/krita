@@ -95,7 +95,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.setRenderHint(QPainter::Antialiasing);
     gc.setRenderHint(QPainter::TextAntialiasing);
 
-    // This option does not do anything anymore with Qt4.6, so don't reenable it since it seems to break display
+    // This option does not do anything anymore with Qt4.6, so don't re-enable it since it seems to break display
     // http://www.archivum.info/qt-interest@trolltech.com/2010-01/00481/Re:-(Qt-interest)-Is-QPainter::HighQualityAntialiasing-render-hint-broken-in-Qt-4.6.html
     // gc.setRenderHint(QPainter::HighQualityAntialiasing);
 

@@ -107,7 +107,7 @@ public:
     static void ensureInitialized();
 
     /**
-     * Finalize the Python interpreter. Not gauranteed to work.
+     * Finalize the Python interpreter. Not guaranteed to work.
      */
     static void maybeFinalize();
 

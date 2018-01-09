@@ -49,6 +49,7 @@ Histogram::~Histogram()
 void Histogram::slotActivated()
 {
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view->mainWindow(), "Histogram");
+
     Q_CHECK_PTR(dlgHistogram);
 
     KisLayerSP layer = m_view->nodeManager()->activeLayer();
@@ -61,8 +62,6 @@ void Histogram::slotActivated()
         if (dlgHistogram->exec() == QDialog::Accepted) {
             // Do nothing; this is an informational dialog
         }
-
-
     }
     delete dlgHistogram;
 }

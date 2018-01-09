@@ -289,7 +289,7 @@ void PythonPluginManager::scanPlugins()
 
             verifyDependenciesSetStatus(plugin);
 
-            plugin.m_enabled = pluginSettings.readEntry(QString("enable_") + plugin.moduleName(), true);
+            plugin.m_enabled = pluginSettings.readEntry(QString("enable_") + plugin.moduleName(), false);
 
             m_plugins.append(plugin);
         }

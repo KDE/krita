@@ -49,6 +49,8 @@ public:
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index) const override;
 
+    void slotUpdateIcon();
+
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
@@ -60,9 +62,7 @@ private:
     Private* const d;
 
     static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
-    QRect progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
 
     void drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;

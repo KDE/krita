@@ -23,6 +23,7 @@
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoColorDisplayRendererInterface.h"
+#include "KoColorSet.h"
 
 #include <QScopedPointer>
 
@@ -119,6 +120,13 @@ public Q_SLOTS:
     void slotColorUpdated(KoColor newColor);
 
     /**
+    * @brief slotSetColorFromPatch
+    * update current color from kocolorpatch.
+    * @param patch
+    */
+    void slotSetColorFromPatch(KoColorPatch* patch);
+
+    /**
      * @brief setPreviousColor
      * set the previous color.
      */
@@ -149,17 +157,16 @@ private Q_SLOTS:
     void slotFinishUp();
 
     /**
-     * @brief slotSetColorFromPatch
-     * update current color from kocolorpatch.
-     * @param patch
-     */
-    void slotSetColorFromPatch(KoColorPatch* patch);
-
-    /**
      * @brief slotSetColorFromHex
      * Update from the hex color input.
      */
     void slotSetColorFromHex();
+
+    void slotChangePalette(KoColorSet *set);
+
+    void slotSetColorFromColorList();
+
+    void slotSetColorFromColorSetEntry(KoColorSetEntry entry);
 
 
 protected:

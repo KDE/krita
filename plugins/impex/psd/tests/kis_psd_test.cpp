@@ -48,7 +48,7 @@ void KisPSDTest::testOpening()
     QScopedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
 
     KisImportExportManager manager(doc.data());
-    manager.setBatchMode(true);
+    doc->setFileBatchMode(true);
 
     KisImportExportFilter::ConversionStatus status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
     QCOMPARE(status, KisImportExportFilter::OK);
@@ -61,7 +61,7 @@ QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
     QSharedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
 
     KisImportExportManager manager(doc.data());
-    manager.setBatchMode(true);
+    doc->setFileBatchMode(true);
 
     KisImportExportFilter::ConversionStatus status = manager.importDocument(fileInfo.absoluteFilePath(), QString());
     Q_UNUSED(status);

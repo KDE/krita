@@ -134,7 +134,7 @@ KoFilterEffectStack *FilterEffectResource::toFilterStack() const
     doc.setContent(data);
     KoXmlElement e = doc.documentElement();
 
-    // only allow obect bounding box units
+    // only allow object bounding box units
     if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox") {
         return 0;
     }

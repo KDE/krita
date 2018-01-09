@@ -22,6 +22,7 @@
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
+#include <kis_filter_configuration.h>
 
 /**
  * Filter: represents a filter and its configuration. A filter is identified by
@@ -100,8 +101,13 @@ public Q_SLOTS:
     bool startFilter(Node *node, int x, int y, int w, int h);
 
 private:
+    friend class FilterLayer;
+    friend class FilterMask;
+
     struct Private;
     Private *const d;
+
+    KisFilterConfigurationSP filterConfig();
 
 };
 

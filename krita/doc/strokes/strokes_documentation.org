@@ -492,7 +492,7 @@
      order with original sequentiality properties (concurrent,
      sequential, barrier, exclusive).
 
-   That is exactly what we have: =KisSavedUndoComand= skips the first
+   That is exactly what we have: =KisSavedUndoCommand= skips the first
    redo and runs undo()/redo() of an internal command in a separate
    stroke. We have =KisSavedMacroCommand= as well to save the contents
    of the whole stroke.

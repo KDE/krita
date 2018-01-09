@@ -163,7 +163,7 @@ public:
 
             int nConseqPixels = srcIt.nConseqPixels();
 
-            // since we are accessing data managers directly, the colums are always aligned
+            // since we are accessing data managers directly, the columns are always aligned
             KIS_SAFE_ASSERT_RECOVER_NOOP(srcIt.nConseqPixels() == dstIt.nConseqPixels());
 
             while(srcIt.nextPixels(nConseqPixels) &&

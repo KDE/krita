@@ -161,18 +161,18 @@ class Palette_Docker(DockWidget):
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
                 color = self.canvas().view().foreGroundColor()
-                succes = self.paletteView.addEntryWithDialog(color)
-                if succes is True:
+                success = self.paletteView.addEntryWithDialog(color)
+                if success is True:
                     self.slot_fill_combobox()
 
     def slot_add_group(self):
-        succes = self.paletteView.addGroupWithDialog()
-        if succes is True:
+        success = self.paletteView.addGroupWithDialog()
+        if success is True:
             self.slot_fill_combobox()
 
     def slot_remove_entry(self):
-        succes = self.paletteView.removeSelectedEntryWithDialog()
-        if succes is True:
+        success = self.paletteView.removeSelectedEntryWithDialog()
+        if success is True:
             self.slot_fill_combobox()
 
     '''

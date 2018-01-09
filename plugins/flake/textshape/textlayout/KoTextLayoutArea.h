@@ -123,7 +123,7 @@ public:
     /// Setting this also indicates that we don't want wrapping.
     /// 0 means wrapping is allowed
     /// This has to be set before each layout(), and the layout() will change the reference rect
-    /// right value to fit snugly (minimum the old right value) and so that no wrapping occours up
+    /// right value to fit snugly (minimum the old right value) and so that no wrapping occurs up
     /// to maximumAllowedWidth
     void setNoWrap(qreal maximumAllowedWidth);
 
@@ -157,7 +157,7 @@ public:
     /// returns true if we have not yet added anything to the page
     bool virginPage() const;
 
-    /// Sets the amound the contenst should be vertically offset due to any outside induced
+    /// Sets the amount the content should be vertically offset due to any outside induced
     /// vertical alignment
     void setVerticalAlignOffset(qreal offset);
     qreal verticalAlignOffset() const;

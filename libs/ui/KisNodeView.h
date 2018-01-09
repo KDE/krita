@@ -146,6 +146,10 @@ protected:
      */
     int cursorPageIndex() const;
 
+public Q_SLOTS:
+    /// called with a theme change to refresh icon colors
+    void slotUpdateIcons();
+
 protected Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) override;

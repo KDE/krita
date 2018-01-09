@@ -52,6 +52,7 @@
 #include <kis_brush_server.h>
 #include <KoResourceServerProvider.h>
 #include <kis_action_registry.h>
+#include <kis_icon_utils.h>
 
 #include "View.h"
 #include "Document.h"
@@ -347,7 +348,7 @@ Window* Krita::openWindow()
     return new Window(mw);
 }
 
-Action *Krita::createAction(const QString &id, const QString &text)
+Action *Krita::createAction(const QString &id, const QString &text, bool addToScriptMenu)
 {
     KisAction *action = new KisAction(text, this);
     action->setObjectName(id);
@@ -360,7 +361,9 @@ Action *Krita::createAction(const QString &id, const QString &text)
     action->setActivationFlags((KisAction::ActivationFlags) activationFlags);
     action->setActivationConditions((KisAction::ActivationConditions) activationConditions);
 
-    KisPart::instance()->addScriptAction(action);
+    if (addToScriptMenu) {
+        KisPart::instance()->addScriptAction(action);
+    }
     return new Action(action->objectName(), action);
 }
 
@@ -384,6 +387,11 @@ QString Krita::readSetting(const QString &group, const QString &name, const QStr
 {
     KConfigGroup grp = KSharedConfig::openConfig()->group(group);
     return grp.readEntry(name, defaultValue);
+}
+
+QIcon Krita::icon(QString &iconName) const
+{
+    return KisIconUtils::loadIcon(iconName);
 }
 
 void Krita::addDockWidgetFactory(DockWidgetFactoryBase* factory)

@@ -72,6 +72,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
@@ -85,14 +86,14 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     QWidget* buttonWidget = new QWidget(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
 
-    QToolButton* addGradient = new QToolButton(this);
-    addGradient->setIcon(KisIconUtils::loadIcon("list-add"));
-    addGradient->setText(i18n("Add..."));
-    addGradient->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(addGradient, SIGNAL(clicked()), this, SLOT(addStopGradient()));
-    buttonLayout->addWidget(addGradient);
+    m_addGradient = new QToolButton(this);
 
-    QMenu *menuAddGradient = new QMenu(addGradient);
+    m_addGradient->setText(i18n("Add..."));
+    m_addGradient->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    connect(m_addGradient, SIGNAL(clicked()), this, SLOT(addStopGradient()));
+    buttonLayout->addWidget(m_addGradient);
+
+    QMenu *menuAddGradient = new QMenu(m_addGradient);
 
     QAction* addStopGradient = new QAction(i18n("Stop gradient"), this);
     connect(addStopGradient, SIGNAL(triggered(bool)), this, SLOT(addStopGradient()));
@@ -102,10 +103,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     connect(addSegmentedGradient, SIGNAL(triggered(bool)), this, SLOT(addSegmentedGradient()));
     menuAddGradient->addAction(addSegmentedGradient);
 
-    addGradient->setMenu(menuAddGradient);
-    addGradient->setPopupMode(QToolButton::MenuButtonPopup);
+    m_addGradient->setMenu(menuAddGradient);
+    m_addGradient->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_editGradient = new QPushButton(KisIconUtils::loadIcon("configure"), i18n("Edit..."));
+    m_editGradient = new QPushButton();
+    m_editGradient->setText(i18n("Edit..."));
     m_editGradient->setEnabled(false);
     connect(m_editGradient, SIGNAL(clicked()), this, SLOT(editGradient()));
     buttonLayout->addWidget(m_editGradient);
@@ -117,6 +119,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_itemChooser, 10);
     mainLayout->addWidget(buttonWidget);
 
+    slotUpdateIcons();
     setLayout(mainLayout);
 }
 
@@ -139,6 +142,14 @@ void KisGradientChooser::setCurrentItem(int row, int column)
     m_itemChooser->setCurrentItem(row, column);
     if (currentResource())
         update(currentResource());
+}
+
+void KisGradientChooser::slotUpdateIcons()
+{
+    if (m_addGradient && m_editGradient) {
+        m_addGradient->setIcon(KisIconUtils::loadIcon("list-add"));
+        m_editGradient->setIcon(KisIconUtils::loadIcon("configure"));
+    }
 }
 
 void KisGradientChooser::update(KoResource * resource)

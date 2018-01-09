@@ -44,6 +44,9 @@ public:
     bool handleColorPickingMouseButtonRelease(QMouseEvent *e);
     bool handleColorPickingKeyPress(QKeyEvent *e);
 
+    /// reloads icon(s) when theme is updated
+    void updateIcons();
+
 Q_SIGNALS:
     void sigNewColorPicked(KoColor c);
     void sigPleaseDisableEverything(bool disable);

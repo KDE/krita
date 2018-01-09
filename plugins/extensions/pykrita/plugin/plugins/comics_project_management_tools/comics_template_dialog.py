@@ -272,12 +272,12 @@ class comics_template_create(QDialog):
         template.setGuidesLocked(True)
 
         self.urlSavedTemplate = os.path.join(self.templateDirectory, self.templateName.text() + ".kra")
-        succes = template.exportImage(self.urlSavedTemplate, InfoObject())
+        success = template.exportImage(self.urlSavedTemplate, InfoObject())
         print("CPMT: Template", self.templateName.text(), "made and saved.")
         template.waitForDone()
         template.close()
 
-        return succes
+        return success
 
     def url(self):
         return self.urlSavedTemplate

@@ -41,6 +41,9 @@ public:
     void unsetCanvas() override;
     void setMainWindow(KisViewManager *kisview) override;
 
+public Q_SLOTS:
+    void slotUpdateIcons();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

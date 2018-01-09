@@ -1259,7 +1259,6 @@ void KisViewManager::updateIcons()
             while (!objects.isEmpty()) {
                 QObject* object = objects.takeFirst();
                 objects.append(object->children());
-
                 KisIconUtils::updateIconCommon(object);
             }
         }

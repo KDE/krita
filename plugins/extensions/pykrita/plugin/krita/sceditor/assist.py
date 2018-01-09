@@ -80,19 +80,19 @@ class AutoComplete(PopupWidget):
         self.insert()
 
     def insert(self):
-        completition = self.items[self.list.currentRow()].value
+        completion = self.items[self.list.currentRow()].value
         cursor = self.textedit.textCursor()
         col = cursor.columnNumber()
         line = unicode(cursor.block().text())
         i = self.cursor_start_col
         while i > 0:
             # print(`line[i:col]`)
-            if completition.startswith(line[i:col]):
+            if completion.startswith(line[i:col]):
                 # print("break")
                 break
             i -= 1
         # print(col,i)
-        cursor.insertText(completition[col - i:])
+        cursor.insertText(completion[col - i:])
         self.hide()
 
     def setItems(self, proposals):

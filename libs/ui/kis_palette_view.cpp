@@ -92,6 +92,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     QLineEdit *lnIDName = new QLineEdit();
     QLineEdit *lnName = new QLineEdit();
     KisColorButton *bnColor = new KisColorButton();
+    bnColor->setPaletteViewEnabled(false);
     QCheckBox *chkSpot = new QCheckBox();
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
     editableItems->addRow(i18n("Group"), cmbGroups);
@@ -303,6 +304,7 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
         QLineEdit *lnIDName = new QLineEdit();
         QLineEdit *lnGroupName = new QLineEdit();
         KisColorButton *bnColor = new KisColorButton();
+        bnColor->setPaletteViewEnabled(false);
         QCheckBox *chkSpot = new QCheckBox();
 
         if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {

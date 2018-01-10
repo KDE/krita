@@ -133,14 +133,25 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
 }
 
+void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)
+{
+    Q_FOREACH (KoShape *shape, shapes) {
+        shape->priv()->removeShapeManager(q);
+
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container) {
+            unlinkFromShapesRecursively(container->shapes());
+        }
+    }
+}
+
 KoShapeManager::~KoShapeManager()
 {
-    Q_FOREACH (KoShape *shape, d->shapes) {
-        shape->priv()->removeShapeManager(this);
-    }
-    Q_FOREACH (KoShape *shape, d->additionalShapes) {
-        shape->priv()->removeShapeManager(this);
-    }
+    d->unlinkFromShapesRecursively(d->shapes);
+    d->shapes.clear();
+    d->unlinkFromShapesRecursively(d->additionalShapes);
+    d->additionalShapes.clear();
+
     delete d;
 }
 
@@ -148,9 +159,7 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
     //clear selection
     d->selection->deselectAll();
-    Q_FOREACH (KoShape *shape, d->shapes) {
-        shape->priv()->removeShapeManager(this);
-    }
+    d->unlinkFromShapesRecursively(d->shapes);
     d->aggregate4update.clear();
     d->tree.clear();
     d->shapes.clear();

@@ -38,12 +38,13 @@ KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 
 }
 
-void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImageSP referenceImage)
+void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
     KisReferenceImagesLayer *layer = view()->document()->createReferenceImagesLayer();
     KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
 
-    layer->addReferenceImage(referenceImage);
+    KUndo2Command *cmd = layer->addReferenceImage(referenceImage);
+    view()->document()->addCommand(cmd);
 }
 
 bool KisReferenceImagesDecoration::documentHasReferenceImages() const

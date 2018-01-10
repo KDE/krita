@@ -22,6 +22,8 @@
 
 #include <QScopedPointer>
 
+#include <KoShape.h>
+
 class QImage;
 class QPointF;
 class QPainter;
@@ -32,7 +34,7 @@ class KisCanvas2;
 /**
  * @brief The KisReferenceImage class represents a single reference image
  */
-class KisReferenceImage
+class KisReferenceImage : public KoShape
 {
 public:
     KisReferenceImage();
@@ -42,8 +44,11 @@ public:
     void setPosition(QPointF pos);
     void setGrayscale(bool grayscale);
 
+    void paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
-    void draw(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override { return false; }
+    void saveOdf(KoShapeSavingContext &context) const override {}
+
 private:
     struct Private;
     const QScopedPointer<Private> d;

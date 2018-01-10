@@ -670,3 +670,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     return parentCommand;
 }
 
+KoShapeBasedDocumentBase *KisShapeLayer::shapeController() const
+{
+    return m_d->controller;
+}

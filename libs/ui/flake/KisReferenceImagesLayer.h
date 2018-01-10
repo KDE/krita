@@ -31,13 +31,14 @@ class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 public:
     KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image);
 
-    void addReferenceImage(KisReferenceImageSP referenceImage);
+    KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
 
     bool allowAsChild(KisNodeSP) const override;
 
     bool accept(KisNodeVisitor&) override;
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
+    friend struct AddReferenceImageCommand;
 };
 
 

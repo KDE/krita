@@ -67,8 +67,13 @@ KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller,
 }
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> shapes, KUndo2Command *parent)
-        : KUndo2Command(kundo2_i18np("Create shape", "Create shapes", shapes.size()), parent),
-        d(new Private(controller, shapes))
+        : KoShapeCreateCommand(controller, shapes, parent, kundo2_i18np("Create shape", "Create shapes", shapes.size()))
+{
+}
+
+KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> shapes, KUndo2Command *parent, const KUndo2MagicString &undoString)
+        : KUndo2Command(undoString, parent)
+        , d(new Private(controller, shapes))
 {
 }
 

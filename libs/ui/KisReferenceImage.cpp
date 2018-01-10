@@ -54,15 +54,19 @@ void KisReferenceImage::setGrayscale(bool grayscale)
     d->grayscale = grayscale;
 }
 
-void KisReferenceImage::draw(QPainter &gc, const QRectF &/*updateRect*/, const KisCoordinatesConverter *converter, KisCanvas2 */*canvas*/)
+void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
+    applyConversion(gc, converter);
+
     gc.save();
-    gc.resetTransform();
 
-    QTransform initialTransform = converter->documentToWidgetTransform();
-    gc.setTransform(initialTransform);
+    QSizeF shapeSize = size();
+    QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
-    gc.drawImage(d->pos, d->image);
+    gc.setRenderHint(QPainter::SmoothPixmapTransform);
+    gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
+    gc.setTransform(transform, true);
+    gc.drawImage(QPoint(), d->image);
 
     gc.restore();
 }

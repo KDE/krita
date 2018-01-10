@@ -150,6 +150,8 @@ protected:
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
 
+    KoShapeBasedDocumentBase *shapeController() const;
+
 Q_SIGNALS:
     /**
      * These signals are forwarded from the local shape manager

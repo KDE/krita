@@ -17,11 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <KoShapeCreateCommand.h>
 #include <kis_node_visitor.h>
 #include <kis_processing_visitor.h>
 #include <kis_shape_layer_canvas.h>
 
 #include "KisReferenceImagesLayer.h"
+#include "KisReferenceImage.h"
+
+struct AddReferenceImageCommand : KoShapeCreateCommand
+{
+    AddReferenceImageCommand(KisReferenceImagesLayer *layer, KisReferenceImage* referenceImage)
+        : KoShapeCreateCommand(layer->shapeController(), {referenceImage}, nullptr, kundo2_i18n("Add reference image"))
+        , m_layer(layer)
+    {}
+
+    void redo() override {
+        KoShapeCreateCommand::redo();
+    }
+
+    void undo() override {
+        KoShapeCreateCommand::undo();
+    }
+
+private:
+    KisReferenceImagesLayer *m_layer;
+};
+
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
 {
 public:
@@ -48,9 +70,9 @@ KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shape
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
 {}
 
-void KisReferenceImagesLayer::addReferenceImage(KisReferenceImageSP referenceImage)
+KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *referenceImage)
 {
-    // TODO
+    return new AddReferenceImageCommand(this, referenceImage);
 }
 
 bool KisReferenceImagesLayer::allowAsChild(KisNodeSP) const

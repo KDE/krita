@@ -44,7 +44,7 @@ public:
     KisReferenceImagesDecoration(QPointer<KisView> parent);
     ~KisReferenceImagesDecoration() override;
 
-    void addReferenceImage(KisReferenceImageSP referenceImage);
+    void addReferenceImage(KisReferenceImage *referenceImage);
 
     bool documentHasReferenceImages() const;
 

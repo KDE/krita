@@ -23,6 +23,13 @@
 #include <KoAlwaysInline.h>
 
 namespace KritaUtils {
+
+
+/**
+ * this is a special helper function for iterating
+ * through pixels in an extremely efficient way. One
+ * should either pass a functor or a lambda to it.
+ */
 template <class PixelProcessor>
 void processTwoDevices(const QRect &rc,
                        KisRandomConstAccessorSP srcIt,

@@ -125,19 +125,19 @@ struct WriteProcessor {
 };
 
 struct ReadProcessor {
-    ReadProcessor(int _channelCount) : channelCount(_channelCount) {}
+    ReadProcessor(int _channelCount) : m_channelCount(_channelCount) {}
 
     ALWAYS_INLINE
     void operator()(const quint8 *srcPtr, quint8 *dstPtr) {
         const quint8 *srcChannel = reinterpret_cast<const quint8*>(srcPtr);
         quint16 *dstChannel = reinterpret_cast<quint16*>(dstPtr);
 
-        for (int k = 0; k < channelCount; k++) {
+        for (int k = 0; k < m_channelCount; k++) {
             *(dstChannel + k) = KoColorSpaceMaths<quint8, quint16>::scaleToA(*(srcChannel + k));
         }
     }
 
-    const int channelCount;
+    const int m_channelCount;
 };
 
 }

@@ -48,6 +48,9 @@ public:
 
     bool documentHasReferenceImages() const;
 
+private Q_SLOTS:
+    void slotReferenceImagesChanged(const QRectF &dirtyRect);
+
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas) override;
 

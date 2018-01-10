@@ -19,24 +19,80 @@
 
 #include "KisReferenceImagesDecoration.h"
 
+#include "KoShapeManager.h"
+
+#include "kis_algebra_2d.h"
 #include "KisDocument.h"
 #include "KisReferenceImagesLayer.h"
 
 struct KisReferenceImagesDecoration::Private {
+    struct Buffer
+    {
+        /// Top left corner of the buffer relative to the viewport
+        QPointF position;
+        QImage image;
 
+        QRectF bounds() const
+        {
+            return QRectF(position, image.size());
+        }
+    };
+
+    KisReferenceImagesDecoration *q;
+
+    KisWeakSharedPtr<KisReferenceImagesLayer> layer;
+    Buffer buffer;
+    QTransform previousTransform;
+
+    explicit Private(KisReferenceImagesDecoration *q)
+        : q(q)
+    {}
+
+    void updateBufferByImageCoordinates(const QRectF &dirtyImageRect)
+    {
+        QRectF dirtyWidgetRect = q->view()->viewConverter()->imageToWidget(dirtyImageRect);
+        updateBuffer(dirtyWidgetRect, dirtyImageRect);
+    }
+
+    void updateBufferByWidgetCoordinates(const QRectF &dirtyWidgetRect)
+    {
+        QRectF dirtyImageRect = q->view()->viewConverter()->widgetToImage(dirtyWidgetRect);
+        updateBuffer(dirtyWidgetRect, dirtyImageRect);
+    }
+
+private:
+    void updateBuffer(const QRectF &widgetRect, const QRectF &imageRect)
+    {
+        KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
+        QTransform transform = viewConverter->imageToWidgetTransform();
+
+        if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
+            // TODO: only use enough buffer to cover the BB of the shapes
+            buffer.position = QPointF();
+            buffer.image = QImage(q->view()->width(), q->view()->height(), QImage::Format_ARGB32);
+            buffer.image.fill(Qt::transparent);
+        }
+
+        QPainter gc(&buffer.image);
+        gc.setTransform(transform);
+
+        gc.save();
+        gc.setCompositionMode(QPainter::CompositionMode_Source);
+        gc.fillRect(imageRect, Qt::transparent);
+        gc.restore();
+
+        gc.setClipRect(imageRect);
+        layer->paint(gc);
+    }
 };
 
 KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent)
     : KisCanvasDecoration("referenceImagesDecoration", parent)
-    , d(new Private)
-{
-}
-
+    , d(new Private(this))
+{}
 
 KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
-{
-
-}
+{}
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
@@ -54,9 +110,28 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
 
 void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
-    /*
-    Q_FOREACH(KisReferenceImageSP image, view()->document()->referenceImages()) {
-        image->draw(gc, updateRect, converter, canvas);
+    KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
+    if (layer.isNull()) {
+        layer = d->layer = view()->document()->referenceImagesLayer();
+        if (layer.isNull()) return;
+
+        connect(layer.data(), SIGNAL(sigUpdateCanvas(const QRectF&)), this, SLOT(slotReferenceImagesChanged(const QRectF&)));
+
+        d->updateBufferByWidgetCoordinates(updateRect);
+    } else {
+        QTransform transform = view()->viewConverter()->imageToWidgetTransform();
+        if (!KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
+            d->updateBufferByWidgetCoordinates(QRectF(0, 0, view()->width(), view()->height()));
+        }
     }
-    */
+
+    gc.drawImage(d->buffer.position, d->buffer.image);
+}
+
+void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirtyRect)
+{
+    d->updateBufferByImageCoordinates(dirtyRect);
+
+    QRectF documentRect = view()->viewConverter()->imageToDocument(dirtyRect);
+    view()->canvasBase()->updateCanvas(documentRect);
 }

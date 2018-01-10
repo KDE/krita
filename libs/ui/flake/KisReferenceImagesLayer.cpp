@@ -54,10 +54,13 @@ public:
 
     void updateCanvas(const QRectF &rect) override
     {
+        QRectF r = m_viewConverter->documentToView(rect);
+        m_layer->signalUpdate(r);
     }
 
     void forceRepaint() override
     {
+        m_layer->signalUpdate(m_layer->extent());
     }
 
     void setImage(KisImageWSP image) override {}
@@ -75,6 +78,10 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *re
     return new AddReferenceImageCommand(this, referenceImage);
 }
 
+void KisReferenceImagesLayer::paint(QPainter &painter) {
+    shapeManager()->paint(painter, *converter(), false);
+}
+
 bool KisReferenceImagesLayer::allowAsChild(KisNodeSP) const
 {
     return false;
@@ -88,4 +95,9 @@ bool KisReferenceImagesLayer::accept(KisNodeVisitor &visitor)
 void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) 
 {
     visitor.visit(this, undoAdapter);
+}
+
+void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
+{
+    emit sigUpdateCanvas(rect);
 }

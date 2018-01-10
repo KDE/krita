@@ -33,12 +33,24 @@ public:
 
     KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
 
+    void paint(QPainter &painter);
+
     bool allowAsChild(KisNodeSP) const override;
 
     bool accept(KisNodeVisitor&) override;
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
+Q_SIGNALS:
+    /**
+     * The content of the layer has changed, and the canvas decoration
+     * needs to update.
+     */
+    void sigUpdateCanvas(const QRectF &rect);
+
+private:
+    void signalUpdate(const QRectF &rect);
     friend struct AddReferenceImageCommand;
+    friend struct ReferenceImagesCanvas;
 };
 
 

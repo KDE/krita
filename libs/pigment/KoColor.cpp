@@ -33,7 +33,13 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
 
+
 #include <QGlobalStatic>
+
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 
 namespace {
 
@@ -383,10 +389,12 @@ QDebug operator<<(QDebug dbg, const KoColor &color)
             const quint32 *ptr = reinterpret_cast<const quint32*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;
             break;
+#ifdef HAVE_OPENEXR
         } case KoChannelInfo::FLOAT16: {
             const half *ptr = reinterpret_cast<const half*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;
             break;
+#endif
         } case KoChannelInfo::FLOAT32: {
             const float *ptr = reinterpret_cast<const float*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;

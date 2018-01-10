@@ -93,7 +93,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_finalPainter->copyMirrorInformationFrom(painter);
 
     m_paintColor = painter->paintColor().convertedTo(m_preciseWrapper.preciseColorSpace());
-    m_preciseColorRateCompositeOp = m_preciseWrapper.preciseColorSpace()->compositeOp(COMPOSITE_COPY);
+    m_preciseColorRateCompositeOp =
+        m_preciseWrapper.preciseColorSpace()->compositeOp(m_colorRatePainter->compositeOp()->id());
 
     m_rotationOption.applyFanCornersInfo(this);
 }

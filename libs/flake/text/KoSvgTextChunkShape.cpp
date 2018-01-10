@@ -599,10 +599,15 @@ void KoSvgTextChunkShape::resetTextShape()
     d->localTransformations.clear();
     d->text.clear();
 
-    // all the subchunks are destroyed!
-    qDeleteAll(shapes());
-}
 
+    // all the subchunks are destroyed!
+    // (first detach, then destroy)
+    QList<KoShape*> shapesToReset = shapes();
+    Q_FOREACH (KoShape *shape, shapesToReset) {
+        shape->setParent(0);
+        delete shape;
+    }
+}
 
 bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &context)
 {

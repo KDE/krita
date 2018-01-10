@@ -159,14 +159,25 @@ KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
 KoShapePrivate::~KoShapePrivate()
 {
     Q_Q(KoShape);
-    if (parent) {
+
+    /**
+     * The shape must have already been detached from all the parents and
+     * shape managers. Otherwise we migh accidentally request some RTTI
+     * information, which is not available anymore (we are in d-tor).
+     *
+     * TL;DR: fix the code that caused this destruction without unparenting
+     *        instead of trying to remove these assert!
+     */
+    KIS_SAFE_ASSERT_RECOVER (!parent) {
         parent->removeShape(q);
     }
 
-    Q_FOREACH (KoShapeManager *manager, shapeManagers) {
-        manager->shapeInterface()->notifyShapeDestructed(q);
+    KIS_SAFE_ASSERT_RECOVER (shapeManagers.isEmpty()) {
+        Q_FOREACH (KoShapeManager *manager, shapeManagers) {
+            manager->shapeInterface()->notifyShapeDestructed(q);
+        }
+        shapeManagers.clear();
     }
-    shapeManagers.clear();
 
     if (shadow && !shadow->deref())
         delete shadow;

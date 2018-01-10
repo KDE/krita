@@ -55,8 +55,6 @@ public:
     bool deleteShapes;
 
     std::vector<std::unique_ptr<KUndo2Command>> reorderingCommands;
-
-    QScopedPointer<KUndo2Command> reorderingCommand;
 };
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KoShapeContainer *parentShape, KUndo2Command *parent)
@@ -98,7 +96,7 @@ void KoShapeCreateCommand::redo()
         if (shapeParent) {
             KUndo2Command *cmd = KoShapeReorderCommand::mergeInShape(shapeParent->shapes(), shape);
 
-            if (d->reorderingCommand) {
+            if (cmd) {
                 cmd->redo();
                 d->reorderingCommands.push_back(
                     std::unique_ptr<KUndo2Command>(cmd));

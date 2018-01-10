@@ -415,7 +415,8 @@ bool KoShape::hitTest(const QPointF &position) const
         return false;
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
-    QRectF bb(QPointF(), size());
+    QRectF bb = outlineRect();
+
     if (d->stroke) {
         KoInsets insets;
         d->stroke->strokeInsets(this, insets);

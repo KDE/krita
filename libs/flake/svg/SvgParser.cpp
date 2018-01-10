@@ -1452,6 +1452,7 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
         applyId(e.attribute("id"), textChunk);
         applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
     } else {
+        m_context.currentGC()->matrix = mergeIntoShape->absoluteTransformation(0);
         applyCurrentBasicStyle(textChunk);
     }
 

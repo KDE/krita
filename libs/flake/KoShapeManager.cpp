@@ -149,8 +149,6 @@ KoShapeManager::~KoShapeManager()
 {
     d->unlinkFromShapesRecursively(d->shapes);
     d->shapes.clear();
-    d->unlinkFromShapesRecursively(d->additionalShapes);
-    d->additionalShapes.clear();
 
     delete d;
 }
@@ -575,7 +573,7 @@ void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selec
 void KoShapeManager::notifyShapeChanged(KoShape *shape)
 {
     Q_ASSERT(shape);
-    if (d->aggregate4update.contains(shape) || d->additionalShapes.contains(shape)) {
+    if (d->aggregate4update.contains(shape)) {
         return;
     }
     const bool wasEmpty = d->aggregate4update.isEmpty();

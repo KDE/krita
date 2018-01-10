@@ -197,7 +197,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 
             if (!allShapes.isEmpty()) {
                 std::sort(allShapes.begin(), allShapes.end(), KoShape::compareShapeZIndex);
-                pasteZIndex = qMin(KoShapePrivate::MaxZIndex, allShapes.last()->zIndex() + 1);
+                pasteZIndex = qMin(int(KoShape::maxZIndex), allShapes.last()->zIndex() + 1);
             }
         }
 

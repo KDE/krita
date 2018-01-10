@@ -21,6 +21,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <limits>
+
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeContainer.h"
@@ -302,6 +304,10 @@ QString KoShapePrivate::getStyleProperty(const char *property, KoShapeLoadingCon
 
 
 // ======== KoShape
+
+const qint16 KoShape::maxZIndex = std::numeric_limits<qint16>::max();
+const qint16 KoShape::minZIndex = std::numeric_limits<qint16>::min();
+
 KoShape::KoShape()
     : d_ptr(new KoShapePrivate(this))
 {
@@ -691,7 +697,7 @@ bool KoShape::inheritsTransformFromAny(const QList<KoShape *> ancestorsInQuestio
     return result;
 }
 
-int KoShape::zIndex() const
+qint16 KoShape::zIndex() const
 {
     Q_D(const KoShape);
     return d->zIndex;
@@ -1124,7 +1130,7 @@ bool KoShape::inheritBackground() const
     return d->inheritBackground;
 }
 
-void KoShape::setZIndex(int zIndex)
+void KoShape::setZIndex(qint16 zIndex)
 {
     Q_D(KoShape);
     if (d->zIndex == zIndex)

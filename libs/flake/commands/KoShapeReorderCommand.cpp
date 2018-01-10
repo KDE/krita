@@ -150,7 +150,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
     for (; newIt!= newOrder.end(); ++newIt) {
         QList<KoShape*> order(newIt.value());
         order.removeAll(0);
-        int index = -KoShapePrivate::MaxZIndex - 1; // set minimum zIndex
+        int index = -KoShape::maxZIndex - 1; // set minimum zIndex
         int pos = 0;
         for (; pos < order.size(); ++pos) {
             if (order[pos]->zIndex() > index) {

@@ -581,7 +581,7 @@ public:
      * @return the z-index of this shape.
      * @see setZIndex()
      */
-    int zIndex() const;
+    qint16 zIndex() const;
 
     /**
      * Set the z-coordinate of this shape.
@@ -594,7 +594,17 @@ public:
      * and probably depends on the order in which they are added to the shape manager.
      * @param zIndex the new z-index;
      */
-    void setZIndex(int zIndex);
+    void setZIndex(qint16 zIndex);
+
+    /**
+     * Maximum value of z-index
+     */
+    static const qint16 maxZIndex;
+
+    /**
+     * Minimum value of z-index
+     */
+    static const qint16 minZIndex;
 
     /**
      * Retrieve the run through property of this shape.

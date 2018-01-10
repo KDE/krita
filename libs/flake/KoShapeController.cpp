@@ -60,9 +60,10 @@ public:
             if (showDialog && !shape->shapeId().isEmpty()) {
                 KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
                 Q_ASSERT(factory);
-                int z = 0;
-                Q_FOREACH (KoShape *sh, canvas->shapeManager()->shapes())
+                qint16 z = 0;
+                Q_FOREACH (KoShape *sh, canvas->shapeManager()->shapes()) {
                     z = qMax(z, sh->zIndex());
+                }
                 shape->setZIndex(z + 1);
 
                 // show config dialog.

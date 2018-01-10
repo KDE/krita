@@ -16,7 +16,9 @@ Dry_Bristles_Eroded.kpp
 Dry_Bristles.kpp
 Dry_Bristles_Smooth.kpp
 Dry_Marker.kpp
+Dry_Textured_Creases.kpp
 Dry_Textured_Rough.kpp
+Dry_Textured_Scribbles.kpp
 Dry_Textured_Soft.kpp
 Eraser_Airbrush.kpp
 Eraser_Circle.kpp

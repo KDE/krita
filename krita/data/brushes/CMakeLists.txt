@@ -25,6 +25,8 @@ cazu-smear-paint.gbr
 cazu-spines.gbr
 cazu_watercolor2.gih
 double_special6.gih
+dub1.gbr
+dub6.gbr
 Flat_textured1.gih
 knife3.gbr
 LJF_Water_Brush_02.gih
@@ -40,7 +42,10 @@ Rect_textured3.gih
 round_textured1.gbr
 R_Rake2.gbr
 R_Rake4.gbr
+rock2.gbr
 S_splats_02.gih
+scribbles.gbr
+texture51.gbr
 w_hearts.gih
 z_study_pencil_2H.gih
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

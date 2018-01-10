@@ -125,6 +125,11 @@ static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoSh
 // static
 KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager, MoveShapeType move, KUndo2Command *parent)
 {
+    /**
+     * TODO: this method doesn't handle the case when one of the shapes
+     *       has maximum or minimum zIndex value (which is 16-bit in our case)!
+     */
+
     QList<int> newIndexes;
     QList<KoShape*> changedShapes;
     QMap<KoShape*, QList<KoShape*> > newOrder;

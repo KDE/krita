@@ -23,6 +23,9 @@
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
+#include <KoSelectedShapesProxy.h>
+#include <KoShapeManager.h>
+#include <kis_image_view_converter.h>
 
 class KoShapeManager;
 class KoToolProxy;
@@ -32,6 +35,37 @@ class QWidget;
 class KoUnit;
 class KisImageViewConverter;
 
+
+class KisShapeLayerCanvasBase : public KoCanvasBase
+{
+
+public:
+    KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image);
+
+    virtual void setImage(KisImageWSP image) = 0;
+    virtual void prepareForDestroying() = 0;
+    virtual void forceRepaint() = 0;
+
+    KoShapeManager *shapeManager() const override;
+    KoViewConverter *viewConverter() const override;
+
+    void gridSize(QPointF *offset, QSizeF *spacing) const override;
+    bool snapToGrid() const override;
+    void addCommand(KUndo2Command *command) override;
+    KoSelectedShapesProxy *selectedShapesProxy() const override;
+    KoToolProxy * toolProxy() const override;
+    QWidget* canvasWidget() override;
+    const QWidget* canvasWidget() const override;
+    KoUnit unit() const override;
+    void updateInputMethodInfo() override {}
+    void setCursor(const QCursor &) override {}
+
+protected:
+    QScopedPointer<KisImageViewConverter> m_viewConverter;
+    QScopedPointer<KoShapeManager> m_shapeManager;
+    QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
+};
+
 /**
  * KisShapeLayerCanvas is a special canvas implementation that Krita
  * uses for non-krita shapes to request updates on.
@@ -39,7 +73,7 @@ class KisImageViewConverter;
  * Do NOT give this canvas to tools or to the KoCanvasController, it's
  * not made for that.
  */
-class KisShapeLayerCanvas : public KoCanvasBase
+class KisShapeLayerCanvas : public KisShapeLayerCanvasBase
 {
     Q_OBJECT
 public:
@@ -52,24 +86,12 @@ public:
         m_projection = projection;
     }
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
-    void prepareForDestroying();
-    void gridSize(QPointF *offset, QSizeF *spacing) const override;
-    bool snapToGrid() const override;
-    void addCommand(KUndo2Command *command) override;
-    KoShapeManager *shapeManager() const override;
-    KoSelectedShapesProxy *selectedShapesProxy() const override;
+    void prepareForDestroying() override ;
     void updateCanvas(const QRectF& rc) override;
-    KoToolProxy * toolProxy() const override;
-    KoViewConverter* viewConverter() const override;
-    QWidget* canvasWidget() override;
-    const QWidget* canvasWidget() const override;
-    KoUnit unit() const override;
-    void updateInputMethodInfo() override {}
-    void setCursor(const QCursor &) override {}
 
-    void forceRepaint();
+    void forceRepaint() override;
 
 private Q_SLOTS:
     void repaint();
@@ -78,9 +100,6 @@ Q_SIGNALS:
 private:
 
     bool m_isDestroying;
-    QScopedPointer<KisImageViewConverter> m_viewConverter;
-    QScopedPointer<KoShapeManager> m_shapeManager;
-    QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 

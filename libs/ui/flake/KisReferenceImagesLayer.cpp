@@ -19,11 +19,33 @@
 
 #include <kis_node_visitor.h>
 #include <kis_processing_visitor.h>
+#include <kis_shape_layer_canvas.h>
 
 #include "KisReferenceImagesLayer.h"
+class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
+{
+public:
+    ReferenceImagesCanvas(KisReferenceImagesLayer *parent, KisImageWSP image)
+        : KisShapeLayerCanvasBase(parent, image)
+        , m_layer(parent)
+    {}
 
+    void updateCanvas(const QRectF &rect) override
+    {
+    }
+
+    void forceRepaint() override
+    {
+    }
+
+    void setImage(KisImageWSP image) override {}
+    void prepareForDestroying() override {}
+
+private:
+    KisReferenceImagesLayer *m_layer;
+};
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image)
-    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8)
+    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
 {}
 
 void KisReferenceImagesLayer::addReferenceImage(KisReferenceImageSP referenceImage)

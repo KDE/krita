@@ -43,16 +43,78 @@
 
 //#define DEBUG_REPAINT
 
+KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
+    : KoCanvasBase(nullptr)
+    , m_viewConverter(new KisImageViewConverter(image))
+    , m_shapeManager(new KoShapeManager(this))
+    , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
+{
+    m_shapeManager->selection()->setActiveLayer(parent);
+}
+
+KoShapeManager *KisShapeLayerCanvasBase::shapeManager() const
+{
+    return m_shapeManager.data();
+}
+
+KoSelectedShapesProxy *KisShapeLayerCanvasBase::selectedShapesProxy() const
+{
+    return m_selectedShapesProxy.data();
+}
+
+KoViewConverter* KisShapeLayerCanvasBase::viewConverter() const
+{
+    return m_viewConverter.data();
+}
+
+void KisShapeLayerCanvasBase::gridSize(QPointF *offset, QSizeF *spacing) const
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(false); // This should never be called as this canvas should have no tools.
+    Q_UNUSED(offset);
+    Q_UNUSED(spacing);
+}
+
+bool KisShapeLayerCanvasBase::snapToGrid() const
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(false); // This should never be called as this canvas should have no tools.
+    return false;
+}
+
+void KisShapeLayerCanvasBase::addCommand(KUndo2Command *)
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(false); // This should never be called as this canvas should have no tools.
+}
+
+
+KoToolProxy * KisShapeLayerCanvasBase::toolProxy() const
+{
+//     KIS_SAFE_ASSERT_RECOVER_NOOP(false); // This should never be called as this canvas should have no tools.
+    return 0;
+}
+
+QWidget* KisShapeLayerCanvasBase::canvasWidget()
+{
+    return 0;
+}
+
+const QWidget* KisShapeLayerCanvasBase::canvasWidget() const
+{
+    return 0;
+}
+
+KoUnit KisShapeLayerCanvasBase::unit() const
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(false); // This should never be called as this canvas should have no tools.
+    return KoUnit(KoUnit::Point);
+}
+
+
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
-        : KoCanvasBase(0)
+        : KisShapeLayerCanvasBase(parent, image)
         , m_isDestroying(false)
-        , m_viewConverter(new KisImageViewConverter(image))
-        , m_shapeManager(new KoShapeManager(this))
-        , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
         , m_projection(0)
         , m_parentLayer(parent)
 {
-    m_shapeManager->selection()->setActiveLayer(parent);
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
 }
 
@@ -70,33 +132,6 @@ void KisShapeLayerCanvas::prepareForDestroying()
     m_isDestroying = true;
 }
 
-void KisShapeLayerCanvas::gridSize(QPointF *offset, QSizeF *spacing) const
-{
-    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    Q_UNUSED(offset);
-    Q_UNUSED(spacing);
-}
-
-bool KisShapeLayerCanvas::snapToGrid() const
-{
-    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    return false;
-}
-
-void KisShapeLayerCanvas::addCommand(KUndo2Command *)
-{
-    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-}
-
-KoShapeManager *KisShapeLayerCanvas::shapeManager() const
-{
-    return m_shapeManager.data();
-}
-
-KoSelectedShapesProxy *KisShapeLayerCanvas::selectedShapesProxy() const
-{
-    return m_selectedShapesProxy.data();
-}
 
 #ifdef DEBUG_REPAINT
 # include <stdlib.h>
@@ -158,33 +193,6 @@ void KisShapeLayerCanvas::repaint()
     KisPainter::copyAreaOptimized(r.topLeft(), dev, m_projection, QRect(QPoint(), r.size()));
 
     m_parentLayer->setDirty(r);
-}
-
-KoToolProxy * KisShapeLayerCanvas::toolProxy() const
-{
-//     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    return 0;
-}
-
-KoViewConverter* KisShapeLayerCanvas::viewConverter() const
-{
-    return m_viewConverter.data();
-}
-
-QWidget* KisShapeLayerCanvas::canvasWidget()
-{
-    return 0;
-}
-
-const QWidget* KisShapeLayerCanvas::canvasWidget() const
-{
-    return 0;
-}
-
-KoUnit KisShapeLayerCanvas::unit() const
-{
-    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    return KoUnit(KoUnit::Point);
 }
 
 void KisShapeLayerCanvas::forceRepaint()

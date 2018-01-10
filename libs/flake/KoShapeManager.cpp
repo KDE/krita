@@ -600,7 +600,7 @@ QList<KoShape*> KoShapeManager::topLevelShapes() const
     QList<KoShape*> shapes;
     // get all toplevel shapes
     Q_FOREACH (KoShape *shape, d->shapes) {
-        if (shape->parent() == 0) {
+        if (!shape->parent() || dynamic_cast<KoShapeLayer*>(shape->parent())) {
             shapes.append(shape);
         }
     }

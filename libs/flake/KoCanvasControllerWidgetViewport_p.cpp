@@ -188,7 +188,20 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         Q_ASSERT(m_draggedShape);
         if (!m_draggedShape) return;
 
-        m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
+        // calculate maximum existing shape zIndex
+
+        int pasteZIndex = 0;
+
+        {
+            QList<KoShape*> allShapes = m_parent->canvas()->shapeManager()->topLevelShapes();
+
+            if (!allShapes.isEmpty()) {
+                std::sort(allShapes.begin(), allShapes.end(), KoShape::compareShapeZIndex);
+                pasteZIndex = qMin(KoShapePrivate::MaxZIndex, allShapes.last()->zIndex() + 1);
+            }
+        }
+
+        m_draggedShape->setZIndex(pasteZIndex);
         m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
 
         m_parent->canvas()->shapeManager()->addShape(m_draggedShape);

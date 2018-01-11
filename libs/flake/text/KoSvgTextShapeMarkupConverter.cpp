@@ -812,30 +812,27 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         }
     }
 
-    if (format.hasProperty(QTextCharFormat::FontUnderline)
-            || format.hasProperty(QTextCharFormat::FontOverline)
-            || format.hasProperty(QTextCharFormat::FontStrikeOut)) {
-        QString c;
         if (format.underlineStyle()!=QTextCharFormat::NoUnderline ||
                 format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
             QStringList values;
+            QString c;
 
-            if (format.hasProperty(QTextCharFormat::FontUnderline)) {
-
+            if (format.fontUnderline()) {
                 values.append("underline");
-
-            } else if(format.hasProperty(QTextCharFormat::FontOverline)) {
+            }
+            if(format.fontOverline()) {
                 values.append("overline");
-            } else {
-                values.append("strike-through");
+            }
+            if(format.fontStrikeOut()) {
+                values.append("line-through");
             }
             c.append("text-decoration").append(":")
                     .append(values.join(" "));
+
+            if (!values.isEmpty()) {
+                style.append(c);
+            }
         }
-        if (!c.isEmpty()) {
-            style.append(c);
-        }
-    }
 
     if (blockFormat.hasProperty(QTextBlockFormat::BlockAlignment)) {
         QString c;
@@ -930,11 +927,14 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
                 charFormat.setFontUnderline(false);
                 charFormat.setFontOverline(false);
                 charFormat.setFontStrikeOut(false);
-                if (value == "strike-through") {
+                QStringList values = value.split(" ");
+                if (values.contains("line-through")) {
                     charFormat.setFontStrikeOut(true);
-                } else if (value == "overline") {
+                }
+                if (values.contains("overline")) {
                     charFormat.setFontOverline(true);
-                } else {
+                }
+                if(values.contains("underline")){
                     charFormat.setFontUnderline(true);
                 }
             }
@@ -990,7 +990,6 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "text-anchor") {
-                qDebug()<<"setting alignment"<< value;
                 if (value == "end") {
                     blockFormat.setAlignment(Qt::AlignRight);
                 } else if (value == "middle") {

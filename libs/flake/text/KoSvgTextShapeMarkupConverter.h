@@ -126,7 +126,7 @@ public:
      * @param currentBlockFormat the current blockformat to compare against.
      * @return A QVector with at 0 a QTextCharFormat and at 1 a QBlockCharFormat.
      */
-    QVector<QTextFormat> stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat);
+    static QVector<QTextFormat> stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat);
     /**
      * @brief formatDifference
      * A class to get the difference between two text-char formats.

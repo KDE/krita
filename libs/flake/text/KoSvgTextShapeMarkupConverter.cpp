@@ -31,6 +31,8 @@
 #include <QTextLayout>
 #include <QTextLine>
 
+#include <QStack>
+
 #include <KoSvgTextShape.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -45,6 +47,7 @@
 #include <html/HtmlWriter.h>
 
 #include "kis_dom_utils.h"
+#include <boost/optional.hpp>
 
 
 struct KoSvgTextShapeMarkupConverter::Private {
@@ -367,6 +370,25 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     return true;
 }
 
+void postCorrectBlockHeight(QTextDocument *doc,
+                            qreal currentLineHeight,
+                            int postCorrectPosition,
+                            qreal postCorrectAbsoluteLineHeight)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(postCorrectPosition >= 0);
+
+    QTextCursor postCorrectionCursor(doc);
+    postCorrectionCursor.setPosition(postCorrectPosition);
+    if (!postCorrectionCursor.isNull()) {
+        const qreal relativeLineHeight = (postCorrectAbsoluteLineHeight / currentLineHeight) * 100.0;
+
+        QTextBlockFormat format = postCorrectionCursor.blockFormat();
+        format.setLineHeight(relativeLineHeight, QTextBlockFormat::ProportionalHeight);
+        postCorrectionCursor.setBlockFormat(format);
+        postCorrectionCursor = QTextCursor();
+    }
+}
+
 bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
 {
     QBuffer svgBuffer;
@@ -425,6 +447,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     int prevBlockLineHeight = globalBlockFormat.lineHeight();
     int prevBlockLineType = globalBlockFormat.lineHeightType();
+    qreal prevBlockAbsoluteLineHeight = 0.0;
 
     while (block.isValid()) {
         const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), globalBlockFormat).toBlockFormat();
@@ -454,6 +477,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
             //single line will set lineHeight to 100%
             prevBlockLineHeight = 100;
         }
+
+        prevBlockAbsoluteLineHeight = layout->lineAt(0).height();
 
         QString text = block.text();
         const QVector<QTextLayout::FormatRange> formats = block.textFormats();
@@ -501,103 +526,137 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
     return true;
 }
 
+void parseTextAttributes(const QXmlStreamAttributes &elementAttributes,
+                         QTextCharFormat &charFormat,
+                         QTextBlockFormat &blockFormat)
+{
+    QString styleString;
+
+    // we convert all the presentation attributes into styles
+    QString presentationAttributes;
+    for (int a = 0; a < elementAttributes.size(); a++) {
+        if (elementAttributes.at(a).name() != "style") {
+            presentationAttributes
+                    .append(elementAttributes.at(a).name().toString())
+                    .append(":")
+                    .append(elementAttributes.at(a).value().toString())
+                    .append(";");
+        }
+    }
+
+    if (presentationAttributes.endsWith(";")) {
+        presentationAttributes.chop(1);
+    }
+
+    if (elementAttributes.hasAttribute("style")) {
+        styleString = elementAttributes.value("style").toString();
+        if (styleString.endsWith(";")) {
+            styleString.chop(1);
+        }
+    }
+
+    if (!styleString.isEmpty() || !presentationAttributes.isEmpty()) {
+        //add attributes to parse them as part of the style.
+        styleString.append(";")
+                .append(presentationAttributes);
+        QStringList styles = styleString.split(";");
+        QVector<QTextFormat> formats = KoSvgTextShapeMarkupConverter::stylesFromString(styles, charFormat, blockFormat);
+
+        charFormat = formats.at(0).toCharFormat();
+        blockFormat = formats.at(1).toBlockFormat();
+    }
+}
+
 bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText, QTextDocument *doc)
 {
     QXmlStreamReader svgReader(svgText.trimmed());
     doc->clear();
     QTextCursor cursor(doc);
-    bool newBlock = false;
-    QString dyString;
-    QTextBlockFormat mainBlockFormat = cursor.blockFormat();
-    QTextCharFormat mainCharFormat = cursor.charFormat();
-    QTextCharFormat oldFormat = cursor.charFormat();
+
+    struct BlockFormatRecord {
+        BlockFormatRecord() {}
+        BlockFormatRecord(QTextBlockFormat _blockFormat,
+                          QTextCharFormat _charFormat)
+            : blockFormat(_blockFormat),
+              charFormat(_charFormat)
+        {}
+
+        QTextBlockFormat blockFormat;
+        QTextCharFormat charFormat;
+    };
+
+    QStack<BlockFormatRecord> formatStack;
+    formatStack.push(BlockFormatRecord(cursor.blockFormat(), cursor.charFormat()));
+
+    qreal postCorrectAbsoluteLineHeight = 0.0;
+    int postCorrectPosition = -1;
 
     while (!svgReader.atEnd()) {
         QXmlStreamReader::TokenType token = svgReader.readNext();
         switch (token) {
         case QXmlStreamReader::StartElement:
         {
-            newBlock = false;
-            if (svgReader.name() == "tspan") {
-                if (svgReader.attributes().hasAttribute("dy")) {
+            bool newBlock = false;
+            QTextBlockFormat newBlockFormat = formatStack.top().blockFormat;
+            QTextCharFormat newCharFormat = formatStack.top().charFormat;
+            qreal absoluteLineHeight = 1.0;
+
+            {
+                const QXmlStreamAttributes elementAttributes = svgReader.attributes();
+                parseTextAttributes(elementAttributes, newCharFormat, newBlockFormat);
+
+                if (elementAttributes.hasAttribute("dy") && svgReader.name() != "text") {
+                    QString dyString = elementAttributes.value("dy").toString();
+                    if (dyString.contains("pt")) {
+                        dyString = dyString.remove("pt").trimmed();
+                    }
+
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
+
+                    absoluteLineHeight = KisDomUtils::toDouble(dyString);
                     newBlock = true;
-                    oldFormat = mainCharFormat;
-                } else {
-                    oldFormat = cursor.charFormat();
                 }
-
-            }
-
-            QString styleString;
-            QString attributes;
-            for (int a = 0; a<svgReader.attributes().size(); a++) {
-                if (svgReader.attributes().at(a).name() != "style")
-                    attributes.append(svgReader.attributes().at(a).name().toString())
-                            .append(":")
-                            .append(svgReader.attributes().at(a).value().toString())
-                            .append(";");
-            }
-            if (attributes.endsWith(";")) {
-                attributes.chop(1);
-            }
-            if (svgReader.attributes().hasAttribute("style")) {
-                styleString = svgReader.attributes().value("style").toString();
-                if (styleString.endsWith(";")) {
-                    styleString.chop(1);
-                }
-            }
-            if (styleString.size()>0 || attributes.size()>0) {
-                //add attributes to parse them as part of the style.
-                styleString.append(";")
-                        .append(attributes);
-                QStringList styles = styleString.split(";");
-                QVector<QTextFormat> formats = stylesFromString(styles, cursor.charFormat(), cursor.blockFormat());
-                cursor.mergeCharFormat(formats.at(0).toCharFormat());
-                cursor.mergeBlockFormat(formats.at(1).toBlockFormat());
-
-                if (svgReader.name()=="text") {
-                    mainBlockFormat = cursor.blockFormat();
-                    mainCharFormat = cursor.charFormat();
-                    oldFormat = mainCharFormat;
-                }
-            }
-            if (svgReader.attributes().hasAttribute("dy")) {
-                dyString = svgReader.attributes().value("dy").toString();
-            } else {
-                dyString.clear();
             }
 
             //hack
             doc->setTextWidth(100);
             doc->setTextWidth(-1);
-            QTextLine line = cursor.block().layout()->lineForTextPosition(cursor.positionInBlock());
-            //Can't do this until there's a first QLine.
-            int lineHeight = 100;
-            if (!dyString.isEmpty()) {
-                QTextBlockFormat format = cursor.blockFormat();
-                if (cursor.block().layout()->lineCount()>0) {
-                    //Always interpret no unit as points..
-                    if (dyString.contains("pt")) {
-                        dyString = dyString.remove("pt").trimmed();
-                    }
-                    qreal dy = dyString.toDouble();
-                    lineHeight = (dy/line.height())*100;
+
+            if (newBlock && absoluteLineHeight) {
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!formatStack.isEmpty(), false);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cursor.block().layout()->lineCount() == 1, false);
+
+                if (postCorrectPosition >= 0) {
+                    QTextLine line = cursor.block().layout()->lineAt(0);
+                    postCorrectBlockHeight(doc, line.height(),
+                                           postCorrectPosition, postCorrectAbsoluteLineHeight);
                 }
-                format.setLineHeight(lineHeight, QTextBlockFormat::ProportionalHeight);
-                cursor.setBlockFormat(format);
-            }
 
-            if (newBlock) {
-                cursor.setBlockCharFormat(cursor.charFormat());
+                postCorrectAbsoluteLineHeight = absoluteLineHeight;
+                postCorrectPosition = cursor.position();
+
                 cursor.insertBlock();
+                cursor.setCharFormat(formatStack.top().charFormat);
+                cursor.setBlockFormat(formatStack.top().blockFormat);
             }
-            break;
 
+
+
+            cursor.mergeCharFormat(newCharFormat);
+            cursor.mergeBlockFormat(newBlockFormat);
+
+            formatStack.push(BlockFormatRecord(cursor.blockFormat(), cursor.charFormat()));
+
+            break;
         }
         case QXmlStreamReader::EndElement:
         {
-            if (!newBlock && svgReader.name()!="text" ) {
-                cursor.setCharFormat(oldFormat);
+            if (svgReader.name() != "text") {
+                formatStack.pop();
+                KIS_SAFE_ASSERT_RECOVER(!formatStack.isEmpty()) { break; }
+
+                cursor.setCharFormat(formatStack.top().charFormat);
+                cursor.setBlockFormat(formatStack.top().blockFormat);
             }
             break;
         }
@@ -610,9 +669,17 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
             break;
         }
         default:
-            ;
+            break;
         }
     }
+
+    if (postCorrectPosition >= 0) {
+        QTextLine line = cursor.block().layout()->lineAt(0);
+        postCorrectBlockHeight(doc, line.height(),
+                               postCorrectPosition, postCorrectAbsoluteLineHeight);
+    }
+
+
     if (svgReader.hasError()) {
         d->errors << svgReader.errorString();
         return false;
@@ -792,6 +859,8 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
 
 QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat)
 {
+    Q_UNUSED(currentBlockFormat);
+
     QVector<QTextFormat> formats;
     QTextCharFormat charFormat;
     charFormat.setTextOutline(currentCharFormat.textOutline());

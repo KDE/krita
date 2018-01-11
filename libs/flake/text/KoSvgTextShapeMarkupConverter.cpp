@@ -44,6 +44,8 @@
 #include <html/HtmlSavingContext.h>
 #include <html/HtmlWriter.h>
 
+#include "kis_dom_utils.h"
+
 
 struct KoSvgTextShapeMarkupConverter::Private {
     Private(KoSvgTextShape *_shape) : shape(_shape) {}
@@ -418,32 +420,43 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
     svgWriter.writeStartElement("text");
     svgWriter.writeAttribute("style", style(mostCommonCharFormat, block.blockFormat()));
     //insert the style of the first block and the first block text format into the text style.
+
+    const QTextBlockFormat globalBlockFormat = block.blockFormat(); // the format of the first block is saved as a style
+
+    int prevBlockLineHeight = globalBlockFormat.lineHeight();
+    int prevBlockLineType = globalBlockFormat.lineHeightType();
+
     while (block.isValid()) {
-        QTextLayout *layout = block.layout();
-        QVector<QTextLayout::FormatRange> formats = block.textFormats();
-        QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), doc->firstBlock().blockFormat()).toBlockFormat();
+        const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), globalBlockFormat).toBlockFormat();
 
-        int lineHeight = doc->firstBlock().blockFormat().lineHeight();
-        int lineHeightType = doc->firstBlock().blockFormat().lineHeightType();
-        if (blockFormatDiff.hasProperty(QTextFormat::LineHeight)) {
-            lineHeight = blockFormatDiff.lineHeight();
-            lineHeightType = blockFormatDiff.lineHeightType();
-        }
-        if (lineHeightType == QTextBlockFormat::SingleHeight) {
-            //single line will set lineHeight to 0...
-            lineHeight = 100;
-        }
-        QTextLine line = layout->lineAt(0);
-
-        double lineHeightPt = line.height()*double(lineHeight)/100.0;
+        const QTextLayout *layout = block.layout();
+        const QTextLine line = layout->lineAt(0);
 
         svgWriter.writeStartElement("tspan");
-        if (block.blockNumber()>0) {
+        if (block.blockNumber() > 0) {
+            const qreal lineHeightPt = line.height() * qreal(prevBlockLineHeight) / 100.0;
+
             svgWriter.writeAttribute("x", "0");
-            svgWriter.writeAttribute("dy", QString::number(lineHeightPt)+"pt");
+            svgWriter.writeAttribute("dy", KisDomUtils::toString(lineHeightPt) + "pt");
+        }
+
+        prevBlockLineHeight =
+            blockFormatDiff.hasProperty(QTextFormat::LineHeight) ?
+                blockFormatDiff.lineHeight() :
+                globalBlockFormat.lineHeight();
+
+        prevBlockLineType =
+            blockFormatDiff.hasProperty(QTextFormat::LineHeightType) ?
+                blockFormatDiff.lineHeightType() :
+                globalBlockFormat.lineHeightType();
+
+        if (prevBlockLineType == QTextBlockFormat::SingleHeight) {
+            //single line will set lineHeight to 100%
+            prevBlockLineHeight = 100;
         }
 
         QString text = block.text();
+        const QVector<QTextLayout::FormatRange> formats = block.textFormats();
 
         if (formats.size()>1) {
             QStringList texts;

@@ -522,7 +522,11 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     while (block.isValid()) {
         const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), mostCommonBlockFormat).toBlockFormat();
-        const QTextCharFormat blockCharFormatDiff = formatDifference(block.charFormat(), mostCommonCharFormat).toCharFormat();
+        QTextCharFormat blockCharFormatDiff = QTextCharFormat();
+        const QVector<QTextLayout::FormatRange> formats = block.textFormats();
+        if (formats.size()==1) {
+            blockCharFormatDiff = formatDifference(formats.at(0).format, mostCommonCharFormat).toCharFormat();
+        }
 
         const QTextLayout *layout = block.layout();
         const QTextLine line = layout->lineAt(0);
@@ -564,7 +568,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         prevBlockDescent = line.descent();
 
         QString text = block.text();
-        const QVector<QTextLayout::FormatRange> formats = block.textFormats();
+
 
         if (formats.size()>1) {
             QStringList texts;

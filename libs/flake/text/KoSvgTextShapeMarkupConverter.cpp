@@ -371,16 +371,20 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
 }
 
 void postCorrectBlockHeight(QTextDocument *doc,
-                            qreal currentLineHeight,
-                            int postCorrectPosition,
-                            qreal postCorrectAbsoluteLineHeight)
+                            qreal currLineAscent,
+                            qreal prevLineAscent,
+                            qreal prevLineDescent,
+                            int prevBlockCursorPosition,
+                            qreal currentBlockAbsoluteLineOffset)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(postCorrectPosition >= 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prevBlockCursorPosition >= 0);
 
     QTextCursor postCorrectionCursor(doc);
-    postCorrectionCursor.setPosition(postCorrectPosition);
+    postCorrectionCursor.setPosition(prevBlockCursorPosition);
     if (!postCorrectionCursor.isNull()) {
-        const qreal relativeLineHeight = (postCorrectAbsoluteLineHeight / currentLineHeight) * 100.0;
+        const qreal relativeLineHeight =
+                ((currentBlockAbsoluteLineOffset - currLineAscent + prevLineAscent) /
+                 (prevLineAscent + prevLineDescent)) * 100.0;
 
         QTextBlockFormat format = postCorrectionCursor.blockFormat();
         format.setLineHeight(relativeLineHeight, QTextBlockFormat::ProportionalHeight);
@@ -445,9 +449,10 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     const QTextBlockFormat globalBlockFormat = block.blockFormat(); // the format of the first block is saved as a style
 
-    int prevBlockLineHeight = globalBlockFormat.lineHeight();
+    int prevBlockRelativeLineSpacing = globalBlockFormat.lineHeight();
     int prevBlockLineType = globalBlockFormat.lineHeightType();
-    qreal prevBlockAbsoluteLineHeight = 0.0;
+    qreal prevBlockAscent = 0.0;
+    qreal prevBlockDescent= 0.0;
 
     while (block.isValid()) {
         const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), globalBlockFormat).toBlockFormat();
@@ -457,13 +462,15 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         svgWriter.writeStartElement("tspan");
         if (block.blockNumber() > 0) {
-            const qreal lineHeightPt = line.height() * qreal(prevBlockLineHeight) / 100.0;
+            const qreal lineHeightPt =
+                line.ascent() - prevBlockAscent +
+                (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
 
             svgWriter.writeAttribute("x", "0");
             svgWriter.writeAttribute("dy", KisDomUtils::toString(lineHeightPt) + "pt");
         }
 
-        prevBlockLineHeight =
+        prevBlockRelativeLineSpacing =
             blockFormatDiff.hasProperty(QTextFormat::LineHeight) ?
                 blockFormatDiff.lineHeight() :
                 globalBlockFormat.lineHeight();
@@ -475,10 +482,11 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         if (prevBlockLineType == QTextBlockFormat::SingleHeight) {
             //single line will set lineHeight to 100%
-            prevBlockLineHeight = 100;
+            prevBlockRelativeLineSpacing = 100;
         }
 
-        prevBlockAbsoluteLineHeight = layout->lineAt(0).height();
+        prevBlockAscent = line.ascent();
+        prevBlockDescent = line.descent();
 
         QString text = block.text();
         const QVector<QTextLayout::FormatRange> formats = block.textFormats();
@@ -588,8 +596,10 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     QStack<BlockFormatRecord> formatStack;
     formatStack.push(BlockFormatRecord(cursor.blockFormat(), cursor.charFormat()));
 
-    qreal postCorrectAbsoluteLineHeight = 0.0;
-    int postCorrectPosition = -1;
+    qreal currBlockAbsoluteLineOffset = 0.0;
+    int prevBlockCursorPosition = -1;
+    qreal prevLineDescent = 0.0;
+    qreal prevLineAscent = 0.0;
 
     while (!svgReader.atEnd()) {
         QXmlStreamReader::TokenType token = svgReader.readNext();
@@ -599,7 +609,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
             bool newBlock = false;
             QTextBlockFormat newBlockFormat = formatStack.top().blockFormat;
             QTextCharFormat newCharFormat = formatStack.top().charFormat;
-            qreal absoluteLineHeight = 1.0;
+            qreal absoluteLineOffset = 1.0;
 
             {
                 const QXmlStreamAttributes elementAttributes = svgReader.attributes();
@@ -625,8 +635,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                         KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
 
-                        absoluteLineHeight = KisDomUtils::toDouble(dyString);
-                        newBlock = absoluteLineHeight > 0;
+                        absoluteLineOffset = KisDomUtils::toDouble(dyString);
+                        newBlock = absoluteLineOffset > 0;
                     }
                 }
             }
@@ -635,18 +645,21 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
             doc->setTextWidth(100);
             doc->setTextWidth(-1);
 
-            if (newBlock && absoluteLineHeight > 0) {
+            if (newBlock && absoluteLineOffset > 0) {
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!formatStack.isEmpty(), false);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cursor.block().layout()->lineCount() == 1, false);
 
-                if (postCorrectPosition >= 0) {
-                    QTextLine line = cursor.block().layout()->lineAt(0);
-                    postCorrectBlockHeight(doc, line.height(),
-                                           postCorrectPosition, postCorrectAbsoluteLineHeight);
+                QTextLine line = cursor.block().layout()->lineAt(0);
+
+                if (prevBlockCursorPosition >= 0) {
+                    postCorrectBlockHeight(doc, line.ascent(), prevLineAscent, prevLineDescent,
+                                           prevBlockCursorPosition, currBlockAbsoluteLineOffset);
                 }
 
-                postCorrectAbsoluteLineHeight = absoluteLineHeight;
-                postCorrectPosition = cursor.position();
+                prevBlockCursorPosition = cursor.position();
+                prevLineAscent  = line.ascent();
+                prevLineDescent = line.descent();
+                currBlockAbsoluteLineOffset = absoluteLineOffset;
 
                 cursor.insertBlock();
                 cursor.setCharFormat(formatStack.top().charFormat);
@@ -686,12 +699,11 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
         }
     }
 
-    if (postCorrectPosition >= 0) {
+    if (prevBlockCursorPosition >= 0) {
         QTextLine line = cursor.block().layout()->lineAt(0);
-        postCorrectBlockHeight(doc, line.height(),
-                               postCorrectPosition, postCorrectAbsoluteLineHeight);
+        postCorrectBlockHeight(doc, line.ascent(), prevLineAscent, prevLineDescent,
+                               prevBlockCursorPosition, currBlockAbsoluteLineOffset);
     }
-
 
     if (svgReader.hasError()) {
         d->errors << svgReader.errorString();

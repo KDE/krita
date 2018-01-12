@@ -605,16 +605,29 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                 const QXmlStreamAttributes elementAttributes = svgReader.attributes();
                 parseTextAttributes(elementAttributes, newCharFormat, newBlockFormat);
 
-                if (elementAttributes.hasAttribute("dy") && svgReader.name() != "text") {
-                    QString dyString = elementAttributes.value("dy").toString();
-                    if (dyString.contains("pt")) {
-                        dyString = dyString.remove("pt").trimmed();
+                // mnemonic for a newline is (dy != 0 && x == 0)
+
+                if (svgReader.name() != "text" &&
+                    elementAttributes.hasAttribute("dy") &&
+                    elementAttributes.hasAttribute("x")) {
+
+                    QString xString = elementAttributes.value("x").toString();
+                    if (xString.contains("pt")) {
+                        xString = xString.remove("pt").trimmed();
                     }
 
-                    KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
+                    if (KisDomUtils::toDouble(xString) == 0.0) {
 
-                    absoluteLineHeight = KisDomUtils::toDouble(dyString);
-                    newBlock = true;
+                        QString dyString = elementAttributes.value("dy").toString();
+                        if (dyString.contains("pt")) {
+                            dyString = dyString.remove("pt").trimmed();
+                        }
+
+                        KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
+
+                        absoluteLineHeight = KisDomUtils::toDouble(dyString);
+                        newBlock = absoluteLineHeight > 0;
+                    }
                 }
             }
 
@@ -622,7 +635,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
             doc->setTextWidth(100);
             doc->setTextWidth(-1);
 
-            if (newBlock && absoluteLineHeight) {
+            if (newBlock && absoluteLineHeight > 0) {
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!formatStack.isEmpty(), false);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cursor.block().layout()->lineCount() == 1, false);
 

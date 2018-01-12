@@ -1404,6 +1404,7 @@ KoShape* SvgParser::parseTextNode(const KoXmlText &e)
         return 0;
     }
 
+    textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
     applyCurrentBasicStyle(textChunk.data()); // apply style to this group after size is set
 
     return textChunk.take();

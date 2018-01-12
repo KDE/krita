@@ -1,5 +1,5 @@
 SET(PREFIX_ext_freetype "${EXTPREFIX}" )
-if(APPLE)
+if(APPLE OR UNIX)
 ExternalProject_Add( ext_freetype
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/freetype-2.6.5.tar.gz

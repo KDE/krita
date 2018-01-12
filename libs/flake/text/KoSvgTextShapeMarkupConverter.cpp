@@ -522,6 +522,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     while (block.isValid()) {
         const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), mostCommonBlockFormat).toBlockFormat();
+        const QTextCharFormat blockCharFormatDiff = formatDifference(block.charFormat(), mostCommonCharFormat).toCharFormat();
 
         const QTextLayout *layout = block.layout();
         const QTextLine line = layout->lineAt(0);
@@ -529,7 +530,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         svgWriter.writeStartElement("tspan");
 
         {
-            const QString blockStyleString = style(QTextCharFormat(), blockFormatDiff);
+            const QString blockStyleString = style(blockCharFormatDiff, blockFormatDiff);
             if (!blockStyleString.isEmpty()) {
                 svgWriter.writeAttribute("style", blockStyleString);
             }

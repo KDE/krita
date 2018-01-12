@@ -393,6 +393,82 @@ void postCorrectBlockHeight(QTextDocument *doc,
     }
 }
 
+QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
+{
+    QTextCharFormat mostCommonFormat;
+
+    QSet<int> propertyIds;
+
+    /**
+     * Get all existing property ids
+     */
+    Q_FOREACH (const QTextFormat &format, allFormats) {
+        const QMap<int, QVariant> formatProperties = format.properties();
+        Q_FOREACH (int id, formatProperties.keys()) {
+            propertyIds.insert(id);
+        }
+    }
+
+    /**
+     * Filter out properties that do not exist in some formats. Otherwise, the
+     * global format may override the default value used in these formats
+     * (and yes, we do not have access to the default values to use them
+     * in difference calculation algorithm
+     */
+    Q_FOREACH (const QTextFormat &format, allFormats) {
+        for (auto it = propertyIds.begin(); it != propertyIds.end();) {
+            if (!format.hasProperty(*it)) {
+                it = propertyIds.erase(it);
+            } else {
+                ++it;
+            }
+        }
+        if (propertyIds.isEmpty()) break;
+    }
+
+    if (!propertyIds.isEmpty()) {
+        QMap<int, QMap<QVariant, int>> propertyFrequency;
+
+        /**
+         * Calculate the frequency of values used in *all* the formats
+         */
+        Q_FOREACH (const QTextFormat &format, allFormats) {
+            const QMap<int, QVariant> formatProperties = format.properties();
+
+            Q_FOREACH (int id, propertyIds) {
+                KIS_SAFE_ASSERT_RECOVER_BREAK(formatProperties.contains(id));
+                propertyFrequency[id][formatProperties.value(id)]++;
+            }
+        }
+
+        /**
+         * Add the most popular property value to the set of most common properties
+         */
+        for (auto it = propertyFrequency.constBegin(); it != propertyFrequency.constEnd(); ++it) {
+            const int id = it.key();
+            const QMap<QVariant, int> allValues = it.value();
+
+            int maxCount = 0;
+            QVariant maxValue;
+
+            for (auto valIt = allValues.constBegin(); valIt != allValues.constEnd(); ++valIt) {
+                if (valIt.value() > maxCount) {
+                    maxCount = valIt.value();
+                    maxValue = valIt.key();
+                }
+            }
+
+            KIS_SAFE_ASSERT_RECOVER_BREAK(maxCount > 0);
+            mostCommonFormat.setProperty(id, maxValue);
+        }
+
+    }
+
+    return mostCommonFormat;
+}
+
+
+
 bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
 {
     QBuffer svgBuffer;
@@ -402,65 +478,63 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     svgWriter.setAutoFormatting(true);
 
-    QTextBlock block = doc->begin();
 
-    /**
-     * Find the most commonly used format.
-     * This is what we put into the text-style.
-     * We cannot just check the first textCharFormat we find
-     * because users might be using things like drop-caps.
-     */
-    QList<int> formatFrequency;
-    QList<QTextCharFormat> allFormats;
-    allFormats.append(QTextCharFormat());
-    formatFrequency.append(1);
-    while (block.isValid()) {
-        //copied from QTextDocument.cpp
-        for (int f=0; f<block.textFormats().size(); f++) {
-            for(int i=0; i<allFormats.size(); i++) {
-                //props should proly compare itself to the main text format...
-                QTextCharFormat diff = formatDifference(block.textFormats().at(f).format, allFormats.at(i)).toCharFormat();
 
-                if (diff.properties().isEmpty()) {
-                    formatFrequency[i] = formatFrequency.at(i) + block.textFormats().at(f).length;
-                } else {
-                    allFormats.append(block.textFormats().at(f).format);
-                    formatFrequency.append(block.textFormats().at(f).length);
-                }
+    QTextCharFormat mostCommonCharFormat;
+    QTextBlockFormat mostCommonBlockFormat;
+
+    {
+        QTextBlock block = doc->begin();
+
+        QList<QTextFormat> allCharFormats;
+        QList<QTextFormat> allBlockFormats;
+
+        while (block.isValid()) {
+            allBlockFormats.append(block.blockFormat());
+            Q_FOREACH (const QTextLayout::FormatRange &range, block.textFormats()) {
+                QTextFormat format =  range.format;
+                allCharFormats.append(format);
             }
+            block = block.next();
         }
-        block = block.next();
-    }
-    QTextCharFormat mostCommonCharFormat = QTextCharFormat();
-    int top = 0;
-    for(int i=0; i<formatFrequency.size(); i++) {
-        if (formatFrequency.at(i)>top) {
-            top = formatFrequency.at(i);
-            mostCommonCharFormat = allFormats.at(i);
-        }
+
+        mostCommonCharFormat = findMostCommonFormat(allCharFormats).toCharFormat();
+        mostCommonBlockFormat = findMostCommonFormat(allBlockFormats).toBlockFormat();
     }
 
     //Okay, now the actual writing.
 
-    block = doc->begin();
+    QTextBlock block = doc->begin();
+
     svgWriter.writeStartElement("text");
-    svgWriter.writeAttribute("style", style(mostCommonCharFormat, block.blockFormat()));
-    //insert the style of the first block and the first block text format into the text style.
 
-    const QTextBlockFormat globalBlockFormat = block.blockFormat(); // the format of the first block is saved as a style
+    {
+        const QString commonTextStyle = style(mostCommonCharFormat, mostCommonBlockFormat);
+        if (!commonTextStyle.isEmpty()) {
+            svgWriter.writeAttribute("style", commonTextStyle);
+        }
+    }
 
-    int prevBlockRelativeLineSpacing = globalBlockFormat.lineHeight();
-    int prevBlockLineType = globalBlockFormat.lineHeightType();
+    int prevBlockRelativeLineSpacing = mostCommonBlockFormat.lineHeight();
+    int prevBlockLineType = mostCommonBlockFormat.lineHeightType();
     qreal prevBlockAscent = 0.0;
     qreal prevBlockDescent= 0.0;
 
     while (block.isValid()) {
-        const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), globalBlockFormat).toBlockFormat();
+        const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), mostCommonBlockFormat).toBlockFormat();
 
         const QTextLayout *layout = block.layout();
         const QTextLine line = layout->lineAt(0);
 
         svgWriter.writeStartElement("tspan");
+
+        {
+            const QString blockStyleString = style(QTextCharFormat(), blockFormatDiff);
+            if (!blockStyleString.isEmpty()) {
+                svgWriter.writeAttribute("style", blockStyleString);
+            }
+        }
+
         if (block.blockNumber() > 0) {
             const qreal lineHeightPt =
                 line.ascent() - prevBlockAscent +
@@ -473,12 +547,12 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         prevBlockRelativeLineSpacing =
             blockFormatDiff.hasProperty(QTextFormat::LineHeight) ?
                 blockFormatDiff.lineHeight() :
-                globalBlockFormat.lineHeight();
+                mostCommonBlockFormat.lineHeight();
 
         prevBlockLineType =
             blockFormatDiff.hasProperty(QTextFormat::LineHeightType) ?
                 blockFormatDiff.lineHeightType() :
-                globalBlockFormat.lineHeightType();
+                mostCommonBlockFormat.lineHeightType();
 
         if (prevBlockLineType == QTextBlockFormat::SingleHeight) {
             //single line will set lineHeight to 100%
@@ -505,10 +579,9 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
             for (int c = 0; c<texts.size(); c++) {
                 QTextCharFormat diff = formatDifference(charFormats.at(c), mostCommonCharFormat).toCharFormat();
-
                 if (!diff.properties().isEmpty()) {
                     svgWriter.writeStartElement("tspan");
-                    svgWriter.writeAttribute("style", style(diff, blockFormatDiff, mostCommonCharFormat));
+                    svgWriter.writeAttribute("style", style(diff, QTextBlockFormat(), mostCommonCharFormat));
                     svgWriter.writeCharacters(texts.at(c));
                     svgWriter.writeEndElement();
                 } else {
@@ -607,9 +680,15 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
         case QXmlStreamReader::StartElement:
         {
             bool newBlock = false;
-            QTextBlockFormat newBlockFormat = formatStack.top().blockFormat;
-            QTextCharFormat newCharFormat = formatStack.top().charFormat;
+            QTextBlockFormat newBlockFormat;
+            QTextCharFormat newCharFormat;
             qreal absoluteLineOffset = 1.0;
+
+            // fetch format of the parent block and make it default
+            if (formatStack.size() >= 2) {
+                newBlockFormat = formatStack[formatStack.size() - 2].blockFormat;
+                newCharFormat = formatStack[formatStack.size() - 2].charFormat;
+            }
 
             {
                 const QXmlStreamAttributes elementAttributes = svgReader.attributes();
@@ -860,6 +939,9 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         }
 
     if (blockFormat.hasProperty(QTextBlockFormat::BlockAlignment)) {
+        // TODO: Alignment works incorrectly! The offsets should be calculated
+        //       according to the shape width/height!
+
         QString c;
         QString val;
         if (blockFormat.alignment()==Qt::AlignRight) {

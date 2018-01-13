@@ -3,7 +3,9 @@ Airbrush_Soft.kpp
 Basic_Chisel_Smooth.kpp
 Basic_Flow.kpp
 Basic_tip_default.kpp
+Blender_Basic.kpp
 Blender_Blur.kpp
+Blender_Mover.kpp
 Blender_Rake.kpp
 Blender_Textured.kpp
 Blender_Water.kpp
@@ -42,15 +44,17 @@ Ink_Precision.kpp
 Ink_Tough.kpp
 Normal_Map.kpp
 Pixel_Art.kpp
+Pixel_Art_Dithering.kpp
 Sketch_2B.kpp
 Sketch_Chrome.kpp
 Sketch_Hatch_Noisy.kpp
+Spray_Smoke.kpp
+Spray_Watercolor.kpp
 Stamp_Clouds.kpp
 Stamp_Freckles.kpp
 Stamp_Grass.kpp
 Stamp_Grass_Patch.kpp
 Stamp_Hearts.kpp
-Stamp_Ink_Smear.kpp
 Stamp_Leaves.kpp
 Stamp_Mountains_Distant.kpp
 Stamp_Scales.kpp
@@ -61,10 +65,8 @@ Stamp_Water.kpp
 Wet_Bristles.kpp
 Wet_Bristles_Rough.kpp
 Wet_Circle.kpp
-
-
-
-
+Wet_Soft_Tilted.kpp
+Wet_Smear.kpp
 
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
 

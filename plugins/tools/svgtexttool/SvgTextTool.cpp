@@ -82,7 +82,9 @@ void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &sha
 
 void SvgTextTool::deactivate()
 {
+    QRectF rect = m_shape->boundingRect();
     m_shape = 0;
+    canvas()->updateCanvas(rect);
     KoToolBase::deactivate();
 }
 

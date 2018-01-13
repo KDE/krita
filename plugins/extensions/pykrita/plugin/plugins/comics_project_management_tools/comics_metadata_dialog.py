@@ -11,9 +11,9 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
 from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate
 """
-mult entry completer cobbled together from the two examples on stackoverflow:3779720
+multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
-This allows us to let people type in comma seperated lists and get completion for those.
+This allows us to let people type in comma-separated lists and get completion for those.
 """
 
 
@@ -194,7 +194,7 @@ class comic_meta_data_editor(QDialog):
         genreCompletion.setModel(QStringListModel(self.genreKeysList))
         self.lnGenre.setCompleter(genreCompletion)
         genreCompletion.setCaseSensitivity(False)
-        self.lnGenre.setToolTip(i18n("The genre of the work. Prefilled values are from the ACBF, but you can fill in your own. Seperate genres with commas. Try to limit the amount to about two or three"))
+        self.lnGenre.setToolTip(i18n("The genre of the work. Prefilled values are from the ACBF, but you can fill in your own. Separate genres with commas. Try to limit the amount to about two or three"))
 
         self.lnCharacters = QLineEdit()
         characterCompletion = multi_entry_completer()
@@ -202,7 +202,7 @@ class comic_meta_data_editor(QDialog):
         characterCompletion.setCaseSensitivity(False)
         characterCompletion.setFilterMode(Qt.MatchContains)  # So that if there is a list of names with last names, people can type in a last name.
         self.lnCharacters.setCompleter(characterCompletion)
-        self.lnCharacters.setToolTip(i18n("The names of the characters that this comic revolves around. Comma seperate."))
+        self.lnCharacters.setToolTip(i18n("The names of the characters that this comic revolves around. Comma-separated."))
 
         self.lnFormat = QLineEdit()
         formatCompletion = multi_entry_completer()
@@ -237,7 +237,7 @@ class comic_meta_data_editor(QDialog):
         otherCompletion.setFilterMode(Qt.MatchContains)
         self.lnOtherKeywords = QLineEdit()
         self.lnOtherKeywords.setCompleter(otherCompletion)
-        self.lnOtherKeywords.setToolTip(i18n("Other keywords that don't fit in the previously mentioned sets. As always, comma seperate"))
+        self.lnOtherKeywords.setToolTip(i18n("Other keywords that don't fit in the previously mentioned sets. As always, comma-separated"))
 
         self.cmbLanguage = language_combo_box()
         self.cmbReadingMode = QComboBox()

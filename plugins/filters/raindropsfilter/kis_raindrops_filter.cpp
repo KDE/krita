@@ -128,7 +128,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
     const KoColorSpace * cs = device->colorSpace();
 
-    // Init booleen Matrix.
+    // Init boolean Matrix.
 
     for (i = 0 ; (i < Width) && !(progressUpdater && progressUpdater->interrupted()) ; ++i) {
         for (j = 0 ; (j < Height) && !(progressUpdater && progressUpdater->interrupted()); ++j) {

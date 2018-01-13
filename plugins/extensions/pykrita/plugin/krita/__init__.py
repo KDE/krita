@@ -22,7 +22,7 @@ except ImportError:
     print("Please make sure, that the needed packages are installed.", file=sys.stderr)
     raise
 
-# Shows nice looking error dialog if an unhandled exception occures.
+# Shows nice looking error dialog if an unhandled exception occurs.
 import excepthook
 excepthook.install()
 

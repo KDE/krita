@@ -54,7 +54,7 @@ public:
     {}
 
     ~Private() {
-        // shape manager that is stored in the painter shoudl be destroyed
+        // shape manager that is stored in the painter should be destroyed
         // before the shapes themselves
         shapePainter.reset();
         qDeleteAll(shapes);

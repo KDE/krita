@@ -873,7 +873,7 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
 
         /// The progress bar will display under the layer name area. The bars have accurate data, so we
-        /// probably don't need to also show the actualy number for % complete
+        /// probably don't need to also show the actual number for % complete
 
         KisNodeViewColorScheme scm;
         const int width = textRect(option, index).width() + scm.iconSize()*2;

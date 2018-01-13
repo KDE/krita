@@ -136,7 +136,7 @@ void KisColorLabelSelectorWidget::resizeEvent(QResizeEvent *e)
     if (hasWideItems) {
         QStyleOption opt;
         opt.init(this);
-        // som ecopy-pasted code from QFusionStyle style
+        // some copy-pasted code from QFusionStyle style
         const int hmargin = style()->pixelMetric(QStyle::PM_MenuHMargin, &opt, this);
         const int icone = style()->pixelMetric(QStyle::PM_SmallIconSize, &opt, this);
         m_d->xMenuOffset = hmargin + icone + 6;

@@ -29,7 +29,7 @@
 /**
  * @brief The SelectionMask class
  * A selection mask is a mask type node that can be used
- * to store selections. In the gui, these are refered to
+ * to store selections. In the gui, these are referred to
  * as local selections.
  *
  * A selection mask can hold both raster and vector selections, though

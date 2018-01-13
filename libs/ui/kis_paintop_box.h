@@ -191,7 +191,6 @@ private:
     KisCompositeOpComboBox*             m_cmbCompositeOp;
     QToolButton*                        m_eraseModeButton;
     QToolButton*                        m_alphaLockButton;
-    QToolButton*                        m_disablePressureButton;
     QToolButton*                        m_hMirrorButton;
     QToolButton*                        m_vMirrorButton;
     KisToolOptionsPopup*                m_toolOptionsPopup;

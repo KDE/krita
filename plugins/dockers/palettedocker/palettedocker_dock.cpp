@@ -178,32 +178,34 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_wdgPaletteDock->paletteView->updateView();
     m_wdgPaletteDock->paletteView->updateRows();
     m_wdgPaletteDock->cmbNameList->clear();
-    for (quint32 i = 0; i< colorSet->nColors(); i++) {
-        KoColorSetEntry entry = colorSet->getColorGlobal(i);
-        QPixmap colorSquare = QPixmap(32, 32);
-        if (entry.spotColor) {
-            QImage img = QImage(32, 32, QImage::Format_ARGB32);
-            QPainter circlePainter;
-            img.fill(Qt::transparent);
-            circlePainter.begin(&img);
-            QBrush brush = QBrush(Qt::SolidPattern);
-            brush.setColor(entry.color.toQColor());
-            circlePainter.setBrush(brush);
-            QPen pen = circlePainter.pen();
-            pen.setColor(Qt::transparent);
-            pen.setWidth(0);
-            circlePainter.setPen(pen);
-            circlePainter.drawEllipse(0, 0, 32, 32);
-            circlePainter.end();
-            colorSquare = QPixmap::fromImage(img);
-        } else {
-            colorSquare.fill(entry.color.toQColor());
+    if (colorSet->nColors()>0) {
+        for (quint32 i = 0; i< colorSet->nColors(); i++) {
+            KoColorSetEntry entry = colorSet->getColorGlobal(i);
+            QPixmap colorSquare = QPixmap(32, 32);
+            if (entry.spotColor) {
+                QImage img = QImage(32, 32, QImage::Format_ARGB32);
+                QPainter circlePainter;
+                img.fill(Qt::transparent);
+                circlePainter.begin(&img);
+                QBrush brush = QBrush(Qt::SolidPattern);
+                brush.setColor(entry.color.toQColor());
+                circlePainter.setBrush(brush);
+                QPen pen = circlePainter.pen();
+                pen.setColor(Qt::transparent);
+                pen.setWidth(0);
+                circlePainter.setPen(pen);
+                circlePainter.drawEllipse(0, 0, 32, 32);
+                circlePainter.end();
+                colorSquare = QPixmap::fromImage(img);
+            } else {
+                colorSquare.fill(entry.color.toQColor());
+            }
+            QString name = entry.name;
+            if (!entry.id.isEmpty()){
+                name = entry.id + " - " + entry.name;
+            }
+            m_wdgPaletteDock->cmbNameList->addItem(QIcon(colorSquare), name);
         }
-        QString name = entry.name;
-        if (!entry.id.isEmpty()){
-            name = entry.id + " - " + entry.name;
-        }
-        m_wdgPaletteDock->cmbNameList->addItem(QIcon(colorSquare), name);
     }
     QCompleter *completer = new QCompleter(m_wdgPaletteDock->cmbNameList->model());
     completer->setCompletionMode(QCompleter::PopupCompletion);

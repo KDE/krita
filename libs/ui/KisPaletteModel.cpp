@@ -170,6 +170,9 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
     if (!m_colorSet) {
         return 0;
     }
+    if (m_colorSet->nColors()==0) {
+        return 0;
+    }
     if (columnCount() > 0) {
         int countedrows = m_colorSet->nColorsGroup("")/columnCount();
         if (m_colorSet->nColorsGroup()%columnCount() > 0) {

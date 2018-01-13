@@ -280,7 +280,9 @@ bool KoColorSet::saveGpl(QIODevice *dev) const
 
 quint32 KoColorSet::nColors()
 {
-    quint32 total = d->colors.count();
+    if (d->colors.isEmpty()) return 0;
+
+    quint32 total = d->colors.size();
     if (!d->groups.empty()) {
         Q_FOREACH (const QVector<KoColorSetEntry> &group, d->groups.values()) {
             total += group.size();
@@ -292,7 +294,7 @@ quint32 KoColorSet::nColors()
 quint32 KoColorSet::nColorsGroup(QString groupName) {
     if (d->groups.contains(groupName)) {
         return d->groups.value(groupName).size();
-    } else if (groupName.isEmpty()){
+    } else if (groupName.isEmpty() && !d->colors.isEmpty()){
         return d->colors.size();
     } else {
         return 0;

@@ -789,7 +789,7 @@ bool LayerModel::activeVisible() const
     return d->activeNode->visible();
 }
 
-void LayerModel::setActiveVisibile(bool newVisible)
+void LayerModel::setActiveVisible(bool newVisible)
 {
     if (d->activeNode.isNull())
         return;

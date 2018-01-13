@@ -295,13 +295,13 @@ void KisNodeTest::testChildNodes()
     nodeTypes.clear();
     nodeTypes << "TestNodeB" << "TestNodeC";
     KoProperties props;
-    props.setProperty("visibile", false);
+    props.setProperty("visible", false);
     props.setProperty("locked", true);
     QList<KisNodeSP> subsetOfTypesAndProps = root->childNodes(nodeTypes, props);
     QVERIFY(subsetOfTypesAndProps.count() == 1);   // b
 
     KoProperties props2;
-    props.setProperty("visibile", false);
+    props.setProperty("visible", false);
     QList<KisNodeSP> subSetOfProps = root->childNodes(QStringList(), props);
     QVERIFY(subSetOfProps.count() == 2);   // b, c
 }

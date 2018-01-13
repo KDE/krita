@@ -821,6 +821,11 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         if (propertyId == QTextCharFormat::FontPointSize) {
             c.append("font-size").append(":")
                     .append(format.properties()[propertyId].toString()+"pt");
+            style.append(c);
+            c.clear();
+            QFontMetricsF metrics(format.fontFamily());
+            qreal xRatio = metrics.xHeight()/metrics.height();
+            c.append("font-size-adjust").append(":").append(QString::number(xRatio));
         }
         if (propertyId == QTextCharFormat::FontPixelSize) {
             c.append("font-size").append(":")

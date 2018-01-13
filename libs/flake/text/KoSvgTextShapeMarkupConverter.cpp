@@ -40,6 +40,7 @@
 
 #include <SvgParser.h>
 #include <SvgWriter.h>
+#include <SvgUtil.h>
 #include <SvgSavingContext.h>
 #include <SvgGraphicContext.h>
 
@@ -979,6 +980,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
     QTextCharFormat charFormat;
     charFormat.setTextOutline(currentCharFormat.textOutline());
     QTextBlockFormat blockFormat;
+    SvgGraphicsContext *context = new SvgGraphicsContext();
 
     for (int i=0; i<styles.size(); i++) {
         if (!styles.at(i).isEmpty()){
@@ -991,29 +993,8 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "font-size") {
-                if (value.contains("%")) {
-                    value = value.remove("%");
-                    int fontSize = currentCharFormat.fontPointSize();
-                    if (fontSize<0) {
-                        fontSize = 10;
-                    }
-                    charFormat.setFontPointSize(qreal(value.toInt()/100*fontSize));
-                } else if (value.contains("em")) {
-                    value = value.remove("em");
-                    int fontSize = currentCharFormat.fontPointSize();
-                    if (fontSize<0) {
-                        fontSize = 10;
-                    }
-                    charFormat.setFontPointSize(qreal(value.toInt()*fontSize));
-                } else if (value.contains("px")) {
-                    value = value.remove("px");
-                    QFont font = charFormat.font();
-                    font.setPixelSize(value.toInt());
-                    charFormat.setFont(font);
-                } else {
-                    value = value.remove("pt");
-                    charFormat.setFontPointSize(value.toDouble());
-                }
+                qreal val = SvgUtil::parseUnitX(context, value);
+                charFormat.setFontPointSize(val);
             }
 
             if (property == "font-variant") {
@@ -1069,21 +1050,24 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "letter-spacing") {
+                qreal val = SvgUtil::parseUnitX(context, value);
                 charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
-                charFormat.setFontLetterSpacing(value.toDouble());
+                charFormat.setFontLetterSpacing(val);
             }
 
             if (property == "word-spacing") {
-                charFormat.setFontWordSpacing(value.toDouble());
+                qreal val = SvgUtil::parseUnitX(context, value);
+                charFormat.setFontWordSpacing(val);
             }
 
             if (property == "kerning") {
                 if (value=="normal") {
                     charFormat.setFontKerning(true);
                 } else {
+                    qreal val = SvgUtil::parseUnitX(context, value);
                     charFormat.setFontKerning(false);
                     charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
-                    charFormat.setFontLetterSpacing(charFormat.fontLetterSpacing() + value.toDouble());
+                    charFormat.setFontLetterSpacing(charFormat.fontLetterSpacing() + val);
                 }
             }
 

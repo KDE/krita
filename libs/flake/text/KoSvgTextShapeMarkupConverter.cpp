@@ -869,7 +869,7 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         if (propertyId == QTextCharFormat::FontKerning) {
             QString val = "normal";
             if(!format.fontKerning()) {
-                val = "none";
+                val = "0";
             }
             c.append("kerning").append(":")
                     .append(val);
@@ -1069,6 +1069,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "letter-spacing") {
+                charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
                 charFormat.setFontLetterSpacing(value.toDouble());
             }
 
@@ -1081,6 +1082,8 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
                     charFormat.setFontKerning(true);
                 } else {
                     charFormat.setFontKerning(false);
+                    charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
+                    charFormat.setFontLetterSpacing(charFormat.fontLetterSpacing() + value.toDouble());
                 }
             }
 

@@ -46,6 +46,7 @@ Normal_Map.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
 Sketch_2B.kpp
+Sketch_6B.kpp
 Sketch_Chrome.kpp
 Sketch_Hatch_Noisy.kpp
 Spray_Smoke.kpp

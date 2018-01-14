@@ -36,6 +36,7 @@ DlgHistogram::DlgHistogram(QWidget *  parent, const char * name)
     setDefaultButton(Ok);
     setObjectName(name);
     m_page = new KisHistogramWidget(this, "histogram");
+
     Q_CHECK_PTR(m_page);
 
     setCaption(i18n("Histogram"));

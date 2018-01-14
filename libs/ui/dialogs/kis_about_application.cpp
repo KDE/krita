@@ -47,7 +47,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), true);
     splash->setWindowFlags(Qt::Widget);
-    splash->displayLinks();
+    splash->displayLinks(true);
     splash->setFixedSize(splash->sizeHint());
 
     wdg->addTab(splash, i18n("About"));

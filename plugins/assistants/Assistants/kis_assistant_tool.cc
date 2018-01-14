@@ -110,6 +110,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
     QPointF mousePos = m_canvas->viewConverter()->documentToView(canvasDecoration->snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
 
+    // syncs the assistant handles to the handles reference we store in this tool
+    // they can get out of sync with the way the actions and paintevents occur
+    // we probably need to stop storing a reference in m_handles and call the assistants directly
+    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
@@ -269,7 +273,13 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
         // This code contains the click event behavior.
-        QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+        QTransform initialTransform = m_canvas->coordinatesConverter()->documentToWidgetTransform();
+        QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
+
+
+        // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
+        // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
+        QPointF uiMousePosition = initialTransform.map( canvasDecoration->snapToGuide(event, QPointF(), false));
 
         AssistantEditorData editorShared; // shared position data between assistant tool and decoration
 
@@ -277,11 +287,12 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         QPointF iconSnapPosition(actionsPosition + editorShared.snapIconPosition);
         QPointF iconDeletePosition(actionsPosition + editorShared.deleteIconPosition);
 
+
         QRectF deleteRect(iconDeletePosition, QSizeF(editorShared.deleteIconSize, editorShared.deleteIconSize));
         QRectF visibleRect(iconSnapPosition, QSizeF(editorShared.snapIconSize, editorShared.snapIconSize));
         QRectF moveRect(iconMovePosition, QSizeF(editorShared.moveIconSize, editorShared.moveIconSize));
 
-        if (moveRect.contains(mousePos)) {
+        if (moveRect.contains(uiMousePosition)) {
             m_assistantDrag = assistant;
             m_cursorStart = event->point;
             m_currentAdjustment = QPointF();
@@ -289,7 +300,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             return;
         }
 
-        if (deleteRect.contains(mousePos)) {
+        if (deleteRect.contains(uiMousePosition)) {
             removeAssistant(assistant);
             if(m_canvas->paintingAssistantsDecoration()->assistants().isEmpty()) {
                 m_internalMode = MODE_CREATION;
@@ -299,7 +310,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_canvas->updateCanvas();
             return;
         }
-        if (visibleRect.contains(mousePos)) {
+        if (visibleRect.contains(uiMousePosition)) {
             newAssistantAllowed = false;
             assistant->setSnappingActive(!assistant->isSnappingActive()); // toggle
             assistant->uncache();//this updates the chache of the assistant, very important.

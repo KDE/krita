@@ -45,6 +45,7 @@ public:
 
 public Q_SLOTS:
     void slotSelectionChanged();
+    void slotUpdateIcons();
 
 private Q_SLOTS:
     void slotUpdateLayersMenu();

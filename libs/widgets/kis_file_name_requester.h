@@ -48,6 +48,8 @@ public:
     ~KisFileNameRequester() override;
 
     void setStartDir(const QString &path);
+    /// Set the name used to store the last-used directory in the settings
+    void setConfiguratioName(const QString &name);
 
     QString fileName() const;
     void setFileName(const QString &path);
@@ -75,6 +77,7 @@ private:
     KoFileDialog::DialogType m_mode;
     QStringList m_mime_filter_list;
     QString m_mime_default_filter;
+    QString m_name;
 };
 
 #endif // KIS_FILE_NAME_REQUESTER_H

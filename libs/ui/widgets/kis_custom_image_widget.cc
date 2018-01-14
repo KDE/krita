@@ -152,7 +152,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     switchPortraitLandscape();
 
     // this makes the portrait and landscape buttons more
-    // obvious what is selected by changing the higlight color
+    // obvious what is selected by changing the highlight color
     QPalette p = QApplication::palette();
     QPalette palette_highlight(p );
     QColor c = p.color(QPalette::Highlight);
@@ -479,30 +479,39 @@ void KisCustomImageWidget::switchPortraitLandscape()
 
 void KisCustomImageWidget::changeDocumentInfoLabel()
 {
-    int layerSize = doubleWidth->value()*doubleHeight->value();
+
+    qint64 width, height;
+    double resolution;
+    resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+
+    width = static_cast<qint64>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
+    height = static_cast<qint64>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+
+    qint64 layerSize = width * height;
     const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
-    int bitSize = 8*cs->pixelSize(); //pixelsize is in bytes.
-    layerSize = layerSize*cs->pixelSize();
-    QString byte = "bytes";
+    int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
+    layerSize = layerSize * cs->pixelSize();
+    QString byte = i18n("bytes");
     if (layerSize>1024) {
         layerSize/=1024;
-        byte = "KB";
+        byte = i18nc("Abbreviation for kilobyte", "KB");
     }
     if (layerSize>1024) {
         layerSize/=1024;
-        byte = "MB";
+        byte = i18nc("Abbreviation for megabyte", "MB");
     }
     if (layerSize>1024) {
         layerSize/=1024;
-        byte = "GB";
+        byte = i18nc("Abbreviation for gigabyte", "GB");
     }
-    QString text = QString("This document will be %1x%2 px %4, which means the pixel size is %3 bit, a single paint layer will thus take up %5 %6 of RAM.")
-            .arg(doubleWidth->value())
-            .arg(doubleHeight->value())
-            .arg(bitSize)
-            .arg(cs->name())
-            .arg(layerSize)
-            .arg(byte);
+    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: size in unites of arg6. Arg6: KB, MB or GB",
+                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 %6 of RAM.",
+                         width,
+                         height,
+                         cs->name(),
+                         bitSize,
+                         layerSize,
+                         byte);
     lblDocumentInfo->setText(text);
 }
 

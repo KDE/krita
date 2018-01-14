@@ -148,7 +148,7 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:src-atop") layer->disableAlphaChannel(true);
         //dst-atop
         if (compop == "svg:dst-atop") layer->setCompositeOpId(COMPOSITE_DESTINATION_ATOP);
-        //plus is svg standard's way of saying addtion... photoshop calls this linear dodge, btw, maybe make a similar alias?
+        //plus is svg standard's way of saying addition... photoshop calls this linear dodge, btw, maybe make a similar alias?
         if (compop == "svg:plus") layer->setCompositeOpId(COMPOSITE_ADD);
         if (compop == "svg:multiply") layer->setCompositeOpId(COMPOSITE_MULT);
         if (compop == "svg:screen") layer->setCompositeOpId(COMPOSITE_SCREEN);

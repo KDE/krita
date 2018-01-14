@@ -141,7 +141,7 @@ public:
      * Constructor.
      *
      * This alternative constructor is mainly useful if you want to
-     * overide the standard actions (aboutApplication(), aboutKDE(),
+     * override the standard actions (aboutApplication(), aboutKDE(),
      * helpContents(), reportBug, and optionally whatsThis).
      *
      * @param parent The parent of the dialog boxes. The boxes are modeless

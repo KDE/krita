@@ -477,7 +477,7 @@ const KoColorSpace * KoColorSpaceRegistry::Private::colorSpace1(const QString &c
     }
 
     if (!cs) {
-        // slow attemt to create a color space
+        // slow attempt to create a color space
         typename LockPolicy::WriteLocker l(&registrylock);
 
         const KoColorProfile *profile =

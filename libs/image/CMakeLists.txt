@@ -57,6 +57,7 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_painter_blt_multi_fixed.cpp
    kis_marker_painter.cpp
+   KisPrecisePaintDeviceWrapper.cpp
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
    brushengine/kis_random_source.cpp
@@ -79,6 +80,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_slider_based_paintop_property.cpp
    brushengine/kis_standard_uniform_properties_factory.cpp
    brushengine/KisStrokeSpeedMeasurer.cpp
+   brushengine/KisPaintopSettingsIds.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_change_visibility_command.cpp

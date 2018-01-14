@@ -399,7 +399,7 @@ public:
     /**
      * @brief Removes subpath from the path
      * @param subpathIndex the index of the subpath to remove
-     * @return the removed subpath on succes, 0 otherwise.
+     * @return the removed subpath on success, 0 otherwise.
      */
     KoSubpath *removeSubpath(int subpathIndex);
 

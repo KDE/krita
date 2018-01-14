@@ -70,7 +70,6 @@ QStringList KisImportExportManager::m_exportMimeTypes;
 class Q_DECL_HIDDEN KisImportExportManager::Private
 {
 public:
-    bool batchMode {false};
     KoUpdaterPtr updater;
 
     QString cachedExportFilterMimeType;
@@ -242,14 +241,9 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
     return filter;
 }
 
-void KisImportExportManager::setBatchMode(const bool batch)
-{
-    d->batchMode = batch;
-}
-
 bool KisImportExportManager::batchMode(void) const
 {
-    return d->batchMode;
+    return m_document->fileBatchMode();
 }
 
 void KisImportExportManager::setUpdater(KoUpdaterPtr updater)
@@ -296,8 +290,8 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
      * because it blocks all the threads. Cache the filter if possible.
      */
     if (direction == KisImportExportManager::Export &&
-        d->cachedExportFilter &&
-        d->cachedExportFilterMimeType == typeName) {
+            d->cachedExportFilter &&
+            d->cachedExportFilterMimeType == typeName) {
 
         filter = d->cachedExportFilter;
     } else {
@@ -368,11 +362,11 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         }
 
         bool alsoAsKra = false;
-        if (!batchMode() && !askUserAboutExportConfiguration(filter, exportConfiguration,
-                                                             from, to,
-                                                             batchMode(), showWarnings,
-                                                             &alsoAsKra)) {
-
+        bool askUser = askUserAboutExportConfiguration(filter, exportConfiguration,
+                                                       from, to,
+                                                       batchMode(), showWarnings,
+                                                       &alsoAsKra);
+        if (!batchMode() && !askUser) {
             return KisImportExportFilter::UserCancelled;
         }
 
@@ -401,7 +395,7 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
     KisPaintDeviceSP dev = image->projection();
     const KoColorSpace* cs = dev->colorSpace();
     const bool isThereAlpha =
-        KisPainter::checkDeviceHasTransparency(image->projection());
+            KisPainter::checkDeviceHasTransparency(image->projection());
 
     exportConfiguration->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, isThereAlpha);
     exportConfiguration->setProperty(KisImportExportFilter::ColorModelIDTag, cs->colorModelId().id());
@@ -419,9 +413,11 @@ KisImportExportManager::askUserAboutExportConfiguration(
         KisPropertiesConfigurationSP exportConfiguration,
         const QByteArray &from,
         const QByteArray &to,
-        const bool batchMode, const bool showWarnings,
+        const bool batchMode,
+        const bool showWarnings,
         bool *alsoAsKra)
 {
+
     const QString mimeUserDescription = KisMimeDatabase::descriptionForMimeType(to);
 
     QStringList warnings;
@@ -561,7 +557,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doImport(const Q
     }
 
     KisImportExportFilter::ConversionStatus status =
-        filter->convert(m_document, &file, KisPropertiesConfigurationSP());
+            filter->convert(m_document, &file, KisPropertiesConfigurationSP());
 
     if (file.isOpen()) {
         file.close();
@@ -573,13 +569,13 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doImport(const Q
 KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
 {
     KisImportExportFilter::ConversionStatus status =
-        doExportImpl(location, filter, exportConfiguration);
+            doExportImpl(location, filter, exportConfiguration);
 
     if (alsoAsKra && status == KisImportExportFilter::OK) {
         QString kraLocation = location + ".kra";
         QByteArray mime = m_document->nativeFormatMimeType();
         QSharedPointer<KisImportExportFilter> filter(
-            filterForMimeType(QString::fromLatin1(mime), Export));
+                    filterForMimeType(QString::fromLatin1(mime), Export));
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
 
@@ -587,7 +583,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const Q
             filter->setFilename(kraLocation);
 
             KisPropertiesConfigurationSP kraExportConfiguration =
-                filter->lastSavedConfiguration(mime, mime);
+                    filter->lastSavedConfiguration(mime, mime);
 
             status = doExportImpl(kraLocation, filter, kraExportConfiguration);
         } else {
@@ -609,7 +605,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     }
 
     KisImportExportFilter::ConversionStatus status =
-        filter->convert(m_document, &file, exportConfiguration);
+            filter->convert(m_document, &file, exportConfiguration);
 
     if (status != KisImportExportFilter::OK) {
         file.cancelWriting();

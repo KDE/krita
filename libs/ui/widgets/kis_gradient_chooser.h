@@ -21,6 +21,7 @@
 #include <KoDialog.h>
 
 #include <QFrame>
+#include <QToolButton>
 #include <kritaui_export.h>
 
 class KoAbstractGradient;
@@ -67,6 +68,9 @@ Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource * resource);
 
+public Q_SLOTS:
+    void slotUpdateIcons();
+
 private Q_SLOTS:
     virtual void update(KoResource * resource);
     void addStopGradient();
@@ -78,6 +82,8 @@ private:
 private:
     QLabel *m_lbName;
     KoResourceItemChooser * m_itemChooser;
+
+    QToolButton* m_addGradient;
     QPushButton* m_editGradient;
 };
 

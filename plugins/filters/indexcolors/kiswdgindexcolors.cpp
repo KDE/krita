@@ -58,7 +58,7 @@ void KisWdgIndexColors::slotColorLimitChanged(int value)
 void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
 {
     int rows     = shadesLabels.length();
-    int collumns = ramps;
+    int columns = ramps;
 
     m_colorSelectors.resize(rows);
     m_stepSpinners.resize(rows-1);
@@ -67,10 +67,10 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
     {
         QLabel* l = new QLabel(shadesLabels[row], ui->colorsBox);
         ui->layoutColors->addWidget(l, row+1, 0);
-        m_colorSelectors[row].resize(collumns);
+        m_colorSelectors[row].resize(columns);
     }
     // Labels for the ramps
-    /*for(int col = 0; col < collumns; ++col)
+    /*for(int col = 0; col < columns; ++col)
     {
         QLabel* l = new QLabel(rampsLabels[col], ui->colorsBox);
         l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -98,7 +98,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
     }
     // Color selectors
     for(int y = 0; y < rows; ++y)
-        for(int x = 0; x < collumns; ++x)
+        for(int x = 0; x < columns; ++x)
         {
             KisColorButton* b = new KisColorButton;
             QCheckBox* c = new QCheckBox;

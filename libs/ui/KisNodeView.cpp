@@ -567,3 +567,8 @@ void KisNodeView::setDraggingFlag(bool flag)
 {
     m_draggingFlag = flag;
 }
+
+void KisNodeView::slotUpdateIcons()
+{
+    d->delegate.slotUpdateIcon();
+}

@@ -127,6 +127,19 @@ public:
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 
+    /**
+     * @return true if this preset demands a secondary masked brush running
+     *         alongside it
+     */
+    bool hasMaskingPreset() const;
+
+    /**
+     * @return a newly created preset of the masked brush that should be run
+     *         alongside the current brush
+     */
+    KisPaintOpPresetSP createMaskingPreset() const;
+
+
 private:
 
     struct Private;

@@ -80,6 +80,8 @@ public:
     QScopedPointer<KoShapeUserData> userData;
     QSharedPointer<KoShapeStrokeModel> stroke; ///< points to a stroke, or 0 if there is no stroke
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
+    bool inheritBackground = false;
+    bool inheritStroke = false;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     QList<KoShape::ShapeChangeListener*> listeners;
     KoShapeShadow * shadow; ///< the current shape shadow
@@ -92,7 +94,6 @@ public:
     qreal transparency; ///< the shapes transparency
     QString hyperLink; //hyperlink for this shape
 
-    static const int MaxZIndex = 32767;
     int zIndex : 16; // keep maxZIndex in sync!
     int runThrough : 16;
     int visible : 1;

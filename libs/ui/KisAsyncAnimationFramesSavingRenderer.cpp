@@ -35,6 +35,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
           sequenceNumberingOffset(_sequenceNumberingOffset),
           exportConfiguration(_exportConfiguration)
     {
+
         savingDoc->setAutoSaveDelay(0);
         savingDoc->setFileBatchMode(true);
 
@@ -59,6 +60,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
     KisTimeRange range;
     int sequenceNumberingOffset = 0;
 
+
     QString filenamePrefix;
     QString filenameSuffix;
 
@@ -71,7 +73,7 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QString &fileNameSuffix,
                                                                              const QByteArray &outputMimeType,
                                                                              const KisTimeRange &range,
-                                                                             int sequenceNumberingOffset,
+                                                                             const int sequenceNumberingOffset,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
     : m_d(new Private(image, range, sequenceNumberingOffset, exportConfiguration))
 {
@@ -82,6 +84,9 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
     connect(this, SIGNAL(sigCompleteRegenerationInternal(int)), SLOT(notifyFrameCompleted(int)));
     connect(this, SIGNAL(sigCancelRegenerationInternal(int)), SLOT(notifyFrameCancelled(int)));
 }
+
+
+
 
 KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {

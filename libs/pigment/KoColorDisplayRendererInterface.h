@@ -106,7 +106,7 @@ private:
 
 /**
  * The default conversion class that just calls KoColor::toQColor()
- * conversion implementation which efectively renders the color into
+ * conversion implementation which effectively renders the color into
  * sRGB color space.
  */
 class KRITAPIGMENT_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface

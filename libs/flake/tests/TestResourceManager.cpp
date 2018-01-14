@@ -385,5 +385,46 @@ void TestResourceManager::testComplexResource()
     spy.clear();
 }
 
+struct NeverChangingResource : public KoDerivedResourceConverter
+{
+    NeverChangingResource(int key, int sourceKey) : KoDerivedResourceConverter(key, sourceKey) {}
+
+    QVariant fromSource(const QVariant &value) override {
+        Q_UNUSED(value);
+        return 10;
+    }
+
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override {
+        Q_UNUSED(value);
+        return sourceValue;
+    }
+};
+
+void TestResourceManager::testNeverChangingConverters()
+{
+    KoResourceManager m;
+
+    const int key1 = 1;
+    const int key2 = 2;
+    const int derivedKey = 3;
+
+    m.setResource(key1, 1);
+    m.setResource(key2, 2);
+
+    QCOMPARE(m.resource(key1).toInt(), 1);
+    QCOMPARE(m.resource(key2).toInt(), 2);
+    QVERIFY(!m.hasResource(derivedKey));
+
+    m.addDerivedResourceConverter(toQShared(new NeverChangingResource(derivedKey, key2)));
+
+    QVERIFY(m.hasResource(derivedKey));
+    QCOMPARE(m.resource(derivedKey).toInt(), 10);
+
+    m.setResource(derivedKey, 150);
+
+    QCOMPARE(m.resource(key2).toInt(), 2);
+    QCOMPARE(m.resource(derivedKey).toInt(), 10);
+}
+
 
 QTEST_MAIN(TestResourceManager)

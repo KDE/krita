@@ -30,7 +30,7 @@ class KoShape;
 class RemoveConnectionPointCommand : public KUndo2Command
 {
 public:
-    /// Creates new comand to remove connection point from shape
+    /// Creates new command to remove connection point from shape
     RemoveConnectionPointCommand(KoShape *shape, int connectionPointId, KUndo2Command *parent = 0);
     ~RemoveConnectionPointCommand() override;
     /// reimplemented from KUndo2Command

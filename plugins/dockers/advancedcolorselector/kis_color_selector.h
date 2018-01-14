@@ -42,9 +42,15 @@ public:
     KisColorSelectorConfiguration configuration() const;
     void setColor(const KoColor &color) override;
 
+    /// update icons when a theme update happens
+    void updateIcons();
+
+    void hasAtLeastOneDocument(bool value);
+
 public Q_SLOTS:
     void reset() override;
     void updateSettings() override;
+
 
 Q_SIGNALS:
     void settingsButtonClicked();
@@ -56,7 +62,6 @@ protected:
     void mouseMoveEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     bool displaySettingsButton();
-
 
 private:
     void mouseEvent(QMouseEvent* e);
@@ -81,6 +86,12 @@ private:
     bool m_blipDisplay;
     Acs::ColorRole m_lastColorRole;
 
+
+    /// if Krita starts with a reference to this componenet that is attached to a canvas, it will call setCanvas()
+    /// that check will be what ultimately decides whether this component will look enabled or disabled
+    /// This color selector is sometimes not attached to the canvas, so we shouldn't disable it in that situation
+    /// One instane of that is when you select the color wheel type from the settings.
+    bool m_hasAtLeastOneDocumentOpen = true;
 
 public:
     void setDisplayBlip(bool disp) {m_blipDisplay = disp;}

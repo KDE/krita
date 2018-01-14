@@ -160,15 +160,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     KisAction* alphaLockAction = m_viewManager->actionManager()->createAction("preserve_alpha");
     m_alphaLockButton->setDefaultAction(alphaLockAction);
 
-
-    // pen pressure
-    m_disablePressureButton = new KisHighlightedToolButton(this);
-    m_disablePressureButton->setFixedSize(iconsize, iconsize);
-    m_disablePressureButton->setCheckable(true);
-
-    m_disablePressureAction = m_viewManager->actionManager()->createAction("disable_pressure");
-    m_disablePressureButton->setDefaultAction(m_disablePressureAction);
-
     // horizontal and vertical mirror toolbar buttons
 
     // mirror tool options for the X Mirror
@@ -331,17 +322,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     action->setText(i18n("Brush composite"));
     action->setDefaultWidget(compositeActions);
 
-    QWidget* compositePressure = new QWidget(this);
-    QHBoxLayout* pressureLayout = new QHBoxLayout(compositePressure);
-    pressureLayout->addWidget(m_disablePressureButton);
-    pressureLayout->setSpacing(4);
-    pressureLayout->setContentsMargins(0, 0, 0, 0);
-
-    action = new QWidgetAction(this);
-    view->actionCollection()->addAction("pressure_action", action);
-    action->setText(i18n("Pressure usage (small button)"));
-    action->setDefaultWidget(compositePressure);
-
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("brushslider1", action);
     view->actionCollection()->addAction("brushslider1", action);
@@ -463,8 +443,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(toggled(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
-    connect(m_disablePressureAction  , SIGNAL(toggled(bool))                    , SLOT(slotDisablePressureMode(bool)));
 
+    m_disablePressureAction = m_viewManager->actionManager()->createAction("disable_pressure");
+    connect(m_disablePressureAction  , SIGNAL(toggled(bool))                    , SLOT(slotDisablePressureMode(bool)));
     m_disablePressureAction->setChecked(true);
 
     connect(m_hMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
@@ -516,7 +497,7 @@ KisPaintopBox::~KisPaintopBox()
             cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
         }
     }
-    // Do not delete the widget, since it it is global to the application, not owned by the view
+    // Do not delete the widget, since it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
     delete m_favoriteResourceManager;
@@ -772,7 +753,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_circle"));
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_Circle"));
         }
         else {
             preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
@@ -1157,9 +1138,9 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 void KisPaintopBox::slotDisablePressureMode(bool checked)
 {
     if (checked) {
-        m_disablePressureButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
+        m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
     } else {
-        m_disablePressureButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure_locked"));
+        m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure_locked"));
     }
 
     m_resourceProvider->setDisablePressure(checked);
@@ -1278,9 +1259,9 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
 
     if (m_disablePressureAction->isChecked()) {
-        m_disablePressureButton->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
+        m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
     } else {
-        m_disablePressureButton->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure_locked"));
+        m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure_locked"));
     }
 }
 

@@ -100,7 +100,7 @@ protected:
      *        the frame was cancelled.
      *
      * The rendering of the frame can be either cancelled by the image itself or
-     * by recieving a timeout signal (10 seconds).
+     * by receiving a timeout signal (10 seconds).
      *
      * NOTE: the slot is called in the GUI thread. Don't forget to call
      *       notifyFrameCancelled() in he end of your call.

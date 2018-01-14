@@ -34,8 +34,39 @@ class KConfigBase;
 /// Save us some ruddy time when printing out QStrings with UTF-8
 # define PQ(x) x.toUtf8().constData()
 
+class PythonPluginManager;
+
 namespace PyKrita
 {
+    enum InitResult {
+        INIT_UNINITIALIZED,
+        INIT_OK,
+        INIT_CANNOT_LOAD_PYTHON_LIBRARY,
+        INIT_CANNOT_SET_PYTHON_PATHS,
+        INIT_CANNOT_LOAD_PYKRITA_MODULE,
+    };
+
+    /**
+     * Initialize the Python environment and plugin manager.
+     * This should be called first before using the manager
+     * or the Python class.
+     */
+    InitResult initialize();
+
+    /**
+     * Gets the instance of the plugin manager.
+     * Note: PyKrita::initialize() must be called
+     * before using this function.
+     */
+    PythonPluginManager *pluginManager();
+
+    /**
+     * Cleanup after Python.
+     * Note: doing this as part of static/global destruction will not
+     * work. The call to Py_Finalize() would happen after the Python
+     * runtime has already been finalized, leading to a segfault.
+     */
+    void finalize();
 
 /**
  * Instantiate this class on the stack to automatically get and release the
@@ -67,7 +98,7 @@ public:
      * Set the Python paths by calling Py_SetPath. This should be called before
      * initialization to ensure the proper libraries get loaded.
      */
-    static bool setPath(const QStringList& paths);
+    static bool setPath(const QStringList& scriptPaths);
 
     /**
      * Make sure the Python interpreter is initialized. Ideally should be only
@@ -76,7 +107,7 @@ public:
     static void ensureInitialized();
 
     /**
-     * Finalize the Python interpreter. Not gauranteed to work.
+     * Finalize the Python interpreter. Not guaranteed to work.
      */
     static void maybeFinalize();
 
@@ -113,18 +144,6 @@ public:
      * Store the last traceback we handled using @ref traceback().
      */
     QString lastTraceback(void) const;
-
-    /**
-     * Create a Python dictionary from a KConfigBase instance, writing the
-     * string representation of the values.
-     */
-    void updateDictionaryFromConfiguration(PyObject* dictionary, const KConfigBase* config);
-
-    /**
-     * Write a Python dictionary to a configuration object, converting objects
-     * to their string representation along the way.
-     */
-    void updateConfigurationFromDictionary(KConfigBase* config, PyObject* dictionary);
 
     /**
      * Call the named module's named entry point.

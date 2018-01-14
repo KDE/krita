@@ -43,7 +43,7 @@ class KisConfigWidget;
 /**
  * Base class for classes that process areas of pixels.
  * Processors can either read in pixels and write out pixels
- * or just write out pixels, using a certain set of configuation
+ * or just write out pixels, using a certain set of configuration
  * pixels.
  *
  * in-out processing is typically filtering: @see KisFilter.

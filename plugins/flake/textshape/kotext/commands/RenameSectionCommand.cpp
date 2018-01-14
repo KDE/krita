@@ -57,7 +57,7 @@ void RenameSectionCommand::redo()
 
 int RenameSectionCommand::id() const
 {
-    //FIXME: extract this to some enum shared accross all commands
+    //FIXME: extract this to some enum shared across all commands
     return 34537684;
 }
 

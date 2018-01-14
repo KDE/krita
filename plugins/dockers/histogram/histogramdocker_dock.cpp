@@ -39,6 +39,9 @@ HistogramDockerDock::HistogramDockerDock()
 
     m_histogramWidget = new HistogramDockerWidget(this);
 
+    m_histogramWidget->setBackgroundRole(QPalette::AlternateBase);
+    m_histogramWidget->setAutoFillBackground(true); // paints background role before paint()
+
     m_histogramWidget->setMinimumHeight(50);
     //m_histogramWidget->setSmoothHistogram(false);
     m_layout->addWidget(m_histogramWidget, 1);

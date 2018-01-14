@@ -98,7 +98,7 @@ public:
     void controlModifierlessTimout()
     {
         if (nKey != 0 && !modifierKeys) {
-            // No modifier key pressed currently. Start the timout
+            // No modifier key pressed currently. Start the timeout
             modifierlessTimeout.start(600);
         } else {
             // A modifier is pressed. Stop the timeout
@@ -185,7 +185,7 @@ bool KKeySequenceWidgetPrivate::stealShortcuts(
                                      action->shortcut().toString(QKeySequence::NativeText),
                                      KLocalizedString::removeAcceleratorMarker(action->text()));
     }
-    QString message = i18ncp("%1 is the number of ambigious shortcut clashes (hidden)",
+    QString message = i18ncp("%1 is the number of ambiguous shortcut clashes (hidden)",
                              "The \"%2\" shortcut is ambiguous with the following shortcut.\n"
                              "Do you want to assign an empty shortcut to this action?\n"
                              "%3",

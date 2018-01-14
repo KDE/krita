@@ -57,8 +57,8 @@ public:
         SoftProofing            = 0x4000,    // Do softproofing
         BlackpointCompensation  = 0x2000,
         NoWhiteOnWhiteFixup     = 0x0004,    // Don't fix scum dot
-        HighQuality             = 0x0400,    // Use more memory to give better accurancy
-        LowQuality              = 0x0800    // Use less memory to minimize resouces
+        HighQuality             = 0x0400,    // Use more memory to give better accuracy
+        LowQuality              = 0x0800    // Use less memory to minimize resources
     };
     Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
 

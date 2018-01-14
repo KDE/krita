@@ -46,6 +46,8 @@
 #include <kis_file_name_requester.h>
 #include <KisDocument.h>
 #include <KoDialog.h>
+#include "kis_slider_spin_box.h"
+#include "kis_acyclic_signal_connector.h"
 
 DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     : KoDialog(parent)
@@ -77,6 +79,25 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
    //m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end()); // animators sometimes want to export after end frame
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
+
+
+
+    m_page->intHeight->setMinimum(1);
+    m_page->intHeight->setMaximum(10000);
+    m_page->intHeight->setValue(doc->image()->height());
+
+    m_page->intWidth->setMinimum(1);
+    m_page->intWidth->setMaximum(10000);
+    m_page->intWidth->setValue(doc->image()->width());
+
+
+    // try to lock the width and height being updated
+
+    KisAcyclicSignalConnector *constrainsConnector = new KisAcyclicSignalConnector(this);
+    constrainsConnector->createCoordinatedConnector()->connectBackwardInt(m_page->intWidth, SIGNAL(valueChanged(int)), this, SLOT(slotLockAspectRatioDimensionsWidth(int)));
+    constrainsConnector->createCoordinatedConnector()->connectForwardInt(m_page->intHeight, SIGNAL(valueChanged(int)), this, SLOT(slotLockAspectRatioDimensionsHeight(int)));
+
+    m_page->intFramesPerSecond->setValue(doc->image()->animationInterface()->framerate());
 
     QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());
     const bool hasAudio = audioFileInfo.exists();
@@ -246,9 +267,10 @@ void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP
     }
 
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
-    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
+    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));    
     m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));
     m_page->sequenceStart->setValue(cfg->getInt("sequence_start", m_image->animationInterface()->playbackRange().start()));
+
     QString mimetype = cfg->getString("mimetype");
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == mimetype) {
@@ -287,7 +309,6 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
 
-
     // delete image sequence if we are only exporting out video
     cfg->setProperty("delete_sequence", m_page->shouldExportOnlyVideo->isChecked());
 
@@ -314,6 +335,9 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     cfg->setProperty("directory", fetchRenderingDirectory());
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
+    cfg->setProperty("framerate", m_page->intFramesPerSecond->value());
+    cfg->setProperty("height", m_page->intHeight->value());
+    cfg->setProperty("width", m_page->intWidth->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
     cfg->setProperty("include_audio", m_page->chkIncludeAudio->isChecked());
 
@@ -322,6 +346,10 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
 
 void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP cfg)
 {
+    m_page->intHeight->setValue(cfg->getInt("height", int(m_image->height())));
+    m_page->intWidth->setValue(cfg->getInt("width", int(m_image->width())));
+    m_page->intFramesPerSecond->setValue(cfg->getInt("framerate", int(m_image->animationInterface()->framerate())));
+
     if (m_encoderConfigWidget) {
         m_encoderConfigWidget->setConfiguration(cfg);
     }
@@ -498,9 +526,11 @@ void DlgAnimationRenderer::slotExportTypeChanged()
 {
     KisConfig cfg;
 
-    // if a video format needs to be outputted
-    if (m_page->shouldExportAll->isChecked() || m_page->shouldExportOnlyVideo->isChecked()) {
+    bool willEncodeVideo =
+        m_page->shouldExportAll->isChecked() || m_page->shouldExportOnlyVideo->isChecked();
 
+    // if a video format needs to be outputted
+    if (willEncodeVideo) {
          // videos always uses PNG for creating video, so disable the ability to change the format
          m_page->cmbMimetype->setEnabled(false);
          for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
@@ -510,6 +540,13 @@ void DlgAnimationRenderer::slotExportTypeChanged()
              }
          }
     }
+
+    m_page->intWidth->setVisible(willEncodeVideo);
+    m_page->intHeight->setVisible(willEncodeVideo);
+    m_page->intFramesPerSecond->setVisible(willEncodeVideo);
+    m_page->fpsLabel->setVisible(willEncodeVideo);
+    m_page->lblWidth->setVisible(willEncodeVideo);
+    m_page->lblHeight->setVisible(willEncodeVideo);
 
     // if only exporting video
     if (m_page->shouldExportOnlyVideo->isChecked()) {
@@ -526,6 +563,7 @@ void DlgAnimationRenderer::slotExportTypeChanged()
     if (m_page->shouldExportOnlyImageSequence->isChecked()) {
         m_page->cmbMimetype->setEnabled(true); // allow to change image format
         m_page->videoOptionsGroup->setVisible(false);
+        m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(true);
 
         cfg.writeEntry<QString>("AnimationRenderer/export_type", "ImageSequence");
@@ -543,4 +581,29 @@ void DlgAnimationRenderer::slotExportTypeChanged()
      // for the resize to work as expected, try to hide elements first before displaying other ones.
      // if the widget gets bigger at any point, the resize will use that, even if elements are hidden later to make it smaller
      resize(m_page->sizeHint());
+}
+
+void DlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)
+{
+    Q_UNUSED(width);
+
+    float aspectRatio = (float)m_image->width() / (float)m_image->height();
+
+    // update height here
+    float newHeight = m_page->intWidth->value() / aspectRatio  ;
+
+    m_page->intHeight->setValue(newHeight);
+
+}
+
+void DlgAnimationRenderer::slotLockAspectRatioDimensionsHeight(int height)
+{
+    Q_UNUSED(height);
+
+    float aspectRatio = (float)m_image->width() / (float)m_image->height();
+
+    // update width here
+     float newWidth = aspectRatio *  m_page->intHeight->value();
+
+     m_page->intWidth->setValue(newWidth);
 }

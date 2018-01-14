@@ -6,7 +6,7 @@
     <doc:doc>
       <doc:description>
         <doc:para>
-          The interface used for quering color profiles.
+          The interface used for querying color profiles.
         </doc:para>
       </doc:description>
     </doc:doc>

@@ -6,7 +6,7 @@ By Wolthera
 @package quick_settings_docker
 '''
 
-# Importing the relevant dependancies:
+# Importing the relevant dependencies:
 import sys
 from PyQt5.QtCore import pyqtSlot, Qt, QPointF
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QPainter, QPalette, QPixmap, QImage, QBrush, QIcon

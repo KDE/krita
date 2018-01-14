@@ -59,6 +59,15 @@ void KisPaintOpOption::emitSettingChanged()
     }
 }
 
+void KisPaintOpOption::emitCheckedChanged()
+{
+    KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
+
+    if (!m_d->updatesBlocked) {
+        emit sigCheckedChanged(isChecked());
+    }
+}
+
 void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_d->updatesBlocked = true;
@@ -95,6 +104,8 @@ bool KisPaintOpOption::isCheckable() const {
 void KisPaintOpOption::setChecked(bool checked)
 {
     m_d->checked = checked;
+
+    emitCheckedChanged();
     emitSettingChanged();
 }
 

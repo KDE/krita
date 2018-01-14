@@ -20,6 +20,8 @@
 #ifndef __VERSION_CHECKER_H__
 # define  __VERSION_CHECKER_H__
 
+#include <libs/global/kis_debug.h>
+#include "utilities.h"
 # include <QtCore/QString>
 # include <QtCore/QStringList>
 # include <QtCore/QtGlobal>
@@ -33,17 +35,13 @@ namespace PyKrita
 class version
 {
     enum type {
-        undefined = -1
-                    , zero = 0
+        undefined = -1,
+        zero = 0
     };
 
 public:
     /// Default constructor
-    explicit version(
-        const int major = zero
-                          , const int minor = zero
-                                  , const int patch = zero
-    )
+    explicit version(const int major = zero, const int minor = zero, const int patch = zero)
         : m_major(major)
         , m_minor(minor)
         , m_patch(patch) {
@@ -87,6 +85,17 @@ public:
         return version(tmp[0], tmp[1], tmp[2]);
     };
 
+    static version fromPythonObject(PyObject* version_obj)
+    {
+        version v = tryObtainVersionFromTuple(version_obj);
+        if (!v.isValid()) {
+            // PEP396 requires __version__ to be a tuple of integers,
+            // but some modules use a string instead.
+            v = tryObtainVersionFromString(version_obj);
+        }
+        return v;
+    }
+
     static version invalid() {
         static version s_bad(undefined, undefined, undefined);
         return s_bad;
@@ -96,6 +105,50 @@ private:
     int m_major;
     int m_minor;
     int m_patch;
+
+
+    static version tryObtainVersionFromTuple(PyObject* version_obj)
+    {
+        Q_ASSERT("Sanity check" && version_obj);
+
+        if (PyTuple_Check(version_obj) == 0)
+            return version::invalid();
+
+        int version_info[3] = {0, 0, 0};
+        for (unsigned i = 0; i < PyTuple_Size(version_obj); ++i) {
+            PyObject* v = PyTuple_GetItem(version_obj, i);
+            if (v && PyLong_Check(v))
+                version_info[i] = PyLong_AsLong(v);
+            else
+                version_info[i] = -1;
+        }
+        if (version_info[0] != -1 && version_info[1] != -1 && version_info[2] != -1)
+            return ::PyKrita::version(version_info[0], version_info[1], version_info[2]);
+
+        return version::invalid();
+    }
+
+/**
+ * Try to parse version string as a simple triplet X.Y.Z.
+ *
+ * \todo Some modules has letters in a version string...
+ * For example current \c pytz version is \e "2013d".
+ */
+    static version tryObtainVersionFromString(PyObject* version_obj)
+    {
+        Q_ASSERT("Sanity check" && version_obj);
+
+        if (!Python::isUnicode(version_obj))
+            return version::invalid();
+
+        QString version_str = Python::unicode(version_obj);
+        if (version_str.isEmpty())
+            return version::invalid();
+
+        return version::fromString(version_str);
+    }
+
+
 };
 
 inline bool operator==(const version& left, const version& right)

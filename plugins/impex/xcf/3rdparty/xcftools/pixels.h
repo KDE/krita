@@ -93,7 +93,7 @@ typedef int refcount_t ;
 #define TILESUMMARY_UPTODATE 8
 #define TILESUMMARY_ALLNULL 4
 #define TILESUMMARY_ALLFULL 2
-#define TILESUMMARY_CRISP   1 /* everyting either null or full */
+#define TILESUMMARY_CRISP   1 /* everything either null or full */
 struct Tile {
   refcount_t refcount ;
   summary_t summary ; /* a combination of TIMESUMMARY_FOO constatns */

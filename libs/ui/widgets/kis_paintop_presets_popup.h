@@ -120,6 +120,7 @@ private Q_SLOTS:
     void slotSwitchScratchpad(bool visible);
     void slotResourceChanged(int key, const QVariant &value);
     void slotLodAvailabilityChanged(bool value);
+    void slotLodThresholdChanged(qreal value);
     void slotSwitchShowEditor(bool visible);
     void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);

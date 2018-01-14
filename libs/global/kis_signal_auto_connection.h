@@ -41,7 +41,7 @@
  * the new object created which will cause you object to become
  * disconnected.
  *
- * Intead use two-stage updates:
+ * Instead use two-stage updates:
  * conn.reset();
  * conn.reset(new KisSignalAutoConnection(...));
  */
@@ -92,7 +92,7 @@ class KisSignalAutoConnectionsStore
 {
 public:
     /**
-     * Connects \p sender to \p reciever with a connection of type \p type.
+     * Connects \p sender to \p receiver with a connection of type \p type.
      * The connection is saved into the store so can be reset later with clear()
      *
      * \see addUniqueConnection()

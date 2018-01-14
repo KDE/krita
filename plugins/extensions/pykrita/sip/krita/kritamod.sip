@@ -10,6 +10,11 @@
 %Import QtWidgets/QtWidgetsmod.sip
 
 %Include Conversions.sip
+
+
+%Include Shape.sip
+%Include GroupShape.sip
+
 %Include Action.sip
 %Include Canvas.sip
 %Include Channel.sip
@@ -23,6 +28,16 @@
 %Include Window.sip
 %Include Krita.sip
 %Include Node.sip
+
+%Include GroupLayer.sip
+%Include CloneLayer.sip
+%Include FilterLayer.sip
+%Include FileLayer.sip
+%Include FillLayer.sip
+%Include VectorLayer.sip
+%Include FilterMask.sip
+%Include SelectionMask.sip
+
 %Include Notifier.sip
 %Include Resource.sip
 %Include Selection.sip

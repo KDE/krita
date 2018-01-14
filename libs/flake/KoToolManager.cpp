@@ -361,23 +361,21 @@ KoCanvasController *KoToolManager::activeCanvasController() const
 
 QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 {
-    QList<QString> types;
+    QSet<QString> shapeTypes;
     Q_FOREACH (KoShape *shape, shapes) {
-        types << shape->shapeId();
+        shapeTypes << shape->shapeId();
     }
-
-    KritaUtils::makeContainerUnique(types);
+    //KritaUtils::makeContainerUnique(types);
 
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;
     Q_FOREACH (ToolHelper *helper, d->tools) {
         if (helper->id() == KoCreateShapesTool_ID) continue;
-
         if (helper->priority() >= prio)
             continue;
 
         bool toolWillWork = false;
-        foreach (const QString &type, types) {
+        foreach (const QString &type, shapeTypes) {
             if (helper->activationShapeId().split(',').contains(type)) {
                 toolWillWork = true;
                 break;
@@ -850,7 +848,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     // if the 'to' is one of our canvasWidgets, then switch.
 
     // for code simplicity the current canvas will be checked again,
-    // but would have been catched already in the lines above, so no issue
+    // but would have been caught already in the lines above, so no issue
     KoCanvasController *newCanvas = 0;
     Q_FOREACH (KoCanvasController* canvas, canvasses.keys()) {
         if (canvas->canvas()->canvasWidget() == to) {

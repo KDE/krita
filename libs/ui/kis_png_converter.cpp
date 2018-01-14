@@ -975,7 +975,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         KisSequentialIterator it(device, imageRect);
 
         bool toomuchcolor = false;
-        do {
+        while (it.nextPixel()) {
             const quint8* c = it.oldRawData();
             bool findit = false;
             for (int i = 0; i < num_palette; i++) {
@@ -996,7 +996,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
                 palette[num_palette].blue = c[0];
                 num_palette++;
             }
-        }  while (it.nextPixel());
+        }
 
         if (!toomuchcolor) {
             dbgFile << "Found a palette of " << num_palette << " colors";

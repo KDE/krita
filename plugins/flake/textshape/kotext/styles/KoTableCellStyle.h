@@ -125,7 +125,7 @@ public:
     KoTableCellStyle *clone(QObject *parent = 0);
 
     /**
-     * Adjust the bounding rectange \boundingRect according to the paddings and margins
+     * Adjust the bounding rectangle \boundingRect according to the paddings and margins
      * of this border data. The inverse of this function is boundingRect().
      *
      * \sa boundingRect()
@@ -140,8 +140,8 @@ public:
      *
      * \sa contentRect()
      *
-     * @param contentRect the content rectange.
-     * @return the bounding rectange.
+     * @param contentRect the content rectangle.
+     * @return the bounding rectangle.
      */
     QRectF boundingRect(const QRectF &contentRect) const;
 

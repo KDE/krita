@@ -229,7 +229,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      PositionToFilthy maskPos) const
 {
     Q_ASSERT_X(src != dst, "KisTransformMask::decorateRect",
-               "src must be != dst, because we cant create transactions "
+               "src must be != dst, because we can't create transactions "
                "during merge, as it breaks reentrancy");
 
     KIS_ASSERT_RECOVER(m_d->params) { return rc; }

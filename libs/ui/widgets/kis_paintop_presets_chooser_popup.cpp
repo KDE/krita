@@ -40,6 +40,7 @@ struct KisPaintOpPresetsChooserPopup::Private
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
     bool firstShown;
+    QToolButton *viewModeButton;
 };
 
 KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
@@ -89,8 +90,10 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
-    QToolButton *viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
-    viewModeButton->setMenu(menu);
+    m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
+    m_d->viewModeButton->setMenu(menu);
+    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
@@ -148,6 +151,11 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  pr
         blockSignals(false);
     }
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+}
+
+void KisPaintOpPresetsChooserPopup::slotThemeChanged()
+{
+    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
 }
 
 void KisPaintOpPresetsChooserPopup::updateViewSettings()

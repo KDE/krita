@@ -55,23 +55,23 @@ generateRandomSelection(const QRect &rc)
     boost::mt11213b uniformSource;
 
     if (uniformSource.max() >= 0x00FFFFFF) {
-        do {
+        while (dstIt.nextPixel()) {
             int randValue = uniformSource();
             *dstIt.rawData() = (quint8) randValue;
-            if (!dstIt.nextPixel()) break;
 
+            if (!dstIt.nextPixel()) break;
             randValue >>= 8;
             *dstIt.rawData() = (quint8) randValue;
-            if (!dstIt.nextPixel()) break;
 
+            if (!dstIt.nextPixel()) break;
             randValue >>= 8;
             *dstIt.rawData() = (quint8) randValue;
-        } while(dstIt.nextPixel());
+        }
 
     } else {
-        do {
+        while (dstIt.nextPixel()) {
             *dstIt.rawData() = (quint8) uniformSource();
-        } while(dstIt.nextPixel());
+        }
     }
 
     return selection;

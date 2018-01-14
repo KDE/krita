@@ -168,13 +168,13 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
         QMap<int, QVariant> props = d->defaultStyle->d->stylesPrivate.properties();
         QMap<int, QVariant>::const_iterator it = props.constBegin();
         while (it != props.constEnd()) {
-            // in case there is already a foreground color don't apply the use window font color as then the forground color
+            // in case there is already a foreground color don't apply the use window font color as then the foreground color
             // should be used.
             if (it.key() == KoCharacterStyle::UseWindowFontColor && format.hasProperty(QTextFormat::ForegroundBrush)) {
                 ++it;
                 continue;
             }
-            // in case there is already a use window font color don't apply the forground brush as this overwrite the foreground color
+            // in case there is already a use window font color don't apply the foreground brush as this overwrite the foreground color
             if (it.key() == QTextFormat::ForegroundBrush && format.hasProperty(KoCharacterStyle::UseWindowFontColor)) {
                 ++it;
                 continue;

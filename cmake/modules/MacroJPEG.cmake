@@ -47,19 +47,19 @@ macro(DETECT_JPEG)
 
         if(_CompileResult)
 
-            # Compile sucessfuly. It's not libjpeg 90. We check previous version.
+            # Compile successfully. It's not libjpeg 90. We check previous version.
 
             CompileToCheckVersion(80 _CompileResult)
 
             if(_CompileResult)
 
-                # Compile sucessfuly. It's not libjpeg 90. We check previous version.
+                # Compile successfully. It's not libjpeg 90. We check previous version.
 
                 CompileToCheckVersion(70 _CompileResult)
 
                 if(_CompileResult)
 
-                    # Compile sucessfuly. It's not libjpeg 70.
+                    # Compile successfully. It's not libjpeg 70.
                     set(JPEG_LIB_VERSION 62)
 
                 else()

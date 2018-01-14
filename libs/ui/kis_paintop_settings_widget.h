@@ -20,9 +20,9 @@
 #define KIS_PAINTOP_SETTINGS_WIDGET_H
 
 #include <kritaui_export.h>
+#include "kis_paintop_option.h"
 #include <brushengine/kis_paintop_config_widget.h>
 
-class KisPaintOpOption;
 class KisPropertiesConfiguration;
 class KisPaintOpConfigWidget;
 class KisPaintopLodLimitations;
@@ -43,6 +43,7 @@ public:
     ~KisPaintOpSettingsWidget() override;
 
     void addPaintOpOption(KisPaintOpOption * option, const QString &label);
+    void addPaintOpOption(KisPaintOpOption * option, const QString &label, KisPaintOpOption::PaintopCategory category);
 
     /// Reimplemented
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;

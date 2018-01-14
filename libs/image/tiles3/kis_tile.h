@@ -156,7 +156,7 @@ private:
     QMutex m_COWMutex;
 
     /**
-     * This lock is used to ensure noone will read the tile data
+     * This lock is used to ensure no one will read the tile data
      * before it has been loaded from to the memory.
      */
     mutable QMutex m_swapBarrierLock;

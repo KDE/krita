@@ -18,4 +18,6 @@
 // Boston, MA 02110-1301, USA.
 
 #define PYKRITA_PYTHON_LIBRARY "${PYTHON_LIBRARY}"
-#define PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR "${PYTHON_SITE_PACKAGES_INSTALL_DIR}"
+
+/// Name of the file where per-plugin configuration is stored
+#define CONFIG_FILE "kritapykritarc"

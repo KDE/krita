@@ -32,6 +32,7 @@
 
 #include <kactioncollection.h>
 
+#include <KisDocument.h>
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
@@ -77,14 +78,36 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_minimalAction = KisActionRegistry::instance()->makeQAction("show_minimal_shade_selector", this);
     connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
 
+
+
 }
 
 void KisColorSelectorContainer::unsetCanvas()
 {
+    m_colorSelector->hasAtLeastOneDocument(doesAtleastOneDocumentExist());
+
     m_colorSelector->unsetCanvas();
     m_myPaintShadeSelector->unsetCanvas();
     m_minimalShadeSelector->unsetCanvas();
     m_canvas = 0;
+}
+
+bool KisColorSelectorContainer::doesAtleastOneDocumentExist()
+{
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document() ) {
+        if (m_canvas->viewManager()->document()->image()->height() == 0) {
+            return false;
+        } else {
+           return true;
+        }
+    } else {
+        return false;
+    }
+}
+
+void KisColorSelectorContainer::slotUpdateIcons()
+{
+    m_colorSelector->updateIcons();
 }
 
 void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
@@ -104,6 +127,10 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
+
+    m_colorSelector->hasAtLeastOneDocument(doesAtleastOneDocumentExist());
+
+
     if (m_canvas && m_canvas->viewManager()) {
         if (m_canvas->viewManager()->nodeManager()) {
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
@@ -114,6 +141,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
         actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
         actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
     }
+
 }
 
 void KisColorSelectorContainer::updateSettings()

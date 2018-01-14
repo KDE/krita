@@ -479,10 +479,10 @@ void readCommon(KisPaintDeviceSP dev,
 
         KisSequentialIterator it(dev, layerRect);
         int col = 0;
-        do {
+        while (it.nextPixel()) {
             pixelFunc(channelSize, channelBytes, col, it.rawData());
             col++;
-        } while(it.nextPixel());
+        }
 
     } else {
         KisHLineIteratorSP it = dev->createHLineIteratorNG(layerRect.left(), layerRect.top(), layerRect.width());

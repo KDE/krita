@@ -155,7 +155,7 @@ void KisDynamicSensorDrawingAngle::setLockedAngleMode(int value)
 
 void KisDynamicSensorDrawingAngle::setAngleOffset(int angle)
 {
-    Q_ASSERT(angle >= 0 && angle < 360);//dont include 360
+    Q_ASSERT(angle >= 0 && angle < 360);//don't include 360
     m_angleOffset = angle;
 }
 

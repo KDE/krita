@@ -79,7 +79,7 @@ class KRITAWIDGETS_EXPORT KoEditColorSetDialog : public KoDialog
 public:
     /**
      * Constructs a KoEditColorSetDialog.
-     * @param palettes all availabe palettes that are going to be edited.
+     * @param palettes all available palettes that are going to be edited.
      * @param activePalette name of the palette which will be activated after this dialog is shown.
      * @param parent the parent widget
      */

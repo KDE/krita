@@ -151,7 +151,7 @@ void mergeHeightmapOntoStroke(KisPaintDeviceSP stroke, KisPaintDeviceSP heightMa
     KisSequentialIterator dstIt(stroke, rc);
     KisSequentialConstIterator mapIt(heightMap, rc);
 
-    do {
+    while (dstIt.nextPixel() && mapIt.nextPixel()) {
         quint8 *dstPtr = dstIt.rawData();
 
         if (*dstPtr > 0) {
@@ -161,7 +161,7 @@ void mergeHeightmapOntoStroke(KisPaintDeviceSP stroke, KisPaintDeviceSP heightMa
             *dstPtr = 0;
         }
 
-    } while (dstIt.nextPixel() && mapIt.nextPixel());
+    }
 }
 
 void parseColorIntoGroups(QVector<FillGroup> &groups,
@@ -176,7 +176,7 @@ void parseColorIntoGroups(QVector<FillGroup> &groups,
 
     KisSequentialIterator dstIt(stroke, strokeRect);
 
-    do {
+    while (dstIt.nextPixel()) {
         quint8 *dstPtr = dstIt.rawData();
 
         if (*dstPtr > 0) {
@@ -193,7 +193,7 @@ void parseColorIntoGroups(QVector<FillGroup> &groups,
             groups << FillGroup(colorIndex);
         }
 
-    } while (dstIt.nextPixel());
+    }
 }
 
 using PointsPriorityQueue = boost::heap::fibonacci_heap<TaskPoint, boost::heap::compare<CompareTaskPoints>>;
@@ -292,7 +292,9 @@ void KisWatershedWorker::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color
         KisSequentialIterator devIt(dev, rc);
         KisSequentialConstIterator lastDevIt(lastDev, rc);
 
-        do {
+        while (devIt.nextPixel() &&
+               lastDevIt.nextPixel()) {
+
             quint8 *devPtr = devIt.rawData();
             const quint8 *lastDevPtr = lastDevIt.rawDataConst();
 
@@ -300,8 +302,7 @@ void KisWatershedWorker::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color
                 *devPtr = 0;
             }
 
-        } while (devIt.nextPixel() &&
-                 lastDevIt.nextPixel());
+        }
     }
 }
 
@@ -385,7 +386,9 @@ void KisWatershedWorker::Private::initializeQueueFromGroupMap(const QRect &rc)
     KisSequentialIterator groupMapIt(groupsMap, rc);
     KisSequentialConstIterator heightMapIt(heightMap, rc);
 
-    do {
+    while (groupMapIt.nextPixel() &&
+           heightMapIt.nextPixel()) {
+
         qint32 *groupPtr = reinterpret_cast<qint32*>(groupMapIt.rawData());
         const quint8 *heightPtr = heightMapIt.rawDataConst();
 
@@ -402,8 +405,7 @@ void KisWatershedWorker::Private::initializeQueueFromGroupMap(const QRect &rc)
             *groupPtr = 0;
         }
 
-    } while (groupMapIt.nextPixel() &&
-             heightMapIt.nextPixel());
+    }
 }
 
 ALWAYS_INLINE void addForeignAlly(qint32 currGroupId,
@@ -728,7 +730,7 @@ void KisWatershedWorker::Private::writeColoring()
     const int colorPixelSize = dstDevice->pixelSize();
 
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const qint32 *srcPtr = reinterpret_cast<const qint32*>(srcIt.rawDataConst());
 
         const int colorIndex = groups[*srcPtr].colorIndex;
@@ -736,7 +738,7 @@ void KisWatershedWorker::Private::writeColoring()
             memcpy(dstIt.rawData(), colors[colorIndex].data(), colorPixelSize);
         }
 
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 }
 
 QVector<TaskPoint> KisWatershedWorker::Private::tryRemoveConflictingPlane(qint32 group, quint8 level)
@@ -921,7 +923,14 @@ void KisWatershedWorker::Private::dumpGroupMaps()
 
 
 
-    do {
+    while (dstGroupIt.nextPixel() &&
+           heightIt.nextPixel() &&
+           srcIt.nextPixel() &&
+           dstColorIt.nextPixel() &&
+           dstPedgeIt.nextPixel() &&
+           dstNedgeIt.nextPixel() &&
+           dstFedgeIt.nextPixel()) {
+
         const qint32 *srcPtr = reinterpret_cast<const qint32*>(srcIt.rawDataConst());
 
         *dstGroupIt.rawData() = quint8(*srcPtr);
@@ -942,14 +951,7 @@ void KisWatershedWorker::Private::dumpGroupMaps()
             *dstNedgeIt.rawData() = 0;
             *dstFedgeIt.rawData() = 0;
         }
-
-    } while (dstGroupIt.nextPixel() &&
-             heightIt.nextPixel() &&
-             srcIt.nextPixel() &&
-             dstColorIt.nextPixel() &&
-             dstPedgeIt.nextPixel() &&
-             dstNedgeIt.nextPixel() &&
-             dstFedgeIt.nextPixel());
+    }
 
 
     KIS_DUMP_DEVICE_2(groupDevice, boundingRect, "01_groupMap", "dd");
@@ -966,13 +968,13 @@ void KisWatershedWorker::Private::calcNumGroupMaps()
 
     QSet<QPair<qint32, quint8>> groups;
 
-    do {
+    while (groupIt.nextPixel() && levelIt.nextPixel()) {
+
         const qint32 group = *reinterpret_cast<const qint32*>(groupIt.rawDataConst());
         const quint8 level = *reinterpret_cast<const quint8*>(levelIt.rawDataConst());
 
         groups.insert(qMakePair(group, level));
-
-    } while (groupIt.nextPixel() && levelIt.nextPixel());
+    }
 
     for (auto it = groups.begin(); it != groups.end(); ++it) {
         dumpGroupInfo(it->first, it->second);

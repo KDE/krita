@@ -46,7 +46,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_keyframe_channel.h"
 
 /**
- *The link between KisProjection ans KisImageUpdater
+ *The link between KisProjection and KisImageUpdater
  *uses queued signals with an argument of KisNodeSP type,
  *so we should register it beforehand
  */

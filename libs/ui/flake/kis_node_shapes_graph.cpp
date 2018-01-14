@@ -66,6 +66,7 @@ void KisNodeShapesGraph::removeNode(KisNodeSP node)
      * so the dummies do not own them. Delete them manually.
      */
     KisNodeShape *tempShape = nodeDummy->nodeShape();
+    ((KoShapeLayer*)tempShape)->setParent(0);
 
     delete nodeDummy;
     delete tempShape;

@@ -76,7 +76,7 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 
     Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisFilterMask::decorateRect",
-               "src must be != dst, because we cant create transactions "
+               "src must be != dst, because we can't create transactions "
                "during merge, as it breaks reentrancy");
 
     if (!filterConfig) {

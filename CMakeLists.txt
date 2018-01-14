@@ -75,14 +75,22 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.0.0-pre-alpha")
-set(KRITA_STABLE_VERSION_MAJOR 4) # 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 0)     # 88 for pre-alpha, 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(KRITA_ALPHA 1) # uncomment only for Alpha
-#set(KRITA_BETA 1) # uncomment only for Beta
+set(KRITA_VERSION_STRING "4.0.0-beta1")
+# Major version: 3 for 3.x, 4 for 4.x, etc.
+set(KRITA_STABLE_VERSION_MAJOR 4)
+# Minor version: 0 for 4.0, 1 for 4.1, etc.
+set(KRITA_STABLE_VERSION_MINOR 0)
+# Bugfix release version, or 0 for before the first stable release
+set(KRITA_VERSION_RELEASE 0)
+# the 4th digit, really only used for the Windows installer:
+# - [Pre-]Alpha: Starts from 0, increment 1 per release
+# - Beta: Starts from 50, increment 1 per release
+# - Stable: Set to 100, bump to 101 if emergency update is needed
+set(KRITA_VERSION_REVISION 50)
+#set(KRITA_ALPHA 1) # uncomment only for Alpha
+set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2017) # update every year
+set(KRITA_YEAR 2018) # update every year
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
     set(KRITA_STABLE 1) # do not edit
@@ -413,15 +421,6 @@ endif(MINGW)
 # enable exceptions globally
 kde_enable_exceptions()
 
-
-# only with this definition will all the FOO_TEST_EXPORT macro do something
-# TODO: check if this can be moved to only those places which make use of it,
-# to reduce global compiler definitions that would trigger a recompile of
-# everything on a change (like adding/removing tests to/from the build)
-if(BUILD_TESTING)
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
 macro(macro_add_unittest_definitions)
   add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
@@ -641,15 +640,8 @@ set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
 add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
-if(WIN32)
-    set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
-                        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-                        LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
-                        ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
-endif()
-
 ##
-## Test endianess
+## Test endianness
 ##
 include (TestBigEndian)
 test_big_endian(CMAKE_WORDS_BIGENDIAN)
@@ -695,6 +687,10 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
+
+if(WIN32)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/ConfigureInstallerNsis.cmake)
+endif()
 
 message("\nBroken tests:")
 foreach(tst ${KRITA_BROKEN_TESTS})

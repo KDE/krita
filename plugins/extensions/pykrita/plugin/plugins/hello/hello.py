@@ -34,8 +34,8 @@ class HelloExtension(Extension):
         """
         This is where most of the setup takes place!
         """
-        qDebug("Hello Setup")
-        action = Krita.instance().createAction("hello_python", "hello")
+        #qDebug("Hello Setup")
+        action = Krita.instance().createAction("hello_python", "hello", False)
         action.triggered.connect(hello)
 
 

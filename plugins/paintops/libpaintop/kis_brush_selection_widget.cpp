@@ -308,7 +308,7 @@ void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, i
     KoGroupButton * button = new KoGroupButton(this);
     button->setGroupPosition(pos);
     button->setText(text);
-    button->setAutoRaise(true);
+    button->setAutoRaise(false);
     button->setCheckable(true);
     uiWdgBrushChooser.brushChooserButtonLayout->addWidget(button);
 

@@ -284,7 +284,7 @@ public:
     }
 
     ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr) {
-        // TODO: either theshold should always be null, or there should be a special
+        // TODO: either threshold should always be null, or there should be a special
         //       case for *pixelPtr == 0, which is different from all the other groups,
         //       whatever the threshold is
 

@@ -195,7 +195,7 @@ struct PaintDevicePolygonOp
         int y = boundRect.top();
         interp.setY(y);
 
-        do {
+        while (dstIt.nextPixel()) {
             int newY = dstIt.y();
 
             if (y != newY) {
@@ -221,7 +221,7 @@ struct PaintDevicePolygonOp
                 srcAcc->sampledOldRawData(dstIt.rawData());
             }
 
-        } while (dstIt.nextPixel());
+        }
 
     }
 

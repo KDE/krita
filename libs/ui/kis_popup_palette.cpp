@@ -19,6 +19,7 @@
 
 */
 
+#include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
@@ -98,6 +99,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_hoveredColor(0)
     , m_selectedColor(0)
     , m_coordinatesConverter(coordinatesConverter)
+    , m_viewManager(viewManager)
     , m_actionManager(viewManager->actionManager())
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
@@ -180,7 +182,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     const int auxButtonSize = 35;
 
     m_settingsButton = new KisRoundHudButton(this);
-    m_settingsButton->setIcon(KisIconUtils::loadIcon("configure"));
+
     m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
 
@@ -189,7 +191,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     KisConfig cfg;
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
-    m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
+
     m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
@@ -210,7 +212,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     mirrorMode = new KisHighlightedToolButton(this);
     mirrorMode->setCheckable(true);
     mirrorMode->setFixedSize(35, 35);
-    mirrorMode->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
+
     mirrorMode->setToolTip(i18n("Mirror Canvas"));
     connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotmirroModeClicked()));
 
@@ -218,14 +220,14 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     canvasOnlyButton = new KisHighlightedToolButton(this);
     canvasOnlyButton->setCheckable(true);
     canvasOnlyButton->setFixedSize(35, 35);
-    canvasOnlyButton->setIcon(KisIconUtils::loadIcon("document-new"));
+
     canvasOnlyButton->setToolTip(i18n("Canvas Only"));
     connect(canvasOnlyButton, SIGNAL(clicked(bool)), this, SLOT(slotCanvasonlyModeClicked()));
 
     zoomToOneHundredPercentButton = new QPushButton(this);
     zoomToOneHundredPercentButton->setText(i18n("100%"));
     zoomToOneHundredPercentButton->setFixedHeight(35);
-    zoomToOneHundredPercentButton->setIcon(KisIconUtils::loadIcon("zoom-original"));
+
     zoomToOneHundredPercentButton->setToolTip(i18n("Zoom to 100%"));
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
 
@@ -242,6 +244,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     connect(zoomCanvasSlider, SIGNAL(valueChanged(int)), this, SLOT(slotZoomSliderChanged(int)));
 
+    slotUpdateIcons();
 
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
@@ -342,6 +345,16 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
         m_brushHud->move(paletteRect.topLeft() + QPoint(m_popupPaletteSize + hudMargin, 0));
         m_lastCenterPoint = p;
     }
+}
+
+void KisPopupPalette::slotUpdateIcons()
+{
+    zoomToOneHundredPercentButton->setIcon(KisIconUtils::loadIcon("zoom-original"));
+    canvasOnlyButton->setIcon(KisIconUtils::loadIcon("document-new"));
+    mirrorMode->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
+    m_settingsButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_brushHud->updateIcons();
+    m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
 
 void KisPopupPalette::showHudWidget(bool visible)
@@ -697,8 +710,9 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
         float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
         m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
-        emit sigUpdateCanvas();
+        m_viewManager->canvasBase()->notifyZoomChanged(); // refreshes the canvas after rotation
 
+        emit sigUpdateCanvas();
     }
 
 
@@ -756,6 +770,8 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
         if (correctedResetCanvasRotationIndicator.contains(point.x(), point.y())) {
             float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it ou
             m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
+            m_viewManager->canvasBase()->notifyZoomChanged(); // refreshes the canvas after rotation
+
             emit sigUpdateCanvas();
         }
     }

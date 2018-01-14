@@ -64,7 +64,6 @@ public:
      */
     static QVariant nodeProperty(KisNodeSP node, const KoID &id, const QVariant &defaultValue);
 
-private:
     void updateIcons();
 
 private:

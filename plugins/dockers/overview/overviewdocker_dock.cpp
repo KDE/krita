@@ -41,6 +41,8 @@ OverviewDockerDock::OverviewDockerDock( )
 
     m_overviewWidget = new OverviewWidget(this);
     m_overviewWidget->setMinimumHeight(50);
+    m_overviewWidget->setBackgroundRole(QPalette::AlternateBase);
+    m_overviewWidget->setAutoFillBackground(true); // paints background role before paint()
 
     m_layout->addWidget(m_overviewWidget, 1);
 

@@ -33,12 +33,13 @@ PluginSettings::PluginSettings(QWidget *parent)
 {
     setupUi(this);
     fileRequester->setFileName(gmicQtPath());
+    fileRequester->setConfiguratioName("gmic_qt");
     fileRequester->setStartDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 }
 
 PluginSettings::~PluginSettings()
 {
-//    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
+    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
 }
 
 QString PluginSettings::id()
@@ -68,6 +69,11 @@ QString PluginSettings::gmicQtPath()
 #ifdef Q_OS_WIN
     gmicqt += ".exe";
 #endif
+
+    QString gmic_qt_path = KisConfig().readEntry<QString>("gmic_qt_plugin_path", "");
+    if (!gmic_qt_path.isEmpty() && QFileInfo(gmic_qt_path).exists()) {
+        return gmic_qt_path;
+    }
 
     QFileInfo fi(qApp->applicationDirPath() + "/" + gmicqt);
 
@@ -104,10 +110,6 @@ void PluginSettings::savePreferences() const
 
 void PluginSettings::loadPreferences()
 {
-    QString gmicqt("gmic_host_krita");
-#ifdef Q_OS_WIN
-    gmicqt += ".exe";
-#endif
     fileRequester->setFileName(gmicQtPath());
 }
 

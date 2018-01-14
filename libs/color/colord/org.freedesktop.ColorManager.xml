@@ -6,7 +6,7 @@
     <doc:doc>
       <doc:description>
         <doc:para>
-          The interface used for quering color parameters for the system.
+          The interface used for querying color parameters for the system.
         </doc:para>
       </doc:description>
     </doc:doc>
@@ -513,7 +513,7 @@
         <doc:description>
           <doc:para>
             Creates a profile without using a file descriptor.
-            It is recomended you use CreateProfileWithFd() as the
+            It is recommended you use CreateProfileWithFd() as the
             daemon may not be running as root and have read access
             to profiles in the users home directory.
           </doc:para>

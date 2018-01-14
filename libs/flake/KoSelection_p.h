@@ -38,12 +38,6 @@ public:
 
     KisSignalCompressor selectionChangedCompressor;
 
-
-    QList<QTransform> savedMatrices;
-
-    QList<QTransform> fetchShapesMatrices() const;
-    bool checkMatricesConsistent(const QList<QTransform> &matrices, QTransform *newTransform);
-
     Q_DECLARE_PUBLIC(KoSelection)
 };
 

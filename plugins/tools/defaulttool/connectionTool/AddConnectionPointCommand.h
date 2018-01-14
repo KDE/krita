@@ -29,7 +29,7 @@ class KoShape;
 class AddConnectionPointCommand : public KUndo2Command
 {
 public:
-    /// Creates new comand to add connection point to shape
+    /// Creates new command to add connection point to shape
     AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, KUndo2Command *parent = 0);
     ~AddConnectionPointCommand() override;
     /// reimplemented from KUndo2Command

@@ -183,7 +183,7 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
 
     //debugVectorImage << "stream position at the end: " << stream.device()->pos();
 #if 0
-    // Read away those bytes that preceed the header.  These are undefined
+    // Read away those bytes that precede the header.  These are undefined
     // according to the spec.  80 is the size of the record above.
     qint32 dummy;
     int    padding = 0;

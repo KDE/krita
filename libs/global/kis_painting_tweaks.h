@@ -75,8 +75,8 @@ namespace KisPaintingTweaks {
         PenBrushSaver(QPainter *painter, const QPair<QPen, QBrush> &pair);
 
         /**
-         * A special contructor of PenBrushSaver that allows \p painter to be null. Passing null
-         * pointer will basically mean that the whole saver existance will be a noop.
+         * A special constructor of PenBrushSaver that allows \p painter to be null. Passing null
+         * pointer will basically mean that the whole saver existence will be a noop.
          */
         PenBrushSaver(QPainter *painter, const QPair<QPen, QBrush> &pair, allow_noop_t);
 

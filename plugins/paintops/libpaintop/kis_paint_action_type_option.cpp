@@ -22,6 +22,7 @@
 #include <QRadioButton>
 
 #include "ui_wdgincremental.h"
+#include <KisPaintopSettingsIds.h>
 
 class KisPaintActionWidget: public QWidget, public Ui::WdgIncremental
 {
@@ -73,8 +74,44 @@ void KisPaintActionTypeOption::writeOptionSetting(KisPropertiesConfigurationSP s
 
 void KisPaintActionTypeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    enumPaintActionType type = (enumPaintActionType)setting->getInt("PaintOpAction", WASH);
-    m_optionWidget->radioBuildup->setChecked(type == BUILDUP);
-    m_optionWidget->radioWash->setChecked(type == WASH);
+    const bool isMaskingBrushEnabled = setting->getBool(KisPaintOpUtils::MaskingBrushEnabledTag);
+
+    if (!isMaskingBrushEnabled) {
+        enumPaintActionType type = (enumPaintActionType)setting->getInt("PaintOpAction", WASH);
+        m_optionWidget->radioBuildup->setChecked(type == BUILDUP);
+        m_optionWidget->radioWash->setChecked(type == WASH);
+    } else {
+        m_optionWidget->radioWash->setChecked(true);
+    }
+
+    updateControlsAvailability(!isMaskingBrushEnabled);
+}
+
+void KisPaintActionTypeOption::slotForceWashMode(bool value)
+{
+    if (value) {
+        m_optionWidget->radioWash->setChecked(true);
+    }
+
+    // TODO: We do not restore the state of the painting
+    //       mode before masking was activated! Hope no one
+    //       will notice it, since BuildUp mode is not used
+    //       too often :)
+
+    updateControlsAvailability(!value);
+}
+
+void KisPaintActionTypeOption::updateControlsAvailability(bool value)
+{
+    m_optionWidget->radioBuildup->setEnabled(value);
+    m_optionWidget->radioWash->setEnabled(value);
+    m_optionWidget->label->setEnabled(value);
+
+    const QString &toolTipText =
+        i18nc("@info:tooltip", "Only wash mode is possible when using a masked brush.");
+
+    m_optionWidget->radioBuildup->setToolTip(toolTipText);
+    m_optionWidget->radioWash->setToolTip(toolTipText);
+    m_optionWidget->label->setToolTip(toolTipText);
 }
 

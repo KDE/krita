@@ -40,16 +40,19 @@
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
 #include <KoShapeOdfSaveHelper.h>
+#include <KoPathShape.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
+#include <commands/KoShapeTransformCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
 #include <commands/KoShapeCreateCommand.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <commands/KoShapeDistributeCommand.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
@@ -89,6 +92,22 @@
 namespace {
 static const QString EditFillGradientFactoryId = "edit_fill_gradient";
 static const QString EditStrokeGradientFactoryId = "edit_stroke_gradient";
+
+enum TransformActionType {
+    TransformRotate90CW,
+    TransformRotate90CCW,
+    TransformRotate180,
+    TransformMirrorX,
+    TransformMirrorY,
+    TransformReset
+};
+
+enum BooleanOp {
+    BooleanUnion,
+    BooleanIntersection,
+    BooleanSubtraction
+};
+
 }
 
 QPolygonF selectionPolygon(KoSelection *selection)
@@ -418,6 +437,27 @@ void DefaultTool::setupActions()
     QAction *actionUngroupBottom = actionRegistry->makeQAction("object_ungroup", this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
+
+    QSignalMapper *transformSignalsMapper = new QSignalMapper(this);
+    connect(transformSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionTransform(int)));
+
+    addMappedAction(transformSignalsMapper, "object_transform_rotate_90_cw", TransformRotate90CW);
+    addMappedAction(transformSignalsMapper, "object_transform_rotate_90_ccw", TransformRotate90CCW);
+    addMappedAction(transformSignalsMapper, "object_transform_rotate_180", TransformRotate180);
+    addMappedAction(transformSignalsMapper, "object_transform_mirror_horizontally", TransformMirrorX);
+    addMappedAction(transformSignalsMapper, "object_transform_mirror_vertically", TransformMirrorY);
+    addMappedAction(transformSignalsMapper, "object_transform_reset", TransformReset);
+
+    QSignalMapper *booleanSignalsMapper = new QSignalMapper(this);
+    connect(booleanSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionBooleanOp(int)));
+
+    addMappedAction(booleanSignalsMapper, "object_unite", BooleanUnion);
+    addMappedAction(booleanSignalsMapper, "object_intersect", BooleanIntersection);
+    addMappedAction(booleanSignalsMapper, "object_subtract", BooleanSubtraction);
+
+    QAction *actionSplit = actionRegistry->makeQAction("object_split", this);
+    addAction("object_split", actionSplit);
+    connect(actionSplit, SIGNAL(triggered()), this, SLOT(selectionSplitShapes()));
 
     m_contextMenu.reset(new QMenu());
 }
@@ -997,8 +1037,10 @@ void DefaultTool::selectionGroup()
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
-    canvas()->shapeController()->addShapeDirect(group, cmd);
+    new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
+    canvas()->shapeController()->addShapeDirect(group, 0, cmd);
     new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
+    new KoKeepShapesSelectedCommand({}, {group}, selection, true, cmd);
     canvas()->addCommand(cmd);
 
     // update selection so we can ungroup immediately again
@@ -1015,12 +1057,17 @@ void DefaultTool::selectionUngroup()
     std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
     KUndo2Command *cmd = 0;
+    QList<KoShape*> newShapes;
 
     // add a ungroup command for each found shape container to the macro command
     Q_FOREACH (KoShape *shape, selectedShapes) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
         if (group) {
-            cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));
+            if (!cmd) {
+                cmd = new KUndo2Command(kundo2_i18n("Ungroup shapes"));
+                new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
+            }
+            newShapes << group->shapes();
             new KoShapeUngroupCommand(group, group->shapes(),
                                       group->parent() ? QList<KoShape *>() : canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
@@ -1028,8 +1075,205 @@ void DefaultTool::selectionUngroup()
         }
     }
     if (cmd) {
+        new KoKeepShapesSelectedCommand({}, newShapes, selection, true, cmd);
         canvas()->addCommand(cmd);
     }
+}
+
+void DefaultTool::selectionTransform(int transformAction)
+{
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
+        return;
+    }
+
+    QTransform applyTransform;
+    bool shouldReset = false;
+    KUndo2MagicString actionName = kundo2_noi18n("BUG: No transform action");
+
+
+    switch (TransformActionType(transformAction)) {
+    case TransformRotate90CW:
+        applyTransform.rotate(90.0);
+        actionName = kundo2_i18n("Rotate Object 90° CW");
+        break;
+    case TransformRotate90CCW:
+        applyTransform.rotate(-90.0);
+        actionName = kundo2_i18n("Rotate Object 90° CCW");
+        break;
+    case TransformRotate180:
+        applyTransform.rotate(180.0);
+        actionName = kundo2_i18n("Rotate Object 180°");
+        break;
+    case TransformMirrorX:
+        applyTransform.scale(-1.0, 1.0);
+        actionName = kundo2_i18n("Mirror Object Horizontally");
+        break;
+    case TransformMirrorY:
+        applyTransform.scale(1.0, -1.0);
+        actionName = kundo2_i18n("Mirror Object Vertically");
+        break;
+    case TransformReset:
+        shouldReset = true;
+        actionName = kundo2_i18n("Reset Object Transformations");
+        break;
+    }
+
+    if (!shouldReset && applyTransform.isIdentity()) return;
+
+    QList<QTransform> oldTransforms;
+    QList<QTransform> newTransforms;
+
+    const QRectF outlineRect = KoShape::absoluteOutlineRect(editableShapes);
+    const QPointF centerPoint = outlineRect.center();
+    const QTransform centerTrans = QTransform::fromTranslate(centerPoint.x(), centerPoint.y());
+    const QTransform centerTransInv = QTransform::fromTranslate(-centerPoint.x(), -centerPoint.y());
+
+    // we also add selection to the list of trasformed shapes, so that its outline is updated correctly
+    QList<KoShape*> transformedShapes = editableShapes;
+    transformedShapes << selection;
+
+    Q_FOREACH (KoShape *shape, transformedShapes) {
+        oldTransforms.append(shape->transformation());
+
+        QTransform t;
+
+        if (!shouldReset) {
+            const QTransform world = shape->absoluteTransformation(0);
+            t =  world * centerTransInv * applyTransform * centerTrans * world.inverted() * shape->transformation();
+        } else {
+            const QPointF center = shape->outlineRect().center();
+            const QPointF offset = shape->transformation().map(center) - center;
+            t = QTransform::fromTranslate(offset.x(), offset.y());
+        }
+
+        newTransforms.append(t);
+    }
+
+    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(transformedShapes, oldTransforms, newTransforms);
+    cmd->setText(actionName);
+    canvas()->addCommand(cmd);
+}
+
+void DefaultTool::selectionBooleanOp(int booleanOp)
+{
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
+        return;
+    }
+
+    QVector<QPainterPath> srcOutlines;
+    QPainterPath dstOutline;
+    KUndo2MagicString actionName = kundo2_noi18n("BUG: boolean action name");
+
+    // TODO: implement a reference shape selection dialog!
+    const int referenceShapeIndex = 0;
+    KoShape *referenceShape = editableShapes[referenceShapeIndex];
+
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        srcOutlines << shape->absoluteTransformation(0).map(shape->outline());
+    }
+
+    if (booleanOp == BooleanUnion) {
+        Q_FOREACH (const QPainterPath &path, srcOutlines) {
+            dstOutline |= path;
+        }
+        actionName = kundo2_i18n("Unite Shapes");
+    } else if (booleanOp == BooleanIntersection) {
+        for (int i = 0; i < srcOutlines.size(); i++) {
+            if (i == 0) {
+                dstOutline = srcOutlines[i];
+            } else {
+                dstOutline &= srcOutlines[i];
+            }
+        }
+
+        // there is a bug in Qt, sometimes it leaves the resulting
+        // outline open, so just close it explicitly.
+        dstOutline.closeSubpath();
+
+        actionName = kundo2_i18n("Intersect Shapes");
+
+    } else if (booleanOp == BooleanSubtraction) {
+        for (int i = 0; i < srcOutlines.size(); i++) {
+            dstOutline = srcOutlines[referenceShapeIndex];
+            if (i != referenceShapeIndex) {
+                dstOutline -= srcOutlines[i];
+            }
+        }
+
+        actionName = kundo2_i18n("Subtract Shapes");
+    }
+
+    KoShape *newShape = 0;
+
+    if (!dstOutline.isEmpty()) {
+        newShape = KoPathShape::createShapeFromPainterPath(dstOutline);
+    }
+
+    KUndo2Command *cmd = new KUndo2Command(actionName);
+
+    new KoKeepShapesSelectedCommand(editableShapes, {}, selection, false, cmd);
+
+    QList<KoShape*> newSelectedShapes;
+
+    if (newShape) {
+        newShape->setBackground(referenceShape->background());
+        newShape->setStroke(referenceShape->stroke());
+        newShape->setZIndex(referenceShape->zIndex());
+
+        KoShapeContainer *parent = referenceShape->parent();
+        canvas()->shapeController()->addShapeDirect(newShape, parent, cmd);
+
+        newSelectedShapes << newShape;
+    }
+
+    canvas()->shapeController()->removeShapes(editableShapes, cmd);
+
+    new KoKeepShapesSelectedCommand({}, newSelectedShapes, selection, true, cmd);
+
+    canvas()->addCommand(cmd);
+}
+
+void DefaultTool::selectionSplitShapes()
+{
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
+        return;
+    }
+
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Split Shapes"));
+
+    new KoKeepShapesSelectedCommand(editableShapes, {}, selection, false, cmd);
+    QList<KoShape*> newShapes;
+
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        if (!pathShape) return;
+
+        QList<KoPathShape*> splitShapes;
+        if (pathShape->separate(splitShapes)) {
+            QList<KoShape*> normalShapes = implicitCastList<KoShape*>(splitShapes);
+
+            KoShapeContainer *parent = shape->parent();
+            canvas()->shapeController()->addShapesDirect(normalShapes, parent, cmd);
+            canvas()->shapeController()->removeShape(shape, cmd);
+            newShapes << normalShapes;
+        }
+    }
+
+    new KoKeepShapesSelectedCommand({}, newShapes, selection, true, cmd);
+
+    canvas()->addCommand(cmd);
 }
 
 void DefaultTool::selectionAlign(int _align)
@@ -1228,7 +1472,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
                 return new ShapeShearStrategy(this, event->point, handle);
             }
 
-            // rotating is allowed for rigth mouse button too
+            // rotating is allowed for right mouse button too
             if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
                     handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle) {
 
@@ -1282,15 +1526,24 @@ void DefaultTool::updateActions()
         editableShapes = koSelection()->selectedEditableShapes();
     }
 
-    const bool orderingEnabled = !editableShapes.isEmpty();
+    const bool hasEditableShapes = !editableShapes.isEmpty();
 
-    action("object_order_front")->setEnabled(orderingEnabled);
-    action("object_order_raise")->setEnabled(orderingEnabled);
-    action("object_order_lower")->setEnabled(orderingEnabled);
-    action("object_order_back")->setEnabled(orderingEnabled);
+    action("object_order_front")->setEnabled(hasEditableShapes);
+    action("object_order_raise")->setEnabled(hasEditableShapes);
+    action("object_order_lower")->setEnabled(hasEditableShapes);
+    action("object_order_back")->setEnabled(hasEditableShapes);
+
+    action("object_transform_rotate_90_cw")->setEnabled(hasEditableShapes);
+    action("object_transform_rotate_90_ccw")->setEnabled(hasEditableShapes);
+    action("object_transform_rotate_180")->setEnabled(hasEditableShapes);
+    action("object_transform_mirror_horizontally")->setEnabled(hasEditableShapes);
+    action("object_transform_mirror_vertically")->setEnabled(hasEditableShapes);
+    action("object_transform_reset")->setEnabled(hasEditableShapes);
+
+    const bool multipleSelected = editableShapes.size() > 1;
 
     const bool alignmentEnabled =
-       editableShapes.size() > 1 ||
+       multipleSelected ||
        (!editableShapes.isEmpty() &&
         canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
 
@@ -1301,7 +1554,23 @@ void DefaultTool::updateActions()
     action("object_align_vertical_center")->setEnabled(alignmentEnabled);
     action("object_align_vertical_bottom")->setEnabled(alignmentEnabled);
 
-    action("object_group")->setEnabled(editableShapes.size() > 1);
+
+    action("object_group")->setEnabled(multipleSelected);
+
+    action("object_unite")->setEnabled(multipleSelected);
+    action("object_intersect")->setEnabled(multipleSelected);
+    action("object_subtract")->setEnabled(multipleSelected);
+
+    bool hasShapesWithMultipleSegments = false;
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape && pathShape->subpathCount() > 1) {
+            hasShapesWithMultipleSegments = true;
+            break;
+        }
+    }
+    action("object_split")->setEnabled(hasShapesWithMultipleSegments);
+
 
     const bool distributionEnabled = editableShapes.size() > 2;
 
@@ -1355,6 +1624,30 @@ QMenu* DefaultTool::popupActionsMenu()
             m_contextMenu->addSeparator();
             m_contextMenu->addAction(action("object_group"));
             m_contextMenu->addAction(action("object_ungroup"));
+        }
+
+        m_contextMenu->addSeparator();
+
+        QMenu *transform = m_contextMenu->addMenu(i18n("Transform"));
+        transform->addAction(action("object_transform_rotate_90_cw"));
+        transform->addAction(action("object_transform_rotate_90_ccw"));
+        transform->addAction(action("object_transform_rotate_180"));
+        transform->addSeparator();
+        transform->addAction(action("object_transform_mirror_horizontally"));
+        transform->addAction(action("object_transform_mirror_vertically"));
+        transform->addSeparator();
+        transform->addAction(action("object_transform_reset"));
+
+        if (action("object_unite")->isEnabled() ||
+            action("object_intersect")->isEnabled() ||
+            action("object_subtract")->isEnabled() ||
+            action("object_split")->isEnabled()) {
+
+            QMenu *transform = m_contextMenu->addMenu(i18n("Logical Operations"));
+            transform->addAction(action("object_unite"));
+            transform->addAction(action("object_intersect"));
+            transform->addAction(action("object_subtract"));
+            transform->addAction(action("object_split"));
         }
     }
 

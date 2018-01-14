@@ -100,6 +100,8 @@ public:
     KisDefaultBoundsBaseSP defaultBounds;
     QScopedPointer<KisPaintDeviceStrategy> basicStrategy;
     QScopedPointer<KisPaintDeviceWrappedStrategy> wrappedStrategy;
+    QMutex m_wrappedStrategyMutex;
+
     QScopedPointer<KisPaintDeviceFramesInterface> framesInterface;
     bool isProjectionDevice;
 
@@ -592,9 +594,16 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
         return basicStrategy.data();
     }
 
-    QRect wrapRect = defaultBounds->bounds();
+    const QRect wrapRect = defaultBounds->bounds();
+
     if (!wrappedStrategy || wrappedStrategy->wrapRect() != wrapRect) {
-        wrappedStrategy.reset(new KisPaintDeviceWrappedStrategy(wrapRect, q, this));
+        QMutexLocker locker(&m_wrappedStrategyMutex);
+
+        if (!wrappedStrategy) {
+            wrappedStrategy.reset(new KisPaintDeviceWrappedStrategy(wrapRect, q, this));
+        }  else if (wrappedStrategy->wrapRect() != wrapRect) {
+            wrappedStrategy->setWrapRect(wrapRect);
+        }
     }
 
     return wrappedStrategy.data();
@@ -733,7 +742,7 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
     while (rowsRemaining > 0) {
 
         int colsRemaining = srcRect.width();
-        while (colsRemaining > 0) {
+        while (colsRemaining > 0 && srcIntIt.nextPixel()) {
 
             memcpy(blendDataPtr, srcIntIt.rawDataConst(), pixelSize);
             blendDataPtr += pixelSize;
@@ -744,7 +753,6 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
                 columnsAccumulated = 0;
             }
 
-            srcIntIt.nextPixel();
             colsRemaining--;
         }
 
@@ -754,11 +762,13 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
 
             // blend and write the final data
             blendDataPtr = blendData.data();
-            for (int i = 0; i < dstRect.width(); i++) {
-                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
 
+            int colsRemaining = dstRect.width();
+            while (colsRemaining > 0 && dstIntIt.nextPixel()) {
+                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
                 blendDataPtr += srcCellStride;
-                dstIntIt.nextPixel();
+
+                colsRemaining--;
             }
 
             // reset counters
@@ -1433,7 +1443,7 @@ void KisPaintDevice::clear(const QRect & rc)
 
 void KisPaintDevice::fill(const QRect & rc, const KoColor &color)
 {
-    Q_ASSERT(*color.colorSpace() == *colorSpace());
+    KIS_ASSERT_RECOVER_RETURN(*color.colorSpace() == *colorSpace());
     m_d->currentStrategy()->fill(rc, color.data());
 }
 

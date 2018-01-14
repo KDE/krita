@@ -1,6 +1,6 @@
 """
 Exception hook
-If some unexpected error occures it can be shown in a nice looking dialog.
+If some unexpected error occurs it can be shown in a nice looking dialog.
 Especially useful is the traceback view.
 
 Things to extend: Clicking on the filename should open an editor.

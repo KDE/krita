@@ -161,9 +161,14 @@ public:
             InternalSequentialConstIterator srcIt(DirectDataAccessPolicy(m_dataManager.data(), cacheInvalidator()), rc);
             InternalSequentialIterator dstIt(DirectDataAccessPolicy(dstDataManager.data(), cacheInvalidator()), rc);
 
-            int nConseqPixels = 0;
+            int nConseqPixels = srcIt.nConseqPixels();
 
-            do {
+            // since we are accessing data managers directly, the columns are always aligned
+            KIS_SAFE_ASSERT_RECOVER_NOOP(srcIt.nConseqPixels() == dstIt.nConseqPixels());
+
+            while(srcIt.nextPixels(nConseqPixels) &&
+                  dstIt.nextPixels(nConseqPixels)) {
+
                 nConseqPixels = srcIt.nConseqPixels();
 
                 const quint8 *srcData = srcIt.rawDataConst();
@@ -173,10 +178,7 @@ public:
                                               dstColorSpace,
                                               nConseqPixels,
                                               renderingIntent, conversionFlags);
-
-
-            } while(srcIt.nextPixels(nConseqPixels) &&
-                    dstIt.nextPixels(nConseqPixels));
+            }
         }
 
         // becomes owned by the parent

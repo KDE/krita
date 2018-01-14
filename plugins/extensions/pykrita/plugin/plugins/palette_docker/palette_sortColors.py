@@ -4,7 +4,7 @@ By Wolthera.
 '''
 
 
-# Importing the relevant dependancies:
+# Importing the relevant dependencies:
 import sys
 import math
 from krita import *

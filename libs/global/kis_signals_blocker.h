@@ -28,7 +28,7 @@
  * because:
  *
  * 1) They are not safe. One beautifully sunny day someone (it might
- *    easily be you youself) will forget about these call and will put
+ *    easily be you yourself) will forget about these call and will put
  *    a 'return' statement somewhere among the lines. Surely this is
  *    not what you expect to happen.
  *

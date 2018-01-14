@@ -98,7 +98,7 @@ void KisTiffTest::testRoundTripRGBF16()
     KisDocument *doc1 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     KisImportExportManager manager(doc1);
-    manager.setBatchMode(false);
+    doc1->setFileBatchMode(false);
 
     KisImportExportFilter::ConversionStatus status;
 

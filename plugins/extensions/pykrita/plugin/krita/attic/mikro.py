@@ -185,7 +185,7 @@ def is_scripter_child(qobj):
 class Error(Exception):
 
     """
-    Base error classed. Catch this to handle exceptions comming from C++
+    Base error classed. Catch this to handle exceptions coming from C++
     """
 
 

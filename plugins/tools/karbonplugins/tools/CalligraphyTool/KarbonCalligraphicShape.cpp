@@ -260,7 +260,7 @@ bool KarbonCalligraphicShape::flipDetected(const QPointF &p1, const QPointF &p2)
 
 int KarbonCalligraphicShape::ccw(const QPointF &p1, const QPointF &p2,const QPointF &p3)
 {
-    // calculate two times the area of the triangle fomed by the points given
+    // calculate two times the area of the triangle formed by the points given
     qreal area2 = (p2.x() - p1.x()) * (p3.y() - p1.y()) -
                   (p2.y() - p1.y()) * (p3.x() - p1.x());
     if (area2 > 0) {

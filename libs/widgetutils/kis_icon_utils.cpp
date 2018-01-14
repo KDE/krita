@@ -130,8 +130,11 @@ QIcon loadIcon(const QString &name)
     return icon;
 }
 
+
+
+
 bool useDarkIcons() {
-     QColor background = qApp->palette().background().color();
+    QColor background = qApp->palette().background().color();
     return  background.value() > 100;
 }
 
@@ -181,6 +184,12 @@ void updateIconCommon(QObject *object)
     if (action) {
         updateIcon(action);
     }
+}
+
+void clearIconCache() {
+    #if defined CACHE_ICONS
+        s_cache.clear();
+    #endif
 }
 
 void updateIcon(QAbstractButton *button)

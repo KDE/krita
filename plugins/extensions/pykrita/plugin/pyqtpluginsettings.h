@@ -18,7 +18,6 @@
 #define PYQTPLUGINSETTINGS_H
 
 #include "kis_preference_set_registry.h"
-#include "engine.h"
 
 namespace Ui
 {
@@ -26,13 +25,14 @@ class ManagerPage;
 }
 
 class QIcon;
+class PythonPluginManager;
 
 class PyQtPluginSettings : public KisPreferenceSet
 {
     Q_OBJECT
 public:
 
-    PyQtPluginSettings(PyKrita::Engine *engine, QWidget *parent = 0);
+    PyQtPluginSettings(PythonPluginManager *pluginManager, QWidget *parent = 0);
     ~PyQtPluginSettings();
 
     virtual QString id();
@@ -71,12 +71,12 @@ class PyQtPluginSettingsFactory : public KisAbstractPreferenceSetFactory
 {
 public:
 
-    PyQtPluginSettingsFactory(PyKrita::Engine *engine) {
-        m_engine = engine;
+    PyQtPluginSettingsFactory(PythonPluginManager *engine) {
+        m_pluginManager = engine;
     }
 
     KisPreferenceSet* createPreferenceSet() {
-        PyQtPluginSettings* ps = new PyQtPluginSettings(m_engine);
+        PyQtPluginSettings* ps = new PyQtPluginSettings(m_pluginManager);
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
@@ -84,7 +84,7 @@ public:
         return "PyQtSettings";
     }
     PyQtPluginSettingsUpdateRepeater repeater;
-    PyKrita::Engine *m_engine;
+    PythonPluginManager *m_pluginManager;
 };
 
 

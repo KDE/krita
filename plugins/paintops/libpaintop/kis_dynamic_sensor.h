@@ -121,7 +121,7 @@ public:
     virtual void reset();
 
     /**
-     * @param selector is a \ref QWidget that countains a signal called "parametersChanged()"
+     * @param selector is a \ref QWidget that contains a signal called "parametersChanged()"
      */
     virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
 

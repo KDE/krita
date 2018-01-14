@@ -344,8 +344,8 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     m_textShapeData->document()->setUndoRedoEnabled(false);
     loadOdfAttributes(element, context, OdfAllAttributes);
 
-    // this cannot be done in loadStyle as that fill the style stack wrongly and therefor it results
-    // in wrong data to be loaded.
+    // this cannot be done in loadStyle as that fills the style stack incorrectly and therefore
+    // it results in wrong data being loaded.
     m_textShapeData->loadStyle(element, context);
 
 #ifndef NWORKAROUND_ODF_BUGS

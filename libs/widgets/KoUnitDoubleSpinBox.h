@@ -37,7 +37,7 @@ class KoUnit;
  * getting a value will not change the value due to conversions.
  * The KoDocument class has a unit() method for consistent (document wide) configuration of the
  * used unit.
- * It is adviced to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
+ * It is advised to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
  * This will generate code that uses this spinbox in the correct manner.
  *
  * This class need to be replaced as much as possible with \see KisDoubleParseUnitSpinBox to add math parsing ability.
@@ -95,7 +95,7 @@ public:
      */
     QString textFromValue( double value ) const override;
     /**
-     * Transfrom a string into a double, while taking care of locale specific symbols.
+     * Transform a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @return the value as double
      */

@@ -62,6 +62,10 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
     connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(canvasResourceChanged(int,QVariant)));
+
+
+    connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()));
+
 }
 
 void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
@@ -75,4 +79,6 @@ void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
         m_presetChooser->updateViewSettings();
     }
 }
+
+
 

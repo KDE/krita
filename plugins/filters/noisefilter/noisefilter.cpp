@@ -134,7 +134,7 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    do {
+    while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted())) {
         if (randt.doubleRandomAt(it.x(), it.y()) > threshold) {
             // XXX: Added static_cast to get rid of warnings
             QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
@@ -145,7 +145,7 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
             mixOp->mixColors(pixels, weights, 2, it.rawData());
         }
         if (progressUpdater) progressUpdater->setValue(++count);
-    } while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
+    }
 
     delete [] interm;
 }

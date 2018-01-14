@@ -293,7 +293,7 @@ KoUnit::Type KisGuidesManager::unitType() const
 void KisGuidesManager::setUnitType(const KoUnit::Type type)
 {
     m_d->guidesConfig.setUnitType(type);
-    setGuidesConfigImpl(m_d->guidesConfig);
+    setGuidesConfigImpl(m_d->guidesConfig, false);
 }
 
 void KisGuidesManager::setup(KisActionManager *actionManager)

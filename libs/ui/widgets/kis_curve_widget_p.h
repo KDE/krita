@@ -81,10 +81,10 @@ public:
 
 
 
-    /*** Internal routins ***/
+    /*** Internal routines ***/
 
     /**
-     * Common update routins
+     * Common update routines
      */
     void setCurveModified();
     void setCurveRepaint();
@@ -104,7 +104,7 @@ public:
      * with any of existing ones from @m_points and adjusts its coordinates.
      * @skipIndex is the index of the point, that shouldn't be taken
      * into account during the search
-     * (e.g. beacuse it's @pt itself)
+     * (e.g. because it's @pt itself)
      *
      * Returns false in case the point can't be placed anywhere
      * without overlapping

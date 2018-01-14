@@ -922,6 +922,7 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
                                             m_d->view->resourceProvider(), m_d->canvasWidget->widget());
     connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotZoomChanged(int)));
     connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
+    connect(m_d->view->mainWindow(), SIGNAL(themeChanged()), m_d->popupPalette, SLOT(slotUpdateIcons()));
 
     m_d->popupPalette->showPopupPalette(false);
 }

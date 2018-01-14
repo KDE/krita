@@ -442,7 +442,7 @@ void KoDocumentInfo::updateParameters()
         }
     }
 
-    //alllow author info set programatically to override info from author profile
+    //allow author info set programmatically to override info from author profile
     Q_FOREACH (const QString &tag, m_authorTags) {
         if (m_authorInfoOverride.contains(tag)) {
             setActiveAuthorInfo(tag, m_authorInfoOverride.value(tag));

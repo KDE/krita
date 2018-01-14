@@ -593,6 +593,8 @@ for /f "delims=" %%F in ('dir /b "%DEPS_INSTALL_DIR%\translations\qt_*.qm"') do 
 endlocal
 :: Krita plugins
 xcopy /Y %KRITA_INSTALL_DIR%\lib\kritaplugins\*.dll %pkg_root%\lib\kritaplugins\
+xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
+xcopy /Y /S /I %KRITA_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 
 :: Share
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\color %pkg_root%\share\color
@@ -676,6 +678,11 @@ endlocal
 setlocal enableextensions enabledelayedexpansion
 :: Find all Python native modules
 for /r "%pkg_root%\share\krita\pykrita\" %%F in (*.pyd) do (
+	set relpath=%%F
+	set relpath=!relpath:~%pkg_root_len_plus_one%!
+	call :split-debug "%%F" !relpath!
+)
+for /r "%pkg_root%\lib\krita-python-libs\" %%F in (*.pyd) do (
 	set relpath=%%F
 	set relpath=!relpath:~%pkg_root_len_plus_one%!
 	call :split-debug "%%F" !relpath!

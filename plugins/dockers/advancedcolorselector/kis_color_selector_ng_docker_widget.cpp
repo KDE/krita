@@ -132,6 +132,8 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 
         actionCollection->addAction("show_color_history", m_colorHistoryAction);
         actionCollection->addAction("show_common_colors", m_commonColorsAction);
+
+        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()));
     }
 
     reactOnLayerChange();

@@ -593,6 +593,7 @@ for /f "delims=" %%F in ('dir /b "%DEPS_INSTALL_DIR%\translations\qt_*.qm"') do 
 endlocal
 :: Krita plugins
 xcopy /Y %KRITA_INSTALL_DIR%\lib\kritaplugins\*.dll %pkg_root%\lib\kritaplugins\
+xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 
 :: Share

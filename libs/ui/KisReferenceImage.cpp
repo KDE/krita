@@ -56,9 +56,9 @@ void KisReferenceImage::setGrayscale(bool grayscale)
 
 void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
-    applyConversion(gc, converter);
-
     gc.save();
+
+    applyConversion(gc, converter);
 
     QSizeF shapeSize = size();
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());

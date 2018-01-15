@@ -1194,7 +1194,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     }
     KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
-    cfg.writeEntry("ko_windowstate", saveState().toBase64());
+    cfg.writeEntry("State", saveState().toBase64());
 
     {
         KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -2451,7 +2451,7 @@ void KisMainWindow::initializeGeometry()
         move(x,y);
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
-    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("State", QByteArray())));
 
     d->fullScreenMode->setChecked(isFullScreen());
 }

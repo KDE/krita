@@ -6,7 +6,7 @@ if (WIN32)
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
         -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools
         -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-ssl
-        -no-openssl -no-libproxy -no-system-proxies -no-icu -no-mtdev
+        -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard
@@ -59,12 +59,13 @@ elseif (NOT APPLE)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/official_releases/qt/5.6/5.6.1-1/single/qt-everywhere-opensource-src-5.6.1-1.tar.gz
-      URL_MD5 8fdec6d657bc370bd3183d8fe8e9c47a
-      PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-no-motion-compression.diff
+      URL https://download.qt.io/official_releases/qt/5.10/5.10.0/single/qt-everywhere-src-5.10.0.tar.xz
+      URL_MD5 c5e275ab0ed7ee61d0f4b82cd471770d
+      #PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-no-motion-compression.diff
 
       INSTALL_DIR ${EXTPREFIX_qt}
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -nomake examples -no-sql-sqlite -no-openssl -no-qml-debug -no-mtdev  -no-journald  -no-syslog -no-nis  -no-cups -no-tslib -no-directfb -no-linuxfb -no-libproxy -no-pch -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg  -qt-harfbuzz -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -nomake examples -no-sql-sqlite -no-mtdev --no-openssl -no-journald  -no-syslog -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg  -qt-harfbuzz -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus
+        -skip qtspeech -skip qtvirtualkeyboard
 
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
@@ -200,8 +201,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-        URL https://download.qt.io/development_releases/qt/5.10/5.10.0-beta3/single/qt-everywhere-src-5.10.0.tar.xz
-        URL_MD5 e809bf33732fb68d531e609979ba529f
+        URL https://download.qt.io/official_releases/qt/5.10/5.10.0/single/qt-everywhere-src-5.10.0.tar.xz
+        URL_MD5 c5e275ab0ed7ee61d0f4b82cd471770d
 
         PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 

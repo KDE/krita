@@ -39,6 +39,8 @@ public:
     void updateViewSettings();
 public Q_SLOTS:
     void canvasResourceChanged(KisPaintOpPresetSP  preset  );
+    void slotThemeChanged();
+
 Q_SIGNALS:
     void resourceSelected( KoResource * resource);
     void resourceClicked( KoResource * resource);

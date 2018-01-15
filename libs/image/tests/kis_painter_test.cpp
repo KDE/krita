@@ -267,11 +267,11 @@ void KisPainterTest::testSelectionBltSelection()
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
 
     KisSequentialConstIterator it(dst, QRect(10, 10, 10, 10));
-    do {
+    while (it.nextPixel()) {
         // These are selections, so only one channel and it should
         // be totally selected
         QCOMPARE(it.oldRawData()[0], MAX_SELECTED);
-    } while (it.nextPixel());
+    }
 }
 
 /*
@@ -400,11 +400,11 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
 
     QRect erasedRect(50, 50, 50, 50);
     KisSequentialConstIterator it(dst, QRect(0, 0, 150, 150));
-    do {
+    while (it.nextPixel()) {
         if(!erasedRect.contains(it.x(), it.y())) {
              QVERIFY(memcmp(it.oldRawData(), c.data(), cs->pixelSize()) == 0);
         }
-    } while (it.nextPixel());
+    }
 
 }
 

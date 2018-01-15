@@ -44,7 +44,7 @@ qint32 KisHermiteFilterStrategy::intValueAt(qint32 t) const
     if (t < 256) {
         t = (2 * t - 3 * 256) * t * t + (256 << 16);
 
-        //go from .24 fixed point to .8 fixedpoint (hack only works with positve numbers, which it is)
+        //go from .24 fixed point to .8 fixedpoint (hack only works with positive numbers, which it is)
         t = (t + 0x8000) >> 16;
 
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
@@ -62,7 +62,7 @@ qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
     if (t < 256) {
         t = (3 * t - 5 * 256) * t * t / 2 + (256 << 16);
 
-        //go from .24 fixed point to .8 fixedpoint (hack only works with positve numbers, which it is)
+        //go from .24 fixed point to .8 fixedpoint (hack only works with positive numbers, which it is)
         t = (t + 0x8000) >> 16;
 
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
@@ -74,7 +74,7 @@ qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
         /* f(t) = -0.5|t|^3 + 2.5|t|^2 + 4|t| - 2, -2 <= t <= 2 */
         t = ((-t + 5 * 256) * t / 2 - 4 * 256 * 256) * t + (2 * 256 << 16);
 
-        //go from .24 fixed point to .8 fixedpoint (hack only works with positve numbers, which it is)
+        //go from .24 fixed point to .8 fixedpoint (hack only works with positive numbers, which it is)
         t = (t + 0x8000) >> 16;
 
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;

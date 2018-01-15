@@ -67,15 +67,15 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
 
     KisSequentialIterator it(device, applyRect);
     int p = 0;
-    int conseq;
-    do {
-        conseq = it.nConseqPixels();
+    int conseq = it.nConseqPixels();
+    while (it.nextPixels(conseq)) {
 
+        conseq = it.nConseqPixels();
         colorTransformation->transform(it.oldRawData(), it.rawData(), conseq);
 
         if (progressUpdater) progressUpdater->setValue(p += conseq);
+    }
 
-    } while(it.nextPixels(conseq));
     if (!colorTransformationConfiguration) {
         delete colorTransformation;
     }

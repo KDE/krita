@@ -195,11 +195,11 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     //     KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
 
     //     //Action
-    //     do {
+    //     while (dstIt.nextPixel()) {
     //         QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
     //         srcAcc->moveTo(p);
     //         srcAcc->sampledOldRawData(dstIt.rawData());
-    //     } while (dstIt.nextPixel());
+    //     }
 
 
     // }

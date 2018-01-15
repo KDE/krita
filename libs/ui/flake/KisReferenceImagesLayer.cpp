@@ -28,7 +28,7 @@
 struct AddReferenceImageCommand : KoShapeCreateCommand
 {
     AddReferenceImageCommand(KisReferenceImagesLayer *layer, KisReferenceImage* referenceImage)
-        : KoShapeCreateCommand(layer->shapeController(), {referenceImage}, nullptr, kundo2_i18n("Add reference image"))
+        : KoShapeCreateCommand(layer->shapeController(), {referenceImage}, layer, nullptr, kundo2_i18n("Add reference image"))
         , m_layer(layer)
     {}
 

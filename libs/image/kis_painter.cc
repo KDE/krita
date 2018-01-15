@@ -212,10 +212,12 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
+    if (processRect.isEmpty()) return dst;
+
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
@@ -223,7 +225,7 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
         const quint8 alpha = srcCS->opacityU8(srcPtr);
 
         *alpha8Ptr = KoColorSpaceMaths<quint8>::multiply(alpha, KoColorSpaceMathsTraits<quint8>::unitValue - white);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     return dst;
 }
@@ -234,15 +236,17 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
+    if (processRect.isEmpty()) return dst;
+
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
         *alpha8Ptr = srcCS->intensity8(srcPtr);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     return dst;
 }
@@ -261,11 +265,11 @@ bool KisPainter::checkDeviceHasTransparency(KisPaintDeviceSP dev)
     const KoColorSpace *cs = dev->colorSpace();
     KisSequentialConstIterator it(dev, deviceBounds);
 
-    do {
+    while(it.nextPixel()) {
         if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
             return true;
         }
-    } while(it.nextPixel());
+    }
 
     return false;
 }
@@ -392,6 +396,18 @@ void KisPainter::addDirtyRect(const QRect & rc)
     QRect r = rc.normalized();
     if (r.isValid()) {
         d->dirtyRects.append(rc);
+    }
+}
+
+void KisPainter::addDirtyRects(const QVector<QRect> &rects)
+{
+    d->dirtyRects.reserve(d->dirtyRects.size() + rects.size());
+
+    Q_FOREACH (const QRect &rc, rects) {
+        const QRect r = rc.normalized();
+        if (r.isValid()) {
+            d->dirtyRects.append(rc);
+        }
     }
 }
 
@@ -1826,7 +1842,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             yd = (y2 - y1);
         }
         grad = yd / xd;
-        // nearest X,Y interger coordinates
+        // nearest X,Y integer coordinates
         xend = x1;
         yend = y1 + grad * (xend - x1);
 
@@ -1928,7 +1944,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         grad = xd / yd;
 
-        // nearest X,Y interger coordinates
+        // nearest X,Y integer coordinates
         yend = y1;
         xend = x1 + grad * (yend - y1);
 
@@ -2636,6 +2652,13 @@ void KisPainter::setMirrorInformation(const QPointF& axesCenter, bool mirrorHori
     d->mirrorVertically = mirrorVertically;
 }
 
+void KisPainter::copyMirrorInformationFrom(const KisPainter *other)
+{
+    d->axesCenter = other->d->axesCenter;
+    d->mirrorHorizontally = other->d->mirrorHorizontally;
+    d->mirrorVertically = other->d->mirrorVertically;
+}
+
 bool KisPainter::hasMirroring() const
 {
     return d->mirrorHorizontally || d->mirrorVertically;
@@ -2903,4 +2926,32 @@ void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
     QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
     KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
+}
+
+const QVector<QRect> KisPainter::calculateAllMirroredRects(const QRect &rc)
+{
+    QVector<QRect> rects;
+
+    KisLodTransform t(d->device);
+    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+
+    QRect baseRect = rc;
+    rects << baseRect;
+
+    if (d->mirrorHorizontally && d->mirrorVertically){
+        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+    } else if (d->mirrorHorizontally) {
+        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+    } else if (d->mirrorVertically) {
+        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
+        rects << baseRect;
+    }
+
+    return rects;
 }

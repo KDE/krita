@@ -163,3 +163,12 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
 
     return true;
 }
+
+KisFilterConfigurationSP Filter::filterConfig()
+{
+    KisFilterConfigurationSP config = KisFilterRegistry::instance()->get(d->name)->defaultConfiguration();
+    Q_FOREACH(const QString property, d->configuration->properties().keys()) {
+        config->setProperty(property, d->configuration->property(property));
+    }
+    return config;
+}

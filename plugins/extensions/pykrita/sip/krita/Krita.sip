@@ -5,9 +5,10 @@ class Krita : QObject
 #include "Krita.h"
 %End
 public:
-public Q_SLOTS:
     Krita(QObject*  parent /TransferThis/ = 0);
     virtual ~Krita();
+public Q_SLOTS:
+
     Document * activeDocument() const /Factory/;
     void setActiveDocument(Document*  value);
     bool batchmode() const;
@@ -33,7 +34,8 @@ public Q_SLOTS:
     QList<Extension*> extensions() /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
-    Action * createAction(const QString &id, const QString & text);
+    Action * createAction(const QString &id, const QString & text, bool addToScriptMenu = true);
+    QIcon icon(QString &iconName) const;
 
     void addExtension(Extension* _extension /GetWrapper/);
 %MethodCode

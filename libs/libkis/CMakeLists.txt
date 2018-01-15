@@ -19,6 +19,17 @@ set(kritalibkis_LIB_SRCS
     View.cpp
     Extension.cpp
     Window.cpp
+    GroupLayer.cpp
+    CloneLayer.cpp
+    FileLayer.cpp
+    FilterLayer.cpp
+    FillLayer.cpp
+    VectorLayer.cpp
+    FilterMask.cpp
+    SelectionMask.cpp
+
+    Shape.cpp
+    GroupShape.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

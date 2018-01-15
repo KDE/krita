@@ -226,7 +226,7 @@ void KisDlgFilter::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);
 
-//    // Workaround, after the initalisation don't center the dialog anymore
+//    // Workaround, after the initialisation don't center the dialog anymore
 //    if(d->resizeCount < 2) {
 //        QWidget* canvas = d->view->canvas();
 //        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());

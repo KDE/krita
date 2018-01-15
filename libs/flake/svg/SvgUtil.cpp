@@ -33,6 +33,7 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
+#include <KoXmlWriter.h>
 #include "kis_dom_utils.h"
 
 #define DPI 72.0
@@ -69,20 +70,17 @@ QSizeF SvgUtil::toUserSpace(const QSizeF &size)
     return QSizeF(toUserSpace(size.width()), toUserSpace(size.height()));
 }
 
-double SvgUtil::toPercentage(QString s)
+QString SvgUtil::toPercentage(qreal value)
 {
-    if (s.endsWith('%'))
-        return s.remove('%').toDouble();
-    else
-        return s.toDouble() * 100.0;
+    return KisDomUtils::toString(value * 100.0) + "%";
 }
 
 double SvgUtil::fromPercentage(QString s)
 {
     if (s.endsWith('%'))
-        return s.remove('%').toDouble() / 100.0;
+        return KisDomUtils::toDouble(s.remove('%')) / 100.0;
     else
-        return s.toDouble();
+        return KisDomUtils::toDouble(s);
 }
 
 QPointF SvgUtil::objectToUserSpace(const QPointF &position, const QRectF &objectBound)
@@ -134,6 +132,15 @@ QString SvgUtil::transformToString(const QTransform &transform)
                      .arg(KisDomUtils::toString(transform.m22()))
                      .arg(KisDomUtils::toString(toUserSpace(transform.dx())))
                      .arg(KisDomUtils::toString(toUserSpace(transform.dy())));
+    }
+}
+
+void SvgUtil::writeTransformAttributeLazy(const QString &name, const QTransform &transform, KoXmlWriter &shapeWriter)
+{
+    const QString value = transformToString(transform);
+
+    if (!value.isEmpty()) {
+        shapeWriter.addAttribute(name.toLatin1().data(), value);
     }
 }
 
@@ -244,6 +251,7 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
         else if (unit.right(2) == "in")
             value = ptToPx(gc, INCH_TO_POINT(value));
         else if (unit.right(2) == "em")
+            // NOTE: all the fonts should be created with 'pt' size, not px!
             value = ptToPx(gc, value * gc->font.pointSize());
         else if (unit.right(2) == "ex") {
             QFontMetrics metrics(gc->font);
@@ -420,6 +428,15 @@ QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const KoXmlElement 
     }
 
     return result;
+}
+
+QStringList SvgUtil::simplifyList(const QString &str)
+{
+    QString attribute = str;
+    attribute.replace(',', ' ');
+    attribute.remove('\r');
+    attribute.remove('\n');
+    return attribute.simplified().split(' ', QString::SkipEmptyParts);
 }
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)

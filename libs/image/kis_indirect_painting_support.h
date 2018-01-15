@@ -71,6 +71,8 @@ public:
 
     KisPaintDeviceSP temporaryTarget() const;
 
+    virtual bool supportsNonIndirectPainting() const;
+
     /**
      * A guard object to lock the temporary target for read
      */

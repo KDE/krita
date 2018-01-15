@@ -389,7 +389,7 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QP
 }
 
 /*
- * functions only used interally in this class
+ * functions only used internally in this class
  * we potentially could make some of these inline to speed up performance
 */
 

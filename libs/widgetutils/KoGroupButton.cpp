@@ -109,7 +109,27 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
             panelOpt.palette = panelPal;
             painter.setOpacity(0.5);
         }
+    } else {
+
+        if (!isChecked() && !isDown() && !(panelOpt.state & QStyle::State_MouseOver)) {
+
+        } else {
+             // only highlight the selected item
+            panelOpt.state |= (QStyle::State_On | QStyle::State_Sunken);
+            QPalette panelPal(panelOpt.palette);
+            QColor c;
+            c = panelPal.color(QPalette::Button);
+            c.setAlpha(50);
+            panelPal.setColor(QPalette::Button, c);
+            c = panelPal.color(QPalette::Window);
+            c.setAlpha(50);
+            panelPal.setColor(QPalette::Window, c);
+            panelOpt.palette = panelPal;
+            painter.setOpacity(0.5);
+        }
     }
+
+
     painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
     painter.setOpacity(1.0);
 

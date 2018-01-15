@@ -439,7 +439,7 @@ bool KoToolProxy::paste()
 
             if (!pastedShapes.isEmpty()) {
                 // add shape to the document
-                canvas->shapeController()->addShapesDirect(pastedShapes, cmd);
+                canvas->shapeController()->addShapesDirect(pastedShapes, 0, cmd);
                 canvas->addCommand(cmd);
             }
         }

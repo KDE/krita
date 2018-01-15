@@ -213,6 +213,56 @@ QVariant KisLodAvailabilityResourceConverter::toSource(const QVariant &value, co
 }
 
 /*********************************************************************/
+/*          KisLodSizeThresholdResourceConverter                     */
+/*********************************************************************/
+
+KisLodSizeThresholdResourceConverter::KisLodSizeThresholdResourceConverter()
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::LodSizeThreshold,
+                                 KisCanvasResourceProvider::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisLodSizeThresholdResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->lodSizeThreshold() : QVariant();
+}
+
+QVariant KisLodSizeThresholdResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setLodSizeThreshold(value.toDouble());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
+/*          KisLodSizeThresholdSupportedResourceConverter            */
+/*********************************************************************/
+
+KisLodSizeThresholdSupportedResourceConverter::KisLodSizeThresholdSupportedResourceConverter()
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::LodSizeThresholdSupported,
+                                 KisCanvasResourceProvider::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisLodSizeThresholdSupportedResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->lodSizeThresholdSupported() : QVariant();
+}
+
+QVariant KisLodSizeThresholdSupportedResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    // this property of the preset is immutable
+
+    Q_UNUSED(value);
+    return sourceValue;
+}
+
+
+/*********************************************************************/
 /*          KisEraserModeResourceConverter                           */
 /*********************************************************************/
 

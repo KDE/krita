@@ -30,7 +30,7 @@ class QTransform;
 
 /**
  * ViewConverter to convert from flake-internal points to
- * krita-internal pixels and back. You can use this class whereever
+ * krita-internal pixels and back. You can use this class wherever
  * the flake tools or shapes come in contact with the krita-image.
  *
  * For usage remember that the document here is the flake-points. And

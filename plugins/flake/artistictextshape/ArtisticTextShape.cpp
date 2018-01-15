@@ -38,6 +38,7 @@
 #include <SvgStyleParser.h>
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
+#include <KisQPainterStateSaver.h>
 
 #include <klocalizedstring.h>
 
@@ -88,6 +89,8 @@ KoShape *ArtisticTextShape::cloneShape() const
 
 void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
+    KisQPainterStateSaver saver(&painter);
+
     applyConversion(painter, converter);
     if (background()) {
         background()->paint(painter, converter, paintContext, outline());
@@ -1072,7 +1075,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
     if (layout() == ArtisticTextShape::Straight) {
         context.shapeWriter().addAttributePt("x", anchorOffset);
         context.shapeWriter().addAttributePt("y", baselineOffset());
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
         Q_FOREACH (const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }
@@ -1374,8 +1377,11 @@ ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, Artist
     }
 
     range.setRotations(context.rotations(textLength));
+
+#if 0
     range.setLetterSpacing(gc->letterSpacing);
     range.setWordSpacing(gc->wordSpacing);
+
     if (gc->baselineShift == "sub") {
         range.setBaselineShift(ArtisticTextRange::Sub);
     } else if (gc->baselineShift == "super") {
@@ -1388,6 +1394,7 @@ ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, Artist
             range.setBaselineShift(ArtisticTextRange::Length, value);
         }
     }
+#endif
 
     //range.printDebug();
 

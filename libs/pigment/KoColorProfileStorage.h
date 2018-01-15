@@ -68,7 +68,7 @@ public:
     void removeProfile(KoColorProfile* profile);
 
     /**
-     * @brief containsProfile shows if a profile is registered in teh storage
+     * @brief containsProfile shows if a profile is registered in the storage
      */
     bool containsProfile(const KoColorProfile *profile);
 

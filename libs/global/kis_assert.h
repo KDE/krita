@@ -112,7 +112,7 @@ KRITAGLOBAL_EXPORT void kis_safe_assert_recoverable(const char *assertion, const
  * This set of macros work in exactly the same way as their non-safe
  * counterparts, but they are automatically converted into console
  * warnings in release builds. That is the user will not see any
- * message box, just a warning message wil be printed in a terminal
+ * message box, just a warning message will be printed in a terminal
  * and a recovery branch will be taken automatically.
  *
  * Rules when to use "safe" asserts. Use them if the following

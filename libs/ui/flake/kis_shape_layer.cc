@@ -68,6 +68,9 @@
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
 
+#include "SvgWriter.h"
+#include "SvgParser.h"
+
 #include <kis_types.h>
 #include <kis_image.h>
 #include "kis_default_bounds.h"
@@ -91,7 +94,7 @@ public:
         SimpleShapeContainerModel::add(child);
 
         /**
-         * The shape is always added with the absolute transformation set appropiately.
+         * The shape is always added with the absolute transformation set appropriately.
          * Here we should just squeeze it into the layer's transformation.
          */
         KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
@@ -428,7 +431,6 @@ void KisShapeLayer::forceUpdateTimedNode()
 
 #include "SvgWriter.h"
 #include "SvgParser.h"
-#include <QXmlStreamReader>
 
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {

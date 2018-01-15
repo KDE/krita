@@ -47,7 +47,7 @@ public:
                                   ///     i.e the layout is done at the center of the area
         UseStyleNameText = 2, ///< Use the style name as the text that is layouted inside the thumbnail
         ScaleThumbnailFont = 4 ///< If set, then when the layout size is more than the size available
-                               ///  the font size is scaled down to fit the space availiable
+                               ///  the font size is scaled down to fit the space available
     };
     Q_DECLARE_FLAGS(KoStyleThumbnailerFlags, KoStyleThumbnailerFlag)
 

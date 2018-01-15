@@ -76,7 +76,7 @@ KisBaseNode::KisBaseNode()
     /**
      * Be cautious! These two calls are vital to warm-up KoProperties.
      * We use it and its QMap in a threaded environment. This is not
-     * officially suported by Qt, but our environment guarantees, that
+     * officially supported by Qt, but our environment guarantees, that
      * there will be the only writer and several readers. Whilst the
      * value of the QMap is boolean and there are no implicit-sharing
      * calls provocated, it is safe to work with it in such an

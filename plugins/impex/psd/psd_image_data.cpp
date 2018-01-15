@@ -151,7 +151,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
 bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev, bool hasAlpha)
 {
-    // XXX: make the compression settting configurable. For now, always use RLE.
+    // XXX: make the compression setting configurable. For now, always use RLE.
     psdwrite(io, (quint16)Compression::RLE);
 
     // now write all the channels in display order

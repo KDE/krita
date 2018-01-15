@@ -164,7 +164,7 @@ extern "C" int main(int argc, char **argv)
     qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
     qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
 
-    // Now that the paths are set, set the language. First check the override from the langage
+    // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
     {
         QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);

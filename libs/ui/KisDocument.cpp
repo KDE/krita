@@ -223,18 +223,19 @@ private:
 class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
-    Private(KisDocument *q) :
-        docInfo(new KoDocumentInfo(q)), // deleted by QObject
-        importExportManager(new KisImportExportManager(q)), // deleted manually
-        undoStack(new UndoStack(q)), // deleted by QObject
-        m_bAutoDetectedMime(false),
-        modified(false),
-        readwrite(true),
-        firstMod(QDateTime::currentDateTime()),
-        lastMod(firstMod),
-        nserver(new KisNameServer(1)),
-        imageIdleWatcher(2000 /*ms*/),
-        savingLock(&savingMutex)
+    Private(KisDocument *q)
+        : docInfo(new KoDocumentInfo(q)) // deleted by QObject
+        , importExportManager(new KisImportExportManager(q)) // deleted manually
+        , undoStack(new UndoStack(q)) // deleted by QObject
+        , m_bAutoDetectedMime(false)
+        , modified(false)
+        , readwrite(true)
+        , firstMod(QDateTime::currentDateTime())
+        , lastMod(firstMod)
+        , nserver(new KisNameServer(1))
+        , imageIdleWatcher(2000 /*ms*/)
+        , savingLock(&savingMutex)
+        , batchMode(false)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
@@ -243,27 +244,28 @@ public:
         }
     }
 
-    Private(const Private &rhs, KisDocument *q) :
-        docInfo(new KoDocumentInfo(*rhs.docInfo, q)),
-        unit(rhs.unit),
-        importExportManager(new KisImportExportManager(q)),
-        mimeType(rhs.mimeType),
-        outputMimeType(rhs.outputMimeType),
-        undoStack(new UndoStack(q)),
-        guidesConfig(rhs.guidesConfig),
-        m_bAutoDetectedMime(rhs.m_bAutoDetectedMime),
-        m_url(rhs.m_url),
-        m_file(rhs.m_file),
-        modified(rhs.modified),
-        readwrite(rhs.readwrite),
-        firstMod(rhs.firstMod),
-        lastMod(rhs.lastMod),
-        nserver(new KisNameServer(*rhs.nserver)),
-        preActivatedNode(0), // the node is from another hierarchy!
-        imageIdleWatcher(2000 /*ms*/),
-        assistants(rhs.assistants), // WARNING: assistants should not store pointers to the document!
-        gridConfig(rhs.gridConfig),
-        savingLock(&savingMutex)
+    Private(const Private &rhs, KisDocument *q)
+        : docInfo(new KoDocumentInfo(*rhs.docInfo, q))
+        , unit(rhs.unit)
+        , importExportManager(new KisImportExportManager(q))
+        , mimeType(rhs.mimeType)
+        , outputMimeType(rhs.outputMimeType)
+        , undoStack(new UndoStack(q))
+        , guidesConfig(rhs.guidesConfig)
+        , m_bAutoDetectedMime(rhs.m_bAutoDetectedMime)
+        , m_url(rhs.m_url)
+        , m_file(rhs.m_file)
+        , modified(rhs.modified)
+        , readwrite(rhs.readwrite)
+        , firstMod(rhs.firstMod)
+        , lastMod(rhs.lastMod)
+        , nserver(new KisNameServer(*rhs.nserver))
+        , preActivatedNode(0) // the node is from another hierarchy!
+        , imageIdleWatcher(2000 /*ms*/)
+        , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
+        , gridConfig(rhs.gridConfig)
+        , savingLock(&savingMutex)
+        , batchMode(rhs.batchMode)
     {
     }
 
@@ -330,6 +332,8 @@ public:
     KritaUtils::ExportFileJob backgroundSaveJob;
 
     bool isRecovered = false;
+
+    bool batchMode { false };
 
     void setImageAndInitIdleWatcher(KisImageSP _image) {
         image = _image;
@@ -601,7 +605,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (status != KisImportExportFilter::OK) {
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
@@ -643,12 +647,12 @@ void KisDocument::setMimeType(const QByteArray & mimeType)
 
 bool KisDocument::fileBatchMode() const
 {
-    return d->importExportManager->batchMode();
+    return d->batchMode;
 }
 
 void KisDocument::setFileBatchMode(const bool batchMode)
 {
-    d->importExportManager->setBatchMode(batchMode);
+    d->batchMode = batchMode;
 }
 
 KisDocument* KisDocument::lockAndCloneForSaving()
@@ -784,7 +788,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
     if (status != KisImportExportFilter::OK) {
         const int emergencyAutoSaveInterval = 10; // sec
         setAutoSaveDelay(emergencyAutoSaveInterval);
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error mesage",
+        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during autosaving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);

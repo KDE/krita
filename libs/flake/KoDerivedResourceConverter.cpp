@@ -81,8 +81,13 @@ QVariant KoDerivedResourceConverter::writeToSource(const QVariant &value,
     QVariant newSourceValue = sourceValue;
     bool hasChanged = m_d->lastKnownValue != value;
     if (hasChanged || value != fromSource(sourceValue)) {
-        m_d->lastKnownValue = value;
         newSourceValue = toSource(value, sourceValue);
+        /**
+         * Some resources may be immutable, that is, writing to them will
+         * **not** alter the value. Example: size property of the Shape Brush
+         * (always 1.0)
+         */
+        m_d->lastKnownValue = fromSource(newSourceValue);
     }
     if (changed) {
         *changed = hasChanged;

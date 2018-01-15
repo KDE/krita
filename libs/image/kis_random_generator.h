@@ -46,7 +46,7 @@ public:
      */
     quint64 randomAt(qint64 x, qint64 y);
     /**
-     * @return the constant random value correspoding to a given pixel, the value is between 0
+     * @return the constant random value corresponding to a given pixel, the value is between 0
      *         and 1.0
      */
     double doubleRandomAt(qint64 x, qint64 y);

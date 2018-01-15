@@ -86,7 +86,7 @@ QVector<QRect> splitAndFilterDabRect(const QRect &totalRect, const QVector<QRect
 
 QVector<QRect> splitDabsIntoRects(const QVector<QRect> &dabRects, int idealNumRects, int diameter, qreal spacing)
 {
-    QRect totalRect =
+    const QRect totalRect =
         std::accumulate(dabRects.begin(), dabRects.end(), QRect(), std::bit_or<QRect>());
 
     constexpr int minPatchSize = 128;

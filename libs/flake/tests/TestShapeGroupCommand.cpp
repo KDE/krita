@@ -204,7 +204,7 @@ void TestShapeGroupCommand::testSublevelGroup()
     QCOMPARE(childOrder, expectedOrder);
     // check that the group has the zIndex/parent of its added top shape
     QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer*>(0));
-    QCOMPARE(toplevelGroup->zIndex(), 1);
+    QCOMPARE(toplevelGroup->zIndex(), (qint16)1);
 }
 
 void TestShapeGroupCommand::testAddToToplevelGroup()

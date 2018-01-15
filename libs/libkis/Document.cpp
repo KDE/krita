@@ -43,14 +43,17 @@
 #include <kis_effect_mask.h>
 #include <kis_paint_layer.h>
 #include <kis_generator_layer.h>
+#include <kis_generator_registry.h>
 #include <kis_shape_layer.h>
 #include <kis_filter_configuration.h>
+#include <kis_filter_registry.h>
 #include <kis_selection.h>
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 
+#include <KisMimeDatabase.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -109,7 +112,26 @@ Node *Document::activeNode() const
         }
     }
     if (activeNodes.size() > 0) {
-        return new Node(d->document->image(), activeNodes.first());
+        KisNodeSP activeNode = activeNodes.first();
+        if (qobject_cast<const KisGroupLayer*>(activeNode.data())) {
+            return new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(activeNode.data())));
+        } else if (qobject_cast<const KisFileLayer*>(activeNode.data())) {
+            return new FileLayer(KisFileLayerSP(dynamic_cast<KisFileLayer*>(activeNode.data())));
+        } else if (qobject_cast<const KisAdjustmentLayer*>(activeNode.data())) {
+            return new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(activeNode.data())));
+        } else  if (qobject_cast<const KisGeneratorLayer*>(activeNode.data())) {
+            return new FillLayer(KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(activeNode.data())));
+        } else if (qobject_cast<const KisCloneLayer*>(activeNode.data())) {
+            return new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(activeNode.data())));
+        } else  if (qobject_cast<const KisShapeLayer*>(activeNode.data())) {
+            return new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(activeNode.data())));
+        } else  if (qobject_cast<const KisFilterMask*>(activeNode.data())) {
+            return new FilterMask(d->document->image(), KisFilterMaskSP(dynamic_cast<KisFilterMask*>(activeNode.data())));
+        } else  if (qobject_cast<const KisSelectionMask*>(activeNode.data())) {
+            return new SelectionMask(d->document->image(), KisSelectionMaskSP(dynamic_cast<KisSelectionMask*>(activeNode.data())));
+        } else{
+            return new Node(d->document->image(), activeNode);
+        }
     }
     return new Node(d->document->image(), d->document->image()->root()->firstChild());
 }
@@ -220,9 +242,10 @@ QString Document::fileName() const
 void Document::setFileName(QString value)
 {
     if (!d->document) return;
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(value, false);
+    d->document->setMimeType(mimeType.toLatin1());
     d->document->setUrl(QUrl::fromLocalFile(value));
 }
-
 
 int Document::height() const
 {
@@ -494,6 +517,8 @@ void Document::shearImage(double angleX, double angleY)
 bool Document::save()
 {
     if (!d->document) return false;
+    if (d->document->url().isEmpty()) return false;
+
     bool retval = d->document->save(true, 0);
     d->document->waitForSavingToComplete();
 
@@ -556,6 +581,85 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     }
     return node;
 }
+
+GroupLayer *Document::createGroupLayer(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new GroupLayer(image, name);
+}
+
+FileLayer *Document::createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FileLayer(image, name, fileName(), FileName, ScalingMethod);
+}
+
+FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FilterLayer(image, name, filter, selection);
+}
+
+FillLayer *Document::createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    KisFilterConfigurationSP config = KisGeneratorRegistry::instance()->value(filterName)->defaultConfiguration();
+    Q_FOREACH(const QString property, configuration.properties().keys()) {
+        config->setProperty(property, configuration.property(property));
+    }
+
+    return new FillLayer(image, name, config, selection);
+}
+
+CloneLayer *Document::createCloneLayer(const QString &name, const Node *source)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+    KisLayerSP layer = qobject_cast<KisLayer*>(source->node().data());
+
+    return new CloneLayer(image, name, layer);
+}
+
+VectorLayer *Document::createVectorLayer(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new VectorLayer(d->document->shapeController(), image, name);
+}
+
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new FilterMask(image, name, filter);
+}
+
+SelectionMask *Document::createSelectionMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new SelectionMask(image, name);
+}
+
 
 QImage Document::projection(int x, int y, int w, int h) const
 {
@@ -644,6 +748,15 @@ bool Document::guidesVisible() const
 bool Document::guidesLocked() const
 {
     return d->document->guidesConfig().showGuides();
+}
+
+Document *Document::clone() const
+{
+    if (!d->document) return 0;
+    QPointer<KisDocument> clone = d->document->clone();
+    Document * d = new Document(clone);
+    clone->setParent(d); // It's owned by the document, not KisPart
+    return d;
 }
 
 void Document::setHorizontalGuides(const QList<qreal> &lines)

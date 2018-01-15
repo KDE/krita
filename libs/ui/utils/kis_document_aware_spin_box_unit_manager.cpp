@@ -76,7 +76,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString p
     qreal factor = KisSpinBoxUnitManager::getConversionFactor(dim, symbol);
 
     if (factor > 0) {
-        //no errors occured at a lower level, so the conversion factor has been get.
+        //no errors occurred at a lower level, so the conversion factor has been get.
         return factor;
     }
 

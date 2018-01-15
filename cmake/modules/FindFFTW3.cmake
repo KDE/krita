@@ -32,6 +32,8 @@ endif()
 
 else()
 
+# TODO: Maybe use fftw3/FFTW3Config.cmake?
+
 find_path(FFTW3_INCLUDE_DIR
     NAMES fftw3.h
 )
@@ -39,7 +41,7 @@ find_path(FFTW3_INCLUDE_DIR
 
 find_library(
     FFTW3_LIBRARY
-    NAMES libfftw3-3 libfftw3f-3 libfftw3l-3
+    NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3
     DOC "Libraries to link against for FFT Support")
 
 if (FFTW3_LIBRARY)

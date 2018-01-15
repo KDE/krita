@@ -27,6 +27,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <squeezedcombobox.h>
+#include <QWidgetAction>
+#include <QMenu>
 
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -34,6 +36,7 @@
 #include <KoProperties.h>
 #include <KoDrag.h>
 
+#include "kis_icon_utils.h"
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
@@ -182,6 +185,35 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
     m_wdgSvgCollection->listCollection->setSelectionMode(QListView::SingleSelection);
 
+
+    // thumbnail icon changer
+    QMenu* configureMenu = new QMenu(this);
+    configureMenu->setStyleSheet("margin: 6px");
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setPopupMode(QToolButton::InstantPopup);
+
+
+
+    // add horizontal slider for changing the icon size
+    m_iconSizeSlider = new QSlider(this);
+    m_iconSizeSlider->setOrientation(Qt::Horizontal);
+    m_iconSizeSlider->setRange(20, 80);
+    m_iconSizeSlider->setValue(20);  // defaults to small icon size
+    m_iconSizeSlider->setMinimumHeight(20);
+    m_iconSizeSlider->setMinimumWidth(40);
+    m_iconSizeSlider->setTickInterval(10);
+
+
+    QWidgetAction *sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(m_iconSizeSlider);
+
+    configureMenu->addSection(i18n("Icon Size"));
+    configureMenu->addAction(sliderAction);
+
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setMenu(configureMenu);
+    connect(m_iconSizeSlider, SIGNAL(sliderReleased()), this, SLOT(slotSetIconSize())); // resizing while sliding is too heavy of an operation
+
+
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("SvgSymbolCollection");
     int i = cfg.readEntry("currentCollection", 0);
     if (i > m_wdgSvgCollection->cmbCollections->count()) {
@@ -189,6 +221,11 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     }
     m_wdgSvgCollection->cmbCollections->setCurrentIndex(i);
     collectionActivated(i);
+}
+
+void SvgSymbolCollectionDocker::slotSetIconSize()
+{
+    m_wdgSvgCollection->listCollection->setIconSize(QSize(m_iconSizeSlider->value(),m_iconSizeSlider->value()));
 }
 
 void SvgSymbolCollectionDocker::setCanvas(KoCanvasBase *canvas)

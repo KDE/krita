@@ -186,7 +186,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
     QString formattedBrushName;
     if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
-         QString formattedBrushName = v.value<KisPaintOpPresetSP>()->name().replace("_", " ");
+         formattedBrushName = v.value<KisPaintOpPresetSP>()->name().replace("_", " ");
     }
 
     switch (key) {
@@ -659,7 +659,20 @@ bool KisTool::nodeEditable()
         return false;
     }
 
-    bool nodeEditable = node->isEditable();
+    bool blockedNoIndirectPainting = false;
+
+    const bool presetUsesIndirectPainting =
+        !currentPaintOpPreset()->settings()->paintIncremental();
+
+    if (!presetUsesIndirectPainting) {
+        const KisIndirectPaintingSupport *indirectPaintingLayer =
+                dynamic_cast<const KisIndirectPaintingSupport*>(node.data());
+        if (indirectPaintingLayer) {
+            blockedNoIndirectPainting = !indirectPaintingLayer->supportsNonIndirectPainting();
+        }
+    }
+
+    bool nodeEditable = node->isEditable() && !blockedNoIndirectPainting;
 
     if (!nodeEditable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
@@ -670,6 +683,8 @@ bool KisTool::nodeEditable()
             message = i18n("Layer is locked.");
         } else if(!node->visible()) {
             message = i18n("Layer is invisible.");
+        } else if (blockedNoIndirectPainting) {
+            message = i18n("Layer can be painted in Wash Mode only.");
         } else {
             message = i18n("Group not editable.");
         }

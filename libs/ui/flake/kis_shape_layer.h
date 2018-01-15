@@ -168,7 +168,7 @@ Q_SIGNALS:
     /**
      * A signal + slot to synchronize UI and image
      * threads. Image thread emits the signal, UI
-     * thread performes the action
+     * thread performs the action
      */
     void sigMoveShapes(const QPointF &diff);
 

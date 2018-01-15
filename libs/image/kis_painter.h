@@ -635,6 +635,8 @@ public:
 
     void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontally, bool mirrorVertically);
 
+    void copyMirrorInformationFrom(const KisPainter *other);
+
     /**
      * Returns whether the mirroring methods will do any
      * work when called
@@ -662,6 +664,12 @@ public:
      * in the painter. The dab's offset is adjusted automatically.
      */
     void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const;
+
+    /**
+     * Calculate the list of the mirrored rects that will be painted on the
+     * the canvas when calling renderMirrorMask() at al
+     */
+    const QVector<QRect> calculateAllMirroredRects(const QRect &rc);
 
     /// Set the current pattern
     void setPattern(const KoPattern * pattern);
@@ -764,9 +772,14 @@ public:
     void setCompositeOp(const QString& op);
 
     /**
-     * Add the r to the current dirty rect.
+     * Add \p r to the current set of dirty rects
      */
-    void addDirtyRect(const QRect & r);
+    void addDirtyRect(const QRect &r);
+
+    /**
+     * Add \p rects to the current set of dirty rects
+     */
+    void addDirtyRects(const QVector<QRect> &rects);
 
     /**
      * Reset the selection to the given selection. All painter actions will be

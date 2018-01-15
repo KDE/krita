@@ -72,11 +72,11 @@ namespace KisLsUtils
         KisSequentialConstIterator srcIt(device, srcRect);
         KisSequentialIterator dstIt(selection, srcRect);
 
-        do {
+        while (srcIt.nextPixel() && dstIt.nextPixel()) {
             quint8 *dstPtr = dstIt.rawData();
             const quint8* srcPtr = srcIt.rawDataConst();
             *dstPtr = cs->opacityU8(srcPtr);
-        } while(srcIt.nextPixel() && dstIt.nextPixel());
+        }
 
         return baseSelection;
     }
@@ -86,20 +86,20 @@ namespace KisLsUtils
         KisSequentialIterator dstIt(selection, applyRect);
 
         if (edgeHidden) {
-            do {
+            while(dstIt.nextPixel()) {
                 quint8 *pixelPtr = dstIt.rawData();
 
                 *pixelPtr =
                     (*pixelPtr < 24) ?
                     *pixelPtr * 10 : 0xFF;
 
-            } while(dstIt.nextPixel());
+            }
         } else {
-            do {
+            while(dstIt.nextPixel()) {
                 quint8 *pixelPtr = dstIt.rawData();
                 *pixelPtr = 0xFF;
 
-            } while(dstIt.nextPixel());
+            }
         }
     }
 
@@ -190,7 +190,10 @@ namespace KisLsUtils
 
             if (edgeHidden) {
 
-                do {
+                while (selIt.nextPixel() &&
+                       dstIt.nextPixel() &&
+                       indexFetcher.nextPixel()) {
+
                     quint8 selAlpha = *selIt.rawDataConst();
                     int gradientIndex = indexFetcher.popOneIndex(selAlpha);
                     const KoColor &color = table[gradientIndex];
@@ -203,20 +206,18 @@ namespace KisLsUtils
                         cs->setOpacity(dstIt.rawData(), tableAlpha, 1);
                     }
 
-                } while(selIt.nextPixel() &&
-                        dstIt.nextPixel() &&
-                        indexFetcher.nextPixel());
+                }
 
             } else {
 
-                do {
+                while (selIt.nextPixel() &&
+                       dstIt.nextPixel() &&
+                       indexFetcher.nextPixel()) {
+
                     int gradientIndex = indexFetcher.popOneIndex(*selIt.rawDataConst());
                     const KoColor &color = table[gradientIndex];
                     memcpy(dstIt.rawData(), color.data(), pixelSize);
-                } while(selIt.nextPixel() &&
-                        dstIt.nextPixel() &&
-                        indexFetcher.nextPixel());
-
+                }
             }
         }
 
@@ -257,7 +258,7 @@ namespace KisLsUtils
         KisSequentialConstIterator srcIt(selection, overlayRect);
         KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG(overlayRect.x(), overlayRect.y());
 
-        do {
+        while (noiseIt.nextPixel() && srcIt.nextPixel()) {
             int itX = noiseIt.x();
             int itY = noiseIt.y();
 
@@ -274,8 +275,7 @@ namespace KisLsUtils
             int value = qMin(255, dstAlpha + srcAlpha);
 
             *dstIt->rawData() = value;
-
-        } while(noiseIt.nextPixel() && srcIt.nextPixel());
+        }
 
         noise = noise * 255 / 100;
 
@@ -299,10 +299,10 @@ namespace KisLsUtils
 
         KisSequentialIterator dstIt(selection, applyRect);
 
-        do {
+        while (dstIt.nextPixel()) {
             quint8 *pixelPtr = dstIt.rawData();
             *pixelPtr = rangeTable[*pixelPtr];
-        } while(dstIt.nextPixel());
+        }
     }
 
     void applyContourCorrection(KisPixelSelectionSP selection,
@@ -352,10 +352,10 @@ namespace KisLsUtils
         }
 
         KisSequentialIterator dstIt(selection, applyRect);
-        do {
+        while (dstIt.nextPixel()) {
             quint8 *pixelPtr = dstIt.rawData();
             *pixelPtr = contour[*pixelPtr];
-        } while(dstIt.nextPixel());
+        }
     }
 
     void knockOutSelection(KisPixelSelectionSP selection,

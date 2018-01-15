@@ -418,13 +418,13 @@ QList<qreal> KoPathSegment::Private::extrema() const
          * r(t) = (P1 - P0) * t + P0
          */
 
-        // calcualting the differences between successive control points
+        // calculating the differences between successive control points
         QPointF cp = first->activeControlPoint2() ?
                      first->controlPoint2() : second->controlPoint1();
         QPointF x0 = cp - first->point();
         QPointF x1 = second->point() - cp;
 
-        // calculating the coefficents
+        // calculating the coefficients
         QPointF a = x1 - x0;
         QPointF c = x0;
 
@@ -445,12 +445,12 @@ QList<qreal> KoPathSegment::Private::extrema() const
          * r(t) = (P2 - 2*P1 + P0) * t^2 + (2*P1 - 2*P0) * t + P0
          *
          */
-        // calcualting the differences between successive control points
+        // calculating the differences between successive control points
         QPointF x0 = first->controlPoint2() - first->point();
         QPointF x1 = second->controlPoint1() - first->controlPoint2();
         QPointF x2 = second->point() - second->controlPoint1();
 
-        // calculating the coefficents
+        // calculating the coefficients
         QPointF a = x2 - 2.0 * x1 + x0;
         QPointF b = 2.0 * x1 - 2.0 * x0;
         QPointF c = x0;
@@ -871,7 +871,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
         // hull edge is completely above dmax
         if (p1.y() > dmax && p2.y() > dmax)
             continue;
-        // hull egde is completely below dmin
+        // hull edge is completely below dmin
         if (p1.y() < dmin && p2.y() < dmin)
             continue;
         if (p1.x() == p2.x()) {
@@ -947,7 +947,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
         }
     } else if (qAbs(tmin - tmax) < 1e-5) {
         //debugFlake << "Yay, we found an intersection";
-        // the inteval is pretty small now, just calculate the intersection at this point
+        // the interval is pretty small now, just calculate the intersection at this point
         isects.append(segment.pointAt(tmin));
     } else {
         QPair<KoPathSegment, KoPathSegment> clip1 = segment.splitAt(tmin);

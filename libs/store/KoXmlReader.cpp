@@ -20,10 +20,7 @@
 #include "KoXmlReader.h"
 #include "KoXmlNS.h"
 
-#include <QTextCodec>
-#include <QTextDecoder>
-#include <QXmlStreamReader>
-
+#include <QStringList>
 
 // ==================================================================
 //

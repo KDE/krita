@@ -29,11 +29,13 @@ class KisSmudgeRadiusOption: public KisRateOption
 public:
     KisSmudgeRadiusOption();
 
+    QRect sampleRect(const KisPaintInformation &info, qreal diameter, const QPoint &pos) const;
+
     /**
      * Set the opacity of the painter based on the rate
      * and the curve (if checked)
      */
-    void apply(KisPainter& painter,
+    void apply(KoColor *resultColor,
                const KisPaintInformation& info,
                qreal diameter,
                qreal posx,

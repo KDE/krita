@@ -35,8 +35,6 @@ public:
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
     void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override;
-    void readOptionSettingForceCopy(KisPropertiesConfigurationSP setting);
-    void readOptionSettingForceCopy(const KisPropertiesConfiguration *setting);
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);
@@ -44,9 +42,6 @@ public:
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     static bool isTextBrush(const KisPropertiesConfiguration *setting);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
-
-private:
-    void readOptionSettingInternal(const KisPropertiesConfiguration *setting, bool forceCopy);
 
 private:
     KisBrushSP m_brush;

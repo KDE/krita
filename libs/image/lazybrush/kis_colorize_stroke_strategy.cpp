@@ -20,7 +20,7 @@
 
 #include <QBitArray>
 
-#include "kis_multiway_cut.h"
+#include "krita_utils.h"
 #include "kis_paint_device.h"
 #include "kis_lazy_fill_tools.h"
 #include "kis_gaussian_kernel.h"
@@ -29,32 +29,51 @@
 #include "kis_lod_transform.h"
 #include "kis_node.h"
 #include "kis_image_config.h"
+#include "KisWatershedWorker.h"
+#include "kis_processing_visitor.h"
+
+#include "kis_transaction.h"
+#include "krita_utils.h"
+
+#include <KisRunnableStrokeJobData.h>
+#include <KisRunnableStrokeJobUtils.h>
+#include <KisRunnableStrokeJobsInterface.h>
 
 using namespace KisLazyFillTools;
 
 struct KisColorizeStrokeStrategy::Private
 {
     Private() : filteredSourceValid(false) {}
-    Private(const Private &rhs)
-        : src(rhs.src),
+    Private(const Private &rhs, int _levelOfDetail)
+        : progressNode(rhs.progressNode),
+          src(rhs.src),
           dst(rhs.dst),
           filteredSource(rhs.filteredSource),
           internalFilteredSource(rhs.internalFilteredSource),
           filteredSourceValid(rhs.filteredSourceValid),
           boundingRect(rhs.boundingRect),
+          prefilterOnly(rhs.prefilterOnly),
           keyStrokes(rhs.keyStrokes),
-          dirtyNode(rhs.dirtyNode)
+          filteringOptions(rhs.filteringOptions),
+          levelOfDetail(_levelOfDetail)
     {}
 
+    KisNodeSP progressNode;
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP filteredSource;
+    KisPaintDeviceSP heightMap;
     KisPaintDeviceSP internalFilteredSource;
     bool filteredSourceValid;
     QRect boundingRect;
 
+    bool prefilterOnly = false;
+    int levelOfDetail = 0;
+
     QVector<KeyStroke> keyStrokes;
-    KisNodeSP dirtyNode;
+
+    // default values: disabled
+    FilteringOptions filteringOptions;
 };
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
@@ -62,22 +81,28 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
                                                      KisPaintDeviceSP filteredSource,
                                                      bool filteredSourceValid,
                                                      const QRect &boundingRect,
-                                                     KisNodeSP dirtyNode)
-    : m_d(new Private)
+                                                     KisNodeSP progressNode,
+                                                     bool prefilterOnly)
+    : KisRunnableBasedStrokeStrategy("colorize-stroke", prefilterOnly ? kundo2_i18n("Prefilter Colorize Mask") : kundo2_i18n("Colorize")),
+      m_d(new Private)
 {
+    m_d->progressNode = progressNode;
     m_d->src = src;
     m_d->dst = dst;
     m_d->filteredSource = filteredSource;
     m_d->boundingRect = boundingRect;
     m_d->filteredSourceValid = filteredSourceValid;
-    m_d->dirtyNode = dirtyNode;
+    m_d->prefilterOnly = prefilterOnly;
 
     enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    enableJob(JOB_DOSTROKE, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    enableJob(JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    setNeedsExplicitCancel(true);
 }
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail)
-    : KisSimpleStrokeStrategy(rhs),
-      m_d(new Private(*rhs.m_d))
+    : KisRunnableBasedStrokeStrategy(rhs),
+      m_d(new Private(*rhs.m_d, levelOfDetail))
 {
     KisLodTransform t(levelOfDetail);
     m_d->boundingRect = t.map(rhs.m_d->boundingRect);
@@ -85,6 +110,16 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(const KisColorizeStrokeStra
 
 KisColorizeStrokeStrategy::~KisColorizeStrokeStrategy()
 {
+}
+
+void KisColorizeStrokeStrategy::setFilteringOptions(const FilteringOptions &value)
+{
+    m_d->filteringOptions = value;
+}
+
+FilteringOptions KisColorizeStrokeStrategy::filteringOptions() const
+{
+    return m_d->filteringOptions;
 }
 
 void KisColorizeStrokeStrategy::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
@@ -97,32 +132,145 @@ void KisColorizeStrokeStrategy::addKeyStroke(KisPaintDeviceSP dev, const KoColor
 
 void KisColorizeStrokeStrategy::initStrokeCallback()
 {
+    using namespace KritaUtils;
+
+    QVector<KisRunnableStrokeJobData*> jobs;
+
+    const QVector<QRect> patchRects =
+        splitRectIntoPatches(m_d->boundingRect, optimalPatchSize());
+
     if (!m_d->filteredSourceValid) {
+        // TODO: make this conversion concurrent!!!
         KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
+        filteredMainDev->setDefaultBounds(m_d->src->defaultBounds());
 
-        // optional filtering
-        // KisGaussianKernel::applyLoG(filteredMainDev,
-        //                             m_d->boundingRect,
-        //                             1.0,
-        //                             QBitArray(), 0);
+        struct PrefilterSharedState {
+            QRect boundingRect;
+            KisPaintDeviceSP filteredMainDev;
+            KisPaintDeviceSP filteredMainDevSavedCopy;
+            QScopedPointer<KisTransaction> activeTransaction;
+            FilteringOptions filteringOptions;
+        };
 
-        normalizeAndInvertAlpha8Device(filteredMainDev, m_d->boundingRect);
+        QSharedPointer<PrefilterSharedState> state(new PrefilterSharedState());
+        state->boundingRect = m_d->boundingRect;
+        state->filteredMainDev = filteredMainDev;
+        state->filteringOptions = m_d->filteringOptions;
 
-        KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
-        m_d->filteredSource->makeCloneFrom(filteredMainDev, m_d->boundingRect);
-        m_d->filteredSource->setDefaultBounds(oldBounds);
+        if (m_d->filteringOptions.useEdgeDetection &&
+            m_d->filteringOptions.edgeDetectionSize > 0.0) {
+
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset(new KisTransaction(state->filteredMainDev));
+            });
+
+            Q_FOREACH (const QRect &rc, patchRects) {
+                addJobConcurrent(jobs, [state, rc] () {
+                    KisLodTransformScalar t(state->filteredMainDev);
+                    KisGaussianKernel::applyLoG(state->filteredMainDev,
+                                                rc,
+                                                t.scale(0.5 * state->filteringOptions.edgeDetectionSize),
+                                                -1.0,
+                                                QBitArray(), 0);
+                });
+            }
+
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset();
+                normalizeAlpha8Device(state->filteredMainDev, state->boundingRect);
+                state->activeTransaction.reset(new KisTransaction(state->filteredMainDev));
+            });
+
+            Q_FOREACH (const QRect &rc, patchRects) {
+                addJobConcurrent(jobs, [state, rc] () {
+                    KisLodTransformScalar t(state->filteredMainDev);
+                    KisGaussianKernel::applyGaussian(state->filteredMainDev,
+                                                     rc,
+                                                     t.scale(state->filteringOptions.edgeDetectionSize),
+                                                     t.scale(state->filteringOptions.edgeDetectionSize),
+                                                     QBitArray(), 0);
+                });
+            }
+
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset();
+            });
+        }
+
+        if (m_d->filteringOptions.fuzzyRadius > 0) {
+
+            addJobSequential(jobs, [state] () {
+                state->filteredMainDevSavedCopy = new KisPaintDevice(*state->filteredMainDev);
+                state->activeTransaction.reset(new KisTransaction(state->filteredMainDev));
+            });
+
+            Q_FOREACH (const QRect &rc, patchRects) {
+                addJobConcurrent(jobs, [state, rc] () {
+                    KisLodTransformScalar t(state->filteredMainDev);
+                    KisGaussianKernel::applyGaussian(state->filteredMainDev,
+                                                     rc,
+                                                     t.scale(state->filteringOptions.fuzzyRadius),
+                                                     t.scale(state->filteringOptions.fuzzyRadius),
+                                                     QBitArray(), 0);
+                    KisPainter gc(state->filteredMainDev);
+                    gc.bitBlt(rc.topLeft(), state->filteredMainDevSavedCopy, rc);
+                });
+            }
+
+            addJobSequential(jobs, [state] () {
+                state->activeTransaction.reset();
+            });
+        }
+
+        addJobSequential(jobs, [this, state] () {
+            normalizeAndInvertAlpha8Device(state->filteredMainDev, state->boundingRect);
+
+            KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
+            m_d->filteredSource->makeCloneFrom(state->filteredMainDev, m_d->boundingRect);
+            m_d->filteredSource->setDefaultBounds(oldBounds);
+            m_d->filteredSourceValid = true;
+        });
     }
 
-    KisMultiwayCut cut(m_d->filteredSource, m_d->dst, m_d->boundingRect);
+    if (!m_d->prefilterOnly) {
+        addJobSequential(jobs, [this] () {
+            m_d->heightMap = new KisPaintDevice(*m_d->filteredSource);
+        });
 
-    Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-        cut.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
+        Q_FOREACH (const QRect &rc, patchRects) {
+            addJobConcurrent(jobs, [this, rc] () {
+                KritaUtils::filterAlpha8Device(m_d->heightMap, rc,
+                                               [](quint8 pixel) {
+                                                   return quint8(255 - pixel);
+                                               });
+            });
+        }
+
+        addJobSequential(jobs, [this] () {
+            KisProcessingVisitor::ProgressHelper helper(m_d->progressNode);
+
+            KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect, helper.updater());
+            Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+                KoColor color =
+                    !stroke.isTransparent ?
+                        stroke.color : KoColor(Qt::transparent, m_d->dst->colorSpace());
+
+                worker.addKeyStroke(stroke.dev, color);
+            }
+            worker.run(m_d->filteringOptions.cleanUpAmount);
+        });
     }
 
-    cut.run();
+    addJobSequential(jobs, [this] () {
+        emit sigFinished(m_d->prefilterOnly);
+    });
 
-    m_d->dirtyNode->setDirty(m_d->boundingRect);
-    emit sigFinished();
+    runnableJobsInterface()->addRunnableJobs(jobs);
+}
+
+void KisColorizeStrokeStrategy::cancelStrokeCallback()
+{
+    emit sigCancelled();
 }
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)

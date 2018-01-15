@@ -30,7 +30,10 @@
 #include <QDir>
 #include <QFile>
 #include <QStandardPaths>
+#include <QVector>
 #include <QWindow>
+
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kis_config.h>
@@ -56,6 +59,8 @@ namespace
 
     QString debugText("OpenGL Info\n  **OpenGL not initialized**");
 
+    QVector<KLocalizedString> openglWarningStrings;
+
     void openglOnMessageLogged(const QOpenGLDebugMessage& debugMessage) {
         qDebug() << "OpenGL:" << debugMessage;
     }
@@ -74,6 +79,11 @@ KisOpenGLPrivate::OpenGLCheckResult::OpenGLCheckResult(QOpenGLContext &context) 
     m_glMinorVersion = context.format().minorVersion();
     m_supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
     m_isOpenGLES = context.isOpenGLES();
+}
+
+void KisOpenGLPrivate::appendOpenGLWarningString(KLocalizedString warning)
+{
+    openglWarningStrings << warning;
 }
 
 bool KisOpenGLPrivate::isDefaultFormatSet() {
@@ -214,6 +224,14 @@ const QString &KisOpenGL::getDebugText()
 {
     initialize();
     return debugText;
+}
+
+QStringList KisOpenGL::getOpenGLWarnings() {
+    QStringList strings;
+    Q_FOREACH (const KLocalizedString &item, openglWarningStrings) {
+        strings << item.toString();
+    }
+    return strings;
 }
 
 // XXX Temporary function to allow LoD on OpenGL3 without triggering

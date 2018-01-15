@@ -37,7 +37,7 @@ class LayerModel : public QAbstractListModel
     Q_PROPERTY(QString activeType READ activeType NOTIFY activeTypeChanged);
     Q_PROPERTY(int activeCompositeOp READ activeCompositeOp WRITE setActiveCompositeOp NOTIFY activeCompositeOpChanged);
     Q_PROPERTY(int activeOpacity READ activeOpacity WRITE setActiveOpacity NOTIFY activeOpacityChanged);
-    Q_PROPERTY(bool activeVisible READ activeVisible WRITE setActiveVisibile NOTIFY activeVisibleChanged);
+    Q_PROPERTY(bool activeVisible READ activeVisible WRITE setActiveVisible NOTIFY activeVisibleChanged);
     Q_PROPERTY(bool activeLocked READ activeLocked WRITE setActiveLocked NOTIFY activeLockedChanged);
     Q_PROPERTY(bool activeRChannelActive READ activeRChannelActive WRITE setActiveRChannelActive NOTIFY activeRChannelActiveChanged);
     Q_PROPERTY(bool activeGChannelActive READ activeGChannelActive WRITE setActiveGChannelActive NOTIFY activeGChannelActiveChanged);
@@ -107,7 +107,7 @@ public:
     int activeOpacity() const;
     void setActiveOpacity(int newOpacity);
     bool activeVisible() const;
-    void setActiveVisibile(bool newVisible);
+    void setActiveVisible(bool newVisible);
     bool activeLocked() const;
     void setActiveLocked(bool newLocked);
     bool activeRChannelActive() const;

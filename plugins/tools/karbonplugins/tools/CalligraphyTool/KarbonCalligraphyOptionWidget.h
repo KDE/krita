@@ -98,7 +98,7 @@ private:
     // called by the ctor
     void addDefaultProfiles();
 
-    // laod the profiles from the configuration file
+    // load the profiles from the configuration file
     void loadProfiles();
 
     // loads the profile set as current profile in the configuration file

@@ -79,16 +79,24 @@ public:
     /**
      * When set to true, allow the user to change the alpha component
      * of the color. The default value is false.
-     * @since 4.5
      */
     void setAlphaChannelEnabled(bool alpha);
 
     /**
      * Returns true if the user is allowed to change the alpha component.
-     * @since 4.5
      */
     bool isAlphaChannelEnabled() const;
 
+    /**
+     * Allow having a palette.
+     */
+    void setPaletteViewEnabled( bool enable);
+
+    /**
+     * @brief paletteViewEnabled
+     * @return whether the palette is enabled.
+     */
+    bool paletteViewEnabled() const;
     /**
      * Returns the default color or an invalid color
      * if no default color is set.

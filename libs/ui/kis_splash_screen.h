@@ -36,8 +36,10 @@ public:
     void repaint();
 
     void show();
-    void displayLinks();
-    void displayRecentFiles();
+    void displayLinks(bool show);
+    void displayRecentFiles(bool show);
+
+    void setLoadingText(QString text);
 
 private Q_SLOTS:
 
@@ -55,7 +57,8 @@ private:
 
     QTimer m_timer;
     bool m_themed;
-
+    QImage m_splashImage;
+    int m_textTop;
 };
 
 #endif // KIS_SPLASH_SCREEN_H

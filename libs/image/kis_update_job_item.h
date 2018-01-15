@@ -100,7 +100,7 @@ public:
 
             m_exclusiveJobLock->unlock();
 
-            // try to exit the loop. Please note, that noone can flip the state from
+            // try to exit the loop. Please note, that no one can flip the state from
             // WAITING to EMPTY except ourselves!
             Type expectedValue = Type::WAITING;
             if (m_atomicType.compare_exchange_strong(expectedValue, Type::EMPTY)) {

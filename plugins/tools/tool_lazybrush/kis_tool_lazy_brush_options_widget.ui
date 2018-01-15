@@ -6,26 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>233</width>
-    <height>264</height>
+    <width>342</width>
+    <height>382</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,1,0,0">
-   <property name="spacing">
-    <number>2</number>
-   </property>
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
@@ -39,9 +24,6 @@
       <widget class="QPushButton" name="btnUpdate">
        <property name="text">
         <string>Update</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -62,7 +44,57 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkLimitToDevice">
+     <property name="text">
+      <string>Limit to layer bounds</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QCheckBox" name="chkUseEdgeDetection">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisSliderSpinBox" name="intEdgeDetectionSize" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="KisSliderSpinBox" name="intRadius" native="true"/>
+   </item>
+   <item>
+    <widget class="KisSliderSpinBox" name="intCleanUp" native="true"/>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -136,6 +168,12 @@
    <class>KisPaletteView</class>
    <extends>QTableView</extends>
    <header location="global">kis_palette_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

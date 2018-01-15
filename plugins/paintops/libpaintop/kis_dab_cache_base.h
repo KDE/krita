@@ -83,14 +83,14 @@ protected:
      * parameters of the previously generated (on a cache-miss) dab. This function
      * automatically updates this state when 'shouldUseCache == false'. Therefore, the
      * caller *must* generate the dab if and only if when 'shouldUseCache == false'.
-     * Othewise the internal state will become inconsistent.
+     * Otherwise the internal state will become inconsistent.
      *
      * @param hasDabInCache shows if the caller has something in its cache
      * @param resources rendering resources available for this dab
      * @param color current painting color
      * @param cursorPoint cursor point at which the dab should be painted
      * @param shape dab shape requested by the caller. It will be modified before
-     *              generation to accomodate the mirroring and rotation options.
+     *              generation to accommodate the mirroring and rotation options.
      * @param info painting info associated with the dab
      * @param softnessFactor softness factor
      * @param di (OUT) calculated dab generation information

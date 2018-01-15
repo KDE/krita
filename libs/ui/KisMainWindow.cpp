@@ -182,6 +182,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
+        mdiArea->setTabsMovable(true);
     }
 
     ~Private() {
@@ -669,7 +670,6 @@ void KisMainWindow::setReadWrite(bool readwrite)
 
 void KisMainWindow::addRecentURL(const QUrl &url)
 {
-    dbgUI << "KisMainWindow::addRecentURL url=" << url.toDisplayString();
     // Add entry to recent documents list
     // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
     if (!url.isEmpty()) {
@@ -677,9 +677,11 @@ void KisMainWindow::addRecentURL(const QUrl &url)
         if (url.isLocalFile()) {
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
             const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
-            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
-                if (path.contains(*it))
+            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
+                if (path.contains(*it)) {
                     ok = false; // it's in the tmp resource
+                }
+            }
 #ifdef HAVE_KIO
             if (ok) {
                 KRecentDocument::add(QUrl::fromLocalFile(path));
@@ -708,16 +710,7 @@ void KisMainWindow::saveRecentFiles()
 
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
-    Q_FOREACH (KMainWindow* window, KMainWindow::memberList()) {
-        /**
-         * FIXME: this is a hacking approach of reloading the updated recent files list.
-         * Sometimes, the result of reading from KConfig right after doing 'sync()' still
-         * returns old values of the recent files. Reading the same files a bit later
-         * returns correct "updated" files. I couldn't find the cause of it (DK).
-         */
-
-        KisMainWindow *mw = static_cast<KisMainWindow *>(window);
-
+    Q_FOREACH (KisMainWindow *mw, KisPart::instance()->mainWindows()) {
         if (mw != this) {
             mw->reloadRecentFileList();
         }
@@ -726,7 +719,7 @@ void KisMainWindow::saveRecentFiles()
 
 void KisMainWindow::reloadRecentFileList()
 {
-    d->recentFiles->loadEntries( KSharedConfig::openConfig()->group("RecentFiles"));
+    d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
 
 void KisMainWindow::updateCaption()
@@ -1251,7 +1244,7 @@ void KisMainWindow::saveWindowSettings()
         KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
         saveMainWindowSettings(group);
 
-        // Save collapsable state of dock widgets
+        // Save collapsible state of dock widgets
         for (QMap<QString, QDockWidget*>::const_iterator i = d->dockWidgetsMap.constBegin();
              i != d->dockWidgetsMap.constEnd(); ++i) {
             if (i.value()->widget()) {
@@ -1351,6 +1344,8 @@ void KisMainWindow::slotFileNew()
 
     KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
+    startupWidget->setWindowTitle(i18n("Create new document"));
+
 
     KisConfig cfg;
 
@@ -1831,7 +1826,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
 
-        // Check if the dock widget is supposed to be collapsable
+        // Check if the dock widget is supposed to be collapsible
         if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);

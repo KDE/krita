@@ -325,7 +325,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
-    static KisBrushSP fromXML(const QDomElement& element, bool forceCopy = false);
+    static KisBrushSP fromXML(const QDomElement& element);
 
     virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;
@@ -335,14 +335,13 @@ public:
     virtual void setAngle(qreal _angle);
     qreal angle() const;
 
-    void prepareBrushPyramid() const;
     void clearBrushPyramid();
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
     virtual KisBrush* clone() const = 0;
 
-//protected:
+protected:
 
     KisBrush(const KisBrush& rhs);
 
@@ -353,17 +352,19 @@ public:
     void setHotSpot(QPointF);
 
     /**
-     * The image is used to represent the brush in the gui, and may also, depending on the brush type
-     * be used to define the actual brush instance.
-     */
-    virtual void setBrushTipImage(const QImage& image);
-
-    /**
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
 
     virtual void setHasColor(bool hasColor);
+
+public:
+
+    /**
+     * The image is used to represent the brush in the gui, and may also, depending on the brush type
+     * be used to define the actual brush instance.
+     */
+    virtual void setBrushTipImage(const QImage& image);
 
     /**
      * Returns true if the brush has a bunch of pixels almost

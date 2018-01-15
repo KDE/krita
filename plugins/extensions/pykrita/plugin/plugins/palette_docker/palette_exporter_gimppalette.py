@@ -4,7 +4,7 @@ By Wolthera.
 '''
 
 
-# Importing the relevant dependancies:
+# Importing the relevant dependencies:
 import sys
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import math
@@ -21,7 +21,7 @@ class gimpPaletteExporter:
         self.currentPalette = Palette(allPalettes[self.paletteName])
         self.export()
         done = QMessageBox()
-        done.setWindowTitle("Export succesful")
+        done.setWindowTitle("Export successful")
         done.setText(self.paletteName + " has been exported to " + self.fileName + "!")
         done.exec_()
         pass

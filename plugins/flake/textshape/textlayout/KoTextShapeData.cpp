@@ -343,7 +343,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
             defaultStyle = new KoParagraphStyle();
             defaultStyle->loadOdf(dstyle, context);
         }
-        // graphic styles don't support inheritance yet therefor some additional work is needed here.
+        // graphic styles don't support inheritance yet therefore some additional work is needed here.
         QList<KoParagraphStyle *> paragraphStyles;
         while (style) {
             KoParagraphStyle *pStyle = new KoParagraphStyle();

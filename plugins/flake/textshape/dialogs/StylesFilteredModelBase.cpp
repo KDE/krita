@@ -124,7 +124,7 @@ QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, const QSize &si
     if (!index.isValid()) {
         return QImage();
     }
-    return m_sourceModel->stylePreview(index, size); //TODO be carefull there. this is assuming the sourceModel is only using the internalId, and the index's internalId matches the model's
+    return m_sourceModel->stylePreview(index, size); //TODO be careful there. this is assuming the sourceModel is only using the internalId, and the index's internalId matches the model's
 
 }
 */

@@ -402,18 +402,18 @@ namespace KritaUtils
 
     void applyToAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<void(quint8)> func) {
         KisSequentialConstIterator dstIt(dev, rc);
-        do {
+        while (dstIt.nextPixel()) {
             const quint8 *dstPtr = dstIt.rawDataConst();
             func(*dstPtr);
-        } while (dstIt.nextPixel());
+        }
     }
 
     void filterAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<quint8(quint8)> func) {
         KisSequentialIterator dstIt(dev, rc);
-        do {
+        while (dstIt.nextPixel()) {
             quint8 *dstPtr = dstIt.rawData();
             *dstPtr = func(*dstPtr);
-        } while (dstIt.nextPixel());
+        }
     }
 
     qreal estimatePortionOfTransparentPixels(KisPaintDeviceSP dev, const QRect &rect, qreal samplePortion) {

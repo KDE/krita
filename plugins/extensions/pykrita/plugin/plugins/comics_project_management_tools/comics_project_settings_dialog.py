@@ -52,7 +52,7 @@ class path_select(QWidget):
         self.button.setDefaultAction(self.action_change_folder)
 
     """
-    pops up a directory chooser widget, and when a directory is chosen a locationChanged signal is emited.
+    pops up a directory chooser widget, and when a directory is chosen a locationChanged signal is emitted.
     """
 
     def slot_change_location(self):

@@ -107,7 +107,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     QColor color1;
     QColor color2;
     KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
-    do {
+    while (it.nextPixel()) {
     
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
         device->colorSpace()->toQColor(it.oldRawData(), &color1);
@@ -123,7 +123,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
 
         device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it.rawData());
         if (progressUpdater) { progressUpdater->setValue(it.y()); if(progressUpdater->interrupted()) return; }
-    } while(it.nextPixel());
+    }
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -137,10 +137,10 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
  *
  * Theory            => This function is used in some functions to limit the
  *                      "for step". E.g. I have a picture with 309 pixels (width), and
- *                      my "for step" is 5. All the code go alright until reachs the
- *                      w = 305, because in the next step w will go to 310, but we want
- *                      to analize all the pixels. So, this function will reduce the
- *                      "for step", when necessary, until reach the last possible value
+ *                      my "for step" is 5. All the code goes alright until it reaches the
+ *                      w = 305, because in the next step we will go to 310, but we want
+ *                      to analyze all the pixels. So, this function will reduce the
+ *                      "for step", when necessary, until we reach the last possible value
  */
 
 int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const

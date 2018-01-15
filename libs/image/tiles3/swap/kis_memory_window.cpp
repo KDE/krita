@@ -30,7 +30,7 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
     m_valid = true;
 
     // swapDir will never be empty, as KisImageConfig::swapDir() always provides
-    // us with a (platform specific) default directory, even if none is explicity
+    // us with a (platform specific) default directory, even if none is explicitly
     // configured by the user; also we do not want any logic that determines the
     // default swap dir here.
     Q_ASSERT(!swapDir.isEmpty());

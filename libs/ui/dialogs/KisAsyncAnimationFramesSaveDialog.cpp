@@ -162,6 +162,7 @@ KisAsyncAnimationRendererBase *KisAsyncAnimationFramesSaveDialog::createRenderer
                                                      m_d->exportConfiguration);
 }
 
+
 QString KisAsyncAnimationFramesSaveDialog::savedFilesMask() const
 {
     return m_d->filenamePrefix + "%04d" + m_d->filenameSuffix;

@@ -22,6 +22,7 @@
 #include <QGraphicsPixmapItem>
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
+#include <strokes/KisFreehandStrokeInfo.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
 {
@@ -191,12 +192,10 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
     resources->setBrush(proxy_preset);
     resources->setFGColorOverride(m_paintColor);
-    FreehandStrokeStrategy::PainterInfo *painterInfo = new FreehandStrokeStrategy::PainterInfo();
+    KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(resources->needsIndirectPainting(),
-                                   resources->indirectPaintingCompositeOp(),
-                                   resources, painterInfo, kundo2_noi18n("temp_stroke"));
+        new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("temp_stroke"));
 
     KisStrokeId strokeId = m_image->startStroke(stroke);
 
@@ -206,7 +205,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
 
 
-    // paint the stroke. The sketchbrush gets a differnet shape than the others to show how it works
+    // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
     if (m_currentPreset->paintOp().id() == "sketchbrush") {
 
         KisPaintInformation pointOne;

@@ -104,21 +104,19 @@ void blendAndOffsetSatinSelection(KisPixelSelectionSP dstSelection,
     KisSequentialIterator srcIt1(srcSelection, applyRect.translated(offset));
     KisSequentialIterator srcIt2(srcSelection, applyRect.translated(-offset));
     KisSequentialIterator dstIt(dstSelection, applyRect);
-    do {
+
+    while(dstIt.nextPixel() && srcIt1.nextPixel() && srcIt2.nextPixel()) {
+
         quint8 *dstPixelPtr = dstIt.rawData();
         quint8 *src1PixelPtr = srcIt1.rawData();
         quint8 *src2PixelPtr = srcIt2.rawData();
-
 
         if (!invert) {
             *dstPixelPtr = *dstPixelPtr * qAbs(*src1PixelPtr - *src2PixelPtr) >> 8;
         } else {
             *dstPixelPtr = *dstPixelPtr * (255 - qAbs(*src1PixelPtr - *src2PixelPtr)) >> 8;
         }
-    } while(dstIt.nextPixel() &&
-            srcIt1.nextPixel() &&
-            srcIt2.nextPixel());
-
+    }
 }
 
 void applySatin(KisPaintDeviceSP srcDevice,

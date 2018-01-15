@@ -67,7 +67,7 @@ class QAction;
  *
  * The synchronization between KActionCollection and KActionCategory is done
  * internally. There is for example no need to remove actions from a category.
- * It is done implicitely if the action is removed from the associated
+ * It is done implicitly if the action is removed from the associated
  * collection.
  *
  * \code

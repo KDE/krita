@@ -27,7 +27,7 @@
 #include "kritaimage_export.h"
 
 /**
- * This namespace countains fast but inaccurate version of mathematical function.
+ * This namespace contains fast but inaccurate version of mathematical function.
  */
 namespace KisFastMath {
 

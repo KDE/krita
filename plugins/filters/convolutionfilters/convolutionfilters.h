@@ -106,47 +106,6 @@ public:
     }
 };
 
-class KisTopEdgeDetectionFilter : public KisConvolutionFilter
-{
-public:
-    KisTopEdgeDetectionFilter();
-public:
-    static inline KoID id() {
-        return KoID("top edge detections", i18n("Top Edge Detection"));
-    }
-};
-
-class KisRightEdgeDetectionFilter : public KisConvolutionFilter
-{
-public:
-    KisRightEdgeDetectionFilter();
-public:
-    static inline KoID id() {
-        return KoID("right edge detections", i18n("Right Edge Detection"));
-    }
-};
-
-class KisBottomEdgeDetectionFilter : public KisConvolutionFilter
-{
-public:
-    KisBottomEdgeDetectionFilter();
-public:
-    static inline KoID id() {
-        return KoID("bottom edge detections", i18n("Bottom Edge Detection"));
-    }
-};
-
-class KisLeftEdgeDetectionFilter : public KisConvolutionFilter
-{
-public:
-    KisLeftEdgeDetectionFilter();
-public:
-    static inline KoID id() {
-        return KoID("left edge detections", i18n("Left Edge Detection"));
-    }
-};
-
-
 class KritaConvolutionFilters : public QObject
 {
     Q_OBJECT

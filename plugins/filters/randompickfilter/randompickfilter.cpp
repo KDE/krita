@@ -111,7 +111,7 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
     const quint8* pixels[2];
     KoMixColorsOp * mixOp = cs->mixColorsOp();
-    do{
+    while (dstIt.nextPixel()) {
         if (randT.doubleRandomAt(dstIt.x(), dstIt.y()) > threshold) {
             int x = static_cast<int>(dstIt.x() + windowsize * (randH.doubleRandomAt(dstIt.x(), dstIt.y()) - 0.5));
             int y = static_cast<int>(dstIt.y() +  windowsize * (randV.doubleRandomAt(dstIt.x(), dstIt.y()) -0.5));
@@ -121,7 +121,7 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
             mixOp->mixColors(pixels, weights, 2, dstIt.rawData());
         }
         if (progressUpdater) progressUpdater->setValue(++count);
-    } while(dstIt.nextPixel());
+    }
 
 }
 

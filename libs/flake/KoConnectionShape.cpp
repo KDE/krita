@@ -105,7 +105,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
                 const qreal c0 = crossProd(p1-centerPoint, p2-centerPoint);
                 // check on which side of the first sector edge our handle point is
                 const qreal c1 = crossProd(p1-centerPoint, vHandle);
-                // second egde and handle point must be on the same side of first edge
+                // second edge and handle point must be on the same side of first edge
                 if ((c0 < 0 && c1 > 0) || (c0 > 0 && c1 < 0))
                     continue;
                 // check on which side of the handle point our second sector edge is

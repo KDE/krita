@@ -101,7 +101,7 @@ And here are some complete lettering examples (taken from the original Inkscape 
 
 Profiles
 ========
-Karbon allows you to easily load and save predifined and custom sets of options, called profiles. The combo box in the top of the "Tool options" docker allows you to choose the profile. To save a profile just click on the "Save profile as..." button (if the details are hidden first press "Show details >>") after which you will be asked to enter a name for the new profile.
+Karbon allows you to easily load and save predefined and custom sets of options, called profiles. The combo box in the top of the "Tool options" docker allows you to choose the profile. To save a profile just click on the "Save profile as..." button (if the details are hidden first press "Show details >>") after which you will be asked to enter a name for the new profile.
 
 Conclusion
 ==========

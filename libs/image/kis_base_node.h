@@ -92,7 +92,7 @@ public:
         bool stateInStasis;
 
         bool operator==(const Property &rhs) const {
-            return rhs.name == name;
+            return rhs.name == name && rhs.state == state;
         }
 
         Property(): isMutable( false ) { }
@@ -274,7 +274,7 @@ public:
 
     /**
      * Merge the specified properties with the properties of this
-     * layer. Whereever these properties overlap, the value of the
+     * layer. Wherever these properties overlap, the value of the
      * node properties is changed. No properties on the node are
      * deleted. If there are new properties in this list, they will be
      * added on the node.
@@ -368,7 +368,7 @@ public:
      * @param visible the new visibility state
      * @param isLoading if true, the property is set during loading.
      */
-    virtual void setVisible(bool visibile, bool loading = false);
+    virtual void setVisible(bool visible, bool loading = false);
 
     /**
      * Return the locked status of this node. Locked nodes cannot be

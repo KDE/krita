@@ -41,11 +41,12 @@
 
 class KoShape;
 class KoShapeGroup;
+class KoShapeContainer;
 class KoDocumentResourceManager;
 class KoVectorPatternBackground;
 class KoMarker;
 class KoPathShape;
-
+class KoSvgTextShape;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
@@ -70,21 +71,28 @@ public:
     /// no longer know about the symbols.
     QVector<KoSvgSymbol*> takeSymbols();
 
+    QString documentTitle() const;
+    QString documentDescription() const;
+
+    
     typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
     void setFileFetcher(FileFetcherFunc func);
 
     QList<QExplicitlySharedDataPointer<KoMarker>> knownMarkers() const;
 
-    QString documentTitle() const;
-    QString documentDescription() const;
+    void parseDefsElement(const KoXmlElement &e);
+    KoShape* parseTextElement(const KoXmlElement &e, KoSvgTextShape *mergeIntoShape = 0);
 
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties
     KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement());
 
+    // XXX
+    KoShape* parseTextNode(const KoXmlText &e);
+    
     /// Parses a container element, returning a list of child shapes
-    QList<KoShape*> parseContainer(const KoXmlElement &);
+    QList<KoShape*> parseContainer(const KoXmlElement &, bool parseTextNodes = false);
 
     /// XXX
     QList<KoShape*> parseSingleElement(const KoXmlElement &b, DeferredUseStore* deferredUseStore = 0);
@@ -147,7 +155,7 @@ protected:
     SvgClipPathHelper* findClipPath(const QString &id);
 
     /// Adds list of shapes to the given group shape
-    void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
+    void addToGroup(QList<KoShape*> shapes, KoShapeContainer *group);
 
     /// creates a shape from the given shape id
     KoShape * createShape(const QString &shapeID);
@@ -160,6 +168,7 @@ protected:
 
     void uploadStyleToContext(const KoXmlElement &e);
     void applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
+    void applyCurrentBasicStyle(KoShape *shape);
 
     /// Applies styles to the given shape
     void applyStyle(KoShape *, const KoXmlElement &, const QPointF &shapeToOriginalUserCoordinates);
@@ -200,10 +209,10 @@ private:
     QList<KoShape*> m_shapes;
     QVector<KoSvgSymbol*> m_symbols;
     QList<KoShape*> m_toplevelShapes;
-
+    QList<KoShape*> m_defsShapes;
+    bool m_isInsideTextSubtree = false;
     QString m_documentTitle;
     QString m_documentDescription;
-
 };
 
 #endif

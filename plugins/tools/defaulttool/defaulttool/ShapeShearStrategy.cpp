@@ -41,8 +41,14 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection,
     : KoInteractionStrategy(tool)
     , m_start(clicked)
 {
-    m_selectedShapes = selection->selectedEditableShapes();
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    /**
+     * The outline of the selection should look as if it is also shear'ed, so we
+     * add it to the transformed shapes list.
+     */
+    m_transformedShapesAndSelection = selection->selectedEditableShapes();
+    m_transformedShapesAndSelection << selection;
+
+    Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         m_oldTransforms << shape->transformation();
     }
 
@@ -144,7 +150,7 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
 
     QTransform applyMatrix = matrix * m_shearMatrix.inverted();
 
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         const QRectF oldDirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
         shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
@@ -161,10 +167,10 @@ void ShapeShearStrategy::paint(QPainter &painter, const KoViewConverter &convert
 KUndo2Command *ShapeShearStrategy::createCommand()
 {
     QList<QTransform> newTransforms;
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         newTransforms << shape->transformation();
     }
-    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_selectedShapes, m_oldTransforms, newTransforms);
+    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_transformedShapesAndSelection, m_oldTransforms, newTransforms);
     cmd->setText(kundo2_i18n("Shear"));
     return cmd;
 }

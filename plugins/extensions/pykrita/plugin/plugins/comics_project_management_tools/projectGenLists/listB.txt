@@ -83,7 +83,7 @@ Pear
 Pecan
 Pomegranate
 Pomelo
-Pumkin
+Pumpkin
 Pineapple
 Rambutan
 Rhubarb

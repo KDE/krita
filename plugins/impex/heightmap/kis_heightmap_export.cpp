@@ -54,9 +54,9 @@ static void writeData(KisPaintDeviceSP pd, const QRect &bounds, QDataStream &out
     KIS_ASSERT_RECOVER_RETURN(pd);
 
     KisSequentialConstIterator it(pd, bounds);
-    do {
+    while (it.nextPixel()) {
         out_stream << KoGrayTraits<T>::gray(const_cast<quint8*>(it.rawDataConst()));
-    } while(it.nextPixel());
+    }
 }
 
 KisHeightMapExport::KisHeightMapExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)

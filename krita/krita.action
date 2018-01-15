@@ -2598,6 +2598,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+        <Action name="save_vector_node_to_svg">
+      <icon>document-save</icon>
+      <text>Save Vector Layer as SVG...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Save Vector Layer as SVG</toolTip>
+      <iconText>Save Vector Layer as SVG</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="save_groups_as_images">
       <icon>document-save</icon>
       <text>Save &amp;Group Layers...</text>

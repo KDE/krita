@@ -49,11 +49,6 @@ KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariant
     manager->add(new KisEmbossHorizontalVerticalFilter());
     manager->add(new KisEmbossVerticalFilter());
     manager->add(new KisEmbossHorizontalFilter());
-    manager->add(new KisTopEdgeDetectionFilter());
-    manager->add(new KisRightEdgeDetectionFilter());
-    manager->add(new KisBottomEdgeDetectionFilter());
-    manager->add(new KisLeftEdgeDetectionFilter());
-
 }
 
 KritaConvolutionFilters::~KritaConvolutionFilters()
@@ -173,65 +168,6 @@ KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
     kernelMatrix << -1, 0, -1,
                      0, 4,  0,
                     -1, 0, -1;
-
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
-    setIgnoreAlpha(true);
-}
-
-
-KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
-        : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Top Edge Detection"))
-{
-    setSupportsPainting(false);
-    setShowConfigurationWidget(false);
-
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
-    kernelMatrix <<  1,  1,  1,
-                     0,  0,  0,
-                    -1, -1, -1;
-
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
-    setIgnoreAlpha(true);
-}
-
-KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
-        : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Right Edge Detection"))
-{
-    setSupportsPainting(false);
-    setShowConfigurationWidget(false);
-
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
-    kernelMatrix << -1, 0, 1,
-                    -1, 0, 1,
-                    -1, 0, 1;
-
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
-    setIgnoreAlpha(true);
-}
-
-KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Bottom Edge Detection"))
-{
-    setSupportsPainting(false);
-    setShowConfigurationWidget(false);
-
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
-    kernelMatrix << -1, -1, -1,
-                     0,  0,  0,
-                     1,  1,  1;
-
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
-    setIgnoreAlpha(true);
-}
-
-KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Left Edge Detection"))
-{
-    setSupportsPainting(false);
-    setShowConfigurationWidget(false);
-
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
-    kernelMatrix << 1, 0, -1,
-                    1, 0, -1,
-                    1, 0, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);

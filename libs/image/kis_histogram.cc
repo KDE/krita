@@ -90,17 +90,19 @@ void KisHistogram::updateHistogram()
 
     // Let the producer do it's work
     m_producer->clear();
-    int i;
+
 
     // XXX: the original code depended on their being a selection mask in the iterator
     //      if the paint device had a selection. When we changed that to passing an
     //      explicit selection to the createRectIterator call, that broke because
     //      paint devices didn't know about their selections anymore.
     //      updateHistogram should get a selection parameter.
-    do {
-        i = srcIt.nConseqPixels();
-        m_producer->addRegionToBin(srcIt.oldRawData(), 0, i, cs);
-    } while (srcIt.nextPixels(i));
+    int numConseqPixels = srcIt.nConseqPixels();
+    while (srcIt.nextPixels(numConseqPixels)) {
+
+        numConseqPixels = srcIt.nConseqPixels();
+        m_producer->addRegionToBin(srcIt.oldRawData(), 0, numConseqPixels, cs);
+    }
 
     computeHistogram();
 }

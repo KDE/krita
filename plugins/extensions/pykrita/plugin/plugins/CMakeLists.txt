@@ -84,11 +84,6 @@ install_pykrita_plugin(exportlayers)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
 install_pykrita_plugin(tenscripts)
-install( FILES
-    tenbrushes/tenbrushes.action
-    tenscripts/tenscripts.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
-
 install_pykrita_plugin(palette_docker)
 install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
@@ -100,6 +95,17 @@ install_pykrita_plugin(comics_project_management_tools)
 #     install_pykrita_plugin(js_utils PATTERNS "*.json")
 #     install_pykrita_plugin(expand PATTERNS "*.expand" "templates/*.tpl")
 # endif()
+
+install( FILES
+    hello/hello.xmlgui
+DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/)
+
+
+install( FILES
+    hello/hello.action
+    tenbrushes/tenbrushes.action
+    tenscripts/tenscripts.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 
 install(
     DIRECTORY libkritapykrita

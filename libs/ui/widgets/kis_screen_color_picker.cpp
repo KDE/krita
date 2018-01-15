@@ -56,12 +56,15 @@ KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : QWidget(parent), m
     QVBoxLayout *layout = new QVBoxLayout();
     this->setLayout(layout);
     m_d->screenColorPickerButton = new QPushButton();
-    m_d->screenColorPickerButton->setIcon(kisIcon("krita_tool_color_picker"));
+
     m_d->screenColorPickerButton->setMinimumHeight(25);
     this->layout()->addWidget(m_d->screenColorPickerButton);
     m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
     this->layout()->addWidget(m_d->lblScreenColorInfo);
     connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));
+
+    updateIcons();
+
 #ifdef Q_OS_WIN32
     m_d->updateTimer = new QTimer(this);
     m_d->dummyTransparentWindow.resize(1, 1);
@@ -72,6 +75,11 @@ KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : QWidget(parent), m
 
 KisScreenColorPicker::~KisScreenColorPicker()
 {
+}
+
+void KisScreenColorPicker::updateIcons()
+{
+        m_d->screenColorPickerButton->setIcon(kisIcon("krita_tool_color_picker"));
 }
 
 KoColor KisScreenColorPicker::currentColor()
@@ -260,6 +268,7 @@ bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
     }
     return false;
 }
+
 
 
 #include "kis_screen_color_picker.moc"

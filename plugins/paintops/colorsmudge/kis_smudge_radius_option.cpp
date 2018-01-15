@@ -48,7 +48,17 @@ KisSmudgeRadiusOption::KisSmudgeRadiusOption():
     setValueRange(0.0,300.0);
 }
 
-void KisSmudgeRadiusOption::apply(KisPainter& painter,
+QRect KisSmudgeRadiusOption::sampleRect(const KisPaintInformation& info,
+                                        qreal diameter,
+                                        const QPoint &pos) const
+{
+    const qreal sliderValue = computeSizeLikeValue(info);
+    const int smudgeRadius = ((sliderValue * diameter) * 0.5) / 100.0;
+
+    return kisGrowRect(QRect(pos, QSize(1,1)), smudgeRadius + 1);
+}
+
+void KisSmudgeRadiusOption::apply(KoColor *resultColor,
                                   const KisPaintInformation& info,
                                   qreal diameter,
                                   qreal posx,
@@ -62,17 +72,17 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter,
     int smudgeRadius = ((sliderValue * diameter) * 0.5) / 100.0;
 
 
-    KoColor color = painter.paintColor();
+    KoColor color(Qt::transparent, dev->colorSpace());
+
     if (smudgeRadius == 1) {
         dev->pixel(posx, posy, &color);
-        painter.setPaintColor(color);
     } else {
 
         const KoColorSpace* cs = dev->colorSpace();
-        int pixelSize = cs->pixelSize();
+        const int pixelSize = cs->pixelSize();
 
         quint8* data = new quint8[pixelSize];
-        static quint8** pixels = new quint8*[2];
+        quint8* pixels[2];
         qint16 weights[2];
 
         pixels[1] = new quint8[pixelSize];
@@ -86,9 +96,10 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter,
         int i = 0;
         int k = 0;
         int j = 0;
+
         KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
-        KisCrossDeviceColorPickerInt colorPicker(painter.device(), color);
-        colorPicker.pickColor(posx, posy, color.data());
+        accessor->moveTo(posx, posy);
+        memcpy(color.data(), accessor->rawDataConst(), pixelSize);
 
         for (int y = 0; y <= smudgeRadius; y = y + loop_increment) {
             for (int x = 0; x <= smudgeRadius; x = x + loop_increment) {
@@ -139,17 +150,15 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter,
 
         }
 
-        KoColor color = KoColor(pixels[0],cs);
-        painter.setPaintColor(color);
+        color = KoColor(pixels[0],cs);
 
         for (int l = 0; l < 2; l++){
             delete[] pixels[l];
         }
-        // delete[] pixels;
         delete[] data;
     }
 
-
+    *resultColor = color.convertedTo(resultColor->colorSpace());
 }
 
 void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const

@@ -34,7 +34,7 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     setToolTip(i18n("A shape which shows a single text line"));
     setIconName(koIconNameCStr("x-shape-text"));
     setLoadingPriority(5);
-    setXmlElementNames(KoXmlNS::svg, QStringList("text"));
+    //setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }
 
 KoShape *ArtisticTextShapeFactory::createDefaultShape(KoDocumentResourceManager *) const

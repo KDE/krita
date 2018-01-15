@@ -44,7 +44,9 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
-KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : QWidget(parent), m_channelInfo(channelInfo), m_color(color), m_displayRenderer(displayRenderer)
+KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
+    QWidget(parent), m_channelInfo(channelInfo), m_color(color), m_displayRenderer(displayRenderer),
+    m_usePercentage(usePercentage)
 {
 }
 
@@ -66,7 +68,8 @@ void KisColorInput::init()
     m_layout->addWidget(m_input);
 }
 
-KisIntegerColorInput::KisIntegerColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, channelInfo, color, displayRenderer)
+KisIntegerColorInput::KisIntegerColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
+    KisColorInput(parent, channelInfo, color, displayRenderer, usePercentage)
 {
     init();
 }
@@ -97,21 +100,41 @@ void KisIntegerColorInput::update()
     quint8* data = m_color->data() + m_channelInfo->pos();
     quint8* dataMin = min.data() + m_channelInfo->pos();
     quint8* dataMax = max.data() + m_channelInfo->pos();
+    m_intNumInput->blockSignals(true);
+    m_colorSlider->blockSignals(true);
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
-        m_intNumInput->setValue(*(reinterpret_cast<quint8*>(data)));
+        if (m_usePercentage) {
+            m_intNumInput->setMaximum(100);
+            m_intNumInput->setValue(round(*(reinterpret_cast<quint8*>(data))*1.0 / 255.0 * 100.0));
+        } else {
+            m_intNumInput->setMaximum(0xFF);
+            m_intNumInput->setValue(*(reinterpret_cast<quint8*>(data)));
+        }
         m_colorSlider->setValue(*(reinterpret_cast<quint8*>(data)));
         *(reinterpret_cast<quint8*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint8*>(dataMax)) = 0xFF;
         break;
     case KoChannelInfo::UINT16:
-        m_intNumInput->setValue(*(reinterpret_cast<quint16*>(data)));
+        if (m_usePercentage) {
+            m_intNumInput->setMaximum(100);
+            m_intNumInput->setValue(round(*(reinterpret_cast<quint16*>(data))*1.0 / 65535.0 * 100.0));
+        } else {
+            m_intNumInput->setMaximum(0xFFFF);
+            m_intNumInput->setValue(*(reinterpret_cast<quint16*>(data)));
+        }
         m_colorSlider->setValue(*(reinterpret_cast<quint16*>(data)));
         *(reinterpret_cast<quint16*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint16*>(dataMax)) = 0xFFFF;
         break;
     case KoChannelInfo::UINT32:
-        m_intNumInput->setValue(*(reinterpret_cast<quint32*>(data)));
+        if (m_usePercentage) {
+            m_intNumInput->setMaximum(100);
+            m_intNumInput->setValue(round(*(reinterpret_cast<quint32*>(data))*1.0 / 4294967295.0 * 100.0));
+        } else {
+            m_intNumInput->setMaximum(0xFFFF);
+            m_intNumInput->setValue(*(reinterpret_cast<quint32*>(data)));
+        }
         m_colorSlider->setValue(*(reinterpret_cast<quint32*>(data)));
         *(reinterpret_cast<quint32*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint32*>(dataMax)) = 0xFFFFFFFF;
@@ -120,6 +143,8 @@ void KisIntegerColorInput::update()
         Q_ASSERT(false);
     }
     m_colorSlider->setColors(min, max);
+    m_intNumInput->blockSignals(false);
+    m_colorSlider->blockSignals(false);
 }
 
 QWidget* KisIntegerColorInput::createInput()
@@ -129,27 +154,93 @@ QWidget* KisIntegerColorInput::createInput()
     m_colorSlider->setMinimum(0);
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
-        m_intNumInput->setMaximum(0xFF);
+        if (m_usePercentage) {
+            m_intNumInput->setMaximum(100);
+        } else {
+            m_intNumInput->setMaximum(0xFF);
+        }
         m_colorSlider->setMaximum(0xFF);
         break;
     case KoChannelInfo::UINT16:
-        m_intNumInput->setMaximum(0xFFFF);
+        if (m_usePercentage) {
+            m_intNumInput->setMaximum(100);
+        } else {
+            m_intNumInput->setMaximum(0xFFFF);
+        }
         m_colorSlider->setMaximum(0xFFFF);
         break;
     case KoChannelInfo::UINT32:
-        m_intNumInput->setMaximum(0xFFFFFFFF);
+        if (m_usePercentage) {
+            m_intNumInput->setMaximum(100);
+        } else {
+            m_intNumInput->setMaximum(0xFFFFFFFF);
+        }
         m_colorSlider->setMaximum(0xFFFFFFFF);
         break;
     default:
         Q_ASSERT(false);
     }
-    connect(m_colorSlider, SIGNAL(valueChanged(int)), m_intNumInput, SLOT(setValue(int)));
-    connect(m_intNumInput, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
+    connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(onColorSliderChanged(int)));
+    connect(m_intNumInput, SIGNAL(valueChanged(int)), this, SLOT(onNumInputChanged(int)));
     return m_intNumInput;
 }
 
+void KisIntegerColorInput::onColorSliderChanged(int val)
+{
+    m_intNumInput->blockSignals(true);
+    if (m_usePercentage) {
+        switch (m_channelInfo->channelValueType()) {
+        case KoChannelInfo::UINT8:
+            m_intNumInput->setValue(round((val*1.0) / 255.0 * 100.0));
+            break;
+        case KoChannelInfo::UINT16:
+            m_intNumInput->setValue(round((val*1.0) / 65535.0 * 100.0));
+            break;
+        case KoChannelInfo::UINT32:
+            m_intNumInput->setValue(round((val*1.0) / 4294967295.0 * 100.0));
+            break;
+        default:
+            Q_ASSERT(false);
+        }
+    } else {
+        m_intNumInput->setValue(val);
+    }
+    m_intNumInput->blockSignals(false);
+    setValue(val);
+}
 
-KisFloatColorInput::KisFloatColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, channelInfo, color, displayRenderer)
+void KisIntegerColorInput::onNumInputChanged(int val)
+{
+    m_colorSlider->blockSignals(true);
+    if (m_usePercentage) {
+        switch (m_channelInfo->channelValueType()) {
+        case KoChannelInfo::UINT8:
+            m_colorSlider->setValue((val*1.0)/100.0 * 255.0);
+            m_colorSlider->blockSignals(false);
+            setValue((val*1.0)/100.0 * 255.0);
+            break;
+        case KoChannelInfo::UINT16:
+            m_colorSlider->setValue((val*1.0)/100.0 * 65535.0);
+            m_colorSlider->blockSignals(false);
+            setValue((val*1.0)/100.0 * 65535.0);
+            break;
+        case KoChannelInfo::UINT32:
+            m_colorSlider->setValue((val*1.0)/100.0 * 4294967295.0);
+            m_colorSlider->blockSignals(false);
+            setValue((val*1.0)/100.0 * 4294967295.0);
+            break;
+        default:
+            Q_ASSERT(false);
+        }
+    } else {
+        m_colorSlider->setValue(val);
+        m_colorSlider->blockSignals(false);
+        setValue(val);
+    }
+}
+
+KisFloatColorInput::KisFloatColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
+    KisColorInput(parent, channelInfo, color, displayRenderer, usePercentage)
 {
     init();
 }
@@ -241,7 +332,8 @@ void KisFloatColorInput::update()
     m_colorSlider->setValue((value - m_minValue) / floatRange * 255);
 }
 
-KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, 0, color, displayRenderer)
+KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
+    KisColorInput(parent, 0, color, displayRenderer, usePercentage)
 {
     QHBoxLayout* m_layout = new QHBoxLayout(this);
     m_layout->setContentsMargins(0,0,0,0);

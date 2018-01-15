@@ -238,11 +238,13 @@ inline T cfHardLight(T src, T dst) {
     if(src > halfValue<T>()) {
         // screen(src*2.0 - 1.0, dst)
         src2 -= unitValue<T>();
-        return T((src2+dst) - (src2*dst / unitValue<T>()));
+
+        // src2 is guaranteed to be smaller than unitValue<T>() now
+        return Arithmetic::unionShapeOpacity(T(src2), dst);
     }
     
-    // multiply(src*2.0, dst)
-    return clamp<T>(src2*dst / unitValue<T>());
+    // src2 is guaranteed to be smaller than unitValue<T>() due to 'if'
+    return Arithmetic::mul(T(src2), dst);
 }
 
 template<class T>
@@ -374,6 +376,16 @@ inline T cfGrainExtract(T src, T dst) {
 template<class T>
 inline T cfHardMix(T src, T dst) {
     return (dst > Arithmetic::halfValue<T>()) ? cfColorDodge(src,dst) : cfColorBurn(src,dst);
+}
+
+template<class T>
+inline T cfHardMixPhotoshop(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    const composite_type sum = composite_type(src) + dst;
+
+    return sum > unitValue<T>() ? unitValue<T>() : zeroValue<T>();
 }
 
 template<class T>

@@ -109,7 +109,7 @@ class ComicsProjectSetupWizard():
         # Execute the wizard, and after wards...
         if (wizard.exec_()):
 
-            # First get the directories, check if the directories exist, and oterwise make them.
+            # First get the directories, check if the directories exist, and otherwise make them.
             self.pagesDirectory = self.lnPagesDirectory.text()
             self.exportDirectory = self.lnExportDirectory.text()
             self.templateLocation = self.lnTemplateLocation.text()

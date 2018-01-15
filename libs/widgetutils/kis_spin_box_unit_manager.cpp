@@ -95,7 +95,7 @@ public:
     mutable QStringList unitListWithName;
     mutable bool unitListWithNameCached;
 
-    //it's possible to store a reference for the % unit, for lenght.
+    //it's possible to store a reference for the % unit, for length.
     bool hasHundredPercent;
     qreal hundredPercent;
 
@@ -181,7 +181,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         for (int i = 0; i < KoUnit::TypeCount; i++) {
 
             if (KoUnit::Type(i) == KoUnit::Pixel) {
-                continue; //skip pixel, which is a document relative unit, in the base classe.
+                continue; //skip pixel, which is a document relative unit, in the base class.
             }
 
             if (withName) {
@@ -286,7 +286,7 @@ qreal KisSpinBoxUnitManager::getConversionConstant(int dim, QString symbol) cons
     Q_UNUSED(dim);
     Q_UNUSED(symbol);
 
-    return 0; // all units managed here are transform via a linear function, so this wll alway be 0 in this class.
+    return 0; // all units managed here are transform via a linear function, so this will always be 0 in this class.
 }
 
 qreal KisSpinBoxUnitManager::getReferenceValue(double apparentValue) const
@@ -447,7 +447,7 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
             newSymb = "°";
             break;
         }
-        goto default_indentifier; //alway do default after handling possible special cases.
+        goto default_indentifier; //always do default after handling possible special cases.
 
 default_indentifier:
     default:

@@ -42,10 +42,10 @@
 #include <QStatusBar>
 #include <QDebug>
 #include <QStandardPaths>
+#include <QAction>
+#include <QMessageBox>
 
 // KDE includes
-
-#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
@@ -54,7 +54,6 @@
 #include <kactionmenu.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <QAction>
 
 // Calligra
 #include <kis_icon.h>
@@ -197,6 +196,8 @@ void ThemeManager::slotChangePalette()
         qApp->style()->polish(qApp);
     }
 #endif
+
+    KisIconUtils::clearIconCache();
     emit signalThemeChanged();
 }
 

@@ -148,7 +148,7 @@ void DockerStylesComboModel::createMapping()
     }
 
     // The order of the styles is already correctly given by the source model.
-    // Therefor it is not needed to resort the styles again here. The source model
+    // Therefore it is not needed to resort the styles again here. The source model
     // makes sure to have the NoneStyleId as first style and the styles after
     // that are ordered by name.
     for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {

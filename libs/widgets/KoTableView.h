@@ -43,7 +43,7 @@ public:
     ~KoTableView() override {}
 
     /** reimplemented
-    * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
+    * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMNS
     * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
     */
     void resizeEvent(QResizeEvent *event) override;

@@ -124,7 +124,7 @@ qreal KisFastMath::atan2(qreal y, qreal x)
     }
     // we are in quadrant 3
     y = -y;
-    // flip y so we can use it as a positve
+    // flip y so we can use it as a positive
     // now figure out which side of the 45 degree line
     if (x > y) {
         return(-M_PI + calcAngle(x, y));

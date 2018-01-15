@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisColorizeMask : public KisEffectMask
 public:
     struct KeyStrokeColors {
         QVector<KoColor> colors;
-        int transparentIndex;
+        int transparentIndex = -1;
     };
 
 public:
@@ -80,6 +80,7 @@ public:
     void setCurrentColor(const KoColor &color) override;
     void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID) override;
     void writeMergeData(KisPainter *painter, KisPaintDeviceSP src) override;
+    bool supportsNonIndirectPainting() const override;
 
     QRect exactBounds() const override;
     QRect extent() const override;
@@ -101,6 +102,21 @@ public:
     QVector<KisPaintDeviceSP> allPaintDevices() const;
     void resetCache();
 
+    void setUseEdgeDetection(bool value);
+    bool useEdgeDetection() const;
+
+    void setEdgeDetectionSize(qreal value);
+    qreal edgeDetectionSize() const;
+
+    void setFuzzyRadius(qreal value);
+    qreal fuzzyRadius() const;
+
+    void setCleanUpAmount(qreal value);
+    qreal cleanUpAmount() const;
+
+    void setLimitToDeviceBounds(bool value);
+    bool limitToDeviceBounds() const;
+
     void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
     void testingRegenerateMask();
     KisPaintDeviceSP testingFilteredSource() const;
@@ -115,12 +131,19 @@ public:
 
     KisPaintDeviceList getLodCapableDevices() const override;
 
+    void regeneratePrefilteredDeviceIfNeeded();
+
 private Q_SLOTS:
-    void slotUpdateRegenerateFilling();
-    void slotRegenerationFinished();
+    void slotUpdateRegenerateFilling(bool prefilterOnly = false);
+    void slotRegenerationFinished(bool prefilterOnly);
+    void slotRegenerationCancelled();
+
+    void slotUpdateOnDirtyParent();
+    void slotRecalculatePrefilteredImage();
 
 Q_SIGNALS:
     void sigKeyStrokesListChanged();
+    void sigUpdateOnDirtyParent() const;
 
 private:
     // NOTE: please access this methods using model properties only!
@@ -134,11 +157,17 @@ private:
     bool showKeyStrokes() const;
     void setShowKeyStrokes(bool value);
 
-
 private:
     void rerenderFakePaintDevice();
     KisImageSP fetchImage() const;
     void moveAllInternalDevices(const QPoint &diff);
+
+    template <class DeviceMetricPolicy>
+    QRect calculateMaskBounds(DeviceMetricPolicy policy) const;
+
+    friend class SetKeyStrokesColorSpaceCommand;
+    friend class KeyStrokeAddRemoveCommand;
+    friend class SetKeyStrokeColorsCommand;
 
 private:
     struct Private;

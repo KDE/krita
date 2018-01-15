@@ -101,7 +101,6 @@
 #include <QString>
 #include <QTextInlineObject>
 #include <QTextStream>
-#include <QXmlStreamReader>
 
 // if defined then debugging is enabled
 // #define KOOPENDOCUMENTLOADER_DEBUG
@@ -220,7 +219,7 @@ KoList *KoTextLoader::Private::previousList(int level)
 
 inline static bool isspace(ushort ch)
 {
-    // options are ordered by likelyhood
+    // options are ordered by likelihood
     return ch == ' ' || ch== '\n' || ch == '\r' ||  ch == '\t';
 }
 
@@ -718,10 +717,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     KoXmlElement e;
     QList<KoXmlElement> childElementsList;
-
-    QString generatedXmlString;
-    KoXmlDocument doc;
-    QXmlStreamReader reader;
 
     for (KoXmlNode _node = element.firstChild(); !_node.isNull(); _node = _node.nextSibling()) {
         if (!(e = _node.toElement()).isNull()) {

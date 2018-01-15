@@ -1,6 +1,7 @@
 ########### install files ###############
 
 install(FILES
+Abstract_lines.png
 01_canvas.png
 02_rough-canvas.png
 02b_WoofTissue.png
@@ -8,7 +9,6 @@ install(FILES
 04_paper-C-grain.png
 05_paper-torchon.png
 06_hard-grain.png
-07_big-grain.png
 08_bump-relief.png
 09_drawed_crosshatched.png
 09b_drawed-CrossedLines.png
@@ -30,10 +30,6 @@ install(FILES
 24-dynamic-screentone-B.png
 25-dynamic-screentone-C.png
 26_brush-marks.png
-Canvas_Hard.pat
-Canvas_covered.pat
-Canvas_small_01.pat
-Canvas_small_02.pat
 Cross01.pat
 Cross02.pat
 Cross03.pat
@@ -49,12 +45,17 @@ Grid04.pat
 Grid05.pat
 HR_PastelPaper_02.pat
 HR_Wall_Paper.pat
+Maze_lines.png
 Pattern01.pat
 Pattern02.pat
 Pattern03.pat
 Pattern04.pat
 Pattern05.pat
 Pattern06.pat
+Rough_Paper.png
+Rough_Wall_With_Impasto.png
+Sand_fine.png
+Stars_Sized.png
 Squares01.pat
 Squares02.pat
 Squares03.pat
@@ -80,7 +81,6 @@ Zigzag04.pat
 fractal_pattern.pat
 generic_paper1.pat
 generic_paper2.pat
-granite.pat
 hexacolBW__2.pat
     DESTINATION ${DATA_INSTALL_DIR}/krita/patterns)
 

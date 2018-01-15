@@ -90,16 +90,12 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     setLayout(layout);
 
     //list of positions that we can use to provide useful autocompletion.
-    d->positions << i18n("Adapter") << i18n("Animator") << i18n("Artist")
-                 << i18n("Art Director") << i18n("Author") << i18n("Assistant Editor")
-                 << i18n("Background Artist") << i18n("Cartoonist") << i18n("Colorist")
-                 << i18n("Concept Artist") << i18n("Corrector") << i18n("Cover Artist")
-                 << i18n("Creator") << i18n("Designer") << i18n("Editor")
-                 << i18n("Inker") << i18n("Letterer") << i18n("Matte Painter")
-                 << i18n("Painter") << i18n("Penciller") << i18n("Proofreader")
-                 << i18n("Pixel Artist") << i18n("Redliner") << i18n("Sprite Artist")
-                 << i18n("Typographer") << i18n("Texture Artist") << i18n("Translator")
-                 << i18n("Writer") << i18n("Other");
+    d->positions << QString(i18nc("This is a list of suggestions for positions an artist can take, comma-separated","Adapter,Animator,Artist,Art Director,Author,Assistant,"
+                                 "Editor,Background,Cartoonist,Colorist,Concept Artist,"
+                                 "Corrector,Cover Artist,Creator,Designer,Inker,"
+                                 "Letterer,Matte Painter,Painter,Penciller,Proofreader,"
+                                 "Pixel Artist,Redliner,Sprite Artist,Typographer,Texture Artist,"
+                                 "Translator,Writer,Other")).split(",");
 
     //Keep these two in sync!
     d->contactModes << i18n("Homepage") << i18n("Email") << i18n("Post Address") << i18n("Telephone") << i18n("Fax");
@@ -171,6 +167,9 @@ KoConfigAuthorPage::KoConfigAuthorPage()
                 el = el.nextSiblingElement("contact");
             }
             modes->setHorizontalHeaderLabels(headerlabels);
+            QCompleter *positionSuggestions = new QCompleter(d->positions);
+            positionSuggestions->setCaseSensitivity(Qt::CaseInsensitive);
+            aUi->lePosition->setCompleter(positionSuggestions);
 
             connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
             connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));

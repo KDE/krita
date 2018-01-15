@@ -1,4 +1,4 @@
 * currently profiles names are untranslatable, because
 KoColorProfile::name() is used as a name and as an id, this should be
 changed by the introduction of an id() and making ::name() return the
-i18n version. And thus be consistant with the rest of the API
+i18n version. And thus be consistent with the rest of the API

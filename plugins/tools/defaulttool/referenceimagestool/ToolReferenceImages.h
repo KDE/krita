@@ -45,6 +45,8 @@ public:
         return 3;
     }
 
+    void mouseDoubleClickEvent(KoPointerEvent *event) override {}
+
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;

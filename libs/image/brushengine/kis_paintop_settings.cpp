@@ -191,6 +191,13 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     return settings;
 }
 
+void KisPaintOpSettings::resetSettings()
+{
+    const QString paintopID = getString("paintop");
+    clearProperties();
+    setProperty("paintop", paintopID);
+}
+
 void KisPaintOpSettings::activate()
 {
 }

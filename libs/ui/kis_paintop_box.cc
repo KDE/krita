@@ -1169,6 +1169,13 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
          */
 
         KisPaintOpPreset::UpdatedPostponer postponer(preset.data());
+
+        // clear all the properties before dumping the stuff into the preset,
+        // some of the options add the values incrementally
+        // (e.g. KisPaintOpUtils::RequiredBrushFilesListTag), therefore they
+        // may add up if we pass the same preset multiple times
+        preset->settings()->resetSettings();
+
         m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(preset->settings().data()));
     }
 

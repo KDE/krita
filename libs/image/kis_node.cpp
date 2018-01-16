@@ -604,12 +604,12 @@ void KisNode::setDirty(const QRect & rect)
 
 void KisNode::setDirtyDontResetAnimationCache()
 {
-    setDirtyDontResetAnimationCache({extent()});
+    setDirtyDontResetAnimationCache(QVector<QRect>({extent()}));
 }
 
 void KisNode::setDirtyDontResetAnimationCache(const QRect &rect)
 {
-    setDirtyDontResetAnimationCache({rect});
+    setDirtyDontResetAnimationCache(QVector<QRect>({rect}));
 }
 
 void KisNode::setDirtyDontResetAnimationCache(const QVector<QRect> &rects)

@@ -40,6 +40,7 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
     titleBar->setToolTip(i18n("Tools"));
     setTitleBarWidget(titleBar);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)

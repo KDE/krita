@@ -168,9 +168,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
-    // Make sure our new layer is visible otherwise the shapes cannot be painted.
-    setVisible(true);
-
     // copy the projection to avoid extra round of updates!
     initShapeLayer(controller, _rhs.m_d->paintDevice);
 

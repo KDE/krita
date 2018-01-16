@@ -39,6 +39,18 @@ KisReferenceImage::~KisReferenceImage()
 
 }
 
+KisReferenceImage * KisReferenceImage::fromFile(const QString &filename)
+{
+    QImage img;
+    img.load(filename);
+
+    KisReferenceImage *reference = new KisReferenceImage();
+    reference->setImage(img);
+
+    return reference;
+}
+
+
 void KisReferenceImage::setImage(QImage image)
 {
     d->image = image;

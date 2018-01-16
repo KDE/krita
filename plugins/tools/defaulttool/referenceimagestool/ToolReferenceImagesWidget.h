@@ -36,9 +36,6 @@ public:
     ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider *provider = 0, QWidget *parent = 0);
     ~ToolReferenceImagesWidget() override;
 
-private Q_SLOTS:
-    void slotAddReferenceImage();
-
 private:
     struct Private;
     const QScopedPointer<Private> d;

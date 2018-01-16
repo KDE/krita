@@ -46,16 +46,14 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui = new Ui_WdgToolOptions();
     d->ui->setupUi(this);
 
-    connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), this, SLOT(slotAddReferenceImage()));
+    connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
+    connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
+    connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
+    connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
 
 
 }
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
 {
-}
-
-void ToolReferenceImagesWidget::slotAddReferenceImage()
-{
-    d->tool->addReferenceImage();
 }

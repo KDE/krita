@@ -599,10 +599,7 @@ void KisView::dropEvent(QDropEvent *event)
                             }
                         }
                         else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
-                            KisReferenceImage *reference(new KisReferenceImage);
-                            QImage img;
-                            img.load(url.toLocalFile());
-                            reference->setImage(img);
+                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile());
                             reference->setPosition(cursorPos);
                             d->referenceImagesDecoration->addReferenceImage(reference);
                         }

@@ -22,6 +22,7 @@
 
 #include <QScopedPointer>
 
+#include <kritaui_export.h>
 #include <KoShape.h>
 
 class QImage;
@@ -34,11 +35,13 @@ class KisCanvas2;
 /**
  * @brief The KisReferenceImage class represents a single reference image
  */
-class KisReferenceImage : public KoShape
+class KRITAUI_EXPORT KisReferenceImage : public KoShape
 {
 public:
     KisReferenceImage();
     ~KisReferenceImage();
+
+    static KisReferenceImage * fromFile(const QString &filename);
 
     void setImage(QImage image);
     void setPosition(QPointF pos);

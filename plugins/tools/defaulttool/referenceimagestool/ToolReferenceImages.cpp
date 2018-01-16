@@ -20,20 +20,16 @@
 #include <QDesktopServices>
 #include <QLayout>
 
-
-#include <canvas/kis_canvas2.h>
-#include <kis_canvas_resource_provider.h>
-#include <kis_cursor.h>
-#include <kis_image.h>
-#include <KisViewManager.h>
-#include <KisDocument.h>
-
-#include "kis_global.h"
-
-#include <math.h>
-#include <libs/ui/flake/KisReferenceImagesLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
+#include <KoShapeController.h>
+#include <KoFileDialog.h>
+
+#include <kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
+#include <KisViewManager.h>
+#include <KisDocument.h>
+#include <KisReferenceImagesLayer.h>
 
 #include "ToolReferenceImagesWidget.h"
 
@@ -58,26 +54,36 @@ void ToolReferenceImages::deactivate()
     DefaultTool::deactivate();
 }
 
-void ToolReferenceImages::removeAllReferenceImages()
+void ToolReferenceImages::addReferenceImage()
 {
-}
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-void ToolReferenceImages::loadReferenceImages()
-{
-/*
-    KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
+    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
     dialog.setCaption(i18n("Select a Reference Image"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    // dialog.setMimeTypeFilters(QStringList() << "application/x-krita-assistant", "application/x-krita-");
+
+    QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+    if (!locations.isEmpty()) {
+        dialog.setDefaultDir(locations.first());
+    }
+
     QString filename = dialog.filename();
     if (filename.isEmpty()) return;
     if (!QFileInfo(filename).exists()) return;
 
-    QFile file(filename);
-    file.open(QIODevice::ReadOnly);
+    auto *reference = KisReferenceImage::fromFile(filename);
+    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    kisCanvas->imageView()->document()->addCommand(layer->addReferenceImage(reference));
+}
 
-    m_canvas->updateCanvas();
-*/
+void ToolReferenceImages::removeAllReferenceImages()
+{
+    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    canvas()->addCommand(canvas()->shapeController()->removeShapes(layer->shapes()));
+}
+
+void ToolReferenceImages::loadReferenceImages()
+{
 }
 
 void ToolReferenceImages::saveReferenceImages()
@@ -103,10 +109,6 @@ QWidget *ToolReferenceImages::createOptionWidget()
     }
     return m_optionsWidget;
  }
-
-void ToolReferenceImages::addReferenceImage()
-{
-}
 
 bool ToolReferenceImages::isValidForCurrentLayer() const
 {

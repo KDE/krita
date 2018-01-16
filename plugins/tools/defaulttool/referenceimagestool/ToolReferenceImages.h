@@ -57,15 +57,11 @@ protected:
 
 public:
 
-    void addReferenceImage();
-
 public Q_SLOTS:
-
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
-private Q_SLOTS:
-
+    void addReferenceImage();
     void removeAllReferenceImages();
     void saveReferenceImages();
     void loadReferenceImages();

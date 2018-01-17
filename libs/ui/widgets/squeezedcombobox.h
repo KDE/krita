@@ -30,6 +30,7 @@ class QWidget;
 
 #include <QComboBox>
 #include <QWidget>
+#include <QIcon>
 
 #include <kritaui_export.h>
 
@@ -77,7 +78,7 @@ public:
      * @param text the original (not-squeezed) text to search for
      */
     qint32 findOriginalText(const QString & text) const;
-    
+
 
     /**
      * Return the list of original text items
@@ -98,6 +99,7 @@ public:
      * @param index the position in the widget.
      */
     void insertSqueezedItem(const QString& newItem, int index, QVariant userData = QVariant());
+    void insertSqueezedItem(const QIcon &icon, const QString& newItem, int index, QVariant userData = QVariant());
 
     /**
      * Append an item.
@@ -105,6 +107,13 @@ public:
      *                to be added to the combobox
      */
     void addSqueezedItem(const QString& newItem, QVariant userData = QVariant());
+
+    /**
+     * Append an item.
+     * @param newItem the original (long version) of the item which needs
+     *                to be added to the combobox
+     */
+    void addSqueezedItem(const QIcon &icon, const QString& newItem, QVariant userData = QVariant());
 
     /**
      * Set the current item to the one matching the given text.

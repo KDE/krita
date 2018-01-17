@@ -118,24 +118,38 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
     /// find out if frame is empty or has content
     bool hasContent = index.data(TimelineFramesModel::FrameHasContent).toBool();
 
-
-
     // assign background color for frame depending on if the frame has a color label or  not
     QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
     QColor color = colorLabel.isValid() ? labelColors.at(colorLabel.toInt()) :
             TimelineColorScheme::instance()->frameColor(doesFrameExist, hasActiveLayerRole);
 
 
+    // how do we fill in a frame that has content
+    // a keyframe will be totally filled in. A hold frame will have a line running through it
     if (hasContent) {
+
         color = TimelineColorScheme::instance()->frameColor(true, hasActiveLayerRole);
+
+        if (doesFrameExist) { // keyframe
+            painter->fillRect(rc, color );
+        } else {  // hold frame
+            QPoint lineStart(rc.x(), rc.height()/2);
+            QPoint lineEnd(rc.x() + rc.width(), rc.height()/2);
+
+            QPen holdFramePen(color);
+            holdFramePen.setWidth(3);
+
+            painter->setPen(holdFramePen);
+            painter->drawLine(lineStart, lineEnd);
+        }
+
+
     } else {
         color = TimelineColorScheme::instance()->frameColor(false, hasActiveLayerRole);
     }
 
-    painter->fillRect(rc, color );
 
-
-    // draw a circle if it is the keyframe in case two key frames are next to each other
+    // in the case the keyframe doesn't have content. fill with a rectangle outline
     if (doesFrameExist) {
 
         if (hasContent) {
@@ -148,14 +162,16 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         QPen oldPen = painter->pen();
         QBrush oldBrush(painter->brush());
 
-        painter->setPen(QPen(color, 0));
-        painter->setBrush(color);
-
-        painter->drawEllipse(rc.center(), 2,2);
+        painter->setPen(QPen(color, 2));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRect(rc);
 
         painter->setBrush(oldBrush);
         painter->setPen(oldPen);
+
     }
+
+
 
 }
 

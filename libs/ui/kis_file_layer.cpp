@@ -37,6 +37,12 @@
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
 {
+    /**
+     * Set default paint device for a layer. It will be used in case
+     * the file does not exist anymore. Or course, this can happen only
+     * in the failing execution path.
+     */
+    m_paintDevice = new KisPaintDevice(image->colorSpace());
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
 }
 
@@ -130,9 +136,11 @@ void KisFileLayer::setFileName(const QString &basePath, const QString &filename)
 {
     m_basePath = basePath;
     m_filename = filename;
-
-    m_loader.setPath(path());
-    m_loader.reloadImage();
+    QFileInfo fi(path());
+    if (fi.exists()) {
+        m_loader.setPath(path());
+        m_loader.reloadImage();
+    }
 }
 
 QString KisFileLayer::fileName() const

@@ -84,9 +84,12 @@ public:
     }
 
     bool operator==(const KoColor &other) const {
-        if (*colorSpace() != *other.colorSpace())
+        if (*colorSpace() != *other.colorSpace()) {
             return false;
-        Q_ASSERT(m_size == other.m_size);
+        }
+        if (m_size != other.m_size) {
+            return false;
+        }
         return memcmp(m_data, other.m_data, m_size) == 0;
     }
 

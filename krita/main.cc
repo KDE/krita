@@ -30,6 +30,7 @@
 #include <QDate>
 #include <QLocale>
 #include <QSettings>
+#include <QMessageBox>
 
 #include <time.h>
 
@@ -155,6 +156,11 @@ extern "C" int main(int argc, char **argv)
     KisApplication app(key, argc, argv);
 
 #ifdef Q_OS_LINUX
+    // We must have the XDG environment to run.
+    if (qgetenv("XDG_DATA_DIRS").isEmpty()) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("XDG_DATA_DIRS is not set. Krita cannot run."));
+        return 1;
+    }
     qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share"));

@@ -43,6 +43,7 @@
 #include "kis_config_notifier.h"
 #include "kis_color_input.h"
 #include "kis_icon_utils.h"
+#include "squeezedcombobox.h"
 
 struct KisDlgInternalColorSelector::Private
 {
@@ -344,7 +345,7 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
         if (!entry.id.isEmpty()){
             name = entry.id + " - " + entry.name;
         }
-        m_ui->cmbNameList->addItem(QIcon(colorSquare), name);
+        m_ui->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
     }
     QCompleter *completer = new QCompleter(m_ui->cmbNameList->model());
     completer->setCompletionMode(QCompleter::PopupCompletion);

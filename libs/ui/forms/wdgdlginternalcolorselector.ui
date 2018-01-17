@@ -160,7 +160,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cmbNameList">
+          <widget class="SqueezedComboBox" name="cmbNameList">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -188,7 +188,6 @@
            <height>50</height>
           </size>
          </property>
-         <zorder>buttonBox</zorder>
         </widget>
        </item>
       </layout>
@@ -217,6 +216,11 @@
    <class>KisPaletteView</class>
    <extends>QTableView</extends>
    <header location="global">kis_palette_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">squeezedcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KisSpinboxColorSelector</class>

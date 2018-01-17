@@ -133,6 +133,7 @@
 #include "kis_derived_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 #include <kis_image.h>
+#include <KisMainWindow.h>
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -892,6 +893,12 @@ void KisViewManager::slotSaveIncremental()
 {
     if (!document()) return;
 
+    if (document()->url().isEmpty()) {
+        KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->mainWindow);
+        mw->saveDocument(document(), true, false);
+        return;
+    }
+
     bool foundVersion;
     bool fileAlreadyExists;
     bool isBackup;
@@ -987,6 +994,12 @@ void KisViewManager::slotSaveIncremental()
 void KisViewManager::slotSaveIncrementalBackup()
 {
     if (!document()) return;
+
+    if (document()->url().isEmpty()) {
+        KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->mainWindow);
+        mw->saveDocument(document(), true, false);
+        return;
+    }
 
     bool workingOnBackup;
     bool fileAlreadyExists;

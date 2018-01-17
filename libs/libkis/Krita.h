@@ -71,7 +71,7 @@ public Q_SLOTS:
     bool batchmode() const;
 
     /**
-     * @brief setBatchmode sets the the batchmode to @param value; if true, scripts should
+     * @brief setBatchmode sets the batchmode to @param value; if true, scripts should
      * not show dialogs or messageboxes.
      */
     void setBatchmode(bool value);

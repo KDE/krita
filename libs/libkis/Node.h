@@ -55,7 +55,7 @@ public Q_SLOTS:
     bool alphaLocked() const;
 
     /**
-     * @brief setAlphaLocked set the layer to value if the the node is paint layer.
+     * @brief setAlphaLocked set the layer to value if the node is paint layer.
      */
     void setAlphaLocked(bool value);
 

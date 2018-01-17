@@ -47,7 +47,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
     , m_scalingMethod(scaleToImageResolution)
 {
     /**
-     * Set default paint device for a layer. It will be used is case
+     * Set default paint device for a layer. It will be used in case
      * the file does not exist anymore. Or course, this can happen only
      * in the failing execution path.
      */

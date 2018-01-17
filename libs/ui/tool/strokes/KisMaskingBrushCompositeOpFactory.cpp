@@ -95,6 +95,8 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
     } else if (id == COMPOSITE_HARD_MIX) {
         // NOTE: we call it "Hard Mix", but it is actually "Hard Mix (Photoshop)"
         result = new KisMaskingBrushCompositeOp<channel_type, cfHardMixPhotoshop>(pixelSize, alphaOffset);
+    } else if (id == COMPOSITE_SUBTRACT) {
+        result = new KisMaskingBrushCompositeOp<channel_type, cfSubtract>(pixelSize, alphaOffset);
     }
 
     KIS_SAFE_ASSERT_RECOVER (result && "Unknown composite op for masked brush!") {
@@ -160,6 +162,7 @@ QStringList KisMaskingBrushCompositeOpFactory::supportedCompositeOpIds()
 
     // NOTE: we call it "Hard Mix", but it is actually "Hard Mix (Photoshop)"
     ids << COMPOSITE_HARD_MIX;
+    ids << COMPOSITE_SUBTRACT;
 
     return ids;
 }

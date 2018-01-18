@@ -48,6 +48,7 @@
 #include "brushhud/kis_brush_hud.h"
 #include "brushhud/kis_round_hud_button.h"
 #include <kis_action.h>
+#include "kis_signals_blocker.h"
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -388,6 +389,8 @@ void KisPopupPalette::showPopupPalette(bool show)
         // the bounds and cause the canvas to jump between the slider's min and max
         if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
             m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue  ){
+
+            KisSignalsBlocker b(zoomCanvasSlider);
             zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
         }
 

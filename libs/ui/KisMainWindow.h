@@ -373,6 +373,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 
 private:
 

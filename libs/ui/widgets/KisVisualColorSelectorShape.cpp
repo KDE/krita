@@ -501,8 +501,8 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
         quint8* oldData = m_d->currentColor.data();
         KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-        QRect offsetrect(this->geometry().topLeft()+QPoint(7.0,7.0), this->geometry().bottomRight()-QPoint(7.0,7.0));
-        if (offsetrect.contains(e->pos()) || (m_d->colorSpace->difference(col.data(), oldData)>5)) {
+        QRect offsetrect(this->geometry().topLeft() + QPoint(7.0, 7.0), this->geometry().bottomRight() - QPoint(7.0, 7.0));
+        if (offsetrect.contains(e->pos()) || (m_d->colorSpace->difference(col.data(), oldData) > 5)) {
             setColor(col);
             if (!m_d->updateTimer->isActive()) {
                 Q_EMIT sigNewColor(col);

@@ -147,7 +147,17 @@ void KisUnsharpFilter::processRaw(KisPaintDeviceSP device,
 
     for (int j = 0; j < rect.height(); j++) {
         do {
-            quint8 diff = cs->difference(dstIt->oldRawData(), dstIt->rawDataConst());
+            quint8 diff = 0;
+            if (threshold == 1) {
+                if (memcmp(dstIt->oldRawData(), dstIt->rawDataConst(), cs->pixelSize()) == 0) {
+                    diff = 1;
+                }
+            }
+            else {
+                diff = cs->difference(dstIt->oldRawData(), dstIt->rawDataConst());
+            }
+
+
             if (diff >= threshold) {
                 memcpy(colors[0], dstIt->oldRawData(), pixelSize);
                 memcpy(colors[1], dstIt->rawDataConst(), pixelSize);

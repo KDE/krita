@@ -493,7 +493,7 @@ public:
 
     /**
      * Get the difference between 2 colors, normalized in the range (0,255). Only completely
-     * opaque and completely transparent are taken into account when computing the different;
+     * opaque and completely transparent are taken into account when computing the difference;
      * other transparency levels are not regarded when finding the difference.
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;

@@ -135,20 +135,27 @@ private:
 class DifferencePolicySlow
 {
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold) {
         m_colorSpace = device->colorSpace();
         m_srcPixel = srcPixel;
         m_srcPixelPtr = m_srcPixel.data();
+        m_threshold = threshold;
     }
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
-        return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+        if (m_threshold == 1) {
+            return memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize());
+        }
+        else {
+            return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+        }
     }
 
 private:
     const KoColorSpace *m_colorSpace;
     KoColor m_srcPixel;
     const quint8 *m_srcPixelPtr;
+    int m_threshold;
 };
 
 template <typename SrcPixelType>
@@ -158,10 +165,11 @@ class DifferencePolicyOptimized
     typedef QHash<HashKeyType, quint8> HashType;
 
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold) {
         m_colorSpace = device->colorSpace();
         m_srcPixel = srcPixel;
         m_srcPixelPtr = m_srcPixel.data();
+        m_threshold = threshold;
     }
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
@@ -174,7 +182,12 @@ public:
         if (it != m_differences.end()) {
             result = *it;
         } else {
-            result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            if (m_threshold == 1) {
+                result = memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize());
+            }
+            else {
+                result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            }
             m_differences.insert(key, result);
         }
 
@@ -187,6 +200,7 @@ private:
     const KoColorSpace *m_colorSpace;
     KoColor m_srcPixel;
     const quint8 *m_srcPixelPtr;
+    int m_threshold;
 };
 
 template <bool useSmoothSelection,
@@ -201,7 +215,7 @@ public:
     SelectionPolicy(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold)
         : m_threshold(threshold)
     {
-        this->initDifferencies(device, srcPixel);
+        this->initDifferences(device, srcPixel, threshold);
         m_srcIt = this->createSourceDeviceAccessor(device);
     }
 
@@ -231,7 +245,7 @@ private:
 class IsNonNullPolicySlow
 {
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int /*threshold*/) {
         Q_UNUSED(srcPixel);
 
         m_pixelSize = device->pixelSize();
@@ -251,7 +265,7 @@ template <typename SrcPixelType>
 class IsNonNullPolicyOptimized
 {
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int /*threshold*/) {
         Q_UNUSED(device);
         Q_UNUSED(srcPixel);
     }

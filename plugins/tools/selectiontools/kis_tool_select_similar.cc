@@ -61,9 +61,16 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
         do {
             //if (dev->colorSpace()->hasAlpha())
             //    opacity = dev->colorSpace()->alpha(hiter->rawData());
-            quint8 match = cs->difference(c, hiter->oldRawData());
-            if (match <= fuzziness) {
-                *(selIter->rawData()) = MAX_SELECTED;
+            if (fuzziness == 1) {
+                if (memcmp(c, hiter->oldRawData(), cs->pixelSize()) == 0) {
+                    *(selIter->rawData()) = MAX_SELECTED;
+                }
+            }
+            else {
+                quint8 match = cs->difference(c, hiter->oldRawData());
+                if (match <= fuzziness) {
+                    *(selIter->rawData()) = MAX_SELECTED;
+                }
             }
         }
         while (hiter->nextPixel() && selIter->nextPixel());
@@ -130,7 +137,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
     helper.selectPixelSelection(tmpSel, selectionAction());
 
-    QApplication::restoreOverrideCursor();                        
+    QApplication::restoreOverrideCursor();
 
 }
 

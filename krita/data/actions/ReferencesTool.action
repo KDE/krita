@@ -134,7 +134,7 @@
     </Action>
     <Action name="format_textcolor">
       <icon></icon>
-      <text>Text ColoText Colorr</text>
+      <text>Text Color</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>

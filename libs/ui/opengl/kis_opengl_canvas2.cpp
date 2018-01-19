@@ -107,7 +107,6 @@ public:
 #endif
 
     qreal pixelGridDrawingThreshold;
-    bool pixelGridEnabled;
     QColor gridColor;
     QColor cursorColor;
 
@@ -785,7 +784,6 @@ void KisOpenGLCanvas2::slotConfigChanged()
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
     d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
-    d->pixelGridEnabled = cfg.pixelGridEnabled();
     d->gridColor = cfg.getPixelGridColor();
     d->cursorColor = cfg.getCursorMainColor();
 
@@ -825,7 +823,10 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
     drawCheckers();
     drawImage();
-    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
+
+    KisConfig cfg;
+
+    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && cfg.pixelGridEnabled()) {
         drawGrid();
     }
     if (KisOpenGL::hasOpenGL3()) {

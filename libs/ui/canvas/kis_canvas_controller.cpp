@@ -276,22 +276,6 @@ bool KisCanvasController::wrapAroundMode() const
     return kritaCanvas->wrapAroundViewingMode();
 }
 
-
-void KisCanvasController::slotTogglePixelGrid(bool value)
-{
-    KisConfig cfg;
-    cfg.enablePixelGrid(value);
-
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-
-    // pixel grid only works with openGL
-    if (kritaCanvas->canvasIsOpenGL() ) {
-            KisOpenGLCanvas2 *openGLWidget = dynamic_cast<KisOpenGLCanvas2*>(kritaCanvas->canvasWidget());
-            openGLWidget->slotConfigChanged();
-    }
-
-}
-
 void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());

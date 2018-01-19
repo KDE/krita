@@ -460,8 +460,6 @@ void KisViewManager::setCurrentView(KisView *view)
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
 
-        d->viewConnections.addUniqueConnection(d->showPixelGrid, SIGNAL(toggled(bool)), canvasController, SLOT(slotTogglePixelGrid(bool)));
-
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
 
@@ -726,9 +724,6 @@ void KisViewManager::createActions()
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
-
-    d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
-    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
 
 }
 

@@ -22,6 +22,8 @@ Dry_Textured_Creases.kpp
 Dry_Textured_Rough.kpp
 Dry_Textured_Scribbles.kpp
 Dry_Textured_Soft.kpp
+Dry_Waterpaint_Soft.kpp
+Dry_Waterpaint_Wet_Edges.kpp
 Eraser_Airbrush.kpp
 Eraser_Circle.kpp
 Eraser_Hard.kpp

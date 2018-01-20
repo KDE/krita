@@ -602,6 +602,8 @@ void KisView::dropEvent(QDropEvent *event)
                             auto *reference = KisReferenceImage::fromFile(url.toLocalFile());
                             reference->setPosition(cursorPos);
                             d->referenceImagesDecoration->addReferenceImage(reference);
+
+                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
                         }
 
                     }

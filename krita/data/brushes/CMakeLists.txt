@@ -23,7 +23,6 @@ cazu-freckles.gbr
 cazu-reptile.gbr
 cazu-smear-paint.gbr
 cazu-spines.gbr
-cazu-smear-ink.gih
 cazu_watercolor2.gih
 double_special6.gih
 dub1.gbr

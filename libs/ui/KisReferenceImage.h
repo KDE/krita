@@ -22,6 +22,7 @@
 
 #include <QScopedPointer>
 
+#include <kundo2command.h>
 #include <kritaui_export.h>
 #include <KoShape.h>
 
@@ -38,6 +39,16 @@ class KisCanvas2;
 class KRITAUI_EXPORT KisReferenceImage : public KoShape
 {
 public:
+    struct SetSaturationCommand : public KUndo2Command {
+        QVector<KisReferenceImage*> images;
+        QVector<qreal> oldSaturations;
+        qreal newSaturation;
+
+        explicit SetSaturationCommand(const QList<KoShape *> &images, qreal newSaturation, KUndo2Command *parent = 0);
+        void undo() override;
+        void redo() override;
+    };
+
     KisReferenceImage();
     ~KisReferenceImage();
 
@@ -45,7 +56,8 @@ public:
 
     void setImage(QImage image);
     void setPosition(QPointF pos);
-    void setGrayscale(bool grayscale);
+    void setSaturation(qreal saturation);
+    qreal saturation() const;
 
     void paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 

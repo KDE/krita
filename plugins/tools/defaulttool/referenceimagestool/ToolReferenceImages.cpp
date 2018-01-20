@@ -47,6 +47,9 @@ void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoS
 {
     // Add code here to initialize your tool when it got activated
     DefaultTool::activate(toolActivation, shapes);
+
+    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    connect(layer, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 }
 
 void ToolReferenceImages::deactivate()
@@ -90,6 +93,11 @@ void ToolReferenceImages::saveReferenceImages()
 {
 }
 
+void ToolReferenceImages::slotSelectionChanged()
+{
+    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    m_optionsWidget->selectionChanged(layer->shapeManager()->selection());
+}
 
 QList<QPointer<QWidget>> ToolReferenceImages::createOptionWidgets()
 {

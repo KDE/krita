@@ -46,8 +46,22 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="KisShapePropertySlider" name="opacitySlider" native="true"/>
+   </item>
+   <item>
+    <widget class="KisShapePropertySlider" name="saturationSlider" native="true"/>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisShapePropertySlider</class>
+   <extends>QWidget</extends>
+   <header>KisSelectionPropertySlider.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

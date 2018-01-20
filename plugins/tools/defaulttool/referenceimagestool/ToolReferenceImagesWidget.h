@@ -25,8 +25,9 @@
 
 #include "kis_types.h"
 
-class KisCanvasResourceProvider;
 class KoColor;
+class KoSelection;
+class KisCanvasResourceProvider;
 class ToolReferenceImages;
 
 class ToolReferenceImagesWidget : public QWidget
@@ -35,6 +36,12 @@ class ToolReferenceImagesWidget : public QWidget
 public:
     ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider *provider = 0, QWidget *parent = 0);
     ~ToolReferenceImagesWidget() override;
+
+    void selectionChanged(KoSelection *selection);
+
+private Q_SLOTS:
+    void slotOpacitySliderChanged(qreal);
+    void slotSaturationSliderChanged(qreal);
 
 private:
     struct Private;

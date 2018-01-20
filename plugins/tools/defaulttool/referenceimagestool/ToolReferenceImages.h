@@ -66,6 +66,8 @@ public Q_SLOTS:
     void saveReferenceImages();
     void loadReferenceImages();
 
+    void slotSelectionChanged();
+
 private:
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
 

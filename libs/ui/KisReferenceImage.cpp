@@ -20,13 +20,50 @@
 #include "KisReferenceImage.h"
 #include <QImage>
 #include <QPainter>
+#include <kundo2command.h>
 #include <kis_coordinates_converter.h>
 
 struct KisReferenceImage::Private {
     QImage image;
     QPointF pos;
-    bool grayscale;
+    qreal saturation {1.0};
 };
+
+
+KisReferenceImage::SetSaturationCommand::SetSaturationCommand(const QList<KoShape *> &shapes, qreal newSaturation, KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Set saturation"), parent)
+    , newSaturation(newSaturation)
+{
+    images.reserve(shapes.count());
+
+    Q_FOREACH(auto *shape, shapes) {
+        auto *reference = dynamic_cast<KisReferenceImage*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_BREAK(reference);
+        images.append(reference);
+    }
+
+    Q_FOREACH(auto *image, images) {
+        oldSaturations.append(image->saturation());
+    }
+}
+
+void KisReferenceImage::SetSaturationCommand::undo()
+{
+    auto saturationIterator = oldSaturations.begin();
+    Q_FOREACH(auto *image, images) {
+        image->setSaturation(*saturationIterator);
+        image->update();
+        saturationIterator++;
+    }
+}
+
+void KisReferenceImage::SetSaturationCommand::redo()
+{
+    Q_FOREACH(auto *image, images) {
+        image->setSaturation(newSaturation);
+        image->update();
+    }
+}
 
 KisReferenceImage::KisReferenceImage()
     : d(new Private)
@@ -61,11 +98,6 @@ void KisReferenceImage::setPosition(QPointF pos)
     d->pos = pos;
 }
 
-void KisReferenceImage::setGrayscale(bool grayscale)
-{
-    d->grayscale = grayscale;
-}
-
 void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     gc.save();
@@ -81,4 +113,14 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
     gc.drawImage(QPoint(), d->image);
 
     gc.restore();
+}
+
+void KisReferenceImage::setSaturation(qreal saturation)
+{
+    d->saturation = saturation;
+}
+
+qreal KisReferenceImage::saturation() const
+{
+    return d->saturation;
 }

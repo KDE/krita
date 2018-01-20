@@ -20,12 +20,10 @@
 
 #include "ui_WdgToolOptions.h"
 
-#include <KoColorSpaceRegistry.h>
-#include "KisPaletteModel.h"
-
-#include "kis_config.h"
-#include <resources/KoColorSet.h>
-#include "kis_canvas_resource_provider.h"
+#include <KoSelection.h>
+#include <KoShapeTransparencyCommand.h>
+#include <kis_config.h>
+#include <KisReferenceImage.h>
 
 #include "ToolReferenceImages.h"
 
@@ -46,14 +44,63 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui = new Ui_WdgToolOptions();
     d->ui->setupUi(this);
 
+    d->ui->opacitySlider->setRange(0, 100);
+    d->ui->opacitySlider->setPrefix(i18n("Opacity: "));
+    d->ui->opacitySlider->setSuffix(i18n(" %"));
+    d->ui->opacitySlider->setValueGetter(
+        [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
+    );
+
+    d->ui->saturationSlider->setRange(0, 100);
+    d->ui->saturationSlider->setPrefix(i18n("Saturation: "));
+    d->ui->saturationSlider->setSuffix(i18n(" %"));
+    d->ui->saturationSlider->setValueGetter(
+        [](KoShape *s){
+            auto *r = dynamic_cast<KisReferenceImage*>(s);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, 0.0);
+            return 100.0 * r->saturation();
+        }
+    );
+
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
 
-
+    connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacitySliderChanged(qreal)));
+    connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotSaturationSliderChanged(qreal)));
 }
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
 {
+}
+
+void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
+{
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    d->ui->opacitySlider->setSelection(shapes);
+    d->ui->saturationSlider->setSelection(shapes);
+}
+
+void ToolReferenceImagesWidget::slotOpacitySliderChanged(qreal newOpacity)
+{
+    QList<KoShape*> shapes = d->ui->opacitySlider->selection();
+    if (shapes.isEmpty()) return;
+
+    KUndo2Command *cmd =
+        new KoShapeTransparencyCommand(shapes, 1.0 - newOpacity / 100.0);
+
+    d->tool->canvas()->addCommand(cmd);
+}
+
+void ToolReferenceImagesWidget::slotSaturationSliderChanged(qreal newSaturation)
+{
+    QList<KoShape*> shapes = d->ui->saturationSlider->selection();
+    if (shapes.isEmpty()) return;
+
+    KUndo2Command *cmd =
+            new KisReferenceImage::SetSaturationCommand(shapes, newSaturation / 100.0);
+
+    d->tool->canvas()->addCommand(cmd);
 }

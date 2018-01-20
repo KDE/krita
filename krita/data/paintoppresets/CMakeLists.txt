@@ -22,8 +22,6 @@ Dry_Textured_Creases.kpp
 Dry_Textured_Rough.kpp
 Dry_Textured_Scribbles.kpp
 Dry_Textured_Soft.kpp
-Dry_Waterpaint_Soft.kpp
-Dry_Waterpaint_Wet_Edges.kpp
 Eraser_Airbrush.kpp
 Eraser_Circle.kpp
 Eraser_Hard.kpp
@@ -65,6 +63,9 @@ Stamp_Shoujo_Bubbles.kpp
 Stamp_Spines.kpp
 Stamp_Watercolor.kpp
 Stamp_Water.kpp
+Waterpaint_Hard_Edges.kpp
+Waterpaint_Soft_Edges.kpp
+Waterpaint_Soft.kpp
 Wet_Bristles.kpp
 Wet_Bristles_Rough.kpp
 Wet_Circle.kpp

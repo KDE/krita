@@ -7,6 +7,7 @@ install( FILES
 A_bamboo-leaves.gih
 A_distant-mountain.gih
 A_eroded-cercle-anim.gih
+A_eroded_circle.gih
 A_grass-floor.gih
 A_pin.gih
 A_smoke.gbr

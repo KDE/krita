@@ -478,7 +478,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         const KisPaintInformation& info_,
         double subPixelX, double subPixelY, qreal softnessFactor) const
 {
-    Q_ASSERT(valid());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(valid());
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 

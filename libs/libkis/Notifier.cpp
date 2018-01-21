@@ -61,7 +61,7 @@ bool Notifier::active() const
 void Notifier::setActive(bool value)
 {
     d->active = value;
-    blockSignals(value);
+    blockSignals(!value);
 }
 
 void Notifier::imageCreated(KisDocument* document)

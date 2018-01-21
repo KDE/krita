@@ -114,6 +114,7 @@ private:
     KisCoordinatesConverter* m_coordinatesConverter;
 
     KisActionManager* m_actionManager;
+    KisViewManager* m_viewManager;
     KisFavoriteResourceManager* m_resourceManager;
     KisColorSelectorInterface* m_triangleColorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;

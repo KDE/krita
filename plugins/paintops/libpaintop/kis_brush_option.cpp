@@ -37,7 +37,7 @@ void KisBrushOption::writeOptionSettingImpl(KisPropertiesConfiguration *setting)
     d.appendChild(e);
     setting->setProperty("brush_definition", d.toString());
 
-    QString brushFileName = !m_brush->filename().isEmpty() ?
+    QString brushFileName  = !m_brush->filename().isEmpty() ?
                             m_brush->shortFilename() : QString();
 
     setting->setProperty(KisPaintOpUtils::RequiredBrushFileTag, brushFileName);
@@ -45,6 +45,9 @@ void KisBrushOption::writeOptionSettingImpl(KisPropertiesConfiguration *setting)
     {
         QStringList requiredFiles =
             setting->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
+
+
+
         requiredFiles << brushFileName;
         setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
     }

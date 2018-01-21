@@ -227,7 +227,13 @@ QString KoFileDialog::filename()
     }
 
     if (!url.isEmpty()) {
-        if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
+
+        QString suffix = QFileInfo(url).suffix();
+        if (KisMimeDatabase::mimeTypeForSuffix(suffix).isEmpty()) {
+            suffix = "";
+        }
+
+        if (d->type == SaveFile && suffix.isEmpty()) {
             QString selectedFilter;
             // index 0 is all supported; if that is chosen, saveDocument will automatically make it .kra
             for (int i = 1; i < d->filterList.size(); ++i) {

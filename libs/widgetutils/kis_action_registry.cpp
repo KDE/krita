@@ -211,10 +211,11 @@ void KisActionRegistry::settingsPageSaved()
 void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
 {
     // First, update the things in KisActionRegistry
+    d->actionInfoList.clear();
+    d->loadActionFiles();
+
     if (config == 0) {
         // Use default shortcut scheme. Simplest just to reload everything.
-        d->actionInfoList.clear();
-        d->loadActionFiles();
         loadCustomShortcuts();
     } else {
         const auto schemeEntries = config->group(QStringLiteral("Shortcuts")).entryMap();

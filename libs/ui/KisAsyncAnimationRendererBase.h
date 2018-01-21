@@ -25,7 +25,7 @@
 /**
  * KisAsyncAnimationRendererBase is a special class represinting a
  * single worker thread inside KisAsyncAnimationRenderDialogBase. It connects
- * the the specified image using correct Qt::DirectConnection connections and
+ * the specified image using correct Qt::DirectConnection connections and
  * reacts on them. On sigFrameReady() signal it calls frameCompletedCallback(),
  * so the derived class can fetch a frame from the image and process it. On
  * sigFrameCancelled() it calls frameCancelledCallback(). The derived class

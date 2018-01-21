@@ -19,6 +19,7 @@
 #include "KisMaskingBrushOption.h"
 
 #include "kis_brush_chooser.h"
+#include "kis_brush_selection_widget.h"
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -57,13 +58,13 @@ struct KisMaskingBrushOption::Private
         l->addLayout(compositeOpLayout, 0);
 
 
-        brushChooser = new KisPredefinedBrushChooser(ui.data(), "MaskingBrushChooser");
+        brushChooser = new KisBrushSelectionWidget(ui.data());
         l->addWidget(brushChooser, 1);
         ui->setLayout(l);
     }
 
     QScopedPointer<QWidget> ui;
-    KisPredefinedBrushChooser *brushChooser = 0;
+    KisBrushSelectionWidget *brushChooser = 0;
     QComboBox *compositeSelector = 0;
     MasterBrushSizeAdapter masterBrushSizeAdapter;
 };
@@ -108,7 +109,7 @@ void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP
     m_d->compositeSelector->setCurrentIndex(selectedIndex);
 
     if (props.brush) {
-        m_d->brushChooser->setBrush(props.brush);
+        m_d->brushChooser->setCurrentBrush(props.brush);
     }
 }
 

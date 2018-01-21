@@ -98,6 +98,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
 
     // Setup reapply action
     d->reapplyAction = d->actionManager->createAction("filter_apply_again");
+    d->reapplyAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     d->reapplyAction->setEnabled(false);
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
 

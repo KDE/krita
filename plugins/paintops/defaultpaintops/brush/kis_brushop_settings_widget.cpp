@@ -110,6 +110,30 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     }
 
     addPaintOpOption(
+        new KisPrefixedPaintOpOptionWrapper<KisFlowOpacityOptionWidget>(
+            KisPaintOpUtils::MaskingBrushPresetPrefix),
+        i18n("Opacity"), KisPaintOpOption::MASKING_BRUSH);
+
+    KisCurveOption *maskingFlowOption = new KisPressureFlowOption();
+    maskingFlowOption->setChecked(false);
+    KisCurveOption *maskingRatioOption = new KisPressureRatioOption();
+    maskingRatioOption->setChecked(false);
+
+    addPaintOpOption(
+                new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
+                    KisPaintOpUtils::MaskingBrushPresetPrefix,
+                    maskingFlowOption,
+                    i18n("0%"), i18n("100%")),
+                i18n("Flow"), KisPaintOpOption::MASKING_BRUSH);
+
+    addPaintOpOption(
+                new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
+                    KisPaintOpUtils::MaskingBrushPresetPrefix,
+                    maskingRatioOption,
+                    i18n("0%"), i18n("100%")),
+                i18n("Ratio"), KisPaintOpOption::MASKING_BRUSH);
+
+    addPaintOpOption(
         new KisPrefixedPaintOpOptionWrapper<KisPressureMirrorOptionWidget>(
             KisPaintOpUtils::MaskingBrushPresetPrefix),
         i18n("Mirror"), KisPaintOpOption::MASKING_BRUSH);

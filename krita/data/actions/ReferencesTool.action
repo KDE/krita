@@ -33,8 +33,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_paste_text">
-      <icon></icon>
-      <text></text>
+      <icon>edit-paste</icon>
+      <text>Paste</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
@@ -134,7 +134,7 @@
     </Action>
     <Action name="format_textcolor">
       <icon></icon>
-      <text></text>
+      <text>Text Color</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
@@ -584,7 +584,7 @@
     </Action>
     <Action name="format_backgroundcolor">
       <icon></icon>
-      <text></text>
+      <text>Background Color</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>

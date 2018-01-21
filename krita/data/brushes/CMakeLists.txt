@@ -7,6 +7,7 @@ install( FILES
 A_bamboo-leaves.gih
 A_distant-mountain.gih
 A_eroded-cercle-anim.gih
+A_eroded_circle.gih
 A_grass-floor.gih
 A_pin.gih
 A_smoke.gbr
@@ -22,7 +23,6 @@ cazu-freckles.gbr
 cazu-reptile.gbr
 cazu-smear-paint.gbr
 cazu-spines.gbr
-cazu-smear-ink.gih
 cazu_watercolor2.gih
 double_special6.gih
 dub1.gbr
@@ -30,6 +30,7 @@ dub6.gbr
 Flat_textured1.gih
 knife3.gbr
 LJF_Water_Brush_02.gih
+leaves-scattered.svg
 M_Pipe_1.gbr
 MZ_leaves.gbr
 N_Grass_2.gih

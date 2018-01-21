@@ -398,6 +398,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_toolOptionsPopup->switchDetached(false);
     }
 
+    // pixel grid
+    m_showPixelGridAction = m_viewManager->actionManager()->createAction("view_pixel_grid");
+    m_showPixelGridAction->setChecked(cfg.pixelGridEnabled());
+    connect(m_showPixelGridAction, SIGNAL(toggled(bool)), this, SLOT(slotEnableShowPixelGrid(bool)));
+
 
     m_savePresetWidget = new KisPresetSaveWidget(this);
 
@@ -740,6 +745,12 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
     }
 }
 
+void KisPaintopBox::slotEnableShowPixelGrid(bool enabled)
+{
+    KisConfig cfg;
+    cfg.enablePixelGrid(enabled);
+}
+
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
@@ -753,7 +764,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_circle"));
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_Circle"));
         }
         else {
             preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
@@ -1169,6 +1180,13 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
          */
 
         KisPaintOpPreset::UpdatedPostponer postponer(preset.data());
+
+        // clear all the properties before dumping the stuff into the preset,
+        // some of the options add the values incrementally
+        // (e.g. KisPaintOpUtils::RequiredBrushFilesListTag), therefore they
+        // may add up if we pass the same preset multiple times
+        preset->settings()->resetSettings();
+
         m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(preset->settings().data()));
     }
 

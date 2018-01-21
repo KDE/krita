@@ -98,6 +98,12 @@ public:
     virtual KisPaintOpSettingsSP clone() const;
 
     /**
+     * Removes all the settings from the object while keeping the paintop id,
+     * which is loaded to the object by the factory
+     */
+    void resetSettings();
+
+    /**
      * @return the node the paintop is working on.
      */
     KisNodeSP node() const;

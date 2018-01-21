@@ -478,7 +478,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
     }
 
     /**
-     * In Krita shapes X,Y coordinates are baked into the the shape global transform, but
+     * In Krita shapes X,Y coordinates are baked into the shape global transform, but
      * the pattern should be painted in "user" coordinates. Therefore, we should handle
      * this offfset separately.
      *

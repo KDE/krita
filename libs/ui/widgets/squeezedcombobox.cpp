@@ -106,9 +106,20 @@ void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVa
     QComboBox::insertItem(index, squeezeText(newItem), userData);
 }
 
+void SqueezedComboBox::insertSqueezedItem(const QIcon &icon, const QString &newItem, int index, QVariant userData)
+{
+    m_originalItems[index] = newItem;
+    QComboBox::insertItem(index, icon, squeezeText(newItem), userData);
+}
+
 void SqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
 {
     insertSqueezedItem(newItem, count(), userData);
+}
+
+void SqueezedComboBox::addSqueezedItem(const QIcon &icon, const QString &newItem, QVariant userData)
+{
+    insertSqueezedItem(icon, newItem, count(), userData);
 }
 
 void SqueezedComboBox::setCurrent(const QString& itemText)

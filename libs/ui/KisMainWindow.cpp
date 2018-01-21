@@ -1194,7 +1194,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     }
     KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
-    cfg.writeEntry("ko_windowstate", saveState().toBase64());
+    cfg.writeEntry("State", saveState().toBase64());
 
     {
         KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -1327,6 +1327,22 @@ void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
 {
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();
+    }
+}
+
+void KisMainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    /**
+     * This ensures people who do not understand that you
+     * need to make a canvas first, will find the new image
+     * dialog on click.
+     */
+    if (centralWidget()->geometry().contains(event->pos())
+            && KisPart::instance()->documents().size()==0) {
+        this->slotFileNew();
+        event->accept();
+    } else {
+        event->ignore();
     }
 }
 
@@ -2451,7 +2467,7 @@ void KisMainWindow::initializeGeometry()
         move(x,y);
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
-    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("State", QByteArray())));
 
     d->fullScreenMode->setChecked(isFullScreen());
 }

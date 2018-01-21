@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
+    <width>326</width>
     <height>219</height>
    </rect>
   </property>
@@ -91,7 +91,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="cmbNameList">
+      <widget class="SqueezedComboBox" name="cmbNameList">
        <property name="editable">
         <bool>true</bool>
        </property>
@@ -143,6 +143,11 @@
    <class>KisPaletteView</class>
    <extends>QTableView</extends>
    <header location="global">kis_palette_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">squeezedcombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

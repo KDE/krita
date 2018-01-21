@@ -129,9 +129,7 @@ public:
      */
     bool saveDocument(KisDocument *document, bool saveas, bool isExporting);
 
-
     void setReadWrite(bool readwrite);
-
 
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets() const;
@@ -228,8 +226,6 @@ public Q_SLOTS:
      * (title in the about page) changes.
      */
     void updateCaption();
-
-
 
     /**
      *  Saves the current document with the current name.
@@ -376,6 +372,8 @@ protected:
     void dropEvent(QDropEvent * event) override;
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
+
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 
 private:

@@ -19,6 +19,7 @@
 
 */
 
+#include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
@@ -47,6 +48,7 @@
 #include "brushhud/kis_brush_hud.h"
 #include "brushhud/kis_round_hud_button.h"
 #include <kis_action.h>
+#include "kis_signals_blocker.h"
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -98,6 +100,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_hoveredColor(0)
     , m_selectedColor(0)
     , m_coordinatesConverter(coordinatesConverter)
+    , m_viewManager(viewManager)
     , m_actionManager(viewManager->actionManager())
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
@@ -386,6 +389,8 @@ void KisPopupPalette::showPopupPalette(bool show)
         // the bounds and cause the canvas to jump between the slider's min and max
         if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
             m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue  ){
+
+            KisSignalsBlocker b(zoomCanvasSlider);
             zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
         }
 
@@ -708,8 +713,9 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
         float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
         m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
-        emit sigUpdateCanvas();
+        m_viewManager->canvasBase()->notifyZoomChanged(); // refreshes the canvas after rotation
 
+        emit sigUpdateCanvas();
     }
 
 
@@ -767,6 +773,8 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
         if (correctedResetCanvasRotationIndicator.contains(point.x(), point.y())) {
             float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it ou
             m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
+            m_viewManager->canvasBase()->notifyZoomChanged(); // refreshes the canvas after rotation
+
             emit sigUpdateCanvas();
         }
     }

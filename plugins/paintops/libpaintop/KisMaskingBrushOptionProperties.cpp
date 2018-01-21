@@ -53,12 +53,6 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
             option.writeOptionSetting(embeddedConfig);
         }
 
-        // the masked brush should paint without any opacity or flow
-        embeddedConfig->setProperty("PressureOpacity", false);
-        embeddedConfig->setProperty("OpacityUseCurve", false);
-        embeddedConfig->setProperty("PressureFlow", false);
-        embeddedConfig->setProperty("FlowUseCurve", false);
-
         setting->setPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
 
         const QString brushFileName = brush->shortFilename();

@@ -45,11 +45,11 @@
 #include <kis_display_color_converter.h>
 #include <kis_canvas2.h>
 #include <KoDialog.h>
-#include <QComboBox>
 #include <kis_color_button.h>
 #include <QCheckBox>
 #include <QFormLayout>
 #include <QLineEdit>
+#include <squeezedcombobox.h>
 
 #include "KisPaletteModel.h"
 #include "KisColorsetChooser.h"
@@ -204,7 +204,7 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
             if (!entry.id.isEmpty()){
                 name = entry.id + " - " + entry.name;
             }
-            m_wdgPaletteDock->cmbNameList->addItem(QIcon(colorSquare), name);
+            m_wdgPaletteDock->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
         }
     }
     QCompleter *completer = new QCompleter(m_wdgPaletteDock->cmbNameList->model());

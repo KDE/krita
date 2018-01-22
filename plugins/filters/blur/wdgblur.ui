@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>280</width>
-    <height>178</height>
+    <height>190</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -40,6 +40,9 @@
     <widget class="KisIntParseSpinBox" name="intHalfWidth">
      <property name="suffix">
       <string> px</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
      </property>
     </widget>
    </item>
@@ -76,6 +79,9 @@
     <widget class="KisIntParseSpinBox" name="intHalfHeight">
      <property name="suffix">
       <string> px</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
      </property>
     </widget>
    </item>
@@ -194,6 +200,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
@@ -203,11 +214,6 @@
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -45,14 +45,14 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->setupUi(this);
 
     d->ui->opacitySlider->setRange(0, 100);
-    d->ui->opacitySlider->setPrefix(i18n("Opacity: "));
+    d->ui->opacitySlider->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
     d->ui->opacitySlider->setSuffix(i18n(" %"));
     d->ui->opacitySlider->setValueGetter(
         [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
     );
 
     d->ui->saturationSlider->setRange(0, 100);
-    d->ui->saturationSlider->setPrefix(i18n("Saturation: "));
+    d->ui->saturationSlider->setPrefixes(i18n("Saturation: "), i18n("Saturation [*varies*]: "));
     d->ui->saturationSlider->setSuffix(i18n(" %"));
     d->ui->saturationSlider->setValueGetter(
         [](KoShape *s){

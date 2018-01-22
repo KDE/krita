@@ -33,7 +33,8 @@ struct KisSelectionPropertySliderBase::Private
 };
 
 KisSelectionPropertySliderBase::KisSelectionPropertySliderBase(QWidget *parent)
-    : m_d(new Private(this))
+    : KisDoubleSliderSpinBox(parent)
+    , m_d(new Private(this))
 {
     connect(m_d->signalCompressor, SIGNAL(timeout()), SLOT(slotCompressedUpdate()));
 }
@@ -45,6 +46,7 @@ void KisSelectionPropertySliderBase::setPrefixes(const QString &normalPrefix, co
 {
     m_d->normalPrefix = normalPrefix;
     m_d->mixedPrefix = mixedPrefix;
+    setPrefix(normalPrefix);
 }
 
 void KisSelectionPropertySliderBase::setInternalValue(int _value, bool blockUpdateSignal)

@@ -114,6 +114,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     dblOpacity->setRange(0.0, 1.0, 2);
     dblOpacity->setSingleStep(0.01);
     dblOpacity->setFastSliderStep(0.1);
+    dblOpacity->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
 
     dblOpacity->setValueGetter(
         [](KoShape *s) { return 1.0 - s->transparency(); }

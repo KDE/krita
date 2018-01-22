@@ -224,16 +224,8 @@ void DefaultToolGeometryWidget::slotAspectButtonToggled()
     KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
-    QList<bool> oldKeepAspectRatio;
-    QList<bool> newKeepAspectRatio;
-
-    Q_FOREACH (KoShape *shape, shapes) {
-        oldKeepAspectRatio << shape->keepAspectRatio();
-        newKeepAspectRatio << aspectButton->keepAspectRatio();
-    }
-
     KUndo2Command *cmd =
-        new KoShapeKeepAspectRatioCommand(shapes, oldKeepAspectRatio, newKeepAspectRatio);
+        new KoShapeKeepAspectRatioCommand(shapes, aspectButton->keepAspectRatio());
 
     m_tool->canvas()->addCommand(cmd);
 }

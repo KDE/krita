@@ -68,7 +68,7 @@ void KisReferenceImage::SetSaturationCommand::redo()
 KisReferenceImage::KisReferenceImage()
     : d(new Private)
 {
-
+    setKeepAspectRatio(true);
 }
 
 KisReferenceImage::~KisReferenceImage()
@@ -83,6 +83,7 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename)
 
     KisReferenceImage *reference = new KisReferenceImage();
     reference->setImage(img);
+    reference->setSize(img.size());
 
     return reference;
 }

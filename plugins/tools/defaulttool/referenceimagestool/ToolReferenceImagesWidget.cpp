@@ -22,6 +22,7 @@
 
 #include <KoSelection.h>
 #include <KoShapeTransparencyCommand.h>
+#include <KoShapeKeepAspectRatioCommand.h>
 #include <kis_config.h>
 #include <KisReferenceImage.h>
 
@@ -67,6 +68,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
 
+    connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
     connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacitySliderChanged(qreal)));
     connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotSaturationSliderChanged(qreal)));
 }
@@ -81,6 +83,28 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
+
+    bool anyKeepingAspectRatio = false;
+    bool anyNotKeepingAspectRatio = false;
+    Q_FOREACH(KoShape *shape, shapes) {
+        anyKeepingAspectRatio |= shape->keepAspectRatio();
+        anyNotKeepingAspectRatio |= !shape->keepAspectRatio();
+    }
+
+    d->ui->chkKeepAspectRatio->setCheckState(
+        (anyKeepingAspectRatio && anyNotKeepingAspectRatio) ? Qt::PartiallyChecked :
+         anyKeepingAspectRatio ? Qt::Checked : Qt::Unchecked);
+}
+
+void ToolReferenceImagesWidget::slotKeepAspectChanged()
+{
+    KoSelection *selection = d->tool->koSelection();
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    KUndo2Command *cmd =
+            new KoShapeKeepAspectRatioCommand(shapes, d->ui->chkKeepAspectRatio->isChecked());
+
+    d->tool->canvas()->addCommand(cmd);
 }
 
 void ToolReferenceImagesWidget::slotOpacitySliderChanged(qreal newOpacity)

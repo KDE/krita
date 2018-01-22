@@ -55,8 +55,6 @@ protected:
     KoShapeManager *shapeManager() const override;
     KoSelection *koSelection() const override;
 
-public:
-
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -69,6 +67,7 @@ public Q_SLOTS:
     void slotSelectionChanged();
 
 private:
+    friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
 
     KisReferenceImagesLayer *referenceImagesLayer() const;

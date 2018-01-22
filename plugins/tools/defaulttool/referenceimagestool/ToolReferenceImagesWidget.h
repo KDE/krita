@@ -42,6 +42,7 @@ public:
 private Q_SLOTS:
     void slotOpacitySliderChanged(qreal);
     void slotSaturationSliderChanged(qreal);
+    void slotKeepAspectChanged();
 
 private:
     struct Private;

@@ -33,6 +33,8 @@ public:
 
     KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
 
+    QColor getPixel(QPointF position) const;
+
     void paint(QPainter &painter);
 
     bool allowAsChild(KisNodeSP) const override;

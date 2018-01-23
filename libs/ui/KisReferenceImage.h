@@ -25,6 +25,7 @@
 #include <kundo2command.h>
 #include <kritaui_export.h>
 #include <KoShape.h>
+#include <KoColor.h>
 
 class QImage;
 class QPointF;
@@ -63,6 +64,8 @@ public:
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override { return false; }
     void saveOdf(KoShapeSavingContext &context) const override {}
+
+    QColor getPixel(QPointF position);
 
 private:
     struct Private;

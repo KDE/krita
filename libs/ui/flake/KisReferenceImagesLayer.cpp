@@ -101,3 +101,19 @@ void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
     emit sigUpdateCanvas(rect);
 }
+
+QColor KisReferenceImagesLayer::getPixel(QPointF position) const
+{
+    const QPointF docPoint = converter()->viewToDocument(position);
+
+    KoShape *shape = shapeManager()->shapeAt(docPoint);
+
+    if (shape) {
+        auto *reference = dynamic_cast<KisReferenceImage*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
+
+        return reference->getPixel(docPoint);
+    }
+
+    return QColor();
+}

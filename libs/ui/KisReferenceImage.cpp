@@ -125,3 +125,14 @@ qreal KisReferenceImage::saturation() const
 {
     return d->saturation;
 }
+
+QColor KisReferenceImage::getPixel(QPointF position)
+{
+    const QSizeF shapeSize = size();
+    const QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
+
+    const QTransform transform = absoluteTransformation(nullptr).inverted() * scale;
+    const QPointF localPosition = position * transform;
+
+    return d->image.pixelColor(localPosition.toPoint());
+}

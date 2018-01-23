@@ -576,6 +576,20 @@ public Q_SLOTS:
      * @param configuration - the configuration for the generation filter.
      * @param selection - the selection.
      * @return a filllayer object.
+     *
+     * @code
+     * from krita import *
+     * d = Krita.instance().activeDocument()
+     * i = InfoObject();
+     * i.setProperty("pattern", "Cross01.pat")
+     * s = Selection();
+     * s.select(0, 0, d.width(), d.height(), 255)
+     * n = d.createFillLayer("test", "pattern", i, s)
+     * r = d.rootNode();
+     * c = r.childNodes();
+     * r.addChildNode(n, c[0])
+     * d.refreshProjection()
+     * @endcode
      */
     FillLayer* createFillLayer(const QString &name, const QString generatorName, InfoObject &configuration, Selection &selection);
 

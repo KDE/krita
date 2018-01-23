@@ -157,6 +157,9 @@ void TestDocument::testCreateAndSave()
     Document *d2 = Krita::instance()->openDocument(filename);
     Q_ASSERT(d2->colorDepth() == "U16");
 
+    delete kisdoc;
+    delete d2;
+
 }
 
 void TestDocument::testCreateFillLayer()
@@ -177,7 +180,6 @@ void TestDocument::testCreateFillLayer()
     QVERIFY(f->type() == filllayer);
     delete f;
     f = d.createFillLayer("test1", color, info, sel);
-    qDebug() << f->filterConfig()->properties();
     QVERIFY(f->generatorName() == color);
     QVERIFY(f->type() == filllayer);
 
@@ -196,12 +198,13 @@ void TestDocument::testCreateFillLayer()
     QVERIFY(f->type() == filllayer);
 
     bool r = f->setGenerator(QString("xxx"), &info);
-    qDebug() << r;
     QVERIFY(!r);
 
     delete f;
 
     QVERIFY(d.createFillLayer("test1", "xxx", info, sel) == 0);
+
+    delete kisdoc;
 
 }
 

@@ -60,7 +60,6 @@ QString FillLayer::type() const
 bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
 {
     KisGeneratorLayer *layer = dynamic_cast<KisGeneratorLayer*>(this->node().data());
-    qDebug() << 1 << layer->filter()->name();
     //getting the default configuration here avoids trouble with versioning.
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
@@ -69,7 +68,6 @@ bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
             cfg->setProperty(property, config->property(property));
         }
         layer->setFilter(cfg);
-        qDebug() << 2 << layer->filter()->name();
         return true;
     }
     return false;

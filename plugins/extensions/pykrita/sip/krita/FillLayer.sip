@@ -19,9 +19,9 @@ class FillLayer : Node
 public:
     virtual ~FillLayer();
     virtual QString type() const;
-    void setFilter(QString &filterName, InfoObject *filterConfig);
-    QString filterName();
-    InfoObject * filterConfig();
+    bool setGenerator(const QString &filterName, InfoObject *filterConfig);
+    QString generatorName();
+    InfoObject *filterConfig();
 Q_SIGNALS:
 private:
 };

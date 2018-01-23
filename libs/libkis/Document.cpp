@@ -609,18 +609,23 @@ FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Se
     return new FilterLayer(image, name, filter, selection);
 }
 
-FillLayer *Document::createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection)
+FillLayer *Document::createFillLayer(const QString &name, const QString generatorName, InfoObject &configuration, Selection &selection)
 {
     if (!d->document) return 0;
     if (!d->document->image()) return 0;
     KisImageSP image = d->document->image();
 
-    KisFilterConfigurationSP config = KisGeneratorRegistry::instance()->value(filterName)->defaultConfiguration();
-    Q_FOREACH(const QString property, configuration.properties().keys()) {
-        config->setProperty(property, configuration.property(property));
-    }
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
+    if (generator) {
 
-    return new FillLayer(image, name, config, selection);
+        KisFilterConfigurationSP config = generator->defaultConfiguration();
+        Q_FOREACH(const QString property, configuration.properties().keys()) {
+            config->setProperty(property, configuration.property(property));
+        }
+
+        return new FillLayer(image, name, config, selection);
+    }
+    return 0;
 }
 
 CloneLayer *Document::createCloneLayer(const QString &name, const Node *source)

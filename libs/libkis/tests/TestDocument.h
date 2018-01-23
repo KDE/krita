@@ -30,6 +30,7 @@ private Q_SLOTS:
     void testPixelData();
     void testThumbnail();
     void testCreateAndSave();
+    void testCreateFillLayer();
 };
 
 #endif

@@ -39,7 +39,15 @@ class KRITALIBKIS_EXPORT FillLayer : public Node
     Q_DISABLE_COPY(FillLayer)
 
 public:
-    explicit FillLayer(KisImageSP image, QString name,KisFilterConfigurationSP filter, Selection &selection, QObject *parent = 0);
+    /**
+     * @brief FillLayer Create a new fill layer with the given generator plugin
+     * @param image the image this fill layer will belong to
+     * @param name "pattern" or "color"
+     * @param filterConfig a configuration object appropriate to the given generator plugin
+     * @param selection a selection object, can be empty
+     * @param parent
+     */
+    explicit FillLayer(KisImageSP image, QString name, KisFilterConfigurationSP filterConfig, Selection &selection, QObject *parent = 0);
     explicit FillLayer(KisGeneratorLayerSP layer, QObject *parent = 0);
     ~FillLayer() override;
 public Q_SLOTS:
@@ -69,10 +77,16 @@ public Q_SLOTS:
      */
     virtual QString type() const override;
 
-    void setFilter(QString &filterName, InfoObject *filterConfig);
+    /**
+     * @brief setGenerator set the given generator for this fill layer
+     * @param generatorName "pattern" or "color"
+     * @param filterConfig a configuration object appropriate to the given generator plugin
+     * @return true if the generator was correctly created and set on the layer
+     */
+    bool setGenerator(const QString &generatorName, InfoObject *filterConfig);
+    QString generatorName();
 
-    QString filterName();
-    InfoObject * filterConfig();
+    InfoObject *filterConfig();
 };
 
 #endif // LIBKIS_FILLLAYER_H

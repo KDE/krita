@@ -159,6 +159,52 @@ void TestDocument::testCreateAndSave()
 
 }
 
+void TestDocument::testCreateFillLayer()
+{
+    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(0, 50, 50, KoColorSpaceRegistry::instance()->rgb16(), "test");
+    kisdoc->setCurrentImage(image);
+    Document d(kisdoc);
+
+    const QString pattern("pattern");
+    const QString color("color");
+    const QString filllayer = "filllayer";
+    InfoObject info;
+    Selection sel(image->globalSelection());
+
+    FillLayer *f = d.createFillLayer("test1", pattern, info, sel);
+    QVERIFY(f->generatorName() == pattern);
+    QVERIFY(f->type() == filllayer);
+    delete f;
+    f = d.createFillLayer("test1", color, info, sel);
+    qDebug() << f->filterConfig()->properties();
+    QVERIFY(f->generatorName() == color);
+    QVERIFY(f->type() == filllayer);
+
+    info.setProperty(pattern, "Cross01.pat");
+    QVERIFY(f->setGenerator(pattern, &info));
+    QVERIFY(f->filterConfig()->property(pattern).toString() == "Cross01.pat");
+    QVERIFY(f->generatorName() == pattern);
+    QVERIFY(f->type() == filllayer);
+
+    info.setProperty(color, QColor(Qt::red));
+    QVERIFY(f->setGenerator(color, &info));
+    QVariant v = f->filterConfig()->property(color);
+    QColor c = v.value<QColor>();
+    QVERIFY(c == QColor(Qt::red));
+    QVERIFY(f->generatorName() == color);
+    QVERIFY(f->type() == filllayer);
+
+    bool r = f->setGenerator(QString("xxx"), &info);
+    qDebug() << r;
+    QVERIFY(!r);
+
+    delete f;
+
+    QVERIFY(d.createFillLayer("test1", "xxx", info, sel) == 0);
+
+}
+
 
 
 QTEST_MAIN(TestDocument)

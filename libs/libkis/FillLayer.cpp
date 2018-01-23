@@ -23,8 +23,8 @@
 #include <InfoObject.h>
 #include <kis_selection.h>
 
-FillLayer::FillLayer(KisImageSP image, QString name, KisFilterConfigurationSP filter, Selection &selection, QObject *parent) :
-    Node(image, new KisGeneratorLayer(image, name, filter, selection.selection()), parent)
+FillLayer::FillLayer(KisImageSP image, QString name, KisFilterConfigurationSP filterConfig, Selection &selection, QObject *parent) :
+    Node(image, new KisGeneratorLayer(image, name, filterConfig, selection.selection()), parent)
 {
 
 }
@@ -40,7 +40,7 @@ FillLayer::~FillLayer()
 
 }
 
-QString FillLayer::filterName()
+QString FillLayer::generatorName()
 {
     const KisGeneratorLayer *layer = qobject_cast<const KisGeneratorLayer*>(this->node());
     return layer->filter()->name();
@@ -57,14 +57,20 @@ QString FillLayer::type() const
     return "filllayer";
 }
 
-void FillLayer::setFilter(QString &filterName, InfoObject *config)
+bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
 {
     KisGeneratorLayer *layer = dynamic_cast<KisGeneratorLayer*>(this->node().data());
+    qDebug() << 1 << layer->filter()->name();
     //getting the default configuration here avoids trouble with versioning.
-    KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(filterName);
-    KisFilterConfigurationSP cfg = generator->defaultConfiguration();
-    Q_FOREACH(const QString property, config->properties().keys()) {
-        cfg->setProperty(property, config->property(property));
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
+    if (generator) {
+        KisFilterConfigurationSP cfg = generator->defaultConfiguration();
+        Q_FOREACH(const QString property, config->properties().keys()) {
+            cfg->setProperty(property, config->property(property));
+        }
+        layer->setFilter(cfg);
+        qDebug() << 2 << layer->filter()->name();
+        return true;
     }
-    layer->setFilter(cfg);
+    return false;
 }

@@ -572,12 +572,12 @@ public Q_SLOTS:
     /**
      * @brief createFillLayer creates a fill layer object, which is a layer
      * @param name
-     * @param filterName - name of the generation filter.
+     * @param generatorName - name of the generation filter.
      * @param configuration - the configuration for the generation filter.
      * @param selection - the selection.
      * @return a filllayer object.
      */
-    FillLayer* createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection);
+    FillLayer* createFillLayer(const QString &name, const QString generatorName, InfoObject &configuration, Selection &selection);
 
     /**
      * @brief createCloneLayer

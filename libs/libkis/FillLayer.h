@@ -44,6 +44,13 @@ public:
      * @param image the image this fill layer will belong to
      * @param name "pattern" or "color"
      * @param filterConfig a configuration object appropriate to the given generator plugin
+     *
+     * For a "pattern" fill layer, the InfoObject can contain a single "pattern" parameter with
+     * the name of a pattern as known to the resource system: "pattern" = "Cross01.pat".
+     *
+     * Foor a "color" fill layer, the InfoObject can contain a single "color" parameter with
+     * a QColor.
+     *
      * @param selection a selection object, can be empty
      * @param parent
      */

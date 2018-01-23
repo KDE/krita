@@ -48,8 +48,9 @@ public:
      * For a "pattern" fill layer, the InfoObject can contain a single "pattern" parameter with
      * the name of a pattern as known to the resource system: "pattern" = "Cross01.pat".
      *
-     * Foor a "color" fill layer, the InfoObject can contain a single "color" parameter with
-     * a QColor.
+     * For a "color" fill layer, the InfoObject can contain a single "color" parameter with
+     * a QColor, a string that QColor can parse (see http://doc.qt.io/qt-5/qcolor.html#setNamedColor)
+     * or an XML description of the color.
      *
      * @param selection a selection object, can be empty
      * @param parent

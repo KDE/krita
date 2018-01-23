@@ -132,6 +132,23 @@ public:
 
     KisCubicCurve getCubicCurve(const QString & name, const KisCubicCurve & curve = KisCubicCurve()) const;
 
+    /**
+     * @brief getColor fetch the given property as a KoColor.
+     *
+     * The color can be stored as
+     * <ul>
+     * <li>A KoColor
+     * <li>A QColor
+     * <li>A string that can be parsed as an XML color definition
+     * <li>A string that QColor can convert to a color (see http://doc.qt.io/qt-5/qcolor.html#setNamedColor)
+     * <li>An integer that QColor can convert to a color
+     * </ul>
+     *
+     * @param name the name of the property
+     * @param color the default value to be returned if the @param name does not exist.
+     * @return returns the named property as a KoColor if the value can be converted to a color,
+     * otherwise a empty KoColor is returned.
+     */
     KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
 
     QMap<QString, QVariant> getProperties() const;

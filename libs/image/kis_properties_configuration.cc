@@ -33,6 +33,7 @@
 #include "kis_types.h"
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
 
 struct Q_DECL_HIDDEN KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;
@@ -258,16 +259,37 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
 {
     QVariant v = getProperty(name);
     if (v.isValid()) {
-        if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+        if (v.canConvert<QColor>()) {
+            QColor c = v.value<QColor>();
+            KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+            return kc;
+        }
+        else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
             return v.value<KoColor>();
-        } else {
+        }
+        else if (v.canConvert<QString>()) {
             QDomDocument doc;
-            doc.setContent(v.toString());
-            QDomElement e = doc.documentElement().firstChild().toElement();
-            bool ok;
-            KoColor c = KoColor::fromXML(e, Integer16BitsColorDepthID.id(), &ok);
-            if (ok) {
-                return c;
+            if (doc.setContent(v.toString())) {
+                QDomElement e = doc.documentElement().firstChild().toElement();
+                bool ok;
+                KoColor c = KoColor::fromXML(e, Integer16BitsColorDepthID.id(), &ok);
+                if (ok) {
+                    return c;
+                }
+            }
+            else {
+                QColor c(v.toString());
+                if (c.isValid()) {
+                    KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+                    return kc;
+                }
+            }
+        }
+        else if (v.canConvert<int>()) {
+            QColor c(v.toInt());
+            if (c.isValid()) {
+                KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+                return kc;
             }
         }
     }

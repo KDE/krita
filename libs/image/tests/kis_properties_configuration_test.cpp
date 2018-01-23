@@ -121,6 +121,24 @@ void KisPropertiesConfigurationTest::testCopy()
     QCOMPARE(p2.getBool("testBool2", true), false);
 }
 
+void KisPropertiesConfigurationTest::testGetColor()
+{
+    KisPropertiesConfiguration pc;
+    KoColor kc = KoColor(QColor(Qt::red), KoColorSpaceRegistry::instance()->rgb8());
+    QVariant c = QVariant::fromValue<KoColor>(kc);
+    pc.setProperty("colorAsKoColor", c);
+    pc.setProperty("colorAsQColor", QColor(Qt::red));
+    pc.setProperty("colorAsString", "#FF0000");
+
+    kc = pc.getColor("colorAsKoColor");
+    QVERIFY(kc.toQColor() == QColor(Qt::red));
+    kc = pc.getColor("colorAsQColor");
+    QVERIFY(kc.toQColor() == QColor(Qt::red));
+    kc = pc.getColor("colorAsString");
+    QVERIFY(kc.toQColor() == QColor(Qt::red));
+
+}
+
 void roundTripStringList(const QStringList &refList)
 {
     KisPropertiesConfiguration config1;

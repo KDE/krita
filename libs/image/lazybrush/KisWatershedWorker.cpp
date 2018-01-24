@@ -713,7 +713,7 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
     backgroundGroupColor = -1;
     recolorMode = false;
 
-    ENTER_FUNCTION() << ppVar(tt.elapsed());
+//    ENTER_FUNCTION() << ppVar(tt.elapsed());
 }
 
 void KisWatershedWorker::Private::writeColoring()

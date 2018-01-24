@@ -63,7 +63,7 @@
   <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>widgets/squeezedcombobox.h</header>
+   <header>squeezedcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

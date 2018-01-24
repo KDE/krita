@@ -248,7 +248,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_size_group_p.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
-    widgets/squeezedcombobox.cpp
     widgets/kis_categorized_list_view.cpp
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp

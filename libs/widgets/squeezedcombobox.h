@@ -17,7 +17,7 @@
  *
  * ============================================================ */
 
-/** @file widgets/squeezedcombobox.h */
+/** @file squeezedcombobox.h */
 
 #ifndef SQUEEZEDCOMBOBOX_H
 #define SQUEEZEDCOMBOBOX_H
@@ -32,9 +32,7 @@ class QWidget;
 #include <QWidget>
 #include <QIcon>
 
-#include <kritaui_export.h>
-
-
+#include "kritawidgets_export.h"
 
 /** @class SqueezedComboBox
  *
@@ -47,7 +45,7 @@ class QWidget;
  * @image html squeezedcombobox.png "This is how it looks"
  * @author Tom Albers
  */
-class KRITAUI_EXPORT SqueezedComboBox : public QComboBox
+class KRITAWIDGETS_EXPORT SqueezedComboBox : public QComboBox
 {
     Q_OBJECT
 

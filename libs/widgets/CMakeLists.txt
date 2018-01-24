@@ -84,6 +84,8 @@ set(kritawidgets_LIB_SRCS
 
     KisColorSelectorInterface.cpp
     KoAnchorSelectionWidget.cpp
+
+    squeezedcombobox.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

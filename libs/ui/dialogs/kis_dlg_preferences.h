@@ -27,7 +27,7 @@
 #include <kpagedialog.h>
 
 #include "kis_global.h"
-#include "widgets/squeezedcombobox.h"
+#include <squeezedcombobox.h>
 
 #include "ui_wdggeneralsettings.h"
 #include "ui_wdgdisplaysettings.h"

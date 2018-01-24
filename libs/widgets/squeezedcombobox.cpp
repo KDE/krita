@@ -17,7 +17,7 @@
  *
  * ============================================================ */
 
-#include "widgets/squeezedcombobox.h"
+#include "squeezedcombobox.h"
 /** @file squeezedcombobox.cpp */
 
 // Qt includes.
@@ -28,7 +28,6 @@
 #include <QStyle>
 #include <QApplication>
 #include <QResizeEvent>
-#include <kis_debug.h>
 
 SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
         : QComboBox(parent)

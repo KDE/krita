@@ -61,7 +61,7 @@
 #include <KoResourcePaths.h>
 #include "kis_action_registry.h"
 
-#include "widgets/squeezedcombobox.h"
+#include <squeezedcombobox.h>
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorSpace.h"

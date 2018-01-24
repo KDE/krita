@@ -46,7 +46,7 @@
 #include <kis_image_config.h>
 
 #include "widgets/kis_cmb_idlist.h"
-#include "widgets/squeezedcombobox.h"
+#include <squeezedcombobox.h>
 #include "kis_layer_utils.h"
 
 

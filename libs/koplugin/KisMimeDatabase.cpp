@@ -77,12 +77,7 @@ QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
     // make the file look like a file so Qt would recognize it
     s = "file." + s;
 
-    QMimeType mime = db.mimeTypeForName(s);
-    if (mime.name() != "application/octet-stream") {
-        debugPlugin << "mimeTypeForSuffix(). QMimeDatabase returned" << mime.name() << "for" << s;
-        return mime.name();
-    }
-    return "";
+    return mimeTypeForFile(s);
 }
 
 QString KisMimeDatabase::mimeTypeForData(const QByteArray ba)

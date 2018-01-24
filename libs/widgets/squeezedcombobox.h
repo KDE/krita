@@ -71,7 +71,6 @@ public:
     bool contains(const QString & text) const;
 
     /**
-     *
      * Returns index of a orinal text, -1 if the text isn't found
      * @param text the original (not-squeezed) text to search for
      */
@@ -128,6 +127,11 @@ public:
     QString itemHighlighted();
 
     /**
+     * remove the squeezed item at index
+     */
+    void removeSqueezedItem(int index);
+
+    /**
      * Sets the sizeHint() of this widget.
      */
     QSize sizeHint() const override;
@@ -145,8 +149,8 @@ private:
     void insertItem(qint32 index, const QString &text);
     void addItem(const QString &text);
 
-    QMap<int, QString>   m_originalItems;
-    QTimer*             m_timer;
+    QMap<int, QString> m_originalItems;
+    QTimer *m_timer;
 
 };
 

@@ -61,7 +61,7 @@ bool SqueezedComboBox::contains(const QString& _text) const
 
 qint32 SqueezedComboBox::findOriginalText(const QString& text) const
 {
-    for(int i = 0; i < m_originalItems.size(); i++) {
+    for (int i = 0; i < m_originalItems.size(); i++) {
         if(m_originalItems.value(i) == text) {
             return i;
         }
@@ -79,6 +79,8 @@ void SqueezedComboBox::resetOriginalTexts(const QStringList &texts)
     if (texts == m_originalItems.values()) return;
 
     clear();
+    m_originalItems.clear();
+
     Q_FOREACH (const QString &item, texts) {
         addSqueezedItem(item);
     }
@@ -168,5 +170,11 @@ QString SqueezedComboBox::itemHighlighted()
 {
     int curItem = currentIndex();
     return m_originalItems[curItem];
+}
+
+void SqueezedComboBox::removeSqueezedItem(int index)
+{
+    removeItem(index);
+    m_originalItems.remove(index);
 }
 

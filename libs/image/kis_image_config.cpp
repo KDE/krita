@@ -247,10 +247,12 @@ QString KisImageConfig::swapDir(bool requestDefault)
 #else
     QString swap = QDir::tempPath();
 #endif
-    QString configuredSwap = !requestDefault ?
-            m_config.readEntry("swaplocation", swap) : swap;
-    if (configuredSwap.isEmpty()) {
-        configuredSwap = swap;
+    if (requestDefault) {
+       return swap;
+    }
+    QString configuredSwap = m_config.readEntry("swaplocation", swap);
+    if (!configuredSwap.isEmpty()) {
+        swap = configuredSwap;
     }
     return swap;
 }

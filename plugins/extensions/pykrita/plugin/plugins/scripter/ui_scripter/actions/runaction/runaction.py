@@ -1,12 +1,15 @@
-from PyQt5.QtWidgets import QAction, QMessageBox
+from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import Qt
 import sys
 from . import docwrapper
-import os
-from scripter import resources_rc
 import importlib
+from importlib.machinery import SourceFileLoader
 
+
+PYTHON33 = sys.version_info.major==3 and sys.version_info.minor==3
+PYTHON34 = sys.version_info.major==3 and sys.version_info.minor==4
+EXEC_NAMESPACE = "users_script" # namespace that user scripts will run in 
 
 class RunAction(QAction):
 
@@ -53,9 +56,18 @@ class RunAction(QAction):
 
         try:
             if document and self.editor._documentModified is False:
-                spec = importlib.util.spec_from_file_location("users_script", document.filePath)
-                users_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(users_module)
+                spec = importlib.util.spec_from_file_location(EXEC_NAMESPACE, document.filePath)
+                try: 
+                    users_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(users_module)
+
+                    
+                except AttributeError as e: # no module from spec
+                    if PYTHON34 or PYTHON33: 
+                        loader = SourceFileLoader(EXEC_NAMESPACE,   document.filePath)
+                        users_module = loader.load_module()
+                    else:
+                        raise e
                 
                 try: 
                     # maybe script is to be execed, maybe main needs to be invoked
@@ -66,7 +78,8 @@ class RunAction(QAction):
                 
             else:
                 code = compile(script, '<string>', 'exec')
-                exec(script, {})
+                exec(code, {})
+                
         except Exception as e:
             self.scripter.uicontroller.showException(str(e))
 

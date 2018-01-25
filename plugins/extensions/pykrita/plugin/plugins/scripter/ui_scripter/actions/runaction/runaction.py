@@ -5,6 +5,7 @@ import sys
 from . import docwrapper
 import importlib
 from importlib.machinery import SourceFileLoader
+import traceback
 
 
 PYTHON33 = sys.version_info.major==3 and sys.version_info.minor==3
@@ -81,7 +82,29 @@ class RunAction(QAction):
                 exec(code, {})
                 
         except Exception as e:
-            self.scripter.uicontroller.showException(str(e))
+            """Provide context (line number and text) for an error that is caught. 
+            Ordinarily, syntax and Indent errors are caught during initial 
+            compilation in exec(), and the traceback traces back to this file. 
+            So these need to be treated separately. 
+            Other errors trace back to the file/script being run. 
+            """
+            type_, value_, traceback_ = sys.exc_info()
+            if type_ == SyntaxError:
+                errorMessage = "%s\n%s"%(value_.text.rstrip(), " "*(value_.offset-1)+"^")
+                # rstrip to remove trailing \n, output needs to be fixed width font for the ^ to align correctly
+                errorText = "Syntax Error on line %s"%value_.lineno
+            elif type_ == IndentationError:
+                # (no offset is provided for an IndentationError
+                errorMessage = value_.text.rstrip()
+                errorText = "Unexpected Indent on line %s"%value_.lineno
+            else: 
+                errorText = traceback.format_exception_only(type_, value_)[0]
+                format_string = "In file: {0}\nIn function: {2} at line: {1}. Line with error:\n{3}"
+                tbList = traceback.extract_tb(traceback_)
+                tb = tbList[-1]
+                errorMessage = format_string.format(*tb)
+            m = "\n**********************\n%s\n%s\n**********************\n"%(errorText, errorMessage)
+            output.write(m)
 
         sys.stdout = stdout
         sys.stderr = stderr

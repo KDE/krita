@@ -222,6 +222,9 @@ Qt::ItemFlags KisActionShortcutsModel::flags(const QModelIndex &index) const
 
 bool KisActionShortcutsModel::canRemoveRow(int row) const
 {
+    if (row >= d->shortcuts.size()) {
+        return false;
+    }
     KisShortcutConfiguration* config = d->shortcuts.at(row);
     return !(d->action->isShortcutRequired(config->mode()) && d->shortcutModeCount(config->mode()) < 2);
 }

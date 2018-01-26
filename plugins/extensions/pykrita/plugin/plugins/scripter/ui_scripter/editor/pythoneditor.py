@@ -1,8 +1,11 @@
 from PyQt5.QtCore import Qt, QRect, QSize, QPoint, pyqtSlot
 from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
-from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QFontInfo, QTextCursor, QPalette
+from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
 from scripter.ui_scripter.editor import linenumberarea, debugarea
-from scripter import resources_rc
+
+
+INDENT_WIDTH = 4 # size in spaces of indent in editor window.
+# ideally make this a setting sometime?
 
 
 class CodeEditor(QPlainTextEdit):
@@ -30,6 +33,7 @@ class CodeEditor(QPlainTextEdit):
         self.debugArrow = QIcon(':/icons/debug_arrow.svg')
         self.setCornerWidget(QLabel(str()))
         self._documentChanged = False
+        self.indent_width = INDENT_WIDTH # maybe one day connect this to a setting
         
         self.undoAvailable.connect(self.setDocumentModified)
         
@@ -152,12 +156,99 @@ class CodeEditor(QPlainTextEdit):
                 self.zoomIn()
         else:
             super(CodeEditor, self).wheelEvent(e)
+            
     def keyPressEvent(self, e):
         if (e.key() == Qt.Key_Tab):
-            self.textCursor().insertText("    ")
+            self.indent()
+        elif e.key() == Qt.Key_Backtab:
+            self.dedent()
         else:
             super(CodeEditor, self).keyPressEvent(e)
+
+    def isEmptyBlock(self, blockNumber):
+        """ test whether block with number blockNumber contains any non-whitespace 
+        If only whitespace: return true, else return false"""
         
+        # get block text
+        cursor = self.textCursor()
+        cursor.movePosition(QTextCursor.Start)
+        cursor.movePosition(QTextCursor.NextBlock, n=blockNumber)
+        cursor.movePosition(QTextCursor.StartOfLine)
+        cursor.movePosition(QTextCursor.EndOfLine, QTextCursor.KeepAnchor)
+        text = cursor.selectedText()
+        if text.strip() == "":
+            return True
+        else:
+            return False
+        
+ 
+    def indent(self):
+        # tab key has been pressed. Indent current line or selected block by self.indent_width
+        
+        cursor = self.textCursor()
+        # is there a selection?
+        
+        selectionStart = cursor.selectionStart()
+        selectionEnd = cursor.selectionEnd()
+        
+        if selectionStart == selectionEnd and cursor.atBlockEnd(): 
+            # ie no selection and don't insert in the middle of text
+            # something smarter might skip whitespace and add a tab in front of 
+            # the next non whitespace character
+            cursor.insertText(" "*self.indent_width)
+            return
+            
+        cursor.setPosition(selectionStart)
+        startBlock = cursor.blockNumber()
+        cursor.setPosition(selectionEnd)
+        endBlock = cursor.blockNumber()
+
+        cursor.movePosition(QTextCursor.Start)        
+        cursor.movePosition(QTextCursor.NextBlock,n=startBlock) 
+        
+        for i in range(0, endBlock-startBlock+1):
+            if not self.isEmptyBlock(startBlock+i): # Don't insert whitespace on empty lines
+                cursor.movePosition(QTextCursor.StartOfLine)
+                cursor.insertText(" "*self.indent_width)  
+            
+            cursor.movePosition(QTextCursor.NextBlock)
+               
+        # QT maintains separate cursors, so don't need to track or reset user's cursor
+
+
+    def dedentBlock(self, blockNumber):
+        # dedent the line at blockNumber  
+        cursor = self.textCursor()
+        cursor.movePosition(QTextCursor.Start)
+        cursor.movePosition(QTextCursor.NextBlock, n=blockNumber) 
+
+        for i in range(self.indent_width):
+            cursor.movePosition(QTextCursor.StartOfLine)
+            cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor)
+            if cursor.selectedText() == " ": # need to test each char
+                cursor.removeSelectedText()
+            else:
+                break # stop deleting!
+            
+        return 
+            
+    def dedent(self):
+        cursor = self.textCursor()
+        selectionStart = cursor.selectionStart()
+        selectionEnd = cursor.selectionEnd()
+    
+        cursor.setPosition(selectionStart)
+        startBlock = cursor.blockNumber()
+        cursor.setPosition(selectionEnd)
+        endBlock = cursor.blockNumber()
+        
+        if endBlock < startBlock: 
+            startBlock, endBlock = endBlock, startBlock
+        
+        for blockNumber in range(startBlock, endBlock+1):
+            self.dedentBlock(blockNumber)
+        
+         
     @property
     def font(self):
         return self._font

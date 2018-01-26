@@ -24,20 +24,21 @@
 
 #include <kundo2command.h>
 #include <kritaui_export.h>
-#include <KoShape.h>
+#include <KoTosContainer.h>
 #include <KoColor.h>
 
 class QImage;
 class QPointF;
 class QPainter;
 class QRectF;
+class KoStore;
 class KisCoordinatesConverter;
 class KisCanvas2;
 
 /**
  * @brief The KisReferenceImage class represents a single reference image
  */
-class KRITAUI_EXPORT KisReferenceImage : public KoShape
+class KRITAUI_EXPORT KisReferenceImage : public KoTosContainer
 {
 public:
     struct SetSaturationCommand : public KUndo2Command {
@@ -51,11 +52,16 @@ public:
     };
 
     KisReferenceImage();
+    KisReferenceImage(const KisReferenceImage &rhs);
     ~KisReferenceImage();
+
+    KoShape *cloneShape() const override;
 
     static KisReferenceImage * fromFile(const QString &filename);
 
     void setImage(QImage image);
+    void setSource(const QString &location);
+
     void setPosition(QPointF pos);
     void setSaturation(qreal saturation);
     qreal saturation() const;
@@ -66,6 +72,12 @@ public:
     void saveOdf(KoShapeSavingContext &context) const override {}
 
     QColor getPixel(QPointF position);
+
+    void saveXml(QDomDocument &document, QDomElement &parentElement, int id);
+    bool saveImage(KoStore *store) const;
+
+    static KisReferenceImage * fromXml(const QDomElement &elem);
+    bool loadImage(KoStore *store);
 
 private:
     struct Private;

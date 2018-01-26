@@ -68,6 +68,8 @@
 #include "kis_resource_server_provider.h"
 #include "kis_keyframe_channel.h"
 #include <kis_filter_configuration.h>
+#include "KisReferenceImagesLayer.h"
+#include "KisReferenceImage.h"
 
 #include "KisDocument.h"
 #include "kis_config.h"
@@ -666,9 +668,10 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
         node = loadSelectionMask(image, element, parent);
     else if (nodeType == COLORIZE_MASK)
         node = loadColorizeMask(image, element, parent, colorSpace);
-    else if (nodeType == FILE_LAYER) {
+    else if (nodeType == FILE_LAYER)
         node = loadFileLayer(element, image, name, opacity);
-    }
+    else if (nodeType == REFERENCE_IMAGES_LAYER)
+        node = loadReferenceImagesLayer(element, image);
     else {
         m_d->warningMessages << i18n("Layer %1 has an unsupported type: %2.", name, nodeType);
         return 0;
@@ -1184,4 +1187,18 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
     if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
         image->animationInterface()->setAudioVolume(audioVolume);
     }
+}
+
+KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
+{
+    KisSharedPtr<KisReferenceImagesLayer> layer = m_d->document->createReferenceImagesLayer(image);
+
+    for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+        if (child.nodeName().toLower() == "referenceimage") {
+            auto* reference = KisReferenceImage::fromXml(child);
+            layer->addShape(reference);
+        }
+    }
+
+    return layer;
 }

@@ -18,15 +18,26 @@
  */
 
 #include "KisReferenceImage.h"
+
 #include <QImage>
 #include <QPainter>
+
 #include <kundo2command.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoTosContainer_p.h>
+
 #include <kis_coordinates_converter.h>
+#include <kis_dom_utils.h>
+#include <SvgUtil.h>
+#include <libs/flake/svg/parsers/SvgTransformParser.h>
 
 struct KisReferenceImage::Private {
+    QString src;
     QImage image;
     QPointF pos;
-    qreal saturation {1.0};
+    qreal saturation{1.0};
+    int id{-1};
 };
 
 
@@ -71,10 +82,13 @@ KisReferenceImage::KisReferenceImage()
     setKeepAspectRatio(true);
 }
 
-KisReferenceImage::~KisReferenceImage()
-{
+KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
+    : KoTosContainer(new KoTosContainerPrivate(*rhs.d_func(), this))
+    , d(new Private(*rhs.d))
+{}
 
-}
+KisReferenceImage::~KisReferenceImage()
+{}
 
 KisReferenceImage * KisReferenceImage::fromFile(const QString &filename)
 {
@@ -92,6 +106,11 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename)
 void KisReferenceImage::setImage(QImage image)
 {
     d->image = image;
+}
+
+void KisReferenceImage::setSource(const QString &location)
+{
+    d->src = location;
 }
 
 void KisReferenceImage::setPosition(QPointF pos)
@@ -135,4 +154,89 @@ QColor KisReferenceImage::getPixel(QPointF position)
     const QPointF localPosition = position * transform;
 
     return d->image.pixelColor(localPosition.toPoint());
+}
+
+void KisReferenceImage::saveXml(QDomDocument &document, QDomElement &parentElement, int id)
+{
+    d->id = id;
+
+    QDomElement element = document.createElement("referenceimage");
+
+    d->src = QString("reference_images/%1.png").arg(id);
+    element.setAttribute("src", d->src);
+
+    const QSizeF &shapeSize = size();
+    element.setAttribute("width", KisDomUtils::toString(shapeSize.width()));
+    element.setAttribute("height", KisDomUtils::toString(shapeSize.height()));
+    element.setAttribute("keepAspectRatio", keepAspectRatio() ? "true" : "false");
+    element.setAttribute("transform", SvgUtil::transformToString(transform()));
+
+    element.setAttribute("opacity", KisDomUtils::toString(1.0 - transparency()));
+    element.setAttribute("saturation", KisDomUtils::toString(d->saturation));
+
+    parentElement.appendChild(element);
+}
+
+KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
+{
+    auto *reference = new KisReferenceImage();
+
+    reference->setSource(elem.attribute("src"));
+
+    qreal width = KisDomUtils::toDouble(elem.attribute("width", "100"));
+    qreal height = KisDomUtils::toDouble(elem.attribute("height", "100"));
+    reference->setSize(QSizeF(width, height));
+    reference->setKeepAspectRatio(elem.attribute("keepAspectRatio", "true").toLower() == "true");
+
+    auto transform = SvgTransformParser(elem.attribute("transform")).transform();
+    reference->setTransformation(transform);
+
+    qreal opacity = KisDomUtils::toDouble(elem.attribute("opacity", "1"));
+    reference->setTransparency(1.0 - opacity);
+
+    qreal saturation = KisDomUtils::toDouble(elem.attribute("opacity", "1"));
+    reference->setSaturation(saturation);
+
+    return reference;
+}
+
+bool KisReferenceImage::saveImage(KoStore *store) const
+{
+    if (!store->open(d->src)) {
+        return false;
+    }
+
+    KoStoreDevice storeDev(store);
+    if (!storeDev.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    if (!d->image.save(&storeDev, "PNG")) {
+        return false;
+    }
+
+    return store->close();
+}
+
+bool KisReferenceImage::loadImage(KoStore *store)
+{
+    if (!store->open(d->src)) {
+        return false;
+    }
+
+    KoStoreDevice storeDev(store);
+    if (!storeDev.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    if (!d->image.load(&storeDev, "PNG")) {
+        return false;
+    }
+
+    return store->close();
+}
+
+KoShape *KisReferenceImage::cloneShape() const
+{
+    return new KisReferenceImage(*this);
 }

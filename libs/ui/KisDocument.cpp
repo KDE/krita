@@ -319,7 +319,8 @@ public:
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
     QList<KisPaintingAssistantSP> assistants;
-    KisReferenceImagesLayer *referenceImagesLayer = nullptr;
+
+    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
     KisGridConfig gridConfig;
 
@@ -1620,11 +1621,13 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     d->assistants = value;
 }
 
-KisReferenceImagesLayer *KisDocument::createReferenceImagesLayer()
+KisSharedPtr<KisReferenceImagesLayer> KisDocument::createReferenceImagesLayer(KisImageSP targetImage)
 {
     if (!d->referenceImagesLayer) {
-        d->referenceImagesLayer = new KisReferenceImagesLayer(shapeController(), image());
-        d->image->addNode(d->referenceImagesLayer, d->image->root());
+        if (targetImage.isNull()) targetImage = d->image;
+
+        d->referenceImagesLayer = new KisReferenceImagesLayer(shapeController(), targetImage);
+        targetImage->addNode(d->referenceImagesLayer, targetImage->root());
     }
 
     return d->referenceImagesLayer;
@@ -1632,7 +1635,7 @@ KisReferenceImagesLayer *KisDocument::createReferenceImagesLayer()
 
 KisReferenceImagesLayer *KisDocument::referenceImagesLayer() const
 {
-    return d->referenceImagesLayer;
+    return d->referenceImagesLayer.data();
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

@@ -43,7 +43,7 @@ public:
     KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image);
 
     virtual void setImage(KisImageWSP image) = 0;
-    virtual void prepareForDestroying() = 0;
+    void prepareForDestroying();
     virtual void forceRepaint() = 0;
 
     KoShapeManager *shapeManager() const override;
@@ -64,6 +64,7 @@ protected:
     QScopedPointer<KisImageViewConverter> m_viewConverter;
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
+    bool m_isDestroying = false;
 };
 
 /**
@@ -87,19 +88,16 @@ public:
     }
 
     void setImage(KisImageWSP image) override;
-
-    void prepareForDestroying() override ;
     void updateCanvas(const QRectF& rc) override;
-
     void forceRepaint() override;
 
 private Q_SLOTS:
     void repaint();
+
 Q_SIGNALS:
     void forwardRepaint();
-private:
 
-    bool m_isDestroying;
+private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 

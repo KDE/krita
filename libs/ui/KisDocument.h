@@ -554,7 +554,7 @@ public:
     /**
      * Get existing reference images layer or create new if none exists.
      */
-    KisReferenceImagesLayer *createReferenceImagesLayer();
+    KisSharedPtr<KisReferenceImagesLayer> createReferenceImagesLayer(KisImageSP targetImage = KisImageSP());
 
     /**
      * Get existing reference images layer or null if none exists.

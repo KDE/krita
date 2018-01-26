@@ -142,7 +142,7 @@ KisReferenceImagesLayer *ToolReferenceImages::getOrCreteReferenceImagesLayer()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisDocument *document = kisCanvas->imageView()->document();
 
-    return  document->createReferenceImagesLayer();
+    return document->createReferenceImagesLayer().data();
 }
 
 KoSelection *ToolReferenceImages::koSelection() const

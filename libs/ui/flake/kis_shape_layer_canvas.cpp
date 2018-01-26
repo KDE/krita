@@ -108,10 +108,14 @@ KoUnit KisShapeLayerCanvasBase::unit() const
     return KoUnit(KoUnit::Point);
 }
 
+void KisShapeLayerCanvasBase::prepareForDestroying()
+{
+    m_isDestroying = true;
+}
+
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
         : KisShapeLayerCanvasBase(parent, image)
-        , m_isDestroying(false)
         , m_projection(0)
         , m_parentLayer(parent)
 {
@@ -125,11 +129,6 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
 {
     m_viewConverter->setImage(image);
-}
-
-void KisShapeLayerCanvas::prepareForDestroying()
-{
-    m_isDestroying = true;
 }
 
 

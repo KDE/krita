@@ -30,6 +30,7 @@ class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 
 public:
     KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image);
+    KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs);
 
     KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
 
@@ -41,6 +42,10 @@ public:
 
     bool accept(KisNodeVisitor&) override;
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
+
+    KisNodeSP clone() const override {
+        return new KisReferenceImagesLayer(*this);
+    }
 
 Q_SIGNALS:
     /**

@@ -54,6 +54,10 @@ public:
 
     void updateCanvas(const QRectF &rect) override
     {
+        if (!m_layer->image() || m_isDestroying) {
+            return;
+        }
+
         QRectF r = m_viewConverter->documentToView(rect);
         m_layer->signalUpdate(r);
     }
@@ -64,13 +68,17 @@ public:
     }
 
     void setImage(KisImageWSP image) override {}
-    void prepareForDestroying() override {}
 
 private:
     KisReferenceImagesLayer *m_layer;
 };
+
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
+{}
+
+KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
+    : KisShapeLayer(rhs)
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *referenceImage)

@@ -3,10 +3,16 @@ from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
 from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 
+##################
+# Constants
+##################
 
 INDENT_WIDTH = 4 # size in spaces of indent in editor window.
 # ideally make this a setting sometime?
 
+MODIFIER_COMMENT = Qt.ControlModifier
+KEY_COMMENT = Qt.Key_M
+CHAR_COMMENT = "#"
 
 CHAR_SPACE = " "
 CHAR_COLON = ":"
@@ -19,7 +25,6 @@ CHAR_EQUALS = "="
 
 class CodeEditor(QPlainTextEdit):
     
-
     DEBUG_AREA_WIDTH = 20
 
     def __init__(self, scripter, parent=None):
@@ -167,10 +172,13 @@ class CodeEditor(QPlainTextEdit):
             super(CodeEditor, self).wheelEvent(e)
             
     def keyPressEvent(self, e):
+        modifiers = e.modifiers()
         if (e.key() == Qt.Key_Tab):
             self.indent()
         elif e.key() == Qt.Key_Backtab:
             self.dedent()
+        elif modifiers == MODIFIER_COMMENT and e.key()==KEY_COMMENT:
+                self.toggleComment()            
         elif e.key() == Qt.Key_Return:
             super(CodeEditor, self).keyPressEvent(e)
             self.autoindent()
@@ -322,7 +330,50 @@ class CodeEditor(QPlainTextEdit):
 
         # indent
         cursor.insertText(CHAR_SPACE*indentLevel)
+
+    def toggleComment(self):
+        """Toggle lines of selected text to/from either comment or uncomment
+        selected text is obtained from text cursor
+        If selected text contains both commented and uncommented text this will 
+        flip the state of each line - which may not be desirable.
+        """
         
+        cursor = self.textCursor()        
+        selectionStart = cursor.selectionStart()
+        selectionEnd = cursor.selectionEnd()
+    
+        cursor.setPosition(selectionStart)
+        startBlock = cursor.blockNumber()
+        cursor.setPosition(selectionEnd)
+        endBlock = cursor.blockNumber()
+
+        cursor.movePosition(QTextCursor.Start)        
+        cursor.movePosition(QTextCursor.NextBlock,n=startBlock) 
+        
+        for i in range(0, endBlock-startBlock+1):
+            # Test for empty line (if the line is empty moving the cursor right will overflow
+            # to next line, throwing the line tracking off)
+            cursor.movePosition(QTextCursor.StartOfLine)            
+            p1 = cursor.position()
+            cursor.movePosition(QTextCursor.EndOfLine)
+            p2 = cursor.position()
+            if p1==p2: # empty line - comment it
+                cursor.movePosition(QTextCursor.StartOfLine)
+                cursor.insertText(CHAR_COMMENT)
+                continue
+            
+            cursor.movePosition(QTextCursor.StartOfLine)
+            cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor) 
+            text = cursor.selectedText()
+            
+            if text == CHAR_COMMENT:
+                cursor.removeSelectedText()
+            else:
+                cursor.movePosition(QTextCursor.StartOfLine)
+                cursor.insertText(CHAR_COMMENT)      
+                
+            cursor.movePosition(QTextCursor.NextBlock)
+
          
     @property
     def font(self):

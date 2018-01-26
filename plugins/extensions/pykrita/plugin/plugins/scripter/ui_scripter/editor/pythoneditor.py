@@ -8,6 +8,15 @@ INDENT_WIDTH = 4 # size in spaces of indent in editor window.
 # ideally make this a setting sometime?
 
 
+CHAR_SPACE = " "
+CHAR_COLON = ":"
+CHAR_COMMA = ","
+CHAR_CONTINUATION = "\\"
+CHAR_OPEN_BRACKET = "("
+CHAR_OPEN_SQUARE_BRACKET = "["
+CHAR_OPEN_BRACE = "{"
+CHAR_EQUALS = "="
+
 class CodeEditor(QPlainTextEdit):
     
 
@@ -162,6 +171,9 @@ class CodeEditor(QPlainTextEdit):
             self.indent()
         elif e.key() == Qt.Key_Backtab:
             self.dedent()
+        elif e.key() == Qt.Key_Return:
+            super(CodeEditor, self).keyPressEvent(e)
+            self.autoindent()
         else:
             super(CodeEditor, self).keyPressEvent(e)
 
@@ -247,6 +259,69 @@ class CodeEditor(QPlainTextEdit):
         
         for blockNumber in range(startBlock, endBlock+1):
             self.dedentBlock(blockNumber)
+
+    def autoindent(self):
+        """The return key has just been pressed (and processed by the editor)
+        now insert leading spaces to reflect an appropriate indent level 
+        against the previous line. 
+        This will depend on the end of the previous line. If it ends:
+        * with a colon (:) then indent to a new indent level
+        * with a comma (,) then this is an implied continuation line, probably
+          in the middle of a function's parameter list
+          - look for last open bracket on previous line (, [ or { 
+            - if found indent to that level + one character, 
+            - otherwise use previous line whitespace, this is probably a list or 
+              parameter list so line up with other elements
+        * with a backslash (\) then this is a continuation line, probably
+          on the RHS of an assignment
+          - similar rules as for comma, but if there is an = character
+            use that plus one indent level if that is greater
+        * if it is an open bracket of some sort treat similarly to comma
+          
+          
+        * anything else - a new line at the same indent level. This will preserve 
+          the indent level of whitespace lines. User can shift-tab to dedent
+          as necessary
+        """
+        
+        cursor = self.textCursor()
+        block = cursor.block()
+        block = block.previous()
+        text = block.text()
+        indentLevel = len(text) - len(text.lstrip()) # base indent level        
+        
+        # get last char
+        try:
+            lastChar = text.rstrip()[-1]
+        except IndexError:
+            lastChar = None
+        
+        # work out indent level
+        if lastChar == CHAR_COLON:
+            indentLevel = indentLevel + self.indent_width
+        elif lastChar == CHAR_COMMA: # technically these are mutually exclusive so if would work
+            braceLevels = []
+            for c in [CHAR_OPEN_BRACE, CHAR_OPEN_BRACKET, CHAR_OPEN_SQUARE_BRACKET]:
+                braceLevels.append(text.rfind(c))
+            bracePosition = max(braceLevels)
+            if bracePosition > 0:
+                indentLevel = bracePosition + 1
+        elif lastChar == CHAR_CONTINUATION:
+            braceLevels = []
+            for c in [CHAR_OPEN_BRACE, CHAR_OPEN_BRACKET, CHAR_OPEN_SQUARE_BRACKET]:
+                braceLevels.append(text.rfind(c))
+            bracePosition = max(braceLevels)
+            equalPosition = text.rfind(CHAR_EQUALS)
+            if bracePosition > equalPosition:
+                indentLevel = bracePosition + 1
+            if equalPosition > bracePosition:
+                indentLevel = equalPosition + self.indent_width
+            # otherwise they're the same - ie both -1 so use base indent level
+        elif lastChar in [CHAR_OPEN_BRACE, CHAR_OPEN_BRACKET, CHAR_OPEN_SQUARE_BRACKET]:
+            indentLevel = len(text.rstrip())
+
+        # indent
+        cursor.insertText(CHAR_SPACE*indentLevel)
         
          
     @property

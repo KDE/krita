@@ -360,6 +360,7 @@ class CodeEditor(QPlainTextEdit):
             if p1==p2: # empty line - comment it
                 cursor.movePosition(QTextCursor.StartOfLine)
                 cursor.insertText(CHAR_COMMENT)
+                cursor.movePosition(QTextCursor.NextBlock)
                 continue
             
             cursor.movePosition(QTextCursor.StartOfLine)

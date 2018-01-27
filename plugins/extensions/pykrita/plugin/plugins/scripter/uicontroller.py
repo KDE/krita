@@ -9,6 +9,10 @@ from scripter import scripterdialog
 import os
 import importlib
 
+
+INITIAL_WIDTH = 660
+INITIAL_HEIGHT = 500
+
 class Elided_Text_Label(QLabel):
     mainText = str()
 
@@ -71,7 +75,7 @@ class UIController(object):
         vbox.addWidget(self.splitter)
         vbox.addWidget(self.statusBar)
 
-        self.mainWidget.resize(400, 500)
+        self.mainWidget.resize(INITIAL_WIDTH, INITIAL_HEIGHT)
         self.mainWidget.setWindowTitle("Scripter")
         self.mainWidget.setSizeGripEnabled(True)
         self.mainWidget.show()

@@ -52,6 +52,7 @@ class KoCanvasController;
 class KisViewManager;
 class KisCanvasResourceProvider;
 class KisPopupButton;
+class KisIconWidget;
 class KisToolOptionsPopup;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
@@ -187,7 +188,7 @@ private:
     KisPopupButton*                     m_toolOptionsPopupButton;
 
     KisPresetSaveWidget*                m_savePresetWidget;
-    KisPopupButton*                     m_brushEditorPopupButton;
+    KisIconWidget*                     m_brushEditorPopupButton;
     KisPopupButton*                     m_presetSelectorPopupButton;
     KisCompositeOpComboBox*             m_cmbCompositeOp;
     QToolButton*                        m_eraseModeButton;

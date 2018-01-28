@@ -70,6 +70,7 @@
 #include "kis_config.h"
 
 #include "widgets/kis_popup_button.h"
+#include "widgets/kis_iconwidget.h"
 #include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_tool_options_popup.h"
@@ -130,7 +131,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
     }
 
-    m_brushEditorPopupButton = new KisPopupButton(this);
+    m_brushEditorPopupButton = new KisIconWidget(this);
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
     m_brushEditorPopupButton->setFixedSize(iconsize, iconsize);
@@ -614,10 +615,8 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
 
     // load the current brush engine icon for the brush editor toolbar button
-    KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
-    m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
+    m_brushEditorPopupButton->slotSetItem(preset.data());
     m_presetsPopup->setCurrentPaintOpId(paintop.id());
 
 

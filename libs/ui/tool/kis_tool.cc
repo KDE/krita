@@ -153,10 +153,6 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     connect(action("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 
-    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
-
     d->m_isActive = true;
     emit isActiveChanged();
 }
@@ -165,9 +161,6 @@ void KisTool::deactivate()
 {
     bool result = true;
 
-    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
-    result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
-    result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
     result &= disconnect(action("toggle_fg_bg"), 0, this, 0);
     result &= disconnect(action("reset_fg_bg"), 0, this, 0);
 

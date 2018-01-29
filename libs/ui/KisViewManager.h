@@ -255,6 +255,7 @@ private Q_SLOTS:
     void guiUpdateTimeout();
     void changeAuthorProfile(const QString &profileName);
     void slotUpdateAuthorProfileActions();
+    void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
 

@@ -102,6 +102,7 @@ public: // Implement kis_abstract_canvas_widget interface
 
 public Q_SLOTS:
     void slotConfigChanged();
+    void slotPixelGridModeChanged();
 
 protected: // KisCanvasWidgetBase
     bool callFocusNextPrevChild(bool next) override;

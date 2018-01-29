@@ -46,6 +46,7 @@ public:
     void notifyConfigChanged(void);
 
     void notifyDropFramesModeChanged();
+    void notifyPixelGridModeChanged();
 
 Q_SIGNALS:
     /**
@@ -53,6 +54,7 @@ Q_SIGNALS:
      */
     void configChanged(void);
     void dropFramesModeChanged();
+    void pixelGridModeChanged();
 private:
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);

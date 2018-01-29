@@ -619,6 +619,7 @@ void KisMainWindow::slotPreferences()
 {
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
+        KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?

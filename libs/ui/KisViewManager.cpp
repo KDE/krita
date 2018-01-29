@@ -134,6 +134,7 @@
 #include "dialogs/kis_delayed_save_dialog.h"
 #include <kis_image.h>
 #include <KisMainWindow.h>
+#include "kis_signals_blocker.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -314,6 +315,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotUpdateAuthorProfileActions()));
+    connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotUpdatePixelGridAction()));
 
     KisInputProfileManager::instance()->loadProfiles();
 
@@ -459,6 +461,8 @@ void KisViewManager::setCurrentView(KisView *view)
         // set up progrress reporting
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
+
+        d->viewConnections.addUniqueConnection(d->showPixelGrid, SIGNAL(toggled(bool)), canvasController, SLOT(slotTogglePixelGrid(bool)));
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -725,6 +729,8 @@ void KisViewManager::createActions()
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
 
+    d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
+    slotUpdatePixelGridAction();
 }
 
 void KisViewManager::setupManagers()
@@ -1385,4 +1391,14 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     } else if (profiles.contains(profileName)) {
         d->actionAuthor->setCurrentAction(profileName);
     }
+}
+
+void KisViewManager::slotUpdatePixelGridAction()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->showPixelGrid);
+
+    KisSignalsBlocker b(d->showPixelGrid);
+
+    KisConfig cfg;
+    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
 }

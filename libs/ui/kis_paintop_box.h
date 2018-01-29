@@ -122,7 +122,6 @@ public Q_SLOTS:
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
-    void slotEnableShowPixelGrid(bool enabled);
 
     /// This should take care of creating a new brush preset from scratch
     /// It will either load the default brush preset for the engine,
@@ -207,8 +206,6 @@ private:
     KisAction*                          m_eraseAction;
     KisAction*                          m_reloadAction;
     KisAction*                          m_disablePressureAction;
-    KisAction*                          m_showPixelGridAction;
-
 
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;

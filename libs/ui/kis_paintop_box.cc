@@ -399,11 +399,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_toolOptionsPopup->switchDetached(false);
     }
 
-    // pixel grid
-    m_showPixelGridAction = m_viewManager->actionManager()->createAction("view_pixel_grid");
-    m_showPixelGridAction->setChecked(cfg.pixelGridEnabled());
-    connect(m_showPixelGridAction, SIGNAL(toggled(bool)), this, SLOT(slotEnableShowPixelGrid(bool)));
-
 
     m_savePresetWidget = new KisPresetSaveWidget(this);
 
@@ -742,12 +737,6 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
         //qDebug() << "slotsetpaintop" << id;
         setCurrentPaintop(id);
     }
-}
-
-void KisPaintopBox::slotEnableShowPixelGrid(bool enabled)
-{
-    KisConfig cfg;
-    cfg.enablePixelGrid(enabled);
 }
 
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)

@@ -107,6 +107,7 @@ public:
 #endif
 
     qreal pixelGridDrawingThreshold;
+    bool pixelGridEnabled;
     QColor gridColor;
     QColor cursorColor;
 
@@ -168,7 +169,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotPixelGridModeChanged()));
     slotConfigChanged();
+    slotPixelGridModeChanged();
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
@@ -783,11 +786,20 @@ void KisOpenGLCanvas2::slotConfigChanged()
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
-    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
-    d->gridColor = cfg.getPixelGridColor();
     d->cursorColor = cfg.getCursorMainColor();
 
     notifyConfigChanged();
+}
+
+void KisOpenGLCanvas2::slotPixelGridModeChanged()
+{
+    KisConfig cfg;
+
+    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
+    d->pixelGridEnabled = cfg.pixelGridEnabled();
+    d->gridColor = cfg.getPixelGridColor();
+
+    update();
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
@@ -823,10 +835,7 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
     drawCheckers();
     drawImage();
-
-    KisConfig cfg;
-
-    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && cfg.pixelGridEnabled()) {
+    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
         drawGrid();
     }
     if (KisOpenGL::hasOpenGL3()) {

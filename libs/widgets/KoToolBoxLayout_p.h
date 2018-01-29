@@ -322,20 +322,20 @@ private:
     int doLayout(const QRect &rect) const
     {
         // nothing to do?
-        if (m_sections.isEmpty())
-        {
+        if (m_sections.isEmpty()) {
             return 0;
         }
 
         // the names of the variables assume a vertical orientation,
         // but all calculations are done based on the real orientation
+        const bool isVertical = m_orientation == Qt::Vertical;
 
         const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
 
-        const int maxWidth = (m_orientation == Qt::Vertical) ? rect.width() : rect.height();
+        const int maxWidth = isVertical ? rect.width() : rect.height();
         // using min 1 as width to e.g. protect against div by 0 below
-        const int iconWidth = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.width() : iconSize.height());
-        const int iconHeight = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.height() : iconSize.width());
+        const int iconWidth = qMax(1, isVertical ? iconSize.width() : iconSize.height());
+        const int iconHeight = qMax(1, isVertical ? iconSize.height() : iconSize.width());
 
         const int maxColumns = qMax(1, (maxWidth / iconWidth));
 
@@ -368,20 +368,20 @@ private:
                 x = 0;
                 y += iconHeight + spacing();
                 const Section::Separators separator =
-                    (m_orientation == Qt::Vertical) ? Section::SeparatorTop : Section::SeparatorLeft;
+                    isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
                 section->setSeparator( separator );
             } else {
                 // append to last row, set separators (on first row only to the left side)
                 const bool isFirstRow = (y == 0);
                 const Section::Separators separators =
                     isFirstRow ?
-                        ((m_orientation == Qt::Vertical) ? Section::SeparatorLeft : Section::SeparatorTop) :
+                        (isVertical ? Section::SeparatorLeft : Section::SeparatorTop) :
                         (Section::SeparatorTop | Section::SeparatorLeft);
                 section->setSeparator( separators );
             }
 
             const int usedColumns = qMin(buttonCount, maxColumns);
-            if (m_orientation == Qt::Vertical) {
+            if (isVertical) {
                 section->setGeometry(x, y,
                                      usedColumns * iconWidth, neededRowCount * iconHeight);
             } else {

@@ -309,11 +309,22 @@ public:
 
     void setGeometry (const QRect &rect) override
     {
+        m_currentHeight = doLayout(rect);
+    }
+
+    void setOrientation (Qt::Orientation orientation)
+    {
+        m_orientation = orientation;
+        invalidate();
+    }
+
+private:
+    int doLayout(const QRect &rect) const
+    {
         // nothing to do?
         if (m_sections.isEmpty())
         {
-            m_currentHeight = 0;
-            return;
+            return 0;
         }
 
         // the names of the variables assume a vertical orientation,
@@ -386,16 +397,9 @@ public:
         }
 
         // cache total height (or width), adding the iconHeight for the current row
-        m_currentHeight = y + iconHeight;
+        return y + iconHeight;
     }
 
-    void setOrientation (Qt::Orientation orientation)
-    {
-        m_orientation = orientation;
-        invalidate();
-    }
-
-private:
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
     mutable int m_currentHeight;

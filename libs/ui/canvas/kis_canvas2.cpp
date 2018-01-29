@@ -135,6 +135,7 @@ public:
     bool lodAllowedInCanvas;
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
+    KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
 
     bool effectiveLodAllowedInCanvas() {
         return lodAllowedInCanvas && !bootstrapLodBlocked;
@@ -402,6 +403,16 @@ KoViewConverter* KisCanvas2::viewConverter() const
 KisInputManager* KisCanvas2::globalInputManager() const
 {
     return m_d->view->globalInputManager();
+}
+
+KisInputActionGroupsMask KisCanvas2::inputActionGroupsMask() const
+{
+    return m_d->inputActionGroupsMask;
+}
+
+void KisCanvas2::setInputActionGroupsMask(KisInputActionGroupsMask mask)
+{
+    m_d->inputActionGroupsMask = mask;
 }
 
 QWidget* KisCanvas2::canvasWidget()

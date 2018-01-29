@@ -38,6 +38,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
 #include "kis_painting_assistants_decoration.h"
+#include "input/KisInputActionGroup.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -60,7 +61,7 @@ class KoViewConverter;
  * the widget it contains, which may be either a QPainter based
  * canvas, or an OpenGL based canvas: that are the real widgets.
  */
-class KRITAUI_EXPORT KisCanvas2 : public KoCanvasBase
+class KRITAUI_EXPORT KisCanvas2 : public KoCanvasBase, public KisInputActionGroupsMaskInterface
 {
 
     Q_OBJECT
@@ -147,6 +148,18 @@ public: // KoCanvasBase implementation
      * NOTE: May be null while initialization!
      */
     KisInputManager* globalInputManager() const;
+
+    /**
+     * Return the mask of currently available input action groups
+     * Note: Override from KisInputActionGroupsMaskInterface
+     */
+    KisInputActionGroupsMask inputActionGroupsMask() const override;
+
+    /**
+     * Set the mask of currently available action groups
+     * Note: Override from KisInputActionGroupsMaskInterface
+     */
+    void setInputActionGroupsMask(KisInputActionGroupsMask mask) override;
 
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
 

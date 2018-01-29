@@ -66,7 +66,9 @@ bool KisAbstractShortcut::compareKeys(const QSet<Qt::Key> &keys1,
     return true;
 }
 
-bool KisAbstractShortcut::isAvailable() const
+bool KisAbstractShortcut::isAvailable(KisInputActionGroupsMask groupMask) const
 {
-    return action()->isAvailable();
+    return
+        (action()->inputActionGroup(m_d->shortcutIndex) & groupMask) &&
+        action()->isAvailable();
 }

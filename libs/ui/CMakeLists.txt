@@ -295,6 +295,7 @@ set(kritaui_LIB_SRCS
     input/kis_shortcut_matcher.cpp
     input/kis_select_layer_action.cpp
     input/KisQtWidgetsTweaker.cpp
+    input/KisInputActionGroup.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp

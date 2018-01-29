@@ -150,3 +150,9 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
     }
     KisAbstractInputAction::inputEvent(event);
 }
+
+KisInputActionGroup KisRotateCanvasAction::inputActionGroup(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return ViewTransformActionGroup;
+}

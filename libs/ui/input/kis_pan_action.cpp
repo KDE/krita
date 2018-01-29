@@ -190,3 +190,9 @@ bool KisPanAction::isShortcutRequired(int shortcut) const
 {
     return shortcut == PanModeShortcut;
 }
+
+KisInputActionGroup KisPanAction::inputActionGroup(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return ViewTransformActionGroup;
+}

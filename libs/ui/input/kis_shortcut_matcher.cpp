@@ -28,6 +28,7 @@
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
 
+
 #ifdef DEBUG_MATCHER
 #include <kis_debug.h>
 #define DEBUG_ACTION(text) dbgInput << __FUNCTION__ << "-" << text;
@@ -52,6 +53,7 @@ public:
         , readyShortcut(0)
         , touchShortcut(0)
         , nativeGestureShortcut(0)
+        , actionGroupMask([] () { return AllActionGroup; })
         , suppressAllActions(false)
         , cursorEntered(false)
         , usingTouch(false)
@@ -80,6 +82,7 @@ public:
     KisTouchShortcut *touchShortcut;
     KisNativeGestureShortcut *nativeGestureShortcut;
 
+    std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
     bool cursorEntered;
     bool usingTouch;
@@ -410,6 +413,11 @@ void KisShortcutMatcher::clearShortcuts()
     m_d->readyShortcut = 0;
 }
 
+void KisShortcutMatcher::setInputActionGroupsMaskCallback(std::function<KisInputActionGroupsMask ()> func)
+{
+    m_d->actionGroupMask = func;
+}
+
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
     return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);
@@ -427,7 +435,7 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
     KisSingleActionShortcut *goodCandidate = 0;
 
     Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
-        if(s->isAvailable() &&
+        if(s->isAvailable(m_d->actionGroupMask()) &&
            s->match(keysState, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
@@ -463,7 +471,7 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
     KisStrokeShortcut *goodCandidate = 0;
 
     Q_FOREACH (KisStrokeShortcut *s, m_d->candidateShortcuts) {
-        if (s->isAvailable() &&
+        if (s->isAvailable(m_d->actionGroupMask()) &&
             s->matchBegin(button) &&
             (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
@@ -572,7 +580,10 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
         return false;
 
     Q_FOREACH (KisTouchShortcut* shortcut, m_d->touchShortcuts) {
-        if( shortcut->match( event ) && (!goodCandidate || shortcut->priority() > goodCandidate->priority()) ) {
+        if (shortcut->isAvailable(m_d->actionGroupMask()) &&
+            shortcut->match( event ) &&
+            (!goodCandidate || shortcut->priority() > goodCandidate->priority()) ) {
+
             goodCandidate = shortcut;
         }
     }

@@ -94,6 +94,12 @@ bool KisAbstractInputAction::supportsHiResInputEvents() const
     return false;
 }
 
+KisInputActionGroup KisAbstractInputAction::inputActionGroup(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return ModifyingActionGroup;
+}
+
 KisInputManager* KisAbstractInputAction::inputManager() const
 {
     return Private::inputManager;

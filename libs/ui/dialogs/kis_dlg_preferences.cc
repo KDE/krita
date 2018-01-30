@@ -127,7 +127,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
-    m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", true));
+    bool dontUseNative = true;
+#ifdef Q_OS_UNIX
+    if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
+        dontUseNative = false;
+    }
+#endif
+    m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", dontUseNative));
 
     intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));
 

@@ -628,6 +628,9 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
     if (node->inherits("KisShapeLayer")) {
         return VECTOR;
     }
+    if (node->inherits("KisCloneLayer")) {
+        return CLONE;
+    }
     if (node->paintDevice()) {
         return PAINT;
     }
